@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.648 2005-12-02 05:34:40 piso Exp $
+;;; $Id: jvm.lisp,v 1.649 2005-12-02 23:05:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -86,7 +86,7 @@
 (defvar *declared-symbols* nil)
 (defvar *declared-functions* nil)
 (defvar *declared-strings* nil)
-(defvar *declared-fixnums* nil)
+(defvar *declared-integers* nil)
 
 (defstruct (class-file (:constructor %make-class-file))
   pathname ; pathname of output file
@@ -103,8 +103,7 @@
   (symbols (make-hash-table :test 'eq))
   (functions (make-hash-table :test 'equal))
   (strings (make-hash-table :test 'eq))
-  (fixnums (make-hash-table :test 'eql))
-  )
+  (integers (make-hash-table :test 'eql)))
 
 (defun class-name-from-filespec (filespec)
   (let* ((name (pathname-name filespec)))
@@ -134,7 +133,7 @@
             (*declared-symbols*   (class-file-symbols ,var))
             (*declared-functions* (class-file-functions ,var))
             (*declared-strings*   (class-file-strings ,var))
-            (*declared-fixnums*   (class-file-fixnums ,var)))
+            (*declared-integers*  (class-file-integers ,var)))
        (progn ,@body)
        (setf (class-file-pool ,var)         *pool*
              (class-file-pool-count ,var)   *pool-count*
@@ -144,8 +143,7 @@
              (class-file-symbols ,var)      *declared-symbols*
              (class-file-functions ,var)    *declared-functions*
              (class-file-strings ,var)      *declared-strings*
-             (class-file-fixnums ,var)      *declared-fixnums*
-             ))))
+             (class-file-integers ,var)     *declared-integers*))))
 
 (defstruct compiland
   name
@@ -1099,7 +1097,7 @@
       (setq pool (cdr pool))))
   t)
 
-(declaim (ftype (function (t) (integer 1 65535)) pool-get))
+(defknown pool-get (t) (integer 1 65535))
 (defun pool-get (entry)
   (declare (optimize speed))
   (let* ((ht *pool-entries*)
@@ -1157,12 +1155,26 @@
   (declare (optimize speed))
   (pool-get (list 8 (pool-name string))))
 
-(defknown pool-int (fixnum) fixnum)
+(defknown pool-int (fixnum) (integer 1 65535))
 (defun pool-int (n)
   (declare (optimize speed))
   (pool-get (list 3 n)))
 
-(declaim (ftype (function (fixnum) cons) u2))
+(defknown pool-long (integer) (integer 1 65535))
+(defun pool-long (n)
+;;   (declare (optimize speed))
+;;   (pool-get (list 5
+;;                   (logand (ash n -32) #xffffffff)
+;;                   (logand n #xffffffff))))
+  (let ((list (list 5
+                    (logand (ash n -32) #xffffffff)
+                    (logand n #xffffffff))))
+    (format t "pool-long ~S~%" list)
+    (let ((index (pool-get list)))
+      (incf *pool-count*)
+      index)))
+
+(defknown u2 (fixnum) cons)
 (defun u2 (n)
   (declare (optimize speed))
   (declare (type (unsigned-byte 16) n))
@@ -1182,7 +1194,7 @@
           (instruction-stack instruction)
           (instruction-depth instruction)))
 
-(declaim (ftype (function * t) inst))
+(defknown inst * t)
 (defun inst (instr &optional args)
   (declare (optimize speed))
   (let ((opcode (if (fixnump instr)
@@ -1222,6 +1234,8 @@
 (defconstant +lisp-cons+ "Lorg/armedbear/lisp/Cons;")
 (defconstant +lisp-fixnum-class+ "org/armedbear/lisp/Fixnum")
 (defconstant +lisp-fixnum+ "Lorg/armedbear/lisp/Fixnum;")
+(defconstant +lisp-bignum-class+ "org/armedbear/lisp/Bignum")
+(defconstant +lisp-bignum+ "Lorg/armedbear/lisp/Bignum;")
 (defconstant +lisp-character-class+ "org/armedbear/lisp/LispCharacter")
 (defconstant +lisp-character+ "Lorg/armedbear/lisp/LispCharacter;")
 (defconstant +lisp-abstract-vector-class+ "org/armedbear/lisp/AbstractVector")
@@ -1873,6 +1887,18 @@ representation, based on the derived type of the LispObject."
         (inst 19 (u2 (car args))) ; LDC_W
         (inst 18 args))))
 
+;; LDC2_W
+(define-resolver 20 (instruction)
+;;   (format t "resolving ldc2_w...~%")
+  (let* ((args (instruction-args instruction)))
+;;     (format t "args = ~S~%" args)
+    (unless (= (length args) 1)
+      (error "Wrong number of args for LDC2_W."))
+;;     (if (> (car args) 255)
+;;         (inst 19 (u2 (car args))) ; LDC_W
+;;         (inst 18 args))))
+    (inst 20 (u2 (car args)))))
+
 ;; GETFIELD, PUTFIELD class-name field-name type-name
 (define-resolver (180 181) (instruction)
   (let* ((args (instruction-args instruction))
@@ -2341,7 +2367,7 @@ representation, based on the derived type of the LispObject."
   (write-8-bits (ash n -8) stream)
   (write-8-bits (logand n #xFF) stream))
 
-(declaim (ftype (function (t t) t) write-u4))
+(defknown write-u4 (integer stream) t)
 (defun write-u4 (n stream)
   (declare (optimize speed))
   (declare (type (unsigned-byte 32) n))
@@ -2404,7 +2430,7 @@ representation, based on the derived type of the LispObject."
             (write-8-bits (aref octets i) stream)))
         (write-ascii string length stream))))
 
-(declaim (ftype (function (t t) t) write-constant-pool-entry))
+(defknown write-constant-pool-entry (t t) t)
 (defun write-constant-pool-entry (entry stream)
   (declare (optimize speed))
   (declare (type stream stream))
@@ -2418,7 +2444,7 @@ representation, based on the derived type of the LispObject."
        (write-s4 (second entry) stream))
       ((5 6)
        (write-u4 (second entry) stream)
-       (write-u4 (third entry)) stream)
+       (write-u4 (third entry) stream))
       ((9 10 11 12)
        (write-u2 (second entry) stream)
        (write-u2 (third entry) stream))
@@ -2596,7 +2622,7 @@ representation, based on the derived type of the LispObject."
   (write-u2 (field-descriptor-index field) stream)
   (write-u2 0 stream)) ; attributes count
 
-(declaim (ftype (function (t t) t) declare-field))
+(defknown declare-field (t t) t)
 (defun declare-field (name descriptor)
   (let ((field (make-field name descriptor)))
     (setf (field-access-flags field) (logior #x8 #x2)) ; private static
@@ -2720,7 +2746,7 @@ representation, based on the derived type of the LispObject."
 (defknown declare-fixnum (fixnum) string)
 (defun declare-fixnum (n)
   (declare (type fixnum n))
-  (let* ((ht *declared-fixnums*)
+  (let* ((ht *declared-integers*)
          (g (gethash1 n ht)))
     (declare (type hash-table ht))
     (unless g
@@ -2754,6 +2780,61 @@ representation, based on the derived type of the LispObject."
         (setf (gethash n ht) g)))
     g))
 
+(defknown declare-bignum (fixnum) string)
+(defun declare-bignum (n)
+  (let* ((ht *declared-integers*)
+         (g (gethash1 n ht)))
+    (declare (type hash-table ht))
+    (unless g
+;;       (let ((*code* *static-code*))
+;;         (setf g (format nil "FIXNUM_~A~D"
+;;                         (if (minusp n) "MINUS_" "")
+;;                         (abs n)))
+;;         (declare-field g +lisp-fixnum+)
+;;         (emit 'new +lisp-fixnum-class+)
+;;         (emit 'dup)
+;;         (case n
+;;           (-1
+;;            (emit 'iconst_m1))
+;;           (0
+;;            (emit 'iconst_0))
+;;           (1
+;;            (emit 'iconst_1))
+;;           (2
+;;            (emit 'iconst_2))
+;;           (3
+;;            (emit 'iconst_3))
+;;           (4
+;;            (emit 'iconst_4))
+;;           (5
+;;            (emit 'iconst_5))
+;;           (t
+;;            (emit-push-constant-int n)))
+;;         (emit-invokespecial-init +lisp-fixnum-class+ '("I"))
+;;         (emit 'putstatic *this-class* g +lisp-fixnum+)
+;;         (setf *static-code* *code*)
+;;         (setf (gethash n ht) g)))
+
+      (cond ((< most-negative-java-long n most-positive-java-long)
+             (let ((*code* *static-code*))
+               (setf g (format nil "BIGNUM_~A~D"
+                               (if (minusp n) "MINUS_" "")
+                               (abs n)))
+               (declare-field g +lisp-object+)
+               (emit 'new +lisp-bignum-class+)
+               (emit 'dup)
+               (emit 'ldc2_w (pool-long n))
+               (emit-invokespecial-init +lisp-bignum-class+ '("J"))
+               (emit 'putstatic *this-class* g +lisp-object+)
+               (setf *static-code* *code*)))
+            (t
+             (setf g (declare-object-as-string n))
+             )
+            )
+
+      (setf (gethash n ht) g))
+    g))
+
 (declaim (ftype (function (t) string) declare-character))
 (defun declare-character (c)
   (let* ((g (symbol-name (gensym)))
@@ -2767,11 +2848,10 @@ representation, based on the derived type of the LispObject."
     (setf *static-code* *code*)
     g))
 
-(declaim (ftype (function (t) string) declare-object-as-string))
+(defknown declare-object-as-string (t) string)
 (defun declare-object-as-string (obj)
   (let* ((g (symbol-name (gensym)))
-         (s (with-output-to-string (stream)
-              (dump-form obj stream)))
+         (s (with-output-to-string (stream) (dump-form obj stream)))
          (*code* *static-code*))
     (declare-field g +lisp-object+)
     (emit 'ldc (pool-string s))
@@ -2783,8 +2863,7 @@ representation, based on the derived type of the LispObject."
 
 (defun declare-load-time-value (obj)
   (let* ((g (symbol-name (gensym)))
-         (s (with-output-to-string (stream)
-              (dump-form obj stream)))
+         (s (with-output-to-string (stream) (dump-form obj stream)))
          (*code* *static-code*))
     (declare-field g +lisp-object+)
     (emit 'ldc (pool-string s))
@@ -2800,8 +2879,7 @@ representation, based on the derived type of the LispObject."
   (aver (not (null *compile-file-truename*)))
   (aver (or (structure-object-p obj) (standard-object-p obj)))
   (let* ((g (symbol-name (gensym)))
-         (s (with-output-to-string (stream)
-              (dump-form obj stream)))
+         (s (with-output-to-string (stream) (dump-form obj stream)))
          (*code* *static-code*))
     (declare-field g +lisp-object+)
     (emit 'ldc (pool-string s))
@@ -2817,7 +2895,7 @@ representation, based on the derived type of the LispObject."
   (let* ((g (symbol-name (gensym)))
          (*print-level* nil)
          (*print-length* nil)
-         (s (sys::%format nil "#.(FIND-PACKAGE ~S)" (package-name obj)))
+         (s (format nil "#.(FIND-PACKAGE ~S)" (package-name obj)))
          (*code* *static-code*))
     (declare-field g +lisp-object+)
     (emit 'ldc (pool-string s))
@@ -2915,6 +2993,9 @@ representation, based on the derived type of the LispObject."
            (if translation
                (emit 'getstatic +lisp-fixnum-class+ translation +lisp-fixnum+)
                (emit 'getstatic *this-class* (declare-fixnum form) +lisp-fixnum+))))
+        ((integerp form)
+         ;; A bignum.
+         (emit 'getstatic *this-class* (declare-bignum form) +lisp-object+))
         ((numberp form)
          ;; A number, but not a fixnum.
          (emit 'getstatic *this-class*
@@ -6982,20 +7063,39 @@ representation, based on the derived type of the LispObject."
 ;;               (neq representation 'unboxed-character) ; FIXME
               )
 ;;          (format t "p2-aref case 1~%")
-         (let ((arg1 (%cadr form))
-               (arg2 (%caddr form)))
+         (let* ((arg1 (%cadr form))
+                (arg2 (%caddr form))
+                (type1 (derive-compiler-type arg1)))
 ;;            (let ((*print-structure* nil))
 ;;              (format t "p2-aref arg1 = ~S~%" arg1)
 ;;              (format t "p2-aref arg2 = ~S~%" arg2))
-           (compile-form arg1 'stack nil) ; array
-           (compile-form arg2 'stack 'unboxed-fixnum) ; index
-           (maybe-emit-clear-values arg1 arg2)
+;;            (compile-form arg1 'stack nil) ; array
+;;            (compile-form arg2 'stack 'unboxed-fixnum) ; index
+;;            (maybe-emit-clear-values arg1 arg2)
            (cond ((eq representation 'unboxed-fixnum)
+                  (compile-form arg1 'stack nil) ; array
+                  (compile-form arg2 'stack 'unboxed-fixnum) ; index
+                  (maybe-emit-clear-values arg1 arg2)
                   (emit-invokevirtual +lisp-object-class+ "aref" '("I") "I"))
                  ((eq representation 'unboxed-character)
-                  (emit-invokevirtual +lisp-object-class+ "AREF" '("I") +lisp-object+)
-                  (emit-unbox-character))
+                  (cond ((compiler-subtypep type1 'string)
+                         (format t "p2-aref string case~%")
+                         (compile-form arg1 'stack nil) ; array
+                         (emit 'checkcast +lisp-abstract-string-class+)
+                         (compile-form arg2 'stack 'unboxed-fixnum) ; index
+                         (maybe-emit-clear-values arg1 arg2)
+                         (emit-invokevirtual +lisp-abstract-string-class+
+                                             "charAt" '("I") "C"))
+                        (t
+                         (compile-form arg1 'stack nil) ; array
+                         (compile-form arg2 'stack 'unboxed-fixnum) ; index
+                         (maybe-emit-clear-values arg1 arg2)
+                         (emit-invokevirtual +lisp-object-class+ "AREF" '("I") +lisp-object+)
+                         (emit-unbox-character))))
                  (t
+                  (compile-form arg1 'stack nil) ; array
+                  (compile-form arg2 'stack 'unboxed-fixnum) ; index
+                  (maybe-emit-clear-values arg1 arg2)
                   (emit-invokevirtual +lisp-object-class+ "AREF" '("I") +lisp-object+)))
            (emit-move-from-stack target representation)))
         (t
