@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.143 2005-10-23 18:44:50 piso Exp $
+ * $Id: Stream.java,v 1.144 2005-12-03 11:02:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1076,7 +1076,7 @@ public class Stream extends LispObject
         catch (NumberFormatException e) {}
         // parseInt() failed.
         try {
-            return new Bignum(new BigInteger(token, radix));
+            return new Bignum(token, radix);
         }
         catch (NumberFormatException e) {}
         // Not a number.
@@ -1194,7 +1194,7 @@ public class Stream extends LispObject
         catch (NumberFormatException e) {}
         // parseInt() failed.
         try {
-            return new Bignum(new BigInteger(s, radix));
+            return new Bignum(s, radix);
         }
         catch (NumberFormatException e) {}
         // Not a number.
@@ -1220,7 +1220,7 @@ public class Stream extends LispObject
         catch (NumberFormatException e) {}
         // parseInt() failed.
         try {
-            return new Bignum(new BigInteger(s, radix));
+            return new Bignum(s, radix);
         }
         catch (NumberFormatException e) {}
         // Not a number.
