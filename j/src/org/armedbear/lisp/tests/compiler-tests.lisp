@@ -1,7 +1,7 @@
 ;;; compiler-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-tests.lisp,v 1.4 2005-11-26 15:47:54 piso Exp $
+;;; $Id: compiler-tests.lisp,v 1.5 2005-12-03 11:36:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,6 +23,14 @@
 (load (merge-pathnames "test-utilities.lisp" *load-truename*))
 
 (in-package #:test)
+
+(defconstant most-positive-java-long 9223372036854775807)
+(defconstant most-negative-java-long -9223372036854775808)
+
+#+abcl
+(assert (eql most-positive-java-long ext:most-positive-java-long))
+#+abcl
+(assert (eql most-negative-java-long ext:most-negative-java-long))
 
 #+abcl
 (deftest unused.1
@@ -197,5 +205,57 @@
   268435455
   134217727
   3)
+
+(deftest bignum-constant.1
+  (progn
+    (fmakunbound 'bignum-constant.1)
+    (defun bignum-constant.1 () #.most-positive-java-long)
+    (values (funcall 'bignum-constant.1)
+            (multiple-value-list (compile 'bignum-constant.1))
+            (compiled-function-p #'bignum-constant.1)
+            (funcall 'bignum-constant.1)))
+  #.most-positive-java-long
+  (bignum-constant.1 nil nil)
+  t
+  #.most-positive-java-long)
+
+(deftest bignum-constant.2
+  (progn
+    (fmakunbound 'bignum-constant.2)
+    (defun bignum-constant.2 () #.(1+ most-positive-java-long))
+    (values (funcall 'bignum-constant.2)
+            (multiple-value-list (compile 'bignum-constant.2))
+            (compiled-function-p #'bignum-constant.2)
+            (funcall 'bignum-constant.2)))
+  #.(1+ most-positive-java-long)
+  (bignum-constant.2 nil nil)
+  t
+  #.(1+ most-positive-java-long))
+
+(deftest bignum-constant.3
+  (progn
+    (fmakunbound 'bignum-constant.3)
+    (defun bignum-constant.3 () #.most-negative-java-long)
+    (values (funcall 'bignum-constant.3)
+            (multiple-value-list (compile 'bignum-constant.3))
+            (compiled-function-p #'bignum-constant.3)
+            (funcall 'bignum-constant.3)))
+  #.most-negative-java-long
+  (bignum-constant.3 nil nil)
+  t
+  #.most-negative-java-long)
+
+(deftest bignum-constant.4
+  (progn
+    (fmakunbound 'bignum-constant.4)
+    (defun bignum-constant.4 () #.(1- most-negative-java-long))
+    (values (funcall 'bignum-constant.4)
+            (multiple-value-list (compile 'bignum-constant.4))
+            (compiled-function-p #'bignum-constant.4)
+            (funcall 'bignum-constant.4)))
+  #.(1- most-negative-java-long)
+  (bignum-constant.4 nil nil)
+  t
+  #.(1- most-negative-java-long))
 
 (do-tests)
