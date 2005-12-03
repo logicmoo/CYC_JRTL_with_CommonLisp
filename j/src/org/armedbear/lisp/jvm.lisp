@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.650 2005-12-03 11:43:13 piso Exp $
+;;; $Id: jvm.lisp,v 1.651 2005-12-03 16:10:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1163,17 +1163,24 @@
 (defknown pool-long (integer) (integer 1 65535))
 (defun pool-long (n)
   (declare (optimize speed))
-  (prog1
-    (pool-get (list 5
-                    (logand (ash n -32) #xffffffff)
-                    (logand n #xffffffff)))
-    ;; The Java Virtual Machine Specification, Section 4.4.5: "All 8-byte
-    ;; constants take up two entries in the constant_pool table of the class
-    ;; file. If a CONSTANT_Long_info or CONSTANT_Double_info structure is the
-    ;; item in the constant_pool table at index n, then the next usable item in
-    ;; the pool is located at index n+2. The constant_pool index n+1 must be
-    ;; valid but is considered unusable." So:
-    (incf *pool-count*)))
+  (let* ((entry (list 5
+                      (logand (ash n -32) #xffffffff)
+                      (logand n #xffffffff)))
+         (ht *pool-entries*)
+         (index (gethash1 entry ht)))
+    (declare (type hash-table ht))
+    (unless index
+      (setf index *pool-count*)
+      (push entry *pool*)
+      (setf (gethash entry ht) index)
+      ;; The Java Virtual Machine Specification, Section 4.4.5: "All 8-byte
+      ;; constants take up two entries in the constant_pool table of the class
+      ;; file. If a CONSTANT_Long_info or CONSTANT_Double_info structure is the
+      ;; item in the constant_pool table at index n, then the next usable item in
+      ;; the pool is located at index n+2. The constant_pool index n+1 must be
+      ;; valid but is considered unusable." So:
+      (setf *pool-count* (+ index 2)))
+    index))
 
 (defknown u2 (fixnum) cons)
 (defun u2 (n)
@@ -1263,11 +1270,18 @@
 (defsubst emit-push-t ()
   (emit 'getstatic +lisp-class+ "T" +lisp-symbol+))
 
-(defknown emit-push-constant-int (integer) t)
+(defknown emit-push-constant-int (fixnum) t)
 (defun emit-push-constant-int (n)
   (if (<= -32768 n 32767)
       (emit 'sipush n)
       (emit 'ldc (pool-int n))))
+
+(defknown emit-push-constant-long (integer) t)
+(defun emit-push-constant-long (n)
+  (aver (not (fixnump n)))
+  (aver (<= n most-positive-java-long))
+  (aver (>= n most-negative-java-long))
+  (emit 'ldc2_w (pool-long n)))
 
 (declaim (ftype (function (t t) cons) make-descriptor-info))
 (defun make-descriptor-info (arg-types return-type)
@@ -1604,7 +1618,7 @@ representation, based on the derived type of the LispObject."
         ((eq required-representation 'unboxed-character)
          (emit-unbox-character))))
 
-(declaim (ftype (function () t) emit-box-long))
+(defknown emit-box-long () t)
 (defun emit-box-long ()
   (declare (optimize speed))
   (emit-invokestatic +lisp-class+ "number" (list "J") +lisp-object+))
@@ -1721,72 +1735,73 @@ representation, based on the derived type of the LispObject."
     (dotimes (n (1+ *last-opcode*))
       (setf (gethash n ht) #'unsupported-opcode))
     ;; The following opcodes resolve to themselves.
-    (dolist (n '(0 ; NOP
-                 1 ; ACONST_NULL
-                 2 ; ICONST_M1
-                 3 ; ICONST_0
-                 4 ; ICONST_1
-                 5 ; ICONST_2
-                 6 ; ICONST_3
-                 7 ; ICONST_4
-                 8 ; ICONST_5
-                 9 ; LCONST_0
-                 10 ; LCONST_1
-                 42 ; ALOAD_0
-                 43 ; ALOAD_1
-                 44 ; ALOAD_2
-                 45 ; ALOAD_3
-                 50 ; AALOAD
-                 75 ; ASTORE_0
-                 76 ; ASTORE_1
-                 77 ; ASTORE_2
-                 78 ; ASTORE_3
-                 83 ; AASTORE
-                 87 ; POP
-                 89 ; DUP
-                 90 ; DUP_X1
-                 91 ; DUP_X2
-                 95 ; SWAP
-                 96 ; IADD
-                 97 ; LADD
-                 100 ; ISUB
-                 101 ; LSUB
-                 104 ; IMUL
-                 105 ; LMUL
-                 116 ; INEG
-                 117 ; LNEG
-                 120 ; ISHL
-                 121 ; LSHL
-                 122 ; ISHR
-                 123 ; LSHR
-                 126 ; IAND
-                 128 ; IOR
-                 130 ; IXOR
-                 133 ; I2L
-                 136 ; L2I
-                 153 ; IFEQ
-                 154 ; IFNE
-                 155 ; IFGE
-                 156 ; IFGT
-                 157 ; IFGT
-                 158 ; IFLE
-                 159 ; IF_ICMPEQ
-                 160 ; IF_ICMPNE
-                 161 ; IF_ICMPLT
-                 162 ; IF_ICMPGE
-                 163 ; IF_ICMPGT
-                 164 ; IF_ICMPLE
-                 165 ; IF_ACMPEQ
-                 166 ; IF_ACMPNE
-                 167 ; GOTO
-                 168 ; JSR
-                 169 ; RET
-                 176 ; ARETURN
-                 177 ; RETURN
-                 190 ; ARRAYLENGTH
-                 191 ; ATHROW
-                 198 ; IFNULL
-                 202 ; LABEL
+    (dolist (n '(0 ; nop
+                 1 ; aconst_null
+                 2 ; iconst_m1
+                 3 ; iconst_0
+                 4 ; iconst_1
+                 5 ; iconst_2
+                 6 ; iconst_3
+                 7 ; iconst_4
+                 8 ; iconst_5
+                 9 ; lconst_0
+                 10 ; lconst_1
+                 42 ; aload_0
+                 43 ; aload_1
+                 44 ; aload_2
+                 45 ; aload_3
+                 50 ; aaload
+                 75 ; astore_0
+                 76 ; astore_1
+                 77 ; astore_2
+                 78 ; astore_3
+                 83 ; aastore
+                 87 ; pop
+                 89 ; dup
+                 90 ; dup_x1
+                 91 ; dup_x2
+                 95 ; swap
+                 96 ; iadd
+                 97 ; ladd
+                 100 ; isub
+                 101 ; lsub
+                 104 ; imul
+                 105 ; lmul
+                 116 ; ineg
+                 117 ; lneg
+                 120 ; ishl
+                 121 ; lshl
+                 122 ; ishr
+                 123 ; lshr
+                 126 ; iand
+                 127 ; land
+                 128 ; ior
+                 130 ; ixor
+                 133 ; i2l
+                 136 ; l2i
+                 153 ; ifeq
+                 154 ; ifne
+                 155 ; ifge
+                 156 ; ifgt
+                 157 ; ifgt
+                 158 ; ifle
+                 159 ; if_icmpeq
+                 160 ; if_icmpne
+                 161 ; if_icmplt
+                 162 ; if_icmpge
+                 163 ; if_icmpgt
+                 164 ; if_icmple
+                 165 ; if_acmpeq
+                 166 ; if_acmpne
+                 167 ; goto
+                 168 ; jsr
+                 169 ; ret
+                 176 ; areturn
+                 177 ; return
+                 190 ; arraylength
+                 191 ; athrow
+                 198 ; ifnull
+                 202 ; label
                  ))
       (setf (gethash n ht) nil))
     (setf *resolvers* ht)))
@@ -5652,13 +5667,6 @@ representation, based on the derived type of the LispObject."
            (compile-form arg2 'stack 'unboxed-fixnum)
            (maybe-emit-clear-values arg1 arg2)
            (emit-invokevirtual +lisp-object-class+ "ash" '("I") +lisp-object+)
-;;            (when (eq representation 'unboxed-fixnum)
-;;              (cond ((and (fixnum-type-p result-type)
-;;                          (< *safety* 3))
-;;                     (emit 'checkcast +lisp-fixnum-class+)
-;;                     (emit 'getfield +lisp-fixnum-class+ "value" "I"))
-;;                    (t
-;;                     (emit-invokevirtual +lisp-object-class+ "intValue" nil "I"))))
            (fix-boxing representation result-type)
            (emit-move-from-stack target representation))
           (t
@@ -5668,18 +5676,16 @@ representation, based on the derived type of the LispObject."
   (let* ((args (cdr form))
          (len (length args)))
     (cond ((= len 2)
-           (let ((arg1 (%car args))
-                 (arg2 (%cadr args))
-                 type1 type2)
-             (when (and (integerp arg1) (integerp arg2))
-               (compile-constant (logand arg1 arg2) target representation)
-               (return-from p2-logand t))
-;;              (when (constantp arg1)
-;;                (setf arg1 (%cadr args)
-;;                      arg2 (%car args)))
-             (setf type1 (derive-compiler-type arg1)
-                   type2 (derive-compiler-type arg2))
-             (cond ((and (integer-type-p type1) (eql arg2 0))
+           (let* ((arg1 (%car args))
+                  (arg2 (%cadr args))
+                  (type1 (derive-compiler-type arg1))
+                  (type2 (derive-compiler-type arg2))
+                  (value1 (integer-constant-value type1))
+                  (value2 (integer-constant-value type2))
+                  (result-type (derive-compiler-type form)))
+             (cond ((and value1 value2)
+                    (compile-constant (logand value1 value2) target representation))
+                   ((and (integer-type-p type1) (eql arg2 0))
                     (compile-constant 0 target representation))
                    ((eql (fixnum-constant-value type1) -1)
                     (compile-form arg2 target representation)
@@ -5730,6 +5736,16 @@ representation, based on the derived type of the LispObject."
                     (emit-invokevirtual +lisp-object-class+ "LOGAND" '("I") +lisp-object+)
                     (when (eq representation 'unboxed-fixnum)
                       (emit-unbox-fixnum))
+                    (emit-move-from-stack target representation))
+                   ((and value2
+                         (<= most-negative-java-long value2 most-positive-java-long))
+                    (compile-form arg1 'stack nil)
+                    (maybe-emit-clear-values arg1)
+                    (emit-invokevirtual +lisp-object-class+ "longValue" nil "J")
+                    (emit-push-constant-long value2)
+                    (emit 'land)
+                    (emit-box-long)
+                    (fix-boxing representation result-type)
                     (emit-move-from-stack target representation))
                    (t
                     (compile-form arg1 'stack nil)
@@ -6813,13 +6829,6 @@ representation, based on the derived type of the LispObject."
                      (maybe-emit-clear-values arg2)
                      (emit 'swap)))
               (emit-invokevirtual +lisp-object-class+ "add" '("I") +lisp-object+)
-;;               (when (eq representation 'unboxed-fixnum)
-;;                 (cond ((and (fixnum-type-p result-type)
-;;                             (< *safety* 3))
-;;                        (emit 'checkcast +lisp-fixnum-class+)
-;;                        (emit 'getfield +lisp-fixnum-class+ "value" "I"))
-;;                       (t
-;;                        (emit-invokevirtual +lisp-object-class+ "intValue" nil "I"))))
               (fix-boxing representation result-type)
               (emit-move-from-stack target representation))
              ((fixnum-type-p type2)
@@ -6827,13 +6836,6 @@ representation, based on the derived type of the LispObject."
               (maybe-emit-clear-values arg1)
               (compile-form arg2 'stack 'unboxed-fixnum)
               (emit-invokevirtual +lisp-object-class+ "add" '("I") +lisp-object+)
-;;               (when (eq representation 'unboxed-fixnum)
-;;                 (cond ((and (fixnum-type-p result-type)
-;;                             (< *safety* 3))
-;;                        (emit 'checkcast +lisp-fixnum-class+)
-;;                        (emit 'getfield +lisp-fixnum-class+ "value" "I"))
-;;                       (t
-;;                        (emit-invokevirtual +lisp-object-class+ "intValue" nil "I"))))
               (fix-boxing representation result-type)
               (emit-move-from-stack target representation))
              (t
@@ -7038,20 +7040,10 @@ representation, based on the derived type of the LispObject."
 
 (defun p2-aref (form target representation)
   ;; We only optimize the 2-arg case.
-;;   (format t "p2-aref representation = ~S~%" representation)
-  (cond ((and (= (length form) 3)
-;;               (neq representation 'unboxed-character) ; FIXME
-              )
-;;          (format t "p2-aref case 1~%")
+  (cond ((= (length form) 3)
          (let* ((arg1 (%cadr form))
                 (arg2 (%caddr form))
                 (type1 (derive-compiler-type arg1)))
-;;            (let ((*print-structure* nil))
-;;              (format t "p2-aref arg1 = ~S~%" arg1)
-;;              (format t "p2-aref arg2 = ~S~%" arg2))
-;;            (compile-form arg1 'stack nil) ; array
-;;            (compile-form arg2 'stack 'unboxed-fixnum) ; index
-;;            (maybe-emit-clear-values arg1 arg2)
            (cond ((eq representation 'unboxed-fixnum)
                   (compile-form arg1 'stack nil) ; array
                   (compile-form arg2 'stack 'unboxed-fixnum) ; index
@@ -7059,7 +7051,6 @@ representation, based on the derived type of the LispObject."
                   (emit-invokevirtual +lisp-object-class+ "aref" '("I") "I"))
                  ((eq representation 'unboxed-character)
                   (cond ((compiler-subtypep type1 'string)
-                         (format t "p2-aref string case~%")
                          (compile-form arg1 'stack nil) ; array
                          (emit 'checkcast +lisp-abstract-string-class+)
                          (compile-form arg2 'stack 'unboxed-fixnum) ; index
@@ -7318,11 +7309,6 @@ representation, based on the derived type of the LispObject."
                  (emit-move-from-stack target representation))
                 ((variable-register variable)
                  (emit 'aload (variable-register variable))
-;;                  (cond ((eq representation 'unboxed-fixnum)
-;;                         ;; FIXME Optimize for case where variable is known to be a fixnum.
-;;                         (emit-invokevirtual +lisp-object-class+ "intValue" nil "I"))
-;;                        ((eq representation 'unboxed-character)
-;;                         (emit-unbox-character)))
                  (fix-boxing representation (variable-derived-type variable))
                  (emit-move-from-stack target representation))
                 ((variable-closure-index variable)
@@ -7331,11 +7317,6 @@ representation, based on the derived type of the LispObject."
                  (emit 'aload (compiland-closure-register *current-compiland*))
                  (emit-push-constant-int (variable-closure-index variable))
                  (emit 'aaload)
-;;                  (cond ((eq representation 'unboxed-fixnum)
-;;                         ;; FIXME Optimize for case where variable is known to be a fixnum.
-;;                         (emit-invokevirtual +lisp-object-class+ "intValue" nil "I"))
-;;                        ((eq representation 'unboxed-character)
-;;                         (emit-unbox-character)))
                  (fix-boxing representation (variable-derived-type variable))
                  (emit-move-from-stack target representation))
                 ((variable-index variable)
@@ -7344,11 +7325,6 @@ representation, based on the derived type of the LispObject."
                  (emit 'aload (compiland-argument-register *current-compiland*))
                  (emit-push-constant-int (variable-index variable))
                  (emit 'aaload)
-;;                  (cond ((eq representation 'unboxed-fixnum)
-;;                         ;; FIXME Optimize for case where variable is known to be a fixnum.
-;;                         (emit-invokevirtual +lisp-object-class+ "intValue" nil "I"))
-;;                        ((eq representation 'unboxed-character)
-;;                         (emit-unbox-character)))
                  (fix-boxing representation (variable-derived-type variable))
                  (emit-move-from-stack target representation))
                 (t
