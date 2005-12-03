@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.649 2005-12-02 23:05:55 piso Exp $
+;;; $Id: jvm.lisp,v 1.650 2005-12-03 11:43:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1162,17 +1162,18 @@
 
 (defknown pool-long (integer) (integer 1 65535))
 (defun pool-long (n)
-;;   (declare (optimize speed))
-;;   (pool-get (list 5
-;;                   (logand (ash n -32) #xffffffff)
-;;                   (logand n #xffffffff))))
-  (let ((list (list 5
+  (declare (optimize speed))
+  (prog1
+    (pool-get (list 5
                     (logand (ash n -32) #xffffffff)
-                    (logand n #xffffffff))))
-    (format t "pool-long ~S~%" list)
-    (let ((index (pool-get list)))
-      (incf *pool-count*)
-      index)))
+                    (logand n #xffffffff)))
+    ;; The Java Virtual Machine Specification, Section 4.4.5: "All 8-byte
+    ;; constants take up two entries in the constant_pool table of the class
+    ;; file. If a CONSTANT_Long_info or CONSTANT_Double_info structure is the
+    ;; item in the constant_pool table at index n, then the next usable item in
+    ;; the pool is located at index n+2. The constant_pool index n+1 must be
+    ;; valid but is considered unusable." So:
+    (incf *pool-count*)))
 
 (defknown u2 (fixnum) cons)
 (defun u2 (n)
@@ -1357,7 +1358,7 @@
                   (mapcar 'pretty-java-type arg-types)))))
     (setf (instruction-stack instruction) (1- stack-effect))))
 
-(declaim (ftype (function * t) emit-invokespecial-init))
+(defknown emit-invokespecial-init (string list) t)
 (defun emit-invokespecial-init (class-name arg-types)
   (let* ((info (get-descriptor-info arg-types nil))
          (descriptor (car info))
@@ -2786,52 +2787,31 @@ representation, based on the derived type of the LispObject."
          (g (gethash1 n ht)))
     (declare (type hash-table ht))
     (unless g
-;;       (let ((*code* *static-code*))
-;;         (setf g (format nil "FIXNUM_~A~D"
-;;                         (if (minusp n) "MINUS_" "")
-;;                         (abs n)))
-;;         (declare-field g +lisp-fixnum+)
-;;         (emit 'new +lisp-fixnum-class+)
-;;         (emit 'dup)
-;;         (case n
-;;           (-1
-;;            (emit 'iconst_m1))
-;;           (0
-;;            (emit 'iconst_0))
-;;           (1
-;;            (emit 'iconst_1))
-;;           (2
-;;            (emit 'iconst_2))
-;;           (3
-;;            (emit 'iconst_3))
-;;           (4
-;;            (emit 'iconst_4))
-;;           (5
-;;            (emit 'iconst_5))
-;;           (t
-;;            (emit-push-constant-int n)))
-;;         (emit-invokespecial-init +lisp-fixnum-class+ '("I"))
-;;         (emit 'putstatic *this-class* g +lisp-fixnum+)
-;;         (setf *static-code* *code*)
-;;         (setf (gethash n ht) g)))
-
-      (cond ((< most-negative-java-long n most-positive-java-long)
+      (cond ((<= most-negative-java-long n most-positive-java-long)
              (let ((*code* *static-code*))
                (setf g (format nil "BIGNUM_~A~D"
                                (if (minusp n) "MINUS_" "")
                                (abs n)))
-               (declare-field g +lisp-object+)
+               (declare-field g +lisp-bignum+)
                (emit 'new +lisp-bignum-class+)
                (emit 'dup)
                (emit 'ldc2_w (pool-long n))
                (emit-invokespecial-init +lisp-bignum-class+ '("J"))
-               (emit 'putstatic *this-class* g +lisp-object+)
+               (emit 'putstatic *this-class* g +lisp-bignum+)
                (setf *static-code* *code*)))
             (t
-             (setf g (declare-object-as-string n))
-             )
-            )
-
+             (let* ((*print-base* 10)
+                    (s (with-output-to-string (stream) (dump-form n stream)))
+                    (*code* *static-code*))
+               (setf g (concatenate 'string "BIGNUM_" (symbol-name (gensym))))
+               (declare-field g +lisp-bignum+)
+               (emit 'new +lisp-bignum-class+)
+               (emit 'dup)
+               (emit 'ldc (pool-string s))
+               (emit 'bipush 10)
+               (emit-invokespecial-init +lisp-bignum-class+ (list +java-string+ "I"))
+               (emit 'putstatic *this-class* g +lisp-bignum+)
+               (setf *static-code* *code*))))
       (setf (gethash n ht) g))
     g))
 
@@ -2995,7 +2975,7 @@ representation, based on the derived type of the LispObject."
                (emit 'getstatic *this-class* (declare-fixnum form) +lisp-fixnum+))))
         ((integerp form)
          ;; A bignum.
-         (emit 'getstatic *this-class* (declare-bignum form) +lisp-object+))
+         (emit 'getstatic *this-class* (declare-bignum form) +lisp-bignum+))
         ((numberp form)
          ;; A number, but not a fixnum.
          (emit 'getstatic *this-class*
