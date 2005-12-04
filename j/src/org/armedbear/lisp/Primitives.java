@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.856 2005-12-01 14:53:08 piso Exp $
+ * $Id: Primitives.java,v 1.857 2005-12-04 15:05:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1005,57 +1005,46 @@ public final class Primitives extends Lisp
                 return second;
             if (first instanceof Cons) {
                 LispObject result = first;
-                LispObject splice = null;
+                Cons splice = null;
                 while (first instanceof Cons) {
-                    splice = first;
-                    first = ((Cons)first).cdr;
+                    splice = (Cons) first;
+                    first = splice.cdr;
                 }
-                ((Cons)splice).cdr = second;
+                splice.cdr = second;
                 return result;
             }
             return signalTypeError(first, Symbol.LIST);
         }
         public LispObject execute(LispObject[] array) throws ConditionThrowable
         {
-            switch (array.length) {
-                case 0:
-                    Debug.assertTrue(false);
-                    return NIL;
-                case 1:
-                    Debug.assertTrue(false);
-                    return array[0];
-                default: {
-                    LispObject result = null;
-                    LispObject splice = null;
-                    final int limit = array.length - 1;
-                    int i;
-                    for (i = 0; i < limit; i++) {
-                        LispObject list = array[i];
-                        if (list == NIL)
-                            continue;
-                        if (list instanceof Cons) {
-                            if (splice != null) {
-                                splice.setCdr(list);
-                                splice = list;
-                            }
-                            while (list instanceof Cons) {
-                                if (result == null) {
-                                    result = list;
-                                    splice = result;
-                                } else {
-                                    splice = list;
-                                }
-                                list = ((Cons)list).cdr;
-                            }
-                        } else
-                            signalTypeError(list, Symbol.LIST);
+            LispObject result = null;
+            Cons splice = null;
+            final int limit = array.length - 1;
+            int i;
+            for (i = 0; i < limit; i++) {
+                LispObject list = array[i];
+                if (list == NIL)
+                    continue;
+                if (list instanceof Cons) {
+                    if (splice != null) {
+                        splice.cdr = list;
+                        splice = (Cons) list;
                     }
-                    if (result == null)
-                        return array[i];
-                    splice.setCdr(array[i]);
-                    return result;
-                }
+                    while (list instanceof Cons) {
+                        if (result == null) {
+                            result = list;
+                            splice = (Cons) result;
+                        } else
+                            splice = (Cons) list;
+                        list = splice.cdr;
+                    }
+                } else
+                    signalTypeError(list, Symbol.LIST);
             }
+            if (result == null)
+                return array[i];
+            splice.cdr = array[i];
+            return result;
         }
     };
 
