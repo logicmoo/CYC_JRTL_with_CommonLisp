@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.659 2005-12-04 17:59:17 piso Exp $
+;;; $Id: jvm.lisp,v 1.660 2005-12-04 19:12:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1016,10 +1016,6 @@
          (let ((op (%car form))
                handler)
            (cond ((symbolp op)
-                  (when (source-transform op)
-                    (let ((new-form (expand-source-transform form)))
-                      (when (neq new-form form)
-                        (return-from p1 (p1 new-form)))))
                   (when (compiler-macro-function op)
                     (unless (notinline-p op)
                       (multiple-value-bind (expansion expanded-p)
