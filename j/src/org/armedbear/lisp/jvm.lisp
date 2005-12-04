@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.656 2005-12-04 06:23:33 piso Exp $
+;;; $Id: jvm.lisp,v 1.657 2005-12-04 12:23:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2698,7 +2698,7 @@ representation, based on the derived type of the LispObject."
         (setf g (symbol-name (gensym)))
         (declare-field g +lisp-symbol+)
         (emit 'ldc (pool-string (symbol-name symbol)))
-        (emit-invokestatic "org/armedbear/lisp/Keyword" "internKeyword"
+        (emit-invokestatic +lisp-class+ "internKeyword"
                            (list +java-string+) +lisp-symbol+)
         (emit 'putstatic *this-class* g +lisp-symbol+)
         (setf *static-code* *code*)

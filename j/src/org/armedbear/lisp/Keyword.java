@@ -2,7 +2,7 @@
  * Keyword.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Keyword.java,v 1.45 2005-11-06 22:15:45 asimon Exp $
+ * $Id: Keyword.java,v 1.46 2005-12-04 12:22:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,11 +23,6 @@ package org.armedbear.lisp;
 
 public final class Keyword extends Lisp
 {
-    public static final Symbol internKeyword(String s)
-    {
-        return PACKAGE_KEYWORD.intern(s);
-    }
-
     public static final Symbol
         ABCL                = internKeyword("ABCL"),
         ABORT               = internKeyword("ABORT"),

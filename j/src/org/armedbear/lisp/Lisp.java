@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.417 2005-12-04 01:47:28 piso Exp $
+ * $Id: Lisp.java,v 1.418 2005-12-04 12:22:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1660,6 +1660,11 @@ public abstract class Lisp
         if (pkg == null)
             signal(new LispError(packageName + " is not the name of a package."));
         return pkg.intern(name);
+    }
+
+    public static final Symbol internKeyword(String s)
+    {
+        return PACKAGE_KEYWORD.intern(s);
     }
 
     // The compiler's object table.
