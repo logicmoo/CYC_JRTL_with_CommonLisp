@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.655 2005-12-04 05:55:32 piso Exp $
+;;; $Id: jvm.lisp,v 1.656 2005-12-04 06:23:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5943,11 +5943,11 @@ representation, based on the derived type of the LispObject."
     (cond ((eql size 0)
            (compile-constant 0 target representation))
           ((and size position)
-           (format t "p2-%ldb case 1 size = ~S position = ~S~%" size position)
+;;            (format t "p2-%ldb case 1 size = ~S position = ~S~%" size position)
            (cond ((and (zerop position)
                        (<= size 64)
                        (<= (1- (expt 2 size)) most-positive-java-long))
-                  (format t "p2-%ldb java long case~%")
+;;                   (format t "p2-%ldb java long case~%")
                   ;; FIXME (compile-form arg3 'stack 'java-long)
                   (compile-form arg3 'stack nil)
                   (maybe-emit-clear-values arg3)
@@ -5968,7 +5968,7 @@ representation, based on the derived type of the LispObject."
                   (emit-move-from-stack target representation))))
           ((and (fixnum-type-p size-type)
                 (fixnum-type-p position-type))
-           (format t "p2-%ldb case 2~%")
+;;            (format t "p2-%ldb case 2~%")
            (compile-form size-arg 'stack :int)
            (compile-form position-arg 'stack :int)
            (compile-form arg3 'stack nil)
@@ -5980,7 +5980,7 @@ representation, based on the derived type of the LispObject."
              (emit-unbox-fixnum))
            (emit-move-from-stack target representation))
           (t
-           (format t "p2-%ldb default case%")
+;;            (format t "p2-%ldb default case%")
            (compile-function-call form target representation)))))
 
 (defun p2-mod (form target representation)
