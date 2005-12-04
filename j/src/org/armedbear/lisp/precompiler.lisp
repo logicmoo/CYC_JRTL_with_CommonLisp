@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.141 2005-08-28 15:14:29 piso Exp $
+;;; $Id: precompiler.lisp,v 1.142 2005-12-04 01:34:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -337,11 +337,6 @@
   (let ((op (car form)))
     (when (or (not *in-jvm-compile*) (notinline-p op))
       (return-from precompile-function-call (precompile-cons form)))
-    (let ((transform (source-transform op)))
-      (when transform
-        (let ((new-form (expand-source-transform form)))
-          (when (neq new-form form)
-            (return-from precompile-function-call (precompile1 new-form))))))
     (let ((expansion (inline-expansion op)))
       (when expansion
         (let ((explain *explain*))
