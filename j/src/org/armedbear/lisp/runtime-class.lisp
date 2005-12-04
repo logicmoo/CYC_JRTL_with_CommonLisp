@@ -1,7 +1,7 @@
 ;;; runtime-class.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: runtime-class.lisp,v 1.14 2004-09-29 21:37:43 asimon Exp $
+;;; $Id: runtime-class.lisp,v 1.15 2005-12-04 17:56:45 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -477,10 +477,10 @@
                              (concatenate 'string "()" (type-name result-type))))
        ((primitive-type-p result-type)
         (visit-type-insn-2 cv constants.checkcast (cast-type result-type))
-        (visit-method-insn-4 cv constants.invokevirtual
-                             (return-type-for-make-lisp-object result-type)
-                             "getValue"
-                             (concatenate 'string "()" (type-name result-type))))
+        (visit-field-insn-4 cv constants.getfield 
+                            (return-type-for-make-lisp-object result-type)
+                            "value"
+                            (type-name result-type)))
        (t
         (visit-method-insn-4 cv constants.invokevirtual
                              "org/armedbear/lisp/LispObject" "javaInstance" "()Ljava/lang/Object;")
