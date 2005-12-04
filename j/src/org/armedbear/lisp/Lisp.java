@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.416 2005-11-26 15:42:12 piso Exp $
+ * $Id: Lisp.java,v 1.417 2005-12-04 01:47:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1028,12 +1028,8 @@ public abstract class Lisp
             Class c =
                 loader.loadClassFromByteArray(null, bytes, 0, bytes.length);
             if (c != null) {
-                Class[] parameterTypes = new Class[0];
-                Constructor constructor =
-                    c.getConstructor(parameterTypes);
-                Object[] initargs = new Object[0];
-                LispObject obj =
-                    (LispObject) constructor.newInstance(initargs);
+                Constructor constructor = c.getConstructor(null);
+                LispObject obj = (LispObject) constructor.newInstance(null);
                 if (obj instanceof Function)
                     ((Function)obj).setClassBytes(bytes);
                 return obj;
