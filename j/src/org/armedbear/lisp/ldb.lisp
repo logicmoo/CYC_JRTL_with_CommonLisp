@@ -1,7 +1,7 @@
 ;;; ldb.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: ldb.lisp,v 1.6 2005-12-04 01:33:11 piso Exp $
+;;; $Id: ldb.lisp,v 1.7 2005-12-04 19:13:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -27,11 +27,6 @@
 
 (defun byte-position (bytespec)
   (cdr bytespec))
-
-;; Used by the LDB source transform.
-(defun %ldb (size position integer)
-  (logand (ash integer (- position))
-	  (1- (ash 1 size))))
 
 (defun ldb (bytespec integer)
   (logand (ash integer (- (byte-position bytespec)))
@@ -72,3 +67,23 @@
 		     ,setter
 		     ,gnuval)
 		  `(ldb ,btemp ,getter))))))
+
+;; Used by the LDB source transform.
+(defun %ldb (size position integer)
+  (logand (ash integer (- position))
+	  (1- (ash 1 size))))
+
+(define-setf-expander %ldb (size position place &environment env)
+  (multiple-value-bind (dummies vals newval setter getter)
+      (get-setf-expansion place env)
+    (let ((n-size (gensym))
+          (n-pos (gensym))
+          (n-new (gensym)))
+      (values (list* n-size n-pos dummies)
+              (list* size position vals)
+              (list n-new)
+              `(let ((,(car newval) (dpb ,n-new (byte ,n-size ,n-pos)
+                                         ,getter)))
+                 ,setter
+                 ,n-new)
+              `(ldb (byte ,n-size ,n-pos) ,getter)))))
