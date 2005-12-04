@@ -1,7 +1,7 @@
 ;;; known-symbols.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-symbols.lisp,v 1.2 2005-11-08 14:58:11 piso Exp $
+;;; $Id: known-symbols.lisp,v 1.3 2005-12-04 13:35:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,25 +19,31 @@
 
 (in-package #:system)
 
-(export 'lookup-known-symbol)
+(export '(lookup-known-symbol lookup-known-keyword))
 
-(let ((ht (make-hash-table :test 'eq :size 1024)))
-  (defun initialize-known-symbols ()
+(let ((symbols (make-hash-table :test 'eq :size 1024))
+      (keywords (make-hash-table :test 'eq :size 128)))
+  (defun initialize-known-symbols (source ht)
     (clrhash ht)
-    (let* ((symbol-class (java:jclass "org.armedbear.lisp.Symbol"))
-           (fields (java:jclass-fields symbol-class :declared t :public t)))
+    (let* ((source-class (java:jclass source))
+           (symbol-class (java:jclass "org.armedbear.lisp.Symbol"))
+           (fields (java:jclass-fields source-class :declared t :public t)))
       (dotimes (i (length fields))
         (let* ((field (aref fields i))
                (type (java:jfield-type field)))
           (when (equal type symbol-class)
             (let* ((name (java:jfield-name field))
-                   (symbol (java:jfield symbol-class name)))
+                   (symbol (java:jfield source-class name)))
               (puthash symbol ht name))))))
     (hash-table-count ht))
 
-  (initialize-known-symbols)
+  (initialize-known-symbols "org.armedbear.lisp.Symbol" symbols)
+  (initialize-known-symbols "org.armedbear.lisp.Keyword" keywords)
 
   (defun lookup-known-symbol (symbol)
-    (gethash1 symbol ht)))
+    (gethash1 symbol symbols))
+
+  (defun lookup-known-keyword (keyword)
+    (gethash1 keyword keywords)))
 
 (provide '#:known-symbols)
