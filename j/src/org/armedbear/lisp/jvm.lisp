@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.653 2005-12-04 05:24:13 piso Exp $
+;;; $Id: jvm.lisp,v 1.654 2005-12-04 05:33:04 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1618,7 +1618,7 @@ representation, based on the derived type of the LispObject."
                 (emit 'getfield +lisp-fixnum-class+ "value" "I"))
                (t
                 (emit-invokevirtual +lisp-object-class+ "intValue" nil "I"))))
-        ((eq required-representation 'unboxed-character)
+        ((eq required-representation :char)
          (emit-unbox-character))))
 
 (defknown emit-box-long () t)
@@ -1635,7 +1635,7 @@ representation, based on the derived type of the LispObject."
         ((fixnump target)
          (emit
           (case representation
-            ((:int java-boolean unboxed-character)
+            ((:int java-boolean :char)
              'istore)
             (t
              'astore))
@@ -2974,7 +2974,7 @@ representation, based on the derived type of the LispObject."
            (return-from compile-constant))
           (t
            (assert nil))))
-  (when (eq representation 'unboxed-character)
+  (when (eq representation :char)
     (cond ((characterp form)
            (emit-push-constant-int (char-code form))
            (emit-move-from-stack target representation)
@@ -3135,7 +3135,7 @@ representation, based on the derived type of the LispObject."
   (emit-invokevirtual +lisp-object-class+ op (list +lisp-object+) +lisp-object+)
   (case representation
     (:int (emit-unbox-fixnum))
-    (unboxed-character (emit-unbox-character)))
+    (:char (emit-unbox-character)))
   (emit-move-from-stack target))
 
 (declaim (ftype (function (t t t t) t) compile-function-call-2))
@@ -3172,7 +3172,7 @@ representation, based on the derived type of the LispObject."
                                        '("I") "I")
                    (emit-invokevirtual +lisp-object-class+ "getSlotValue"
                                        '("I") +lisp-object+))
-               (when (eq representation 'unboxed-character)
+               (when (eq representation :char)
                  (emit-unbox-character))
                (emit-move-from-stack target representation)
                t)))
@@ -3534,7 +3534,7 @@ representation, based on the derived type of the LispObject."
           (emit-call-thread-execute numargs))
       (case representation
         (:int (emit-unbox-fixnum))
-        (unboxed-character (emit-unbox-character))
+        (:char (emit-unbox-character))
         (java-boolean (emit-unbox-boolean)))
       (emit-move-from-stack target representation)
       (when saved-vars
@@ -3629,7 +3629,7 @@ representation, based on the derived type of the LispObject."
   (compile-call (cddr form))
   (case representation
     (:int (emit-unbox-fixnum))
-    (unboxed-character (emit-unbox-character)))
+    (:char (emit-unbox-character)))
   (emit-move-from-stack target))
 
 (defun save-variables (variables)
@@ -4036,8 +4036,8 @@ representation, based on the derived type of the LispObject."
 ;;       (format t "p2-test-char= type1 = ~S type2 = ~S~%" type1 type2)
       (when (and (eq type1 'CHARACTER) (eq type2 'CHARACTER))
         (cond (*enable-unboxed-characters*
-               (compile-form arg1 'stack 'unboxed-character)
-               (compile-form arg2 'stack 'unboxed-character)
+               (compile-form arg1 'stack :char)
+               (compile-form arg2 'stack :char)
                'if_icmpne)
               (t
                (compile-form arg1 'stack nil)
@@ -4074,8 +4074,8 @@ representation, based on the derived type of the LispObject."
              (maybe-emit-clear-values arg1 arg2)
              'if_icmpne)
             ((and (eq type1 'CHARACTER) (eq type2 'CHARACTER))
-             (compile-form arg1 'stack 'unboxed-character)
-             (compile-form arg2 'stack 'unboxed-character)
+             (compile-form arg1 'stack :char)
+             (compile-form arg2 'stack :char)
              (maybe-emit-clear-values arg1 arg2)
              'if_icmpne)
             ((fixnum-type-p type2)
@@ -4692,9 +4692,9 @@ representation, based on the derived type of the LispObject."
                                  (setf boundp t))
                                 ((and *enable-unboxed-characters*
                                       (eq type 'CHARACTER))
-                                 (setf (variable-representation variable) 'unboxed-character)
+                                 (setf (variable-representation variable) :char)
                                  (setf (variable-register variable) (allocate-register))
-                                 (compile-form initform 'stack 'unboxed-character)
+                                 (compile-form initform 'stack :char)
                                  (emit 'istore (variable-register variable))
                                  (setf boundp t))
                                 (t
@@ -6964,7 +6964,7 @@ representation, based on the derived type of the LispObject."
          (type1 (derive-compiler-type arg1))
          (type2 (derive-compiler-type arg2)))
 ;;     (format t "p2-char/schar type1 = ~S type2 = ~S~%" type1 type2)
-    (cond ((and (eq representation 'unboxed-character)
+    (cond ((and (eq representation :char)
                 (eq op 'CHAR)
                 (or (stringp arg1) (compiler-subtypep type1 'STRING))
                 (fixnum-type-p type2))
@@ -6982,7 +6982,7 @@ representation, based on the derived type of the LispObject."
            (emit-invokevirtual +lisp-object-class+
                                (symbol-name op) ;; "CHAR" or "SCHAR"
                                '("I") +lisp-object+)
-           (when (eq representation 'unboxed-character)
+           (when (eq representation :char)
              (emit-unbox-character))
            (emit-move-from-stack target representation))
           (t
@@ -6990,7 +6990,7 @@ representation, based on the derived type of the LispObject."
 
 (defun p2-svref (form target representation)
   (cond ((and (check-arg-count form 2)
-              (neq representation 'unboxed-character)) ; FIXME
+              (neq representation :char)) ; FIXME
          (let ((arg1 (%cadr form))
                (arg2 (%caddr form)))
            (compile-form arg1 'stack nil) ; vector
@@ -6999,7 +6999,7 @@ representation, based on the derived type of the LispObject."
            (emit-invokevirtual +lisp-object-class+ "SVREF" '("I") +lisp-object+)
            (case representation
              (:int (emit-unbox-fixnum))
-             (unboxed-character (emit-unbox-character)))
+             (:char (emit-unbox-character)))
            (emit-move-from-stack target representation)))
         (t
          (compile-function-call form target representation))))
@@ -7051,7 +7051,7 @@ representation, based on the derived type of the LispObject."
 (defun p2-elt (form target representation)
   (cond ((and (check-arg-count form 2)
               (subtypep (derive-type (third form)) 'fixnum)
-              (neq representation 'unboxed-character)) ; FIXME
+              (neq representation :char)) ; FIXME
          (compile-form (second form) 'stack nil)
          (compile-form (third form) 'stack :int)
          (emit-invokevirtual +lisp-object-class+ "elt" '("I") +lisp-object+)
@@ -7072,7 +7072,7 @@ representation, based on the derived type of the LispObject."
                   (compile-form arg2 'stack :int) ; index
                   (maybe-emit-clear-values arg1 arg2)
                   (emit-invokevirtual +lisp-object-class+ "aref" '("I") "I"))
-                 ((eq representation 'unboxed-character)
+                 ((eq representation :char)
                   (cond ((compiler-subtypep type1 'string)
                          (compile-form arg1 'stack nil) ; array
                          (emit 'checkcast +lisp-abstract-string-class+)
@@ -7319,8 +7319,8 @@ representation, based on the derived type of the LispObject."
                         (emit 'iload (variable-register variable))
                         (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
                  (emit-move-from-stack target representation))
-                ((eq (variable-representation variable) 'unboxed-character)
-                 (cond ((eq representation 'unboxed-character)
+                ((eq (variable-representation variable) :char)
+                 (cond ((eq representation :char)
                         (aver (variable-register variable))
                         (emit 'iload (variable-register variable)))
                        (t
@@ -7516,9 +7516,9 @@ representation, based on the derived type of the LispObject."
                (emit 'swap)                    ; stack: new-fixnum new-fixnum int
                (emit-invokespecial-init +lisp-fixnum-class+ '("I")) ; stack: fixnum
              (emit-move-from-stack target representation))))
-          ((eq (variable-representation variable) 'unboxed-character)
-           (dformat t "p2-setq unboxed-character case~%")
-           (compile-form value-form 'stack 'unboxed-character)
+          ((eq (variable-representation variable) :char)
+           (dformat t "p2-setq :char case~%")
+           (compile-form value-form 'stack :char)
            (maybe-emit-clear-values value-form)
            (when target
              (emit 'dup))
@@ -7669,7 +7669,7 @@ representation, based on the derived type of the LispObject."
 ;;              (emit-unbox-fixnum))
            (case representation
              (:int (emit-unbox-fixnum))
-             (unboxed-character (emit-unbox-character)))
+             (:char (emit-unbox-character)))
            (emit-move-from-stack target representation))
           (t
            (compile-form value-form target representation)))))
@@ -7692,7 +7692,7 @@ representation, based on the derived type of the LispObject."
              (emit 'dup))
            (cond (;;(and *enable-unboxed-characters* (consp arg) (eq (car arg) 'CHAR))
                   *enable-unboxed-characters*
-                  (compile-form arg 'stack 'unboxed-character))
+                  (compile-form arg 'stack :char))
                  (t
                   (compile-form arg 'stack nil)
                   (maybe-emit-clear-values arg)
@@ -7736,15 +7736,15 @@ representation, based on the derived type of the LispObject."
           (return-from p2-char=))
         (cond ((characterp arg1)
                (emit-push-constant-int (char-code arg1))
-               (compile-form arg2 'stack 'unboxed-character)
+               (compile-form arg2 'stack :char)
                (maybe-emit-clear-values arg2))
               ((characterp arg2)
-               (compile-form arg1 'stack 'unboxed-character)
+               (compile-form arg1 'stack :char)
                (maybe-emit-clear-values arg1)
                (emit-push-constant-int (char-code arg2)))
               (t
-               (compile-form arg1 'stack 'unboxed-character)
-               (compile-form arg2 'stack 'unboxed-character)
+               (compile-form arg1 'stack :char)
+               (compile-form arg2 'stack :char)
                (maybe-emit-clear-values arg1 arg2)))
         (let ((LABEL1 (gensym))
               (LABEL2 (gensym)))
@@ -8336,7 +8336,7 @@ representation, based on the derived type of the LispObject."
                        (cond ((subtypep (variable-declared-type variable) 'FIXNUM)
                               (setf (variable-representation variable) :int))
                              ((subtypep (variable-declared-type variable) 'CHARACTER)
-                              (setf (variable-representation variable) 'unboxed-character)))))))))
+                              (setf (variable-representation variable) :char)))))))))
             ((IGNORE IGNORABLE)
              (process-ignore/ignorable (%car decl) (%cdr decl) *visible-variables*))
             ((DYNAMIC-EXTENT FTYPE INLINE NOTINLINE OPTIMIZE SPECIAL)
@@ -8355,7 +8355,7 @@ representation, based on the derived type of the LispObject."
                        (cond ((subtypep (variable-declared-type variable) 'FIXNUM)
                               (setf (variable-representation variable) :int))
                              ((subtypep (variable-declared-type variable) 'CHARACTER)
-                              (setf (variable-representation variable) 'unboxed-character)))))))))))))
+                              (setf (variable-representation variable) :char)))))))))))))
 
     (allocate-register) ;; register 0: "this" pointer
     (when (and *closure-variables* *child-p*)
@@ -8458,7 +8458,7 @@ representation, based on the derived type of the LispObject."
                (emit 'aload (variable-register variable))
                (emit-unbox-character)
                (emit 'istore (variable-register variable))
-               (setf (variable-representation variable) 'unboxed-character)))))
+               (setf (variable-representation variable) :char)))))
 
     ;; Establish dynamic bindings for any variables declared special.
     (dolist (variable parameters)
