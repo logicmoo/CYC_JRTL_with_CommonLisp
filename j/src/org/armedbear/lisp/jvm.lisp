@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.651 2005-12-03 16:10:46 piso Exp $
+;;; $Id: jvm.lisp,v 1.652 2005-12-04 01:34:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1016,6 +1016,10 @@
          (let ((op (%car form))
                handler)
            (cond ((symbolp op)
+                  (when (source-transform op)
+                    (let ((new-form (expand-source-transform form)))
+                      (when (neq new-form form)
+                        (return-from p1 (p1 new-form)))))
                   (when (compiler-macro-function op)
                     (unless (notinline-p op)
                       (multiple-value-bind (expansion expanded-p)
@@ -1278,7 +1282,6 @@
 
 (defknown emit-push-constant-long (integer) t)
 (defun emit-push-constant-long (n)
-  (aver (not (fixnump n)))
   (aver (<= n most-positive-java-long))
   (aver (>= n most-negative-java-long))
   (emit 'ldc2_w (pool-long n)))
@@ -5927,30 +5930,49 @@ representation, based on the derived type of the LispObject."
     (compile-function-call form target representation)
     (return-from p2-%ldb))
   (let* ((args (cdr form))
-         (arg1 (%car args))
-         (arg2 (%cadr args))
+         (size-arg (%car args))
+         (position-arg (%cadr args))
          (arg3 (%caddr args))
-         (type1 (derive-type arg1))
-         (type2 (derive-type arg2)))
+         (size-type (derive-compiler-type size-arg))
+         (position-type (derive-compiler-type position-arg))
+         (size (fixnum-constant-value size-type))
+         (position (fixnum-constant-value position-type)))
     ;; FIXME Inline the case where all args are of fixnum type.
     ;; FIXME Add LispObject.ldb(), returning a Java int, for the case where we
     ;; need an unboxed fixnum result.
-    (cond ((and (fixnump arg1) (fixnump arg2))
-           ;; Order of evaluation doesn't matter.
+    (cond ((eql size 0)
+           (compile-constant 0 target representation))
+          ((and size position)
+           (format t "p2-%ldb case 1 size = ~S position = ~S~%" size position)
+           (cond ((and (zerop position)
+                       (<= size 64)
+                       (<= (1- (expt 2 size)) most-positive-java-long))
+                  (format t "p2-%ldb java long case~%")
+                  ;; FIXME (compile-form arg3 'stack 'java-long)
+                  (compile-form arg3 'stack nil)
+                  (maybe-emit-clear-values arg3)
+                  (emit-invokevirtual +lisp-object-class+ "longValue" nil "J")
+                  (emit-push-constant-long (1- (expt 2 size))) ; mask
+                  (emit 'land)
+                  (emit-box-long)
+                  (fix-boxing representation nil)
+                  (emit-move-from-stack target representation))
+                 (t
+                  (compile-form arg3 'stack nil)
+                  (maybe-emit-clear-values arg3)
+                  (emit-push-constant-int size)
+                  (emit-push-constant-int position)
+                  (emit-invokevirtual +lisp-object-class+ "LDB" '("I" "I") +lisp-object+)
+                  (when (eq representation 'unboxed-fixnum)
+                    (emit-unbox-fixnum))
+                  (emit-move-from-stack target representation))))
+          ((and (fixnum-type-p size-type)
+                (fixnum-type-p position-type))
+           (format t "p2-%ldb case 2~%")
+           (compile-form size-arg 'stack 'unboxed-fixnum)
+           (compile-form position-arg 'stack 'unboxed-fixnum)
            (compile-form arg3 'stack nil)
-           (compile-form arg1 'stack 'unboxed-fixnum)
-           (compile-form arg2 'stack 'unboxed-fixnum)
-           (maybe-emit-clear-values arg1 arg2 arg3)
-           (emit-invokevirtual +lisp-object-class+ "LDB" '("I" "I") +lisp-object+)
-           (when (eq representation 'unboxed-fixnum)
-             (emit-unbox-fixnum))
-           (emit-move-from-stack target representation))
-          ((and (subtypep type1 'FIXNUM)
-                (subtypep type2 'FIXNUM))
-           (compile-form arg1 'stack 'unboxed-fixnum)
-           (compile-form arg2 'stack 'unboxed-fixnum)
-           (compile-form arg3 'stack nil)
-           (maybe-emit-clear-values arg1 arg2 arg3)
+           (maybe-emit-clear-values size-arg position-arg arg3)
            (emit 'dup_x2)
            (emit 'pop)
            (emit-invokevirtual +lisp-object-class+ "LDB" '("I" "I") +lisp-object+)
@@ -5958,6 +5980,7 @@ representation, based on the derived type of the LispObject."
              (emit-unbox-fixnum))
            (emit-move-from-stack target representation))
           (t
+           (format t "p2-%ldb default case%")
            (compile-function-call form target representation)))))
 
 (defun p2-mod (form target representation)
