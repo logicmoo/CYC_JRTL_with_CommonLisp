@@ -2,7 +2,7 @@
  * Keyword.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Keyword.java,v 1.46 2005-12-04 12:22:21 piso Exp $
+ * $Id: Keyword.java,v 1.47 2005-12-04 13:28:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@ public final class Keyword extends Lisp
         ABCL                = internKeyword("ABCL"),
         ABORT               = internKeyword("ABORT"),
         ABSOLUTE            = internKeyword("ABSOLUTE"),
+        ADJUSTABLE          = internKeyword("ADJUSTABLE"),
         ALLOW_OTHER_KEYS    = internKeyword("ALLOW-OTHER-KEYS"),
         ANSI_CL             = internKeyword("ANSI-CL"),
         APPEND              = internKeyword("APPEND"),
@@ -37,6 +38,7 @@ public final class Keyword extends Lisp
         CAPITALIZE_FIRST    = internKeyword("CAPITALIZE-FIRST"),
         CASE                = internKeyword("CASE"),
         CAUSE               = internKeyword("CAUSE"),
+        CHAR                = internKeyword("CHAR"),
         COMMON              = internKeyword("COMMON"),
         COMMON_LISP         = internKeyword("COMMON-LISP"),
         COMPILE_TOPLEVEL    = internKeyword("COMPILE-TOPLEVEL"),
@@ -47,6 +49,7 @@ public final class Keyword extends Lisp
         DEFAULT             = internKeyword("DEFAULT"),
         DEFAULTS            = internKeyword("DEFAULTS"),
         DEVICE              = internKeyword("DEVICE"),
+        DIRECTION           = internKeyword("DIRECTION"),
         DIRECTORY           = internKeyword("DIRECTORY"),
         DIRECT_SUPERCLASSES = internKeyword("DIRECT-SUPERCLASSES"),
         DOWNCASE            = internKeyword("DOWNCASE"),
@@ -59,12 +62,14 @@ public final class Keyword extends Lisp
         FILL_POINTER        = internKeyword("FILL-POINTER"),
         FORMAT_ARGUMENTS    = internKeyword("FORMAT-ARGUMENTS"),
         FORMAT_CONTROL      = internKeyword("FORMAT-CONTROL"),
+        FROM_END            = internKeyword("FROM-END"),
         HOST                = internKeyword("HOST"),
         INHERITED           = internKeyword("INHERITED"),
         INITIAL_CONTENTS    = internKeyword("INITIAL-CONTENTS"),
         INITIAL_ELEMENT     = internKeyword("INITIAL-ELEMENT"),
         INPUT               = internKeyword("INPUT"),
         INSTANCE            = internKeyword("INSTANCE"),
+        INT                 = internKeyword("INT"),
         INTERNAL            = internKeyword("INTERNAL"),
         INVERT              = internKeyword("INVERT"),
         IO                  = internKeyword("IO"),
@@ -72,12 +77,14 @@ public final class Keyword extends Lisp
         JAVA_1_4            = internKeyword("JAVA-1.4"),
         JAVA_1_5            = internKeyword("JAVA-1.5"),
         JAVA_1_6            = internKeyword("JAVA-1.6"),
+        KEY                 = internKeyword("KEY"),
         LINUX               = internKeyword("LINUX"),
         LOAD_TOPLEVEL       = internKeyword("LOAD-TOPLEVEL"),
         LOCAL               = internKeyword("LOCAL"),
         NAME                = internKeyword("NAME"),
         NEWEST              = internKeyword("NEWEST"),
         NICKNAMES           = internKeyword("NICKNAMES"),
+        NONE                = internKeyword("NONE"),
         NO_ERROR            = internKeyword("NO-ERROR"),
         OBJECT              = internKeyword("OBJECT"),
         OPERANDS            = internKeyword("OPERANDS"),
@@ -96,6 +103,8 @@ public final class Keyword extends Lisp
         STREAM              = internKeyword("STREAM"),
         SUNOS               = internKeyword("SUNOS"),
         SUPERSEDE           = internKeyword("SUPERSEDE"),
+        TEST                = internKeyword("TEST"),
+        TEST_NOT            = internKeyword("TEST-NOT"),
         TIME                = internKeyword("TIME"),
         TOP_LEVEL           = internKeyword("TOP-LEVEL"),
         TRAPS               = internKeyword("TRAPS"),
