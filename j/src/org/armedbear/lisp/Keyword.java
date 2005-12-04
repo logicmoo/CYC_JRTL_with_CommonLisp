@@ -2,7 +2,7 @@
  * Keyword.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Keyword.java,v 1.47 2005-12-04 13:28:24 piso Exp $
+ * $Id: Keyword.java,v 1.48 2005-12-04 13:34:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,6 +43,7 @@ public final class Keyword extends Lisp
         COMMON_LISP         = internKeyword("COMMON-LISP"),
         COMPILE_TOPLEVEL    = internKeyword("COMPILE-TOPLEVEL"),
         COUNT_ONLY          = internKeyword("COUNT-ONLY"),
+        CREATE              = internKeyword("CREATE"),
         DARWIN              = internKeyword("DARWIN"),
         DATUM               = internKeyword("DATUM"),
         DECLARED            = internKeyword("DECLARED"),
@@ -59,11 +60,14 @@ public final class Keyword extends Lisp
         EXECUTE             = internKeyword("EXECUTE"),
         EXPECTED_TYPE       = internKeyword("EXPECTED-TYPE"),
         EXTERNAL            = internKeyword("EXTERNAL"),
+        EXTERNAL_FORMAT     = internKeyword("EXTERNAL-FORMAT"),
         FILL_POINTER        = internKeyword("FILL-POINTER"),
         FORMAT_ARGUMENTS    = internKeyword("FORMAT-ARGUMENTS"),
         FORMAT_CONTROL      = internKeyword("FORMAT-CONTROL"),
         FROM_END            = internKeyword("FROM-END"),
         HOST                = internKeyword("HOST"),
+        IF_DOES_NOT_EXIST   = internKeyword("IF-DOES-NOT-EXIST"),
+        IF_EXISTS           = internKeyword("IF-EXISTS"),
         INHERITED           = internKeyword("INHERITED"),
         INITIAL_CONTENTS    = internKeyword("INITIAL-CONTENTS"),
         INITIAL_ELEMENT     = internKeyword("INITIAL-ELEMENT"),
@@ -82,6 +86,7 @@ public final class Keyword extends Lisp
         LOAD_TOPLEVEL       = internKeyword("LOAD-TOPLEVEL"),
         LOCAL               = internKeyword("LOCAL"),
         NAME                = internKeyword("NAME"),
+        NEW_VERSION         = internKeyword("NEW"),
         NEWEST              = internKeyword("NEWEST"),
         NICKNAMES           = internKeyword("NICKNAMES"),
         NONE                = internKeyword("NONE"),
@@ -94,10 +99,14 @@ public final class Keyword extends Lisp
         OVERWRITE           = internKeyword("OVERWRITE"),
         PACKAGE             = internKeyword("PACKAGE"),
         PATHNAME            = internKeyword("PATHNAME"),
+        PROBE               = internKeyword("PROBE"),
         PUBLIC              = internKeyword("PUBLIC"),
         PRESERVE            = internKeyword("PRESERVE"),
         REF                 = internKeyword("REF"),
         RELATIVE            = internKeyword("RELATIVE"),
+        RENAME              = internKeyword("RENAME"),
+        RENAME_AND_DELETE   = internKeyword("RENAME-AND-DELETE"),
+        SIZE                = internKeyword("SIZE"),
         START               = internKeyword("START"),
         STATUS              = internKeyword("STATUS"),
         STREAM              = internKeyword("STREAM"),
