@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.654 2005-12-04 05:33:04 piso Exp $
+;;; $Id: jvm.lisp,v 1.655 2005-12-04 05:55:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1635,7 +1635,7 @@ representation, based on the derived type of the LispObject."
         ((fixnump target)
          (emit
           (case representation
-            ((:int java-boolean :char)
+            ((:int :boolean :char)
              'istore)
             (t
              'astore))
@@ -3535,7 +3535,7 @@ representation, based on the derived type of the LispObject."
       (case representation
         (:int (emit-unbox-fixnum))
         (:char (emit-unbox-character))
-        (java-boolean (emit-unbox-boolean)))
+        (:boolean (emit-unbox-boolean)))
       (emit-move-from-stack target representation)
       (when saved-vars
         (restore-variables saved-vars))
@@ -3814,12 +3814,12 @@ representation, based on the derived type of the LispObject."
            (compile-form arg3 'stack :int)
            (maybe-emit-clear-values arg3)
            (emit test LABEL1)
-           (if (eq representation 'java-boolean)
+           (if (eq representation :boolean)
                (emit 'iconst_1)
                (emit-push-t))
            (emit 'goto LABEL2)
            (label LABEL1)
-           (if (eq representation 'java-boolean)
+           (if (eq representation :boolean)
                (emit 'iconst_0)
                (emit-push-nil))
            (label LABEL2)
@@ -7719,11 +7719,11 @@ representation, based on the derived type of the LispObject."
           (arg2 (%cadr args)))
       (when (and (characterp arg1) (characterp arg2))
         (cond ((eql arg1 arg2)
-               (if (eq representation 'java-boolean)
+               (if (eq representation :boolean)
                    (emit 'iconst_1)
                    (emit-push-t)))
               (t
-               (if (eq representation 'java-boolean)
+               (if (eq representation :boolean)
                    (emit 'iconst_0)
                    (emit-push-nil))))
         (emit-move-from-stack target representation)
@@ -7749,12 +7749,12 @@ representation, based on the derived type of the LispObject."
         (let ((LABEL1 (gensym))
               (LABEL2 (gensym)))
           (emit 'if_icmpeq LABEL1)
-          (if (eq representation 'java-boolean)
+          (if (eq representation :boolean)
               (emit 'iconst_0)
               (emit-push-nil))
           (emit 'goto LABEL2)
           (label LABEL1)
-          (if (eq representation 'java-boolean)
+          (if (eq representation :boolean)
               (emit 'iconst_1)
               (emit-push-t))
           (label LABEL2)
