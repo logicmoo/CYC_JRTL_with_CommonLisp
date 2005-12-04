@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.657 2005-12-04 12:23:45 piso Exp $
+;;; $Id: jvm.lisp,v 1.658 2005-12-04 14:07:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1626,7 +1626,7 @@ representation, based on the derived type of the LispObject."
   (declare (optimize speed))
   (emit-invokestatic +lisp-class+ "number" (list "J") +lisp-object+))
 
-(declaim (ftype (function (t &optional t) t) emit-move-from-stack))
+(defknown emit-move-from-stack (t &optional t) t)
 (defun emit-move-from-stack (target &optional representation)
   (declare (optimize speed))
   (cond ((null target)
@@ -2687,7 +2687,7 @@ representation, based on the derived type of the LispObject."
         (setf (gethash symbol ht) g)))
     g))
 
-(declaim (ftype (function (symbol) string) declare-keyword))
+(defknown declare-keyword (symbol) string)
 (defun declare-keyword (symbol)
   (declare (type symbol symbol))
   (let* ((ht *declared-symbols*)
@@ -5207,6 +5207,12 @@ representation, based on the derived type of the LispObject."
            (when target
              (emit-push-nil)
              (emit-move-from-stack target)))
+          ((keywordp obj)
+           (let ((name (lookup-known-keyword obj)))
+              (if name
+                  (emit 'getstatic "org/armedbear/lisp/Keyword" name +lisp-symbol+)
+                  (emit 'getstatic *this-class* (declare-keyword obj) +lisp-symbol+)))
+            (emit-move-from-stack target))
           ((symbolp obj)
            (let ((name (lookup-known-symbol obj)))
              (cond (name
@@ -7922,7 +7928,10 @@ representation, based on the derived type of the LispObject."
                 (emit-push-t)
                 (emit-move-from-stack target))
                ((keywordp form)
-                (emit 'getstatic *this-class* (declare-keyword form) +lisp-symbol+)
+                (let ((name (lookup-known-keyword form)))
+                  (if name
+                      (emit 'getstatic "org/armedbear/lisp/Keyword" name +lisp-symbol+)
+                      (emit 'getstatic *this-class* (declare-keyword form) +lisp-symbol+)))
                 (emit-move-from-stack target))
                (t
                 ;; Shouldn't happen.
