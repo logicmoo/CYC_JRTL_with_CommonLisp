@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.658 2005-12-04 14:07:28 piso Exp $
+;;; $Id: jvm.lisp,v 1.659 2005-12-04 17:59:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5147,7 +5147,12 @@ representation, based on the derived type of the LispObject."
     (return-from p2-cons))
   (emit 'new +lisp-cons-class+)
   (emit 'dup)
-  (process-args (cdr form))
+  (let* ((args (%cdr form))
+         (arg1 (%car args))
+         (arg2 (%cadr args)))
+    (compile-form arg1 'stack nil)
+    (compile-form arg2 'stack nil)
+    (maybe-emit-clear-values arg1 arg2))
   (emit-invokespecial-init +lisp-cons-class+ (lisp-object-arg-types 2))
   (emit-move-from-stack target))
 
@@ -8529,7 +8534,7 @@ representation, based on the derived type of the LispObject."
         (emit 'astore (compiland-argument-register compiland)))
 
       (maybe-initialize-thread-var)
-      (setf *code* (append code *code*)))
+      (setf *code* (nconc code *code*)))
 
     (finalize-code)
     (optimize-code)
