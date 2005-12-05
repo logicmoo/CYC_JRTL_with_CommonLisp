@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2005 Peter Graves, Andras Simon
- * $Id: Java.java,v 1.69 2005-11-11 21:14:24 piso Exp $
+ * $Id: Java.java,v 1.70 2005-12-05 01:41:18 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -375,7 +375,8 @@ public final class Java extends Lisp
                 return new JavaObject(result);
             }
             catch (Throwable t) {
-                Class tClass = t.getClass();
+                if (t instanceof InvocationTargetException)
+                    t = t.getCause();
                 Symbol condition = getCondition(t.getClass());
                 if (condition == null)
                     signal(new JavaException(t));
@@ -485,7 +486,6 @@ public final class Java extends Lisp
                 return new JavaObject(Array.get(a, ((Integer)args[args.length - 1].javaInstance()).intValue()));
             }
             catch (Throwable t) {
-                Class tClass = t.getClass();
                 Symbol condition = getCondition(t.getClass());
                 if (condition == null)
                     signal(new JavaException(t));
@@ -520,7 +520,6 @@ public final class Java extends Lisp
                 return v;
             }
             catch (Throwable t) {
-                Class tClass = t.getClass();
                 Symbol condition = getCondition(t.getClass());
                 if (condition == null)
                     signal(new JavaException(t));
@@ -605,6 +604,8 @@ public final class Java extends Lisp
             throw t;
         }
         catch (Throwable t) {
+            if (t instanceof InvocationTargetException)
+                t = t.getCause();
             Symbol condition = getCondition(t.getClass());
             if (condition == null)
                 signal(new JavaException(t));
