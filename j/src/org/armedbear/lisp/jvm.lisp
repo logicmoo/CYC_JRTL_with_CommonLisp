@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.661 2005-12-05 00:20:16 piso Exp $
+;;; $Id: jvm.lisp,v 1.662 2005-12-05 17:19:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -342,7 +342,7 @@
   free-specials
   )
 
-(declaim (ftype (function (t) boolean) node-constant-p))
+(defknown node-constant-p (t) boolean)
 (defun node-constant-p (object)
   (cond ((block-node-p object)
          nil)
@@ -1670,16 +1670,18 @@ representation, based on the derived type of the LispObject."
       (setf *last-error-context* context))))
 
 (defun handle-style-warning (condition)
-  (fresh-line *error-output*)
-  (note-error-context)
-  (format *error-output* "; Caught ~A:~%;   ~A~2%" (type-of condition) condition)
+  (unless *suppress-compiler-warnings*
+    (fresh-line *error-output*)
+    (note-error-context)
+    (format *error-output* "; Caught ~A:~%;   ~A~2%" (type-of condition) condition))
   (incf *style-warnings*)
   (muffle-warning))
 
 (defun handle-warning (condition)
-  (fresh-line *error-output*)
-  (note-error-context)
-  (format *error-output* "; Caught ~A:~%;   ~A~2%" (type-of condition) condition)
+  (unless *suppress-compiler-warnings*
+    (fresh-line *error-output*)
+    (note-error-context)
+    (format *error-output* "; Caught ~A:~%;   ~A~2%" (type-of condition) condition))
   (incf *warnings*)
   (muffle-warning))
 
@@ -1690,16 +1692,15 @@ representation, based on the derived type of the LispObject."
   (incf *errors*)
   (throw 'compile-defun-abort (funcall *compiler-error-bailout*)))
 
-;; "In addition to situations for which the standard specifies
-;; that conditions of type WARNING must or might be signaled, warnings might be
-;; signaled in situations where the compiler can determine that the
-;; consequences are undefined or that a run-time error will be signaled.
-;; Examples of this situation are as follows: violating type declarations,
-;; altering or assigning the value of a constant defined with DEFCONSTANT,
-;; calling built-in Lisp functions with a wrong number of arguments or
-;; malformed keyword argument lists, and using unrecognized declaration
-;; specifiers." (3.2.5)
-(declaim (ftype (function (t fixnum) t) check-arg-count))
+;; "In addition to situations for which the standard specifies that conditions
+;; of type WARNING must or might be signaled, warnings might be signaled in
+;; situations where the compiler can determine that the consequences are
+;; undefined or that a run-time error will be signaled. Examples of this
+;; situation are as follows: violating type declarations, altering or assigning
+;; the value of a constant defined with DEFCONSTANT, calling built-in Lisp
+;; functions with a wrong number of arguments or malformed keyword argument
+;; lists, and using unrecognized declaration specifiers." (3.2.5)
+(defknown check-arg-count (t fixnum) t)
 (defun check-arg-count (form n)
   (declare (type fixnum n))
   (let* ((op (car form))
@@ -2969,6 +2970,11 @@ representation, based on the derived type of the LispObject."
   (when (eq representation :int)
     (cond ((fixnump form)
            (emit-push-constant-int form)
+           (emit-move-from-stack target representation)
+           (return-from compile-constant))
+          ((integerp form)
+           (emit 'getstatic *this-class* (declare-bignum form) +lisp-bignum+)
+           (emit-invokevirtual +lisp-object-class+ "intValue" nil "I")
            (emit-move-from-stack target representation)
            (return-from compile-constant))
           (t
@@ -4323,6 +4329,7 @@ representation, based on the derived type of the LispObject."
     (emit 'putfield +lisp-thread-class+ "_values" "[Lorg/armedbear/lisp/LispObject;")
     ;; Result.
     (emit 'aload result-register)
+    (fix-boxing representation nil)
     (emit-move-from-stack target)))
 
 (defun compile-multiple-value-call (form target representation)
@@ -4412,7 +4419,7 @@ representation, based on the derived type of the LispObject."
         (t
          (aver nil))))
 
-(declaim (ftype (function (t t) t) compile-progn-body))
+(defknown compile-progn-body (t t) t)
 (defun compile-progn-body (body target)
   (cond ((null body)
          (when target
@@ -4786,10 +4793,20 @@ representation, based on the derived type of the LispObject."
              (when target
                (emit-push-nil)
                (emit-move-from-stack target)))
+            ((null representation)
+             (do ((forms (cdr form) (cdr forms)))
+                 ((null forms))
+               (compile-form (car forms) (if (cdr forms) nil target) nil)))
+            ;; FIXME maybe-emit-clear-values
             (t
              (do ((forms (cdr form) (cdr forms)))
                  ((null forms))
-               (compile-form (car forms) (if (cdr forms) nil target) nil))))
+               (compile-form (car forms) (if (cdr forms) nil 'stack) nil))
+             ;; FIXME maybe-emit-clear-values
+             (fix-boxing representation nil)
+             (emit-move-from-stack target representation)
+             )
+            )
 ;;       )
     ))
 
@@ -6825,8 +6842,10 @@ representation, based on the derived type of the LispObject."
             (type1 (derive-compiler-type arg1))
             (type2 (derive-compiler-type arg2))
             (result-type (derive-compiler-type form)))
-;;        (format t "p2-plus type1 = ~S~%p2-plus type2 = ~S~%p2-plus result-type = ~S~%p2-plus representation = ~S~%"
-;;                type1 type2 result-type representation)
+;;        (format t "~&p2-plus type1 = ~S~%" type1)
+;;        (format t "p2-plus type2 = ~S~%" type2)
+;;        (format t "p2-plus result-type = ~S~%" result-type)
+;;        (format t "p2-plus representation = ~S~%" representation)
        (cond ((and (numberp arg1) (numberp arg2))
               (compile-constant (+ arg1 arg2) target representation))
              ((and (fixnum-type-p type1) (fixnum-type-p type2))
@@ -6883,22 +6902,16 @@ representation, based on the derived type of the LispObject."
               (maybe-emit-clear-values arg2)
               (emit-invoke-method "incr" target representation))
              ((fixnum-type-p type1)
-              (cond ((atom arg2)
-                     ;; We can avoid having to swap the arguments.
-                     (compile-form arg2 'stack nil)
-                     (maybe-emit-clear-values arg2)
-                     (compile-form arg1 'stack :int))
-                    (t
-                     (compile-form arg1 'stack :int)
-                     (compile-form arg2 'stack nil)
-                     (maybe-emit-clear-values arg2)
-                     (emit 'swap)))
+              (compile-form arg1 'stack :int)
+              (compile-form arg2 'stack nil)
+              (maybe-emit-clear-values arg1 arg2)
+              (emit 'swap)
               (emit-invokevirtual +lisp-object-class+ "add" '("I") +lisp-object+)
               (fix-boxing representation result-type)
               (emit-move-from-stack target representation))
              ((fixnum-type-p type2)
               (compile-form arg1 'stack nil)
-              (maybe-emit-clear-values arg1)
+              (maybe-emit-clear-values arg1 arg2)
               (compile-form arg2 'stack :int)
               (emit-invokevirtual +lisp-object-class+ "add" '("I") +lisp-object+)
               (fix-boxing representation result-type)
@@ -8693,22 +8706,24 @@ representation, based on the derived type of the LispObject."
               (*in-compilation-unit* t))
           (unwind-protect
               (funcall fn)
-            (unless (and (zerop (+ *errors* *warnings* *style-warnings*))
-                         (null *undefined-functions*))
+            (unless (or (and *suppress-compiler-warnings* (zerop *errors*))
+                        (and (zerop (+ *errors* *warnings* *style-warnings*))
+                             (null *undefined-functions*)))
               (format *error-output* "~%; Compilation unit finished~%")
               (unless (zerop *errors*)
                 (format *error-output* ";   Caught ~D ERROR condition~P~%"
                         *errors* *errors*))
-              (unless (zerop *warnings*)
-                (format *error-output* ";   Caught ~D WARNING condition~P~%"
-                        *warnings* *warnings*))
-              (unless (zerop *style-warnings*)
-                (format *error-output* ";   Caught ~D STYLE-WARNING condition~P~%"
-                        *style-warnings* *style-warnings*))
-              (when *undefined-functions*
-                (format *error-output* ";   The following functions were used but not defined:~%")
-                (dolist (name *undefined-functions*)
-                  (format *error-output* ";     ~S~%" name)))
+              (unless *suppress-compiler-warnings*
+                (unless (zerop *warnings*)
+                  (format *error-output* ";   Caught ~D WARNING condition~P~%"
+                          *warnings* *warnings*))
+                (unless (zerop *style-warnings*)
+                  (format *error-output* ";   Caught ~D STYLE-WARNING condition~P~%"
+                          *style-warnings* *style-warnings*))
+                (when *undefined-functions*
+                  (format *error-output* ";   The following functions were used but not defined:~%")
+                  (dolist (name *undefined-functions*)
+                    (format *error-output* ";     ~S~%" name))))
               (terpri *error-output*)))))))
 
 (defun get-lambda-to-compile (thing)
