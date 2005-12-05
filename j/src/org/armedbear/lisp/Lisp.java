@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.418 2005-12-04 12:22:39 piso Exp $
+ * $Id: Lisp.java,v 1.419 2005-12-05 16:44:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2143,6 +2143,10 @@ public abstract class Lisp
     // ### *explain* compiler policy
     public static final Symbol _EXPLAIN_ =
         exportSpecial("*EXPLAIN*", PACKAGE_SYS, NIL);
+
+    static {
+        Symbol.SUPPRESS_COMPILER_WARNINGS.initializeSpecial(NIL);
+    }
 
     public static final Symbol _COMPILE_FILE_ENVIRONMENT_ =
         exportSpecial("*COMPILE-FILE-ENVIRONMENT*", PACKAGE_SYS, NIL);
