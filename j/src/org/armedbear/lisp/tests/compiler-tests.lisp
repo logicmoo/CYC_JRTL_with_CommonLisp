@@ -1,7 +1,7 @@
 ;;; compiler-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-tests.lisp,v 1.5 2005-12-03 11:36:24 piso Exp $
+;;; $Id: compiler-tests.lisp,v 1.6 2005-12-05 05:45:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -257,5 +257,20 @@
   (bignum-constant.4 nil nil)
   t
   #.(1- most-negative-java-long))
+
+(deftest shiftf.1
+  (progn
+    (fmakunbound 'shiftf.1)
+    (defun shiftf.1 (x)
+      (declare (type (integer -5213 238468) x))
+      (+ x (shiftf x 168771)))
+    (values (funcall 'shiftf.1 96411)
+            (multiple-value-list (compile 'shiftf.1))
+            (compiled-function-p #'shiftf.1)
+            (funcall 'shiftf.1 96411)))
+  192822
+  (shiftf.1 nil nil)
+  t
+  192822)
 
 (do-tests)
