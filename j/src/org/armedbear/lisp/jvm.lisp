@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.664 2005-12-06 17:29:43 piso Exp $
+;;; $Id: jvm.lisp,v 1.665 2005-12-06 20:42:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1625,6 +1625,15 @@ representation, based on the derived type of the LispObject."
 (defun emit-box-long ()
   (declare (optimize speed))
   (emit-invokestatic +lisp-class+ "number" (list "J") +lisp-object+))
+
+(defknown convert-long (t) t)
+(defun convert-long (representation)
+  (case representation
+    (:int
+     (emit 'l2i))
+    (:long)
+    (t
+     (emit-box-long))))
 
 (defknown emit-move-from-stack (t &optional t) t)
 (defun emit-move-from-stack (target &optional representation)
@@ -5657,32 +5666,37 @@ representation, based on the derived type of the LispObject."
          (arg2 (%cadr args))
          (type1 (derive-compiler-type arg1))
          (type2 (derive-compiler-type arg2))
+         (constant-shift (fixnum-constant-value type2))
          (result-type (derive-compiler-type form)))
 ;;     (format t "~&p2-ash type1 = ~S~%" type1)
 ;;     (format t "p2-ash type2 = ~S~%" type2)
 ;;     (format t "p2-ash result-type = ~S~%" result-type)
 ;;     (format t "p2-ash representation = ~S~%" representation)
-    (cond ((integer-constant-value result-type)
-           (compile-constant (integer-constant-value result-type)
-                             target representation))
-          ((and (eql (fixnum-constant-value type2) 0)
-                (or (integer-type-p type1)
-                    (eql *safety* 0)))
-           (compile-form arg1 target representation)
-           (maybe-emit-clear-values arg1))
-          ((and (fixnum-type-p type1)
-                (fixnum-type-p type2)
-                (fixnum-type-p result-type)
-                (fixnum-constant-value type2)
-                (> (fixnum-constant-value type2) 0))
-           ;; positive shift
+    (cond ((and (integerp arg1) (integerp arg2))
+           (compile-constant (ash arg1 arg2) target representation))
+          ((and constant-shift
+                ;; ishl/ishr only use the low five bits of the mask.
+                (<= -31 constant-shift 31)
+                (fixnum-type-p type1)
+                (fixnum-type-p result-type))
            (when (null representation)
              (emit 'new +lisp-fixnum-class+)
              (emit 'dup))
            (compile-form arg1 'stack :int)
-           (compile-form arg2 'stack :int)
-           (maybe-emit-clear-values arg1 arg2)
-           (emit 'ishl)
+           (cond ((plusp constant-shift)
+                  (compile-form arg2 'stack :int)
+                  (maybe-emit-clear-values arg1 arg2)
+                  (emit 'ishl))
+                 ((minusp constant-shift)
+                  (cond ((fixnump arg2)
+                         (emit-push-constant-int (- arg2)))
+                        (t
+                         (compile-form arg2 'stack :int)
+                         (emit 'ineg)))
+                  (maybe-emit-clear-values arg1 arg2)
+                  (emit 'ishr))
+                 ((zerop constant-shift)
+                  (compile-form arg2 nil nil))) ; for effect
            (case representation
              (:int)
              (:long
@@ -5690,67 +5704,27 @@ representation, based on the derived type of the LispObject."
              (t
               (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
            (emit-move-from-stack target representation))
-          ((and (fixnum-type-p type1)
-                (fixnum-type-p type2)
-                (fixnum-type-p result-type)
-                (fixnum-constant-value type2)
-                (< (fixnum-constant-value type2) 0))
-           ;; negative shift
-           (when (null representation)
-             (emit 'new +lisp-fixnum-class+)
-             (emit 'dup))
-           (compile-form arg1 'stack :int)
-           (cond ((fixnump arg2)
-                  (emit-push-constant-int (- arg2)))
-                 (t
-                  (compile-form arg2 'stack :int)
-                  (emit 'ineg)))
-           (maybe-emit-clear-values arg1 arg2)
-           (emit 'ishr)
-           (case representation
-             (:int)
-             (:long
-              (emit 'i2l))
-             (t
-              (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
-           (emit-move-from-stack target representation))
-          ((and (java-long-type-p type1)
-                (fixnum-type-p type2)
-                (java-long-type-p result-type)
-                (fixnum-constant-value type2)
-                (> (fixnum-constant-value type2) 0))
-           ;; positive shift
+          ((and constant-shift
+                ;; lshl/lshr only use the low six bits of the mask.
+                (<= -63 constant-shift 63)
+                (java-long-type-p type1)
+                (java-long-type-p result-type))
            (compile-form arg1 'stack :long)
-           (compile-form arg2 'stack :int)
-           (maybe-emit-clear-values arg1 arg2)
-           (emit 'lshl)
-           (case representation
-             (:int
-              (emit 'l2i))
-             (:long)
-             (t
-              (emit-box-long)))
-           (emit-move-from-stack target representation))
-          ((and (java-long-type-p type1)
-                (fixnum-type-p type2)
-                (java-long-type-p result-type)
-                (fixnum-constant-value type2)
-                (< (fixnum-constant-value type2) 0))
-           ;; negative shift
-           (compile-form arg1 'stack :long)
-           (cond ((fixnump arg2)
-                  (emit-push-constant-int (- arg2)))
-                 (t
+           (cond ((plusp constant-shift)
                   (compile-form arg2 'stack :int)
-                  (emit 'ineg)))
-           (maybe-emit-clear-values arg1 arg2)
-           (emit 'lshr)
-           (case representation
-             (:int
-              (emit 'l2i))
-             (:long)
-             (t
-              (emit-box-long)))
+                  (maybe-emit-clear-values arg1 arg2)
+                  (emit 'lshl))
+                 ((minusp constant-shift)
+                  (cond ((fixnump arg2)
+                         (emit-push-constant-int (- arg2)))
+                        (t
+                         (compile-form arg2 'stack :int)
+                         (emit 'ineg)))
+                  (maybe-emit-clear-values arg1 arg2)
+                  (emit 'lshr))
+                 ((zerop constant-shift)
+                  (compile-form arg2 nil nil))) ; for effect
+           (convert-long representation)
            (emit-move-from-stack target representation))
           ((fixnum-type-p type2)
            (compile-form arg1 'stack nil)
@@ -5791,6 +5765,7 @@ representation, based on the derived type of the LispObject."
                     (compile-form arg1 target representation)
                     (maybe-emit-clear-values arg1))
                    ((and (fixnum-type-p type1) (fixnum-type-p type2))
+;;                     (format t "p2-logand fixnum case~%")
                     (unless (eq representation :int)
                       (emit 'new +lisp-fixnum-class+)
                       (emit 'dup))
@@ -5805,23 +5780,26 @@ representation, based on the derived type of the LispObject."
                              (compiler-subtypep type1 'unsigned-byte))
                         (and (fixnum-type-p type2)
                              (compiler-subtypep type2 'unsigned-byte)))
-                    (unless (eq representation :int)
+;;                     (format t "p2-logand unsigned-byte case~%")
+                    (when (null representation)
                       (emit 'new +lisp-fixnum-class+)
                       (emit 'dup))
                     (compile-form arg1 'stack :int)
                     (compile-form arg2 'stack :int)
                     (maybe-emit-clear-values arg1 arg2)
                     (emit 'iand)
-                    (unless (eq representation :int)
-                      (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
+                    (case representation
+                      (:int)
+                      (:long
+                       (emit 'i2l))
+                      (t
+                       (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
                     (emit-move-from-stack target representation))
                    ((fixnum-type-p type2)
                     (compile-form arg1 'stack nil)
                     (compile-form arg2 'stack :int)
                     (maybe-emit-clear-values arg1 arg2)
                     (emit-invokevirtual +lisp-object-class+ "LOGAND" '("I") +lisp-object+)
-;;                     (when (eq representation :int)
-;;                       (emit-unbox-fixnum))
                     (fix-boxing representation result-type)
                     (emit-move-from-stack target representation))
                    ((fixnum-type-p type1)
@@ -5832,8 +5810,6 @@ representation, based on the derived type of the LispObject."
                     ;; swap args
                     (emit 'swap)
                     (emit-invokevirtual +lisp-object-class+ "LOGAND" '("I") +lisp-object+)
-;;                     (when (eq representation :int)
-;;                       (emit-unbox-fixnum))
                     (fix-boxing representation result-type)
                     (emit-move-from-stack target representation))
                    ((and value2
@@ -5856,8 +5832,6 @@ representation, based on the derived type of the LispObject."
                     (maybe-emit-clear-values arg1 arg2)
                     (emit-invokevirtual +lisp-object-class+ "LOGAND"
                                         (lisp-object-arg-types 1) +lisp-object+)
-;;                     (when (eq representation :int)
-;;                       (emit-unbox-fixnum))
                     (fix-boxing representation result-type)
                     (emit-move-from-stack target representation)))))
           (t
@@ -5960,11 +5934,13 @@ representation, based on the derived type of the LispObject."
          ;;              (format t "p2-logxor type1 = ~S~%" type1)
          ;;              (format t "p2-logxor type2 = ~S~%" type2)
          (cond ((eq representation :int)
+;;                 (format t "p2-logxor case 1~%")
                 (compile-form arg1 'stack :int)
                 (compile-form arg2 'stack :int)
                 (maybe-emit-clear-values arg1 arg2)
                 (emit 'ixor))
                ((and (fixnum-type-p type1) (fixnum-type-p type2))
+;;                 (format t "p2-logxor case 2~%")
                 (when (null representation)
                   (emit 'new +lisp-fixnum-class+)
                   (emit 'dup))
@@ -5979,23 +5955,21 @@ representation, based on the derived type of the LispObject."
                   (t
                    (emit-invokespecial-init +lisp-fixnum-class+ '("I")))))
                ((and (java-long-type-p type1) (java-long-type-p type2))
+;;                 (format t "p2-logxor case 3~%")
                 (compile-form arg1 'stack :long)
                 (compile-form arg2 'stack :long)
                 (maybe-emit-clear-values arg1 arg2)
                 (emit 'lxor)
-                (case representation
-                  (:int
-                   (emit 'l2i))
-                  (:long)
-                  (t
-                   (emit-box-long))))
+                (convert-long representation))
                ((fixnum-type-p type2)
+;;                 (format t "p2-logxor case 4~%")
                 (compile-form arg1 'stack nil)
                 (compile-form arg2 'stack :int)
                 (maybe-emit-clear-values arg1 arg2)
                 (emit-invokevirtual +lisp-object-class+ "LOGXOR" '("I") +lisp-object+)
                 (fix-boxing representation result-type))
                (t
+;;                 (format t "p2-logxor case 5~%")
                 (compile-form arg1 'stack nil)
                 (compile-form arg2 'stack nil)
                 (maybe-emit-clear-values arg1 arg2)
@@ -6063,12 +6037,7 @@ representation, based on the derived type of the LispObject."
                   (maybe-emit-clear-values arg3)
                   (emit-push-constant-long (1- (expt 2 size))) ; mask
                   (emit 'land)
-                  (case representation
-                    (:int
-                     (emit 'l2i))
-                    (:long)
-                    (t
-                     (emit-box-long)))
+                  (convert-long representation)
                   (emit-move-from-stack target representation))
                  (t
                   (compile-form arg3 'stack nil)
@@ -6836,12 +6805,7 @@ representation, based on the derived type of the LispObject."
                      (emit 'i2l)
                      (maybe-emit-clear-values arg1 arg2)
                      (emit 'lmul)
-                     (case representation
-                       (:int
-                        (emit 'l2i))
-                       (:long)
-                       (t
-                        (emit-box-long)))
+                     (convert-long representation)
                      (emit-move-from-stack target representation))))
              ((fixnump arg2)
 ;;               (format t "p2-times case 3~%")
@@ -6935,12 +6899,7 @@ representation, based on the derived type of the LispObject."
                      (emit 'i2l)
                      (maybe-emit-clear-values arg1 arg2)
                      (emit 'ladd)
-                     (case representation
-                       (:int
-                        (aver nil))
-                       (:long)
-                       (t
-                        (emit-box-long)))))
+                     (convert-long representation)))
               (emit-move-from-stack target representation))
              ((and (java-long-type-p type1)
                    (java-long-type-p type2)
@@ -6969,12 +6928,7 @@ representation, based on the derived type of the LispObject."
                      ))
               (maybe-emit-clear-values arg1 arg2)
               (emit 'ladd)
-              (case representation
-                (:int
-                 (emit 'l2i))
-                (:long)
-                (t
-                 (emit-box-long)))
+              (convert-long representation)
               (emit-move-from-stack target representation))
              ((eql arg2 1)
               (compile-form arg1 'stack nil)
@@ -7076,20 +7030,13 @@ representation, based on the derived type of the LispObject."
                      (emit 'i2l)
                      (maybe-emit-clear-values arg1 arg2)
                      (emit 'lsub)
-                     (case representation
-                       (:int
-                        (emit 'l2i))
-                       (:long)
-                       (t
-                        (emit-box-long)))))
+                     (convert-long representation)))
               (emit-move-from-stack target representation))
              ((fixnum-type-p type2)
               (compile-form arg1 'stack nil)
               (compile-form arg2 'stack :int)
               (maybe-emit-clear-values arg1 arg2)
               (emit-invokevirtual +lisp-object-class+ "subtract" '("I") +lisp-object+)
-;;               (when (eq representation :int)
-;;                 (emit-unbox-fixnum))
               (fix-boxing representation result-type)
               (emit-move-from-stack target representation))
              (t
