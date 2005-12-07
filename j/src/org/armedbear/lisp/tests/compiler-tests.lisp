@@ -1,7 +1,7 @@
 ;;; compiler-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-tests.lisp,v 1.6 2005-12-05 05:45:28 piso Exp $
+;;; $Id: compiler-tests.lisp,v 1.7 2005-12-07 00:49:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -272,5 +272,9 @@
   (shiftf.1 nil nil)
   t
   192822)
+
+(deftest logand-values.1
+  (ignore-errors (funcall (compile nil '(lambda () (logand 18 (values 42 7))))))
+  2)
 
 (do-tests)
