@@ -1,7 +1,7 @@
 ;;; opcodes.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: opcodes.lisp,v 1.25 2005-12-02 20:43:37 piso Exp $
+;;; $Id: opcodes.lisp,v 1.26 2005-12-07 19:00:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -62,7 +62,7 @@
 (define-opcode ldc_w 19 3 1)
 (define-opcode ldc2_w 20 3 2)
 (define-opcode iload 21 2 1)
-(define-opcode lload 22 2 nil)
+(define-opcode lload 22 2 2)
 (define-opcode fload 23 2 nil)
 (define-opcode dload 24 2 nil)
 (define-opcode aload 25 2 1)
@@ -70,10 +70,10 @@
 (define-opcode iload_1 27 1 1)
 (define-opcode iload_2 28 1 1)
 (define-opcode iload_3 29 1 1)
-(define-opcode lload_0 30 1 nil)
-(define-opcode lload_1 31 1 nil)
-(define-opcode lload_2 32 1 nil)
-(define-opcode lload_3 33 1 nil)
+(define-opcode lload_0 30 1 2)
+(define-opcode lload_1 31 1 2)
+(define-opcode lload_2 32 1 2)
+(define-opcode lload_3 33 1 2)
 (define-opcode fload_0 34 1 nil)
 (define-opcode fload_1 35 1 nil)
 (define-opcode fload_2 36 1 nil)
@@ -95,7 +95,7 @@
 (define-opcode caload 52 1 nil)
 (define-opcode saload 53 1 nil)
 (define-opcode istore 54 2 -1)
-(define-opcode lstore 55 2 nil)
+(define-opcode lstore 55 2 -2)
 (define-opcode fstore 56 2 nil)
 (define-opcode dstore 57 2 nil)
 (define-opcode astore 58 2 -1)
@@ -103,10 +103,10 @@
 (define-opcode istore_1 60 1 -1)
 (define-opcode istore_2 61 1 -1)
 (define-opcode istore_3 62 1 -1)
-(define-opcode lstore_0 63 1 nil)
-(define-opcode lstore_1 64 1 nil)
-(define-opcode lstore_2 65 1 nil)
-(define-opcode lstore_3 66 1 nil)
+(define-opcode lstore_0 63 1 -2)
+(define-opcode lstore_1 64 1 -2)
+(define-opcode lstore_2 65 1 -2)
+(define-opcode lstore_3 66 1 -2)
 (define-opcode fstore_0 67 1 nil)
 (define-opcode fstore_1 68 1 nil)
 (define-opcode fstore_2 69 1 nil)
@@ -132,7 +132,7 @@
 (define-opcode dup 89 1 1)
 (define-opcode dup_x1 90 1 1)
 (define-opcode dup_x2 91 1 1)
-(define-opcode dup2 92 1 nil)
+(define-opcode dup2 92 1 2)
 (define-opcode dup2_x1 93 1 nil)
 (define-opcode dup2_x2 94 1 nil)
 (define-opcode swap 95 1 0)
