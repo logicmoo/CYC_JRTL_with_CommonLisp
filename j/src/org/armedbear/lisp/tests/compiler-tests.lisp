@@ -1,7 +1,7 @@
 ;;; compiler-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-tests.lisp,v 1.7 2005-12-07 00:49:59 piso Exp $
+;;; $Id: compiler-tests.lisp,v 1.8 2005-12-07 14:21:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -276,5 +276,20 @@
 (deftest logand-values.1
   (ignore-errors (funcall (compile nil '(lambda () (logand 18 (values 42 7))))))
   2)
+
+(deftest logand-lognot.1
+  (progn
+    (fmakunbound 'logand-lognot.1)
+    (defun logand-lognot.1 (x)
+      (declare (type (unsigned-byte 32) x))
+      (logand #.(1- (expt 2 32)) (lognot x)))
+    (values (funcall 'logand-lognot.1 123456789)
+            (multiple-value-list (compile 'logand-lognot.1))
+            (compiled-function-p #'logand-lognot.1)
+            (funcall 'logand-lognot.1 123456789)))
+  4171510506
+  (logand-lognot.1 nil nil)
+  t
+  4171510506)
 
 (do-tests)
