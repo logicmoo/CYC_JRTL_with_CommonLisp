@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.667 2005-12-07 14:20:37 piso Exp $
+;;; $Id: jvm.lisp,v 1.668 2005-12-07 17:06:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4691,62 +4691,70 @@ representation, based on the derived type of the LispObject."
                             (zerop (variable-reads variable))
                             (zerop (variable-writes variable))))
              (boundp nil))
-        (cond ((and (variable-special-p variable)
-                    (eq initform (variable-name variable)))
-               ;; The special case of binding a special to its current value.
-               (emit-push-current-thread)
-               (emit 'getstatic *this-class*
-                     (declare-symbol (variable-name variable)) +lisp-symbol+)
-               (emit-invokevirtual +lisp-thread-class+
-                                   "bindSpecialToCurrentValue"
-                                   (list +lisp-symbol+)
-                                   nil)
-               (setf boundp t))
-              ((and (not (variable-special-p variable))
-                    (zerop (variable-reads variable)))
-               ;; We don't have to bind it if we never read it.
-               (compile-form initform nil nil) ; for effect
-               (setf boundp t))
-              ((null initform)
-               (emit-push-nil))
-              (t
-               (cond (unused-p
-                      (compile-form initform nil nil) ; for effect
-                      (setf boundp t))
-                     ((and (null (variable-closure-index variable))
-                           (not (variable-special-p variable))
-                           (neq (variable-declared-type variable) :none)
-                           (subtypep (variable-declared-type variable) 'FIXNUM))
-                      (setf (variable-representation variable) :int)
-                      (compile-form initform 'stack :int)
-                      (setf (variable-register variable) (allocate-register))
-                      (emit 'istore (variable-register variable))
-                      (setf boundp t))
-                     ((and (null (variable-closure-index variable))
-                           (not (variable-special-p variable))
-                           (eql (variable-writes variable) 0))
-                        (let ((type (derive-type initform)))
-                          (setf (variable-derived-type variable) type)
-                          (cond ((subtypep type 'FIXNUM)
-                                 (setf (variable-representation variable) :int)
-                                 (setf (variable-register variable) (allocate-register))
-                                 (compile-form initform 'stack :int)
-                                 (emit 'istore (variable-register variable))
-                                 (setf boundp t))
-                                ((and *enable-unboxed-characters*
-                                      (eq type 'CHARACTER))
-                                 (setf (variable-representation variable) :char)
-                                 (setf (variable-register variable) (allocate-register))
-                                 (compile-form initform 'stack :char)
-                                 (emit 'istore (variable-register variable))
-                                 (setf boundp t))
-                                (t
-                                 (compile-form initform 'stack nil)))))
-                     (t
-                      (compile-form initform 'stack nil)))
-               (unless must-clear-values
-                 (unless (single-valued-p initform)
-                   (setf must-clear-values t)))))
+        (flet ((update-must-clear-values ()
+                 (unless must-clear-values
+                   (unless (single-valued-p initform)
+                     (setf must-clear-values t)))))
+          (cond ((and (variable-special-p variable)
+                      (eq initform (variable-name variable)))
+                 ;; The special case of binding a special to its current value.
+                 (emit-push-current-thread)
+                 (emit 'getstatic *this-class*
+                       (declare-symbol (variable-name variable)) +lisp-symbol+)
+                 (emit-invokevirtual +lisp-thread-class+
+                                     "bindSpecialToCurrentValue"
+                                     (list +lisp-symbol+)
+                                     nil)
+                 (setf boundp t))
+                ((and (not (variable-special-p variable))
+                      (zerop (variable-reads variable)))
+                 ;; We don't have to bind it if we never read it.
+                 (compile-form initform nil nil) ; for effect
+                 (update-must-clear-values)
+                 (setf boundp t))
+                ((null initform)
+                 (emit-push-nil))
+                (t
+                  (cond (unused-p
+                         (compile-form initform nil nil) ; for effect
+                         (update-must-clear-values)
+                         (setf boundp t))
+                        ((and (null (variable-closure-index variable))
+                              (not (variable-special-p variable))
+                              (neq (variable-declared-type variable) :none)
+                              (subtypep (variable-declared-type variable) 'FIXNUM))
+                         (setf (variable-representation variable) :int)
+                         (compile-form initform 'stack :int)
+                         (update-must-clear-values)
+                         (setf (variable-register variable) (allocate-register))
+                         (emit 'istore (variable-register variable))
+                         (setf boundp t))
+                        ((and (null (variable-closure-index variable))
+                              (not (variable-special-p variable))
+                              (eql (variable-writes variable) 0))
+                         (let ((type (derive-type initform)))
+                           (setf (variable-derived-type variable) type)
+                           (cond ((subtypep type 'FIXNUM)
+                                  (setf (variable-representation variable) :int)
+                                  (setf (variable-register variable) (allocate-register))
+                                  (compile-form initform 'stack :int)
+                                  (update-must-clear-values)
+                                  (emit 'istore (variable-register variable))
+                                  (setf boundp t))
+                                 ((and *enable-unboxed-characters*
+                                       (eq type 'CHARACTER))
+                                  (setf (variable-representation variable) :char)
+                                  (setf (variable-register variable) (allocate-register))
+                                  (compile-form initform 'stack :char)
+                                  (update-must-clear-values)
+                                  (emit 'istore (variable-register variable))
+                                  (setf boundp t))
+                                 (t
+                                  (compile-form initform 'stack nil)
+                                  (update-must-clear-values)))))
+                        (t
+                         (compile-form initform 'stack nil)
+                         (update-must-clear-values))))))
         (unless (or boundp (variable-special-p variable))
           (unless (or (variable-closure-index variable) (variable-register variable))
             (setf (variable-register variable) (allocate-register))))
@@ -5821,7 +5829,6 @@ representation, based on the derived type of the LispObject."
                     (emit-invokevirtual +lisp-object-class+ "LOGAND" '("I") +lisp-object+)
                     (fix-boxing representation result-type)
                     (emit-move-from-stack target representation))
-
                    ((and (java-long-type-p type1) (java-long-type-p type2))
                     ;; Both arguments are longs.
                     (compile-form arg1 'stack :long)
@@ -5835,7 +5842,6 @@ representation, based on the derived type of the LispObject."
                       (t
                        (emit-box-long)))
                     (emit-move-from-stack target representation))
-
                    ((or (and (java-long-type-p type1)
                              (compiler-subtypep type1 'unsigned-byte))
                         (and (java-long-type-p type2)
@@ -5852,21 +5858,6 @@ representation, based on the derived type of the LispObject."
                       (t
                        (emit-box-long)))
                     (emit-move-from-stack target representation))
-
-;;                    ((and value2
-;;                          (<= most-negative-java-long value2 most-positive-java-long))
-;; ;;                     (format t "p2-logand long case~%")
-;;                     (compile-form arg1 'stack nil)
-;;                     (maybe-emit-clear-values arg1)
-;;                     (emit-invokevirtual +lisp-object-class+ "longValue" nil "J")
-;;                     (emit-push-constant-long value2)
-;;                     (emit 'land)
-;;                     (cond ((eq representation :long)
-;;                            (aver (eq target :stack)))
-;;                           (t
-;;                            (emit-box-long)
-;;                            (fix-boxing representation result-type)))
-;;                     (emit-move-from-stack target representation))
                    (t
                     (compile-form arg1 'stack nil)
                     (compile-form arg2 'stack nil)
@@ -5879,81 +5870,81 @@ representation, based on the derived type of the LispObject."
            (compile-function-call form target representation)))))
 
 (defun p2-logior (form target representation)
-  (let* ((args (cdr form))
-         (len (length args)))
-    (cond ((= len 2)
-           (let* ((arg1 (%car args))
-                  (arg2 (%cadr args))
-                  type1 type2 result-type)
-             (when (and (integerp arg1) (integerp arg2))
-               (compile-constant (logior arg1 arg2) target representation)
-               (return-from p2-logior t))
-             (when (integerp arg1)
-               (setf arg1 (%cadr args)
-                     arg2 (%car args)))
-             (setf type1 (derive-compiler-type arg1)
-                   type2 (derive-compiler-type arg2)
-                   result-type (derive-compiler-type form))
-             (cond ((and (fixnum-constant-value type1) (fixnum-constant-value type2))
-                    (compile-constant (logior (fixnum-constant-value type1)
-                                              (fixnum-constant-value type2))
-                                      target representation))
-                   ((and (fixnum-type-p type1) (fixnum-type-p type2))
-                    (unless (eq representation :int)
-                      (emit 'new +lisp-fixnum-class+)
-                      (emit 'dup))
-                    (compile-form arg1 'stack :int)
-                    (compile-form arg2 'stack :int)
-                    (maybe-emit-clear-values arg1 arg2)
-                    (emit 'ior)
-                    (unless (eq representation :int)
-                      (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
-                    (emit-move-from-stack target representation))
-                   ((and (eql (fixnum-constant-value type1) 0) (< *safety* 3))
-                    (compile-form arg1 nil nil) ; for effect
-                    (compile-form arg2 target representation)
-                    (maybe-emit-clear-values arg1 arg2))
-                   ((and (eql (fixnum-constant-value type2) 0) (< *safety* 3))
-                    (compile-form arg1 target representation)
-                    (compile-form arg2 nil nil) ; for effect
-                    (maybe-emit-clear-values arg1 arg2))
-                   ((fixnum-type-p type2)
-                    (compile-form arg1 'stack nil)
-                    (compile-form arg2 'stack :int)
-                    (maybe-emit-clear-values arg1 arg2)
-                    (emit-invokevirtual +lisp-object-class+ "LOGIOR" '("I") +lisp-object+)
-;;                     (when (eq representation :int)
-;;                       (emit-unbox-fixnum))
-                    (fix-boxing representation result-type)
-                    (emit-move-from-stack target representation))
-                   ((fixnum-type-p type1)
-                    ;; arg1 is of fixnum type, but arg2 is not
-                    (compile-form arg1 'stack :int)
-                    (compile-form arg2 'stack 'nil)
-                    (maybe-emit-clear-values arg1 arg2)
-                    ;; swap args
-                    (emit 'swap)
-                    (emit-invokevirtual +lisp-object-class+ "LOGIOR" '("I") +lisp-object+)
-;;                     (when (eq representation :int)
-;;                       (emit-unbox-fixnum))
-                    (fix-boxing representation result-type)
-                    (emit-move-from-stack target representation))
-                   (t
-                    (compile-form arg1 'stack nil)
-                    (compile-form arg2 'stack nil)
-                    (maybe-emit-clear-values arg1 arg2)
-                    (emit-invokevirtual +lisp-object-class+ "LOGIOR"
-                                        (lisp-object-arg-types 1) +lisp-object+)
-;;                     (when (eq representation :int)
-;;                       (emit-unbox-fixnum))
-                    (fix-boxing representation result-type)
-                    (emit-move-from-stack target representation)))))
-          ((= len 3)
-           ;; (logior a b c) => (logior (logior a b) c)
-           (let ((new-form `(LOGIOR (LOGIOR ,(second form) ,(third form)) ,(fourth form))))
-             (p2-logior new-form target representation)))
-          (t
-           (compile-function-call form target representation)))))
+  (let ((args (cdr form)))
+    (case (length args)
+      (2
+       (let* ((arg1 (%car args))
+              (arg2 (%cadr args))
+              type1 type2 result-type)
+         (when (and (integerp arg1) (integerp arg2))
+           (compile-constant (logior arg1 arg2) target representation)
+           (return-from p2-logior t))
+         (when (integerp arg1)
+           (setf arg1 (%cadr args)
+                 arg2 (%car args)))
+         (setf type1 (derive-compiler-type arg1)
+               type2 (derive-compiler-type arg2)
+               result-type (derive-compiler-type form))
+         (cond ((and (fixnum-constant-value type1) (fixnum-constant-value type2))
+                (compile-form arg1 nil nil) ; for effect
+                (compile-form arg2 nil nil) ; for effect
+                (compile-constant (logior (fixnum-constant-value type1)
+                                          (fixnum-constant-value type2))
+                                  target representation))
+               ((and (fixnum-type-p type1) (fixnum-type-p type2))
+                (when (null representation)
+                  (emit 'new +lisp-fixnum-class+)
+                  (emit 'dup))
+                (compile-form arg1 'stack :int)
+                (compile-form arg2 'stack :int)
+                (maybe-emit-clear-values arg1 arg2)
+                (emit 'ior)
+                (case representation
+                  (:int)
+                  (:long
+                   (emit 'i2l))
+                  (t
+                   (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
+                (emit-move-from-stack target representation))
+               ((and (eql (fixnum-constant-value type1) 0) (< *safety* 3))
+                (compile-form arg1 nil nil) ; for effect
+                (compile-form arg2 target representation)
+                (maybe-emit-clear-values arg1 arg2))
+               ((and (eql (fixnum-constant-value type2) 0) (< *safety* 3))
+                (compile-form arg1 target representation)
+                (compile-form arg2 nil nil) ; for effect
+                (maybe-emit-clear-values arg1 arg2))
+               ((fixnum-type-p type2)
+                (compile-form arg1 'stack nil)
+                (compile-form arg2 'stack :int)
+                (maybe-emit-clear-values arg1 arg2)
+                (emit-invokevirtual +lisp-object-class+ "LOGIOR" '("I") +lisp-object+)
+                (fix-boxing representation result-type)
+                (emit-move-from-stack target representation))
+               ((fixnum-type-p type1)
+                ;; arg1 is of fixnum type, but arg2 is not
+                (compile-form arg1 'stack :int)
+                (compile-form arg2 'stack 'nil)
+                (maybe-emit-clear-values arg1 arg2)
+                ;; swap args
+                (emit 'swap)
+                (emit-invokevirtual +lisp-object-class+ "LOGIOR" '("I") +lisp-object+)
+                (fix-boxing representation result-type)
+                (emit-move-from-stack target representation))
+               (t
+                (compile-form arg1 'stack nil)
+                (compile-form arg2 'stack nil)
+                (maybe-emit-clear-values arg1 arg2)
+                (emit-invokevirtual +lisp-object-class+ "LOGIOR"
+                                    (lisp-object-arg-types 1) +lisp-object+)
+                (fix-boxing representation result-type)
+                (emit-move-from-stack target representation)))))
+      (3
+       ;; (logior a b c) => (logior (logior a b) c)
+       (let ((new-form `(LOGIOR (LOGIOR ,(second form) ,(third form)) ,(fourth form))))
+         (p2-logior new-form target representation)))
+      (t
+       (compile-function-call form target representation)))))
 
 (defun p2-logxor (form target representation)
   (let* ((args (cdr form))
