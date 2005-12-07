@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.666 2005-12-07 05:25:52 piso Exp $
+;;; $Id: jvm.lisp,v 1.667 2005-12-07 14:20:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6032,21 +6032,26 @@ representation, based on the derived type of the LispObject."
     (return-from p2-lognot))
   (cond ((and (fixnum-type-p (derive-compiler-type form)))
          (let ((arg (%cadr form)))
-           (unless (eq representation :int)
+           (when (null representation)
              (emit 'new +lisp-fixnum-class+)
              (emit 'dup))
            (compile-form arg 'stack :int)
            (maybe-emit-clear-values arg)
            (emit 'iconst_m1)
            (emit 'ixor)
-           (unless (eq representation :int)
-             (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
+           (case representation
+             (:int)
+             (:long
+              (emit 'i2l))
+             (t
+              (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
            (emit-move-from-stack target representation)))
         (t
          (let ((arg (%cadr form)))
            (compile-form arg 'stack nil)
            (maybe-emit-clear-values arg))
          (emit-invokevirtual +lisp-object-class+ "LOGNOT" nil +lisp-object+)
+         (fix-boxing representation nil)
          (emit-move-from-stack target representation))))
 
 ;; %ldb size position integer => byte
