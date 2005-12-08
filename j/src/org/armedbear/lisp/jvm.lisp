@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.670 2005-12-08 06:15:32 piso Exp $
+;;; $Id: jvm.lisp,v 1.671 2005-12-08 12:42:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -157,7 +157,29 @@
   argument-register
   closure-register
   class-file ; class-file object
-  (single-valued-p t))
+  (%single-valued-p t))
+
+(defknown compiland-single-valued-p (t) t)
+(defun compiland-single-valued-p (compiland)
+  (unless (compiland-parent compiland)
+    (let ((name (compiland-name compiland)))
+      (when name
+        (let ((result-type
+               (or (function-result-type name)
+                  (and (proclaimed-ftype name)
+                       (ftype-result-type (proclaimed-ftype name))))))
+          (when result-type
+            (return-from compiland-single-valued-p
+                         (cond ((eq result-type '*)
+                                nil)
+                               ((atom result-type)
+                                t)
+                               ((eq (%car result-type) 'VALUES)
+                                (= (length result-type) 2))
+                               (t
+                                t))))))))
+  ;; Otherwise...
+  (compiland-%single-valued-p compiland))
 
 (defvar *current-compiland* nil)
 
@@ -533,6 +555,7 @@
     (setf (cdr form) (p1-body (cdr form)))
     form))
 
+(defknown p1-m-v-b (t) t)
 (defun p1-m-v-b (form)
   (when (= (length (cadr form)) 1)
     (let ((new-form `(let* ((,(caadr form) ,(caddr form))) ,@(cdddr form))))
@@ -575,6 +598,7 @@
     (setf (block-form block) (p1-default form))
     block))
 
+(defknown p1-return-from (t) t)
 (defun p1-return-from (form)
   (let* ((name (second form))
          (block (find-block name)))
@@ -623,6 +647,7 @@
       (setf (block-form block) (list* 'TAGBODY (nreverse new-body))))
     block))
 
+(defknown p1-go (t) t)
 (defun p1-go (form)
   (let* ((name (cadr form))
          (tag (find-tag name)))
@@ -728,6 +753,7 @@
         (p1-compiland (local-function-compiland local-function))))
     (list* (car form) local-functions (p1-body (cddr form)))))
 
+(defknown p1-funcall (t) t)
 (defun p1-funcall (form)
   (unless (> (length form) 1)
     (compiler-warn "Wrong number of arguments for ~A." (car form))
@@ -830,6 +856,7 @@
 (defun p1-eval-when (form)
   (list* (car form) (cadr form) (mapcar #'p1 (cddr form))))
 
+(defknown p1-progv (t) t)
 (defun p1-progv (form)
   ;; We've already checked argument count in PRECOMPILE-PROGV.
   (let ((new-form (rewrite-progv form)))
@@ -840,6 +867,7 @@
         (body (cdddr form)))
     `(progv ,(p1 symbols-form) ,(p1 values-form) ,@(p1-body body))))
 
+(defknown rewrite-progv (t) t)
 (defun rewrite-progv (form)
   (let ((symbols-form (cadr form))
         (values-form (caddr form))
@@ -910,12 +938,14 @@
                     (1- (length form))))
   (list 'TRULY-THE (%cadr form) (p1 (%caddr form))))
 
+(defknown p1-throw (t) t)
 (defun p1-throw (form)
   (let ((new-form (rewrite-throw form)))
     (when (neq new-form form)
       (return-from p1-throw (p1 new-form))))
   (list* 'THROW (mapcar #'p1 (cdr form))))
 
+(defknown rewrite-throw (t) t)
 (defun rewrite-throw (form)
   (let ((args (cdr form)))
     (if (unsafe-p args)
@@ -943,6 +973,7 @@
           (list 'LET* (nreverse lets) (list* 'THROW (nreverse syms))))
         form)))
 
+(defknown p1-function-call (t) t)
 (defun p1-function-call (form)
   (let ((op (car form)))
     (let ((new-form (rewrite-function-call form)))
@@ -956,7 +987,7 @@
 
              ;; FIXME
              (dformat t "local function assumed not single-valued~%")
-             (setf (compiland-single-valued-p *current-compiland*) nil)
+             (setf (compiland-%single-valued-p *current-compiland*) nil)
 
              (let ((variable (local-function-variable local-function)))
                (when variable
@@ -966,8 +997,8 @@
              ;; Not a local function call.
              (dformat t "p1 non-local call to ~S~%" op)
              (unless (single-valued-p form)
-;;                (sys::%format t "not single-valued op = ~S~%" op)
-               (setf (compiland-single-valued-p *current-compiland*) nil)))))
+;;                (format t "not single-valued op = ~S~%" op)
+               (setf (compiland-%single-valued-p *current-compiland*) nil)))))
     (p1-default form)))
 
 (defknown p1 (t) t)
@@ -1550,7 +1581,7 @@
                          t)))
                  ((and (setf compiland *current-compiland*)
                        (eq op (compiland-name compiland)))
-                  (compiland-single-valued-p compiland))
+                  (compiland-%single-valued-p compiland))
                  (t
                   nil))))))
 
@@ -2350,6 +2381,7 @@ representation, based on the derived type of the LispObject."
 
 (defvar *enable-optimization* t)
 
+(defknown optimize-code () t)
 (defun optimize-code ()
   (unless *enable-optimization*
     (format t "optimizations are disabled~%"))
@@ -2370,7 +2402,8 @@ representation, based on the derived type of the LispObject."
       (setf *code* (coerce *code* 'vector)))
     (when *compiler-debug*
       (sys::%format t "----- after optimization -----~%")
-      (print-code))))
+      (print-code)))
+  t)
 
 (defun code-bytes (code)
   (let ((length 0))
@@ -3004,6 +3037,7 @@ representation, based on the derived type of the LispObject."
         (setf (gethash string ht) g)))
     g))
 
+(defknown compile-constant (t t t) t)
 (defun compile-constant (form target representation)
   (unless target
     (return-from compile-constant))
@@ -3683,6 +3717,7 @@ representation, based on the derived type of the LispObject."
         (t
          form)))
 
+(defknown p2-funcall (t t t) t)
 (defun p2-funcall (form target representation)
   (unless (> (length form) 1)
     (compiler-warn "Wrong number of arguments for ~A." (car form))
@@ -3790,6 +3825,7 @@ representation, based on the derived type of the LispObject."
   t)
 
 ;; Note that /= is not transitive, so we don't handle it here.
+(defknown p2-numeric-comparison (t t t) t)
 (defun p2-numeric-comparison (form target representation)
   (aver (null representation))
   (let ((op (car form))
@@ -4306,6 +4342,7 @@ representation, based on the derived type of the LispObject."
                                    (lisp-object-arg-types 1) "Z")
                'ifeq))))))
 
+(defknown compile-test-form (t) t)
 (defun compile-test-form (test-form)
   (when (consp test-form)
     (let* ((op (%car test-form))
@@ -4896,11 +4933,13 @@ representation, based on the derived type of the LispObject."
 ;;       )
     ))
 
+(defknown find-tag (t) t)
 (defun find-tag (name)
   (dolist (tag *visible-tags*)
     (when (eql name (tag-name tag))
       (return tag))))
 
+(defknown p2-tagbody-node (t t) t)
 (defun p2-tagbody-node (block target)
   (let* ((*blocks* (cons block *blocks*))
          (*visible-tags* *visible-tags*)
@@ -4988,6 +5027,7 @@ representation, based on the derived type of the LispObject."
       (emit-push-nil)
       (emit-move-from-stack target))))
 
+(defknown p2-go (t t t) t)
 (defun p2-go (form target representation)
   ;; FIXME What if we're called with a non-NIL representation?
   (declare (ignore representation))
@@ -5158,6 +5198,7 @@ representation, based on the derived type of the LispObject."
       (emit 'aload (block-environment-register block))
       (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-special-binding+))))
 
+(defknown p2-return-from (t t t) t)
 (defun p2-return-from (form target representation)
   ;; FIXME What if we're called with a non-NIL representation?
   (declare (ignore representation))
@@ -5166,27 +5207,24 @@ representation, based on the derived type of the LispObject."
          (block (find-block name)))
     (when (null block)
       (error "No block named ~S is currently visible." name))
-
-    (dformat t "p2-return-from block = ~S~%" (block-name block))
-
-    (when (eq (block-compiland block) *current-compiland*)
-      (dformat t "p2-return-from *blocks* = ~S~%" (mapcar #'block-name *blocks*))
-      ;; Local case. Is the RETURN nested inside an UNWIND-PROTECT which
-      ;; is inside the block we're returning from?
-      (let ((protected
-             (dolist (enclosing-block *blocks*)
-               (when (eq enclosing-block block)
-                 (return nil))
-               (when (equal (block-name enclosing-block) '(UNWIND-PROTECT))
-                 (return t)))))
-        (dformat t "p2-return-from protected = ~S~%" protected)
-        (unless protected
-          (unless (compiland-single-valued-p *current-compiland*)
-            (emit-clear-values))
-          (compile-form result-form (block-target block) nil)
-          (emit 'goto (block-exit block))
-          (return-from p2-return-from))))
-
+    (let ((compiland *current-compiland*))
+      (when (eq (block-compiland block) compiland)
+        ;; Local case. Is the RETURN nested inside an UNWIND-PROTECT which is
+        ;; inside the block we're returning from?
+        (let ((protected
+               (dolist (enclosing-block *blocks*)
+                 (when (eq enclosing-block block)
+                   (return nil))
+                 (when (equal (block-name enclosing-block) '(UNWIND-PROTECT))
+                   (return t)))))
+          (unless protected
+            (unless (compiland-single-valued-p *current-compiland*)
+;;               (format t "compiland not single-valued: ~S~%"
+;;                       (compiland-name *current-compiland*))
+              (emit-clear-values))
+            (compile-form result-form (block-target block) nil)
+            (emit 'goto (block-exit block))
+            (return-from p2-return-from)))))
     ;; Non-local RETURN.
     (aver (block-non-local-return-p block))
     (cond ((node-constant-p result-form)
@@ -5400,6 +5438,7 @@ representation, based on the derived type of the LispObject."
     (emit-push-nil)
     (emit-move-from-stack target)))
 
+(defknown p2-flet-process-compiland (t) t)
 (defun p2-flet-process-compiland (local-function)
   (let* ((compiland (local-function-compiland local-function))
          (lambda-list (cadr (compiland-lambda-expression compiland))))
@@ -5473,6 +5512,7 @@ representation, based on the derived type of the LispObject."
                        (emit 'var-set (local-function-variable local-function)))))
                (delete-file pathname)))))))
 
+(defknown p2-labels-process-compiland (t) t)
 (defun p2-labels-process-compiland (local-function)
   (let* ((compiland (local-function-compiland local-function))
          (lambda-list (cadr (compiland-lambda-expression compiland))))
@@ -5541,6 +5581,7 @@ representation, based on the derived type of the LispObject."
                      (emit 'var-set (local-function-variable local-function))))
                (delete-file pathname)))))))
 
+(defknown p2-flet (t t t) t)
 (defun p2-flet (form target representation)
   ;; FIXME What if we're called with a non-NIL representation?
   (declare (ignore representation))
@@ -5565,6 +5606,7 @@ representation, based on the derived type of the LispObject."
         ((null forms))
       (compile-form (car forms) (if (cdr forms) nil target) nil))))
 
+(defknown p2-labels (t t t) t)
 (defun p2-labels (form target representation)
   ;; FIXME What if we're called with a non-NIL representation?
   (declare (ignore representation))
@@ -5635,6 +5677,7 @@ representation, based on the derived type of the LispObject."
            (aver nil))) ;; Shouldn't happen.
     (emit-move-from-stack target)))
 
+(defknown p2-function (t t t) t)
 (defun p2-function (form target representation)
   ;; FIXME What if we're called with a non-NIL representation?
   (declare (ignore representation))
@@ -5715,6 +5758,7 @@ representation, based on the derived type of the LispObject."
           (t
            (compiler-unsupported "p2-function: unsupported case: ~S" form)))))
 
+(defknown p2-ash (t t t) t)
 (defun p2-ash (form target representation)
   (unless (check-arg-count form 2)
     (compile-function-call form target representation)
@@ -5794,6 +5838,7 @@ representation, based on the derived type of the LispObject."
           (t
            (compile-function-call form target representation)))))
 
+(defknown p2-logand (t t t) t)
 (defun p2-logand (form target representation)
   (let* ((args (cdr form))
          (len (length args)))
@@ -5919,6 +5964,7 @@ representation, based on the derived type of the LispObject."
           (t
            (compile-function-call form target representation)))))
 
+(defknown p2-logior (t t t) t)
 (defun p2-logior (form target representation)
   (let ((args (cdr form)))
     (case (length args)
@@ -5996,6 +6042,7 @@ representation, based on the derived type of the LispObject."
       (t
        (compile-function-call form target representation)))))
 
+(defknown p2-logxor (t t t) t)
 (defun p2-logxor (form target representation)
   (let* ((args (cdr form))
          (len (length args)))
@@ -6067,6 +6114,7 @@ representation, based on the derived type of the LispObject."
       (t
        (compile-function-call form target representation)))))
 
+(defknown p2-lognot (t t t) t)
 (defun p2-lognot (form target representation)
   (unless (check-arg-count form 1)
     (compile-function-call form target representation)
@@ -6096,6 +6144,7 @@ representation, based on the derived type of the LispObject."
          (emit-move-from-stack target representation))))
 
 ;; %ldb size position integer => byte
+(defknown p2-%ldb (t t t) t)
 (defun p2-%ldb (form target representation)
 ;;   (format t "~&p2-%ldb~%")
   (unless (check-arg-count form 3)
@@ -6150,6 +6199,7 @@ representation, based on the derived type of the LispObject."
 ;;            (format t "p2-%ldb default case%")
            (compile-function-call form target representation)))))
 
+(defknown p2-mod (t t t) t)
 (defun p2-mod (form target representation)
   (unless (check-arg-count form 2)
     (compile-function-call form target representation)
@@ -6172,8 +6222,6 @@ representation, based on the derived type of the LispObject."
            (compile-form arg2 'stack :int)
            (maybe-emit-clear-values arg1 arg2)
            (emit-invokevirtual +lisp-object-class+ "MOD" '("I") +lisp-object+)
-;;            (when (eq representation :int)
-;;              (emit-unbox-fixnum))
            (fix-boxing representation nil) ; FIXME use derived result type
            (emit-move-from-stack target representation))
           (t
@@ -6182,11 +6230,10 @@ representation, based on the derived type of the LispObject."
            (maybe-emit-clear-values arg1 arg2)
            (emit-invokevirtual +lisp-object-class+ "MOD"
                                (lisp-object-arg-types 1) +lisp-object+)
-;;            (when (eq representation :int)
-;;              (emit-unbox-fixnum))
            (fix-boxing representation nil) ; FIXME use derived result type
            (emit-move-from-stack target representation)))))
 
+(defknown p2-zerop (t t t) t)
 (defun p2-zerop (form target representation)
   (unless (check-arg-count form 1)
     (compile-function-call form target representation)
@@ -6246,6 +6293,7 @@ representation, based on the derived type of the LispObject."
           (t
            (compile-function-call form target representation)))))
 
+(defknown p2-stream-element-type (t t t) t)
 (defun p2-stream-element-type (form target representation)
   (unless (check-arg-count form 1)
     (compile-function-call form target representation)
@@ -6264,6 +6312,7 @@ representation, based on the derived type of the LispObject."
            (compile-function-call form target representation)))))
 
 ;; write-8-bits byte stream => nil
+(defknown p2-write-8-bits (t t t) t)
 (defun p2-write-8-bits (form target representation)
   (unless (check-arg-count form 2)
     (compile-function-call form target representation)
@@ -6756,6 +6805,7 @@ representation, based on the derived type of the LispObject."
   (make-compiler-type (derive-type form)))
 
 ;; delete item sequence &key from-end test test-not start end count key
+(defknown p2-delete (t t t) t)
 (defun p2-delete (form target representation)
   (unless (notinline-p 'delete)
     (when (= (length form) 3)
@@ -7136,6 +7186,7 @@ representation, based on the derived type of the LispObject."
      (compile-function-call form target representation))))
 
 ;; char/schar string index => character
+(defknown p2-char/schar (t t t) t)
 (defun p2-char/schar (form target representation)
   (unless (check-arg-count form 2)
     (compile-function-call form target representation)
@@ -7586,6 +7637,7 @@ representation, based on the derived type of the LispObject."
           (list 'LET (list (list sym expr)) (list 'SETQ (%cadr form) sym)))
         form)))
 
+(defknown p2-setq (t t t) t)
 (defun p2-setq (form target representation)
   (unless (= (length form) 3)
     (return-from p2-setq (compile-form (precompiler::precompile-setq form)
@@ -7784,6 +7836,7 @@ representation, based on the derived type of the LispObject."
         (t
          (compile-function-call form target representation))))
 
+(defknown p2-symbol-name (t t t) t)
 (defun p2-symbol-name (form target representation)
   (unless (check-arg-count form 1)
     (compile-function-call form target representation)
@@ -7798,6 +7851,7 @@ representation, based on the derived type of the LispObject."
           (t
            (compile-function-call form target representation)))))
 
+(defknown p2-symbol-package (t t t) t)
 (defun p2-symbol-package (form target representation)
   (unless (check-arg-count form 1)
     (compile-function-call form target representation)
@@ -7813,6 +7867,7 @@ representation, based on the derived type of the LispObject."
           (t
            (compile-function-call form target representation)))))
 
+(defknown p2-symbol-value (t t t) t)
 (defun p2-symbol-value (form target representation)
   (when (check-arg-count form 1)
     (let ((arg (%cadr form)))
@@ -7905,6 +7960,7 @@ representation, based on the derived type of the LispObject."
 (defun p2-truly-the (form target representation)
   (compile-form (third form) target representation))
 
+(defknown p2-char-code (t t t) t)
 (defun p2-char-code (form target representation)
   (unless (check-arg-count form 1)
     (compile-function-call form target representation)
@@ -7915,7 +7971,7 @@ representation, based on the derived type of the LispObject."
     (cond ((characterp arg)
            (compile-constant (char-code arg) target representation))
           ((and (eq type 'character) (< *safety* 3))
-           (unless (eq representation :int)
+           (when (null representation)
              (emit 'new +lisp-fixnum-class+)
              (emit 'dup))
            (cond (;;(and *enable-unboxed-characters* (consp arg) (eq (car arg) 'CHAR))
@@ -7926,12 +7982,17 @@ representation, based on the derived type of the LispObject."
                   (maybe-emit-clear-values arg)
                   (emit 'checkcast +lisp-character-class+)
                   (emit 'getfield +lisp-character-class+ "value" "C")))
-           (unless (eq representation :int)
-             (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
+           (case representation
+             (:int)
+             (:long
+              (emit 'i2l))
+             (t
+              (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
            (emit-move-from-stack target representation))
           (t
            (compile-function-call form target representation)))))
 
+(defknown p2-char= (t t t) t)
 (defun p2-char= (form target representation)
 ;;   (format t "p2-char= representation = ~S~%" representation)
   (let* ((args (cdr form))
@@ -8426,6 +8487,7 @@ representation, based on the derived type of the LispObject."
       (emit-invokevirtual *this-class* "_execute" arg-types return-type))
     (emit-move-from-stack target representation)))
 
+(defknown p2-compiland (t) t)
 (defun p2-compiland (compiland)
 ;;   (format t "p2-compiland name = ~S~%" (compiland-name compiland))
   (let* ((p1-result (compiland-p1-result compiland))
@@ -8784,9 +8846,8 @@ representation, based on the derived type of the LispObject."
 
     (setf (class-file-lambda-list class-file) args)
 
-    (push execute-method (class-file-methods class-file))
-
-    (values)))
+    (push execute-method (class-file-methods class-file)))
+  t)
 
 (defun compile-1 (compiland)
   (let ((*all-variables* '())
