@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.34 2005-12-01 02:00:55 piso Exp $
+;;; $Id: known-functions.lisp,v 1.35 2005-12-08 12:00:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -105,6 +105,9 @@
            compile-file-pathname
            complex
            conjugate
+           count
+           count-if
+           count-if-not
            delete-file
            directory-namestring
            eighth
@@ -159,6 +162,7 @@
            replace
            rest
            scale-float
+           search
            second
            set
            set-std-slot-value
@@ -384,5 +388,6 @@
   * t)
 
 (defknown lookup-known-symbol (symbol) t)
+(defknown %class-name (class) symbol)
 
 (provide '#:known-functions)
