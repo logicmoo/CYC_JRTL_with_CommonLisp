@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-types.lisp,v 1.14 2005-11-29 17:09:39 piso Exp $
+;;; $Id: compiler-types.lisp,v 1.15 2005-12-08 12:01:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -166,6 +166,7 @@
   name-or-names)
 
 (defmacro defknown (name-or-names argument-types result-type)
-  `(%defknown ',name-or-names ',argument-types ',result-type))
+  `(eval-when (:compile-toplevel :load-toplevel :execute)
+     (%defknown ',name-or-names ',argument-types ',result-type)))
 
 (provide '#:compiler-types)
