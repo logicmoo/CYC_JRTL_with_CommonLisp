@@ -1,7 +1,7 @@
 ;;; compiler-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-tests.lisp,v 1.9 2005-12-08 01:27:26 piso Exp $
+;;; $Id: compiler-tests.lisp,v 1.10 2005-12-08 19:52:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -309,5 +309,19 @@
   (foo nil nil)
   t
   -3475589)
+
+(deftest logxor.1
+  (progn
+    (fmakunbound 'foo)
+    (defun foo ()
+      (logxor -4153366606 (- 0)))
+    (values (funcall 'foo)
+            (multiple-value-list (compile 'foo))
+            (compiled-function-p #'foo)
+            (funcall 'foo)))
+    -4153366606
+    (foo nil nil)
+    t
+    -4153366606)
 
 (do-tests)
