@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.668 2005-12-07 17:06:10 piso Exp $
+;;; $Id: jvm.lisp,v 1.669 2005-12-08 00:48:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -288,7 +288,7 @@
 ;;          (eq (variable-representation variable) :int))))
   (unboxed-fixnum-variable obj))
 
-(declaim (ftype (function () t) allocate-register))
+(defknown allocate-register () (integer 0 65535))
 (defun allocate-register ()
   (let* ((register *register*)
          (next-register (1+ register)))
@@ -1642,12 +1642,13 @@ representation, based on the derived type of the LispObject."
          (emit 'pop))
         ((eq target 'stack)) ; Nothing to do.
         ((fixnump target)
+         ;; A register.
          (emit
           (case representation
             ((:int :boolean :char)
              'istore)
             (:long
-             (aver nil))
+             'lstore)
             (t
              'astore))
           target))
@@ -1776,6 +1777,7 @@ representation, based on the derived type of the LispObject."
                  89 ; dup
                  90 ; dup_x1
                  91 ; dup_x2
+                 92 ; dup2
                  95 ; swap
                  96 ; iadd
                  97 ; ladd
@@ -1838,7 +1840,7 @@ representation, based on the derived type of the LispObject."
            (eval-when (:load-toplevel :execute)
              (setf (gethash ,opcodes *resolvers*) (symbol-function ',name)))))))
 
-;; ALOAD
+;; aload
 (define-resolver 25 (instruction)
  (let* ((args (instruction-args instruction))
         (index (car args)))
@@ -1850,19 +1852,7 @@ representation, based on the derived type of the LispObject."
          (t
           (error "ALOAD unsupported case")))))
 
-;; ILOAD
-(define-resolver 21 (instruction)
-  (let* ((args (instruction-args instruction))
-         (index (car args)))
-    (declare (type (unsigned-byte 16) index))
-    (cond ((<= 0 index 3)
-           (inst (+ index 26)))
-          ((<= 0 index 255)
-           (inst 21 index))
-          (t
-           (error "ILOAD unsupported case")))))
-
-;; ASTORE
+;; astore
 (define-resolver 58 (instruction)
   (let* ((args (instruction-args instruction))
          (index (car args)))
@@ -1874,7 +1864,19 @@ representation, based on the derived type of the LispObject."
           (t
            (error "ASTORE unsupported case")))))
 
-;; ISTORE
+;; iload
+(define-resolver 21 (instruction)
+  (let* ((args (instruction-args instruction))
+         (index (car args)))
+    (declare (type (unsigned-byte 16) index))
+    (cond ((<= 0 index 3)
+           (inst (+ index 26)))
+          ((<= 0 index 255)
+           (inst 21 index))
+          (t
+           (error "ILOAD unsupported case")))))
+
+;; istore
 (define-resolver 54 (instruction)
   (let* ((args (instruction-args instruction))
          (index (car args)))
@@ -1886,13 +1888,37 @@ representation, based on the derived type of the LispObject."
           (t
            (error "ASTORE unsupported case")))))
 
-;; GETSTATIC, PUTSTATIC
+;; lload
+(define-resolver 22 (instruction)
+  (let* ((args (instruction-args instruction))
+         (index (car args)))
+    (declare (type (unsigned-byte 16) index))
+    (cond ((<= 0 index 3)
+           (inst (+ index 30)))
+          ((<= 0 index 255)
+           (inst 22 index))
+          (t
+           (error "LLOAD unsupported case")))))
+
+;; lstore
+(define-resolver 55 (instruction)
+  (let* ((args (instruction-args instruction))
+         (index (car args)))
+    (declare (type (unsigned-byte 16) index))
+    (cond ((<= 0 index 3)
+           (inst (+ index 63)))
+          ((<= 0 index 255)
+           (inst 55 index))
+          (t
+           (error "ASTORE unsupported case")))))
+
+;; getstatic, putstatic
 (define-resolver (178 179) (instruction)
   (let* ((args (instruction-args instruction))
          (index (pool-field (first args) (second args) (third args))))
     (inst (instruction-opcode instruction) (u2 index))))
 
-;; BIPUSH, SIPUSH
+;; bipush, sipush
 (define-resolver (16 17) (instruction)
   (let* ((args (instruction-args instruction))
          (n (first args)))
@@ -1904,14 +1930,14 @@ representation, based on the derived type of the LispObject."
           (t ; SIPUSH
            (inst 17 (u2 n))))))
 
-;; INVOKEVIRTUAL, INVOKESPECIAL, INVOKESTATIC class-name method-name descriptor
+;; invokevirtual, invokespecial, invokestatic class-name method-name descriptor
 (define-resolver (182 183 184) (instruction)
   (let* ((args (instruction-args instruction))
          (index (pool-method (first args) (second args) (third args))))
     (setf (instruction-args instruction) (u2 index))
     instruction))
 
-;; LDC
+;; ldc
 (define-resolver 18 (instruction)
   (let* ((args (instruction-args instruction)))
     (unless (= (length args) 1)
@@ -1920,7 +1946,7 @@ representation, based on the derived type of the LispObject."
         (inst 19 (u2 (car args))) ; LDC_W
         (inst 18 args))))
 
-;; LDC2_W
+;; ldc2_w
 (define-resolver 20 (instruction)
 ;;   (format t "resolving ldc2_w...~%")
   (let* ((args (instruction-args instruction)))
@@ -1932,19 +1958,19 @@ representation, based on the derived type of the LispObject."
 ;;         (inst 18 args))))
     (inst 20 (u2 (car args)))))
 
-;; GETFIELD, PUTFIELD class-name field-name type-name
+;; getfield, putfield class-name field-name type-name
 (define-resolver (180 181) (instruction)
   (let* ((args (instruction-args instruction))
          (index (pool-field (first args) (second args) (third args))))
     (inst (instruction-opcode instruction) (u2 index))))
 
-;; NEW, ANEWARRAY, CHECKCAST, INSTANCEOF class-name
+;; new, anewarray, checkcast, instanceof class-name
 (define-resolver (187 189 192 193) (instruction)
   (let* ((args (instruction-args instruction))
          (index (pool-class (first args))))
     (inst (instruction-opcode instruction) (u2 index))))
 
-;; IINC
+;; iinc
 (define-resolver 132 (instruction)
   (let* ((args (instruction-args instruction))
          (register (first args))
@@ -4731,6 +4757,19 @@ representation, based on the derived type of the LispObject."
                          (setf boundp t))
                         ((and (null (variable-closure-index variable))
                               (not (variable-special-p variable))
+                              (neq (variable-declared-type variable) :none)
+                              (subtypep (variable-declared-type variable)
+                                        (list 'integer most-negative-java-long most-positive-java-long)))
+                         (setf (variable-representation variable) :long)
+                         (compile-form initform 'stack :long)
+                         (update-must-clear-values)
+                         (setf (variable-register variable)
+                               ;; We need two registers for a long.
+                               (prog1 (allocate-register) (allocate-register)))
+                         (emit 'lstore (variable-register variable))
+                         (setf boundp t))
+                        ((and (null (variable-closure-index variable))
+                              (not (variable-special-p variable))
                               (eql (variable-writes variable) 0))
                          (let ((type (derive-type initform)))
                            (setf (variable-derived-type variable) type)
@@ -4741,6 +4780,17 @@ representation, based on the derived type of the LispObject."
                                   (update-must-clear-values)
                                   (emit 'istore (variable-register variable))
                                   (setf boundp t))
+                                 ((subtypep type
+                                            (list 'integer most-negative-java-long most-positive-java-long))
+                                  (setf (variable-representation variable) :long)
+                                  (setf (variable-register variable)
+                                        ;; We need two registers for a long.
+                                        (prog1 (allocate-register) (allocate-register)))
+                                  (compile-form initform 'stack :long)
+                                  (update-must-clear-values)
+                                  (emit 'lstore (variable-register variable))
+                                  (setf boundp t))
+
                                  ((and *enable-unboxed-characters*
                                        (eq type 'CHARACTER))
                                   (setf (variable-representation variable) :char)
@@ -7455,6 +7505,8 @@ representation, based on the derived type of the LispObject."
                  (case representation
                    (:int
                     (emit 'iload (variable-register variable)))
+                   (:char
+                    (aver nil))
                    (:long
                     (emit 'iload (variable-register variable))
                     (emit 'i2l))
@@ -7465,15 +7517,30 @@ representation, based on the derived type of the LispObject."
                     (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
                  (emit-move-from-stack target representation))
                 ((eq (variable-representation variable) :char)
-                 (cond ((eq representation :char)
-                        (aver (variable-register variable))
-                        (emit 'iload (variable-register variable)))
-                       (t
-                        (emit 'new +lisp-character-class+)
-                        (emit 'dup)
-                        (aver (variable-register variable))
-                        (emit 'iload (variable-register variable))
-                        (emit-invokespecial-init +lisp-character-class+ '("C"))))
+                 (case representation
+                   (:char
+                    (aver (variable-register variable))
+                    (emit 'iload (variable-register variable)))
+                   (t
+                    (emit 'new +lisp-character-class+)
+                    (emit 'dup)
+                    (aver (variable-register variable))
+                    (emit 'iload (variable-register variable))
+                    (emit-invokespecial-init +lisp-character-class+ '("C"))))
+                 (emit-move-from-stack target representation))
+                ((eq (variable-representation variable) :long)
+                 (aver (variable-register variable))
+                 (case representation
+                   (:int
+                    (emit 'lload (variable-register variable))
+                    (emit 'l2i))
+                   (:char
+                    (aver nil))
+                   (:long
+                    (emit 'lload (variable-register variable)))
+                   (t
+                    (emit 'lload (variable-register variable))
+                    (emit-box-long)))
                  (emit-move-from-stack target representation))
                 ((variable-register variable)
                  (emit 'aload (variable-register variable))
@@ -7508,8 +7575,6 @@ representation, based on the derived type of the LispObject."
          (maybe-emit-clear-values (%cadr form) (%caddr form))
          (emit-invokevirtual +lisp-thread-class+ "setSpecialVariable"
                              (list +lisp-symbol+ +lisp-object+) +lisp-object+)
-;;          (when (eq representation :int)
-;;            (emit-unbox-fixnum))
          (fix-boxing representation nil)
          (emit-move-from-stack target representation))
         (t
@@ -7556,8 +7621,6 @@ representation, based on the derived type of the LispObject."
              (maybe-emit-clear-values value-form)
              (emit-invokevirtual +lisp-thread-class+ "setSpecialVariable"
                                  (list +lisp-symbol+ +lisp-object+) +lisp-object+)))
-;;       (when (eq representation :int)
-;;         (emit-unbox-fixnum))
       (fix-boxing representation nil)
       (emit-move-from-stack target representation)
       (return-from p2-setq))
@@ -7567,8 +7630,6 @@ representation, based on the derived type of the LispObject."
      (cond (target
             (compile-form value-form 'stack nil)
             (maybe-emit-clear-values value-form)
-;;             (when (eq representation :int)
-;;               (emit-unbox-fixnum))
             (fix-boxing representation nil)
             (emit-move-from-stack target representation))
            (t
@@ -7680,6 +7741,21 @@ representation, based on the derived type of the LispObject."
                (emit 'swap)                    ; stack: new-character new-character char
                (emit-invokespecial-init +lisp-character-class+ '("C")) ; stack: character
                (emit-move-from-stack target representation))))
+          ((eq (variable-representation variable) :long)
+           (compile-form value-form 'stack :long)
+           (maybe-emit-clear-values value-form)
+           (when target
+             (emit 'dup2))
+           (emit 'lstore (variable-register variable))
+           (when target
+             ;; long on stack here
+             (case representation
+               (:int
+                (emit 'l2i))
+               (:long)
+               (t
+                (emit-box-long)))
+             (emit-move-from-stack target representation)))
           (t
            (compile-form value-form 'stack nil)
            (maybe-emit-clear-values value-form)
@@ -7687,8 +7763,6 @@ representation, based on the derived type of the LispObject."
              (emit 'dup))
            (emit 'var-set variable)
            (when target
-;;              (when (eq representation :int)
-;;                (emit-unbox-fixnum))
              (fix-boxing representation nil)
              (emit-move-from-stack target representation))))))
 
