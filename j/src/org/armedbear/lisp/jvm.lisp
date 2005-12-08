@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.671 2005-12-08 12:42:42 piso Exp $
+;;; $Id: jvm.lisp,v 1.672 2005-12-08 23:53:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -938,12 +938,24 @@
                     (1- (length form))))
   (list 'TRULY-THE (%cadr form) (p1 (%caddr form))))
 
-(defknown p1-throw (t) t)
-(defun p1-throw (form)
-  (let ((new-form (rewrite-throw form)))
-    (when (neq new-form form)
-      (return-from p1-throw (p1 new-form))))
-  (list* 'THROW (mapcar #'p1 (cdr form))))
+(defknown unsafe-p (t) t)
+(defun unsafe-p (args)
+  (cond ((node-p args)
+         (unsafe-p (node-form args)))
+        ((atom args)
+         nil)
+        (t
+         (case (car args)
+           (QUOTE
+            nil)
+           (LAMBDA
+            nil)
+           ((RETURN-FROM GO CATCH THROW UNWIND-PROTECT BLOCK)
+            t)
+           (t
+            (dolist (arg args)
+              (when (unsafe-p arg)
+                (return t))))))))
 
 (defknown rewrite-throw (t) t)
 (defun rewrite-throw (form)
@@ -973,13 +985,42 @@
           (list 'LET* (nreverse lets) (list* 'THROW (nreverse syms))))
         form)))
 
+(defknown p1-throw (t) t)
+(defun p1-throw (form)
+  (let ((new-form (rewrite-throw form)))
+    (when (neq new-form form)
+      (return-from p1-throw (p1 new-form))))
+  (list* 'THROW (mapcar #'p1 (cdr form))))
+
+(defknown rewrite-function-call (t) t)
+(defun rewrite-function-call (form)
+  (let ((args (cdr form)))
+    (if (unsafe-p args)
+        (let ((syms ())
+              (lets ()))
+          ;; Preserve the order of evaluation of the arguments!
+          (dolist (arg args)
+            (cond ((constantp arg)
+                   (push arg syms))
+                  ((and (consp arg) (eq (car arg) 'GO))
+                   (return-from rewrite-function-call
+                                (list 'LET* (nreverse lets) arg))
+                   )
+                  (t
+                   (let ((sym (gensym)))
+                     (push sym syms)
+                     (push (list sym arg) lets)))))
+          (list 'LET* (nreverse lets) (list* (car form) (nreverse syms))))
+        form)))
+
 (defknown p1-function-call (t) t)
 (defun p1-function-call (form)
   (let ((op (car form)))
     (let ((new-form (rewrite-function-call form)))
       (when (neq new-form form)
-        (dformat t "old form = ~S~%" form)
-        (dformat t "new form = ~S~%" new-form)
+;;         (let ((*print-structure* nil))
+;;           (format t "old form = ~S~%" form)
+;;           (format t "new form = ~S~%" new-form))
         (return-from p1-function-call (p1 new-form))))
     (let ((local-function (find-local-function op)))
       (cond (local-function
@@ -1431,7 +1472,7 @@
   (ensure-thread-var-initialized)
   (emit 'aload *thread*))
 
-(declaim (ftype (function (t t) t) generate-instanceof-type-check-for-variable))
+(defknown generate-instanceof-type-check-for-variable (t t) t)
 (defun generate-instanceof-type-check-for-variable (variable expected-type)
   (declare (type symbol expected-type))
   (let ((instanceof-class (ecase expected-type
@@ -1475,7 +1516,7 @@
     (label LABEL1))
   t)
 
-(declaim (ftype (function (t) t) generate-type-check-for-variable))
+(defknown generate-type-check-for-variable (t) t)
 (defun generate-type-check-for-variable (variable)
   (let ((declared-type (variable-declared-type variable)))
     (cond ((eq declared-type :none)) ; Nothing to do.
@@ -3470,40 +3511,6 @@ representation, based on the derived type of the LispObject."
         (t
          nil)))
 
-(declaim (ftype (function (t) t) unsafe-p))
-(defun unsafe-p (args)
-  (cond ((node-p args)
-         (unsafe-p (node-form args)))
-        ((atom args)
-         nil)
-        (t
-         (case (car args)
-           (QUOTE
-            nil)
-           (LAMBDA
-            nil)
-           ((RETURN-FROM GO CATCH THROW UNWIND-PROTECT BLOCK)
-            t)
-           (t
-            (dolist (arg args)
-              (when (unsafe-p arg)
-                (return t))))))))
-
-(defun rewrite-function-call (form)
-  (let ((args (cdr form)))
-    (if (unsafe-p args)
-        (let ((syms ())
-              (lets ()))
-          ;; Preserve the order of evaluation of the arguments!
-          (dolist (arg args)
-            (if (constantp arg)
-                (push arg syms)
-                (let ((sym (gensym)))
-                  (push sym syms)
-                  (push (list sym arg) lets))))
-          (list 'LET* (nreverse lets) (list* (car form) (nreverse syms))))
-        form)))
-
 (declaim (ftype (function (t) t) process-args))
 (defun process-args (args)
   (let ((numargs (length args)))
@@ -4685,51 +4692,46 @@ representation, based on the derived type of the LispObject."
       (let* ((initform (variable-initform variable))
              (unused-p (and (not (variable-special-p variable))
                             ;; If it's never read, we don't care about writes.
-                            (zerop (variable-reads variable))))
-             (target (if unused-p nil 'stack)))
-        (cond (initform
-               (cond (unused-p
-                      ;; Nothing to do.
-                      )
-                     ((and (variable-register variable)
-                           (neq (variable-declared-type variable) :none)
-                           (subtypep (variable-declared-type variable) 'FIXNUM))
-                      (setf (variable-representation variable) :int))
-                     ((and (variable-register variable)
-                           (eql (variable-writes variable) 0))
-                      (let ((type (derive-type initform)))
-                        (setf (variable-derived-type variable) type)
-                        (when (subtypep type 'FIXNUM)
-                          (setf (variable-representation variable) :int))))
-                     ((get (variable-name variable) 'sys::dotimes-index-variable-p)
-                      ;; This is a DOTIMES index variable.
-                      (let* ((limit-variable-name (get (variable-name variable) 'sys::dotimes-limit-variable-name))
-                             (limit-variable (and limit-variable-name
-                                                  (or (find-variable limit-variable-name (block-vars block))
-                                                      (find-visible-variable limit-variable-name)))))
-                        (when limit-variable
-                          (let ((type (variable-derived-type limit-variable)))
-                            (when (eq type :none)
-                              (setf type (variable-declared-type limit-variable)))
-                            (when (subtypep type 'FIXNUM)
-                              (setf (variable-representation variable) :int)
-                              (setf (variable-derived-type variable) 'FIXNUM)))))))
-               (compile-form initform target (variable-representation variable))
-               (unless must-clear-values
-                 (unless (single-valued-p initform)
-                   (setf must-clear-values t))))
+                            (zerop (variable-reads variable)))))
+        (cond (unused-p
+               (compile-form initform nil nil)) ; for effect
               (t
-               (when target
-                 (emit-push-nil))))
-        (cond ((variable-special-p variable)
-               (emit-move-from-stack (setf (variable-temp-register variable) (allocate-register))))
-              ((null target)
-               ;; Nothing to do.
-               )
-              ((eq (variable-representation variable) :int)
-               (emit 'istore (variable-register variable)))
-              (t
-               (compile-binding variable)))))
+               (cond (initform
+                      (cond ((and (variable-register variable)
+                                  (neq (variable-declared-type variable) :none)
+                                  (subtypep (variable-declared-type variable) 'FIXNUM))
+                             (setf (variable-representation variable) :int))
+                            ((and (variable-register variable)
+                                  (eql (variable-writes variable) 0))
+                             (let ((type (derive-type initform)))
+                               (setf (variable-derived-type variable) type)
+                               (when (subtypep type 'FIXNUM)
+                                 (setf (variable-representation variable) :int))))
+                            ((get (variable-name variable) 'sys::dotimes-index-variable-p)
+                             ;; This is a DOTIMES index variable.
+                             (let* ((limit-variable-name (get (variable-name variable) 'sys::dotimes-limit-variable-name))
+                                    (limit-variable (and limit-variable-name
+                                                         (or (find-variable limit-variable-name (block-vars block))
+                                                             (find-visible-variable limit-variable-name)))))
+                               (when limit-variable
+                                 (let ((type (variable-derived-type limit-variable)))
+                                   (when (eq type :none)
+                                     (setf type (variable-declared-type limit-variable)))
+                                   (when (subtypep type 'FIXNUM)
+                                     (setf (variable-representation variable) :int)
+                                     (setf (variable-derived-type variable) 'FIXNUM)))))))
+                      (compile-form initform 'stack (variable-representation variable))
+                      (unless must-clear-values
+                        (unless (single-valued-p initform)
+                          (setf must-clear-values t))))
+                     (t
+                      (emit-push-nil)))
+               (cond ((variable-special-p variable)
+                      (emit-move-from-stack (setf (variable-temp-register variable) (allocate-register))))
+                     ((eq (variable-representation variable) :int)
+                      (emit 'istore (variable-register variable)))
+                     (t
+                      (compile-binding variable)))))))
     (when must-clear-values
       (emit-clear-values))
     ;; Now that all the initforms have been evaluated, move the results from
@@ -7106,10 +7108,13 @@ representation, based on the derived type of the LispObject."
      (let* ((arg (%cadr form))
             (type (derive-compiler-type arg)))
        (cond ((eql (fixnum-constant-value type) 0)
-              (cond ((eq representation :int)
-                     (emit 'iconst_0))
-                    (t
-                     (emit 'getstatic +lisp-fixnum-class+ "ZERO" +lisp-fixnum+)))
+              (case representation
+                (:int
+                 (emit 'iconst_0))
+                (:long
+                 (emit 'lconst_0))
+                (t
+                 (emit 'getstatic +lisp-fixnum-class+ "ZERO" +lisp-fixnum+)))
               (emit-move-from-stack target representation))
              ((and (fixnum-type-p type)
                    (integer-type-low type)
@@ -7129,8 +7134,6 @@ representation, based on the derived type of the LispObject."
               (maybe-emit-clear-values arg)
               (emit-invokevirtual +lisp-object-class+ "negate"
                                   nil +lisp-object+)
-;;               (when (eq representation :int)
-;;                 (emit-unbox-fixnum))
               (fix-boxing representation nil)
               (emit-move-from-stack target representation)))))
     (3
