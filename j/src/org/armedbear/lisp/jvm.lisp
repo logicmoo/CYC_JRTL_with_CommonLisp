@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.669 2005-12-08 00:48:11 piso Exp $
+;;; $Id: jvm.lisp,v 1.670 2005-12-08 06:15:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -7412,8 +7412,6 @@ representation, based on the derived type of the LispObject."
          (compile-form arg2 'stack representation)
          (emit 'goto LABEL2)
          (emit 'label LABEL1)
-;;          (when (eq representation :int)
-;;            (emit-unbox-fixnum))
          (fix-boxing representation nil) ; FIXME use derived result type
          (emit 'label LABEL2)
          (emit-move-from-stack target representation)))
@@ -7718,13 +7716,17 @@ representation, based on the derived type of the LispObject."
            (emit 'istore (variable-register variable))
            (when target
              ;; int on stack here
-             (unless (eq representation :int)
-               ;; need to box int
-               (emit 'new +lisp-fixnum-class+) ; stack: int new-fixnum
-               (emit 'dup_x1)                  ; stack: new-fixnum int new-fixnum
-               (emit 'swap)                    ; stack: new-fixnum new-fixnum int
-               (emit-invokespecial-init +lisp-fixnum-class+ '("I")) ; stack: fixnum
-             (emit-move-from-stack target representation))))
+             (case representation
+               (:int)
+               (:long
+                (emit 'i2l))
+               (t
+                ;; need to box int
+                (emit 'new +lisp-fixnum-class+) ; stack: int new-fixnum
+                (emit 'dup_x1)                  ; stack: new-fixnum int new-fixnum
+                (emit 'swap)                    ; stack: new-fixnum new-fixnum int
+                (emit-invokespecial-init +lisp-fixnum-class+ '("I")))) ; stack: fixnum
+             (emit-move-from-stack target representation)))
           ((eq (variable-representation variable) :char)
            (dformat t "p2-setq :char case~%")
            (compile-form value-form 'stack :char)
