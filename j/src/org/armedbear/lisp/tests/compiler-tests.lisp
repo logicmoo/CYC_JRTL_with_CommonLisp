@@ -1,7 +1,7 @@
 ;;; compiler-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-tests.lisp,v 1.8 2005-12-07 14:21:08 piso Exp $
+;;; $Id: compiler-tests.lisp,v 1.9 2005-12-08 01:27:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -291,5 +291,23 @@
   (logand-lognot.1 nil nil)
   t
   4171510506)
+
+(deftest logior-logand-setf.1
+  (progn
+    (fmakunbound 'foo)
+    (defun foo (x y)
+      (declare (type (integer 2005076 2881158415) x))
+      (declare (type (integer -28121355 17748872) y))
+      (logior (logand (setf y -3475589)
+                      x))
+      y)
+    (values (funcall 'foo 12345678 42)
+            (multiple-value-list (compile 'foo))
+            (compiled-function-p #'foo)
+            (funcall 'foo 12345678 42)))
+  -3475589
+  (foo nil nil)
+  t
+  -3475589)
 
 (do-tests)
