@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.419 2005-12-05 16:44:57 piso Exp $
+ * $Id: Lisp.java,v 1.420 2005-12-09 01:55:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -954,7 +954,6 @@ public abstract class Lisp
             }
             return signal(new LispError("Unable to load " + namestring));
         }
-
         Pathname pathname = new Pathname(namestring);
         final File file = Utilities.getFile(pathname, defaultPathname);
         if (file != null && file.isFile()) {
@@ -965,10 +964,6 @@ public abstract class Lisp
                 // FIXME close stream!
                 if (obj != null)
                     return obj;
-
-                Debug.trace("Unable to load " + namestring);
-                return signal(new LispError("Unable to load " + namestring));
-
             }
             catch (VerifyError e) {
                 return signal(new LispError("Class verification failed: " +
@@ -980,7 +975,6 @@ public abstract class Lisp
             return signal(new LispError("Unable to load " +
                                         pathname.writeToString()));
         }
-
         try {
             LispObject loadTruename = Symbol.LOAD_TRUENAME.symbolValue(thread);
             String zipFileName = ((Pathname)loadTruename).getNamestring();
