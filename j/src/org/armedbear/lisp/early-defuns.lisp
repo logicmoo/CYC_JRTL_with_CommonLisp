@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.38 2005-08-05 05:52:02 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.39 2005-12-09 15:03:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,10 +19,17 @@
 
 (in-package #:system)
 
-(export '(index %type-error check-sequence-bounds require-type normalize-type))
+(export '(index java-long %type-error check-sequence-bounds require-type
+          normalize-type))
 
 ;; (deftype index () '(integer 0 (#.most-positive-fixnum)))
-(%put 'index 'deftype-definition (lambda () '(integer 0 (#.most-positive-fixnum))))
+(%put 'index 'deftype-definition
+      (lambda () '(integer 0 (#.most-positive-fixnum))))
+
+;; (deftype java-long ()
+;;   '(integer #.most-negative-java-long #.most-positive-java-long))
+(%put 'java-long 'deftype-definition
+      (lambda () '(integer #.most-negative-java-long #.most-positive-java-long)))
 
 (defun %type-error (datum expected-type)
   (error 'type-error :datum datum :expected-type expected-type))
