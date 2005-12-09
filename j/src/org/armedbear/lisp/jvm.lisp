@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.672 2005-12-08 23:53:05 piso Exp $
+;;; $Id: jvm.lisp,v 1.673 2005-12-09 15:02:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -525,7 +525,6 @@
             (or (atom varspec)
                 (constantp (cadr varspec))
                 (eq (car varspec) (cadr varspec))
-                ;;             (return nil)
                 (return)))))
     (let ((vars (if (eq op 'LET)
                     (p1-let-vars varlist)
@@ -4679,9 +4678,9 @@ representation, based on the derived type of the LispObject."
     (unless (or (variable-special-p variable)
                 (variable-closure-index variable)
                 (zerop (variable-reads variable)))
-      (setf (variable-register variable) (allocate-register))))
-  (let ((*register* *register*)
-        (must-clear-values nil))
+      (aver (null (variable-register variable)))
+      (setf (variable-register variable) t)))
+  (let ((must-clear-values nil))
     ;; Evaluate each initform. If the variable being bound is special, allocate
     ;; a temporary register for the result; LET bindings must be done in
     ;; parallel, so we can't modify any specials until all the initforms have
@@ -4697,39 +4696,58 @@ representation, based on the derived type of the LispObject."
                (compile-form initform nil nil)) ; for effect
               (t
                (cond (initform
-                      (cond ((and (variable-register variable)
-                                  (neq (variable-declared-type variable) :none)
-                                  (subtypep (variable-declared-type variable) 'FIXNUM))
-                             (setf (variable-representation variable) :int))
-                            ((and (variable-register variable)
-                                  (eql (variable-writes variable) 0))
-                             (let ((type (derive-type initform)))
-                               (setf (variable-derived-type variable) type)
-                               (when (subtypep type 'FIXNUM)
-                                 (setf (variable-representation variable) :int))))
-                            ((get (variable-name variable) 'sys::dotimes-index-variable-p)
-                             ;; This is a DOTIMES index variable.
-                             (let* ((limit-variable-name (get (variable-name variable) 'sys::dotimes-limit-variable-name))
-                                    (limit-variable (and limit-variable-name
-                                                         (or (find-variable limit-variable-name (block-vars block))
-                                                             (find-visible-variable limit-variable-name)))))
-                               (when limit-variable
-                                 (let ((type (variable-derived-type limit-variable)))
-                                   (when (eq type :none)
-                                     (setf type (variable-declared-type limit-variable)))
-                                   (when (subtypep type 'FIXNUM)
-                                     (setf (variable-representation variable) :int)
-                                     (setf (variable-derived-type variable) 'FIXNUM)))))))
+                      (when (eq (variable-register variable) t)
+                        (let ((declared-type (variable-declared-type variable)))
+                          (cond ((neq declared-type :none)
+                                 (cond ((subtypep declared-type 'FIXNUM)
+                                        (setf (variable-representation variable) :int))
+                                       ((subtypep declared-type 'JAVA-LONG)
+                                        (setf (variable-representation variable) :long))))
+                                ((zerop (variable-writes variable))
+                                 (let ((derived-type (derive-type initform)))
+                                   (setf (variable-derived-type variable) derived-type)
+                                   (cond ((subtypep derived-type 'FIXNUM)
+                                          (setf (variable-representation variable) :int))
+                                         ((subtypep derived-type 'JAVA-LONG)
+                                          (setf (variable-representation variable) :long)))))
+                                ((get (variable-name variable) 'sys::dotimes-index-variable-p)
+                                 ;; DOTIMES index variable.
+                                 (let* ((name (get (variable-name variable) 'sys::dotimes-limit-variable-name))
+                                        (limit-variable (and name
+                                                             (or (find-variable name (block-vars block))
+                                                                 (find-visible-variable name)))))
+                                   (when limit-variable
+                                     (let ((type (variable-derived-type limit-variable)))
+                                       (when (eq type :none)
+                                         (setf type (variable-declared-type limit-variable)))
+                                       (cond ((subtypep type 'FIXNUM)
+                                              (setf (variable-representation variable) :int
+                                                    (variable-derived-type variable) 'FIXNUM))
+                                             ((subtypep type 'JAVA-LONG)
+                                              (setf (variable-representation variable) :long
+                                                    (variable-derived-type variable) 'JAVA-LONG))))))))))
                       (compile-form initform 'stack (variable-representation variable))
                       (unless must-clear-values
                         (unless (single-valued-p initform)
                           (setf must-clear-values t))))
                      (t
+                      ;; No initform.
                       (emit-push-nil)))
+               (when (eq (variable-register variable) t)
+                 ;; Now allocate the register.
+                 (setf (variable-register variable)
+                       (case (variable-representation variable)
+                         (:long
+                          ;; We need two registers for a long.
+                          (prog1 (allocate-register) (allocate-register)))
+                         (t
+                          (allocate-register)))))
                (cond ((variable-special-p variable)
                       (emit-move-from-stack (setf (variable-temp-register variable) (allocate-register))))
                      ((eq (variable-representation variable) :int)
                       (emit 'istore (variable-register variable)))
+                     ((eq (variable-representation variable) :long)
+                      (emit 'lstore (variable-register variable)))
                      (t
                       (compile-binding variable)))))))
     (when must-clear-values
@@ -4797,8 +4815,7 @@ representation, based on the derived type of the LispObject."
                         ((and (null (variable-closure-index variable))
                               (not (variable-special-p variable))
                               (neq (variable-declared-type variable) :none)
-                              (subtypep (variable-declared-type variable)
-                                        (list 'integer most-negative-java-long most-positive-java-long)))
+                              (subtypep (variable-declared-type variable) 'JAVA-LONG))
                          (setf (variable-representation variable) :long)
                          (compile-form initform 'stack :long)
                          (update-must-clear-values)
@@ -4819,8 +4836,7 @@ representation, based on the derived type of the LispObject."
                                   (update-must-clear-values)
                                   (emit 'istore (variable-register variable))
                                   (setf boundp t))
-                                 ((subtypep type
-                                            (list 'integer most-negative-java-long most-positive-java-long))
+                                 ((subtypep type 'JAVA-LONG)
                                   (setf (variable-representation variable) :long)
                                   (setf (variable-register variable)
                                         ;; We need two registers for a long.
@@ -4829,7 +4845,6 @@ representation, based on the derived type of the LispObject."
                                   (update-must-clear-values)
                                   (emit 'lstore (variable-register variable))
                                   (setf boundp t))
-
                                  ((and *enable-unboxed-characters*
                                        (eq type 'CHARACTER))
                                   (setf (variable-representation variable) :char)
