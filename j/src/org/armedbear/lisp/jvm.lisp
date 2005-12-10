@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.673 2005-12-09 15:02:40 piso Exp $
+;;; $Id: jvm.lisp,v 1.674 2005-12-10 08:38:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1730,8 +1730,6 @@ representation, based on the derived type of the LispObject."
 (defknown emit-invoke-method (t t t) t)
 (defun emit-invoke-method (method-name target representation)
   (emit-invokevirtual +lisp-object-class+ method-name nil +lisp-object+)
-;;   (when (eq representation :int)
-;;     (emit-unbox-fixnum))
   (fix-boxing representation nil)
   (emit-move-from-stack target representation))
 
@@ -4994,6 +4992,8 @@ representation, based on the derived type of the LispObject."
              (compile-form subform nil nil)
              (unless must-clear-values
                (unless (single-valued-p subform)
+;;                  (let ((*print-structure* nil))
+;;                    (format t "not single-valued: ~S~%" subform))
                  (setf must-clear-values t))))))
     (label END-BLOCK)
     (emit 'goto EXIT)
@@ -5282,8 +5282,6 @@ representation, based on the derived type of the LispObject."
            (compile-form arg 'stack nil)
            (emit 'checkcast +lisp-cons-class+)
            (emit 'getfield +lisp-cons-class+ "car" +lisp-object+)
-;;            (when (eq representation :int)
-;;              (emit-unbox-fixnum))
            (fix-boxing representation nil)
            (emit-move-from-stack target representation))
           (t
@@ -7318,40 +7316,40 @@ representation, based on the derived type of the LispObject."
 
 (defun p2-aref (form target representation)
   ;; We only optimize the 2-arg case.
-  (cond ((= (length form) 3)
-         (let* ((arg1 (%cadr form))
-                (arg2 (%caddr form))
-                (type1 (derive-compiler-type arg1)))
-           (case representation
-             (:int
-              (compile-form arg1 'stack nil) ; array
-              (compile-form arg2 'stack :int) ; index
-              (maybe-emit-clear-values arg1 arg2)
-              (emit-invokevirtual +lisp-object-class+ "aref" '("I") "I"))
-             (:char
-              (cond ((compiler-subtypep type1 'string)
-                     (compile-form arg1 'stack nil) ; array
-                     (emit 'checkcast +lisp-abstract-string-class+)
-                     (compile-form arg2 'stack :int) ; index
-                     (maybe-emit-clear-values arg1 arg2)
-                     (emit-invokevirtual +lisp-abstract-string-class+
-                                         "charAt" '("I") "C"))
-                    (t
-                     (compile-form arg1 'stack nil) ; array
-                     (compile-form arg2 'stack :int) ; index
-                     (maybe-emit-clear-values arg1 arg2)
-                     (emit-invokevirtual +lisp-object-class+ "AREF" '("I") +lisp-object+)
-                     (emit-unbox-character))))
-             (t
-              (compile-form arg1 'stack nil) ; array
-              (compile-form arg2 'stack :int) ; index
-              (maybe-emit-clear-values arg1 arg2)
-              (emit-invokevirtual +lisp-object-class+ "AREF" '("I") +lisp-object+)
-              (fix-boxing representation nil)))
-           (emit-move-from-stack target representation)))
-        (t
-;;          (format t "p2-aref case 2~%")
-         (compile-function-call form target representation))))
+  (case (length form)
+    (3
+     (let* ((arg1 (%cadr form))
+            (arg2 (%caddr form))
+            (type1 (derive-compiler-type arg1)))
+       (case representation
+         (:int
+          (compile-form arg1 'stack nil) ; array
+          (compile-form arg2 'stack :int) ; index
+          (maybe-emit-clear-values arg1 arg2)
+          (emit-invokevirtual +lisp-object-class+ "aref" '("I") "I"))
+         (:char
+          (cond ((compiler-subtypep type1 'string)
+                 (compile-form arg1 'stack nil) ; array
+                 (emit 'checkcast +lisp-abstract-string-class+)
+                 (compile-form arg2 'stack :int) ; index
+                 (maybe-emit-clear-values arg1 arg2)
+                 (emit-invokevirtual +lisp-abstract-string-class+
+                                     "charAt" '("I") "C"))
+                (t
+                 (compile-form arg1 'stack nil) ; array
+                 (compile-form arg2 'stack :int) ; index
+                 (maybe-emit-clear-values arg1 arg2)
+                 (emit-invokevirtual +lisp-object-class+ "AREF" '("I") +lisp-object+)
+                 (emit-unbox-character))))
+         (t
+          (compile-form arg1 'stack nil) ; array
+          (compile-form arg2 'stack :int) ; index
+          (maybe-emit-clear-values arg1 arg2)
+          (emit-invokevirtual +lisp-object-class+ "AREF" '("I") +lisp-object+)
+          (fix-boxing representation nil)))
+       (emit-move-from-stack target representation)))
+    (t
+     (compile-function-call form target representation))))
 
 (defun p2-aset (form target representation)
   ;; We only optimize the 3-arg case.
