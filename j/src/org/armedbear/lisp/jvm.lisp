@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.675 2005-12-10 09:34:57 piso Exp $
+;;; $Id: jvm.lisp,v 1.676 2005-12-10 18:32:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1291,7 +1291,7 @@
     (push instruction *code*)
     instruction))
 
-(declaim (ftype (function label (symbol) t) label))
+(defknown label (symbol) t)
 (defun label (symbol)
   (declare (type symbol symbol))
   (declare (optimize speed))
@@ -8081,51 +8081,50 @@ representation, based on the derived type of the LispObject."
     (return-from p2-catch))
   (let* ((*register* *register*)
          (tag-register (allocate-register))
-         (label1 (gensym))
-         (label2 (gensym))
-         (label3 (gensym))
-         (label4 (gensym))
-         (label5 (gensym)))
+         (BEGIN-PROTECTED-RANGE (gensym))
+         (END-PROTECTED-RANGE (gensym))
+         (THROW-HANDLER (gensym))
+         (DEFAULT-HANDLER (gensym))
+         (EXIT (gensym)))
     (compile-form (second form) tag-register nil) ; Tag.
     (emit-push-current-thread)
     (emit 'aload tag-register)
     (emit-invokevirtual +lisp-thread-class+ "pushCatchTag"
                         (lisp-object-arg-types 1) nil)
     ; Stack depth is 0.
-    (emit 'label label1) ; Start of protected range.
-    ;; Implicit PROGN.
-    (compile-progn-body (cddr form) target)
-    (emit 'label label2) ; End of protected range.
-    (emit 'goto label5) ; Jump over handlers.
-    (emit 'label label3) ; Start of handler for THROW.
+    (label BEGIN-PROTECTED-RANGE) ; Start of protected range.
+    (compile-progn-body (cddr form) target) ; Implicit PROGN.
+    (label END-PROTECTED-RANGE) ; End of protected range.
+    (emit 'goto EXIT) ; Jump over handlers.
+    (label THROW-HANDLER) ; Start of handler for THROW.
     ;; The Throw object is on the runtime stack. Stack depth is 1.
     (emit 'dup) ; Stack depth is 2.
     (emit 'getfield +lisp-throw-class+ "tag" +lisp-object+) ; Still 2.
     (emit 'aload tag-register) ; Stack depth is 3.
     ;; If it's not the tag we're looking for, we branch to the start of the
     ;; catch-all handler, which will do a re-throw.
-    (emit 'if_acmpne label4) ; Stack depth is 1.
+    (emit 'if_acmpne DEFAULT-HANDLER) ; Stack depth is 1.
     (emit 'aload *thread*)
     (emit-invokevirtual +lisp-throw-class+ "getResult"
                         (list +lisp-thread+) +lisp-object+)
     (emit-move-from-stack target) ; Stack depth is 0.
-    (emit 'goto label5)
-    (emit 'label label4) ; Start of handler for all other Throwables.
+    (emit 'goto EXIT)
+    (label DEFAULT-HANDLER) ; Start of handler for all other Throwables.
     ;; A Throwable object is on the runtime stack here. Stack depth is 1.
     (emit 'aload *thread*)
     (emit-invokevirtual +lisp-thread-class+ "popCatchTag" nil nil)
-    (emit 'athrow) ; And we're gone.
-    (emit 'label label5)
+    (emit 'athrow) ; Re-throw.
+    (label EXIT)
     ;; Finally...
     (emit 'aload *thread*)
     (emit-invokevirtual +lisp-thread-class+ "popCatchTag" nil nil)
-    (let ((handler1 (make-handler :from label1
-                                  :to label2
-                                  :code label3
+    (let ((handler1 (make-handler :from BEGIN-PROTECTED-RANGE
+                                  :to END-PROTECTED-RANGE
+                                  :code THROW-HANDLER
                                   :catch-type (pool-class +lisp-throw-class+)))
-          (handler2 (make-handler :from label1
-                                  :to label2
-                                  :code label4
+          (handler2 (make-handler :from BEGIN-PROTECTED-RANGE
+                                  :to END-PROTECTED-RANGE
+                                  :code DEFAULT-HANDLER
                                   :catch-type 0)))
       (push handler1 *handlers*)
       (push handler2 *handlers*))))
@@ -8252,8 +8251,6 @@ representation, based on the derived type of the LispObject."
                 (p2-unwind-protect-node form target))
                (t
                 (p2-block-node form target)))
-;;          (when (eq representation :int)
-;;            (emit-unbox-fixnum)))
          (fix-boxing representation nil))
         ((constantp form)
          (compile-constant form target representation))
