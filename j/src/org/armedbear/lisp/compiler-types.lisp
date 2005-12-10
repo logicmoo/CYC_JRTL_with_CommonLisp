@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-types.lisp,v 1.15 2005-12-08 12:01:28 piso Exp $
+;;; $Id: compiler-types.lisp,v 1.16 2005-12-10 08:38:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -107,6 +107,8 @@
                (case (%car type)
                  (INTEGER
                   (make-integer-type type))
+                 (SIMPLE-STRING
+                  'SIMPLE-STRING)
                  (STRING
                   'STRING)
                  (t
