@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.674 2005-12-10 08:38:03 piso Exp $
+;;; $Id: jvm.lisp,v 1.675 2005-12-10 09:34:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3094,8 +3094,14 @@ representation, based on the derived type of the LispObject."
             (assert nil))))
     (:long
      (cond ((fixnump form)
-            (emit-push-constant-int form)
-            (emit 'i2l)
+            (case form
+              (0
+               (emit 'lconst_0))
+              (1
+               (emit 'lconst_1))
+              (t
+               (emit-push-constant-int form)
+               (emit 'i2l)))
             (emit-move-from-stack target representation)
             (return-from compile-constant))
            ((integerp form)
