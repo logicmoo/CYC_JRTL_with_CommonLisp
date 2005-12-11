@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.677 2005-12-11 14:10:51 piso Exp $
+;;; $Id: jvm.lisp,v 1.678 2005-12-11 18:03:56 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -607,6 +607,26 @@
     (setf (block-form block) form)
     block))
 
+(defun p1-catch (form)
+  (let ((tag (p1 (cadr form)))
+        (body (cddr form))
+        (result '()))
+    (dolist (subform body)
+      (let ((op (and (consp subform) (%car subform))))
+        (push (p1 subform) result)
+        (when (and op (memq op '(GO RETURN-FROM THROW)))
+          (return))))
+    (setf result (nreverse result))
+    (cond ((and (null (cdr result))
+                (consp (car result))
+                (memq (caar result) '(GO RETURN-FROM)))
+           (push tag result)
+           (push 'PROGN result))
+          (t
+           (push tag result)
+           (push 'CATCH result)))
+    result))
+
 (defun p1-unwind-protect (form)
   (let* ((block (make-block-node '(UNWIND-PROTECT)))
          (*blocks* (cons block *blocks*)))
@@ -1139,7 +1159,7 @@
 (defun initialize-p1-handlers ()
   (dolist (pair '((AND                  p1-default)
                   (BLOCK                p1-block)
-                  (CATCH                p1-default)
+                  (CATCH                p1-catch)
                   (DECLARE              identity)
                   (EVAL-WHEN            p1-eval-when)
                   (FLET                 p1-flet)
