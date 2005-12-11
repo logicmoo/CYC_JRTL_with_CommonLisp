@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.676 2005-12-10 18:32:20 piso Exp $
+;;; $Id: jvm.lisp,v 1.677 2005-12-11 14:10:51 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -460,11 +460,27 @@
       (setf tail (%cdr tail))))
   body)
 
-(declaim (ftype (function (t) t) p1-default))
+(defknown p1-default (t) t)
 (declaim (inline p1-default))
 (defun p1-default (form)
   (setf (cdr form) (p1-body (cdr form)))
   form)
+
+(defknown p1-if (t) t)
+(defun p1-if (form)
+  (let ((test (cadr form)))
+    (cond ((unsafe-p test)
+           (cond ((and (consp test)
+                       (memq (%car test) '(GO RETURN-FROM THROW)))
+                  (p1 test))
+                 (t
+                  (let* ((var (gensym))
+                         (new-form
+                          `(let ((,var ,test))
+                             (if ,var ,(third form) ,(fourth form)))))
+                    (p1 new-form)))))
+          (t
+           (p1-default form)))))
 
 (defknown p1-let-vars (t) t)
 (defun p1-let-vars (varlist)
@@ -637,12 +653,22 @@
       (when (or (symbolp subform) (integerp subform))
         (let* ((tag (make-tag :name subform :label (gensym) :block block)))
           (push tag *visible-tags*))))
-    (let ((new-body '()))
+    (let ((new-body '())
+          (live t))
       (dolist (subform body)
-        (push (if (or (symbolp subform) (integerp subform))
-                  subform
-                  (p1 subform))
-              new-body))
+        (cond ((or (symbolp subform) (integerp subform))
+               (push subform new-body)
+               (setf live t))
+              ((not live)
+               ;; Nothing to do.
+               )
+              (t
+               (when (and (consp subform)
+                          (memq (%car subform) '(GO RETURN-FROM THROW)))
+                 ;; Subsequent subforms are unreachable until we see another
+                 ;; tag.
+                 (setf live nil))
+               (push (p1 subform) new-body))))
       (setf (block-form block) (list* 'TAGBODY (nreverse new-body))))
     block))
 
@@ -944,7 +970,7 @@
         ((atom args)
          nil)
         (t
-         (case (car args)
+         (case (%car args)
            (QUOTE
             nil)
            (LAMBDA
@@ -1120,7 +1146,7 @@
                   (FUNCALL              p1-funcall)
                   (FUNCTION             p1-function)
                   (GO                   p1-go)
-                  (IF                   p1-default)
+                  (IF                   p1-if)
                   (LABELS               p1-labels)
                   (LAMBDA               p1-lambda)
                   (LET                  p1-let/let*)
@@ -5304,8 +5330,6 @@ representation, based on the derived type of the LispObject."
            (compile-form arg 'stack nil)
            (emit 'checkcast +lisp-cons-class+)
            (emit 'getfield +lisp-cons-class+ "cdr" +lisp-object+)
-;;            (when (eq representation :int)
-;;              (emit-unbox-fixnum))
            (fix-boxing representation nil)
            (emit-move-from-stack target representation))
           (t
@@ -8086,6 +8110,9 @@ representation, based on the derived type of the LispObject."
          (THROW-HANDLER (gensym))
          (DEFAULT-HANDLER (gensym))
          (EXIT (gensym)))
+;;     (format t "tag-register = ~S~%" tag-register)
+;;     (let ((*print-structure* nil))
+;;       (format t "(second form) = ~S~%" (second form)))
     (compile-form (second form) tag-register nil) ; Tag.
     (emit-push-current-thread)
     (emit 'aload tag-register)
