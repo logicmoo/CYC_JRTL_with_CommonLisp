@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.681 2005-12-12 05:26:30 piso Exp $
+;;; $Id: jvm.lisp,v 1.682 2005-12-12 16:18:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -7170,7 +7170,6 @@ representation, based on the derived type of the LispObject."
      (compile-function-call form target representation))))
 
 (defun p2-minus (form target representation)
-;;   (format t "p2-minus~%")
   (case (length form)
     (2
      (let* ((arg (%cadr form))
@@ -7187,17 +7186,31 @@ representation, based on the derived type of the LispObject."
              ((and (fixnum-type-p type)
                    (integer-type-low type)
                    (> (integer-type-low type) most-negative-fixnum))
-              (unless (eq representation :int)
+              (when (null representation)
                 (emit 'new +lisp-fixnum-class+)
                 (emit 'dup))
               (compile-form arg 'stack :int)
               (emit 'ineg)
-              (unless (eq representation :int)
-                (emit-invokespecial-init +lisp-fixnum-class+ '("I")))
+              (case representation
+                (:int)
+                (:long
+                 (emit 'i2l))
+                (t
+                 (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
+              (emit-move-from-stack target representation))
+             ((and (java-long-type-p type)
+                   (integer-type-low type)
+                   (> (integer-type-low type) most-negative-java-long))
+              (compile-form arg 'stack :long)
+              (emit 'lneg)
+              (case representation
+                (:int
+                 (emit 'l2i))
+                (:long)
+                (t
+                 (emit-box-long)))
               (emit-move-from-stack target representation))
              (t
-;;               (format t "p2-minus case 1~%")
-;;               (compile-function-call form target representation)
               (compile-form arg 'stack nil)
               (maybe-emit-clear-values arg)
               (emit-invokevirtual +lisp-object-class+ "negate"
