@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.680 2005-12-12 01:19:52 piso Exp $
+;;; $Id: jvm.lisp,v 1.681 2005-12-12 05:26:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5112,12 +5112,14 @@ representation, based on the derived type of the LispObject."
       (let* ((tag-block (tag-block tag))
              (register nil)
              (protected
-              ;; Does the GO leave an enclosing UNWIND-PROTECT?
+              ;; Does the GO leave an enclosing CATCH or UNWIND-PROTECT?
               (dolist (enclosing-block *blocks*)
                 (when (eq enclosing-block tag-block)
                   (return nil))
-                (when (equal (block-name enclosing-block) '(UNWIND-PROTECT))
-                  (return t)))))
+                (let ((block-name (block-name enclosing-block)))
+                  (when (or (equal block-name '(CATCH))
+                            (equal block-name '(UNWIND-PROTECT)))
+                    (return t))))))
         (unless protected
           (dolist (block *blocks*)
             (if (eq block tag-block)
