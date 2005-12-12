@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.679 2005-12-12 00:36:09 piso Exp $
+;;; $Id: jvm.lisp,v 1.680 2005-12-12 01:19:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -608,13 +608,15 @@
     block))
 
 (defun p1-catch (form)
-  (let ((tag (p1 (cadr form)))
-        (body (cddr form))
-        (result '()))
+  (let* ((block (make-block-node '(CATCH)))
+         (*blocks* (cons block *blocks*))
+         (tag (p1 (cadr form)))
+         (body (cddr form))
+         (result '()))
     (dolist (subform body)
       (let ((op (and (consp subform) (%car subform))))
         (push (p1 subform) result)
-        (when (and op (memq op '(GO RETURN-FROM THROW)))
+        (when (memq op '(GO RETURN-FROM THROW))
           (return))))
     (setf result (nreverse result))
     (cond ((and (null (cdr result))
@@ -625,7 +627,8 @@
           (t
            (push tag result)
            (push 'CATCH result)))
-    result))
+    (setf (block-form block) result)
+    block))
 
 (defun p1-unwind-protect (form)
   (let* ((block (make-block-node '(UNWIND-PROTECT)))
@@ -8115,66 +8118,128 @@ representation, based on the derived type of the LispObject."
           (label LABEL2)
           (emit-move-from-stack target representation))))))
 
-(defun p2-catch (form target representation)
-  ;; FIXME What if we're called with a non-NIL representation?
-  (declare (ignore representation))
-  (when (= (length form) 2) ; (catch 'foo)
-    (when target
-      (emit-push-nil)
-      (emit-move-from-stack target))
-    (return-from p2-catch))
-  (let* ((*register* *register*)
-         (tag-register (allocate-register))
-         (BEGIN-PROTECTED-RANGE (gensym))
-         (END-PROTECTED-RANGE (gensym))
-         (THROW-HANDLER (gensym))
-         (DEFAULT-HANDLER (gensym))
-         (EXIT (gensym)))
-;;     (format t "tag-register = ~S~%" tag-register)
-;;     (let ((*print-structure* nil))
-;;       (format t "(second form) = ~S~%" (second form)))
-    (compile-form (second form) tag-register nil) ; Tag.
-    (emit-push-current-thread)
-    (emit 'aload tag-register)
-    (emit-invokevirtual +lisp-thread-class+ "pushCatchTag"
-                        (lisp-object-arg-types 1) nil)
-    ; Stack depth is 0.
-    (label BEGIN-PROTECTED-RANGE) ; Start of protected range.
-    (compile-progn-body (cddr form) target) ; Implicit PROGN.
-    (label END-PROTECTED-RANGE) ; End of protected range.
-    (emit 'goto EXIT) ; Jump over handlers.
-    (label THROW-HANDLER) ; Start of handler for THROW.
-    ;; The Throw object is on the runtime stack. Stack depth is 1.
-    (emit 'dup) ; Stack depth is 2.
-    (emit 'getfield +lisp-throw-class+ "tag" +lisp-object+) ; Still 2.
-    (emit 'aload tag-register) ; Stack depth is 3.
-    ;; If it's not the tag we're looking for, we branch to the start of the
-    ;; catch-all handler, which will do a re-throw.
-    (emit 'if_acmpne DEFAULT-HANDLER) ; Stack depth is 1.
-    (emit 'aload *thread*)
-    (emit-invokevirtual +lisp-throw-class+ "getResult"
-                        (list +lisp-thread+) +lisp-object+)
-    (emit-move-from-stack target) ; Stack depth is 0.
-    (emit 'goto EXIT)
-    (label DEFAULT-HANDLER) ; Start of handler for all other Throwables.
-    ;; A Throwable object is on the runtime stack here. Stack depth is 1.
-    (emit 'aload *thread*)
-    (emit-invokevirtual +lisp-thread-class+ "popCatchTag" nil nil)
-    (emit 'athrow) ; Re-throw.
-    (label EXIT)
-    ;; Finally...
-    (emit 'aload *thread*)
-    (emit-invokevirtual +lisp-thread-class+ "popCatchTag" nil nil)
-    (let ((handler1 (make-handler :from BEGIN-PROTECTED-RANGE
-                                  :to END-PROTECTED-RANGE
-                                  :code THROW-HANDLER
-                                  :catch-type (pool-class +lisp-throw-class+)))
-          (handler2 (make-handler :from BEGIN-PROTECTED-RANGE
-                                  :to END-PROTECTED-RANGE
-                                  :code DEFAULT-HANDLER
-                                  :catch-type 0)))
-      (push handler1 *handlers*)
-      (push handler2 *handlers*))))
+;; (defun p2-catch (form target representation)
+;;   ;; FIXME What if we're called with a non-NIL representation?
+;;   (declare (ignore representation))
+;;   (when (= (length form) 2) ; (catch 'foo)
+;;     (when target
+;;       (emit-push-nil)
+;;       (emit-move-from-stack target))
+;;     (return-from p2-catch))
+;;   (let* ((*register* *register*)
+;;          (tag-register (allocate-register))
+;;          (BEGIN-PROTECTED-RANGE (gensym))
+;;          (END-PROTECTED-RANGE (gensym))
+;;          (THROW-HANDLER (gensym))
+;;          (DEFAULT-HANDLER (gensym))
+;;          (EXIT (gensym)))
+;; ;;     (format t "tag-register = ~S~%" tag-register)
+;; ;;     (let ((*print-structure* nil))
+;; ;;       (format t "(second form) = ~S~%" (second form)))
+;;     (compile-form (second form) tag-register nil) ; Tag.
+;;     (emit-push-current-thread)
+;;     (emit 'aload tag-register)
+;;     (emit-invokevirtual +lisp-thread-class+ "pushCatchTag"
+;;                         (lisp-object-arg-types 1) nil)
+;;     ; Stack depth is 0.
+;;     (label BEGIN-PROTECTED-RANGE) ; Start of protected range.
+;;     (compile-progn-body (cddr form) target) ; Implicit PROGN.
+;;     (label END-PROTECTED-RANGE) ; End of protected range.
+;;     (emit 'goto EXIT) ; Jump over handlers.
+;;     (label THROW-HANDLER) ; Start of handler for THROW.
+;;     ;; The Throw object is on the runtime stack. Stack depth is 1.
+;;     (emit 'dup) ; Stack depth is 2.
+;;     (emit 'getfield +lisp-throw-class+ "tag" +lisp-object+) ; Still 2.
+;;     (emit 'aload tag-register) ; Stack depth is 3.
+;;     ;; If it's not the tag we're looking for, we branch to the start of the
+;;     ;; catch-all handler, which will do a re-throw.
+;;     (emit 'if_acmpne DEFAULT-HANDLER) ; Stack depth is 1.
+;;     (emit 'aload *thread*)
+;;     (emit-invokevirtual +lisp-throw-class+ "getResult"
+;;                         (list +lisp-thread+) +lisp-object+)
+;;     (emit-move-from-stack target) ; Stack depth is 0.
+;;     (emit 'goto EXIT)
+;;     (label DEFAULT-HANDLER) ; Start of handler for all other Throwables.
+;;     ;; A Throwable object is on the runtime stack here. Stack depth is 1.
+;;     (emit 'aload *thread*)
+;;     (emit-invokevirtual +lisp-thread-class+ "popCatchTag" nil nil)
+;;     (emit 'athrow) ; Re-throw.
+;;     (label EXIT)
+;;     ;; Finally...
+;;     (emit 'aload *thread*)
+;;     (emit-invokevirtual +lisp-thread-class+ "popCatchTag" nil nil)
+;;     (let ((handler1 (make-handler :from BEGIN-PROTECTED-RANGE
+;;                                   :to END-PROTECTED-RANGE
+;;                                   :code THROW-HANDLER
+;;                                   :catch-type (pool-class +lisp-throw-class+)))
+;;           (handler2 (make-handler :from BEGIN-PROTECTED-RANGE
+;;                                   :to END-PROTECTED-RANGE
+;;                                   :code DEFAULT-HANDLER
+;;                                   :catch-type 0)))
+;;       (push handler1 *handlers*)
+;;       (push handler2 *handlers*))))
+
+(defknown p2-catch-node (t t) t)
+(defun p2-catch-node (block target)
+  (let ((form (block-form block)))
+    (when (= (length form) 2) ; (catch 'foo)
+      (when target
+        (emit-push-nil)
+        (emit-move-from-stack target))
+      (return-from p2-catch-node))
+    (let* ((*register* *register*)
+           (tag-register (allocate-register))
+           (BEGIN-PROTECTED-RANGE (gensym))
+           (END-PROTECTED-RANGE (gensym))
+           (THROW-HANDLER (gensym))
+           (DEFAULT-HANDLER (gensym))
+           (EXIT (gensym)))
+      ;;     (format t "tag-register = ~S~%" tag-register)
+      ;;     (let ((*print-structure* nil))
+      ;;       (format t "(second form) = ~S~%" (second form)))
+      (compile-form (second form) tag-register nil) ; Tag.
+      (emit-push-current-thread)
+      (emit 'aload tag-register)
+      (emit-invokevirtual +lisp-thread-class+ "pushCatchTag"
+                          (lisp-object-arg-types 1) nil)
+      ; Stack depth is 0.
+      (label BEGIN-PROTECTED-RANGE) ; Start of protected range.
+      (compile-progn-body (cddr form) target) ; Implicit PROGN.
+      (label END-PROTECTED-RANGE) ; End of protected range.
+      (emit 'goto EXIT) ; Jump over handlers.
+      (label THROW-HANDLER) ; Start of handler for THROW.
+      ;; The Throw object is on the runtime stack. Stack depth is 1.
+      (emit 'dup) ; Stack depth is 2.
+      (emit 'getfield +lisp-throw-class+ "tag" +lisp-object+) ; Still 2.
+      (emit 'aload tag-register) ; Stack depth is 3.
+      ;; If it's not the tag we're looking for, we branch to the start of the
+      ;; catch-all handler, which will do a re-throw.
+      (emit 'if_acmpne DEFAULT-HANDLER) ; Stack depth is 1.
+      (emit 'aload *thread*)
+      (emit-invokevirtual +lisp-throw-class+ "getResult"
+                          (list +lisp-thread+) +lisp-object+)
+      (emit-move-from-stack target) ; Stack depth is 0.
+      (emit 'goto EXIT)
+      (label DEFAULT-HANDLER) ; Start of handler for all other Throwables.
+      ;; A Throwable object is on the runtime stack here. Stack depth is 1.
+      (emit 'aload *thread*)
+      (emit-invokevirtual +lisp-thread-class+ "popCatchTag" nil nil)
+      (emit 'athrow) ; Re-throw.
+      (label EXIT)
+      ;; Finally...
+      (emit 'aload *thread*)
+      (emit-invokevirtual +lisp-thread-class+ "popCatchTag" nil nil)
+      (let ((handler1 (make-handler :from BEGIN-PROTECTED-RANGE
+                                    :to END-PROTECTED-RANGE
+                                    :code THROW-HANDLER
+                                    :catch-type (pool-class +lisp-throw-class+)))
+            (handler2 (make-handler :from BEGIN-PROTECTED-RANGE
+                                    :to END-PROTECTED-RANGE
+                                    :code DEFAULT-HANDLER
+                                    :catch-type 0)))
+        (push handler1 *handlers*)
+        (push handler2 *handlers*))))
+  t)
 
 (defun p2-throw (form target representation)
   ;; FIXME What if we're called with a non-NIL representation?
@@ -8296,6 +8361,8 @@ representation, based on the derived type of the LispObject."
                 (p2-m-v-b-node form target))
                ((equal (block-name form) '(UNWIND-PROTECT))
                 (p2-unwind-protect-node form target))
+               ((equal (block-name form) '(CATCH))
+                (p2-catch-node form target))
                (t
                 (p2-block-node form target)))
          (fix-boxing representation nil))
@@ -9123,7 +9190,7 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'ash                 'p2-ash)
   (install-p2-handler 'atom                'p2-atom)
   (install-p2-handler 'car                 'p2-car)
-  (install-p2-handler 'catch               'p2-catch)
+;;   (install-p2-handler 'catch               'p2-catch)
   (install-p2-handler 'cdr                 'p2-cdr)
   (install-p2-handler 'char                'p2-char/schar)
   (install-p2-handler 'char-code           'p2-char-code)
