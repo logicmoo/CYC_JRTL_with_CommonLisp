@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.678 2005-12-11 18:03:56 piso Exp $
+;;; $Id: jvm.lisp,v 1.679 2005-12-12 00:36:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -619,7 +619,7 @@
     (setf result (nreverse result))
     (cond ((and (null (cdr result))
                 (consp (car result))
-                (memq (caar result) '(GO RETURN-FROM)))
+                (eq (caar result) 'GO))
            (push tag result)
            (push 'PROGN result))
           (t
