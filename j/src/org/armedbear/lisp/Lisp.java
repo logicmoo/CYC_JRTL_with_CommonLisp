@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.421 2005-12-12 05:27:55 piso Exp $
+ * $Id: Lisp.java,v 1.422 2005-12-13 22:28:05 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -256,6 +256,12 @@ public abstract class Lisp
                 thread.setSpecialVariable(_SAVED_BACKTRACE_,
                                           thread.backtraceAsList(0));
                 return signal(new StorageCondition("Stack overflow."));
+            }
+            catch (Go go) {
+                FastStringBuffer sb = new FastStringBuffer("No tag named ");
+                sb.append(go.tag.writeToString());
+                sb.append(" is currently visible.");
+                return signal(new ControlError(sb.toString()));
             }
             catch (Throw t) {
                 return signal(new ControlError("Attempt to throw to the nonexistent tag " +
