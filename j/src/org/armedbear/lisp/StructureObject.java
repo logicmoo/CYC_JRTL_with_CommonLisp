@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StructureObject.java,v 1.59 2005-12-10 08:15:17 piso Exp $
+ * $Id: StructureObject.java,v 1.60 2005-12-13 22:00:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -187,8 +187,8 @@ public final class StructureObject extends LispObject
       }
     catch (ArrayIndexOutOfBoundsException e)
       {
-        return signal(new LispError("Invalid slot index " + index +
-                                    "  for " + writeToString()));
+        return signal(new LispError("Invalid slot index " + index + "  for " +
+                                    writeToString()));
       }
   }
 
@@ -210,6 +210,21 @@ public final class StructureObject extends LispObject
         signalTypeError(slots[index], Symbol.FIXNUM);
         // Not reached.
         return 0;
+      }
+  }
+
+  public boolean getSlotValueAsBoolean(int index) throws ConditionThrowable
+  {
+    try
+      {
+        return slots[index] != NIL ? true : false;
+      }
+    catch (ArrayIndexOutOfBoundsException e)
+      {
+        signal(new LispError("Invalid slot index " + index + "  for " +
+                             writeToString()));
+        // Not reached.
+        return false;
       }
   }
 
