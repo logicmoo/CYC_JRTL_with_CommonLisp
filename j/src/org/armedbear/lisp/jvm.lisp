@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.682 2005-12-12 16:18:14 piso Exp $
+;;; $Id: jvm.lisp,v 1.683 2005-12-13 02:13:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3304,7 +3304,6 @@ representation, based on the derived type of the LispObject."
                     ( =           "IS_E")
                     (/=           "IS_NE")
                     (ASH          "ash")
-;;                     (LOGAND       "logand")
                     (AREF         "AREF")
                     (SIMPLE-TYPEP "typep")
                     (RPLACA       "RPLACA")
@@ -3322,9 +3321,6 @@ representation, based on the derived type of the LispObject."
   (maybe-emit-clear-values arg1 arg2)
   (emit-invokevirtual +lisp-object-class+ op
                       (lisp-object-arg-types 1) +lisp-object+)
-;;   (case representation
-;;     (:int (emit-unbox-fixnum))
-;;     (:char (emit-unbox-character)))
   (fix-boxing representation nil)
   (emit-move-from-stack target representation)))
 
@@ -3334,22 +3330,6 @@ representation, based on the derived type of the LispObject."
     (if translation
         (compile-binary-operation translation args target representation)
         (case op
-          (EQ
-           (let ((first (first args))
-                 (second (second args)))
-             (compile-form first 'stack nil)
-             (compile-form second 'stack nil)
-             (maybe-emit-clear-values first second)
-             (let ((label1 (gensym))
-                   (label2 (gensym)))
-               (emit 'if_acmpeq `,label1)
-               (emit-push-nil)
-               (emit 'goto `,label2)
-               (emit 'label `,label1)
-               (emit-push-t)
-               (emit 'label `,label2))
-             (emit-move-from-stack target))
-           t)
           (STRUCTURE-REF
            (let ((arg1 (first args))
                  (arg2 (second args)))
@@ -3399,6 +3379,31 @@ representation, based on the derived type of the LispObject."
            (emit 'iload (variable-register variable))
            (emit 'i2l)))))
 
+(defknown p2-eq/neq (t t t) t)
+(defun p2-eq/neq (form target representation)
+  (aver (null representation))
+  (unless (check-arg-count form 2)
+    (compile-function-call form target representation)
+    (return-from p2-eq/neq))
+  (let* ((op (%car form))
+         (args (%cdr form))
+         (arg1 (%car args))
+         (arg2 (%cadr args)))
+     (compile-form arg1 'stack nil)
+     (compile-form arg2 'stack nil)
+     (maybe-emit-clear-values arg1 arg2)
+     (let ((LABEL1 (gensym))
+           (LABEL2 (gensym)))
+       (emit (if (eq op 'EQ) 'if_acmpne 'if_acmpeq) `,LABEL1)
+       (emit-push-t)
+       (emit 'goto `,LABEL2)
+       (label `,LABEL1)
+       (emit-push-nil)
+       (label `,LABEL2))
+     (emit-move-from-stack target representation))
+   t)
+
+(defknown p2-eql (t t t) t)
 (defun p2-eql (form target representation)
   (unless (check-arg-count form 2)
     (compile-function-call form target representation)
@@ -9217,6 +9222,7 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'consp               'p2-consp)
   (install-p2-handler 'delete              'p2-delete)
   (install-p2-handler 'elt                 'p2-elt)
+  (install-p2-handler 'eq                  'p2-eq/neq)
   (install-p2-handler 'eql                 'p2-eql)
   (install-p2-handler 'eval-when           'p2-eval-when)
   (install-p2-handler 'fixnump             'p2-fixnump)
@@ -9242,6 +9248,7 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'max                 'p2-min/max)
   (install-p2-handler 'min                 'p2-min/max)
   (install-p2-handler 'mod                 'p2-mod)
+  (install-p2-handler 'neq                 'p2-eq/neq)
   (install-p2-handler 'not                 'p2-not/null)
   (install-p2-handler 'null                'p2-not/null)
   (install-p2-handler 'or                  'p2-or)
