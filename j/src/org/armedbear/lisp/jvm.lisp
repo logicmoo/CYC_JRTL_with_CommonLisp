@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.684 2005-12-13 02:40:29 piso Exp $
+;;; $Id: jvm.lisp,v 1.685 2005-12-13 03:52:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -248,8 +248,8 @@
   index
   closure-index
   reserved-register
-  (reads 0)
-  (writes 0)
+  (reads 0 :type fixnum)
+  (writes 0 :type fixnum)
   references
   used-non-locally-p
   (compiland *current-compiland*))
