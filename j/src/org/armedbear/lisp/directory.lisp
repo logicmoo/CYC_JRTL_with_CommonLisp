@@ -1,7 +1,7 @@
 ;;; directory.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: directory.lisp,v 1.5 2005-10-04 16:17:06 piso Exp $
+;;; $Id: directory.lisp,v 1.6 2005-12-13 17:29:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@
       (setf pathname (translate-logical-pathname pathname)))
     (if (wild-pathname-p pathname)
         (let ((namestring (directory-namestring pathname)))
-          (when (and namestring (length namestring))
+          (when (and namestring (> (length namestring) 0))
             (let ((entries (list-directory namestring))
                   (matching-entries ()))
               (dolist (entry entries)
