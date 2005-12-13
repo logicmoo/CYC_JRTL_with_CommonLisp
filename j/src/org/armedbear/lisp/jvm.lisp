@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.683 2005-12-13 02:13:08 piso Exp $
+;;; $Id: jvm.lisp,v 1.684 2005-12-13 02:40:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1916,6 +1916,7 @@ representation, based on the derived type of the LispObject."
                  131 ; lxor
                  133 ; i2l
                  136 ; l2i
+                 148 ; lcmp
                  153 ; ifeq
                  154 ; ifne
                  155 ; ifge
@@ -3082,7 +3083,7 @@ representation, based on the derived type of the LispObject."
   (let* ((g (symbol-name (gensym)))
          (*print-level* nil)
          (*print-length* nil)
-         (s (sys::%format nil "~S" obj))
+         (s (format nil "~S" obj))
          (*code* *static-code*))
     (declare-field g +lisp-object+)
     (emit 'ldc
@@ -3880,8 +3881,6 @@ representation, based on the derived type of the LispObject."
            (result-type +lisp-object+))
       (emit-invokevirtual +lisp-object-class+ "execute" arg-types result-type))
 
-;;     (when (eq representation :int)
-;;       (emit-unbox-fixnum))
     (fix-boxing representation nil)
     (emit-move-from-stack target representation)
     (when saved-vars
@@ -6310,11 +6309,13 @@ representation, based on the derived type of the LispObject."
 
 (defknown p2-zerop (t t t) t)
 (defun p2-zerop (form target representation)
+  (aver (null representation))
   (unless (check-arg-count form 1)
     (compile-function-call form target representation)
     (return-from p2-zerop))
-  (let ((arg (cadr form)))
-    (cond ((subtypep (derive-type arg) 'FIXNUM)
+  (let* ((arg (cadr form))
+         (type (derive-compiler-type arg)))
+    (cond ((fixnum-type-p type)
            (compile-form arg 'stack :int)
            (maybe-emit-clear-values arg)
            (let ((LABEL1 (gensym))
@@ -6325,7 +6326,21 @@ representation, based on the derived type of the LispObject."
              (label LABEL1)
              (emit-push-nil)
              (label LABEL2)
-             (emit-move-from-stack target)))
+             (emit-move-from-stack target representation)))
+          ((java-long-type-p type)
+           (compile-form arg 'stack :long)
+           (maybe-emit-clear-values arg)
+           (emit 'lconst_0)
+           (emit 'lcmp)
+           (let ((LABEL1 (gensym))
+                 (LABEL2 (gensym)))
+             (emit 'ifne LABEL1)
+             (emit-push-t)
+             (emit 'goto LABEL2)
+             (label LABEL1)
+             (emit-push-nil)
+             (label LABEL2)
+             (emit-move-from-stack target representation)))
           (t
            (compile-form arg 'stack nil)
            (maybe-emit-clear-values arg)
