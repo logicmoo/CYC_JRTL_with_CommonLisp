@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.685 2005-12-13 03:52:15 piso Exp $
+;;; $Id: jvm.lisp,v 1.686 2005-12-13 17:28:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3167,7 +3167,11 @@ representation, based on the derived type of the LispObject."
             (emit-move-from-stack target representation)
             (return-from compile-constant))
            (t
-            (assert nil)))))
+            (assert nil))))
+    (:boolean
+     (emit (if form 'iconst_1 'iconst_0))
+     (emit-move-from-stack target representation)
+     (return-from compile-constant)))
   (cond ((fixnump form)
          (let ((translation (case form
                               (0  "ZERO")
@@ -3338,13 +3342,26 @@ representation, based on the derived type of the LispObject."
                (compile-form arg1 'stack nil)
                (maybe-emit-clear-values arg1)
                (emit 'sipush arg2)
-               (if (eq representation :int)
-                   (emit-invokevirtual +lisp-object-class+ "getFixnumSlotValue"
-                                       '("I") "I")
-                   (emit-invokevirtual +lisp-object-class+ "getSlotValue"
-                                       '("I") +lisp-object+))
-               (when (eq representation :char)
-                 (emit-unbox-character))
+               (case representation
+                 (:int
+                  (emit-invokevirtual +lisp-object-class+ "getFixnumSlotValue"
+                                      '("I") "I"))
+                 (:long
+                  (emit-invokevirtual +lisp-object-class+ "getSlotValue"
+                                      '("I") +lisp-object+)
+                  (emit-invokevirtual +lisp-object-class+ "longValue"
+                                      nil "J"))
+                 (:char
+                  (emit-invokevirtual +lisp-object-class+ "getSlotValue"
+                                      '("I") +lisp-object+)
+                  (emit-unbox-character))
+                 (:boolean
+                  (emit-invokevirtual +lisp-object-class+ "getSlotValue"
+                                      '("I") +lisp-object+)
+                  (emit-unbox-boolean))
+                 (t
+                  (emit-invokevirtual +lisp-object-class+ "getSlotValue"
+                                      '("I") +lisp-object+)))
                (emit-move-from-stack target representation)
                t)))
           (t
@@ -3382,7 +3399,7 @@ representation, based on the derived type of the LispObject."
 
 (defknown p2-eq/neq (t t t) t)
 (defun p2-eq/neq (form target representation)
-  (aver (null representation))
+  (aver (or (null representation) (eq representation :boolean)))
   (unless (check-arg-count form 2)
     (compile-function-call form target representation)
     (return-from p2-eq/neq))
@@ -3396,10 +3413,18 @@ representation, based on the derived type of the LispObject."
      (let ((LABEL1 (gensym))
            (LABEL2 (gensym)))
        (emit (if (eq op 'EQ) 'if_acmpne 'if_acmpeq) `,LABEL1)
-       (emit-push-t)
+       (case representation
+         (:boolean
+          (emit 'iconst_1))
+         (t
+          (emit-push-t)))
        (emit 'goto `,LABEL2)
        (label `,LABEL1)
-       (emit-push-nil)
+       (case representation
+         (:boolean
+          (emit 'iconst_0))
+         (t
+          (emit-push-nil)))
        (label `,LABEL2))
      (emit-move-from-stack target representation))
    t)
@@ -3423,7 +3448,7 @@ representation, based on the derived type of the LispObject."
              (emit 'label `,label1)
              (emit-push-t)
              (emit 'label `,label2))
-           (emit-move-from-stack target))
+           )
           ((fixnum-or-unboxed-variable-p arg1)
            (emit-push-int arg1)
            (compile-form arg2 'stack nil)
@@ -3438,7 +3463,7 @@ representation, based on the derived type of the LispObject."
              (emit 'label `,label1)
              (emit-push-t)
              (emit 'label `,label2))
-           (emit-move-from-stack target))
+           )
           ((fixnum-or-unboxed-variable-p arg2)
            (compile-form arg1 'stack nil)
            (maybe-emit-clear-values arg1)
@@ -3452,7 +3477,7 @@ representation, based on the derived type of the LispObject."
              (emit 'label `,label1)
              (emit-push-t)
              (emit 'label `,label2))
-           (emit-move-from-stack target))
+           )
           (t
            (compile-form arg1 'stack nil)
            (compile-form arg2 'stack nil)
@@ -3461,7 +3486,11 @@ representation, based on the derived type of the LispObject."
              (emit-clear-values))
            (emit-invokevirtual +lisp-object-class+ "EQL"
                                (lisp-object-arg-types 1) +lisp-object+)
-           (emit-move-from-stack target)))))
+           ))
+    ;; FIXME optimize
+    (fix-boxing representation nil)
+    (emit-move-from-stack target representation)
+    ))
 
 (defun p2-gensym (form target representation)
   (cond ((and (null representation) (null (cdr form)))
@@ -3474,7 +3503,7 @@ representation, based on the derived type of the LispObject."
 
 ;; get symbol indicator &optional default => value
 (defun p2-get (form target representation)
-  (aver (null representation))
+  (aver (or (null representation) (eq representation :boolean)))
   (let* ((args (cdr form))
          (arg1 (first args))
          (arg2 (second args))
@@ -3484,11 +3513,12 @@ representation, based on the derived type of the LispObject."
        (compile-form arg1 'stack nil)
        (compile-form arg2 'stack nil)
        (compile-form arg3 'stack nil) ; NIL if only 2 args
-       (unless (every #'single-valued-p args)
-         (emit-clear-values))
+       (maybe-emit-clear-values arg1 arg2 arg3)
        (emit-invokestatic +lisp-class+ "get"
                           (lisp-object-arg-types 3) +lisp-object+)
-       (emit-move-from-stack target))
+       (when (eq representation :boolean)
+         (emit-unbox-boolean))
+       (emit-move-from-stack target representation))
       (t
        (compiler-warn "Wrong number of arguments for ~A (expected 2 or 3, but received ~D)."
                     'GET (length args))
@@ -3890,17 +3920,22 @@ representation, based on the derived type of the LispObject."
 ;; Note that /= is not transitive, so we don't handle it here.
 (defknown p2-numeric-comparison (t t t) t)
 (defun p2-numeric-comparison (form target representation)
-  (aver (null representation))
+  (aver (or (null representation) (eq representation :boolean)))
   (let ((op (car form))
         (args (%cdr form)))
     (case (length args)
       (2
        (let ((arg1 (%car args))
              (arg2 (%cadr args)))
-         (cond ((and (fixnump arg1) (fixnump arg2))
-                (if (funcall op arg1 arg2)
-                    (emit-push-t)
-                    (emit-push-nil))
+         (cond ((and (integerp arg1) (integerp arg2))
+                (let ((result (funcall op arg1 arg2)))
+                  (case representation
+                    (:boolean
+                     (emit (if result 'iconst_1 'iconst_0)))
+                    (t
+                     (if result
+                         (emit-push-t)
+                         (emit-push-nil)))))
                 (emit-move-from-stack target representation)
                 (return-from p2-numeric-comparison))
                ((and (fixnum-type-p (derive-compiler-type arg1))
@@ -3922,6 +3957,8 @@ representation, based on the derived type of the LispObject."
                   (label LABEL1)
                   (emit-push-nil)
                   (label LABEL2))
+                ;; FIXME optimize
+                (fix-boxing representation nil)
                 (emit-move-from-stack target representation)
                 (return-from p2-numeric-comparison))
                ((fixnump arg2)
@@ -3946,6 +3983,8 @@ representation, based on the derived type of the LispObject."
                   (label LABEL1)
                   (emit-push-nil)
                   (label LABEL2))
+                ;; FIXME optimize
+                (fix-boxing representation nil)
                 (emit-move-from-stack target representation)
                 (return-from p2-numeric-comparison)))))
       (3
@@ -4010,6 +4049,7 @@ representation, based on the derived type of the LispObject."
                     (=                  p2-test-numeric-comparison)
                     (>                  p2-test-numeric-comparison)
                     (>=                 p2-test-numeric-comparison)
+                    (AND                p2-test-and)
                     (ATOM               p2-test-atom)
                     (CHAR=              p2-test-char=)
                     (CHARACTERP         p2-test-characterp)
@@ -4225,6 +4265,23 @@ representation, based on the derived type of the LispObject."
       (maybe-emit-clear-values arg1 arg2)
      'if_acmpne)))
 
+(defun p2-test-and (form)
+;;   (format t "p2-test-and~%")
+  (let ((args (cdr form)))
+    (case (length args)
+      (0
+       :consequent)
+      (1
+       (compile-test-form (%car args)))
+      (2
+       (compile-form form 'stack :boolean)
+       'ifeq)
+      (t
+       (compile-form form 'stack nil)
+       (maybe-emit-clear-values form)
+       (emit-push-nil)
+       'if_acmpeq))))
+
 (defun p2-test-neq (form)
   (p2-test-eq form)
   'if_acmpeq)
@@ -4415,6 +4472,8 @@ representation, based on the derived type of the LispObject."
 ;;         (format t "no test handler for ~S~%" op))
       (when result
         (return-from compile-test-form result))))
+  (when (eq test-form t)
+    (return-from compile-test-form :consequent))
   (when (null test-form)
     (return-from compile-test-form :alternate))
   ;; Otherwise...
@@ -5149,7 +5208,9 @@ representation, based on the derived type of the LispObject."
       (emit-push-nil)
       (emit-move-from-stack target))))
 
+(defknown p2-atom (t t t) t)
 (defun p2-atom (form target representation)
+  (aver (or (null representation) (eq representation :boolean)))
   (unless (check-arg-count form 1)
     (compile-function-call form target representation)
     (return-from p2-atom))
@@ -5159,12 +5220,20 @@ representation, based on the derived type of the LispObject."
   (let ((LABEL1 (gensym))
         (LABEL2 (gensym)))
     (emit 'ifeq LABEL1)
-    (emit-push-nil)
+    (case representation
+      (:boolean
+       (emit 'iconst_0))
+      (t
+       (emit-push-nil)))
     (emit 'goto LABEL2)
     (label LABEL1)
-    (emit-push-t)
+    (case representation
+      (:boolean
+       (emit 'iconst_1))
+      (t
+       (emit-push-t)))
     (label LABEL2)
-    (emit-move-from-stack target)))
+    (emit-move-from-stack target representation)))
 
 (declaim (ftype (function (t t t t) t) p2-instanceof-predicate))
 (defun p2-instanceof-predicate (form target representation java-class)
@@ -5177,12 +5246,20 @@ representation, based on the derived type of the LispObject."
   (let ((LABEL1 (gensym))
         (LABEL2 (gensym)))
     (emit 'ifeq LABEL1)
-    (emit-push-t)
+    (case representation
+      (:boolean
+       (emit 'iconst_1))
+      (t
+       (emit-push-t)))
     (emit 'goto LABEL2)
     (label LABEL1)
-    (emit-push-nil)
+    (case representation
+      (:boolean
+       (emit 'iconst_0))
+      (t
+       (emit-push-nil)))
     (label LABEL2)
-    (emit-move-from-stack target)))
+    (emit-move-from-stack target representation)))
 
 (defun p2-characterp (form target representation)
   (p2-instanceof-predicate form target representation +lisp-character-class+))
@@ -6307,9 +6384,24 @@ representation, based on the derived type of the LispObject."
            (fix-boxing representation nil) ; FIXME use derived result type
            (emit-move-from-stack target representation)))))
 
+(defknown p2-integerp (t t t) t)
+(defun p2-integerp (form target representation)
+  (unless (check-arg-count form 1)
+    (compile-function-call form target representation)
+    (return-from p2-integerp))
+  (let ((arg (cadr form)))
+    (compile-form arg 'stack nil)
+    (maybe-emit-clear-values arg)
+    (case representation
+      (:boolean
+       (emit-invokevirtual +lisp-object-class+ "integerp" nil "Z"))
+      (t
+       (emit-invokevirtual +lisp-object-class+ "INTEGERP" nil +lisp-object+)))
+    (emit-move-from-stack target representation)))
+
 (defknown p2-zerop (t t t) t)
 (defun p2-zerop (form target representation)
-  (aver (null representation))
+  (aver (or (null representation) (eq representation :boolean)))
   (unless (check-arg-count form 1)
     (compile-function-call form target representation)
     (return-from p2-zerop))
@@ -6321,10 +6413,18 @@ representation, based on the derived type of the LispObject."
            (let ((LABEL1 (gensym))
                  (LABEL2 (gensym)))
              (emit 'ifne LABEL1)
-             (emit-push-t)
+             (case representation
+               (:boolean
+                (emit 'iconst_1))
+               (t
+                (emit-push-t)))
              (emit 'goto LABEL2)
              (label LABEL1)
-             (emit-push-nil)
+             (case representation
+               (:boolean
+                (emit 'iconst_0))
+               (t
+                (emit-push-nil)))
              (label LABEL2)
              (emit-move-from-stack target representation)))
           ((java-long-type-p type)
@@ -6335,10 +6435,18 @@ representation, based on the derived type of the LispObject."
            (let ((LABEL1 (gensym))
                  (LABEL2 (gensym)))
              (emit 'ifne LABEL1)
-             (emit-push-t)
+             (case representation
+               (:boolean
+                (emit 'iconst_1))
+               (t
+                (emit-push-t)))
              (emit 'goto LABEL2)
              (label LABEL1)
-             (emit-push-nil)
+             (case representation
+               (:boolean
+                (emit 'iconst_0))
+               (t
+                (emit-push-nil)))
              (label LABEL2)
              (emit-move-from-stack target representation)))
           (t
@@ -6928,10 +7036,21 @@ representation, based on the derived type of the LispObject."
   (let ((arg (cadr form)))
     (compile-form arg 'stack nil)
     (maybe-emit-clear-values arg)
-    (cond ((eq representation :int)
-           (emit-invokevirtual +lisp-object-class+ "length" nil "I"))
-          (t
-           (emit-invokevirtual +lisp-object-class+ "LENGTH" nil +lisp-object+)))
+    (case representation
+      (:int
+       (emit-invokevirtual +lisp-object-class+ "length" nil "I"))
+      (:long
+       (emit-invokevirtual +lisp-object-class+ "length" nil "I")
+       (emit 'i2l))
+      (:boolean
+       ;; FIXME We could optimize this all away in unsafe calls.
+       (emit-invokevirtual +lisp-object-class+ "length" nil "I")
+       (emit 'pop)
+       (emit 'iconst_1))
+      (:char
+       (aver nil))
+      (t
+       (emit-invokevirtual +lisp-object-class+ "LENGTH" nil +lisp-object+)))
     (emit-move-from-stack target representation)))
 
 (defun p2-list (form target representation)
@@ -7488,10 +7607,17 @@ representation, based on the derived type of the LispObject."
     (return-from p2-not/null))
   (let ((arg (second form)))
     (cond ((null arg)
-           (emit-push-t))
-          (;;(and (constantp arg) (not (block-node-p arg)))
-           (node-constant-p arg)
-           (emit-push-nil))
+           (case representation
+             (:boolean
+              (emit 'iconst_1))
+             (t
+              (emit-push-t))))
+          ((node-constant-p arg)
+           (case representation
+             (:boolean
+              (emit 'iconst_0))
+             (t
+              (emit-push-nil))))
           ((and (consp arg)
                 (memq (%car arg) '(NOT NULL)))
            (compile-form (second arg) 'stack nil)
@@ -7500,10 +7626,18 @@ representation, based on the derived type of the LispObject."
            (let ((LABEL1 (gensym))
                  (LABEL2 (gensym)))
              (emit 'if_acmpeq LABEL1)
-             (emit-push-t)
+             (case representation
+               (:boolean
+                (emit 'iconst_1))
+               (t
+                (emit-push-t)))
              (emit 'goto LABEL2)
              (emit 'label LABEL1)
-             (emit-push-nil)
+             (case representation
+               (:boolean
+                (emit 'iconst_0))
+               (t
+                (emit-push-nil)))
              (emit 'label LABEL2)))
           (t
            (compile-form arg 'stack nil)
@@ -7512,34 +7646,69 @@ representation, based on the derived type of the LispObject."
            (let ((LABEL1 (gensym))
                  (LABEL2 (gensym)))
              (emit 'if_acmpeq LABEL1)
-             (emit-push-nil)
+             (case representation
+               (:boolean
+                (emit 'iconst_0))
+               (t
+                (emit-push-nil)))
              (emit 'goto LABEL2)
              (emit 'label LABEL1)
-             (emit-push-t)
+             (case representation
+               (:boolean
+                (emit 'iconst_1))
+               (t
+                (emit-push-t)))
              (emit 'label LABEL2)))))
-  (emit-move-from-stack target))
+  (emit-move-from-stack target representation))
 
 (defun p2-and (form target representation)
   (let ((args (cdr form)))
     (case (length args)
       (0
-       (emit-push-t)
-       (emit-move-from-stack target))
+       (case representation
+         (:boolean
+          (emit 'iconst_1))
+         (t
+          (emit-push-t)))
+       (emit-move-from-stack target representation))
       (1
        (compile-form (%car args) target representation))
       (2
        (let ((arg1 (%car args))
              (arg2 (%cadr args))
-             (LABEL1 (gensym)))
-         (compile-form arg1 'stack nil)
-         (maybe-emit-clear-values arg1)
-         (emit 'dup)
-         (emit-push-nil)
-         (emit 'if_acmpeq LABEL1)
-         (emit 'pop)
-         (compile-form arg2 'stack representation)
-         (emit 'label LABEL1)
-         (emit-move-from-stack target representation)))
+             (FAIL (gensym))
+             (DONE (gensym)))
+         (case representation
+           (:boolean
+;;             (format t "p2-and :boolean case~%")
+            (compile-form arg1 'stack :boolean)
+            (maybe-emit-clear-values arg1)
+;;             (emit 'dup)
+;;             (emit-push-nil)
+;;             (emit 'if_acmpeq LABEL1)
+            (emit 'ifeq FAIL)
+;;             (emit 'pop)
+            (compile-form arg2 'stack :boolean)
+            (maybe-emit-clear-values arg2)
+            (emit 'goto DONE)
+            (label FAIL)
+            (emit 'iconst_0)
+            (label DONE)
+            (emit-move-from-stack target representation)
+            )
+           (t
+            (compile-form arg1 'stack nil)
+            (maybe-emit-clear-values arg1)
+            (emit 'dup)
+            (emit-push-nil)
+            (emit 'if_acmpeq DONE)
+            (emit 'pop)
+            (compile-form arg2 'stack nil)
+            (label DONE)
+            (emit-move-from-stack target representation)
+            )
+           )
+         ))
       (t
        ;; (and a b c d e f) => (and a (and b c d e f))
        (let ((new-form `(and ,(%car args) (and ,@(%cdr args)))))
@@ -8371,17 +8540,29 @@ representation, based on the derived type of the LispObject."
                   (compiler-unsupported "COMPILE-FORM unhandled case ~S" form)))))
         ((symbolp form)
          (cond ((null form)
-                (emit-push-nil)
-                (emit-move-from-stack target))
+                (case representation
+                  (:boolean
+                   (emit 'iconst_0))
+                  (t
+                   (emit-push-nil)))
+                (emit-move-from-stack target representation))
                ((eq form t)
-                (emit-push-t)
-                (emit-move-from-stack target))
+                (case representation
+                  (:boolean
+                   (emit 'iconst_1))
+                  (t
+                   (emit-push-t)))
+                (emit-move-from-stack target representation))
                ((keywordp form)
-                (let ((name (lookup-known-keyword form)))
-                  (if name
-                      (emit 'getstatic "org/armedbear/lisp/Keyword" name +lisp-symbol+)
-                      (emit 'getstatic *this-class* (declare-keyword form) +lisp-symbol+)))
-                (emit-move-from-stack target))
+                (case representation
+                  (:boolean
+                   (emit 'iconst_1))
+                  (t
+                   (let ((name (lookup-known-keyword form)))
+                     (if name
+                         (emit 'getstatic "org/armedbear/lisp/Keyword" name +lisp-symbol+)
+                         (emit 'getstatic *this-class* (declare-keyword form) +lisp-symbol+)))))
+                (emit-move-from-stack target representation))
                (t
                 ;; Shouldn't happen.
                 (aver nil))))
@@ -9250,6 +9431,7 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'gethash1    'p2-gethash)
   (install-p2-handler 'go                  'p2-go)
   (install-p2-handler 'if                  'p2-if)
+  (install-p2-handler 'integerp            'p2-integerp)
   (install-p2-handler 'labels              'p2-labels)
   (install-p2-handler 'length              'p2-length)
   (install-p2-handler 'list                'p2-list)
