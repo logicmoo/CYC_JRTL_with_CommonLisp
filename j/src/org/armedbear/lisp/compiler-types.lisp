@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-types.lisp,v 1.16 2005-12-10 08:38:39 piso Exp $
+;;; $Id: compiler-types.lisp,v 1.17 2005-12-14 23:54:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -113,7 +113,7 @@
                   'STRING)
                  (t
                   t)))
-              ((memq type '(CHARACTER HASH-TABLE STREAM SYMBOL))
+              ((memq type '(BOOLEAN CHARACTER HASH-TABLE STREAM SYMBOL))
                type)
               (t
                t)))))
