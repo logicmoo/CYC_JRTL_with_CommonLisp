@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.688 2005-12-14 22:12:38 piso Exp $
+;;; $Id: jvm.lisp,v 1.689 2005-12-14 23:55:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4515,14 +4515,18 @@ representation, based on the derived type of the LispObject."
 ;;              (eq (variable-representation (var-ref-variable test-form)) :boolean))
 ;;     (compile-form test-form 'stack :boolean)
 ;;     (return-from compile-test-form 'ifeq))
+  (when (eq (derive-compiler-type test-form) 'BOOLEAN)
+    (compile-form test-form 'stack :boolean)
+    (maybe-emit-clear-values test-form)
+    (return-from compile-test-form 'ifeq))
   ;; Otherwise...
-;;   (compile-form test-form 'stack nil)
-;;   (maybe-emit-clear-values test-form)
-;;   (emit-push-nil)
-;;   'if_acmpeq)
-  (compile-form test-form 'stack :boolean)
+  (compile-form test-form 'stack nil)
   (maybe-emit-clear-values test-form)
-  'ifeq)
+  (emit-push-nil)
+  'if_acmpeq)
+;;   (compile-form test-form 'stack :boolean)
+;;   (maybe-emit-clear-values test-form)
+;;   'ifeq)
 
 (defun p2-if (form target representation)
   (let* ((test (second form))
