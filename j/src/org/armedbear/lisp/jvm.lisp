@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.687 2005-12-13 22:58:10 piso Exp $
+;;; $Id: jvm.lisp,v 1.688 2005-12-14 22:12:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1052,8 +1052,7 @@
                    (push arg syms))
                   ((and (consp arg) (eq (car arg) 'GO))
                    (return-from rewrite-function-call
-                                (list 'LET* (nreverse lets) arg))
-                   )
+                                (list 'LET* (nreverse lets) arg)))
                   (t
                    (let ((sym (gensym)))
                      (push sym syms)
@@ -1773,6 +1772,17 @@ representation, based on the derived type of the LispObject."
     (t
      (emit-box-long))))
 
+(defknown emit-box-boolean () t)
+(defun emit-box-boolean ()
+  (let ((LABEL1 (gensym))
+        (LABEL2 (gensym)))
+    (emit 'ifeq LABEL1)
+    (emit-push-t)
+    (emit 'goto LABEL2)
+    (label LABEL1)
+    (emit-push-nil)
+    (label LABEL2)))
+
 (defknown emit-move-from-stack (t &optional t) t)
 (defun emit-move-from-stack (target &optional representation)
   (declare (optimize speed))
@@ -1856,6 +1866,7 @@ representation, based on the derived type of the LispObject."
   (let* ((op (car form))
          (args (cdr form))
          (ok (= (length args) n)))
+    (declare (type boolean ok))
     (unless ok
       (funcall (if (eq (symbol-package op) +cl-package+)
                    #'compiler-warn ; See above!
@@ -3616,11 +3627,12 @@ representation, based on the derived type of the LispObject."
         (t
          nil)))
 
-(declaim (ftype (function (t) t) process-args))
+(defknown process-args (t) t)
 (defun process-args (args)
   (let ((numargs (length args)))
     (when (plusp numargs)
       (let ((must-clear-values nil))
+        (declare (type boolean must-clear-values))
         (cond ((<= numargs call-registers-limit)
                (dolist (arg args)
                  (compile-form arg 'stack nil)
@@ -3899,6 +3911,7 @@ representation, based on the derived type of the LispObject."
                                   (list +lisp-object+ +lisp-object-array+)
                                   +lisp-object+)))))
     (let ((must-clear-values nil))
+      (declare (type boolean must-clear-values))
       (cond ((> (length args) call-registers-limit)
              (emit-push-constant-int (length args))
              (emit 'anewarray +lisp-object-class+)
@@ -3920,14 +3933,12 @@ representation, based on the derived type of the LispObject."
                    (setf must-clear-values t)))))) ; args left on stack here
       (when must-clear-values
         (emit-clear-values)))
-
     (let* ((arg-count (length args))
            (arg-types (if (<= arg-count call-registers-limit)
                           (lisp-object-arg-types arg-count)
                           (list +lisp-object-array+))) ;; FIXME
            (result-type +lisp-object+))
       (emit-invokevirtual +lisp-object-class+ "execute" arg-types result-type))
-
     (fix-boxing representation nil)
     (emit-move-from-stack target representation)
     (when saved-vars
@@ -4499,11 +4510,19 @@ representation, based on the derived type of the LispObject."
     (return-from compile-test-form :consequent))
   (when (null test-form)
     (return-from compile-test-form :alternate))
+;;   (when (and (var-ref-p test-form)
+;;              (var-ref-variable test-form)
+;;              (eq (variable-representation (var-ref-variable test-form)) :boolean))
+;;     (compile-form test-form 'stack :boolean)
+;;     (return-from compile-test-form 'ifeq))
   ;; Otherwise...
-  (compile-form test-form 'stack nil)
+;;   (compile-form test-form 'stack nil)
+;;   (maybe-emit-clear-values test-form)
+;;   (emit-push-nil)
+;;   'if_acmpeq)
+  (compile-form test-form 'stack :boolean)
   (maybe-emit-clear-values test-form)
-  (emit-push-nil)
-  'if_acmpeq)
+  'ifeq)
 
 (defun p2-if (form target representation)
   (let* ((test (second form))
@@ -4535,17 +4554,14 @@ representation, based on the derived type of the LispObject."
                 (label LABEL2))))))))
 
 (defun compile-multiple-value-list (form target representation)
-  ;; FIXME What if we're called with a non-NIL representation?
-  (declare (ignore representation))
   (emit-clear-values)
   (compile-form (second form) 'stack nil)
   (emit-invokestatic +lisp-class+ "multipleValueList"
                      (lisp-object-arg-types 1) +lisp-object+)
+  (fix-boxing representation nil)
   (emit-move-from-stack target))
 
 (defun compile-multiple-value-prog1 (form target representation)
-  ;; FIXME What if we're called with a non-NIL representation?
-  (declare (ignore representation))
   (let ((first-subform (cadr form))
         (subforms (cddr form))
         (result-register (allocate-register))
@@ -4578,8 +4594,7 @@ representation, based on the derived type of the LispObject."
      (compile-form (second form) 'stack nil)
      (emit-invokestatic +lisp-class+ "coerceToFunction"
                         (lisp-object-arg-types 1) +lisp-object+)
-     (emit-invokevirtual +lisp-object-class+ "execute" nil +lisp-object+)
-     (emit-move-from-stack target))
+     (emit-invokevirtual +lisp-object-class+ "execute" nil +lisp-object+))
     (3
      (let* ((*register* *register*)
             (function-register (allocate-register)))
@@ -4589,8 +4604,7 @@ representation, based on the derived type of the LispObject."
        (emit-push-current-thread)
        (emit-invokestatic +lisp-class+ "multipleValueCall1"
                           (list +lisp-object+ +lisp-object+ +lisp-thread+)
-                          +lisp-object+)
-       (emit-move-from-stack target)))
+                          +lisp-object+)))
     (t
      ;; The general case.
      (let* ((*register* *register*)
@@ -4615,8 +4629,9 @@ representation, based on the derived type of the LispObject."
        (emit 'aload function-register)
        (emit 'aload values-register)
        (emit-invokevirtual +lisp-object-class+ "dispatch"
-                           (list +lisp-object-array+) +lisp-object+)
-       (emit-move-from-stack target)))))
+                           (list +lisp-object-array+) +lisp-object+))))
+  (fix-boxing representation nil)
+  (emit-move-from-stack target))
 
 (defknown unused-variable (t) t)
 (defun unused-variable (variable)
@@ -4820,6 +4835,7 @@ representation, based on the derived type of the LispObject."
       (aver (null (variable-register variable)))
       (setf (variable-register variable) t)))
   (let ((must-clear-values nil))
+    (declare (type boolean must-clear-values))
     ;; Evaluate each initform. If the variable being bound is special, allocate
     ;; a temporary register for the result; LET bindings must be done in
     ;; parallel, so we can't modify any specials until all the initforms have
@@ -4906,6 +4922,7 @@ representation, based on the derived type of the LispObject."
 (defknown p2-let*-bindings (t) t)
 (defun p2-let*-bindings (block)
   (let ((must-clear-values nil))
+    (declare (type boolean must-clear-values))
     ;; Generate code to evaluate initforms and bind variables.
     (dolist (variable (block-vars block))
       (let* ((initform (variable-initform variable))
@@ -4913,10 +4930,11 @@ representation, based on the derived type of the LispObject."
                             (zerop (variable-reads variable))
                             (zerop (variable-writes variable))))
              (boundp nil))
-        (flet ((update-must-clear-values ()
-                 (unless must-clear-values
-                   (unless (single-valued-p initform)
-                     (setf must-clear-values t)))))
+        (declare (type boolean unused-p boundp))
+        (macrolet ((update-must-clear-values ()
+                     `(unless must-clear-values
+                        (unless (single-valued-p initform)
+                          (setf must-clear-values t)))))
           (cond ((and (variable-special-p variable)
                       (eq initform (variable-name variable)))
                  ;; The special case of binding a special to its current value.
@@ -4935,66 +4953,82 @@ representation, based on the derived type of the LispObject."
                  (update-must-clear-values)
                  (setf boundp t))
                 ((null initform)
-                 (emit-push-nil))
+                 (cond ((and (null (variable-closure-index variable))
+                             (not (variable-special-p variable))
+                             (eq (variable-declared-type variable) 'BOOLEAN))
+                        (setf (variable-representation variable) :boolean)
+                        (setf (variable-register variable) (allocate-register))
+                        (emit 'iconst_0)
+                        (emit 'istore (variable-register variable))
+                        (setf boundp t))
+                       (t
+                        (emit-push-nil))))
                 (t
                   (cond (unused-p
                          (compile-form initform nil nil) ; for effect
                          (update-must-clear-values)
                          (setf boundp t))
                         ((and (null (variable-closure-index variable))
-                              (not (variable-special-p variable))
-                              (neq (variable-declared-type variable) :none)
-                              (subtypep (variable-declared-type variable) 'FIXNUM))
-                         (setf (variable-representation variable) :int)
-                         (compile-form initform 'stack :int)
-                         (update-must-clear-values)
-                         (setf (variable-register variable) (allocate-register))
-                         (emit 'istore (variable-register variable))
-                         (setf boundp t))
-                        ((and (null (variable-closure-index variable))
-                              (not (variable-special-p variable))
-                              (neq (variable-declared-type variable) :none)
-                              (subtypep (variable-declared-type variable) 'JAVA-LONG))
-                         (setf (variable-representation variable) :long)
-                         (compile-form initform 'stack :long)
-                         (update-must-clear-values)
-                         (setf (variable-register variable)
-                               ;; We need two registers for a long.
-                               (prog1 (allocate-register) (allocate-register)))
-                         (emit 'lstore (variable-register variable))
-                         (setf boundp t))
-                        ((and (null (variable-closure-index variable))
-                              (not (variable-special-p variable))
-                              (eql (variable-writes variable) 0))
-                         (let ((type (derive-type initform)))
-                           (setf (variable-derived-type variable) type)
-                           (cond ((subtypep type 'FIXNUM)
-                                  (setf (variable-representation variable) :int)
-                                  (setf (variable-register variable) (allocate-register))
-                                  (compile-form initform 'stack :int)
-                                  (update-must-clear-values)
-                                  (emit 'istore (variable-register variable))
-                                  (setf boundp t))
-                                 ((subtypep type 'JAVA-LONG)
-                                  (setf (variable-representation variable) :long)
-                                  (setf (variable-register variable)
-                                        ;; We need two registers for a long.
-                                        (prog1 (allocate-register) (allocate-register)))
-                                  (compile-form initform 'stack :long)
-                                  (update-must-clear-values)
-                                  (emit 'lstore (variable-register variable))
-                                  (setf boundp t))
-                                 ((and *enable-unboxed-characters*
-                                       (eq type 'CHARACTER))
-                                  (setf (variable-representation variable) :char)
-                                  (setf (variable-register variable) (allocate-register))
-                                  (compile-form initform 'stack :char)
-                                  (update-must-clear-values)
-                                  (emit 'istore (variable-register variable))
-                                  (setf boundp t))
-                                 (t
-                                  (compile-form initform 'stack nil)
-                                  (update-must-clear-values)))))
+                              (not (variable-special-p variable)))
+                         (cond ((and (neq (variable-declared-type variable) :none)
+                                     (subtypep (variable-declared-type variable) 'FIXNUM))
+                                (setf (variable-representation variable) :int)
+                                (compile-form initform 'stack :int)
+                                (update-must-clear-values)
+                                (setf (variable-register variable) (allocate-register))
+                                (emit 'istore (variable-register variable))
+                                (setf boundp t))
+                               ((and (neq (variable-declared-type variable) :none)
+                                     (subtypep (variable-declared-type variable) 'JAVA-LONG))
+                                (setf (variable-representation variable) :long)
+                                (compile-form initform 'stack :long)
+                                (update-must-clear-values)
+                                (setf (variable-register variable)
+                                      ;; We need two registers for a long.
+                                      (prog1 (allocate-register) (allocate-register)))
+                                (emit 'lstore (variable-register variable))
+                                (setf boundp t))
+                               ((and (neq (variable-declared-type variable) :none)
+                                     (eq (variable-declared-type variable) 'BOOLEAN))
+                                (setf (variable-representation variable) :boolean)
+                                (compile-form initform 'stack :boolean)
+                                (update-must-clear-values)
+                                (setf (variable-register variable) (allocate-register))
+                                (emit 'istore (variable-register variable))
+                                (setf boundp t))
+                               ((eql (variable-writes variable) 0)
+                                (let ((type (derive-type initform)))
+                                  (setf (variable-derived-type variable) type)
+                                  (cond ((subtypep type 'FIXNUM)
+                                         (setf (variable-representation variable) :int)
+                                         (setf (variable-register variable) (allocate-register))
+                                         (compile-form initform 'stack :int)
+                                         (update-must-clear-values)
+                                         (emit 'istore (variable-register variable))
+                                         (setf boundp t))
+                                        ((subtypep type 'JAVA-LONG)
+                                         (setf (variable-representation variable) :long)
+                                         (setf (variable-register variable)
+                                               ;; We need two registers for a long.
+                                               (prog1 (allocate-register) (allocate-register)))
+                                         (compile-form initform 'stack :long)
+                                         (update-must-clear-values)
+                                         (emit 'lstore (variable-register variable))
+                                         (setf boundp t))
+                                        ((and *enable-unboxed-characters*
+                                              (eq type 'CHARACTER))
+                                         (setf (variable-representation variable) :char)
+                                         (setf (variable-register variable) (allocate-register))
+                                         (compile-form initform 'stack :char)
+                                         (update-must-clear-values)
+                                         (emit 'istore (variable-register variable))
+                                         (setf boundp t))
+                                        (t
+                                         (compile-form initform 'stack nil)
+                                         (update-must-clear-values)))))
+                               (t
+                                (compile-form initform 'stack nil)
+                                (update-must-clear-values))))
                         (t
                          (compile-form initform 'stack nil)
                          (update-must-clear-values))))))
@@ -5536,19 +5570,21 @@ representation, based on the derived type of the LispObject."
     ))
 
 (defun p2-quote (form target representation)
-  ;; FIXME What if we're called with a non-NIL representation?
-  (declare (ignore representation))
+  (aver (or (null representation) (eq representation :boolean)))
   (let ((obj (second form)))
     (cond ((null obj)
            (when target
-             (emit-push-nil)
-             (emit-move-from-stack target)))
+             (emit-push-false representation)
+             (emit-move-from-stack target representation)))
+          ((eq representation :boolean)
+           (emit 'iconst_1)
+           (emit-move-from-stack target representation))
           ((keywordp obj)
            (let ((name (lookup-known-keyword obj)))
               (if name
                   (emit 'getstatic "org/armedbear/lisp/Keyword" name +lisp-symbol+)
                   (emit 'getstatic *this-class* (declare-keyword obj) +lisp-symbol+)))
-            (emit-move-from-stack target))
+            (emit-move-from-stack target representation))
           ((symbolp obj)
            (let ((name (lookup-known-symbol obj)))
              (cond (name
@@ -5561,15 +5597,15 @@ representation, based on the derived type of the LispObject."
                                  (declare-object-as-string obj)
                                  (declare-object obj))))
                       (emit 'getstatic *this-class* g +lisp-object+))))
-             (emit-move-from-stack target)))
+             (emit-move-from-stack target representation)))
           ((listp obj)
            (let ((g (if *compile-file-truename*
                         (declare-object-as-string obj)
                         (declare-object obj))))
              (emit 'getstatic *this-class* g +lisp-object+)
-             (emit-move-from-stack target)))
+             (emit-move-from-stack target representation)))
           ((constantp obj)
-           (compile-constant obj target nil))
+           (compile-constant obj target representation))
           (t
            (compiler-unsupported "COMPILE-QUOTE: unsupported case: ~S" form)))))
 
@@ -5784,8 +5820,6 @@ representation, based on the derived type of the LispObject."
 
 (defknown p2-labels (t t t) t)
 (defun p2-labels (form target representation)
-  ;; FIXME What if we're called with a non-NIL representation?
-  (declare (ignore representation))
   (let ((*local-functions* *local-functions*)
         (*visible-variables* *visible-variables*)
         (local-functions (cadr form))
@@ -5802,7 +5836,9 @@ representation, based on the derived type of the LispObject."
       (p2-labels-process-compiland local-function))
     (do ((forms body (cdr forms)))
         ((null forms))
-      (compile-form (car forms) (if (cdr forms) nil target) nil))))
+      (compile-form (car forms) (if (cdr forms) nil 'stack) nil))
+    (fix-boxing representation nil)
+    (emit-move-from-stack target representation)))
 
 (defun p2-lambda (compiland target)
   (let* ((lambda-list (cadr (compiland-lambda-expression compiland))))
@@ -7745,12 +7781,13 @@ representation, based on the derived type of the LispObject."
        (let ((new-form `(and ,(%car args) (and ,@(%cdr args)))))
          (p2-and new-form target representation))))))
 
+(defknown p2-or (t t t) t)
 (defun p2-or (form target representation)
   (let ((args (cdr form)))
     (case (length args)
       (0
-       (emit-push-nil)
-       (emit-move-from-stack target))
+       (emit-push-false representation)
+       (emit-move-from-stack target representation))
       (1
        (compile-form (%car args) target representation))
       (2
@@ -7900,6 +7937,15 @@ representation, based on the derived type of the LispObject."
                    (t
                     (emit 'lload (variable-register variable))
                     (emit-box-long)))
+                 (emit-move-from-stack target representation))
+                ((eq (variable-representation variable) :boolean)
+                 (aver (variable-register variable))
+                 (aver (or (null representation) (eq representation :boolean)))
+                 (emit 'iload (variable-register variable))
+                 (case representation
+                   (:boolean)
+                   (t
+                    (emit-box-boolean)))
                  (emit-move-from-stack target representation))
                 ((variable-register variable)
                  (emit 'aload (variable-register variable))
@@ -8120,6 +8166,19 @@ representation, based on the derived type of the LispObject."
                (t
                 (emit-box-long)))
              (emit-move-from-stack target representation)))
+          ((eq (variable-representation variable) :boolean)
+           (compile-form value-form 'stack :boolean)
+           (maybe-emit-clear-values value-form)
+           (when target
+             (emit 'dup))
+           (emit 'istore (variable-register variable))
+           (when target
+             ;; int on stack here
+             (case representation
+               (:boolean)
+               (t
+                (emit-box-boolean)))
+             (emit-move-from-stack target representation)))
           (t
            (compile-form value-form 'stack nil)
            (maybe-emit-clear-values value-form)
@@ -8173,6 +8232,7 @@ representation, based on the derived type of the LispObject."
            (emit 'checkcast +lisp-symbol-class+)
            (emit-invokevirtual +lisp-symbol-class+ "getPackage"
                                nil +lisp-object+)
+           (fix-boxing representation nil)
            (emit-move-from-stack target representation))
           (t
            (compile-function-call form target representation)))))
