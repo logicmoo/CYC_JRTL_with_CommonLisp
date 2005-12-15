@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.36 2005-12-15 06:12:39 piso Exp $
+;;; $Id: known-functions.lisp,v 1.37 2005-12-15 13:41:18 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -253,9 +253,6 @@
 ;; (declaim (ftype (function (symbol) function) resolve))
 (defknown resolve (symbol) function)
 
-;; (declaim (ftype (function (symbol) t) boundp))
-(defknown boundp (symbol) t)
-
 ;; (declaim (ftype (function (string fixnum character) character) %set-char))
 (defknown %set-char (string index character) character)
 
@@ -276,22 +273,16 @@
 (defknown open * (or stream null))
 (defknown make-string-input-stream * stream)
 
-;; Boolean predicates.
+;; Boolean predicates that can return unboxed Java booleans.
 (defknown (
            arrayp
            atom
-           bit-vector-p
-           compiled-function-p
-           complexp
            consp
            constantp
            endp
            evenp
-           fboundp
            floatp
-           functionp
            integerp
-           keywordp
            listp
            minusp
            numberp
@@ -302,11 +293,8 @@
            readtablep
            realp
            simple-bit-vector-p
-           simple-string-p
            simple-typep
            simple-vector-p
-           special-operator-p
-           special-variable-p
            stringp
            symbolp
            typep
@@ -315,6 +303,22 @@
            sys::%typep
            )
   (t) boolean)
+
+;; Boolean predicates that can not (currently) return unboxed Java booleans.
+(defknown (
+           bit-vector-p
+           compiled-function-p
+           complexp
+           fboundp
+           functionp
+           keywordp
+           simple-string-p
+           typep
+           )
+  (t) t)
+
+(defknown (boundp special-operator-p special-variable-p)
+  (symbol) t)
 
 ;; Boolean comparison operators.
 (defknown (

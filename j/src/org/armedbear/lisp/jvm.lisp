@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.690 2005-12-15 06:13:02 piso Exp $
+;;; $Id: jvm.lisp,v 1.691 2005-12-15 13:41:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1381,6 +1381,7 @@
 (defconstant +lisp-primitive-class+ "org/armedbear/lisp/Primitive")
 (defconstant +lisp-hash-table-class+ "org/armedbear/lisp/HashTable")
 (defconstant +lisp-package-class+ "org/armedbear/lisp/Package")
+(defconstant +lisp-readtable-class+ "org/armedbear/lisp/Readtable")
 (defconstant +lisp-stream-class+ "org/armedbear/lisp/Stream")
 
 (defsubst emit-push-nil ()
@@ -4583,6 +4584,65 @@ representation, based on the derived type of the LispObject."
 ;;   (maybe-emit-clear-values test-form)
 ;;   'ifeq)
 
+(defknown p2-if-and (t t t) t)
+(defun p2-if-and (form target representation)
+;;   (format t "p2-if-and~%")
+  (let* ((test (second form))
+         (consequent (third form))
+         (alternate (fourth form))
+         (LABEL1 (gensym))
+         (LABEL2 (gensym)))
+    (aver (and (consp test) (eq (car test) 'AND)))
+    (let* ((args (cdr test))
+;;            (test1 (first args))
+;;            (test2 (second args))
+           )
+      (case (length args)
+        (0
+         (compile-form consequent target representation))
+        (1
+         (p2-if (list 'IF (%car args) consequent alternate) target representation))
+;;         (2
+;;          (compile-form test1 'stack :boolean)
+;;          (emit 'ifeq LABEL1)
+;;          (compile-form test2 'stack :boolean)
+;;          (emit 'ifeq LABEL1)
+;;          (compile-form consequent target representation)
+;;          (emit 'goto LABEL2)
+;;          (label LABEL1)
+;;          (compile-form alternate target representation)
+;;          (label LABEL2))
+;;         (t
+;;          (compile-form test 'stack nil)
+;;          (maybe-emit-clear-values form)
+;;          (emit-push-nil)
+;;          (emit 'if_acmpeq LABEL1)
+;;          (compile-form consequent target representation)
+;;          (emit 'goto LABEL2)
+;;          (label LABEL1)
+;;          (compile-form alternate target representation)
+;;          (label LABEL2))
+        (t
+         (dolist (arg args)
+           (let ((type (derive-compiler-type arg)))
+             (cond ((eq type 'BOOLEAN)
+                    (compile-form arg 'stack :boolean)
+                    (maybe-emit-clear-values arg)
+                    (emit 'ifeq LABEL1))
+                   (t
+                    (compile-form arg 'stack nil)
+                    (maybe-emit-clear-values arg)
+                    (emit-push-nil)
+                    (emit 'if_acmpeq LABEL1))))
+           )
+         (compile-form consequent target representation)
+         (emit 'goto LABEL2)
+         (label LABEL1)
+         (compile-form alternate target representation)
+         (label LABEL2))
+        ))))
+
+(defknown p2-if (t t t) t)
 (defun p2-if (form target representation)
   (let* ((test (second form))
          (consequent (third form))
@@ -4597,6 +4657,8 @@ representation, based on the derived type of the LispObject."
            (compile-form consequent target representation))
           ((equal (derive-type test) '(not null))
            (compile-form consequent target representation))
+          ((and (consp test) (eq (car test) 'AND))
+           (p2-if-and form target representation))
           (t
            (let ((result (compile-test-form test)))
              (case result
@@ -5388,6 +5450,12 @@ representation, based on the derived type of the LispObject."
 
 (defun p2-fixnump (form target representation)
   (p2-instanceof-predicate form target representation +lisp-fixnum-class+))
+
+(defun p2-packagep (form target representation)
+  (p2-instanceof-predicate form target representation +lisp-package-class+))
+
+(defun p2-readtablep (form target representation)
+  (p2-instanceof-predicate form target representation +lisp-readtable-class+))
 
 (defun p2-simple-vector-p (form target representation)
   (p2-instanceof-predicate form target representation +lisp-simple-vector-class+))
@@ -6504,35 +6572,35 @@ representation, based on the derived type of the LispObject."
            (fix-boxing representation nil) ; FIXME use derived result type
            (emit-move-from-stack target representation)))))
 
-(defknown p2-integerp (t t t) t)
-(defun p2-integerp (form target representation)
-  (unless (check-arg-count form 1)
-    (compile-function-call form target representation)
-    (return-from p2-integerp))
-  (let ((arg (cadr form)))
-    (compile-form arg 'stack nil)
-    (maybe-emit-clear-values arg)
-    (case representation
-      (:boolean
-       (emit-invokevirtual +lisp-object-class+ "integerp" nil "Z"))
-      (t
-       (emit-invokevirtual +lisp-object-class+ "INTEGERP" nil +lisp-object+)))
-    (emit-move-from-stack target representation)))
+;; (defknown p2-integerp (t t t) t)
+;; (defun p2-integerp (form target representation)
+;;   (unless (check-arg-count form 1)
+;;     (compile-function-call form target representation)
+;;     (return-from p2-integerp))
+;;   (let ((arg (cadr form)))
+;;     (compile-form arg 'stack nil)
+;;     (maybe-emit-clear-values arg)
+;;     (case representation
+;;       (:boolean
+;;        (emit-invokevirtual +lisp-object-class+ "integerp" nil "Z"))
+;;       (t
+;;        (emit-invokevirtual +lisp-object-class+ "INTEGERP" nil +lisp-object+)))
+;;     (emit-move-from-stack target representation)))
 
-(defknown p2-listp (t t t) t)
-(defun p2-listp (form target representation)
-  (unless (check-arg-count form 1)
-    (compile-function-call form target representation)
-    (return-from p2-listp))
-  (let ((arg (cadr form)))
-    (compile-form arg 'stack nil)
-    (maybe-emit-clear-values arg)
-    (case representation
-      (:boolean
-       (emit-invokevirtual +lisp-object-class+ "listp" nil "Z"))
-      (t
-       (emit-invokevirtual +lisp-object-class+ "LISTP" nil +lisp-object+)))
-    (emit-move-from-stack target representation)))
+;; (defknown p2-listp (t t t) t)
+;; (defun p2-listp (form target representation)
+;;   (unless (check-arg-count form 1)
+;;     (compile-function-call form target representation)
+;;     (return-from p2-listp))
+;;   (let ((arg (cadr form)))
+;;     (compile-form arg 'stack nil)
+;;     (maybe-emit-clear-values arg)
+;;     (case representation
+;;       (:boolean
+;;        (emit-invokevirtual +lisp-object-class+ "listp" nil "Z"))
+;;       (t
+;;        (emit-invokevirtual +lisp-object-class+ "LISTP" nil +lisp-object+)))
+;;     (emit-move-from-stack target representation)))
 
 (defknown p2-zerop (t t t) t)
 (defun p2-zerop (form target representation)
@@ -9575,14 +9643,14 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'gensym              'p2-gensym)
   (install-p2-handler 'get                 'p2-get)
   (install-p2-handler 'gethash             'p2-gethash)
-  (install-p2-handler 'gethash1    'p2-gethash)
+  (install-p2-handler 'gethash1            'p2-gethash)
   (install-p2-handler 'go                  'p2-go)
   (install-p2-handler 'if                  'p2-if)
-  (install-p2-handler 'integerp            'p2-integerp)
+;;   (install-p2-handler 'integerp            'p2-integerp)
   (install-p2-handler 'labels              'p2-labels)
   (install-p2-handler 'length              'p2-length)
   (install-p2-handler 'list                'p2-list)
-  (install-p2-handler 'listp               'p2-listp)
+;;   (install-p2-handler 'listp               'p2-listp)
   (install-p2-handler 'load-time-value     'p2-load-time-value)
   (install-p2-handler 'locally             'p2-locally)
   (install-p2-handler 'logand              'p2-logand)
@@ -9597,10 +9665,12 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'not                 'p2-not/null)
   (install-p2-handler 'null                'p2-not/null)
   (install-p2-handler 'or                  'p2-or)
+  (install-p2-handler 'packagep            'p2-packagep)
   (install-p2-handler 'progv               'p2-progv)
   (install-p2-handler 'puthash             'p2-puthash)
   (install-p2-handler 'quote               'p2-quote)
   (install-p2-handler 'read-line           'p2-read-line)
+  (install-p2-handler 'readtablep          'p2-readtablep)
   (install-p2-handler 'return-from         'p2-return-from)
   (install-p2-handler 'rplacd              'p2-rplacd)
   (install-p2-handler 'schar               'p2-char/schar)
