@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.689 2005-12-14 23:55:12 piso Exp $
+;;; $Id: jvm.lisp,v 1.690 2005-12-15 06:13:02 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3269,39 +3269,94 @@ representation, based on the derived type of the LispObject."
                     (CADR            "cadr")
                     (CDDR            "cddr")
                     (CDR             "cdr")
-                    (CHARACTERP      "CHARACTERP")
+;;                     (CHARACTERP      "CHARACTERP")
                     (CLASS-OF        "classOf")
                     (COMPLEXP        "COMPLEXP")
-                    (CONSTANTP       "CONSTANTP")
+;;                     (CONSTANTP       "CONSTANTP")
                     (DENOMINATOR     "DENOMINATOR")
-                    (ENDP            "ENDP")
-                    (EVENP           "EVENP")
+;;                     (ENDP            "ENDP")
+;;                     (EVENP           "EVENP")
                     (FIRST           "car")
-                    (FLOATP          "FLOATP")
-                    (INTEGERP        "INTEGERP")
+;;                     (FLOATP          "FLOATP")
+;;                     (INTEGERP        "INTEGERP")
                     (LENGTH          "LENGTH")
-                    (LISTP           "LISTP")
-                    (MINUSP          "MINUSP")
+;;                     (LISTP           "LISTP")
+;;                     (MINUSP          "MINUSP")
                     (NREVERSE        "nreverse")
-                    (NUMBERP         "NUMBERP")
+;;                     (NUMBERP         "NUMBERP")
                     (NUMERATOR       "NUMERATOR")
-                    (ODDP            "ODDP")
-                    (PLUSP           "PLUSP")
-                    (RATIONALP       "RATIONALP")
-                    (REALP           "REALP")
+;;                     (ODDP            "ODDP")
+;;                     (PLUSP           "PLUSP")
+;;                     (RATIONALP       "RATIONALP")
+;;                     (REALP           "REALP")
                     (REST            "cdr")
                     (REVERSE         "reverse")
                     (SECOND          "cadr")
                     (SIMPLE-STRING-P "SIMPLE_STRING_P")
                     (STRING          "STRING")
-                    (STRINGP         "STRINGP")
+;;                     (STRINGP         "STRINGP")
                     (THIRD           "caddr")
-                    (VECTORP         "VECTORP")))
+;;                     (VECTORP         "VECTORP")
+                    ))
       ;;     (define-unary-operator (%car pair) (%cadr pair))
       (setf (gethash (%car pair) ht) (%cadr pair)))
     (setf *unary-operators* ht)))
 
 (initialize-unary-operators)
+
+(defknown install-p2-handler * t)
+(defun install-p2-handler (symbol &optional handler)
+  (declare (type symbol symbol))
+  (let ((handler (or handler
+                     (find-symbol (concatenate 'string "COMPILE-" (symbol-name symbol)) 'jvm))))
+    (unless (and handler (fboundp handler))
+      (error "Handler not found: ~S" handler))
+    (setf (get symbol 'p2-handler) handler)))
+
+(defparameter *predicates* (make-hash-table :test 'eq))
+
+(defun define-predicate (name boxed-method-name unboxed-method-name)
+  (setf (gethash name *predicates*) (cons boxed-method-name unboxed-method-name))
+  (install-p2-handler name 'p2-predicate))
+
+(defknown p2-predicate (t t t) t)
+(defun p2-predicate (form target representation)
+  (unless (check-arg-count form 1)
+    (compile-function-call form target representation)
+    (return-from p2-predicate))
+  (let* ((op (car form))
+         (info (gethash op *predicates*))
+         (boxed-method-name (car info))
+         (unboxed-method-name (cdr info)))
+    (cond ((and boxed-method-name unboxed-method-name)
+           (let ((arg (cadr form)))
+             (compile-form arg 'stack nil)
+             (maybe-emit-clear-values arg)
+             (case representation
+               (:boolean
+                (emit-invokevirtual +lisp-object-class+
+                                    unboxed-method-name
+                                    nil "Z"))
+               (t
+                (emit-invokevirtual +lisp-object-class+
+                                    boxed-method-name
+                                    nil +lisp-object+)))
+             (emit-move-from-stack target representation)))
+          (t
+           (compile-function-call form target representation)))))
+
+(define-predicate 'constantp "CONSTANTP" "constantp")
+(define-predicate 'endp      "ENDP"      "endp")
+(define-predicate 'evenp     "EVENP"     "evenp")
+(define-predicate 'floatp    "FLOATP"    "floatp")
+(define-predicate 'integerp  "INTEGERP"  "integerp")
+(define-predicate 'listp     "LISTP"     "listp")
+(define-predicate 'minusp    "MINUSP"    "minusp")
+(define-predicate 'numberp   "NUMBERP"   "numberp")
+(define-predicate 'oddp      "ODDP"      "oddp")
+(define-predicate 'plusp     "PLUSP"     "plusp")
+(define-predicate 'rationalp "RATIONALP" "rationalp")
+(define-predicate 'realp     "REALP"     "realp")
 
 (declaim (ftype (function (t t t t) t) compile-function-call-1))
 (defun compile-function-call-1 (op args target representation)
@@ -5296,7 +5351,7 @@ representation, based on the derived type of the LispObject."
     (label LABEL2)
     (emit-move-from-stack target representation)))
 
-(declaim (ftype (function (t t t t) t) p2-instanceof-predicate))
+(defknown p2-instanceof-predicate (t t t t) t)
 (defun p2-instanceof-predicate (form target representation java-class)
   (unless (check-arg-count form 1)
     (compile-function-call form target representation)
@@ -9473,15 +9528,6 @@ representation, based on the derived type of the LispObject."
               (unless (compiled-function-p f)
                 (jvm-compile sym)))))))
   t)
-
-(defknown install-p2-handler * t)
-(defun install-p2-handler (symbol &optional handler)
-  (declare (type symbol symbol))
-  (let ((handler (or handler
-                     (find-symbol (concatenate 'string "COMPILE-" (symbol-name symbol)) 'jvm))))
-    (unless (and handler (fboundp handler))
-      (error "Handler not found: ~S" handler))
-    (setf (get symbol 'p2-handler) handler)))
 
 (defun initialize-p2-handlers ()
   (mapc #'install-p2-handler '(declare

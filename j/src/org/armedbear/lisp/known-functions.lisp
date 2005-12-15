@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.35 2005-12-08 12:00:38 piso Exp $
+;;; $Id: known-functions.lisp,v 1.36 2005-12-15 06:12:39 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -147,7 +147,6 @@
            nsubst-if
            nsubst-if-not
            nth
-           oddp
            pathname-type
            pathname-type
            pathnamep
@@ -171,7 +170,6 @@
            simple-condition-format-arguments
            simple-condition-format-control
            simple-search
-           simple-typep
            sixth
            some
            sort
@@ -278,30 +276,75 @@
 (defknown open * (or stream null))
 (defknown make-string-input-stream * stream)
 
+;; Boolean predicates.
+(defknown (
+           arrayp
+           atom
+           bit-vector-p
+           compiled-function-p
+           complexp
+           consp
+           constantp
+           endp
+           evenp
+           fboundp
+           floatp
+           functionp
+           integerp
+           keywordp
+           listp
+           minusp
+           numberp
+           oddp
+           packagep
+           plusp
+           rationalp
+           readtablep
+           realp
+           simple-bit-vector-p
+           simple-string-p
+           simple-typep
+           simple-vector-p
+           special-operator-p
+           special-variable-p
+           stringp
+           symbolp
+           typep
+           zerop
+           ;; Internal symbols.
+           sys::%typep
+           )
+  (t) boolean)
+
+;; Boolean comparison operators.
+(defknown (
+           /=
+           <
+           <=
+           =
+           >
+           >=
+           eq
+           eql
+           equal
+           equalp
+           )
+  * boolean)
+
 ;; Moved here from jvm.lisp.
 (defknown (+ - * /
-             1+ 1- < > <= >= = /=
+             1+ 1-
              car cdr caar cadr cdar cddr cadar caddr cdddr cddddr
              first second third
-             eq eql equal equalp
              length
-             constantp symbolp
              list list*
              macro-function
              compiler-macro-function
              sys::%defun
              get
-             atom
-             compiled-function-p
              fdefinition
-             special-operator-p keywordp functionp fboundp zerop consp listp
-             numberp integerp floatp
-             plusp minusp
-             complexp arrayp readtablep packagep
              array-dimensions array-rank array-total-size
              array-element-type upgraded-array-element-type
-             simple-vector-p simple-string-p bit-vector-p simple-bit-vector-p
-             stringp
              row-major-aref
              quote function
              mapcar
@@ -313,7 +356,6 @@
              code-char char-int digit-char-p
              member ext:memq
              remove remove-if remove-if-not delete delete-if delete-if-not
-             special-variable-p
              symbol-function
              coerce
              reverse nreverse
@@ -328,8 +370,7 @@
              package-used-by-list package-shadowing-symbols
              nthcdr
              aref elt
-             not null endp
-             concatenate
+             not null concatenate
              format sys::%format
              prin1 princ print write
              compute-restarts find-restart restart-name
@@ -338,7 +379,6 @@
              setq
              multiple-value-list push pop
              type-of class-of
-             typep sys::%typep
              abs
              ash
              float-radix
