@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: LispMode.java,v 1.102 2005-11-15 16:31:45 piso Exp $
+ * $Id: LispMode.java,v 1.103 2005-12-16 17:49:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -506,7 +506,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
                     up = downList(up);
                     if (up != null) {
                         String s = gatherToken(up);
-                        if (s.equals("flet") || s.equals("labels"))
+                        if (s.equals("flet") || s.equals("labels") || s.equals("macrolet"))
                             return buffer.getCol(pos) + indentSize;
                     }
                 }
