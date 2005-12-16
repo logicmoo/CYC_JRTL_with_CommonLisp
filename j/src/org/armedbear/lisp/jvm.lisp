@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.692 2005-12-16 17:45:05 piso Exp $
+;;; $Id: jvm.lisp,v 1.693 2005-12-16 19:44:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1336,12 +1336,26 @@
       (setf args (list args)))
     (make-instruction opcode args)))
 
-(declaim (ftype (function * t) emit))
-(defun emit (instr &rest args)
+(defknown %%emit * t)
+(defun %%emit (instr &rest args)
+  (declare (optimize speed))
+  (let ((instruction (make-instruction instr args)))
+    (push instruction *code*)
+    instruction))
+
+(defknown %emit * t)
+(defun %emit (instr &rest args)
   (declare (optimize speed))
   (let ((instruction (inst instr args)))
     (push instruction *code*)
     instruction))
+
+(defmacro emit (instr &rest args)
+  (when (and (consp instr) (eq (car instr) 'QUOTE) (symbolp (cadr instr)))
+    (setf instr (opcode-number (cadr instr))))
+  (if (fixnump instr)
+      `(%%emit ,instr ,@args)
+      `(%emit ,instr ,@args)))
 
 (defknown label (symbol) t)
 (defun label (symbol)
@@ -1396,7 +1410,6 @@
 
 (defknown emit-push-false (t) t)
 (defun emit-push-false (representation)
-  (aver (or (null representation) (eq representation :boolean)))
   (case representation
     (:boolean
      (emit 'iconst_0))
@@ -1405,7 +1418,6 @@
 
 (defknown emit-push-true (t) t)
 (defun emit-push-true (representation)
-  (aver (or (null representation) (eq representation :boolean)))
   (case representation
     (:boolean
      (emit 'iconst_1))
@@ -1496,7 +1508,7 @@
         (t
          class)))
 
-(declaim (ftype (function * t) emit-invokevirtual))
+(defknown emit-invokevirtual (t t t t) t)
 (defun emit-invokevirtual (class-name method-name arg-types return-type)
   (let* ((info (get-descriptor-info arg-types return-type))
          (descriptor (car info))
