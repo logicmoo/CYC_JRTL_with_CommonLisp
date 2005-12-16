@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.691 2005-12-15 13:41:08 piso Exp $
+;;; $Id: jvm.lisp,v 1.692 2005-12-16 17:45:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1044,20 +1044,24 @@
 (defun rewrite-function-call (form)
   (let ((args (cdr form)))
     (if (unsafe-p args)
-        (let ((syms ())
-              (lets ()))
-          ;; Preserve the order of evaluation of the arguments!
-          (dolist (arg args)
-            (cond ((constantp arg)
-                   (push arg syms))
-                  ((and (consp arg) (eq (car arg) 'GO))
-                   (return-from rewrite-function-call
-                                (list 'LET* (nreverse lets) arg)))
-                  (t
-                   (let ((sym (gensym)))
-                     (push sym syms)
-                     (push (list sym arg) lets)))))
-          (list 'LET* (nreverse lets) (list* (car form) (nreverse syms))))
+        (let ((arg1 (car args)))
+          (cond ((and (consp arg1) (eq (car arg1) 'GO))
+                 arg1)
+                (t
+                 (let ((syms ())
+                       (lets ()))
+                   ;; Preserve the order of evaluation of the arguments!
+                   (dolist (arg args)
+                     (cond ((constantp arg)
+                            (push arg syms))
+                           ((and (consp arg) (eq (car arg) 'GO))
+                            (return-from rewrite-function-call
+                                         (list 'LET* (nreverse lets) arg)))
+                           (t
+                            (let ((sym (gensym)))
+                              (push sym syms)
+                              (push (list sym arg) lets)))))
+                   (list 'LET* (nreverse lets) (list* (car form) (nreverse syms)))))))
         form)))
 
 (defknown p1-function-call (t) t)
