@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.37 2005-12-15 13:41:18 piso Exp $
+;;; $Id: known-functions.lisp,v 1.38 2005-12-17 00:47:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -136,6 +136,7 @@
            load-compiled-function
            lower-case-p
            make-string-output-stream
+           make-structure
            map
            merge-pathnames
            namestring
