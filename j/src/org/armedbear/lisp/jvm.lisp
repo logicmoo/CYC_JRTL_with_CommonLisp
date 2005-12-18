@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.697 2005-12-18 15:57:33 piso Exp $
+;;; $Id: jvm.lisp,v 1.698 2005-12-18 16:47:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3346,7 +3346,7 @@ representation, based on the derived type of the LispObject."
 
 (defknown p2-predicate (t t t) t)
 (defun p2-predicate (form target representation)
-  (unless (check-arg-count form 1)
+  (unless (= (length form) 2)
     (compile-function-call form target representation)
     (return-from p2-predicate))
   (let* ((op (car form))
@@ -7833,6 +7833,7 @@ representation, based on the derived type of the LispObject."
          (compile-function-call form target representation))))
 
 (defun p2-not/null (form target representation)
+  (aver (or (null representation) (eq representation :boolean)))
   (unless (check-arg-count form 1)
     (compile-function-call form target representation)
     (return-from p2-not/null))
@@ -7859,12 +7860,24 @@ representation, based on the derived type of the LispObject."
            (maybe-emit-clear-values arg)
            (emit 'iconst_1)
            (emit 'ixor))
-          (t
+          ((eq (derive-compiler-type arg) 'BOOLEAN)
            (compile-form arg 'stack :boolean)
            (maybe-emit-clear-values arg)
            (let ((LABEL1 (gensym))
                  (LABEL2 (gensym)))
              (emit 'ifeq LABEL1)
+             (emit-push-nil)
+             (emit 'goto LABEL2)
+             (emit 'label LABEL1)
+             (emit-push-t)
+             (emit 'label LABEL2)))
+          (t
+           (compile-form arg 'stack nil)
+           (maybe-emit-clear-values arg)
+           (let ((LABEL1 (gensym))
+                 (LABEL2 (gensym)))
+             (emit-push-nil)
+             (emit 'if_acmpeq LABEL1)
              (emit-push-nil)
              (emit 'goto LABEL2)
              (emit 'label LABEL1)
