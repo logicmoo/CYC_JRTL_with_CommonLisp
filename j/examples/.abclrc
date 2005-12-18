@@ -31,6 +31,25 @@
           (time (funcall f size nvars count)))))))
 
 #+abcl
+(defun run-other-tests ()
+  (let ((*default-pathname-defaults* "/home/peter/cl-ppcre-1.2.11/"))
+    (map nil #'delete-file (directory "*.abcl"))
+    (load "load.lisp")
+    (let ((f (find-symbol "TEST" "CL-PPCRE-TEST")))
+      (when f
+        (gc)
+        (time (funcall f))
+        (gc)
+        (time (funcall f)))))
+  (let ((*default-pathname-defaults* "/home/peter/salza-0.7.2/"))
+    (map nil #'delete-file (directory "*.abcl"))
+    (load "/home/peter/test-salza.lisp")
+    (gc)
+    (test-salza)
+    (gc)
+    (test-salza)))
+
+#+abcl
 (autoload 'do-tests "rt.lisp")
 
 #+allegro
