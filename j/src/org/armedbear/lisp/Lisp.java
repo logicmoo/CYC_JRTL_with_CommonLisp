@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.423 2005-12-16 17:51:18 piso Exp $
+ * $Id: Lisp.java,v 1.424 2005-12-18 14:28:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1489,6 +1489,24 @@ public abstract class Lisp
                                             plist.writeToString()));
         }
         return defaultValue;
+    }
+
+    public static final LispObject get(LispObject symbol, LispObject indicator)
+        throws ConditionThrowable
+    {
+        LispObject list;
+        try {
+            list = ((Symbol)symbol).getPropertyList();
+        }
+        catch (ClassCastException e) {
+            return signalTypeError(symbol, Symbol.SYMBOL);
+        }
+        while (list != NIL) {
+            if (list.car() == indicator)
+                return list.cadr();
+            list = list.cddr();
+        }
+        return NIL;
     }
 
     public static final LispObject get(LispObject symbol, LispObject indicator,
