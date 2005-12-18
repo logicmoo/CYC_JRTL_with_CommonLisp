@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.695 2005-12-18 14:28:06 piso Exp $
+;;; $Id: jvm.lisp,v 1.696 2005-12-18 15:05:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4600,7 +4600,6 @@ representation, based on the derived type of the LispObject."
 
 (defknown p2-if-and (t t t) t)
 (defun p2-if-and (form target representation)
-;;   (format t "p2-if-and~%")
   (let* ((test (second form))
          (consequent (third form))
          (alternate (fourth form))
@@ -4631,6 +4630,43 @@ representation, based on the derived type of the LispObject."
          (compile-form alternate target representation)
          (label LABEL2))))))
 
+(defknown p2-if-not-and (t t t) t)
+(defun p2-if-not-and (form target representation)
+;;   (format t "p2-if-not-and~%")
+;;   (aver (eq (first form) 'IF))
+;;   (aver (consp (second form)))
+;;   (aver (memq (first (second form)) '(NOT NULL)))
+;;   (aver (eq (first (second (second form))) 'AND))
+  (let* ((inverted-test (second (second form)))
+         (consequent (third form))
+         (alternate (fourth form))
+         (LABEL1 (gensym))
+         (LABEL2 (gensym)))
+;;     (aver (and (consp inverted-test) (eq (car inverted-test) 'AND)))
+    (let* ((args (cdr inverted-test)))
+      (case (length args)
+        (0
+         (compile-form alternate target representation))
+        (1
+         (p2-if (list 'IF (%car args) alternate consequent) target representation))
+        (t
+         (dolist (arg args)
+           (let ((type (derive-compiler-type arg)))
+             (cond ((eq type 'BOOLEAN)
+                    (compile-form arg 'stack :boolean)
+                    (maybe-emit-clear-values arg)
+                    (emit 'ifeq LABEL1))
+                   (t
+                    (compile-form arg 'stack nil)
+                    (maybe-emit-clear-values arg)
+                    (emit-push-nil)
+                    (emit 'if_acmpeq LABEL1)))))
+         (compile-form alternate target representation)
+         (emit 'goto LABEL2)
+         (label LABEL1)
+         (compile-form consequent target representation)
+         (label LABEL2))))))
+
 (defknown p2-if (t t t) t)
 (defun p2-if (form target representation)
   (let* ((test (second form))
@@ -4648,6 +4684,11 @@ representation, based on the derived type of the LispObject."
            (compile-form consequent target representation))
           ((and (consp test) (eq (car test) 'AND))
            (p2-if-and form target representation))
+          ((and (consp test)
+                (memq (first test) '(NOT NULL))
+                (consp (second test))
+                (eq (first (second test)) 'AND))
+           (p2-if-not-and form target representation))
           (t
            (let ((result (compile-test-form test)))
              (case result
