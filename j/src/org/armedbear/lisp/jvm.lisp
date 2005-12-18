@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.694 2005-12-17 02:39:00 piso Exp $
+;;; $Id: jvm.lisp,v 1.695 2005-12-18 14:28:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3611,7 +3611,6 @@ representation, based on the derived type of the LispObject."
 
 ;; get symbol indicator &optional default => value
 (defun p2-get (form target representation)
-  (aver (or (null representation) (eq representation :boolean)))
   (let* ((args (cdr form))
          (arg1 (first args))
          (arg2 (second args))
@@ -3620,12 +3619,15 @@ representation, based on the derived type of the LispObject."
       ((2 3)
        (compile-form arg1 'stack nil)
        (compile-form arg2 'stack nil)
-       (compile-form arg3 'stack nil) ; NIL if only 2 args
-       (maybe-emit-clear-values arg1 arg2 arg3)
+       (cond ((null arg3)
+              (maybe-emit-clear-values arg1 arg2))
+             (t
+              (compile-form arg3 'stack nil)
+              (maybe-emit-clear-values arg1 arg2 arg3)))
        (emit-invokestatic +lisp-class+ "get"
-                          (lisp-object-arg-types 3) +lisp-object+)
-       (when (eq representation :boolean)
-         (emit-unbox-boolean))
+                          (lisp-object-arg-types (if arg3 3 2))
+                          +lisp-object+)
+       (fix-boxing representation nil)
        (emit-move-from-stack target representation))
       (t
        (compiler-warn "Wrong number of arguments for ~A (expected 2 or 3, but received ~D)."
@@ -3645,8 +3647,6 @@ representation, based on the derived type of the LispObject."
            (maybe-emit-clear-values ht-form key-form)
            (emit-invokevirtual +lisp-hash-table-class+ "gethash1"
                                (lisp-object-arg-types 1) +lisp-object+)
-;;            (when (eq representation :int)
-;;              (emit-unbox-fixnum))
            (fix-boxing representation nil)
            (emit-move-from-stack target representation)))
         (t
