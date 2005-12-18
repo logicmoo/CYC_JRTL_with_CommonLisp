@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.38 2005-12-17 00:47:24 piso Exp $
+;;; $Id: known-functions.lisp,v 1.39 2005-12-18 14:27:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -275,11 +275,9 @@
 (defknown make-string-input-stream * stream)
 
 ;; Boolean predicates that can return unboxed Java booleans.
-(defknown (
-           arrayp
+(defknown (arrayp
            atom
            consp
-           constantp
            endp
            evenp
            floatp
@@ -294,36 +292,17 @@
            readtablep
            realp
            simple-bit-vector-p
-           simple-typep
            simple-vector-p
            stringp
            symbolp
-           typep
-           zerop
-           ;; Internal symbols.
-           sys::%typep
-           )
+           zerop)
   (t) boolean)
 
-;; Boolean predicates that can not (currently) return unboxed Java booleans.
-(defknown (
-           bit-vector-p
-           compiled-function-p
-           complexp
-           fboundp
-           functionp
-           keywordp
-           simple-string-p
-           typep
-           )
-  (t) t)
-
-(defknown (boundp special-operator-p special-variable-p)
-  (symbol) t)
+(defknown (constantp simple-typep typep sys::%typep)
+  * boolean)
 
 ;; Boolean comparison operators.
-(defknown (
-           /=
+(defknown (/=
            <
            <=
            =
@@ -332,9 +311,22 @@
            eq
            eql
            equal
-           equalp
-           )
+           equalp)
   * boolean)
+
+;; Boolean predicates that can not (currently) return unboxed Java booleans.
+(defknown (bit-vector-p
+           compiled-function-p
+           complexp
+           fboundp
+           functionp
+           keywordp
+           simple-string-p
+           typep)
+  (t) t)
+
+(defknown (boundp special-operator-p special-variable-p)
+  (symbol) t)
 
 ;; Moved here from jvm.lisp.
 (defknown (+ - * /
