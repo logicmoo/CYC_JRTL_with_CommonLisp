@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.857 2005-12-04 15:05:29 piso Exp $
+ * $Id: Primitives.java,v 1.858 2005-12-19 18:19:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1421,6 +1421,18 @@ public final class Primitives extends Lisp
             if (args[0] instanceof Condition)
                 throw new ConditionThrowable((Condition)args[0]);
             throw new ConditionThrowable(new SimpleCondition());
+        }
+    };
+
+    // ### undefined-function-called
+    // Redefined in restart.lisp.
+    private static final Primitive UNDEFINED_FUNCTION_CALLED =
+        new Primitive(Symbol.UNDEFINED_FUNCTION_CALLED, "name arguments")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            return signal(new UndefinedFunction(first));
         }
     };
 
