@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispShell.java,v 1.92 2005-12-19 16:14:42 piso Exp $
+ * $Id: LispShell.java,v 1.93 2005-12-19 18:28:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -277,9 +277,13 @@ public class LispShell extends Shell
         return; // For now.
       }
     final Line promptLine = endOfOutput.getLine();
-    Annotation a = new Annotation(endOfOutput.getOffset());
-    promptLine.setAnnotation(a);
-    promptLine.setFlags(STATE_PROMPT);
+    final boolean atPrompt = (promptRE.getMatch(promptLine.getText()) != null);
+    if (atPrompt)
+      {
+        Annotation a = new Annotation(endOfOutput.getOffset());
+        promptLine.setAnnotation(a);
+        promptLine.setFlags(STATE_PROMPT);
+      }
     Position end = getEnd();
     Position pos = LispMode.findContainingSexp(end);
     boolean isComplete = (pos == null || pos.isBefore(endOfOutput));
@@ -287,8 +291,11 @@ public class LispShell extends Shell
       {
         // Complete sexp.
         editor.eob();
-        editor.insertLineSeparator();
-        editor.getDotLine().setFlags(0);
+        if (atPrompt)
+          {
+            editor.insertLineSeparator();
+            editor.getDotLine().setFlags(0);
+          }
       }
     else
       {
@@ -339,6 +346,7 @@ public class LispShell extends Shell
     if (dot.isBefore(endOfOutput))
       return;
     final Line promptLine = endOfOutput.getLine();
+    final boolean atPrompt = (promptRE.getMatch(promptLine.getText()) != null);
     Position end = getEnd();
     if (dot.isBefore(end))
       return;
@@ -347,12 +355,18 @@ public class LispShell extends Shell
     if (isComplete)
       {
         // Complete sexp.
-        Annotation a = new Annotation(endOfOutput.getOffset());
-        promptLine.setAnnotation(a);
-        promptLine.setFlags(STATE_PROMPT);
+        if (atPrompt)
+          {
+            Annotation a = new Annotation(endOfOutput.getOffset());
+            promptLine.setAnnotation(a);
+            promptLine.setFlags(STATE_PROMPT);
+          }
         editor.eob();
-        editor.insertLineSeparator();
-        editor.getDotLine().setFlags(0);
+        if (atPrompt)
+          {
+            editor.insertLineSeparator();
+            editor.getDotLine().setFlags(0);
+          }
       }
     if (needsRenumbering)
       renumber();
