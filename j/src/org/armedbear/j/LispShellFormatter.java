@@ -2,7 +2,7 @@
  * LispShellFormatter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispShellFormatter.java,v 1.14 2005-12-19 15:55:22 piso Exp $
+ * $Id: LispShellFormatter.java,v 1.15 2005-12-19 16:00:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -74,7 +74,8 @@ public final class LispShellFormatter extends Formatter
             {
               addSegment(text, promptEnd, commentStart, FORMAT_INPUT);
               addSegment(text, commentStart, FORMAT_COMMENT);
-            } else
+            }
+          else
               addSegment(text, promptEnd, FORMAT_INPUT);
           return segmentList;
         }
