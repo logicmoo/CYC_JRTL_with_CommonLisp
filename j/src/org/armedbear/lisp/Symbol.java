@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.239 2005-12-05 16:43:57 piso Exp $
+ * $Id: Symbol.java,v 1.240 2005-12-19 18:17:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -642,7 +642,7 @@ public class Symbol extends LispObject
             return function.execute();
         }
         catch (NullPointerException e) {
-            return signalNPE(e);
+            return handleNPE(e, NIL);
         }
     }
 
@@ -652,7 +652,7 @@ public class Symbol extends LispObject
             return function.execute(arg);
         }
         catch (NullPointerException e) {
-            return signalNPE(e);
+            return handleNPE(e, list1(arg));
         }
     }
 
@@ -663,7 +663,7 @@ public class Symbol extends LispObject
             return function.execute(first, second);
         }
         catch (NullPointerException e) {
-            return signalNPE(e);
+            return handleNPE(e, list2(first, second));
         }
     }
 
@@ -675,7 +675,7 @@ public class Symbol extends LispObject
             return function.execute(first, second, third);
         }
         catch (NullPointerException e) {
-            return signalNPE(e);
+            return handleNPE(e, list3(first, second, third));
         }
     }
 
@@ -687,7 +687,7 @@ public class Symbol extends LispObject
             return function.execute(first, second, third, fourth);
         }
         catch (NullPointerException e) {
-            return signalNPE(e);
+            return handleNPE(e, list4(first, second, third, fourth));
         }
     }
 
@@ -700,7 +700,7 @@ public class Symbol extends LispObject
             return function.execute(first, second, third, fourth, fifth);
         }
         catch (NullPointerException e) {
-            return signalNPE(e);
+            return handleNPE(e, list5(first, second, third, fourth, fifth));
         }
     }
 
@@ -713,7 +713,8 @@ public class Symbol extends LispObject
             return function.execute(first, second, third, fourth, fifth, sixth);
         }
         catch (NullPointerException e) {
-            return signalNPE(e);
+            return handleNPE(e, list6(first, second, third, fourth, fifth,
+                                      sixth));
         }
     }
 
@@ -728,7 +729,9 @@ public class Symbol extends LispObject
                                     seventh);
         }
         catch (NullPointerException e) {
-            return signalNPE(e);
+            return handleNPE(e,
+                             list7(first, second, third, fourth, fifth, sixth,
+                                   seventh));
         }
     }
 
@@ -743,7 +746,9 @@ public class Symbol extends LispObject
                                     seventh, eighth);
         }
         catch (NullPointerException e) {
-            return signalNPE(e);
+            return handleNPE(e,
+                             list8(first, second, third, fourth, fifth, sixth,
+                                   seventh, eighth));
         }
     }
 
@@ -753,7 +758,10 @@ public class Symbol extends LispObject
             return function.execute(args);
         }
         catch (NullPointerException e) {
-            return signalNPE(e);
+            LispObject list = NIL;
+            for (int i = args.length; i-- > 0;)
+                list = new Cons(args[i], list);
+            return handleNPE(e, list);
         }
     }
 
@@ -762,6 +770,16 @@ public class Symbol extends LispObject
     {
         if (function == null)
             return signal(new UndefinedFunction(this));
+        Debug.trace(e);
+        return signal(new LispError("Null pointer exception"));
+    }
+
+    private final LispObject handleNPE(NullPointerException e, LispObject args)
+        throws ConditionThrowable
+    {
+        if (function == null)
+            return LispThread.currentThread().execute(Symbol.UNDEFINED_FUNCTION_CALLED,
+                                                      this, args);
         Debug.trace(e);
         return signal(new LispError("Null pointer exception"));
     }
@@ -2831,6 +2849,8 @@ public class Symbol extends LispObject
         PACKAGE_SYS.addExternalSymbol("GETHASH1");
     public static final Symbol PUTHASH =
         PACKAGE_SYS.addExternalSymbol("PUTHASH");
+    public static final Symbol UNDEFINED_FUNCTION_CALLED =
+        PACKAGE_SYS.addExternalSymbol("UNDEFINED-FUNCTION-CALLED");
 
     // Internal symbols in SYSTEM package.
     public static final Symbol BACKQUOTE_MACRO =
