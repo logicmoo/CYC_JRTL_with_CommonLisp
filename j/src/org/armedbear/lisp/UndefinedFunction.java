@@ -2,7 +2,7 @@
  * UndefinedFunction.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: UndefinedFunction.java,v 1.15 2005-12-19 18:25:01 piso Exp $
+ * $Id: UndefinedFunction.java,v 1.16 2005-12-19 18:26:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,40 +23,40 @@ package org.armedbear.lisp;
 
 public final class UndefinedFunction extends CellError
 {
-    // obj is either the name of the undefined function or an initArgs list.
-    public UndefinedFunction(LispObject obj) throws ConditionThrowable
-    {
-        super(StandardClass.UNDEFINED_FUNCTION);
-        if (obj instanceof Cons)
-            initialize(obj);
-        else
-            setCellName(obj);
-    }
+  // obj is either the name of the undefined function or an initArgs list.
+  public UndefinedFunction(LispObject obj) throws ConditionThrowable
+  {
+    super(StandardClass.UNDEFINED_FUNCTION);
+    if (obj instanceof Cons)
+      initialize(obj);
+    else
+      setCellName(obj);
+  }
 
-    public LispObject typeOf()
-    {
-        return Symbol.UNDEFINED_FUNCTION;
-    }
+  public LispObject typeOf()
+  {
+    return Symbol.UNDEFINED_FUNCTION;
+  }
 
-    public LispObject classOf()
-    {
-        return StandardClass.UNDEFINED_FUNCTION;
-    }
+  public LispObject classOf()
+  {
+    return StandardClass.UNDEFINED_FUNCTION;
+  }
 
-    public LispObject typep(LispObject type) throws ConditionThrowable
-    {
-        if (type == Symbol.UNDEFINED_FUNCTION)
-            return T;
-        if (type == StandardClass.UNDEFINED_FUNCTION)
-            return T;
-        return super.typep(type);
-    }
+  public LispObject typep(LispObject type) throws ConditionThrowable
+  {
+    if (type == Symbol.UNDEFINED_FUNCTION)
+      return T;
+    if (type == StandardClass.UNDEFINED_FUNCTION)
+      return T;
+    return super.typep(type);
+  }
 
-    public String getMessage() throws ConditionThrowable
-    {
-        FastStringBuffer sb = new FastStringBuffer("The function ");
-        sb.append(getCellName().writeToString());
-        sb.append(" is undefined.");
-        return sb.toString();
-    }
+  public String getMessage() throws ConditionThrowable
+  {
+    FastStringBuffer sb = new FastStringBuffer("The function ");
+    sb.append(getCellName().writeToString());
+    sb.append(" is undefined.");
+    return sb.toString();
+  }
 }
