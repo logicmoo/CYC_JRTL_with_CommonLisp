@@ -1,7 +1,7 @@
 ;;; restart.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: restart.lisp,v 1.20 2005-05-25 15:53:16 piso Exp $
+;;; $Id: restart.lisp,v 1.21 2005-12-19 18:27:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -96,20 +96,17 @@
   (let ((real-restart (find-restart-or-control-error restart)))
     (apply (restart-function real-restart) values)))
 
-;;; INVOKE-RESTART-INTERACTIVELY (from CMUCL)
-(defun %invoke-restart-interactively (restart)
-  (apply (restart-function restart)
-	 (let ((interactive-function (restart-interactive-function restart)))
-	   (if interactive-function
-	       (funcall interactive-function)
-	       ()))))
+(defun interactive-restart-arguments (real-restart)
+  (let ((interactive-function (restart-interactive-function real-restart)))
+    (if interactive-function
+        (funcall interactive-function)
+        '())))
 
 (defun invoke-restart-interactively (restart)
-  (let ((real-restart (or (find-restart restart)
-                          (error 'control-error
-                                 :format-control "Restart ~s is not active."
-                                 :format-arguments (list restart)))))
-    (%invoke-restart-interactively real-restart)))
+  (let* ((real-restart (find-restart-or-control-error restart))
+         (args (interactive-restart-arguments real-restart)))
+    (apply (restart-function real-restart) args)))
+
 
 (defun parse-keyword-pairs (list keys)
   (do ((l list (cddr l))
@@ -285,3 +282,29 @@
         (signal condition)
         (invoke-debugger condition))))
   nil)
+
+(defun query-function ()
+  (format *query-io* "~&Enter a form to be evaluated: ")
+  (force-output *query-io*)
+  (multiple-value-list (eval (read *query-io*))))
+
+(defun undefined-function-called (name arguments)
+  (finish-output)
+  (loop
+    (restart-case
+        (error 'undefined-function :name name)
+      (continue ()
+        :report "Try again.")
+      (use-value (value)
+        :report "Specify a function to call instead."
+        :interactive query-function
+        (return-from undefined-function-called
+                     (apply value arguments)))
+      (return-value (&rest values)
+        :report (lambda (stream)
+                  (format stream "Return one or more values from the call to ~S." name))
+        :interactive query-function
+        (return-from undefined-function-called
+                     (values-list values))))
+    (when (fboundp name)
+      (return (apply name arguments)))))
