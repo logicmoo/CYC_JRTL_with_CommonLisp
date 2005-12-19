@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: top-level.lisp,v 1.50 2005-09-28 14:39:10 piso Exp $
+;;; $Id: top-level.lisp,v 1.51 2005-12-19 18:27:01 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -381,7 +381,7 @@
              (let ((n form)
                    (restarts (compute-restarts)))
                (if (< -1 n (length restarts))
-                   (invoke-restart (nth n restarts))
+                   (invoke-restart-interactively (nth n restarts))
                    (return form))))
             (t
              (return form))))))
