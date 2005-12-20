@@ -2,7 +2,7 @@
  * ClosureTemplateFunction.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: ClosureTemplateFunction.java,v 1.10 2005-08-22 00:13:51 piso Exp $
+ * $Id: ClosureTemplateFunction.java,v 1.11 2005-12-20 18:56:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,208 +23,208 @@ package org.armedbear.lisp;
 
 public abstract class ClosureTemplateFunction extends Closure
 {
-    public ClosureTemplateFunction(LispObject lambdaList)
-        throws ConditionThrowable
-    {
-        super(list2(Symbol.LAMBDA, lambdaList), null);
-    }
+  public ClosureTemplateFunction(LispObject lambdaList)
+    throws ConditionThrowable
+  {
+    super(list2(Symbol.LAMBDA, lambdaList), null);
+  }
 
-    public final LispObject execute() throws ConditionThrowable
-    {
-        return notImplemented();
-    }
+  public final LispObject execute() throws ConditionThrowable
+  {
+    return notImplemented();
+  }
 
-    public final LispObject execute(LispObject arg) throws ConditionThrowable
-    {
-        return notImplemented();
-    }
+  public final LispObject execute(LispObject arg) throws ConditionThrowable
+  {
+    return notImplemented();
+  }
 
-    public final LispObject execute(LispObject first, LispObject second)
-        throws ConditionThrowable
-    {
-        return notImplemented();
-    }
+  public final LispObject execute(LispObject first, LispObject second)
+    throws ConditionThrowable
+  {
+    return notImplemented();
+  }
 
-    public final LispObject execute(LispObject first, LispObject second,
-                                    LispObject third)
-        throws ConditionThrowable
-    {
-        return notImplemented();
-    }
+  public final LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+    throws ConditionThrowable
+  {
+    return notImplemented();
+  }
 
-    public final LispObject execute(LispObject first, LispObject second,
-                                    LispObject third, LispObject fourth)
-        throws ConditionThrowable
-    {
-        return notImplemented();
-    }
+  public final LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth)
+    throws ConditionThrowable
+  {
+    return notImplemented();
+  }
 
-    public final LispObject execute(LispObject first, LispObject second,
-                                    LispObject third, LispObject fourth,
-                                    LispObject fifth)
-        throws ConditionThrowable
-    {
-        return notImplemented();
-    }
+  public final LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth,
+                                  LispObject fifth)
+    throws ConditionThrowable
+  {
+    return notImplemented();
+  }
 
-    public final LispObject execute(LispObject first, LispObject second,
-                                    LispObject third, LispObject fourth,
-                                    LispObject fifth, LispObject sixth)
-        throws ConditionThrowable
-    {
-        return notImplemented();
-    }
+  public final LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth,
+                                  LispObject fifth, LispObject sixth)
+    throws ConditionThrowable
+  {
+    return notImplemented();
+  }
 
-    public final LispObject execute(LispObject first, LispObject second,
-                                    LispObject third, LispObject fourth,
-                                    LispObject fifth, LispObject sixth,
-                                    LispObject seventh)
-        throws ConditionThrowable
-    {
-        return notImplemented();
-    }
+  public final LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth,
+                                  LispObject fifth, LispObject sixth,
+                                  LispObject seventh)
+    throws ConditionThrowable
+  {
+    return notImplemented();
+  }
 
-    public final LispObject execute(LispObject first, LispObject second,
-                                    LispObject third, LispObject fourth,
-                                    LispObject fifth, LispObject sixth,
-                                    LispObject seventh, LispObject eighth)
-        throws ConditionThrowable
-    {
-        return notImplemented();
-    }
+  public final LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth,
+                                  LispObject fifth, LispObject sixth,
+                                  LispObject seventh, LispObject eighth)
+    throws ConditionThrowable
+  {
+    return notImplemented();
+  }
 
-    private final LispObject notImplemented() throws ConditionThrowable
-    {
-        return signal(new WrongNumberOfArgumentsException(this));
-    }
+  private final LispObject notImplemented() throws ConditionThrowable
+  {
+    return signal(new WrongNumberOfArgumentsException(this));
+  }
 
-    // Zero args.
-    public LispObject execute(LispObject[] context) throws ConditionThrowable
-    {
-        LispObject[] args = new LispObject[0];
-        return execute(context, args);
-    }
+  // Zero args.
+  public LispObject execute(LispObject[] context) throws ConditionThrowable
+  {
+    LispObject[] args = new LispObject[0];
+    return execute(context, args);
+  }
 
-    // One arg.
-    public LispObject execute(LispObject[] context, LispObject first)
-        throws ConditionThrowable
-    {
-        LispObject[] args = new LispObject[1];
-        args[0] = first;
-        return execute(context, args);
-    }
+  // One arg.
+  public LispObject execute(LispObject[] context, LispObject first)
+    throws ConditionThrowable
+  {
+    LispObject[] args = new LispObject[1];
+    args[0] = first;
+    return execute(context, args);
+  }
 
-    // Two args.
-    public LispObject execute(LispObject[] context, LispObject first,
-                              LispObject second)
-        throws ConditionThrowable
-    {
-        LispObject[] args = new LispObject[2];
-        args[0] = first;
-        args[1] = second;
-        return execute(context, args);
-    }
+  // Two args.
+  public LispObject execute(LispObject[] context, LispObject first,
+                            LispObject second)
+    throws ConditionThrowable
+  {
+    LispObject[] args = new LispObject[2];
+    args[0] = first;
+    args[1] = second;
+    return execute(context, args);
+  }
 
-    // Three args.
-    public LispObject execute(LispObject[] context, LispObject first,
-                              LispObject second, LispObject third)
-        throws ConditionThrowable
-    {
-        LispObject[] args = new LispObject[3];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        return execute(context, args);
-    }
+  // Three args.
+  public LispObject execute(LispObject[] context, LispObject first,
+                            LispObject second, LispObject third)
+    throws ConditionThrowable
+  {
+    LispObject[] args = new LispObject[3];
+    args[0] = first;
+    args[1] = second;
+    args[2] = third;
+    return execute(context, args);
+  }
 
-    // Four args.
-    public LispObject execute(LispObject[] context, LispObject first,
-                              LispObject second, LispObject third,
-                              LispObject fourth)
-        throws ConditionThrowable
-    {
-        LispObject[] args = new LispObject[4];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        args[3] = fourth;
-        return execute(context, args);
-    }
+  // Four args.
+  public LispObject execute(LispObject[] context, LispObject first,
+                            LispObject second, LispObject third,
+                            LispObject fourth)
+    throws ConditionThrowable
+  {
+    LispObject[] args = new LispObject[4];
+    args[0] = first;
+    args[1] = second;
+    args[2] = third;
+    args[3] = fourth;
+    return execute(context, args);
+  }
 
-    // Five args.
-    public LispObject execute(LispObject[] context, LispObject first,
-                              LispObject second, LispObject third,
-                              LispObject fourth, LispObject fifth)
-        throws ConditionThrowable
-    {
-        LispObject[] args = new LispObject[5];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        args[3] = fourth;
-        args[4] = fifth;
-        return execute(context, args);
-    }
+  // Five args.
+  public LispObject execute(LispObject[] context, LispObject first,
+                            LispObject second, LispObject third,
+                            LispObject fourth, LispObject fifth)
+    throws ConditionThrowable
+  {
+    LispObject[] args = new LispObject[5];
+    args[0] = first;
+    args[1] = second;
+    args[2] = third;
+    args[3] = fourth;
+    args[4] = fifth;
+    return execute(context, args);
+  }
 
-    // Six args.
-    public LispObject execute(LispObject[] context, LispObject first,
-                              LispObject second, LispObject third,
-                              LispObject fourth, LispObject fifth,
-                              LispObject sixth)
-        throws ConditionThrowable
-    {
-        LispObject[] args = new LispObject[6];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        args[3] = fourth;
-        args[4] = fifth;
-        args[5] = sixth;
-        return execute(context, args);
-    }
+  // Six args.
+  public LispObject execute(LispObject[] context, LispObject first,
+                            LispObject second, LispObject third,
+                            LispObject fourth, LispObject fifth,
+                            LispObject sixth)
+    throws ConditionThrowable
+  {
+    LispObject[] args = new LispObject[6];
+    args[0] = first;
+    args[1] = second;
+    args[2] = third;
+    args[3] = fourth;
+    args[4] = fifth;
+    args[5] = sixth;
+    return execute(context, args);
+  }
 
-    // Seven args.
-    public LispObject execute(LispObject[] context, LispObject first,
-                              LispObject second, LispObject third,
-                              LispObject fourth, LispObject fifth,
-                              LispObject sixth, LispObject seventh)
-        throws ConditionThrowable
-    {
-        LispObject[] args = new LispObject[7];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        args[3] = fourth;
-        args[4] = fifth;
-        args[5] = sixth;
-        args[6] = seventh;
-        return execute(context, args);
-    }
+  // Seven args.
+  public LispObject execute(LispObject[] context, LispObject first,
+                            LispObject second, LispObject third,
+                            LispObject fourth, LispObject fifth,
+                            LispObject sixth, LispObject seventh)
+    throws ConditionThrowable
+  {
+    LispObject[] args = new LispObject[7];
+    args[0] = first;
+    args[1] = second;
+    args[2] = third;
+    args[3] = fourth;
+    args[4] = fifth;
+    args[5] = sixth;
+    args[6] = seventh;
+    return execute(context, args);
+  }
 
-    // Eight args.
-    public LispObject execute(LispObject[] context, LispObject first,
-                              LispObject second, LispObject third,
-                              LispObject fourth, LispObject fifth,
-                              LispObject sixth, LispObject seventh,
-                              LispObject eighth)
-        throws ConditionThrowable
-    {
-        LispObject[] args = new LispObject[8];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        args[3] = fourth;
-        args[4] = fifth;
-        args[5] = sixth;
-        args[6] = seventh;
-        args[7] = eighth;
-        return execute(context, args);
-    }
+  // Eight args.
+  public LispObject execute(LispObject[] context, LispObject first,
+                            LispObject second, LispObject third,
+                            LispObject fourth, LispObject fifth,
+                            LispObject sixth, LispObject seventh,
+                            LispObject eighth)
+    throws ConditionThrowable
+  {
+    LispObject[] args = new LispObject[8];
+    args[0] = first;
+    args[1] = second;
+    args[2] = third;
+    args[3] = fourth;
+    args[4] = fifth;
+    args[5] = sixth;
+    args[6] = seventh;
+    args[7] = eighth;
+    return execute(context, args);
+  }
 
-    // Arg array.
-    public LispObject execute(LispObject[] context, LispObject[] args)
-        throws ConditionThrowable
-    {
-        return notImplemented();
-    }
+  // Arg array.
+  public LispObject execute(LispObject[] context, LispObject[] args)
+    throws ConditionThrowable
+  {
+    return notImplemented();
+  }
 }
