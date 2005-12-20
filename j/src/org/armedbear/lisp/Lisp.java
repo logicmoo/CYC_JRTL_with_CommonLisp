@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.426 2005-12-20 12:26:52 piso Exp $
+ * $Id: Lisp.java,v 1.427 2005-12-20 21:01:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1038,10 +1038,17 @@ public abstract class Lisp
         return null;
     }
 
-    public static final LispObject makeCompiledClosure(LispObject ctf,
+    public static final LispObject makeCompiledClosure(LispObject template,
                                                        LispObject[] context)
+        throws ConditionThrowable
     {
-        return new CompiledClosure((ClosureTemplateFunction)ctf, context);
+        ClosureTemplateFunction ctf = (ClosureTemplateFunction) template;
+        CompiledClosure result = new CompiledClosure(ctf, context);
+        LispObject classBytes =
+            getf(ctf.getPropertyList(), Symbol.CLASS_BYTES, NIL);
+        if (classBytes != NIL)
+            result.setPropertyList(list2(Symbol.CLASS_BYTES, classBytes));
+        return result;
     }
 
     public static final String safeWriteToString(LispObject obj)
