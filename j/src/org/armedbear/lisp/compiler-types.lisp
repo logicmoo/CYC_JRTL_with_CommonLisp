@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-types.lisp,v 1.17 2005-12-14 23:54:16 piso Exp $
+;;; $Id: compiler-types.lisp,v 1.18 2005-12-20 09:45:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -40,30 +40,32 @@
   low
   high)
 
-(defconstant +fixnum-type+ (%make-integer-type most-negative-fixnum most-positive-fixnum))
+(defconstant +fixnum-type+  (%make-integer-type most-negative-fixnum
+                                                most-positive-fixnum))
 (defconstant +integer-type+ (%make-integer-type nil nil))
 
 (declaim (ftype (function (t) t) make-integer-type))
 (defun make-integer-type (type)
   (if (integer-type-p type)
       type
-      (case type
-        (FIXNUM +fixnum-type+)
-        (INTEGER +integer-type+)
-        (t
-         (setf type (normalize-type type))
-         (when (and (consp type) (eq (%car type) 'INTEGER))
-           (let ((low (second type))
-                 (high (third type)))
-             (if (eq low '*)
-                 (setf low nil)
-                 (when (and (consp low) (integerp (%car low)))
-                   (setf low (1+ (%car low)))))
-             (if (eq high '*)
-                 (setf high nil)
-                 (when (and (consp high) (integerp (%car high)))
-                   (setf high (1- (%car high)))))
-             (%make-integer-type low high)))))))
+      (cond ((eq type 'FIXNUM)
+             +fixnum-type+)
+            ((eq type 'INTEGER)
+             +integer-type+)
+            (t
+             (setf type (normalize-type type))
+             (when (and (consp type) (eq (%car type) 'INTEGER))
+               (let ((low (second type))
+                     (high (third type)))
+                 (if (eq low '*)
+                     (setf low nil)
+                     (when (and (consp low) (integerp (%car low)))
+                       (setf low (1+ (%car low)))))
+                 (if (eq high '*)
+                     (setf high nil)
+                     (when (and (consp high) (integerp (%car high)))
+                       (setf high (1- (%car high)))))
+                 (%make-integer-type low high)))))))
 
 (declaim (ftype (function (t) t) fixnum-type-p))
 (defun fixnum-type-p (compiler-type)
@@ -99,18 +101,43 @@
        (typep (integer-type-high compiler-type)
               (list 'INTEGER most-negative-java-long most-positive-java-long))))
 
+
+(declaim (ftype (function (t t) t) make-union-type))
+(defun make-union-type (type1 type2)
+  (cond ((and (integer-type-p type1)
+              (integer-type-p type2))
+         (let ((low1 (integer-type-low type1))
+               (low2 (integer-type-low type2))
+               (high1 (integer-type-high type1))
+               (high2 (integer-type-high type2)))
+           (if (and low1 low2 high1 high2)
+               (%make-integer-type (min low1 low2) (max high1 high2))
+               +integer-type+)))
+        (t
+         t)))
+
+(declaim (ftype (function (t) t) make-compiler-type))
 (defun make-compiler-type (typespec)
   (if (integer-type-p typespec)
       typespec
       (let ((type (normalize-type typespec)))
         (cond ((consp type)
-               (case (%car type)
+               (case (first type)
                  (INTEGER
                   (make-integer-type type))
                  (SIMPLE-STRING
                   'SIMPLE-STRING)
                  (STRING
                   'STRING)
+                 (OR
+                  (case (length (cdr type))
+                    (1
+                     (make-compiler-type (second type)))
+                    (2
+                     (make-union-type (make-compiler-type (second type))
+                                      (make-compiler-type (third type))))
+                    (t
+                     t)))
                  (t
                   t)))
               ((memq type '(BOOLEAN CHARACTER HASH-TABLE STREAM SYMBOL))
