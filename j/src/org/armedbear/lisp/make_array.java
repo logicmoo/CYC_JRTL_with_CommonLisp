@@ -2,7 +2,7 @@
  * make_array.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: make_array.java,v 1.30 2005-12-20 11:51:43 piso Exp $
+ * $Id: make_array.java,v 1.31 2005-12-20 12:02:18 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -190,7 +190,7 @@ public final class make_array extends Primitive
                   v.aset(i, initialContents.elt(i));
               }
             else
-              return signal(new TypeError(initialContents, Symbol.SEQUENCE));
+              return signalTypeError(initialContents, Symbol.SEQUENCE);
           }
         if (fillPointer != NIL)
           v.setFillPointer(fillPointer);
