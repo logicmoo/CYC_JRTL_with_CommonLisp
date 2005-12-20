@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.702 2005-12-20 10:13:58 piso Exp $
+;;; $Id: jvm.lisp,v 1.703 2005-12-20 11:01:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -7071,39 +7071,40 @@ representation, based on the derived type of the LispObject."
     result-type))
 
 (defun derive-type-times (form)
-  (let ((args (cdr form)))
+  (let ((args (cdr form))
+        (result-type t))
     (when (= (length args) 2)
       (let ((arg1 (%car args))
             (arg2 (%cadr args)))
-      (when (and (integerp arg1) (integerp arg2))
-        (let ((n (* arg1 arg2)))
-          (return-from derive-type-times (list 'INTEGER n n))))
-      (let ((type1 (make-integer-type (derive-type arg1)))
-            type2)
-        (when type1
-          (setf type2 (make-integer-type (derive-type arg2)))
-          (when type2
-            ;; Both integer types.
-            (let ((low1 (integer-type-low type1))
-                  (high1 (integer-type-high type1))
-                  (low2 (integer-type-low type2))
-                  (high2 (integer-type-high type2))
-                  low high)
-              (cond ((not (and (integerp low1) (integerp low2)))
-                     (setf low '* high '*))
-                    ((or (minusp low1) (minusp low2))
-                     (if (and (integerp high1) (integerp high2))
+        (when (and (integerp arg1) (integerp arg2))
+          (let ((n (* arg1 arg2)))
+            (return-from derive-type-times (%make-integer-type n n))))
+      (let ((type1 (derive-compiler-type arg1)))
+        (when (integer-type-p type1)
+          (let ((type2 (derive-compiler-type arg2)))
+            (when (integer-type-p type2)
+              ;; Both integer types.
+              (let ((low1 (integer-type-low type1))
+                    (high1 (integer-type-high type1))
+                    (low2 (integer-type-low type2))
+                    (high2 (integer-type-high type2))
+                    (low nil)
+                    (high nil))
+                (cond ((not (and low1 low2))
+                       ;; Nothing to do.
+                       )
+                      ((or (minusp low1) (minusp low2))
+                       (when (and high1 high2)
                          (let ((max (* (max (abs low1) (abs high1))
                                        (max (abs low2) (abs high2)))))
-                           (setf low (- max) high max))
-                         (setf low '* high '*)))
-                    (t
-                     (setf low (* low1 low2)
-                           high (if (and (integerp high1) (integerp high2))
-                                    (* high1 high2)
-                                    '*))))
-              (return-from derive-type-times (list 'INTEGER low high)))))))))
-  t)
+                           (setf low (- max)
+                                 high max))))
+                      (t
+                       (setf low (* low1 low2))
+                       (when (and high1 high2)
+                         (setf high (* high1 high2)))))
+                (setf result-type (%make-integer-type low high)))))))))
+    result-type))
 
 (declaim (ftype (function (t) t) derive-type-max))
 (defun derive-type-max (form)
