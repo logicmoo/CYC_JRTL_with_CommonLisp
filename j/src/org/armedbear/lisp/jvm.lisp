@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.699 2005-12-18 18:54:49 piso Exp $
+;;; $Id: jvm.lisp,v 1.700 2005-12-20 09:42:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -7023,7 +7023,7 @@ representation, based on the derived type of the LispObject."
                                (max (integer-length low) (integer-length high)))))))))
   (list 'INTEGER 0 '*))
 
-(declaim (ftype (function (t) t) derive-type-minus))
+(defknown derive-type-minus (t) t)
 (defun derive-type-minus (form)
   (let ((args (cdr form))
         (result-type t))
@@ -7037,10 +7037,10 @@ representation, based on the derived type of the LispObject."
                   (result-high (if (integerp low) (- low) '*)))
              (setf result-type (list 'INTEGER result-low result-high))))))
       (2
-       (let ((type1 (make-integer-type (derive-type (%car args)))))
-         (when type1
-           (let ((type2 (make-integer-type (derive-type (%cadr args)))))
-             (when type2
+       (let ((type1 (derive-compiler-type (%car args))))
+         (when (integer-type-p type1)
+           (let ((type2 (derive-compiler-type (%cadr args))))
+             (when (integer-type-p type2)
                ;; Both integer types.
                (let ((low1 (integer-type-low type1))
                      (high1 (integer-type-high type1))
