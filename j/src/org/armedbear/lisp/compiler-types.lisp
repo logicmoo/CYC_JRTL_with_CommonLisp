@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-types.lisp,v 1.18 2005-12-20 09:45:00 piso Exp $
+;;; $Id: compiler-types.lisp,v 1.19 2005-12-20 09:56:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -24,6 +24,7 @@
 (export '(integer-type-low
           integer-type-high
           integer-type-p
+          %make-integer-type
           make-integer-type
           +fixnum-type+
           +integer-type+
