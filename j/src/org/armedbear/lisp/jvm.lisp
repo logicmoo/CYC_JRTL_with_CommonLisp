@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.700 2005-12-20 09:42:24 piso Exp $
+;;; $Id: jvm.lisp,v 1.701 2005-12-20 09:57:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -7042,18 +7042,13 @@ representation, based on the derived type of the LispObject."
            (let ((type2 (derive-compiler-type (%cadr args))))
              (when (integer-type-p type2)
                ;; Both integer types.
-               (let ((low1 (integer-type-low type1))
-                     (high1 (integer-type-high type1))
-                     (low2 (integer-type-low type2))
-                     (high2 (integer-type-high type2))
-                     low high)
-                 (setf low (if (and (integerp low1) (integerp high2))
-                               (- low1 high2)
-                               '*)
-                       high (if (and (integerp high1) (integerp low2))
-                                (- high1 low2)
-                                '*))
-                 (setf result-type (list 'INTEGER low high)))))))))
+               (let* ((low1 (integer-type-low type1))
+                      (high1 (integer-type-high type1))
+                      (low2 (integer-type-low type2))
+                      (high2 (integer-type-high type2))
+                      (low (and low1 high2 (- low1 high2)))
+                      (high (and high1 low2 (- high1 low2))))
+                 (setf result-type (%make-integer-type low high)))))))))
     result-type))
 
 (defknown derive-type-plus (t) t)
