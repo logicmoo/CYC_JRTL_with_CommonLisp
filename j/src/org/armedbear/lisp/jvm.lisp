@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.709 2005-12-21 19:31:44 piso Exp $
+;;; $Id: jvm.lisp,v 1.710 2005-12-21 22:17:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -280,14 +280,6 @@
         (t
          nil)))
 
-(defun arg-is-fixnum-p (arg)
-  (or (fixnump arg)
-      (unboxed-fixnum-variable arg)
-;;       (and (consp arg)
-;;            (eq (car arg) 'THE)
-;;            (subtypep (cadr arg) 'FIXNUM))
-      ))
-
 ;; True for local functions defined with FLET or LABELS.
 (defvar *child-p* nil)
 
@@ -302,13 +294,6 @@
   (dolist (variable *visible-variables*)
     (when (eq name (variable-name variable))
       (return variable))))
-
-(defun unboxed-fixnum-variable-p (obj)
-;;   (let ((variable (and (symbolp obj)
-;;                        (find-visible-variable obj))))
-;;     (and variable
-;;          (eq (variable-representation variable) :int))))
-  (unboxed-fixnum-variable obj))
 
 (defknown allocate-register () (integer 0 65535))
 (defun allocate-register ()
@@ -329,9 +314,8 @@
 
 (defvar *local-functions* ())
 
-(declaim (ftype (function (t) t) find-local-function))
+(defknown find-local-function (t) t)
 (defun find-local-function (name)
-;;   (find name *local-functions* :key #'local-function-name :test #'equal)
   (dolist (local-function *local-functions* nil)
     (when (equal name (local-function-name local-function))
         (return local-function))))
@@ -4484,25 +4468,25 @@ representation, based on the derived type of the LispObject."
   (when (= (length form) 3)
     (let* ((arg1 (%cadr form))
            (arg2 (%caddr form))
-           (type1 (derive-type arg1))
-           (type2 (derive-type arg2)))
-      (cond ((and (fixnump arg1) (fixnump arg2))
+           (type1 (derive-compiler-type arg1))
+           (type2 (derive-compiler-type arg2)))
+      (cond ((and (numberp arg1) (numberp arg2))
              (if (/= arg1 arg2) :consequent :alternate))
-            ((and (subtypep type1 'fixnum)
-                  (subtypep type2 'fixnum))
+            ((and (fixnum-type-p type1)
+                  (fixnum-type-p type2))
              (compile-form arg1 'stack :int)
              (compile-form arg2 'stack :int)
              (maybe-emit-clear-values arg1 arg2)
              'if_icmpeq)
-            ((subtypep type2 'fixnum)
+            ((fixnum-type-p type2)
              (compile-form arg1 'stack nil)
              (compile-form arg2 'stack :int)
              (maybe-emit-clear-values arg1 arg2)
              (emit-invokevirtual +lisp-object-class+ "isNotEqualTo" '("I") "Z")
              'ifeq)
-            ((subtypep type1 'fixnum)
-             ;; FIXME We can compile the args in reverse order and avoid
-             ;; the swap if either arg is a fixnum or a lexical variable.
+            ((fixnum-type-p type1)
+             ;; FIXME Compile the args in reverse order and avoid the swap if
+             ;; either arg is a fixnum or a lexical variable.
              (compile-form arg1 'stack :int)
              (compile-form arg2 'stack nil)
              (maybe-emit-clear-values arg1 arg2)
@@ -6233,12 +6217,23 @@ representation, based on the derived type of the LispObject."
            (convert-long representation)
            (emit-move-from-stack target representation))
           ((fixnum-type-p type2)
-           (compile-form arg1 'stack nil)
-           (compile-form arg2 'stack :int)
-           (maybe-emit-clear-values arg1 arg2)
-           (emit-invokevirtual +lisp-object-class+ "ash" '("I") +lisp-object+)
-           (fix-boxing representation result-type)
-           (emit-move-from-stack target representation))
+           (let ((low2 (integer-type-low type2))
+                 (high2 (integer-type-high type2)))
+             (cond ((and low2 high2 (<= 0 low2 high2 63) ;; Non-negative shift.
+                         (java-long-type-p type1)
+                         (java-long-type-p result-type))
+                    (compile-form arg1 'stack :long)
+                    (compile-form arg2 'stack :int)
+                    (maybe-emit-clear-values arg1 arg2)
+                    (emit 'lshl)
+                    (convert-long representation))
+                   (t
+                    (compile-form arg1 'stack nil)
+                    (compile-form arg2 'stack :int)
+                    (maybe-emit-clear-values arg1 arg2)
+                    (emit-invokevirtual +lisp-object-class+ "ash" '("I") +lisp-object+)
+                    (fix-boxing representation result-type)))
+             (emit-move-from-stack target representation)))
           (t
            (compile-function-call form target representation)))))
 
@@ -7143,25 +7138,41 @@ representation, based on the derived type of the LispObject."
 (defknown derive-type-ash (t) t)
 (defun derive-type-ash (form)
   (let* ((args (cdr form))
-         (arg1 (car args))
-         (arg2 (cadr args))
+         (arg1 (first args))
+         (arg2 (second args))
          (type1 (derive-compiler-type arg1))
          (type2 (derive-compiler-type arg2))
          (result-type 'INTEGER))
 ;;     (format t "derive-type-ash type1 = ~S~%" type1)
 ;;     (format t "derive-type-ash type2 = ~S~%" type2)
-    (when (integer-type-p type1)
-      (let ((low (integer-type-low type1))
-            (high (integer-type-high type1)))
-        (when (fixnum-constant-value type2)
-          (setf arg2 (fixnum-constant-value type2)))
-        (when (and low high (fixnump arg2))
-          (cond ((<= -32 arg2 32)
-                 (setf result-type (list 'INTEGER (ash low arg2) (ash high arg2))))
-                ((minusp arg2)
+    (when (and (integer-type-p type1) (integer-type-p type2))
+      (let ((low1 (integer-type-low type1))
+            (high1 (integer-type-high type1))
+            (low2 (integer-type-low type2))
+            (high2 (integer-type-high type2)))
+        (when (and low1 high1 low2 high2)
+          (cond ((fixnum-constant-value type2)
+                 (setf arg2 (fixnum-constant-value type2))
+                 (cond ((<= -64 arg2 64)
+                        (setf result-type
+                              (list 'INTEGER (ash low1 arg2) (ash high1 arg2))))
+                       ((minusp arg2)
+                        (setf result-type
+                              (list 'INTEGER
+                                    (if (minusp low1) -1 0)
+                                    (if (minusp high1) -1 0))))))
+                ((and (fixnump low1) (fixnump high1) (fixnump low2) (fixnump high2)
+                      (>= low1 0) (>= high1 0) (>= low2 0) (>= high2 0))
+                 ;; Everything is non-negative.
                  (setf result-type (list 'INTEGER
-                                         (if (minusp low) -1 0)
-                                         (if (minusp high) -1 0))))))))
+                                         (ash low1 low2)
+                                         (ash high1 high2))))
+                ((and (fixnump low1) (fixnump high1) (fixnump low2) (fixnump high2)
+                      (>= low1 0) (>= high1 0) (<= low2 0) (<= high2 0))
+                 ;; Negative (or zero) second argument.
+                 (setf result-type (list 'INTEGER
+                                         (ash low1 low2)
+                                         (ash high1 high2))))))))
 ;;     (format t "derive-type-ash result-type = ~S~%" result-type)
     (make-compiler-type result-type)))
 
@@ -8162,15 +8173,13 @@ representation, based on the derived type of the LispObject."
                  (fix-boxing representation (variable-derived-type variable))
                  (emit-move-from-stack target representation))
                 ((variable-closure-index variable)
-                 (dformat t "closure-index = ~S~%" (variable-closure-index variable))
                  (aver (not (null (compiland-closure-register *current-compiland*))))
                  (emit 'aload (compiland-closure-register *current-compiland*))
                  (emit-push-constant-int (variable-closure-index variable))
                  (emit 'aaload)
-                 (fix-boxing representation (variable-derived-type variable))
+                 (fix-boxing representation (derive-type ref))
                  (emit-move-from-stack target representation))
                 ((variable-index variable)
-                 (dformat t "index = ~S~%" (variable-index variable))
                  (aver (not (null (compiland-argument-register *current-compiland*))))
                  (emit 'aload (compiland-argument-register *current-compiland*))
                  (emit-push-constant-int (variable-index variable))
@@ -8527,11 +8536,6 @@ representation, based on the derived type of the LispObject."
            (compile-form value-form 'stack nil)
            (generate-type-check-for-value type-form)
            ;; The value is left on the stack here if the type check succeeded.
-;;            (when (eq representation :int)
-;;              (emit-unbox-fixnum))
-;;            (case representation
-;;              (:int (emit-unbox-fixnum))
-;;              (:char (emit-unbox-character)))
            (fix-boxing representation nil)
            (emit-move-from-stack target representation))
           (t

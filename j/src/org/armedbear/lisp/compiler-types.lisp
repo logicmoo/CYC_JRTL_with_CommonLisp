@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-types.lisp,v 1.20 2005-12-21 03:14:16 piso Exp $
+;;; $Id: compiler-types.lisp,v 1.21 2005-12-21 22:17:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -145,6 +145,8 @@
                         t))))
               ((memq type '(BOOLEAN CHARACTER HASH-TABLE STREAM SYMBOL))
                type)
+              ((eq type 'INTEGER)
+               (%make-integer-type nil nil))
               (t
                t)))))
 
