@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.707 2005-12-21 12:44:44 piso Exp $
+;;; $Id: jvm.lisp,v 1.708 2005-12-21 18:17:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -7515,7 +7515,30 @@ representation, based on the derived type of the LispObject."
                     (convert-long representation)
                     (emit-move-from-stack target representation))
                    (t
-                    (compile-function-call form target representation))))))
+                    (let* ((*register* *register*)
+                           (reg1 (allocate-register))
+                           (reg2 (allocate-register)))
+                      (compile-form arg1 'stack nil)
+                      (emit 'dup)
+                      (emit 'astore reg1)
+                      (compile-form arg2 'stack nil)
+                      (emit 'dup)
+                      (emit 'astore reg2)
+                      (emit-invokevirtual +lisp-object-class+
+                                          (if (eq op 'min)
+                                              "isLessThanOrEqualTo"
+                                              "isGreaterThanOrEqualTo")
+                                          (lisp-object-arg-types 1) "Z")
+                      (let ((LABEL1 (gensym))
+                            (LABEL2 (gensym)))
+                        (emit 'ifeq LABEL1)
+                        (emit 'aload reg1)
+                        (emit 'goto LABEL2)
+                        (label LABEL1)
+                        (emit 'aload reg2)
+                        (label LABEL2)))
+                    (fix-boxing representation nil)
+                    (emit-move-from-stack target representation))))))
          (t
           (compile-function-call form target representation))))
 
@@ -8852,18 +8875,10 @@ representation, based on the derived type of the LispObject."
                   (compiler-unsupported "COMPILE-FORM unhandled case ~S" form)))))
         ((symbolp form)
          (cond ((null form)
-                (case representation
-                  (:boolean
-                   (emit 'iconst_0))
-                  (t
-                   (emit-push-nil)))
+                (emit-push-false representation)
                 (emit-move-from-stack target representation))
                ((eq form t)
-                (case representation
-                  (:boolean
-                   (emit 'iconst_1))
-                  (t
-                   (emit-push-t)))
+                (emit-push-true representation)
                 (emit-move-from-stack target representation))
                ((keywordp form)
                 (case representation
