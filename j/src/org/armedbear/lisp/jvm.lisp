@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.705 2005-12-21 03:13:12 piso Exp $
+;;; $Id: jvm.lisp,v 1.706 2005-12-21 11:34:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4264,7 +4264,7 @@ representation, based on the derived type of the LispObject."
 (defun p2-test-minusp (form)
   (when (check-arg-count form 1)
     (let ((arg (%cadr form)))
-      (cond ((subtypep (derive-type arg) 'FIXNUM)
+      (cond ((fixnum-type-p (derive-compiler-type arg))
              (compile-form arg 'stack :int)
              (maybe-emit-clear-values arg)
              'ifge)
@@ -4277,7 +4277,7 @@ representation, based on the derived type of the LispObject."
 (defun p2-test-zerop (form)
   (when (check-arg-count form 1)
     (let ((arg (%cadr form)))
-      (cond ((subtypep (derive-type arg) 'FIXNUM)
+      (cond ((fixnum-type-p (derive-compiler-type arg))
              (compile-form arg 'stack :int)
              (maybe-emit-clear-values arg)
              'ifne)
@@ -4481,7 +4481,7 @@ representation, based on the derived type of the LispObject."
                             (EQUALP "equalp")))
            (arg1 (%cadr form))
            (arg2 (%caddr form)))
-      (cond ((subtypep (derive-type arg2) 'fixnum)
+      (cond ((fixnum-type-p (derive-compiler-type arg2))
              (compile-form arg1 'stack nil)
              (compile-form arg2 'stack :int)
              (maybe-emit-clear-values arg1 arg2)
@@ -6639,17 +6639,17 @@ representation, based on the derived type of the LispObject."
   (let* ((args (cdr form))
          (arg1 (%car args))
          (arg2 (%cadr args))
-         (type1 (derive-type arg1))
-         (type2 (derive-type arg2)))
+         (type1 (derive-compiler-type arg1))
+         (type2 (derive-compiler-type arg2)))
     (cond ((and (eq representation :int)
-                (subtypep type1 'FIXNUM)
-                (subtypep type2 'FIXNUM))
+                (fixnum-type-p type1)
+                (fixnum-type-p type2))
            (compile-form arg1 'stack :int)
            (compile-form arg2 'stack :int)
            (maybe-emit-clear-values arg1 arg2)
            (emit-invokestatic +lisp-class+ "mod" '("I" "I") "I")
            (emit-move-from-stack target representation))
-          ((subtypep type2 'FIXNUM)
+          ((fixnum-type-p type2)
            (compile-form arg1 'stack nil)
            (compile-form arg2 'stack :int)
            (maybe-emit-clear-values arg1 arg2)
@@ -7017,9 +7017,9 @@ representation, based on the derived type of the LispObject."
   (if (= (length form) 3)
       (let* ((arg1 (%cadr form))
              (arg2 (%caddr form))
-             (type1 (normalize-type (derive-type arg1)))
-             (type2 (normalize-type (derive-type arg2))))
-        (cond ((and (subtypep type1 'INTEGER) (subtypep type2 'FIXNUM))
+             (type1 (derive-compiler-type arg1))
+             (type2 (derive-compiler-type arg2)))
+        (cond ((and (integer-type-p type1) (fixnum-type-p type2))
                'FIXNUM)
               (t
                t)))
@@ -7132,8 +7132,8 @@ representation, based on the derived type of the LispObject."
 
 (declaim (ftype (function (t) t) derive-type-max))
 (defun derive-type-max (form)
-  (dolist (arg (cdr form) 'FIXNUM)
-    (unless (subtypep (derive-type arg) 'FIXNUM)
+  (dolist (arg (cdr form) (make-compiler-type 'FIXNUM))
+    (unless (fixnum-type-p (derive-compiler-type arg))
       (return t))))
 
 (defknown derive-type-min (t) t)
@@ -7781,7 +7781,7 @@ representation, based on the derived type of the LispObject."
 
 (defun p2-elt (form target representation)
   (cond ((and (check-arg-count form 2)
-              (subtypep (derive-type (third form)) 'fixnum)
+              (fixnum-type-p (derive-compiler-type (third form)))
               (neq representation :char)) ; FIXME
          (compile-form (second form) 'stack nil)
          (compile-form (third form) 'stack :int)
@@ -8473,7 +8473,7 @@ representation, based on the derived type of the LispObject."
          (generate-instanceof-type-check-for-value 'CONS))
         ((eq declared-type 'HASH-TABLE)
          (generate-instanceof-type-check-for-value 'HASH-TABLE))
-        ((subtypep declared-type 'FIXNUM)
+        ((fixnum-type-p declared-type)
          (generate-instanceof-type-check-for-value 'FIXNUM))
         ((subtypep declared-type 'STRING)
          (generate-instanceof-type-check-for-value 'STRING))
