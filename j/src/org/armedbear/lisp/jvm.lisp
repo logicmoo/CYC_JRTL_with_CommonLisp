@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.706 2005-12-21 11:34:53 piso Exp $
+;;; $Id: jvm.lisp,v 1.707 2005-12-21 12:44:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3894,29 +3894,29 @@ representation, based on the derived type of the LispObject."
         (t
          form)))
 
-(define-source-transform min (&whole form &rest args)
-  (cond ((= (length args) 2)
-         (let* ((arg1 (%car args))
-                (arg2 (%cadr args))
-                (sym1 (gensym))
-                (sym2 (gensym)))
-           `(let ((,sym1 ,arg1)
-                  (,sym2 ,arg2))
-              (if (<= ,sym1 ,sym2) ,sym1 ,sym2))))
-        (t
-         form)))
+;; (define-source-transform min (&whole form &rest args)
+;;   (cond ((= (length args) 2)
+;;          (let* ((arg1 (%car args))
+;;                 (arg2 (%cadr args))
+;;                 (sym1 (gensym))
+;;                 (sym2 (gensym)))
+;;            `(let ((,sym1 ,arg1)
+;;                   (,sym2 ,arg2))
+;;               (if (<= ,sym1 ,sym2) ,sym1 ,sym2))))
+;;         (t
+;;          form)))
 
-(define-source-transform max (&whole form &rest args)
-  (cond ((= (length args) 2)
-         (let* ((arg1 (%car args))
-                (arg2 (%cadr args))
-                (sym1 (gensym))
-                (sym2 (gensym)))
-           `(let ((,sym1 ,arg1)
-                  (,sym2 ,arg2))
-              (if (>= ,sym1 ,sym2) ,sym1 ,sym2))))
-        (t
-         form)))
+;; (define-source-transform max (&whole form &rest args)
+;;   (cond ((= (length args) 2)
+;;          (let* ((arg1 (%car args))
+;;                 (arg2 (%cadr args))
+;;                 (sym1 (gensym))
+;;                 (sym2 (gensym)))
+;;            `(let ((,sym1 ,arg1)
+;;                   (,sym2 ,arg2))
+;;               (if (>= ,sym1 ,sym2) ,sym1 ,sym2))))
+;;         (t
+;;          form)))
 
 (defknown p2-funcall (t t t) t)
 (defun p2-funcall (form target representation)
@@ -7448,39 +7448,76 @@ representation, based on the derived type of the LispObject."
      (dformat t "p2-times case 5~%")
      (compile-function-call form target representation))))
 
+(defknown p2-min/max (t t t) t)
 (defun p2-min/max (form target representation)
   (cond ((= (length form) 3)
          (let* ((op (%car form))
                 (args (%cdr form))
                 (arg1 (%car args))
-                (arg2 (%cadr args))
-                (type1 (derive-compiler-type arg1))
-                (type2 (derive-compiler-type arg2)))
-           (cond ((and (not (notinline-p op))
-                       (fixnum-type-p type1) (fixnum-type-p type2))
-                  (cond (target
-                          (unless (eq representation :int)
-                            (emit 'new +lisp-fixnum-class+)
-                            (emit 'dup))
-                          (compile-form arg1 'stack :int)
-                          (compile-form arg2 'stack :int)
-                          (maybe-emit-clear-values arg1 arg2)
-                          (emit-invokestatic "java/lang/Math"
-                                             (if (eq op 'min) "min" "max")
-                                             '("I" "I") "I")
-                          (unless (eq representation :int)
-                            (emit-invokespecial-init +lisp-fixnum-class+ '("I"))
-                            (fix-boxing representation 'fixnum))
-                          (emit-move-from-stack target representation))
-                        (t
-                         ;; No target.
-                         (compile-form arg1 nil nil)
-                         (compile-form arg2 nil nil)
-                         (maybe-emit-clear-values arg1 arg2))))
-                 (t
-                  (compile-function-call form target representation)))))
-        (t
-         (compile-function-call form target representation))))
+                (arg2 (%cadr args)))
+           (when (null target)
+             (compile-form arg1 nil nil)
+             (compile-form arg2 nil nil)
+             (maybe-emit-clear-values arg1 arg2)
+             (return-from p2-min/max))
+           (when (notinline-p op)
+             (compile-function-call form target representation)
+             (return-from p2-min/max))
+           (let ((type1 (derive-compiler-type arg1))
+                 (type2 (derive-compiler-type arg2)))
+             (cond ((and (fixnum-type-p type1) (fixnum-type-p type2))
+                    (let* ((*register* *register*)
+                           (reg1 (allocate-register))
+                           (reg2 (allocate-register)))
+                      (when (null representation)
+                        (emit 'new +lisp-fixnum-class+)
+                        (emit 'dup))
+                      (compile-form arg1 'stack :int)
+                      (emit 'dup)
+                      (emit 'istore reg1)
+                      (compile-form arg2 'stack :int)
+                      (emit 'dup)
+                      (emit 'istore reg2)
+                      (let ((LABEL1 (gensym))
+                            (LABEL2 (gensym)))
+                        (emit (if (eq op 'min) 'if_icmpge 'if_icmple) LABEL1)
+                        (emit 'iload reg1)
+                        (emit 'goto LABEL2)
+                        (label LABEL1)
+                        (emit 'iload reg2)
+                        (label LABEL2)))
+                    (case representation
+                      (:int)
+                      (:long
+                       (emit 'i2l))
+                      (t
+                       (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
+                    (emit-move-from-stack target representation))
+                   ((and (java-long-type-p type1) (java-long-type-p type2))
+                    (let* ((*register* *register*)
+                           (reg1 (prog1 (allocate-register) (allocate-register)))
+                           (reg2 (prog1 (allocate-register) (allocate-register))))
+                      (compile-form arg1 'stack :long)
+                      (emit 'dup2)
+                      (emit 'lstore reg1)
+                      (compile-form arg2 'stack :long)
+                      (emit 'dup2)
+                      (emit 'lstore reg2)
+                      (emit 'lcmp)
+                      (let ((LABEL1 (gensym))
+                            (LABEL2 (gensym)))
+                        (emit (if (eq op 'min) 'ifge 'ifle) LABEL1)
+                        (emit 'lload reg1)
+                        (emit 'goto LABEL2)
+                        (label LABEL1)
+                        (emit 'lload reg2)
+                        (label LABEL2)))
+                    (convert-long representation)
+                    (emit-move-from-stack target representation))
+                   (t
+                    (compile-function-call form target representation))))))
+         (t
+          (compile-function-call form target representation))))
 
 (defun p2-plus (form target representation)
   (case (length form)
@@ -7726,9 +7763,6 @@ representation, based on the derived type of the LispObject."
            (compile-form arg2 'stack :int) ; index
            (maybe-emit-clear-values arg1 arg2)
            (emit-invokevirtual +lisp-object-class+ "SVREF" '("I") +lisp-object+)
-;;            (case representation
-;;              (:int (emit-unbox-fixnum))
-;;              (:char (emit-unbox-character)))
            (fix-boxing representation nil)
            (emit-move-from-stack target representation)))
         (t
