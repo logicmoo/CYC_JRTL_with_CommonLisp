@@ -2,7 +2,7 @@
  * Environment.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Environment.java,v 1.26 2005-08-26 00:32:56 piso Exp $
+ * $Id: Environment.java,v 1.27 2005-12-21 18:26:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -273,7 +273,7 @@ public final class Environment extends LispObject
 
     // ### empty-environment-p
     private static final Primitive EMPTY_ENVIRONMENT_P =
-        new Primitive("empty-environment-p", PACKAGE_SYS, false, "environment")
+        new Primitive("empty-environment-p", PACKAGE_SYS, true, "environment")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
