@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-types.lisp,v 1.19 2005-12-20 09:56:27 piso Exp $
+;;; $Id: compiler-types.lisp,v 1.20 2005-12-21 03:14:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -123,24 +123,26 @@
       typespec
       (let ((type (normalize-type typespec)))
         (cond ((consp type)
-               (case (first type)
-                 (INTEGER
-                  (make-integer-type type))
-                 (SIMPLE-STRING
-                  'SIMPLE-STRING)
-                 (STRING
-                  'STRING)
-                 (OR
-                  (case (length (cdr type))
-                    (1
-                     (make-compiler-type (second type)))
-                    (2
-                     (make-union-type (make-compiler-type (second type))
-                                      (make-compiler-type (third type))))
-                    (t
-                     t)))
-                 (t
-                  t)))
+               (let ((car (%car type)))
+                 (cond ((eq car 'INTEGER)
+                        (make-integer-type type))
+                       ((eq car 'SIMPLE-STRING)
+                        'SIMPLE-STRING)
+                       ((eq car 'STRING)
+                        'STRING)
+                       ((eq car 'OR)
+                        (case (length (cdr type))
+                          (1
+                           (make-compiler-type (second type)))
+                          (2
+                           (make-union-type (make-compiler-type (second type))
+                                            (make-compiler-type (third type))))
+                          (t
+                           t)))
+                       ((subtypep type 'FIXNUM)
+                        +fixnum-type+)
+                       (t
+                        t))))
               ((memq type '(BOOLEAN CHARACTER HASH-TABLE STREAM SYMBOL))
                type)
               (t
