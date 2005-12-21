@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.143 2005-12-04 19:11:30 piso Exp $
+;;; $Id: precompiler.lisp,v 1.144 2005-12-21 18:48:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1067,7 +1067,7 @@
       (cond (*compile-file-truename*
              `(fset ',name ,lambda-expression))
             (t
-             (when (and env (sys::empty-environment-p env))
+             (when (and env (empty-environment-p env))
                (setf env nil))
              (when (null env)
                (setf lambda-expression (precompile-form lambda-expression nil)))
