@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.708 2005-12-21 18:17:27 piso Exp $
+;;; $Id: jvm.lisp,v 1.709 2005-12-21 19:31:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3761,13 +3761,10 @@ representation, based on the derived type of the LispObject."
         (return-type +lisp-object+))
     (emit-invokevirtual +lisp-thread-class+ "execute" arg-types return-type)))
 
-(declaim (ftype (function (t t t) t) compile-function-call))
+(defknown compile-function-call (t t t) t)
 (defun compile-function-call (form target representation)
   (let ((op (car form))
-        (args (cdr form))
-        (saved-vars nil))
-;;     (unless (symbolp op)
-;;       (error "COMPILE-FUNCTION-CALL ~S is not a symbol" op))
+        (args (cdr form)))
     (declare (type symbol op))
     (when (find-local-function op)
       (return-from compile-function-call
@@ -3800,47 +3797,22 @@ representation, based on the derived type of the LispObject."
              (if (notinline-p op)
                  (emit 'getstatic *this-class* (declare-symbol op) +lisp-symbol+)
                  (emit 'aload 0)))
-;;             ((inline-ok op)
-;;              (emit 'getstatic *this-class* (declare-function op) +lisp-object+))
             ((null (symbol-package op))
              (let ((g (if *compile-file-truename*
                           (declare-object-as-string op)
                           (declare-object op))))
                (emit 'getstatic *this-class* g +lisp-object+)))
             (t
-;;              (let (;;(save-variables-p nil)
-;;                    (compiland *current-compiland*))
-;;                (loop
-;;                  (cond ((null compiland)
-;;                         (return))
-;;                        ((eq op (compiland-name compiland))
-;; ;;                         (setf save-variables-p t)
-;;                         (return))
-;;                        (t
-;;                         (setf compiland (compiland-parent compiland)))))
-;;                (when compiland
-;;                  (format t "saving variables...~%")
-;;                  (setf saved-vars (save-variables (compiland-arg-vars compiland)))))
-
-;;              (let ((name (and (eq (symbol-package op) +cl-package+) (lookup-known-symbol op))))
              (let ((name (lookup-known-symbol op)))
                (if name
                    (emit 'getstatic +lisp-symbol-class+ name +lisp-symbol+)
-                   (emit 'getstatic *this-class* (declare-symbol op) +lisp-symbol+)))
-             ))
+                   (emit 'getstatic *this-class* (declare-symbol op) +lisp-symbol+)))))
       (process-args args)
       (if (> *speed* *debug*)
           (emit-call-execute numargs)
           (emit-call-thread-execute numargs))
-;;       (case representation
-;;         (:int (emit-unbox-fixnum))
-;;         (:char (emit-unbox-character))
-;;         (:boolean (emit-unbox-boolean)))
-      (fix-boxing representation nil)
-      (emit-move-from-stack target representation)
-      (when saved-vars
-        (restore-variables saved-vars))
-      )))
+      (fix-boxing representation (derive-compiler-type form))
+      (emit-move-from-stack target representation))))
 
 (defun compile-call (args)
   (let ((numargs (length args)))
@@ -7225,11 +7197,11 @@ representation, based on the derived type of the LispObject."
              (-
               (derive-type-minus form))
              (1-
-              (derive-type-minus (list '- (%cadr form) 1)))
+              (derive-type-minus (list '- (cadr form) 1)))
              (+
               (derive-type-plus form))
              (1+
-              (derive-type-plus (list '+ (%cadr form) 1)))
+              (derive-type-plus (list '+ (cadr form) 1)))
              (*
               (derive-type-times form))
              (MAX
@@ -9565,7 +9537,7 @@ representation, based on the derived type of the LispObject."
 
 (defun compile-defun (name form environment filespec)
   (aver (eq (car form) 'LAMBDA))
-  (unless (or (null environment) (sys::empty-environment-p environment))
+  (unless (or (null environment) (empty-environment-p environment))
     (compiler-unsupported "COMPILE-DEFUN: unable to compile LAMBDA form defined in non-null lexical environment."))
   (catch 'compile-defun-abort
     (let* ((class-file (make-class-file :pathname filespec
