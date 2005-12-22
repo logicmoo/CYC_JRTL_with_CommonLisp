@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StringFunctions.java,v 1.41 2005-12-22 18:47:02 piso Exp $
+ * $Id: StringFunctions.java,v 1.42 2005-12-22 21:56:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -886,8 +886,8 @@ public final class StringFunctions extends Lisp
             throws ConditionThrowable
         {
             try {
-                ((AbstractString)first).aset(((Fixnum)second).value,
-                                             ((LispCharacter)third));
+                ((AbstractString)first).setCharAt(((Fixnum)second).value,
+                                                  ((LispCharacter)third).value);
                 return third;
             }
             catch (ClassCastException e) {
@@ -920,10 +920,6 @@ public final class StringFunctions extends Lisp
                 if (!(second instanceof Fixnum))
                     return signalTypeError(second, Symbol.FIXNUM);
                 return signalTypeError(third, Symbol.CHARACTER);
-            }
-            catch (ArrayIndexOutOfBoundsException e) {
-                return signal(new TypeError("Array index out of bounds: " +
-                                            ((Fixnum)second).value));
             }
         }
     };
