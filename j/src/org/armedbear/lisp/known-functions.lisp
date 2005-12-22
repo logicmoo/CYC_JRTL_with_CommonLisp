@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.39 2005-12-18 14:27:32 piso Exp $
+;;; $Id: known-functions.lisp,v 1.40 2005-12-22 18:48:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -76,7 +76,6 @@
            %method-function
            %put
            %set-cddr
-           %set-schar
            %stream-terpri
            %stream-write-char
            alphanumericp
@@ -165,6 +164,8 @@
            search
            second
            set
+	   set-char
+	   set-schar
            set-std-slot-value
            setf-function-name-p
            seventh
@@ -361,7 +362,6 @@
              sys::set-car sys::set-cdr
              copy-list copy-tree
              make-sequence make-list make-array make-package
-             make-string
              find-package
              pathname make-pathname pathname-name directory
              package-used-by-list package-shadowing-symbols
@@ -423,6 +423,8 @@
              sys:subclassp
              ext:autoloadp)
   * t)
+
+(defknown make-string * simple-string)
 
 (defknown lookup-known-symbol (symbol) t)
 (defknown %class-name (class) symbol)
