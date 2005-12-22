@@ -1,7 +1,7 @@
 ;;; dolist.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: dolist.lisp,v 1.6 2005-05-15 21:43:51 piso Exp $
+;;; $Id: dolist.lisp,v 1.7 2005-12-22 22:00:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -30,7 +30,8 @@
   ;; environment. We spuriously reference the gratuitous variable,
   ;; since we don't want to use IGNORABLE on what might be a special
   ;; var.
-  (multiple-value-bind (forms decls) (parse-body body nil)
+  (multiple-value-bind (forms decls)
+      (parse-body body nil)
     (let ((list (gensym "LIST-"))
           (top (gensym "TOP-")))
       `(block nil
@@ -40,8 +41,8 @@
             (unless (endp ,list)
               (let ((,var (%car ,list)))
                 ,@decls
-                (setq ,list (%cdr ,list))
-                (tagbody ,@forms))
+                (tagbody ,@forms)
+                (setq ,list (%cdr ,list)))
               (go ,top))))
          ,(if (constantp result-form)
               `,result-form
