@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.711 2005-12-22 03:42:36 piso Exp $
+;;; $Id: jvm.lisp,v 1.712 2005-12-22 16:47:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -191,7 +191,7 @@
 ;; be in the current compiland.
 (defvar *visible-tags* ())
 
-;; Next available register.
+;; The next available register.
 (defvar *register* 0)
 
 ;; Total number of registers allocated.
@@ -299,6 +299,16 @@
 (defun allocate-register ()
   (let* ((register *register*)
          (next-register (1+ register)))
+    (declare (type (unsigned-byte 16) register next-register))
+    (setf *register* next-register)
+    (when (< *registers-allocated* next-register)
+      (setf *registers-allocated* next-register))
+    register))
+
+(defknown allocate-register-pair () (integer 0 65535))
+(defun allocate-register-pair ()
+  (let* ((register *register*)
+         (next-register (+ register 2)))
     (declare (type (unsigned-byte 16) register next-register))
     (setf *register* next-register)
     (when (< *registers-allocated* next-register)
@@ -1208,7 +1218,7 @@
 
 (defknown pool-get (t) (integer 1 65535))
 (defun pool-get (entry)
-  (declare (optimize speed))
+  (declare (optimize speed (safety 0)))
   (let* ((ht *pool-entries*)
          (index (gethash1 entry ht)))
     (declare (type hash-table ht))
@@ -5067,7 +5077,7 @@ representation, based on the derived type of the LispObject."
                        (case (variable-representation variable)
                          (:long
                           ;; We need two registers for a long.
-                          (prog1 (allocate-register) (allocate-register)))
+                          (allocate-register-pair))
                          (t
                           (allocate-register)))))
                (cond ((variable-special-p variable)
@@ -5159,7 +5169,7 @@ representation, based on the derived type of the LispObject."
                                   (update-must-clear-values)
                                   (setf (variable-register variable)
                                         ;; We need two registers for a long.
-                                        (prog1 (allocate-register) (allocate-register)))
+                                        (allocate-register-pair))
                                   (emit 'lstore (variable-register variable))
                                   (setf boundp t))
                                  ((and (neq declared-type :none)
@@ -5184,7 +5194,7 @@ representation, based on the derived type of the LispObject."
                                            (setf (variable-representation variable) :long)
                                            (setf (variable-register variable)
                                                  ;; We need two registers for a long.
-                                                 (prog1 (allocate-register) (allocate-register)))
+                                                 (allocate-register-pair))
                                            (compile-form initform 'stack :long)
                                            (update-must-clear-values)
                                            (emit 'lstore (variable-register variable))
@@ -6354,7 +6364,7 @@ representation, based on the derived type of the LispObject."
                        (emit-box-long)))
                     (emit-move-from-stack target representation))
                    ((fixnum-type-p type2)
-                    (format t "p2-logand LispObject.LOGAND(int) 1~%")
+;;                     (format t "p2-logand LispObject.LOGAND(int) 1~%")
                     (compile-form arg1 'stack nil)
                     (compile-form arg2 'stack :int)
                     (maybe-emit-clear-values arg1 arg2)
@@ -6362,7 +6372,7 @@ representation, based on the derived type of the LispObject."
                     (fix-boxing representation result-type)
                     (emit-move-from-stack target representation))
                    ((fixnum-type-p type1)
-                    (format t "p2-logand LispObject.LOGAND(int) 2~%")
+;;                     (format t "p2-logand LispObject.LOGAND(int) 2~%")
                     ;; arg1 is a fixnum, but arg2 is not
                     (compile-form arg1 'stack :int)
                     (compile-form arg2 'stack 'nil)
@@ -6373,7 +6383,7 @@ representation, based on the derived type of the LispObject."
                     (fix-boxing representation result-type)
                     (emit-move-from-stack target representation))
                    (t
-                    (format t "p2-logand LispObject.LOGAND(LispObject)~%")
+;;                     (format t "p2-logand LispObject.LOGAND(LispObject)~%")
                     (compile-form arg1 'stack nil)
                     (compile-form arg2 'stack nil)
                     (maybe-emit-clear-values arg1 arg2)
@@ -6382,7 +6392,7 @@ representation, based on the derived type of the LispObject."
                     (fix-boxing representation result-type)
                     (emit-move-from-stack target representation)))))
           (t
-           (format t "p2-logand full call~%")
+;;            (format t "p2-logand full call~%")
            (compile-function-call form target representation)))))
 
 (defknown p2-logior (t t t) t)
@@ -7500,8 +7510,8 @@ representation, based on the derived type of the LispObject."
                     (emit-move-from-stack target representation))
                    ((and (java-long-type-p type1) (java-long-type-p type2))
                     (let* ((*register* *register*)
-                           (reg1 (prog1 (allocate-register) (allocate-register)))
-                           (reg2 (prog1 (allocate-register) (allocate-register))))
+                           (reg1 (allocate-register-pair))
+                           (reg2 (allocate-register-pair)))
                       (compile-form arg1 'stack :long)
                       (emit 'dup2)
                       (emit 'lstore reg1)
@@ -8287,13 +8297,17 @@ representation, based on the derived type of the LispObject."
       ;; We're setting a special variable.
       (emit-push-current-thread)
       (emit 'getstatic *this-class* (declare-symbol name) +lisp-symbol+)
+;;       (let ((*print-structure* nil))
+;;         (format t "p2-setq name = ~S value-form = ~S~%" name value-form))
       (cond ((and (consp value-form)
-                  (eq (%car value-form) 'cons)
+                  (eq (first value-form) 'CONS)
                   (= (length value-form) 3)
-                  (eq (%caddr value-form) name))
+                  (var-ref-p (third value-form))
+                  (eq (variable-name (var-ref-variable (third value-form))) name))
              ;; (push thing *special*) => (setq *special* (cons thing *special*))
-             (compile-form (%cadr value-form) 'stack nil)
-             (maybe-emit-clear-values (%cadr value-form))
+;;              (format t "compiling pushSpecial~%")
+             (compile-form (second value-form) 'stack nil)
+             (maybe-emit-clear-values (second value-form))
              (emit-invokevirtual +lisp-thread-class+ "pushSpecial"
                                  (list +lisp-symbol+ +lisp-object+) +lisp-object+))
             (t
@@ -9757,7 +9771,6 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'ash                 'p2-ash)
   (install-p2-handler 'atom                'p2-atom)
   (install-p2-handler 'car                 'p2-car)
-;;   (install-p2-handler 'catch               'p2-catch)
   (install-p2-handler 'cdr                 'p2-cdr)
   (install-p2-handler 'char                'p2-char/schar)
   (install-p2-handler 'char-code           'p2-char-code)
@@ -9782,11 +9795,9 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'gethash1            'p2-gethash)
   (install-p2-handler 'go                  'p2-go)
   (install-p2-handler 'if                  'p2-if)
-;;   (install-p2-handler 'integerp            'p2-integerp)
   (install-p2-handler 'labels              'p2-labels)
   (install-p2-handler 'length              'p2-length)
   (install-p2-handler 'list                'p2-list)
-;;   (install-p2-handler 'listp               'p2-listp)
   (install-p2-handler 'load-time-value     'p2-load-time-value)
   (install-p2-handler 'locally             'p2-locally)
   (install-p2-handler 'logand              'p2-logand)
