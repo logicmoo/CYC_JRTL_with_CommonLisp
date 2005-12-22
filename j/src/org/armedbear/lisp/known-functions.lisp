@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.40 2005-12-22 18:48:30 piso Exp $
+;;; $Id: known-functions.lisp,v 1.41 2005-12-22 22:00:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -351,7 +351,7 @@
              revappend nreconc
              copy-seq
              assoc assoc-if assoc-if-not acons assq assql
-             code-char char-int digit-char-p
+             char-int digit-char-p
              member ext:memq
              remove remove-if remove-if-not delete delete-if delete-if-not
              symbol-function
@@ -425,6 +425,8 @@
   * t)
 
 (defknown make-string * simple-string)
+
+(defknown code-char * character)
 
 (defknown lookup-known-symbol (symbol) t)
 (defknown %class-name (class) symbol)
