@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.712 2005-12-22 16:47:33 piso Exp $
+;;; $Id: jvm.lisp,v 1.713 2005-12-22 21:55:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2859,7 +2859,7 @@ representation, based on the derived type of the LispObject."
     (setf (field-descriptor-index field) (pool-name (field-descriptor field)))
     (push field *fields*)))
 
-(declaim (ftype (function (symbol) string) sanitize))
+(defknown sanitize (symbol) string)
 (defun sanitize (symbol)
   (declare (type symbol symbol))
   (declare (optimize speed))
@@ -6741,6 +6741,22 @@ representation, based on the derived type of the LispObject."
            (maybe-emit-clear-values arg)
            (emit-invoke-method "ZEROP" target representation)))))
 
+(defun p2-make-string (form target representation)
+  ;; In safe code, we want to make sure the requested length does not exceed
+  ;; ARRAY-DIMENSION-LIMIT.
+  (cond ((and (< *safety* 3)
+              (= (length form) 2)
+              (null representation))
+         (let ((arg (second form)))
+           (emit 'new +lisp-simple-string-class+)
+           (emit 'dup)
+           (compile-form arg 'stack :int)
+           (maybe-emit-clear-values arg)
+           (emit-invokespecial-init +lisp-simple-string-class+ '("I"))
+           (emit-move-from-stack target representation)))
+        (t
+         (compile-function-call form target representation))))
+
 (defun p2-%make-structure (form target representation)
   (cond ((and (check-arg-count form 2)
               (eq (derive-type (%cadr form)) 'SYMBOL))
@@ -7024,13 +7040,24 @@ representation, based on the derived type of the LispObject."
                t)))
       t))
 
-(declaim (ftype (function (t) t) derive-type-coerce))
+(defknown derive-type-coerce (t) t)
 (defun derive-type-coerce (form)
   (if (= (length form) 3)
       (let ((type-form (%caddr form)))
         (if (and (consp type-form) (eq (%car type-form) 'QUOTE) (= (length type-form) 2))
             (%cadr type-form)
             t))
+      t))
+
+(defknown derive-type-copy-seq (t) t)
+(defun derive-type-copy-seq (form)
+  (if (= (length form) 2)
+      (let ((type (derive-compiler-type (second form))))
+        (case type
+          ((STRING SIMPLE-STRING)
+           (make-compiler-type type))
+          (t
+           t)))
       t))
 
 (declaim (ftype (function (t) t) derive-type-integer-length))
@@ -7221,6 +7248,8 @@ representation, based on the derived type of the LispObject."
               'CHARACTER)
              (COERCE
               (derive-type-coerce form))
+             (COPY-SEQ
+              (derive-type-copy-seq form))
              (FIXNUMP
               (if (fixnum-type-p (derive-compiler-type (cadr form)))
                   '(not null)
@@ -7767,10 +7796,9 @@ representation, based on the derived type of the LispObject."
          (arg2 (%cadr args))
          (type1 (derive-compiler-type arg1))
          (type2 (derive-compiler-type arg2)))
-;;     (format t "p2-char/schar type1 = ~S type2 = ~S~%" type1 type2)
     (cond ((and (eq representation :char)
                 (eq op 'CHAR)
-                (or (stringp arg1) (compiler-subtypep type1 'STRING))
+                (compiler-subtypep type1 'STRING)
                 (fixnum-type-p type2))
            (compile-form arg1 'stack nil)
            (emit 'checkcast +lisp-abstract-string-class+)
@@ -7791,6 +7819,58 @@ representation, based on the derived type of the LispObject."
            (emit-move-from-stack target representation))
           (t
            (compile-function-call form target representation)))))
+
+;; set-char/schar string index character => character
+(defknown p2-set-char/schar (t t t) t)
+(defun p2-set-char/schar (form target representation)
+  (format t "p2-set-char/schar~%")
+  (unless (check-arg-count form 3)
+    (compile-function-call form target representation)
+    (return-from p2-set-char/schar))
+  (let* ((op (%car form))
+         (args (%cdr form))
+         (arg1 (first args))
+         (arg2 (second args))
+         (arg3 (third args))
+         (type1 (derive-compiler-type arg1))
+         (type2 (derive-compiler-type arg2))
+         (type3 (derive-compiler-type arg3)))
+    (format t "p2-set-char/schar type1 = ~S~%" type1)
+    (format t "p2-set-char/schar type2 = ~S~%" type2)
+    (format t "p2-set-char/schar type3 = ~S~%" type3)
+    (cond ((and (< *safety* 3)
+                (or (null representation) (eq representation :char))
+                (compiler-subtypep type1 'STRING)
+                (fixnum-type-p type2)
+                (compiler-subtypep type3 'CHARACTER))
+           (let ((*register* *register*)
+                 (value-register (when target (allocate-register)))
+                 (class (if (eq op 'SCHAR)
+                            +lisp-simple-string-class+
+                            +lisp-abstract-string-class+)))
+             (compile-form arg1 'stack nil)
+             (emit 'checkcast class)
+             (compile-form arg2 'stack :int)
+             (compile-form arg3 'stack :char)
+             (when target
+               (emit 'dup)
+               (emit-move-from-stack value-register :char))
+             (maybe-emit-clear-values arg1 arg2 arg3)
+             (emit-invokevirtual class "setCharAt" '("I" "C") nil)
+             (when target
+               (when (null representation)
+                 (emit 'new +lisp-fixnum-class+)
+                 (emit 'dup))
+               (emit 'iload value-register)
+               (case representation
+                 (:char)
+                 (t
+                  (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
+               (emit-move-from-stack target representation))))
+          (t
+           (format t "p2-set-char/schar not optimized~%")
+           (compile-function-call form target representation)))))
+
 
 (defun p2-svref (form target representation)
   (cond ((and (check-arg-count form 2)
@@ -9804,6 +9884,7 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'logior              'p2-logior)
   (install-p2-handler 'lognot              'p2-lognot)
   (install-p2-handler 'logxor              'p2-logxor)
+  (install-p2-handler 'make-string         'p2-make-string)
   (install-p2-handler 'make-structure      'p2-make-structure)
   (install-p2-handler 'max                 'p2-min/max)
   (install-p2-handler 'min                 'p2-min/max)
@@ -9824,6 +9905,8 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'set                 'p2-set)
   (install-p2-handler 'set-car             'p2-set-car/cdr)
   (install-p2-handler 'set-cdr             'p2-set-car/cdr)
+  (install-p2-handler 'set-char            'p2-set-char/schar)
+  (install-p2-handler 'set-schar           'p2-set-char/schar)
   (install-p2-handler 'setq                'p2-setq)
   (install-p2-handler 'simple-vector-p     'p2-simple-vector-p)
   (install-p2-handler 'stream-element-type 'p2-stream-element-type)
