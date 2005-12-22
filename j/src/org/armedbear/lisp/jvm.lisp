@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.713 2005-12-22 21:55:47 piso Exp $
+;;; $Id: jvm.lisp,v 1.714 2005-12-22 23:09:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -7823,7 +7823,7 @@ representation, based on the derived type of the LispObject."
 ;; set-char/schar string index character => character
 (defknown p2-set-char/schar (t t t) t)
 (defun p2-set-char/schar (form target representation)
-  (format t "p2-set-char/schar~%")
+;;   (format t "p2-set-char/schar~%")
   (unless (check-arg-count form 3)
     (compile-function-call form target representation)
     (return-from p2-set-char/schar))
@@ -7835,9 +7835,9 @@ representation, based on the derived type of the LispObject."
          (type1 (derive-compiler-type arg1))
          (type2 (derive-compiler-type arg2))
          (type3 (derive-compiler-type arg3)))
-    (format t "p2-set-char/schar type1 = ~S~%" type1)
-    (format t "p2-set-char/schar type2 = ~S~%" type2)
-    (format t "p2-set-char/schar type3 = ~S~%" type3)
+;;     (format t "p2-set-char/schar type1 = ~S~%" type1)
+;;     (format t "p2-set-char/schar type2 = ~S~%" type2)
+;;     (format t "p2-set-char/schar type3 = ~S~%" type3)
     (cond ((and (< *safety* 3)
                 (or (null representation) (eq representation :char))
                 (compiler-subtypep type1 'STRING)
@@ -7868,7 +7868,7 @@ representation, based on the derived type of the LispObject."
                   (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
                (emit-move-from-stack target representation))))
           (t
-           (format t "p2-set-char/schar not optimized~%")
+;;            (format t "p2-set-char/schar not optimized~%")
            (compile-function-call form target representation)))))
 
 
