@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispObject.java,v 1.150 2005-12-13 22:00:34 piso Exp $
+ * $Id: LispObject.java,v 1.151 2005-12-22 02:18:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -440,7 +440,7 @@ public class LispObject extends Lisp
     public void aset(int index, int n)
         throws ConditionThrowable
     {
-        signalTypeError(this, Symbol.ARRAY);
+        aset(index, new Fixnum(n));
     }
 
     public void aset(int index, LispObject newValue)
