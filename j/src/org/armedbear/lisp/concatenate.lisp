@@ -1,7 +1,7 @@
 ;;; concatenate.lisp
 ;;;
 ;;; Copyright (C) 2003-2004 Peter Graves
-;;; $Id: concatenate.lisp,v 1.5 2004-03-13 19:45:25 piso Exp $
+;;; $Id: concatenate.lisp,v 1.6 2005-12-22 22:01:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,23 +17,42 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-;;; From GCL.
+(in-package #:system)
 
-(in-package "SYSTEM")
+(defun concatenate-to-string (sequences)
+  (declare (optimize speed (safety 0)))
+  (let ((length 0))
+    (declare (type fixnum length))
+    (dolist (seq sequences)
+      (incf length (length seq)))
+    (let ((result (make-string length))
+          (i 0))
+      (declare (type index i))
+      (dolist (seq sequences result)
+        (if (stringp seq)
+            (dotimes (j (length seq))
+              (declare (type index j))
+              (setf (schar result i) (char (truly-the string seq) j))
+              (incf i))
+            (dotimes (j (length seq))
+              (declare (type index j))
+              (setf (schar result i) (elt seq j))
+              (incf i)))))))
 
 (defun concatenate (result-type &rest sequences)
-  (if (eq result-type 'list)
-      (let ((result ()))
-        (dolist (seq sequences (nreverse result))
-          (dotimes (j (length seq))
-            (push (elt seq j) result))))
-      (do ((result (make-sequence result-type
-                                  (apply #'+ (mapcar #'length sequences))))
-           (s sequences (cdr s))
-           (i 0))
-          ((null s) result)
-        (do ((j 0 (1+ j))
-             (n (length (car s))))
-            ((>= j n))
-          (setf (elt result i) (elt (car s) j))
-          (incf i)))))
+  (cond ((eq result-type 'list)
+         (let ((result ()))
+           (dolist (seq sequences (nreverse result))
+             (dotimes (j (length seq))
+               (push (elt seq j) result)))))
+        ((eq result-type 'string)
+         (concatenate-to-string sequences))
+        (t
+         (let* ((length (apply '+ (mapcar 'length sequences)))
+                (result (make-sequence result-type length))
+                (i 0))
+           (declare (type index i))
+           (dolist (seq sequences result)
+             (dotimes (j (length seq))
+               (setf (elt result i) (elt seq j))
+               (incf i)))))))
