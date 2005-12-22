@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: ComplexString.java,v 1.30 2005-10-16 02:03:28 piso Exp $
+ * $Id: ComplexString.java,v 1.31 2005-12-22 21:57:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -338,7 +338,12 @@ public final class ComplexString extends AbstractString
 
     public void aset(int index, LispObject newValue) throws ConditionThrowable
     {
-        setCharAt(index, LispCharacter.getValue(newValue));
+        try {
+            setCharAt(index, ((LispCharacter)newValue).value);
+        }
+        catch (ClassCastException e) {
+            signalTypeError(newValue, Symbol.CHARACTER);
+        }
     }
 
     public LispObject vectorPushExtend(LispObject element)
