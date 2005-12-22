@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StringFunctions.java,v 1.40 2005-10-16 02:03:28 piso Exp $
+ * $Id: StringFunctions.java,v 1.41 2005-12-22 18:47:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -846,7 +846,8 @@ public final class StringFunctions extends Lisp
     };
 
     // ### char
-    private static final Primitive CHAR = new Primitive("char", "string index")
+    private static final Primitive CHAR =
+        new Primitive(Symbol.CHAR, "string index")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -861,7 +862,8 @@ public final class StringFunctions extends Lisp
     };
 
     // ### schar
-    private static final Primitive SCHAR = new Primitive("schar", "string index")
+    private static final Primitive SCHAR =
+        new Primitive(Symbol.SCHAR, "string index")
     {
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -875,9 +877,9 @@ public final class StringFunctions extends Lisp
         }
     };
 
-    // ### %set-char
-    private static final Primitive _SET_CHAR =
-        new Primitive("%set-char", PACKAGE_SYS, false)
+    // ### set-char
+    private static final Primitive SET_CHAR =
+        new Primitive(Symbol.SET_CHAR, "string index character")
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
@@ -899,9 +901,9 @@ public final class StringFunctions extends Lisp
         }
     };
 
-    // ### %set-schar
-    private static final Primitive _SET_SCHAR =
-        new Primitive("%set-schar", PACKAGE_SYS, false)
+    // ### set-schar
+    private static final Primitive SET_SCHAR =
+        new Primitive(Symbol.SET_SCHAR, "string index character")
     {
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)

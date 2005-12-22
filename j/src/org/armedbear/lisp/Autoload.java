@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.251 2005-12-01 13:05:04 piso Exp $
+ * $Id: Autoload.java,v 1.252 2005-12-22 18:45:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -521,7 +521,6 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%run-shell-command", "ShellCommand");
         autoload(PACKAGE_SYS, "%server-socket-close", "server_socket_close");
         autoload(PACKAGE_SYS, "%set-arglist", "arglist");
-        autoload(PACKAGE_SYS, "%set-char", "StringFunctions");
         autoload(PACKAGE_SYS, "%set-class-direct-slots", "SlotClass", true);
         autoload(PACKAGE_SYS, "%set-function-info", "function_info");
         autoload(PACKAGE_SYS, "%set-generic-function-lambda-list", "StandardGenericFunction", true);
@@ -531,7 +530,6 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%set-method-function", "StandardMethod", true);
         autoload(PACKAGE_SYS, "%set-method-generic-function", "StandardMethod", true);
         autoload(PACKAGE_SYS, "%set-method-specializers", "StandardMethod", true);
-        autoload(PACKAGE_SYS, "%set-schar", "StringFunctions");
         autoload(PACKAGE_SYS, "%simple-bit-vector-bit-and", "SimpleBitVector");
         autoload(PACKAGE_SYS, "%simple-bit-vector-bit-andc1", "SimpleBitVector");
         autoload(PACKAGE_SYS, "%simple-bit-vector-bit-andc2", "SimpleBitVector");
@@ -641,6 +639,9 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "zip", "zip", true);
 
         autoload(Symbol.COPY_LIST, "copy_list");
+
+        autoload(Symbol.SET_CHAR, "StringFunctions");
+        autoload(Symbol.SET_SCHAR, "StringFunctions");
 
         autoload(Symbol.SET_CLASS_SLOTS, "SlotClass");
         autoload(Symbol._CLASS_SLOTS, "SlotClass");
