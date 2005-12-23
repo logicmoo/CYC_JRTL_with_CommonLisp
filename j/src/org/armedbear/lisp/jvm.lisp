@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.715 2005-12-23 01:23:00 piso Exp $
+;;; $Id: jvm.lisp,v 1.716 2005-12-23 01:39:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -624,10 +624,12 @@
       block)))
 
 (defun p1-unwind-protect (form)
-  (let* ((block (make-block-node '(UNWIND-PROTECT)))
-         (*blocks* (cons block *blocks*)))
-    (setf (block-form block) (p1-default form))
-    block))
+  (if (= (length form) 2)
+      (p1 (second form)) ; No cleanup forms: (unwind-protect (...)) => (...)
+      (let* ((block (make-block-node '(UNWIND-PROTECT)))
+             (*blocks* (cons block *blocks*)))
+        (setf (block-form block) (p1-default form))
+        block)))
 
 (defknown p1-return-from (t) t)
 (defun p1-return-from (form)
