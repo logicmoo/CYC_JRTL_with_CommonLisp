@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.716 2005-12-23 01:39:22 piso Exp $
+;;; $Id: jvm.lisp,v 1.717 2005-12-23 19:33:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1061,32 +1061,32 @@
 
 (defknown p1-function-call (t) t)
 (defun p1-function-call (form)
-  (let ((op (car form)))
-    (let ((new-form (rewrite-function-call form)))
-      (when (neq new-form form)
-;;         (let ((*print-structure* nil))
-;;           (format t "old form = ~S~%" form)
-;;           (format t "new form = ~S~%" new-form))
-        (return-from p1-function-call (p1 new-form))))
-    (let ((local-function (find-local-function op)))
-      (cond (local-function
-             (dformat t "p1 local call to ~S~%" op)
+  (let ((new-form (rewrite-function-call form)))
+    (when (neq new-form form)
+;;       (let ((*print-structure* nil))
+;;         (format t "old form = ~S~%" form)
+;;         (format t "new form = ~S~%" new-form))
+      (return-from p1-function-call (p1 new-form))))
+  (let* ((op (car form))
+         (local-function (find-local-function op)))
+    (cond (local-function
+           (dformat t "p1 local call to ~S~%" op)
 
-             ;; FIXME
-             (dformat t "local function assumed not single-valued~%")
-             (setf (compiland-%single-valued-p *current-compiland*) nil)
+           ;; FIXME
+           (dformat t "local function assumed not single-valued~%")
+           (setf (compiland-%single-valued-p *current-compiland*) nil)
 
-             (let ((variable (local-function-variable local-function)))
-               (when variable
-                 (dformat t "p1 ~S used non-locally~%" (variable-name variable))
-                 (setf (variable-used-non-locally-p variable) t))))
-            (t
-             ;; Not a local function call.
-             (dformat t "p1 non-local call to ~S~%" op)
-             (unless (single-valued-p form)
+           (let ((variable (local-function-variable local-function)))
+             (when variable
+               (dformat t "p1 ~S used non-locally~%" (variable-name variable))
+               (setf (variable-used-non-locally-p variable) t))))
+          (t
+           ;; Not a local function call.
+           (dformat t "p1 non-local call to ~S~%" op)
+           (unless (single-valued-p form)
 ;;                (format t "not single-valued op = ~S~%" op)
-               (setf (compiland-%single-valued-p *current-compiland*) nil)))))
-    (p1-default form)))
+             (setf (compiland-%single-valued-p *current-compiland*) nil)))))
+  (p1-default form))
 
 (defknown p1 (t) t)
 (defun p1 (form)
