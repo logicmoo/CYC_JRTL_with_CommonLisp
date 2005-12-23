@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: autoloads.lisp,v 1.202 2005-12-01 13:06:27 piso Exp $
+;;; $Id: autoloads.lisp,v 1.203 2005-12-23 02:16:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -128,7 +128,8 @@
                 "print-unreadable-object")
 (autoload 'print-object)
 (autoload-macro '(prog prog*) "prog")
-(autoload 'concatenate)
+(export 'concatenate-to-string '#:system)
+(autoload '(concatenate-to-string concatenate) "concatenate")
 (autoload 'parse-lambda-list)
 (autoload-macro 'assert)
 (autoload '(sys::assert-error sys::assert-prompt) "assert")

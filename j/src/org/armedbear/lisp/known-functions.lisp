@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.41 2005-12-22 22:00:32 piso Exp $
+;;; $Id: known-functions.lisp,v 1.42 2005-12-23 02:17:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -425,6 +425,7 @@
   * t)
 
 (defknown make-string * simple-string)
+(defknown concatenate-to-string * simple-string)
 
 (defknown code-char * character)
 
