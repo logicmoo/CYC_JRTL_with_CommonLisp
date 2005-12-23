@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.144 2005-12-21 18:48:09 piso Exp $
+;;; $Id: precompiler.lisp,v 1.145 2005-12-23 02:12:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -240,6 +240,11 @@
 
 (define-compiler-macro byte-position (bytespec)
   `(cdr ,bytespec))
+
+(define-source-transform concatenate (&whole form result-type &rest sequences)
+  (if (equal result-type '(quote STRING))
+      `(sys::concatenate-to-string (list ,@sequences))
+      form))
 
 (define-source-transform ldb (&whole form bytespec integer)
   (if (and (consp bytespec)
