@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: subtypep.lisp,v 1.68 2005-11-04 00:28:14 piso Exp $
+;;; $Id: subtypep.lisp,v 1.69 2005-12-23 06:57:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -246,7 +246,7 @@
     (if (atom type2)
         (setf t2 type2 i2 nil)
         (setf t2 (car type2) i2 (cdr type2)))
-    (cond ((and (eq t1 (find-class 'array)) (eq t2 'array))
+    (cond ((and (classp t1) (eq (%class-name t1) 'array) (eq t2 'array))
            (values (equal i2 '(* *)) t))
           ((and (memq t1 '(array simple-array)) (eq t2 'array))
            (let ((e1 (car i1))
@@ -396,39 +396,40 @@
                  (values t t)
                  (values nil t))))
           ((classp t2)
-           (cond ((eq t2 (find-class t1 nil))
-                  (values t t))
-                 ((and (eq t2 (find-class 'array))
-                       (memq t1 '(array simple-array vector simple-vector string
-                                  simple-string simple-base-string bit-vector
-                                  simple-bit-vector)))
-                  (values t t))
-                 ((eq t2 (find-class 'vector))
-                  (cond ((memq t1 '(string simple-string))
-                         (values t t))
-                        ((eq t1 'array)
-                         (let ((dim (cadr i1)))
-                           (if (or (eql dim 1)
-                                   (and (consp dim) (= (length dim) 1)))
-                               (values t t)
-                               (values nil t))))
-                        (t
-                         (values nil t))))
-                 ((and (eq t2 (find-class 'simple-vector))
-                       (eq t1 'simple-array))
-                  (let ((dim (cadr i1)))
-                    (if (or (eql dim 1)
-                            (and (consp dim) (= (length dim) 1)))
-                        (values t t)
-                        (values nil t))))
-                 ((and (eq t2 (find-class 'bit-vector))
-                       (eq t1 'simple-bit-vector))
-                  (values t t))
-                 ((and (eq t2 (find-class 'string))
-                       (memq t1 '(string simple-string)))
-                  (values t t))
-                 (t
-                  (values nil nil))))
+           (let ((class-name (%class-name t2)))
+             (cond ((eq class-name t1)
+                    (values t t))
+                   ((and (eq class-name 'array)
+                         (memq t1 '(array simple-array vector simple-vector string
+                                    simple-string simple-base-string bit-vector
+                                    simple-bit-vector)))
+                    (values t t))
+                   ((eq class-name 'vector)
+                    (cond ((memq t1 '(string simple-string))
+                           (values t t))
+                          ((eq t1 'array)
+                           (let ((dim (cadr i1)))
+                             (if (or (eql dim 1)
+                                     (and (consp dim) (= (length dim) 1)))
+                                 (values t t)
+                                 (values nil t))))
+                          (t
+                           (values nil t))))
+                   ((and (eq class-name 'simple-vector)
+                         (eq t1 'simple-array))
+                    (let ((dim (cadr i1)))
+                      (if (or (eql dim 1)
+                              (and (consp dim) (= (length dim) 1)))
+                          (values t t)
+                          (values nil t))))
+                   ((and (eq class-name 'bit-vector)
+                         (eq t1 'simple-bit-vector))
+                    (values t t))
+                   ((and (eq class-name 'string)
+                         (memq t1 '(string simple-string)))
+                    (values t t))
+                   (t
+                    (values nil nil)))))
           (t
            (values nil nil))))))
 
@@ -468,11 +469,12 @@
   (when (or (eq type1 type2)
             (null type1)
             (eq type2 t)
-            (eq type2 (find-class t)))
+            (and (classp type2) (eq (%class-name type2) t)))
     (return-from %subtypep (values t t)))
   (let ((ct1 (ctype type1))
         (ct2 (ctype type2)))
-    (multiple-value-bind (subtype-p valid-p) (csubtypep ct1 ct2)
+    (multiple-value-bind (subtype-p valid-p)
+        (csubtypep ct1 ct2)
       (when valid-p
         (return-from %subtypep (values subtype-p valid-p)))))
   (when (and (atom type1) (atom type2))
@@ -485,8 +487,7 @@
                  (setf class2 (if classp-2
                                   type2
                                   (and (symbolp type2) (find-class type2 nil)))))
-        (return-from %subtypep
-                     (values (if (member class2 (%class-precedence-list class1)) t nil) t)))
+        (return-from %subtypep (values (subclassp class1 class2) t)))
       (when (or classp-1 classp-2)
         (let ((t1 (if classp-1 (%class-name type1) type1))
               (t2 (if classp-2 (%class-name type2) type2)))
@@ -573,7 +574,7 @@
            (cond ((memq t2 '(integer rational real number))
                   (values (sub-interval-p i1 i2) t))
                  ((or (eq t2 'bignum)
-                      (eq t2 (find-class 'bignum)))
+                      (and (classp t2) (eq (%class-name t2) 'bignum)))
                   (values
                    (or (sub-interval-p i1 (list '* (list most-negative-fixnum)))
                        (sub-interval-p i1 (list (list most-positive-fixnum) '*)))
@@ -610,7 +611,9 @@
                          (values nil t))
                         (t
                          (values (subtypep (car i1) (car i2)) t))))))
-          ((and (eq t1 (find-class 'array)) (eq t2 'array))
+          ((and (classp t1)
+                (eq (%class-name t1) 'array)
+                (eq t2 'array))
            (values (equal i2 '(* *)) t))
           ((and (memq t1 '(array simple-array)) (eq t2 'array))
            (let ((e1 (car i1))
@@ -719,39 +722,40 @@
                (t
                 (values nil t)))))
           ((classp t2)
-           (cond ((eq t2 (find-class t1 nil))
-                  (values t t))
-                 ((and (eq t2 (find-class 'array))
-                       (memq t1 '(array simple-array vector simple-vector string
-                                  simple-string simple-base-string bit-vector
-                                  simple-bit-vector)))
-                  (values t t))
-                 ((eq t2 (find-class 'vector))
-                  (cond ((memq t1 '(string simple-string))
-                         (values t t))
-                        ((memq t1 '(array simple-array))
-                         (let ((dim (cadr i1)))
-                           (if (or (eql dim 1)
-                                   (and (consp dim) (= (length dim) 1)))
-                               (values t t)
-                               (values nil t))))
-                        (t
-                         (values nil t))))
-                 ((and (eq t2 (find-class 'simple-vector))
-                       (eq t1 'simple-array))
-                  (let ((dim (cadr i1)))
-                    (if (or (eql dim 1)
-                            (and (consp dim) (= (length dim) 1)))
-                        (values t t)
-                        (values nil t))))
-                 ((and (eq t2 (find-class 'bit-vector))
-                       (eq t1 'simple-bit-vector))
-                  (values t t))
-                 ((and (eq t2 (find-class 'string))
-                       (memq t1 '(string simple-string)))
-                  (values t t))
-                 (t
-                  (values nil nil))))
+           (let ((class-name (%class-name t2)))
+             (cond ((eq class-name t1)
+                    (values t t))
+                   ((and (eq class-name 'array)
+                         (memq t1 '(array simple-array vector simple-vector string
+                                    simple-string simple-base-string bit-vector
+                                    simple-bit-vector)))
+                    (values t t))
+                   ((eq class-name 'vector)
+                    (cond ((memq t1 '(string simple-string))
+                           (values t t))
+                          ((memq t1 '(array simple-array))
+                           (let ((dim (cadr i1)))
+                             (if (or (eql dim 1)
+                                     (and (consp dim) (= (length dim) 1)))
+                                 (values t t)
+                                 (values nil t))))
+                          (t
+                           (values nil t))))
+                   ((and (eq class-name 'simple-vector)
+                         (eq t1 'simple-array))
+                    (let ((dim (cadr i1)))
+                      (if (or (eql dim 1)
+                              (and (consp dim) (= (length dim) 1)))
+                          (values t t)
+                          (values nil t))))
+                   ((and (eq class-name 'bit-vector)
+                         (eq t1 'simple-bit-vector))
+                    (values t t))
+                   ((and (eq class-name 'string)
+                         (memq t1 '(string simple-string)))
+                    (values t t))
+                   (t
+                    (values nil nil)))))
           (t
            (values nil nil)))))
 
