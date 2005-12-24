@@ -2,7 +2,7 @@
  * MacroObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: MacroObject.java,v 1.13 2005-06-27 11:52:35 piso Exp $
+ * $Id: MacroObject.java,v 1.14 2005-12-24 16:30:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,7 +24,7 @@ package org.armedbear.lisp;
 public final class MacroObject extends Function
 {
     private final LispObject name;
-    private final LispObject expander;
+    public final LispObject expander;
 
     public MacroObject(LispObject name, LispObject expander)
     {
@@ -33,11 +33,6 @@ public final class MacroObject extends Function
         if (name instanceof Symbol && name != NIL && expander instanceof Function)
             ((Function)expander).setLambdaName(list2(Symbol.MACRO_FUNCTION,
                                                      name));
-    }
-
-    public LispObject getExpander()
-    {
-        return expander;
     }
 
     public LispObject execute() throws ConditionThrowable
