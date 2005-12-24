@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.721 2005-12-24 18:14:27 piso Exp $
+;;; $Id: jvm.lisp,v 1.722 2005-12-24 19:11:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2868,6 +2868,8 @@ representation, based on the derived type of the LispObject."
       (declare (type fixnum i))
       (let ((c (char-upcase (char input i))))
         (cond ((<= #.(char-code #\A) (char-code c) #.(char-code #\Z))
+               (vector-push c output))
+              ((<= #.(char-code #\0) (char-code c) #.(char-code #\9))
                (vector-push c output))
               ((eql c #\-)
                (vector-push #\_ output)))))
@@ -9915,6 +9917,7 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'list                'p2-list)
   (install-p2-handler 'sys::backq-list     'p2-list)
   (install-p2-handler 'list*               'p2-list*)
+  (install-p2-handler 'sys::backq-list*    'p2-list*)
   (install-p2-handler 'load-time-value     'p2-load-time-value)
   (install-p2-handler 'locally             'p2-locally)
   (install-p2-handler 'logand              'p2-logand)
