@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispThread.java,v 1.87 2005-11-03 14:52:00 piso Exp $
+ * $Id: LispThread.java,v 1.88 2005-12-24 02:12:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -435,7 +435,7 @@ public final class LispThread extends LispObject
 
     private static class StackFrame extends LispObject
     {
-        private final LispObject operator;
+        public final LispObject operator;
         private final LispObject first;
         private final LispObject second;
         private final LispObject third;
@@ -488,11 +488,6 @@ public final class LispThread extends LispObject
             this.args = new LispObject[args.length];
             for (int i = args.length; i-- > 0;)
                 this.args[i] = args[i];
-        }
-
-        public LispObject getOperator()
-        {
-            return operator;
         }
 
         public LispObject toList() throws ConditionThrowable
@@ -882,7 +877,7 @@ public final class LispThread extends LispObject
         while (s != NIL) {
             StackFrame frame = (StackFrame) s.car();
             if (frame != null) {
-                LispObject operator = frame.getOperator();
+                LispObject operator = frame.operator;
                 if (operator != null)
                     operator.incrementCallCount();
             }
