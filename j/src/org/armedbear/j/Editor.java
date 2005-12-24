@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.158 2005-11-19 00:54:24 piso Exp $
+ * $Id: Editor.java,v 1.159 2005-12-24 16:52:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1774,51 +1774,63 @@ public final class Editor extends JPanel implements Constants,
 
     public void indentRegion()
     {
-        if (isColumnSelection()) {
-            notSupportedForColumnSelections();
-            return;
+      if (isColumnSelection())
+        {
+          notSupportedForColumnSelections();
+          return;
         }
-        if (getMode().canIndent() && mark != null) {
-            Region r = new Region(this);
-            if (r.getBeginLine() == r.getEndLine()) {
-                indentLine();
-            } else {
-                setWaitCursor();
-                Position savedDot = new Position(dot);
-                try {
-                    buffer.lockWrite();
+      if (getMode().canIndent() && mark != null)
+        {
+          Region r = new Region(this);
+          if (r.getBeginLine() == r.getEndLine())
+            indentLine();
+          else
+            {
+              if (!checkReadOnly())
+                return;
+              setWaitCursor();
+              Position savedDot = new Position(dot);
+              try
+                {
+                  buffer.lockWrite();
                 }
-                catch (InterruptedException e) {
-                    Log.error(e);
-                    return;
+              catch (InterruptedException e)
+                {
+                  Log.error(e);
+                  return;
                 }
-                try {
-                    if (buffer.needsParsing()) {
-                        if (getFormatter().parseBuffer())
-                            buffer.repaint();
+              try
+                {
+                  if (buffer.needsParsing())
+                    {
+                      if (getFormatter().parseBuffer())
+                        buffer.repaint();
                     }
-                    CompoundEdit compoundEdit = beginCompoundEdit();
-                    addUndo(SimpleEdit.MOVE);
-                    dot.moveTo(r.getBeginLine(), 0);
-                    do {
-                        if (!dot.getLine().isBlank())
-                            indentLineInternal();
-                        dot.moveTo(dot.getNextLine(), 0);
-                    } while (dot.getLine() != r.getEndLine());
-                    addUndo(SimpleEdit.MOVE);
-                    dot = savedDot;
-                    if (dot.getOffset() > getDotLine().length())
-                        dot.setOffset(getDotLine().length());
-                    if (mark.getOffset() > getMarkLine().length())
-                        mark.setOffset(getMarkLine().length());
-                    moveCaretToDotCol();
-                    endCompoundEdit(compoundEdit);
+                  CompoundEdit compoundEdit = beginCompoundEdit();
+                  addUndo(SimpleEdit.MOVE);
+                  dot.moveTo(r.getBeginLine(), 0);
+                  do
+                    {
+                      if (!dot.getLine().isBlank())
+                        indentLineInternal();
+                      dot.moveTo(dot.getNextLine(), 0);
+                    }
+                  while (dot.getLine() != r.getEndLine());
+                  addUndo(SimpleEdit.MOVE);
+                  dot = savedDot;
+                  if (dot.getOffset() > getDotLine().length())
+                    dot.setOffset(getDotLine().length());
+                  if (mark.getOffset() > getMarkLine().length())
+                    mark.setOffset(getMarkLine().length());
+                  moveCaretToDotCol();
+                  endCompoundEdit(compoundEdit);
                 }
-                finally {
-                    buffer.unlockWrite();
+              finally
+                {
+                  buffer.unlockWrite();
                 }
-                setUpdateFlag(REFRAME);
-                setDefaultCursor();
+              setUpdateFlag(REFRAME);
+              setDefaultCursor();
             }
         }
     }
