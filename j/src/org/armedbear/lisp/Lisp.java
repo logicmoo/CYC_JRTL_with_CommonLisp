@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.427 2005-12-20 21:01:31 piso Exp $
+ * $Id: Lisp.java,v 1.428 2005-12-24 16:32:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -211,7 +211,7 @@ public abstract class Lisp
                     }
                 }
                 if (obj instanceof MacroObject) {
-                    LispObject expander = ((MacroObject)obj).getExpander();
+                    LispObject expander = ((MacroObject)obj).expander;
                     if (profiling)
                         if (!sampling)
                             expander.incrementCallCount();
