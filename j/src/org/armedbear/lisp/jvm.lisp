@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.719 2005-12-24 17:49:16 piso Exp $
+;;; $Id: jvm.lisp,v 1.720 2005-12-24 18:03:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -7417,21 +7417,36 @@ representation, based on the derived type of the LispObject."
 
 (defun p2-list* (form target representation)
   (let* ((args (cdr form))
-         (len (length args)))
-    (cond ((= len 1)
+         (length (length args)))
+    (cond ((= length 1)
            (compile-form (first args) 'stack nil)
            (maybe-emit-clear-values (first args))
            (emit-move-from-stack target representation))
-          ((and (>= *speed* *space*)
-                (< 0 len 3))
-           (emit 'new +lisp-cons-class+)
-           (emit 'dup)
-           (compile-form (first args) 'stack nil)
-           (compile-form (second args) 'stack nil)
-           (emit-invokespecial-init +lisp-cons-class+ (lisp-object-arg-types 2))
-           (unless (every 'single-valued-p args)
-             (emit-clear-values))
-           (emit-move-from-stack target representation))
+          ((= length 2)
+           (let ((arg1 (first args))
+                 (arg2 (second args)))
+             (emit 'new +lisp-cons-class+)
+             (emit 'dup)
+             (compile-form arg1 'stack nil)
+             (compile-form arg2 'stack nil)
+             (emit-invokespecial-init +lisp-cons-class+ (lisp-object-arg-types 2))
+             (maybe-emit-clear-values arg1 arg2)
+             (emit-move-from-stack target representation)))
+          ((= length 3)
+           (let ((arg1 (first args))
+                 (arg2 (second args))
+                 (arg3 (third args)))
+             (emit 'new +lisp-cons-class+)
+             (emit 'dup)
+             (compile-form arg1 'stack nil)
+             (emit 'new +lisp-cons-class+)
+             (emit 'dup)
+             (compile-form arg2 'stack nil)
+             (compile-form arg3 'stack nil)
+             (emit-invokespecial-init +lisp-cons-class+ (lisp-object-arg-types 2))
+             (emit-invokespecial-init +lisp-cons-class+ (lisp-object-arg-types 2))
+             (maybe-emit-clear-values arg1 arg2 arg3)
+             (emit-move-from-stack target representation)))
           (t
            (compile-function-call form target representation)))))
 
