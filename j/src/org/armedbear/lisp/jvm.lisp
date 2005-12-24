@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.717 2005-12-23 19:33:17 piso Exp $
+;;; $Id: jvm.lisp,v 1.718 2005-12-24 16:35:10 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -9877,6 +9877,7 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'labels              'p2-labels)
   (install-p2-handler 'length              'p2-length)
   (install-p2-handler 'list                'p2-list)
+  (install-p2-handler 'sys::backq-list     'p2-list)
   (install-p2-handler 'load-time-value     'p2-load-time-value)
   (install-p2-handler 'locally             'p2-locally)
   (install-p2-handler 'logand              'p2-logand)
