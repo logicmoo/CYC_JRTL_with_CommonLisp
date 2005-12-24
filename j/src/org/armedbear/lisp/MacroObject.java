@@ -2,7 +2,7 @@
  * MacroObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: MacroObject.java,v 1.14 2005-12-24 16:30:43 piso Exp $
+ * $Id: MacroObject.java,v 1.15 2005-12-24 16:31:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,89 +23,89 @@ package org.armedbear.lisp;
 
 public final class MacroObject extends Function
 {
-    private final LispObject name;
-    public final LispObject expander;
+  private final LispObject name;
+  public final LispObject expander;
 
-    public MacroObject(LispObject name, LispObject expander)
-    {
-        this.name = name;
-        this.expander = expander;
-        if (name instanceof Symbol && name != NIL && expander instanceof Function)
-            ((Function)expander).setLambdaName(list2(Symbol.MACRO_FUNCTION,
-                                                     name));
-    }
+  public MacroObject(LispObject name, LispObject expander)
+  {
+    this.name = name;
+    this.expander = expander;
+    if (name instanceof Symbol && name != NIL && expander instanceof Function)
+      ((Function)expander).setLambdaName(list2(Symbol.MACRO_FUNCTION,
+                                               name));
+  }
 
-    public LispObject execute() throws ConditionThrowable
-    {
-        return signal(new UndefinedFunction(name));
-    }
+  public LispObject execute() throws ConditionThrowable
+  {
+    return signal(new UndefinedFunction(name));
+  }
 
-    public LispObject execute(LispObject arg) throws ConditionThrowable
-    {
-        return signal(new UndefinedFunction(name));
-    }
+  public LispObject execute(LispObject arg) throws ConditionThrowable
+  {
+    return signal(new UndefinedFunction(name));
+  }
 
-    public LispObject execute(LispObject first, LispObject second)
-        throws ConditionThrowable
-    {
-        return signal(new UndefinedFunction(name));
-    }
+  public LispObject execute(LispObject first, LispObject second)
+    throws ConditionThrowable
+  {
+    return signal(new UndefinedFunction(name));
+  }
 
-    public LispObject execute(LispObject first, LispObject second,
-                              LispObject third)
-        throws ConditionThrowable
-    {
-        return signal(new UndefinedFunction(name));
-    }
+  public LispObject execute(LispObject first, LispObject second,
+                            LispObject third)
+    throws ConditionThrowable
+  {
+    return signal(new UndefinedFunction(name));
+  }
 
-    public LispObject execute(LispObject first, LispObject second,
-                              LispObject third, LispObject fourth)
-        throws ConditionThrowable
-    {
-        return signal(new UndefinedFunction(name));
-    }
+  public LispObject execute(LispObject first, LispObject second,
+                            LispObject third, LispObject fourth)
+    throws ConditionThrowable
+  {
+    return signal(new UndefinedFunction(name));
+  }
 
-    public LispObject execute(LispObject first, LispObject second,
-                              LispObject third, LispObject fourth,
-                              LispObject fifth)
-        throws ConditionThrowable
-    {
-        return signal(new UndefinedFunction(name));
-    }
+  public LispObject execute(LispObject first, LispObject second,
+                            LispObject third, LispObject fourth,
+                            LispObject fifth)
+    throws ConditionThrowable
+  {
+    return signal(new UndefinedFunction(name));
+  }
 
-    public LispObject execute(LispObject first, LispObject second,
-                              LispObject third, LispObject fourth,
-                              LispObject fifth, LispObject sixth)
-        throws ConditionThrowable
-    {
-        return signal(new UndefinedFunction(name));
-    }
+  public LispObject execute(LispObject first, LispObject second,
+                            LispObject third, LispObject fourth,
+                            LispObject fifth, LispObject sixth)
+    throws ConditionThrowable
+  {
+    return signal(new UndefinedFunction(name));
+  }
 
-    public LispObject execute(LispObject first, LispObject second,
-                              LispObject third, LispObject fourth,
-                              LispObject fifth, LispObject sixth,
-                              LispObject seventh)
-        throws ConditionThrowable
-    {
-        return signal(new UndefinedFunction(name));
-    }
+  public LispObject execute(LispObject first, LispObject second,
+                            LispObject third, LispObject fourth,
+                            LispObject fifth, LispObject sixth,
+                            LispObject seventh)
+    throws ConditionThrowable
+  {
+    return signal(new UndefinedFunction(name));
+  }
 
-    public LispObject execute(LispObject first, LispObject second,
-                              LispObject third, LispObject fourth,
-                              LispObject fifth, LispObject sixth,
-                              LispObject seventh, LispObject eighth)
-        throws ConditionThrowable
-    {
-        return signal(new UndefinedFunction(name));
-    }
+  public LispObject execute(LispObject first, LispObject second,
+                            LispObject third, LispObject fourth,
+                            LispObject fifth, LispObject sixth,
+                            LispObject seventh, LispObject eighth)
+    throws ConditionThrowable
+  {
+    return signal(new UndefinedFunction(name));
+  }
 
-    public LispObject execute(LispObject[] args) throws ConditionThrowable
-    {
-        return signal(new UndefinedFunction(name));
-    }
+  public LispObject execute(LispObject[] args) throws ConditionThrowable
+  {
+    return signal(new UndefinedFunction(name));
+  }
 
-    public String writeToString()
-    {
-        return unreadableString("MACRO-OBJECT");
-    }
+  public String writeToString()
+  {
+    return unreadableString("MACRO-OBJECT");
+  }
 }
