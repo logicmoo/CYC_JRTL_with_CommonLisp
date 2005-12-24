@@ -1,7 +1,7 @@
 ;;; disassemble.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: disassemble.lisp,v 1.3 2005-05-22 17:30:02 piso Exp $
+;;; $Id: disassemble.lisp,v 1.4 2005-12-24 16:34:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,17 +21,17 @@
 
 (require '#:clos)
 
-(defun disassemble (fn)
-  (require-type fn '(OR FUNCTION
-                     SYMBOL
-                     (CONS (EQL SETF) (CONS SYMBOL NULL))
-                     (CONS (EQL LAMBDA) LIST)))
-  (when (symbolp fn)
-    (setf fn (symbol-function fn)))
-  (let ((function (cond ((typep fn 'generic-function)
-                         (mop::funcallable-instance-function fn))
-                        ((functionp fn)
-                         fn))))
+(defun disassemble (arg)
+  (require-type arg '(OR FUNCTION
+                      SYMBOL
+                      (CONS (EQL SETF) (CONS SYMBOL NULL))
+                      (CONS (EQL LAMBDA) LIST)))
+  (let ((function (cond ((functionp arg)
+                         arg)
+                        ((symbolp arg)
+                         (or (macro-function arg) (symbol-function arg))))))
+    (when (typep function 'generic-function)
+      (setf function (mop::funcallable-instance-function function)))
     (when (functionp function)
       (unless (compiled-function-p function)
         (setf function (compile nil function)))
