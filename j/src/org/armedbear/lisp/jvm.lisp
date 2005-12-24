@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.718 2005-12-24 16:35:10 piso Exp $
+;;; $Id: jvm.lisp,v 1.719 2005-12-24 17:49:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -7415,6 +7415,26 @@ representation, based on the derived type of the LispObject."
              (emit-clear-values))
            (emit-move-from-stack target)))))
 
+(defun p2-list* (form target representation)
+  (let* ((args (cdr form))
+         (len (length args)))
+    (cond ((= len 1)
+           (compile-form (first args) 'stack nil)
+           (maybe-emit-clear-values (first args))
+           (emit-move-from-stack target representation))
+          ((and (>= *speed* *space*)
+                (< 0 len 3))
+           (emit 'new +lisp-cons-class+)
+           (emit 'dup)
+           (compile-form (first args) 'stack nil)
+           (compile-form (second args) 'stack nil)
+           (emit-invokespecial-init +lisp-cons-class+ (lisp-object-arg-types 2))
+           (unless (every 'single-valued-p args)
+             (emit-clear-values))
+           (emit-move-from-stack target representation))
+          (t
+           (compile-function-call form target representation)))))
+
 (defun compile-nth (form target representation)
   (unless (check-arg-count form 2)
     (compile-function-call form target representation)
@@ -7426,8 +7446,6 @@ representation, based on the derived type of the LispObject."
     (maybe-emit-clear-values index-form list-form)
     (emit 'swap)
     (emit-invokevirtual +lisp-object-class+ "NTH" '("I") +lisp-object+)
-;;     (when (eq representation :int)
-;;       (emit-unbox-fixnum))
     (fix-boxing representation nil) ; FIXME use derived result type
     (emit-move-from-stack target representation)))
 
@@ -9878,6 +9896,7 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'length              'p2-length)
   (install-p2-handler 'list                'p2-list)
   (install-p2-handler 'sys::backq-list     'p2-list)
+  (install-p2-handler 'list*               'p2-list*)
   (install-p2-handler 'load-time-value     'p2-load-time-value)
   (install-p2-handler 'locally             'p2-locally)
   (install-p2-handler 'logand              'p2-logand)
