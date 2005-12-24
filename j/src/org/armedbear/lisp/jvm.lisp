@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.723 2005-12-24 19:20:53 piso Exp $
+;;; $Id: jvm.lisp,v 1.724 2005-12-24 19:51:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4165,7 +4165,7 @@ representation, based on the derived type of the LispObject."
 
 (initialize-p2-test-handlers)
 
-(declaim (ftype (function (t t) t) p2-test-predicate))
+(defknown p2-test-predicate (t t) t)
 (defun p2-test-predicate (form java-predicate)
   (when (check-arg-count form 1)
     (let ((arg (%cadr form)))
@@ -4218,10 +4218,17 @@ representation, based on the derived type of the LispObject."
              (maybe-emit-clear-values arg)
              'ifge)
             (t
-             (compile-form arg 'stack nil)
+             (p2-test-predicate form "minusp"))))))
+
+(defun p2-test-plusp (form)
+  (when (check-arg-count form 1)
+    (let ((arg (%cadr form)))
+      (cond ((fixnum-type-p (derive-compiler-type arg))
+             (compile-form arg 'stack :int)
              (maybe-emit-clear-values arg)
-             (emit-invokevirtual +lisp-object-class+ "minusp" nil "Z")
-             'ifeq)))))
+             'ifle)
+            (t
+             (p2-test-predicate form "plusp"))))))
 
 (defun p2-test-zerop (form)
   (when (check-arg-count form 1)
@@ -4231,10 +4238,7 @@ representation, based on the derived type of the LispObject."
              (maybe-emit-clear-values arg)
              'ifne)
             (t
-             (compile-form arg 'stack nil)
-             (maybe-emit-clear-values arg)
-             (emit-invokevirtual +lisp-object-class+ "zerop" nil "Z")
-             'ifeq)))))
+             (p2-test-predicate form "zerop"))))))
 
 (defun p2-test-numberp (form)
   (p2-test-predicate form "numberp"))
@@ -4244,9 +4248,6 @@ representation, based on the derived type of the LispObject."
 
 (defun p2-test-packagep (form)
   (p2-test-instanceof-predicate form +lisp-package-class+))
-
-(defun p2-test-plusp (form)
-  (p2-test-predicate form "plusp"))
 
 (defun p2-test-rationalp (form)
   (p2-test-predicate form "rationalp"))
