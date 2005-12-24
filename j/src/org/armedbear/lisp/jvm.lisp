@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.722 2005-12-24 19:11:22 piso Exp $
+;;; $Id: jvm.lisp,v 1.723 2005-12-24 19:20:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3683,8 +3683,8 @@ representation, based on the derived type of the LispObject."
 
 (defknown process-args (t) t)
 (defun process-args (args)
-  (let ((numargs (length args)))
-    (when (plusp numargs)
+  (when args
+    (let ((numargs (length args)))
       (let ((must-clear-values nil))
         (declare (type boolean must-clear-values))
         (cond ((<= numargs call-registers-limit)
@@ -3710,7 +3710,7 @@ representation, based on the derived type of the LispObject."
           (emit-clear-values)))))
   t)
 
-(declaim (ftype (function (fixnum) list) lisp-object-arg-types))
+(defknown lisp-object-arg-types (fixnum) list)
 (let ((table (make-array 10)))
   (dotimes (i 10)
     (declare (type fixnum i))
