@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.724 2005-12-24 19:51:29 piso Exp $
+;;; $Id: jvm.lisp,v 1.725 2005-12-25 05:23:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1323,6 +1323,7 @@
 (defconstant +lisp-cons+ "Lorg/armedbear/lisp/Cons;")
 (defconstant +lisp-fixnum-class+ "org/armedbear/lisp/Fixnum")
 (defconstant +lisp-fixnum+ "Lorg/armedbear/lisp/Fixnum;")
+(defconstant +lisp-fixnum-array+ "[Lorg/armedbear/lisp/Fixnum;")
 (defconstant +lisp-bignum-class+ "org/armedbear/lisp/Bignum")
 (defconstant +lisp-bignum+ "Lorg/armedbear/lisp/Bignum;")
 (defconstant +lisp-character-class+ "org/armedbear/lisp/LispCharacter")
@@ -2985,26 +2986,31 @@ representation, based on the derived type of the LispObject."
                         (if (minusp n) "MINUS_" "")
                         (abs n)))
         (declare-field g +lisp-fixnum+)
-        (emit 'new +lisp-fixnum-class+)
-        (emit 'dup)
-        (case n
-          (-1
-           (emit 'iconst_m1))
-          (0
-           (emit 'iconst_0))
-          (1
-           (emit 'iconst_1))
-          (2
-           (emit 'iconst_2))
-          (3
-           (emit 'iconst_3))
-          (4
-           (emit 'iconst_4))
-          (5
-           (emit 'iconst_5))
-          (t
-           (emit-push-constant-int n)))
-        (emit-invokespecial-init +lisp-fixnum-class+ '("I"))
+        (cond ((<= 0 n 255)
+               (emit 'getstatic +lisp-fixnum-class+ "constants" +lisp-fixnum-array+)
+               (emit 'sipush n)
+               (emit 'aaload))
+              (t
+               (emit 'new +lisp-fixnum-class+)
+               (emit 'dup)
+               (case n
+                 (-1
+                  (emit 'iconst_m1))
+                 (0
+                  (emit 'iconst_0))
+                 (1
+                  (emit 'iconst_1))
+                 (2
+                  (emit 'iconst_2))
+                 (3
+                  (emit 'iconst_3))
+                 (4
+                  (emit 'iconst_4))
+                 (5
+                  (emit 'iconst_5))
+                 (t
+                  (emit-push-constant-int n)))
+               (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
         (emit 'putstatic *this-class* g +lisp-fixnum+)
         (setf *static-code* *code*)
         (setf (gethash n ht) g)))
