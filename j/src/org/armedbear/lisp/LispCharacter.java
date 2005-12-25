@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispCharacter.java,v 1.69 2005-12-02 13:11:49 piso Exp $
+ * $Id: LispCharacter.java,v 1.70 2005-12-25 05:22:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -281,7 +281,8 @@ public final class LispCharacter extends LispObject
       {
         try
           {
-            return new Fixnum(((LispCharacter)arg).value);
+            int n = ((LispCharacter)arg).value;
+            return n < 256 ? Fixnum.constants[n] : new Fixnum(n);
           }
         catch (ClassCastException e)
           {
@@ -298,7 +299,8 @@ public final class LispCharacter extends LispObject
       {
         try
           {
-            return new Fixnum(((LispCharacter)arg).value);
+            int n = ((LispCharacter)arg).value;
+            return n < 256 ? Fixnum.constants[n] : new Fixnum(n);
           }
         catch (ClassCastException e)
           {
@@ -448,7 +450,7 @@ public final class LispCharacter extends LispObject
         if (radix < 2 || radix > 36)
           return signalTypeError(second,
                                  list3(Symbol.INTEGER, Fixnum.TWO,
-                                       new Fixnum(36)));
+                                       Fixnum.constants[36]));
         int weight;
         try
           {
@@ -477,7 +479,8 @@ public final class LispCharacter extends LispObject
         try
           {
             int n = Character.digit(((LispCharacter)arg).value, 10);
-            return n < 0 ? NIL : new Fixnum(n);
+//             return n < 0 ? NIL : new Fixnum(n);
+            return n < 0 ? NIL : Fixnum.constants[n];
           }
         catch (ClassCastException e)
           {
@@ -502,13 +505,14 @@ public final class LispCharacter extends LispObject
             if (radix >= 2 && radix <= 36)
               {
                 int n = Character.digit(c, radix);
-                return n < 0 ? NIL : new Fixnum(n);
+//                 return n < 0 ? NIL : new Fixnum(n);
+                return n < 0 ? NIL : Fixnum.constants[n];
               }
           }
         catch (ClassCastException e) {}
         return signalTypeError(second,
                                list3(Symbol.INTEGER, Fixnum.TWO,
-                                     new Fixnum(36)));
+                                     Fixnum.constants[36]));
       }
     };
 

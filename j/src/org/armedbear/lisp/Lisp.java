@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.429 2005-12-24 17:00:40 piso Exp $
+ * $Id: Lisp.java,v 1.430 2005-12-25 05:20:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1193,13 +1193,13 @@ public abstract class Lisp
                 list3(Symbol.CONS, Symbol.SYMBOL, Symbol.NULL)));
 
   public static final LispObject UNSIGNED_BYTE_8 =
-    list2(Symbol.UNSIGNED_BYTE, new Fixnum(8));
+    list2(Symbol.UNSIGNED_BYTE, Fixnum.constants[8]);
 
   public static final LispObject UNSIGNED_BYTE_16 =
-    list2(Symbol.UNSIGNED_BYTE, new Fixnum(16));
+    list2(Symbol.UNSIGNED_BYTE, Fixnum.constants[16]);
 
   public static final LispObject UNSIGNED_BYTE_32 =
-    list2(Symbol.UNSIGNED_BYTE, new Fixnum(32));
+    list2(Symbol.UNSIGNED_BYTE, Fixnum.constants[32]);
 
   public static final LispObject UNSIGNED_BYTE_32_MAX_VALUE =
     new Bignum(4294967296L);
@@ -1324,7 +1324,7 @@ public abstract class Lisp
 
   public static final LispObject coerceJavaByteToLispObject(byte b)
   {
-    return new Fixnum(((int)b) & 0xff);
+    return Fixnum.constants[((int)b) & 0xff];
   }
 
   public static final LispCharacter checkCharacter(LispObject obj)
@@ -1832,7 +1832,7 @@ public abstract class Lisp
                         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
                         thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
                         thread.bindSpecial(Symbol.PRINT_RADIX, NIL);
-                        thread.bindSpecial(Symbol.PRINT_BASE, new Fixnum(10));
+                        thread.bindSpecial(Symbol.PRINT_BASE, Fixnum.constants[10]);
                         sb.append(obj.writeToString());
                         thread.lastSpecialBinding = lastSpecialBinding;
                       }
@@ -1845,7 +1845,7 @@ public abstract class Lisp
                         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
                         thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
                         thread.bindSpecial(Symbol.PRINT_RADIX, NIL);
-                        thread.bindSpecial(Symbol.PRINT_BASE, new Fixnum(16));
+                        thread.bindSpecial(Symbol.PRINT_BASE, Fixnum.constants[16]);
                         sb.append(obj.writeToString());
                         thread.lastSpecialBinding = lastSpecialBinding;
                       }
@@ -2166,7 +2166,7 @@ public abstract class Lisp
   // ### *load-depth*
   // internal symbol
   public static final Symbol _LOAD_DEPTH_ =
-    internSpecial("*LOAD-DEPTH*", PACKAGE_SYS, new Fixnum(0));
+    internSpecial("*LOAD-DEPTH*", PACKAGE_SYS, Fixnum.ZERO);
 
   // ### *load-stream*
   // internal symbol
@@ -2220,7 +2220,7 @@ public abstract class Lisp
 
   static
   {
-    Symbol.READ_BASE.initializeSpecial(new Fixnum(10));
+    Symbol.READ_BASE.initializeSpecial(Fixnum.constants[10]);
   }
 
   static
@@ -2232,7 +2232,7 @@ public abstract class Lisp
   static
   {
     Symbol.PRINT_ARRAY.initializeSpecial(T);
-    Symbol.PRINT_BASE.initializeSpecial(new Fixnum(10));
+    Symbol.PRINT_BASE.initializeSpecial(Fixnum.constants[10]);
     Symbol.PRINT_CASE.initializeSpecial(Keyword.UPCASE);
     Symbol.PRINT_CIRCLE.initializeSpecial(NIL);
     Symbol.PRINT_ESCAPE.initializeSpecial(T);
@@ -2324,37 +2324,37 @@ public abstract class Lisp
     Symbol.BOOLE_CLR.initializeConstant(Fixnum.ZERO);
     Symbol.BOOLE_SET.initializeConstant(Fixnum.ONE);
     Symbol.BOOLE_1.initializeConstant(Fixnum.TWO);
-    Symbol.BOOLE_2.initializeConstant(new Fixnum(3));
-    Symbol.BOOLE_C1.initializeConstant(new Fixnum(4));
-    Symbol.BOOLE_C2.initializeConstant(new Fixnum(5));
-    Symbol.BOOLE_AND.initializeConstant(new Fixnum(6));
-    Symbol.BOOLE_IOR.initializeConstant(new Fixnum(7));
-    Symbol.BOOLE_XOR.initializeConstant(new Fixnum(8));
-    Symbol.BOOLE_EQV.initializeConstant(new Fixnum(9));
-    Symbol.BOOLE_NAND.initializeConstant(new Fixnum(10));
-    Symbol.BOOLE_NOR.initializeConstant(new Fixnum(11));
-    Symbol.BOOLE_ANDC1.initializeConstant(new Fixnum(12));
-    Symbol.BOOLE_ANDC2.initializeConstant(new Fixnum(13));
-    Symbol.BOOLE_ORC1.initializeConstant(new Fixnum(14));
-    Symbol.BOOLE_ORC2.initializeConstant(new Fixnum(15));
+    Symbol.BOOLE_2.initializeConstant(Fixnum.constants[3]);
+    Symbol.BOOLE_C1.initializeConstant(Fixnum.constants[4]);
+    Symbol.BOOLE_C2.initializeConstant(Fixnum.constants[5]);
+    Symbol.BOOLE_AND.initializeConstant(Fixnum.constants[6]);
+    Symbol.BOOLE_IOR.initializeConstant(Fixnum.constants[7]);
+    Symbol.BOOLE_XOR.initializeConstant(Fixnum.constants[8]);
+    Symbol.BOOLE_EQV.initializeConstant(Fixnum.constants[9]);
+    Symbol.BOOLE_NAND.initializeConstant(Fixnum.constants[10]);
+    Symbol.BOOLE_NOR.initializeConstant(Fixnum.constants[11]);
+    Symbol.BOOLE_ANDC1.initializeConstant(Fixnum.constants[12]);
+    Symbol.BOOLE_ANDC2.initializeConstant(Fixnum.constants[13]);
+    Symbol.BOOLE_ORC1.initializeConstant(Fixnum.constants[14]);
+    Symbol.BOOLE_ORC2.initializeConstant(Fixnum.constants[15]);
   }
 
   static
   {
     // ### call-arguments-limit
-    Symbol.CALL_ARGUMENTS_LIMIT.initializeConstant(new Fixnum(50));
+    Symbol.CALL_ARGUMENTS_LIMIT.initializeConstant(Fixnum.constants[50]);
   }
 
   static
   {
     // ### lambda-parameters-limit
-    Symbol.LAMBDA_PARAMETERS_LIMIT.initializeConstant(new Fixnum(50));
+    Symbol.LAMBDA_PARAMETERS_LIMIT.initializeConstant(Fixnum.constants[50]);
   }
 
   static
   {
     // ### multiple-values-limit
-    Symbol.MULTIPLE_VALUES_LIMIT.initializeConstant(new Fixnum(20));
+    Symbol.MULTIPLE_VALUES_LIMIT.initializeConstant(Fixnum.constants[20]);
   }
 
   static
@@ -2366,7 +2366,7 @@ public abstract class Lisp
   // ### call-registers-limit
   public static final Symbol CALL_REGISTERS_LIMIT =
     exportConstant("CALL-REGISTERS-LIMIT", PACKAGE_SYS,
-                   new Fixnum(CALL_REGISTERS_MAX));
+                   Fixnum.constants[CALL_REGISTERS_MAX]);
 
   // ### *warn-on-redefinition*
   public static final Symbol _WARN_ON_REDEFINITION_ =
