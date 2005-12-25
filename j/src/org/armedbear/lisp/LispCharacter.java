@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispCharacter.java,v 1.70 2005-12-25 05:22:38 piso Exp $
+ * $Id: LispCharacter.java,v 1.71 2005-12-25 05:25:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -479,7 +479,6 @@ public final class LispCharacter extends LispObject
         try
           {
             int n = Character.digit(((LispCharacter)arg).value, 10);
-//             return n < 0 ? NIL : new Fixnum(n);
             return n < 0 ? NIL : Fixnum.constants[n];
           }
         catch (ClassCastException e)
@@ -505,7 +504,6 @@ public final class LispCharacter extends LispObject
             if (radix >= 2 && radix <= 36)
               {
                 int n = Character.digit(c, radix);
-//                 return n < 0 ? NIL : new Fixnum(n);
                 return n < 0 ? NIL : Fixnum.constants[n];
               }
           }
