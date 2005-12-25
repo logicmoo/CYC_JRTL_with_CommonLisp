@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Stream.java,v 1.144 2005-12-03 11:02:25 piso Exp $
+ * $Id: Stream.java,v 1.145 2005-12-25 06:17:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1071,7 +1071,8 @@ public class Stream extends LispObject
         if (token.charAt(0) == '+')
             token = token.substring(1);
         try {
-            return new Fixnum(Integer.parseInt(token, radix));
+            int n = Integer.parseInt(token, radix);
+            return (n >= 0 && n <= 255) ? Fixnum.constants[n] : new Fixnum(n);
         }
         catch (NumberFormatException e) {}
         // parseInt() failed.
@@ -1189,7 +1190,8 @@ public class Stream extends LispObject
         if (s.indexOf('/') >= 0)
             return makeRatio(s, radix);
         try {
-            return new Fixnum(Integer.parseInt(s, radix));
+            int n = Integer.parseInt(s, radix);
+            return (n >= 0 && n <= 255) ? Fixnum.constants[n] : new Fixnum(n);
         }
         catch (NumberFormatException e) {}
         // parseInt() failed.
@@ -1215,7 +1217,8 @@ public class Stream extends LispObject
         if (s.indexOf('/') >= 0)
             return makeRatio(s, radix);
         try {
-            return new Fixnum(Integer.parseInt(s, radix));
+            int n = Integer.parseInt(s, radix);
+            return (n >= 0 && n <= 255) ? Fixnum.constants[n] : new Fixnum(n);
         }
         catch (NumberFormatException e) {}
         // parseInt() failed.
@@ -1374,7 +1377,7 @@ public class Stream extends LispObject
             else
                 return eofValue;
         }
-        return new Fixnum(n);
+        return Fixnum.constants[n];
     }
 
     public LispObject terpri() throws ConditionThrowable
