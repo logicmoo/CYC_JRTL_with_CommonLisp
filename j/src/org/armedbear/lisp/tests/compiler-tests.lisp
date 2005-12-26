@@ -1,7 +1,7 @@
 ;;; compiler-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-tests.lisp,v 1.10 2005-12-08 19:52:08 piso Exp $
+;;; $Id: compiler-tests.lisp,v 1.11 2005-12-26 14:13:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -31,6 +31,22 @@
 (assert (eql most-positive-java-long ext:most-positive-java-long))
 #+abcl
 (assert (eql most-negative-java-long ext:most-negative-java-long))
+
+(defmacro define-compiler-test (name lambda-form &key args results)
+  `(deftest ,name
+     (progn
+       (fmakunbound ',name)
+       (defun ,name ,(cadr lambda-form)
+         ,@(cddr lambda-form))
+       (values
+        (funcall ',name ,@args)
+        (multiple-value-list (compile ',name))
+        (compiled-function-p #',name)
+        (funcall ',name ,@args)))
+     ,results
+     (,name nil nil)
+     t
+     ,results))
 
 #+abcl
 (deftest unused.1
@@ -89,6 +105,41 @@
     (plus.3 most-positive-fixnum most-positive-fixnum))
   #.(+ most-positive-fixnum most-positive-fixnum))
 #+allegro (pushnew 'plus.3 *expected-failures*)
+
+(define-compiler-test plus.4
+  (lambda (x y)
+    (declare (type (integer #.most-negative-java-long #.most-positive-java-long) x y))
+    (+ x y))
+  :args (#.most-positive-java-long #.most-positive-java-long)
+  :results #.(+ most-positive-java-long most-positive-java-long))
+
+(define-compiler-test minus.1
+  (lambda (x)
+    (declare (type fixnum x))
+    (- x))
+  :args (#.most-negative-fixnum)
+  :results #.(- most-negative-fixnum))
+
+(define-compiler-test minus.2
+  (lambda (x)
+    (declare (type (integer #.most-negative-java-long #.most-positive-java-long) x))
+    (- x))
+  :args (#.most-negative-java-long)
+  :results #.(- most-negative-java-long))
+
+(define-compiler-test minus.3
+  (lambda (x y)
+    (declare (type (integer #.most-negative-java-long #.most-positive-java-long) x y))
+    (- x y))
+  :args (#.most-negative-java-long #.most-positive-java-long)
+  :results #.(- most-negative-java-long most-positive-java-long))
+
+(define-compiler-test logxor-minus.1
+  (lambda (x)
+    (declare (type (integer 0 255) x))
+    (logxor (- x) #.most-positive-java-long))
+  :args (17)
+  :results -9223372036854775792)
 
 (deftest times.1
   (progn
@@ -323,5 +374,61 @@
     (foo nil nil)
     t
     -4153366606)
+
+(define-compiler-test min.1
+  (lambda (x y)
+    (declare (type fixnum x y))
+    (min x y))
+  :args (3 4)
+  :results 3)
+
+(define-compiler-test min.2
+  (lambda (x y)
+    (declare (type fixnum x y))
+    (min x y))
+  :args (#.most-positive-fixnum #.most-negative-fixnum)
+  :results #.most-negative-fixnum)
+
+(define-compiler-test min.3
+  (lambda (x y)
+    (declare (type (integer #.most-negative-java-long #.most-positive-java-long) x y))
+    (min x y))
+  :args (3 4)
+  :results 3)
+
+(define-compiler-test min.4
+  (lambda (x y)
+    (declare (type (integer #.most-negative-java-long #.most-positive-java-long) x y))
+    (min x y))
+  :args (#.most-positive-java-long #.most-negative-java-long)
+  :results #.most-negative-java-long)
+
+(define-compiler-test max.1
+  (lambda (x y)
+    (declare (type fixnum x y))
+    (max x y))
+  :args (3 4)
+  :results 4)
+
+(define-compiler-test max.2
+  (lambda (x y)
+    (declare (type fixnum x y))
+    (max x y))
+  :args (#.most-positive-fixnum #.most-negative-fixnum)
+  :results #.most-positive-fixnum)
+
+(define-compiler-test max.3
+  (lambda (x y)
+    (declare (type (integer #.most-negative-java-long #.most-positive-java-long) x y))
+    (max x y))
+  :args (3 4)
+  :results 4)
+
+(define-compiler-test max.4
+  (lambda (x y)
+    (declare (type (integer #.most-negative-java-long #.most-positive-java-long) x y))
+    (max x y))
+  :args (#.most-positive-java-long #.most-negative-java-long)
+  :results #.most-positive-java-long)
 
 (do-tests)
