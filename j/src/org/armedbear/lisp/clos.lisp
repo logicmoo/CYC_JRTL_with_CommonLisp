@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.201 2005-12-27 19:06:26 piso Exp $
+;;; $Id: clos.lisp,v 1.202 2005-12-27 20:16:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1181,6 +1181,26 @@
                 (make-closure `(lambda (&rest args)
                                  (slow-method-lookup ,gf args nil))
                               nil))
+               ((and (= (length (generic-function-methods gf)) 1)
+                     (typep (car (generic-function-methods gf)) 'standard-reader-method))
+;;                 (sys::%format t "standard reader function ~S~%" (generic-function-name gf))
+                (make-closure
+                 (let* ((method (%car (generic-function-methods gf)))
+                        (class (car (%method-specializers method)))
+;;                         (function (or (%method-fast-function method)
+;;                                       (%method-function method)))
+                        (slot-name (reader-method-slot-name method))
+                        )
+                   `(lambda (arg)
+                      (declare (optimize speed))
+                      (unless (simple-typep arg ,class)
+                        (error 'simple-type-error
+                               :datum arg
+                               :expected-type ,class))
+;;                       (funcall ,function arg)
+                      (std-slot-value arg ',slot-name)
+                      ))
+                 nil))
                (t
                 (let* ((emf-table (classes-to-emf-table gf))
                        (number-required (length (gf-required-args gf)))
@@ -1191,20 +1211,20 @@
                   (make-closure
                    (cond ((= number-required 1)
                           (if exact
-                              (cond ((and (eq (generic-function-method-combination gf) 'standard)
-                                          (= (length (generic-function-methods gf)) 1))
-                                     (let* ((method (%car (generic-function-methods gf)))
-                                            (class (car (%method-specializers method)))
-                                            (function (or (%method-fast-function method)
-                                                          (%method-function method))))
-                                       `(lambda (arg)
-                                          (declare (optimize speed))
-                                          (unless (simple-typep arg ,class)
-                                            (error 'simple-type-error
-                                                   :datum arg
-                                                   :expected-type ,class))
-                                          (funcall ,function arg))))
-                                    (t
+;;                               (cond ((and (eq (generic-function-method-combination gf) 'standard)
+;;                                           (= (length (generic-function-methods gf)) 1))
+;;                                      (let* ((method (%car (generic-function-methods gf)))
+;;                                             (class (car (%method-specializers method)))
+;;                                             (function (or (%method-fast-function method)
+;;                                                           (%method-function method))))
+;;                                        `(lambda (arg)
+;;                                           (declare (optimize speed))
+;;                                           (unless (simple-typep arg ,class)
+;;                                             (error 'simple-type-error
+;;                                                    :datum arg
+;;                                                    :expected-type ,class))
+;;                                           (funcall ,function arg))))
+;;                                     (t
                                      `(lambda (arg)
                                         (declare (optimize speed))
                                         (let* ((class (class-of arg))
@@ -1212,7 +1232,8 @@
                                                           (slow-method-lookup-1 ,gf class))))
                                           (if emfun
                                               (funcall emfun (list arg))
-                                              (apply #'no-applicable-method ,gf (list arg)))))))
+                                              (apply #'no-applicable-method ,gf (list arg)))))
+;;                                      ))
                               `(lambda (&rest args)
                                  (declare (optimize speed))
                                  (unless (>= (length args) 1)
@@ -1692,7 +1713,8 @@
                                              specializers
                                              documentation
                                              function
-                                             fast-function)
+                                             fast-function
+                                             slot-name)
   (declare (ignore gf))
   (let ((method (std-allocate-instance (find-class 'standard-reader-method))))
     (setf (method-lambda-list method) lambda-list)
@@ -1702,6 +1724,7 @@
     (%set-method-generic-function method nil)
     (%set-method-function method function)
     (%set-method-fast-function method fast-function)
+    (set-reader-method-slot-name method slot-name)
     method))
 
 (defun add-reader-method (class function-name slot-name)
@@ -1726,7 +1749,8 @@
                                                                  (compile nil method-function))
                                                    :fast-function (if (autoloadp 'compile)
                                                                       fast-function
-                                                                      (compile nil fast-function)))))
+                                                                      (compile nil fast-function))
+                                                   :slot-name slot-name)))
         (%add-method gf method)
         method))))
 
