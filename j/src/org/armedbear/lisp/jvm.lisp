@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.725 2005-12-25 05:23:28 piso Exp $
+;;; $Id: jvm.lisp,v 1.726 2005-12-27 03:55:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4158,6 +4158,7 @@ representation, based on the derived type of the LispObject."
                     (PLUSP              p2-test-plusp)
                     (RATIONALP          p2-test-rationalp)
                     (REALP              p2-test-realp)
+                    (SIMPLE-TYPEP       p2-test-simple-typep)
                     (SIMPLE-VECTOR-P    p2-test-simple-vector-p)
                     (SPECIAL-OPERATOR-P p2-test-special-operator-p)
                     (SPECIAL-VARIABLE-P p2-test-special-variable-p)
@@ -4452,6 +4453,18 @@ representation, based on the derived type of the LispObject."
                                  translated-op
                                  (lisp-object-arg-types 1) "Z")))
       'ifeq)))
+
+(defun p2-test-simple-typep (form)
+  (when (check-arg-count form 2)
+    (let ((arg1 (%cadr form))
+          (arg2 (%caddr form)))
+      (compile-form arg1 'stack nil)
+      (compile-form arg2 'stack nil)
+      (maybe-emit-clear-values arg1 arg2)
+      (emit-invokevirtual +lisp-object-class+ "typep"
+                          (lisp-object-arg-types 1) +lisp-object+)
+      (emit-push-nil)
+      'if_acmpeq)))
 
 (defun p2-test-memq (form)
   (when (check-arg-count form 2)
