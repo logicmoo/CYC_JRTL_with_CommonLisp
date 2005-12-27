@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardClass.java,v 1.46 2005-12-27 19:04:12 piso Exp $
+ * $Id: StandardClass.java,v 1.47 2005-12-27 19:46:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -444,7 +444,7 @@ public class StandardClass extends SlotClass
     // STANDARD-READER-METHOD
     Debug.assertTrue(STANDARD_READER_METHOD.isFinalized());
     STANDARD_READER_METHOD.setCPL(STANDARD_READER_METHOD, STANDARD_METHOD,
-                                  METHOD, STANDARD_OBJECT, BuiltInClass.T);
+                                  METHOD, STANDARD_OBJECT, BuiltInClass.CLASS_T);
     STANDARD_READER_METHOD.setSlotDefinitions(STANDARD_READER_METHOD.getClassLayout().generateSlotDefinitions());
     // All but the last slot are inherited.
     STANDARD_READER_METHOD.setDirectSlotDefinitions(list1(STANDARD_READER_METHOD.getSlotDefinitions().reverse().car()));
