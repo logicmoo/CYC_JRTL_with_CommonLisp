@@ -2,7 +2,7 @@
  * StandardMethod.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: StandardMethod.java,v 1.6 2005-12-27 12:25:36 piso Exp $
+ * $Id: StandardMethod.java,v 1.7 2005-12-27 19:05:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,12 +21,17 @@
 
 package org.armedbear.lisp;
 
-public final class StandardMethod extends StandardObject
+public class StandardMethod extends StandardObject
 {
   public StandardMethod()
   {
     super(StandardClass.STANDARD_METHOD,
           StandardClass.STANDARD_METHOD.getClassLayout().getLength());
+  }
+
+  protected StandardMethod(LispClass cls, int length)
+  {
+    super(cls, length);
   }
 
   public StandardMethod(StandardGenericFunction gf,
