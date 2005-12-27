@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.200 2005-12-27 03:55:26 piso Exp $
+;;; $Id: clos.lisp,v 1.201 2005-12-27 19:06:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -512,11 +512,9 @@
     (setf (class-direct-slots class) slots)
     (dolist (direct-slot slots)
       (dolist (reader (%slot-definition-readers direct-slot))
-        (add-reader-method
-         class reader (%slot-definition-name direct-slot)))
+        (add-reader-method class reader (%slot-definition-name direct-slot)))
       (dolist (writer (%slot-definition-writers direct-slot))
-        (add-writer-method
-         class writer (%slot-definition-name direct-slot)))))
+        (add-writer-method class writer (%slot-definition-name direct-slot)))))
   (setf (class-direct-default-initargs class) direct-default-initargs)
   (funcall (if (eq (class-of class) (find-class 'standard-class))
                #'std-finalize-inheritance
@@ -1687,26 +1685,50 @@
 
 ;;; Reader and writer methods
 
+(defun make-instance-standard-reader-method (gf
+                                             &key
+                                             lambda-list
+                                             qualifiers
+                                             specializers
+                                             documentation
+                                             function
+                                             fast-function)
+  (declare (ignore gf))
+  (let ((method (std-allocate-instance (find-class 'standard-reader-method))))
+    (setf (method-lambda-list method) lambda-list)
+    (setf (method-qualifiers method) qualifiers)
+    (%set-method-specializers method (canonicalize-specializers specializers))
+    (setf (method-documentation method) documentation)
+    (%set-method-generic-function method nil)
+    (%set-method-function method function)
+    (%set-method-fast-function method fast-function)
+    method))
+
 (defun add-reader-method (class function-name slot-name)
   (let* ((lambda-expression
           (if (eq (class-of class) the-class-standard-class)
               `(lambda (object) (std-slot-value object ',slot-name)))
               `(lambda (object) (slot-value object ',slot-name)))
          (method-function (compute-method-function lambda-expression))
-         (fast-function (compute-method-fast-function lambda-expression))
-         )
-    (ensure-method function-name
-                   :lambda-list '(object)
-                   :qualifiers ()
-                   :specializers (list class)
-;;                    :function `(function ,method-function)
-                   :function (if (autoloadp 'compile)
-                                 method-function
-                                 (compile nil method-function))
-                   :fast-function (if (autoloadp 'compile)
-                                      fast-function
-                                      (compile nil fast-function))
-                   )))
+         (fast-function (compute-method-fast-function lambda-expression)))
+    (let ((method-lambda-list '(object))
+          (gf (find-generic-function function-name nil)))
+      (if gf
+          (check-method-lambda-list method-lambda-list (generic-function-lambda-list gf))
+          (setf gf (ensure-generic-function function-name :lambda-list method-lambda-list)))
+      (let ((method
+             (make-instance-standard-reader-method gf
+                                                   :lambda-list '(object)
+                                                   :qualifiers ()
+                                                   :specializers (list class)
+                                                   :function (if (autoloadp 'compile)
+                                                                 method-function
+                                                                 (compile nil method-function))
+                                                   :fast-function (if (autoloadp 'compile)
+                                                                      fast-function
+                                                                      (compile nil fast-function)))))
+        (%add-method gf method)
+        method))))
 
 (defun add-writer-method (class function-name slot-name)
   (let* ((lambda-expression
