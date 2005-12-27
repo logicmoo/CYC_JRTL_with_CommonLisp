@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.199 2005-11-08 14:51:07 piso Exp $
+;;; $Id: clos.lisp,v 1.200 2005-12-27 03:55:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-;;; Adapted from Closette.
+;;; Originally based on Closette.
 
 ;;; Closette Version 1.0 (February 10, 1991)
 ;;;
@@ -836,14 +836,22 @@
                           all-keys))
           gf))))
 
-(defun finalize-generic-function (gf)
-  (setf (classes-to-emf-table gf) (make-hash-table :test #'equal))
+(defun initial-discriminating-function (gf args)
   (set-funcallable-instance-function
    gf
    (funcall (if (eq (class-of gf) the-class-standard-gf)
                 #'std-compute-discriminating-function
                 #'compute-discriminating-function)
             gf))
+  (apply gf args))
+
+(defun finalize-generic-function (gf)
+  (setf (classes-to-emf-table gf) (make-hash-table :test #'equal))
+  (set-funcallable-instance-function
+   gf
+   (make-closure `(lambda (&rest args)
+                    (initial-discriminating-function ,gf args))
+                 nil))
   ;; FIXME Do we need to warn on redefinition somewhere else?
   (let ((*warn-on-redefinition* nil))
     (setf (fdefinition (%generic-function-name gf)) gf))
@@ -1175,15 +1183,6 @@
                 (make-closure `(lambda (&rest args)
                                  (slow-method-lookup ,gf args nil))
                               nil))
-;;                ((and (eq (generic-function-method-combination gf) 'standard)
-;;                      (= (length (generic-function-methods gf)) 1))
-;;                 (let* ((method (%car (generic-function-methods gf)))
-;;                        (fast-function (%method-fast-function method)))
-;;                   (if fast-function
-;;                       (return-from std-compute-discriminating-function fast-function)
-;;                       (make-closure `(lambda (&rest args)
-;;                                        (funcall ,(%method-function method) args nil))
-;;                                     nil))))
                (t
                 (let* ((emf-table (classes-to-emf-table gf))
                        (number-required (length (gf-required-args gf)))
@@ -1194,14 +1193,28 @@
                   (make-closure
                    (cond ((= number-required 1)
                           (if exact
-                              `(lambda (arg)
-                                 (declare (optimize speed))
-                                 (let* ((class (class-of arg))
-                                        (emfun (or (gethash1 class ,emf-table)
-                                                   (slow-method-lookup-1 ,gf class))))
-                                   (if emfun
-                                       (funcall emfun (list arg))
-                                       (apply #'no-applicable-method ,gf (list arg)))))
+                              (cond ((and (eq (generic-function-method-combination gf) 'standard)
+                                          (= (length (generic-function-methods gf)) 1))
+                                     (let* ((method (%car (generic-function-methods gf)))
+                                            (class (car (%method-specializers method)))
+                                            (function (or (%method-fast-function method)
+                                                          (%method-function method))))
+                                       `(lambda (arg)
+                                          (declare (optimize speed))
+                                          (unless (simple-typep arg ,class)
+                                            (error 'simple-type-error
+                                                   :datum arg
+                                                   :expected-type ,class))
+                                          (funcall ,function arg))))
+                                    (t
+                                     `(lambda (arg)
+                                        (declare (optimize speed))
+                                        (let* ((class (class-of arg))
+                                               (emfun (or (gethash1 class ,emf-table)
+                                                          (slow-method-lookup-1 ,gf class))))
+                                          (if emfun
+                                              (funcall emfun (list arg))
+                                              (apply #'no-applicable-method ,gf (list arg)))))))
                               `(lambda (&rest args)
                                  (declare (optimize speed))
                                  (unless (>= (length args) 1)
