@@ -31,7 +31,7 @@
           (time (funcall f size nvars count)))))))
 
 #+abcl
-(defun run-other-tests ()
+(defun test-cl-ppcre ()
   (let ((*default-pathname-defaults* "/home/peter/cl-ppcre-1.2.11/"))
     (map nil #'delete-file (directory "*.abcl"))
     (load "load.lisp")
@@ -40,7 +40,11 @@
         (gc)
         (time (funcall f))
         (gc)
-        (time (funcall f)))))
+        (time (funcall f))))))
+
+#+abcl
+(defun run-other-tests ()
+  (test-cl-ppcre)
   (let ((*default-pathname-defaults* "/home/peter/salza-0.7.2/"))
     (map nil #'delete-file (directory "*.abcl"))
     (load "/home/peter/test-salza.lisp")
