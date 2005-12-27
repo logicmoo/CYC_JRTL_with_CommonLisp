@@ -2,7 +2,7 @@
  * StandardMethod.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: StandardMethod.java,v 1.5 2005-12-27 12:23:21 piso Exp $
+ * $Id: StandardMethod.java,v 1.6 2005-12-27 12:25:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,7 +57,7 @@ public final class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signal(new TypeError(arg, Symbol.STANDARD_METHOD));
+            return signalTypeError(arg, Symbol.STANDARD_METHOD);
           }
       }
     };
@@ -77,7 +77,7 @@ public final class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signal(new TypeError(first, Symbol.STANDARD_METHOD));
+            return signalTypeError(first, Symbol.STANDARD_METHOD);
           }
       }
     };
@@ -94,7 +94,7 @@ public final class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signal(new TypeError(arg, Symbol.STANDARD_METHOD));
+            return signalTypeError(arg, Symbol.STANDARD_METHOD);
           }
       }
     };
@@ -114,7 +114,7 @@ public final class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signal(new TypeError(first, Symbol.STANDARD_METHOD));
+            return signalTypeError(first, Symbol.STANDARD_METHOD);
           }
       }
     };
@@ -131,7 +131,7 @@ public final class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signal(new TypeError(arg, Symbol.STANDARD_METHOD));
+            return signalTypeError(arg, Symbol.STANDARD_METHOD);
           }
       }
     };
@@ -151,7 +151,7 @@ public final class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signal(new TypeError(first, Symbol.STANDARD_METHOD));
+            return signalTypeError(first, Symbol.STANDARD_METHOD);
           }
       }
     };
@@ -171,7 +171,7 @@ public final class StandardMethod extends StandardObject
           ((StandardGenericFunction)genericFunction).getGenericFunctionName();
         if (name != null)
           {
-            StringBuffer sb = new StringBuffer();
+            FastStringBuffer sb = new FastStringBuffer();
             sb.append(getLispClass().getSymbol().writeToString());
             sb.append(' ');
             sb.append(name.writeToString());
@@ -211,7 +211,7 @@ public final class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signal(new TypeError(arg, Symbol.METHOD));
+            return signalTypeError(arg, Symbol.METHOD);
           }
       }
     };
@@ -230,7 +230,7 @@ public final class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signal(new TypeError(first, Symbol.METHOD));
+            return signalTypeError(first, Symbol.METHOD);
           }
       }
     };
@@ -247,7 +247,7 @@ public final class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signal(new TypeError(arg, Symbol.METHOD));
+            return signalTypeError(arg, Symbol.METHOD);
           }
       }
     };
@@ -267,7 +267,7 @@ public final class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signal(new TypeError(first, Symbol.METHOD));
+            return signalTypeError(first, Symbol.METHOD);
           }
       }
     };
@@ -284,7 +284,7 @@ public final class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signal(new TypeError(arg, Symbol.METHOD));
+            return signalTypeError(arg, Symbol.METHOD);
           }
       }
     };
@@ -304,7 +304,7 @@ public final class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signal(new TypeError(first, Symbol.METHOD));
+            return signalTypeError(first, Symbol.METHOD);
           }
       }
     };
@@ -321,7 +321,7 @@ public final class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signal(new TypeError(arg, Symbol.METHOD));
+            return signalTypeError(arg, Symbol.METHOD);
           }
       }
     };
@@ -341,7 +341,7 @@ public final class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signal(new TypeError(first, Symbol.METHOD));
+            return signalTypeError(first, Symbol.METHOD);
           }
       }
     };
