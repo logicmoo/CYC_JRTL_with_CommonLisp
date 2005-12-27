@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardClass.java,v 1.45 2005-12-27 12:28:21 piso Exp $
+ * $Id: StandardClass.java,v 1.46 2005-12-27 19:04:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -224,6 +224,13 @@ public class StandardClass extends SlotClass
     addClass(Symbol.STANDARD_METHOD, STANDARD_METHOD);
   }
 
+  public static final StandardClass STANDARD_READER_METHOD =
+    new StandardReaderMethodClass();
+  static
+  {
+    addClass(Symbol.STANDARD_READER_METHOD, STANDARD_READER_METHOD);
+  }
+
   public static final StandardClass STANDARD_GENERIC_FUNCTION =
     new StandardGenericFunctionClass();
   static
@@ -433,6 +440,14 @@ public class StandardClass extends SlotClass
     STANDARD_METHOD.setDirectSlotDefinitions(STANDARD_METHOD.getClassLayout().generateSlotDefinitions());
     // There are no inherited slots.
     STANDARD_METHOD.setSlotDefinitions(STANDARD_METHOD.getDirectSlotDefinitions());
+
+    // STANDARD-READER-METHOD
+    Debug.assertTrue(STANDARD_READER_METHOD.isFinalized());
+    STANDARD_READER_METHOD.setCPL(STANDARD_READER_METHOD, STANDARD_METHOD,
+                                  METHOD, STANDARD_OBJECT, BuiltInClass.T);
+    STANDARD_READER_METHOD.setSlotDefinitions(STANDARD_READER_METHOD.getClassLayout().generateSlotDefinitions());
+    // All but the last slot are inherited.
+    STANDARD_READER_METHOD.setDirectSlotDefinitions(list1(STANDARD_READER_METHOD.getSlotDefinitions().reverse().car()));
 
     // STANDARD-GENERIC-FUNCTION
     Debug.assertTrue(STANDARD_GENERIC_FUNCTION.isFinalized());
