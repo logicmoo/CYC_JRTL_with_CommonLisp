@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Symbol.java,v 1.242 2005-12-24 17:05:12 piso Exp $
+ * $Id: Symbol.java,v 1.243 2005-12-27 19:01:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2858,6 +2858,10 @@ public class Symbol extends LispObject
     PACKAGE_EXT.addExternalSymbol("THREAD");
   public static final Symbol SUPPRESS_COMPILER_WARNINGS =
     PACKAGE_EXT.addExternalSymbol("*SUPPRESS-COMPILER-WARNINGS*");
+
+  // MOP.
+  public static final Symbol STANDARD_READER_METHOD =
+    PACKAGE_MOP.addExternalSymbol("STANDARD-READER-METHOD");
 
   // Java interface.
   public static final Symbol JAVA_EXCEPTION =
