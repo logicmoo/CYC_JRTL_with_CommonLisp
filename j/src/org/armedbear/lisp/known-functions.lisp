@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.43 2005-12-28 17:20:16 piso Exp $
+;;; $Id: known-functions.lisp,v 1.44 2005-12-28 21:26:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -177,6 +177,7 @@
            sort
            stable-sort
            standard-object-p
+           std-instance-layout
            std-slot-value
            stream-element-type
            stream-line-number
