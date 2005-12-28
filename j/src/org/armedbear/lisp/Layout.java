@@ -2,7 +2,7 @@
  * Layout.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Layout.java,v 1.25 2005-12-26 18:56:58 piso Exp $
+ * $Id: Layout.java,v 1.26 2005-12-28 21:25:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -252,7 +252,7 @@ public final class Layout extends LispObject
 
   // ### layout-slot-location layout slot-name => location
   private static final Primitive LAYOUT_SLOT_LOCATION =
-    new Primitive("layout-slot-location", PACKAGE_SYS, true)
+    new Primitive("layout-slot-location", PACKAGE_SYS, true, "layout slot-name")
     {
       public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
