@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.726 2005-12-27 03:55:59 piso Exp $
+;;; $Id: jvm.lisp,v 1.727 2005-12-28 12:04:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6745,6 +6745,23 @@ representation, based on the derived type of the LispObject."
            (maybe-emit-clear-values arg)
            (emit-invoke-method "ZEROP" target representation)))))
 
+(defun p2-make-array (form target representation)
+  ;; In safe code, we want to make sure the requested length does not exceed
+  ;; ARRAY-DIMENSION-LIMIT.
+  (cond ((and (< *safety* 3)
+              (= (length form) 2)
+              (fixnum-type-p (derive-compiler-type (second form)))
+              (null representation))
+         (let ((arg (second form)))
+           (emit 'new +lisp-simple-vector-class+)
+           (emit 'dup)
+           (compile-form arg 'stack :int)
+           (maybe-emit-clear-values arg)
+           (emit-invokespecial-init +lisp-simple-vector-class+ '("I"))
+           (emit-move-from-stack target representation)))
+        (t
+         (compile-function-call form target representation))))
+
 (defun p2-make-string (form target representation)
   ;; In safe code, we want to make sure the requested length does not exceed
   ;; ARRAY-DIMENSION-LIMIT.
@@ -9944,6 +9961,7 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'logior              'p2-logior)
   (install-p2-handler 'lognot              'p2-lognot)
   (install-p2-handler 'logxor              'p2-logxor)
+  (install-p2-handler 'make-array          'p2-make-array)
   (install-p2-handler 'make-string         'p2-make-string)
   (install-p2-handler 'make-structure      'p2-make-structure)
   (install-p2-handler 'max                 'p2-min/max)
