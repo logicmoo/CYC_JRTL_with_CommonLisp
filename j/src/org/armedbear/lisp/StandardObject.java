@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObject.java,v 1.56 2005-12-26 18:55:24 piso Exp $
+ * $Id: StandardObject.java,v 1.57 2005-12-28 21:24:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -352,14 +352,45 @@ public class StandardObject extends LispObject
       public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
       {
+        final StandardObject instance;
         try
           {
-            return ((StandardObject)first).slots[Fixnum.getValue(second)]; // FIXME
+            instance = (StandardObject) first;
           }
         catch (ClassCastException e)
           {
             return signalTypeError(first, Symbol.STANDARD_OBJECT);
           }
+        final int index;
+        try
+          {
+            index = ((Fixnum)second).value;
+          }
+        catch (ClassCastException e)
+          {
+            return signalTypeError(second,
+                                   list3(Symbol.INTEGER, Fixnum.ZERO,
+                                         new Fixnum(instance.slots.length)));
+          }
+        LispObject value;
+        try
+          {
+            value = instance.slots[index];
+          }
+        catch (ArrayIndexOutOfBoundsException e)
+          {
+            return signalTypeError(second,
+                                   list3(Symbol.INTEGER, Fixnum.ZERO,
+                                         new Fixnum(instance.slots.length)));
+          }
+        if (value == UNBOUND_VALUE)
+          {
+            LispObject slotName = instance.layout.getSlotNames()[index];
+            value = Symbol.SLOT_UNBOUND.execute(instance.getLispClass(),
+                                                instance, slotName);
+            LispThread.currentThread()._values = null;
+          }
+        return value;
       }
     };
 
