@@ -1,7 +1,7 @@
 ;;; coerce.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: coerce.lisp,v 1.10 2005-12-28 10:58:19 piso Exp $
+;;; $Id: coerce.lisp,v 1.11 2005-12-28 17:25:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,10 +19,10 @@
 
 (in-package #:system)
 
-(declaim (ftype (function (t t) t) coerce-list-to-vector))
-(defun coerce-list-to-vector (list result-type)
+(declaim (ftype (function (t) t) coerce-list-to-vector))
+(defun coerce-list-to-vector (list)
   (let* ((length (length list))
-         (result (make-sequence result-type length)))
+         (result (make-array length)))
     (dotimes (i length)
       (declare (type index i))
       (setf (aref result i) (pop list)))
@@ -53,6 +53,9 @@
          object)
         ((typep object result-type)
          object)
+        ((and (listp object)
+              (eq result-type 'vector))
+         (coerce-list-to-vector object))
         ((eq result-type 'character)
          (cond ((and (stringp object)
                      (= (length object) 1))
@@ -84,9 +87,6 @@
         ((and (consp result-type)
               (eq (%car result-type) 'AND))
          (coerce-object-to-and-type object result-type))
-        ((and (listp object)
-              (eq result-type 'vector))
-         (coerce-list-to-vector object result-type))
         ((and (simple-typep object 'sequence)
               (%subtypep result-type 'sequence))
          (concatenate result-type object))
