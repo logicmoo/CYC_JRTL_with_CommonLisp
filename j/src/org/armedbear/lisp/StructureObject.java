@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StructureObject.java,v 1.60 2005-12-13 22:00:01 piso Exp $
+ * $Id: StructureObject.java,v 1.61 2005-12-28 17:19:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -268,7 +268,7 @@ public final class StructureObject extends LispObject
         int currentLevel = Fixnum.getValue(currentPrintLevel);
         if (currentLevel >= maxLevel && slots.length > 0)
           return "#";
-        StringBuffer sb = new StringBuffer("#S(");
+        FastStringBuffer sb = new FastStringBuffer("#S(");
         sb.append(structureClass.getSymbol().writeToString());
         if (currentLevel < maxLevel)
           {
@@ -322,7 +322,7 @@ public final class StructureObject extends LispObject
     {
       public LispObject execute(LispObject arg)
       {
-        return (arg instanceof StructureObject) ? T : NIL;
+        return arg instanceof StructureObject ? T : NIL;
       }
     };
 
@@ -338,7 +338,7 @@ public final class StructureObject extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signal(new TypeError(arg, Symbol.STRUCTURE_OBJECT));
+            return signalTypeError(arg, Symbol.STRUCTURE_OBJECT);
           }
       }
     };
