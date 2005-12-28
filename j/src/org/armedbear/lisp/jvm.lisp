@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.727 2005-12-28 12:04:03 piso Exp $
+;;; $Id: jvm.lisp,v 1.728 2005-12-28 17:25:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1328,6 +1328,7 @@
 (defconstant +lisp-bignum+ "Lorg/armedbear/lisp/Bignum;")
 (defconstant +lisp-character-class+ "org/armedbear/lisp/LispCharacter")
 (defconstant +lisp-character+ "Lorg/armedbear/lisp/LispCharacter;")
+(defconstant +lisp-abstract-bit-vector-class+ "org/armedbear/lisp/AbstractBitVector")
 (defconstant +lisp-abstract-vector-class+ "org/armedbear/lisp/AbstractVector")
 (defconstant +lisp-abstract-string-class+ "org/armedbear/lisp/AbstractString")
 (defconstant +lisp-simple-vector-class+ "org/armedbear/lisp/SimpleVector")
@@ -3291,7 +3292,6 @@ representation, based on the derived type of the LispObject."
 (defun initialize-unary-operators ()
   (let ((ht (make-hash-table :test 'eq)))
     (dolist (pair '((ABS             "ABS")
-                    (BIT-VECTOR-P    "BIT_VECTOR_P")
                     (CADDR           "caddr")
                     (CADR            "cadr")
                     (CDDR            "cddr")
@@ -4132,6 +4132,7 @@ representation, based on the derived type of the LispObject."
                     (>=                 p2-test-numeric-comparison)
                     (AND                p2-test-and)
                     (ATOM               p2-test-atom)
+                    (BIT-VECTOR-P       p2-test-bit-vector-p)
                     (CHAR=              p2-test-char=)
                     (CHARACTERP         p2-test-characterp)
                     (CLASSP             p2-test-classp)
@@ -4189,6 +4190,9 @@ representation, based on the derived type of the LispObject."
       (maybe-emit-clear-values arg)
       (emit 'instanceof java-class)
       'ifeq)))
+
+(defun p2-test-bit-vector-p (form)
+  (p2-test-instanceof-predicate form +lisp-abstract-bit-vector-class+))
 
 (defun p2-test-characterp (form)
   (p2-test-instanceof-predicate form +lisp-character-class+))
@@ -5500,6 +5504,9 @@ representation, based on the derived type of the LispObject."
        (emit-push-nil)
        (label LABEL2)
        (emit-move-from-stack target representation)))))
+
+(defun p2-bit-vector-p (form target representation)
+  (p2-instanceof-predicate form target representation +lisp-abstract-bit-vector-class+))
 
 (defun p2-characterp (form target representation)
   (p2-instanceof-predicate form target representation +lisp-character-class+))
@@ -9924,6 +9931,7 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'aset                'p2-aset)
   (install-p2-handler 'ash                 'p2-ash)
   (install-p2-handler 'atom                'p2-atom)
+  (install-p2-handler 'bit-vector-p        'p2-bit-vector-p)
   (install-p2-handler 'car                 'p2-car)
   (install-p2-handler 'cdr                 'p2-cdr)
   (install-p2-handler 'char                'p2-char/schar)
