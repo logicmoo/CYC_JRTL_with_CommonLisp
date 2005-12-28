@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.202 2005-12-27 20:16:50 piso Exp $
+;;; $Id: clos.lisp,v 1.203 2005-12-28 21:26:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1187,19 +1187,22 @@
                 (make-closure
                  (let* ((method (%car (generic-function-methods gf)))
                         (class (car (%method-specializers method)))
-;;                         (function (or (%method-fast-function method)
-;;                                       (%method-function method)))
-                        (slot-name (reader-method-slot-name method))
-                        )
+                        (slot-name (reader-method-slot-name method)))
                    `(lambda (arg)
                       (declare (optimize speed))
-                      (unless (simple-typep arg ,class)
-                        (error 'simple-type-error
-                               :datum arg
-                               :expected-type ,class))
-;;                       (funcall ,function arg)
-                      (std-slot-value arg ',slot-name)
-                      ))
+                      (let ((layout (std-instance-layout arg)))
+                        (let ((location (gethash1 layout ,(classes-to-emf-table gf))))
+                          (unless location
+                            (unless (simple-typep arg ,class)
+                              ;; FIXME no applicable method
+                              (error 'simple-type-error
+                                     :datum arg
+                                     :expected-type ,class))
+                            (setf location (slow-reader-lookup ,gf layout ',slot-name)))
+                          (if (consp location)
+                              ;; Shared slot.
+                              (cdr location)
+                              (standard-instance-access arg location))))))
                  nil))
                (t
                 (let* ((emf-table (classes-to-emf-table gf))
@@ -1211,20 +1214,21 @@
                   (make-closure
                    (cond ((= number-required 1)
                           (if exact
-;;                               (cond ((and (eq (generic-function-method-combination gf) 'standard)
-;;                                           (= (length (generic-function-methods gf)) 1))
-;;                                      (let* ((method (%car (generic-function-methods gf)))
-;;                                             (class (car (%method-specializers method)))
-;;                                             (function (or (%method-fast-function method)
-;;                                                           (%method-function method))))
-;;                                        `(lambda (arg)
-;;                                           (declare (optimize speed))
-;;                                           (unless (simple-typep arg ,class)
-;;                                             (error 'simple-type-error
-;;                                                    :datum arg
-;;                                                    :expected-type ,class))
-;;                                           (funcall ,function arg))))
-;;                                     (t
+                              (cond ((and (eq (generic-function-method-combination gf) 'standard)
+                                          (= (length (generic-function-methods gf)) 1))
+                                     (let* ((method (%car (generic-function-methods gf)))
+                                            (class (car (%method-specializers method)))
+                                            (function (or (%method-fast-function method)
+                                                          (%method-function method))))
+                                       `(lambda (arg)
+                                          (declare (optimize speed))
+                                          (unless (simple-typep arg ,class)
+                                            ;; FIXME no applicable method
+                                            (error 'simple-type-error
+                                                   :datum arg
+                                                   :expected-type ,class))
+                                          (funcall ,function arg))))
+                                    (t
                                      `(lambda (arg)
                                         (declare (optimize speed))
                                         (let* ((class (class-of arg))
@@ -1233,7 +1237,7 @@
                                           (if emfun
                                               (funcall emfun (list arg))
                                               (apply #'no-applicable-method ,gf (list arg)))))
-;;                                      ))
+                                     ))
                               `(lambda (&rest args)
                                  (declare (optimize speed))
                                  (unless (>= (length args) 1)
@@ -1392,6 +1396,13 @@
           (when emfun
             (setf (gethash class (classes-to-emf-table gf)) emfun))
           emfun))))
+
+(declaim (ftype (function (t t t) t) slow-reader-lookup))
+(defun slow-reader-lookup (gf layout slot-name)
+  ;; FIXME Ideally we should use an EQ hash table.
+  (let ((location (layout-slot-location layout slot-name)))
+    (setf (gethash layout (classes-to-emf-table gf)) location)
+    location))
 
 (defun sub-specializer-p (c1 c2 c-arg)
   (find c2 (cdr (memq c1 (%class-precedence-list c-arg)))))
