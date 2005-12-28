@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispObject.java,v 1.151 2005-12-22 02:18:07 piso Exp $
+ * $Id: LispObject.java,v 1.152 2005-12-28 17:21:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -275,11 +275,6 @@ public class LispObject extends Lisp
         signalTypeError(this, Symbol.NUMBER);
         // Not reached.
         return false;
-    }
-
-    public LispObject BIT_VECTOR_P()
-    {
-        return NIL;
     }
 
     public LispObject COMPLEXP()

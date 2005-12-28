@@ -2,7 +2,7 @@
  * AbstractBitVector.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: AbstractBitVector.java,v 1.13 2005-10-23 18:44:50 piso Exp $
+ * $Id: AbstractBitVector.java,v 1.14 2005-12-28 17:21:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,11 +42,6 @@ public abstract class AbstractBitVector extends AbstractVector
     public LispObject classOf()
     {
         return BuiltInClass.BIT_VECTOR;
-    }
-
-    public final LispObject BIT_VECTOR_P()
-    {
-        return T;
     }
 
     public final int capacity()
