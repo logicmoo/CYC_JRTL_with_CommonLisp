@@ -1,7 +1,7 @@
 ;;; coerce.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: coerce.lisp,v 1.9 2005-08-16 19:58:30 piso Exp $
+;;; $Id: coerce.lisp,v 1.10 2005-12-28 10:58:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@
 
 ;; FIXME This is a special case for LOOP code, which does things like
 ;; (AND SINGLE-FLOAT REAL) and (AND SINGLE-FLOAT (REAL (0))).
-(declaim (ftype (function (t t) t) coerce-to-and-type))
+(declaim (ftype (function (t t) t) coerce-object-to-and-type))
 (defun coerce-object-to-and-type (object result-type)
   (when (and (consp result-type)
              (eq (%car result-type) 'AND)
