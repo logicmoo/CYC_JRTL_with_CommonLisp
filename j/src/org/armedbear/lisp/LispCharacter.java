@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispCharacter.java,v 1.72 2005-12-29 21:48:58 piso Exp $
+ * $Id: LispCharacter.java,v 1.73 2005-12-29 22:12:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -107,6 +107,11 @@ public final class LispCharacter extends LispObject
     if (value == '\n')
       return true;
     return false;
+  }
+
+  public boolean eql(char c)
+  {
+    return value == c;
   }
 
   public boolean eql(LispObject obj)
