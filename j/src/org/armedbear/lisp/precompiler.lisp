@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.145 2005-12-23 02:12:38 piso Exp $
+;;; $Id: precompiler.lisp,v 1.146 2005-12-29 15:14:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -254,6 +254,18 @@
             (position (%caddr bytespec)))
         `(%ldb ,size ,position ,integer))
       form))
+
+(define-source-transform find (&whole form item sequence &key from-end test test-not start end key)
+  (cond ((and (>= (length form) 3) (null start) (null end))
+         (let ((item-var (gensym))
+               (seq-var (gensym)))
+           `(let ((,item-var ,item)
+                  (,seq-var ,sequence))
+              (if (listp ,seq-var)
+                  (list-find* ,item-var ,seq-var ,from-end ,test ,test-not 0 (length ,seq-var) ,key)
+                  (vector-find* ,item-var ,seq-var ,from-end ,test ,test-not 0 (length ,seq-var) ,key)))))
+        (t
+         form)))
 
 (define-compiler-macro catch (&whole form tag &rest args)
   (declare (ignore tag))
