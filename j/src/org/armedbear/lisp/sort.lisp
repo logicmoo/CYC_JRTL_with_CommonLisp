@@ -1,7 +1,7 @@
 ;;; sort.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sort.lisp,v 1.6 2003-10-29 14:16:47 piso Exp $
+;;; Copyright (C) 2003-2005 Peter Graves
+;;; $Id: sort.lisp,v 1.7 2005-12-29 15:13:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,9 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "COMMON-LISP")
-
-(export '(sort merge))
+(in-package #:system)
 
 (defun sort (sequence predicate &key key)
   (if (listp sequence)
@@ -49,7 +47,8 @@
 ;;; list, elements of list-2 are guaranteed to come after equal elements
 ;;; of list-1.
 (defun merge-lists* (list-1 list-2 pred key
-			    &optional (merge-lists-header (list :header)))
+;; 			    &optional (merge-lists-header (list :header)))
+                            merge-lists-header)
   (do* ((result merge-lists-header)
 	(p result))                         ; P points to last cell of result
     ((or (null list-1) (null list-2))       ; done when either list used up
@@ -110,8 +109,8 @@
                          ;; the second run goes off the end of the list
                          (t (setf unsorted nil)))
                    (multiple-value-bind (merged-head merged-last)
-                     (merge-lists* list-1 list-2 pred key
-                                   merge-lists-header)
+                       (merge-lists* list-1 list-2 pred key
+                                     merge-lists-header)
                      (setf (cdr last) merged-head)
                      (setf last merged-last))
                    (if (null unsorted) (return)))

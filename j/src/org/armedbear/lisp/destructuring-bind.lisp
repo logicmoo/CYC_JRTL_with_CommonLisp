@@ -1,7 +1,7 @@
 ;;; destructuring-bind.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: destructuring-bind.lisp,v 1.21 2005-06-27 12:24:27 piso Exp $
+;;; $Id: destructuring-bind.lisp,v 1.22 2005-12-29 15:13:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -292,12 +292,14 @@
 	  (push `(multiple-value-bind (,problem ,info)
 		     (verify-keywords ,rest-name ',keys ',allow-other-keys-p)
 		   (when ,problem
-		     (,error-fun
-		      'defmacro-lambda-list-broken-key-list-error
-		      :kind ',error-kind
-		      ,@(when name `(:name ',name))
-		      :problem ,problem
-		      :info ,info)))
+;; 		     (,error-fun
+;; 		      'defmacro-lambda-list-broken-key-list-error
+;; 		      :kind ',error-kind
+;; 		      ,@(when name `(:name ',name))
+;; 		      :problem ,problem
+;; 		      :info ,info)
+                     (error 'program-error "Unrecognized keyword argument ~S" (car ,info)))
+                     )
 		*arg-tests*)))
     (values env-arg-used minimum (if (null restp) maximum nil))))
 

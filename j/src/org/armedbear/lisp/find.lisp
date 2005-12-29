@@ -1,7 +1,7 @@
 ;;; find.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: find.lisp,v 1.13 2005-06-11 23:46:28 piso Exp $
+;;; $Id: find.lisp,v 1.14 2005-12-29 15:14:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -185,10 +185,14 @@
 
 (defun list-find* (item sequence from-end test test-not start end key)
   (declare (type fixnum start end))
+  (unless (or test test-not)
+    (setf test 'eql))
   (list-find item sequence))
 
 (defun vector-find* (item sequence from-end test test-not start end key)
   (declare (type fixnum start end))
+  (unless (or test test-not)
+    (setf test 'eql))
   (vector-find item sequence))
 
 (defun find (item sequence &key from-end (test #'eql) test-not (start 0)
