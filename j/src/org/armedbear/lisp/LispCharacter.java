@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispCharacter.java,v 1.71 2005-12-25 05:25:13 piso Exp $
+ * $Id: LispCharacter.java,v 1.72 2005-12-29 21:48:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,12 +23,12 @@ package org.armedbear.lisp;
 
 public final class LispCharacter extends LispObject
 {
-  private static final LispCharacter[] characters = new LispCharacter[CHAR_MAX];
+  public static final LispCharacter[] constants = new LispCharacter[CHAR_MAX];
 
   static
   {
-    for (int i = characters.length; i-- > 0;)
-      characters[i] = new LispCharacter((char)i);
+    for (int i = constants.length; i-- > 0;)
+      constants[i] = new LispCharacter((char)i);
   }
 
   public final char value;
@@ -37,7 +37,7 @@ public final class LispCharacter extends LispObject
   {
     try
       {
-        return characters[c];
+        return constants[c];
       }
     catch (ArrayIndexOutOfBoundsException e)
       {
@@ -319,7 +319,7 @@ public final class LispCharacter extends LispObject
           {
             int n = ((Fixnum)arg).value;
             if (n < CHAR_MAX)
-              return characters[n];
+              return constants[n];
           }
         catch (ClassCastException e)
           {
@@ -388,7 +388,7 @@ public final class LispCharacter extends LispObject
             return signalTypeError(arg, Symbol.CHARACTER);
           }
         if (c < 128)
-          return characters[LOWER_CASE_CHARS[c]];
+          return constants[LOWER_CASE_CHARS[c]];
         return getInstance(toLowerCase(c));
       }
     };
@@ -409,7 +409,7 @@ public final class LispCharacter extends LispObject
             return signalTypeError(arg, Symbol.CHARACTER);
           }
         if (c < 128)
-          return characters[UPPER_CASE_CHARS[c]];
+          return constants[UPPER_CASE_CHARS[c]];
         return getInstance(toUpperCase(c));
       }
     };
@@ -432,7 +432,7 @@ public final class LispCharacter extends LispObject
             return signalTypeError(arg, Symbol.INTEGER);
           }
         if (weight < 10)
-          return characters['0' + weight];
+          return constants['0' + weight];
         return NIL;
       }
       public LispObject execute(LispObject first, LispObject second)
@@ -465,8 +465,8 @@ public final class LispCharacter extends LispObject
         if (weight >= radix)
           return NIL;
         if (weight < 10)
-          return characters['0' + weight];
-        return characters['A' + weight - 10];
+          return constants['0' + weight];
+        return constants['A' + weight - 10];
       }
     };
 
