@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.728 2005-12-28 17:25:55 piso Exp $
+;;; $Id: jvm.lisp,v 1.729 2005-12-29 20:33:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4219,7 +4219,19 @@ representation, based on the derived type of the LispObject."
   (p2-test-predicate form "integerp"))
 
 (defun p2-test-listp (form)
-  (p2-test-predicate form "listp"))
+  (when (check-arg-count form 1)
+    (let* ((arg (%cadr form))
+           (arg-type (derive-compiler-type arg)))
+      (cond ((memq arg-type '(CONS LIST NULL))
+             (compile-form arg nil nil) ; for effect
+             (maybe-emit-clear-values arg)
+             :consequent)
+            ((neq arg-type t)
+             (compile-form arg nil nil) ; for effect
+             (maybe-emit-clear-values arg)
+             :alternate)
+            (t
+             (p2-test-predicate form "listp"))))))
 
 (defun p2-test-minusp (form)
   (when (check-arg-count form 1)
