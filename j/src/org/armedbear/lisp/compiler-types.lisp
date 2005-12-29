@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-types.lisp,v 1.22 2005-12-22 21:59:07 piso Exp $
+;;; $Id: compiler-types.lisp,v 1.23 2005-12-29 20:33:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -126,10 +126,9 @@
                (let ((car (%car type)))
                  (cond ((eq car 'INTEGER)
                         (make-integer-type type))
-                       ((eq car 'SIMPLE-STRING)
-                        'SIMPLE-STRING)
-                       ((eq car 'STRING)
-                        'STRING)
+                       ((memq car '(STRING SIMPLE-STRING VECTOR SIMPLE-VECTOR
+                                    ARRAY SIMPLE-ARRAY LIST))
+                        car)
                        ((eq car 'OR)
                         (case (length (cdr type))
                           (1
