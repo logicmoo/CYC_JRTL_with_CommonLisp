@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.730 2005-12-30 02:48:03 piso Exp $
+;;; $Id: jvm.lisp,v 1.731 2005-12-30 04:19:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3527,12 +3527,15 @@ representation, based on the derived type of the LispObject."
   (unless (check-arg-count form 2)
     (compile-function-call form target representation)
     (return-from p2-eql))
-  (let ((arg1 (%cadr form))
-        (arg2 (%caddr form)))
-    (cond ((and (fixnum-or-unboxed-variable-p arg1)
-                (fixnum-or-unboxed-variable-p arg2))
-           (emit-push-int arg1)
-           (emit-push-int arg2)
+  (let* ((arg1 (%cadr form))
+         (arg2 (%caddr form))
+         (type1 (derive-compiler-type arg1))
+         (type2 (derive-compiler-type arg2)))
+    (cond ((and (fixnum-type-p type1)
+                (fixnum-type-p type2))
+           (compile-form arg1 'stack :int)
+           (compile-form arg2 'stack :int)
+           (maybe-emit-clear-values arg1 arg2)
            (let ((label1 (gensym))
                  (label2 (gensym)))
              (emit 'if_icmpeq `,label1)
@@ -3541,10 +3544,26 @@ representation, based on the derived type of the LispObject."
              (emit 'label `,label1)
              (emit-push-true representation)
              (emit 'label `,label2)))
-          ((fixnum-or-unboxed-variable-p arg1)
-           (emit-push-int arg1)
+          ((fixnum-type-p type2)
+           (compile-form arg1 'stack nil)
+           (compile-form arg2 'stack :int)
+           (maybe-emit-clear-values arg1 arg2)
+           (emit-invokevirtual +lisp-object-class+ "eql" '("I") "Z")
+           (case representation
+             (:boolean)
+             (t
+              (let ((label1 (gensym))
+                    (label2 (gensym)))
+                (emit 'ifne `,label1)
+                (emit-push-nil)
+                (emit 'goto `,label2)
+                (emit 'label `,label1)
+                (emit-push-t)
+                (emit 'label `,label2)))))
+          ((fixnum-type-p type1)
+           (compile-form arg1 'stack :int)
            (compile-form arg2 'stack nil)
-           (maybe-emit-clear-values arg2)
+           (maybe-emit-clear-values arg1 arg2)
            (emit 'swap)
            (emit-invokevirtual +lisp-object-class+ "eql" '("I") "Z")
            (case representation
@@ -3558,11 +3577,28 @@ representation, based on the derived type of the LispObject."
                 (emit 'label `,label1)
                 (emit-push-t)
                 (emit 'label `,label2)))))
-          ((fixnum-or-unboxed-variable-p arg2)
+          ((eq type2 'CHARACTER)
            (compile-form arg1 'stack nil)
-           (maybe-emit-clear-values arg1)
-           (emit-push-int arg2)
-           (emit-invokevirtual +lisp-object-class+ "eql" '("I") "Z")
+           (compile-form arg2 'stack :char)
+           (maybe-emit-clear-values arg1 arg2)
+           (emit-invokevirtual +lisp-object-class+ "eql" '("C") "Z")
+           (case representation
+             (:boolean)
+             (t
+              (let ((label1 (gensym))
+                    (label2 (gensym)))
+                (emit 'ifne `,label1)
+                (emit-push-nil)
+                (emit 'goto `,label2)
+                (emit 'label `,label1)
+                (emit-push-t)
+                (emit 'label `,label2)))))
+          ((eq type1 'CHARACTER)
+           (compile-form arg1 'stack :char)
+           (compile-form arg2 'stack nil)
+           (maybe-emit-clear-values arg1 arg2)
+           (emit 'swap)
+           (emit-invokevirtual +lisp-object-class+ "eql" '("C") "Z")
            (case representation
              (:boolean)
              (t
