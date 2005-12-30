@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.44 2005-12-28 21:26:05 piso Exp $
+;;; $Id: known-functions.lisp,v 1.45 2005-12-30 02:47:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -132,6 +132,7 @@
            ldb
            ldb-test
            list-all-packages
+           list-find*
            load-compiled-function
            lower-case-p
            make-string-output-stream
@@ -181,6 +182,7 @@
            std-slot-value
            stream-element-type
            stream-line-number
+           string-find
            string<=
            structure-object-p
            structure-ref
@@ -195,6 +197,7 @@
            truename
            upper-case-p
            vector
+           vector-find*
            vectorp
            write-byte
            write-sequence
