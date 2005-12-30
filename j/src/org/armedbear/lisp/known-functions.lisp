@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.45 2005-12-30 02:47:05 piso Exp $
+;;; $Id: known-functions.lisp,v 1.46 2005-12-30 16:56:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -365,7 +365,7 @@
              reverse nreverse
              last
              cons rplaca rplacd
-             sys::set-car sys::set-cdr
+             set-car set-cdr
              copy-list copy-tree
              make-sequence make-list make-array make-package
              find-package
