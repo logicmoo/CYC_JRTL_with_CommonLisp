@@ -1,7 +1,7 @@
 ;;; sort.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: sort.lisp,v 1.7 2005-12-29 15:13:30 piso Exp $
+;;; $Id: sort.lisp,v 1.8 2005-12-30 16:55:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -29,45 +29,77 @@
       (sort-list sequence predicate key)
       (quick-sort sequence 0 (length sequence) predicate key)))
 
-;;; From CMUCL.
+;; Adapted from SBCL.
+(declaim (ftype (function (list) cons) last-cons-of))
+(defun last-cons-of (list)
+  (loop
+    (let ((rest (rest list)))
+      (if rest
+          (setf list rest)
+          (return list)))))
 
-;;; Stable Sorting Lists
+;; Adapted from OpenMCL.
+(defun merge-lists (list1 list2 pred key)
+  (declare (optimize (speed 3) (safety 0)))
+  (if (null key)
+      (merge-lists-no-key list1 list2 pred)
+      (cond ((null list1)
+             (values list2 (last-cons-of list2)))
+            ((null list2)
+             (values list1 (last-cons-of list1)))
+            (t
+             (let* ((result (cons nil nil))
+                    (p result)               ; p points to last cell of result
+                    (key1 (funcall key (car list1)))
+                    (key2 (funcall key (car list2))))
+               (declare (type list p))
+               (loop
+                 (cond ((funcall pred key2 key1)
+                        (rplacd p list2)     ; append the lesser list to last cell of
+                        (setf p (cdr p))     ;   result.  Note: test must bo done for
+                        (pop list2)          ;   list2 < list1 so merge will be
+                        (unless list2        ;   stable for list1
+                          (rplacd p list1)
+                          (return (values (cdr result) (last-cons-of p))))
+                        (setf key2 (funcall key (car list2))))
+                       (t
+                        (rplacd p list1)
+                        (setf p (cdr p))
+                        (pop list1)
+                        (unless list1
+                          (rplacd p list2)
+                          (return (values (cdr result) (last-cons-of p))))
+                        (setf key1 (funcall key (car list1)))))))))))
 
-;;; APPLY-PRED saves us a function call sometimes.
-(defmacro apply-pred (one two pred key)
-  `(if ,key
-       (funcall ,pred (funcall ,key ,one)
-                (funcall ,key  ,two))
-       (funcall ,pred ,one ,two)))
-
-;;; MERGE-LISTS*   originally written by Jim Large.
-;;; 		   modified to return a pointer to the end of the result
-;;; 		      and to not cons header each time its called.
-;;; It destructively merges list-1 with list-2.  In the resulting
-;;; list, elements of list-2 are guaranteed to come after equal elements
-;;; of list-1.
-(defun merge-lists* (list-1 list-2 pred key
-;; 			    &optional (merge-lists-header (list :header)))
-                            merge-lists-header)
-  (do* ((result merge-lists-header)
-	(p result))                         ; P points to last cell of result
-    ((or (null list-1) (null list-2))       ; done when either list used up
-     (if (null list-1)                      ; in which case, append the
-         (rplacd p list-2)                  ;   other list
-         (rplacd p list-1))
-     (do ((drag p lead)
-          (lead (cdr p) (cdr lead)))
-       ((null lead)
-        (values (prog1 (cdr result)         ; return the result sans header
-                       (rplacd result nil)) ; (free memory, be careful)
-                drag))))		    ; and return pointer to last element
-    (cond ((apply-pred (car list-2) (car list-1) pred key)
-	   (rplacd p list-2)           ; append the lesser list to last cell of
-	   (setq p (cdr p))            ;   result.  Note: test must bo done for
-	   (pop list-2))               ;   list-2 < list-1 so merge will be
-	  (t (rplacd p list-1)         ;   stable for list-1
-	     (setq p (cdr p))
-	     (pop list-1)))))
+(defun merge-lists-no-key (list1 list2 pred)
+  (declare (optimize (speed 3) (safety 0)))
+  (cond ((null list1)
+         (values list2 (last-cons-of list2)))
+        ((null list2)
+         (values list1 (last-cons-of list1)))
+        (t
+         (let* ((result (cons nil nil))
+                (p result)                   ; p points to last cell of result
+                (key1 (car list1))
+                (key2 (car list2)))
+           (declare (type list p))
+           (loop
+             (cond ((funcall pred key2 key1)
+                    (rplacd p list2)         ; append the lesser list to last cell of
+                    (setf p (cdr p))         ;   result.  Note: test must bo done for
+                    (pop list2)              ;   list2 < list1 so merge will be
+                    (unless list2            ;   stable for list1
+                      (rplacd p list1)
+                      (return (values (cdr result) (last-cons-of p))))
+                    (setf key2 (car list2)))
+                   (t
+                    (rplacd p list1)
+                    (setf p (cdr p))
+                    (pop list1)
+                    (unless list1
+                      (rplacd p list2)
+                      (return (values (cdr result) (last-cons-of p))))
+                    (setf key1 (car list1)))))))))
 
 ;;; SORT-LIST uses a bottom up merge sort.  First a pass is made over
 ;;; the list grabbing one element at a time and merging it with the next one
@@ -79,21 +111,23 @@
 ;;; the remaining elements.
 
 (defun sort-list (list pred key)
-  (let ((head (cons :header list))  ; head holds on to everything
-	(n 1)                       ; bottom-up size of lists to be merged
-	unsorted		    ; unsorted is the remaining list to be
-                                    ;   broken into n size lists and merged
-	list-1			    ; list-1 is one length n list to be merged
-	last			    ; last points to the last visited cell
-	(merge-lists-header (list :header)))
-    (declare (fixnum n))
+  (when (or (eq key #'identity) (eq key 'identity))
+    (setf key nil))
+  (let ((head (cons nil list)) ; head holds on to everything
+        (n 1)                  ; bottom-up size of lists to be merged
+        unsorted               ; unsorted is the remaining list to be
+                               ;   broken into n size lists and merged
+        list-1                 ; list-1 is one length n list to be merged
+        last                   ; last points to the last visited cell
+        )
+    (declare (type fixnum n))
     (loop
       ;; start collecting runs of n at the first element
       (setf unsorted (cdr head))
       ;; tack on the first merge of two n-runs to the head holder
       (setf last head)
       (let ((n-1 (1- n)))
-        (declare (fixnum n-1))
+        (declare (type fixnum n-1))
         (loop
           (setf list-1 unsorted)
           (let ((temp (nthcdr n-1 list-1))
@@ -109,8 +143,7 @@
                          ;; the second run goes off the end of the list
                          (t (setf unsorted nil)))
                    (multiple-value-bind (merged-head merged-last)
-                       (merge-lists* list-1 list-2 pred key
-                                     merge-lists-header)
+                       (merge-lists list-1 list-2 pred key)
                      (setf (cdr last) merged-head)
                      (setf last merged-last))
                    (if (null unsorted) (return)))
@@ -158,22 +191,22 @@
        (i2 0))
     ((and (= i1 l1) (= i2 l2)) newseq)
     (cond ((and (< i1 l1) (< i2 l2))
-	   (cond ((funcall predicate
-			   (funcall key (elt sequence1 i1))
-			   (funcall key (elt sequence2 i2)))
-		  (setf (elt newseq j) (elt sequence1 i1))
-		  (incf i1))
-		 ((funcall predicate
-			   (funcall key (elt sequence2 i2))
-			   (funcall key (elt sequence1 i1)))
-		  (setf (elt newseq j) (elt sequence2 i2))
-		  (incf i2))
-		 (t
-		  (setf (elt newseq j) (elt sequence1 i1))
-		  (incf i1))))
+           (cond ((funcall predicate
+                           (funcall key (elt sequence1 i1))
+                           (funcall key (elt sequence2 i2)))
+                  (setf (elt newseq j) (elt sequence1 i1))
+                  (incf i1))
+                 ((funcall predicate
+                           (funcall key (elt sequence2 i2))
+                           (funcall key (elt sequence1 i1)))
+                  (setf (elt newseq j) (elt sequence2 i2))
+                  (incf i2))
+                 (t
+                  (setf (elt newseq j) (elt sequence1 i1))
+                  (incf i1))))
           ((< i1 l1)
-	   (setf (elt newseq j) (elt sequence1 i1))
-	   (incf i1))
-	  (t
-	   (setf (elt newseq j) (elt sequence2 i2))
-	   (incf i2)))))
+           (setf (elt newseq j) (elt sequence1 i1))
+           (incf i1))
+          (t
+           (setf (elt newseq j) (elt sequence2 i2))
+           (incf i2)))))
