@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.729 2005-12-29 20:33:05 piso Exp $
+;;; $Id: jvm.lisp,v 1.730 2005-12-30 02:48:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1328,6 +1328,7 @@
 (defconstant +lisp-bignum+ "Lorg/armedbear/lisp/Bignum;")
 (defconstant +lisp-character-class+ "org/armedbear/lisp/LispCharacter")
 (defconstant +lisp-character+ "Lorg/armedbear/lisp/LispCharacter;")
+(defconstant +lisp-character-array+ "[Lorg/armedbear/lisp/LispCharacter;")
 (defconstant +lisp-abstract-bit-vector-class+ "org/armedbear/lisp/AbstractBitVector")
 (defconstant +lisp-abstract-vector-class+ "org/armedbear/lisp/AbstractVector")
 (defconstant +lisp-abstract-string-class+ "org/armedbear/lisp/AbstractString")
@@ -3051,15 +3052,21 @@ representation, based on the derived type of the LispObject."
       (setf (gethash n ht) g))
     g))
 
-(declaim (ftype (function (t) string) declare-character))
+(defknown declare-character (t) string)
 (defun declare-character (c)
-  (let* ((g (symbol-name (gensym)))
-         (*code* *static-code*))
+  (let ((g (symbol-name (gensym)))
+        (n (char-code c))
+        (*code* *static-code*))
     (declare-field g +lisp-character+)
-    (emit 'new +lisp-character-class+)
-    (emit 'dup)
-    (emit-push-constant-int (char-code c))
-    (emit-invokespecial-init +lisp-character-class+ '("C"))
+    (cond ((<= 0 n 255)
+           (emit 'getstatic +lisp-character-class+ "constants" +lisp-character-array+)
+           (emit 'sipush n)
+           (emit 'aaload))
+          (t
+           (emit 'new +lisp-character-class+)
+           (emit 'dup)
+           (emit-push-constant-int n)
+           (emit-invokespecial-init +lisp-character-class+ '("C"))))
     (emit 'putstatic *this-class* g +lisp-character+)
     (setf *static-code* *code*)
     g))
@@ -4423,6 +4430,19 @@ representation, based on the derived type of the LispObject."
              (compile-form arg2 'stack :char)
              (maybe-emit-clear-values arg1 arg2)
              'if_icmpne)
+            ((eq type2 'CHARACTER)
+             (compile-form arg1 'stack nil)
+             (compile-form arg2 'stack :char)
+             (maybe-emit-clear-values arg1 arg2)
+             (emit-invokevirtual +lisp-object-class+ "eql" '("C") "Z")
+             'ifeq)
+            ((eq type1 'CHARACTER)
+             (compile-form arg1 'stack :char)
+             (compile-form arg2 'stack nil)
+             (maybe-emit-clear-values arg1 arg2)
+             (emit 'swap)
+             (emit-invokevirtual +lisp-object-class+ "eql" '("C") "Z")
+             'ifeq)
             ((fixnum-type-p type2)
              (compile-form arg1 'stack nil)
              (compile-form arg2 'stack :int)
