@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.46 2005-12-30 16:56:26 piso Exp $
+;;; $Id: known-functions.lisp,v 1.47 2005-12-30 20:25:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -351,6 +351,7 @@
              array-element-type upgraded-array-element-type
              row-major-aref
              quote function
+             map
              mapcar
              find position
              append nconc subseq adjoin
