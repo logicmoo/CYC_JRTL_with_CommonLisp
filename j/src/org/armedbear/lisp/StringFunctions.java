@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StringFunctions.java,v 1.42 2005-12-22 21:56:40 piso Exp $
+ * $Id: StringFunctions.java,v 1.43 2005-12-30 02:43:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -942,6 +942,32 @@ public final class StringFunctions extends Lisp
             for (int i = start, limit = string.length(); i < limit; i++) {
                 if (string.charAt(i) == c)
                     return number(i);
+            }
+            return NIL;
+        }
+    };
+
+    // ### string-find
+    private static final Primitive STRING_FIND =
+        new Primitive("string-find", PACKAGE_EXT, true, "char string")
+    {
+        public LispObject execute(LispObject first, LispObject second)
+            throws ConditionThrowable
+        {
+            if (first instanceof LispCharacter) {
+                final char c = ((LispCharacter)first).value;
+                final AbstractString string;
+                try {
+                    string = (AbstractString) second;
+                }
+                catch (ClassCastException e) {
+                    return signalTypeError(second, Symbol.STRING);
+                }
+                final int limit = string.length();
+                for (int i = 0; i < limit; i++) {
+                    if (string.charAt(i) == c)
+                        return first;
+                }
             }
             return NIL;
         }

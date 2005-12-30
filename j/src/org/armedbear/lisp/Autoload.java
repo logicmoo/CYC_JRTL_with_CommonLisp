@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.252 2005-12-22 18:45:55 piso Exp $
+ * $Id: Autoload.java,v 1.253 2005-12-30 02:44:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -482,6 +482,7 @@ public class Autoload extends Function
         autoload(PACKAGE_EXT, "simple-string-fill", "StringFunctions");
         autoload(PACKAGE_EXT, "simple-string-search", "StringFunctions");
         autoload(PACKAGE_EXT, "string-input-stream-current", "StringInputStream", true);
+        autoload(PACKAGE_EXT, "string-find", "StringFunctions");
         autoload(PACKAGE_EXT, "string-position", "StringFunctions");
         autoload(PACKAGE_EXT, "thread-lock", "ThreadLock", true);
         autoload(PACKAGE_EXT, "thread-unlock", "ThreadLock", true);
