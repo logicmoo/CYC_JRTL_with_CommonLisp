@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispObject.java,v 1.153 2005-12-29 22:12:26 piso Exp $
+ * $Id: LispObject.java,v 1.154 2005-12-30 16:54:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -139,6 +139,14 @@ public class LispObject extends Lisp
 
     public LispObject caddr() throws ConditionThrowable
     {
+        return signalTypeError(this, Symbol.LIST);
+    }
+
+    public LispObject nthcdr(int n) throws ConditionThrowable
+    {
+        if (n < 0)
+            return signalTypeError(new Fixnum(n),
+                                   list2(Symbol.INTEGER, Fixnum.ZERO));
         return signalTypeError(this, Symbol.LIST);
     }
 

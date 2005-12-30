@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Cons.java,v 1.69 2005-11-02 17:35:28 piso Exp $
+ * $Id: Cons.java,v 1.70 2005-12-30 16:53:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -146,6 +146,20 @@ public final class Cons extends LispObject
     public final LispObject caddr() throws ConditionThrowable
     {
         return cdr.cadr();
+    }
+
+    public LispObject nthcdr(int n) throws ConditionThrowable
+    {
+        if (n < 0)
+            return signalTypeError(new Fixnum(n),
+                                   list2(Symbol.INTEGER, Fixnum.ZERO));
+        LispObject result = this;
+        for (int i = n; i-- > 0;) {
+            result = result.cdr();
+            if (result == NIL)
+                break;
+        }
+        return result;
     }
 
     public final LispObject push(LispObject obj)
