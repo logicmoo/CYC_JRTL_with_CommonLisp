@@ -1,7 +1,7 @@
 <project name="j" default="compile" basedir="./src">
 
   <!-- Set global properties for this build -->
-  <property name="version" value="0.21.0.4"/>
+  <property name="version" value="0.21.0.4+"/>
   <property name="topdir" value="${basedir}/.."/>
   <property name="distdir" value="/tmp/j-${version}"/>
   <property file="${topdir}/build.properties"/>
