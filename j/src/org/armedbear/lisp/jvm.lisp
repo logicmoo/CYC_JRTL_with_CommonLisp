@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.731 2005-12-30 04:19:05 piso Exp $
+;;; $Id: jvm.lisp,v 1.732 2005-12-30 16:56:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -8260,6 +8260,24 @@ representation, based on the derived type of the LispObject."
              (emit 'label LABEL2)))))
   (emit-move-from-stack target representation))
 
+(defun p2-nthcdr (form target representation)
+  (unless (check-arg-count form 2)
+    (compile-function-call form target representation)
+    (return-from p2-nthcdr))
+  (let* ((args (%cdr form))
+         (arg1 (%car args))
+         (arg2 (%cadr args)))
+    (cond ((fixnum-type-p (derive-compiler-type arg1))
+           (compile-form arg1 'stack :int)
+           (compile-form arg2 'stack nil)
+           (maybe-emit-clear-values arg1 arg2)
+           (emit 'swap)
+           (emit-invokevirtual +lisp-object-class+ "nthcdr" '("I") +lisp-object+)
+           (fix-boxing representation nil)
+           (emit-move-from-stack target representation))
+          (t
+           (compile-function-call form target representation)))))
+
 (defun p2-and (form target representation)
   (aver (or (null representation) (eq representation :boolean)))
   (let ((args (cdr form)))
@@ -10045,6 +10063,7 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'mod                 'p2-mod)
   (install-p2-handler 'neq                 'p2-eq/neq)
   (install-p2-handler 'not                 'p2-not/null)
+  (install-p2-handler 'nthcdr              'p2-nthcdr)
   (install-p2-handler 'null                'p2-not/null)
   (install-p2-handler 'or                  'p2-or)
   (install-p2-handler 'packagep            'p2-packagep)
