@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-system.lisp,v 1.68 2005-12-01 14:53:46 piso Exp $
+;;; $Id: compile-system.lisp,v 1.69 2005-12-30 02:51:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -70,16 +70,19 @@
 (defun %compile-system ()
   (let ((*default-pathname-defaults* (pathname *lisp-home*))
          (*warn-on-redefinition* nil))
+    (load (compile-file-if-needed "coerce.lisp"))
+    (load (compile-file-if-needed "open.lisp"))
+    (load (compile-file-if-needed "dump-form.lisp"))
+    (load (compile-file-if-needed "compiler-types.lisp"))
+    (load (compile-file-if-needed "compile-file.lisp"))
     (load (compile-file-if-needed "precompiler.lisp"))
+    (load (compile-file-if-needed "jvm.lisp"))
     (load (compile-file-if-needed "source-transform.lisp"))
     (load (compile-file-if-needed "compiler-macro.lisp"))
     (load (compile-file-if-needed "opcodes.lisp"))
-    (load (compile-file-if-needed "dump-form.lisp"))
-    (load (compile-file-if-needed "compiler-types.lisp"))
-    (load (compile-file-if-needed "jvm.lisp"))
-    (load (compile-file-if-needed "compile-file.lisp"))
-    ;; FIXME We need to load clos.lisp before we can compile clos.lisp.
-    (load "clos.lisp")
+    (load (compile-file-if-needed "setf.lisp"))
+    (load (compile-file-if-needed "substitute.lisp"))
+    (load (compile-file-if-needed "clos.lisp"))
     ;; Order matters for these files.
     (mapc #'compile-file-if-needed '("collect.lisp"
                                      "macros.lisp"
@@ -94,10 +97,9 @@
     (load (compile-file-if-needed "pprint.lisp"))
     (load (compile-file-if-needed "format.lisp"))
     (load (compile-file-if-needed "delete.lisp"))
-    (load (compile-file-if-needed "coerce.lisp"))
     (load (compile-file-if-needed "concatenate.lisp"))
-    (load (compile-file-if-needed "make-sequence.lisp"))
     (load (compile-file-if-needed "ldb.lisp"))
+    (load (compile-file-if-needed "destructuring-bind.lisp"))
     ;; But not for these.
     (mapc #'compile-file-if-needed '("adjoin.lisp"
                                      "and.lisp"
@@ -108,7 +110,6 @@
                                      "assoc.lisp"
                                      ;;"autoloads.lisp"
                                      "aver.lisp"
-                                     ;;"backquote.lisp"
                                      "bit-array-ops.lisp"
                                      "boole.lisp"
                                      ;;"boot.lisp"
@@ -117,14 +118,9 @@
                                      "case.lisp"
                                      "chars.lisp"
                                      "check-type.lisp"
-                                     "clos.lisp"
-                                     ;;"coerce.lisp"
-                                     ;;"compile-file.lisp"
                                      "compile-file-pathname.lisp"
                                      "compile-system.lisp"
                                      "compiler-error.lisp"
-                                     ;;"compiler-macro.lisp"
-                                     ;;"concatenate.lisp"
                                      "cond.lisp"
                                      "copy-seq.lisp"
                                      "copy-symbol.lisp"
@@ -138,10 +134,8 @@
                                      "defstruct.lisp"
                                      "deftype.lisp"
                                      "delete-duplicates.lisp"
-                                     ;;"delete.lisp"
                                      "deposit-field.lisp"
                                      "describe.lisp"
-                                     "destructuring-bind.lisp"
                                      "directory.lisp"
                                      "disassemble.lisp"
                                      "do-all-symbols.lisp"
@@ -152,7 +146,6 @@
                                      "dotimes.lisp"
                                      "dribble.lisp"
                                      "dump-class.lisp"
-                                     ;;"early-defuns.lisp"
                                      "ed.lisp"
                                      "enough-namestring.lisp"
                                      "ensure-directories-exist.lisp"
@@ -161,7 +154,6 @@
                                      "fdefinition.lisp"
                                      "fill.lisp"
                                      "find-all-symbols.lisp"
-                                     ;;"find.lisp"
                                      "gentemp.lisp"
                                      "gray-streams.lisp"
                                      "inspect.lisp"
@@ -171,14 +163,13 @@
                                      "known-symbols.lisp"
                                      "late-setf.lisp"
                                      "lcm.lisp"
-                                     ;;"ldb.lisp"
                                      "ldiff.lisp"
                                      "list-length.lisp"
                                      "list.lisp"
                                      "load.lisp"
                                      "make-hash-table.lisp"
                                      "make-load-form-saving-slots.lisp"
-                                     ;;"make-sequence.lisp"
+                                     "make-sequence.lisp"
                                      "make-string-output-stream.lisp"
                                      "make-string.lisp"
                                      "map-into.lisp"
@@ -193,12 +184,10 @@
                                      "nsubstitute.lisp"
                                      "nth-value.lisp"
                                      "numbers.lisp"
-                                     "open.lisp"
                                      "or.lisp"
                                      "parse-integer.lisp"
                                      "parse-lambda-list.lisp"
                                      "pathnames.lisp"
-                                     ;;"print.lisp"
                                      ;;"print-object.lisp"
                                      "print-unreadable-object.lisp"
                                      "proclaim.lisp"
@@ -224,7 +213,6 @@
                                      ;;"runtime-class.lisp"
                                      "search.lisp"
                                      "sequences.lisp"
-                                     "setf.lisp"
                                      "sets.lisp"
                                      "shiftf.lisp"
                                      "signal.lisp"
@@ -234,14 +222,11 @@
                                      "strings.lisp"
                                      "sublis.lisp"
                                      "subst.lisp"
-                                     "substitute.lisp"
-                                     ;;"subtypep.lisp"
                                      "tailp.lisp"
                                      "time.lisp"
                                      "top-level.lisp"
                                      "trace.lisp"
                                      "tree-equal.lisp"
-                                     ;;"typep.lisp"
                                      "upgraded-complex-part-type.lisp"
                                      "with-accessors.lisp"
                                      "with-hash-table-iterator.lisp"
