@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.146 2005-12-29 15:14:28 piso Exp $
+;;; $Id: precompiler.lisp,v 1.147 2005-12-30 02:45:45 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -257,13 +257,20 @@
 
 (define-source-transform find (&whole form item sequence &key from-end test test-not start end key)
   (cond ((and (>= (length form) 3) (null start) (null end))
-         (let ((item-var (gensym))
-               (seq-var (gensym)))
-           `(let ((,item-var ,item)
-                  (,seq-var ,sequence))
-              (if (listp ,seq-var)
-                  (list-find* ,item-var ,seq-var ,from-end ,test ,test-not 0 (length ,seq-var) ,key)
-                  (vector-find* ,item-var ,seq-var ,from-end ,test ,test-not 0 (length ,seq-var) ,key)))))
+         (cond ((and (stringp sequence)
+                     (null from-end)
+                     (member test '(#'eql #'char=) :test #'equal)
+                     (null test-not)
+                     (null key))
+                `(string-find ,item ,sequence))
+               (t
+                (let ((item-var (gensym))
+                      (seq-var (gensym)))
+                  `(let ((,item-var ,item)
+                         (,seq-var ,sequence))
+                     (if (listp ,seq-var)
+                         (list-find* ,item-var ,seq-var ,from-end ,test ,test-not 0 (length ,seq-var) ,key)
+                         (vector-find* ,item-var ,seq-var ,from-end ,test ,test-not 0 (length ,seq-var) ,key)))))))
         (t
          form)))
 
