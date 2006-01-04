@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.125 2005-10-29 18:45:58 piso Exp $
+ * $Id: Load.java,v 1.126 2006-01-04 18:05:58 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -141,11 +141,13 @@ public final class Load extends Lisp
             return signal(new SimpleError(sb.toString()));
         }
         finally {
-            try {
-                in.close();
-            }
-            catch (IOException e) {
-                return signal(new LispError(e.getMessage()));
+            if (in != null) {
+                try {
+                    in.close();
+                }
+                catch (IOException e) {
+                    return signal(new LispError(e.getMessage()));
+                }
             }
             if (zipfile != null) {
                 try {
