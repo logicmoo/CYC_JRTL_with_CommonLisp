@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObject.java,v 1.57 2005-12-28 21:24:23 piso Exp $
+ * $Id: StandardObject.java,v 1.58 2006-01-04 20:43:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -292,14 +292,22 @@ public class StandardObject extends LispObject
     {
       public LispObject execute(LispObject arg) throws ConditionThrowable
       {
+        final StandardObject instance;
         try
           {
-            return ((StandardObject)arg).layout;
+              instance = (StandardObject) arg;
           }
         catch (ClassCastException e)
           {
             return signalTypeError(arg, Symbol.STANDARD_OBJECT);
           }
+        Layout layout = instance.layout;
+        if (layout.isInvalid())
+          {
+            // Update instance.
+            layout = instance.updateLayout();
+          }
+        return layout;
       }
     };
 
