@@ -500,7 +500,7 @@
   (let* ((*default-pathname-defaults* *abcl-dir*)
          (source-files (directory "*.java"))
          (cmdline (with-output-to-string (s)
-                    (princ "gcj -O2 " s)
+                    (princ "gcj -g -O0 " s)
                     (dolist (source-file source-files)
                       (unless (string= (pathname-name source-file) "Native")
                         (princ (pathname-name source-file) s)
