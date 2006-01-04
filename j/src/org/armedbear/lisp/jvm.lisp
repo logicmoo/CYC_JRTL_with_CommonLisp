@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.732 2005-12-30 16:56:58 piso Exp $
+;;; $Id: jvm.lisp,v 1.733 2006-01-04 20:40:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1742,7 +1742,7 @@
 
 (defknown emit-unbox-character () t)
 (defun emit-unbox-character ()
-  (cond ((= *safety* 3)
+  (cond ((> *safety* 0)
          (emit-invokestatic +lisp-character-class+ "getValue"
                             (lisp-object-arg-types 1) "C"))
         (t
@@ -4399,26 +4399,11 @@ representation, based on the derived type of the LispObject."
 (defun p2-test-char= (form)
   (when (check-arg-count form 2)
     (let* ((arg1 (%cadr form))
-           (arg2 (%caddr form))
-           (type1 (derive-compiler-type arg1))
-           (type2 (derive-compiler-type arg2)))
-;;       (let ((*print-structure* nil))
-;;         (format t "p2-test-char= arg1 = ~S arg2 = ~S~%" arg1 arg2))
-;;       (format t "p2-test-char= type1 = ~S type2 = ~S~%" type1 type2)
-      (when (and (eq type1 'CHARACTER) (eq type2 'CHARACTER))
-        (cond (*enable-unboxed-characters*
-               (compile-form arg1 'stack :char)
-               (compile-form arg2 'stack :char)
-               'if_icmpne)
-              (t
-               (compile-form arg1 'stack nil)
-               (emit-unbox-character)
-               (cond ((characterp arg2)
-                      (emit-push-constant-int (char-code arg2)))
-                     (t
-                      (compile-form arg2 'stack nil)
-                      (emit-unbox-character)))
-               'if_icmpne))))))
+           (arg2 (%caddr form)))
+      (compile-form arg1 'stack :char)
+      (compile-form arg2 'stack :char)
+      (maybe-emit-clear-values arg1 arg2)
+      'if_icmpne)))
 
 (defun p2-test-eq (form)
   (when (check-arg-count form 2)
@@ -4430,7 +4415,6 @@ representation, based on the derived type of the LispObject."
      'if_acmpne)))
 
 (defun p2-test-and (form)
-;;   (format t "p2-test-and~%")
   (let ((args (cdr form)))
     (case (length args)
       (0
@@ -7946,7 +7930,16 @@ representation, based on the derived type of the LispObject."
          (type1 (derive-compiler-type arg1))
          (type2 (derive-compiler-type arg2)))
     (cond ((and (eq representation :char)
-                (eq op 'CHAR)
+                (zerop *safety*))
+           (compile-form arg1 'stack nil)
+           (emit 'checkcast +lisp-abstract-string-class+)
+           (compile-form arg2 'stack :int)
+           (maybe-emit-clear-values arg1 arg2)
+           (emit-invokevirtual +lisp-abstract-string-class+ "charAt"
+                               '("I") "C")
+           (emit-move-from-stack target representation))
+          ((and (eq representation :char)
+                (or (eq op 'CHAR) (< *safety* 3))
                 (compiler-subtypep type1 'STRING)
                 (fixnum-type-p type2))
            (compile-form arg1 'stack nil)
@@ -8894,7 +8887,6 @@ representation, based on the derived type of the LispObject."
 
 (defknown p2-char= (t t t) t)
 (defun p2-char= (form target representation)
-;;   (format t "p2-char= representation = ~S~%" representation)
   (let* ((args (cdr form))
          (numargs (length args)))
     (when (= numargs 0)
@@ -8908,107 +8900,32 @@ representation, based on the derived type of the LispObject."
           (arg2 (%cadr args)))
       (when (and (characterp arg1) (characterp arg2))
         (cond ((eql arg1 arg2)
-               (if (eq representation :boolean)
-                   (emit 'iconst_1)
-                   (emit-push-t)))
+               (emit-push-true representation))
               (t
-               (if (eq representation :boolean)
-                   (emit 'iconst_0)
-                   (emit-push-nil))))
+               (emit-push-false representation)))
         (emit-move-from-stack target representation)
         (return-from p2-char=))
-      (let ((type1 (derive-compiler-type arg1))
-            (type2 (derive-compiler-type arg2)))
-;;         (format t "p2-char= type1 = ~S type2 = ~S~%" type1 type2)
-        (unless (and (eq type1 'character) (eq type2 'character))
-          (compile-function-call form target representation)
-          (return-from p2-char=))
-        (cond ((characterp arg1)
-               (emit-push-constant-int (char-code arg1))
-               (compile-form arg2 'stack :char)
-               (maybe-emit-clear-values arg2))
-              ((characterp arg2)
-               (compile-form arg1 'stack :char)
-               (maybe-emit-clear-values arg1)
-               (emit-push-constant-int (char-code arg2)))
-              (t
-               (compile-form arg1 'stack :char)
-               (compile-form arg2 'stack :char)
-               (maybe-emit-clear-values arg1 arg2)))
-        (let ((LABEL1 (gensym))
-              (LABEL2 (gensym)))
-          (emit 'if_icmpeq LABEL1)
-          (if (eq representation :boolean)
-              (emit 'iconst_0)
-              (emit-push-nil))
-          (emit 'goto LABEL2)
-          (label LABEL1)
-          (if (eq representation :boolean)
-              (emit 'iconst_1)
-              (emit-push-t))
-          (label LABEL2)
-          (emit-move-from-stack target representation))))))
-
-;; (defun p2-catch (form target representation)
-;;   ;; FIXME What if we're called with a non-NIL representation?
-;;   (declare (ignore representation))
-;;   (when (= (length form) 2) ; (catch 'foo)
-;;     (when target
-;;       (emit-push-nil)
-;;       (emit-move-from-stack target))
-;;     (return-from p2-catch))
-;;   (let* ((*register* *register*)
-;;          (tag-register (allocate-register))
-;;          (BEGIN-PROTECTED-RANGE (gensym))
-;;          (END-PROTECTED-RANGE (gensym))
-;;          (THROW-HANDLER (gensym))
-;;          (DEFAULT-HANDLER (gensym))
-;;          (EXIT (gensym)))
-;; ;;     (format t "tag-register = ~S~%" tag-register)
-;; ;;     (let ((*print-structure* nil))
-;; ;;       (format t "(second form) = ~S~%" (second form)))
-;;     (compile-form (second form) tag-register nil) ; Tag.
-;;     (emit-push-current-thread)
-;;     (emit 'aload tag-register)
-;;     (emit-invokevirtual +lisp-thread-class+ "pushCatchTag"
-;;                         (lisp-object-arg-types 1) nil)
-;;     ; Stack depth is 0.
-;;     (label BEGIN-PROTECTED-RANGE) ; Start of protected range.
-;;     (compile-progn-body (cddr form) target) ; Implicit PROGN.
-;;     (label END-PROTECTED-RANGE) ; End of protected range.
-;;     (emit 'goto EXIT) ; Jump over handlers.
-;;     (label THROW-HANDLER) ; Start of handler for THROW.
-;;     ;; The Throw object is on the runtime stack. Stack depth is 1.
-;;     (emit 'dup) ; Stack depth is 2.
-;;     (emit 'getfield +lisp-throw-class+ "tag" +lisp-object+) ; Still 2.
-;;     (emit 'aload tag-register) ; Stack depth is 3.
-;;     ;; If it's not the tag we're looking for, we branch to the start of the
-;;     ;; catch-all handler, which will do a re-throw.
-;;     (emit 'if_acmpne DEFAULT-HANDLER) ; Stack depth is 1.
-;;     (emit 'aload *thread*)
-;;     (emit-invokevirtual +lisp-throw-class+ "getResult"
-;;                         (list +lisp-thread+) +lisp-object+)
-;;     (emit-move-from-stack target) ; Stack depth is 0.
-;;     (emit 'goto EXIT)
-;;     (label DEFAULT-HANDLER) ; Start of handler for all other Throwables.
-;;     ;; A Throwable object is on the runtime stack here. Stack depth is 1.
-;;     (emit 'aload *thread*)
-;;     (emit-invokevirtual +lisp-thread-class+ "popCatchTag" nil nil)
-;;     (emit 'athrow) ; Re-throw.
-;;     (label EXIT)
-;;     ;; Finally...
-;;     (emit 'aload *thread*)
-;;     (emit-invokevirtual +lisp-thread-class+ "popCatchTag" nil nil)
-;;     (let ((handler1 (make-handler :from BEGIN-PROTECTED-RANGE
-;;                                   :to END-PROTECTED-RANGE
-;;                                   :code THROW-HANDLER
-;;                                   :catch-type (pool-class +lisp-throw-class+)))
-;;           (handler2 (make-handler :from BEGIN-PROTECTED-RANGE
-;;                                   :to END-PROTECTED-RANGE
-;;                                   :code DEFAULT-HANDLER
-;;                                   :catch-type 0)))
-;;       (push handler1 *handlers*)
-;;       (push handler2 *handlers*))))
+      (cond ((characterp arg1)
+             (emit-push-constant-int (char-code arg1))
+             (compile-form arg2 'stack :char)
+             (maybe-emit-clear-values arg2))
+            ((characterp arg2)
+             (compile-form arg1 'stack :char)
+             (maybe-emit-clear-values arg1)
+             (emit-push-constant-int (char-code arg2)))
+            (t
+             (compile-form arg1 'stack :char)
+             (compile-form arg2 'stack :char)
+             (maybe-emit-clear-values arg1 arg2)))
+      (let ((LABEL1 (gensym))
+            (LABEL2 (gensym)))
+        (emit 'if_icmpeq LABEL1)
+        (emit-push-false representation)
+        (emit 'goto LABEL2)
+        (label LABEL1)
+        (emit-push-true representation)
+        (label LABEL2)
+        (emit-move-from-stack target representation)))))
 
 (defknown p2-catch-node (t t) t)
 (defun p2-catch-node (block target)
@@ -9025,9 +8942,6 @@ representation, based on the derived type of the LispObject."
            (THROW-HANDLER (gensym))
            (DEFAULT-HANDLER (gensym))
            (EXIT (gensym)))
-      ;;     (format t "tag-register = ~S~%" tag-register)
-      ;;     (let ((*print-structure* nil))
-      ;;       (format t "(second form) = ~S~%" (second form)))
       (compile-form (second form) tag-register nil) ; Tag.
       (emit-push-current-thread)
       (emit 'aload tag-register)
