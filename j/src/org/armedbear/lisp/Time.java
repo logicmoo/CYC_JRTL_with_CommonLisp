@@ -2,7 +2,7 @@
  * Time.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Time.java,v 1.31 2005-10-23 17:38:10 piso Exp $
+ * $Id: Time.java,v 1.32 2006-01-04 18:22:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,11 +21,38 @@
 
 package org.armedbear.lisp;
 
+import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.TimeZone;
 
 public final class Time extends Lisp
 {
+    private static final long getCurrentThreadUserTime()
+    {
+        try {
+            Class c = Class.forName("org.armedbear.lisp.Native");
+            Method m = c.getMethod("getCurrentThreadUserTime", (Class[]) null);
+            Object result = m.invoke((Object) null, (Object[]) null);
+            if (result instanceof Long)
+                return ((Long)result).longValue();
+        }
+        catch (Throwable t) {}
+        return -1;
+    }
+
+    private static final long getCurrentThreadSystemTime()
+    {
+        try {
+            Class c = Class.forName("org.armedbear.lisp.Native");
+            Method m = c.getMethod("getCurrentThreadSystemTime", (Class[]) null);
+            Object result = m.invoke((Object) null, (Object[]) null);
+            if (result instanceof Long)
+                return ((Long)result).longValue();
+        }
+        catch (Throwable t) {}
+        return -1;
+    }
+
     // ### %time
     private static final Primitive _TIME =
         new Primitive("%time", PACKAGE_SYS, false)
@@ -36,8 +63,8 @@ public final class Time extends Lisp
             long userStart = -1;
             long systemStart = -1;
             try {
-                userStart = Native.getCurrentThreadUserTime();
-                systemStart = Native.getCurrentThreadSystemTime();
+                userStart = getCurrentThreadUserTime();
+                systemStart = getCurrentThreadSystemTime();
             }
             catch (Throwable t) {}
             long realStart = System.currentTimeMillis();
@@ -46,25 +73,28 @@ public final class Time extends Lisp
             }
             finally {
                 long realElapsed = System.currentTimeMillis() - realStart;
-                long userStop = -1;
-                long systemStop = -1;
+                final long userStop;
+                final long systemStop;
                 if (userStart > 0) {
-                    userStop = Native.getCurrentThreadUserTime();
-                    systemStop = Native.getCurrentThreadSystemTime();
+                    userStop = getCurrentThreadUserTime();
+                    systemStop = getCurrentThreadSystemTime();
+                } else {
+                    userStop = -1;
+                    systemStop = -1;
                 }
                 long count = Cons.getCount();
                 Stream out =
                     checkCharacterOutputStream(Symbol.TRACE_OUTPUT.symbolValue());
                 out.freshLine();
-                StringBuffer sb = new StringBuffer();
-                sb.append(String.valueOf((float)realElapsed/1000));
+                FastStringBuffer sb = new FastStringBuffer();
+                sb.append(String.valueOf((float)realElapsed / 1000));
                 sb.append(" seconds real time");
                 sb.append(System.getProperty("line.separator"));
                 if (userStart > 0) {
-                    sb.append(String.valueOf((float)(userStop - userStart)/100));
+                    sb.append(String.valueOf((float)(userStop - userStart) / 100));
                     sb.append(" seconds user run time");
                     sb.append(System.getProperty("line.separator"));
-                    sb.append(String.valueOf((float)(systemStop - systemStart)/100));
+                    sb.append(String.valueOf((float)(systemStop - systemStart) / 100));
                     sb.append(" seconds system run time");
                     sb.append(System.getProperty("line.separator"));
                 }
@@ -99,8 +129,8 @@ public final class Time extends Lisp
                 long userTime = -1;
                 long systemTime = -1;
                 try {
-                    userTime = Native.getCurrentThreadUserTime();
-                    systemTime = Native.getCurrentThreadSystemTime();
+                    userTime = getCurrentThreadUserTime();
+                    systemTime = getCurrentThreadSystemTime();
                 }
                 catch (Throwable t) {}
                 if (userTime >= 0 && systemTime >= 0)
