@@ -2,7 +2,7 @@
  * Interpreter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Interpreter.java,v 1.99 2005-10-23 18:44:50 piso Exp $
+ * $Id: Interpreter.java,v 1.100 2006-01-04 18:02:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -368,7 +368,7 @@ public final class Interpreter extends Lisp
                 try {
                     thread.resetStack();
                     thread.lastSpecialBinding = null;
-                    out._writeString(prompt());
+                    out._writeString("* ");
                     out._finishOutput();
                     LispObject object =
                         getStandardInput().read(false, EOF, false, thread);
@@ -584,17 +584,6 @@ public final class Interpreter extends Lisp
             sb.append(vm);
             sb.append(sep);
         }
-        return sb.toString();
-    }
-
-    private static String prompt()
-    {
-        Package pkg = (Package) Symbol._PACKAGE_.getSymbolValue();
-        String pkgName = pkg.getNickname();
-        if (pkgName == null)
-            pkgName = pkg.getName();
-        FastStringBuffer sb = new FastStringBuffer();
-        sb.append(pkgName);
         return sb.toString();
     }
 }
