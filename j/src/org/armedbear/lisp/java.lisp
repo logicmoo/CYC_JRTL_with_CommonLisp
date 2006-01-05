@@ -1,7 +1,7 @@
 ;;; java.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves, Andras Simon
-;;; $Id: java.lisp,v 1.21 2005-11-10 02:24:18 piso Exp $
+;;; $Id: java.lisp,v 1.22 2006-01-05 20:17:43 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -39,12 +39,14 @@
         (implemented-methods
          (loop for m in method-names-and-defs
            for i from 0
-           when (evenp i)
-           collect m)))
+           if (evenp i) 
+           do (assert (stringp m) (m) "Method names must be strings: ~s" m) and collect m
+           else
+           do (assert (functionp m) (m) "Methods must be functions: ~s" m))) 
+        (null (make-immediate-object nil :ref)))
     (loop for method across
       (jclass-methods interface :declared nil :public t)
       for method-name = (jmethod-name method)
-      with null = (make-immediate-object nil :ref)
       when (not (member method-name implemented-methods :test #'string=))
       do
       (let* ((void-p (string= (jclass-name (jmethod-return-type method)) "void"))
