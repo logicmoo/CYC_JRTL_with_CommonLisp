@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.203 2005-12-28 21:26:49 piso Exp $
+;;; $Id: clos.lisp,v 1.204 2006-01-05 14:52:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -674,6 +674,7 @@
 (defun (setf generic-function-argument-precedence-order) (new-value gf)
   (set-generic-function-argument-precedence-order gf new-value))
 
+(declaim (ftype (function * t) classes-to-emf-table))
 (defun classes-to-emf-table (gf)
   (generic-function-classes-to-emf-table gf))
 
@@ -1179,7 +1180,7 @@
   (let ((code
          (cond ((methods-contain-eql-specializer-p (generic-function-methods gf))
                 (make-closure `(lambda (&rest args)
-                                 (slow-method-lookup ,gf args nil))
+                                 (slow-method-lookup ,gf args))
                               nil))
                ((and (= (length (generic-function-methods gf)) 1)
                      (typep (car (generic-function-methods gf)) 'standard-reader-method))
@@ -1244,59 +1245,48 @@
                                    (error 'program-error
                                           :format-control "Not enough arguments for generic function ~S."
                                           :format-arguments (list (%generic-function-name ,gf))))
-                                 (let* ((classes (list (class-of (%car args))))
-                                        (emfun (gethash1 classes ,emf-table)))
+                                 (let ((emfun (get-cached-emf ,gf args)))
                                    (if emfun
                                        (funcall emfun args)
-                                       (slow-method-lookup ,gf args classes)))))
-                          )
+                                       (slow-method-lookup ,gf args))))))
                          ((= number-required 2)
                           (if exact
                               `(lambda (arg1 arg2)
                                  (declare (optimize speed))
-                                 (let* ((classes (list (class-of arg1)
-                                                       (class-of arg2)))
-                                        (emfun (gethash1 classes ,emf-table)))
+                                 (let* ((args (list arg1 arg2))
+                                        (emfun (get-cached-emf ,gf args)))
                                    (if emfun
-                                       (funcall emfun (list arg1 arg2))
-                                       (slow-method-lookup ,gf (list arg1 arg2) classes))))
+                                       (funcall emfun args)
+                                       (slow-method-lookup ,gf args))))
                               `(lambda (&rest args)
                                  (declare (optimize speed))
                                  (unless (>= (length args) 2)
                                    (error 'program-error
                                           :format-control "Not enough arguments for generic function ~S."
                                           :format-arguments (list (%generic-function-name ,gf))))
-                                 (let* ((classes (list (class-of (%car args)) (class-of (%cadr args))))
-                                        (emfun (gethash1 classes ,emf-table)))
+                                 (let ((emfun (get-cached-emf ,gf args)))
                                    (if emfun
                                        (funcall emfun args)
-                                       (slow-method-lookup ,gf args classes)))))
-                          )
+                                       (slow-method-lookup ,gf args))))))
                          ((= number-required 3)
                           (if exact
                               `(lambda (arg1 arg2 arg3)
                                  (declare (optimize speed))
-                                 (let* ((classes (list (class-of arg1)
-                                                       (class-of arg2)
-                                                       (class-of arg3)))
-                                        (emfun (gethash1 classes ,emf-table)))
+                                 (let* ((args (list arg1 arg2 arg3))
+                                        (emfun (get-cached-emf ,gf args)))
                                    (if emfun
-                                       (funcall emfun (list arg1 arg2 arg3))
-                                       (slow-method-lookup ,gf (list arg1 arg2 arg3) classes))))
+                                       (funcall emfun args)
+                                       (slow-method-lookup ,gf args))))
                               `(lambda (&rest args)
                                  (declare (optimize speed))
                                  (unless (>= (length args) 3)
                                    (error 'program-error
                                           :format-control "Not enough arguments for generic function ~S."
                                           :format-arguments (list (%generic-function-name ,gf))))
-                                 (let* ((classes (list (class-of (%car args))
-                                                       (class-of (%cadr args))
-                                                       (class-of (%caddr args))))
-                                        (emfun (gethash1 classes ,emf-table)))
+                                 (let ((emfun (get-cached-emf ,gf args)))
                                    (if emfun
                                        (funcall emfun args)
-                                       (slow-method-lookup ,gf args classes)))))
-                          )
+                                       (slow-method-lookup ,gf args))))))
                          (t
                           `(lambda (&rest args)
                              (declare (optimize speed))
@@ -1304,18 +1294,10 @@
                                (error 'program-error
                                       :format-control "Not enough arguments for generic function ~S."
                                       :format-arguments (list (%generic-function-name ,gf))))
-                             (let ((classes ())
-                                   (i 0)
-                                   emfun)
-                               (dolist (arg args)
-                                 (push (class-of arg) classes)
-                                 (when (= (incf i) ,number-required)
-                                   (return)))
-                               (setf classes (nreverse classes))
-                               (setf emfun (gethash1 classes ,emf-table))
+                             (let ((emfun (get-cached-emf ,gf args)))
                                (if emfun
                                    (funcall emfun args)
-                                   (slow-method-lookup ,gf args classes))))))
+                                   (slow-method-lookup ,gf args))))))
                    nil))))))
 
     (when (and (fboundp 'compile)
@@ -1374,15 +1356,39 @@
                   #'(lambda (m1 m2)
                      (method-more-specific-p gf m1 m2 required-classes)))))))
 
-(defun slow-method-lookup (gf args classes)
+(declaim (ftype (function * t) cache-emf))
+(defun cache-emf (gf args emf)
+  (declare (optimize speed (safety 0)))
+  (let ((number-required (length (gf-required-args gf)))
+        (classes ()))
+    (dotimes (i number-required)
+      (push (class-of (car args)) classes)
+      (setf args (%cdr args)))
+    (when classes
+      (setf classes (nreverse classes))
+      (setf (gethash classes (classes-to-emf-table gf)) emf))))
+
+(declaim (ftype (function * t) get-cached-emf))
+;; (defun get-cached-emf (gf args)
+;;   (declare (optimize speed (safety 0)))
+;; ;;   (let ((number-required (length (gf-required-args gf)))
+;; ;;         (classes ()))
+;; ;;     (dotimes (i number-required)
+;; ;;       (push (class-of (car args)) classes)
+;; ;;       (setf args (%cdr args)))
+;; ;;     (when classes
+;; ;;       (setf classes (nreverse classes))
+;; ;;       (gethash1 classes (classes-to-emf-table gf)))))
+;;   (%get-cached-emf gf args))
+
+(defun slow-method-lookup (gf args)
   (let ((applicable-methods (%compute-applicable-methods gf args)))
     (if applicable-methods
         (let ((emfun (funcall (if (eq (class-of gf) the-class-standard-gf)
                                   #'std-compute-effective-method-function
                                   #'compute-effective-method-function)
                               gf applicable-methods)))
-          (when classes
-            (setf (gethash classes (classes-to-emf-table gf)) emfun))
+          (cache-emf gf args emfun)
           (funcall emfun args))
         (apply #'no-applicable-method gf args))))
 
