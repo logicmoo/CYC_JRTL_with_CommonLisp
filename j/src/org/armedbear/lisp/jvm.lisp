@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.733 2006-01-04 20:40:59 piso Exp $
+;;; $Id: jvm.lisp,v 1.734 2006-01-05 15:37:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4107,8 +4107,6 @@ representation, based on the derived type of the LispObject."
                      (label LABEL1)
                      (emit-push-nil)
                      (label LABEL2))))
-;;                 ;; FIXME optimize
-;;                 (fix-boxing representation nil)
                 (emit-move-from-stack target representation)
                 (return-from p2-numeric-comparison)))))
       (3
@@ -4129,29 +4127,25 @@ representation, based on the derived type of the LispObject."
                 ;; If we do both tests, we need to use the arg2 value twice,
                 ;; so we store that value in a temporary register.
                 (*register* *register*)
-                (temp-register (allocate-register)))
-           ;; First test.
+                (arg2-register (allocate-register))
+                (arg3-register (allocate-register)))
            (compile-form arg1 'stack :int)
            (compile-form arg2 'stack :int)
-           (maybe-emit-clear-values arg1 arg2)
-           ;; Store arg2 value in temp register for arg2 test (if needed).
            (emit 'dup)
-           (emit 'istore temp-register)
+           (emit 'istore arg2-register)
+           (compile-form arg3 'stack :int)
+           (emit 'istore arg3-register)
+           (maybe-emit-clear-values arg1 arg2 arg3)
+           ;; First test.
            (emit test LABEL1)
            ;; Second test.
-           ;; Retrieve arg2 value from temp register.
-           (emit 'iload temp-register)
-           (compile-form arg3 'stack :int)
-           (maybe-emit-clear-values arg3)
+           (emit 'iload arg2-register)
+           (emit 'iload arg3-register)
            (emit test LABEL1)
-           (if (eq representation :boolean)
-               (emit 'iconst_1)
-               (emit-push-t))
+           (emit-push-true representation)
            (emit 'goto LABEL2)
            (label LABEL1)
-           (if (eq representation :boolean)
-               (emit 'iconst_0)
-               (emit-push-nil))
+           (emit-push-false representation)
            (label LABEL2)
            (emit-move-from-stack target representation)
            (return-from p2-numeric-comparison))))))
@@ -7362,6 +7356,10 @@ representation, based on the derived type of the LispObject."
               (derive-type-min form))
              (READ-CHAR
               (derive-type-read-char form))
+             (SETQ
+              (if (= (length form) 3)
+                  (derive-type (third form))
+                  t))
              ((THE TRULY-THE)
               (second form))
              (t
