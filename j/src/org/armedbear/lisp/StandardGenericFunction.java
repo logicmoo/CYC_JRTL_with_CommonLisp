@@ -2,7 +2,7 @@
  * StandardGenericFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardGenericFunction.java,v 1.11 2006-01-05 14:53:02 piso Exp $
+ * $Id: StandardGenericFunction.java,v 1.12 2006-01-05 16:07:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,6 +24,8 @@ package org.armedbear.lisp;
 public final class StandardGenericFunction extends StandardObject
 {
   private LispObject function;
+
+  private int numberOfRequiredArgs;
 
   public StandardGenericFunction()
   {
@@ -50,6 +52,7 @@ public final class StandardGenericFunction extends StandardObject
           lambdaList;
         slots[StandardGenericFunctionClass.SLOT_INDEX_REQUIRED_ARGS] =
           lambdaList;
+        numberOfRequiredArgs = lambdaList.length();
         slots[StandardGenericFunctionClass.SLOT_INDEX_INITIAL_METHODS] =
           NIL;
         StandardMethod method =
@@ -348,15 +351,18 @@ public final class StandardGenericFunction extends StandardObject
       public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
       {
+        final StandardGenericFunction gf;
         try
           {
-            ((StandardGenericFunction)first).slots[StandardGenericFunctionClass.SLOT_INDEX_REQUIRED_ARGS] = second;
-            return second;
+            gf = (StandardGenericFunction) first;
           }
         catch (ClassCastException e)
           {
             return signalTypeError(first, Symbol.STANDARD_GENERIC_FUNCTION);
           }
+        gf.slots[StandardGenericFunctionClass.SLOT_INDEX_REQUIRED_ARGS] = second;
+        gf.numberOfRequiredArgs = second.length();
+        return second;
       }
     };
 
@@ -628,9 +634,7 @@ public final class StandardGenericFunction extends StandardObject
           {
             return signalTypeError(first, Symbol.STANDARD_GENERIC_FUNCTION);
           }
-        final LispObject requiredArgs =
-          gf.slots[StandardGenericFunctionClass.SLOT_INDEX_REQUIRED_ARGS];
-        final int numberRequired = requiredArgs.length();
+        final int numberRequired = gf.numberOfRequiredArgs;
         LispObject args = second;
         LispObject classes = NIL;
         for (int i = 0; i < numberRequired; i++)
