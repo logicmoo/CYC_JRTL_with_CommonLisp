@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.205 2006-01-05 19:45:59 piso Exp $
+;;; $Id: clos.lisp,v 1.206 2006-01-05 20:05:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1355,31 +1355,6 @@
                                                  (generic-function-argument-precedence-order gf)))
                   #'(lambda (m1 m2)
                      (method-more-specific-p gf m1 m2 required-classes)))))))
-
-(declaim (ftype (function * t) cache-emf))
-;; (defun cache-emf (gf args emf)
-;;   (declare (optimize speed (safety 0)))
-;;   (let ((number-required (length (gf-required-args gf)))
-;;         (classes ()))
-;;     (dotimes (i number-required)
-;;       (push (class-of (car args)) classes)
-;;       (setf args (%cdr args)))
-;;     (when classes
-;;       (setf classes (nreverse classes))
-;;       (setf (gethash classes (classes-to-emf-table gf)) emf))))
-
-(declaim (ftype (function * t) get-cached-emf))
-;; (defun get-cached-emf (gf args)
-;;   (declare (optimize speed (safety 0)))
-;; ;;   (let ((number-required (length (gf-required-args gf)))
-;; ;;         (classes ()))
-;; ;;     (dotimes (i number-required)
-;; ;;       (push (class-of (car args)) classes)
-;; ;;       (setf args (%cdr args)))
-;; ;;     (when classes
-;; ;;       (setf classes (nreverse classes))
-;; ;;       (gethash1 classes (classes-to-emf-table gf)))))
-;;   (%get-cached-emf gf args))
 
 (defun slow-method-lookup (gf args)
   (let ((applicable-methods (%compute-applicable-methods gf args)))
