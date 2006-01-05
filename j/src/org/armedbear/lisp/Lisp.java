@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.431 2006-01-04 20:42:41 piso Exp $
+ * $Id: Lisp.java,v 1.432 2006-01-05 02:25:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -442,10 +442,11 @@ public abstract class Lisp
 
   public static final int CALL_REGISTERS_MAX = 8;
 
-  private static final LispObject evalCall(LispObject function,
-                                           LispObject args,
-                                           Environment env,
-                                           LispThread thread)
+  // Also used in JProxy.java.
+  protected static final LispObject evalCall(LispObject function,
+                                             LispObject args,
+                                             Environment env,
+                                             LispThread thread)
     throws ConditionThrowable
   {
     if (args == NIL)
