@@ -30,9 +30,13 @@
               (*random-state* (make-random-state t)))
           (time (funcall f size nvars count)))))))
 
-#+abcl
+#+(or abcl clisp)
 (defun test-cl-ppcre ()
-  (let ((*default-pathname-defaults* "/home/peter/cl-ppcre-1.2.11/"))
+  #+abcl (require '#:jvm)
+  (let ((*default-pathname-defaults* #-(or windows mswindows win32)
+                                     #p"/home/peter/cl-ppcre-1.2.11/"
+                                     #+(or windows mswindows win32)
+                                     #p"c:\\cygwin\\home\\peter\\cl-ppcre-1.2.13\\"))
     (map nil #'delete-file (directory "*.abcl"))
     (load "load.lisp")
     (let ((f (find-symbol "TEST" "CL-PPCRE-TEST")))
