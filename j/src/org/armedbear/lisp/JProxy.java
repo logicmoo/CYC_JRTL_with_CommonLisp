@@ -2,7 +2,7 @@
  * JProxy.java
  *
  * Copyright (C) 2002-2005 Peter Graves, Andras Simon
- * $Id: JProxy.java,v 1.6 2006-01-05 02:09:58 piso Exp $
+ * $Id: JProxy.java,v 1.7 2006-01-05 02:26:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,14 +81,17 @@ public final class JProxy extends Lisp
           Function f = entry.getLispMethod(methodName);
           if (f != null)
             {
-              if (args == null) // method needs no argument
-                args = new Object[0];
-              LispObject[] lispArgs = new LispObject[args.length];
-              for (int i = 0 ; i< args.length; i++)
-                lispArgs[i] = new JavaObject(args[i]);
               try
                 {
-                  LispObject result = f.execute(lispArgs);
+                  LispObject lispArgs = NIL;
+                  if (args != null)
+                    {
+                      for (int i = 0; i < args.length; i++)
+                        lispArgs = lispArgs.push(new JavaObject(args[i]));
+                      lispArgs = lispArgs.nreverse();
+                    }
+                  LispObject result = evalCall(f, lispArgs, new Environment(),
+                                               LispThread.currentThread());
                   return (method.getReturnType() == void.class ? null : result.javaInstance());
                 }
               catch (ConditionThrowable t)
