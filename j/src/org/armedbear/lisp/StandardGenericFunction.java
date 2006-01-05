@@ -2,7 +2,7 @@
  * StandardGenericFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardGenericFunction.java,v 1.10 2005-12-27 01:50:25 piso Exp $
+ * $Id: StandardGenericFunction.java,v 1.11 2006-01-05 14:53:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -609,6 +609,45 @@ public final class StandardGenericFunction extends StandardObject
           {
             return signalTypeError(first, Symbol.STANDARD_GENERIC_FUNCTION);
           }
+      }
+    };
+
+  // ### get-cached-emf
+  private static final Primitive GET_CACHED_EMF =
+    new Primitive("get-cached-emf", PACKAGE_SYS, true)
+    {
+      public LispObject execute(LispObject first, LispObject second)
+        throws ConditionThrowable
+      {
+        final StandardGenericFunction gf;
+        try
+          {
+            gf = (StandardGenericFunction) first;
+          }
+        catch (ClassCastException e)
+          {
+            return signalTypeError(first, Symbol.STANDARD_GENERIC_FUNCTION);
+          }
+        final LispObject requiredArgs =
+          gf.slots[StandardGenericFunctionClass.SLOT_INDEX_REQUIRED_ARGS];
+        final int numberRequired = requiredArgs.length();
+        LispObject args = second;
+        LispObject classes = NIL;
+        for (int i = 0; i < numberRequired; i++)
+          {
+            classes = classes.push(args.car().classOf());
+            args = args.cdr();
+          }
+        if (classes != NIL)
+          {
+            classes = classes.nreverse();
+            HashTable ht =
+              (HashTable) gf.slots[StandardGenericFunctionClass.SLOT_INDEX_CLASSES_TO_EMF_TABLE];
+            LispObject emf = ht.get(classes);
+            if (emf != null)
+              return emf;
+          }
+        return NIL;
       }
     };
 

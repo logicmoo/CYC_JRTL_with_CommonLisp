@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.253 2005-12-30 02:44:35 piso Exp $
+ * $Id: Autoload.java,v 1.254 2006-01-05 14:53:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -591,6 +591,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "generic-function-method-class","StandardGenericFunction", true);
         autoload(PACKAGE_SYS, "generic-function-method-combination","StandardGenericFunction", true);
         autoload(PACKAGE_SYS, "generic-function-methods","StandardGenericFunction", true);
+        autoload(PACKAGE_SYS, "get-cached-emf", "StandardGenericFunction", true);
         autoload(PACKAGE_SYS, "get-function-info-value", "function_info");
         autoload(PACKAGE_SYS, "gf-required-args", "StandardGenericFunction", true);
         autoload(PACKAGE_SYS, "hash-table-entries", "HashTableFunctions");
