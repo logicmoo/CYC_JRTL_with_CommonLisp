@@ -2,7 +2,7 @@
  * StandardGenericFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardGenericFunction.java,v 1.12 2006-01-05 16:07:22 piso Exp $
+ * $Id: StandardGenericFunction.java,v 1.13 2006-01-05 16:15:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -634,12 +634,11 @@ public final class StandardGenericFunction extends StandardObject
           {
             return signalTypeError(first, Symbol.STANDARD_GENERIC_FUNCTION);
           }
-        final int numberRequired = gf.numberOfRequiredArgs;
         LispObject args = second;
         LispObject classes = NIL;
-        for (int i = 0; i < numberRequired; i++)
+        for (int i = gf.numberOfRequiredArgs; i-- > 0;)
           {
-            classes = classes.push(args.car().classOf());
+            classes = new Cons(args.car().classOf(), classes);
             args = args.cdr();
           }
         if (classes != NIL)
