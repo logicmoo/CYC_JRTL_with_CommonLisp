@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Cons.java,v 1.71 2006-01-05 10:59:02 piso Exp $
+ * $Id: Cons.java,v 1.72 2006-01-05 11:00:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -571,7 +571,7 @@ public final class Cons extends LispObject
       maxLevel = ((Fixnum)printLevel).value;
     else
       maxLevel = Integer.MAX_VALUE;
-    StringBuffer sb = new StringBuffer();
+    FastStringBuffer sb = new FastStringBuffer();
     if (car == Symbol.QUOTE)
       {
         if (cdr instanceof Cons)
