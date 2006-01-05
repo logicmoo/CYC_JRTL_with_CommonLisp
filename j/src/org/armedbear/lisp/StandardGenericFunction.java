@@ -2,7 +2,7 @@
  * StandardGenericFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardGenericFunction.java,v 1.13 2006-01-05 16:15:13 piso Exp $
+ * $Id: StandardGenericFunction.java,v 1.14 2006-01-05 19:44:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -618,9 +618,44 @@ public final class StandardGenericFunction extends StandardObject
       }
     };
 
+  // ### cache-emf
+  private static final Primitive CACHE_EMF =
+    new Primitive("cache-emf", PACKAGE_SYS, true, "generic-function args emf")
+    {
+      public LispObject execute(LispObject first, LispObject second,
+                                LispObject third)
+        throws ConditionThrowable
+      {
+        final StandardGenericFunction gf;
+        try
+          {
+            gf = (StandardGenericFunction) first;
+          }
+        catch (ClassCastException e)
+          {
+            return signalTypeError(first, Symbol.STANDARD_GENERIC_FUNCTION);
+          }
+        LispObject args = second;
+        LispObject classes = NIL;
+        for (int i = gf.numberOfRequiredArgs; i-- > 0;)
+          {
+            classes = new Cons(args.car().classOf(), classes);
+            args = args.cdr();
+          }
+        if (classes != NIL)
+          {
+            HashTable ht =
+              (HashTable) gf.slots[StandardGenericFunctionClass.SLOT_INDEX_CLASSES_TO_EMF_TABLE];
+            ht.put(classes.nreverse(), third);
+            return third;
+          }
+        return NIL;
+      }
+    };
+
   // ### get-cached-emf
   private static final Primitive GET_CACHED_EMF =
-    new Primitive("get-cached-emf", PACKAGE_SYS, true)
+    new Primitive("get-cached-emf", PACKAGE_SYS, true, "generic-function args")
     {
       public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
@@ -643,10 +678,9 @@ public final class StandardGenericFunction extends StandardObject
           }
         if (classes != NIL)
           {
-            classes = classes.nreverse();
             HashTable ht =
               (HashTable) gf.slots[StandardGenericFunctionClass.SLOT_INDEX_CLASSES_TO_EMF_TABLE];
-            LispObject emf = ht.get(classes);
+            LispObject emf = ht.get(classes.nreverse());
             if (emf != null)
               return emf;
           }
