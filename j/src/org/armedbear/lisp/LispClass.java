@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispClass.java,v 1.67 2005-12-10 08:18:20 piso Exp $
+ * $Id: LispClass.java,v 1.68 2006-01-05 14:54:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,6 +46,8 @@ public abstract class LispClass extends StandardObject
         }
     }
 
+    private final int sxhash;
+
     protected Symbol symbol;
     private LispObject propertyList;
     private Layout classLayout;
@@ -58,16 +60,19 @@ public abstract class LispClass extends StandardObject
 
     protected LispClass()
     {
+        sxhash = hashCode() & 0x7fffffff;
     }
 
     protected LispClass(Symbol symbol)
     {
+        sxhash = hashCode() & 0x7fffffff;
         this.symbol = symbol;
         this.directSuperclasses = NIL;
     }
 
     protected LispClass(Symbol symbol, LispObject directSuperclasses)
     {
+        sxhash = hashCode() & 0x7fffffff;
         this.symbol = symbol;
         this.directSuperclasses = directSuperclasses;
     }
@@ -83,6 +88,11 @@ public abstract class LispClass extends StandardObject
         result = result.push(new Cons("DIRECT-METHODS", directMethods));
         result = result.push(new Cons("DOCUMENTATION", documentation));
         return result.nreverse();
+    }
+
+    public final int sxhash()
+    {
+        return sxhash;
     }
 
     public final Symbol getSymbol()
