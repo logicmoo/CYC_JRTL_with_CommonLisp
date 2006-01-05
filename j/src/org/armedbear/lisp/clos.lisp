@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.204 2006-01-05 14:52:28 piso Exp $
+;;; $Id: clos.lisp,v 1.205 2006-01-05 19:45:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1357,16 +1357,16 @@
                      (method-more-specific-p gf m1 m2 required-classes)))))))
 
 (declaim (ftype (function * t) cache-emf))
-(defun cache-emf (gf args emf)
-  (declare (optimize speed (safety 0)))
-  (let ((number-required (length (gf-required-args gf)))
-        (classes ()))
-    (dotimes (i number-required)
-      (push (class-of (car args)) classes)
-      (setf args (%cdr args)))
-    (when classes
-      (setf classes (nreverse classes))
-      (setf (gethash classes (classes-to-emf-table gf)) emf))))
+;; (defun cache-emf (gf args emf)
+;;   (declare (optimize speed (safety 0)))
+;;   (let ((number-required (length (gf-required-args gf)))
+;;         (classes ()))
+;;     (dotimes (i number-required)
+;;       (push (class-of (car args)) classes)
+;;       (setf args (%cdr args)))
+;;     (when classes
+;;       (setf classes (nreverse classes))
+;;       (setf (gethash classes (classes-to-emf-table gf)) emf))))
 
 (declaim (ftype (function * t) get-cached-emf))
 ;; (defun get-cached-emf (gf args)
