@@ -2,7 +2,7 @@
  * StandardGenericFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardGenericFunction.java,v 1.14 2006-01-05 19:44:41 piso Exp $
+ * $Id: StandardGenericFunction.java,v 1.15 2006-01-05 20:04:29 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -646,7 +646,7 @@ public final class StandardGenericFunction extends StandardObject
           {
             HashTable ht =
               (HashTable) gf.slots[StandardGenericFunctionClass.SLOT_INDEX_CLASSES_TO_EMF_TABLE];
-            ht.put(classes.nreverse(), third);
+            ht.put(classes, third);
             return third;
           }
         return NIL;
@@ -680,7 +680,7 @@ public final class StandardGenericFunction extends StandardObject
           {
             HashTable ht =
               (HashTable) gf.slots[StandardGenericFunctionClass.SLOT_INDEX_CLASSES_TO_EMF_TABLE];
-            LispObject emf = ht.get(classes.nreverse());
+            LispObject emf = ht.get(classes);
             if (emf != null)
               return emf;
           }
