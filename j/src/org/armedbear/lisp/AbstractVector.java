@@ -263,16 +263,4 @@ public abstract class AbstractVector extends AbstractArray
                                                 AbstractArray displacedTo,
                                                 int displacement)
         throws ConditionThrowable;
-
-    public LispObject VECTOR_PUSH_EXTEND(LispObject element)
-        throws ConditionThrowable
-    {
-        return noFillPointer();
-    }
-
-    public LispObject VECTOR_PUSH_EXTEND(LispObject element, LispObject extension)
-        throws ConditionThrowable
-    {
-        return noFillPointer();
-    }
 }
