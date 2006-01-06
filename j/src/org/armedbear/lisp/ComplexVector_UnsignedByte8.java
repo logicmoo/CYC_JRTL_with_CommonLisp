@@ -2,7 +2,7 @@
  * ComplexVector_UnsignedByte8.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: ComplexVector_UnsignedByte8.java,v 1.5 2005-05-28 03:59:02 piso Exp $
+ * $Id: ComplexVector_UnsignedByte8.java,v 1.6 2006-01-06 19:08:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -278,7 +278,7 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
         return this;
     }
 
-    public LispObject vectorPushExtend(LispObject element)
+    public LispObject VECTOR_PUSH_EXTEND(LispObject element)
         throws ConditionThrowable
     {
         if (fillPointer < 0)
@@ -291,7 +291,7 @@ public final class ComplexVector_UnsignedByte8 extends AbstractVector
         return new Fixnum(fillPointer++);
     }
 
-    public LispObject vectorPushExtend(LispObject element, LispObject extension)
+    public LispObject VECTOR_PUSH_EXTEND(LispObject element, LispObject extension)
         throws ConditionThrowable
     {
         int ext = Fixnum.getValue(extension);

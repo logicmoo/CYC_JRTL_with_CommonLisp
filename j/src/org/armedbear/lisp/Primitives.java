@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.862 2006-01-06 17:44:56 piso Exp $
+ * $Id: Primitives.java,v 1.863 2006-01-06 19:08:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2463,7 +2463,7 @@ public final class Primitives extends Lisp
       {
         try
           {
-            return ((AbstractVector)second).vectorPushExtend(first);
+            return ((AbstractVector)second).VECTOR_PUSH_EXTEND(first);
           }
         catch (ClassCastException e)
           {
@@ -2477,7 +2477,7 @@ public final class Primitives extends Lisp
       {
         try
           {
-            return ((AbstractVector)second).vectorPushExtend(first, third);
+            return ((AbstractVector)second).VECTOR_PUSH_EXTEND(first, third);
           }
         catch (ClassCastException e)
           {

@@ -2,7 +2,7 @@
  * ComplexVector.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: ComplexVector.java,v 1.20 2005-05-28 04:00:37 piso Exp $
+ * $Id: ComplexVector.java,v 1.21 2006-01-06 19:08:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -265,7 +265,7 @@ public final class ComplexVector extends AbstractVector
         return this;
     }
 
-    public LispObject vectorPushExtend(LispObject element)
+    public LispObject VECTOR_PUSH_EXTEND(LispObject element)
         throws ConditionThrowable
     {
         if (fillPointer < 0)
@@ -278,7 +278,7 @@ public final class ComplexVector extends AbstractVector
         return new Fixnum(fillPointer++);
     }
 
-    public LispObject vectorPushExtend(LispObject element, LispObject extension)
+    public LispObject VECTOR_PUSH_EXTEND(LispObject element, LispObject extension)
         throws ConditionThrowable
     {
         int ext = Fixnum.getValue(extension);

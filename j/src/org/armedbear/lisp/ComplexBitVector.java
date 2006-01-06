@@ -2,7 +2,7 @@
  * ComplexBitVector.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: ComplexBitVector.java,v 1.13 2005-10-15 17:06:40 piso Exp $
+ * $Id: ComplexBitVector.java,v 1.14 2006-01-06 19:08:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -210,7 +210,7 @@ public final class ComplexBitVector extends AbstractBitVector
     }
 
     // FIXME
-    public LispObject vectorPushExtend(LispObject element)
+    public LispObject VECTOR_PUSH_EXTEND(LispObject element)
         throws ConditionThrowable
     {
         final int fp = getFillPointer();
@@ -226,7 +226,7 @@ public final class ComplexBitVector extends AbstractBitVector
     }
 
     // FIXME
-    public LispObject vectorPushExtend(LispObject element, LispObject extension)
+    public LispObject VECTOR_PUSH_EXTEND(LispObject element, LispObject extension)
         throws ConditionThrowable
     {
         int ext = Fixnum.getValue(extension);

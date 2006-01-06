@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: ComplexString.java,v 1.32 2006-01-06 18:46:53 piso Exp $
+ * $Id: ComplexString.java,v 1.33 2006-01-06 19:08:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -376,7 +376,7 @@ public final class ComplexString extends AbstractString
       }
   }
 
-  public LispObject vectorPushExtend(LispObject element)
+  public LispObject VECTOR_PUSH_EXTEND(LispObject element)
     throws ConditionThrowable
   {
     if (fillPointer < 0)
@@ -402,7 +402,7 @@ public final class ComplexString extends AbstractString
     return new Fixnum(fillPointer++);
   }
 
-  public LispObject vectorPushExtend(LispObject element, LispObject extension)
+  public LispObject VECTOR_PUSH_EXTEND(LispObject element, LispObject extension)
     throws ConditionThrowable
   {
     int ext = Fixnum.getValue(extension);
