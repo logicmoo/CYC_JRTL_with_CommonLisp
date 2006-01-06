@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.735 2006-01-06 16:51:23 piso Exp $
+;;; $Id: jvm.lisp,v 1.736 2006-01-06 18:39:20 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6832,6 +6832,32 @@ representation, based on the derived type of the LispObject."
            (maybe-emit-clear-values arg)
            (emit-invoke-method "ZEROP" target representation)))))
 
+(defun p2-find-class (form target representation)
+  (let* ((args (cdr form))
+         (arg-count (length args)))
+    (case arg-count
+      (1
+       (let ((arg1 (%car args)))
+         (compile-form arg1 'stack nil)
+         (maybe-emit-clear-values arg1)
+         (emit-push-constant-int 1) ; errorp is true by default.
+         (emit-invokestatic +lisp-class-class+ "findClass"
+                            (list +lisp-object+ "Z") +lisp-object+)
+         (fix-boxing representation nil)
+         (emit-move-from-stack target representation)))
+      (2
+       (let ((arg1 (%car args))
+             (arg2 (%cadr args)))
+         (compile-form arg1 'stack nil)
+         (compile-form arg2 'stack :boolean)
+         (maybe-emit-clear-values arg1 arg2)
+         (emit-invokestatic +lisp-class-class+ "findClass"
+                            (list +lisp-object+ "Z") +lisp-object+)
+         (fix-boxing representation nil)
+         (emit-move-from-stack target representation)))
+      (t
+       (compile-function-call form target representation)))))
+
 (defun p2-make-array (form target representation)
   ;; In safe code, we want to make sure the requested length does not exceed
   ;; ARRAY-DIMENSION-LIMIT.
@@ -9979,6 +10005,7 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'eq                  'p2-eq/neq)
   (install-p2-handler 'eql                 'p2-eql)
   (install-p2-handler 'eval-when           'p2-eval-when)
+  (install-p2-handler 'find-class          'p2-find-class)
   (install-p2-handler 'fixnump             'p2-fixnump)
   (install-p2-handler 'flet                'p2-flet)
   (install-p2-handler 'funcall             'p2-funcall)
