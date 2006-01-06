@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispClass.java,v 1.69 2006-01-06 17:29:21 piso Exp $
+ * $Id: LispClass.java,v 1.70 2006-01-06 17:45:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -280,6 +280,103 @@ public abstract class LispClass extends StandardObject
       }
     return false;
   }
+
+  // ### find-class symbol &optional errorp environment => class
+  private static final Primitive FIND_CLASS =
+    new Primitive(Symbol.FIND_CLASS, "symbol &optional errorp environment")
+    {
+      public LispObject execute(LispObject arg) throws ConditionThrowable
+      {
+        final Symbol name;
+        try
+          {
+            name = (Symbol) arg;
+          }
+        catch (ClassCastException e)
+          {
+            return signalTypeError(arg, Symbol.SYMBOL);
+          }
+        final LispObject c = findClass(name);
+        if (c == null)
+          {
+            FastStringBuffer sb =
+              new FastStringBuffer("There is no class named ");
+            sb.append(arg.writeToString());
+            sb.append('.');
+            return signal(new LispError(sb.toString()));
+          }
+        return c;
+      }
+      public LispObject execute(LispObject first, LispObject second)
+        throws ConditionThrowable
+      {
+        final Symbol name;
+        try
+          {
+            name = (Symbol) first;
+          }
+        catch (ClassCastException e)
+          {
+            return signalTypeError(first, Symbol.SYMBOL);
+          }
+        final LispObject c = findClass(name);
+        if (c == null)
+          {
+            if (second != NIL)
+              {
+                FastStringBuffer sb =
+                  new FastStringBuffer("There is no class named ");
+                sb.append(first.writeToString());
+                sb.append('.');
+                return signal(new LispError(sb.toString()));
+              }
+            return NIL;
+          }
+        return c;
+      }
+      public LispObject execute(LispObject first, LispObject second,
+                                LispObject third)
+        throws ConditionThrowable
+      {
+        // FIXME Ignore environment.
+        return execute(first, second);
+      }
+    };
+
+  // ### %set-find-class
+  private static final Primitive _SET_FIND_CLASS =
+    new Primitive("%set-find-class", PACKAGE_SYS, true)
+    {
+      public LispObject execute(LispObject first, LispObject second)
+        throws ConditionThrowable
+      {
+        final Symbol name;
+        try
+          {
+            name = (Symbol) first;
+          }
+        catch (ClassCastException e)
+          {
+            return signalTypeError(first, Symbol.SYMBOL);
+          }
+        if (second == NIL)
+          {
+            removeClass(name);
+            return second;
+          }
+        final LispClass c;
+        try
+          {
+            c = (LispClass) second;
+          }
+        catch (ClassCastException e)
+          {
+            return signalTypeError(second, Symbol.CLASS);
+          }
+        addClass(name, c);
+        return second;
+      }
+    };
 
   // ### subclassp
   private static final Primitive SUBCLASSP =
