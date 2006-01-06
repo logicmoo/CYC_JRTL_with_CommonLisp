@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.863 2006-01-06 19:08:32 piso Exp $
+ * $Id: Primitives.java,v 1.864 2006-01-06 19:19:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2461,28 +2461,14 @@ public final class Primitives extends Lisp
       public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
       {
-        try
-          {
-            return ((AbstractVector)second).VECTOR_PUSH_EXTEND(first);
-          }
-        catch (ClassCastException e)
-          {
-            return signalTypeError(second, Symbol.VECTOR);
-          }
+        return second.VECTOR_PUSH_EXTEND(first);
       }
 
       public LispObject execute(LispObject first, LispObject second,
                                 LispObject third)
         throws ConditionThrowable
       {
-        try
-          {
-            return ((AbstractVector)second).VECTOR_PUSH_EXTEND(first, third);
-          }
-        catch (ClassCastException e)
-          {
-            return signalTypeError(second, Symbol.VECTOR);
-          }
+        return second.VECTOR_PUSH_EXTEND(first, third);
       }
     };
 
