@@ -2,7 +2,7 @@
  * StandardGenericFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardGenericFunction.java,v 1.15 2006-01-05 20:04:29 piso Exp $
+ * $Id: StandardGenericFunction.java,v 1.16 2006-01-06 13:24:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,11 +21,15 @@
 
 package org.armedbear.lisp;
 
+import java.util.HashMap;
+
 public final class StandardGenericFunction extends StandardObject
 {
   private LispObject function;
 
   private int numberOfRequiredArgs;
+
+  private HashMap emfCache;
 
   public StandardGenericFunction()
   {
@@ -73,6 +77,11 @@ public final class StandardGenericFunction extends StandardObject
       {
         Debug.assertTrue(false);
       }
+  }
+
+  private void finalizeInternal()
+  {
+    emfCache = new HashMap();
   }
 
   public LispObject typep(LispObject type) throws ConditionThrowable
@@ -618,6 +627,27 @@ public final class StandardGenericFunction extends StandardObject
       }
     };
 
+  // ### finalize-internal
+  private static final Primitive _FINALIZE_GENERIC_FUNCTION =
+    new Primitive("%finalize-generic-function", PACKAGE_SYS, true,
+                  "generic-function")
+    {
+      public LispObject execute(LispObject arg) throws ConditionThrowable
+      {
+        final StandardGenericFunction gf;
+        try
+          {
+            gf = (StandardGenericFunction) arg;
+          }
+        catch (ClassCastException e)
+          {
+            return signalTypeError(arg, Symbol.STANDARD_GENERIC_FUNCTION);
+          }
+        gf.finalizeInternal();
+        return T;
+      }
+    };
+
   // ### cache-emf
   private static final Primitive CACHE_EMF =
     new Primitive("cache-emf", PACKAGE_SYS, true, "generic-function args emf")
@@ -636,20 +666,16 @@ public final class StandardGenericFunction extends StandardObject
             return signalTypeError(first, Symbol.STANDARD_GENERIC_FUNCTION);
           }
         LispObject args = second;
-        LispObject classes = NIL;
+        LispObject[] array = new LispObject[gf.numberOfRequiredArgs];
         for (int i = gf.numberOfRequiredArgs; i-- > 0;)
           {
-            classes = new Cons(args.car().classOf(), classes);
+            array[i] = args.car().classOf();
             args = args.cdr();
           }
-        if (classes != NIL)
-          {
-            HashTable ht =
-              (HashTable) gf.slots[StandardGenericFunctionClass.SLOT_INDEX_CLASSES_TO_EMF_TABLE];
-            ht.put(classes, third);
-            return third;
-          }
-        return NIL;
+        CacheEntry classes = new CacheEntry(array);
+        HashMap ht = gf.emfCache;
+        ht.put(classes, third);
+        return third;
       }
     };
 
@@ -670,21 +696,16 @@ public final class StandardGenericFunction extends StandardObject
             return signalTypeError(first, Symbol.STANDARD_GENERIC_FUNCTION);
           }
         LispObject args = second;
-        LispObject classes = NIL;
+        LispObject[] array = new LispObject[gf.numberOfRequiredArgs];
         for (int i = gf.numberOfRequiredArgs; i-- > 0;)
           {
-            classes = new Cons(args.car().classOf(), classes);
+            array[i] = args.car().classOf();
             args = args.cdr();
           }
-        if (classes != NIL)
-          {
-            HashTable ht =
-              (HashTable) gf.slots[StandardGenericFunctionClass.SLOT_INDEX_CLASSES_TO_EMF_TABLE];
-            LispObject emf = ht.get(classes);
-            if (emf != null)
-              return emf;
-          }
-        return NIL;
+        CacheEntry classes = new CacheEntry(array);
+        HashMap ht = gf.emfCache;
+        LispObject emf = (LispObject) ht.get(classes);
+        return emf != null ? emf : NIL;
       }
     };
 
@@ -695,4 +716,36 @@ public final class StandardGenericFunction extends StandardObject
                                 _GENERIC_FUNCTION_NAME,
                                 list1(Symbol.GENERIC_FUNCTION),
                                 list1(StandardClass.STANDARD_GENERIC_FUNCTION));
+
+  private static class CacheEntry
+  {
+    final LispObject[] array;
+
+    CacheEntry(LispObject[] array)
+    {
+      this.array = array;
+    }
+
+    public int hashCode()
+    {
+      int result = 0;
+      for (int i = array.length; i-- > 0;)
+        result ^= array[i].hashCode();
+      return result;
+    }
+
+    public boolean equals(Object object)
+    {
+      if (!(object instanceof CacheEntry))
+        return false;
+      final CacheEntry otherEntry = (CacheEntry) object;
+      if (otherEntry.array.length != array.length)
+        return false;
+      final LispObject[] otherArray = otherEntry.array;
+      for (int i = array.length; i-- > 0;)
+        if (array[i] != otherArray[i])
+          return false;
+      return true;
+    }
+  }
 }
