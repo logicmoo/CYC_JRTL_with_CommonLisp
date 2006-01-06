@@ -1,7 +1,7 @@
 ;;; java.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves, Andras Simon
-;;; $Id: java.lisp,v 1.22 2006-01-05 20:17:43 asimon Exp $
+;;; $Id: java.lisp,v 1.23 2006-01-06 17:57:15 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@
            if (evenp i) 
            do (assert (stringp m) (m) "Method names must be strings: ~s" m) and collect m
            else
-           do (assert (functionp m) (m) "Methods must be functions: ~s" m))) 
+           do (assert (or (symbolp m) (functionp m)) (m) "Methods must be functions: ~s" m))) 
         (null (make-immediate-object nil :ref)))
     (loop for method across
       (jclass-methods interface :declared nil :public t)
