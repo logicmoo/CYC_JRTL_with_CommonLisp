@@ -2,7 +2,7 @@
  * StandardGenericFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardGenericFunction.java,v 1.16 2006-01-06 13:24:44 piso Exp $
+ * $Id: StandardGenericFunction.java,v 1.17 2006-01-06 13:34:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -627,7 +627,7 @@ public final class StandardGenericFunction extends StandardObject
       }
     };
 
-  // ### finalize-internal
+  // ### %finalize-generic-function
   private static final Primitive _FINALIZE_GENERIC_FUNCTION =
     new Primitive("%finalize-generic-function", PACKAGE_SYS, true,
                   "generic-function")
