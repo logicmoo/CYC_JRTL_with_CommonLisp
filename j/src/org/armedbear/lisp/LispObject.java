@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispObject.java,v 1.156 2006-01-06 19:22:26 piso Exp $
+ * $Id: LispObject.java,v 1.157 2006-01-06 19:30:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -476,6 +476,12 @@ public class LispObject extends Lisp
     public void svset(int index, LispObject newValue) throws ConditionThrowable
     {
         signalTypeError(this, Symbol.SIMPLE_VECTOR);
+    }
+
+    public void vectorPushExtend(LispObject element)
+        throws ConditionThrowable
+    {
+        noFillPointer();
     }
 
     public LispObject VECTOR_PUSH_EXTEND(LispObject element)
