@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.734 2006-01-05 15:37:08 piso Exp $
+;;; $Id: jvm.lisp,v 1.735 2006-01-06 16:51:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2654,6 +2654,7 @@ representation, based on the derived type of the LispObject."
                     (t
                      (let ((char-octets (char-to-utf8 c)))
                        (dotimes (j (length char-octets))
+                         (declare (type fixnum j))
                          (vector-push-extend (svref char-octets j) octets)))))))
           (write-u2 (length octets) stream)
           (dotimes (i (length octets))
@@ -4127,20 +4128,35 @@ representation, based on the derived type of the LispObject."
                 ;; If we do both tests, we need to use the arg2 value twice,
                 ;; so we store that value in a temporary register.
                 (*register* *register*)
-                (arg2-register (allocate-register))
-                (arg3-register (allocate-register)))
+                (arg2-register
+                 (unless (and (or (node-constant-p arg2)
+                                  (var-ref-p arg2))
+                              (node-constant-p arg3))
+                   (allocate-register)))
+                (arg3-register
+                 (unless (node-constant-p arg3) (allocate-register))))
            (compile-form arg1 'stack :int)
            (compile-form arg2 'stack :int)
-           (emit 'dup)
-           (emit 'istore arg2-register)
-           (compile-form arg3 'stack :int)
-           (emit 'istore arg3-register)
-           (maybe-emit-clear-values arg1 arg2 arg3)
+           (when arg2-register
+             (emit 'dup)
+             (emit 'istore arg2-register))
+           (cond (arg3-register
+                  (compile-form arg3 'stack :int)
+                  (emit 'istore arg3-register)
+                  (maybe-emit-clear-values arg1 arg2 arg3))
+                 (t
+                  (maybe-emit-clear-values arg1 arg2)))
            ;; First test.
            (emit test LABEL1)
            ;; Second test.
-           (emit 'iload arg2-register)
-           (emit 'iload arg3-register)
+           (cond (arg2-register
+                  (emit 'iload arg2-register))
+                 (t
+                  (compile-form arg2 'stack :int)))
+           (cond (arg3-register
+                  (emit 'iload arg3-register))
+                 (t
+                  (compile-form arg3 'stack :int)))
            (emit test LABEL1)
            (emit-push-true representation)
            (emit 'goto LABEL2)
@@ -4247,7 +4263,28 @@ representation, based on the derived type of the LispObject."
   (p2-test-predicate form "endp"))
 
 (defun p2-test-evenp (form)
-  (p2-test-predicate form "evenp"))
+  (when (check-arg-count form 1)
+    (let ((arg (%cadr form)))
+      (cond ((fixnum-type-p (derive-compiler-type arg))
+             (compile-form arg 'stack :int)
+             (maybe-emit-clear-values arg)
+             (emit-push-constant-int 1)
+             (emit 'iand)
+             'ifne)
+            (t
+             (p2-test-predicate form "evenp"))))))
+
+(defun p2-test-oddp (form)
+  (when (check-arg-count form 1)
+    (let ((arg (%cadr form)))
+      (cond ((fixnum-type-p (derive-compiler-type arg))
+             (compile-form arg 'stack :int)
+             (maybe-emit-clear-values arg)
+             (emit-push-constant-int 1)
+             (emit 'iand)
+             'ifeq)
+            (t
+             (p2-test-predicate form "oddp"))))))
 
 (defun p2-test-floatp (form)
   (p2-test-predicate form "floatp"))
@@ -4302,9 +4339,6 @@ representation, based on the derived type of the LispObject."
 
 (defun p2-test-numberp (form)
   (p2-test-predicate form "numberp"))
-
-(defun p2-test-oddp (form)
-  (p2-test-predicate form "oddp"))
 
 (defun p2-test-packagep (form)
   (p2-test-instanceof-predicate form +lisp-package-class+))
