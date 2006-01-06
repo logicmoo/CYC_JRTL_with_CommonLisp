@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.255 2006-01-05 19:45:10 piso Exp $
+ * $Id: Autoload.java,v 1.256 2006-01-06 13:27:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -501,6 +501,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%%string=", "StringFunctions");
         autoload(PACKAGE_SYS, "%adjust-array", "adjust_array");
         autoload(PACKAGE_SYS, "%defpackage", "PackageFunctions");
+        autoload(PACKAGE_SYS, "%finalize-generic-function", "StandardGenericFunction", true);
         autoload(PACKAGE_SYS, "%generic-function-lambda-list", "StandardGenericFunction", true);
         autoload(PACKAGE_SYS, "%generic-function-name", "StandardGenericFunction", true);
         autoload(PACKAGE_SYS, "%make-array", "make_array");
