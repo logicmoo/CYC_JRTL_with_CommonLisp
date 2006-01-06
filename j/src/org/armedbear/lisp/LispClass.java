@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispClass.java,v 1.71 2006-01-06 17:50:12 piso Exp $
+ * $Id: LispClass.java,v 1.72 2006-01-06 18:14:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,6 +33,14 @@ public abstract class LispClass extends StandardObject
       }
   }
 
+  public static void removeClass(Symbol symbol)
+  {
+    synchronized (map)
+      {
+        map.remove(symbol);
+      }
+  }
+
   public static LispClass findClass(Symbol symbol)
   {
     synchronized (map)
@@ -41,12 +49,34 @@ public abstract class LispClass extends StandardObject
       }
   }
 
-  public static void removeClass(Symbol symbol)
+  public static LispObject findClass(LispObject name, boolean errorp)
+    throws ConditionThrowable
   {
+    final Symbol symbol;
+    try
+      {
+        symbol = (Symbol) name;
+      }
+    catch (ClassCastException e)
+      {
+        return signalTypeError(name, Symbol.SYMBOL);
+      }
+    final LispClass c;
     synchronized (map)
       {
-        map.remove(symbol);
+        c = (LispClass) map.get(symbol);
       }
+    if (c != null)
+      return c;
+    if (errorp)
+      {
+        FastStringBuffer sb =
+          new FastStringBuffer("There is no class named ");
+        sb.append(name.writeToString());
+        sb.append('.');
+        return signal(new LispError(sb.toString()));
+      }
+    return NIL;
   }
 
   private final int sxhash;
@@ -287,59 +317,19 @@ public abstract class LispClass extends StandardObject
     {
       public LispObject execute(LispObject arg) throws ConditionThrowable
       {
-        final Symbol name;
-        try
-          {
-            name = (Symbol) arg;
-          }
-        catch (ClassCastException e)
-          {
-            return signalTypeError(arg, Symbol.SYMBOL);
-          }
-        final LispObject c = findClass(name);
-        if (c == null)
-          {
-            FastStringBuffer sb =
-              new FastStringBuffer("There is no class named ");
-            sb.append(arg.writeToString());
-            sb.append('.');
-            return signal(new LispError(sb.toString()));
-          }
-        return c;
+        return findClass(arg, true);
       }
       public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
       {
-        final Symbol name;
-        try
-          {
-            name = (Symbol) first;
-          }
-        catch (ClassCastException e)
-          {
-            return signalTypeError(first, Symbol.SYMBOL);
-          }
-        final LispObject c = findClass(name);
-        if (c == null)
-          {
-            if (second != NIL)
-              {
-                FastStringBuffer sb =
-                  new FastStringBuffer("There is no class named ");
-                sb.append(first.writeToString());
-                sb.append('.');
-                return signal(new LispError(sb.toString()));
-              }
-            return NIL;
-          }
-        return c;
+        return findClass(first, second != NIL);
       }
       public LispObject execute(LispObject first, LispObject second,
                                 LispObject third)
         throws ConditionThrowable
       {
-        // FIXME Ignore environment.
-        return execute(first, second);
+        // FIXME Use environment!
+        return findClass(first, second != NIL);
       }
     };
 
