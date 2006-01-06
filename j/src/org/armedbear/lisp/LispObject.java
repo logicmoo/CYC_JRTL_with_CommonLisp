@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispObject.java,v 1.155 2006-01-06 19:18:14 piso Exp $
+ * $Id: LispObject.java,v 1.156 2006-01-06 19:22:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -481,13 +481,16 @@ public class LispObject extends Lisp
     public LispObject VECTOR_PUSH_EXTEND(LispObject element)
         throws ConditionThrowable
     {
-        return signalTypeError(this, list3(Symbol.AND, Symbol.VECTOR,
-                                           list2(Symbol.SATISFIES,
-                                                 Symbol.ARRAY_HAS_FILL_POINTER_P)));
+        return noFillPointer();
     }
 
     public LispObject VECTOR_PUSH_EXTEND(LispObject element, LispObject extension)
         throws ConditionThrowable
+    {
+        return noFillPointer();
+    }
+
+    public final LispObject noFillPointer() throws ConditionThrowable
     {
         return signalTypeError(this, list3(Symbol.AND, Symbol.VECTOR,
                                            list2(Symbol.SATISFIES,

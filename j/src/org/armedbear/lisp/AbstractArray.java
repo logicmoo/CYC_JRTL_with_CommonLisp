@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: AbstractArray.java,v 1.47 2005-10-23 18:44:50 piso Exp $
+ * $Id: AbstractArray.java,v 1.48 2006-01-06 19:22:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -70,14 +70,6 @@ public abstract class AbstractArray extends LispObject
     {
         noFillPointer();
         return -1; // Not reached.
-    }
-
-
-    public final LispObject noFillPointer() throws ConditionThrowable
-    {
-        return signalTypeError(this, list3(Symbol.AND, Symbol.VECTOR,
-                                           list2(Symbol.SATISFIES,
-                                                 Symbol.ARRAY_HAS_FILL_POINTER_P)));
     }
 
     public boolean isAdjustable()
