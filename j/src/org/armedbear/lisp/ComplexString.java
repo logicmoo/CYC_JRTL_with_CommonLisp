@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: ComplexString.java,v 1.33 2006-01-06 19:08:32 piso Exp $
+ * $Id: ComplexString.java,v 1.34 2006-01-06 19:41:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -374,6 +374,32 @@ public final class ComplexString extends AbstractString
       {
         signalTypeError(newValue, Symbol.CHARACTER);
       }
+  }
+
+  public void vectorPushExtend(LispObject element)
+    throws ConditionThrowable
+  {
+    if (fillPointer < 0)
+      noFillPointer();
+    if (fillPointer >= capacity)
+      {
+        // Need to extend vector.
+        ensureCapacity(capacity * 2 + 1);
+      }
+    if (chars != null)
+      {
+        try
+          {
+            chars[fillPointer] = ((LispCharacter)element).value;
+          }
+        catch (ClassCastException e)
+          {
+            signalTypeError(element, Symbol.CHARACTER);
+          }
+      }
+    else
+      array.aset(fillPointer + displacement, element);
+    ++fillPointer;
   }
 
   public LispObject VECTOR_PUSH_EXTEND(LispObject element)
