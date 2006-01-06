@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.206 2006-01-05 20:05:33 piso Exp $
+;;; $Id: clos.lisp,v 1.207 2006-01-06 13:32:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -845,6 +845,7 @@
   (apply gf args))
 
 (defun finalize-generic-function (gf)
+  (%finalize-generic-function gf)
   (setf (classes-to-emf-table gf) (make-hash-table :test #'equal))
   (set-funcallable-instance-function
    gf
