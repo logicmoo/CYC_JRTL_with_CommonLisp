@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispClass.java,v 1.70 2006-01-06 17:45:21 piso Exp $
+ * $Id: LispClass.java,v 1.71 2006-01-06 17:50:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -276,7 +276,7 @@ public abstract class LispClass extends StandardObject
       {
         if (cpl.car() == obj)
           return true;
-        cpl = cpl.cdr();
+        cpl = ((Cons)cpl).cdr;
       }
     return false;
   }
