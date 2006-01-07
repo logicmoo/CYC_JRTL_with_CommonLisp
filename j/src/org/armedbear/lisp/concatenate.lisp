@@ -1,7 +1,7 @@
 ;;; concatenate.lisp
 ;;;
-;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: concatenate.lisp,v 1.8 2005-12-23 02:16:58 piso Exp $
+;;; Copyright (C) 2003-2006 Peter Graves
+;;; $Id: concatenate.lisp,v 1.9 2006-01-07 17:34:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -40,19 +40,20 @@
               (incf i)))))))
 
 (defun concatenate (result-type &rest sequences)
-  (cond ((eq result-type 'list)
-         (let ((result ()))
-           (dolist (seq sequences (nreverse result))
-             (dotimes (j (length seq))
-               (push (elt seq j) result)))))
-        ((eq result-type 'string)
-         (concatenate-to-string sequences))
-        (t
-         (let* ((length (apply '+ (mapcar 'length sequences)))
-                (result (make-sequence result-type length))
-                (i 0))
-           (declare (type index i))
-           (dolist (seq sequences result)
-             (dotimes (j (length seq))
-               (setf (elt result i) (elt seq j))
-               (incf i)))))))
+  (case result-type
+    (LIST
+     (let ((result ()))
+       (dolist (seq sequences (nreverse result))
+         (dotimes (i (length seq))
+           (push (elt seq i) result)))))
+    ((STRING SIMPLE-STRING)
+     (concatenate-to-string sequences))
+    (t
+     (let* ((length (apply '+ (mapcar 'length sequences)))
+            (result (make-sequence result-type length))
+            (i 0))
+       (declare (type index i))
+       (dolist (seq sequences result)
+         (dotimes (j (length seq))
+           (setf (elt result i) (elt seq j))
+           (incf i)))))))
