@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.742 2006-01-07 14:07:00 piso Exp $
+;;; $Id: jvm.lisp,v 1.743 2006-01-07 17:35:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6945,6 +6945,38 @@ representation, based on the derived type of the LispObject."
         (t
          (compile-function-call form target representation))))
 
+;; make-sequence result-type size &key initial-element => sequence
+(defun p2-make-sequence (form target representation)
+  ;; In safe code, we want to make sure the requested length does not exceed
+  ;; ARRAY-DIMENSION-LIMIT.
+  (unless (and (< *safety* 3)
+               (= (length form) 3)
+               (null representation))
+    (compile-function-call form target representation)
+    (return-from p2-make-sequence))
+  (let* ((args (cdr form))
+         (arg1 (first args))
+         (arg2 (second args)))
+    (when (and (consp arg1)
+               (= (length arg1) 2)
+               (eq (first arg1) 'QUOTE))
+      (let* ((result-type (second arg1))
+             (class
+              (case result-type
+                ((STRING SIMPLE-STRING)
+                 (setf class +lisp-simple-string-class+))
+                ((VECTOR SIMPLE-VECTOR)
+                 (setf class +lisp-simple-vector-class+)))))
+        (when class
+          (emit 'new class)
+          (emit 'dup)
+          (compile-form arg2 'stack :int)
+          (maybe-emit-clear-values arg2)
+          (emit-invokespecial-init class '("I"))
+          (emit-move-from-stack target representation)
+          (return-from p2-make-sequence)))))
+  (compile-function-call form target representation))
+
 (defun p2-make-string (form target representation)
   ;; In safe code, we want to make sure the requested length does not exceed
   ;; ARRAY-DIMENSION-LIMIT.
@@ -8309,8 +8341,7 @@ representation, based on the derived type of the LispObject."
                  (t
                   (emit-invokevirtual +lisp-object-class+ "aset" (list "I" +lisp-object+) nil)))
            (when value-register
-             (cond (;;(subtypep array-derived-type '(array (unsigned-byte 8)))
-                    (fixnum-type-p type3)
+             (cond ((fixnum-type-p type3)
                     (when (null representation)
                       (emit 'new +lisp-fixnum-class+)
                       (emit 'dup))
@@ -10105,6 +10136,7 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'lognot              'p2-lognot)
   (install-p2-handler 'logxor              'p2-logxor)
   (install-p2-handler 'make-array          'p2-make-array)
+  (install-p2-handler 'make-sequence       'p2-make-sequence)
   (install-p2-handler 'make-string         'p2-make-string)
   (install-p2-handler 'make-structure      'p2-make-structure)
   (install-p2-handler 'max                 'p2-min/max)
