@@ -1,8 +1,8 @@
 /*
  * get_properties.java
  *
- * Copyright (C) 2003-2005 Peter Graves
- * $Id: get_properties.java,v 1.6 2005-11-08 16:17:30 piso Exp $
+ * Copyright (C) 2003-2006 Peter Graves
+ * $Id: get_properties.java,v 1.7 2006-01-07 16:15:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -24,33 +24,37 @@ package org.armedbear.lisp;
 // ### get-properties
 public final class get_properties extends Primitive
 {
-    private get_properties()
-    {
-        super(Symbol.GET_PROPERTIES, "plist indicator-list");
-    }
+  private get_properties()
+  {
+    super(Symbol.GET_PROPERTIES, "plist indicator-list");
+  }
 
-    public LispObject execute(LispObject first, LispObject second)
-        throws ConditionThrowable
-    {
-        final LispThread thread = LispThread.currentThread();
-        LispObject plist = first;
-        while (plist != NIL) {
-            if (plist.cdr() instanceof Cons) {
-                LispObject indicator = ((Cons)plist).car;
-                LispObject indicators = second;
-                while (indicators instanceof Cons) {
-                    if (indicator == ((Cons)indicators).car)
-                        return thread.setValues(indicator, plist.cadr(), plist);
-                    indicators = ((Cons)indicators).cdr;
-                }
-                if (indicators != NIL)
-                    return signalTypeError(indicators, Symbol.LIST);
-                plist = plist.cddr();
-            } else
-                return signalTypeError(plist.cdr(), Symbol.CONS);
-        }
-        return thread.setValues(NIL, NIL, NIL);
-    }
+  public LispObject execute(LispObject first, LispObject second)
+    throws ConditionThrowable
+  {
+    final LispThread thread = LispThread.currentThread();
+    LispObject plist = first;
+    while (plist != NIL)
+      {
+        if (plist.cdr() instanceof Cons)
+          {
+            LispObject indicator = ((Cons)plist).car;
+            LispObject indicators = second;
+            while (indicators instanceof Cons)
+              {
+                if (indicator == ((Cons)indicators).car)
+                  return thread.setValues(indicator, plist.cadr(), plist);
+                indicators = ((Cons)indicators).cdr;
+              }
+            if (indicators != NIL)
+              return signalTypeError(indicators, Symbol.LIST);
+            plist = plist.cddr();
+          }
+        else
+          return signalTypeError(plist.cdr(), Symbol.CONS);
+      }
+    return thread.setValues(NIL, NIL, NIL);
+  }
 
-    private static final Primitive GET_PROPERTIES = new get_properties();
+  private static final Primitive GET_PROPERTIES = new get_properties();
 }
