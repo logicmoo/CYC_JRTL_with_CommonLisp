@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.743 2006-01-07 17:35:33 piso Exp $
+;;; $Id: jvm.lisp,v 1.744 2006-01-07 18:38:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6928,6 +6928,32 @@ representation, based on the derived type of the LispObject."
     (fix-boxing representation nil)
     (emit-move-from-stack target representation)))
 
+;; set-std-slot-value instance slot-name new-value => new-value
+(defknown p2-set-std-slot-value (t t t) t)
+(defun p2-set-std-slot-value (form target representation)
+  (unless (check-arg-count form 3)
+    (compile-function-call form target representation)
+    (return-from p2-set-std-slot-value))
+  (let* ((args (cdr form))
+         (arg1 (first args))
+         (arg2 (second args))
+         (arg3 (third args))
+         (*register* *register*)
+         (value-register (when target (allocate-register))))
+    (compile-form arg1 'stack nil)
+    (compile-form arg2 'stack nil)
+    (compile-form arg3 'stack nil)
+    (maybe-emit-clear-values arg1 arg2 arg3)
+    (when value-register
+      (emit 'dup)
+      (emit 'astore value-register))
+    (emit-invokevirtual +lisp-object-class+ "setSlotValue"
+                        (lisp-object-arg-types 2) nil)
+    (when value-register
+      (emit 'aload value-register)
+      (fix-boxing representation nil)
+      (emit-move-from-stack target representation))))
+
 (defun p2-make-array (form target representation)
   ;; In safe code, we want to make sure the requested length does not exceed
   ;; ARRAY-DIMENSION-LIMIT.
@@ -8145,11 +8171,11 @@ representation, based on the derived type of the LispObject."
                 (compiler-subtypep type1 'STRING)
                 (fixnum-type-p type2)
                 (compiler-subtypep type3 'CHARACTER))
-           (let ((*register* *register*)
-                 (value-register (when target (allocate-register)))
-                 (class (if (eq op 'SCHAR)
-                            +lisp-simple-string-class+
-                            +lisp-abstract-string-class+)))
+           (let* ((*register* *register*)
+                  (value-register (when target (allocate-register)))
+                  (class (if (eq op 'SCHAR)
+                             +lisp-simple-string-class+
+                             +lisp-abstract-string-class+)))
              (compile-form arg1 'stack nil)
              (emit 'checkcast class)
              (compile-form arg2 'stack :int)
@@ -10161,6 +10187,7 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'set-cdr             'p2-set-car/cdr)
   (install-p2-handler 'set-char            'p2-set-char/schar)
   (install-p2-handler 'set-schar           'p2-set-char/schar)
+  (install-p2-handler 'set-std-slot-value  'p2-set-std-slot-value)
   (install-p2-handler 'setq                'p2-setq)
   (install-p2-handler 'simple-vector-p     'p2-simple-vector-p)
   (install-p2-handler 'std-slot-value      'p2-std-slot-value)
