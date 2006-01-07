@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.740 2006-01-07 06:25:32 piso Exp $
+;;; $Id: jvm.lisp,v 1.741 2006-01-07 06:54:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -8675,14 +8675,14 @@ representation, based on the derived type of the LispObject."
       (return-from p2-setq))
 
     (when (zerop (variable-reads variable))
-     ;; If we never read the variable, we don't have to set it.
-     (cond (target
-            (compile-form value-form 'stack nil)
-            (maybe-emit-clear-values value-form)
-            (fix-boxing representation nil)
-            (emit-move-from-stack target representation))
-           (t
-            (compile-form value-form nil nil)))
+      ;; If we never read the variable, we don't have to set it.
+      (cond (target
+             (compile-form value-form 'stack nil)
+             (maybe-emit-clear-values value-form)
+             (fix-boxing representation nil)
+             (emit-move-from-stack target representation))
+            (t
+             (compile-form value-form nil nil)))
       (return-from p2-setq))
 
     ;; Optimize the (INCF X) case.
@@ -8710,14 +8710,19 @@ representation, based on the derived type of the LispObject."
         (aver (variable-register variable))
         (emit 'iinc (variable-register variable) 1)
         (when target
-          (cond ((eq representation :int)
-                 (emit 'iload (variable-register variable)))
-                (t
-                 (emit 'new +lisp-fixnum-class+)
-                 (emit 'dup)
-                 (aver (variable-register variable))
-                 (emit 'iload (variable-register variable))
-                 (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
+          (case representation
+            (:int
+             (emit 'iload (variable-register variable)))
+            (:long
+             (emit 'iload (variable-register variable))
+             (emit 'i2l))
+            (t
+             (emit 'new +lisp-fixnum-class+)
+             (emit 'dup)
+             (aver (variable-register variable))
+             (emit 'iload (variable-register variable))
+             (emit-invokespecial-init +lisp-fixnum-class+ '("I"))
+             (fix-boxing representation nil)))
           (emit-move-from-stack target representation))
         (return-from p2-setq)))
 
