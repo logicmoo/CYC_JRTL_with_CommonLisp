@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
-;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.209 2006-01-07 14:06:16 piso Exp $
+;;; Copyright (C) 2003-2006 Peter Graves
+;;; $Id: clos.lisp,v 1.210 2006-01-07 17:37:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -638,8 +638,6 @@
       (setf (gethash object *eql-specializer-table*)
             (make-eql-specializer :object object))))
 
-(defvar the-class-standard-gf (find-class 'standard-generic-function))
-
 ;; MOP (p. 216) specifies the following reader generic functions:
 ;;   generic-function-argument-precedence-order
 ;;   generic-function-declarations
@@ -788,7 +786,7 @@
                                 &rest all-keys
                                 &key
                                 lambda-list
-                                (generic-function-class the-class-standard-gf)
+                                (generic-function-class (find-class 'standard-generic-function))
                                 (method-class the-class-standard-method)
                                 (method-combination 'standard)
                                 (argument-precedence-order nil apo-p)
@@ -822,7 +820,7 @@
             (error 'program-error
                    :format-control "~A already names an ordinary function, macro, or special operator."
                    :format-arguments (list function-name)))
-          (setf gf (apply (if (eq generic-function-class the-class-standard-gf)
+          (setf gf (apply (if (eq generic-function-class (find-class 'standard-generic-function))
                               #'make-instance-standard-generic-function
                               #'make-instance)
                           generic-function-class
@@ -835,7 +833,7 @@
 (defun initial-discriminating-function (gf args)
   (set-funcallable-instance-function
    gf
-   (funcall (if (eq (class-of gf) the-class-standard-gf)
+   (funcall (if (eq (class-of gf) (find-class 'standard-generic-function))
                 #'std-compute-discriminating-function
                 #'compute-discriminating-function)
             gf))
@@ -861,7 +859,7 @@
                                                 argument-precedence-order
                                                 documentation)
   (declare (ignore generic-function-class))
-  (let ((gf (std-allocate-instance the-class-standard-gf)))
+  (let ((gf (std-allocate-instance (find-class 'standard-generic-function))))
     (%set-generic-function-name gf name)
     (setf (generic-function-lambda-list gf) lambda-list)
     (setf (generic-function-initial-methods gf) ())
@@ -1324,7 +1322,7 @@
     (if (or (null methods) (null (%cdr methods)))
         methods
         (sort methods
-              (if (eq (class-of gf) the-class-standard-gf)
+              (if (eq (class-of gf) (find-class 'standard-generic-function))
                   #'(lambda (m1 m2)
                      (std-method-more-specific-p m1 m2 required-classes
                                                  (generic-function-argument-precedence-order gf)))
@@ -1347,7 +1345,7 @@
     (if (or (null methods) (null (%cdr methods)))
         methods
         (sort methods
-              (if (eq (class-of gf) the-class-standard-gf)
+              (if (eq (class-of gf) (find-class 'standard-generic-function))
                   #'(lambda (m1 m2)
                      (std-method-more-specific-p m1 m2 required-classes
                                                  (generic-function-argument-precedence-order gf)))
@@ -1357,7 +1355,7 @@
 (defun slow-method-lookup (gf args)
   (let ((applicable-methods (%compute-applicable-methods gf args)))
     (if applicable-methods
-        (let ((emfun (funcall (if (eq (class-of gf) the-class-standard-gf)
+        (let ((emfun (funcall (if (eq (class-of gf) (find-class 'standard-generic-function))
                                   #'std-compute-effective-method-function
                                   #'compute-effective-method-function)
                               gf applicable-methods)))
@@ -1368,7 +1366,7 @@
 (defun slow-method-lookup-1 (gf class)
   (let ((applicable-methods (%compute-applicable-methods-using-classes gf (list class))))
     (if applicable-methods
-        (let ((emfun (funcall (if (eq (class-of gf) the-class-standard-gf)
+        (let ((emfun (funcall (if (eq (class-of gf) (find-class 'standard-generic-function))
                                   #'std-compute-effective-method-function
                                   #'compute-effective-method-function)
                               gf applicable-methods)))
@@ -1460,7 +1458,7 @@
     (cond (around
            (let ((next-emfun
                   (funcall
-                   (if (eq (class-of gf) the-class-standard-gf)
+                   (if (eq (class-of gf) (find-class 'standard-generic-function))
                        #'std-compute-effective-method-function
                        #'compute-effective-method-function)
                    gf (remove around methods))))
