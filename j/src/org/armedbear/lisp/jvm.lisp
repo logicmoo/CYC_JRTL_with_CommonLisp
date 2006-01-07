@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.736 2006-01-06 18:39:20 piso Exp $
+;;; $Id: jvm.lisp,v 1.737 2006-01-07 00:53:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3658,6 +3658,26 @@ representation, based on the derived type of the LispObject."
                     'GET (length args))
        (compile-function-call form target representation)))))
 
+;; getf plist indicator &optional default => value
+(defun p2-getf (form target representation)
+  (let* ((args (cdr form))
+         (arg-count (length args)))
+    (case arg-count
+      ((2 3)
+       (let ((arg1 (first args))
+             (arg2 (second args))
+             (arg3 (third args)))
+         (compile-form arg1 'stack nil)
+         (compile-form arg2 'stack nil)
+         (compile-form arg3 'stack nil)
+         (maybe-emit-clear-values arg1 arg2 arg3)
+         (emit-invokestatic +lisp-class+ "getf"
+                            (lisp-object-arg-types 3) +lisp-object+)
+         (fix-boxing representation nil)
+         (emit-move-from-stack target representation)))
+      (t
+       (compile-function-call form target representation)))))
+
 ;; gethash key hash-table &optional default => value, present-p
 (defun p2-gethash (form target representation)
   (cond ((and (eq (car form) 'GETHASH1)
@@ -3691,8 +3711,6 @@ representation, based on the derived type of the LispObject."
            (cond (target
                   (emit-invokevirtual +lisp-hash-table-class+ "puthash"
                                       (lisp-object-arg-types 2) +lisp-object+)
-;;                   (when (eq representation :int)
-;;                     (emit-unbox-fixnum))
                   (fix-boxing representation nil)
                   (emit-move-from-stack target representation))
                  (t
@@ -6858,6 +6876,29 @@ representation, based on the derived type of the LispObject."
       (t
        (compile-function-call form target representation)))))
 
+;; vector-push-extend new-element vector &optional extension => new-index
+(defun p2-vector-push-extend (form target representation)
+  (let* ((args (cdr form))
+         (arg-count (length args))
+         (arg1 (first args))
+         (arg2 (second args)))
+    (case arg-count
+      (2
+       (compile-form arg1 'stack nil)
+       (compile-form arg2 'stack nil)
+       (maybe-emit-clear-values arg1 arg2)
+       (emit 'swap)
+       (cond (target
+              (emit-invokevirtual +lisp-object-class+ "VECTOR_PUSH_EXTEND"
+                                  (lisp-object-arg-types 1) +lisp-object+)
+              (fix-boxing representation nil)
+              (emit-move-from-stack target representation))
+             (t
+              (emit-invokevirtual +lisp-object-class+ "vectorPushExtend"
+                                  (lisp-object-arg-types 1) nil))))
+      (t
+       (compile-function-call form target representation)))))
+
 (defun p2-make-array (form target representation)
   ;; In safe code, we want to make sure the requested length does not exceed
   ;; ARRAY-DIMENSION-LIMIT.
@@ -10012,6 +10053,7 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'function            'p2-function)
   (install-p2-handler 'gensym              'p2-gensym)
   (install-p2-handler 'get                 'p2-get)
+  (install-p2-handler 'getf                'p2-getf)
   (install-p2-handler 'gethash             'p2-gethash)
   (install-p2-handler 'gethash1            'p2-gethash)
   (install-p2-handler 'go                  'p2-go)
@@ -10070,6 +10112,7 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'truncate            'p2-truncate)
   (install-p2-handler 'values              'p2-values)
   (install-p2-handler 'vectorp             'p2-vectorp)
+  (install-p2-handler 'vector-push-extend  'p2-vector-push-extend)
   (install-p2-handler 'write-8-bits        'p2-write-8-bits)
   (install-p2-handler 'zerop               'p2-zerop)
   t)
