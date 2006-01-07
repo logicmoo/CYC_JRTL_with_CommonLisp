@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObject.java,v 1.58 2006-01-04 20:43:31 piso Exp $
+ * $Id: StandardObject.java,v 1.59 2006-01-07 01:25:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -466,6 +466,37 @@ public class StandardObject extends LispObject
       }
     };
 
+  public LispObject SLOT_VALUE(LispObject slotName) throws ConditionThrowable
+  {
+    if (layout.isInvalid())
+      {
+        // Update instance.
+        layout = updateLayout();
+      }
+    LispObject value;
+    final LispObject index = layout.slotTable.get(slotName);
+    if (index != null)
+      {
+        // Found instance slot.
+        value = slots[((Fixnum)index).value];
+      }
+    else
+      {
+        // Check for shared slot.
+        LispObject location = layout.getSharedSlotLocation(slotName);
+        if (location == null)
+          return Symbol.SLOT_MISSING.execute(getLispClass(), this, slotName,
+                                             Symbol.SLOT_VALUE);
+        value = location.cdr();
+      }
+    if (value == UNBOUND_VALUE)
+      {
+        value = Symbol.SLOT_UNBOUND.execute(getLispClass(), this, slotName);
+        LispThread.currentThread()._values = null;
+      }
+    return value;
+  }
+
   // ### std-slot-value
   private static final Primitive STD_SLOT_VALUE =
     new Primitive(Symbol.STD_SLOT_VALUE, "instance slot-name")
@@ -473,45 +504,7 @@ public class StandardObject extends LispObject
       public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
       {
-        final StandardObject instance;
-        try
-          {
-            instance = (StandardObject) first;
-          }
-        catch (ClassCastException e)
-          {
-            return signalTypeError(first, Symbol.STANDARD_OBJECT);
-          }
-        Layout layout = instance.layout;
-        if (layout.isInvalid())
-          {
-            // Update instance.
-            layout = instance.updateLayout();
-          }
-        LispObject value;
-        final LispObject index = layout.slotTable.get(second);
-        if (index != null)
-          {
-            // Found instance slot.
-            value = instance.slots[((Fixnum)index).value];
-          }
-        else
-          {
-            // Check for shared slot.
-            LispObject location = layout.getSharedSlotLocation(second);
-            if (location == null)
-              return Symbol.SLOT_MISSING.execute(instance.getLispClass(),
-                                                 instance, second,
-                                                 Symbol.SLOT_VALUE);
-            value = location.cdr();
-          }
-        if (value == UNBOUND_VALUE)
-          {
-            value = Symbol.SLOT_UNBOUND.execute(instance.getLispClass(),
-                                                instance, second);
-            LispThread.currentThread()._values = null;
-          }
-        return value;
+        return first.SLOT_VALUE(second);
       }
     };
 
