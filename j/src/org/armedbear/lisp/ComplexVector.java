@@ -2,7 +2,7 @@
  * ComplexVector.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: ComplexVector.java,v 1.22 2006-01-06 19:31:35 piso Exp $
+ * $Id: ComplexVector.java,v 1.23 2006-01-07 00:56:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -280,14 +280,8 @@ public final class ComplexVector extends AbstractVector
     public LispObject VECTOR_PUSH_EXTEND(LispObject element)
         throws ConditionThrowable
     {
-        if (fillPointer < 0)
-            noFillPointer();
-        if (fillPointer >= capacity) {
-            // Need to extend vector.
-            ensureCapacity(capacity * 2 + 1);
-        }
-        aset(fillPointer, element);
-        return new Fixnum(fillPointer++);
+        vectorPushExtend(element);
+        return new Fixnum(fillPointer - 1);
     }
 
     public LispObject VECTOR_PUSH_EXTEND(LispObject element, LispObject extension)
