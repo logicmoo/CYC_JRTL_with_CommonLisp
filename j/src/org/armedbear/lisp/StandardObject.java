@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObject.java,v 1.59 2006-01-07 01:25:23 piso Exp $
+ * $Id: StandardObject.java,v 1.60 2006-01-07 18:13:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -508,6 +508,37 @@ public class StandardObject extends LispObject
       }
     };
 
+  public void setSlotValue(LispObject slotName, LispObject newValue)
+    throws ConditionThrowable
+  {
+    if (layout.isInvalid())
+      {
+        // Update instance.
+        layout = updateLayout();
+      }
+    final LispObject index = layout.slotTable.get(slotName);
+    if (index != null)
+      {
+        // Found instance slot.
+        slots[((Fixnum)index).value] = newValue;
+        return;
+      }
+    // Check for shared slot.
+    LispObject location = layout.getSharedSlotLocation(slotName);
+    if (location != null)
+      {
+        location.setCdr(newValue);
+        return;
+      }
+    LispObject[] args = new LispObject[5];
+    args[0] = getLispClass();
+    args[1] = this;
+    args[2] = slotName;
+    args[3] = Symbol.SETF;
+    args[4] = newValue;
+    Symbol.SLOT_MISSING.execute(args);
+  }
+
   // ### set-std-slot-value
   private static final Primitive SET_STD_SLOT_VALUE =
     new Primitive(Symbol.SET_STD_SLOT_VALUE, "instance slot-name new-value")
@@ -525,33 +556,7 @@ public class StandardObject extends LispObject
           {
             return signalTypeError(first, Symbol.STANDARD_OBJECT);
           }
-        Layout layout = instance.layout;
-        if (layout.isInvalid())
-          {
-            // Update instance.
-            layout = instance.updateLayout();
-          }
-        final LispObject index = layout.slotTable.get(second);
-        if (index != null)
-          {
-            // Found instance slot.
-            instance.slots[((Fixnum)index).value] = third;
-            return third;
-          }
-        // Check for shared slot.
-        LispObject location = layout.getSharedSlotLocation(second);
-        if (location != null)
-          {
-            location.setCdr(third);
-            return third;
-          }
-        LispObject[] args = new LispObject[5];
-        args[0] = instance.getLispClass();
-        args[1] = instance;
-        args[2] = second;
-        args[3] = Symbol.SETF;
-        args[4] = third;
-        Symbol.SLOT_MISSING.execute(args);
+        instance.setSlotValue(second, third);
         return third;
       }
     };
