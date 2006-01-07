@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.737 2006-01-07 00:53:58 piso Exp $
+;;; $Id: jvm.lisp,v 1.738 2006-01-07 01:54:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6899,6 +6899,22 @@ representation, based on the derived type of the LispObject."
       (t
        (compile-function-call form target representation)))))
 
+(defknown p2-std-slot-value (t t t) t)
+(defun p2-std-slot-value (form target representation)
+  (unless (check-arg-count form 2)
+    (compile-function-call form target representation)
+    (return-from p2-std-slot-value))
+  (let* ((args (cdr form))
+         (arg1 (first args))
+         (arg2 (second args)))
+    (compile-form arg1 'stack nil)
+    (compile-form arg2 'stack nil)
+    (maybe-emit-clear-values arg1 arg2)
+    (emit-invokevirtual +lisp-object-class+ "SLOT_VALUE"
+                        (lisp-object-arg-types 1) +lisp-object+)
+    (fix-boxing representation nil)
+    (emit-move-from-stack target representation)))
+
 (defun p2-make-array (form target representation)
   ;; In safe code, we want to make sure the requested length does not exceed
   ;; ARRAY-DIMENSION-LIMIT.
@@ -10097,6 +10113,7 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'set-schar           'p2-set-char/schar)
   (install-p2-handler 'setq                'p2-setq)
   (install-p2-handler 'simple-vector-p     'p2-simple-vector-p)
+  (install-p2-handler 'std-slot-value      'p2-std-slot-value)
   (install-p2-handler 'stream-element-type 'p2-stream-element-type)
   (install-p2-handler 'stringp             'p2-stringp)
   (install-p2-handler 'svref               'p2-svref)
