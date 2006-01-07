@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.738 2006-01-07 01:54:37 piso Exp $
+;;; $Id: jvm.lisp,v 1.739 2006-01-07 02:54:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3269,7 +3269,7 @@ representation, based on the derived type of the LispObject."
         ((characterp form)
          (emit 'getstatic *this-class*
                (declare-character form) +lisp-character+))
-        ((or (classp form) (hash-table-p form) (typep form 'generic-function))
+        ((or (hash-table-p form) (typep form 'generic-function))
          (emit 'getstatic *this-class*
                (declare-object form) +lisp-object+))
         ((pathnamep form)
