@@ -1,7 +1,7 @@
 ;;; coerce.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: coerce.lisp,v 1.11 2005-12-28 17:25:07 piso Exp $
+;;; $Id: coerce.lisp,v 1.12 2006-01-07 17:34:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -27,6 +27,16 @@
       (declare (type index i))
       (setf (aref result i) (pop list)))
     result))
+
+(declaim (ftype (function (string) simple-string) copy-string))
+(defun copy-string (string)
+  (declare (optimize speed (safety 0)))
+  (declare (type string string))
+  (let* ((length (length string))
+         (copy (make-string length)))
+    (dotimes (i length copy)
+      (declare (type fixnum i))
+      (setf (schar copy i) (char string i)))))
 
 (defun coerce-error (object result-type)
   (error 'simple-type-error
@@ -56,6 +66,9 @@
         ((and (listp object)
               (eq result-type 'vector))
          (coerce-list-to-vector object))
+        ((and (stringp object) ; a string, but not a simple-string
+              (eq result-type 'simple-string))
+         (copy-string object))
         ((eq result-type 'character)
          (cond ((and (stringp object)
                      (= (length object) 1))
