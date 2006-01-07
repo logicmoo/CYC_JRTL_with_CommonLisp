@@ -1,8 +1,8 @@
 /*
  * StandardObject.java
  *
- * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObject.java,v 1.60 2006-01-07 18:13:52 piso Exp $
+ * Copyright (C) 2003-2006 Peter Graves
+ * $Id: StandardObject.java,v 1.61 2006-01-07 18:25:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -547,16 +547,7 @@ public class StandardObject extends LispObject
                                 LispObject third)
         throws ConditionThrowable
       {
-        StandardObject instance;
-        try
-          {
-            instance = (StandardObject) first;
-          }
-        catch (ClassCastException e)
-          {
-            return signalTypeError(first, Symbol.STANDARD_OBJECT);
-          }
-        instance.setSlotValue(second, third);
+        first.setSlotValue(second, third);
         return third;
       }
     };
