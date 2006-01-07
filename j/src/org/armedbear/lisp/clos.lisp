@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.208 2006-01-07 02:55:41 piso Exp $
+;;; $Id: clos.lisp,v 1.209 2006-01-07 14:06:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -241,7 +241,7 @@
 (defun std-finalize-inheritance (class)
   (set-class-precedence-list
    class
-   (funcall (if (eq (class-of class) the-class-standard-class)
+   (funcall (if (eq (class-of class) (find-class 'standard-class))
                 #'std-compute-class-precedence-list
                 #'compute-class-precedence-list)
             class))
@@ -249,7 +249,7 @@
     (when (typep class 'forward-referenced-class)
       (return-from std-finalize-inheritance)))
   (set-class-slots class
-                   (funcall (if (eq (class-of class) the-class-standard-class)
+                   (funcall (if (eq (class-of class) (find-class 'standard-class))
                                 #'std-compute-slots
                                 #'compute-slots)
                             class))
@@ -382,7 +382,7 @@
                      (mapcar #'%slot-definition-name all-slots))))
     (mapcar #'(lambda (name)
                (funcall
-                (if (eq (class-of class) the-class-standard-class)
+                (if (eq (class-of class) (find-class 'standard-class))
                     #'std-compute-effective-slot-definition
                     #'compute-effective-slot-definition)
                 class
@@ -415,9 +415,6 @@
 ;;; standard-class must be determined without making any further slot
 ;;; references.
 
-(defvar the-slots-of-standard-class) ;standard-class's class-slots
-(defvar the-class-standard-class (find-class 'standard-class))
-
 (defun find-slot-definition (class slot-name)
   (dolist (slot (%class-slots class) nil)
     (when (eq slot-name (%slot-definition-name slot))
@@ -434,14 +431,14 @@
     (and layout (layout-slot-location layout slot-name))))
 
 (defun slot-value (object slot-name)
-  (if (eq (class-of (class-of object)) #.(find-class 'standard-class))
+  (if (eq (class-of (class-of object)) (find-class 'standard-class))
       (std-slot-value object slot-name)
       (slot-value-using-class (class-of object) object slot-name)))
 
 (defsetf std-slot-value set-std-slot-value)
 
 (defun %set-slot-value (object slot-name new-value)
-  (if (eq (class-of (class-of object)) the-class-standard-class)
+  (if (eq (class-of (class-of object)) (find-class 'standard-class))
       (setf (std-slot-value object slot-name) new-value)
       (set-slot-value-using-class new-value (class-of object)
                                   object slot-name)))
@@ -449,7 +446,7 @@
 (defsetf slot-value %set-slot-value)
 
 (defun slot-boundp (object slot-name)
-  (if (eq (class-of (class-of object)) the-class-standard-class)
+  (if (eq (class-of (class-of object)) (find-class 'standard-class))
       (std-slot-boundp object slot-name)
       (slot-boundp-using-class (class-of object) object slot-name)))
 
@@ -464,7 +461,7 @@
   instance)
 
 (defun slot-makunbound (object slot-name)
-  (if (eq (class-of (class-of object)) the-class-standard-class)
+  (if (eq (class-of (class-of object)) (find-class 'standard-class))
       (std-slot-makunbound object slot-name)
       (slot-makunbound-using-class (class-of object) object slot-name)))
 
@@ -473,7 +470,7 @@
                    :key #'%slot-definition-name))))
 
 (defun slot-exists-p (object slot-name)
-  (if (eq (class-of (class-of object)) the-class-standard-class)
+  (if (eq (class-of (class-of object)) (find-class 'standard-class))
       (std-slot-exists-p object slot-name)
       (slot-exists-p-using-class (class-of object) object slot-name)))
 
@@ -1722,7 +1719,7 @@
 
 (defun add-reader-method (class function-name slot-name)
   (let* ((lambda-expression
-          (if (eq (class-of class) the-class-standard-class)
+          (if (eq (class-of class) (find-class 'standard-class))
               `(lambda (object) (std-slot-value object ',slot-name)))
               `(lambda (object) (slot-value object ',slot-name)))
          (method-function (compute-method-function lambda-expression))
@@ -1749,7 +1746,7 @@
 
 (defun add-writer-method (class function-name slot-name)
   (let* ((lambda-expression
-          (if (eq (class-of class) the-class-standard-class)
+          (if (eq (class-of class) (find-class 'standard-class))
               `(lambda (new-value object)
                  (setf (std-slot-value object ',slot-name) new-value))
               `(lambda (new-value object)
