@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.741 2006-01-07 06:54:59 piso Exp $
+;;; $Id: jvm.lisp,v 1.742 2006-01-07 14:07:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3099,6 +3099,7 @@ representation, based on the derived type of the LispObject."
     (setf *static-code* *code*)
     g))
 
+(defknown declare-instance (t) t)
 (defun declare-instance (obj)
   (aver (not (null *compile-file-truename*)))
   (aver (or (structure-object-p obj) (standard-object-p obj)))
@@ -6850,22 +6851,34 @@ representation, based on the derived type of the LispObject."
            (maybe-emit-clear-values arg)
            (emit-invoke-method "ZEROP" target representation)))))
 
+;; find-class symbol &optional errorp environment => class
+(defknown p2-find-class (t t t) t)
 (defun p2-find-class (form target representation)
   (let* ((args (cdr form))
-         (arg-count (length args)))
+         (arg-count (length args))
+         (arg1 (first args))
+         class)
+    (when (and (<= 1 arg-count 2) ; no environment arg
+               (consp arg1)
+               (= (length arg1) 2)
+               (eq (first arg1) 'QUOTE)
+               (symbolp (second arg1))
+               (eq (symbol-package (second arg1)) (find-package "CL"))
+               (setf class (find-class (second arg1) nil)))
+      (compile-constant class target representation)
+      (return-from p2-find-class))
     (case arg-count
       (1
-       (let ((arg1 (%car args)))
-         (compile-form arg1 'stack nil)
-         (maybe-emit-clear-values arg1)
-         (emit-push-constant-int 1) ; errorp is true by default.
-         (emit-invokestatic +lisp-class-class+ "findClass"
-                            (list +lisp-object+ "Z") +lisp-object+)
-         (fix-boxing representation nil)
-         (emit-move-from-stack target representation)))
+       ;; errorp is true
+       (compile-form arg1 'stack nil)
+       (maybe-emit-clear-values arg1)
+       (emit-push-constant-int 1) ; errorp
+       (emit-invokestatic +lisp-class-class+ "findClass"
+                          (list +lisp-object+ "Z") +lisp-object+)
+       (fix-boxing representation nil)
+       (emit-move-from-stack target representation))
       (2
-       (let ((arg1 (%car args))
-             (arg2 (%cadr args)))
+       (let ((arg2 (second args)))
          (compile-form arg1 'stack nil)
          (compile-form arg2 'stack :boolean)
          (maybe-emit-clear-values arg1 arg2)
