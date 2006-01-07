@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: clos.lisp,v 1.207 2006-01-06 13:32:57 piso Exp $
+;;; $Id: clos.lisp,v 1.208 2006-01-07 02:55:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -434,7 +434,7 @@
     (and layout (layout-slot-location layout slot-name))))
 
 (defun slot-value (object slot-name)
-  (if (eq (class-of (class-of object)) the-class-standard-class)
+  (if (eq (class-of (class-of object)) #.(find-class 'standard-class))
       (std-slot-value object slot-name)
       (slot-value-using-class (class-of object) object slot-name)))
 
