@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.739 2006-01-07 02:54:59 piso Exp $
+;;; $Id: jvm.lisp,v 1.740 2006-01-07 06:25:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -7981,8 +7981,8 @@ representation, based on the derived type of the LispObject."
             (type1 (derive-compiler-type arg1))
             (type2 (derive-compiler-type arg2))
             (result-type (derive-compiler-type form)))
-       (cond ((integer-constant-value result-type)
-              (compile-constant (integer-constant-value result-type) target representation))
+       (cond ((and (numberp arg1) (numberp arg2))
+              (compile-constant (- arg1 arg2) target representation))
              ((and (fixnum-type-p type1) (fixnum-type-p type2))
               (cond ((or (eq representation :int)
                          (fixnum-type-p result-type))
