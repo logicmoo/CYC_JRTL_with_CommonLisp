@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: clos.lisp,v 1.210 2006-01-07 17:37:07 piso Exp $
+;;; $Id: clos.lisp,v 1.211 2006-01-08 05:42:41 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1172,6 +1172,12 @@
 
 (declaim (ftype (function * t) slow-method-lookup-1))
 
+(declaim (ftype (function (t t t) t) slow-reader-lookup))
+(defun slow-reader-lookup (gf layout slot-name)
+  (let ((location (layout-slot-location layout slot-name)))
+    (cache-slot-location gf layout location)
+    location))
+
 (defun std-compute-discriminating-function (gf)
   (let ((code
          (cond ((methods-contain-eql-specializer-p (generic-function-methods gf))
@@ -1187,19 +1193,19 @@
                         (slot-name (reader-method-slot-name method)))
                    `(lambda (arg)
                       (declare (optimize speed))
-                      (let ((layout (std-instance-layout arg)))
-                        (let ((location (gethash1 layout ,(classes-to-emf-table gf))))
-                          (unless location
-                            (unless (simple-typep arg ,class)
-                              ;; FIXME no applicable method
-                              (error 'simple-type-error
-                                     :datum arg
-                                     :expected-type ,class))
-                            (setf location (slow-reader-lookup ,gf layout ',slot-name)))
-                          (if (consp location)
-                              ;; Shared slot.
-                              (cdr location)
-                              (standard-instance-access arg location))))))
+                      (let* ((layout (std-instance-layout arg))
+                             (location (get-cached-slot-location ,gf layout)))
+                        (unless location
+                          (unless (simple-typep arg ,class)
+                            ;; FIXME no applicable method
+                            (error 'simple-type-error
+                                   :datum arg
+                                   :expected-type ,class))
+                          (setf location (slow-reader-lookup ,gf layout ',slot-name)))
+                        (if (consp location)
+                            ;; Shared slot.
+                            (cdr location)
+                            (standard-instance-access arg location)))))
                  nil))
                (t
                 (let* ((emf-table (classes-to-emf-table gf))
@@ -1373,13 +1379,6 @@
           (when emfun
             (setf (gethash class (classes-to-emf-table gf)) emfun))
           emfun))))
-
-(declaim (ftype (function (t t t) t) slow-reader-lookup))
-(defun slow-reader-lookup (gf layout slot-name)
-  ;; FIXME Ideally we should use an EQ hash table.
-  (let ((location (layout-slot-location layout slot-name)))
-    (setf (gethash layout (classes-to-emf-table gf)) location)
-    location))
 
 (defun sub-specializer-p (c1 c2 c-arg)
   (find c2 (cdr (memq c1 (%class-precedence-list c-arg)))))
