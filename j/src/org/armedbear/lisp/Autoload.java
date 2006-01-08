@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Autoload.java,v 1.256 2006-01-06 13:27:22 piso Exp $
+ * $Id: Autoload.java,v 1.257 2006-01-08 05:43:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -572,6 +572,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "%string>=", "StringFunctions");
         autoload(PACKAGE_SYS, "%time", "Time");
         autoload(PACKAGE_SYS, "cache-emf", "StandardGenericFunction", true);
+        autoload(PACKAGE_SYS, "cache-slot-location", "StandardGenericFunction", true);
         autoload(PACKAGE_SYS, "canonicalize-logical-host", "LogicalPathname", true);
         autoload(PACKAGE_SYS, "class-direct-slots", "SlotClass");
         autoload(PACKAGE_SYS, "coerce-to-double-float", "FloatFunctions");
@@ -594,6 +595,7 @@ public class Autoload extends Function
         autoload(PACKAGE_SYS, "generic-function-method-combination","StandardGenericFunction", true);
         autoload(PACKAGE_SYS, "generic-function-methods","StandardGenericFunction", true);
         autoload(PACKAGE_SYS, "get-cached-emf", "StandardGenericFunction", true);
+        autoload(PACKAGE_SYS, "get-cached-slot-location", "StandardGenericFunction", true);
         autoload(PACKAGE_SYS, "get-function-info-value", "function_info");
         autoload(PACKAGE_SYS, "gf-required-args", "StandardGenericFunction", true);
         autoload(PACKAGE_SYS, "hash-table-entries", "HashTableFunctions");

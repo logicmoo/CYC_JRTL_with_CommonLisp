@@ -2,7 +2,7 @@
  * StandardGenericFunction.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: StandardGenericFunction.java,v 1.18 2006-01-08 03:56:36 piso Exp $
+ * $Id: StandardGenericFunction.java,v 1.19 2006-01-08 05:41:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ public final class StandardGenericFunction extends StandardObject
 
   private int numberOfRequiredArgs;
 
-  private HashMap emfCache;
+  private HashMap cache;
 
   public StandardGenericFunction()
   {
@@ -81,7 +81,7 @@ public final class StandardGenericFunction extends StandardObject
 
   private void finalizeInternal()
   {
-    emfCache = null;
+    cache = null;
   }
 
   public LispObject typep(LispObject type) throws ConditionThrowable
@@ -673,9 +673,9 @@ public final class StandardGenericFunction extends StandardObject
             args = args.cdr();
           }
         CacheEntry classes = new CacheEntry(array);
-        HashMap ht = gf.emfCache;
+        HashMap ht = gf.cache;
         if (ht == null)
-            ht = gf.emfCache = new HashMap();
+            ht = gf.cache = new HashMap();
         ht.put(classes, third);
         return third;
       }
@@ -705,11 +705,63 @@ public final class StandardGenericFunction extends StandardObject
             args = args.cdr();
           }
         CacheEntry classes = new CacheEntry(array);
-        HashMap ht = gf.emfCache;
+        HashMap ht = gf.cache;
         if (ht == null)
           return NIL;
         LispObject emf = (LispObject) ht.get(classes);
         return emf != null ? emf : NIL;
+      }
+    };
+
+  // ### cache-slot-location
+  private static final Primitive CACHE_SLOT_LOCATION =
+    new Primitive("cache-slot-location", PACKAGE_SYS, true, "generic-function layout location")
+    {
+      public LispObject execute(LispObject first, LispObject second,
+                                LispObject third)
+        throws ConditionThrowable
+      {
+        final StandardGenericFunction gf;
+        try
+          {
+            gf = (StandardGenericFunction) first;
+          }
+        catch (ClassCastException e)
+          {
+            return signalTypeError(first, Symbol.STANDARD_GENERIC_FUNCTION);
+          }
+        LispObject layout = second;
+        LispObject location = third;
+        HashMap ht = gf.cache;
+        if (ht == null)
+          ht = gf.cache = new HashMap();
+        ht.put(layout, location);
+        return third;
+      }
+    };
+
+  // ### get-cached-slot-location
+  private static final Primitive GET_CACHED_SLOT_LOCATION =
+    new Primitive("get-cached-slot-location", PACKAGE_SYS, true, "generic-function layout")
+    {
+      public LispObject execute(LispObject first, LispObject second)
+        throws ConditionThrowable
+      {
+        final StandardGenericFunction gf;
+        try
+          {
+            gf = (StandardGenericFunction) first;
+          }
+        catch (ClassCastException e)
+          {
+            return signalTypeError(first, Symbol.STANDARD_GENERIC_FUNCTION);
+          }
+        LispObject layout = second;
+        HashMap ht = gf.cache;
+        if (ht == null)
+          return NIL;
+        LispObject location = (LispObject) ht.get(layout);
+        return location != null ? location : NIL;
       }
     };
 
