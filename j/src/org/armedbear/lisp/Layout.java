@@ -1,8 +1,8 @@
 /*
  * Layout.java
  *
- * Copyright (C) 2003-2005 Peter Graves
- * $Id: Layout.java,v 1.26 2005-12-28 21:25:33 piso Exp $
+ * Copyright (C) 2003-2006 Peter Graves
+ * $Id: Layout.java,v 1.27 2006-01-08 02:40:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,9 +62,7 @@ public final class Layout extends LispObject
       }
     Debug.assertTrue(i == length);
     this.sharedSlots = sharedSlots;
-    slotTable = new EqHashTable(slotNames.length, NIL, NIL);
-    for (i = slotNames.length; i-- > 0;)
-      slotTable.put(slotNames[i], new Fixnum(i));
+    slotTable = initializeSlotTable(slotNames);
   }
 
   public Layout(LispClass lispClass, LispObject[] instanceSlotNames,
@@ -73,9 +71,7 @@ public final class Layout extends LispObject
     this.lispClass = lispClass;
     this.slotNames = instanceSlotNames;
     this.sharedSlots = sharedSlots;
-    slotTable = new EqHashTable(slotNames.length, NIL, NIL);
-    for (int i = slotNames.length; i-- > 0;)
-      slotTable.put(slotNames[i], new Fixnum(i));
+    slotTable = initializeSlotTable(slotNames);
   }
 
   // Copy constructor.
@@ -84,9 +80,15 @@ public final class Layout extends LispObject
     lispClass = oldLayout.lispClass;
     slotNames = oldLayout.slotNames;
     sharedSlots = oldLayout.sharedSlots;
-    slotTable = new EqHashTable(slotNames.length, NIL, NIL);
+    slotTable = initializeSlotTable(slotNames);
+  }
+
+  private EqHashTable initializeSlotTable(LispObject[] slotNames)
+  {
+    EqHashTable ht = new EqHashTable(slotNames.length, NIL, NIL);
     for (int i = slotNames.length; i-- > 0;)
-      slotTable.put(slotNames[i], new Fixnum(i));
+      ht.put(slotNames[i], i < 256 ? Fixnum.constants[i] : new Fixnum(i));
+    return ht;
   }
 
   public LispObject getParts() throws ConditionThrowable
