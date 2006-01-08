@@ -1,8 +1,8 @@
 /*
  * StandardGenericFunction.java
  *
- * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardGenericFunction.java,v 1.17 2006-01-06 13:34:02 piso Exp $
+ * Copyright (C) 2003-2006 Peter Graves
+ * $Id: StandardGenericFunction.java,v 1.18 2006-01-08 03:56:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,7 +81,7 @@ public final class StandardGenericFunction extends StandardObject
 
   private void finalizeInternal()
   {
-    emfCache = new HashMap();
+    emfCache = null;
   }
 
   public LispObject typep(LispObject type) throws ConditionThrowable
@@ -674,6 +674,8 @@ public final class StandardGenericFunction extends StandardObject
           }
         CacheEntry classes = new CacheEntry(array);
         HashMap ht = gf.emfCache;
+        if (ht == null)
+            ht = gf.emfCache = new HashMap();
         ht.put(classes, third);
         return third;
       }
@@ -704,6 +706,8 @@ public final class StandardGenericFunction extends StandardObject
           }
         CacheEntry classes = new CacheEntry(array);
         HashMap ht = gf.emfCache;
+        if (ht == null)
+          return NIL;
         LispObject emf = (LispObject) ht.get(classes);
         return emf != null ? emf : NIL;
       }
