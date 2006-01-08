@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
-;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.745 2006-01-08 01:17:09 piso Exp $
+;;; Copyright (C) 2003-2006 Peter Graves
+;;; $Id: jvm.lisp,v 1.746 2006-01-08 18:38:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1476,7 +1476,7 @@
          (instruction (emit 'invokestatic class-name method-name descriptor)))
     (setf (instruction-stack instruction) stack-effect)))
 
-(declaim (ftype (function t string) pretty-java-type))
+(defknown pretty-java-type (t) string)
 (defun pretty-java-type (type)
   (let ((arrayp nil)
         (pretty-string nil))
@@ -1488,11 +1488,15 @@
     (setf pretty-string
           (cond ((equal type +lisp-object+)
                  "LispObject")
+                ((equal type +lisp-symbol+)
+                 "Symbol")
                 ((equal type +lisp-thread+)
                  "LispThread")
-                ((equal type "I")
+                ((eql type "C")
+                 "char")
+                ((eql type "I")
                  "int")
-                ((equal type "Z")
+                ((eql type "Z")
                  "boolean")
                 ((null type)
                  "void")
@@ -1506,6 +1510,8 @@
 (defun pretty-java-class (class)
   (cond ((equal class +lisp-object-class+)
          "LispObject")
+        ((equal class +lisp-symbol+)
+         "Symbol")
         ((equal class +lisp-thread-class+)
          "LispThread")
         (t
@@ -3436,39 +3442,8 @@ representation, based on the derived type of the LispObject."
 (declaim (ftype (function (t t t t) t) compile-function-call-2))
 (defun compile-function-call-2 (op args target representation)
   (let ((translation (gethash1 op (the hash-table *binary-operators*))))
-    (if translation
-        (compile-binary-operation translation args target representation)
-        (case op
-          (STRUCTURE-REF
-           (let ((arg1 (first args))
-                 (arg2 (second args)))
-             (when (fixnump arg2)
-               (compile-form arg1 'stack nil)
-               (maybe-emit-clear-values arg1)
-               (emit 'sipush arg2)
-               (case representation
-                 (:int
-                  (emit-invokevirtual +lisp-object-class+ "getFixnumSlotValue"
-                                      '("I") "I"))
-                 (:long
-                  (emit-invokevirtual +lisp-object-class+ "getSlotValue"
-                                      '("I") +lisp-object+)
-                  (emit-invokevirtual +lisp-object-class+ "longValue"
-                                      nil "J"))
-                 (:char
-                  (emit-invokevirtual +lisp-object-class+ "getSlotValue"
-                                      '("I") +lisp-object+)
-                  (emit-unbox-character))
-                 (:boolean
-                  (emit-invokevirtual +lisp-object-class+ "getSlotValueAsBoolean"
-                                      '("I") "Z"))
-                 (t
-                  (emit-invokevirtual +lisp-object-class+ "getSlotValue"
-                                      '("I") +lisp-object+)))
-               (emit-move-from-stack target representation)
-               t)))
-          (t
-           nil)))))
+    (when translation
+      (compile-binary-operation translation args target representation))))
 
 (declaim (ftype (function (t) t) fixnum-or-unboxed-variable-p))
 (defun fixnum-or-unboxed-variable-p (arg)
@@ -3721,23 +3696,6 @@ representation, based on the derived type of the LispObject."
         (t
          (compile-function-call form target representation))))
 
-(declaim (ftype (function (t t t t) t) compile-function-call-3))
-(defun compile-function-call-3 (op args target)
-  (case op
-    (STRUCTURE-SET
-     (when (fixnump (second args))
-       (compile-form (first args) 'stack nil)
-       (maybe-emit-clear-values (first args))
-       (emit 'sipush (second args))
-       (compile-form (third args) 'stack nil)
-       (maybe-emit-clear-values (third args))
-       (emit-invokevirtual +lisp-object-class+ "setSlotValue"
-                           (list "I" +lisp-object+) +lisp-object+)
-       (emit-move-from-stack target)
-       t))
-    (t
-     nil)))
-
 (defvar *functions-defined-in-current-file* nil)
 
 (defun inline-ok (name)
@@ -3829,9 +3787,6 @@ representation, based on the derived type of the LispObject."
            (return-from compile-function-call)))
         (2
          (when (compile-function-call-2 op args target representation)
-           (return-from compile-function-call)))
-        (3
-         (when (compile-function-call-3 op args target)
            (return-from compile-function-call))))
       (let ((explain *explain*))
         (when (and explain (memq :calls explain))
@@ -8394,6 +8349,109 @@ representation, based on the derived type of the LispObject."
         (t
          (compile-function-call form target representation))))
 
+(defknown p2-structure-ref (t t t) t)
+(defun p2-structure-ref (form target representation)
+  (unless (check-arg-count form 2)
+    (compile-function-call form target representation)
+    (return-from p2-structure-ref))
+  (let* ((args (cdr form))
+         (arg1 (first args))
+         (arg2 (second args)))
+    (cond ((and (fixnump arg2)
+                (null representation))
+           (compile-form arg1 'stack nil)
+           (maybe-emit-clear-values arg1)
+           (case arg2
+             (0
+              (emit-invokevirtual +lisp-object-class+ "getSlotValue_0"
+                                  nil +lisp-object+))
+             (1
+              (emit-invokevirtual +lisp-object-class+ "getSlotValue_1"
+                                  nil +lisp-object+))
+             (2
+              (emit-invokevirtual +lisp-object-class+ "getSlotValue_2"
+                                  nil +lisp-object+))
+             (3
+              (emit-invokevirtual +lisp-object-class+ "getSlotValue_3"
+                                  nil +lisp-object+))
+             (t
+              (emit 'sipush arg2)
+              (emit-invokevirtual +lisp-object-class+ "getSlotValue"
+                                  '("I") +lisp-object+)))
+           (emit-move-from-stack target representation))
+          ((fixnump arg2)
+           (compile-form arg1 'stack nil)
+           (maybe-emit-clear-values arg1)
+           (emit 'sipush arg2)
+           (case representation
+             (:int
+              (emit-invokevirtual +lisp-object-class+ "getFixnumSlotValue"
+                                  '("I") "I"))
+             (:long
+              (emit-invokevirtual +lisp-object-class+ "getSlotValue"
+                                  '("I") +lisp-object+)
+              (emit-invokevirtual +lisp-object-class+ "longValue"
+                                  nil "J"))
+             (:char
+              (emit-invokevirtual +lisp-object-class+ "getSlotValue"
+                                  '("I") +lisp-object+)
+              (emit-unbox-character))
+             (:boolean
+              (emit-invokevirtual +lisp-object-class+ "getSlotValueAsBoolean"
+                                  '("I") "Z"))
+             (t
+              (emit-invokevirtual +lisp-object-class+ "getSlotValue"
+                                  '("I") +lisp-object+)))
+           (emit-move-from-stack target representation))
+          (t
+           (compile-function-call form target representation)))))
+
+(defknown p2-structure-set (t t t) t)
+(defun p2-structure-set (form target representation)
+  (unless (check-arg-count form 3)
+    (compile-function-call form target representation)
+    (return-from p2-structure-set))
+  (let* ((args (cdr form))
+         (arg1 (first args))
+         (arg2 (second args))
+         (arg3 (third args)))
+   (cond ((and (fixnump arg2)
+               (<= 0 arg2 3))
+          (let* ((*register* *register*)
+                 (value-register (when target (allocate-register))))
+            (compile-form arg1 'stack nil)
+            (compile-form arg3 'stack nil)
+            (maybe-emit-clear-values arg1 arg3)
+            (when value-register
+              (emit 'dup)
+              (emit 'astore value-register))
+            (emit-invokevirtual +lisp-object-class+
+                                (format nil "setSlotValue_~D" arg2)
+                                (lisp-object-arg-types 1) nil)
+            (when value-register
+              (emit 'aload value-register)
+              (fix-boxing representation nil)
+              (emit-move-from-stack target representation))))
+         ((fixnump arg2)
+          (let* ((*register* *register*)
+                 (value-register (when target (allocate-register))))
+            (compile-form arg1 'stack nil)
+            (emit 'sipush arg2)
+            (compile-form arg3 'stack nil)
+            (maybe-emit-clear-values arg1 arg3)
+            (when value-register
+              (emit 'dup)
+              (emit 'astore value-register))
+            (emit-invokevirtual +lisp-object-class+ "setSlotValue"
+                                (list "I" +lisp-object+) nil)
+            (when value-register
+              (emit 'aload value-register)
+              (fix-boxing representation nil)
+              (emit-move-from-stack target representation))))
+         (t
+          (compile-function-call form target representation)))))
+
+
 (defun p2-not/null (form target representation)
   (aver (or (null representation) (eq representation :boolean)))
   (unless (check-arg-count form 1)
@@ -10203,6 +10261,8 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'std-slot-value      'p2-std-slot-value)
   (install-p2-handler 'stream-element-type 'p2-stream-element-type)
   (install-p2-handler 'stringp             'p2-stringp)
+  (install-p2-handler 'structure-ref       'p2-structure-ref)
+  (install-p2-handler 'structure-set       'p2-structure-set)
   (install-p2-handler 'svref               'p2-svref)
   (install-p2-handler 'svset               'p2-svset)
   (install-p2-handler 'sxhash              'p2-sxhash)
