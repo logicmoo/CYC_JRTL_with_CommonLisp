@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.49 2006-01-05 20:05:02 piso Exp $
+;;; $Id: known-functions.lisp,v 1.50 2006-01-08 15:12:52 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -437,7 +437,7 @@
 (defknown make-string * simple-string)
 (defknown concatenate-to-string * simple-string)
 
-(defknown code-char * character)
+(defknown code-char * (or character null))
 
 (defknown lookup-known-symbol (symbol) t)
 (defknown %class-name (class) symbol)
