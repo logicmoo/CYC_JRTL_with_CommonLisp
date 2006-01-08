@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: jvm.lisp,v 1.744 2006-01-07 18:38:59 piso Exp $
+;;; $Id: jvm.lisp,v 1.745 2006-01-08 01:17:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1345,6 +1345,7 @@
 (defconstant +lisp-compiled-function-class+ "org/armedbear/lisp/CompiledFunction")
 (defconstant +lisp-primitive-class+ "org/armedbear/lisp/Primitive")
 (defconstant +lisp-hash-table-class+ "org/armedbear/lisp/HashTable")
+(defconstant +lisp-eql-hash-table-class+ "org/armedbear/lisp/EqlHashTable")
 (defconstant +lisp-package-class+ "org/armedbear/lisp/Package")
 (defconstant +lisp-readtable-class+ "org/armedbear/lisp/Readtable")
 (defconstant +lisp-stream-class+ "org/armedbear/lisp/Stream")
@@ -7056,6 +7057,16 @@ representation, based on the derived type of the LispObject."
           (t
            (compile-function-call form target representation)))))
 
+(defun p2-make-hash-table (form target representation)
+  (cond ((= (length form) 1) ; no args
+         (emit 'new +lisp-eql-hash-table-class+)
+         (emit 'dup)
+         (emit-invokespecial-init +lisp-eql-hash-table-class+ nil)
+         (fix-boxing representation nil)
+         (emit-move-from-stack target representation))
+        (t
+         (compile-function-call form target representation))))
+
 (defknown p2-stream-element-type (t t t) t)
 (defun p2-stream-element-type (form target representation)
   (unless (check-arg-count form 1)
@@ -7063,7 +7074,6 @@ representation, based on the derived type of the LispObject."
     (return-from p2-stream-element-type))
   (let ((arg (%cadr form)))
     (cond ((eq (derive-compiler-type arg) 'STREAM)
-;;            (format t "p2-stream-element-type case 1~%")
            (compile-form arg 'stack nil)
            (maybe-emit-clear-values arg)
            (emit 'checkcast +lisp-stream-class+)
@@ -7071,7 +7081,6 @@ representation, based on the derived type of the LispObject."
                                nil +lisp-object+)
            (emit-move-from-stack target representation))
           (t
-;;            (format t "p2-stream-element-type giving up~%")
            (compile-function-call form target representation)))))
 
 ;; write-8-bits byte stream => nil
@@ -10162,6 +10171,7 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'lognot              'p2-lognot)
   (install-p2-handler 'logxor              'p2-logxor)
   (install-p2-handler 'make-array          'p2-make-array)
+  (install-p2-handler 'make-hash-table     'p2-make-hash-table)
   (install-p2-handler 'make-sequence       'p2-make-sequence)
   (install-p2-handler 'make-string         'p2-make-string)
   (install-p2-handler 'make-structure      'p2-make-structure)
