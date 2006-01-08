@@ -1,8 +1,8 @@
 /*
  * HashTable.java
  *
- * Copyright (C) 2002-2005 Peter Graves
- * $Id: HashTable.java,v 1.55 2006-01-05 20:33:36 piso Exp $
+ * Copyright (C) 2002-2006 Peter Graves
+ * $Id: HashTable.java,v 1.56 2006-01-08 01:15:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,6 +23,10 @@ package org.armedbear.lisp;
 
 public abstract class HashTable extends LispObject
 {
+  private static final int DEFAULT_SIZE = 16;
+
+  protected static final float loadFactor = 0.75f;
+
   protected final LispObject rehashSize;
   protected final LispObject rehashThreshold;
 
@@ -30,13 +34,19 @@ public abstract class HashTable extends LispObject
   // of elements exceeds the threshold, the implementation calls rehash().
   protected int threshold;
 
-  protected static final float loadFactor = 0.75f;
-
   // Array containing the actual key-value mappings.
   protected HashEntry[] buckets;
 
   // The number of key-value pairs.
   protected int count;
+
+  protected HashTable()
+  {
+    rehashSize = new SingleFloat(1.5f); // FIXME
+    rehashThreshold = new SingleFloat(0.75f); // FIXME
+    buckets = new HashEntry[DEFAULT_SIZE];
+    threshold = (int) (DEFAULT_SIZE * loadFactor);
+  }
 
   protected HashTable(int size, LispObject rehashSize,
                       LispObject rehashThreshold)
