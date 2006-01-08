@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: LispObject.java,v 1.160 2006-01-07 18:24:39 piso Exp $
+ * $Id: LispObject.java,v 1.161 2006-01-08 18:34:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1035,6 +1035,26 @@ public class LispObject extends Lisp
     return null;
   }
 
+  public LispObject getSlotValue_0() throws ConditionThrowable
+  {
+    return signalTypeError(this, Symbol.STRUCTURE_OBJECT);
+  }
+
+  public LispObject getSlotValue_1() throws ConditionThrowable
+  {
+    return signalTypeError(this, Symbol.STRUCTURE_OBJECT);
+  }
+
+  public LispObject getSlotValue_2() throws ConditionThrowable
+  {
+    return signalTypeError(this, Symbol.STRUCTURE_OBJECT);
+  }
+
+  public LispObject getSlotValue_3() throws ConditionThrowable
+  {
+    return signalTypeError(this, Symbol.STRUCTURE_OBJECT);
+  }
+
   public LispObject getSlotValue(int index) throws ConditionThrowable
   {
     return signalTypeError(this, Symbol.STRUCTURE_OBJECT);
@@ -1054,10 +1074,34 @@ public class LispObject extends Lisp
     return false;
   }
 
-  public LispObject setSlotValue(int index, LispObject value)
+  public void setSlotValue_0(LispObject value)
     throws ConditionThrowable
   {
-    return signalTypeError(this, Symbol.STRUCTURE_OBJECT);
+    signalTypeError(this, Symbol.STRUCTURE_OBJECT);
+  }
+
+  public void setSlotValue_1(LispObject value)
+    throws ConditionThrowable
+  {
+    signalTypeError(this, Symbol.STRUCTURE_OBJECT);
+  }
+
+  public void setSlotValue_2(LispObject value)
+    throws ConditionThrowable
+  {
+    signalTypeError(this, Symbol.STRUCTURE_OBJECT);
+  }
+
+  public void setSlotValue_3(LispObject value)
+    throws ConditionThrowable
+  {
+    signalTypeError(this, Symbol.STRUCTURE_OBJECT);
+  }
+
+  public void setSlotValue(int index, LispObject value)
+    throws ConditionThrowable
+  {
+    signalTypeError(this, Symbol.STRUCTURE_OBJECT);
   }
 
   public LispObject SLOT_VALUE(LispObject slotName) throws ConditionThrowable

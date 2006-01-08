@@ -1,8 +1,8 @@
 /*
  * StructureObject.java
  *
- * Copyright (C) 2003-2005 Peter Graves
- * $Id: StructureObject.java,v 1.61 2005-12-28 17:19:12 piso Exp $
+ * Copyright (C) 2003-2006 Peter Graves
+ * $Id: StructureObject.java,v 1.62 2006-01-08 18:34:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -179,6 +179,54 @@ public final class StructureObject extends LispObject
     return false;
   }
 
+  public LispObject getSlotValue_0() throws ConditionThrowable
+  {
+    try
+      {
+        return slots[0];
+      }
+    catch (ArrayIndexOutOfBoundsException e)
+      {
+        return badIndex(0);
+      }
+  }
+
+  public LispObject getSlotValue_1() throws ConditionThrowable
+  {
+    try
+      {
+        return slots[1];
+      }
+    catch (ArrayIndexOutOfBoundsException e)
+      {
+        return badIndex(1);
+      }
+  }
+
+  public LispObject getSlotValue_2() throws ConditionThrowable
+  {
+    try
+      {
+        return slots[2];
+      }
+    catch (ArrayIndexOutOfBoundsException e)
+      {
+        return badIndex(2);
+      }
+  }
+
+  public LispObject getSlotValue_3() throws ConditionThrowable
+  {
+    try
+      {
+        return slots[3];
+      }
+    catch (ArrayIndexOutOfBoundsException e)
+      {
+        return badIndex(3);
+      }
+  }
+
   public LispObject getSlotValue(int index) throws ConditionThrowable
   {
     try
@@ -187,8 +235,7 @@ public final class StructureObject extends LispObject
       }
     catch (ArrayIndexOutOfBoundsException e)
       {
-        return signal(new LispError("Invalid slot index " + index + "  for " +
-                                    writeToString()));
+        return badIndex(index);
       }
   }
 
@@ -200,8 +247,7 @@ public final class StructureObject extends LispObject
       }
     catch (ArrayIndexOutOfBoundsException e)
       {
-        signal(new LispError("Invalid slot index " + index + "  for "
-                             + writeToString()));
+        badIndex(index);
         // Not reached.
         return 0;
       }
@@ -221,26 +267,84 @@ public final class StructureObject extends LispObject
       }
     catch (ArrayIndexOutOfBoundsException e)
       {
-        signal(new LispError("Invalid slot index " + index + "  for " +
-                             writeToString()));
+        badIndex(index);
         // Not reached.
         return false;
       }
   }
 
-  public LispObject setSlotValue(int index, LispObject value)
+  public void setSlotValue_0(LispObject value)
+    throws ConditionThrowable
+  {
+    try
+      {
+        slots[0] = value;
+      }
+    catch (ArrayIndexOutOfBoundsException e)
+      {
+        badIndex(0);
+      }
+  }
+
+  public void setSlotValue_1(LispObject value)
+    throws ConditionThrowable
+  {
+    try
+      {
+        slots[1] = value;
+      }
+    catch (ArrayIndexOutOfBoundsException e)
+      {
+        badIndex(1);
+      }
+  }
+
+  public void setSlotValue_2(LispObject value)
+    throws ConditionThrowable
+  {
+    try
+      {
+        slots[2] = value;
+      }
+    catch (ArrayIndexOutOfBoundsException e)
+      {
+        badIndex(2);
+      }
+  }
+
+  public void setSlotValue_3(LispObject value)
+    throws ConditionThrowable
+  {
+    try
+      {
+        slots[3] = value;
+      }
+    catch (ArrayIndexOutOfBoundsException e)
+      {
+        badIndex(3);
+      }
+  }
+
+  public void setSlotValue(int index, LispObject value)
     throws ConditionThrowable
   {
     try
       {
         slots[index] = value;
-        return value;
       }
     catch (ArrayIndexOutOfBoundsException e)
       {
-        return signal(new LispError("Invalid slot index " + index +
-                                    "  for " + writeToString()));
+        badIndex(index);
       }
+  }
+
+  private LispObject badIndex(int n) throws ConditionThrowable
+  {
+    FastStringBuffer sb = new FastStringBuffer("Invalid slot index ");
+    sb.append(Fixnum.getInstance(n).writeToString());
+    sb.append(" for ");
+    sb.append(writeToString());
+    return signal(new LispError(sb.toString()));
   }
 
   public String writeToString() throws ConditionThrowable
