@@ -2,7 +2,7 @@
  * RuntimeClass.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: RuntimeClass.java,v 1.10 2005-03-17 14:57:04 piso Exp $
+ * $Id: RuntimeClass.java,v 1.11 2006-01-09 21:11:53 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -82,7 +82,7 @@ public class RuntimeClass extends Lisp
     // ### %load-java-class-from-byte-array
     private static final Primitive _LOAD_JAVA_CLASS_FROM_BYTE_ARRAY =
         new Primitive("%load-java-class-from-byte-array", PACKAGE_JAVA, false,
-                       "classname bytearray")
+                      "classname bytearray")
     {
         public LispObject execute(LispObject className, LispObject classBytes)
             throws ConditionThrowable
@@ -112,6 +112,15 @@ public class RuntimeClass extends Lisp
                 new LispError("unable to load ".concat(cn)));
         }
     };
+
+    public static final LispObject evalC(LispObject function,
+                                         LispObject args,
+                                         Environment env,
+                                         LispThread thread)
+        throws ConditionThrowable
+    {
+        return evalCall(function, args, env, thread);
+    }
 
     public static RuntimeClass getRuntimeClass(String className) {
         return (RuntimeClass) classes.get(className);
@@ -150,9 +159,9 @@ public class RuntimeClass extends Lisp
         return new Bignum(i);
     }
 
-    public static final DoubleFloat makeLispObject(float i) throws ConditionThrowable
+    public static final SingleFloat makeLispObject(float i) throws ConditionThrowable
     {
-        return new DoubleFloat(i);
+        return new SingleFloat(i);
     }
 
     public static final DoubleFloat makeLispObject(double i) throws ConditionThrowable
