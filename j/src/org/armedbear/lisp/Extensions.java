@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Extensions.java,v 1.43 2006-01-09 01:33:08 piso Exp $
+ * $Id: Extensions.java,v 1.44 2006-01-09 01:35:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,189 +26,193 @@ import java.io.IOException;
 
 public final class Extensions extends Lisp
 {
-    // ### *ed-functions*
-    public static final Symbol _ED_FUNCTIONS_ =
-        exportSpecial("*ED-FUNCTIONS*", PACKAGE_EXT,
-                      list1(intern("DEFAULT-ED-FUNCTION", PACKAGE_SYS)));
+  // ### *ed-functions*
+  public static final Symbol _ED_FUNCTIONS_ =
+    exportSpecial("*ED-FUNCTIONS*", PACKAGE_EXT,
+                  list1(intern("DEFAULT-ED-FUNCTION", PACKAGE_SYS)));
 
-    // ### truly-the value-type form => result*
-    private static final SpecialOperator TRULY_THE =
-        new SpecialOperator("truly-the", PACKAGE_EXT, true, "type value")
+  // ### truly-the value-type form => result*
+  private static final SpecialOperator TRULY_THE =
+    new SpecialOperator("truly-the", PACKAGE_EXT, true, "type value")
     {
-        public LispObject execute(LispObject args, Environment env)
-            throws ConditionThrowable
-        {
-            if (args.length() != 2)
-                return signal(new WrongNumberOfArgumentsException(this));
-            return eval(args.cadr(), env, LispThread.currentThread());
-        }
+      public LispObject execute(LispObject args, Environment env)
+        throws ConditionThrowable
+      {
+        if (args.length() != 2)
+          return signal(new WrongNumberOfArgumentsException(this));
+        return eval(args.cadr(), env, LispThread.currentThread());
+      }
     };
 
-    // ### neq
-    private static final Primitive NEQ =
-        new Primitive("neq", PACKAGE_EXT, true)
+  // ### neq
+  private static final Primitive NEQ =
+    new Primitive("neq", PACKAGE_EXT, true)
     {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            return first != second ? T : NIL;
-        }
+      public LispObject execute(LispObject first, LispObject second)
+        throws ConditionThrowable
+      {
+        return first != second ? T : NIL;
+      }
     };
 
-    // ### memq item list => tail
-    private static final Primitive MEMQ =
-        new Primitive(Symbol.MEMQ, "item list")
+  // ### memq item list => tail
+  private static final Primitive MEMQ =
+    new Primitive(Symbol.MEMQ, "item list")
     {
-        public LispObject execute(LispObject item, LispObject list)
-            throws ConditionThrowable
-        {
-            while (list instanceof Cons)
-            {
-                if (item == ((Cons)list).car)
-                    return list;
-                list = ((Cons)list).cdr;
-            }
-            if (list != NIL)
-                signalTypeError(list, Symbol.LIST);
-            return NIL;
-        }
+      public LispObject execute(LispObject item, LispObject list)
+        throws ConditionThrowable
+      {
+        while (list instanceof Cons)
+          {
+            if (item == ((Cons)list).car)
+              return list;
+            list = ((Cons)list).cdr;
+          }
+        if (list != NIL)
+          signalTypeError(list, Symbol.LIST);
+        return NIL;
+      }
     };
 
-    // ### memql item list => tail
-    private static final Primitive MEMQL =
-        new Primitive(Symbol.MEMQL, "item list")
+  // ### memql item list => tail
+  private static final Primitive MEMQL =
+    new Primitive(Symbol.MEMQL, "item list")
     {
-        public LispObject execute(LispObject item, LispObject list)
-            throws ConditionThrowable
-        {
-            while (list instanceof Cons)
-            {
-                if (item.eql(((Cons)list).car))
-                    return list;
-                list = ((Cons)list).cdr;
-            }
-            if (list != NIL)
-                signalTypeError(list, Symbol.LIST);
-            return NIL;
-        }
+      public LispObject execute(LispObject item, LispObject list)
+        throws ConditionThrowable
+      {
+        while (list instanceof Cons)
+          {
+            if (item.eql(((Cons)list).car))
+              return list;
+            list = ((Cons)list).cdr;
+          }
+        if (list != NIL)
+          signalTypeError(list, Symbol.LIST);
+        return NIL;
+      }
     };
 
-    // ### special-variable-p
-    private static final Primitive SPECIAL_VARIABLE_P =
-        new Primitive("special-variable-p", PACKAGE_EXT, true)
+  // ### special-variable-p
+  private static final Primitive SPECIAL_VARIABLE_P =
+    new Primitive("special-variable-p", PACKAGE_EXT, true)
     {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            return arg.isSpecialVariable() ? T : NIL;
-        }
+      public LispObject execute(LispObject arg) throws ConditionThrowable
+      {
+        return arg.isSpecialVariable() ? T : NIL;
+      }
     };
 
-    // ### source
-    private static final Primitive SOURCE =
-        new Primitive("source", PACKAGE_EXT, true)
+  // ### source
+  private static final Primitive SOURCE =
+    new Primitive("source", PACKAGE_EXT, true)
     {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            return get(arg, Symbol._SOURCE, NIL);
-        }
+      public LispObject execute(LispObject arg) throws ConditionThrowable
+      {
+        return get(arg, Symbol._SOURCE, NIL);
+      }
     };
 
-    // ### source-file-position
-    private static final Primitive SOURCE_FILE_POSITION =
-        new Primitive("source-file-position", PACKAGE_EXT, true)
+  // ### source-file-position
+  private static final Primitive SOURCE_FILE_POSITION =
+    new Primitive("source-file-position", PACKAGE_EXT, true)
     {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            LispObject obj = get(arg, Symbol._SOURCE, NIL);
-            if (obj instanceof Cons)
-                return obj.cdr();
-            return NIL;
-        }
+      public LispObject execute(LispObject arg) throws ConditionThrowable
+      {
+        LispObject obj = get(arg, Symbol._SOURCE, NIL);
+        if (obj instanceof Cons)
+          return obj.cdr();
+        return NIL;
+      }
     };
 
-    // ### source-pathname
-    public static final Primitive SOURCE_PATHNAME =
-        new Primitive("source-pathname", PACKAGE_EXT, true)
+  // ### source-pathname
+  public static final Primitive SOURCE_PATHNAME =
+    new Primitive("source-pathname", PACKAGE_EXT, true)
     {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            LispObject obj = get(arg, Symbol._SOURCE, NIL);
-            if (obj instanceof Cons)
-                return obj.car();
-            return obj;
-        }
+      public LispObject execute(LispObject arg) throws ConditionThrowable
+      {
+        LispObject obj = get(arg, Symbol._SOURCE, NIL);
+        if (obj instanceof Cons)
+          return obj.car();
+        return obj;
+      }
     };
 
-    // ### exit
-    private static final Primitive EXIT =
-        new Primitive("exit", PACKAGE_EXT, true)
+  // ### exit
+  private static final Primitive EXIT =
+    new Primitive("exit", PACKAGE_EXT, true)
     {
-        public LispObject execute() throws ConditionThrowable
-        {
-            exit(0);
-            return LispThread.currentThread().nothing();
-        }
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            int status = 0;
-            if (first == Keyword.STATUS) {
-                if (second instanceof Fixnum)
-                    status = ((Fixnum)second).value;
-            }
-            exit(status);
-            return LispThread.currentThread().nothing();
-        }
+      public LispObject execute() throws ConditionThrowable
+      {
+        exit(0);
+        return LispThread.currentThread().nothing();
+      }
+      public LispObject execute(LispObject first, LispObject second)
+        throws ConditionThrowable
+      {
+        int status = 0;
+        if (first == Keyword.STATUS)
+          {
+            if (second instanceof Fixnum)
+              status = ((Fixnum)second).value;
+          }
+        exit(status);
+        return LispThread.currentThread().nothing();
+      }
     };
 
-    // ### quit
-    private static final Primitive QUIT =
-        new Primitive("quit", PACKAGE_EXT, true)
+  // ### quit
+  private static final Primitive QUIT =
+    new Primitive("quit", PACKAGE_EXT, true)
     {
-        public LispObject execute() throws ConditionThrowable
-        {
-            exit(0);
-            return LispThread.currentThread().nothing();
-        }
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            int status = 0;
-            if (first == Keyword.STATUS) {
-                if (second instanceof Fixnum)
-                    status = ((Fixnum)second).value;
-            }
-            exit(status);
-            return LispThread.currentThread().nothing();
-        }
+      public LispObject execute() throws ConditionThrowable
+      {
+        exit(0);
+        return LispThread.currentThread().nothing();
+      }
+      public LispObject execute(LispObject first, LispObject second)
+        throws ConditionThrowable
+      {
+        int status = 0;
+        if (first == Keyword.STATUS)
+          {
+            if (second instanceof Fixnum)
+              status = ((Fixnum)second).value;
+          }
+        exit(status);
+        return LispThread.currentThread().nothing();
+      }
     };
 
-    // ### dump-java-stack
-    private static final Primitive DUMP_JAVA_STACK =
-        new Primitive("dump-java-stack", PACKAGE_EXT, true)
+  // ### dump-java-stack
+  private static final Primitive DUMP_JAVA_STACK =
+    new Primitive("dump-java-stack", PACKAGE_EXT, true)
     {
-        public LispObject execute() throws ConditionThrowable
-        {
-            Thread.dumpStack();
-            return LispThread.currentThread().nothing();
-        }
+      public LispObject execute() throws ConditionThrowable
+      {
+        Thread.dumpStack();
+        return LispThread.currentThread().nothing();
+      }
     };
 
-    // ### make-temp-file => namestring
-    private static final Primitive MAKE_TEMP_FILE =
-        new Primitive("make-temp-file", PACKAGE_EXT, true, "")
+  // ### make-temp-file => namestring
+  private static final Primitive MAKE_TEMP_FILE =
+    new Primitive("make-temp-file", PACKAGE_EXT, true, "")
     {
-        public LispObject execute() throws ConditionThrowable
-        {
-            try {
-                File file = File.createTempFile("abcl", null, null);
-                if (file != null)
-                    return new Pathname(file.getPath());
-            }
-            catch (IOException e) {
-                Debug.trace(e);
-            }
-            return NIL;
-        }
+      public LispObject execute() throws ConditionThrowable
+      {
+        try
+          {
+            File file = File.createTempFile("abcl", null, null);
+            if (file != null)
+              return new Pathname(file.getPath());
+          }
+        catch (IOException e)
+          {
+            Debug.trace(e);
+          }
+        return NIL;
+      }
     };
 }
