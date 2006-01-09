@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: autoloads.lisp,v 1.203 2005-12-23 02:16:12 piso Exp $
+;;; $Id: autoloads.lisp,v 1.204 2006-01-09 19:19:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -64,7 +64,8 @@
 (autoload '(remove-duplicates delete-duplicates))
 (autoload '(substitute substitute-if substitute-if-not) "substitute")
 (autoload '(nsubstitute nsubstitute-if nsubstitute-if-not) "nsubstitute")
-(autoload '(position position-if position-if-not find find-if find-if-not)
+(autoload '(position position-if position-if-not find find-if find-if-not
+            list-find* vector-find*)
           "find")
 (autoload '(count count-if count-if-not) "count")
 (autoload '(mismatch search))
