@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.746 2006-01-08 18:38:33 piso Exp $
+;;; $Id: jvm.lisp,v 1.747 2006-01-09 10:58:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3601,6 +3601,47 @@ representation, based on the derived type of the LispObject."
                                   (lisp-object-arg-types 1) +lisp-object+)))))
     (emit-move-from-stack target representation)))
 
+(defknown p2-memq (t t t) t)
+(defun p2-memq (form target representation)
+;;   (format t "p2-memq representation = ~S~%" representation)
+  (unless (check-arg-count form 2)
+    (compile-function-call form target representation)
+    (return-from p2-memq))
+  (cond ((eq representation :boolean)
+         (let* ((args (cdr form))
+                (arg1 (first args))
+                (arg2 (second args)))
+           (compile-form arg1 'stack nil)
+           (compile-form arg2 'stack nil)
+           (emit-invokestatic +lisp-class+ "memq"
+                              (lisp-object-arg-types 2) "Z")
+           (emit-move-from-stack target representation)))
+        (t
+         (compile-function-call form target representation))))
+
+(defknown p2-memql (t t t) t)
+(defun p2-memql (form target representation)
+;;   (format t "p2-memql representation = ~S~%" representation)
+  (unless (check-arg-count form 2)
+    (compile-function-call form target representation)
+    (return-from p2-memql))
+  (cond ((eq representation :boolean)
+         (let* ((args (cdr form))
+                (arg1 (first args))
+                (arg2 (second args))
+                (type1 (derive-compiler-type arg1)))
+           (compile-form arg1 'stack nil)
+           (compile-form arg2 'stack nil)
+           (cond ((eq type1 'SYMBOL) ; FIXME
+                  (emit-invokestatic +lisp-class+ "memq"
+                                     (lisp-object-arg-types 2) "Z"))
+                 (t
+                  (emit-invokestatic +lisp-class+ "memql"
+                                     (lisp-object-arg-types 2) "Z")))
+           (emit-move-from-stack target representation)))
+        (t
+         (compile-function-call form target representation))))
+
 (defun p2-gensym (form target representation)
   (cond ((and (null representation) (null (cdr form)))
          (emit-push-current-thread)
@@ -4178,6 +4219,7 @@ representation, based on the derived type of the LispObject."
                     (INTEGERP           p2-test-integerp)
                     (LISTP              p2-test-listp)
                     (MEMQ               p2-test-memq)
+                    (MEMQL              p2-test-memql)
                     (MINUSP             p2-test-minusp)
                     (NOT                p2-test-not/null)
                     (NULL               p2-test-not/null)
@@ -4536,6 +4578,17 @@ representation, based on the derived type of the LispObject."
                          (lisp-object-arg-types 2) "Z")
       'ifeq)))
 
+(defun p2-test-memql (form)
+  (when (check-arg-count form 2)
+    (let ((arg1 (%cadr form))
+          (arg2 (%caddr form)))
+      (compile-form arg1 'stack nil)
+      (compile-form arg2 'stack nil)
+      (maybe-emit-clear-values arg1 arg2)
+      (emit-invokestatic +lisp-class+ "memql"
+                         (lisp-object-arg-types 2) "Z")
+      'ifeq)))
+
 (defun p2-test-/= (form)
   (when (= (length form) 3)
     (let* ((arg1 (%cadr form))
@@ -4703,16 +4756,21 @@ representation, based on the derived type of the LispObject."
          (p2-if (list 'IF (%car args) consequent alternate) target representation))
         (t
          (dolist (arg args)
-           (let ((type (derive-compiler-type arg)))
-             (cond ((eq type 'BOOLEAN)
+;;            (let ((type (derive-compiler-type arg)))
+;;              (cond
+;;               ((eq type 'BOOLEAN)
                     (compile-form arg 'stack :boolean)
                     (maybe-emit-clear-values arg)
-                    (emit 'ifeq LABEL1))
-                   (t
-                    (compile-form arg 'stack nil)
-                    (maybe-emit-clear-values arg)
-                    (emit-push-nil)
-                    (emit 'if_acmpeq LABEL1)))))
+                    (emit 'ifeq LABEL1)
+;;                )
+;;                    (t
+;;                     (compile-form arg 'stack nil)
+;;                     (maybe-emit-clear-values arg)
+;;                     (emit-push-nil)
+;;                     (emit 'if_acmpeq LABEL1))
+;;                    )
+;;              )
+           )
          (compile-form consequent target representation)
          (emit 'goto LABEL2)
          (label LABEL1)
@@ -10234,6 +10292,8 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'make-string         'p2-make-string)
   (install-p2-handler 'make-structure      'p2-make-structure)
   (install-p2-handler 'max                 'p2-min/max)
+  (install-p2-handler 'memq                'p2-memq)
+  (install-p2-handler 'memql               'p2-memql)
   (install-p2-handler 'min                 'p2-min/max)
   (install-p2-handler 'mod                 'p2-mod)
   (install-p2-handler 'neq                 'p2-eq/neq)
