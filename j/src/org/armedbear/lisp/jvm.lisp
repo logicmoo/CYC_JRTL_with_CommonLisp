@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.747 2006-01-09 10:58:07 piso Exp $
+;;; $Id: jvm.lisp,v 1.748 2006-01-09 19:50:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -10256,6 +10256,7 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'classp              'p2-classp)
   (install-p2-handler 'coerce-to-function  'p2-coerce-to-function)
   (install-p2-handler 'cons                'p2-cons)
+  (install-p2-handler 'sys::backq-cons     'p2-cons)
   (install-p2-handler 'consp               'p2-consp)
   (install-p2-handler 'delete              'p2-delete)
   (install-p2-handler 'elt                 'p2-elt)
