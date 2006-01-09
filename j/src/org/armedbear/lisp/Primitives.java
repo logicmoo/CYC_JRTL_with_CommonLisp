@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Primitives.java,v 1.865 2006-01-09 03:00:19 piso Exp $
+ * $Id: Primitives.java,v 1.866 2006-01-09 03:39:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5252,25 +5252,45 @@ public final class Primitives extends Lisp
             if (test == NIL || test == Symbol.EQL)
               test = EQL;
           }
-        if (key == NIL && test == EQL)
+        if (key == NIL)
           {
-            while (tail instanceof Cons)
+            if (test == EQL)
               {
-                if (item.eql(((Cons)tail).car))
-                  return tail;
-                tail = ((Cons)tail).cdr;
+                while (tail instanceof Cons)
+                  {
+                    if (item.eql(((Cons)tail).car))
+                      return tail;
+                    tail = ((Cons)tail).cdr;
+                  }
               }
-            if (tail != NIL)
-              signalTypeError(tail, Symbol.LIST);
-            return NIL;
+            else if (test != NIL)
+              {
+                while (tail instanceof Cons)
+                  {
+                    LispObject candidate = ((Cons)tail).car;
+                    if (test.execute(item, candidate) == T)
+                      return tail;
+                    tail = ((Cons)tail).cdr;
+                  }
+              }
+            else
+              {
+                // test == NIL
+                while (tail instanceof Cons)
+                  {
+                    LispObject candidate = ((Cons)tail).car;
+                    if (testNot.execute(item, candidate) == NIL)
+                      return tail;
+                    tail = ((Cons)tail).cdr;
+                  }
+              }
           }
         else
           {
+            // key != NIL
             while (tail instanceof Cons)
               {
-                LispObject candidate = ((Cons)tail).car;
-                if (key != NIL)
-                  candidate = key.execute(candidate);
+                LispObject candidate = key.execute(((Cons)tail).car);
                 if (test != NIL)
                   {
                     if (test.execute(item, candidate) == T)
@@ -5283,10 +5303,10 @@ public final class Primitives extends Lisp
                   }
                 tail = ((Cons)tail).cdr;
               }
-            if (tail != NIL)
-              signalTypeError(tail, Symbol.LIST);
-            return NIL;
           }
+        if (tail != NIL)
+          signalTypeError(tail, Symbol.LIST);
+        return NIL;
       }
     };
 
