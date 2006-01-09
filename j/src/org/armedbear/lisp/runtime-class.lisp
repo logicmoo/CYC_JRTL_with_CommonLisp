@@ -1,7 +1,7 @@
 ;;; runtime-class.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: runtime-class.lisp,v 1.15 2005-12-04 17:56:45 asimon Exp $
+;;; $Id: runtime-class.lisp,v 1.16 2006-01-09 21:09:43 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -297,32 +297,41 @@
                  :java-instance (jnew (jconstructor "java.lang.String" "[C") (jnew-array-from-array "char" string))))
 
 (defparameter *primitive-types*
-  (acons "void" (list "V" "" -1 constants.return -1)
-         (acons "byte"
-                (list "B" "org/armedbear/lisp/Fixnum"
-                      constants.iload constants.ireturn constants.iconst_0)
-                (acons "short"
-                       (list "S" "org/armedbear/lisp/Fixnum"
-                             constants.iload constants.ireturn constants.iconst_0)
-                       (acons "int"
-                              (list "I" "org/armedbear/lisp/Fixnum"
-                                    constants.iload constants.ireturn constants.iconst_0)
-                              (acons "long"
-                                     (list "J" "org/armedbear/lisp/Bignum"
-                                           constants.lload constants.lreturn constants.lconst_0)
-                                     (acons "float"
-                                            (list "F" "org/armedbear/lisp/LispFloat"
-                                                  constants.fload constants.freturn constants.fconst_0)
-                                            (acons "double"
-                                                   (list "D" "org/armedbear/lisp/LispFloat"
-                                                         constants.dload constants.dreturn constants.dconst_0)
-                                                   (acons "char"
-                                                          (list "C" "org/armedbear/lisp/LispCharacter"
-                                                                constants.iload constants.ireturn constants.iconst_0)
-                                                          (acons "boolean"
-                                                                 (list "Z" "org/armedbear/lisp/LispObject"
-                                                                       constants.iload constants.ireturn constants.iconst_0)
-                                                                 nil))))))))))
+  (acons 
+   "void" (list "V" (list "" "" "") -1 constants.return -1)
+   (acons 
+    "byte"
+    (list "B" (list "org/armedbear/lisp/Fixnum" "java/lang/Byte" "byteValue")
+          constants.iload constants.ireturn constants.iconst_0)
+    (acons 
+     "short"
+     (list "S" (list "org/armedbear/lisp/Fixnum" "java/lang/Short" "shortValue")
+           constants.iload constants.ireturn constants.iconst_0)
+     (acons 
+      "int"
+      (list "I" (list "org/armedbear/lisp/Fixnum" "java/lang/Integer" "intValue")
+            constants.iload constants.ireturn constants.iconst_0)
+      (acons 
+       "long"
+       (list "J" (list "org/armedbear/lisp/Fixnum" "java/lang/Long" "longValue")
+             constants.lload constants.lreturn constants.lconst_0)
+       (acons 
+        "float"
+        (list "F" (list "org/armedbear/lisp/SingleFloat" "java/lang/Float" "floatValue")
+              constants.fload constants.freturn constants.fconst_0)
+        (acons 
+         "double"
+         (list "D" (list "org/armedbear/lisp/DoubleFloat" "java/lang/Double" "doubleValue")
+               constants.dload constants.dreturn constants.dconst_0)
+         (acons 
+          "char"
+          (list "C" (list "org/armedbear/lisp/LispCharacter" "java/lang/Character" "charValue")
+                constants.iload constants.ireturn constants.iconst_0)
+          (acons 
+           "boolean"
+           (list "Z" (list "org/armedbear/lisp/LispObject" "" "")
+                 constants.iload constants.ireturn constants.iconst_0)
+           nil))))))))))
 
 (defun primitive-type-p (type)
   (assoc type *primitive-types* :test #'string=))
@@ -353,12 +362,16 @@
 
 (defun return-type-for-make-lisp-object (type)
   (let ((name (assoc type *primitive-types* :test #'string=)))
-    (if name (caddr name) "org/armedbear/lisp/LispObject")))
+    (if name (caaddr name) "org/armedbear/lisp/LispObject")))
 
 (defun cast-type (type)
   (let ((name (assoc type *primitive-types* :test #'string=)))
-    (if name (caddr name) (type-name type))))
+    (if name (cadr (caddr name)) (type-name type))))
 
+(defun converter-for-primitive-return-type (type)
+  (assert (and (primitive-type-p type) 
+               (not (or (string= type "void")(string= type "boolean")))))
+  (caddr (caddr (assoc type *primitive-types* :test #'string=))))
 
 (defun load-instruction (type)
   (let ((name (assoc type *primitive-types* :test #'string=)))
@@ -392,8 +405,7 @@
 (defun write-method
   (class-writer class-name class-type-name method-name unique-method-name modifiers result-type arg-types &optional super-invocation)
 
-  (let* ((arg-count (length arg-types))
-         (args-size (reduce #'+ arg-types :key #'size))
+  (let* ((args-size (reduce #'+ arg-types :key #'size))
          (index (+ 2 args-size))
          (cv (visit-method-3
               class-writer
@@ -431,42 +443,58 @@
                          "getLispMethod"
                          "(Ljava/lang/String;)Lorg/armedbear/lisp/Function;")
     (visit-var-insn-2 cv constants.astore (1+ args-size))
-    (visit-int-insn-2 cv constants.bipush (1+ arg-count))
-    (visit-type-insn-2 cv constants.anewarray "org/armedbear/lisp/LispObject")
+    (visit-field-insn-4 cv constants.getstatic
+                        "org/armedbear/lisp/Lisp" "NIL" "Lorg/armedbear/lisp/LispObject;")
     (visit-var-insn-2 cv constants.astore (+ 2 args-size))
 
 
     (let ((l0 (make-label-0))(l1 (make-label-0))(l2 (make-label-0))(l3 (make-label-0)))
       (visit-label-1 cv l0)
 
-      (loop for arg-type in arg-types and i from 0 and j = 1 then (+ j (size arg-type))
+      (visit-var-insn-2 cv constants.aload index)
+      (visit-var-insn-2 cv constants.aload 0) ; (visit-var-insn-2 cv constants.aload 0)
+      (visit-method-insn-4 cv constants.invokestatic
+                           "org/armedbear/lisp/RuntimeClass" "makeLispObject"
+                           (format nil "(~a)~a"
+                                   (arg-type-for-make-lisp-object "java.lang.Object")
+                                   (decorate-type-name (return-type-for-make-lisp-object "java.lang.Object"))))
+      (visit-method-insn-4 cv constants.invokevirtual
+                           "org/armedbear/lisp/LispObject"
+                           "push"
+                           "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;")
+      (visit-var-insn-2 cv constants.astore (+ 2 args-size))
+
+      (loop for arg-type in (reverse arg-types) and j = args-size then (- j (size arg-type))
         do
         (visit-var-insn-2 cv constants.aload index)
-        (visit-int-insn-2 cv constants.bipush i)
+
         (visit-var-insn-2 cv (load-instruction arg-type) j)
         (visit-method-insn-4 cv constants.invokestatic
                              "org/armedbear/lisp/RuntimeClass" "makeLispObject"
                              (format nil "(~a)~a"
                                      (arg-type-for-make-lisp-object arg-type)
                                      (decorate-type-name (return-type-for-make-lisp-object arg-type))))
-        (visit-insn-1 cv constants.aastore))
-
-      (visit-var-insn-2 cv constants.aload index)
-      (visit-int-insn-2 cv constants.bipush arg-count)
-      (visit-var-insn-2 cv constants.aload 0)
-      (visit-method-insn-4 cv constants.invokestatic
-                           "org/armedbear/lisp/RuntimeClass" "makeLispObject"
-                           (format nil "(~a)~a"
-                                   (arg-type-for-make-lisp-object "java.lang.Object")
-                                   (decorate-type-name (return-type-for-make-lisp-object "java.lang.Object"))))
-      (visit-insn-1 cv constants.aastore)
-
+        (visit-method-insn-4 cv constants.invokevirtual
+                           "org/armedbear/lisp/LispObject"
+                           "push"
+                           "(Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;") ;uj
+        (visit-var-insn-2 cv constants.astore (+ 2 args-size)))
+      
+      
       (visit-var-insn-2 cv constants.aload (1- index))
       (visit-var-insn-2 cv constants.aload index)
-      (visit-method-insn-4 cv constants.invokevirtual
-                           "org/armedbear/lisp/Function"
-                           "execute"
-                           "([Lorg/armedbear/lisp/LispObject;)Lorg/armedbear/lisp/LispObject;")
+
+      (visit-type-insn-2 cv constants.new "org/armedbear/lisp/Environment")
+      (visit-insn-1 cv constants.dup)
+      (visit-method-insn-4 cv constants.invokespecial "org/armedbear/lisp/Environment" "<init>" "()V")
+      (visit-method-insn-4 cv constants.invokestatic 
+                           "org/armedbear/lisp/LispThread"
+                           "currentThread"
+                           "()Lorg/armedbear/lisp/LispThread;")
+      (visit-method-insn-4 cv constants.invokestatic 
+                           "org/armedbear/lisp/RuntimeClass"
+                           "evalC"
+                           "(Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/LispObject;Lorg/armedbear/lisp/Environment;Lorg/armedbear/lisp/LispThread;)Lorg/armedbear/lisp/LispObject;")
       (cond
        ((string= "void" result-type)
         (visit-insn-1 cv constants.pop))
@@ -476,11 +504,16 @@
                              "getBooleanValue"
                              (concatenate 'string "()" (type-name result-type))))
        ((primitive-type-p result-type)
+        (visit-method-insn-4 cv constants.invokevirtual
+                             "org/armedbear/lisp/LispObject"
+                             "javaInstance"
+                             "()Ljava/lang/Object;")
         (visit-type-insn-2 cv constants.checkcast (cast-type result-type))
-        (visit-field-insn-4 cv constants.getfield 
-                            (return-type-for-make-lisp-object result-type)
-                            "value"
-                            (type-name result-type)))
+        (visit-method-insn-4 cv constants.invokevirtual
+                             (cast-type result-type)
+                             (converter-for-primitive-return-type result-type)
+                             (concatenate 'string "()" (type-name result-type))
+                             ))
        (t
         (visit-method-insn-4 cv constants.invokevirtual
                              "org/armedbear/lisp/LispObject" "javaInstance" "()Ljava/lang/Object;")
@@ -498,7 +531,7 @@
                            "org/armedbear/lisp/ConditionThrowable" "printStackTrace" "()V")
 
       (if (string= "void" result-type)
-          (visit-label-1 cv l3)
+          (progn (visit-insn-1 cv (return-instruction result-type))(visit-label-1 cv l3) )
           (visit-insn-1 cv (error-constant result-type)))
 
       (visit-insn-1 cv (return-instruction result-type))
@@ -540,12 +573,12 @@
   (let ((cw (make-class-writer-1 (make-instance 'jboolean :java-instance t)))
         (class-type-name (type-name class-name))
         (super-type-name (type-name super-name))
-	(interface-type-names 
-	 (when interfaces 
-	   (let* ((no-of-interfaces (length interfaces))
-		  (ifarray (jnew-array "java.lang.String" no-of-interfaces)))
-	     (dotimes (i no-of-interfaces ifarray) 
-	       (setf (jarray-ref ifarray i) (type-name (nth i interfaces)))))))
+        (interface-type-names 
+         (when interfaces 
+           (let* ((no-of-interfaces (length interfaces))
+                  (ifarray (jnew-array "java.lang.String" no-of-interfaces)))
+             (dotimes (i no-of-interfaces ifarray) 
+               (setf (jarray-ref ifarray i) (type-name (nth i interfaces)))))))
         (args-for-%jnew))
     (visit-4 cw (+ constants.acc-public constants.acc-super)
              class-type-name super-type-name interface-type-names)
@@ -566,8 +599,9 @@
           collect unique-method-name into args
           collect (coerce constr-def 'function) into args
           do
-          (write-method cw class-name class-type-name "<init>" unique-method-name '("public") "void" arg-types
-                        (cons super-type-name super-invocation-args))
+          (write-method 
+           cw class-name class-type-name "<init>" unique-method-name '("public") "void" arg-types
+           (cons super-type-name super-invocation-args))
           finally
           (setf args-for-%jnew (append args-for-%jnew args)))
         (let ((cv (visit-method-3 cw constants.acc-public "<init>" "()V")))
@@ -582,7 +616,8 @@
       collect unique-method-name into args
       collect (coerce method-def 'function) into args
       do
-      (write-method cw class-name class-type-name method-name unique-method-name modifiers ret-type arg-types)
+      (write-method 
+       cw class-name class-type-name method-name unique-method-name modifiers ret-type arg-types)
       finally
       (apply #'java::%jnew-runtime-class class-name (append args-for-%jnew args)))
 
@@ -603,7 +638,7 @@
   (assert (jruntime-class-exists-p class-name) (class-name)
           "Can't redefine methods of undefined runtime class ~a" class-name)
   (let ((unique-method-name 
-	 (apply #'concatenate 'string (if method-name method-name "<init>") "|" arg-types)))
+         (apply #'concatenate 'string (if method-name method-name "<init>") "|" arg-types)))
     (java::%jredefine-method class-name unique-method-name  (compile nil method-def))))
 
 (defun jruntime-class-exists-p (class-name)
