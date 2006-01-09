@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Extensions.java,v 1.44 2006-01-09 01:35:00 piso Exp $
+ * $Id: Extensions.java,v 1.45 2006-01-09 12:00:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@ public final class Extensions extends Lisp
 
   // ### neq
   private static final Primitive NEQ =
-    new Primitive("neq", PACKAGE_EXT, true)
+    new Primitive(Symbol.NEQ, "obj1 obj2")
     {
       public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
@@ -90,6 +90,17 @@ public final class Extensions extends Lisp
         if (list != NIL)
           signalTypeError(list, Symbol.LIST);
         return NIL;
+      }
+    };
+
+  // ### adjoin-eql item list => new-list
+  private static final Primitive ADJOIN_EQL =
+    new Primitive(Symbol.ADJOIN_EQL, "item list")
+    {
+      public LispObject execute(LispObject item, LispObject list)
+        throws ConditionThrowable
+      {
+        return memql(item, list) ? list : new Cons(item, list);
       }
     };
 

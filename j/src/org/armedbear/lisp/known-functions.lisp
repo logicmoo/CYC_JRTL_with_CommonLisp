@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.50 2006-01-08 15:12:52 piso Exp $
+;;; $Id: known-functions.lisp,v 1.51 2006-01-09 12:00:17 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -441,5 +441,7 @@
 
 (defknown lookup-known-symbol (symbol) t)
 (defknown %class-name (class) symbol)
+
+(defknown adjoin-eql (t t) list)
 
 (provide '#:known-functions)
