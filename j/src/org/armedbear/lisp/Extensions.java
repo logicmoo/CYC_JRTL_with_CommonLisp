@@ -1,8 +1,8 @@
 /*
  * Extensions.java
  *
- * Copyright (C) 2002-2005 Peter Graves
- * $Id: Extensions.java,v 1.42 2005-11-06 02:18:24 piso Exp $
+ * Copyright (C) 2002-2006 Peter Graves
+ * $Id: Extensions.java,v 1.43 2006-01-09 01:33:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,11 +62,14 @@ public final class Extensions extends Lisp
         public LispObject execute(LispObject item, LispObject list)
             throws ConditionThrowable
         {
-            while (list != NIL) {
-                if (item == list.car())
+            while (list instanceof Cons)
+            {
+                if (item == ((Cons)list).car)
                     return list;
-                list = list.cdr();
+                list = ((Cons)list).cdr;
             }
+            if (list != NIL)
+                signalTypeError(list, Symbol.LIST);
             return NIL;
         }
     };
@@ -78,11 +81,14 @@ public final class Extensions extends Lisp
         public LispObject execute(LispObject item, LispObject list)
             throws ConditionThrowable
         {
-            while (list != NIL) {
-                if (item.eql(list.car()))
+            while (list instanceof Cons)
+            {
+                if (item.eql(((Cons)list).car))
                     return list;
-                list = list.cdr();
+                list = ((Cons)list).cdr;
             }
+            if (list != NIL)
+                signalTypeError(list, Symbol.LIST);
             return NIL;
         }
     };
