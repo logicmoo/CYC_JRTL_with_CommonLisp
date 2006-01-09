@@ -1,8 +1,8 @@
 /*
  * Primitives.java
  *
- * Copyright (C) 2002-2005 Peter Graves
- * $Id: Primitives.java,v 1.864 2006-01-06 19:19:02 piso Exp $
+ * Copyright (C) 2002-2006 Peter Graves
+ * $Id: Primitives.java,v 1.865 2006-01-09 03:00:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5235,76 +5235,58 @@ public final class Primitives extends Lisp
       }
     };
 
-  // ### %member
-  // %member item list key test test-not => tail
+  // ### %member item list key test test-not => tail
   private static final Primitive _MEMBER =
     new Primitive("%member", PACKAGE_SYS, false)
     {
-      public LispObject execute(LispObject first, LispObject second,
-                                LispObject third, LispObject fourth,
-                                LispObject fifth)
+      public LispObject execute(LispObject item, LispObject list,
+                                LispObject key, LispObject test,
+                                LispObject testNot)
         throws ConditionThrowable
       {
-        LispObject item = first;
-        LispObject tail = checkList(second);
-        LispObject key = third;
-        if (key != NIL)
-          {
-            if (key instanceof Symbol)
-              key = key.getSymbolFunction();
-            if (!(key instanceof Function || key instanceof StandardGenericFunction))
-              signal(new UndefinedFunction(third));
-          }
-        LispObject test = fourth;
-        LispObject testNot = fifth;
+        LispObject tail = checkList(list);
         if (test != NIL && testNot != NIL)
           signal(new LispError("MEMBER: test and test-not both supplied"));
-        if (test == NIL && testNot == NIL)
+        if (testNot == NIL)
           {
-            test = EQL;
-          }
-        else if (test != NIL)
-          {
-            if (test instanceof Symbol)
-              test = test.getSymbolFunction();
-            if (!(test instanceof Function || test instanceof StandardGenericFunction))
-              signal(new UndefinedFunction(fourth));
-          }
-        else if (testNot != NIL)
-          {
-            if (testNot instanceof Symbol)
-              testNot = testNot.getSymbolFunction();
-            if (!(testNot instanceof Function || testNot instanceof StandardGenericFunction))
-              signal(new UndefinedFunction(fifth));
+            if (test == NIL || test == Symbol.EQL)
+              test = EQL;
           }
         if (key == NIL && test == EQL)
           {
-            while (tail != NIL)
+            while (tail instanceof Cons)
               {
-                if (item.eql(tail.car()))
+                if (item.eql(((Cons)tail).car))
                   return tail;
-                tail = tail.cdr();
+                tail = ((Cons)tail).cdr;
               }
+            if (tail != NIL)
+              signalTypeError(tail, Symbol.LIST);
             return NIL;
           }
-        while (tail != NIL)
+        else
           {
-            LispObject candidate = tail.car();
-            if (key != NIL)
-              candidate = key.execute(candidate);
-            if (test != NIL)
+            while (tail instanceof Cons)
               {
-                if (test.execute(item, candidate) == T)
-                  return tail;
+                LispObject candidate = ((Cons)tail).car;
+                if (key != NIL)
+                  candidate = key.execute(candidate);
+                if (test != NIL)
+                  {
+                    if (test.execute(item, candidate) == T)
+                      return tail;
+                  }
+                else
+                  {
+                    if (testNot.execute(item, candidate) == NIL)
+                      return tail;
+                  }
+                tail = ((Cons)tail).cdr;
               }
-            else if (testNot != NIL)
-              {
-                if (testNot.execute(item, candidate) == NIL)
-                  return tail;
-              }
-            tail = tail.cdr();
+            if (tail != NIL)
+              signalTypeError(tail, Symbol.LIST);
+            return NIL;
           }
-        return NIL;
       }
     };
 
