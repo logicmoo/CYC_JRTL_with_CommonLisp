@@ -1,7 +1,7 @@
 ;;; macros.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: macros.lisp,v 1.30 2005-05-03 23:20:54 piso Exp $
+;;; $Id: macros.lisp,v 1.31 2006-01-09 19:21:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -18,6 +18,40 @@
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 (in-package #:system)
+
+(defmacro in-package (name)
+  `(%in-package ,(string name)))
+
+(defmacro when (test-form &rest body)
+  (if (cdr body)
+      `(if ,test-form (progn ,@body))
+      `(if ,test-form ,(car body))))
+
+(defmacro unless (test-form &rest body)
+  (if (cdr body)
+      `(if (not ,test-form) (progn ,@body))
+      `(if (not ,test-form) ,(car body))))
+
+(defmacro return (&optional result)
+  `(return-from nil ,result))
+
+(defmacro defconstant (name initial-value &optional docstring)
+  `(%defconstant ',name ,initial-value ,docstring))
+
+(defmacro defparameter (name initial-value &optional docstring)
+  `(%defparameter ',name ,initial-value ,docstring))
+
+(defmacro %car (x)
+  `(car (truly-the cons ,x)))
+
+(defmacro %cdr (x)
+  `(cdr (truly-the cons ,x)))
+
+(defmacro %cadr (x)
+  `(%car (%cdr ,x)))
+
+(defmacro %caddr (x)
+  `(%car (%cdr (%cdr ,x))))
 
 (defmacro prog1 (first-form &rest forms)
   (let ((result (gensym)))
@@ -111,3 +145,13 @@
       (return-from loop (ansi-loop exps))))
   (let ((tag (gensym)))
     `(block nil (tagbody ,tag ,@exps (go ,tag)))))
+
+(defmacro defvar (var &optional (val nil valp) (doc nil docp))
+  `(progn
+     (%defvar ',var)
+     ,@(when valp
+         `((unless (boundp ',var)
+             (setq ,var ,val))))
+     ,@(when docp
+         `((%set-documentation ',var 'variable ',doc)))
+     ',var))
