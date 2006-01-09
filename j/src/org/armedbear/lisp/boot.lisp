@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.239 2005-09-28 14:37:40 piso Exp $
+;;; $Id: boot.lisp,v 1.240 2006-01-09 19:22:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -22,6 +22,7 @@
 (setq *autoload-verbose* nil)
 (setq *load-verbose* nil)
 
+;; Redefined in macros.lisp.
 (defmacro in-package (name)
   (list '%in-package (string name)))
 
@@ -31,28 +32,22 @@
 (defmacro named-lambda (name lambda-list &rest body)
   (list 'function (list* 'named-lambda name lambda-list body)))
 
-(defmacro when (pred &rest body)
-  (list 'if pred (if (> (length body) 1)
-                     (append '(progn) body)
-                     (car body))))
-
-(defmacro unless (pred &rest body)
-  (list 'if (list 'not pred) (if (> (length body) 1)
-                                 (append '(progn) body)
-                                 (car body))))
-
+;; Redefined in macros.lisp.
 (defmacro return (&optional result)
   (list 'return-from nil result))
 
+;; Redefined in precompiler.lisp.
 (defmacro defun (name lambda-list &rest body)
   (let ((block-name (fdefinition-block-name name)))
     (list '%defun
           (list 'quote name)
           (list 'lambda lambda-list (list* 'block block-name body)))))
 
+;; Redefined in macros.lisp.
 (defmacro defconstant (name initial-value &optional docstring)
   (list '%defconstant (list 'quote name) initial-value docstring))
 
+;; Redefined in macros.lisp.
 (defmacro defparameter (name initial-value &optional docstring)
   (list '%defparameter (list 'quote name) initial-value docstring))
 
@@ -76,16 +71,19 @@
 
 (in-package #:system)
 
-;; EVAL is redefined in precompiler.lisp.
+;; Redefined in precompiler.lisp.
 (defun eval (form)
   (%eval form))
 
+;; Redefined in pprint.lisp.
 (defun terpri (&optional output-stream)
   (%terpri output-stream))
 
+;; Redefined in pprint.lisp.
 (defun fresh-line (&optional output-stream)
   (%fresh-line output-stream))
 
+;; Redefined in pprint.lisp.
 (defun write-char (character &optional output-stream)
   (%write-char character output-stream))
 
@@ -129,16 +127,7 @@
 (load-system-file "fdefinition")
 (load-system-file "featurep")
 (load-system-file "read-conditional")
-
-(defmacro defvar (var &optional (val nil valp) (doc nil docp))
-  `(progn
-     (%defvar ',var)
-     ,@(when valp
-         `((unless (boundp ',var)
-             (setq ,var ,val))))
-     ,@(when docp
-         `((%set-documentation ',var 'variable ',doc)))
-     ',var))
+(load-system-file "macros")
 
 (defun make-package (package-name &key nicknames use)
   (%make-package package-name nicknames use))
@@ -261,7 +250,6 @@
 (defun sys::%compile (name definition)
   (values (if name name definition) nil nil))
 
-(load-system-file "macros")
 (load-system-file "proclaim")
 (load-system-file "arrays")
 (load-system-file "compiler-macro")
