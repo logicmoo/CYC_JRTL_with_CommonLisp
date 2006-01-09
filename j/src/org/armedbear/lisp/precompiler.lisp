@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: precompiler.lisp,v 1.148 2006-01-09 12:02:48 piso Exp $
+;;; $Id: precompiler.lisp,v 1.149 2006-01-09 12:33:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -127,19 +127,28 @@
         (t form)))
 
 (define-compiler-macro member (&whole form &rest args)
-  (cond ((and (= (length args) 4)
-              (eq (third args) :test)
-              (or (equal (fourth args) '(quote eq))
-                  (equal (fourth args) '(function eq))))
-         `(memq ,(first args) ,(second args)))
-        ((and (= (length args) 4)
-              (eq (third args) :test)
-              (or (equal (fourth args) '(quote eql))
-                  (equal (fourth args) '(function eql))))
-         `(memql ,(first args) ,(second args)))
-        ((= (length args) 2)
-         `(memql ,(first args) ,(second args)))
-        (t form)))
+  (let ((arg1 (first args))
+        (arg2 (second args)))
+    (case (length args)
+      (2
+       `(memql ,arg1 ,arg2))
+      (4
+       (let ((arg3 (third args))
+             (arg4 (fourth args)))
+         (cond ((and (eq arg3 :test)
+                     (or (equal arg4 '(quote eq))
+                         (equal arg4 '(function eq))))
+                `(memq ,arg1 ,arg2))
+               ((and (eq arg3 :test)
+                     (or (equal arg4 '(quote eql))
+                         (equal arg4 '(function eql))
+                         (equal arg4 '(quote char=))
+                         (equal arg4 '(function char=))))
+                `(memql ,arg1 ,arg2))
+               (t
+                form))))
+      (t
+       form))))
 
 (define-compiler-macro search (&whole form &rest args)
   (if (= (length args) 2)
