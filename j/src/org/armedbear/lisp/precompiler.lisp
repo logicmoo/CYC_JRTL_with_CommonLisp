@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
-;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: precompiler.lisp,v 1.147 2005-12-30 02:45:45 piso Exp $
+;;; Copyright (C) 2003-2006 Peter Graves
+;;; $Id: precompiler.lisp,v 1.148 2006-01-09 12:02:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -273,6 +273,11 @@
                          (vector-find* ,item-var ,seq-var ,from-end ,test ,test-not 0 (length ,seq-var) ,key)))))))
         (t
          form)))
+
+(define-source-transform adjoin (&whole form &rest args)
+  (if (= (length args) 2)
+      `(adjoin-eql ,(first args) ,(second args))
+      form))
 
 (define-compiler-macro catch (&whole form tag &rest args)
   (declare (ignore tag))
