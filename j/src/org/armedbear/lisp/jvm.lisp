@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.748 2006-01-09 19:50:37 piso Exp $
+;;; $Id: jvm.lisp,v 1.749 2006-01-10 05:03:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3834,7 +3834,7 @@ representation, based on the derived type of the LispObject."
           (let ((package (symbol-package op)))
             (when (or (eq package +cl-package+) (eq package (find-package "SYSTEM")))
               (format t ";   full call to ~S~%" op)))))
-      (unless (> *speed* *debug*)
+      (when (or (<= *speed* *debug*) *require-stack-frame*)
         (emit-push-current-thread))
       (cond ((eq op (compiland-name *current-compiland*)) ; recursive call
              (if (notinline-p op)
@@ -3851,9 +3851,9 @@ representation, based on the derived type of the LispObject."
                    (emit 'getstatic +lisp-symbol-class+ name +lisp-symbol+)
                    (emit 'getstatic *this-class* (declare-symbol op) +lisp-symbol+)))))
       (process-args args)
-      (if (> *speed* *debug*)
-          (emit-call-execute numargs)
-          (emit-call-thread-execute numargs))
+      (if (or (<= *speed* *debug*) *require-stack-frame*)
+          (emit-call-thread-execute numargs)
+          (emit-call-execute numargs))
       (fix-boxing representation (derive-compiler-type form))
       (emit-move-from-stack target representation))))
 
