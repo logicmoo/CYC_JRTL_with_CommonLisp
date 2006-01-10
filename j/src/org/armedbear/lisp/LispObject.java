@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: LispObject.java,v 1.161 2006-01-08 18:34:40 piso Exp $
+ * $Id: LispObject.java,v 1.162 2006-01-10 04:56:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -419,17 +419,7 @@ public class LispObject extends Lisp
 
   public int aref(int index) throws ConditionThrowable
   {
-    final LispObject obj = AREF(index);
-    try
-      {
-        return ((Fixnum)obj).value;
-      }
-    catch (ClassCastException e)
-      {
-        signalTypeError(obj, Symbol.FIXNUM);
-        // Not reached.
-        return 0;
-      }
+    return AREF(index).intValue();
   }
 
   public LispObject AREF(int index) throws ConditionThrowable
