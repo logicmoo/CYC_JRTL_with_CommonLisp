@@ -1,7 +1,7 @@
 ;;; proclaim.lisp
 ;;;
-;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: proclaim.lisp,v 1.10 2005-11-08 14:58:19 piso Exp $
+;;; Copyright (C) 2003-2006 Peter Graves
+;;; $Id: proclaim.lisp,v 1.11 2006-01-10 19:48:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 (in-package #:system)
 
-(export '(check-declaration-type proclaimed-ftype ftype-result-type))
+(export '(check-declaration-type proclaimed-type proclaimed-ftype ftype-result-type))
 
 (defmacro declaim (&rest decls)
 `(eval-when (:compile-toplevel :load-toplevel :execute)
@@ -73,6 +73,10 @@
      (unless (cdr declaration-specifier)
        (error "No type specified in FTYPE declaration: ~S" declaration-specifier))
      (apply 'proclaim-ftype (cdr declaration-specifier)))
+    (TYPE
+     (unless (cdr declaration-specifier)
+       (error "No type specified in TYPE declaration: ~S" declaration-specifier))
+     (apply 'proclaim-type (cdr declaration-specifier)))
     ((INLINE NOTINLINE)
      (dolist (name (cdr declaration-specifier))
        (when (symbolp name) ; FIXME Need to support non-symbol function names.
@@ -94,6 +98,13 @@
          (if val
              (pushnew quality *explain*)
              (setf *explain* (remove quality *explain*))))))))
+
+(defun proclaim-type (type &rest names)
+  (dolist (name names)
+    (setf (get name 'proclaimed-type) type)))
+
+(defun proclaimed-type (name)
+  (get name 'proclaimed-type))
 
 (defvar *proclaimed-ftypes* (make-hash-table :test 'equal))
 
