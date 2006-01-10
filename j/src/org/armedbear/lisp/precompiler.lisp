@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: precompiler.lisp,v 1.149 2006-01-09 12:33:38 piso Exp $
+;;; $Id: precompiler.lisp,v 1.150 2006-01-10 05:02:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -379,12 +379,13 @@
       (let ((new-form (expand-source-transform form)))
         (when (neq new-form form)
           (return-from precompile-function-call (precompile1 new-form)))))
-    (let ((expansion (inline-expansion op)))
-      (when expansion
-        (let ((explain *explain*))
-          (when (and explain (memq :calls explain))
-            (format t ";   inlining call to ~S~%" op)))
-        (return-from precompile-function-call (precompile1 (expand-inline form expansion)))))
+    (when *enable-inline-expansion*
+      (let ((expansion (inline-expansion op)))
+        (when expansion
+          (let ((explain *explain*))
+            (when (and explain (memq :calls explain))
+              (format t ";   inlining call to ~S~%" op)))
+          (return-from precompile-function-call (precompile1 (expand-inline form expansion))))))
     (cons op (mapcar #'precompile1 (cdr form)))))
 
 (defun precompile-locally (form)
