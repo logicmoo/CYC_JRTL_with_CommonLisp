@@ -1,8 +1,8 @@
 /*
  * EqualpHashTable.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: EqualpHashTable.java,v 1.7 2005-08-05 19:51:18 piso Exp $
+ * Copyright (C) 2004-2005 Peter Graves
+ * $Id: EqualpHashTable.java,v 1.8 2006-01-10 11:17:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,97 +23,109 @@ package org.armedbear.lisp;
 
 public final class EqualpHashTable extends HashTable
 {
-    public EqualpHashTable(int size, LispObject rehashSize,
-                           LispObject rehashThreshold)
-    {
-        super(size, rehashSize, rehashThreshold);
-    }
+  public EqualpHashTable(int size, LispObject rehashSize,
+                         LispObject rehashThreshold)
+  {
+    super(size, rehashSize, rehashThreshold);
+  }
 
-    public Symbol getTest()
-    {
-        return Symbol.EQUALP;
-    }
+  public Symbol getTest()
+  {
+    return Symbol.EQUALP;
+  }
 
-    public LispObject get(LispObject key)
-    {
-        final int index = key.psxhash() % buckets.length;
-        HashEntry e = buckets[index];
-        while (e != null) {
-            try {
-                if (key.equalp(e.key))
-                    return e.value;
-            }
-            catch (ConditionThrowable t) {
-                Debug.trace(t);
-            }
-            e = e.next;
-        }
-        return null;
-    }
+  public LispObject get(LispObject key)
+  {
+    final int index = key.psxhash() % buckets.length;
+    HashEntry e = buckets[index];
+    while (e != null)
+      {
+        try
+          {
+            if (key.equalp(e.key))
+              return e.value;
+          }
+        catch (ConditionThrowable t)
+          {
+            Debug.trace(t);
+          }
+        e = e.next;
+      }
+    return null;
+  }
 
-    public void put(LispObject key, LispObject value) throws ConditionThrowable
-    {
-        int index = key.psxhash() % buckets.length;
-        HashEntry e = buckets[index];
-        while (e != null) {
-            if (key.equals(e.key)) {
-                e.value = value;
-                return;
-            }
-            e = e.next;
-        }
-        // Not found. We need to add a new entry.
-        if (++count > threshold) {
-            rehash();
-            // Need a new hash value to suit the bigger table.
-            index = key.psxhash() % buckets.length;
-        }
-        e = new HashEntry(key, value);
-        e.next = buckets[index];
-        buckets[index] = e;
-    }
+  public void put(LispObject key, LispObject value) throws ConditionThrowable
+  {
+    int index = key.psxhash() % buckets.length;
+    HashEntry e = buckets[index];
+    while (e != null)
+      {
+        if (key.equals(e.key))
+          {
+            e.value = value;
+            return;
+          }
+        e = e.next;
+      }
+    // Not found. We need to add a new entry.
+    if (++count > threshold)
+      {
+        rehash();
+        // Need a new hash value to suit the bigger table.
+        index = key.psxhash() % buckets.length;
+      }
+    e = new HashEntry(key, value);
+    e.next = buckets[index];
+    buckets[index] = e;
+  }
 
-    public LispObject remove(LispObject key) throws ConditionThrowable
-    {
-        final int index = key.psxhash() % buckets.length;
-        HashEntry e = buckets[index];
-        HashEntry last = null;
-        while (e != null) {
-            if (key.equals(e.key)) {
-                if (last == null)
-                    buckets[index] = e.next;
-                else
-                    last.next = e.next;
-                --count;
-                return e.value;
-            }
-            last = e;
-            e = e.next;
-        }
-        return null;
-    }
+  public LispObject remove(LispObject key) throws ConditionThrowable
+  {
+    final int index = key.psxhash() % buckets.length;
+    HashEntry e = buckets[index];
+    HashEntry last = null;
+    while (e != null)
+      {
+        if (key.equals(e.key))
+          {
+            if (last == null)
+              buckets[index] = e.next;
+            else
+              last.next = e.next;
+            --count;
+            return e.value;
+          }
+        last = e;
+        e = e.next;
+      }
+    return null;
+  }
 
-    protected void rehash()
-    {
-        HashEntry[] oldBuckets = buckets;
-        int newCapacity = buckets.length * 2 + 1;
-        threshold = (int) (newCapacity * loadFactor);
-        buckets = new HashEntry[newCapacity];
-        for (int i = oldBuckets.length; i-- > 0;) {
-            HashEntry e = oldBuckets[i];
-            while (e != null) {
-                final int index = e.key.psxhash() % buckets.length;
-                HashEntry dest = buckets[index];
-                if (dest != null) {
-                    while (dest.next != null)
-                        dest = dest.next;
-                    dest.next = e;
-                } else
-                    buckets[index] = e;
-                HashEntry next = e.next;
-                e.next = null;
-                e = next;
-            }
-        }
-    }
+  protected void rehash()
+  {
+    HashEntry[] oldBuckets = buckets;
+    int newCapacity = buckets.length * 2 + 1;
+    threshold = (int) (newCapacity * loadFactor);
+    buckets = new HashEntry[newCapacity];
+    for (int i = oldBuckets.length; i-- > 0;)
+      {
+        HashEntry e = oldBuckets[i];
+        while (e != null)
+          {
+            final int index = e.key.psxhash() % buckets.length;
+            HashEntry dest = buckets[index];
+            if (dest != null)
+              {
+                while (dest.next != null)
+                  dest = dest.next;
+                dest.next = e;
+              }
+            else
+              buckets[index] = e;
+            HashEntry next = e.next;
+            e.next = null;
+            e = next;
+          }
+      }
+  }
 }
