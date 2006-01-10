@@ -1,8 +1,8 @@
 /*
  * Lisp.java
  *
- * Copyright (C) 2002-2005 Peter Graves
- * $Id: Lisp.java,v 1.433 2006-01-09 01:31:53 piso Exp $
+ * Copyright (C) 2002-2006 Peter Graves
+ * $Id: Lisp.java,v 1.434 2006-01-10 05:01:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2407,6 +2407,14 @@ public abstract class Lisp
   // ### *explain* compiler policy
   public static final Symbol _EXPLAIN_ =
     exportSpecial("*EXPLAIN*", PACKAGE_SYS, NIL);
+
+  // ### *enable-inline-expansion*
+  public static final Symbol _ENABLE_INLINE_EXPANSION_ =
+    exportSpecial("*ENABLE-INLINE-EXPANSION*", PACKAGE_EXT, T);
+
+  // ### *require-stack-frame*
+  public static final Symbol _REQUIRE_STACK_FRAME_ =
+    exportSpecial("*REQUIRE-STACK-FRAME*", PACKAGE_EXT, NIL);
 
   static
   {
