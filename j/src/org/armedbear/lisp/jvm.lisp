@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.749 2006-01-10 05:03:55 piso Exp $
+;;; $Id: jvm.lisp,v 1.750 2006-01-10 22:19:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1970,6 +1970,7 @@ representation, based on the derived type of the LispObject."
                  126 ; iand
                  127 ; land
                  128 ; ior
+                 129 ; lor
                  130 ; ixor
                  131 ; lxor
                  133 ; i2l
@@ -6523,6 +6524,12 @@ representation, based on the derived type of the LispObject."
 (defun p2-logior (form target representation)
   (let ((args (cdr form)))
     (case (length args)
+      (0
+       (compile-constant 0 target representation))
+      (1
+       (let ((arg (%car args)))
+         (compile-form arg target representation)
+         (maybe-emit-clear-values arg)))
       (2
        (let* ((arg1 (%car args))
               (arg2 (%cadr args))
@@ -6539,6 +6546,7 @@ representation, based on the derived type of the LispObject."
          (cond ((and (fixnum-constant-value type1) (fixnum-constant-value type2))
                 (compile-form arg1 nil nil) ; for effect
                 (compile-form arg2 nil nil) ; for effect
+                (maybe-emit-clear-values arg1 arg2)
                 (compile-constant (logior (fixnum-constant-value type1)
                                           (fixnum-constant-value type2))
                                   target representation))
@@ -6565,6 +6573,13 @@ representation, based on the derived type of the LispObject."
                 (compile-form arg1 target representation)
                 (compile-form arg2 nil nil) ; for effect
                 (maybe-emit-clear-values arg1 arg2))
+               ((or (eq representation :long)
+                    (and (java-long-type-p type1) (java-long-type-p type2)))
+                (compile-form arg1 'stack :long)
+                (compile-form arg2 'stack :long)
+                (maybe-emit-clear-values arg1 arg2)
+                (emit 'lor)
+                (convert-long representation))
                ((fixnum-type-p type2)
                 (compile-form arg1 'stack nil)
                 (compile-form arg2 'stack :int)
@@ -6590,12 +6605,10 @@ representation, based on the derived type of the LispObject."
                                     (lisp-object-arg-types 1) +lisp-object+)
                 (fix-boxing representation result-type)
                 (emit-move-from-stack target representation)))))
-      (3
-       ;; (logior a b c) => (logior (logior a b) c)
-       (let ((new-form `(LOGIOR (LOGIOR ,(second form) ,(third form)) ,(fourth form))))
-         (p2-logior new-form target representation)))
       (t
-       (compile-function-call form target representation)))))
+       ;; (logior a b c d ...) => (logior a (logior b c d ...))
+       (let ((new-form `(LOGIOR ,(car args) (LOGIOR ,@(cdr args)))))
+         (p2-logior new-form target representation))))))
 
 (defknown p2-logxor (t t t) t)
 (defun p2-logxor (form target representation)
@@ -7187,60 +7200,36 @@ representation, based on the derived type of the LispObject."
            (setf result-type 'CHARACTER)))
     result-type))
 
-(defknown derive-type-logxor (t) t)
-(defun derive-type-logxor (form)
-  (let ((args (cdr form))
-        (result-type t))
-;;     (dolist (arg args)
-;;       (let ((type (derive-type arg)))
-;;         (unless (subtypep type 'INTEGER)
-;;           (return-from derive-type-logxor 'T))
-;;         (cond ((null result-type)
-;;                (setf result-type type))
-;;               ((subtypep type result-type)
-;;                ;; No change.
-;;                )
-;;               ((and (subtypep result-type '(UNSIGNED-BYTE 8))
-;;                     (subtypep type '(UNSIGNED-BYTE 8)))
-;;                (setf result-type '(UNSIGNED-BYTE 8)))
-;;               ((and (subtypep result-type '(UNSIGNED-BYTE 16))
-;;                     (subtypep type '(UNSIGNED-BYTE 16)))
-;;                (setf result-type '(UNSIGNED-BYTE 16)))
-;;               ((and (subtypep result-type '(UNSIGNED-BYTE 24))
-;;                     (subtypep type '(UNSIGNED-BYTE 24)))
-;;                (setf result-type '(UNSIGNED-BYTE 24)))
-;;               ((and (subtypep result-type '(UNSIGNED-BYTE 32))
-;;                     (subtypep type '(UNSIGNED-BYTE 32)))
-;;                (setf result-type '(UNSIGNED-BYTE 32)))
-;;               ((and (subtypep result-type 'FIXNUM)
-;;                     (subtypep type 'FIXNUM))
-;;                (setf result-type 'FIXNUM))
-;;               (t
-;;                (setf result-type 'INTEGER)))))
+(defknown derive-type-logior/logxor (t) t)
+(defun derive-type-logior/logxor (form)
+  (let ((op (car form))
+        (args (cdr form))
+        (result-type +integer-type+))
     (case (length args)
       (0
        (setf result-type (make-integer-type '(INTEGER 0 0))))
       (1
        (setf result-type (derive-compiler-type (car args))))
       (2
-;;        (format t "derive-type-logxor 2-arg case~%")
        (let ((type1 (derive-compiler-type (%car args)))
              (type2 (derive-compiler-type (%cadr args))))
-;;          (format t "derive-type-logxor type1 = ~S~%" type1)
-;;          (format t "derive-type-logxor type2 = ~S~%" type2)
          (cond ((and (compiler-subtypep type1 'unsigned-byte)
                      (compiler-subtypep type2 'unsigned-byte))
                 (let ((high1 (integer-type-high type1))
                       (high2 (integer-type-high type2)))
-                  (if (and high1 high2)
-                      (setf result-type (make-compiler-type (list 'INTEGER 0 (max high1 high2))))
-                      (setf result-type (make-compiler-type 'unsigned-byte)))))
+                  (cond ((and high1 high2)
+                         (let ((length (integer-length (max high1 high2))))
+                           (setf result-type
+                                 (make-compiler-type (list 'INTEGER 0
+                                                           (1- (expt 2 length)))))))
+                        (t
+                         (setf result-type (make-compiler-type 'unsigned-byte))))))
                ((and (fixnum-type-p type1)
                      (fixnum-type-p type2))
                 (setf result-type (make-compiler-type 'fixnum))))))
       (t
-       (setf result-type (derive-type-logxor
-                          `(logxor ,(car args) (logxor ,@(cdr args)))))))
+       (setf result-type (derive-type-logior/logxor
+                          `(,op ,(car args) (,op ,@(cdr args)))))))
     result-type))
 
 (defknown derive-type-logand (t) t)
@@ -7546,8 +7535,8 @@ representation, based on the derived type of the LispObject."
               (derive-type-logand form))
              (LOGNOT
               (derive-type-lognot form))
-             (LOGXOR
-              (derive-type-logxor form))
+             ((LOGIOR LOGXOR)
+              (derive-type-logior/logxor form))
              (MOD
               (derive-type-mod form))
              (-
@@ -7592,15 +7581,19 @@ representation, based on the derived type of the LispObject."
                (t
                 t)))
         ((var-ref-p form)
-         (if (var-ref-constant-p form)
-             (derive-type (var-ref-constant-value form))
-             (let ((variable (var-ref-variable form)))
-               (cond ((neq (variable-declared-type variable) :none)
-                      (variable-declared-type variable))
-                     ((neq (variable-derived-type variable) :none)
-                      (variable-derived-type variable))
-                     (t
-                      t)))))
+         (cond ((var-ref-constant-p form)
+                (derive-type (var-ref-constant-value form)))
+               (t
+                (let ((variable (var-ref-variable form)))
+                  (cond ((variable-special-p variable)
+                         (or (proclaimed-type (variable-name variable))
+                             t))
+                        ((neq (variable-declared-type variable) :none)
+                         (variable-declared-type variable))
+                        ((neq (variable-derived-type variable) :none)
+                         (variable-derived-type variable))
+                        (t
+                         t))))))
         ((symbolp form)
          (let ((variable (find-visible-variable form)))
            (if variable
@@ -8308,6 +8301,11 @@ representation, based on the derived type of the LispObject."
           (compile-form arg2 'stack :int) ; index
           (maybe-emit-clear-values arg1 arg2)
           (emit-invokevirtual +lisp-object-class+ "aref" '("I") "I"))
+         (:long
+          (compile-form arg1 'stack nil) ; array
+          (compile-form arg2 'stack :int) ; index
+          (maybe-emit-clear-values arg1 arg2)
+          (emit-invokevirtual +lisp-object-class+ "aref_long" '("I") "J"))
          (:char
           (cond ((compiler-subtypep type1 'string)
                  (compile-form arg1 'stack nil) ; array

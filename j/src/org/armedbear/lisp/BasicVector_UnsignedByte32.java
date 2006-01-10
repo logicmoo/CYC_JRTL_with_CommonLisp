@@ -2,7 +2,7 @@
  * BasicVector_UnsignedByte32.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: BasicVector_UnsignedByte32.java,v 1.4 2006-01-10 11:40:57 piso Exp $
+ * $Id: BasicVector_UnsignedByte32.java,v 1.5 2006-01-10 22:17:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,21 +27,21 @@ public final class BasicVector_UnsignedByte32 extends AbstractVector
 {
   private int capacity;
 
-  // FIXME We should really use an array of unboxed values!
-  private LispObject[] elements;
+  private long[] elements;
 
   public BasicVector_UnsignedByte32(int capacity)
   {
-    elements = new LispObject[capacity];
-    for (int i = capacity; i-- > 0;)
-      elements[i] = Fixnum.ZERO;
+    elements = new long[capacity];
     this.capacity = capacity;
   }
 
   public BasicVector_UnsignedByte32(LispObject[] array)
+    throws ConditionThrowable
   {
-    elements = array;
     capacity = array.length;
+    elements = new long[capacity];
+    for (int i = array.length; i-- > 0;)
+      elements[i] = array[i].longValue();
   }
 
   public LispObject typeOf()
@@ -98,7 +98,7 @@ public final class BasicVector_UnsignedByte32 extends AbstractVector
   {
     try
       {
-        return elements[index];
+        return number(elements[index]);
       }
     catch (ArrayIndexOutOfBoundsException e)
       {
@@ -107,8 +107,20 @@ public final class BasicVector_UnsignedByte32 extends AbstractVector
       }
   }
 
-  // Ignores fill pointer.
-  public LispObject AREF(int index) throws ConditionThrowable
+  public int aref(int index) throws ConditionThrowable
+  {
+    try
+      {
+        return (int) elements[index];
+      }
+    catch (ArrayIndexOutOfBoundsException e)
+      {
+        badIndex(index, elements.length);
+        return -1; // Not reached.
+      }
+  }
+
+  public long aref_long(int index) throws ConditionThrowable
   {
     try
       {
@@ -117,20 +129,32 @@ public final class BasicVector_UnsignedByte32 extends AbstractVector
     catch (ArrayIndexOutOfBoundsException e)
       {
         badIndex(index, elements.length);
+        return -1; // Not reached.
+      }
+  }
+
+  public LispObject AREF(int index) throws ConditionThrowable
+  {
+    try
+      {
+        return number(elements[index]);
+      }
+    catch (ArrayIndexOutOfBoundsException e)
+      {
+        badIndex(index, elements.length);
         return NIL; // Not reached.
       }
   }
 
-  // Ignores fill pointer.
   public LispObject AREF(LispObject index) throws ConditionThrowable
   {
     try
       {
-        return elements[((Fixnum)index).value];
+        return number(elements[((Fixnum)index).value]);
       }
     catch (ClassCastException e)
       {
-        return signal(new TypeError(index, Symbol.FIXNUM));
+        return signalTypeError(index, Symbol.FIXNUM);
       }
     catch (ArrayIndexOutOfBoundsException e)
       {
@@ -143,7 +167,7 @@ public final class BasicVector_UnsignedByte32 extends AbstractVector
   {
     try
       {
-        elements[index] = newValue;
+        elements[index] = newValue.longValue();
       }
     catch (ArrayIndexOutOfBoundsException e)
       {
@@ -163,6 +187,7 @@ public final class BasicVector_UnsignedByte32 extends AbstractVector
       }
     catch (ArrayIndexOutOfBoundsException e)
       {
+        // FIXME
         return signal(new TypeError("Array index out of bounds: " + i + "."));
       }
   }
@@ -170,14 +195,14 @@ public final class BasicVector_UnsignedByte32 extends AbstractVector
   public void fill(LispObject obj) throws ConditionThrowable
   {
     for (int i = capacity; i-- > 0;)
-      elements[i] = obj;
+      elements[i] = obj.longValue();
   }
 
   public void shrink(int n) throws ConditionThrowable
   {
     if (n < capacity)
       {
-        LispObject[] newArray = new LispObject[n];
+        long[] newArray = new long[n];
         System.arraycopy(elements, 0, newArray, 0, n);
         elements = newArray;
         capacity = n;
@@ -203,7 +228,7 @@ public final class BasicVector_UnsignedByte32 extends AbstractVector
     int j = capacity - 1;
     while (i < j)
       {
-        LispObject temp = elements[i];
+        long temp = elements[i];
         elements[i] = elements[j];
         elements[j] = temp;
         ++i;
@@ -235,7 +260,7 @@ public final class BasicVector_UnsignedByte32 extends AbstractVector
               newElements[i] = initialContents.elt(i);
           }
         else
-          signal(new TypeError(initialContents, Symbol.SEQUENCE));
+          signalTypeError(initialContents, Symbol.SEQUENCE);
         return new BasicVector_UnsignedByte32(newElements);
       }
     if (capacity != newCapacity)
