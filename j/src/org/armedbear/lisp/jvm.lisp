@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.751 2006-01-11 02:17:47 piso Exp $
+;;; $Id: jvm.lisp,v 1.752 2006-01-11 04:50:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4829,6 +4829,8 @@ representation, based on the derived type of the LispObject."
           ((numberp test)
            (compile-form consequent target representation))
           ((equal (derive-type test) '(not null))
+           (compile-form test nil nil) ; for effect
+           (maybe-emit-clear-values test)
            (compile-form consequent target representation))
           ((and (consp test) (eq (car test) 'OR))
            (p2-if-or form target representation))
