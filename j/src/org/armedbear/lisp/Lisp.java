@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Lisp.java,v 1.434 2006-01-10 05:01:30 piso Exp $
+ * $Id: Lisp.java,v 1.435 2006-01-11 13:42:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2006,12 +2006,6 @@ public abstract class Lisp
     Symbol.TERMINAL_IO.setSymbolValue(new TwoWayStream(stdin, stdout, true));
     Symbol.QUERY_IO.setSymbolValue(new TwoWayStream(stdin, stdout, true));
     Symbol.DEBUG_IO.setSymbolValue(new TwoWayStream(stdin, stdout, true));
-  }
-
-  public static final void resetIO()
-  {
-    resetIO(new Stream(System.in, Symbol.CHARACTER, true),
-            new Stream(System.out, Symbol.CHARACTER, true));
   }
 
   public static final TwoWayStream getTerminalIO()
