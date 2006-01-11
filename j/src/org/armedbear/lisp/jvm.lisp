@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.752 2006-01-11 04:50:59 piso Exp $
+;;; $Id: jvm.lisp,v 1.753 2006-01-11 17:40:21 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6610,7 +6610,7 @@ representation, based on the derived type of the LispObject."
                 (emit-move-from-stack target representation)))))
       (t
        ;; (logior a b c d ...) => (logior a (logior b c d ...))
-       (let ((new-form `(LOGIOR ,(car args) (LOGIOR ,@(cdr args)))))
+       (let ((new-form `(logior ,(car args) (logior ,@(cdr args)))))
          (p2-logior new-form target representation))))))
 
 (defknown p2-logxor (t t t) t)
@@ -6618,6 +6618,12 @@ representation, based on the derived type of the LispObject."
   (let* ((args (cdr form))
          (len (length args)))
     (case len
+      (0
+       (compile-constant 0 target representation))
+      (1
+       (let ((arg (%car args)))
+         (compile-form arg target representation)
+         (maybe-emit-clear-values arg)))
       (2
        (let* ((arg1 (%car args))
               (arg2 (%cadr args))
@@ -6631,10 +6637,7 @@ representation, based on the derived type of the LispObject."
          (setf type1       (derive-compiler-type arg1)
                type2       (derive-compiler-type arg2)
                result-type (derive-compiler-type form))
-         ;;              (format t "p2-logxor type1 = ~S~%" type1)
-         ;;              (format t "p2-logxor type2 = ~S~%" type2)
          (cond ((eq representation :int)
-;;                 (format t "p2-logxor case 1~%")
                 (compile-form arg1 'stack :int)
                 (compile-form arg2 'stack :int)
                 (maybe-emit-clear-values arg1 arg2)
@@ -6655,21 +6658,18 @@ representation, based on the derived type of the LispObject."
                   (t
                    (emit-invokespecial-init +lisp-fixnum-class+ '("I")))))
                ((and (java-long-type-p type1) (java-long-type-p type2))
-;;                 (format t "p2-logxor case 3~%")
                 (compile-form arg1 'stack :long)
                 (compile-form arg2 'stack :long)
                 (maybe-emit-clear-values arg1 arg2)
                 (emit 'lxor)
                 (convert-long representation))
                ((fixnum-type-p type2)
-;;                 (format t "p2-logxor case 4~%")
                 (compile-form arg1 'stack nil)
                 (compile-form arg2 'stack :int)
                 (maybe-emit-clear-values arg1 arg2)
                 (emit-invokevirtual +lisp-object-class+ "LOGXOR" '("I") +lisp-object+)
                 (fix-boxing representation result-type))
                (t
-;;                 (format t "p2-logxor case 5~%")
                 (compile-form arg1 'stack nil)
                 (compile-form arg2 'stack nil)
                 (maybe-emit-clear-values arg1 arg2)
@@ -6677,13 +6677,10 @@ representation, based on the derived type of the LispObject."
                                     (lisp-object-arg-types 1) +lisp-object+)
                 (fix-boxing representation result-type)))
          (emit-move-from-stack target representation)))
-      (3
-       ;; (logxor a b c) => (logxor (logxor a b) c)
-       (let ((new-form `(LOGXOR (LOGXOR ,(second form) ,(third form)) ,(fourth form))))
-         (p2-logxor new-form target representation))
-       (return-from p2-logxor))
       (t
-       (compile-function-call form target representation)))))
+       ;; (logxor a b c d ...) => (logxor a (logxor b c d ...))
+       (let ((new-form `(logxor ,(car args) (logxor ,@(cdr args)))))
+         (p2-logxor new-form target representation))))))
 
 (defknown p2-lognot (t t t) t)
 (defun p2-lognot (form target representation)
@@ -7251,8 +7248,6 @@ representation, based on the derived type of the LispObject."
        (let* ((type1 (derive-compiler-type (%car args)))
               (type2 (derive-compiler-type (%cadr args)))
               low1 high1 low2 high2 result-low result-high result-type)
-         (dformat t "derive-type-logand type1 = ~S~%" type1)
-         (dformat t "derive-type-logand type2 = ~S~%" type2)
          (when (integer-type-p type1)
            (setf low1 (integer-type-low type1)
                  high1 (integer-type-high type1)))
@@ -7576,6 +7571,8 @@ representation, based on the derived type of the LispObject."
          'CHARACTER)
         ((stringp form)
          'STRING)
+        ((arrayp form)
+         (type-of form))
         ((variable-p form)
          (cond ((neq (variable-declared-type form) :none)
                 (variable-declared-type form))
@@ -7598,10 +7595,18 @@ representation, based on the derived type of the LispObject."
                         (t
                          t))))))
         ((symbolp form)
-         (let ((variable (find-visible-variable form)))
-           (if variable
-               (derive-type variable)
-               t)))
+         (cond ((keywordp form)
+                'SYMBOL)
+               ((eq form t)
+                t)
+               ((and (special-variable-p form)
+                     (constantp form))
+                (derive-type (symbol-value form)))
+               (t
+                (let ((variable (find-visible-variable form)))
+                  (if variable
+                      (derive-type variable)
+                      t)))))
         (t
          t)))
 
