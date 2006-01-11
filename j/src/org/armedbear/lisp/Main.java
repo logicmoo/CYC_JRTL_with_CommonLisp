@@ -1,8 +1,8 @@
 /*
  * Main.java
  *
- * Copyright (C) 2002-2005 Peter Graves
- * $Id: Main.java,v 1.6 2005-09-28 15:05:33 piso Exp $
+ * Copyright (C) 2002-2006 Peter Graves
+ * $Id: Main.java,v 1.7 2006-01-11 13:44:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,12 +23,12 @@ package org.armedbear.lisp;
 
 public final class Main
 {
-    public static final long startTimeMillis = System.currentTimeMillis();
+  public static final long startTimeMillis = System.currentTimeMillis();
 
-    public static void main(String[] args)
-    {
-        Interpreter interpreter = Interpreter.createDefaultInstance(args);
-        if (interpreter != null)
-            interpreter.run();
-    }
+  public static void main(String[] args)
+  {
+    Interpreter interpreter = Interpreter.createDefaultInstance(args);
+    if (interpreter != null)
+      interpreter.run();
+  }
 }
