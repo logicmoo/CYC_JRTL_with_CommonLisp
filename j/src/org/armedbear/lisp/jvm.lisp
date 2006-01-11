@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.750 2006-01-10 22:19:08 piso Exp $
+;;; $Id: jvm.lisp,v 1.751 2006-01-11 02:17:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6579,7 +6579,8 @@ representation, based on the derived type of the LispObject."
                 (compile-form arg2 'stack :long)
                 (maybe-emit-clear-values arg1 arg2)
                 (emit 'lor)
-                (convert-long representation))
+                (convert-long representation)
+                (emit-move-from-stack target representation))
                ((fixnum-type-p type2)
                 (compile-form arg1 'stack nil)
                 (compile-form arg2 'stack :int)
