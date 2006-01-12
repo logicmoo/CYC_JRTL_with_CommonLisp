@@ -1,8 +1,8 @@
 /*
  * EqualpHashTable.java
  *
- * Copyright (C) 2004-2005 Peter Graves
- * $Id: EqualpHashTable.java,v 1.8 2006-01-10 11:17:52 piso Exp $
+ * Copyright (C) 2004-2006 Peter Graves
+ * $Id: EqualpHashTable.java,v 1.9 2006-01-12 03:52:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -60,7 +60,7 @@ public final class EqualpHashTable extends HashTable
     HashEntry e = buckets[index];
     while (e != null)
       {
-        if (key.equals(e.key))
+        if (key.equalp(e.key))
           {
             e.value = value;
             return;
@@ -86,7 +86,7 @@ public final class EqualpHashTable extends HashTable
     HashEntry last = null;
     while (e != null)
       {
-        if (key.equals(e.key))
+        if (key.equalp(e.key))
           {
             if (last == null)
               buckets[index] = e.next;
