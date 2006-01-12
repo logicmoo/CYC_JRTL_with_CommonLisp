@@ -1,8 +1,8 @@
 /*
  * Java.java
  *
- * Copyright (C) 2002-2005 Peter Graves, Andras Simon
- * $Id: Java.java,v 1.70 2005-12-05 01:41:18 asimon Exp $
+ * Copyright (C) 2002-2006 Peter Graves, Andras Simon
+ * $Id: Java.java,v 1.71 2006-01-12 03:03:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -559,8 +559,7 @@ public final class Java extends Lisp
         {
             if (args.length < 2)
                 signal(new WrongNumberOfArgumentsException(this));
-            Object result = jcall(args);
-            return (result != null) ? new JavaObject(result) : NIL;
+            return new JavaObject(jcall(args));
         }
     };
 
