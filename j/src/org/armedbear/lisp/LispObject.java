@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: LispObject.java,v 1.163 2006-01-10 19:43:27 piso Exp $
+ * $Id: LispObject.java,v 1.164 2006-01-12 03:53:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,7 +85,7 @@ public class LispObject extends Lisp
 
   public Object javaInstance() throws ConditionThrowable
   {
-    return signal(new TypeError("The value " + writeToString() +
+    return signal(new LispError("The value " + writeToString() +
                                 " is not of primitive type."));
   }
 
@@ -93,7 +93,7 @@ public class LispObject extends Lisp
   {
     if (c == LispObject.class)
       return this;
-    return signal(new TypeError("The value " + writeToString() +
+    return signal(new LispError("The value " + writeToString() +
                                 " is not of primitive type."));
   }
 
