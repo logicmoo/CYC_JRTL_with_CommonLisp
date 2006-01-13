@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: precompiler.lisp,v 1.150 2006-01-10 05:02:55 piso Exp $
+;;; $Id: precompiler.lisp,v 1.151 2006-01-13 05:55:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -103,16 +103,25 @@
 (defun expand-inline (form expansion)
 ;;   (format t "expand-inline form = ~S~%" form)
 ;;   (format t "expand-inline expansion = ~S~%" expansion)
-  (let ((args (cdr form))
-        (vars (cadr expansion))
-        (varlist ())
-        new-form)
+  (let* ((op (car form))
+         (proclaimed-ftype (proclaimed-ftype op))
+         (args (cdr form))
+         (vars (cadr expansion))
+         (varlist ())
+         new-form)
+;;     (format t "op = ~S proclaimed-ftype = ~S~%" op (proclaimed-ftype op))
     (do ((vars vars (cdr vars))
          (args args (cdr args)))
         ((null vars))
       (push (list (car vars) (car args)) varlist))
-    (setf varlist (nreverse varlist))
-    (setf new-form (list* 'LET varlist (copy-tree (cddr expansion))))
+    (setf new-form (list* 'LET (nreverse varlist)
+                          (copy-tree (cddr expansion))))
+    (when proclaimed-ftype
+      (let ((result-type (ftype-result-type proclaimed-ftype)))
+        (when (and result-type
+                   (neq result-type t)
+                   (neq result-type '*))
+          (setf new-form (list 'TRULY-THE result-type new-form)))))
 ;;     (format t "expand-inline new form = ~S~%" new-form)
     new-form))
 
