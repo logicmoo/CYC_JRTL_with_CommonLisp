@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005-2006 Peter Graves
-;;; $Id: compiler-types.lisp,v 1.24 2006-01-10 22:18:01 piso Exp $
+;;; $Id: compiler-types.lisp,v 1.25 2006-01-13 21:52:03 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -184,13 +184,24 @@
         (t
          (subtypep compiler-type typespec))))
 
-(defvar *function-result-types* (make-hash-table :test 'equal))
+;; FIXME This should go somewhere else!
+(defmacro defconst (name value)
+  `(defconstant ,name
+     (if (boundp ',name)
+         (symbol-value ',name)
+         ,value)))
+
+(declaim (type hash-table *function-result-types*))
+(defconst *function-result-types* (make-hash-table :test 'equal))
 
 (defun function-result-type (name)
-  (gethash1 name (the hash-table *function-result-types*)))
+  (declare (optimize speed))
+  (gethash1 name *function-result-types*))
 
+(declaim (inline set-function-result-type))
 (defun set-function-result-type (name result-type)
-  (setf (gethash name (the hash-table *function-result-types*)) result-type))
+  (declare (optimize speed))
+  (setf (gethash name *function-result-types*) result-type))
 
 (defun %defknown (name-or-names argument-types result-type)
   (declare (ignore argument-types))
