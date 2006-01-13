@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Primitives.java,v 1.866 2006-01-09 03:39:00 piso Exp $
+ * $Id: Primitives.java,v 1.867 2006-01-13 21:51:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1802,16 +1802,31 @@ public final class Primitives extends Lisp
     {
       public LispObject execute(LispObject arg) throws ConditionThrowable
       {
-        Symbol symbol = checkSymbol(arg);
+        final Symbol symbol;
+        try
+          {
+            symbol = (Symbol) arg;
+          }
+        catch (ClassCastException e)
+          {
+            return signalTypeError(arg, Symbol.SYMBOL);
+          }
         symbol.setSpecial(true);
         return symbol;
       }
       public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
       {
-        Symbol symbol = checkSymbol(first);
-        symbol.setSpecial(true);
-        symbol.setSymbolValue(second);
+        final Symbol symbol;
+        try
+          {
+            symbol = (Symbol) first;
+          }
+        catch (ClassCastException e)
+          {
+            return signalTypeError(first, Symbol.SYMBOL);
+          }
+        symbol.initializeSpecial(second);
         return symbol;
       }
     };
@@ -1824,17 +1839,23 @@ public final class Primitives extends Lisp
                                 LispObject third)
         throws ConditionThrowable
       {
-        Symbol symbol = checkSymbol(first);
+        final Symbol symbol;
+        try
+          {
+            symbol = (Symbol) first;
+          }
+        catch (ClassCastException e)
+          {
+            return signalTypeError(first, Symbol.SYMBOL);
+          }
         if (third != NIL)
           {
             if (third instanceof AbstractString)
               symbol.setDocumentation(Symbol.VARIABLE, third);
             else
-              signalTypeError(third, Symbol.STRING);
+              return signalTypeError(third, Symbol.STRING);
           }
-        symbol.setSymbolValue(second);
-        symbol.setSpecial(true);
-        symbol.setConstant(true);
+        symbol.initializeConstant(second);
         return symbol;
       }
     };
