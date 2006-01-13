@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.754 2006-01-12 19:08:00 piso Exp $
+;;; $Id: jvm.lisp,v 1.755 2006-01-13 13:01:50 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -318,6 +318,7 @@
 (defstruct local-function
   name
   compiland
+  inline-expansion
   function
   class-file
   variable)
@@ -743,11 +744,15 @@
                (local-function (make-local-function :name name
                                                     :compiland compiland)))
           (multiple-value-bind (body decls) (parse-body body)
-            (setf (compiland-lambda-expression compiland)
-                  `(lambda ,lambda-list ,@decls (block ,name ,@body)))
-            (let ((*visible-variables* *visible-variables*)
-                  (*local-functions* *local-functions*)
-                  (*current-compiland* compiland))
+            (let* ((block-name (fdefinition-block-name name))
+                   (lambda-expression
+                    `(lambda ,lambda-list ,@decls (block ,block-name ,@body)))
+                   (*visible-variables* *visible-variables*)
+                   (*local-functions* *local-functions*)
+                   (*current-compiland* compiland))
+              (setf (compiland-lambda-expression compiland) lambda-expression)
+              (setf (local-function-inline-expansion local-function)
+                    (generate-inline-expansion block-name lambda-list body))
               (p1-compiland compiland)))
           (when *closure-variables*
             (let ((variable (make-variable :name (gensym))))
@@ -761,7 +766,13 @@
       (let ((variable (local-function-variable local-function)))
         (when variable
           (push variable *visible-variables*))))
-    (list* (car form) local-functions (p1-body (cddr form)))))
+    (let ((*speed* *speed*)
+          (*safety* *safety*)
+          (*debug* *debug*)
+          (*explain* *explain*)
+          (*inline-declarations* *inline-declarations*))
+      (process-optimization-declarations (cddr form))
+      (list* (car form) local-functions (p1-body (cddr form))))))
 
 (defun p1-labels (form)
   (incf (compiland-children *current-compiland*) (length (cadr form)))
@@ -1070,7 +1081,16 @@
   (let* ((op (car form))
          (local-function (find-local-function op)))
     (cond (local-function
-           (dformat t "p1 local call to ~S~%" op)
+;;            (format t "p1 local call to ~S~%" op)
+;;            (format t "inline-p = ~S~%" (inline-p op))
+
+           (when (and *enable-inline-expansion* (inline-p op))
+             (let ((expansion (local-function-inline-expansion local-function)))
+               (when expansion
+                 (let ((explain *explain*))
+                   (when (and explain (memq :calls explain))
+                     (format t ";   inlining call to local function ~S~%" op)))
+                 (return-from p1-function-call (p1 (expand-inline form expansion))))))
 
            ;; FIXME
            (dformat t "local function assumed not single-valued~%")
