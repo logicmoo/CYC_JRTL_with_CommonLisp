@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: precompiler.lisp,v 1.152 2006-01-13 13:01:11 piso Exp $
+;;; $Id: precompiler.lisp,v 1.153 2006-01-14 13:28:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -99,14 +99,6 @@
     (if entry
         (eq (cdr entry) 'NOTINLINE)
         (and (symbolp name) (eq (get name '%inline) 'NOTINLINE)))))
-
-(defun inline-expansion (name)
-  (get-function-info-value name :inline-expansion))
-
-(defun set-inline-expansion (name expansion)
-  (set-function-info-value name :inline-expansion expansion))
-
-(defsetf inline-expansion set-inline-expansion)
 
 (defun expand-inline (form expansion)
 ;;   (format t "expand-inline form = ~S~%" form)
@@ -615,12 +607,19 @@
 
 (defun precompile-lambda (form)
   (setf form (maybe-rewrite-lambda form))
-  (list* 'LAMBDA (cadr form) (mapcar #'precompile1 (cddr form))))
+  (let ((body (cddr form))
+        (*inline-declarations* *inline-declarations*))
+    (process-optimization-declarations body)
+    (list* 'LAMBDA (cadr form) (mapcar #'precompile1 body))))
 
 (defun precompile-named-lambda (form)
   (let ((lambda-form (list* 'LAMBDA (caddr form) (cdddr form))))
     (setf lambda-form (maybe-rewrite-lambda lambda-form))
-    (list* 'NAMED-LAMBDA (cadr form) (cadr lambda-form) (mapcar #'precompile1 (cddr lambda-form)))))
+    (let ((body (cddr lambda-form))
+          (*inline-declarations* *inline-declarations*))
+      (process-optimization-declarations body)
+      (list* 'NAMED-LAMBDA (cadr form) (cadr lambda-form)
+             (mapcar #'precompile1 body)))))
 
 (defun precompile-defun (form)
   (if *in-jvm-compile*

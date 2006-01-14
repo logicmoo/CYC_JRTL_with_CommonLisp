@@ -1,7 +1,7 @@
 ;;; proclaim.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: proclaim.lisp,v 1.11 2006-01-10 19:48:57 piso Exp $
+;;; $Id: proclaim.lisp,v 1.12 2006-01-14 13:27:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -106,13 +106,22 @@
 (defun proclaimed-type (name)
   (get name 'proclaimed-type))
 
-(defvar *proclaimed-ftypes* (make-hash-table :test 'equal))
+(declaim (type hash-table *proclaimed-ftypes*))
+(defconst *proclaimed-ftypes* (make-hash-table :test 'equal))
+
+(declaim (inline proclaim-ftype-1))
+(defun proclaim-ftype-1 (ftype name)
+  (declare (optimize speed))
+  (if (symbolp name)
+      (setf (get name 'proclaimed-ftype) ftype)
+      (setf (gethash name *proclaimed-ftypes*) ftype)))
+(declaim (notinline proclaim-ftype-1))
 
 (defun proclaim-ftype (ftype &rest names)
+  (declare (optimize speed))
+  (declare (inline proclaim-ftype-1))
   (dolist (name names)
-    (if (symbolp name)
-        (setf (get name 'proclaimed-ftype) ftype)
-        (setf (gethash name (the hash-table *proclaimed-ftypes*)) ftype))))
+    (proclaim-ftype-1 ftype name)))
 
 (defun proclaimed-ftype (name)
   (if (symbolp name)

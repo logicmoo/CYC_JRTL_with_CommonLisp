@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005-2006 Peter Graves
-;;; $Id: compiler-types.lisp,v 1.25 2006-01-13 21:52:03 piso Exp $
+;;; $Id: compiler-types.lisp,v 1.26 2006-01-14 13:26:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -184,32 +184,29 @@
         (t
          (subtypep compiler-type typespec))))
 
-;; FIXME This should go somewhere else!
-(defmacro defconst (name value)
-  `(defconstant ,name
-     (if (boundp ',name)
-         (symbol-value ',name)
-         ,value)))
-
 (declaim (type hash-table *function-result-types*))
 (defconst *function-result-types* (make-hash-table :test 'equal))
 
 (defun function-result-type (name)
-  (declare (optimize speed))
-  (gethash1 name *function-result-types*))
+  (if (symbolp name)
+      (get name 'function-result-type)
+      (gethash1 name *function-result-types*)))
 
-(declaim (inline set-function-result-type))
 (defun set-function-result-type (name result-type)
-  (declare (optimize speed))
-  (setf (gethash name *function-result-types*) result-type))
+  (if (symbolp name)
+      (setf (get name 'function-result-type) result-type)
+      (setf (gethash name *function-result-types*) result-type)))
 
 (defun %defknown (name-or-names argument-types result-type)
-  (declare (ignore argument-types))
-  (let ((type (make-compiler-type result-type)))
-    (if (or (symbolp name-or-names) (setf-function-name-p name-or-names))
-        (set-function-result-type name-or-names type)
-        (dolist (name name-or-names)
-          (set-function-result-type name type))))
+  (let ((ftype `(function ,argument-types ,result-type))
+        (result-type (make-compiler-type result-type)))
+    (cond ((or (symbolp name-or-names) (setf-function-name-p name-or-names))
+           (proclaim-ftype-1 ftype name-or-names)
+           (set-function-result-type name-or-names result-type))
+          (t
+           (proclaim-ftype ftype name-or-names)
+           (dolist (name name-or-names)
+             (set-function-result-type name result-type)))))
   name-or-names)
 
 (defmacro defknown (name-or-names argument-types result-type)
