@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Primitives.java,v 1.867 2006-01-13 21:51:36 piso Exp $
+ * $Id: Primitives.java,v 1.868 2006-01-14 12:55:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1785,13 +1785,20 @@ public final class Primitives extends Lisp
                                 LispObject third)
         throws ConditionThrowable
       {
-        Symbol symbol = checkSymbol(first);
+        final Symbol symbol;
+        try
+          {
+            symbol = (Symbol) first;
+          }
+        catch (ClassCastException e)
+          {
+            return signalTypeError(first, Symbol.SYMBOL);
+          }
         if (third instanceof AbstractString)
           symbol.setDocumentation(Symbol.VARIABLE, third);
         else if (third != NIL)
           signalTypeError(third, Symbol.STRING);
-        symbol.setSymbolValue(second);
-        symbol.setSpecial(true);
+        symbol.initializeSpecial(second);
         return symbol;
       }
     };
