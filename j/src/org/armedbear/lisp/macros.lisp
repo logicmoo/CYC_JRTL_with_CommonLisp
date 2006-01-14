@@ -1,7 +1,7 @@
 ;;; macros.lisp
 ;;;
-;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: macros.lisp,v 1.31 2006-01-09 19:21:42 piso Exp $
+;;; Copyright (C) 2003-2006 Peter Graves
+;;; $Id: macros.lisp,v 1.32 2006-01-14 12:56:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -155,3 +155,9 @@
      ,@(when docp
          `((%set-documentation ',var 'variable ',doc)))
      ',var))
+
+(defmacro defconst (name value)
+  `(defconstant ,name
+     (if (boundp ',name)
+         (symbol-value ',name)
+         ,value)))
