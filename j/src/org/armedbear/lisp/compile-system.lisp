@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-system.lisp,v 1.69 2005-12-30 02:51:13 piso Exp $
+;;; $Id: compile-system.lisp,v 1.70 2006-01-14 13:27:11 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -156,6 +156,7 @@
                                      "find-all-symbols.lisp"
                                      "gentemp.lisp"
                                      "gray-streams.lisp"
+                                     "inline.lisp"
                                      "inspect.lisp"
                                      ;;"j.lisp"
                                      "java.lisp"
