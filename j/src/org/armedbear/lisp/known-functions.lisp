@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.51 2006-01-09 12:00:17 piso Exp $
+;;; $Id: known-functions.lisp,v 1.52 2006-01-14 13:29:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -431,7 +431,10 @@
              sys:gf-required-args
              sys:cache-emf
              sys:get-cached-emf
-             ext:autoloadp)
+             ext:autoloadp
+             sys::proclaim-ftype-1
+             sys::proclaim-ftype
+             )
   * t)
 
 (defknown make-string * simple-string)
