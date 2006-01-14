@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.240 2006-01-09 19:22:08 piso Exp $
+;;; $Id: boot.lisp,v 1.241 2006-01-14 12:53:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -250,6 +250,7 @@
 (defun sys::%compile (name definition)
   (values (if name name definition) nil nil))
 
+(load-system-file "inline")
 (load-system-file "proclaim")
 (load-system-file "arrays")
 (load-system-file "compiler-macro")
