@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.756 2006-01-16 13:58:09 piso Exp $
+;;; $Id: jvm.lisp,v 1.757 2006-01-16 22:48:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -7440,6 +7440,8 @@ representation, based on the derived type of the LispObject."
 
 (defknown derive-type-minus (t) t)
 (defun derive-type-minus (form)
+  (when (eq (car form) '1-)
+    (setf form (list '- (cadr form) 1)))
   (let ((args (cdr form))
         (result-type t))
     (case (length args)
@@ -7468,6 +7470,8 @@ representation, based on the derived type of the LispObject."
 
 (defknown derive-type-plus (t) t)
 (defun derive-type-plus (form)
+  (when (eq (car form) '1+)
+    (setf form (list '+ (cadr form) 1)))
   (let ((args (cdr form))
         (result-type t))
     (when (= (length args) 2)
@@ -7595,65 +7599,63 @@ representation, based on the derived type of the LispObject."
                                          (ash high1 high2))))))))
     (make-compiler-type result-type)))
 
+(defun derive-type-fixnump (form)
+  (if (fixnum-type-p (derive-compiler-type (cadr form)))
+      '(not null)
+      t))
+
+(defun derive-type-setq (form)
+  (if (= (length form) 3)
+      (derive-compiler-type (third form))
+      t))
+
+(defun derive-type-the/truly-the (form)
+  (make-compiler-type (second form)))
+
+(defun install-derive-type-handler (symbol handler)
+  (setf (get symbol 'derive-type-handler) handler))
+
+(defun initialize-derive-type-handlers ()
+  (dolist (pair '((%LDB           derive-type-%ldb)
+                  (1+             derive-type-plus)
+                  (1-             derive-type-minus)
+                  (AREF           derive-type-aref)
+                  (ASH            derive-type-ash)
+                  (COERCE         derive-type-coerce)
+                  (COPY-SEQ       derive-type-copy-seq)
+                  (FIXNUMP        derive-type-fixnump)
+                  (INTEGER-LENGTH derive-type-integer-length)
+                  (LOGAND         derive-type-logand)
+                  (LOGIOR         derive-type-logior/logxor)
+                  (LOGNOT         derive-type-lognot)
+                  (LOGXOR         derive-type-logior/logxor)
+                  (MAX            derive-type-max)
+                  (MIN            derive-type-min)
+                  (MINUS          derive-type-minus)
+                  (MOD            derive-type-mod)
+                  (PLUS           derive-type-plus)
+                  (READ-CHAR      derive-type-read-char)
+                  (SETQ           derive-type-setq)
+                  (THE            derive-type-the/truly-the)
+                  (TIMES          derive-type-times)
+                  (TRULY-THE      derive-type-the/truly-the)
+                  ))
+    (install-derive-type-handler (%car pair) (%cadr pair))))
+
+(initialize-derive-type-handlers)
+
 (defknown derive-type (t) t)
 (defun derive-type (form)
   (cond ((consp form)
-         (let ((op (%car form)))
-           (case op
-             (ASH
-              (derive-type-ash form))
-             (AREF
-              (derive-type-aref form))
-             ((CHAR SCHAR)
-              'CHARACTER)
-             (COERCE
-              (derive-type-coerce form))
-             (COPY-SEQ
-              (derive-type-copy-seq form))
-             (FIXNUMP
-              (if (fixnum-type-p (derive-compiler-type (cadr form)))
-                  '(not null)
-                  t))
-             (INTEGER-LENGTH
-              (derive-type-integer-length form))
-             (%LDB
-              (derive-type-%ldb form))
-             (LENGTH
-              '(INTEGER 0 #.(1- most-positive-fixnum)))
-             (LOGAND
-              (derive-type-logand form))
-             (LOGNOT
-              (derive-type-lognot form))
-             ((LOGIOR LOGXOR)
-              (derive-type-logior/logxor form))
-             (MOD
-              (derive-type-mod form))
-             (-
-              (derive-type-minus form))
-             (1-
-              (derive-type-minus (list '- (cadr form) 1)))
-             (+
-              (derive-type-plus form))
-             (1+
-              (derive-type-plus (list '+ (cadr form) 1)))
-             (*
-              (derive-type-times form))
-             (MAX
-              (derive-type-max form))
-             (MIN
-              (derive-type-min form))
-             (READ-CHAR
-              (derive-type-read-char form))
-             (SETQ
-              (if (= (length form) 3)
-                  (derive-type (third form))
-                  t))
-             ((THE TRULY-THE)
-              (second form))
-             (t
-              (let ((type (or (function-result-type op)
-                              (ftype-result-type (proclaimed-ftype op)))))
-                (if (eq type '*) t type))))))
+         (let* ((op (%car form))
+                (handler (and (symbolp op) (get op 'derive-type-handler))))
+           (if handler
+               (funcall handler form)
+               (let ((type (or (function-result-type op)
+                               (ftype-result-type (proclaimed-ftype op)))))
+                 (if (eq type '*)
+                     t
+                     type)))))
         ((null form)
          'NULL)
         ((integerp form)
