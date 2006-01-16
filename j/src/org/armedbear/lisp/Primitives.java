@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Primitives.java,v 1.868 2006-01-14 12:55:40 piso Exp $
+ * $Id: Primitives.java,v 1.869 2006-01-16 13:57:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2916,8 +2916,8 @@ public final class Primitives extends Lisp
         while (list1 != NIL && list2 != NIL)
           {
             thread.execute(fun, list1.car(), list2.car());
-            list1 = list1.cdr();
-            list2 = list2.cdr();
+            list1 = ((Cons)list1).cdr;
+            list2 = ((Cons)list2).cdr;
           }
         thread._values = null;
         return result;
