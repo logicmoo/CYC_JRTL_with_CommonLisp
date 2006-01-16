@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.52 2006-01-14 13:29:06 piso Exp $
+;;; $Id: known-functions.lisp,v 1.53 2006-01-16 22:43:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -204,12 +204,15 @@
            zerop)
   * t)
 
+(defknown length (sequence) (integer 0 #.(1- most-positive-fixnum)))
+
 (defknown (deposit-field dpb logand logcount lognor
                          mask-field
                          numerator denominator
                          boole
                          array-dimension
-                         %dpb)
+                         %dpb
+                         ash)
   * integer)
 
 ;; (declaim (ftype (function (t) (integer 0 2147483647)) sxhash))
@@ -340,7 +343,6 @@
              1+ 1-
              car cdr caar cadr cdar cddr cadar caddr cdddr cddddr
              first second third
-             length
              list list*
              macro-function
              compiler-macro-function
@@ -384,7 +386,6 @@
              multiple-value-list push pop
              type-of class-of
              abs
-             ash
              float-radix
              logand logandc1 logandc2 logeqv logior lognand
              lognot logorc1 logorc2 logxor
