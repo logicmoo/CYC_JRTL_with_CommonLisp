@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.755 2006-01-13 13:01:50 piso Exp $
+;;; $Id: jvm.lisp,v 1.756 2006-01-16 13:58:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3928,6 +3928,23 @@ representation, based on the derived type of the LispObject."
                   (return (cdr ,result)))
                 (rplacd ,temp (setf ,temp (list (funcall ,function (car ,list)))))
                 (setf ,list (cdr ,list))))))
+        (t
+         form)))
+
+(define-source-transform mapc (&whole form function &rest lists)
+  (cond ((or (> *debug* *speed*)
+             (> *space* *speed*))
+         form)
+        ((= (length lists) 1)
+         (let ((list (gensym))
+               (result (gensym)))
+           `(let* ((,list ,(car lists))
+                   (,result ,list))
+              (loop
+                (when (null ,list)
+                  (return ,result))
+                (funcall ,function (car ,list))
+                (setf ,list (%cdr ,list))))))
         (t
          form)))
 
