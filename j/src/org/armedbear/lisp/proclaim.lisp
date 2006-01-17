@@ -1,7 +1,7 @@
 ;;; proclaim.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: proclaim.lisp,v 1.12 2006-01-14 13:27:44 piso Exp $
+;;; $Id: proclaim.lisp,v 1.13 2006-01-17 17:55:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -126,7 +126,7 @@
 (defun proclaimed-ftype (name)
   (if (symbolp name)
       (get name 'proclaimed-ftype)
-      (gethash1 name (the hash-table *proclaimed-ftypes*))))
+      (gethash1 name *proclaimed-ftypes*)))
 
 (defun ftype-result-type (ftype)
   (if (atom ftype)

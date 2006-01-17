@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.758 2006-01-17 09:47:36 piso Exp $
+;;; $Id: jvm.lisp,v 1.759 2006-01-17 17:51:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -166,8 +166,8 @@
       (when name
         (let ((result-type
                (or (function-result-type name)
-                  (and (proclaimed-ftype name)
-                       (ftype-result-type (proclaimed-ftype name))))))
+                   (and (proclaimed-ftype name)
+                        (ftype-result-type (proclaimed-ftype name))))))
           (when result-type
             (return-from compiland-single-valued-p
                          (cond ((eq result-type '*)
@@ -1512,11 +1512,11 @@
                  "Symbol")
                 ((equal type +lisp-thread+)
                  "LispThread")
-                ((eql type "C")
+                ((equal type "C")
                  "char")
-                ((eql type "I")
+                ((equal type "I")
                  "int")
-                ((eql type "Z")
+                ((equal type "Z")
                  "boolean")
                 ((null type)
                  "void")
@@ -7269,8 +7269,14 @@ representation, based on the derived type of the LispObject."
       (t
        (compile-function-call form target representation)))))
 
-(defknown derive-type-aref (t) t)
-(defun derive-type-aref (form)
+(defmacro define-derive-type-handler (op lambda-list &body body)
+  (let ((name (intern (concatenate 'string "DERIVE-TYPE-" (symbol-name op)))))
+    `(progn
+       (defknown ,name (t) t)
+       (defun ,name ,lambda-list ,@body)
+       (setf (get ',op 'derive-type-handler) ',name))))
+
+(define-derive-type-handler aref (form)
   (let* ((args (cdr form))
          (array-arg (car args))
          (array-type (normalize-type (derive-type array-arg)))
@@ -7598,62 +7604,65 @@ representation, based on the derived type of the LispObject."
 (defknown derive-type (t) t)
 (defun derive-type (form)
   (cond ((consp form)
-         (let ((op (%car form)))
-           (case op
-             (ASH
-              (derive-type-ash form))
-             (AREF
-              (derive-type-aref form))
-             ((CHAR SCHAR)
-              'CHARACTER)
-             (COERCE
-              (derive-type-coerce form))
-             (COPY-SEQ
-              (derive-type-copy-seq form))
-             (FIXNUMP
-              (if (fixnum-type-p (derive-compiler-type (cadr form)))
-                  '(not null)
-                  t))
-             (INTEGER-LENGTH
-              (derive-type-integer-length form))
-             (%LDB
-              (derive-type-%ldb form))
-             (LENGTH
-              '(INTEGER 0 #.(1- most-positive-fixnum)))
-             (LOGAND
-              (derive-type-logand form))
-             (LOGNOT
-              (derive-type-lognot form))
-             ((LOGIOR LOGXOR)
-              (derive-type-logior/logxor form))
-             (MOD
-              (derive-type-mod form))
-             (-
-              (derive-type-minus form))
-             (1-
-              (derive-type-minus (list '- (cadr form) 1)))
-             (+
-              (derive-type-plus form))
-             (1+
-              (derive-type-plus (list '+ (cadr form) 1)))
-             (*
-              (derive-type-times form))
-             (MAX
-              (derive-type-max form))
-             (MIN
-              (derive-type-min form))
-             (READ-CHAR
-              (derive-type-read-char form))
-             (SETQ
-              (if (= (length form) 3)
-                  (derive-type (third form))
-                  t))
-             ((THE TRULY-THE)
-              (second form))
-             (t
-              (let ((type (or (function-result-type op)
-                              (ftype-result-type (proclaimed-ftype op)))))
-                (if (eq type '*) t type))))))
+         (let* ((op (%car form))
+                (handler (and (symbolp op) (get op 'derive-type-handler))))
+           (if handler
+               (funcall handler form)
+               (case op
+                 (ASH
+                  (derive-type-ash form))
+                 ((CHAR SCHAR)
+                  'CHARACTER)
+                 (COERCE
+                  (derive-type-coerce form))
+                 (COPY-SEQ
+                  (derive-type-copy-seq form))
+                 (FIXNUMP
+                  (if (fixnum-type-p (derive-compiler-type (cadr form)))
+                      '(not null)
+                      t))
+                 (INTEGER-LENGTH
+                  (derive-type-integer-length form))
+                 (%LDB
+                  (derive-type-%ldb form))
+                 (LENGTH
+                  '(INTEGER 0 #.(1- most-positive-fixnum)))
+                 (LOGAND
+                  (derive-type-logand form))
+                 (LOGNOT
+                  (derive-type-lognot form))
+                 ((LOGIOR LOGXOR)
+                  (derive-type-logior/logxor form))
+                 (MOD
+                  (derive-type-mod form))
+                 (-
+                  (derive-type-minus form))
+                 (1-
+                  (derive-type-minus (list '- (cadr form) 1)))
+                 (+
+                  (derive-type-plus form))
+                 (1+
+                  (derive-type-plus (list '+ (cadr form) 1)))
+                 (*
+                  (derive-type-times form))
+                 (MAX
+                  (derive-type-max form))
+                 (MIN
+                  (derive-type-min form))
+                 (READ-CHAR
+                  (derive-type-read-char form))
+                 (SETQ
+                  (if (= (length form) 3)
+                      (derive-type (third form))
+                      t))
+                 ((THE TRULY-THE)
+                  (second form))
+                 (t
+                  (let ((type (or (function-result-type op)
+                                  (ftype-result-type (proclaimed-ftype op)))))
+                    (if (eq type '*)
+                        t
+                        type)))))))
         ((null form)
          'NULL)
         ((integerp form)
