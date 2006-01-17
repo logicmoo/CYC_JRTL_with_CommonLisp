@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005-2006 Peter Graves
-;;; $Id: compiler-types.lisp,v 1.27 2006-01-17 17:50:42 piso Exp $
+;;; $Id: compiler-types.lisp,v 1.28 2006-01-17 22:41:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -21,7 +21,9 @@
 
 (in-package #:system)
 
-(export '(integer-type-low
+(export '(+true-type+
+          +false-type+
+          integer-type-low
           integer-type-high
           integer-type-p
           %make-integer-type
@@ -37,12 +39,19 @@
           function-result-type
           defknown))
 
+(defstruct constant-type value)
+
+(defconst +true-type+ (make-constant-type :value t))
+
+(defconst +false-type+ (make-constant-type :value nil))
+
 (defstruct (integer-type (:constructor %make-integer-type (low high)))
   low
   high)
 
 (defconstant +fixnum-type+  (%make-integer-type most-negative-fixnum
                                                 most-positive-fixnum))
+
 (defconstant +integer-type+ (%make-integer-type nil nil))
 
 (declaim (ftype (function (t) t) make-integer-type))
@@ -119,36 +128,39 @@
 
 (declaim (ftype (function (t) t) make-compiler-type))
 (defun make-compiler-type (typespec)
-  (if (integer-type-p typespec)
-      typespec
-      (let ((type (normalize-type typespec)))
-        (cond ((consp type)
-               (let ((car (%car type)))
-                 (cond ((eq car 'INTEGER)
-                        (make-integer-type type))
-                       ((memq car '(STRING SIMPLE-STRING LIST))
-                        car)
-                       ((memq car '(VECTOR SIMPLE-VECTOR ARRAY SIMPLE-ARRAY))
-                        type)
-                       ((eq car 'OR)
-                        (case (length (cdr type))
-                          (1
-                           (make-compiler-type (second type)))
-                          (2
-                           (make-union-type (make-compiler-type (second type))
-                                            (make-compiler-type (third type))))
+  (cond ((integer-type-p typespec)
+         typespec)
+        ((constant-type-p typespec)
+         typespec)
+        (t
+         (let ((type (normalize-type typespec)))
+           (cond ((consp type)
+                  (let ((car (%car type)))
+                    (cond ((eq car 'INTEGER)
+                           (make-integer-type type))
+                          ((memq car '(STRING SIMPLE-STRING LIST))
+                           car)
+                          ((memq car '(VECTOR SIMPLE-VECTOR ARRAY SIMPLE-ARRAY))
+                           type)
+                          ((eq car 'OR)
+                           (case (length (cdr type))
+                             (1
+                              (make-compiler-type (second type)))
+                             (2
+                              (make-union-type (make-compiler-type (second type))
+                                               (make-compiler-type (third type))))
+                             (t
+                              t)))
+                          ((subtypep type 'FIXNUM)
+                           +fixnum-type+)
                           (t
-                           t)))
-                       ((subtypep type 'FIXNUM)
-                        +fixnum-type+)
-                       (t
-                        t))))
-              ((memq type '(BOOLEAN CHARACTER HASH-TABLE STREAM SYMBOL))
-               type)
-              ((eq type 'INTEGER)
-               (%make-integer-type nil nil))
-              (t
-               t)))))
+                           t))))
+                 ((memq type '(BOOLEAN CHARACTER HASH-TABLE STREAM SYMBOL))
+                  type)
+                 ((eq type 'INTEGER)
+                  (%make-integer-type nil nil))
+                 (t
+                  t))))))
 
 (defun integer-type-subtypep (type1 typespec)
   (if (eq typespec 'INTEGER)

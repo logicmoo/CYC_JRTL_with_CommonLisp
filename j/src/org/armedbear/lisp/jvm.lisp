@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.759 2006-01-17 17:51:44 piso Exp $
+;;; $Id: jvm.lisp,v 1.760 2006-01-17 22:42:57 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -4866,7 +4866,7 @@ representation, based on the derived type of the LispObject."
            (compile-form alternate target representation))
           ((numberp test)
            (compile-form consequent target representation))
-          ((equal (derive-type test) '(not null))
+          ((equal (derive-compiler-type test) +true-type+)
            (compile-form test nil nil) ; for effect
            (maybe-emit-clear-values test)
            (compile-form consequent target representation))
@@ -5643,21 +5643,26 @@ representation, based on the derived type of the LispObject."
   (unless (check-arg-count form 1)
     (compile-function-call form target representation)
     (return-from p2-instanceof-predicate))
-  (compile-form (%cadr form) 'stack nil)
-  (maybe-emit-clear-values (%cadr form))
-  (emit 'instanceof java-class)
-  (case representation
-    (:boolean)
-    (t
-     (let ((LABEL1 (gensym))
-           (LABEL2 (gensym)))
-       (emit 'ifeq LABEL1)
-       (emit-push-t)
-       (emit 'goto LABEL2)
-       (label LABEL1)
-       (emit-push-nil)
-       (label LABEL2)
-       (emit-move-from-stack target representation)))))
+  (let ((arg (%cadr form)))
+    (cond ((null target)
+           (compile-form arg nil nil) ; for effect
+           (maybe-emit-clear-values arg))
+          (t
+           (compile-form arg 'stack nil)
+           (maybe-emit-clear-values arg)
+           (emit 'instanceof java-class)
+           (case representation
+             (:boolean)
+             (t
+              (let ((LABEL1 (gensym))
+                    (LABEL2 (gensym)))
+                (emit 'ifeq LABEL1)
+                (emit-push-t)
+                (emit 'goto LABEL2)
+                (label LABEL1)
+                (emit-push-nil)
+                (label LABEL2)
+                (emit-move-from-stack target representation))))))))
 
 (defun p2-bit-vector-p (form target representation)
   (p2-instanceof-predicate form target representation +lisp-abstract-bit-vector-class+))
@@ -7291,6 +7296,11 @@ representation, based on the derived type of the LispObject."
            (setf result-type 'CHARACTER)))
     result-type))
 
+(define-derive-type-handler fixnump (form)
+   (if (fixnum-type-p (derive-compiler-type (cadr form)))
+       +true-type+
+       'BOOLEAN))
+
 (defknown derive-type-logior/logxor (t) t)
 (defun derive-type-logior/logxor (form)
   (let ((op (car form))
@@ -7617,10 +7627,6 @@ representation, based on the derived type of the LispObject."
                   (derive-type-coerce form))
                  (COPY-SEQ
                   (derive-type-copy-seq form))
-                 (FIXNUMP
-                  (if (fixnum-type-p (derive-compiler-type (cadr form)))
-                      '(not null)
-                      t))
                  (INTEGER-LENGTH
                   (derive-type-integer-length form))
                  (%LDB
