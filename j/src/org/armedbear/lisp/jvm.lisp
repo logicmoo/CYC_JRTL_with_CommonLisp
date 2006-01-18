@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.760 2006-01-17 22:42:57 piso Exp $
+;;; $Id: jvm.lisp,v 1.761 2006-01-18 03:10:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -7301,6 +7301,11 @@ representation, based on the derived type of the LispObject."
        +true-type+
        'BOOLEAN))
 
+(define-derive-type-handler setq (form)
+  (if (= (length form) 3)
+      (derive-compiler-type (third form))
+      t))
+
 (defknown derive-type-logior/logxor (t) t)
 (defun derive-type-logior/logxor (form)
   (let ((op (car form))
@@ -7657,10 +7662,10 @@ representation, based on the derived type of the LispObject."
                   (derive-type-min form))
                  (READ-CHAR
                   (derive-type-read-char form))
-                 (SETQ
-                  (if (= (length form) 3)
-                      (derive-type (third form))
-                      t))
+;;                  (SETQ
+;;                   (if (= (length form) 3)
+;;                       (derive-type (third form))
+;;                       t))
                  ((THE TRULY-THE)
                   (second form))
                  (t
@@ -7713,6 +7718,21 @@ representation, based on the derived type of the LispObject."
                   (if variable
                       (derive-type variable)
                       t)))))
+        ((block-node-p form)
+         (let ((result t))
+           (when (equal (block-name form) '(LET))
+;;              (format t "derive-type LET/LET* node case~%")
+             (let* ((forms (cddr (block-form form)))
+                    (last-form (car (last forms)))
+                    (derived-type (derive-compiler-type last-form)))
+;;                (unless (eq derived-type t)
+;;                  (let ((*print-structure* nil))
+;;                    (format t "last-form = ~S~%" last-form))
+;;                  (format t "derived-type = ~S~%" derived-type)
+                 (setf result derived-type)
+;;                  )
+               ))
+           result))
         (t
          t)))
 
