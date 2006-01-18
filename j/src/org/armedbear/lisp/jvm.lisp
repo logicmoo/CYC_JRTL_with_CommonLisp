@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.761 2006-01-18 03:10:46 piso Exp $
+;;; $Id: jvm.lisp,v 1.762 2006-01-18 15:23:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -153,7 +153,7 @@
   arity ; NIL if the number of args can vary.
   p1-result
   parent
-  (children 0) ; Number of local functions defined with FLET or LABELS.
+  (children 0 :type fixnum) ; Number of local functions defined with FLET or LABELS.
   argument-register
   closure-register
   class-file ; class-file object
@@ -2947,6 +2947,7 @@ representation, based on the derived type of the LispObject."
         (setf (gethash symbol ht) g)))
     g))
 
+(defknown declare-function (symbol) string)
 (defun declare-function (symbol)
   (declare (type symbol symbol))
   (let* ((ht *declared-functions*)
@@ -2971,10 +2972,11 @@ representation, based on the derived type of the LispObject."
         (emit-invokevirtual +lisp-symbol-class+ "getSymbolFunctionOrDie"
                             nil +lisp-object+)
         (emit 'putstatic *this-class* f +lisp-object+)
-        (setq *static-code* *code*)
+        (setf *static-code* *code*)
         (setf (gethash symbol ht) f)))
     f))
 
+(defknown declare-setf-function (name) string)
 (defun declare-setf-function (name)
   (let* ((ht *declared-functions*)
          (f (gethash1 name ht)))
@@ -3000,9 +3002,27 @@ representation, based on the derived type of the LispObject."
           (emit-invokevirtual +lisp-symbol-class+ "getSymbolSetfFunctionOrDie"
                               nil +lisp-object+)
           (emit 'putstatic *this-class* f +lisp-object+)
-          (setq *static-code* *code*)
+          (setf *static-code* *code*)
           (setf (gethash name ht) f))))
     f))
+
+(defknown declare-local-function (local-function) string)
+(defun declare-local-function (local-function)
+  (let* ((ht *declared-functions*)
+         (g (gethash1 local-function ht)))
+    (declare (type hash-table ht))
+    (unless g
+      (setf g (symbol-name (gensym)))
+      (let* ((pathname (class-file-pathname (local-function-class-file local-function)))
+             (*code* *static-code*))
+        (declare-field g +lisp-object+)
+        (emit 'ldc (pool-string (file-namestring pathname)))
+        (emit-invokestatic +lisp-class+ "loadCompiledFunction"
+                           (list +java-string+) +lisp-object+)
+        (emit 'putstatic *this-class* g +lisp-object+)
+        (setf *static-code* *code*)
+        (setf (gethash local-function ht) g)))
+    g))
 
 (defknown declare-fixnum (fixnum) string)
 (defun declare-fixnum (n)
@@ -3185,18 +3205,6 @@ representation, based on the derived type of the LispObject."
                        (list +java-string+) +lisp-object+)
     (emit-invokestatic +lisp-class+ "coerceToFunction"
                        (lisp-object-arg-types 1) +lisp-object+)
-    (emit 'putstatic *this-class* g +lisp-object+)
-    (setf *static-code* *code*)
-    g))
-
-(defun declare-local-function (local-function)
-  (let* ((g (symbol-name (gensym)))
-         (pathname (class-file-pathname (local-function-class-file local-function)))
-         (*code* *static-code*))
-    (declare-field g +lisp-object+)
-    (emit 'ldc (pool-string (file-namestring pathname)))
-    (emit-invokestatic +lisp-class+ "loadCompiledFunction"
-                       (list +java-string+) +lisp-object+)
     (emit 'putstatic *this-class* g +lisp-object+)
     (setf *static-code* *code*)
     g))
@@ -4010,7 +4018,7 @@ representation, based on the derived type of the LispObject."
       (emit 'aload register)
       (emit 'aastore))))
 
-(declaim (ftype (function (t t t) t) compile-local-function-call))
+(defknown compile-local-function-call (t t t) t)
 (defun compile-local-function-call (form target representation)
   (let* ((compiland *current-compiland*)
          (op (car form))
@@ -9826,6 +9834,41 @@ representation, based on the derived type of the LispObject."
       (emit-invokevirtual *this-class* "_execute" arg-types return-type))
     (emit-move-from-stack target representation)))
 
+(defknown p2-compiland-process-type-declarations (list) t)
+(defun p2-compiland-process-type-declarations (body)
+  (flet ((process-declaration (name type)
+           (let ((variable (find-visible-variable name)))
+             (when variable
+               (setf (variable-declared-type variable) type)
+                 (when (and (variable-register variable)
+                            (not (variable-special-p variable))
+                            (not (variable-used-non-locally-p variable))
+                            (zerop (compiland-children *current-compiland*)))
+                   (cond ((fixnum-type-p (variable-declared-type variable))
+                          (setf (variable-representation variable) :int))
+                         ((eq (variable-declared-type variable) 'CHARACTER)
+                          (setf (variable-representation variable) :char))))))))
+    (dolist (subform body)
+      (unless (and (consp subform) (eq (%car subform) 'DECLARE))
+        (return))
+      (let ((decls (%cdr subform)))
+        (dolist (decl decls)
+          (case (car decl)
+            (TYPE
+             (let ((type (make-compiler-type (cadr decl))))
+               (dolist (name (cddr decl))
+                 (process-declaration name type))))
+            ((IGNORE IGNORABLE)
+             (process-ignore/ignorable (%car decl) (%cdr decl) *visible-variables*))
+            ((DYNAMIC-EXTENT FTYPE INLINE NOTINLINE OPTIMIZE SPECIAL)
+             ;; Nothing to do here.
+             )
+            (t
+             (let ((type (make-compiler-type (car decl))))
+               (dolist (name (cdr decl))
+                 (process-declaration name type)))))))))
+  t)
+
 (defknown p2-compiland (t) t)
 (defun p2-compiland (compiland)
 ;;   (format t "p2-compiland name = ~S~%" (compiland-name compiland))
@@ -9947,48 +9990,7 @@ representation, based on the derived type of the LispObject."
                 (t
                  (setf (variable-special-p variable) t))))))
 
-    ;; Process type declarations.
-    (dolist (subform body)
-      (unless (and (consp subform) (eq (%car subform) 'DECLARE))
-        (return))
-      (let ((decls (%cdr subform)))
-        (dolist (decl decls)
-          (case (car decl)
-            (TYPE
-             (dolist (name (cddr decl))
-               (let ((variable (find-visible-variable name)))
-                 (when variable
-                   (setf (variable-declared-type variable)
-                         (make-compiler-type (cadr decl)))
-                   (unless (or ;;*child-p*
-                            (plusp (compiland-children *current-compiland*)))
-                     (when (and (variable-register variable)
-                                (not (variable-special-p variable))
-                                (not (variable-used-non-locally-p variable)))
-                       (cond ((fixnum-type-p (variable-declared-type variable))
-                              (setf (variable-representation variable) :int))
-                             ((eq (variable-declared-type variable) 'CHARACTER)
-                              (setf (variable-representation variable) :char)))))))))
-            ((IGNORE IGNORABLE)
-             (process-ignore/ignorable (%car decl) (%cdr decl) *visible-variables*))
-            ((DYNAMIC-EXTENT FTYPE INLINE NOTINLINE OPTIMIZE SPECIAL)
-             ;; Nothing to do here.
-             )
-            (t
-             (dolist (name (cdr decl))
-               (let ((variable (find-visible-variable name)))
-                 (when variable
-                   (setf (variable-declared-type variable)
-                         (make-compiler-type (car decl)))
-                   (unless (or ;;*child-p*
-                            (plusp (compiland-children *current-compiland*)))
-                     (when (and (variable-register variable)
-                                (not (variable-special-p variable))
-                                (not (variable-used-non-locally-p variable)))
-                       (cond ((fixnum-type-p (variable-declared-type variable))
-                              (setf (variable-representation variable) :int))
-                             ((eq (variable-declared-type variable) 'CHARACTER)
-                              (setf (variable-representation variable) :char)))))))))))))
+    (p2-compiland-process-type-declarations body)
 
     (allocate-register) ;; register 0: "this" pointer
     (when (and *closure-variables* *child-p*)
