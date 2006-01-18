@@ -2,7 +2,7 @@
  * last.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: last.java,v 1.8 2006-01-18 19:11:43 piso Exp $
+ * $Id: last.java,v 1.9 2006-01-18 19:25:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,18 +31,20 @@ public final class last extends Primitive
 
   public LispObject execute(LispObject arg) throws ConditionThrowable
   {
-    LispObject list = checkList(arg);
-    if (list == NIL)
+    if (arg == NIL)
       return NIL;
-    LispObject result = list;
-    int n = 1;
-    while (list instanceof Cons)
+    if (arg instanceof Cons)
       {
-        list = list.cdr();
-        if (n-- <= 0)
-          result = result.cdr();
+        while (true)
+          {
+            LispObject cdr = ((Cons)arg).cdr;
+            if (!(cdr instanceof Cons))
+              return arg;
+            arg = cdr;
+          }
       }
-    return result;
+    else
+      return signalTypeError(arg, Symbol.LIST);
   }
 
   public LispObject execute(LispObject first, LispObject second)
