@@ -2,7 +2,7 @@
  * Main.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Main.java,v 1.7 2006-01-11 13:44:04 piso Exp $
+ * $Id: Main.java,v 1.8 2006-01-19 19:42:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,10 +25,19 @@ public final class Main
 {
   public static final long startTimeMillis = System.currentTimeMillis();
 
-  public static void main(String[] args)
+  public static void main(final String[] args)
   {
-    Interpreter interpreter = Interpreter.createDefaultInstance(args);
-    if (interpreter != null)
-      interpreter.run();
+    // Run the interpreter in a secondary thread so we can control the stack
+    // size.
+    Runnable r = new Runnable()
+      {
+        public void run()
+        {
+          Interpreter interpreter = Interpreter.createDefaultInstance(args);
+          if (interpreter != null)
+          interpreter.run();
+        }
+      };
+    new Thread(null, r, "interpreter", 4194304L).start();
   }
 }
