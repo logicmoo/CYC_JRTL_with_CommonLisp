@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Lisp.java,v 1.436 2006-01-18 03:19:19 piso Exp $
+ * $Id: Lisp.java,v 1.437 2006-01-19 20:59:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -452,42 +452,42 @@ public abstract class Lisp
     if (args == NIL)
       return thread.execute(function);
     LispObject first = eval(args.car(), env, thread);
-    args = args.cdr();
+    args = ((Cons)args).cdr;
     if (args == NIL)
       {
         thread._values = null;
         return thread.execute(function, first);
       }
     LispObject second = eval(args.car(), env, thread);
-    args = args.cdr();
+    args = ((Cons)args).cdr;
     if (args == NIL)
       {
         thread._values = null;
         return thread.execute(function, first, second);
       }
     LispObject third = eval(args.car(), env, thread);
-    args = args.cdr();
+    args = ((Cons)args).cdr;
     if (args == NIL)
       {
         thread._values = null;
         return thread.execute(function, first, second, third);
       }
     LispObject fourth = eval(args.car(), env, thread);
-    args = args.cdr();
+    args = ((Cons)args).cdr;
     if (args == NIL)
       {
         thread._values = null;
         return thread.execute(function, first, second, third, fourth);
       }
     LispObject fifth = eval(args.car(), env, thread);
-    args = args.cdr();
+    args = ((Cons)args).cdr;
     if (args == NIL)
       {
         thread._values = null;
         return thread.execute(function, first, second, third, fourth, fifth);
       }
     LispObject sixth = eval(args.car(), env, thread);
-    args = args.cdr();
+    args = ((Cons)args).cdr;
     if (args == NIL)
       {
         thread._values = null;
@@ -495,7 +495,7 @@ public abstract class Lisp
                               sixth);
       }
     LispObject seventh = eval(args.car(), env, thread);
-    args = args.cdr();
+    args = ((Cons)args).cdr;
     if (args == NIL)
       {
         thread._values = null;
@@ -503,7 +503,7 @@ public abstract class Lisp
                               sixth, seventh);
       }
     LispObject eighth = eval(args.car(), env, thread);
-    args = args.cdr();
+    args = ((Cons)args).cdr;
     if (args == NIL)
       {
         thread._values = null;
@@ -538,7 +538,7 @@ public abstract class Lisp
     while (body != NIL)
       {
         result = eval(body.car(), env, thread);
-        body = body.cdr();
+        body = ((Cons)body).cdr;
       }
     return result;
   }
