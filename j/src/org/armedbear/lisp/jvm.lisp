@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.763 2006-01-18 23:35:27 piso Exp $
+;;; $Id: jvm.lisp,v 1.764 2006-01-19 21:00:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5717,63 +5717,68 @@ representation, based on the derived type of the LispObject."
                      (lisp-object-arg-types 1) +lisp-object+)
   (emit-move-from-stack target))
 
-(defun p2-block-node (block target)
+(defun p2-block-node (block target representation)
   (unless (block-node-p block)
     (sys::%format t "type-of block = ~S~%" (type-of block))
     (aver (block-node-p block)))
   (let* ((*blocks* (cons block *blocks*))
          (*register* *register*))
-    (setf (block-target block) target)
-    (when (block-return-p block)
-      (dformat t "p2-block-node lastSpecialBinding~%")
-      (dformat t "*all-variables* = ~S~%" (mapcar #'variable-name *all-variables*))
-      (cond ((some #'variable-special-p *all-variables*)
-             ;; Save the current dynamic environment.
-             (setf (block-environment-register block) (allocate-register))
-             (emit-push-current-thread)
-             (emit 'getfield +lisp-thread-class+ "lastSpecialBinding" +lisp-special-binding+)
-             (emit 'astore (block-environment-register block)))
-            (t
-             (dformat t "no specials~%"))))
-    (setf (block-catch-tag block) (gensym))
-    (let* ((*register* *register*)
-           (BEGIN-BLOCK (gensym))
-           (END-BLOCK (gensym))
-           (BLOCK-EXIT (block-exit block)))
-      (label BEGIN-BLOCK) ; Start of protected range.
-      ;; Implicit PROGN.
-      (compile-progn-body (cddr (block-form block)) target)
-      (label END-BLOCK) ; End of protected range.
-      (emit 'goto BLOCK-EXIT) ; Jump over handler (if any).
-      (when (block-non-local-return-p block)
-        ; We need a handler to catch non-local RETURNs.
-        (let ((HANDLER (gensym))
-              (RETHROW (gensym)))
-          (label HANDLER)
-          ;; The Return object is on the runtime stack. Stack depth is 1.
-          (emit 'dup) ; Stack depth is 2.
-          (emit 'getfield +lisp-return-class+ "tag" +lisp-object+) ; Still 2.
-          (compile-form `',(block-catch-tag block) 'stack nil) ; Tag. Stack depth is 3.
-          ;; If it's not the tag we're looking for...
-          (emit 'if_acmpne RETHROW) ; Stack depth is 1.
-          (emit 'getfield +lisp-return-class+ "result" +lisp-object+)
-          (emit-move-from-stack target) ; Stack depth is 0.
-          (emit 'goto BLOCK-EXIT)
-          (label RETHROW)
-          ;; Not the tag we're looking for.
-          (emit 'athrow)
-          ;; Finally...
-          (push (make-handler :from BEGIN-BLOCK
-                              :to END-BLOCK
-                              :code HANDLER
-                              :catch-type (pool-class +lisp-return-class+))
-                *handlers*)))
-      (label BLOCK-EXIT))
-    (when (block-environment-register block)
-      ;; We saved the dynamic environment above. Restore it now.
-      (emit 'aload *thread*)
-      (emit 'aload (block-environment-register block))
-      (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-special-binding+))))
+    (cond ((block-return-p block)
+           (setf (block-target block) target)
+           (dformat t "p2-block-node lastSpecialBinding~%")
+           (dformat t "*all-variables* = ~S~%" (mapcar #'variable-name *all-variables*))
+           (cond ((some #'variable-special-p *all-variables*)
+                  ;; Save the current dynamic environment.
+                  (setf (block-environment-register block) (allocate-register))
+                  (emit-push-current-thread)
+                  (emit 'getfield +lisp-thread-class+ "lastSpecialBinding" +lisp-special-binding+)
+                  (emit 'astore (block-environment-register block)))
+                 (t
+                  (dformat t "no specials~%")))
+           (setf (block-catch-tag block) (gensym))
+           (let* ((*register* *register*)
+                  (BEGIN-BLOCK (gensym))
+                  (END-BLOCK (gensym))
+                  (BLOCK-EXIT (block-exit block)))
+             (label BEGIN-BLOCK) ; Start of protected range.
+             ;; Implicit PROGN.
+             (compile-progn-body (cddr (block-form block)) target)
+             (label END-BLOCK) ; End of protected range.
+             (emit 'goto BLOCK-EXIT) ; Jump over handler (if any).
+             (when (block-non-local-return-p block)
+               ; We need a handler to catch non-local RETURNs.
+               (let ((HANDLER (gensym))
+                     (RETHROW (gensym)))
+                 (label HANDLER)
+                 ;; The Return object is on the runtime stack. Stack depth is 1.
+                 (emit 'dup) ; Stack depth is 2.
+                 (emit 'getfield +lisp-return-class+ "tag" +lisp-object+) ; Still 2.
+                 (compile-form `',(block-catch-tag block) 'stack nil) ; Tag. Stack depth is 3.
+                 ;; If it's not the tag we're looking for...
+                 (emit 'if_acmpne RETHROW) ; Stack depth is 1.
+                 (emit 'getfield +lisp-return-class+ "result" +lisp-object+)
+                 (emit-move-from-stack target) ; Stack depth is 0.
+                 (emit 'goto BLOCK-EXIT)
+                 (label RETHROW)
+                 ;; Not the tag we're looking for.
+                 (emit 'athrow)
+                 ;; Finally...
+                 (push (make-handler :from BEGIN-BLOCK
+                                     :to END-BLOCK
+                                     :code HANDLER
+                                     :catch-type (pool-class +lisp-return-class+))
+                       *handlers*)))
+             (label BLOCK-EXIT))
+           (when (block-environment-register block)
+             ;; We saved the dynamic environment above. Restore it now.
+             (emit 'aload *thread*)
+             (emit 'aload (block-environment-register block))
+             (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-special-binding+))
+           (fix-boxing representation nil)
+           )
+          (t
+           ;; No explicit returns.
+           (compile-progn-body (cddr (block-form block)) target representation)))))
 
 (defknown p2-return-from (t t t) t)
 (defun p2-return-from (form target representation)
@@ -9607,8 +9612,8 @@ representation, based on the derived type of the LispObject."
                 (fix-boxing representation nil)
                 )
                (t
-                (p2-block-node form target)
-                (fix-boxing representation nil)
+                (p2-block-node form target representation)
+;;                 (fix-boxing representation nil)
                 ))
 ;;          (fix-boxing representation nil)
          )
