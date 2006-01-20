@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: Stream.java,v 1.146 2006-01-19 13:00:53 piso Exp $
+ * $Id: Stream.java,v 1.147 2006-01-20 15:04:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -629,10 +629,10 @@ public class Stream extends LispObject
         LispObject result =
           thread.execute(fun, this, LispCharacter.getInstance(c),
                          (numArg < 0) ? NIL : new Fixnum(numArg));
-        LispObject[] values = thread.getValues();
+        LispObject[] values = thread._values;
         if (values != null && values.length == 0)
           result = null;
-        thread.clearValues();
+        thread._values = null;
         return result;
       }
     return signal(new ReaderError("No dispatch function defined for #\\" + c,
