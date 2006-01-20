@@ -376,7 +376,7 @@
                           (merge-pathnames "abcl.bat" *build-root*)
                           :direction :output
                           :if-exists :supersede)
-           (format s "~A -cp ~A;~A org.armedbear.lisp.Main %1 %2 %3 %4 %5 %6 %7 %8 %9~%"
+           (format s "~A -Xss4M -Xmx256M -cp ~A;~A org.armedbear.lisp.Main %1 %2 %3 %4 %5 %6 %7 %8 %9~%"
                    (safe-namestring *java*)
                    (safe-namestring (merge-pathnames "src" *build-root*))
                    (safe-namestring (merge-pathnames "abcl.jar" *build-root*)))))
@@ -387,13 +387,13 @@
            (with-open-file (s pathname :direction :output :if-exists :supersede)
              (if (eq *platform* :linux)
                  ;; On Linux, set java.library.path for libabcl.so.
-                 (format s "#!/bin/sh~%exec ~A -Xmx256M -Xrs -Djava.library.path=~A -cp ~A:~A org.armedbear.lisp.Main \"$@\"~%"
+                 (format s "#!/bin/sh~%exec ~A -Xss4M -Xmx256M -Xrs -Djava.library.path=~A -cp ~A:~A org.armedbear.lisp.Main \"$@\"~%"
                          (safe-namestring *java*)
                          (safe-namestring *abcl-dir*)
                          (safe-namestring (merge-pathnames "src" *build-root*))
                          (safe-namestring (merge-pathnames "abcl.jar" *build-root*)))
                  ;; Not Linux.
-                 (format s "#!/bin/sh~%exec ~A -Xmx256M -cp ~A:~A org.armedbear.lisp.Main \"$@\"~%"
+                 (format s "#!/bin/sh~%exec ~A -Xss4M -Xmx256M -cp ~A:~A org.armedbear.lisp.Main \"$@\"~%"
                          (safe-namestring *java*)
                          (safe-namestring (merge-pathnames "src" *build-root*))
                          (safe-namestring (merge-pathnames "abcl.jar" *build-root*)))))
