@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.764 2006-01-19 21:00:24 piso Exp $
+;;; $Id: jvm.lisp,v 1.765 2006-01-20 03:09:58 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -30,11 +30,11 @@
   (require '#:format)
   (require '#:clos)
   (require '#:print-object)
-  (require '#:opcodes)
   (require '#:compiler-types)
   (require '#:known-functions)
   (require '#:known-symbols)
-  (require '#:dump-form))
+  (require '#:dump-form)
+  (require '#:opcodes))
 
 (defvar *closure-variables* nil)
 
@@ -1937,13 +1937,14 @@ representation, based on the derived type of the LispObject."
                op n (length args)))
     ok))
 
-(defparameter *resolvers* nil)
-
 (defun unsupported-opcode (instruction)
   (error "Unsupported opcode ~D." (instruction-opcode instruction)))
 
+(declaim (type hash-table +resolvers+))
+(defconst +resolvers+ (make-hash-table))
+
 (defun initialize-resolvers ()
-  (let ((ht (make-hash-table)))
+  (let ((ht +resolvers+))
     (dotimes (n (1+ *last-opcode*))
       (setf (gethash n ht) #'unsupported-opcode))
     ;; The following opcodes resolve to themselves.
@@ -2019,8 +2020,7 @@ representation, based on the derived type of the LispObject."
                  198 ; ifnull
                  202 ; label
                  ))
-      (setf (gethash n ht) nil))
-    (setf *resolvers* ht)))
+      (setf (gethash n ht) nil))))
 
 (initialize-resolvers)
 
@@ -2031,11 +2031,11 @@ representation, based on the derived type of the LispObject."
            (defun ,name ,args ,@body)
            (eval-when (:load-toplevel :execute)
              (dolist (op ',opcodes)
-               (setf (gethash op *resolvers*) (symbol-function ',name)))))
+               (setf (gethash op +resolvers+) (symbol-function ',name)))))
         `(progn
            (defun ,name ,args ,@body)
            (eval-when (:load-toplevel :execute)
-             (setf (gethash ,opcodes *resolvers*) (symbol-function ',name)))))))
+             (setf (gethash ,opcodes +resolvers+) (symbol-function ',name)))))))
 
 ;; aload
 (define-resolver 25 (instruction)
@@ -2174,11 +2174,10 @@ representation, based on the derived type of the LispObject."
          (n (second args)))
     (inst 132 (list register (logand n #xff)))))
 
-(declaim (ftype (function (t) t) resolve-instruction))
+(defknown resolve-instruction (t) t)
 (defun resolve-instruction (instruction)
   (declare (optimize speed))
-  (let ((resolver (gethash1 (instruction-opcode instruction)
-                            (the hash-table *resolvers*))))
+  (let ((resolver (gethash1 (instruction-opcode instruction) +resolvers+)))
     (if resolver
         (funcall resolver instruction)
         instruction)))

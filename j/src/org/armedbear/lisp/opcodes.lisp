@@ -1,7 +1,7 @@
 ;;; opcodes.lisp
 ;;;
-;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: opcodes.lisp,v 1.27 2005-12-13 02:39:57 piso Exp $
+;;; Copyright (C) 2003-2006 Peter Graves
+;;; $Id: opcodes.lisp,v 1.28 2006-01-20 03:09:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,9 +19,9 @@
 
 (in-package #:jvm)
 
-(defparameter *opcode-table* (make-array 256))
+(defconst *opcode-table* (make-array 256))
 
-(defparameter *opcodes* (make-hash-table :test 'equalp))
+(defconst *opcodes* (make-hash-table :test 'equalp))
 
 (defstruct jvm-opcode name number size stack-effect)
 
@@ -266,7 +266,7 @@
 
 (declaim (ftype (function (t) fixnum) opcode-size))
 (defun opcode-size (opcode-number)
-  (declare (optimize speed))
+  (declare (optimize speed (safety 0)))
   (declare (type (integer 0 255) opcode-number))
   (jvm-opcode-size (svref *opcode-table* opcode-number)))
 
