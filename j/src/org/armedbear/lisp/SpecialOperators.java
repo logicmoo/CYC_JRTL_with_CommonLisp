@@ -1,8 +1,8 @@
 /*
  * SpecialOperators.java
  *
- * Copyright (C) 2003-2005 Peter Graves
- * $Id: SpecialOperators.java,v 1.50 2005-12-19 18:42:13 piso Exp $
+ * Copyright (C) 2003-2006 Peter Graves
+ * $Id: SpecialOperators.java,v 1.51 2006-01-20 13:38:13 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ public final class SpecialOperators extends Lisp
       {
         if (args.length() != 1)
           return signal(new WrongNumberOfArgumentsException(this));
-        return args.car();
+        return ((Cons)args).car;
       }
     };
 
@@ -50,15 +50,15 @@ public final class SpecialOperators extends Lisp
           {
           case 2:
             {
-              if (eval(args.car(), env, thread) != NIL)
+              if (eval(((Cons)args).car, env, thread) != NIL)
                 return eval(args.cadr(), env, thread);
               return NIL;
             }
           case 3:
             {
-              if (eval(args.car(), env, thread) != NIL)
+              if (eval(((Cons)args).car, env, thread) != NIL)
                 return eval(args.cadr(), env, thread);
-              return eval(args.cdr().cadr(), env, thread);
+              return eval((((Cons)args).cdr).cadr(), env, thread);
             }
           default:
             return signal(new WrongNumberOfArgumentsException(this));
@@ -108,23 +108,24 @@ public final class SpecialOperators extends Lisp
         while (body != NIL)
           {
             LispObject obj = body.car();
-            if (obj instanceof Cons && obj.car() == Symbol.DECLARE)
+            if (obj instanceof Cons && ((Cons)obj).car == Symbol.DECLARE)
               {
                 LispObject decls = obj.cdr();
                 while (decls != NIL)
                   {
                     LispObject decl = decls.car();
-                    if (decl instanceof Cons && decl.car() == Symbol.SPECIAL) {
-                      LispObject vars = decl.cdr();
-                      while (vars != NIL)
-                        {
-                          specials = new Cons(vars.car(), specials);
-                          vars = vars.cdr();
-                        }
-                    }
-                    decls = decls.cdr();
+                    if (decl instanceof Cons && ((Cons)decl).car == Symbol.SPECIAL)
+                      {
+                        LispObject vars = ((Cons)decl).cdr;
+                        while (vars != NIL)
+                          {
+                            specials = new Cons(vars.car(), specials);
+                            vars = ((Cons)vars).cdr;
+                          }
+                      }
+                    decls = ((Cons)decls).cdr;
                   }
-                body = body.cdr();
+                body = ((Cons)body).cdr;
               }
             else
               break;
@@ -144,7 +145,7 @@ public final class SpecialOperators extends Lisp
                       return signal(new LispError("The LET* binding specification " +
                                                   obj.writeToString() +
                                                   " is invalid."));
-                    symbol = checkSymbol(obj.car());
+                    symbol = checkSymbol(((Cons)obj).car);
                     value = eval(obj.cadr(), ext, thread);
                   }
                 else
@@ -163,7 +164,7 @@ public final class SpecialOperators extends Lisp
                   }
                 else
                   ext.bind(symbol, value);
-                varList = varList.cdr();
+                varList = ((Cons)varList).cdr;
               }
           }
         else
@@ -173,7 +174,7 @@ public final class SpecialOperators extends Lisp
             LispObject[] vals = new LispObject[length];
             for (int i = 0; i < length; i++)
               {
-                LispObject obj = varList.car();
+                LispObject obj = ((Cons)varList).car;
                 if (obj instanceof Cons)
                   {
                     if (obj.length() > 2)
@@ -184,7 +185,7 @@ public final class SpecialOperators extends Lisp
                   }
                 else
                   vals[i] = NIL;
-                varList = varList.cdr();
+                varList = ((Cons)varList).cdr;
               }
             varList = args.car();
             int i = 0;
@@ -208,7 +209,7 @@ public final class SpecialOperators extends Lisp
                   }
                 else
                   ext.bind(symbol, value);
-                varList = varList.cdr();
+                varList = ((Cons)varList).cdr;
                 ++i;
               }
           }
@@ -353,7 +354,7 @@ public final class SpecialOperators extends Lisp
         while (args != NIL)
           {
             result = eval(args.car(), env, thread);
-            args = args.cdr();
+            args = ((Cons)args).cdr;
           }
         return result;
       }
