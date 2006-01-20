@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.766 2006-01-20 13:17:16 piso Exp $
+;;; $Id: jvm.lisp,v 1.767 2006-01-20 14:07:29 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -6463,130 +6463,132 @@ representation, based on the derived type of the LispObject."
 (defknown p2-logand (t t t) t)
 (defun p2-logand (form target representation)
   (let* ((args (cdr form))
-         (len (length args)))
-    (cond ((= len 2)
-           (let* ((arg1 (%car args))
-                  (arg2 (%cadr args))
-                  (type1 (derive-compiler-type arg1))
-                  (type2 (derive-compiler-type arg2))
-                  (result-type (derive-compiler-type form)))
-;;              (let ((*print-structure* nil))
-;;                (format t "~&p2-logand arg1 = ~S~%" arg1)
-;;                (format t "p2-logand arg2 = ~S~%" arg2))
-;;              (format t "~&p2-logand type1 = ~S~%" type1)
-;;              (format t "p2-logand type2 = ~S~%" type2)
-;;              (format t "p2-logand result-type = ~S~%" result-type)
-;;              (format t "p2-logand representation = ~S~%" representation)
-             (cond ((and (integerp arg1) (integerp arg2))
-                    (compile-constant (logand arg1 arg2) target representation))
-                   ((and (integer-type-p type1) (eql arg2 0))
-                    (compile-form arg1 nil nil) ; for effect
-                    (maybe-emit-clear-values arg1)
-                    (compile-constant 0 target representation))
-                   ((eql (fixnum-constant-value type1) -1)
-                    (compile-form arg1 nil nil) ; for effect
-                    (compile-form arg2 target representation)
-                    (maybe-emit-clear-values arg1 arg2))
-                   ((eql (fixnum-constant-value type2) -1)
-                    (compile-form arg1 target representation)
-                    (compile-form arg2 nil nil) ; for effect
-                    (maybe-emit-clear-values arg1 arg2))
-                   ((and (fixnum-type-p type1) (fixnum-type-p type2))
-;;                     (format t "p2-logand fixnum case~%")
-                    ;; Both arguments are fixnums.
-                    (when (null representation)
-                      (emit 'new +lisp-fixnum-class+)
-                      (emit 'dup))
-                    (compile-form arg1 'stack :int)
-                    (compile-form arg2 'stack :int)
-                    (maybe-emit-clear-values arg1 arg2)
-                    (emit 'iand)
-                    (case representation
-                      (:int)
-                      (:long
-                       (emit 'i2l))
-                      (t
-                       (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
-                    (emit-move-from-stack target representation))
-                   ((or (and (fixnum-type-p type1)
-                             (compiler-subtypep type1 'unsigned-byte))
-                        (and (fixnum-type-p type2)
-                             (compiler-subtypep type2 'unsigned-byte)))
-                    ;; One of the arguments is a positive fixnum.
-                    (when (null representation)
-                      (emit 'new +lisp-fixnum-class+)
-                      (emit 'dup))
-                    (compile-form arg1 'stack :int)
-                    (compile-form arg2 'stack :int)
-                    (maybe-emit-clear-values arg1 arg2)
-                    (emit 'iand)
-                    (case representation
-                      (:int)
-                      (:long
-                       (emit 'i2l))
-                      (t
-                       (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
-                    (emit-move-from-stack target representation))
-                   ((and (java-long-type-p type1) (java-long-type-p type2))
-                    ;; Both arguments are longs.
-                    (compile-form arg1 'stack :long)
-                    (compile-form arg2 'stack :long)
-                    (maybe-emit-clear-values arg1 arg2)
-                    (emit 'land)
-                    (case representation
-                      (:int
-                       (emit 'l2i))
-                      (:long)
-                      (t
-                       (emit-box-long)))
-                    (emit-move-from-stack target representation))
-                   ((or (and (java-long-type-p type1)
-                             (compiler-subtypep type1 'unsigned-byte))
-                        (and (java-long-type-p type2)
-                             (compiler-subtypep type2 'unsigned-byte)))
-                    ;; One of the arguments is a positive long.
-                    (compile-form arg1 'stack :long)
-                    (compile-form arg2 'stack :long)
-                    (maybe-emit-clear-values arg1 arg2)
-                    (emit 'land)
-                    (case representation
-                      (:int
-                       (emit 'l2i))
-                      (:long)
-                      (t
-                       (emit-box-long)))
-                    (emit-move-from-stack target representation))
-                   ((fixnum-type-p type2)
-;;                     (format t "p2-logand LispObject.LOGAND(int) 1~%")
-                    (compile-form arg1 'stack nil)
-                    (compile-form arg2 'stack :int)
-                    (maybe-emit-clear-values arg1 arg2)
-                    (emit-invokevirtual +lisp-object-class+ "LOGAND" '("I") +lisp-object+)
-                    (fix-boxing representation result-type)
-                    (emit-move-from-stack target representation))
-                   ((fixnum-type-p type1)
-;;                     (format t "p2-logand LispObject.LOGAND(int) 2~%")
-                    ;; arg1 is a fixnum, but arg2 is not
-                    (compile-form arg1 'stack :int)
-                    (compile-form arg2 'stack 'nil)
-                    (maybe-emit-clear-values arg1 arg2)
-                    ;; swap args
-                    (emit 'swap)
-                    (emit-invokevirtual +lisp-object-class+ "LOGAND" '("I") +lisp-object+)
-                    (fix-boxing representation result-type)
-                    (emit-move-from-stack target representation))
-                   (t
-;;                     (format t "p2-logand LispObject.LOGAND(LispObject)~%")
-                    (compile-form arg1 'stack nil)
-                    (compile-form arg2 'stack nil)
-                    (maybe-emit-clear-values arg1 arg2)
-                    (emit-invokevirtual +lisp-object-class+ "LOGAND"
-                                        (lisp-object-arg-types 1) +lisp-object+)
-                    (fix-boxing representation result-type)
-                    (emit-move-from-stack target representation)))))
-          (t
-;;            (format t "p2-logand full call~%")
-           (compile-function-call form target representation)))))
+;;          (len (length args))
+         )
+;;     (cond ((= len 2)
+    (case (length args)
+      (2
+       (let* ((arg1 (%car args))
+              (arg2 (%cadr args))
+              (type1 (derive-compiler-type arg1))
+              (type2 (derive-compiler-type arg2))
+              (result-type (derive-compiler-type form)))
+         ;;              (let ((*print-structure* nil))
+         ;;                (format t "~&p2-logand arg1 = ~S~%" arg1)
+         ;;                (format t "p2-logand arg2 = ~S~%" arg2))
+         ;;              (format t "~&p2-logand type1 = ~S~%" type1)
+         ;;              (format t "p2-logand type2 = ~S~%" type2)
+         ;;              (format t "p2-logand result-type = ~S~%" result-type)
+         ;;              (format t "p2-logand representation = ~S~%" representation)
+         (cond ((and (integerp arg1) (integerp arg2))
+                (compile-constant (logand arg1 arg2) target representation))
+               ((and (integer-type-p type1) (eql arg2 0))
+                (compile-form arg1 nil nil) ; for effect
+                (maybe-emit-clear-values arg1)
+                (compile-constant 0 target representation))
+               ((eql (fixnum-constant-value type1) -1)
+                (compile-form arg1 nil nil) ; for effect
+                (compile-form arg2 target representation)
+                (maybe-emit-clear-values arg1 arg2))
+               ((eql (fixnum-constant-value type2) -1)
+                (compile-form arg1 target representation)
+                (compile-form arg2 nil nil) ; for effect
+                (maybe-emit-clear-values arg1 arg2))
+               ((and (fixnum-type-p type1) (fixnum-type-p type2))
+                ;;                     (format t "p2-logand fixnum case~%")
+                ;; Both arguments are fixnums.
+                (when (null representation)
+                  (emit 'new +lisp-fixnum-class+)
+                  (emit 'dup))
+                (compile-form arg1 'stack :int)
+                (compile-form arg2 'stack :int)
+                (maybe-emit-clear-values arg1 arg2)
+                (emit 'iand)
+                (case representation
+                  (:int)
+                  (:long
+                   (emit 'i2l))
+                  (t
+                   (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
+                (emit-move-from-stack target representation))
+               ((or (and (fixnum-type-p type1)
+                         (compiler-subtypep type1 'unsigned-byte))
+                    (and (fixnum-type-p type2)
+                         (compiler-subtypep type2 'unsigned-byte)))
+                ;; One of the arguments is a positive fixnum.
+                (when (null representation)
+                  (emit 'new +lisp-fixnum-class+)
+                  (emit 'dup))
+                (compile-form arg1 'stack :int)
+                (compile-form arg2 'stack :int)
+                (maybe-emit-clear-values arg1 arg2)
+                (emit 'iand)
+                (case representation
+                  (:int)
+                  (:long
+                   (emit 'i2l))
+                  (t
+                   (emit-invokespecial-init +lisp-fixnum-class+ '("I"))))
+                (emit-move-from-stack target representation))
+               ((and (java-long-type-p type1) (java-long-type-p type2))
+                ;; Both arguments are longs.
+                (compile-form arg1 'stack :long)
+                (compile-form arg2 'stack :long)
+                (maybe-emit-clear-values arg1 arg2)
+                (emit 'land)
+                (case representation
+                  (:int
+                   (emit 'l2i))
+                  (:long)
+                  (t
+                   (emit-box-long)))
+                (emit-move-from-stack target representation))
+               ((or (and (java-long-type-p type1)
+                         (compiler-subtypep type1 'unsigned-byte))
+                    (and (java-long-type-p type2)
+                         (compiler-subtypep type2 'unsigned-byte)))
+                ;; One of the arguments is a positive long.
+                (compile-form arg1 'stack :long)
+                (compile-form arg2 'stack :long)
+                (maybe-emit-clear-values arg1 arg2)
+                (emit 'land)
+                (case representation
+                  (:int
+                   (emit 'l2i))
+                  (:long)
+                  (t
+                   (emit-box-long)))
+                (emit-move-from-stack target representation))
+               ((fixnum-type-p type2)
+                ;;                     (format t "p2-logand LispObject.LOGAND(int) 1~%")
+                (compile-form arg1 'stack nil)
+                (compile-form arg2 'stack :int)
+                (maybe-emit-clear-values arg1 arg2)
+                (emit-invokevirtual +lisp-object-class+ "LOGAND" '("I") +lisp-object+)
+                (fix-boxing representation result-type)
+                (emit-move-from-stack target representation))
+               ((fixnum-type-p type1)
+                ;;                     (format t "p2-logand LispObject.LOGAND(int) 2~%")
+                ;; arg1 is a fixnum, but arg2 is not
+                (compile-form arg1 'stack :int)
+                (compile-form arg2 'stack 'nil)
+                (maybe-emit-clear-values arg1 arg2)
+                ;; swap args
+                (emit 'swap)
+                (emit-invokevirtual +lisp-object-class+ "LOGAND" '("I") +lisp-object+)
+                (fix-boxing representation result-type)
+                (emit-move-from-stack target representation))
+               (t
+                ;;                     (format t "p2-logand LispObject.LOGAND(LispObject)~%")
+                (compile-form arg1 'stack nil)
+                (compile-form arg2 'stack nil)
+                (maybe-emit-clear-values arg1 arg2)
+                (emit-invokevirtual +lisp-object-class+ "LOGAND"
+                                    (lisp-object-arg-types 1) +lisp-object+)
+                (fix-boxing representation result-type)
+                (emit-move-from-stack target representation)))))
+      (t
+       (compile-function-call form target representation)))))
 
 (defknown p2-logior (t t t) t)
 (defun p2-logior (form target representation)
