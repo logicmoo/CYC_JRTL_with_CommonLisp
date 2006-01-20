@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.765 2006-01-20 03:09:58 piso Exp $
+;;; $Id: jvm.lisp,v 1.766 2006-01-20 13:17:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -9547,11 +9547,13 @@ representation, based on the derived type of the LispObject."
 (defknown compile-form (t t t) t)
 (defun compile-form (form target representation)
   (cond ((consp form)
-         (let ((op (%car form))
-               handler)
-           (cond ((symbolp op)
-                  (cond ((setf handler (get op 'p2-handler))
-                         (funcall handler form target representation))
+         (let* ((op (%car form))
+                (handler (and (symbolp op) (get op 'p2-handler))))
+           (cond (handler
+                  (funcall handler form target representation))
+                 ((symbolp op)
+                  (cond #+nil((setf handler (get op 'p2-handler))
+                              (funcall handler form target representation))
                         ((macro-function op *compile-file-environment*)
                          (compile-form (macroexpand form *compile-file-environment*)
                                        target representation))
