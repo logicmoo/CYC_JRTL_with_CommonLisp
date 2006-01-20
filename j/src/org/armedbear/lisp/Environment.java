@@ -1,8 +1,8 @@
 /*
  * Environment.java
  *
- * Copyright (C) 2002-2005 Peter Graves
- * $Id: Environment.java,v 1.27 2005-12-21 18:26:01 piso Exp $
+ * Copyright (C) 2002-2006 Peter Graves
+ * $Id: Environment.java,v 1.28 2006-01-20 12:52:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,286 +23,307 @@ package org.armedbear.lisp;
 
 public final class Environment extends LispObject
 {
-    private Binding vars;
-    private FunctionBinding lastFunctionBinding;
-    private Binding blocks;
-    private Binding tags;
+  private Binding vars;
+  private FunctionBinding lastFunctionBinding;
+  private Binding blocks;
+  private Binding tags;
 
-    public Environment() {}
+  public Environment() {}
 
-    public Environment(Environment parent)
-    {
-        if (parent != null) {
-            vars = parent.vars;
-            lastFunctionBinding = parent.lastFunctionBinding;
-            blocks = parent.blocks;
-            tags = parent.tags;
-        }
-    }
+  public Environment(Environment parent)
+  {
+    if (parent != null)
+      {
+        vars = parent.vars;
+        lastFunctionBinding = parent.lastFunctionBinding;
+        blocks = parent.blocks;
+        tags = parent.tags;
+      }
+  }
 
-    // Construct a new Environment extending parent with the specified symbol-
-    // value binding.
-    public Environment(Environment parent, Symbol symbol, LispObject value)
-    {
-        if (parent != null) {
-            vars = parent.vars;
-            lastFunctionBinding = parent.lastFunctionBinding;
-            blocks = parent.blocks;
-            tags = parent.tags;
-        }
-        vars = new Binding(symbol, value, vars);
-    }
+  // Construct a new Environment extending parent with the specified symbol-
+  // value binding.
+  public Environment(Environment parent, Symbol symbol, LispObject value)
+  {
+    if (parent != null)
+      {
+        vars = parent.vars;
+        lastFunctionBinding = parent.lastFunctionBinding;
+        blocks = parent.blocks;
+        tags = parent.tags;
+      }
+    vars = new Binding(symbol, value, vars);
+  }
 
-    public LispObject typeOf()
-    {
-        return Symbol.ENVIRONMENT;
-    }
+  public LispObject typeOf()
+  {
+    return Symbol.ENVIRONMENT;
+  }
 
-    public LispObject classOf()
-    {
-        return BuiltInClass.ENVIRONMENT;
-    }
+  public LispObject classOf()
+  {
+    return BuiltInClass.ENVIRONMENT;
+  }
 
-    public LispObject typep(LispObject type) throws ConditionThrowable
-    {
-        if (type == Symbol.ENVIRONMENT)
-            return T;
-        if (type == BuiltInClass.ENVIRONMENT)
-            return T;
-        return super.typep(type);
-    }
+  public LispObject typep(LispObject type) throws ConditionThrowable
+  {
+    if (type == Symbol.ENVIRONMENT)
+      return T;
+    if (type == BuiltInClass.ENVIRONMENT)
+      return T;
+    return super.typep(type);
+  }
 
-    public boolean isEmpty()
-    {
-        if (lastFunctionBinding != null)
+  public boolean isEmpty()
+  {
+    if (lastFunctionBinding != null)
+      return false;
+    if (vars != null)
+      {
+        for (Binding binding = vars; binding != null; binding = binding.next)
+          if (!binding.specialp)
             return false;
-        if (vars != null) {
-            for (Binding binding = vars; binding != null; binding = binding.next)
-                if (!binding.specialp)
-                    return false;
-        }
-        return true;
-    }
+      }
+    return true;
+  }
 
-    public void bind(Symbol symbol, LispObject value)
-    {
-        vars = new Binding(symbol, value, vars);
-    }
+  public void bind(Symbol symbol, LispObject value)
+  {
+    vars = new Binding(symbol, value, vars);
+  }
 
-    public void rebind(Symbol symbol, LispObject value)
-    {
-        Binding binding = getBinding(symbol);
-        binding.value = value;
-    }
+  public void rebind(Symbol symbol, LispObject value)
+  {
+    Binding binding = getBinding(symbol);
+    binding.value = value;
+  }
 
-    public LispObject lookup(LispObject symbol)
-    {
-        Binding binding = vars;
-        while (binding != null) {
-            if (binding.symbol == symbol)
-                return binding.value;
+  public LispObject lookup(LispObject symbol)
+  {
+    Binding binding = vars;
+    while (binding != null)
+      {
+        if (binding.symbol == symbol)
+          return binding.value;
+        binding = binding.next;
+      }
+    return null;
+  }
+
+  public Binding getBinding(LispObject symbol)
+  {
+    Binding binding = vars;
+    while (binding != null)
+      {
+        if (binding.symbol == symbol)
+          return binding;
+        binding = binding.next;
+      }
+    return null;
+  }
+
+  // Function bindings.
+  public void addFunctionBinding(LispObject name, LispObject value)
+  {
+    lastFunctionBinding =
+      new FunctionBinding(name, value, lastFunctionBinding);
+  }
+
+  public LispObject lookupFunction(LispObject name)
+    throws ConditionThrowable
+  {
+    FunctionBinding binding = lastFunctionBinding;
+    if (name instanceof Symbol)
+      {
+        while (binding != null)
+          {
+            if (binding.name == name)
+              return binding.value;
             binding = binding.next;
-        }
-        return null;
-    }
-
-    public Binding getBinding(LispObject symbol)
-    {
-        Binding binding = vars;
-        while (binding != null) {
-            if (binding.symbol == symbol)
-                return binding;
+          }
+        // Not found in environment.
+        return name.getSymbolFunction();
+      }
+    if (name instanceof Cons)
+      {
+        while (binding != null)
+          {
+            if (binding.name.equal(name))
+              return binding.value;
             binding = binding.next;
-        }
-        return null;
-    }
+          }
+      }
+    return null;
+  }
 
-    // Function bindings.
-    public void addFunctionBinding(LispObject name, LispObject value)
+  public void addBlock(LispObject tag, LispObject block)
+  {
+    blocks = new Binding(tag, block, blocks);
+  }
+
+  public LispObject lookupBlock(LispObject symbol)
+  {
+    Binding binding = blocks;
+    while (binding != null)
+      {
+        if (binding.symbol == symbol)
+          return binding.value;
+        binding = binding.next;
+      }
+    return null;
+  }
+
+  public void addTagBinding(LispObject tag, LispObject code)
+  {
+    tags = new Binding(tag, code, tags);
+  }
+
+  public Binding getTagBinding(LispObject tag)
+  {
+    Binding binding = tags;
+    while (binding != null)
+      {
+        if (binding.symbol.eql(tag))
+          return binding;
+        binding = binding.next;
+      }
+    return null;
+  }
+
+  // Returns body with declarations removed.
+  public LispObject processDeclarations(LispObject body)
+    throws ConditionThrowable
+  {
+    while (body != NIL)
+      {
+        LispObject obj = body.car();
+        if (obj instanceof Cons && obj.car() == Symbol.DECLARE)
+          {
+            LispObject decls = obj.cdr();
+            while (decls != NIL)
+              {
+                LispObject decl = decls.car();
+                if (decl instanceof Cons && decl.car() == Symbol.SPECIAL)
+                  {
+                    LispObject names = decl.cdr();
+                    while (names != NIL)
+                      {
+                        Symbol var = checkSymbol(names.car());
+                        declareSpecial(var);
+                        names = names.cdr();
+                      }
+                  }
+                decls = decls.cdr();
+              }
+            body = body.cdr();
+          }
+        else
+          break;
+      }
+    return body;
+  }
+
+  public void declareSpecial(Symbol var)
+  {
+    vars = new Binding(var, null, vars);
+    vars.specialp = true;
+  }
+
+  public boolean isDeclaredSpecial(LispObject var)
+  {
+    Binding binding = getBinding(var);
+    return binding != null ? binding.specialp : false;
+  }
+
+  public String writeToString() throws ConditionThrowable
+  {
+    return unreadableString(Symbol.ENVIRONMENT);
+  }
+
+  // ### make-environment
+  public static final Primitive MAKE_ENVIRONMENT =
+    new Primitive("make-environment", PACKAGE_SYS, true,
+                  "&optional parent-environment")
     {
-        lastFunctionBinding =
-            new FunctionBinding(name, value, lastFunctionBinding);
-    }
+      public LispObject execute()
+      {
+        return new Environment();
+      }
+      public LispObject execute(LispObject arg) throws ConditionThrowable
+      {
+        if (arg == NIL)
+          return new Environment();
+        return new Environment(checkEnvironment(arg));
+      }
+    };
 
-    public LispObject lookupFunction(LispObject name)
+  // ### environment-add-macro-definition
+  public static final Primitive ENVIRONMENT_ADD_MACRO_DEFINITION =
+    new Primitive("environment-add-macro-definition", PACKAGE_SYS, true,
+                  "environment name expander")
+    {
+      public LispObject execute(LispObject first, LispObject second,
+                                LispObject third)
         throws ConditionThrowable
-    {
-        FunctionBinding binding = lastFunctionBinding;
-        if (name instanceof Symbol) {
-            while (binding != null) {
-                if (binding.name == name)
-                    return binding.value;
-                binding = binding.next;
-            }
-            // Not found in environment.
-            return name.getSymbolFunction();
-        }
-        if (name instanceof Cons) {
-            while (binding != null) {
-                if (binding.name.equal(name))
-                    return binding.value;
-                binding = binding.next;
-            }
-        }
-        return null;
-    }
+      {
+        Environment env = checkEnvironment(first);
+        LispObject name = second;
+        LispObject expander = third;
+        env.addFunctionBinding(name, expander);
+        return env;
+      }
+    };
 
-    public void addBlock(LispObject tag, LispObject block)
+  // ### environment-add-function-definition
+  public static final Primitive ENVIRONMENT_ADD_FUNCTION_DEFINITION =
+    new Primitive("environment-add-function-definition", PACKAGE_SYS, true,
+                  "environment name lambda-expression")
     {
-        blocks = new Binding(tag, block, blocks);
-    }
-
-    public LispObject lookupBlock(LispObject symbol)
-    {
-        Binding binding = blocks;
-        while (binding != null) {
-            if (binding.symbol == symbol)
-                return binding.value;
-            binding = binding.next;
-        }
-        return null;
-    }
-
-    public void addTagBinding(LispObject tag, LispObject code)
-    {
-        tags = new Binding(tag, code, tags);
-    }
-
-    public Binding getTagBinding(LispObject tag)
-    {
-        Binding binding = tags;
-        while (binding != null) {
-            if (binding.symbol.eql(tag))
-                return binding;
-            binding = binding.next;
-        }
-        return null;
-    }
-
-    // Returns body with declarations removed.
-    public LispObject processDeclarations(LispObject body)
+      public LispObject execute(LispObject first, LispObject second,
+                                LispObject third)
         throws ConditionThrowable
-    {
-        while (body != NIL) {
-            LispObject obj = body.car();
-            if (obj instanceof Cons && obj.car() == Symbol.DECLARE) {
-                LispObject decls = obj.cdr();
-                while (decls != NIL) {
-                    LispObject decl = decls.car();
-                    if (decl instanceof Cons && decl.car() == Symbol.SPECIAL) {
-                        LispObject names = decl.cdr();
-                        while (names != NIL) {
-                            Symbol var = checkSymbol(names.car());
-                            declareSpecial(var);
-                            names = names.cdr();
-                        }
-                    }
-                    decls = decls.cdr();
-                }
-                body = body.cdr();
-            } else
-                break;
-        }
-        return body;
-    }
-
-    public void declareSpecial(Symbol var)
-    {
-            vars = new Binding(var, null, vars);
-            vars.specialp = true;
-    }
-
-    public boolean isDeclaredSpecial(LispObject var)
-    {
-        Binding binding = getBinding(var);
-        return binding != null ? binding.specialp : false;
-    }
-
-    public String writeToString() throws ConditionThrowable
-    {
-        return unreadableString(Symbol.ENVIRONMENT);
-    }
-
-    // ### make-environment
-    public static final Primitive MAKE_ENVIRONMENT =
-        new Primitive("make-environment", PACKAGE_SYS, true,
-                      "&optional parent-environment")
-    {
-        public LispObject execute()
-        {
-            return new Environment();
-        }
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            if (arg == NIL)
-                return new Environment();
-            return new Environment(checkEnvironment(arg));
-        }
+      {
+        checkEnvironment(first).addFunctionBinding(second, third);
+        return first;
+      }
     };
 
-    // ### environment-add-macro-definition
-    public static final Primitive ENVIRONMENT_ADD_MACRO_DEFINITION =
-        new Primitive("environment-add-macro-definition", PACKAGE_SYS, true,
-                      "environment name expander")
+  // ### empty-environment-p
+  private static final Primitive EMPTY_ENVIRONMENT_P =
+    new Primitive("empty-environment-p", PACKAGE_SYS, true, "environment")
     {
-        public LispObject execute(LispObject first, LispObject second,
-                                  LispObject third)
-            throws ConditionThrowable
-        {
-            Environment env = checkEnvironment(first);
-            LispObject name = second;
-            LispObject expander = third;
-            env.addFunctionBinding(name, expander);
-            return env;
-        }
+      public LispObject execute(LispObject arg) throws ConditionThrowable
+      {
+        try
+          {
+            return ((Environment)arg).isEmpty() ? T : NIL;
+          }
+        catch (ClassCastException e)
+          {
+            return signalTypeError(arg, Symbol.ENVIRONMENT);
+          }
+      }
     };
 
-    // ### environment-add-function-definition
-    public static final Primitive ENVIRONMENT_ADD_FUNCTION_DEFINITION =
-        new Primitive("environment-add-function-definition", PACKAGE_SYS, true,
-                      "environment name lambda-expression")
+  // ### environment-variables
+  private static final Primitive ENVIRONMENT_VARS =
+    new Primitive("environment-variables", PACKAGE_SYS, true, "environment")
     {
-        public LispObject execute(LispObject first, LispObject second,
-                                  LispObject third)
-            throws ConditionThrowable
-        {
-            checkEnvironment(first).addFunctionBinding(second, third);
-            return first;
-        }
-    };
-
-    // ### empty-environment-p
-    private static final Primitive EMPTY_ENVIRONMENT_P =
-        new Primitive("empty-environment-p", PACKAGE_SYS, true, "environment")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            try {
-                return ((Environment)arg).isEmpty() ? T : NIL;
-            }
-            catch (ClassCastException e) {
-                return signalTypeError(arg, Symbol.ENVIRONMENT);
-            }
-        }
-    };
-
-    // ### environment-variables
-    private static final Primitive ENVIRONMENT_VARS =
-        new Primitive("environment-variables", PACKAGE_SYS, true, "environment")
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            try {
-                Environment env = (Environment) arg;
-                LispObject result = NIL;
-                for (Binding binding = env.vars; binding != null; binding = binding.next)
-                    if (!binding.specialp)
-                        result = result.push(new Cons(binding.symbol, binding.value));
-                return result.nreverse();
-            }
-            catch (ClassCastException e) {
-                return signalTypeError(arg, Symbol.ENVIRONMENT);
-            }
-        }
+      public LispObject execute(LispObject arg) throws ConditionThrowable
+      {
+        try
+          {
+            Environment env = (Environment) arg;
+            LispObject result = NIL;
+            for (Binding binding = env.vars; binding != null; binding = binding.next)
+              if (!binding.specialp)
+                result = result.push(new Cons(binding.symbol, binding.value));
+            return result.nreverse();
+          }
+        catch (ClassCastException e)
+          {
+            return signalTypeError(arg, Symbol.ENVIRONMENT);
+          }
+      }
     };
 }
