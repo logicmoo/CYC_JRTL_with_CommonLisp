@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Primitives.java,v 1.870 2006-01-20 13:36:28 piso Exp $
+ * $Id: Primitives.java,v 1.871 2006-01-20 15:04:44 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1880,18 +1880,18 @@ public final class Primitives extends Lisp
           {
             LispObject clause = args.car();
             result = eval(clause.car(), env, thread);
-            thread.clearValues();
+            thread._values = null;
             if (result != NIL)
               {
                 LispObject body = clause.cdr();
                 while (body != NIL)
                   {
                     result = eval(body.car(), env, thread);
-                    body = body.cdr();
+                    body = ((Cons)body).cdr;
                   }
                 return result;
               }
-            args = args.cdr();
+            args = ((Cons)args).cdr;
           }
         return result;
       }
@@ -3562,7 +3562,7 @@ public final class Primitives extends Lisp
         while (body != NIL)
           {
             LispObject current = body.car();
-            body = body.cdr();
+            body = ((Cons)body).cdr;
             if (current instanceof Cons)
               continue;
             // It's a tag.
@@ -3580,7 +3580,7 @@ public final class Primitives extends Lisp
                 try
                   {
                     // Handle GO inline if possible.
-                    if (current.car() == Symbol.GO)
+                    if (((Cons)current).car == Symbol.GO)
                       {
                         if (interrupted)
                           handleInterrupt();
@@ -3614,9 +3614,9 @@ public final class Primitives extends Lisp
                     throw go;
                   }
               }
-            remaining = remaining.cdr();
+            remaining = ((Cons)remaining).cdr;
           }
-        thread.clearValues();
+        thread._values = null;
         return NIL;
       }
     };
@@ -3809,7 +3809,7 @@ public final class Primitives extends Lisp
         if (values != null)
           thread.setValues(values);
         else
-          thread.clearValues();
+          thread._values = null;
         return result;
       }
     };
@@ -3953,7 +3953,7 @@ public final class Primitives extends Lisp
         if (values != null)
           thread.setValues(values);
         else
-          thread.clearValues();
+          thread._values = null;
         return result;
       }
     };
@@ -4023,14 +4023,14 @@ public final class Primitives extends Lisp
             result = eval(args.car(), env, thread);
             if (result == NIL)
               {
-                if (args.cdr() != NIL)
+                if (((Cons)args).cdr != NIL)
                   {
                     // Not the last form.
-                    thread.clearValues();
+                    thread._values = null;
                   }
                 break;
               }
-            args = args.cdr();
+            args = ((Cons)args).cdr;
           }
         return result;
       }
@@ -4051,14 +4051,14 @@ public final class Primitives extends Lisp
             result = eval(args.car(), env, thread);
             if (result != NIL)
               {
-                if (args.cdr() != NIL)
+                if (((Cons)args).cdr != NIL)
                   {
                     // Not the last form.
-                    thread.clearValues();
+                    thread._values = null;
                   }
                 break;
               }
-            args = args.cdr();
+            args = ((Cons)args).cdr;
           }
         return result;
       }
@@ -4308,11 +4308,11 @@ public final class Primitives extends Lisp
         if (args.length() != 1)
           return signal(new WrongNumberOfArgumentsException(this));
         final LispThread thread = LispThread.currentThread();
-        LispObject result = eval(args.car(), env, thread);
-        LispObject[] values = thread.getValues();
+        LispObject result = eval(((Cons)args).car, env, thread);
+        LispObject[] values = thread._values;
         if (values == null)
           return new Cons(result);
-        thread.clearValues();
+        thread._values = null;
         LispObject list = NIL;
         for (int i = values.length; i-- > 0;)
           list = new Cons(values[i], list);
@@ -4337,8 +4337,8 @@ public final class Primitives extends Lisp
         if (n < 0)
           n = 0;
         LispObject result = eval(args.cadr(), env, thread);
-        LispObject[] values = thread.getValues();
-        thread.clearValues();
+        LispObject[] values = thread._values;
+        thread._values = null;
         if (values == null)
           {
             // A single value was returned.
