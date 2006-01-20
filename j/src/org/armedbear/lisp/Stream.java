@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: Stream.java,v 1.147 2006-01-20 15:04:19 piso Exp $
+ * $Id: Stream.java,v 1.148 2006-01-20 15:23:46 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -554,7 +554,7 @@ public class Stream extends LispObject
                                              Symbol.LIST.writeToString() + ".",
                                              this));
                   }
-                last.setCdr(obj);
+                last.cdr = obj;
                 continue;
               }
             // normal token beginning with '.'
@@ -574,7 +574,7 @@ public class Stream extends LispObject
         else
           {
             Cons newCons = new Cons(obj);
-            last.setCdr(newCons);
+            last.cdr = newCons;
             last = newCons;
           }
       }
