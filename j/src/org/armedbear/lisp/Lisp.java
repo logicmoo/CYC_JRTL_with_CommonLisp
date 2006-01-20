@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Lisp.java,v 1.437 2006-01-19 20:59:46 piso Exp $
+ * $Id: Lisp.java,v 1.438 2006-01-20 15:24:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -185,7 +185,7 @@ public abstract class Lisp
     while (true)
       {
         form = macroexpand_1(form, env, thread);
-        LispObject[] values = thread.getValues();
+        LispObject[] values = thread._values;
         if (values[1] == NIL)
           {
             values[1] = expanded;
@@ -304,7 +304,7 @@ public abstract class Lisp
                                   thread.safeSymbolValue(Symbol.PLUS));
         thread.setSpecialVariable(Symbol.PLUS,
                                   thread.safeSymbolValue(Symbol.MINUS));
-        LispObject[] values = thread.getValues();
+        LispObject[] values = thread._values;
         thread.setSpecialVariable(Symbol.SLASH_SLASH_SLASH,
                                   thread.safeSymbolValue(Symbol.SLASH_SLASH));
         thread.setSpecialVariable(Symbol.SLASH_SLASH,
@@ -653,10 +653,10 @@ public abstract class Lisp
     throws ConditionThrowable
   {
     LispThread thread = LispThread.currentThread();
-    LispObject[] values = thread.getValues();
+    LispObject[] values = thread._values;
     if (values == null)
       return new Cons(result);
-    thread.clearValues();
+    thread._values = null;
     LispObject list = NIL;
     for (int i = values.length; i-- > 0;)
       list = new Cons(values[i], list);
@@ -669,8 +669,8 @@ public abstract class Lisp
                                                     LispThread thread)
     throws ConditionThrowable
   {
-    LispObject[] values = thread.getValues();
-    thread.clearValues();
+    LispObject[] values = thread._values;
+    thread._values = null;
     if (values == null)
       return thread.execute(coerceToFunction(function), result);
     else
