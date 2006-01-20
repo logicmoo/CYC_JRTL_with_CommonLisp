@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.767 2006-01-20 14:07:29 piso Exp $
+;;; $Id: jvm.lisp,v 1.768 2006-01-20 14:28:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -39,8 +39,6 @@
 (defvar *closure-variables* nil)
 
 (defvar *enable-dformat* nil)
-
-(defvar *enable-unboxed-characters* t)
 
 #+nil
 (defun dformat (destination control-string &rest args)
@@ -5370,8 +5368,7 @@ representation, based on the derived type of the LispObject."
                                            (update-must-clear-values)
                                            (emit 'lstore (variable-register variable))
                                            (setf boundp t))
-                                          ((and *enable-unboxed-characters*
-                                                (eq type 'CHARACTER))
+                                          ((eq type 'CHARACTER)
                                            (setf (variable-representation variable) :char)
                                            (setf (variable-register variable) (allocate-register))
                                            (compile-form initform 'stack :char)
@@ -9348,23 +9345,15 @@ representation, based on the derived type of the LispObject."
   (unless (check-arg-count form 1)
     (compile-function-call form target representation)
     (return-from p2-char-code))
-  (let* ((arg (second form))
-         (type (derive-compiler-type arg)))
-;;     (format t "p2-char-code type = ~S~%" type)
+  (let ((arg (second form)))
     (cond ((characterp arg)
            (compile-constant (char-code arg) target representation))
-          ((and (eq type 'character) (< *safety* 3))
+          ((and (< *safety* 3)
+                (eq (derive-compiler-type arg) 'character))
            (when (null representation)
              (emit 'new +lisp-fixnum-class+)
              (emit 'dup))
-           (cond (;;(and *enable-unboxed-characters* (consp arg) (eq (car arg) 'CHAR))
-                  *enable-unboxed-characters*
-                  (compile-form arg 'stack :char))
-                 (t
-                  (compile-form arg 'stack nil)
-                  (maybe-emit-clear-values arg)
-                  (emit 'checkcast +lisp-character-class+)
-                  (emit 'getfield +lisp-character-class+ "value" "C")))
+           (compile-form arg 'stack :char)
            (case representation
              (:int)
              (:long
@@ -9554,9 +9543,7 @@ representation, based on the derived type of the LispObject."
            (cond (handler
                   (funcall handler form target representation))
                  ((symbolp op)
-                  (cond #+nil((setf handler (get op 'p2-handler))
-                              (funcall handler form target representation))
-                        ((macro-function op *compile-file-environment*)
+                  (cond ((macro-function op *compile-file-environment*)
                          (compile-form (macroexpand form *compile-file-environment*)
                                        target representation))
                         ((special-operator-p op)
