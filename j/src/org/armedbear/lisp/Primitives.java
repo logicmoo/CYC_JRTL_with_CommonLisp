@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Primitives.java,v 1.869 2006-01-16 13:57:38 piso Exp $
+ * $Id: Primitives.java,v 1.870 2006-01-20 13:36:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3657,7 +3657,7 @@ public final class Primitives extends Lisp
           {
             return signalTypeError(args.car(), Symbol.SYMBOL);
           }
-        LispObject body = args.cdr();
+        LispObject body = ((Cons)args).cdr();
         Environment ext = new Environment(env);
         final LispObject block = new LispObject();
         ext.addBlock(tag, block);
@@ -3669,7 +3669,7 @@ public final class Primitives extends Lisp
             while (body != NIL)
               {
                 result = eval(body.car(), ext, thread);
-                body = body.cdr();
+                body = ((Cons)body).cdr;
               }
             return result;
           }
