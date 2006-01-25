@@ -1,8 +1,8 @@
 /*
  * CppMode.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: CppMode.java,v 1.1.1.1 2002-09-24 16:08:28 piso Exp $
+ * Copyright (C) 1998-2006 Peter Graves
+ * $Id: CppMode.java,v 1.2 2006-01-25 12:18:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,5 +84,13 @@ public final class CppMode extends CMode implements Constants, Mode
     public boolean isQualifiedName(String s)
     {
         return s.indexOf("::") >= 0;
+    }
+
+    public int getCorrectIndentation(Line line, Buffer buffer)
+    {
+        String trim = line.trim();
+        if (trim.equals("public:") || trim.equals("private:"))
+            return 0;
+        return super.getCorrectIndentation(line, buffer);
     }
 }
