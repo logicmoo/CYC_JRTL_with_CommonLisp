@@ -2,7 +2,7 @@
  * CppMode.java
  *
  * Copyright (C) 1998-2006 Peter Graves
- * $Id: CppMode.java,v 1.2 2006-01-25 12:18:35 piso Exp $
+ * $Id: CppMode.java,v 1.3 2006-01-31 10:06:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,8 +89,29 @@ public final class CppMode extends CMode implements Constants, Mode
     public int getCorrectIndentation(Line line, Buffer buffer)
     {
         String trim = line.trim();
-        if (trim.equals("public:") || trim.equals("private:"))
+        final char trimFirstChar = trim.length() > 0 ? trim.charAt(0) : 0;
+        if (trimFirstChar == '}')
+            return indentClosingBrace(line, buffer);
+        if (trim.equals("public:") || trim.equals("private:") || trim.equals("protected:"))
             return 0;
+        if (trim.startsWith(": ") || trim.startsWith(":\t"))
+            return 2; // start of member initialization list
+        if (trim.startsWith("{")) {
+            Line model = findModel(line);
+            if (model == null)
+                return 0;
+            String modelTrim = model.trim();
+            if (modelTrim.startsWith(": ") || modelTrim.startsWith(":\t"))
+                return 0;
+        }
         return super.getCorrectIndentation(line, buffer);
+    }
+
+    protected int indentClosingBrace(Line line, Buffer buffer)
+    {
+        Position pos = matchClosingBrace(new Position(line, 0));
+        if (!pos.getLine().trim().startsWith("{"))
+            pos = findPreviousConditional(pos);
+        return buffer.getIndentation(pos.getLine());
     }
 }
