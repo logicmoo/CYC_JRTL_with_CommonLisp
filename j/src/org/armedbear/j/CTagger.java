@@ -1,8 +1,8 @@
 /*
  * CTagger.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: CTagger.java,v 1.8 2003-12-30 19:27:59 piso Exp $
+ * Copyright (C) 1998-2006 Peter Graves
+ * $Id: CTagger.java,v 1.9 2006-01-31 10:11:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,181 +27,219 @@ import java.util.ArrayList;
 
 public final class CTagger extends JavaTagger
 {
-    // States.
-    private static final int NEUTRAL        = 0;
-    private static final int METHOD_NAME    = 1;
-    private static final int PARAMETER_LIST = 2;
+  // States.
+  private static final int NEUTRAL        = 0;
+  private static final int METHOD_NAME    = 1;
+  private static final int PARAMETER_LIST = 2;
 
-    private static RE lynxArgsMacroRE = new UncheckedRE("ARGS[0-9][0-9]?");
+  private static RE lynxArgsMacroRE = new UncheckedRE("ARGS[0-9][0-9]?");
 
-    private CMode mode = (CMode) CMode.getMode();
+  private CMode mode = (CMode) CMode.getMode();
 
-    public CTagger(SystemBuffer buffer)
-    {
-        super(buffer);
-    }
+  public CTagger(SystemBuffer buffer)
+  {
+    super(buffer);
+  }
 
-    public void run()
-    {
-        ArrayList tags = new ArrayList();
-        pos = new Position(buffer.getFirstLine(), 0);
-        token = null;
-        tokenStart = null;
-        int state = NEUTRAL;
-        while (!pos.atEnd()) {
-            char c = pos.getChar();
-            if (Character.isWhitespace(c)) {
-                pos.skipWhitespace();
+  public void run()
+  {
+    ArrayList tags = new ArrayList();
+    pos = new Position(buffer.getFirstLine(), 0);
+    token = null;
+    tokenStart = null;
+    int state = NEUTRAL;
+    while (!pos.atEnd())
+      {
+        char c = pos.getChar();
+        if (Character.isWhitespace(c))
+          {
+            pos.skipWhitespace();
+            continue;
+          }
+        if (c == '\'' || c == '"')
+          {
+            pos.skipQuote();
+            continue;
+          }
+        if (pos.lookingAt("/*"))
+          {
+            skipComment(pos);
+            continue;
+          }
+        if (pos.lookingAt("//"))
+          {
+            skipSingleLineComment(pos);
+            continue;
+          }
+        if (c == '#' && pos.getOffset() == 0)
+          {
+            skipPreprocessor(pos);
+            continue;
+          }
+        if (state == METHOD_NAME)
+          {
+            if (c == '{')
+              {
+                if (token != null && !mode.isKeyword(token))
+                  tags.add(new CTag(token, tokenStart));
+                skipBrace();
+                state = NEUTRAL;
                 continue;
-            }
-            if (c == '\'' || c == '"') {
-                pos.skipQuote();
-                continue;
-            }
-            if (pos.lookingAt("/*")) {
-                skipComment(pos);
-                continue;
-            }
-            if (pos.lookingAt("//")) {
-                skipSingleLineComment(pos);
-                continue;
-            }
-            if (c == '#' && pos.getOffset() == 0) {
-                skipPreprocessor(pos);
-                continue;
-            }
-            if (state == METHOD_NAME) {
-                if (c == '{') {
-                    if (token != null && !mode.isKeyword(token))
-                        tags.add(new CTag(token, tokenStart));
-                    skipBrace();
-                    state = NEUTRAL;
-                    continue;
-                } else if (mode.isIdentifierStart(c)) {
-                    state = PARAMETER_LIST;
-                    pos.next();
-                    continue;
-                } else {
-                    state = NEUTRAL;
-                    pos.next();
-                    continue;
-                }
-            }
-            if (state == PARAMETER_LIST) {
-                if (c == '{') {
-                    if (token != null && !mode.isKeyword(token))
-                        tags.add(new CTag(token, tokenStart));
-                    skipBrace();
-                    state = NEUTRAL;
-                    continue;
-                } else if (c == '(') {
-                    state = NEUTRAL;
-                    skipParen();
-                    continue;
-                } else {
-                    pos.next();
-                    continue;
-                }
-            }
-            if (c == '}') {
+              }
+            else if (mode.isIdentifierStart(c))
+              {
+                state = PARAMETER_LIST;
                 pos.next();
                 continue;
-            }
-            if (mode.isIdentifierStart(c)) {
-                tokenStart = pos.copy();
-                String s = gatherToken(pos);
-                if (s.startsWith("ARGS") && lynxArgsMacroRE.isMatch(s)) {
-                    // Lynx "ARGSnn" macro.
-                    ;
-                } else if (s.equals("NOARGS")) {
-                    // Lynx macro.
-                    state = METHOD_NAME;
-                } else if (isDefunStart(s)) {
-                    // Emacs macro.
-                    while (true) {
-                        c = pos.getChar();
-                        if (c == '"') {
-                            pos.next();
-                            break;
-                        }
-                        if (!pos.next())
-                            break;
-                    }
-                    tokenStart = pos.copy();
-                    token = gatherDefunName(pos);
-                    tags.add(new CTag(token, tokenStart));
-                    while ((c = pos.getChar()) != '{') {
-                        if (c == '"' || c == '\'') {
-                            pos.skipQuote();
-                            continue;
-                        }
-                        if (c == '/' && pos.lookingAt("/*")) {
-                            skipComment(pos);
-                            continue;
-                        }
-                        if (!pos.next())
-                            break;
-                    }
-                    if (c == '{')
-                        skipBrace();
-                } else
-                    token = s;
+              }
+            else
+              {
+                state = NEUTRAL;
+                pos.next();
                 continue;
-            }
-            if (c == '(') {
+              }
+          }
+        if (state == PARAMETER_LIST)
+          {
+            if (c == '{')
+              {
+                if (token != null && !mode.isKeyword(token))
+                  tags.add(new CTag(token, tokenStart));
+                skipBrace();
+                state = NEUTRAL;
+                continue;
+              }
+            else if (c == '(')
+              {
+                state = NEUTRAL;
                 skipParen();
-                state = METHOD_NAME;
                 continue;
-            }
+              }
+            else
+              {
+                pos.next();
+                continue;
+              }
+          }
+        if (c == '}')
+          {
             pos.next();
-        }
-        buffer.setTags(tags);
-    }
+            continue;
+          }
+        if (mode.isIdentifierStart(c))
+          {
+            tokenStart = pos.copy();
+            String s = gatherToken(pos);
+            if (s.startsWith("ARGS") && lynxArgsMacroRE.isMatch(s))
+              {
+                // Lynx "ARGSnn" macro.
+                ;
+              }
+            else if (s.equals("NOARGS"))
+              {
+                // Lynx macro.
+                state = METHOD_NAME;
+              }
+            else if (isDefunStart(s))
+              {
+                // Emacs macro.
+                while (true)
+                  {
+                    c = pos.getChar();
+                    if (c == '"')
+                      {
+                        pos.next();
+                        break;
+                      }
+                    if (!pos.next())
+                      break;
+                  }
+                tokenStart = pos.copy();
+                token = gatherDefunName(pos);
+                tags.add(new CTag(token, tokenStart));
+                while ((c = pos.getChar()) != '{')
+                  {
+                    if (c == '"' || c == '\'')
+                      {
+                        pos.skipQuote();
+                        continue;
+                      }
+                    if (c == '/' && pos.lookingAt("/*"))
+                      {
+                        skipComment(pos);
+                        continue;
+                      }
+                    if (!pos.next())
+                      break;
+                  }
+                if (c == '{')
+                  skipBrace();
+              }
+            else
+              token = s;
+            continue;
+          }
+        if (c == '(')
+          {
+            skipParen();
+            state = METHOD_NAME;
+            continue;
+          }
+        pos.next();
+      }
+    buffer.setTags(tags);
+  }
 
-    private String gatherToken(Position pos)
-    {
-        FastStringBuffer sb = new FastStringBuffer();
-        char c;
-        while (mode.isIdentifierPart(c = pos.getChar())) {
-            sb.append(c);
-            if (!pos.next())
-                break;
-        }
-        return sb.toString();
-    }
+  private String gatherToken(Position pos)
+  {
+    FastStringBuffer sb = new FastStringBuffer();
+    char c;
+    while (mode.isIdentifierPart(c = pos.getChar()))
+      {
+        sb.append(c);
+        if (!pos.next())
+          break;
+      }
+    return sb.toString();
+  }
 
-    private static boolean isDefunStart(String s)
-    {
-        if (s.length() < 5)
-            return false;
-        char c = s.charAt(0);
-        if (c == 'D') {
-            if (s.equals("DEFUN")) // Emacs, rep
-                return true;
-            if (s.equals("DEFUN_INT")) // rep
-                return true;
-        } else if (c == 'S') {
-            if (s.equals("SCM_DEFINE")) // guile
-                return true;
-        }
-        return false;
-    }
+  private static boolean isDefunStart(String s)
+  {
+    if (s.length() < 5)
+      return false;
+    char c = s.charAt(0);
+    if (c == 'D')
+      {
+        if (s.equals("DEFUN")) // Emacs, rep
+          return true;
+        if (s.equals("DEFUN_INT")) // rep
+          return true;
+      }
+    else if (c == 'S')
+      {
+        if (s.equals("SCM_DEFINE")) // guile
+          return true;
+      }
+    return false;
+  }
 
-    private static String gatherDefunName(Position pos)
-    {
-        FastStringBuffer sb = new FastStringBuffer();
-        while (true) {
-            char c = pos.getChar();
-            if (c == '"') {
-                pos.next(); // Skip past final quote char.
-                break;
-            }
-            if (c == EOL)
-                break;
-            sb.append(c);
-            if (!pos.next())
-                break;
-        }
-        return sb.toString();
-    }
+  private static String gatherDefunName(Position pos)
+  {
+    FastStringBuffer sb = new FastStringBuffer();
+    while (true)
+      {
+        char c = pos.getChar();
+        if (c == '"')
+          {
+            pos.next(); // Skip past final quote char.
+            break;
+          }
+        if (c == EOL)
+          break;
+        sb.append(c);
+        if (!pos.next())
+          break;
+      }
+    return sb.toString();
+  }
 }
