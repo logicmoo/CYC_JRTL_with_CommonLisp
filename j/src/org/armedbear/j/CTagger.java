@@ -2,7 +2,7 @@
  * CTagger.java
  *
  * Copyright (C) 1998-2006 Peter Graves
- * $Id: CTagger.java,v 1.9 2006-01-31 10:11:09 piso Exp $
+ * $Id: CTagger.java,v 1.10 2006-01-31 10:22:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -25,7 +25,7 @@ import gnu.regexp.RE;
 import gnu.regexp.UncheckedRE;
 import java.util.ArrayList;
 
-public final class CTagger extends JavaTagger
+public class CTagger extends JavaTagger
 {
   // States.
   private static final int NEUTRAL        = 0;
@@ -203,7 +203,7 @@ public final class CTagger extends JavaTagger
     return sb.toString();
   }
 
-  private static boolean isDefunStart(String s)
+  protected static boolean isDefunStart(String s)
   {
     if (s.length() < 5)
       return false;
@@ -223,7 +223,7 @@ public final class CTagger extends JavaTagger
     return false;
   }
 
-  private static String gatherDefunName(Position pos)
+  protected static String gatherDefunName(Position pos)
   {
     FastStringBuffer sb = new FastStringBuffer();
     while (true)

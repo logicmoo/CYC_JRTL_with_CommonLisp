@@ -23,7 +23,7 @@ package org.armedbear.j;
 import java.util.ArrayList;
 import java.util.Stack;
 
-public final class CppTagger extends JavaTagger implements Constants
+public final class CppTagger extends CTagger implements Constants
 {
   // States.
   private static final int NEUTRAL             = 0;
@@ -190,6 +190,41 @@ public final class CppTagger extends JavaTagger implements Constants
                 gatherOperatorName();
                 token = "operator " + token;
                 state = METHOD_NAME;
+              }
+            else if (isDefunStart(token))
+              {
+                // Emacs macro.
+                while (true)
+                  {
+                    c = pos.getChar();
+                    if (c == '"')
+                      {
+                        pos.next();
+                        break;
+                      }
+                    if (!pos.next())
+                      break;
+                  }
+                tokenStart = pos.copy();
+                token = gatherDefunName(pos);
+                tags.add(new CTag(token, tokenStart));
+                while ((c = pos.getChar()) != '{')
+                  {
+                    if (c == '"' || c == '\'')
+                      {
+                        pos.skipQuote();
+                        continue;
+                      }
+                    if (c == '/' && pos.lookingAt("/*"))
+                      {
+                        skipComment(pos);
+                        continue;
+                      }
+                    if (!pos.next())
+                      break;
+                  }
+                if (c == '{')
+                  skipBrace();
               }
             continue;
           }
