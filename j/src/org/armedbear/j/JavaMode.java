@@ -1,8 +1,8 @@
 /*
  * JavaMode.java
  *
- * Copyright (C) 1998-2005 Peter Graves
- * $Id: JavaMode.java,v 1.18 2005-11-17 12:59:42 piso Exp $
+ * Copyright (C) 1998-2006 Peter Graves
+ * $Id: JavaMode.java,v 1.19 2006-01-31 10:05:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -295,7 +295,7 @@ public class JavaMode extends AbstractMode implements Constants, Mode
         final String modelText = trimSyntacticWhitespace(model.getText());
 
         // Model line can't be blank, so this is safe.
-        final char modelLastChar = modelText.charAt(modelText.length()-1);
+        final char modelLastChar = modelText.charAt(modelText.length() - 1);
 
         if (modelLastChar == '{')
             return indentAfterOpeningBrace(model, modelText, buffer);
@@ -361,7 +361,7 @@ public class JavaMode extends AbstractMode implements Constants, Mode
         return indent;
     }
 
-    private final int indentClosingBrace(Line line, Buffer buffer)
+    protected int indentClosingBrace(Line line, Buffer buffer)
     {
         Position pos = matchClosingBrace(new Position(line, 0));
         if (isOpeningBraceOfClassOrMethod(pos.getLine()))
@@ -499,6 +499,8 @@ public class JavaMode extends AbstractMode implements Constants, Mode
                 }
                 case '}': {
                     Position pos = matchClosingBrace(it.getPosition());
+                    if (pos.getOffset() == 0)
+                        return 0;
                     pos = findBeginningOfStatement(pos);
                     return buffer.getIndentation(pos.getLine());
                 }
@@ -569,6 +571,10 @@ public class JavaMode extends AbstractMode implements Constants, Mode
             return false;
         else if (firstChar == '=')
             return false;
+        else if (firstChar == ':') {
+            if (trim.startsWith(": ") || trim.startsWith(":\t"))
+                return false;
+        }
         String s = trimSyntacticWhitespace(line.getText());
         if (s.length() == 0)
             return false;
