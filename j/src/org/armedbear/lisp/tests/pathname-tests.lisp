@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.50 2005-11-04 19:33:02 piso Exp $
+;;; $Id: pathname-tests.lisp,v 1.51 2006-02-03 17:42:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -392,12 +392,14 @@
 
 #-sbcl
 (deftest physical.30
-  #-(or allegro)
+  #-(or allegro cmu)
   (string= (namestring (make-pathname :name "..")) "..")
   #+allegro
   (string= (namestring (make-pathname :name ".."))
            #-windows "../"
            #+windows "..\\")
+  #+cmu
+  (signals-error (make-pathname :name "..") 'warning)
   t)
 
 (deftest physical.31
@@ -495,7 +497,9 @@
 (pushnew 'silly.1 *expected-failures*)
 
 (deftest silly.2
-  (signals-error (make-pathname :name "abc/def") 'error)
+  (signals-error (make-pathname :name "abc/def")
+                 #-cmu 'error
+                 #+cmu 'warning)
   t)
 
 (deftest silly.3
