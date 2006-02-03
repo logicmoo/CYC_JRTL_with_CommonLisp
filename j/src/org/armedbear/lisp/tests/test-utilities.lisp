@@ -1,7 +1,7 @@
 ;;; test-utilities.lisp
 ;;;
-;;; Copyright (C) 2005 Peter Graves
-;;; $Id: test-utilities.lisp,v 1.8 2005-11-01 00:56:31 piso Exp $
+;;; Copyright (C) 2005-2006 Peter Graves
+;;; $Id: test-utilities.lisp,v 1.9 2006-02-03 17:28:22 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@
 (defmacro signals-error (form error-name)
   `(locally (declare (optimize safety))
      (handler-case ,form
-       (error (c) (typep c ,error-name))
+       (condition (c) (typep c ,error-name))
        (:no-error (&rest ignored) (declare (ignore ignored)) nil))))
 
 (rem-all-tests)
