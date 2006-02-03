@@ -1,7 +1,7 @@
 ;;; math-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: math-tests.lisp,v 1.7 2005-10-30 12:36:44 piso Exp $
+;;; $Id: math-tests.lisp,v 1.8 2006-02-03 17:40:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -416,6 +416,14 @@
   #+(or abcl allegro cmu sbcl) -10000.000219294045d0
   #+clisp                      -10000.000219287919724l0
   #+lispworks                   -9999.999966673891d0)
+
+(deftest atanh.1
+  (atanh 2)
+  #C(0.54930615 1.5707964))
+
+(deftest atanh.2
+  (atanh -2)
+  #C(-0.54930615 -1.5707964))
 
 (deftest truncate.1
   (truncate least-positive-single-float)
