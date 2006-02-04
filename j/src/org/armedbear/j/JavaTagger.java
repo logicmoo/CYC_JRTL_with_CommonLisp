@@ -2,7 +2,7 @@
  * JavaTagger.java
  *
  * Copyright (C) 1998-2006 Peter Graves
- * $Id: JavaTagger.java,v 1.7 2006-02-04 21:00:26 piso Exp $
+ * $Id: JavaTagger.java,v 1.8 2006-02-04 21:14:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,6 +84,9 @@ public class JavaTagger extends Tagger implements Constants
           }
         if (pos.lookingAt("//"))
           {
+            LocalTag tag = checkForExplicitTag(pos);
+            if (tag instanceof JavaTag)
+              tags.add(tag);
             skipSingleLineComment(pos);
             continue;
           }
@@ -363,7 +366,6 @@ public class JavaTagger extends Tagger implements Constants
 
   protected final void skipSingleLineComment(Position pos)
   {
-    checkForExplicitTag(pos);
     Line next = pos.getNextLine();
     if (next != null)
       pos.moveTo(next, 0);
@@ -371,10 +373,12 @@ public class JavaTagger extends Tagger implements Constants
       pos.setOffset(pos.getLineLength());
   }
 
-  private final void checkForExplicitTag(Position pos)
+  protected final LocalTag checkForExplicitTag(Position pos)
   {
-    if (tags == null)
-      return; // Only supported for Java and JavaScript for now.
+    // Only supported for Java, JavaScript and C++ for now.
+    final int modeId = buffer.getModeId();
+    if (modeId != JAVA_MODE && modeId != JAVASCRIPT_MODE && modeId != CPP_MODE)
+      return null;
     final String explicitTag =
       Editor.preferences().getStringProperty(Property.EXPLICIT_TAG);
     if (explicitTag != null && explicitTag.length() > 0)
@@ -418,9 +422,13 @@ public class JavaTagger extends Tagger implements Constants
             // containing tag.
             pos.setOffset(0);
             pos.skipWhitespace();
-            tags.add(new JavaTag(tag, pos, TAG_EXPLICIT, 0, currentClass));
+            if (buffer.getModeId() == JAVA_MODE)
+              return new JavaTag(tag, pos, TAG_EXPLICIT, 0, currentClass);
+            else if (buffer.getModeId() == CPP_MODE)
+              return new CppTag(tag, pos, TAG_EXPLICIT);
           }
       }
+    return null;
   }
 
   // If canonical is true, strings like "java.lang.String" are considered to

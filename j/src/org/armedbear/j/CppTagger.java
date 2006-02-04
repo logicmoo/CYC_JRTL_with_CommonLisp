@@ -69,6 +69,9 @@ public final class CppTagger extends CTagger implements Constants
           }
         if (pos.lookingAt("//"))
           {
+            LocalTag tag = checkForExplicitTag(pos);
+            if (tag instanceof CppTag)
+              tags.add(tag);
             skipSingleLineComment(pos);
             continue;
           }
