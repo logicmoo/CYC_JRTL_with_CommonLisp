@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.768 2006-01-20 14:28:09 piso Exp $
+;;; $Id: jvm.lisp,v 1.769 2006-02-07 18:06:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -5883,17 +5883,12 @@ representation, based on the derived type of the LispObject."
 
 (defun compile-progn (form target representation)
   (compile-progn-body (cdr form) target)
-;;   (when (eq representation :int)
-;;     (emit-unbox-fixnum))
-  (fix-boxing representation nil)
-  )
+  (fix-boxing representation nil))
 
 (defun p2-eval-when (form target representation)
   (cond ((or (memq :execute (cadr form))
              (memq 'eval (cadr form)))
          (compile-progn-body (cddr form) target)
-;;          (when (eq representation :int)
-;;            (emit-unbox-fixnum)))
          (fix-boxing representation nil))
         (t
          (emit-push-nil)
@@ -5902,7 +5897,9 @@ representation, based on the derived type of the LispObject."
 (defun p2-load-time-value (form target representation)
   (cond (*compile-file-truename*
          (emit 'getstatic *this-class*
-               (declare-load-time-value (second form)) +lisp-object+))
+               (declare-load-time-value (second form)) +lisp-object+)
+         (fix-boxing representation nil)
+         (emit-move-from-stack target representation))
         (t
          (compile-constant (eval (second form)) target representation))))
 
