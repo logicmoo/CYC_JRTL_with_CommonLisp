@@ -69,9 +69,9 @@ public final class CppTagger extends CTagger implements Constants
           }
         if (pos.lookingAt("//"))
           {
-            LocalTag tag = checkForExplicitTag(pos);
+            LocalTag tag = checkForExplicitTag(pos, CPP_MODE);
             if (tag instanceof CppTag)
-              tags.add(tag);
+                tags.add(tag);
             skipSingleLineComment(pos);
             continue;
           }
@@ -84,6 +84,13 @@ public final class CppTagger extends CTagger implements Constants
           {
             if (c == '{')
               {
+                if (token.equals("DEFINE_PRIMITIVE")
+                    || token.equals("DEFINE_SPECIAL_OPERATOR"))
+                  {
+                    state = NEUTRAL;
+                    skipBrace();
+                    continue;
+                  }
                 if (className != null)
                   token = className + classSeparator + token;
                 tags.add(new CppTag(token, tokenStart, TAG_METHOD));
@@ -194,41 +201,6 @@ public final class CppTagger extends CTagger implements Constants
                 token = "operator " + token;
                 state = METHOD_NAME;
               }
-            else if (isDefunStart(token))
-              {
-                // Emacs macro.
-                while (true)
-                  {
-                    c = pos.getChar();
-                    if (c == '"')
-                      {
-                        pos.next();
-                        break;
-                      }
-                    if (!pos.next())
-                      break;
-                  }
-                tokenStart = pos.copy();
-                token = gatherDefunName(pos);
-                tags.add(new CTag(token, tokenStart));
-                while ((c = pos.getChar()) != '{')
-                  {
-                    if (c == '"' || c == '\'')
-                      {
-                        pos.skipQuote();
-                        continue;
-                      }
-                    if (c == '/' && pos.lookingAt("/*"))
-                      {
-                        skipComment(pos);
-                        continue;
-                      }
-                    if (!pos.next())
-                      break;
-                  }
-                if (c == '{')
-                  skipBrace();
-              }
             continue;
           }
         if (c == '(')
@@ -254,8 +226,8 @@ public final class CppTagger extends CTagger implements Constants
           break;
       }
     // Token can't end with ':'.
-    while (sb.length() > 0 && sb.charAt(sb.length()-1) == ':')
-      sb.setLength(sb.length()-1);
+    while (sb.length() > 0 && sb.charAt(sb.length() - 1) == ':')
+      sb.setLength(sb.length() - 1);
     token = sb.toString();
   }
 
