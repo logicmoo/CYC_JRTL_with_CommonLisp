@@ -1,8 +1,8 @@
 /*
  * CppTag.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: CppTag.java,v 1.1.1.1 2002-09-24 16:09:19 piso Exp $
+ * Copyright (C) 2002-2006 Peter Graves
+ * $Id: CppTag.java,v 1.2 2006-02-10 12:04:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,8 @@ public final class CppTag extends LocalTag
     public CppTag(String name, Position pos, int type)
     {
         super(name, pos, type);
+        if (type == TAG_EXPLICIT)
+            canonicalSignature = pos.getLine().trim();
     }
 
     public String getMethodName()
