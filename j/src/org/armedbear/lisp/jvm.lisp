@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.769 2006-02-07 18:06:26 piso Exp $
+;;; $Id: jvm.lisp,v 1.770 2006-02-10 05:18:36 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2911,19 +2911,24 @@ representation, based on the derived type of the LispObject."
          (g (gethash1 symbol ht)))
     (declare (type hash-table ht))
     (unless g
-      (let ((*code* *static-code*)
-            (s (sanitize symbol)))
-        (setf g (symbol-name (gensym)))
-        (when s
-          (setf g (concatenate 'string g "_" s)))
-        (declare-field g +lisp-symbol+)
-        (emit 'ldc (pool-string (symbol-name symbol)))
-        (emit 'ldc (pool-string (package-name (symbol-package symbol))))
-        (emit-invokestatic +lisp-class+ "internInPackage"
-                           (list +java-string+ +java-string+) +lisp-symbol+)
-        (emit 'putstatic *this-class* g +lisp-symbol+)
-        (setf *static-code* *code*)
-        (setf (gethash symbol ht) g)))
+      (cond ((null (symbol-package symbol))
+             (setf g (if *compile-file-truename*
+                         (declare-object-as-string symbol)
+                         (declare-object symbol))))
+            (t
+             (let ((*code* *static-code*)
+                   (s (sanitize symbol)))
+               (setf g (symbol-name (gensym)))
+               (when s
+                 (setf g (concatenate 'string g "_" s)))
+               (declare-field g +lisp-symbol+)
+               (emit 'ldc (pool-string (symbol-name symbol)))
+               (emit 'ldc (pool-string (package-name (symbol-package symbol))))
+               (emit-invokestatic +lisp-class+ "internInPackage"
+                                  (list +java-string+ +java-string+) +lisp-symbol+)
+               (emit 'putstatic *this-class* g +lisp-symbol+)
+               (setf *static-code* *code*)
+               (setf (gethash symbol ht) g)))))
     g))
 
 (defknown declare-keyword (symbol) string)
@@ -5926,11 +5931,7 @@ representation, based on the derived type of the LispObject."
     (emit 'aload *thread*)
     (emit 'aload environment-register)
     (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-special-binding+)
-;;     (when (eq representation :int)
-;;       (emit-unbox-fixnum))
-    (fix-boxing representation nil)
-;;     (emit-move-from-stack target representation)
-    ))
+    (fix-boxing representation nil)))
 
 (defun p2-quote (form target representation)
   (aver (or (null representation) (eq representation :boolean)))
