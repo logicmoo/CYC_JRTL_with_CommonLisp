@@ -1,8 +1,8 @@
 /*
  * Interpreter.java
  *
- * Copyright (C) 2002-2005 Peter Graves
- * $Id: Interpreter.java,v 1.100 2006-01-04 18:02:53 piso Exp $
+ * Copyright (C) 2002-2006 Peter Graves
+ * $Id: Interpreter.java,v 1.101 2006-02-12 00:08:08 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -459,7 +459,7 @@ public final class Interpreter extends Lisp
                 Debug.trace(e);
             }
         } else
-            System.exit(0);
+            System.exit(status);
     }
 
     public synchronized void dispose()
