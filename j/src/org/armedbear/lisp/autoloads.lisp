@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
-;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: autoloads.lisp,v 1.204 2006-01-09 19:19:21 piso Exp $
+;;; Copyright (C) 2003-2006 Peter Graves
+;;; $Id: autoloads.lisp,v 1.205 2006-02-14 02:30:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -249,6 +249,7 @@
 (autoload 'simple-search "search")
 (export 'run-shell-command)
 (autoload 'run-shell-command)
+
 (export 'make-socket)
 (autoload 'make-socket "socket")
 (export 'make-server-socket)
@@ -261,6 +262,15 @@
 (autoload 'socket-close "socket")
 (export 'get-socket-stream)
 (autoload 'get-socket-stream "socket")
+(export 'socket-peer-port)
+(autoload 'socket-peer-port "socket")
+(export 'socket-local-port)
+(autoload 'socket-local-port "socket")
+(export 'socket-local-address)
+(autoload 'socket-local-address "socket")
+(export 'socket-peer-address)
+(autoload 'socket-peer-address "socket")
+
 (export '(grovel-java-definitions compile-system))
 (autoload '(grovel-java-definitions compile-system) "compile-system")
 (export 'with-thread-lock)

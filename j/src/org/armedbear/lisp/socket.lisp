@@ -1,7 +1,7 @@
 ;;; socket.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: socket.lisp,v 1.2 2004-08-03 16:47:00 piso Exp $
+;;; Copyright (C) 2004-2006 Peter Graves
+;;; $Id: socket.lisp,v 1.3 2006-02-14 02:30:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -43,5 +43,28 @@
 
 (defun server-socket-close (socket)
   (%server-socket-close socket))
+
+(declaim (inline %socket-address %socket-port))
+(defun %socket-address (socket addressName)
+   (java:jcall "getHostAddress" (java:jcall-raw addressName socket)))
+
+(defun %socket-port (socket portName)
+   (java:jcall portName socket))
+
+(defun socket-local-address (socket)
+   "Returns the local address of the given socket as a dotted quad string."
+   (%socket-address socket "getLocalAddress"))
+
+(defun socket-peer-address (socket)
+   "Returns the peer address of the given socket as a dotted quad string."
+   (%socket-address socket "getInetAddress"))
+
+(defun socket-local-port (socket)
+   "Returns the local port number of the given socket."
+   (%socket-port socket "getLocalPort"))
+
+(defun socket-peer-port (socket)
+   "Returns the peer port number of the given socket."
+   (%socket-port socket "getPort"))
 
 (provide '#:socket)
