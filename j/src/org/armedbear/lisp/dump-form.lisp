@@ -1,7 +1,7 @@
 ;;; dump-form.lisp
 ;;;
-;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: dump-form.lisp,v 1.4 2005-08-13 17:34:25 piso Exp $
+;;; Copyright (C) 2004-2006 Peter Graves
+;;; $Id: dump-form.lisp,v 1.5 2006-02-15 11:51:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -23,7 +23,7 @@
 
 (declaim (ftype (function (cons stream) t) dump-cons))
 (defun dump-cons (object stream)
-  (cond ((and (eq (car object) 'QUOTE) (null (cddr object)))
+  (cond ((and (eq (car object) 'QUOTE) (= (length object) 2))
          (%stream-write-char #\' stream)
          (dump-object (%cadr object) stream))
         (t
