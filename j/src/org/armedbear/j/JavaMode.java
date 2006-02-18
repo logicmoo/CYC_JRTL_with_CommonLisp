@@ -2,7 +2,7 @@
  * JavaMode.java
  *
  * Copyright (C) 1998-2006 Peter Graves
- * $Id: JavaMode.java,v 1.20 2006-02-18 16:56:13 piso Exp $
+ * $Id: JavaMode.java,v 1.21 2006-02-18 17:35:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -409,7 +409,8 @@ public class JavaMode extends AbstractMode implements Constants, Mode
     do
       {
         ++offset;
-      } while (offset < limit && line.charAt(offset) <= ' ');
+      }
+    while (offset < limit && line.charAt(offset) <= ' ');
     if (offset <= limit)
       return buffer.getCol(line, offset);
     return 0;
@@ -473,7 +474,8 @@ public class JavaMode extends AbstractMode implements Constants, Mode
     do
       {
         c = it.prevChar();
-      } while (c != SyntaxIterator.DONE && c != ')');
+      }
+    while (c != SyntaxIterator.DONE && c != ')');
     Position pos = it.getPosition();
     pos = matchClosingParen(pos);
     boolean indent = false;
@@ -519,7 +521,7 @@ public class JavaMode extends AbstractMode implements Constants, Mode
   private final int getIndentationOfEnclosingScope(Line line, Buffer buffer)
   {
     SyntaxIterator it = getSyntaxIterator(new Position(line, 0));
-    loop:
+loop:
     while (true)
       {
         switch (it.prevChar())
@@ -551,6 +553,11 @@ public class JavaMode extends AbstractMode implements Constants, Mode
               String firstIdentifier = getFirstIdentifier(it.getLine());
               if (firstIdentifier.equals("case") || firstIdentifier.equals("default"))
                 return buffer.getIndentation(it.getLine()) + buffer.getIndentSize();
+              String trim = it.getLine().trim();
+              if (trim.startsWith(": ") || trim.startsWith(":\t"))
+                continue;
+              if (trim.startsWith("public:") || trim.startsWith("private:") || trim.startsWith("protected:"))
+                return buffer.getIndentation(it.getLine()) + buffer.getIndentSize();
               break;
             }
           case SyntaxIterator.DONE:
@@ -568,7 +575,8 @@ public class JavaMode extends AbstractMode implements Constants, Mode
     do
       {
         c = it.prevChar();
-      } while (c != SyntaxIterator.DONE && Character.isWhitespace(c));
+      }
+    while (c != SyntaxIterator.DONE && Character.isWhitespace(c));
     if (c == '=' || c == ']')
       return true;
     return false;
@@ -825,7 +833,8 @@ public class JavaMode extends AbstractMode implements Constants, Mode
             String s = getFirstIdentifier(line);
             if (s.equals("switch"))
               return line;
-          } while ((line = line.previous()) != null);
+          }
+        while ((line = line.previous()) != null);
       }
     return null;
   }
@@ -926,7 +935,8 @@ public class JavaMode extends AbstractMode implements Constants, Mode
             do
               {
                 ch = it.prevChar();
-              } while (ch != SyntaxIterator.DONE && Character.isWhitespace(ch));
+              }
+            while (ch != SyntaxIterator.DONE && Character.isWhitespace(ch));
             if (ch == '=' || ch == ']')
               {
                 // It is an array initializer.
@@ -940,10 +950,17 @@ public class JavaMode extends AbstractMode implements Constants, Mode
           }
         if (";{}:".indexOf(c) >= 0)
           {
+            if (c == ':')
+              {
+                String s = it.getLine().trim();
+                if (s.startsWith(": ") || s.startsWith(":\t"))
+                  continue;
+              }
             do
               {
                 c = it.nextChar();
-              } while (c != SyntaxIterator.DONE && Character.isWhitespace(c));
+              }
+            while (c != SyntaxIterator.DONE && Character.isWhitespace(c));
             pos = it.getPosition();
             pos.setOffset(0);
             return pos;
