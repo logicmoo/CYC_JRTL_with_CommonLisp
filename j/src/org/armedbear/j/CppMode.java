@@ -2,7 +2,7 @@
  * CppMode.java
  *
  * Copyright (C) 1998-2006 Peter Graves
- * $Id: CppMode.java,v 1.3 2006-01-31 10:06:23 piso Exp $
+ * $Id: CppMode.java,v 1.4 2006-02-18 17:36:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -94,12 +94,14 @@ public final class CppMode extends CMode implements Constants, Mode
             return indentClosingBrace(line, buffer);
         if (trim.equals("public:") || trim.equals("private:") || trim.equals("protected:"))
             return 0;
-        if (trim.startsWith(": ") || trim.startsWith(":\t"))
-            return 2; // start of member initialization list
+        Line model = findModel(line);
+        if (model == null)
+            return 0;
+        if (trim.startsWith(": ") || trim.startsWith(":\t")) {
+            // start of member initialization list
+            return model.getIndentation() + 2;
+        }
         if (trim.startsWith("{")) {
-            Line model = findModel(line);
-            if (model == null)
-                return 0;
             String modelTrim = model.trim();
             if (modelTrim.startsWith(": ") || modelTrim.startsWith(":\t"))
                 return 0;
