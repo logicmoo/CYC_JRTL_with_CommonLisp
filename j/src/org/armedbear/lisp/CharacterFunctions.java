@@ -1,8 +1,8 @@
 /*
  * CharacterFunctions.java
  *
- * Copyright (C) 2003-2005 Peter Graves
- * $Id: CharacterFunctions.java,v 1.14 2005-10-17 18:07:54 piso Exp $
+ * Copyright (C) 2003-2006 Peter Graves
+ * $Id: CharacterFunctions.java,v 1.15 2006-02-20 19:16:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -56,7 +56,7 @@ public final class CharacterFunctions extends Lisp
         {
             final int length = array.length;
             final char c0 = LispCharacter.getValue(array[0]);
-            for (int i = 0; i < length; i++) {
+            for (int i = 1; i < length; i++) {
                 if (c0 != LispCharacter.getValue(array[i]))
                     return NIL;
             }
