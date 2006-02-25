@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
-;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: format.lisp,v 1.31 2005-07-07 23:31:52 piso Exp $
+;;; Copyright (C) 2004-2006 Peter Graves
+;;; $Id: format.lisp,v 1.32 2006-02-25 04:20:54 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -248,6 +248,9 @@
   (let* ((index (position #\. string))
          (n (read-from-string (setf string (remove #\. string))))
          (s (princ-to-string (incf n))))
+    (loop for char across string
+      while (equal char #\0)
+      do (setf s (concatenate 'string "0" s)))
     (cond ((null index)
            s)
           (t
