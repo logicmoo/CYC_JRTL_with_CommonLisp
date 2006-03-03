@@ -1,7 +1,7 @@
 ;;; update-check-enabled.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: update-check-enabled.lisp,v 1.1 2003-10-07 14:29:50 piso Exp $
+;;; Copyright (C) 2003-2006 Peter Graves
+;;; $Id: update-check-enabled.lisp,v 1.2 2006-03-03 14:26:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -32,10 +32,9 @@
            (current-time (get-internal-real-time))
            (timeout (* check-enabled-timeout 60 internal-time-units-per-second))
            (enable (if (> current-time (+ last-event-time timeout)) nil t)))
-      (unless (eq (variable-value 'check-enabled :global) enable)
-        (setf (variable-value 'check-enabled :global) enable)
-        (log-debug "check-enabled => ~A"
-                   (variable-value 'check-enabled :global))))))
+      (unless (eq (get-global-property 'check-enabled) enable)
+        (set-global-property 'check-enabled enable)
+        (log-debug "check-enabled => ~A" (get-global-property 'check-enabled))))))
 
 ;; Fire it up.
 (make-thread #'update-check-enabled)
