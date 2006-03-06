@@ -1,7 +1,7 @@
 ;;; misc-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: misc-tests.lisp,v 1.4 2005-12-01 14:52:22 piso Exp $
+;;; $Id: misc-tests.lisp,v 1.5 2006-03-06 20:33:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -88,5 +88,15 @@
 (deftest copy-list.1
   (eq (copy-list nil) nil)
   t)
+
+(deftest read-from-string.1
+  (read-from-string "(1 2 #-abcl #k(3 4))")
+  (1 2)
+  20)
+
+(deftest read-from-string.2
+  (read-from-string "(1 2 #+nil #k(3 4))")
+  (1 2)
+  19)
 
 (do-tests)
