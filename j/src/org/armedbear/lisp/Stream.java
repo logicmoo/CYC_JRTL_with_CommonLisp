@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: Stream.java,v 1.148 2006-01-20 15:23:46 piso Exp $
+ * $Id: Stream.java,v 1.149 2006-03-06 20:30:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -635,6 +635,8 @@ public class Stream extends LispObject
         thread._values = null;
         return result;
       }
+    if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
+      return null;
     return signal(new ReaderError("No dispatch function defined for #\\" + c,
                                   this));
   }
