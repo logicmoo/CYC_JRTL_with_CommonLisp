@@ -2,7 +2,7 @@
  * Darcs.java
  *
  * Copyright (C) 2005-2006 Peter Graves
- * $Id: Darcs.java,v 1.2 2006-02-23 16:08:23 piso Exp $
+ * $Id: Darcs.java,v 1.3 2006-03-07 02:14:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,14 +21,8 @@
 
 package org.armedbear.j;
 
-import gnu.regexp.RE;
-import gnu.regexp.REMatch;
-import gnu.regexp.UncheckedRE;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import javax.swing.SwingUtilities;
-import javax.swing.undo.CompoundEdit;
 
 public class Darcs implements Constants
 {
@@ -44,18 +38,21 @@ public class Darcs implements Constants
     final Editor editor = Editor.currentEditor();
     editor.setWaitCursor();
     List args = Utilities.tokenize(s);
+    String arg;
     FastStringBuffer sb = new FastStringBuffer("darcs ");
-    for (Iterator it = args.iterator(); it.hasNext();)
+    for (int i = 0; i < args.size(); i++)
       {
-        String arg = (String) it.next();
-        if (arg.equals("%"))
-          {
-            File file = editor.getBuffer().getFile();
-            if (file != null)
-              arg = file.canonicalPath();
-          }
+        arg = (String) args.get(i);
+        if (i == 0 && arg.equals("w"))
+          arg = "whatsnew";
         sb.append(maybeQuote(arg));
         sb.append(' ');
+      }
+    if (sb.toString().equals("darcs whatsnew "))
+      {
+        File file = editor.getBuffer().getFile();
+        if (file != null)
+          sb.append(file.getName());
       }
     final String cmd = sb.toString().trim();
     final Buffer parentBuffer = editor.getBuffer();
