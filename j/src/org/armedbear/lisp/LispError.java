@@ -1,8 +1,8 @@
 /*
  * LispError.java
  *
- * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispError.java,v 1.15 2005-11-01 01:42:06 piso Exp $
+ * Copyright (C) 2002-2006 Peter Graves
+ * $Id: LispError.java,v 1.16 2006-03-11 17:04:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,47 +23,47 @@ package org.armedbear.lisp;
 
 public class LispError extends SeriousCondition
 {
-    public LispError() throws ConditionThrowable
-    {
-    }
+  public LispError() throws ConditionThrowable
+  {
+  }
 
-    protected LispError(LispClass cls) throws ConditionThrowable
-    {
-        super(cls);
-    }
+  protected LispError(LispClass cls) throws ConditionThrowable
+  {
+    super(cls);
+  }
 
-    public LispError(LispObject initArgs) throws ConditionThrowable
-    {
-        super(StandardClass.ERROR);
-        initialize(initArgs);
-    }
+  public LispError(LispObject initArgs) throws ConditionThrowable
+  {
+    super(StandardClass.ERROR);
+    initialize(initArgs);
+  }
 
-    protected void initialize(LispObject initArgs) throws ConditionThrowable
-    {
-        super.initialize(initArgs);
-    }
+  protected void initialize(LispObject initArgs) throws ConditionThrowable
+  {
+    super.initialize(initArgs);
+  }
 
-    public LispError(String message)
-    {
-        super(message);
-    }
+  public LispError(String message)
+  {
+    super(message);
+  }
 
-    public LispObject typeOf()
-    {
-        return Symbol.ERROR;
-    }
+  public LispObject typeOf()
+  {
+    return Symbol.ERROR;
+  }
 
-    public LispObject classOf()
-    {
-        return StandardClass.ERROR;
-    }
+  public LispObject classOf()
+  {
+    return StandardClass.ERROR;
+  }
 
-    public LispObject typep(LispObject type) throws ConditionThrowable
-    {
-        if (type == Symbol.ERROR)
-            return T;
-        if (type == StandardClass.ERROR)
-            return T;
-        return super.typep(type);
-    }
+  public LispObject typep(LispObject type) throws ConditionThrowable
+  {
+    if (type == Symbol.ERROR)
+      return T;
+    if (type == StandardClass.ERROR)
+      return T;
+    return super.typep(type);
+  }
 }
