@@ -2,7 +2,7 @@
  * LispError.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: LispError.java,v 1.16 2006-03-11 17:04:02 piso Exp $
+ * $Id: LispError.java,v 1.17 2006-03-11 18:01:22 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,9 +43,10 @@ public class LispError extends SeriousCondition
     super.initialize(initArgs);
   }
 
-  public LispError(String message)
+  public LispError(String message) throws ConditionThrowable
   {
-    super(message);
+    super(StandardClass.ERROR);
+    setFormatControl(message);
   }
 
   public LispObject typeOf()
