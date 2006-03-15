@@ -2,7 +2,7 @@
  * Do.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: Do.java,v 1.14 2006-01-20 13:43:19 piso Exp $
+ * $Id: Do.java,v 1.15 2006-03-15 02:23:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,30 +51,30 @@ public final class Do extends Lisp
   {
     LispObject varList = args.car();
     LispObject second = args.cadr();
-    LispObject endTestForm = second.car();
+    LispObject end_test_form = second.car();
     LispObject resultForms = second.cdr();
     LispObject body = args.cddr();
     // Process variable specifications.
-    int length = varList.length();
+    final int length = varList.length();
     Symbol[] variables = new Symbol[length];
-    LispObject[] initials = new LispObject[length];
-    LispObject[] updates = new LispObject[length];
+    LispObject[] init_forms = new LispObject[length];
+    LispObject[] step_forms = new LispObject[length];
     for (int i = 0; i < length; i++)
       {
         LispObject obj = varList.car();
         if (obj instanceof Cons)
           {
             variables[i] = checkSymbol(obj.car());
-            initials[i] = obj.cadr();
+            init_forms[i] = obj.cadr();
             // Is there a step form?
-            if (obj.cdr().cdr() != NIL)
-              updates[i] = obj.cdr().cdr().car();
+            if (obj.cddr() != NIL)
+              step_forms[i] = obj.caddr();
           }
         else
           {
             // Not a cons, must be a symbol.
             variables[i] = checkSymbol(obj);
-            initials[i] = NIL;
+            init_forms[i] = NIL;
           }
         varList = varList.cdr();
       }
@@ -112,18 +112,19 @@ public final class Do extends Lisp
       {
         Symbol symbol = variables[i];
         LispObject value =
-          eval(initials[i], (sequential ? ext : env), thread);
+          eval(init_forms[i], (sequential ? ext : env), thread);
         if (specials != NIL && memq(symbol, specials))
-          {
             thread.bindSpecial(symbol, value);
-            ext.declareSpecial(symbol);
-          }
         else if (symbol.isSpecialVariable())
-          {
-            thread.bindSpecial(symbol, value);
-          }
+          thread.bindSpecial(symbol, value);
         else
           ext.bind(symbol, value);
+      }
+    LispObject list = specials;
+    while (list != NIL)
+      {
+        ext.declareSpecial(checkSymbol(list.car()));
+        list = list.cdr();
       }
     final LispObject stack = thread.getStack();
     // Look for tags.
@@ -145,7 +146,7 @@ public final class Do extends Lisp
           {
             // Execute body.
             // Test for termination.
-            if (eval(endTestForm, ext, thread) != NIL)
+            if (eval(end_test_form, ext, thread) != NIL)
               break;
             remaining = body;
             while (remaining != NIL)
@@ -189,13 +190,13 @@ public final class Do extends Lisp
               {
                 for (int i = 0; i < length; i++)
                   {
-                    LispObject update = updates[i];
-                    if (update != null)
+                    LispObject step = step_forms[i];
+                    if (step != null)
                       {
                         Symbol symbol = variables[i];
-                        LispObject value = eval(update, ext, thread);
-                        if (symbol.isSpecialVariable() ||
-                            (specials != NIL && memq(symbol, specials)))
+                        LispObject value = eval(step, ext, thread);
+                        if (symbol.isSpecialVariable()
+                            || ext.isDeclaredSpecial(symbol))
                           thread.rebindSpecial(symbol, value);
                         else
                           ext.rebind(symbol, value);
@@ -208,10 +209,10 @@ public final class Do extends Lisp
                 LispObject results[] = new LispObject[length];
                 for (int i = 0; i < length; i++)
                   {
-                    LispObject update = updates[i];
-                    if (update != null)
+                    LispObject step = step_forms[i];
+                    if (step != null)
                       {
-                        LispObject result = eval(update, ext, thread);
+                        LispObject result = eval(step, ext, thread);
                         results[i] = result;
                       }
                   }
@@ -222,8 +223,8 @@ public final class Do extends Lisp
                       {
                         Symbol symbol = variables[i];
                         LispObject value = results[i];
-                        if (symbol.isSpecialVariable() ||
-                            (specials != NIL && memq(symbol, specials)))
+                        if (symbol.isSpecialVariable()
+                            || ext.isDeclaredSpecial(symbol))
                           thread.rebindSpecial(symbol, value);
                         else
                           ext.rebind(symbol, value);
