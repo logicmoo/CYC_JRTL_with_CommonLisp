@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
-;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: setf.lisp,v 1.63 2005-12-22 18:47:39 piso Exp $
+;;; Copyright (C) 2003-2006 Peter Graves
+;;; $Id: setf.lisp,v 1.64 2006-03-16 19:49:12 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -62,9 +62,9 @@
            (expand-or-get-setf-inverse form environment)))))
 
 (defmacro setf (&rest args &environment environment)
-  (let ((count (length args)))
+  (let ((numargs (length args)))
     (cond
-     ((= count 2)
+     ((= numargs 2)
       (let ((place (first args))
             (value-form (second args)))
         (if (atom place)
@@ -86,7 +86,7 @@
                           `(let* (,@(mapcar #'list dummies vals)
                                     ,(list (car store-vars) value-form))
                                ,setter)))))))))
-     ((oddp count)
+     ((oddp numargs)
       (error "Odd number of arguments to SETF."))
      (t
       (do ((a args (cddr a)) (l nil))
