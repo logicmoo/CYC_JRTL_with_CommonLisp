@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: SpecialOperators.java,v 1.53 2006-03-16 11:13:08 piso Exp $
+ * $Id: SpecialOperators.java,v 1.54 2006-03-16 11:32:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -441,10 +441,8 @@ public final class SpecialOperators extends Lisp
                     return signal(new ProgramError(message));
                   }
               }
-            else if (name instanceof Cons && name.car() == Symbol.SETF)
-              {
-                symbol = checkSymbol(name.cadr());
-              }
+            else if (isValidSetfFunctionName(name))
+              symbol = checkSymbol(name.cadr());
             else
               return signalTypeError(name, FUNCTION_NAME);
             LispObject rest = def.cdr();
