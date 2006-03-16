@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Lisp.java,v 1.439 2006-02-10 10:50:57 piso Exp $
+ * $Id: Lisp.java,v 1.440 2006-03-16 11:31:26 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1180,8 +1180,7 @@ public abstract class Lisp
         if (cons.car == Symbol.SETF && cons.cdr instanceof Cons)
           {
             Cons cdr = (Cons) cons.cdr;
-            if (cdr.car != NIL && cdr.cdr == NIL)
-              return (cdr.car instanceof Symbol);
+            return (cdr.car instanceof Symbol && cdr.cdr == NIL);
           }
       }
     return false;
