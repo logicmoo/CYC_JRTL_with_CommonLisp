@@ -2,7 +2,7 @@
  * dolist.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: dolist.java,v 1.13 2006-03-16 00:47:27 piso Exp $
+ * $Id: dolist.java,v 1.14 2006-03-16 01:06:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -101,6 +101,11 @@ public final class dolist extends SpecialOperator
           {
             ext.bind(var, null);
             binding = ext.getBinding(var);
+          }
+        while (specials != NIL)
+          {
+            ext.declareSpecial(checkSymbol(specials.car()));
+            specials = specials.cdr();
           }
         while (list != NIL)
           {
