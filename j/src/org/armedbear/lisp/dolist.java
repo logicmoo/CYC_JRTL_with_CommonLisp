@@ -2,7 +2,7 @@
  * dolist.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: dolist.java,v 1.14 2006-03-16 01:06:10 piso Exp $
+ * $Id: dolist.java,v 1.15 2006-03-16 01:31:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -69,8 +69,11 @@ public final class dolist extends SpecialOperator
       }
     try
       {
-        LispObject list = checkList(eval(listForm, env, thread));
         final Environment ext = new Environment(env);
+        // Implicit block.
+        ext.addBlock(NIL, new LispObject());
+        // Evaluate the list form.
+        LispObject list = checkList(eval(listForm, ext, thread));
         // Look for tags.
         LispObject remaining = bodyForm;
         while (remaining != NIL)
@@ -82,8 +85,6 @@ public final class dolist extends SpecialOperator
             // It's a tag.
             ext.addTagBinding(current, remaining);
           }
-        // Implicit block.
-        ext.addBlock(NIL, new LispObject());
         // Establish a reusable binding.
         final Object binding;
         if (specials != NIL && memq(var, specials))
