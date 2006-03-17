@@ -1,7 +1,7 @@
 ;;; fdefinition.lisp
 ;;;
-;;; Copyright (C) 2005 Peter Graves
-;;; $Id: fdefinition.lisp,v 1.16 2005-11-15 14:08:33 piso Exp $
+;;; Copyright (C) 2005-2006 Peter Graves
+;;; $Id: fdefinition.lisp,v 1.17 2006-03-17 01:33:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -46,7 +46,7 @@
                     (cons source-pathname source-position)
                     source-pathname)))
     (cond ((symbolp name)
-           (%put name '%source source)))))
+           (put name '%source source)))))
 
 ;; Redefined in trace.lisp.
 (defun trace-redefined-update (&rest args)

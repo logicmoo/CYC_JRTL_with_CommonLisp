@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
-;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-functions.lisp,v 1.53 2006-01-16 22:43:59 piso Exp $
+;;; Copyright (C) 2005-2006 Peter Graves
+;;; $Id: known-functions.lisp,v 1.54 2006-03-17 01:33:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -74,7 +74,7 @@
            %ldb
            %make-structure
            %method-function
-           %put
+           put
            %set-cddr
            %stream-terpri
            %stream-write-char

@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: precompiler.lisp,v 1.153 2006-01-14 13:28:34 piso Exp $
+;;; $Id: precompiler.lisp,v 1.154 2006-03-17 01:33:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1092,7 +1092,7 @@
 ;;            (let ((macro (make-macro ',name
 ;;                                     (or (precompile nil ,expander) ,expander))))
 ;;              ,@(if (special-operator-p name)
-;;                    `((%put ',name 'macroexpand-macro macro))
+;;                    `((put ',name 'macroexpand-macro macro))
 ;;                    `((fset ',name macro)))
 ;;              (%set-arglist macro ',lambda-list)
 ;;              ',name))))))

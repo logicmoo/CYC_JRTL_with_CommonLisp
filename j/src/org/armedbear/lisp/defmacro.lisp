@@ -1,7 +1,7 @@
 ;;; defmacro.lisp
 ;;;
-;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: defmacro.lisp,v 1.6 2005-06-27 12:23:39 piso Exp $
+;;; Copyright (C) 2003-2006 Peter Graves
+;;; $Id: defmacro.lisp,v 1.7 2006-03-17 01:33:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@
            (let ((macro (make-macro ',name
                                     (or (precompile nil ,expander) ,expander))))
              ,@(if (special-operator-p name)
-                   `((%put ',name 'macroexpand-macro macro))
+                   `((put ',name 'macroexpand-macro macro))
                    `((fset ',name macro)))
              (%set-arglist macro ',lambda-list)
              ',name))))))

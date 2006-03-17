@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: setf.lisp,v 1.64 2006-03-16 19:49:12 piso Exp $
+;;; $Id: setf.lisp,v 1.65 2006-03-17 01:33:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -119,14 +119,14 @@
 (defun %define-setf-macro (name expander inverse doc)
   (declare (ignore doc)) ; FIXME
   (when inverse
-    (%put name 'setf-inverse inverse))
+    (put name 'setf-inverse inverse))
   (when expander
-    (%put name 'setf-expander expander))
+    (put name 'setf-expander expander))
   name)
 
 (defmacro defsetf (access-function update-function)
   `(eval-when (:load-toplevel :compile-toplevel :execute)
-     (%put ',access-function 'setf-inverse ',update-function)))
+     (put ',access-function 'setf-inverse ',update-function)))
 
 (defun %set-caar (x v) (set-car (car x) v))
 (defun %set-cadr (x v) (set-car (cdr x) v))
@@ -214,7 +214,7 @@
 (defsetf symbol-value set)
 (defsetf symbol-function %set-symbol-function)
 (defsetf symbol-plist %set-symbol-plist)
-(defsetf get %put)
+(defsetf get put)
 (defsetf gethash puthash)
 (defsetf char set-char)
 (defsetf schar set-schar)

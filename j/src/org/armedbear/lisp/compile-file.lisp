@@ -1,7 +1,7 @@
 ;;; compile-file.lisp
 ;;;
-;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file.lisp,v 1.118 2005-10-22 19:33:33 piso Exp $
+;;; Copyright (C) 2004-2006 Peter Graves
+;;; $Id: compile-file.lisp,v 1.119 2006-03-17 01:33:42 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -191,10 +191,10 @@
                       (progn
                         (setf form
                               (if (special-operator-p name)
-                                  `(%put ',name 'macroexpand-macro
-                                         (make-macro ',name
-                                                     (load-compiled-function
-                                                      ,(file-namestring classfile))))
+                                  `(put ',name 'macroexpand-macro
+                                        (make-macro ',name
+                                                    (load-compiled-function
+                                                     ,(file-namestring classfile))))
                                   `(fset ',name
                                          (make-macro ',name
                                                      (load-compiled-function
@@ -253,7 +253,7 @@
 ;;                      (setf form (precompile-form form nil))
                      (return-from process-toplevel-form)
                      )
-                    ((eq operator '%PUT)
+                    ((eq operator 'PUT)
                      (setf form (precompile-form form nil)))
                     ((eq operator 'COMPILER-DEFSTRUCT)
                      (setf form (precompile-form form nil)))
