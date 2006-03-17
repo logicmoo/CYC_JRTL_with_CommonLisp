@@ -1,8 +1,8 @@
 /*
  * LispShell.java
  *
- * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispShell.java,v 1.93 2005-12-19 18:28:18 piso Exp $
+ * Copyright (C) 2002-2006 Peter Graves
+ * $Id: LispShell.java,v 1.94 2006-03-17 01:26:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -167,6 +167,10 @@ public class LispShell extends Shell
       {
         lisp.setPromptRE(ARMEDBEAR_PROMPT_PATTERN);
         lisp.setResetCommand(":reset");
+      }
+    else if (shellCommand.equals("/home/peter/x/x"))
+      {
+        lisp.setPromptRE("^\\* ");
       }
     else
       {
