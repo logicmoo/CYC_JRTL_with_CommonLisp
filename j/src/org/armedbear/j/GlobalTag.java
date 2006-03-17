@@ -2,7 +2,7 @@
  * GlobalTag.java
  *
  * Copyright (C) 1998-2006 Peter Graves
- * $Id: GlobalTag.java,v 1.3 2006-03-17 02:08:50 piso Exp $
+ * $Id: GlobalTag.java,v 1.4 2006-03-17 02:20:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -207,7 +207,7 @@ public final class GlobalTag extends Tag
               {
                 String head = s.substring(0, index);
                 String tail = s.substring(index + methodName.length());
-                s = head + name + tail;
+                s = head + methodName + tail;
               }
           }
       }
