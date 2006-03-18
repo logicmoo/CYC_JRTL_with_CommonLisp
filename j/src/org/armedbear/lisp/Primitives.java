@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Primitives.java,v 1.874 2006-03-17 01:25:14 piso Exp $
+ * $Id: Primitives.java,v 1.875 2006-03-18 11:28:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5128,7 +5128,7 @@ public final class Primitives extends Lisp
       }
     };
 
-  // ### list-delete-eq item list => result-list
+  // ### list-delete-eql item list => result-list
   private static final Primitive LIST_DELETE_EQL =
     new Primitive("list-delete-eql", PACKAGE_SYS, true, "item list")
     {
