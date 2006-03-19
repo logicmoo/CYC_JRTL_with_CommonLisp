@@ -2,7 +2,7 @@
  * Do.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: Do.java,v 1.17 2006-03-16 00:54:24 piso Exp $
+ * $Id: Do.java,v 1.18 2006-03-19 15:12:47 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,11 +55,11 @@ public final class Do extends Lisp
     LispObject resultForms = second.cdr();
     LispObject body = args.cddr();
     // Process variable specifications.
-    final int length = varList.length();
-    Symbol[] variables = new Symbol[length];
-    LispObject[] init_forms = new LispObject[length];
-    LispObject[] step_forms = new LispObject[length];
-    for (int i = 0; i < length; i++)
+    final int numvars = varList.length();
+    Symbol[] variables = new Symbol[numvars];
+    LispObject[] init_forms = new LispObject[numvars];
+    LispObject[] step_forms = new LispObject[numvars];
+    for (int i = 0; i < numvars; i++)
       {
         LispObject obj = varList.car();
         if (obj instanceof Cons)
@@ -108,7 +108,7 @@ public final class Do extends Lisp
           break;
       }
     final Environment ext = new Environment(env);
-    for (int i = 0; i < length; i++)
+    for (int i = 0; i < numvars; i++)
       {
         Symbol symbol = variables[i];
         LispObject value =
@@ -188,7 +188,7 @@ public final class Do extends Lisp
             // Update variables.
             if (sequential)
               {
-                for (int i = 0; i < length; i++)
+                for (int i = 0; i < numvars; i++)
                   {
                     LispObject step = step_forms[i];
                     if (step != null)
@@ -206,8 +206,8 @@ public final class Do extends Lisp
             else
               {
                 // Evaluate step forms.
-                LispObject results[] = new LispObject[length];
-                for (int i = 0; i < length; i++)
+                LispObject results[] = new LispObject[numvars];
+                for (int i = 0; i < numvars; i++)
                   {
                     LispObject step = step_forms[i];
                     if (step != null)
@@ -217,7 +217,7 @@ public final class Do extends Lisp
                       }
                   }
                 // Update variables.
-                for (int i = 0; i < length; i++)
+                for (int i = 0; i < numvars; i++)
                   {
                     if (results[i] != null)
                       {
