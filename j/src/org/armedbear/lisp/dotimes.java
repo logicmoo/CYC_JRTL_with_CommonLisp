@@ -2,7 +2,7 @@
  * dotimes.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: dotimes.java,v 1.17 2006-01-31 20:24:06 piso Exp $
+ * $Id: dotimes.java,v 1.18 2006-03-19 19:08:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -103,6 +103,11 @@ public final class dotimes extends SpecialOperator
           {
             ext.bind(var, null);
             binding = ext.getBinding(var);
+          }
+        while (specials != NIL)
+          {
+            ext.declareSpecial(checkSymbol(specials.car()));
+            specials = specials.cdr();
           }
         if (limit instanceof Fixnum)
           {
