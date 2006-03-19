@@ -2,7 +2,7 @@
  * Do.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: Do.java,v 1.19 2006-03-19 16:05:10 piso Exp $
+ * $Id: Do.java,v 1.20 2006-03-19 16:10:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -110,15 +110,14 @@ public final class Do extends Lisp
     final Environment ext = new Environment(env);
     for (int i = 0; i < numvars; i++)
       {
-        Symbol symbol = vars[i];
-        LispObject value =
-          eval(initforms[i], (sequential ? ext : env), thread);
-        if (specials != NIL && memq(symbol, specials))
-            thread.bindSpecial(symbol, value);
-        else if (symbol.isSpecialVariable())
-          thread.bindSpecial(symbol, value);
+        Symbol var = vars[i];
+        LispObject value = eval(initforms[i], (sequential ? ext : env), thread);
+        if (specials != NIL && memq(var, specials))
+            thread.bindSpecial(var, value);
+        else if (var.isSpecialVariable())
+          thread.bindSpecial(var, value);
         else
-          ext.bind(symbol, value);
+          ext.bind(var, value);
       }
     LispObject list = specials;
     while (list != NIL)
