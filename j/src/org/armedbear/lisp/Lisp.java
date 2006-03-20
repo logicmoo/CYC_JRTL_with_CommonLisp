@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Lisp.java,v 1.440 2006-03-16 11:31:26 piso Exp $
+ * $Id: Lisp.java,v 1.441 2006-03-20 01:25:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1605,7 +1605,7 @@ public abstract class Lisp
               return entry;
           }
         else if (entry != NIL)
-          return signalTypeError(entry, Symbol.CONS);
+          return signalTypeError(entry, Symbol.LIST);
         alist = ((Cons)alist).cdr;
       }
     if (alist != NIL)
