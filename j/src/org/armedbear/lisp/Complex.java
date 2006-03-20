@@ -2,7 +2,7 @@
  * Complex.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: Complex.java,v 1.37 2006-03-20 01:24:21 piso Exp $
+ * $Id: Complex.java,v 1.38 2006-03-20 01:27:40 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,9 +39,9 @@ public final class Complex extends LispObject
     throws ConditionThrowable
   {
     if (!realpart.realp())
-      return signal(new TypeError(realpart, Symbol.REAL));
+      return signalTypeError(realpart, Symbol.REAL);
     if (!imagpart.realp())
-      return signal(new TypeError(imagpart, Symbol.REAL));
+      return signalTypeError(imagpart, Symbol.REAL);
     if (realpart instanceof DoubleFloat)
       imagpart = DoubleFloat.coerceToFloat(imagpart);
     else if (imagpart instanceof DoubleFloat)
@@ -180,7 +180,8 @@ public final class Complex extends LispObject
     if (obj instanceof Complex)
       {
         Complex c = (Complex) obj;
-        return getInstance(realpart.subtract(c.realpart), imagpart.subtract(c.imagpart));
+        return getInstance(realpart.subtract(c.realpart),
+                           imagpart.subtract(c.imagpart));
       }
     return getInstance(realpart.subtract(obj), imagpart);
   }
@@ -262,7 +263,7 @@ public final class Complex extends LispObject
           }
         return false;
       }
-    signal(new TypeError(obj, Symbol.NUMBER));
+    signalTypeError(obj, Symbol.NUMBER);
     // Not reached.
     return false;
   }
@@ -339,7 +340,7 @@ public final class Complex extends LispObject
 
   public String writeToString() throws ConditionThrowable
   {
-    StringBuffer sb = new StringBuffer("#C(");
+    FastStringBuffer sb = new FastStringBuffer("#C(");
     sb.append(realpart.writeToString());
     sb.append(' ');
     sb.append(imagpart.writeToString());
