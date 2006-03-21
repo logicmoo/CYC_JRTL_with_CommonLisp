@@ -1,8 +1,8 @@
 /*
  * UnboundVariable.java
  *
- * Copyright (C) 2002-2005 Peter Graves
- * $Id: UnboundVariable.java,v 1.15 2005-10-23 16:39:49 piso Exp $
+ * Copyright (C) 2002-2006 Peter Graves
+ * $Id: UnboundVariable.java,v 1.16 2006-03-21 15:55:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -23,48 +23,49 @@ package org.armedbear.lisp;
 
 public final class UnboundVariable extends CellError
 {
-    // obj is either the unbound variable itself or an initArgs list.
-    public UnboundVariable(LispObject obj) throws ConditionThrowable
-    {
-        super(StandardClass.UNBOUND_VARIABLE);
-        if (obj instanceof Cons)
-            initialize(obj);
-        else
-            setCellName(obj);
-    }
+  // obj is either the unbound variable itself or an initArgs list.
+  public UnboundVariable(LispObject obj) throws ConditionThrowable
+  {
+    super(StandardClass.UNBOUND_VARIABLE);
+    if (obj instanceof Cons)
+      initialize(obj);
+    else
+      setCellName(obj);
+  }
 
-    public String getMessage()
-    {
-        LispThread thread = LispThread.currentThread();
-        SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
-        thread.bindSpecial(Symbol.PRINT_ESCAPE, T);
-        StringBuffer sb = new StringBuffer("The variable ");
-        // FIXME
-        try {
-            sb.append(getCellName().writeToString());
-        }
-        catch (Throwable t) {}
-        sb.append(" is unbound.");
-        thread.lastSpecialBinding = lastSpecialBinding;
-        return sb.toString();
-    }
+  public String getMessage()
+  {
+    LispThread thread = LispThread.currentThread();
+    SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
+    thread.bindSpecial(Symbol.PRINT_ESCAPE, T);
+    StringBuffer sb = new StringBuffer("The variable ");
+    // FIXME
+    try
+      {
+        sb.append(getCellName().writeToString());
+      }
+    catch (Throwable t) {}
+    sb.append(" is unbound.");
+    thread.lastSpecialBinding = lastSpecialBinding;
+    return sb.toString();
+  }
 
-    public LispObject typeOf()
-    {
-        return Symbol.UNBOUND_VARIABLE;
-    }
+  public LispObject typeOf()
+  {
+    return Symbol.UNBOUND_VARIABLE;
+  }
 
-    public LispObject classOf()
-    {
-        return StandardClass.UNBOUND_VARIABLE;
-    }
+  public LispObject classOf()
+  {
+    return StandardClass.UNBOUND_VARIABLE;
+  }
 
-    public LispObject typep(LispObject type) throws ConditionThrowable
-    {
-        if (type == Symbol.UNBOUND_VARIABLE)
-            return T;
-        if (type == StandardClass.UNBOUND_VARIABLE)
-            return T;
-        return super.typep(type);
-    }
+  public LispObject typep(LispObject type) throws ConditionThrowable
+  {
+    if (type == Symbol.UNBOUND_VARIABLE)
+      return T;
+    if (type == StandardClass.UNBOUND_VARIABLE)
+      return T;
+    return super.typep(type);
+  }
 }
