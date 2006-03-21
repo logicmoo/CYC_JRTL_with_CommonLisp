@@ -1,8 +1,8 @@
 /*
  * Readtable.java
  *
- * Copyright (C) 2003-2005 Peter Graves
- * $Id: Readtable.java,v 1.44 2005-10-16 02:03:28 piso Exp $
+ * Copyright (C) 2003-2006 Peter Graves
+ * $Id: Readtable.java,v 1.45 2006-03-21 16:21:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -373,45 +373,38 @@ public class Readtable extends LispObject
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
-            char c = LispCharacter.getValue(first);
-            Readtable rt = currentReadtable();
-            // FIXME synchronization
-            rt.syntax[c] = SYNTAX_TYPE_TERMINATING_MACRO;
-            rt.readerMacroFunctions[c] = coerceToFunction(second);
-            return T;
+            return execute(first, second, NIL, currentReadtable());
         }
 
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
         {
+            return execute(first, second, third, currentReadtable());
+        }
+
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth)
+            throws ConditionThrowable
+        {
             char c = LispCharacter.getValue(first);
-            Readtable rt = currentReadtable();
+            final LispObject designator;
+            if (second instanceof Function || second instanceof StandardGenericFunction)
+                designator = second;
+            else if (second instanceof Symbol)
+                designator = second;
+            else
+                return signal(new LispError(second.writeToString() +
+                                            " does not designate a function."));
             byte syntaxType;
             if (third != NIL)
                 syntaxType = SYNTAX_TYPE_NON_TERMINATING_MACRO;
             else
                 syntaxType = SYNTAX_TYPE_TERMINATING_MACRO;
+            Readtable rt = checkReadtable(fourth);
             // FIXME synchronization
             rt.syntax[c] = syntaxType;
-            rt.readerMacroFunctions[c] = coerceToFunction(second);
-            return T;
-        }
-
-        public LispObject execute(LispObject[] args) throws ConditionThrowable
-        {
-            if (args.length != 4)
-                return signal(new WrongNumberOfArgumentsException(this));
-            char c = LispCharacter.getValue(args[0]);
-            byte syntaxType;
-            if (args[2] != NIL)
-                syntaxType = SYNTAX_TYPE_NON_TERMINATING_MACRO;
-            else
-                syntaxType = SYNTAX_TYPE_TERMINATING_MACRO;
-            Readtable rt = checkReadtable(args[3]);
-            // FIXME synchronization
-            rt.syntax[c] = syntaxType;
-            rt.readerMacroFunctions[c] = coerceToFunction(args[1]);
+            rt.readerMacroFunctions[c] = designator;
             return T;
         }
     };
