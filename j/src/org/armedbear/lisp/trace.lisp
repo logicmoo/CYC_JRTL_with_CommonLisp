@@ -1,7 +1,7 @@
 ;;; trace.lisp
 ;;;
-;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: trace.lisp,v 1.15 2005-05-14 19:00:58 piso Exp $
+;;; Copyright (C) 2003-2006 Peter Graves
+;;; $Id: trace.lisp,v 1.16 2006-03-21 15:26:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -66,7 +66,8 @@
   name)
 
 (defun traced-function (name info untraced-function)
-  (let ((breakp (trace-info-breakp info)))
+  (let ((breakp (trace-info-breakp info))
+	(*trace-depth* *trace-depth*))
     (lambda (&rest args)
       (with-standard-io-syntax
         (let ((*print-readably* nil)
