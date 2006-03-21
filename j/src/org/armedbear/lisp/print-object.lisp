@@ -1,7 +1,7 @@
 ;;; print-object.lisp
 ;;;
-;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: print-object.lisp,v 1.12 2005-11-04 12:07:02 piso Exp $
+;;; Copyright (C) 2003-2006 Peter Graves
+;;; $Id: print-object.lisp,v 1.13 2006-03-21 16:14:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -92,5 +92,13 @@
   (if *print-escape*
       (call-next-method)
       (format stream "The function ~S is undefined." (cell-error-name x))))
+
+(defmethod print-object ((x unbound-variable) stream)
+  (if *print-escape*
+      (print-unreadable-object (x stream :identity t)
+        (format stream "~S ~S"
+                (type-of x)
+                (cell-error-name x)))
+      (format stream "The variable ~S is unbound." (cell-error-name x))))
 
 (provide 'print-object)
