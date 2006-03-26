@@ -1,8 +1,8 @@
 /*
  * DoubleFloat.java
  *
- * Copyright (C) 2003-2005 Peter Graves
- * $Id: DoubleFloat.java,v 1.6 2005-10-23 18:44:50 piso Exp $
+ * Copyright (C) 2003-2006 Peter Graves
+ * $Id: DoubleFloat.java,v 1.7 2006-03-26 18:38:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,10 +36,8 @@ public final class DoubleFloat extends LispObject
         new DoubleFloat(Double.NEGATIVE_INFINITY);
 
     static {
-        Symbol.DOUBLE_FLOAT_POSITIVE_INFINITY.setSymbolValue(DOUBLE_FLOAT_POSITIVE_INFINITY);
-        Symbol.DOUBLE_FLOAT_POSITIVE_INFINITY.setConstant(true);
-        Symbol.DOUBLE_FLOAT_NEGATIVE_INFINITY.setSymbolValue(DOUBLE_FLOAT_NEGATIVE_INFINITY);
-        Symbol.DOUBLE_FLOAT_NEGATIVE_INFINITY.setConstant(true);
+        Symbol.DOUBLE_FLOAT_POSITIVE_INFINITY.initializeConstant(DOUBLE_FLOAT_POSITIVE_INFINITY);
+        Symbol.DOUBLE_FLOAT_NEGATIVE_INFINITY.initializeConstant(DOUBLE_FLOAT_NEGATIVE_INFINITY);
     }
 
     public final double value;

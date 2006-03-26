@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Lisp.java,v 1.441 2006-03-20 01:25:12 piso Exp $
+ * $Id: Lisp.java,v 1.442 2006-03-26 18:41:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -384,6 +384,8 @@ public abstract class Lisp
       throw new ThreadDestroyed();
     if (obj instanceof Symbol)
       {
+        if (obj.constantp())
+          return obj.getSymbolValue();
         LispObject result;
         if (obj.isSpecialVariable() || env.isDeclaredSpecial(obj))
           result = thread.lookupSpecial(obj);
@@ -1917,9 +1919,7 @@ public abstract class Lisp
                                             LispObject value)
   {
     Symbol symbol = pkg.intern(name);
-    symbol.setSpecial(true);
-    symbol.setSymbolValue(value);
-    symbol.setConstant(true);
+    symbol.initializeConstant(value);
     return symbol;
   }
 
@@ -1952,9 +1952,7 @@ public abstract class Lisp
       {
         Debug.trace(t);
       }
-    symbol.setSpecial(true);
-    symbol.setSymbolValue(value);
-    symbol.setConstant(true);
+    symbol.initializeConstant(value);
     return symbol;
   }
 

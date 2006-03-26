@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Package.java,v 1.72 2005-10-23 12:57:15 piso Exp $
+ * $Id: Package.java,v 1.73 2006-03-26 18:40:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -256,8 +256,7 @@ public final class Package extends LispObject
         Symbol symbol = new Symbol(name, this);
         try {
             if (this == PACKAGE_KEYWORD) {
-                symbol.setSymbolValue(symbol);
-                symbol.setConstant(true);
+                symbol.initializeConstant(symbol);
                 externalSymbols.put(name, symbol);
             } else
                 internalSymbols.put(name, symbol);
@@ -273,8 +272,7 @@ public final class Package extends LispObject
         Symbol symbol = new Symbol(name, hash, this);
         try {
             if (this == PACKAGE_KEYWORD) {
-                symbol.setSymbolValue(symbol);
-                symbol.setConstant(true);
+                symbol.initializeConstant(symbol);
                 externalSymbols.put(name, symbol);
             } else
                 internalSymbols.put(name, symbol);
@@ -394,10 +392,8 @@ public final class Package extends LispObject
         }
         // Not found.
         symbol = new Symbol(s, hash, this);
-        if (this == PACKAGE_KEYWORD) {
-            symbol.setSymbolValue(symbol);
-            symbol.setConstant(true);
-        }
+        if (this == PACKAGE_KEYWORD)
+            symbol.initializeConstant(symbol);
         externalSymbols.put(s, symbol);
         return symbol;
     }

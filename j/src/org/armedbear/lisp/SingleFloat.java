@@ -1,8 +1,8 @@
 /*
  * SingleFloat.java
  *
- * Copyright (C) 2003-2005 Peter Graves
- * $Id: SingleFloat.java,v 1.5 2005-10-23 18:44:50 piso Exp $
+ * Copyright (C) 2003-2006 Peter Graves
+ * $Id: SingleFloat.java,v 1.6 2006-03-26 18:38:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,10 +36,8 @@ public final class SingleFloat extends LispObject
         new SingleFloat(Float.NEGATIVE_INFINITY);
 
     static {
-        Symbol.SINGLE_FLOAT_POSITIVE_INFINITY.setSymbolValue(SINGLE_FLOAT_POSITIVE_INFINITY);
-        Symbol.SINGLE_FLOAT_POSITIVE_INFINITY.setConstant(true);
-        Symbol.SINGLE_FLOAT_NEGATIVE_INFINITY.setSymbolValue(SINGLE_FLOAT_NEGATIVE_INFINITY);
-        Symbol.SINGLE_FLOAT_NEGATIVE_INFINITY.setConstant(true);
+        Symbol.SINGLE_FLOAT_POSITIVE_INFINITY.initializeConstant(SINGLE_FLOAT_POSITIVE_INFINITY);
+        Symbol.SINGLE_FLOAT_NEGATIVE_INFINITY.initializeConstant(SINGLE_FLOAT_NEGATIVE_INFINITY);
     }
 
     public final float value;
