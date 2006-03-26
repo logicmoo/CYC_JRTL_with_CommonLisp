@@ -1,8 +1,8 @@
 /*
  * HashTableFunctions.java
  *
- * Copyright (C) 2002-2005 Peter Graves
- * $Id: HashTableFunctions.java,v 1.7 2006-01-05 20:29:58 piso Exp $
+ * Copyright (C) 2002-2006 Peter Graves
+ * $Id: HashTableFunctions.java,v 1.8 2006-03-26 18:42:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -57,7 +57,7 @@ public final class HashTableFunctions extends Lisp
           return new EqualHashTable(n, rehashSize, rehashThreshold);
         if (test == FUNCTION_EQUALP)
           return new EqualpHashTable(n, rehashSize, rehashThreshold);
-        return signal(new LispError("Unknown test for MAKE-HASH-TABLE: " +
+        return signal(new LispError("Unsupported test for MAKE-HASH-TABLE: " +
                                     test.writeToString()));
       }
     };
