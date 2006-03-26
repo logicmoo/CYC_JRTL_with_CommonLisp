@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Symbol.java,v 1.244 2006-01-09 11:59:41 piso Exp $
+ * $Id: Symbol.java,v 1.245 2006-03-26 18:41:00 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -203,14 +203,6 @@ public class Symbol extends LispObject
   public final boolean isConstant()
   {
     return (flags & FLAG_CONSTANT) != 0;
-  }
-
-  public final void setConstant(boolean b)
-  {
-    if (b)
-      flags |= FLAG_CONSTANT;
-    else
-      flags &= ~FLAG_CONSTANT;
   }
 
   public final void initializeConstant(LispObject value)
