@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Primitives.java,v 1.875 2006-03-18 11:28:43 piso Exp $
+ * $Id: Primitives.java,v 1.876 2006-03-28 01:13:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -5273,7 +5273,7 @@ public final class Primitives extends Lisp
 
   // ### %member item list key test test-not => tail
   private static final Primitive _MEMBER =
-    new Primitive("%member", PACKAGE_SYS, false)
+    new Primitive("%member", PACKAGE_SYS, true)
     {
       public LispObject execute(LispObject item, LispObject list,
                                 LispObject key, LispObject test,
@@ -5304,7 +5304,7 @@ public final class Primitives extends Lisp
                 while (tail instanceof Cons)
                   {
                     LispObject candidate = ((Cons)tail).car;
-                    if (test.execute(item, candidate) == T)
+                    if (test.execute(item, candidate) != NIL)
                       return tail;
                     tail = ((Cons)tail).cdr;
                   }
@@ -5329,7 +5329,7 @@ public final class Primitives extends Lisp
                 LispObject candidate = key.execute(((Cons)tail).car);
                 if (test != NIL)
                   {
-                    if (test.execute(item, candidate) == T)
+                    if (test.execute(item, candidate) != NIL)
                       return tail;
                   }
                 else
@@ -5346,8 +5346,7 @@ public final class Primitives extends Lisp
       }
     };
 
-  // ### funcall-key
-  // funcall-key function-or-nil element
+  // ### funcall-key function-or-nil element
   private static final Primitive FUNCALL_KEY =
     new Primitive("funcall-key", PACKAGE_SYS, false)
     {
