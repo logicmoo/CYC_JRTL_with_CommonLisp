@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.126 2006-01-04 18:05:58 piso Exp $
+ * $Id: Load.java,v 1.127 2006-04-08 00:12:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -91,11 +91,14 @@ public final class Load extends Lisp
                 return NIL;
         }
         ZipFile zipfile = null;
-        try {
-            zipfile = new ZipFile(file);
-        }
-        catch (Throwable t) {
-            // Fall through.
+        if (checkZipFile(file))
+        {
+            try {
+                zipfile = new ZipFile(file);
+            }
+            catch (Throwable t) {
+                // Fall through.
+            }
         }
         String truename = filename;
         InputStream in = null;
@@ -485,6 +488,32 @@ public final class Load extends Lisp
             }
         }
         return null;
+    }
+    
+    private static final boolean checkZipFile(File file)
+    {
+        InputStream in = null;
+        try {
+            in = new FileInputStream(file);
+            byte[] bytes = new byte[4];
+            int bytesRead = in.read(bytes);
+            return (bytesRead == 4
+                    && bytes[0] == 0x50
+                    && bytes[1] == 0x4b
+                    && bytes[2] == 0x03
+                    && bytes[3] == 0x04);
+        }
+        catch (Throwable t) {
+            return false;
+        }
+        finally {
+            if (in != null) {
+                try {
+                    in.close();
+                }
+                catch (Throwable t) {}
+            }
+        }
     }
 
     // ### %load filespec verbose print if-does-not-exist => generalized-boolean
