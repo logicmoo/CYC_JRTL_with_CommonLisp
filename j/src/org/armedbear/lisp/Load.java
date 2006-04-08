@@ -1,8 +1,8 @@
 /*
  * Load.java
  *
- * Copyright (C) 2002-2005 Peter Graves
- * $Id: Load.java,v 1.127 2006-04-08 00:12:51 piso Exp $
+ * Copyright (C) 2002-2006 Peter Graves
+ * $Id: Load.java,v 1.128 2006-04-08 00:13:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -489,7 +489,7 @@ public final class Load extends Lisp
         }
         return null;
     }
-    
+
     private static final boolean checkZipFile(File file)
     {
         InputStream in = null;
