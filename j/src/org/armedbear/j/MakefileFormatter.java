@@ -2,7 +2,7 @@
  * MakefileFormatter.java
  *
  * Copyright (C) 2000-2006 Peter Graves
- * $Id: MakefileFormatter.java,v 1.2 2006-04-09 23:12:20 piso Exp $
+ * $Id: MakefileFormatter.java,v 1.3 2006-04-10 01:22:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@ public final class MakefileFormatter extends Formatter
   private static final RE targetRE = new UncheckedRE("^\\S+.*:");
   private static final RE assignmentRE = new UncheckedRE("^\\S+\\s*:?=");
   private static final RE conditionalRE =
-    new UncheckedRE("^(ifn?(eq|def)\\s)|^(else\\s*)|^(endif\\s*)");
+    new UncheckedRE("^( *ifn?(eq|def)\\s)|^( *else\\s+(ifn?(eq|def))?)|^( *else\\s*)|^( *endif\\s*)");
 
   public MakefileFormatter(Buffer buffer)
   {
