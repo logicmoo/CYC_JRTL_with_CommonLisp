@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Primitives.java,v 1.876 2006-03-28 01:13:55 piso Exp $
+ * $Id: Primitives.java,v 1.877 2006-04-11 16:09:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -346,8 +346,7 @@ public final class Primitives extends Lisp
       }
     };
 
-  // ### values-list
-  // values-list list => element*
+  // ### values-list list => element*
   // Returns the elements of the list as multiple values.
   private static final Primitive VALUES_LIST =
     new Primitive(Symbol.VALUES_LIST, "list")
@@ -355,7 +354,7 @@ public final class Primitives extends Lisp
       public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         if (arg == NIL)
-          return LispThread.currentThread().setValues(new LispObject[0]);
+          return LispThread.currentThread().setValues();
         if (arg.cdr() == NIL)
           return arg.car();
         return LispThread.currentThread().setValues(arg.copyToArray());
