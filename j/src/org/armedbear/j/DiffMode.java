@@ -2,7 +2,7 @@
  * DiffMode.java
  *
  * Copyright (C) 1998-2006 Peter Graves
- * $Id: DiffMode.java,v 1.15 2006-04-12 00:04:03 piso Exp $
+ * $Id: DiffMode.java,v 1.16 2006-04-12 00:16:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -359,7 +359,7 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
     int context = 0;
     int added = 0;
     Line line = dotLine;
-    final File dir;
+    File dir;
     Buffer parentBuffer = diffOutputBuffer.getParentBuffer();
     if (parentBuffer != null)
       dir = parentBuffer.getCurrentDirectory();
@@ -392,6 +392,11 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
     if (--lineNumber < 0)
       return;
     String filename = text.substring(5, index);
+    Log.debug("filename = " + filename);
+    File darcs_root = find_darcs_root(dir);
+    Log.debug("darcs_root = " + darcs_root);
+    if (darcs_root != null)
+      dir = darcs_root;
     File file = File.getInstance(dir, filename);
     if (file != null && file.isFile())
       {
@@ -399,6 +404,19 @@ public final class DiffMode extends AbstractMode implements Constants, Mode
         if (buf != null)
           gotoLocation(editor, buf, lineNumber + added, 0);
       }
+  }
+
+  private static File find_darcs_root(File dir)
+  {
+    while (dir != null)
+      {
+        File file = File.getInstance(dir, "_darcs");
+        if (file != null && file.isDirectory())
+          return dir;
+        dir = dir.getParentFile();
+      }
+    // Not found.
+    return null;
   }
 
   private static void localGotoFile(Editor editor,
