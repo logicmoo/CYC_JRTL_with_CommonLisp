@@ -1,23 +1,20 @@
-/*
- * ManMode.java
- *
- * Copyright (C) 2000-2004 Peter Graves
- * $Id: ManMode.java,v 1.4 2004-04-01 18:50:03 piso Exp $
- *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * as published by the Free Software Foundation; either version 2
- * of the License, or (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- */
+// ManMode.java
+//
+// Copyright (C) 2000-2006 Peter Graves <peter@armedbear.org>
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 package org.armedbear.j;
 
@@ -62,6 +59,16 @@ public final class ManMode extends AbstractMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_G, CTRL_MASK | SHIFT_MASK, "manFollowLink");
         km.mapKey(VK_DOUBLE_MOUSE_1, 0, "manFollowLink");
         km.mapKey(VK_MOUSE_2, 0, "manFollowLink");
+    }
+
+    public Tagger getTagger(SystemBuffer buffer)
+    {
+        return new ManTagger(buffer);
+    }
+
+    public boolean isTaggable()
+    {
+        return true;
     }
 
     private static void followLink(Editor editor)
