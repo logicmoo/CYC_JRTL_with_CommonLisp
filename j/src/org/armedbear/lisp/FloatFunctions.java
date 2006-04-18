@@ -1,8 +1,8 @@
 /*
  * FloatFunctions.java
  *
- * Copyright (C) 2003-2005 Peter Graves
- * $Id: FloatFunctions.java,v 1.8 2005-09-12 01:13:40 piso Exp $
+ * Copyright (C) 2003-2006 Peter Graves
+ * $Id: FloatFunctions.java,v 1.9 2006-04-18 00:30:31 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,8 +73,7 @@ public final class FloatFunctions extends Lisp
         }
     };
 
-    // ### integer-decode-float
-    // integer-decode-float float => significand, exponent, integer-sign
+    // ### integer-decode-float float => significand, exponent, integer-sign
     private static final Primitive INTEGER_DECODE_FLOAT =
         new Primitive("integer-decode-float", "float")
     {
@@ -91,7 +90,6 @@ public final class FloatFunctions extends Lisp
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof SingleFloat) {
-                LispObject[] values = new LispObject[3];
                 int bits =
                     Float.floatToRawIntBits(((SingleFloat)arg).value);
                 int s = ((bits >> 31) == 0) ? 1 : -1;
@@ -109,7 +107,6 @@ public final class FloatFunctions extends Lisp
                                                             sign);
             }
             if (arg instanceof DoubleFloat) {
-                LispObject[] values = new LispObject[3];
                 long bits =
                     Double.doubleToRawLongBits((double)((DoubleFloat)arg).value);
                 int s = ((bits >> 63) == 0) ? 1 : -1;
