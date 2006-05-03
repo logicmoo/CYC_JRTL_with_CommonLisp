@@ -1,8 +1,8 @@
 /*
  * LispThread.java
  *
- * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispThread.java,v 1.88 2005-12-24 02:12:47 piso Exp $
+ * Copyright (C) 2003-2006 Peter Graves
+ * $Id: LispThread.java,v 1.89 2006-05-03 16:14:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,6 +26,8 @@ import java.util.Iterator;
 
 public final class LispThread extends LispObject
 {
+    private static boolean use_fast_calls = false;
+
     private static final Object lock = new Object();
 
     private static HashMap map = new HashMap();
@@ -594,6 +596,9 @@ public final class LispThread extends LispObject
 
     public LispObject execute(LispObject function) throws ConditionThrowable
     {
+        if (use_fast_calls)
+            return function.execute();
+
         LispObject oldStack = stack;
         pushStackFrame(function);
         try {
@@ -611,6 +616,9 @@ public final class LispThread extends LispObject
     public LispObject execute(LispObject function, LispObject arg)
         throws ConditionThrowable
     {
+        if (use_fast_calls)
+            return function.execute(arg);
+
         LispObject oldStack = stack;
         pushStackFrame(function, arg);
         try {
@@ -629,6 +637,9 @@ public final class LispThread extends LispObject
                               LispObject second)
         throws ConditionThrowable
     {
+        if (use_fast_calls)
+            return function.execute(first, second);
+
         LispObject oldStack = stack;
         pushStackFrame(function, first, second);
         try {
@@ -647,6 +658,9 @@ public final class LispThread extends LispObject
                               LispObject second, LispObject third)
         throws ConditionThrowable
     {
+        if (use_fast_calls)
+            return function.execute(first, second, third);
+
         LispObject oldStack = stack;
         pushStackFrame(function, first, second, third);
         try {
@@ -666,6 +680,9 @@ public final class LispThread extends LispObject
                               LispObject fourth)
         throws ConditionThrowable
     {
+        if (use_fast_calls)
+            return function.execute(first, second, third, fourth);
+
         LispObject oldStack = stack;
         LispObject[] args = new LispObject[4];
         args[0] = first;
@@ -690,6 +707,9 @@ public final class LispThread extends LispObject
                               LispObject fourth, LispObject fifth)
         throws ConditionThrowable
     {
+        if (use_fast_calls)
+            return function.execute(first, second, third, fourth, fifth);
+
         LispObject oldStack = stack;
         LispObject[] args = new LispObject[5];
         args[0] = first;
@@ -716,6 +736,9 @@ public final class LispThread extends LispObject
                               LispObject sixth)
         throws ConditionThrowable
     {
+        if (use_fast_calls)
+            return function.execute(first, second, third, fourth, fifth, sixth);
+
         LispObject oldStack = stack;
         LispObject[] args = new LispObject[6];
         args[0] = first;
@@ -743,6 +766,10 @@ public final class LispThread extends LispObject
                               LispObject sixth, LispObject seventh)
         throws ConditionThrowable
     {
+        if (use_fast_calls)
+            return function.execute(first, second, third, fourth, fifth, sixth,
+                                    seventh);
+
         LispObject oldStack = stack;
         LispObject[] args = new LispObject[7];
         args[0] = first;
@@ -773,6 +800,10 @@ public final class LispThread extends LispObject
                               LispObject eighth)
         throws ConditionThrowable
     {
+        if (use_fast_calls)
+            return function.execute(first, second, third, fourth, fifth, sixth,
+                                    seventh, eighth);
+
         LispObject oldStack = stack;
         LispObject[] args = new LispObject[8];
         args[0] = first;
@@ -800,6 +831,9 @@ public final class LispThread extends LispObject
     public LispObject execute(LispObject function, LispObject[] args)
         throws ConditionThrowable
     {
+        if (use_fast_calls)
+            return function.execute(args);
+
         LispObject oldStack = stack;
         pushStackFrame(function, args);
         try {
@@ -1118,6 +1152,17 @@ public final class LispThread extends LispObject
                 return signal(new WrongNumberOfArgumentsException(this));
             int limit = args.length > 0 ? Fixnum.getValue(args[0]) : 0;
             return currentThread().backtraceAsList(limit);
+        }
+    };
+
+    // ### use-fast-calls
+    private static final Primitive USE_FAST_CALLS =
+        new Primitive("use-fast-calls", PACKAGE_SYS, true)
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            use_fast_calls = (arg != NIL);
+            return use_fast_calls ? T : NIL;
         }
     };
 }
