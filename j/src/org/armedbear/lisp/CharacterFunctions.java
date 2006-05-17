@@ -2,7 +2,7 @@
  * CharacterFunctions.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: CharacterFunctions.java,v 1.15 2006-02-20 19:16:24 piso Exp $
+ * $Id: CharacterFunctions.java,v 1.16 2006-05-17 11:55:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -232,7 +232,7 @@ public final class CharacterFunctions extends Lisp
                 }
             }
             for (int i = 1; i < length; i++) {
-                if (chars[i-1] > chars[i])
+                if (chars[i-1] >= chars[i])
                     return NIL;
             }
             return T;
