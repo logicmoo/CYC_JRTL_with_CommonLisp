@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
-;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: top-level.lisp,v 1.51 2005-12-19 18:27:01 piso Exp $
+;;; Copyright (C) 2003-2006 Peter Graves
+;;; $Id: top-level.lisp,v 1.52 2006-05-23 13:11:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -347,8 +347,8 @@
            (args (if pos (subseq form (1+ pos)) nil)))
       (let ((command (find-command command-string)))
         (cond ((null command)
-               (%format t "Unknown command ~A.~%" (string-upcase command-string))
-               (%help-command command-string))
+               (%format t "Unknown top-level command \"~A\".~%" command-string)
+               (%format t "Type \"~Ahelp\" for a list of available commands." *command-char*))
               (t
                (when args
                  (setf args (string-trim (list #\space #\return) args))
@@ -400,7 +400,7 @@
 (defun top-level-loop ()
   (fresh-line)
   (unless sys:*noinform*
-    (%format t "Type ~AHELP for a list of available commands.~%" *command-char*))
+    (%format t "Type \"~Ahelp\" for a list of available commands.~%" *command-char*))
   (loop
     (setf *inspected-object* nil
           *inspected-object-stack* nil
