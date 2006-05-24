@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
-;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: numbers.lisp,v 1.37 2005-08-24 17:36:24 piso Exp $
+;;; Copyright (C) 2003-2006 Peter Graves
+;;; $Id: numbers.lisp,v 1.38 2006-05-24 00:49:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -19,7 +19,7 @@
 
 ;;; Adapted from CMUCL/SBCL.
 
-(in-package #:system)
+(in-package "SYSTEM")
 
 (defun signum (number)
   "If NUMBER is zero, return NUMBER, else return (/ NUMBER (ABS NUMBER))."
@@ -80,15 +80,15 @@
   (rational number))
 
 (defun gcd (&rest integers)
-  "Returns the greatest common divisor of the arguments, which must be
-   integers.  Gcd with no arguments is defined to be 0."
-  (unless (every #'integerp integers)
-    (error 'type-error :datum (find-if-not #'integerp integers) :expected-type 'integer))
-  (cond ((null integers) 0)
-	((null (cdr integers)) (abs (car integers)))
+  (cond ((null integers)
+         0)
+	((null (cdr integers))
+         (let ((n (car integers)))
+           (if (integerp n)
+               (abs n)
+               (error 'type-error :datum n :expected-type 'integer))))
 	(t
-	 (do ((gcd (car integers)
-		   (gcd-2 gcd (car rest)))
+	 (do ((gcd (car integers) (gcd-2 gcd (car rest)))
 	      (rest (cdr integers) (cdr rest)))
 	     ((null rest) gcd)))))
 
