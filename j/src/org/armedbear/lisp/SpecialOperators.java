@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: SpecialOperators.java,v 1.54 2006-03-16 11:32:38 piso Exp $
+ * $Id: SpecialOperators.java,v 1.55 2006-05-25 01:34:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -275,7 +275,6 @@ public final class SpecialOperators extends Lisp
       public LispObject execute(LispObject args, Environment env)
         throws ConditionThrowable
       {
-        boolean sequential = true; // FIXME Is this right?
         LispObject varList = checkList(args.car());
         final LispThread thread = LispThread.currentThread();
         LispObject result = NIL;
@@ -285,7 +284,6 @@ public final class SpecialOperators extends Lisp
             try
               {
                 Environment ext = new Environment(env);
-                Environment evalEnv = sequential ? ext : env;
                 for (int i = varList.length(); i-- > 0;)
                   {
                     LispObject obj = varList.car();
