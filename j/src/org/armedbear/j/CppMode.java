@@ -2,7 +2,7 @@
  * CppMode.java
  *
  * Copyright (C) 1998-2006 Peter Graves
- * $Id: CppMode.java,v 1.5 2006-02-18 17:37:44 piso Exp $
+ * $Id: CppMode.java,v 1.6 2006-05-25 01:31:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -109,7 +109,13 @@ public final class CppMode extends CMode implements Constants, Mode
         if (modelTrim.startsWith(": ") || modelTrim.startsWith(":\t"))
           return 0;
       }
-    return super.getCorrectIndentation(line, buffer);
+    int indent = super.getCorrectIndentation(line, buffer);
+    if (trim.endsWith(":") && trim.indexOf(' ') == -1 && !trim.equals("default:"))
+      {
+        // label
+        return indent > 0 ? indent - 1 : 0;
+      }
+    return indent;
   }
 
   protected int indentClosingBrace(Line line, Buffer buffer)
