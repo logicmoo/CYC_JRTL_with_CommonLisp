@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.770 2006-02-10 05:18:36 piso Exp $
+;;; $Id: jvm.lisp,v 1.771 2006-06-09 08:52:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -204,13 +204,13 @@
   catch-type)
 
 ;; Variables visible at the current point of compilation.
-(defvar *visible-variables* ())
+(defvar *visible-variables* nil)
 
 ;; All variables seen so far.
-(defvar *all-variables* ())
+(defvar *all-variables* nil)
 
 ;; Undefined variables that we've already warned about.
-(defvar *undefined-variables* ())
+(defvar *undefined-variables* nil)
 
 (defvar *dump-variables* nil)
 
@@ -1126,6 +1126,9 @@
                  (t
                   (let ((variable (find-visible-variable form)))
                     (when (null variable)
+		      (unless (memq form *undefined-variables*)
+			(compiler-style-warn "Undefined variable: ~S" form)
+			(push form *undefined-variables*))
                       (setf variable (make-variable :name form :special-p t))
                       (push variable *visible-variables*))
                     (let ((ref (make-var-ref variable)))
@@ -1875,21 +1878,29 @@ representation, based on the derived type of the LispObject."
       (terpri *error-output*)
       (setf *last-error-context* context))))
 
+(defvar *resignal-compiler-warnings* nil) ; bind this to t inside slime compilation
+
 (defun handle-style-warning (condition)
-  (unless *suppress-compiler-warnings*
-    (fresh-line *error-output*)
-    (note-error-context)
-    (format *error-output* "; Caught ~A:~%;   ~A~2%" (type-of condition) condition))
-  (incf *style-warnings*)
-  (muffle-warning))
+  (cond (*resignal-compiler-warnings*
+         (signal condition))
+        (t
+         (unless *suppress-compiler-warnings*
+           (fresh-line *error-output*)
+           (note-error-context)
+           (format *error-output* "; Caught ~A:~%;   ~A~2%" (type-of condition) condition))
+         (incf *style-warnings*)
+         (muffle-warning))))
 
 (defun handle-warning (condition)
-  (unless *suppress-compiler-warnings*
-    (fresh-line *error-output*)
-    (note-error-context)
-    (format *error-output* "; Caught ~A:~%;   ~A~2%" (type-of condition) condition))
-  (incf *warnings*)
-  (muffle-warning))
+  (cond (*resignal-compiler-warnings*
+         (signal condition))
+        (t
+         (unless *suppress-compiler-warnings*
+           (fresh-line *error-output*)
+           (note-error-context)
+           (format *error-output* "; Caught ~A:~%;   ~A~2%" (type-of condition) condition))
+         (incf *warnings*)
+         (muffle-warning))))
 
 (defun handle-compiler-error (condition)
   (fresh-line *error-output*)
@@ -9936,7 +9947,6 @@ representation, based on the derived type of the LispObject."
          (*registers-allocated* 0)
          (*handlers* ())
          (*visible-variables* *visible-variables*)
-         (*undefined-variables* *undefined-variables*)
 
          (parameters ())
 
@@ -10225,9 +10235,10 @@ representation, based on the derived type of the LispObject."
   t)
 
 (defun compile-1 (compiland)
-  (let ((*all-variables* '())
-        (*closure-variables* '())
-        (*local-functions* '())
+  (let ((*all-variables* nil)
+        (*closure-variables* nil)
+        (*undefined-variables* nil)
+        (*local-functions* nil)
         (*current-compiland* compiland)
         (*speed* *speed*)
         (*safety* *safety*)
@@ -10288,16 +10299,16 @@ representation, based on the derived type of the LispObject."
   `(%with-compilation-unit (lambda () ,@body) ,@options))
 
 (defun %with-compilation-unit (fn &key override)
-  (handler-bind ((style-warning #'handle-style-warning)
-                 (warning #'handle-warning)
-                 (compiler-error #'handle-compiler-error))
+  (handler-bind ((style-warning 'handle-style-warning)
+                 (warning 'handle-warning)
+                 (compiler-error 'handle-compiler-error))
     (if (and *in-compilation-unit* (not override))
         (funcall fn)
         (let ((*style-warnings* 0)
               (*warnings* 0)
               (*errors* 0)
-              (*defined-functions* '())
-              (*undefined-functions* '())
+              (*defined-functions* nil)
+              (*undefined-functions* nil)
               (*in-compilation-unit* t))
           (unwind-protect
               (funcall fn)
