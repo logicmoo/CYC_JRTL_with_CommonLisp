@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.771 2006-06-09 08:52:24 piso Exp $
+;;; $Id: jvm.lisp,v 1.772 2006-06-12 12:39:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1126,7 +1126,8 @@
                  (t
                   (let ((variable (find-visible-variable form)))
                     (when (null variable)
-		      (unless (memq form *undefined-variables*)
+		      (unless (or (special-variable-p form)
+                                  (memq form *undefined-variables*))
 			(compiler-style-warn "Undefined variable: ~S" form)
 			(push form *undefined-variables*))
                       (setf variable (make-variable :name form :special-p t))
