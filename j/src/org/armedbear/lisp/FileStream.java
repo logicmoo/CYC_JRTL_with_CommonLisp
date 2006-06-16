@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004-2006 Peter Graves
- * $Id: FileStream.java,v 1.28 2006-05-03 16:13:09 piso Exp $
+ * $Id: FileStream.java,v 1.29 2006-06-16 00:02:43 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -544,7 +544,7 @@ public final class FileStream extends Stream
         return unreadableString(Symbol.FILE_STREAM);
     }
 
-    // ### make-file-stream pathname element-type direction if-exists => stream
+    // ### make-file-stream pathname namestring element-type direction if-exists => stream
     private static final Primitive MAKE_FILE_STREAM =
         new Primitive("make-file-stream", PACKAGE_SYS, true,
                       "pathname namestring element-type direction if-exists")
