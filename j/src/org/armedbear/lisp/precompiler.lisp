@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: precompiler.lisp,v 1.154 2006-03-17 01:33:42 piso Exp $
+;;; $Id: precompiler.lisp,v 1.155 2006-06-17 18:32:05 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -344,7 +344,7 @@
   (cond ((symbolp form)
          (let ((varspec (find-varspec form)))
            (cond ((and varspec (eq (second varspec) :symbol-macro))
-                  (copy-tree (third varspec)))
+                  (precompile1 (copy-tree (third varspec))))
                  ((null varspec)
                   (let ((expansion (expand-macro form)))
                     (if (eq expansion form)
