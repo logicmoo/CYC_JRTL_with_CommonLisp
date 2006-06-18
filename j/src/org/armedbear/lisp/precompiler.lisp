@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: precompiler.lisp,v 1.155 2006-06-17 18:32:05 piso Exp $
+;;; $Id: precompiler.lisp,v 1.156 2006-06-18 03:43:24 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -331,7 +331,7 @@
 
 (defvar *in-jvm-compile* nil)
 
-(defvar *local-variables* ())
+(defvar *local-variables* nil)
 
 (declaim (ftype (function (t) t) find-varspec))
 (defun find-varspec (sym)
