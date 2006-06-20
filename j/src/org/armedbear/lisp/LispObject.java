@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: LispObject.java,v 1.164 2006-01-12 03:53:26 piso Exp $
+ * $Id: LispObject.java,v 1.165 2006-06-20 15:52:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1002,6 +1002,11 @@ public class LispObject extends Lisp
   public int psxhash()
   {
     return sxhash();
+  }
+
+  public int psxhash(int depth)
+  {
+    return psxhash();
   }
 
   public LispObject STRING() throws ConditionThrowable
