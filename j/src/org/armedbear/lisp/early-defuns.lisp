@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.40 2006-03-17 01:33:42 piso Exp $
+;;; $Id: early-defuns.lisp,v 1.41 2006-06-20 17:42:23 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -200,12 +200,12 @@
       (LONG-FLOAT
        (setf tp 'double-float))
       (COMPLEX
-        (cond ((null i)
-               (setf i '(*)))
-              ((eq i 'short-float)
-               (setf i 'single-float))
-              ((eq i 'long-float)
-               (setf i 'double-float)))))
+       (cond ((null i)
+              (return-from normalize-type '(complex *)))
+             ((eq (car i) 'short-float)
+              (return-from normalize-type '(complex single-float)))
+             ((eq (car i) 'long-float)
+              (return-from normalize-type '(complex double-float))))))
     (if i (cons tp i) tp)))
 
 (defun caaaar (list) (car (car (car (car list)))))
