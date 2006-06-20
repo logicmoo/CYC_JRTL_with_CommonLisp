@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: StructureObject.java,v 1.62 2006-01-08 18:34:10 piso Exp $
+ * $Id: StructureObject.java,v 1.63 2006-06-20 15:52:37 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -345,6 +345,25 @@ public final class StructureObject extends LispObject
     sb.append(" for ");
     sb.append(writeToString());
     return signal(new LispError(sb.toString()));
+  }
+
+  public final int psxhash()
+  {
+    return psxhash(4);
+  }
+
+  public final int psxhash(int depth)
+  {
+    int result = mix(structureClass.sxhash(), 7814971);
+    if (depth > 0)
+      {
+        int limit = slots.length;
+        if (limit > 4)
+          limit = 4;
+        for (int i = 0; i < limit; i++)
+          result = mix(slots[i].psxhash(depth - 1), result);
+      }
+    return result & 0x7fffffff;
   }
 
   public String writeToString() throws ConditionThrowable
