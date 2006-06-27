@@ -1,8 +1,8 @@
 /*
  * MailboxEntry.java
  *
- * Copyright (C) 2000-2002 Peter Graves
- * $Id: MailboxEntry.java,v 1.2 2003-05-30 15:09:50 piso Exp $
+ * Copyright (C) 2000-2006 Peter Graves
+ * $Id: MailboxEntry.java,v 1.3 2006-06-27 14:52:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -373,7 +373,7 @@ public abstract class MailboxEntry implements Serializable
     {
         if (from != null) {
             MailAddress a = from[0];
-            if (a.matches(Mail.getUserMailAddress()))
+            if (a != null && a.matches(Mail.getUserMailAddress()))
                 return true;
         }
         return false;

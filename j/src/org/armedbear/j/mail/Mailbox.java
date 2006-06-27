@@ -1,8 +1,8 @@
 /*
  * Mailbox.java
  *
- * Copyright (C) 2000-2003 Peter Graves
- * $Id: Mailbox.java,v 1.6 2003-08-09 17:39:07 piso Exp $
+ * Copyright (C) 2000-2006 Peter Graves
+ * $Id: Mailbox.java,v 1.7 2006-06-27 14:52:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1017,6 +1017,8 @@ public abstract class Mailbox extends Buffer
         if (list == null)
             return;
         MailAddress userMailAddress = Mail.getUserMailAddress();
+        if (userMailAddress == null)
+            return;
         AddressBook addressBook = AddressBook.getGlobalAddressBook();
         for (int i = 0; i < list.size(); i++) {
             MailboxEntry sourceEntry = (MailboxEntry) list.get(i);

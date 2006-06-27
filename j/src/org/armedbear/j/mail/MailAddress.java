@@ -1,8 +1,8 @@
 /*
  * MailAddress.java
  *
- * Copyright (C) 2000-2003 Peter Graves
- * $Id: MailAddress.java,v 1.4 2003-08-13 18:25:17 piso Exp $
+ * Copyright (C) 2000-2006 Peter Graves
+ * $Id: MailAddress.java,v 1.5 2006-06-27 14:52:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -172,13 +172,14 @@ public final class MailAddress implements Serializable
 
     public final boolean matches(MailAddress a)
     {
-        // Personal name must be exact match.
-        if (personal != null && personal.equals(a.personal))
-            return true;
-        else if (address != null && address.equalsIgnoreCase(a.address))
-            return true;
-        else
-            return false;
+        if (a != null) {
+            // Personal name must be exact match.
+            if (personal != null && personal.equals(a.personal))
+                return true;
+            else if (address != null && address.equalsIgnoreCase(a.address))
+                return true;
+        }
+        return false;
     }
 
     public final boolean addressMatches(MailAddress a)
