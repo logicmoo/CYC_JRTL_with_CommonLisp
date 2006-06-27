@@ -2,7 +2,7 @@
  * SlimeOutputStream.java
  *
  * Copyright (C) 2004-2005 Andras Simon, Peter Graves
- * $Id: SlimeOutputStream.java,v 1.9 2005-09-24 19:39:54 piso Exp $
+ * $Id: SlimeOutputStream.java,v 1.10 2006-06-27 19:41:03 asimon Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -105,11 +105,12 @@ public final class SlimeOutputStream extends Stream
 
     public void _finishOutput() throws ConditionThrowable
     {
-        try {
-            LispThread.currentThread().execute(f, new SimpleString(stringWriter.toString()));
+        super._finishOutput ();
+        if (stringWriter.getBuffer().length() > 0) {
+            String s = stringWriter.toString();
+            stringWriter.getBuffer().setLength(0);
+            LispThread.currentThread().execute(f, new SimpleString(s));
         }
-        catch (Throwable t) {}
-        super._finishOutput();
     }
 
     public String toString()
