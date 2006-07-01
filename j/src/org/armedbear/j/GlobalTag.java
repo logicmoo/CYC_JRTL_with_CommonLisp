@@ -2,7 +2,7 @@
  * GlobalTag.java
  *
  * Copyright (C) 1998-2006 Peter Graves
- * $Id: GlobalTag.java,v 1.4 2006-03-17 02:20:19 piso Exp $
+ * $Id: GlobalTag.java,v 1.5 2006-07-01 14:56:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -126,8 +126,7 @@ public final class GlobalTag extends Tag
         s = s.substring(1).trim();
         // First word should be "defun" or "defvar" or some such...
         int end = 0;
-        final int limit = s.length();
-        for (int i = 0; i < limit; i++)
+        for (int i = 0; i < s.length(); i++)
           {
             char c = s.charAt(i);
             if (c == ' ' || c == '\t')
@@ -146,7 +145,7 @@ public final class GlobalTag extends Tag
             sb.append(s);
             return sb.toString();
           }
-        for (int i = 0; i < limit; i++)
+        for (int i = 0; i < s.length(); i++)
           {
             char c = s.charAt(i);
             if (c == ' ' || c == '\t')
