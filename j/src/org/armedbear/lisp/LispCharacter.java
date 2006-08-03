@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispCharacter.java,v 1.73 2005-12-29 22:12:56 piso Exp $
+ * $Id: LispCharacter.java,v 1.74 2006-08-03 13:47:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -208,6 +208,9 @@ public final class LispCharacter extends LispObject
           {
           case 0:
             sb.append("Null");
+            break;
+          case 7:
+            sb.append("Bell");
             break;
           case '\b':
             sb.append("Backspace");
@@ -595,6 +598,8 @@ public final class LispCharacter extends LispObject
     String lower = s.toLowerCase();
     if (lower.equals("null"))
       return 0;
+    if (lower.equals("bell"))
+      return 7;
     if (lower.equals("backspace"))
       return '\b';
     if (lower.equals("tab"))
@@ -633,6 +638,8 @@ public final class LispCharacter extends LispObject
       {
       case 0:
         return "Null";
+      case 7:
+        return "Bell";
       case '\b':
         return "Backspace";
       case '\t':
