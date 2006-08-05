@@ -1,8 +1,8 @@
 /*
  * ImapMailboxEntry.java
  *
- * Copyright (C) 2000-2005 Peter Graves
- * $Id: ImapMailboxEntry.java,v 1.2 2005-11-19 17:05:55 piso Exp $
+ * Copyright (C) 2000-2006 Peter Graves
+ * $Id: ImapMailboxEntry.java,v 1.3 2006-08-05 16:45:21 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -396,7 +396,7 @@ import org.armedbear.j.Utilities;
         int begin = s.indexOf("((");
         if (begin < 0)
             return null;
-        int end = s.indexOf("))");
+        int end = s.indexOf("))", begin);
         if (end < 0)
             return null;
         String list = s.substring(begin, end + 2);
