@@ -1,8 +1,8 @@
 /*
  * LispMode.java
  *
- * Copyright (C) 1998-2005 Peter Graves
- * $Id: LispMode.java,v 1.103 2005-12-16 17:49:56 piso Exp $
+ * Copyright (C) 1998-2006 Peter Graves
+ * $Id: LispMode.java,v 1.104 2006-08-14 12:46:16 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -501,15 +501,15 @@ public class LispMode extends AbstractMode implements Constants, Mode
                     if (s.equals("restart-case"))
                         return buffer.getCol(up) + indentSize * 2;
                 }
-                up = findContainingSexp(up);
-                if (up != null) {
-                    up = downList(up);
-                    if (up != null) {
-                        String s = gatherToken(up);
-                        if (s.equals("flet") || s.equals("labels") || s.equals("macrolet"))
-                            return buffer.getCol(pos) + indentSize;
-                    }
-                }
+//                 up = findContainingSexp(up);
+//                 if (up != null) {
+//                     up = downList(up);
+//                     if (up != null) {
+//                         String s = gatherToken(up);
+//                         if (s.equals("flet") || s.equals("labels") || s.equals("macrolet"))
+//                             return buffer.getCol(pos) + indentSize;
+//                     }
+//                 }
             }
             // Not special. Indent under the second element of the containing
             // list, if the second element is on the same line as the first.
