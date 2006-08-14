@@ -68,7 +68,7 @@
 #+cmu
 (setf *gc-verbose* nil)
 
-#+sbcl
-(require '#:asdf)
-#+sbcl
-(require '#:sb-aclrepl)
+;; #+sbcl
+;; (require '#:asdf)
+;; #+sbcl
+;; (require '#:sb-aclrepl)
