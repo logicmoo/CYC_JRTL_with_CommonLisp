@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: precompiler.lisp,v 1.156 2006-06-18 03:43:24 piso Exp $
+;;; $Id: precompiler.lisp,v 1.157 2006-08-17 23:52:49 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -657,9 +657,9 @@
             (forms (cddr macro)))
         (push (define-local-macro name lambda-list forms) *local-functions-and-macros*)
         (push name *local-functions-and-macros*)))
-    ;; FIXME Process declarations!
-    (let ((body (sys::parse-body (cddr form) nil)))
-      (list* 'PROGN (mapcar #'precompile1 body)))))
+    (multiple-value-bind (body decls)
+        (parse-body (cddr form) nil)
+      `(locally ,@decls ,@(mapcar #'precompile1 body)))))
 
 ;; "If the restartable-form is a list whose car is any of the symbols SIGNAL,
 ;; ERROR, CERROR, or WARN (or is a macro form which macroexpands into such a
