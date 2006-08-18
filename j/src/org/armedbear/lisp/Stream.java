@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: Stream.java,v 1.150 2006-08-15 14:22:07 piso Exp $
+ * $Id: Stream.java,v 1.151 2006-08-18 00:33:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -369,16 +369,8 @@ public class Stream extends LispObject
       }
     else
       {
-        SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         thread.bindSpecial(_SHARP_EQUAL_ALIST_, NIL);
-        try
-          {
-            return faslReadPreservingWhitespace(eofError, eofValue, true, thread);
-          }
-        finally
-          {
-            thread.lastSpecialBinding = lastSpecialBinding;
-          }
+        return faslReadPreservingWhitespace(eofError, eofValue, true, thread);
       }
   }
 
