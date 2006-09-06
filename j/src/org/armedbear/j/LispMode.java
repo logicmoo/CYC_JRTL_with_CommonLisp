@@ -2,7 +2,7 @@
  * LispMode.java
  *
  * Copyright (C) 1998-2006 Peter Graves
- * $Id: LispMode.java,v 1.104 2006-08-14 12:46:16 piso Exp $
+ * $Id: LispMode.java,v 1.105 2006-09-06 23:23:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -453,7 +453,7 @@ public class LispMode extends AbstractMode implements Constants, Mode
                 }
                 return buffer.getCol(pos) + indentSize;
             }
-            if (token.equals("multiple-value-bind")) {
+            if (token.equals("multiple-value-bind") || token.equals("destructuring-bind")) {
                 Position p1 = forwardSexp(posFirst);
                 if (p1 != null) {
                     // Skip whitespace to get to opening '(' of variable list.
