@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: LispShell.java,v 1.97 2006-08-15 14:20:21 piso Exp $
+ * $Id: LispShell.java,v 1.98 2006-09-26 00:16:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -116,7 +116,8 @@ public class LispShell extends Shell
                                                 "swank-loader.lisp");
             if (swankLoader == null)
               return null; // FIXME Error message?
-            if (shellCommand.indexOf("sbcl") >= 0)
+            if (shellCommand.indexOf("sbcl") >= 0
+                || shellCommand.endsWith("/x") || shellCommand.endsWith("\\x"))
               {
                 shellCommand =
                   shellCommand + " --load " + swankLoader.canonicalPath();
@@ -171,7 +172,7 @@ public class LispShell extends Shell
         lisp.setPromptRE(ARMEDBEAR_PROMPT_PATTERN);
         lisp.setResetCommand(":reset");
       }
-    else if (shellCommand.endsWith("/x") || (shellCommand.endsWith("\\x")))
+    else if (shellCommand.indexOf("xcl") >= 0)
       {
         lisp.setPromptRE(ARMEDBEAR_PROMPT_PATTERN);
         lisp.setResetCommand("(ext:reset)");
