@@ -1,7 +1,7 @@
 ;;; swank-loader.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: swank-loader.lisp,v 1.6 2006-09-26 00:24:40 piso Exp $
+;;; $Id: swank-loader.lisp,v 1.7 2006-09-26 00:27:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -74,9 +74,9 @@
 
 #+xcl
 (progn
-  (load "/home/peter/j/src/org/armedbear/lisp/swank-protocol.lisp")
-  (load "/home/peter/j/src/org/armedbear/lisp/swank-xcl.lisp")
-  (load "/home/peter/j/src/org/armedbear/lisp/swank.lisp"))  
+  (load (merge-pathnames "swank-protocol.lisp" *load-truename*))
+  (load (merge-pathnames "swank-xcl.lisp" *load-truename*))
+  (load (merge-pathnames "swank.lisp" *load-truename*)))
 
 #-j
 (funcall (intern (string '#:start-server) '#:swank))

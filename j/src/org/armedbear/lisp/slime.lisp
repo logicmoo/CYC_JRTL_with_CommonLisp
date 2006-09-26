@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: slime.lisp,v 1.37 2005-11-21 14:21:11 piso Exp $
+;;; $Id: slime.lisp,v 1.38 2006-09-26 00:28:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -346,7 +346,8 @@
               (with-single-undo
                 (goto-char (or position 0))
                 (let (pattern pos)
-                  (cond ((string-equal (pathname-type file) "java")
+                  (cond ((or (string-equal (pathname-type file) "cpp")
+                             (string-equal (pathname-type file) "java"))
                          (setf pattern (format nil "// ### ~A" short-name))
                          (setf pos (search-forward pattern
                                                    :ignore-case t
