@@ -1,7 +1,7 @@
 ;;; swank-loader.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: swank-loader.lisp,v 1.5 2005-02-04 19:34:54 piso Exp $
+;;; $Id: swank-loader.lisp,v 1.6 2006-09-26 00:24:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -47,7 +47,7 @@
                  (sys:load-system-file (file-namestring binary-file))
                  (sys:load-system-file (file-namestring (compile-file source-file)))))))))
 
-#-abcl
+#-(or abcl xcl)
 (defun binary-pathname (source-pathname)
   (let ((cfp (compile-file-pathname source-pathname)))
     (merge-pathnames (make-pathname
@@ -58,7 +58,7 @@
                       :type (pathname-type cfp))
                      (user-homedir-pathname))))
 
-#-abcl
+#-(or abcl xcl)
 (dolist (file '("swank-protocol.lisp"
                 #+allegro "swank-allegro.lisp"
                 #+sbcl "swank-sbcl.lisp"
@@ -71,6 +71,12 @@
                 (file-write-date source-file)))
         (load binary-file)
         (load (compile-file source-file :output-file binary-file)))))
+
+#+xcl
+(progn
+  (load "/home/peter/j/src/org/armedbear/lisp/swank-protocol.lisp")
+  (load "/home/peter/j/src/org/armedbear/lisp/swank-xcl.lisp")
+  (load "/home/peter/j/src/org/armedbear/lisp/swank.lisp"))  
 
 #-j
 (funcall (intern (string '#:start-server) '#:swank))
