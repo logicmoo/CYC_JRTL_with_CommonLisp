@@ -1,7 +1,7 @@
 ;;; swank-protocol.lisp
 ;;;
-;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: swank-protocol.lisp,v 1.6 2005-03-07 19:00:12 piso Exp $
+;;; Copyright (C) 2004-2006 Peter Graves
+;;; $Id: swank-protocol.lisp,v 1.7 2006-09-29 11:38:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -68,12 +68,12 @@
     (let ((form (read-form string)))
       form)))
 
-#+abcl
+#+(or abcl xcl)
 (defun port-file ()
   (merge-pathnames ".j/swank"
                    (if (ext:featurep :windows) "C:\\" (user-homedir-pathname))))
 
-#-abcl
+#-(or abcl xcl)
 (defun port-file ()
   (merge-pathnames ".j/swank" (user-homedir-pathname)))
 
