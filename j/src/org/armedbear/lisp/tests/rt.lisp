@@ -55,7 +55,7 @@
 
 (defvar *notes* (make-hash-table :test 'equal)
   "A mapping from names of notes to note objects.")
-  
+
 (defstruct (entry (:conc-name nil))
   pend name props form vals)
 
@@ -65,7 +65,7 @@
 ;;; of the requirements.
 
 (defstruct note
-  name  
+  name
   contents
   disabled ;; When true, tests with this note are considered inactive
   )
@@ -167,7 +167,7 @@
   (setq *test* (name entry)))
 
 (defun report-error (error? &rest args)
-  (cond (*debug* 
+  (cond (*debug*
 	 (apply #'format t args)
 	 (if error? (throw '*debug* nil)))
 	(error? (apply #'error args))
@@ -276,9 +276,19 @@
       (setf (pend entry)
 	    (or aborted
 		(not (equalp-with-case r (vals entry)))))
-      
+
       (when (pend entry)
 	(let ((*print-circle* *print-circle-on-failure*))
+          #+xcl
+          (progn
+            (fresh-line)
+            (format t "Test ~S failed~%" *test*)
+            (format t "Form: ~S~%" (form entry))
+            (format t "Expected value: ~S~%"
+                    (if (= (length (vals entry)) 1)
+                        (car (vals entry))
+                        (vals entry))))
+          #-xcl
 	  (format s "~&Test ~:@(~S~) failed~
                    ~%Form: ~S~
                    ~%Expected value~P: ~
@@ -287,6 +297,13 @@
 		  (length (vals entry))
 		  (vals entry))
 	  (handler-case
+           #+xcl
+           (let ((r (if (= (length r) 1) (car r) r)))
+             (format t "Actual value: ~S" r)
+             (when (typep r 'condition)
+               (format t " [\"~A\"]" r))
+             (terpri))
+           #-xcl
 	   (let ((st (format nil "Actual value~P: ~
                       ~{~S~^~%~15t~}.~%"
 			     (length r) r)))
@@ -345,7 +362,7 @@
     (setf (pend entry) t))
   (if (streamp out)
       (do-entries out)
-      (with-open-file 
+      (with-open-file
 	  (stream out :direction :output)
 	(do-entries stream))))
 
@@ -362,6 +379,12 @@
 	(if success?
 	  (push (name entry) *passed-tests*)
 	  (push (name entry) *failed-tests*))
+        #+xcl
+        (progn
+          (fresh-line s)
+          (when success?
+            (format s "Test ~S~%" (name entry))))
+        #-xcl
 	(format s "~@[~<~%~:; ~:@(~S~)~>~]" success?))
       (finish-output s)
       ))
@@ -374,8 +397,20 @@
 		 unless (gethash pend expected-table)
 		 collect pend)))
       (if (null pending)
+          #+xcl
+          (progn
+            (fresh-line s)
+            (format s "No tests failed."))
+          #-xcl
 	  (format s "~&No tests failed.")
 	(progn
+          #+xcl
+          (progn
+            (fresh-line s)
+            (format s "~D out of ~D total tests failed"
+                    (length pending)
+                    (length (cdr *entries*))))
+          #-xcl
 	  (format s "~&~A out of ~A ~
                    total tests failed: ~
                    ~:@(~{~<~%   ~1:;~S~>~
