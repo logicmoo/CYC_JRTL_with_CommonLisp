@@ -2,7 +2,7 @@
  * MathFunctions.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: MathFunctions.java,v 1.33 2005-09-12 17:17:42 piso Exp $
+ * $Id: MathFunctions.java,v 1.34 2006-10-03 10:34:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -745,6 +745,8 @@ public final class MathFunctions extends Lisp
                     return DoubleFloat.ONE;
                 return SingleFloat.ONE;
             }
+            if (base.zerop())
+                return base;
             if (power instanceof Fixnum) {
                 if (base.rationalp())
                     return intexp(base, power);
@@ -778,12 +780,8 @@ public final class MathFunctions extends Lisp
                 }
                 return result;
             }
-            if (base instanceof Complex || power instanceof Complex) {
-                if (base.zerop() && ((Complex)power).realpart.plusp()) {
-                    return base.multiplyBy(power);
-                }
+            if (base instanceof Complex || power instanceof Complex)
                 return exp(power.multiplyBy(log(base)));
-            }
             final double x; // base
             final double y; // power
             if (base instanceof Fixnum)
