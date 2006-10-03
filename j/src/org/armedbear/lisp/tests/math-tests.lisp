@@ -1,7 +1,7 @@
 ;;; math-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: math-tests.lisp,v 1.8 2006-02-03 17:40:47 piso Exp $
+;;; $Id: math-tests.lisp,v 1.9 2006-10-03 10:49:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -302,8 +302,8 @@
 
 (deftest expt.14
   (expt 0 1/2)
-  #+(or allegro clisp lispworks) 0
-  #+(or abcl cmu sbcl) 0.0)
+  #+(or abcl allegro clisp lispworks) 0
+  #+(or cmu sbcl) 0.0)
 
 (deftest expt.15
   (expt 1 1/2)
@@ -347,6 +347,18 @@
   (expt 14 #c(1.0 1.0))
   #-(or clisp allegro) #c(-12.269101 6.743085)
   #+(or clisp allegro) #c(-12.269099 6.7430854))
+
+(deftest expt.24
+  (expt 0.0 4)
+  0.0)
+
+(deftest expt.25
+  (expt #c(0 0.0) 4)
+  #c(0.0 0.0))
+
+(deftest expt.25
+  (expt #c(0 0.0) 4.0)
+  #c(0.0 0.0))
 
 (deftest log.1
   (typep (log 17d0 10) 'double-float)
