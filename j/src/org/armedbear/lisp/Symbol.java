@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Symbol.java,v 1.245 2006-03-26 18:41:00 piso Exp $
+ * $Id: Symbol.java,v 1.246 2006-10-05 16:57:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2854,6 +2854,8 @@ public class Symbol extends LispObject
     PACKAGE_EXT.addExternalSymbol("NEQ");
   public static final Symbol ADJOIN_EQL =
     PACKAGE_EXT.addExternalSymbol("ADJOIN-EQL");
+  public static final Symbol CHARACTER_DESIGNATOR =
+    PACKAGE_EXT.addExternalSymbol("CHARACTER-DESIGNATOR");
 
   // MOP.
   public static final Symbol STANDARD_READER_METHOD =
