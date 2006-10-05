@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispCharacter.java,v 1.74 2006-08-03 13:47:23 piso Exp $
+ * $Id: LispCharacter.java,v 1.75 2006-10-05 16:58:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -242,6 +242,7 @@ public final class LispCharacter extends LispObject
     return sb.toString();
   }
 
+  // ### character
   private static final Primitive CHARACTER =
     new Primitive(Symbol.CHARACTER, "character")
     {
@@ -260,7 +261,7 @@ public final class LispCharacter extends LispObject
             if (name.length() == 1)
               return getInstance(name.charAt(0));
           }
-        return signal(new TypeError());
+        return signalTypeError(arg, Symbol.CHARACTER_DESIGNATOR);
       }
     };
 
