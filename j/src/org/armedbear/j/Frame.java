@@ -2,7 +2,7 @@
  * Frame.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Frame.java,v 1.19 2005-11-20 13:04:31 piso Exp $
+ * $Id: Frame.java,v 1.20 2006-10-19 16:52:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -597,7 +597,8 @@ public final class Frame extends JFrame implements Constants, ComponentListener,
           SplitPane sp = (SplitPane) editorPane;
           Editor otherEditor = (editor == editors[0]) ? editors[1] : editors[0];
           int charHeight = Display.getCharHeight();
-          int scrollBarHeight = editor.getHorizontalScrollBar().getHeight();
+          HorizontalScrollBar scrollBar = editor.getHorizontalScrollBar();
+          int scrollBarHeight = (scrollBar != null) ? scrollBar.getHeight() : 0;
           int minHeightForOtherWindow =
             otherEditor.getLocationBarHeight() + charHeight * 4 + scrollBarHeight;
           int availableHeight =
