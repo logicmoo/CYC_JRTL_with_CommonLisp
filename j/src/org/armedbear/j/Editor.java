@@ -2,7 +2,7 @@
  * Editor.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.159 2005-12-24 16:52:56 piso Exp $
+ * $Id: Editor.java,v 1.160 2006-10-19 17:00:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -481,25 +481,25 @@ public final class Editor extends JPanel implements Constants,
 
     private void init()
     {
-        // Add this editor to the global editor list.
-        editorList.add(this);
+      // Add this editor to the global editor list.
+      editorList.add(this);
 
-        setLayout(new BorderLayout());
-        display.setDoubleBuffered(true);
-        add(display, BorderLayout.CENTER);
+      setLayout(new BorderLayout());
+      display.setDoubleBuffered(true);
+      add(display, BorderLayout.CENTER);
 
-        new DropTarget(display, dispatcher);
+      new DropTarget(display, dispatcher);
 
-        addLocationBar();
-        addVerticalScrollBar();
-        addHorizontalScrollBar();
+      addLocationBar();
+      addVerticalScrollBar();
+      maybeAddHorizontalScrollBar();
 
-        display.addKeyListener(dispatcher);
-        display.addMouseListener(dispatcher);
-        display.addMouseMotionListener(dispatcher);
+      display.addKeyListener(dispatcher);
+      display.addMouseListener(dispatcher);
+      display.addMouseMotionListener(dispatcher);
 
-        addMouseWheelListener(this);
-        addComponentListener(this);
+      addMouseWheelListener(this);
+      addComponentListener(this);
     }
 
     public static final boolean isDebugEnabled()
@@ -739,32 +739,38 @@ public final class Editor extends JPanel implements Constants,
 
     private HorizontalScrollBarListener horizontalScrollBarListener;
 
-    public void addHorizontalScrollBar()
+    public void maybeAddHorizontalScrollBar()
     {
-        if (horizontalScrollBar == null) {
-            horizontalScrollBar = new HorizontalScrollBar(this);
-            horizontalScrollBar.setMinimum(0);
-            JPanel panel = new JPanel();
-            panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-            panel.add(horizontalScrollBar);
-            final int height = horizontalScrollBar.getPreferredSize().height;
-            panel.add(Box.createRigidArea(new Dimension(height, height)));
-            add(panel, BorderLayout.SOUTH);
-            horizontalScrollBarListener = new HorizontalScrollBarListener(this);
-            horizontalScrollBar.addAdjustmentListener(horizontalScrollBarListener);
+      if (horizontalScrollBar == null)
+        {
+          if (prefs.getBooleanProperty(Property.ENABLE_HORIZONTAL_SCROLL_BAR))
+            {
+              horizontalScrollBar = new HorizontalScrollBar(this);
+              horizontalScrollBar.setMinimum(0);
+              JPanel panel = new JPanel();
+              panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+              panel.add(horizontalScrollBar);
+              final int height = horizontalScrollBar.getPreferredSize().height;
+              panel.add(Box.createRigidArea(new Dimension(height, height)));
+              add(panel, BorderLayout.SOUTH);
+              horizontalScrollBarListener = new HorizontalScrollBarListener(this);
+              horizontalScrollBar.addAdjustmentListener(horizontalScrollBarListener);
+            }
         }
     }
 
     public void removeHorizontalScrollBar()
     {
-        if (horizontalScrollBar != null) {
-            if (horizontalScrollBarListener == null) {
-                horizontalScrollBar.removeAdjustmentListener(horizontalScrollBarListener);
-                horizontalScrollBarListener = null;
+      if (horizontalScrollBar != null)
+        {
+          if (horizontalScrollBarListener == null)
+            {
+              horizontalScrollBar.removeAdjustmentListener(horizontalScrollBarListener);
+              horizontalScrollBarListener = null;
             }
-            // Remove JPanel containing scroll bar.
-            remove(horizontalScrollBar.getParent());
-            horizontalScrollBar = null;
+          // Remove JPanel containing scroll bar.
+          remove(horizontalScrollBar.getParent());
+          horizontalScrollBar = null;
         }
     }
 
