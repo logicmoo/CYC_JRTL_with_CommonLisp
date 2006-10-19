@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004-2006 Peter Graves
- * $Id: FileStream.java,v 1.29 2006-06-16 00:02:43 piso Exp $
+ * $Id: FileStream.java,v 1.30 2006-10-19 23:39:56 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -180,19 +180,17 @@ public final class FileStream extends Stream
             final LispThread thread = LispThread.currentThread();
             final FastStringBuffer sb = new FastStringBuffer();
             while (true) {
-                if (inputBufferOffset >= inputBufferCount) {
-                    fillInputBuffer();
-                    if (inputBufferCount < 0) {
-                        // End of file.
-                        if (sb.length() == 0) {
-                            if (eofError)
-                                return signal(new EndOfFile(this));
-                            return thread.setValues(eofValue, T);
-                        }
-                        return thread.setValues(new SimpleString(sb), T);
+                int n = _readChar();
+                if (n < 0) {
+                    // End of file.
+                    if (sb.length() == 0) {
+                        if (eofError)
+                            return signal(new EndOfFile(this));
+                        return thread.setValues(eofValue, T);
                     }
+                    return thread.setValues(new SimpleString(sb), T);
                 }
-                char c = (char) (inputBuffer[inputBufferOffset++] & 0xff);
+                char c = (char) n;
                 if (c == '\n')
                     return thread.setValues(new SimpleString(sb), NIL);
                 else
