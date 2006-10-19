@@ -2,7 +2,7 @@
  * IdleThread.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: IdleThread.java,v 1.4 2003-06-19 17:38:25 piso Exp $
+ * $Id: IdleThread.java,v 1.5 2006-10-19 16:42:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -183,10 +183,12 @@ public class IdleThread extends Thread
         {
             for (EditorIterator it = new EditorIterator(); it.hasNext();) {
                 Editor ed = it.nextEditor();
-                Buffer buf = ed.getBuffer();
-                if (buf != null) {
-                    if (buf.validateMaximumColumns())
-                        ed.updateHorizontalScrollBar();
+                if (ed.getHorizontalScrollBar() != null) {
+                    Buffer buf = ed.getBuffer();
+                    if (buf != null) {
+                        if (buf.validateMaximumColumns())
+                            ed.updateHorizontalScrollBar();
+                    }
                 }
             }
         }
