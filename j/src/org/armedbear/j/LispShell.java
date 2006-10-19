@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: LispShell.java,v 1.98 2006-09-26 00:16:52 piso Exp $
+ * $Id: LispShell.java,v 1.99 2006-10-19 16:57:09 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@ public class LispShell extends Shell
 
   private static final String CMUCL_PROMPT_PATTERN =
     "^\\* |^[0-9]+\\] ";
-    
+
   private static final String OPENMCL_PROMPT_PATTERN =
     "(^\\? )|(^Inspect ?[0-9]*\\>)";
 
@@ -249,9 +249,7 @@ public class LispShell extends Shell
       {
         stdin  = new OutputStreamWriter(p.getOutputStream());
         stdoutThread = new StdoutThread(p.getInputStream());
-        stdoutThread.setTimeOut(50);
         stderrThread = new StderrThread(p.getErrorStream());
-        stderrThread.setTimeOut(50);
         stdoutThread.start();
         stderrThread.start();
         readOnly = false;
