@@ -1,8 +1,8 @@
 /*
  * Registers.java
  *
- * Copyright (C) 2002-2004 Peter Graves
- * $Id: Registers.java,v 1.2 2004-08-26 17:13:33 piso Exp $
+ * Copyright (C) 2002-2006 Peter Graves
+ * $Id: Registers.java,v 1.3 2006-11-06 11:06:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -175,10 +175,9 @@ public final class Registers
         return null;
     }
 
-    // No history.
     private static final String getName(Editor editor, String title)
     {
-        InputDialog d = new InputDialog(editor, "Register:", title, null);
+        SelectRegisterDialog d = new SelectRegisterDialog(editor, "Register:", title, null);
         editor.centerDialog(d);
         d.show();
         return d.getInput();
