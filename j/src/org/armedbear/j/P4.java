@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: P4.java,v 1.29 2005-11-18 19:23:27 piso Exp $
+ * $Id: P4.java,v 1.30 2006-12-09 19:18:04 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -157,13 +157,13 @@ public class P4 extends VersionControl implements Constants
     buffer.setBusy(true);
     editor.setWaitCursor();
     FastStringBuffer sb = new FastStringBuffer("p4 edit ");
-    sb.append(maybeQuote(file.canonicalPath()));
+    sb.append(maybeQuote(file.getName()));
     final String cmd = sb.toString();
     Runnable commandRunnable = new Runnable()
       {
         public void run()
         {
-          final String output = command(cmd, null);
+          final String output = command(cmd, buffer.getCurrentDirectory());
           Runnable completionRunnable = new Runnable()
             {
               public void run()
@@ -214,7 +214,7 @@ public class P4 extends VersionControl implements Constants
     if (output == null)
       return false;
     FastStringBuffer sb = new FastStringBuffer("p4 edit ");
-    sb.append(maybeQuote(file.canonicalPath()));
+    sb.append(maybeQuote(file.getName()));
     editCompleted(editor, buffer, sb.toString(), output);
     return !buffer.isReadOnly();
   }
@@ -231,6 +231,8 @@ public class P4 extends VersionControl implements Constants
   // Returns output from "p4 edit" command or null if error.
   private static String _autoEdit(File file)
   {
+    Editor editor = Editor.currentEditor();
+    Buffer buffer = editor.getBuffer();
     if (file == null)
       return null;
     if (file.isRemote())
@@ -238,8 +240,8 @@ public class P4 extends VersionControl implements Constants
     if (!haveP4())
       return null;
     FastStringBuffer sb = new FastStringBuffer("p4 edit ");
-    sb.append(maybeQuote(file.canonicalPath()));
-    return command(sb.toString(), null);
+    sb.append(maybeQuote(file.getName()));
+    return command(sb.toString(), buffer.getCurrentDirectory());
   }
 
   public static void revert()
@@ -258,12 +260,12 @@ public class P4 extends VersionControl implements Constants
         if (!editor.confirm("Revert Buffer", prompt))
           return;
       }
-    final String cmd = "p4 revert " + maybeQuote(file.canonicalPath());
+    final String cmd = "p4 revert " + maybeQuote(file.getName());
     Runnable commandRunnable = new Runnable()
       {
         public void run()
         {
-          final String output = command(cmd, null);
+          final String output = command(cmd, buffer.getCurrentDirectory());
           Runnable completionRunnable = new Runnable()
             {
               public void run()
@@ -449,7 +451,7 @@ public class P4 extends VersionControl implements Constants
         File file = parentBuffer.getFile();
         if (file == null)
           return;
-        sb.append(maybeQuote(file.canonicalPath()));
+        sb.append(maybeQuote(file.getName()));
         title = baseCmd + maybeQuote(file.getName());
       }
     else
@@ -465,7 +467,7 @@ public class P4 extends VersionControl implements Constants
       {
         public void run()
         {
-          final String output = command(cmd, null);
+          final String output = command(cmd, parentBuffer.getCurrentDirectory());
           Runnable completionRunnable = new Runnable()
             {
               public void run()
@@ -551,7 +553,8 @@ public class P4 extends VersionControl implements Constants
         sb.append(' ');
         sb.append(arg);
       }
-    final ShellCommand shellCommand = new ShellCommand(sb.toString());
+    final ShellCommand shellCommand =
+      new ShellCommand(sb.toString(), parentBuffer.getCurrentDirectory());
     Runnable commandRunnable = new Runnable()
       {
         public void run()
@@ -891,6 +894,8 @@ public class P4 extends VersionControl implements Constants
   public static void finish(final Editor editor,
                             final CheckinBuffer checkinBuffer)
   {
+    final Buffer parentBuffer = checkinBuffer.getParentBuffer();
+
     checkinBuffer.setBusy(true);
     final boolean editOnly = checkinBuffer.isEditOnly();
     final String cmd;
@@ -906,7 +911,8 @@ public class P4 extends VersionControl implements Constants
         title = "Output from p4 submit";
       }
     final String input = checkinBuffer.getText();
-    final ShellCommand shellCommand = new ShellCommand(cmd, null, input);
+    final ShellCommand shellCommand =
+      new ShellCommand(cmd, parentBuffer.getCurrentDirectory(), input);
     Runnable commandRunnable = new Runnable()
       {
         public void run()
@@ -1012,11 +1018,14 @@ public class P4 extends VersionControl implements Constants
 
   public static String getStatusString(File file)
   {
+    Editor editor = Editor.currentEditor();
+    Buffer buffer = editor.getBuffer();
+
     if (file != null && haveP4())
       {
         FastStringBuffer sb = null;
         String output =
-          command("p4 fstat ".concat(file.canonicalPath()), null);
+          command("p4 fstat ".concat(file.getName()), buffer.getCurrentDirectory());
         String HAVE_REV = "... haveRev ";
         int begin = output.indexOf(HAVE_REV);
         if (begin >= 0)
