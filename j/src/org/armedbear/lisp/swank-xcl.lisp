@@ -69,6 +69,9 @@
                                 (return `((,(princ-to-string name)
                                            (:location
                                             (:file ,(namestring file))))))))))))))))
-          
+
           (t
            nil))))
+
+(defun swank-interrupt-lisp ()
+  (sys:interrupt-lisp))

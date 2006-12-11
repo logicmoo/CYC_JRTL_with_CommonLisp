@@ -1,7 +1,7 @@
 ;;; swank-package.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank-package.lisp,v 1.10 2005-11-21 14:19:48 piso Exp $
+;;; $Id: swank-package.lisp,v 1.11 2006-12-11 04:01:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -28,4 +28,5 @@
            #:swank-load-file
            #:swank-compile-file
            #:swank-compile-string
-           #:swank-describe-symbol))
+           #:swank-describe-symbol
+           #:swank-interrupt-lisp))

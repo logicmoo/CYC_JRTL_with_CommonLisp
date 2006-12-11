@@ -1,7 +1,7 @@
 ;;; slime.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: slime.lisp,v 1.38 2006-09-26 00:28:35 piso Exp $
+;;; $Id: slime.lisp,v 1.39 2006-12-11 04:01:40 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -44,7 +44,8 @@
            #:slime-load-file
            #:slime-compile-file
            #:slime-compile-and-load-file
-           #:slime-describe-symbol))
+           #:slime-describe-symbol
+           #:slime-interrupt))
 
 (in-package #:slime)
 
@@ -481,6 +482,9 @@
       (let ((output (slime-eval `(swank:swank-describe-symbol ,symbol-name ,(find-buffer-package)))))
         (invoke-later (lambda () (show-description output)))))))
 
+(defun slime-interrupt ()
+  (slime-eval '(swank:swank-interrupt-lisp)))
+
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (unless (find-package '#:emacs)
     (defpackage #:emacs
@@ -500,7 +504,8 @@
            (map-key-for-mode "Ctrl Alt E" "(slime:slime-eval-last-expression)" "Lisp")
            (map-key-for-mode "Ctrl Alt K" "(slime:slime-compile-and-load-file)" "Lisp")
            (map-key-for-mode "Ctrl Alt X" "(slime:slime-eval-defun)" "Lisp")
-           (map-key-for-mode "Ctrl Alt C" "(slime:slime-compile-defun)" "Lisp"))
+           (map-key-for-mode "Ctrl Alt C" "(slime:slime-compile-defun)" "Lisp")
+           (map-key-for-mode "Ctrl Alt B" "(slime:slime-interrupt)" "Lisp Shell"))
           ((and (stringp emulation)
                 (string-equal emulation "emacs")
                 (fboundp 'emacs::define-keys-for-slime))
