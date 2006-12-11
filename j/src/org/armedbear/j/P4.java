@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: P4.java,v 1.30 2006-12-09 19:18:04 piso Exp $
+ * $Id: P4.java,v 1.31 2006-12-11 22:02:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -696,7 +696,8 @@ public class P4 extends VersionControl implements Constants
             sb.append(' ');
             sb.append(arg);
           }
-        final ShellCommand shellCommand = new ShellCommand(sb.toString());
+        final ShellCommand shellCommand =
+            new ShellCommand(sb.toString(), parentBuffer.getCurrentDirectory());
         Runnable commandRunnable = new Runnable()
           {
             public void run()
