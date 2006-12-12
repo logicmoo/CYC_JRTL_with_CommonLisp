@@ -1,8 +1,8 @@
 /*
  * LispShellMode.java
  *
- * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispShellMode.java,v 1.21 2005-10-28 13:13:32 piso Exp $
+ * Copyright (C) 2002-2006 Peter Graves
+ * $Id: LispShellMode.java,v 1.22 2006-12-12 12:28:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,7 +65,8 @@ public final class LispShellMode extends LispMode implements Constants, Mode
         km.mapKey(KeyEvent.VK_ENTER, ALT_MASK, "newlineAndIndent");
         km.mapKey(KeyEvent.VK_R, CTRL_MASK, "resetLisp");
         km.mapKey(KeyEvent.VK_TAB, 0, "indentLineOrRegion");
-        km.mapKey(KeyEvent.VK_C, CTRL_MASK | ALT_MASK, "shellInterrupt");
+        if (!Platform.isPlatformWindows())
+            km.mapKey(KeyEvent.VK_C, CTRL_MASK | ALT_MASK, "shellInterrupt");
         km.mapKey(KeyEvent.VK_T, CTRL_MASK, "findTag");
         km.mapKey(KeyEvent.VK_F9, CTRL_MASK, "recompile");
         km.mapKey(KeyEvent.VK_F1, ALT_MASK, "hyperspec");
