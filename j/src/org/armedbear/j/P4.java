@@ -2,7 +2,7 @@
  * P4.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: P4.java,v 1.31 2006-12-11 22:02:41 piso Exp $
+ * $Id: P4.java,v 1.32 2006-12-16 22:58:50 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -944,31 +944,11 @@ public class P4 extends VersionControl implements Constants
                                       ShellCommand shellCommand)
   {
     final Buffer parentBuffer = checkinBuffer.getParentBuffer();
+    OutputBuffer buf = null;
+
     if (shellCommand.exitValue() != 0)
       {
         // Error.
-        OutputBuffer buf = null;
-        // Re-use existing output buffer if possible.
-        for (BufferIterator it = new BufferIterator(); it.hasNext();)
-          {
-            Buffer b = it.nextBuffer();
-            if (b instanceof OutputBuffer)
-              {
-                if (title.equals(b.getTitle()))
-                  {
-                    buf = (OutputBuffer) b;
-                    break; // There should be one at most.
-                  }
-              }
-          }
-        if (buf != null)
-          buf.setText(shellCommand.getOutput());
-        else
-          buf = OutputBuffer.getOutputBuffer(shellCommand.getOutput());
-        buf.setTitle(title);
-        editor.makeNext(buf);
-        checkinBuffer.setBusy(false);
-        editor.displayInOtherWindow(buf);
       }
     else
       {
@@ -1014,6 +994,31 @@ public class P4 extends VersionControl implements Constants
         editor.unsplitWindow();
         checkinBuffer.kill();
       }
+
+    // Re-use existing output buffer if possible.
+    for (BufferIterator it = new BufferIterator(); it.hasNext();)
+      {
+        Buffer b = it.nextBuffer();
+        if (b instanceof OutputBuffer)
+          {
+            if (title.equals(b.getTitle()))
+              {
+                buf = (OutputBuffer) b;
+                break; // There should be one at most.
+              }
+          }
+      }
+
+    if (buf != null)
+      buf.setText(shellCommand.getOutput());
+    else
+      buf = OutputBuffer.getOutputBuffer(shellCommand.getOutput());
+
+    buf.setTitle(title);
+    editor.makeNext(buf);
+    checkinBuffer.setBusy(false);
+    editor.displayInOtherWindow(buf);
+
     editor.getFrame().setDefaultCursor();
   }
 
