@@ -1,7 +1,7 @@
 ;;; swank.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: swank.lisp,v 1.19 2005-11-21 13:22:58 piso Exp $
+;;; Copyright (C) 2004-2006 Peter Graves
+;;; $Id: swank.lisp,v 1.20 2006-12-22 16:03:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -251,14 +251,17 @@
       values)))
 
 (defun shorten-string-for-transcript (string)
-  (let ((s (subseq string 0 (min 60 (length string)))))
-    (string-right-trim '(#\space) (substitute #\space #\newline s))))
+  (let ((s (string-trim '(#\space #\newline #\return) string)))
+    (when (> (length s) 60)
+      (setq s (subseq s 0 60)))
+    (setq s (substitute #\space #\newline s))
+    #+windows
+    (setq s (substitute #\space #\return s))
+    s))
 
 (defun eval-string-async (string package-name)
-  (write-string ";;;; ")
-  (write-string (shorten-string-for-transcript string))
-  (write-string " ...")
-  (terpri)
+  (let ((s (concatenate 'string ";;;; " (shorten-string-for-transcript string) " ...")))
+    (write-string s))
   (force-output)
   (let ((package (if package-name (find-package package-name) *package*)))
     (let* ((*package* (or package *package*))
