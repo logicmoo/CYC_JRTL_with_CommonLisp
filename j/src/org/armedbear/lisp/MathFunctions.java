@@ -1,8 +1,8 @@
 /*
  * MathFunctions.java
  *
- * Copyright (C) 2004-2005 Peter Graves
- * $Id: MathFunctions.java,v 1.34 2006-10-03 10:34:36 piso Exp $
+ * Copyright (C) 2004-2006 Peter Graves
+ * $Id: MathFunctions.java,v 1.35 2006-12-25 14:51:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -189,23 +189,14 @@ public final class MathFunctions extends Lisp
                 return signalTypeError(y, Symbol.REAL);
             if (!x.realp())
                 return signalTypeError(x, Symbol.REAL);
-            if (y.floatp() && x.floatp()) {
-                double d1, d2;
-                if (y instanceof SingleFloat)
-                    d1 = ((SingleFloat)y).value;
-                else
-                    d1 = ((DoubleFloat)y).value;
-                if (x instanceof SingleFloat)
-                    d2 = ((SingleFloat)x).value;
-                else
-                    d2 = ((DoubleFloat)x).value;
-                double result = Math.atan2(d1, d2);
-                if (y instanceof DoubleFloat || x instanceof DoubleFloat)
-                    return new DoubleFloat(result);
-                else
-                    return new SingleFloat((float)result);
-            }
-            return atan(y.divideBy(x));
+            double d1, d2;
+            d1 = DoubleFloat.coerceToFloat(y).value;
+            d2 = DoubleFloat.coerceToFloat(x).value;
+            double result = Math.atan2(d1, d2);
+            if (y instanceof DoubleFloat || x instanceof DoubleFloat)
+                return new DoubleFloat(result);
+            else
+                return new SingleFloat((float)result);
         }
     };
 
