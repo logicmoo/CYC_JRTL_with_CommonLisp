@@ -1,8 +1,8 @@
 /*
  * SimpleArray_T.java
  *
- * Copyright (C) 2003-2005 Peter Graves
- * $Id: SimpleArray_T.java,v 1.2 2005-03-25 03:19:22 piso Exp $
+ * Copyright (C) 2003-2007 Peter Graves
+ * $Id: SimpleArray_T.java,v 1.3 2007-01-08 16:33:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,8 +44,8 @@ public final class SimpleArray_T extends AbstractArray
     }
 
     public SimpleArray_T(int[] dimv,
-                       LispObject elementType,
-                       LispObject initialContents)
+                         LispObject elementType,
+                         LispObject initialContents)
         throws ConditionThrowable
     {
         this.dimv = dimv;
