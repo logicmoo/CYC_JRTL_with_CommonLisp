@@ -1,8 +1,8 @@
 /*
  * LispThread.java
  *
- * Copyright (C) 2003-2006 Peter Graves
- * $Id: LispThread.java,v 1.89 2006-05-03 16:14:34 piso Exp $
+ * Copyright (C) 2003-2007 Peter Graves
+ * $Id: LispThread.java,v 1.90 2007-01-20 15:13:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1011,6 +1011,16 @@ public final class LispThread extends LispObject
                                             args[1].writeToString() + "."));
             }
             return new LispThread(checkFunction(args[0]), name);
+        }
+    };
+
+    // ### thread-p
+    private static final Primitive THREAD_P =
+        new Primitive("thread-p", PACKAGE_EXT, true, "object")
+    {
+        public LispObject execute(LispObject arg) throws ConditionThrowable
+        {
+            return arg instanceof LispThread ? T : NIL;
         }
     };
 
