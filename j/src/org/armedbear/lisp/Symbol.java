@@ -1,8 +1,8 @@
 /*
  * Symbol.java
  *
- * Copyright (C) 2002-2006 Peter Graves
- * $Id: Symbol.java,v 1.246 2006-10-05 16:57:45 piso Exp $
+ * Copyright (C) 2002-2007 Peter Graves
+ * $Id: Symbol.java,v 1.247 2007-01-22 16:34:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -606,10 +606,10 @@ public class Symbol extends LispObject
       }
     if (!seenNonDigit)
       return true;
-    if (s.length() > 0 && s.charAt(0) == '.')
+    if (s.charAt(0) == '.')
       {
         boolean allDots = true;
-        for (int i = s.length(); i-- > 1;)
+        for (int i = length; i-- > 1;)
           {
             if (s.charAt(i) != '.')
               {
