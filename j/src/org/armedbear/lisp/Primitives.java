@@ -1,8 +1,8 @@
 /*
  * Primitives.java
  *
- * Copyright (C) 2002-2006 Peter Graves
- * $Id: Primitives.java,v 1.877 2006-04-11 16:09:49 piso Exp $
+ * Copyright (C) 2002-2007 Peter Graves
+ * $Id: Primitives.java,v 1.878 2007-02-06 14:25:10 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3241,7 +3241,7 @@ public final class Primitives extends Lisp
           pkg = coerceToPackage(args[1]);
         else
           pkg = getCurrentPackage();
-        if (args[0] instanceof Cons)
+        if (args[0].listp())
           {
             LispObject list = args[0];
             while (list != NIL)
