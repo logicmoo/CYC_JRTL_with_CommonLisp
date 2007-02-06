@@ -1,8 +1,8 @@
 /*
  * Stream.java
  *
- * Copyright (C) 2003-2006 Peter Graves
- * $Id: Stream.java,v 1.151 2006-08-18 00:33:02 piso Exp $
+ * Copyright (C) 2003-2007 Peter Graves
+ * $Id: Stream.java,v 1.152 2007-02-06 14:23:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1331,6 +1331,10 @@ public class Stream extends LispObject
     String s = sb.toString();
     if (s.indexOf('/') >= 0)
       return makeRatio(s, radix);
+    // Integer.parseInt() below handles a prefixed '-' character correctly, but
+    // does not accept a prefixed '+' character, so we skip over it here
+    if (s.charAt(0) == '+')
+      s = s.substring(1);
     try
       {
         int n = Integer.parseInt(s, radix);
