@@ -1,8 +1,8 @@
 /*
  * Mutex.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: Mutex.java,v 1.2 2004-09-09 14:59:29 piso Exp $
+ * Copyright (C) 2004-2007 Peter Graves
+ * $Id: Mutex.java,v 1.3 2007-02-11 15:10:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,6 +37,25 @@ package org.armedbear.lisp;
 public final class Mutex extends LispObject
 {
     private boolean inUse;
+
+    public LispObject typeOf()
+    {
+        return Symbol.MUTEX;
+    }
+
+    public LispObject classOf()
+    {
+        return BuiltInClass.MUTEX;
+    }
+
+    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
+    {
+        if (typeSpecifier == Symbol.MUTEX)
+            return T;
+        if (typeSpecifier == BuiltInClass.MUTEX)
+            return T;
+        return super.typep(typeSpecifier);
+    }
 
     public void acquire() throws InterruptedException
     {

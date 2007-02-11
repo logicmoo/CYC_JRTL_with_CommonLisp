@@ -1,8 +1,8 @@
 /*
  * BuiltInClass.java
  *
- * Copyright (C) 2003-2006 Peter Graves
- * $Id: BuiltInClass.java,v 1.53 2006-06-12 12:23:33 piso Exp $
+ * Copyright (C) 2003-2007 Peter Graves
+ * $Id: BuiltInClass.java,v 1.54 2007-02-11 15:10:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,6 +93,7 @@ public class BuiltInClass extends LispClass
   public static final BuiltInClass LOGICAL_PATHNAME     = addClass(Symbol.LOGICAL_PATHNAME);
   public static final BuiltInClass MAILBOX              = addClass(Symbol.MAILBOX);
   public static final BuiltInClass METHOD_COMBINATION   = addClass(Symbol.METHOD_COMBINATION);
+  public static final BuiltInClass MUTEX                = addClass(Symbol.MUTEX);
   public static final BuiltInClass NIL_VECTOR           = addClass(Symbol.NIL_VECTOR);
   public static final BuiltInClass NULL                 = addClass(Symbol.NULL);
   public static final BuiltInClass NUMBER               = addClass(Symbol.NUMBER);
@@ -183,6 +184,8 @@ public class BuiltInClass extends LispClass
     MAILBOX.setCPL(MAILBOX, CLASS_T);
     METHOD_COMBINATION.setDirectSuperclass(CLASS_T);
     METHOD_COMBINATION.setCPL(METHOD_COMBINATION, CLASS_T);
+    MUTEX.setDirectSuperclass(CLASS_T);
+    MUTEX.setCPL(MUTEX, CLASS_T);
     NIL_VECTOR.setDirectSuperclass(STRING);
     NIL_VECTOR.setCPL(NIL_VECTOR, STRING, VECTOR, ARRAY, SEQUENCE, CLASS_T);
     NULL.setDirectSuperclass(LIST);

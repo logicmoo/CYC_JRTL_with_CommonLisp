@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2007 Peter Graves
- * $Id: Symbol.java,v 1.247 2007-01-22 16:34:34 piso Exp $
+ * $Id: Symbol.java,v 1.248 2007-02-11 15:10:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2846,6 +2846,8 @@ public class Symbol extends LispObject
     PACKAGE_EXT.addExternalSymbol("COMPILER-ERROR");
   public static final Symbol COMPILER_UNSUPPORTED_FEATURE_ERROR =
     PACKAGE_EXT.addExternalSymbol("COMPILER-UNSUPPORTED-FEATURE-ERROR");
+  public static final Symbol MUTEX =
+    PACKAGE_EXT.addExternalSymbol("MUTEX");
   public static final Symbol THREAD =
     PACKAGE_EXT.addExternalSymbol("THREAD");
   public static final Symbol SUPPRESS_COMPILER_WARNINGS =
