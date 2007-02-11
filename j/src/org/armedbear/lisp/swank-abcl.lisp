@@ -1,7 +1,7 @@
 ;;; swank-abcl.lisp
 ;;;
-;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: swank-abcl.lisp,v 1.10 2005-06-17 17:39:15 piso Exp $
+;;; Copyright (C) 2004-2007 Peter Graves
+;;; $Id: swank-abcl.lisp,v 1.11 2007-02-11 15:47:46 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -78,3 +78,6 @@
                                             (:file ,(namestring file))))))))))))))))
           (t
            nil))))
+
+(defun swank-interrupt-lisp ()
+  (ext:interrupt-lisp))

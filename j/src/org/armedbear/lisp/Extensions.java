@@ -1,8 +1,8 @@
 /*
  * Extensions.java
  *
- * Copyright (C) 2002-2006 Peter Graves
- * $Id: Extensions.java,v 1.46 2006-03-02 16:08:39 piso Exp $
+ * Copyright (C) 2002-2007 Peter Graves
+ * $Id: Extensions.java,v 1.47 2007-02-11 15:47:45 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -224,6 +224,17 @@ public final class Extensions extends Lisp
             Debug.trace(e);
           }
         return NIL;
+      }
+    };
+
+  // ### interrupt-lisp
+  private static final Primitive INTERRUPT_LISP =
+    new Primitive("interrupt-lisp", PACKAGE_EXT, true, "")
+    {
+      public LispObject execute() throws ConditionThrowable
+      {
+        setInterrupted(true);
+        return T;
       }
     };
 }
