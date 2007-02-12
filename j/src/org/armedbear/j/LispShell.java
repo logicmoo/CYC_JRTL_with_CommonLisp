@@ -1,8 +1,8 @@
 /*
  * LispShell.java
  *
- * Copyright (C) 2002-2006 Peter Graves
- * $Id: LispShell.java,v 1.99 2006-10-19 16:57:09 piso Exp $
+ * Copyright (C) 2002-2007 Peter Graves
+ * $Id: LispShell.java,v 1.100 2007-02-12 19:38:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -117,7 +117,9 @@ public class LispShell extends Shell
             if (swankLoader == null)
               return null; // FIXME Error message?
             if (shellCommand.indexOf("sbcl") >= 0
-                || shellCommand.endsWith("/x") || shellCommand.endsWith("\\x"))
+                || shellCommand.endsWith("/x")
+                || shellCommand.endsWith("\\x")
+                || shellCommand.endsWith("\\x.exe"))
               {
                 shellCommand =
                   shellCommand + " --load " + swankLoader.canonicalPath();
