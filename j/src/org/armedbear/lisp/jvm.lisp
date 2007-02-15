@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.772 2006-06-12 12:39:59 piso Exp $
+;;; $Id: jvm.lisp,v 1.773 2007-02-15 14:06:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -10360,7 +10360,12 @@ representation, based on the derived type of the LispObject."
            (warnings-p t)
            (failure-p t))
       (with-compilation-unit ()
-        (let* ((tempfile (make-temp-file)))
+        (let* ((*speed* *speed*)
+               (*space* *space*)
+               (*safety* *safety*)
+               (*debug* *debug*)
+               (*explain* *explain*)
+               (tempfile (make-temp-file)))
           (unwind-protect
               (setf compiled-function
                     (load-compiled-function (compile-defun name expr env tempfile)))
