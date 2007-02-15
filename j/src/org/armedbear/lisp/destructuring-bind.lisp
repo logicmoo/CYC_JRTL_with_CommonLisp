@@ -1,7 +1,7 @@
 ;;; destructuring-bind.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: destructuring-bind.lisp,v 1.22 2005-12-29 15:13:11 piso Exp $
+;;; $Id: destructuring-bind.lisp,v 1.23 2007-02-15 11:21:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -347,7 +347,9 @@
   (let* ((arg-list-name (gensym "ARG-LIST-")))
     (multiple-value-bind (body local-decls)
 	(parse-defmacro lambda-list arg-list-name body nil 'destructuring-bind
-			:anonymousp t :doc-string-allowed nil)
+			:anonymousp t
+                        :doc-string-allowed nil
+                        :wrap-block nil)
       `(let ((,arg-list-name ,arg-list))
 	 ,@local-decls
 	 ,body))))
