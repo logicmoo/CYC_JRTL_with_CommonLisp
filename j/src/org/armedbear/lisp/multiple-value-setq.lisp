@@ -1,7 +1,7 @@
 ;;; multiple-value-setq.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: multiple-value-setq.lisp,v 1.1 2004-03-31 02:51:38 piso Exp $
+;;; Copyright (C) 2004-2007 Peter Graves
+;;; $Id: multiple-value-setq.lisp,v 1.2 2007-02-15 11:37:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -24,4 +24,8 @@
 (defmacro multiple-value-setq (varlist value-form)
   (unless (and (listp varlist) (every #'symbolp varlist))
     (error "~S is not a list of symbols." varlist))
-  `(values (setf (values ,@varlist) ,value-form)))
+  ;; MULTIPLE-VALUE-SETQ is required always to return the primary value of the
+  ;; value-form, even if varlist is empty.
+  (if varlist
+    `(values (setf (values ,@varlist) ,value-form))
+    `(values ,value-form)))
