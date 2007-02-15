@@ -1,7 +1,7 @@
 ;;; trace.lisp
 ;;;
-;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: trace.lisp,v 1.16 2006-03-21 15:26:55 piso Exp $
+;;; Copyright (C) 2003-2007 Peter Graves
+;;; $Id: trace.lisp,v 1.17 2007-02-15 14:05:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,15 +17,20 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package #:system)
+(in-package "SYSTEM")
 
 (export 'untraced-function) ;; For FIND-GENERIC-FUNCTION in clos.lisp.
 
-(require 'format)
+(require "FORMAT")
+
+(require "CLOS")
 
 (defvar *trace-info-hashtable* (make-hash-table :test #'equal))
 
 (defstruct trace-info name untraced-function breakp)
+
+(defmethod make-load-form ((object trace-info) &optional environment)
+   (make-load-form-saving-slots object :environment environment))
 
 (defvar *trace-depth* 0)
 
