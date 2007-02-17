@@ -1,7 +1,7 @@
 ;;; pathnames.lisp
 ;;;
-;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: pathnames.lisp,v 1.27 2005-10-17 18:52:03 piso Exp $
+;;; Copyright (C) 2003-2007 Peter Graves
+;;; $Id: pathnames.lisp,v 1.28 2007-02-17 17:27:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -150,6 +150,7 @@
     (nreverse result)))
 
 (defun translate-component (source from to &optional case)
+  (declare (ignore from))
   (cond ((or (eq to :wild) (null to))
          ;; "If the piece in TO-WILDCARD is :WILD or NIL, the piece in source
          ;; is copied into the result."

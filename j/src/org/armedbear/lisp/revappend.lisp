@@ -1,7 +1,7 @@
 ;;; revappend.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: revappend.lisp,v 1.1 2003-06-22 18:18:18 piso Exp $
+;;; Copyright (C) 2003-2007 Peter Graves
+;;; $Id: revappend.lisp,v 1.2 2007-02-17 17:26:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,7 +17,7 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "COMMON-LISP")
+(in-package "SYSTEM")
 
 (defun revappend (x y)
   (do ((top x (cdr top))
