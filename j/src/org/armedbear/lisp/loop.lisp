@@ -1,7 +1,7 @@
 ;;; loop.lisp
 ;;;
-;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: loop.lisp,v 1.13 2005-05-24 19:10:02 piso Exp $
+;;; Copyright (C) 2004-2007 Peter Graves
+;;; $Id: loop.lisp,v 1.14 2007-02-18 17:30:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -773,11 +773,11 @@ code to be loaded.
 
 (defun loop-error (format-string &rest format-args)
   (error 'program-error
-	 :format-control "~?~%current LOOP context:~{ ~S~}."
+	 :format-control "~?~%Current LOOP context:~{ ~S~}."
 	 :format-arguments (list format-string format-args (loop-context))))
 
 (defun loop-warn (format-string &rest format-args)
-  (warn "~?~%current LOOP context:~{ ~S~}."
+  (warn "~?~%Current LOOP context:~{ ~S~}."
 	format-string
 	format-args
 	(loop-context)))
@@ -1092,6 +1092,8 @@ code to be loaded.
   name)
 
 (defun loop-make-iteration-var (name initialization dtype)
+  (when (and name (loop-var-p name))
+    (loop-error "Variable ~S has already been used." name))
   (loop-make-var name initialization dtype t))
 
 (defun loop-declare-var (name dtype &optional step-var-p)
