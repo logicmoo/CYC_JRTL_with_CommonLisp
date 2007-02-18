@@ -1,7 +1,7 @@
 ;;; java.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves, Andras Simon
-;;; $Id: java.lisp,v 1.24 2006-01-06 19:09:23 asimon Exp $
+;;; $Id: java.lisp,v 1.25 2007-02-18 15:47:47 asimon Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -104,7 +104,6 @@
   (flet
     ((row-major-to-index (dimensions n)
                          (loop for dims on dimensions
-                           for dim = (car dims)
                            with indices
                            do
                            (multiple-value-bind (m r) (floor n (apply #'* (cdr dims)))
