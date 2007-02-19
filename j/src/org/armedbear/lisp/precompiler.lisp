@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: precompiler.lisp,v 1.157 2006-08-17 23:52:49 piso Exp $
+;;; $Id: precompiler.lisp,v 1.158 2007-02-19 16:59:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -74,14 +74,14 @@
 ;; Returns list of declared specials.
 (declaim (ftype (function (list) list) process-special-declarations))
 (defun process-special-declarations (forms)
-  (let ((specials ()))
+  (let ((specials nil))
     (dolist (form forms)
       (unless (and (consp form) (eq (%car form) 'DECLARE))
         (return))
       (let ((decls (%cdr form)))
         (dolist (decl decls)
           (when (eq (car decl) 'special)
-            (setf specials (append (cdr decl) specials))))))
+            (setq specials (append (cdr decl) specials))))))
     specials))
 
 (declaim (ftype (function (t) t) inline-p))
@@ -547,66 +547,67 @@
 (defun maybe-rewrite-lambda (form)
   (let* ((args (cdr form))
          (lambda-list (car args))
-         (body (cdr args))
-         (declared-specials (process-special-declarations body))
-         (auxvars (memq '&AUX lambda-list))
-         (specials '()))
+         (auxvars (memq '&AUX lambda-list)))
     (when auxvars
-      (setf lambda-list (subseq lambda-list 0 (position '&AUX lambda-list)))
-      (setf body (list (append (list 'LET* (cdr auxvars)) body))))
-    ;; Scan for specials.
-    (let ((keyp nil))
-      (dolist (var lambda-list)
-        (cond ((eq var '&KEY)
-               (setf keyp t))
-              ((atom var)
-               (when (or (special-variable-p var) (memq var declared-specials))
-                 (push var specials)))
-              ((not keyp) ;; e.g. "&optional (*x* 42)"
-               (setf var (%car var))
-               (when (or (special-variable-p var) (memq var declared-specials))
-                 (push var specials)))
-              ;; Keyword parameters.
-              ((atom (%car var)) ;; e.g. "&key (a 42)"
-               ;; Not special.
-               )
-              (t
-               ;; e.g. "&key ((:x *x*) 42)"
-               (setf var (second (%car var))) ;; *x*
-               (when (or (special-variable-p var) (memq var declared-specials))
-                 (push var specials))))))
-    (when specials
-      ;; For each special...
-      (dolist (special specials)
-        (let ((sym (gensym)))
-          (let ((res ())
-                (keyp nil))
-            ;; Walk through the lambda list and replace each occurrence.
-            (dolist (var lambda-list)
-              (cond ((eq var '&KEY)
-                     (setf keyp t)
-                     (push var res))
-                    ((atom var)
-                     (when (eq var special)
-                       (setf var sym))
-                     (push var res))
-                    ((not keyp) ;; e.g. "&optional (*x* 42)"
-                     (when (eq (%car var) special)
-                       (setf (first var) sym))
-                     (push var res))
-                    ((atom (%car var)) ;; e.g. "&key (a 42)"
-                     (push var res))
-                    (t
-                     ;; e.g. "&key ((:x *x*) 42)"
-                     (when (eq (second (%car var)) special)
-                       (setf (second (%car var)) sym))
-                     (push var res))))
-            (setf lambda-list (nreverse res)))
-          (setf body (list (append (list 'LET* (list (list special sym))) body))))))
-    (list* 'LAMBDA lambda-list body)))
+      (setq lambda-list (subseq lambda-list 0 (position '&AUX lambda-list)))
+      (setf (cddr form) (list (append (list 'LET* (cdr auxvars)) (cddr form)))))
+    (multiple-value-bind (body decls doc)
+        (parse-body (cddr form))
+      (let* ((declared-specials (process-special-declarations decls))
+             (specials nil))
+        ;; Scan for specials.
+        (let ((keyp nil))
+          (dolist (var lambda-list)
+            (cond ((eq var '&KEY)
+                   (setq keyp t))
+                  ((atom var)
+                   (when (or (special-variable-p var) (memq var declared-specials))
+                     (push var specials)))
+                  ((not keyp) ;; e.g. "&optional (*x* 42)"
+                   (setq var (%car var))
+                   (when (or (special-variable-p var) (memq var declared-specials))
+                     (push var specials)))
+                  ;; Keyword parameters.
+                  ((atom (%car var)) ;; e.g. "&key (a 42)"
+                   ;; Not special.
+                   )
+                  (t
+                   ;; e.g. "&key ((:x *x*) 42)"
+                   (setq var (second (%car var))) ;; *x*
+                   (when (or (special-variable-p var) (memq var declared-specials))
+                     (push var specials))))))
+        (when specials
+          ;; For each special...
+          (dolist (special specials)
+            (let ((sym (gensym)))
+              (let ((res nil)
+                    (keyp nil))
+                ;; Walk through the lambda list and replace each occurrence.
+                (dolist (var lambda-list)
+                  (cond ((eq var '&KEY)
+                         (setq keyp t)
+                         (push var res))
+                        ((atom var)
+                         (when (eq var special)
+                           (setq var sym))
+                         (push var res))
+                        ((not keyp) ;; e.g. "&optional (*x* 42)"
+                         (when (eq (%car var) special)
+                           (setf (car var) sym))
+                         (push var res))
+                        ((atom (%car var)) ;; e.g. "&key (a 42)"
+                         (push var res))
+                        (t
+                         ;; e.g. "&key ((:x *x*) 42)"
+                         (when (eq (second (%car var)) special)
+                           (setf (second (%car var)) sym))
+                         (push var res))))
+                (setq lambda-list (nreverse res)))
+              (setq body (list (append (list 'LET* (list (list special sym))) body))))))
+        `(lambda ,lambda-list ,@decls ,@(when doc `(,doc)) ,@body)))))
 
 (defun precompile-lambda (form)
-  (setf form (maybe-rewrite-lambda form))
+  (setq form (maybe-rewrite-lambda form))
   (let ((body (cddr form))
         (*inline-declarations* *inline-declarations*))
     (process-optimization-declarations body)
@@ -1118,7 +1119,8 @@
   (multiple-value-bind (body decls doc)
       (parse-body body)
     (let* ((block-name (fdefinition-block-name name))
-           (lambda-expression `(named-lambda ,name ,lambda-list ,@decls (block ,block-name ,@body))))
+           (lambda-expression `(named-lambda ,name ,lambda-list ,@decls ,@(when doc `(,doc))
+                                             (block ,block-name ,@body))))
       (cond (*compile-file-truename*
              `(fset ',name ,lambda-expression))
             (t
