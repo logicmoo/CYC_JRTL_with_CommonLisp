@@ -1,7 +1,7 @@
 ;;; read-conditional.lisp
 ;;;
-;;; Copyright (C) 2005 Peter Graves
-;;; $Id: read-conditional.lisp,v 1.1 2005-06-18 14:54:44 piso Exp $
+;;; Copyright (C) 2005-2007 Peter Graves
+;;; $Id: read-conditional.lisp,v 1.2 2007-02-20 18:54:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,10 +17,11 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package #:system)
+(in-package "SYSTEM")
 
 (defun read-feature (stream)
-  (let* ((*package* +keyword-package+))
+  (let* ((*package* +keyword-package+)
+         (*read-suppress* nil))
     (if (featurep (read stream t nil t))
         #\+ #\-)))
 
