@@ -2,7 +2,7 @@
  * Mailbox.java
  *
  * Copyright (C) 2004-2007 Peter Graves, Andras Simon
- * $Id: Mailbox.java,v 1.8 2007-02-21 17:18:01 piso Exp $
+ * $Id: Mailbox.java,v 1.9 2007-02-21 18:00:28 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,11 +93,10 @@ public final class Mailbox extends LispObject
     return box.isEmpty() ? T : NIL;
   }
 
-  public String writeToString()
+  public String writeToString() throws ConditionThrowable
   {
-    return unreadableString("MAILBOX");
+    return unreadableString(Symbol.MAILBOX);
   }
-
 
   // ### make-mailbox
   private static final Primitive MAKE_MAILBOX =
