@@ -1,8 +1,8 @@
 /*
  * Mailbox.java
  *
- * Copyright (C) 2004-2005 Peter Graves, Andras Simon
- * $Id: Mailbox.java,v 1.7 2005-11-04 13:08:02 piso Exp $
+ * Copyright (C) 2004-2007 Peter Graves, Andras Simon
+ * $Id: Mailbox.java,v 1.8 2007-02-21 17:18:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,135 +26,152 @@ import java.util.NoSuchElementException;
 
 public final class Mailbox extends LispObject
 {
-    private LinkedList box = new LinkedList();
+  private LinkedList box = new LinkedList();
 
-    public LispObject typeOf()
-    {
-        return Symbol.MAILBOX;
-    }
+  public LispObject typeOf()
+  {
+    return Symbol.MAILBOX;
+  }
 
-    public LispObject classOf()
-    {
-        return BuiltInClass.MAILBOX;
-    }
+  public LispObject classOf()
+  {
+    return BuiltInClass.MAILBOX;
+  }
 
-    public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
-    {
-        if (typeSpecifier == Symbol.MAILBOX)
-            return T;
-        if (typeSpecifier == BuiltInClass.MAILBOX)
-            return T;
-        return super.typep(typeSpecifier);
-    }
+  public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
+  {
+    if (typeSpecifier == Symbol.MAILBOX)
+      return T;
+    if (typeSpecifier == BuiltInClass.MAILBOX)
+      return T;
+    return super.typep(typeSpecifier);
+  }
 
-    private void send (LispObject o)
-    {
-        synchronized(this) {
-            box.add(o);
-            notifyAll();
-        }
-    }
+  private void send(LispObject o)
+  {
+    synchronized(this)
+      {
+        box.add(o);
+        notifyAll();
+      }
+  }
 
-    private LispObject read ()
-    {
-        while (box.isEmpty())
-            synchronized(this) {
-                try {
-                    wait();
-                } catch(InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+  private LispObject read()
+  {
+    while (box.isEmpty())
+      synchronized(this)
+        {
+          try
+            {
+              wait();
             }
-        return (LispObject) box.removeFirst();
-    }
-
-    private LispObject peek ()
-    {
-        synchronized(this) {
-            try {
-                return (LispObject) box.getFirst();
-            } catch(NoSuchElementException e) {
-                return NIL;
+          catch(InterruptedException e)
+            {
+              throw new RuntimeException(e);
             }
         }
-    }
+    return (LispObject) box.removeFirst();
+  }
 
-    private LispObject empty ()
+  private LispObject peek()
+  {
+    synchronized(this)
+      {
+        try
+          {
+            return (LispObject) box.getFirst();
+          }
+        catch(NoSuchElementException e)
+          {
+            return NIL;
+          }
+      }
+  }
+
+  private LispObject empty()
+  {
+    return box.isEmpty() ? T : NIL;
+  }
+
+  public String writeToString()
+  {
+    return unreadableString("MAILBOX");
+  }
+
+
+  // ### make-mailbox
+  private static final Primitive MAKE_MAILBOX =
+    new Primitive("make-mailbox", PACKAGE_EXT, true, "")
     {
-        return box.isEmpty() ? T : NIL;
-    }
-
-    public String writeToString()
-    {
-        return unreadableString("MAILBOX");
-    }
-
-
-    // ### make-mailbox
-    private static final Primitive MAKE_MAILBOX =
-        new Primitive("make-mailbox", PACKAGE_EXT, true, "")
-    {
-        public LispObject execute() throws ConditionThrowable
-        {
-            return new Mailbox();
-        }
+      public LispObject execute() throws ConditionThrowable
+      {
+        return new Mailbox();
+      }
     };
 
-    // ### mailbox-send mailbox object
-    private static final Primitive MAILBOX_SEND =
-        new Primitive("mailbox-send", PACKAGE_EXT, true, "mailbox object")
+  // ### mailbox-send mailbox object
+  private static final Primitive MAILBOX_SEND =
+    new Primitive("mailbox-send", PACKAGE_EXT, true, "mailbox object")
     {
-        public LispObject execute(LispObject first, LispObject second)
-            throws ConditionThrowable
-        {
-            if (first instanceof Mailbox) {
-                Mailbox mbox = (Mailbox) first;
-                mbox.send(second);
-                return T;
-            } else
-                return signalTypeError(first, Symbol.MAILBOX);
-        }
+      public LispObject execute(LispObject first, LispObject second)
+        throws ConditionThrowable
+      {
+        if (first instanceof Mailbox)
+          {
+            Mailbox mbox = (Mailbox) first;
+            mbox.send(second);
+            return T;
+          }
+        else
+          return signalTypeError(first, Symbol.MAILBOX);
+      }
     };
 
-    // ### mailbox-read mailbox
-    private static final Primitive MAILBOX_READ =
-        new Primitive("mailbox-read", PACKAGE_EXT, true, "mailbox")
+  // ### mailbox-read mailbox
+  private static final Primitive MAILBOX_READ =
+    new Primitive("mailbox-read", PACKAGE_EXT, true, "mailbox")
     {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            if (arg instanceof Mailbox) {
-                Mailbox mbox = (Mailbox) arg;
-                return mbox.read();
-            } else
-                return signalTypeError(arg, Symbol.MAILBOX);
-        }
+      public LispObject execute(LispObject arg) throws ConditionThrowable
+      {
+        if (arg instanceof Mailbox)
+          {
+            Mailbox mbox = (Mailbox) arg;
+            return mbox.read();
+          }
+        else
+          return signalTypeError(arg, Symbol.MAILBOX);
+      }
     };
 
-    // ### mailbox-peek mailbox
-    private static final Primitive MAILBOX_PEEK =
-        new Primitive("mailbox-peek", PACKAGE_EXT, true, "mailbox")
+  // ### mailbox-peek mailbox
+  private static final Primitive MAILBOX_PEEK =
+    new Primitive("mailbox-peek", PACKAGE_EXT, true, "mailbox")
     {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            if (arg instanceof Mailbox) {
-                Mailbox mbox = (Mailbox) arg;
-                return mbox.peek();
-            } else
-                return signalTypeError(arg, Symbol.MAILBOX);
-        }
+      public LispObject execute(LispObject arg) throws ConditionThrowable
+      {
+        if (arg instanceof Mailbox)
+          {
+            Mailbox mbox = (Mailbox) arg;
+            return mbox.peek();
+          }
+        else
+          return signalTypeError(arg, Symbol.MAILBOX);
+      }
     };
 
-    // ### mailbox-empty-p mailbox
-    private static final Primitive MAILBOX_EMPTY_P =
-        new Primitive("mailbox-empty-p", PACKAGE_EXT, true, "mailbox")
+  // ### mailbox-empty-p mailbox
+  private static final Primitive MAILBOX_EMPTY_P =
+    new Primitive("mailbox-empty-p", PACKAGE_EXT, true, "mailbox")
     {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            if (arg instanceof Mailbox) {
-                Mailbox mbox = (Mailbox) arg;
-                return mbox.empty();
-            } else
-                return signalTypeError(arg, Symbol.MAILBOX);
-        }
+      public LispObject execute(LispObject arg) throws ConditionThrowable
+      {
+        if (arg instanceof Mailbox)
+          {
+            Mailbox mbox = (Mailbox) arg;
+            return mbox.empty();
+          }
+        else
+            return signalTypeError(arg, Symbol.MAILBOX);
+      }
     };
 }
