@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id: Bignum.java,v 1.81 2007-02-21 18:38:37 piso Exp $
+ * $Id: Bignum.java,v 1.82 2007-02-21 18:39:38 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,6 +40,11 @@ public final class Bignum extends LispObject
   public Bignum(String s, int radix)
   {
     value = new BigInteger(s, radix);
+  }
+
+  public Object javaInstance()
+  {
+    return value;
   }
 
   public LispObject typeOf()
