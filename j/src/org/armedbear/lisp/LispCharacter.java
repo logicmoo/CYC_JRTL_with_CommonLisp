@@ -1,8 +1,8 @@
 /*
  * LispCharacter.java
  *
- * Copyright (C) 2002-2005 Peter Graves
- * $Id: LispCharacter.java,v 1.75 2006-10-05 16:58:10 piso Exp $
+ * Copyright (C) 2002-2007 Peter Graves
+ * $Id: LispCharacter.java,v 1.76 2007-02-21 21:19:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -329,10 +329,12 @@ public final class LispCharacter extends LispObject
             int n = ((Fixnum)arg).value;
             if (n < CHAR_MAX)
               return constants[n];
+            else if (n <= Character.MAX_VALUE)
+              return new LispCharacter((char)n);
           }
         catch (ClassCastException e)
           {
-            ; // SBCL signals a type error here: "not of type (UNSIGNED-BYTE 8)".
+            ; // SBCL signals a type-error here: "not of type (UNSIGNED-BYTE 8)"
           }
         return NIL;
       }
