@@ -2,7 +2,7 @@
  * Mailbox.java
  *
  * Copyright (C) 2004-2007 Peter Graves, Andras Simon
- * $Id: Mailbox.java,v 1.9 2007-02-21 18:00:28 piso Exp $
+ * $Id: Mailbox.java,v 1.10 2007-02-22 14:03:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,19 +58,21 @@ public final class Mailbox extends LispObject
 
   private LispObject read()
   {
-    while (box.isEmpty())
-      synchronized(this)
-        {
-          try
-            {
-              wait();
-            }
-          catch(InterruptedException e)
-            {
-              throw new RuntimeException(e);
-            }
-        }
-    return (LispObject) box.removeFirst();
+    synchronized(this)
+      {
+        while (box.isEmpty())
+          {
+            try
+              {
+                wait();
+              }
+            catch(InterruptedException e)
+              {
+                throw new RuntimeException(e);
+              }
+          }
+        return (LispObject) box.removeFirst();
+      }
   }
 
   private LispObject peek()
