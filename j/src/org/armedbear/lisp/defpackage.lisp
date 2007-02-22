@@ -1,7 +1,7 @@
 ;;; defpackage.lisp
 ;;;
-;;; Copyright (C) 2003 Peter Graves
-;;; $Id: defpackage.lisp,v 1.3 2003-07-07 20:25:46 piso Exp $
+;;; Copyright (C) 2003-2007 Peter Graves
+;;; $Id: defpackage.lisp,v 1.4 2007-02-22 17:14:31 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,12 +17,16 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-(in-package "SYSTEM")
+;;; Adapted from CMUCL.
 
-;;; From CMUCL.
+(in-package "SYSTEM")
 
 (defun stringify-names (names)
   (mapcar #'string names))
+
+(defun find-package-or-lose (designator)
+  (or (find-package designator)
+      (error "~S does not designate a package." designator)))
 
 ;; FIXME Better error reporting!
 (defun check-disjoint (&rest args)
@@ -33,19 +37,7 @@
         (when (remove-duplicates (intersection arg1 arg2 :test #'string=))
           (error 'program-error))))))
 
-(defmacro defpackage (package &rest options)
-  "Defines a new package called PACKAGE.  Each of OPTIONS should be one of the
-   following:
-   (:NICKNAMES {package-name}*)
-   (:SIZE <integer>)
-   (:SHADOW {symbol-name}*)
-   (:SHADOWING-IMPORT-FROM <package-name> {symbol-name}*)
-   (:USE {package-name}*)
-   (:IMPORT-FROM <package-name> {symbol-name}*)
-   (:INTERN {symbol-name}*)
-   (:EXPORT {symbol-name}*)
-   (:DOCUMENTATION doc-string)
-   All options except :SIZE and :DOCUMENTATION can be used multiple times."
+(defmacro defpackage (defined-package-name &rest options)
   (let ((nicknames nil)
 	(size nil)
 	(shadows nil)
@@ -85,9 +77,9 @@
 		 (setf shadowing-imports
 		       (acons package-name names shadowing-imports))))))
 	(:use
-	 (let ((new (stringify-names (cdr option))))
-	   (setf use (delete-duplicates (nconc use new) :test #'string=))
-	   (setf use-p t)))
+	 (let ((new (mapcar #'find-package-or-lose (cdr option))))
+	   (setq use (delete-duplicates (nconc use new) :test #'eq))
+	   (setq use-p t)))
 	(:import-from
 	 (let ((package-name (string (second option)))
 	       (names (stringify-names (cddr option))))
@@ -115,6 +107,6 @@
 		    `(:shadow ,@shadows)
 		    `(:shadowing-import-from
 		      ,@(apply #'append (mapcar #'rest shadowing-imports))))
-    `(%defpackage ,(string package) ',nicknames ',size
+    `(%defpackage ,(string defined-package-name) ',nicknames ',size
                   ',shadows ',shadowing-imports ',(if use-p use nil)
                   ',imports ',interns ',exports ',doc)))
