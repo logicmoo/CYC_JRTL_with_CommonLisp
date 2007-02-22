@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
-;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: boot.lisp,v 1.241 2006-01-14 12:53:40 piso Exp $
+;;; Copyright (C) 2003-2007 Peter Graves
+;;; $Id: boot.lisp,v 1.242 2007-02-22 16:03:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -241,10 +241,10 @@
                    :format-arguments (list label)))
           (cdr pair)))))
 
-(set-dispatch-macro-character #\# #\= #'sharp-equal *standard-readtable*)
-(set-dispatch-macro-character #\# #\# #'sharp-sharp *standard-readtable*)
+(set-dispatch-macro-character #\# #\= #'sharp-equal +standard-readtable+)
+(set-dispatch-macro-character #\# #\# #'sharp-sharp +standard-readtable+)
 
-(copy-readtable *standard-readtable* *readtable*)
+(copy-readtable +standard-readtable+ *readtable*)
 
 ;; SYS::%COMPILE is redefined in precompiler.lisp.
 (defun sys::%compile (name definition)

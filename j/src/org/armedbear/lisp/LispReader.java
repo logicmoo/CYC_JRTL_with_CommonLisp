@@ -1,8 +1,8 @@
 /*
  * LispReader.java
  *
- * Copyright (C) 2004-2005 Peter Graves
- * $Id: LispReader.java,v 1.45 2005-10-23 18:11:10 piso Exp $
+ * Copyright (C) 2004-2007 Peter Graves
+ * $Id: LispReader.java,v 1.46 2007-02-22 16:03:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -50,7 +50,7 @@ public final class LispReader extends Lisp
             throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
-            final Readtable rt = (Readtable) Symbol._READTABLE_.symbolValue(thread);
+            final Readtable rt = (Readtable) Symbol.CURRENT_READTABLE.symbolValue(thread);
             FastStringBuffer sb = new FastStringBuffer();
             while (true) {
                 int n = stream._readChar();
@@ -183,7 +183,7 @@ public final class LispReader extends Lisp
             throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
-            final Readtable rt = (Readtable) Symbol._READTABLE_.symbolValue(thread);
+            final Readtable rt = (Readtable) Symbol.CURRENT_READTABLE.symbolValue(thread);
             final boolean suppress = Symbol.READ_SUPPRESS.symbolValue(thread) != NIL;
             FastStringBuffer sb = new FastStringBuffer();
             while (true) {
@@ -382,7 +382,7 @@ public final class LispReader extends Lisp
             throws ConditionThrowable
         {
             final LispThread thread = LispThread.currentThread();
-            final Readtable rt = (Readtable) Symbol._READTABLE_.symbolValue(thread);
+            final Readtable rt = (Readtable) Symbol.CURRENT_READTABLE.symbolValue(thread);
             return stream.readCharacterLiteral(rt, thread);
         }
     };

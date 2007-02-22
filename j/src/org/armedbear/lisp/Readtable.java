@@ -1,8 +1,8 @@
 /*
  * Readtable.java
  *
- * Copyright (C) 2003-2006 Peter Graves
- * $Id: Readtable.java,v 1.46 2006-03-21 16:30:41 piso Exp $
+ * Copyright (C) 2003-2007 Peter Graves
+ * $Id: Readtable.java,v 1.47 2007-02-22 16:03:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -108,7 +108,7 @@ public class Readtable extends LispObject
   {
     Readtable rt;
     if (obj == NIL)
-      rt = checkReadtable(_STANDARD_READTABLE_.symbolValue());
+      rt = checkReadtable(STANDARD_READTABLE.symbolValue());
     else
       rt = checkReadtable(obj);
     synchronized (rt)
@@ -315,11 +315,6 @@ public class Readtable extends LispObject
       }
     };
 
-  // ### *standard-readtable*
-  // internal symbol
-  public static final Symbol _STANDARD_READTABLE_ =
-    internSpecial("*STANDARD-READTABLE*", PACKAGE_SYS, new Readtable());
-
   // ### copy-readtable
   private static final Primitive COPY_READTABLE =
     new Primitive("copy-readtable", "&optional from-readtable to-readtable")
@@ -337,11 +332,7 @@ public class Readtable extends LispObject
       public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
       {
-        Readtable from;
-        if (first == NIL)
-          from = checkReadtable(_STANDARD_READTABLE_.symbolValue());
-        else
-          from = checkReadtable(first);
+        Readtable from = designator_readtable(first);
         if (second == NIL)
           return new Readtable(from);
         Readtable to = checkReadtable(second);
@@ -366,11 +357,7 @@ public class Readtable extends LispObject
         throws ConditionThrowable
       {
         char c = LispCharacter.getValue(first);
-        Readtable rt;
-        if (second == NIL)
-          rt = new Readtable(NIL);
-        else
-          rt = checkReadtable(second);
+        Readtable rt = designator_readtable(second);
         return rt.getMacroCharacter(c);
       }
     };
@@ -413,8 +400,8 @@ public class Readtable extends LispObject
           syntaxType = SYNTAX_TYPE_NON_TERMINATING_MACRO;
         else
           syntaxType = SYNTAX_TYPE_TERMINATING_MACRO;
-        Readtable rt = checkReadtable(fourth);
-        // FIXME synchronization
+        Readtable rt = designator_readtable(fourth);
+        // REVIEW synchronization
         rt.syntax[c] = syntaxType;
         rt.readerMacroFunctions[c] = designator;
         return T;
@@ -438,7 +425,7 @@ public class Readtable extends LispObject
         else
           non_terminating_p = NIL;
         Readtable readtable;
-        if (args.length > 2)
+        if (args.length == 3)
           readtable = checkReadtable(args[2]);
         else
           readtable = currentReadtable();
@@ -461,7 +448,7 @@ public class Readtable extends LispObject
         char subChar = LispCharacter.getValue(args[1]);
         Readtable readtable;
         if (args.length == 3)
-          readtable = checkReadtable(args[2]);
+          readtable = designator_readtable(args[2]);
         else
           readtable = currentReadtable();
         return readtable.getDispatchMacroCharacter(dispChar, subChar);
@@ -483,7 +470,7 @@ public class Readtable extends LispObject
         LispObject function = coerceToFunction(args[2]);
         Readtable readtable;
         if (args.length == 4)
-          readtable = checkReadtable(args[3]);
+          readtable = designator_readtable(args[3]);
         else
           readtable = currentReadtable();
         readtable.setDispatchMacroCharacter(dispChar, subChar, function);
@@ -510,10 +497,10 @@ public class Readtable extends LispObject
           toReadtable = currentReadtable();
         Readtable fromReadtable;
         if (args.length > 3)
-          fromReadtable = checkReadtable(args[3]);
+          fromReadtable = designator_readtable(args[3]);
         else
-          fromReadtable = new Readtable(NIL);
-        // FIXME synchronization
+          fromReadtable = checkReadtable(STANDARD_READTABLE.symbolValue());
+        // REVIEW synchronization
         toReadtable.syntax[toChar] = fromReadtable.syntax[fromChar];
         toReadtable.readerMacroFunctions[toChar] =
           fromReadtable.readerMacroFunctions[fromChar];

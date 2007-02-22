@@ -1,7 +1,7 @@
 ;;; read-conditional.lisp
 ;;;
 ;;; Copyright (C) 2005-2007 Peter Graves
-;;; $Id: read-conditional.lisp,v 1.2 2007-02-20 18:54:25 piso Exp $
+;;; $Id: read-conditional.lisp,v 1.3 2007-02-22 16:03:48 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -33,5 +33,5 @@
         (read stream t nil t)
         (values))))
 
-(set-dispatch-macro-character #\# #\+ #'read-conditional *standard-readtable*)
-(set-dispatch-macro-character #\# #\- #'read-conditional *standard-readtable*)
+(set-dispatch-macro-character #\# #\+ #'read-conditional +standard-readtable+)
+(set-dispatch-macro-character #\# #\- #'read-conditional +standard-readtable+)

@@ -1,8 +1,8 @@
 /*
  * Lisp.java
  *
- * Copyright (C) 2002-2006 Peter Graves
- * $Id: Lisp.java,v 1.443 2006-03-26 23:07:07 piso Exp $
+ * Copyright (C) 2002-2007 Peter Graves
+ * $Id: Lisp.java,v 1.444 2007-02-22 16:03:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1518,6 +1518,25 @@ public abstract class Lisp
       }
   }
 
+  public static final Readtable designator_readtable(LispObject obj)
+    throws ConditionThrowable
+  {
+    if (obj == null)
+      throw new NullPointerException();
+    if (obj == NIL)
+      obj = STANDARD_READTABLE.symbolValue();
+    try
+      {
+        return (Readtable) obj;
+      }
+    catch (ClassCastException e)
+      {
+        signalTypeError(obj, Symbol.READTABLE);
+        // Not reached.
+        return null;
+      }
+  }
+
   public static final Environment checkEnvironment(LispObject obj)
     throws ConditionThrowable
   {
@@ -2035,12 +2054,17 @@ public abstract class Lisp
 
   static
   {
-    Symbol._READTABLE_.initializeSpecial(new Readtable());
+    Symbol.CURRENT_READTABLE.initializeSpecial(new Readtable());
   }
+
+  // ### +standard-readtable+
+  // internal symbol
+  public static final Symbol STANDARD_READTABLE =
+    internConstant("+STANDARD-READTABLE+", PACKAGE_SYS, new Readtable());
 
   public static final Readtable currentReadtable() throws ConditionThrowable
   {
-    return (Readtable) Symbol._READTABLE_.symbolValue();
+    return (Readtable) Symbol.CURRENT_READTABLE.symbolValue();
   }
 
   static

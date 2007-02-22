@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2007 Peter Graves
- * $Id: Symbol.java,v 1.249 2007-02-11 15:47:45 piso Exp $
+ * $Id: Symbol.java,v 1.250 2007-02-22 16:03:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -368,7 +368,7 @@ public class Symbol extends LispObject
     boolean printEscape = (PRINT_ESCAPE.symbolValue(thread) != NIL);
     LispObject printCase = PRINT_CASE.symbolValue(thread);
     final LispObject readtableCase =
-      ((Readtable)_READTABLE_.symbolValue(thread)).getReadtableCase();
+      ((Readtable)CURRENT_READTABLE.symbolValue(thread)).getReadtableCase();
     boolean printReadably = (PRINT_READABLY.symbolValue(thread) != NIL);
     if (printReadably)
       {
@@ -964,7 +964,7 @@ public class Symbol extends LispObject
     PACKAGE_CL.addExternalSymbol("*READ-EVAL*");
   public static final Symbol READ_SUPPRESS =
     PACKAGE_CL.addExternalSymbol("*READ-SUPPRESS*");
-  public static final Symbol _READTABLE_ =
+  public static final Symbol CURRENT_READTABLE =
     PACKAGE_CL.addExternalSymbol("*READTABLE*");
   public static final Symbol STANDARD_INPUT =
     PACKAGE_CL.addExternalSymbol("*STANDARD-INPUT*");

@@ -1,8 +1,8 @@
 /*
  * Load.java
  *
- * Copyright (C) 2002-2006 Peter Graves
- * $Id: Load.java,v 1.128 2006-04-08 00:13:10 piso Exp $
+ * Copyright (C) 2002-2007 Peter Graves
+ * $Id: Load.java,v 1.129 2007-02-22 16:03:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -179,8 +179,8 @@ public final class Load extends Lisp
         LispThread thread = LispThread.currentThread();
         if (auto) {
             SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
-            thread.bindSpecial(Symbol._READTABLE_,
-                               Readtable._STANDARD_READTABLE_.symbolValue(thread));
+            thread.bindSpecial(Symbol.CURRENT_READTABLE,
+                               STANDARD_READTABLE.symbolValue(thread));
             thread.bindSpecial(Symbol._PACKAGE_, PACKAGE_CL_USER);
             try {
                 return loadSystemFile(filename,
@@ -363,7 +363,7 @@ public final class Load extends Lisp
         final SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         // "LOAD binds *READTABLE* and *PACKAGE* to the values they held before
         // loading the file."
-        thread.bindSpecialToCurrentValue(Symbol._READTABLE_);
+        thread.bindSpecialToCurrentValue(Symbol.CURRENT_READTABLE);
         thread.bindSpecialToCurrentValue(Symbol._PACKAGE_);
         int loadDepth = Fixnum.getValue(_LOAD_DEPTH_.symbolValue(thread));
         thread.bindSpecial(_LOAD_DEPTH_, new Fixnum(++loadDepth));

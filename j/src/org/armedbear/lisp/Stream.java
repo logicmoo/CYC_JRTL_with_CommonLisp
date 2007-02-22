@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id: Stream.java,v 1.152 2007-02-06 14:23:25 piso Exp $
+ * $Id: Stream.java,v 1.153 2007-02-22 16:03:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -255,7 +255,7 @@ public class Stream extends LispObject
             if (n >= 0)
               {
                 char c = (char) n;
-                Readtable rt = (Readtable) Symbol._READTABLE_.symbolValue(thread);
+                Readtable rt = (Readtable) Symbol.CURRENT_READTABLE.symbolValue(thread);
                 if (!rt.isWhitespace(c))
                   _unreadChar(c);
               }
@@ -280,7 +280,7 @@ public class Stream extends LispObject
   {
     if (recursive)
       {
-        final Readtable rt = (Readtable) Symbol._READTABLE_.symbolValue(thread);
+        final Readtable rt = (Readtable) Symbol.CURRENT_READTABLE.symbolValue(thread);
         while (true)
           {
             int n = _readChar();
@@ -408,7 +408,7 @@ public class Stream extends LispObject
   public LispObject readSymbol() throws ConditionThrowable
   {
     final Readtable rt =
-      (Readtable) Symbol._READTABLE_.symbolValue(LispThread.currentThread());
+      (Readtable) Symbol.CURRENT_READTABLE.symbolValue(LispThread.currentThread());
     FastStringBuffer sb = new FastStringBuffer();
     _readToken(sb, rt);
     return new Symbol(sb.toString());
@@ -529,7 +529,7 @@ public class Stream extends LispObject
     while (true)
       {
         if (!useFaslReadtable)
-          rt = (Readtable) Symbol._READTABLE_.symbolValue(thread);
+          rt = (Readtable) Symbol.CURRENT_READTABLE.symbolValue(thread);
         char c = flushWhitespace(rt);
         if (c == ')')
           {
@@ -628,7 +628,7 @@ public class Stream extends LispObject
     if (useFaslReadtable)
       rt = FaslReadtable.getInstance();
     else
-      rt = (Readtable) Symbol._READTABLE_.symbolValue(thread);
+      rt = (Readtable) Symbol.CURRENT_READTABLE.symbolValue(thread);
     LispObject fun = rt.getDispatchMacroCharacter(dispChar, c);
     if (fun instanceof DispatchMacroFunction)
       return ((DispatchMacroFunction)fun).execute(this, c, numArg);
@@ -1322,7 +1322,7 @@ public class Stream extends LispObject
     FastStringBuffer sb = new FastStringBuffer();
     final LispThread thread = LispThread.currentThread();
     final Readtable rt =
-      (Readtable) Symbol._READTABLE_.symbolValue(thread);
+      (Readtable) Symbol.CURRENT_READTABLE.symbolValue(thread);
     boolean escaped = (_readToken(sb, rt) != null);
     if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
       return NIL;
@@ -1404,7 +1404,7 @@ public class Stream extends LispObject
     LispObject result = NIL;
     while (true)
       {
-        Readtable rt = (Readtable) Symbol._READTABLE_.symbolValue(thread);
+        Readtable rt = (Readtable) Symbol.CURRENT_READTABLE.symbolValue(thread);
         char c = flushWhitespace(rt);
         if (c == delimiter)
           break;
