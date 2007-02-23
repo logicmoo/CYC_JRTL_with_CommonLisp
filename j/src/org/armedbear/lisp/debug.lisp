@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
-;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: debug.lisp,v 1.33 2005-11-04 20:06:33 piso Exp $
+;;; Copyright (C) 2003-2007 Peter Graves
+;;; $Id: debug.lisp,v 1.34 2007-02-23 10:07:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -15,7 +15,7 @@
 ;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
-;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+;;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 ;;; Adapted from SBCL.
 
@@ -88,29 +88,29 @@
         (simple-format *debug-io* "  ~A~%" condition)))))
 
 (defun invoke-debugger (condition)
-  (when *debugger-hook*
-    (let ((hook-function *debugger-hook*)
-          (*debugger-hook* nil))
-      (funcall hook-function condition hook-function)))
-  (invoke-debugger-report-condition condition)
-  (unless (fboundp 'tpl::repl)
-    (quit))
-  (let ((original-package *package*))
-    (with-standard-io-syntax
-      (let ((*package* original-package)
-            (*print-readably* nil) ;; Top-level default.
-            (*print-structure* nil)
-            (*debug-condition* condition)
-            (level *debug-level*))
-        (clear-input)
-        (if (> level 0)
-            (with-simple-restart (abort "Return to debug level ~D." level)
-              (debug-loop))
-            (debug-loop))))))
+  (let ((*saved-backtrace* (backtrace-as-list)))
+    (when *debugger-hook*
+      (let ((hook-function *debugger-hook*)
+            (*debugger-hook* nil))
+        (funcall hook-function condition hook-function)))
+    (invoke-debugger-report-condition condition)
+    (unless (fboundp 'tpl::repl)
+      (quit))
+    (let ((original-package *package*))
+      (with-standard-io-syntax
+        (let ((*package* original-package)
+              (*print-readably* nil) ; Top-level default.
+              (*print-structure* nil)
+              (*debug-condition* condition)
+              (level *debug-level*))
+          (clear-input)
+          (if (> level 0)
+              (with-simple-restart (abort "Return to debug level ~D." level)
+                (debug-loop))
+              (debug-loop)))))))
 
 (defun break (&optional (format-control "BREAK called") &rest format-arguments)
-  (let ((*debugger-hook* nil) ; Specifically required by ANSI.
-        (*saved-backtrace* (backtrace-as-list)))
+  (let ((*debugger-hook* nil)) ; Specifically required by ANSI.
     (with-simple-restart (continue "Return from BREAK.")
       (invoke-debugger
        (%make-condition 'simple-condition
