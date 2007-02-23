@@ -1,7 +1,7 @@
 ;;; signal.lisp
 ;;;
-;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: signal.lisp,v 1.14 2005-11-01 16:37:59 piso Exp $
+;;; Copyright (C) 2003-2007 Peter Graves
+;;; $Id: signal.lisp,v 1.15 2007-02-23 10:47:26 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -15,11 +15,11 @@
 ;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
-;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+;;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 ;;; Adapted from SBCL.
 
-(in-package #:system)
+(in-package "SYSTEM")
 
 (export 'coerce-to-condition)
 
@@ -27,7 +27,7 @@
 
 (defvar *current-error-depth* 0)
 
-(defvar *handler-clusters* ())
+(defvar *handler-clusters* nil)
 
 (defvar *break-on-signals* nil)
 
@@ -47,18 +47,20 @@
         (dolist (handler cluster)
           (when (typep condition (car handler))
             (funcall (cdr handler) condition)))))
-    (when (typep condition 'serious-condition)
-      (let ((*current-error-depth* (1+ *current-error-depth*)))
-        (cond ((> *current-error-depth* *maximum-error-depth*)
-               (%format t "~%Maximum error depth exceeded (~D nested errors).~%"
-                        *current-error-depth*)
-               (if (fboundp 'internal-debug)
-                   (internal-debug)
-                   (quit)))
-              (t
-               (let ((*saved-backtrace* (backtrace-as-list)))
-                 (invoke-debugger condition))))))
     nil))
+
+(defun error (datum &rest arguments)
+  (let ((condition (coerce-to-condition datum arguments 'simple-error 'error)))
+    (signal condition)
+    (let ((*current-error-depth* (1+ *current-error-depth*)))
+      (cond ((> *current-error-depth* *maximum-error-depth*)
+             (%format t "~%Maximum error depth exceeded (~D nested errors).~%"
+                      *current-error-depth*)
+             (if (fboundp 'internal-debug)
+                 (internal-debug)
+                 (quit)))
+            (t
+             (invoke-debugger condition))))))
 
 ;; COERCE-TO-CONDITION is redefined in clos.lisp.
 (defun coerce-to-condition (datum arguments default-type fun-name)
