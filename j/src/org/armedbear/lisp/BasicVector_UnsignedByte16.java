@@ -2,7 +2,7 @@
  * BasicVector_UnsignedByte16.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: BasicVector_UnsignedByte16.java,v 1.1 2005-07-09 03:53:54 piso Exp $
+ * $Id: BasicVector_UnsignedByte16.java,v 1.2 2007-02-23 21:17:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -136,7 +136,7 @@ public final class BasicVector_UnsignedByte16 extends AbstractVector
             return new Fixnum(elements[((Fixnum)index).value]);
         }
         catch (ClassCastException e) {
-            return signal(new TypeError(index, Symbol.FIXNUM));
+            return error(new TypeError(index, Symbol.FIXNUM));
         }
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(Fixnum.getValue(index), elements.length);
@@ -163,7 +163,7 @@ public final class BasicVector_UnsignedByte16 extends AbstractVector
             badIndex(index, capacity);
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, UNSIGNED_BYTE_16));
+            error(new TypeError(obj, UNSIGNED_BYTE_16));
         }
     }
 
@@ -177,7 +177,7 @@ public final class BasicVector_UnsignedByte16 extends AbstractVector
             return v;
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            return signal(new TypeError("Array index out of bounds: " + i + "."));
+            return error(new TypeError("Array index out of bounds: " + i + "."));
         }
     }
 
@@ -199,7 +199,7 @@ public final class BasicVector_UnsignedByte16 extends AbstractVector
         }
         if (n == capacity)
             return;
-        signal(new LispError());
+        error(new LispError());
     }
 
     public LispObject reverse() throws ConditionThrowable
@@ -242,7 +242,7 @@ public final class BasicVector_UnsignedByte16 extends AbstractVector
                 for (int i = 0; i < newCapacity; i++)
                     newElements[i] = initialContents.elt(i);
             } else
-                signal(new TypeError(initialContents, Symbol.SEQUENCE));
+                error(new TypeError(initialContents, Symbol.SEQUENCE));
             return new BasicVector_UnsignedByte16(newElements);
         }
         if (capacity != newCapacity) {

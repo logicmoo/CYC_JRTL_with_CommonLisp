@@ -2,7 +2,7 @@
  * SimpleString.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: SimpleString.java,v 1.34 2005-10-29 18:21:52 piso Exp $
+ * $Id: SimpleString.java,v 1.35 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -206,7 +206,7 @@ public final class SimpleString extends AbstractString
             return s;
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            signal(new TypeError("Array index out of bounds: " + i));
+            error(new TypeError("Array index out of bounds: " + i));
             // Not reached.
             return null;
         }
@@ -239,7 +239,7 @@ public final class SimpleString extends AbstractString
         }
         if (n == capacity)
             return;
-        signal(new LispError());
+        error(new LispError());
     }
 
     public LispObject reverse() throws ConditionThrowable
@@ -361,7 +361,7 @@ public final class SimpleString extends AbstractString
             return LispCharacter.getInstance(chars[((Fixnum)index).value]);
         }
         catch (ClassCastException e) {
-            return signalTypeError(index, Symbol.FIXNUM);
+            return type_error(index, Symbol.FIXNUM);
         }
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(((Fixnum)index).value, capacity);
@@ -378,7 +378,7 @@ public final class SimpleString extends AbstractString
             badIndex(index, capacity);
         }
         catch (ClassCastException e) {
-            signalTypeError(obj, Symbol.CHARACTER);
+            type_error(obj, Symbol.CHARACTER);
         }
     }
 
@@ -428,7 +428,7 @@ public final class SimpleString extends AbstractString
                 for (int i = 0; i < newCapacity; i++)
                     newChars[i] = LispCharacter.getValue(initialContents.elt(i));
             } else
-                signalTypeError(initialContents, Symbol.SEQUENCE);
+                type_error(initialContents, Symbol.SEQUENCE);
             return new SimpleString(newChars);
         }
         if (capacity != newCapacity) {

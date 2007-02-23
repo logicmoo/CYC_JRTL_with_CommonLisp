@@ -2,7 +2,7 @@
  * Load.java
  *
  * Copyright (C) 2002-2007 Peter Graves
- * $Id: Load.java,v 1.129 2007-02-22 16:03:48 piso Exp $
+ * $Id: Load.java,v 1.130 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -85,7 +85,7 @@ public final class Load extends Lisp
         }
         if (!isFile) {
             if (ifDoesNotExist)
-                return signal(new FileError("File not found: " + filename,
+                return error(new FileError("File not found: " + filename,
                                             pathname));
             else
                 return NIL;
@@ -113,7 +113,7 @@ public final class Load extends Lisp
                     in = zipfile.getInputStream(entry);
                 }
                 catch (IOException e) {
-                    return signal(new LispError(e.getMessage()));
+                    return error(new LispError(e.getMessage()));
                 }
             }
         } else {
@@ -123,13 +123,13 @@ public final class Load extends Lisp
             }
             catch (FileNotFoundException e) {
                 if (ifDoesNotExist)
-                    return signal(new FileError("File not found: " + filename,
+                    return error(new FileError("File not found: " + filename,
                                                 pathname));
                 else
                     return NIL;
             }
             catch (IOException e) {
-                return signal(new LispError(e.getMessage()));
+                return error(new LispError(e.getMessage()));
             }
         }
         try {
@@ -141,7 +141,7 @@ public final class Load extends Lisp
             FastStringBuffer sb =
                 new FastStringBuffer("Incorrect fasl version: ");
             sb.append(truename);
-            return signal(new SimpleError(sb.toString()));
+            return error(new SimpleError(sb.toString()));
         }
         finally {
             if (in != null) {
@@ -149,7 +149,7 @@ public final class Load extends Lisp
                     in.close();
                 }
                 catch (IOException e) {
-                    return signal(new LispError(e.getMessage()));
+                    return error(new LispError(e.getMessage()));
                 }
             }
             if (zipfile != null) {
@@ -157,7 +157,7 @@ public final class Load extends Lisp
                     zipfile.close();
                 }
                 catch (IOException e) {
-                    return signal(new LispError(e.getMessage()));
+                    return error(new LispError(e.getMessage()));
                 }
             }
         }
@@ -301,7 +301,7 @@ public final class Load extends Lisp
                             in.close();
                         }
                         catch (IOException e) {
-                            return signal(new LispError(e.getMessage()));
+                            return error(new LispError(e.getMessage()));
                         }
                     }
                 }
@@ -312,12 +312,12 @@ public final class Load extends Lisp
                         zipfile.close();
                     }
                     catch (IOException e) {
-                        return signal(new LispError(e.getMessage()));
+                        return error(new LispError(e.getMessage()));
                     }
                 }
             }
         }
-        return signal(new LispError("File not found: " + filename));
+        return error(new LispError("File not found: " + filename));
     }
 
     // ### *fasl-version*

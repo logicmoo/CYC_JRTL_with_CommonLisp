@@ -2,7 +2,7 @@
  * Primitive2R.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: Primitive2R.java,v 1.1 2005-06-10 16:37:52 piso Exp $
+ * $Id: Primitive2R.java,v 1.2 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -138,6 +138,6 @@ public class Primitive2R extends Function
                                   LispObject third)
         throws ConditionThrowable
     {
-        return signal(new LispError("Not implemented."));
+        return error(new LispError("Not implemented."));
     }
 }

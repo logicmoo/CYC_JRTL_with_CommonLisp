@@ -2,7 +2,7 @@
  * zip.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: zip.java,v 1.3 2005-10-23 16:22:15 piso Exp $
+ * $Id: zip.java,v 1.4 2007-02-23 21:17:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ public final class zip extends Primitive
         try {
             String zipfileNamestring = zipfilePathname.getNamestring();
             if (zipfileNamestring == null)
-                return signal(new SimpleError("Pathname has no namestring: " +
+                return error(new SimpleError("Pathname has no namestring: " +
                                               zipfilePathname.writeToString()));
             ZipOutputStream out =
                 new ZipOutputStream(new FileOutputStream(zipfileNamestring));
@@ -57,7 +57,7 @@ public final class zip extends Primitive
                     out.close();
                     File zipfile = new File(zipfileNamestring);
                     zipfile.delete();
-                    return signal(new SimpleError("Pathname has no namestring: " +
+                    return error(new SimpleError("Pathname has no namestring: " +
                                                   pathname.writeToString()));
                 }
                 File file = new File(namestring);
@@ -74,7 +74,7 @@ public final class zip extends Primitive
             out.close();
         }
         catch (IOException e) {
-            return signal(new LispError(e.getMessage()));
+            return error(new LispError(e.getMessage()));
         }
         return zipfilePathname;
     }

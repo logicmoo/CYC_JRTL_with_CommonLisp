@@ -2,7 +2,7 @@
  * StructureObject.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: StructureObject.java,v 1.63 2006-06-20 15:52:37 piso Exp $
+ * $Id: StructureObject.java,v 1.64 2007-02-23 21:17:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -253,7 +253,7 @@ public final class StructureObject extends LispObject
       }
     catch (ClassCastException e)
       {
-        signalTypeError(slots[index], Symbol.FIXNUM);
+        type_error(slots[index], Symbol.FIXNUM);
         // Not reached.
         return 0;
       }
@@ -344,7 +344,7 @@ public final class StructureObject extends LispObject
     sb.append(Fixnum.getInstance(n).writeToString());
     sb.append(" for ");
     sb.append(writeToString());
-    return signal(new LispError(sb.toString()));
+    return error(new LispError(sb.toString()));
   }
 
   public final int psxhash()
@@ -434,7 +434,7 @@ public final class StructureObject extends LispObject
       }
     catch (StackOverflowError e)
       {
-        signal(new StorageCondition("Stack overflow."));
+        error(new StorageCondition("Stack overflow."));
         return null; // Not reached.
       }
   }
@@ -461,7 +461,7 @@ public final class StructureObject extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.STRUCTURE_OBJECT);
+            return type_error(arg, Symbol.STRUCTURE_OBJECT);
           }
       }
     };
@@ -480,14 +480,14 @@ public final class StructureObject extends LispObject
         catch (ClassCastException e)
           {
             if (first instanceof StructureObject)
-              return signalTypeError(second, Symbol.FIXNUM);
+              return type_error(second, Symbol.FIXNUM);
             else
-              return signalTypeError(first, Symbol.STRUCTURE_OBJECT);
+              return type_error(first, Symbol.STRUCTURE_OBJECT);
           }
         catch (ArrayIndexOutOfBoundsException e)
           {
             // Shouldn't happen.
-            return signal(new LispError("Internal error."));
+            return error(new LispError("Internal error."));
           }
       }
     };
@@ -508,14 +508,14 @@ public final class StructureObject extends LispObject
         catch (ClassCastException e)
           {
             if (first instanceof StructureObject)
-              return signalTypeError(second, Symbol.FIXNUM);
+              return type_error(second, Symbol.FIXNUM);
             else
-              return signalTypeError(first, Symbol.STRUCTURE_OBJECT);
+              return type_error(first, Symbol.STRUCTURE_OBJECT);
           }
         catch (ArrayIndexOutOfBoundsException e)
           {
             // Shouldn't happen.
-            return signal(new LispError("Internal error."));
+            return error(new LispError("Internal error."));
           }
       }
     };
@@ -533,7 +533,7 @@ public final class StructureObject extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.SYMBOL);
+            return type_error(first, Symbol.SYMBOL);
           }
       }
       public LispObject execute(LispObject first, LispObject second,
@@ -546,7 +546,7 @@ public final class StructureObject extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.SYMBOL);
+            return type_error(first, Symbol.SYMBOL);
           }
       }
       public LispObject execute(LispObject first, LispObject second,
@@ -559,7 +559,7 @@ public final class StructureObject extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.SYMBOL);
+            return type_error(first, Symbol.SYMBOL);
           }
       }
       public LispObject execute(LispObject first, LispObject second,
@@ -574,7 +574,7 @@ public final class StructureObject extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.SYMBOL);
+            return type_error(first, Symbol.SYMBOL);
           }
       }
       public LispObject execute(LispObject first, LispObject second,
@@ -589,7 +589,7 @@ public final class StructureObject extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.SYMBOL);
+            return type_error(first, Symbol.SYMBOL);
           }
       }
       public LispObject execute(LispObject first, LispObject second,
@@ -605,7 +605,7 @@ public final class StructureObject extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.SYMBOL);
+            return type_error(first, Symbol.SYMBOL);
           }
       }
     };
@@ -623,7 +623,7 @@ public final class StructureObject extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.SYMBOL);
+            return type_error(first, Symbol.SYMBOL);
           }
       }
     };
@@ -640,7 +640,7 @@ public final class StructureObject extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.STRUCTURE_OBJECT);
+            return type_error(arg, Symbol.STRUCTURE_OBJECT);
           }
       }
     };

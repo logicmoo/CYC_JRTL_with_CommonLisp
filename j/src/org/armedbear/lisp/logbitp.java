@@ -2,7 +2,7 @@
  * logbitp.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: logbitp.java,v 1.8 2005-11-04 13:38:59 piso Exp $
+ * $Id: logbitp.java,v 1.9 2007-02-23 21:17:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,14 +44,14 @@ public final class logbitp extends Primitive
                 index = Integer.MAX_VALUE;
         }
         if (index < 0)
-            return signalTypeError(first, Symbol.UNSIGNED_BYTE);
+            return type_error(first, Symbol.UNSIGNED_BYTE);
         BigInteger n;
         if (second instanceof Fixnum)
             n = ((Fixnum)second).getBigInteger();
         else if (second instanceof Bignum)
             n = ((Bignum)second).value;
         else
-            return signalTypeError(second, Symbol.INTEGER);
+            return type_error(second, Symbol.INTEGER);
         // FIXME See above.
         if (index == Integer.MAX_VALUE)
             return n.signum() < 0 ? T : NIL;

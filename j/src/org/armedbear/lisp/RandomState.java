@@ -2,7 +2,7 @@
  * RandomState.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: RandomState.java,v 1.8 2005-11-27 21:42:20 piso Exp $
+ * $Id: RandomState.java,v 1.9 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -53,7 +53,7 @@ public final class RandomState extends LispObject
             file.delete();
         }
         catch (Throwable t) {
-            signal(new LispError("Unable to copy random state."));
+            error(new LispError("Unable to copy random state."));
         }
     }
 
@@ -110,7 +110,7 @@ public final class RandomState extends LispObject
                 return new DoubleFloat(rand * limit);
             }
         }
-        return signalTypeError(arg, list3(Symbol.OR,
+        return type_error(arg, list3(Symbol.OR,
                                           list2(Symbol.INTEGER, Fixnum.ONE),
                                           list2(Symbol.FLOAT, list1(Fixnum.ZERO))));
     }
@@ -132,7 +132,7 @@ public final class RandomState extends LispObject
                 RandomState randomState = (RandomState) second;
                 return randomState.random(first);
             }
-            return signalTypeError(first, Symbol.RANDOM_STATE);
+            return type_error(first, Symbol.RANDOM_STATE);
         }
     };
 
@@ -153,7 +153,7 @@ public final class RandomState extends LispObject
                 return new RandomState();
             if (arg instanceof RandomState)
                 return new RandomState((RandomState)arg);
-            return signalTypeError(arg, Symbol.RANDOM_STATE);
+            return type_error(arg, Symbol.RANDOM_STATE);
         }
     };
 

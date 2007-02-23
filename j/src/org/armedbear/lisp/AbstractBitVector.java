@@ -2,7 +2,7 @@
  * AbstractBitVector.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: AbstractBitVector.java,v 1.14 2005-12-28 17:21:42 piso Exp $
+ * $Id: AbstractBitVector.java,v 1.15 2007-02-23 21:17:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -119,7 +119,7 @@ public abstract class AbstractBitVector extends AbstractVector
         catch (ClassCastException e) {
             // Fall through...
         }
-        signal(new TypeError(obj, Symbol.BIT));
+        error(new TypeError(obj, Symbol.BIT));
     }
 
     public LispObject subseq(int start, int end) throws ConditionThrowable
@@ -136,7 +136,7 @@ public abstract class AbstractBitVector extends AbstractVector
             return v;
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            return signal(new TypeError("Array index out of bounds: " + i + "."));
+            return error(new TypeError("Array index out of bounds: " + i + "."));
         }
     }
 
@@ -186,7 +186,7 @@ public abstract class AbstractBitVector extends AbstractVector
             return AREF(((Fixnum)index).value);
         }
         catch (ClassCastException e) {
-            return signal(new TypeError(index, Symbol.FIXNUM));
+            return error(new TypeError(index, Symbol.FIXNUM));
         }
     }
 

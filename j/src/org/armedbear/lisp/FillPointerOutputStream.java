@@ -2,7 +2,7 @@
  * FillPointerOutputStream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: FillPointerOutputStream.java,v 1.14 2005-09-25 14:58:12 piso Exp $
+ * $Id: FillPointerOutputStream.java,v 1.15 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,7 +47,7 @@ public final class FillPointerOutputStream extends Stream
                 if (string.getFillPointer() >= 0)
                     return new FillPointerOutputStream(string);
             }
-            return signalTypeError(arg, list3(Symbol.AND, Symbol.STRING,
+            return type_error(arg, list3(Symbol.AND, Symbol.STRING,
                                               list2(Symbol.SATISFIES,
                                                     Symbol.ARRAY_HAS_FILL_POINTER_P)));
         }

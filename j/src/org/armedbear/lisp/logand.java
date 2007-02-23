@@ -2,7 +2,7 @@
  * logand.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: logand.java,v 1.13 2005-08-10 20:39:32 piso Exp $
+ * $Id: logand.java,v 1.14 2007-02-23 21:17:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ public final class logand extends Primitive
     {
         if (arg instanceof Fixnum || arg instanceof Bignum)
             return arg;
-        return signalTypeError(arg, Symbol.INTEGER);
+        return type_error(arg, Symbol.INTEGER);
     }
 
     public LispObject execute(LispObject first, LispObject second)

@@ -2,7 +2,7 @@
  * LispReader.java
  *
  * Copyright (C) 2004-2007 Peter Graves
- * $Id: LispReader.java,v 1.46 2007-02-22 16:03:48 piso Exp $
+ * $Id: LispReader.java,v 1.47 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -55,7 +55,7 @@ public final class LispReader extends Lisp
             while (true) {
                 int n = stream._readChar();
                 if (n < 0) {
-                    signal(new EndOfFile(stream));
+                    error(new EndOfFile(stream));
                     // Not reached.
                     return null;
                 }
@@ -64,7 +64,7 @@ public final class LispReader extends Lisp
                     // Single escape.
                     n = stream._readChar();
                     if (n < 0) {
-                        signal(new EndOfFile(stream));
+                        error(new EndOfFile(stream));
                         // Not reached.
                         return null;
                     }
@@ -75,7 +75,7 @@ public final class LispReader extends Lisp
                     if (c == '\r') {
                         n = stream._readChar();
                         if (n < 0) {
-                            signal(new EndOfFile(stream));
+                            error(new EndOfFile(stream));
                             // Not reached.
                             return null;
                         }
@@ -118,7 +118,7 @@ public final class LispReader extends Lisp
         public LispObject execute(Stream stream, char ignored)
             throws ConditionThrowable
         {
-            return signal(new ReaderError("Unmatched right parenthesis.", stream));
+            return error(new ReaderError("Unmatched right parenthesis.", stream));
         }
     };
 
@@ -203,7 +203,7 @@ public final class LispReader extends Lisp
                         String name = LispCharacter.charToName(c);
                         if (name == null)
                             name = "#\\" + c;
-                        signal(new ReaderError("Illegal element for bit-vector: " + name,
+                        error(new ReaderError("Illegal element for bit-vector: " + name,
                                                stream));
                     }
                 }
@@ -215,7 +215,7 @@ public final class LispReader extends Lisp
                 final int length = sb.length();
                 if (length == 0) {
                     if (n > 0)
-                        return signal(new ReaderError("No element specified for bit vector of length " +
+                        return error(new ReaderError("No element specified for bit vector of length " +
                                                       n + '.',
                                                       stream));
                 }
@@ -224,7 +224,7 @@ public final class LispReader extends Lisp
                     for (int i = length; i < n; i++)
                         sb.append(c);
                 } else if (n < length) {
-                    return signal(new ReaderError("Bit vector is longer than specified length: #" +
+                    return error(new ReaderError("Bit vector is longer than specified length: #" +
                                                   n + '*' + sb.toString(),
                                                   stream));
                 }
@@ -243,7 +243,7 @@ public final class LispReader extends Lisp
         {
             final LispThread thread = LispThread.currentThread();
             if (Symbol.READ_EVAL.symbolValue(thread) == NIL)
-                return signal(new ReaderError("Can't read #. when *READ-EVAL* is NIL.",
+                return error(new ReaderError("Can't read #. when *READ-EVAL* is NIL.",
                                               stream));
             else
                 return eval(stream.read(true, NIL, true, thread),
@@ -414,7 +414,7 @@ public final class LispReader extends Lisp
                 sb.append(s);
             else
                 sb.append(c);
-            return signal(new ReaderError(sb.toString(), stream));
+            return error(new ReaderError(sb.toString(), stream));
         }
     };
 }

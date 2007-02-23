@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2007 Peter Graves
- * $Id: Lisp.java,v 1.445 2007-02-23 17:39:53 piso Exp $
+ * $Id: Lisp.java,v 1.446 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -268,13 +268,13 @@ public abstract class Lisp
           }
         catch (OutOfMemoryError e)
           {
-            return signal(new LispError("Out of memory."));
+            return error(new LispError("Out of memory."));
           }
         catch (StackOverflowError e)
           {
             thread.setSpecialVariable(_SAVED_BACKTRACE_,
                                       thread.backtraceAsList(0));
-            return signal(new StorageCondition("Stack overflow."));
+            return error(new StorageCondition("Stack overflow."));
           }
         catch (Go go)
           {
@@ -282,7 +282,7 @@ public abstract class Lisp
           }
         catch (Throw t)
           {
-            return signal(new ControlError("Attempt to throw to the nonexistent tag " +
+            return error(new ControlError("Attempt to throw to the nonexistent tag " +
                                            t.tag.writeToString() + "."));
           }
         catch (Throwable t)
@@ -290,7 +290,7 @@ public abstract class Lisp
             Debug.trace(t);
             thread.setSpecialVariable(_SAVED_BACKTRACE_,
                                       thread.backtraceAsList(0));
-            return signal(new LispError("Caught " + t + "."));
+            return error(new LispError("Caught " + t + "."));
           }
         Debug.assertTrue(result != null);
         thread.setSpecialVariable(Symbol.STAR_STAR_STAR,
@@ -322,18 +322,6 @@ public abstract class Lisp
       }
     };
 
-  public static final LispObject signal(LispObject condition)
-    throws ConditionThrowable
-  {
-    return Symbol.SIGNAL.execute(condition);
-  }
-
-  public static final LispObject signal(LispObject condition, LispObject message)
-    throws ConditionThrowable
-  {
-    return Symbol.SIGNAL.execute(condition, Keyword.FORMAT_CONTROL, message);
-  }
-
   public static final LispObject error(LispObject condition)
     throws ConditionThrowable
   {
@@ -344,13 +332,6 @@ public abstract class Lisp
     throws ConditionThrowable
   {
     return Symbol.ERROR.execute(condition, Keyword.FORMAT_CONTROL, message);
-  }
-
-  public static final LispObject signalTypeError(LispObject datum,
-                                                 LispObject expectedType)
-    throws ConditionThrowable
-  {
-    return signal(new TypeError(datum, expectedType));
   }
 
   public static final LispObject type_error(LispObject datum,
@@ -419,7 +400,7 @@ public abstract class Lisp
           {
             result = obj.getSymbolValue();
             if (result == null)
-              return signal(new UnboundVariable(obj));
+              return error(new UnboundVariable(obj));
           }
         if (result instanceof SymbolMacro)
           return eval(((SymbolMacro)result).getExpansion(), env, thread);
@@ -458,7 +439,7 @@ public abstract class Lisp
                 return evalCall(closure, ((Cons)obj).cdr, env, thread);
               }
             else
-              return signal(new ProgramError("Illegal function object: " +
+              return error(new ProgramError("Illegal function object: " +
                                              first.writeToString()));
           }
       }
@@ -737,7 +718,7 @@ public abstract class Lisp
       }
     catch (ClassCastException e)
       {
-        signalTypeError(obj, Symbol.SYMBOL);
+        type_error(obj, Symbol.SYMBOL);
         // Not reached.
         return null;
       }
@@ -748,7 +729,7 @@ public abstract class Lisp
   {
     if (obj.listp())
       return obj;
-    return signalTypeError(obj, Symbol.LIST);
+    return type_error(obj, Symbol.LIST);
   }
 
   public static final AbstractArray checkArray(LispObject obj)
@@ -762,7 +743,7 @@ public abstract class Lisp
       }
     catch (ClassCastException e)
       {
-        signalTypeError(obj, Symbol.ARRAY);
+        type_error(obj, Symbol.ARRAY);
         // Not reached.
         return null;
       }
@@ -779,7 +760,7 @@ public abstract class Lisp
       }
     catch (ClassCastException e)
       {
-        signalTypeError(obj, Symbol.VECTOR);
+        type_error(obj, Symbol.VECTOR);
         // Not reached.
         return null;
       }
@@ -819,7 +800,7 @@ public abstract class Lisp
           binding.value = Fixnum.ZERO;
         else
           Symbol.GENSYM_COUNTER.setSymbolValue(Fixnum.ZERO);
-        signal(new TypeError("The value of *GENSYM-COUNTER* was not a nonnegative integer. Old value: " +
+        error(new TypeError("The value of *GENSYM-COUNTER* was not a nonnegative integer. Old value: " +
                              oldValue.writeToString() + " New value: 0"));
       }
     if (binding != null)
@@ -838,7 +819,7 @@ public abstract class Lisp
       return ((Symbol)arg).getName();
     if (arg instanceof LispCharacter)
       return String.valueOf(new char[] {((LispCharacter)arg).value});
-    signalTypeError(arg, list4(Symbol.OR, Symbol.STRING, Symbol.SYMBOL,
+    type_error(arg, list4(Symbol.OR, Symbol.STRING, Symbol.SYMBOL,
                                Symbol.CHARACTER));
     // Not reached.
     return null;
@@ -860,7 +841,7 @@ public abstract class Lisp
     throws ConditionThrowable
   {
     if (denominator.signum() == 0)
-      signal(new DivisionByZero());
+      error(new DivisionByZero());
     if (denominator.signum() < 0)
       {
         numerator = numerator.negate();
@@ -896,7 +877,7 @@ public abstract class Lisp
       }
     catch (ArithmeticException e)
       {
-        signal(new ArithmeticError("Division by zero."));
+        error(new ArithmeticError("Division by zero."));
         // Not reached.
         return 0;
       }
@@ -1059,7 +1040,7 @@ public abstract class Lisp
               }
             catch (VerifyError e)
               {
-                return signal(new LispError("Class verification failed: " +
+                return error(new LispError("Class verification failed: " +
                                             e.getMessage()));
               }
             catch (IOException e)
@@ -1071,7 +1052,7 @@ public abstract class Lisp
                 Debug.trace(t);
               }
           }
-        return signal(new LispError("Unable to load " + namestring));
+        return error(new LispError("Unable to load " + namestring));
       }
     Pathname pathname = new Pathname(namestring);
     final File file = Utilities.getFile(pathname, defaultPathname);
@@ -1088,14 +1069,14 @@ public abstract class Lisp
           }
         catch (VerifyError e)
           {
-            return signal(new LispError("Class verification failed: " +
+            return error(new LispError("Class verification failed: " +
                                         e.getMessage()));
           }
         catch (Throwable t)
           {
             Debug.trace(t);
           }
-        return signal(new LispError("Unable to load " +
+        return error(new LispError("Unable to load " +
                                     pathname.writeToString()));
       }
     try
@@ -1113,7 +1094,7 @@ public abstract class Lisp
                 if (obj != null)
                   return obj;
                 Debug.trace("Unable to load " + namestring);
-                return signal(new LispError("Unable to load " + namestring));
+                return error(new LispError("Unable to load " + namestring));
               }
           }
         finally
@@ -1125,7 +1106,7 @@ public abstract class Lisp
       {
         Debug.trace(t);
       }
-    return signal(new FileError("File not found: " + namestring,
+    return error(new FileError("File not found: " + namestring,
                                 new Pathname(namestring)));
   }
 
@@ -1343,7 +1324,7 @@ public abstract class Lisp
       }
     catch (ClassCastException e)
       {
-        signalTypeError(obj, Symbol.FIXNUM);
+        type_error(obj, Symbol.FIXNUM);
         // Not reached.
         return 0;
       }
@@ -1365,7 +1346,7 @@ public abstract class Lisp
       }
     catch (ClassCastException e)
       {
-        signalTypeError(obj, Symbol.CHARACTER);
+        type_error(obj, Symbol.CHARACTER);
         // Not reached.
         return null;
       }
@@ -1382,7 +1363,7 @@ public abstract class Lisp
       }
     catch (ClassCastException e)
       {
-        signalTypeError(obj, Symbol.PACKAGE);
+        type_error(obj, Symbol.PACKAGE);
         // Not reached.
         return null;
       }
@@ -1399,7 +1380,7 @@ public abstract class Lisp
       }
     catch (ClassCastException e)
       {
-        signalTypeError(obj, Symbol.FUNCTION);
+        type_error(obj, Symbol.FUNCTION);
         // Not reached.
         return null;
       }
@@ -1416,7 +1397,7 @@ public abstract class Lisp
       }
     catch (ClassCastException e)
       {
-        signalTypeError(obj, Symbol.STREAM);
+        type_error(obj, Symbol.STREAM);
         // Not reached.
         return null;
       }
@@ -1432,14 +1413,14 @@ public abstract class Lisp
         final Stream stream = (Stream) obj;
         if (stream.isCharacterInputStream())
           return stream;
-        signal(new TypeError("The value " + obj.writeToString() +
+        error(new TypeError("The value " + obj.writeToString() +
                              " is not a character input stream."));
         // Not reached.
         return null;
       }
     catch (ClassCastException e)
       {
-        signalTypeError(obj, Symbol.STREAM);
+        type_error(obj, Symbol.STREAM);
         // Not reached.
         return null;
       }
@@ -1478,14 +1459,14 @@ public abstract class Lisp
         final Stream stream = (Stream) obj;
         if (stream.isBinaryInputStream())
           return stream;
-        signal(new TypeError("The value " + obj.writeToString() +
+        error(new TypeError("The value " + obj.writeToString() +
                              " is not a binary input stream."));
         // Not reached.
         return null;
       }
     catch (ClassCastException e)
       {
-        signalTypeError(obj, Symbol.STREAM);
+        type_error(obj, Symbol.STREAM);
         // Not reached.
         return null;
       }
@@ -1500,7 +1481,7 @@ public abstract class Lisp
       return checkCharacterInputStream(Symbol.TERMINAL_IO.symbolValue());
     if (obj == NIL)
       return checkCharacterInputStream(Symbol.STANDARD_INPUT.symbolValue());
-    signalTypeError(obj, Symbol.STREAM);
+    type_error(obj, Symbol.STREAM);
     // Not reached.
     return null;
   }
@@ -1509,14 +1490,14 @@ public abstract class Lisp
     throws ConditionThrowable
   {
     if (n < 0 || n > 255)
-      signalTypeError(new Fixnum(n), UNSIGNED_BYTE_8);
+      type_error(new Fixnum(n), UNSIGNED_BYTE_8);
     try
       {
         ((Stream)obj)._writeByte(n);
       }
     catch (ClassCastException e)
       {
-        signalTypeError(obj, Symbol.STREAM);
+        type_error(obj, Symbol.STREAM);
       }
   }
 
@@ -1531,7 +1512,7 @@ public abstract class Lisp
       }
     catch (ClassCastException e)
       {
-        signalTypeError(obj, Symbol.READTABLE);
+        type_error(obj, Symbol.READTABLE);
         // Not reached.
         return null;
       }
@@ -1550,7 +1531,7 @@ public abstract class Lisp
       }
     catch (ClassCastException e)
       {
-        signalTypeError(obj, Symbol.READTABLE);
+        type_error(obj, Symbol.READTABLE);
         // Not reached.
         return null;
       }
@@ -1567,7 +1548,7 @@ public abstract class Lisp
       }
     catch (ClassCastException e)
       {
-        signalTypeError(obj, Symbol.ENVIRONMENT);
+        type_error(obj, Symbol.ENVIRONMENT);
         // Not reached.
         return null;
       }
@@ -1585,7 +1566,7 @@ public abstract class Lisp
         sb.append(" are bad for a sequence of length ");
         sb.append(length);
         sb.append('.');
-        signal(new TypeError(sb.toString()));
+        error(new TypeError(sb.toString()));
       }
   }
 
@@ -1604,7 +1585,7 @@ public abstract class Lisp
       }
     else if (obj instanceof Cons && obj.car() == Symbol.LAMBDA)
       return new Closure(obj, new Environment());
-    signal(new UndefinedFunction(obj));
+    error(new UndefinedFunction(obj));
     // Not reached.
     return null;
   }
@@ -1618,7 +1599,7 @@ public abstract class Lisp
     Package pkg = Packages.findPackage(javaString(obj));
     if (pkg != null)
       return pkg;
-    signal(new PackageError(obj.writeToString() + " is not the name of a package."));
+    error(new PackageError(obj.writeToString() + " is not the name of a package."));
     // Not reached.
     return null;
   }
@@ -1632,7 +1613,7 @@ public abstract class Lisp
       return Pathname.parseNamestring((AbstractString)arg);
     if (arg instanceof FileStream)
       return ((FileStream)arg).getPathname();
-    signalTypeError(arg, list4(Symbol.OR, Symbol.PATHNAME,
+    type_error(arg, list4(Symbol.OR, Symbol.PATHNAME,
                                Symbol.STRING, Symbol.FILE_STREAM));
     // Not reached.
     return null;
@@ -1650,11 +1631,11 @@ public abstract class Lisp
               return entry;
           }
         else if (entry != NIL)
-          return signalTypeError(entry, Symbol.LIST);
+          return type_error(entry, Symbol.LIST);
         alist = ((Cons)alist).cdr;
       }
     if (alist != NIL)
-      return signalTypeError(alist, Symbol.LIST);
+      return type_error(alist, Symbol.LIST);
     return NIL;
   }
 
@@ -1668,7 +1649,7 @@ public abstract class Lisp
         list = ((Cons)list).cdr;
       }
     if (list != NIL)
-      signalTypeError(list, Symbol.LIST);
+      type_error(list, Symbol.LIST);
     return false;
   }
 
@@ -1682,7 +1663,7 @@ public abstract class Lisp
         list = ((Cons)list).cdr;
       }
     if (list != NIL)
-      signalTypeError(list, Symbol.LIST);
+      type_error(list, Symbol.LIST);
     return false;
   }
 
@@ -1699,7 +1680,7 @@ public abstract class Lisp
         if (list.cdr() instanceof Cons)
           list = list.cddr();
         else
-          return signal(new TypeError("Malformed property list: " +
+          return error(new TypeError("Malformed property list: " +
                                       plist.writeToString()));
       }
     return defaultValue;
@@ -1715,7 +1696,7 @@ public abstract class Lisp
       }
     catch (ClassCastException e)
       {
-        return signalTypeError(symbol, Symbol.SYMBOL);
+        return type_error(symbol, Symbol.SYMBOL);
       }
     while (list != NIL)
       {
@@ -1737,7 +1718,7 @@ public abstract class Lisp
       }
     catch (ClassCastException e)
       {
-        return signalTypeError(symbol, Symbol.SYMBOL);
+        return type_error(symbol, Symbol.SYMBOL);
       }
     while (list != NIL)
       {
@@ -1799,7 +1780,7 @@ public abstract class Lisp
     while (list != NIL)
       {
         if (!(list.cdr() instanceof Cons))
-          signal(new ProgramError("The symbol " + symbol.writeToString() +
+          error(new ProgramError("The symbol " + symbol.writeToString() +
                                   " has an odd number of items in its property list."));
         if (list.car() == indicator)
           {
@@ -1920,7 +1901,7 @@ public abstract class Lisp
   {
     Package pkg = Packages.findPackage(packageName);
     if (pkg == null)
-      signal(new LispError(packageName + " is not the name of a package."));
+      error(new LispError(packageName + " is not the name of a package."));
     return pkg.intern(name);
   }
 

@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.773 2007-02-15 14:06:32 piso Exp $
+;;; $Id: jvm.lisp,v 1.774 2007-02-23 21:17:35 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1625,7 +1625,7 @@
           (t
            (return-from generate-instanceof-type-check-for-variable)))
     (emit 'getstatic +lisp-symbol-class+ expected-type-java-symbol-name +lisp-symbol+)
-    (emit-invokestatic +lisp-class+ "signalTypeError"
+    (emit-invokestatic +lisp-class+ "type_error"
                        (lisp-object-arg-types 2) +lisp-object+)
     (emit 'pop) ; Needed for JVM stack consistency.
     (label LABEL1))
@@ -9302,7 +9302,7 @@ representation, based on the derived type of the LispObject."
     (emit 'instanceof instanceof-class)
     (emit 'ifne LABEL1)
     (emit 'getstatic +lisp-symbol-class+ expected-type-java-symbol-name +lisp-symbol+)
-    (emit-invokestatic +lisp-class+ "signalTypeError"
+    (emit-invokestatic +lisp-class+ "type_error"
                        (lisp-object-arg-types 2) +lisp-object+)
     (label LABEL1))
   t)

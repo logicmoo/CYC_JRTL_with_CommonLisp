@@ -2,7 +2,7 @@
  * ZeroRankArray.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: ZeroRankArray.java,v 1.14 2005-10-23 18:44:50 piso Exp $
+ * $Id: ZeroRankArray.java,v 1.15 2007-02-23 21:17:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -68,7 +68,7 @@ public final class ZeroRankArray extends AbstractArray
 
     public int getDimension(int n) throws ConditionThrowable
     {
-        signal(new TypeError("Bad array dimension (" + n + ") for array of rank 0."));
+        error(new TypeError("Bad array dimension (" + n + ") for array of rank 0."));
         // Not reached.
         return -1;
     }
@@ -88,23 +88,23 @@ public final class ZeroRankArray extends AbstractArray
         if (index == 0)
             return data;
         else
-            return signal(new TypeError("Bad row major index " + index + "."));
+            return error(new TypeError("Bad row major index " + index + "."));
     }
 
     public void aset(int index, LispObject obj) throws ConditionThrowable
     {
         if (obj.typep(elementType) == NIL)
-            signal(new TypeError(obj, elementType));
+            error(new TypeError(obj, elementType));
         if (index == 0)
             data = obj;
         else
-            signal(new TypeError("Bad row major index " + index + "."));
+            error(new TypeError("Bad row major index " + index + "."));
     }
 
     public void fill(LispObject obj) throws ConditionThrowable
     {
         if (obj.typep(elementType) == NIL)
-            signal(new TypeError(obj, elementType));
+            error(new TypeError(obj, elementType));
         data = obj;
     }
 
@@ -114,7 +114,7 @@ public final class ZeroRankArray extends AbstractArray
         boolean printReadably = (Symbol.PRINT_READABLY.symbolValue(thread) != NIL);
         if (printReadably) {
             if (elementType != T) {
-                signal(new PrintNotReadable(list2(Keyword.OBJECT, this)));
+                error(new PrintNotReadable(list2(Keyword.OBJECT, this)));
                 // Not reached.
                 return null;
             }

@@ -2,7 +2,7 @@
  * StandardReaderMethod.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: StandardReaderMethod.java,v 1.2 2005-12-27 20:00:58 piso Exp $
+ * $Id: StandardReaderMethod.java,v 1.3 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@ public final class StandardReaderMethod extends StandardMethod
           }
           catch (ClassCastException e)
           {
-              return signalTypeError(arg, Symbol.STANDARD_READER_METHOD);
+              return type_error(arg, Symbol.STANDARD_READER_METHOD);
           }
       }
   };
@@ -61,7 +61,7 @@ public final class StandardReaderMethod extends StandardMethod
           }
           catch (ClassCastException e)
           {
-              return signalTypeError(first, Symbol.STANDARD_READER_METHOD);
+              return type_error(first, Symbol.STANDARD_READER_METHOD);
           }
       }
   };

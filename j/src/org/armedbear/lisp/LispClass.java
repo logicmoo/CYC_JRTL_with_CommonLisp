@@ -2,7 +2,7 @@
  * LispClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispClass.java,v 1.72 2006-01-06 18:14:26 piso Exp $
+ * $Id: LispClass.java,v 1.73 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,7 +59,7 @@ public abstract class LispClass extends StandardObject
       }
     catch (ClassCastException e)
       {
-        return signalTypeError(name, Symbol.SYMBOL);
+        return type_error(name, Symbol.SYMBOL);
       }
     final LispClass c;
     synchronized (map)
@@ -74,7 +74,7 @@ public abstract class LispClass extends StandardObject
           new FastStringBuffer("There is no class named ");
         sb.append(name.writeToString());
         sb.append('.');
-        return signal(new LispError(sb.toString()));
+        return error(new LispError(sb.toString()));
       }
     return NIL;
   }
@@ -347,7 +347,7 @@ public abstract class LispClass extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.SYMBOL);
+            return type_error(first, Symbol.SYMBOL);
           }
         if (second == NIL)
           {
@@ -361,7 +361,7 @@ public abstract class LispClass extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(second, Symbol.CLASS);
+            return type_error(second, Symbol.CLASS);
           }
         addClass(name, c);
         return second;
@@ -382,7 +382,7 @@ public abstract class LispClass extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.CLASS);
+            return type_error(first, Symbol.CLASS);
           }
         return c.subclassp(second) ? T : NIL;
       }

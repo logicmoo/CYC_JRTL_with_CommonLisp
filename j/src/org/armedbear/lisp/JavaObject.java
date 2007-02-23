@@ -2,7 +2,7 @@
  * JavaObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: JavaObject.java,v 1.22 2005-11-11 21:12:34 piso Exp $
+ * $Id: JavaObject.java,v 1.23 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,7 +71,7 @@ public final class JavaObject extends LispObject
 	    return ((JavaObject)o).obj;
         }
         catch (ClassCastException e) {
-            signalTypeError(o, Symbol.JAVA_OBJECT);
+            type_error(o, Symbol.JAVA_OBJECT);
             // Not reached.
             return null;
         }
@@ -115,13 +115,13 @@ public final class JavaObject extends LispObject
             throws ConditionThrowable
         {
             if (!(first instanceof JavaObject))
-                return signalTypeError(first, Symbol.JAVA_OBJECT);
+                return type_error(first, Symbol.JAVA_OBJECT);
             final Stream stream;
             try {
                 stream = (Stream) second;
             }
             catch (ClassCastException e) {
-                return signalTypeError(second, Symbol.STREAM);
+                return type_error(second, Symbol.STREAM);
             }
             final JavaObject javaObject = (JavaObject) first;
             final Object obj = javaObject.getObject();

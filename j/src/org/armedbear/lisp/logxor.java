@@ -2,7 +2,7 @@
  * logxor.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: logxor.java,v 1.6 2005-08-10 13:27:20 piso Exp $
+ * $Id: logxor.java,v 1.7 2007-02-23 21:17:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@ public final class logxor extends Primitive
     {
         if (arg instanceof Fixnum || arg instanceof Bignum)
             return arg;
-        return signalTypeError(arg, Symbol.INTEGER);
+        return type_error(arg, Symbol.INTEGER);
     }
 
     public LispObject execute(LispObject first, LispObject second)

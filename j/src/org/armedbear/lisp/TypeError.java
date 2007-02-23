@@ -2,7 +2,7 @@
  * TypeError.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: TypeError.java,v 1.35 2005-11-04 13:40:18 piso Exp $
+ * $Id: TypeError.java,v 1.36 2007-02-23 21:17:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -187,7 +187,7 @@ public class TypeError extends LispError
                 obj = (StandardObject) arg;
             }
             catch (ClassCastException e) {
-                return signalTypeError(arg, Symbol.STANDARD_OBJECT);
+                return type_error(arg, Symbol.STANDARD_OBJECT);
             }
             return obj.getInstanceSlotValue(Symbol.DATUM);
         }
@@ -204,7 +204,7 @@ public class TypeError extends LispError
                 obj = (StandardObject) arg;
             }
             catch (ClassCastException e) {
-                return signalTypeError(arg, Symbol.STANDARD_OBJECT);
+                return type_error(arg, Symbol.STANDARD_OBJECT);
             }
             return obj.getInstanceSlotValue(Symbol.EXPECTED_TYPE);
         }

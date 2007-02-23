@@ -74,7 +74,7 @@ public abstract class AbstractVector extends AbstractArray
   {
     if (n != 0)
       {
-        signal(new TypeError("bad dimension for vector"));
+        error(new TypeError("bad dimension for vector"));
         // Not reached.
         return 0;
       }
@@ -145,7 +145,7 @@ public abstract class AbstractVector extends AbstractArray
         sb.append(limit);
         sb.append(").");
       }
-    signal(new TypeError(sb.toString(),
+    error(new TypeError(sb.toString(),
                          new Fixnum(index),
                          list3(Symbol.INTEGER,
                                Fixnum.ZERO,

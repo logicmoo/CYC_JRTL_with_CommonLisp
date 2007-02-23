@@ -2,7 +2,7 @@
  * output_stream_p.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: output_stream_p.java,v 1.5 2004-11-03 15:39:02 piso Exp $
+ * $Id: output_stream_p.java,v 1.6 2007-02-23 21:17:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ public final class output_stream_p extends Primitive
             return ((Stream)arg).isOutputStream() ? T : NIL;
         }
         catch (ClassCastException e) {
-            return signal(new TypeError(arg, Symbol.STREAM));
+            return error(new TypeError(arg, Symbol.STREAM));
         }
     }
 

@@ -2,7 +2,7 @@
  * MacroObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: MacroObject.java,v 1.15 2005-12-24 16:31:51 piso Exp $
+ * $Id: MacroObject.java,v 1.16 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -37,32 +37,32 @@ public final class MacroObject extends Function
 
   public LispObject execute() throws ConditionThrowable
   {
-    return signal(new UndefinedFunction(name));
+    return error(new UndefinedFunction(name));
   }
 
   public LispObject execute(LispObject arg) throws ConditionThrowable
   {
-    return signal(new UndefinedFunction(name));
+    return error(new UndefinedFunction(name));
   }
 
   public LispObject execute(LispObject first, LispObject second)
     throws ConditionThrowable
   {
-    return signal(new UndefinedFunction(name));
+    return error(new UndefinedFunction(name));
   }
 
   public LispObject execute(LispObject first, LispObject second,
                             LispObject third)
     throws ConditionThrowable
   {
-    return signal(new UndefinedFunction(name));
+    return error(new UndefinedFunction(name));
   }
 
   public LispObject execute(LispObject first, LispObject second,
                             LispObject third, LispObject fourth)
     throws ConditionThrowable
   {
-    return signal(new UndefinedFunction(name));
+    return error(new UndefinedFunction(name));
   }
 
   public LispObject execute(LispObject first, LispObject second,
@@ -70,7 +70,7 @@ public final class MacroObject extends Function
                             LispObject fifth)
     throws ConditionThrowable
   {
-    return signal(new UndefinedFunction(name));
+    return error(new UndefinedFunction(name));
   }
 
   public LispObject execute(LispObject first, LispObject second,
@@ -78,7 +78,7 @@ public final class MacroObject extends Function
                             LispObject fifth, LispObject sixth)
     throws ConditionThrowable
   {
-    return signal(new UndefinedFunction(name));
+    return error(new UndefinedFunction(name));
   }
 
   public LispObject execute(LispObject first, LispObject second,
@@ -87,7 +87,7 @@ public final class MacroObject extends Function
                             LispObject seventh)
     throws ConditionThrowable
   {
-    return signal(new UndefinedFunction(name));
+    return error(new UndefinedFunction(name));
   }
 
   public LispObject execute(LispObject first, LispObject second,
@@ -96,12 +96,12 @@ public final class MacroObject extends Function
                             LispObject seventh, LispObject eighth)
     throws ConditionThrowable
   {
-    return signal(new UndefinedFunction(name));
+    return error(new UndefinedFunction(name));
   }
 
   public LispObject execute(LispObject[] args) throws ConditionThrowable
   {
-    return signal(new UndefinedFunction(name));
+    return error(new UndefinedFunction(name));
   }
 
   public String writeToString()

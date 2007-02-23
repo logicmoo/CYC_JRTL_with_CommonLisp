@@ -2,7 +2,7 @@
  * BroadcastStream.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: BroadcastStream.java,v 1.12 2005-05-06 23:39:33 piso Exp $
+ * $Id: BroadcastStream.java,v 1.13 2007-02-23 21:17:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -180,7 +180,7 @@ public final class BroadcastStream extends Stream
 
     private void notSupported() throws ConditionThrowable
     {
-        signal(new TypeError("Operation is not supported for streams of type BROADCAST-STREAM."));
+        error(new TypeError("Operation is not supported for streams of type BROADCAST-STREAM."));
     }
 
     public String writeToString()
@@ -205,10 +205,10 @@ public final class BroadcastStream extends Stream
                         streams[i] = (Stream) args[i];
                         continue;
                     } else
-                        return signal(new TypeError(args[i], list2(Symbol.SATISFIES,
+                        return error(new TypeError(args[i], list2(Symbol.SATISFIES,
                                                                    Symbol.OUTPUT_STREAM_P)));
                 } else
-                    return signal(new TypeError(args[i], Symbol.STREAM));
+                    return error(new TypeError(args[i], Symbol.STREAM));
             }
             // All is well.
             return new BroadcastStream(streams);
@@ -230,7 +230,7 @@ public final class BroadcastStream extends Stream
                 return result;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.BROADCAST_STREAM));
+                return error(new TypeError(arg, Symbol.BROADCAST_STREAM));
             }
         }
     };

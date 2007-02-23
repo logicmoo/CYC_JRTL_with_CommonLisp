@@ -2,7 +2,7 @@
  * SlotDefinition.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: SlotDefinition.java,v 1.7 2005-12-27 18:16:44 piso Exp $
+ * $Id: SlotDefinition.java,v 1.8 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -115,7 +115,7 @@ public final class SlotDefinition extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.SLOT_DEFINITION);
+            return type_error(arg, Symbol.SLOT_DEFINITION);
           }
       }
     };
@@ -135,7 +135,7 @@ public final class SlotDefinition extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.SLOT_DEFINITION);
+            return type_error(first, Symbol.SLOT_DEFINITION);
           }
       }
     };
@@ -152,7 +152,7 @@ public final class SlotDefinition extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.SLOT_DEFINITION);
+            return type_error(arg, Symbol.SLOT_DEFINITION);
           }
       }
     };
@@ -172,7 +172,7 @@ public final class SlotDefinition extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.SLOT_DEFINITION);
+            return type_error(first, Symbol.SLOT_DEFINITION);
           }
       }
     };
@@ -190,7 +190,7 @@ public final class SlotDefinition extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.SLOT_DEFINITION);
+            return type_error(arg, Symbol.SLOT_DEFINITION);
           }
       }
     };
@@ -210,7 +210,7 @@ public final class SlotDefinition extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.SLOT_DEFINITION);
+            return type_error(first, Symbol.SLOT_DEFINITION);
           }
       }
     };
@@ -227,7 +227,7 @@ public final class SlotDefinition extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.SLOT_DEFINITION);
+            return type_error(arg, Symbol.SLOT_DEFINITION);
           }
       }
     };
@@ -247,7 +247,7 @@ public final class SlotDefinition extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.SLOT_DEFINITION);
+            return type_error(first, Symbol.SLOT_DEFINITION);
           }
       }
     };
@@ -265,7 +265,7 @@ public final class SlotDefinition extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.SLOT_DEFINITION);
+            return type_error(arg, Symbol.SLOT_DEFINITION);
           }
       }
     };
@@ -285,7 +285,7 @@ public final class SlotDefinition extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.SLOT_DEFINITION);
+            return type_error(first, Symbol.SLOT_DEFINITION);
           }
       }
     };
@@ -303,7 +303,7 @@ public final class SlotDefinition extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.SLOT_DEFINITION);
+            return type_error(arg, Symbol.SLOT_DEFINITION);
           }
       }
     };
@@ -323,7 +323,7 @@ public final class SlotDefinition extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.SLOT_DEFINITION);
+            return type_error(first, Symbol.SLOT_DEFINITION);
           }
       }
     };
@@ -341,7 +341,7 @@ public final class SlotDefinition extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.SLOT_DEFINITION);
+            return type_error(arg, Symbol.SLOT_DEFINITION);
           }
       }
     };
@@ -361,7 +361,7 @@ public final class SlotDefinition extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.SLOT_DEFINITION);
+            return type_error(first, Symbol.SLOT_DEFINITION);
           }
       }
     };
@@ -379,7 +379,7 @@ public final class SlotDefinition extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.SLOT_DEFINITION);
+            return type_error(arg, Symbol.SLOT_DEFINITION);
           }
       }
     };
@@ -399,7 +399,7 @@ public final class SlotDefinition extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.SLOT_DEFINITION);
+            return type_error(first, Symbol.SLOT_DEFINITION);
           }
       }
     };
@@ -416,7 +416,7 @@ public final class SlotDefinition extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.SLOT_DEFINITION);
+            return type_error(arg, Symbol.SLOT_DEFINITION);
           }
       }
     };
@@ -435,7 +435,7 @@ public final class SlotDefinition extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.SLOT_DEFINITION);
+            return type_error(first, Symbol.SLOT_DEFINITION);
           }
       }
     };

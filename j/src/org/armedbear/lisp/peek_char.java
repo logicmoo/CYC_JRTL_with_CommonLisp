@@ -2,7 +2,7 @@
  * peek_char.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: peek_char.java,v 1.5 2005-10-16 12:35:45 piso Exp $
+ * $Id: peek_char.java,v 1.6 2007-02-23 21:17:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ public final class peek_char extends Primitive
     {
         int length = args.length;
         if (length > 5)
-            signal(new WrongNumberOfArgumentsException(this));
+            error(new WrongNumberOfArgumentsException(this));
         LispObject peekType = length > 0 ? args[0] : NIL;
         Stream stream = length > 1 ? inSynonymOf(args[1]) : getStandardInput();
         boolean eofError = length > 2 ? (args[2] != NIL) : true;
@@ -91,7 +91,7 @@ public final class peek_char extends Primitive
                     return result;
             }
         }
-        return signal(new SimpleError(String.valueOf(peekType) +
+        return error(new SimpleError(String.valueOf(peekType) +
                                       " is an illegal peek-type."));
     }
 

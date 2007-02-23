@@ -2,7 +2,7 @@
  * read_delimited_list.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: read_delimited_list.java,v 1.1 2004-03-17 16:23:38 piso Exp $
+ * $Id: read_delimited_list.java,v 1.2 2007-02-23 21:17:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ public final class read_delimited_list extends Primitive
     {
         int length = args.length;
         if (length < 1 || length > 3)
-            signal(new WrongNumberOfArgumentsException(this));
+            error(new WrongNumberOfArgumentsException(this));
         char c = LispCharacter.getValue(args[0]);
         Stream stream =
             length > 1 ? inSynonymOf(args[1]) : getStandardInput();

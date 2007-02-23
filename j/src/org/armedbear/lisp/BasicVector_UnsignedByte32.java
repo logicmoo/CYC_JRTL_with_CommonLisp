@@ -2,7 +2,7 @@
  * BasicVector_UnsignedByte32.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: BasicVector_UnsignedByte32.java,v 1.5 2006-01-10 22:17:20 piso Exp $
+ * $Id: BasicVector_UnsignedByte32.java,v 1.6 2007-02-23 21:17:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -154,7 +154,7 @@ public final class BasicVector_UnsignedByte32 extends AbstractVector
       }
     catch (ClassCastException e)
       {
-        return signalTypeError(index, Symbol.FIXNUM);
+        return type_error(index, Symbol.FIXNUM);
       }
     catch (ArrayIndexOutOfBoundsException e)
       {
@@ -188,7 +188,7 @@ public final class BasicVector_UnsignedByte32 extends AbstractVector
     catch (ArrayIndexOutOfBoundsException e)
       {
         // FIXME
-        return signal(new TypeError("Array index out of bounds: " + i + "."));
+        return error(new TypeError("Array index out of bounds: " + i + "."));
       }
   }
 
@@ -210,7 +210,7 @@ public final class BasicVector_UnsignedByte32 extends AbstractVector
       }
     if (n == capacity)
       return;
-    signal(new LispError());
+    error(new LispError());
   }
 
   public LispObject reverse() throws ConditionThrowable
@@ -260,7 +260,7 @@ public final class BasicVector_UnsignedByte32 extends AbstractVector
               newElements[i] = initialContents.elt(i);
           }
         else
-          signalTypeError(initialContents, Symbol.SEQUENCE);
+          type_error(initialContents, Symbol.SEQUENCE);
         return new BasicVector_UnsignedByte32(newElements);
       }
     if (capacity != newCapacity)

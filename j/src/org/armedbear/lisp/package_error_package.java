@@ -2,7 +2,7 @@
  * package_error_package.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: package_error_package.java,v 1.1 2004-11-28 15:41:04 piso Exp $
+ * $Id: package_error_package.java,v 1.2 2007-02-23 21:17:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ public final class package_error_package extends Primitive
             return ((PackageError)arg).getPackage();
         }
         catch (ClassCastException e) {
-            return signal(new TypeError(arg, Symbol.PACKAGE_ERROR));
+            return error(new TypeError(arg, Symbol.PACKAGE_ERROR));
         }
     }
 

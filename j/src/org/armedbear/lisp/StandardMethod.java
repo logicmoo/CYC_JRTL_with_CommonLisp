@@ -2,7 +2,7 @@
  * StandardMethod.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: StandardMethod.java,v 1.7 2005-12-27 19:05:23 piso Exp $
+ * $Id: StandardMethod.java,v 1.8 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -62,7 +62,7 @@ public class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.STANDARD_METHOD);
+            return type_error(arg, Symbol.STANDARD_METHOD);
           }
       }
     };
@@ -82,7 +82,7 @@ public class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.STANDARD_METHOD);
+            return type_error(first, Symbol.STANDARD_METHOD);
           }
       }
     };
@@ -99,7 +99,7 @@ public class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.STANDARD_METHOD);
+            return type_error(arg, Symbol.STANDARD_METHOD);
           }
       }
     };
@@ -119,7 +119,7 @@ public class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.STANDARD_METHOD);
+            return type_error(first, Symbol.STANDARD_METHOD);
           }
       }
     };
@@ -136,7 +136,7 @@ public class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.STANDARD_METHOD);
+            return type_error(arg, Symbol.STANDARD_METHOD);
           }
       }
     };
@@ -156,7 +156,7 @@ public class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.STANDARD_METHOD);
+            return type_error(first, Symbol.STANDARD_METHOD);
           }
       }
     };
@@ -216,7 +216,7 @@ public class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.METHOD);
+            return type_error(arg, Symbol.METHOD);
           }
       }
     };
@@ -235,7 +235,7 @@ public class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.METHOD);
+            return type_error(first, Symbol.METHOD);
           }
       }
     };
@@ -252,7 +252,7 @@ public class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.METHOD);
+            return type_error(arg, Symbol.METHOD);
           }
       }
     };
@@ -272,7 +272,7 @@ public class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.METHOD);
+            return type_error(first, Symbol.METHOD);
           }
       }
     };
@@ -289,7 +289,7 @@ public class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.METHOD);
+            return type_error(arg, Symbol.METHOD);
           }
       }
     };
@@ -309,7 +309,7 @@ public class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.METHOD);
+            return type_error(first, Symbol.METHOD);
           }
       }
     };
@@ -326,7 +326,7 @@ public class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.METHOD);
+            return type_error(arg, Symbol.METHOD);
           }
       }
     };
@@ -346,7 +346,7 @@ public class StandardMethod extends StandardObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.METHOD);
+            return type_error(first, Symbol.METHOD);
           }
       }
     };

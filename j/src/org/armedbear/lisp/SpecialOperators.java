@@ -2,7 +2,7 @@
  * SpecialOperators.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: SpecialOperators.java,v 1.55 2006-05-25 01:34:17 piso Exp $
+ * $Id: SpecialOperators.java,v 1.56 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ public final class SpecialOperators extends Lisp
         throws ConditionThrowable
       {
         if (args.cdr() != NIL)
-          return signal(new WrongNumberOfArgumentsException(this));
+          return error(new WrongNumberOfArgumentsException(this));
         return ((Cons)args).car;
       }
     };
@@ -61,7 +61,7 @@ public final class SpecialOperators extends Lisp
               return eval((((Cons)args).cdr).cadr(), env, thread);
             }
           default:
-            return signal(new WrongNumberOfArgumentsException(this));
+            return error(new WrongNumberOfArgumentsException(this));
           }
       }
     };
@@ -74,7 +74,7 @@ public final class SpecialOperators extends Lisp
         throws ConditionThrowable
       {
         if (args == NIL)
-          return signal(new WrongNumberOfArgumentsException(this));
+          return error(new WrongNumberOfArgumentsException(this));
         return _let(args, env, false);
       }
     };
@@ -87,7 +87,7 @@ public final class SpecialOperators extends Lisp
         throws ConditionThrowable
       {
         if (args == NIL)
-          return signal(new WrongNumberOfArgumentsException(this));
+          return error(new WrongNumberOfArgumentsException(this));
         return _let(args, env, true);
       }
     };
@@ -142,7 +142,7 @@ public final class SpecialOperators extends Lisp
                 if (obj instanceof Cons)
                   {
                     if (obj.length() > 2)
-                      return signal(new LispError("The LET* binding specification " +
+                      return error(new LispError("The LET* binding specification " +
                                                   obj.writeToString() +
                                                   " is invalid."));
                     try
@@ -151,7 +151,7 @@ public final class SpecialOperators extends Lisp
                       }
                     catch (ClassCastException e)
                       {
-                        return signalTypeError(((Cons)obj).car, Symbol.SYMBOL);
+                        return type_error(((Cons)obj).car, Symbol.SYMBOL);
                       }
                     value = eval(obj.cadr(), ext, thread);
                   }
@@ -163,7 +163,7 @@ public final class SpecialOperators extends Lisp
                       }
                     catch (ClassCastException e)
                       {
-                        return signalTypeError(obj, Symbol.SYMBOL);
+                        return type_error(obj, Symbol.SYMBOL);
                       }
                     value = NIL;
                   }
@@ -192,7 +192,7 @@ public final class SpecialOperators extends Lisp
                 if (obj instanceof Cons)
                   {
                     if (obj.length() > 2)
-                      return signal(new LispError("The LET binding specification " +
+                      return error(new LispError("The LET binding specification " +
                                                   obj.writeToString() +
                                                   " is invalid."));
                     vals[i] = eval(obj.cadr(), env, thread);
@@ -215,7 +215,7 @@ public final class SpecialOperators extends Lisp
                       }
                     catch (ClassCastException e)
                       {
-                        return signalTypeError(((Cons)obj).car, Symbol.SYMBOL);
+                        return type_error(((Cons)obj).car, Symbol.SYMBOL);
                       }
                   }
                 else
@@ -226,7 +226,7 @@ public final class SpecialOperators extends Lisp
                       }
                     catch (ClassCastException e)
                       {
-                        return signalTypeError(obj, Symbol.SYMBOL);
+                        return type_error(obj, Symbol.SYMBOL);
                       }
                   }
                 LispObject value = vals[i];
@@ -293,7 +293,7 @@ public final class SpecialOperators extends Lisp
                         Symbol symbol = checkSymbol(obj.car());
                         if (symbol.isSpecialVariable())
                           {
-                            return signal(new ProgramError(
+                            return error(new ProgramError(
                               "Attempt to bind the special variable " +
                               symbol.writeToString() +
                               " with SYMBOL-MACROLET."));
@@ -302,7 +302,7 @@ public final class SpecialOperators extends Lisp
                       }
                     else
                       {
-                        return signal(new ProgramError(
+                        return error(new ProgramError(
                           "Malformed symbol-expansion pair in SYMBOL-MACROLET: " +
                           obj.writeToString()));
                       }
@@ -347,7 +347,7 @@ public final class SpecialOperators extends Lisp
             return eval(args.car(), new Environment(),
                         LispThread.currentThread());
           default:
-            return signal(new WrongNumberOfArgumentsException(this));
+            return error(new WrongNumberOfArgumentsException(this));
           }
       }
     };
@@ -436,13 +436,13 @@ public final class SpecialOperators extends Lisp
                   {
                     String message =
                       symbol.getName() + " is a special operator and may not be redefined";
-                    return signal(new ProgramError(message));
+                    return error(new ProgramError(message));
                   }
               }
             else if (isValidSetfFunctionName(name))
               symbol = checkSymbol(name.cadr());
             else
-              return signalTypeError(name, FUNCTION_NAME);
+              return type_error(name, FUNCTION_NAME);
             LispObject rest = def.cdr();
             LispObject parameters = rest.car();
             LispObject body = rest.cdr();
@@ -492,7 +492,7 @@ public final class SpecialOperators extends Lisp
         throws ConditionThrowable
       {
         if (args.length() != 2)
-          return signal(new WrongNumberOfArgumentsException(this));
+          return error(new WrongNumberOfArgumentsException(this));
         return eval(args.cadr(), env, LispThread.currentThread());
       }
     };
@@ -505,7 +505,7 @@ public final class SpecialOperators extends Lisp
         throws ConditionThrowable
       {
         if (args.length() < 2)
-          return signal(new WrongNumberOfArgumentsException(this));
+          return error(new WrongNumberOfArgumentsException(this));
         final LispThread thread = LispThread.currentThread();
         final LispObject symbols = checkList(eval(args.car(), env, thread));
         LispObject values = checkList(eval(args.cadr(), env, thread));
@@ -578,7 +578,7 @@ public final class SpecialOperators extends Lisp
               return operator;
             if (operator instanceof StandardGenericFunction)
               return operator;
-            return signal(new UndefinedFunction(arg));
+            return error(new UndefinedFunction(arg));
           }
         if (arg instanceof Cons)
           {
@@ -607,10 +607,10 @@ public final class SpecialOperators extends Lisp
                                        new Cons(Symbol.LAMBDA, arg.cddr()),
                                        env);
                   }
-                return signalTypeError(name, FUNCTION_NAME);
+                return type_error(name, FUNCTION_NAME);
               }
           }
-        return signal(new UndefinedFunction(list2(Keyword.NAME, arg)));
+        return error(new UndefinedFunction(list2(Keyword.NAME, arg)));
       }
     };
 
@@ -628,7 +628,7 @@ public final class SpecialOperators extends Lisp
             Symbol symbol = checkSymbol(args.car());
             if (symbol.isConstant())
               {
-                return signal(new ProgramError(symbol.writeToString() +
+                return error(new ProgramError(symbol.writeToString() +
                                                " is a constant and thus cannot be set."));
               }
             args = args.cdr();

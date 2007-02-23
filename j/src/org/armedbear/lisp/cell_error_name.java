@@ -2,7 +2,7 @@
  * cell_error_name.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: cell_error_name.java,v 1.5 2005-11-02 01:11:57 piso Exp $
+ * $Id: cell_error_name.java,v 1.6 2007-02-23 21:17:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,7 +36,7 @@ public final class cell_error_name extends Primitive
             obj = (StandardObject) arg;
         }
         catch (ClassCastException e) {
-            return signalTypeError(arg, Symbol.STANDARD_OBJECT);
+            return type_error(arg, Symbol.STANDARD_OBJECT);
         }
         return obj.getInstanceSlotValue(Symbol.NAME);
     }

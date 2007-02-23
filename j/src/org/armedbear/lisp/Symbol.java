@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2007 Peter Graves
- * $Id: Symbol.java,v 1.250 2007-02-22 16:03:48 piso Exp $
+ * $Id: Symbol.java,v 1.251 2007-02-23 21:17:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -279,7 +279,7 @@ public class Symbol extends LispObject
       return val;
     if (value != null)
       return value;
-    return signal(new UnboundVariable(this));
+    return error(new UnboundVariable(this));
   }
 
   public final LispObject symbolValue(LispThread thread) throws ConditionThrowable
@@ -289,7 +289,7 @@ public class Symbol extends LispObject
       return val;
     if (value != null)
       return value;
-    return signal(new UnboundVariable(this));
+    return error(new UnboundVariable(this));
   }
 
   public final LispObject symbolValueNoThrow()
@@ -322,7 +322,7 @@ public class Symbol extends LispObject
   public final LispObject getSymbolFunctionOrDie() throws ConditionThrowable
   {
     if (function == null)
-      return signal(new UndefinedFunction(this));
+      return error(new UndefinedFunction(this));
     if (function instanceof Autoload)
       {
         Autoload autoload = (Autoload) function;
@@ -336,7 +336,7 @@ public class Symbol extends LispObject
   {
     LispObject obj = get(this, Symbol.SETF_FUNCTION, null);
     if (obj == null)
-      signal(new UndefinedFunction(list2(Keyword.NAME,
+      error(new UndefinedFunction(list2(Keyword.NAME,
                                          list2(Symbol.SETF,
                                                this))));
     return obj;
@@ -570,13 +570,13 @@ public class Symbol extends LispObject
       }
     catch (ClassCastException e)
       {
-        signal(new TypeError("The value of *PRINT-BASE* is not of type (INTEGER 2 36)."));
+        error(new TypeError("The value of *PRINT-BASE* is not of type (INTEGER 2 36)."));
         // Not reached.
         return false;
       }
     if (radix < 2 || radix > 36)
       {
-        signal(new TypeError("The value of *PRINT-BASE* is not of type (INTEGER 2 36)."));
+        error(new TypeError("The value of *PRINT-BASE* is not of type (INTEGER 2 36)."));
         // Not reached.
         return false;
       }
@@ -842,9 +842,9 @@ public class Symbol extends LispObject
     throws ConditionThrowable
   {
     if (function == null)
-      return signal(new UndefinedFunction(this));
+      return error(new UndefinedFunction(this));
     Debug.trace(e);
-    return signal(new LispError("Null pointer exception"));
+    return error(new LispError("Null pointer exception"));
   }
 
   private final LispObject handleNPE(NullPointerException e, LispObject args)
@@ -854,7 +854,7 @@ public class Symbol extends LispObject
       return LispThread.currentThread().execute(Symbol.UNDEFINED_FUNCTION_CALLED,
                                                 this, args);
     Debug.trace(e);
-    return signal(new LispError("Null pointer exception"));
+    return error(new LispError("Null pointer exception"));
   }
 
   public void incrementCallCount()

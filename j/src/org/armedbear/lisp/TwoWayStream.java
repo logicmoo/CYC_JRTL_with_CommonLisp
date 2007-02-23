@@ -2,7 +2,7 @@
  * TwoWayStream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: TwoWayStream.java,v 1.26 2005-11-01 02:13:27 piso Exp $
+ * $Id: TwoWayStream.java,v 1.27 2007-02-23 21:17:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -193,20 +193,20 @@ public class TwoWayStream extends Stream
                 in = (Stream) first;
             }
             catch (ClassCastException e) {
-                return signalTypeError(first, Symbol.STREAM);
+                return type_error(first, Symbol.STREAM);
             }
             final Stream out;
             try {
                 out = (Stream) second;
             }
             catch (ClassCastException e) {
-                return signalTypeError(second, Symbol.STREAM);
+                return type_error(second, Symbol.STREAM);
             }
             if (!in.isInputStream())
-                return signalTypeError(in, list2(Symbol.SATISFIES,
+                return type_error(in, list2(Symbol.SATISFIES,
                                                  Symbol.INPUT_STREAM_P));
             if (!out.isOutputStream())
-                return signalTypeError(out, list2(Symbol.SATISFIES,
+                return type_error(out, list2(Symbol.SATISFIES,
                                                   Symbol.OUTPUT_STREAM_P));
             return new TwoWayStream(in, out);
         }
@@ -222,7 +222,7 @@ public class TwoWayStream extends Stream
                 return ((TwoWayStream)arg).in;
             }
             catch (ClassCastException e) {
-                return signalTypeError(arg, Symbol.TWO_WAY_STREAM);
+                return type_error(arg, Symbol.TWO_WAY_STREAM);
             }
         }
     };
@@ -237,7 +237,7 @@ public class TwoWayStream extends Stream
                 return ((TwoWayStream)arg).out;
             }
             catch (ClassCastException e) {
-                return signalTypeError(arg, Symbol.TWO_WAY_STREAM);
+                return type_error(arg, Symbol.TWO_WAY_STREAM);
             }
         }
     };

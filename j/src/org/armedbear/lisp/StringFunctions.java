@@ -2,7 +2,7 @@
  * StringFunctions.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StringFunctions.java,v 1.43 2005-12-30 02:43:51 piso Exp $
+ * $Id: StringFunctions.java,v 1.44 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ public final class StringFunctions extends Lisp
                 start1 = ((Fixnum)third).value;
             }
             catch (ClassCastException e) {
-                return signalTypeError(third, Symbol.FIXNUM);
+                return type_error(third, Symbol.FIXNUM);
             }
             if (fourth == NIL) {
                 end1 = array1.length;
@@ -49,14 +49,14 @@ public final class StringFunctions extends Lisp
                     end1 = ((Fixnum)fourth).value;
                 }
                 catch (ClassCastException e) {
-                    return signalTypeError(fourth, Symbol.FIXNUM);
+                    return type_error(fourth, Symbol.FIXNUM);
                 }
             }
             try {
                 start2 = ((Fixnum)fifth).value;
             }
             catch (ClassCastException e) {
-                return signalTypeError(fifth, Symbol.FIXNUM);
+                return type_error(fifth, Symbol.FIXNUM);
             }
             if (sixth == NIL) {
                 end2 = array2.length;
@@ -65,7 +65,7 @@ public final class StringFunctions extends Lisp
                     end2 = ((Fixnum)sixth).value;
                 }
                 catch (ClassCastException e) {
-                    return signalTypeError(sixth, Symbol.FIXNUM);
+                    return type_error(sixth, Symbol.FIXNUM);
                 }
             }
             if ((end1 - start1) != (end2 - start2))
@@ -113,7 +113,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                return signal(new WrongNumberOfArgumentsException(this));
+                return error(new WrongNumberOfArgumentsException(this));
             char[] array1 = args[0].STRING().getStringChars();
             char[] array2 = args[1].STRING().getStringChars();
             int start1 = Fixnum.getValue(args[2]);
@@ -183,7 +183,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                return signal(new WrongNumberOfArgumentsException(this));
+                return error(new WrongNumberOfArgumentsException(this));
             char[] array1 = args[0].STRING().getStringChars();
             char[] array2 = args[1].STRING().getStringChars();
             int start1 = Fixnum.getValue(args[2]);
@@ -226,7 +226,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                return signal(new WrongNumberOfArgumentsException(this));
+                return error(new WrongNumberOfArgumentsException(this));
             char[] array1 = args[0].STRING().getStringChars();
             char[] array2 = args[1].STRING().getStringChars();
             int start1 = Fixnum.getValue(args[2]);
@@ -269,7 +269,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                return signal(new WrongNumberOfArgumentsException(this));
+                return error(new WrongNumberOfArgumentsException(this));
             char[] array1 = args[0].STRING().getStringChars();
             char[] array2 = args[1].STRING().getStringChars();
             int start1 = Fixnum.getValue(args[2]);
@@ -310,7 +310,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                return signal(new WrongNumberOfArgumentsException(this));
+                return error(new WrongNumberOfArgumentsException(this));
             char[] array1 = args[0].STRING().getStringChars();
             char[] array2 = args[1].STRING().getStringChars();
             int start1 = Fixnum.getValue(args[2]);
@@ -351,7 +351,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                return signal(new WrongNumberOfArgumentsException(this));
+                return error(new WrongNumberOfArgumentsException(this));
             char[] array1 = args[0].STRING().getStringChars();
             char[] array2 = args[1].STRING().getStringChars();
             int start1 = Fixnum.getValue(args[2]);
@@ -394,7 +394,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                return signal(new WrongNumberOfArgumentsException(this));
+                return error(new WrongNumberOfArgumentsException(this));
             char[] array1 = args[0].STRING().getStringChars();
             char[] array2 = args[1].STRING().getStringChars();
             int start1 = Fixnum.getValue(args[2]);
@@ -437,7 +437,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                return signal(new WrongNumberOfArgumentsException(this));
+                return error(new WrongNumberOfArgumentsException(this));
             char[] array1 = args[0].STRING().getStringChars();
             char[] array2 = args[1].STRING().getStringChars();
             int start1 = Fixnum.getValue(args[2]);
@@ -478,7 +478,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                return signal(new WrongNumberOfArgumentsException(this));
+                return error(new WrongNumberOfArgumentsException(this));
             char[] array1 = args[0].STRING().getStringChars();
             char[] array2 = args[1].STRING().getStringChars();
             int start1 = Fixnum.getValue(args[2]);
@@ -521,7 +521,7 @@ public final class StringFunctions extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length != 6)
-                return signal(new WrongNumberOfArgumentsException(this));
+                return error(new WrongNumberOfArgumentsException(this));
             char[] array1 = args[0].STRING().getStringChars();
             char[] array2 = args[1].STRING().getStringChars();
             int start1 = Fixnum.getValue(args[2]);
@@ -566,16 +566,16 @@ public final class StringFunctions extends Lisp
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
-                return signal(new TypeError("Invalid start position " + start + "."));
+                return error(new TypeError("Invalid start position " + start + "."));
             int end;
             if (third == NIL)
                 end = length;
             else
                 end = (int) Fixnum.getValue(third);
             if (end < 0 || end > length)
-                return signal(new TypeError("Invalid end position " + start + "."));
+                return error(new TypeError("Invalid end position " + start + "."));
             if (start > end)
-                return signal(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
+                return error(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
             FastStringBuffer sb = new FastStringBuffer(length);
             char[] array = s.getStringChars();
             int i;
@@ -601,16 +601,16 @@ public final class StringFunctions extends Lisp
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
-                return signal(new TypeError("Invalid start position " + start + "."));
+                return error(new TypeError("Invalid start position " + start + "."));
             int end;
             if (third == NIL)
                 end = length;
             else
                 end = (int) Fixnum.getValue(third);
             if (end < 0 || end > length)
-                return signal(new TypeError("Invalid end position " + start + "."));
+                return error(new TypeError("Invalid end position " + start + "."));
             if (start > end)
-                return signal(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
+                return error(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
             FastStringBuffer sb = new FastStringBuffer(length);
             char[] array = s.getStringChars();
             int i;
@@ -636,16 +636,16 @@ public final class StringFunctions extends Lisp
             final int length = s.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
-                return signal(new TypeError("Invalid start position " + start + "."));
+                return error(new TypeError("Invalid start position " + start + "."));
             int end;
             if (third == NIL)
                 end = length;
             else
                 end = (int) Fixnum.getValue(third);
             if (end < 0 || end > length)
-                return signal(new TypeError("Invalid end position " + start + "."));
+                return error(new TypeError("Invalid end position " + start + "."));
             if (start > end)
-                return signal(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
+                return error(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
             FastStringBuffer sb = new FastStringBuffer(length);
             char[] array = s.getStringChars();
             boolean lastCharWasAlphanumeric = false;
@@ -684,21 +684,21 @@ public final class StringFunctions extends Lisp
                 string = (AbstractString) first;
             }
             catch (ClassCastException e) {
-                return signalTypeError(first, Symbol.STRING);
+                return type_error(first, Symbol.STRING);
             }
             final int length = string.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
-                return signal(new TypeError("Invalid start position " + start + "."));
+                return error(new TypeError("Invalid start position " + start + "."));
             int end;
             if (third == NIL)
                 end = length;
             else
                 end = (int) Fixnum.getValue(third);
             if (end < 0 || end > length)
-                return signal(new TypeError("Invalid end position " + start + "."));
+                return error(new TypeError("Invalid end position " + start + "."));
             if (start > end)
-                return signal(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
+                return error(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
             for (int i = start; i < end; i++)
                 string.setCharAt(i, LispCharacter.toUpperCase(string.charAt(i)));
             return string;
@@ -718,21 +718,21 @@ public final class StringFunctions extends Lisp
                 string = (AbstractString) first;
             }
             catch (ClassCastException e) {
-                return signalTypeError(first, Symbol.STRING);
+                return type_error(first, Symbol.STRING);
             }
             final int length = string.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
-                return signal(new TypeError("Invalid start position " + start + "."));
+                return error(new TypeError("Invalid start position " + start + "."));
             int end;
             if (third == NIL)
                 end = length;
             else
                 end = (int) Fixnum.getValue(third);
             if (end < 0 || end > length)
-                return signal(new TypeError("Invalid end position " + start + "."));
+                return error(new TypeError("Invalid end position " + start + "."));
             if (start > end)
-                return signal(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
+                return error(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
             for (int i = start; i < end; i++)
                 string.setCharAt(i, LispCharacter.toLowerCase(string.charAt(i)));
             return string;
@@ -752,21 +752,21 @@ public final class StringFunctions extends Lisp
                 string = (AbstractString) first;
             }
             catch (ClassCastException e) {
-                return signalTypeError(first, Symbol.STRING);
+                return type_error(first, Symbol.STRING);
             }
             final int length = string.length();
             int start = (int) Fixnum.getValue(second);
             if (start < 0 || start > length)
-                return signal(new TypeError("Invalid start position " + start + "."));
+                return error(new TypeError("Invalid start position " + start + "."));
             int end;
             if (third == NIL)
                 end = length;
             else
                 end = (int) Fixnum.getValue(third);
             if (end < 0 || end > length)
-                return signal(new TypeError("Invalid end position " + start + "."));
+                return error(new TypeError("Invalid end position " + start + "."));
             if (start > end)
-                return signal(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
+                return error(new TypeError("Start (" + start + ") is greater than end (" + end + ")."));
             boolean lastCharWasAlphanumeric = false;
             for (int i = start; i < end; i++) {
                 char c = string.charAt(i);
@@ -819,7 +819,7 @@ public final class StringFunctions extends Lisp
                 n = ((Fixnum)size).value;
             }
             catch (ClassCastException e) {
-                return signalTypeError(size, Symbol.FIXNUM);
+                return type_error(size, Symbol.FIXNUM);
             }
             if (n < 0 || n >= ARRAY_DIMENSION_MAX) {
                 FastStringBuffer sb = new FastStringBuffer();
@@ -832,7 +832,7 @@ public final class StringFunctions extends Lisp
                     sb.append(").");
                 } else
                     sb.append(" is negative.");
-                return signal(new LispError(sb.toString()));
+                return error(new LispError(sb.toString()));
             }
             // Ignore elementType.
             SimpleString string = new SimpleString(n);
@@ -856,7 +856,7 @@ public final class StringFunctions extends Lisp
                 return first.CHAR(((Fixnum)second).value);
             }
             catch (ClassCastException e) {
-                return signalTypeError(second, Symbol.FIXNUM);
+                return type_error(second, Symbol.FIXNUM);
             }
         }
     };
@@ -872,7 +872,7 @@ public final class StringFunctions extends Lisp
                 return first.SCHAR(((Fixnum)second).value);
             }
             catch (ClassCastException e) {
-                return signalTypeError(second, Symbol.FIXNUM);
+                return type_error(second, Symbol.FIXNUM);
             }
         }
     };
@@ -892,11 +892,11 @@ public final class StringFunctions extends Lisp
             }
             catch (ClassCastException e) {
                 if (!(first instanceof AbstractString))
-                    return signalTypeError(first, Symbol.STRING);
+                    return type_error(first, Symbol.STRING);
                 else if (!(second instanceof Fixnum))
-                    return signalTypeError(second, Symbol.FIXNUM);
+                    return type_error(second, Symbol.FIXNUM);
                 else
-                    return signalTypeError(third, Symbol.CHARACTER);
+                    return type_error(third, Symbol.CHARACTER);
             }
         }
     };
@@ -916,10 +916,10 @@ public final class StringFunctions extends Lisp
             }
             catch (ClassCastException e) {
                 if (!(first instanceof SimpleString))
-                    return signalTypeError(first, Symbol.SIMPLE_STRING);
+                    return type_error(first, Symbol.SIMPLE_STRING);
                 if (!(second instanceof Fixnum))
-                    return signalTypeError(second, Symbol.FIXNUM);
-                return signalTypeError(third, Symbol.CHARACTER);
+                    return type_error(second, Symbol.FIXNUM);
+                return type_error(third, Symbol.CHARACTER);
             }
         }
     };
@@ -937,7 +937,7 @@ public final class StringFunctions extends Lisp
             if (second instanceof AbstractString)
                 string = (AbstractString) second;
             else
-                return signalTypeError(second, Symbol.STRING);
+                return type_error(second, Symbol.STRING);
             int start = Fixnum.getValue(third);
             for (int i = start, limit = string.length(); i < limit; i++) {
                 if (string.charAt(i) == c)
@@ -961,7 +961,7 @@ public final class StringFunctions extends Lisp
                     string = (AbstractString) second;
                 }
                 catch (ClassCastException e) {
-                    return signalTypeError(second, Symbol.STRING);
+                    return type_error(second, Symbol.STRING);
                 }
                 final int limit = string.length();
                 for (int i = 0; i < limit; i++) {
@@ -1000,7 +1000,7 @@ public final class StringFunctions extends Lisp
                 return first;
             }
             catch (ClassCastException e) {
-                return signalTypeError(first, Symbol.SIMPLE_STRING);
+                return type_error(first, Symbol.SIMPLE_STRING);
             }
         }
     };

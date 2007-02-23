@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Closure.java,v 1.110 2006-03-27 01:15:06 piso Exp $
+ * $Id: Closure.java,v 1.111 2007-02-23 21:17:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -73,7 +73,7 @@ public class Closure extends Function
     final LispObject lambdaList = lambdaExpression.cadr();
     setLambdaList(lambdaList);
     if (!(lambdaList == NIL || lambdaList instanceof Cons))
-      signal(new LispError("The lambda list " + lambdaList.writeToString() +
+      error(new LispError("The lambda list " + lambdaList.writeToString() +
                            " is invalid."));
     boolean _andKey = false;
     boolean _allowOtherKeys = false;
@@ -110,7 +110,7 @@ public class Closure extends Function
                     remaining = remaining.cdr();
                     if (remaining == NIL)
                       {
-                        signal(new LispError(
+                        error(new LispError(
                           "&REST/&BODY must be followed by a variable."));
                       }
                     Debug.assertTrue(restVar == null);
@@ -120,7 +120,7 @@ public class Closure extends Function
                       }
                     catch (ClassCastException e)
                       {
-                        signal(new LispError(
+                        error(new LispError(
                           "&REST/&BODY must be followed by a variable."));
                       }
                   }
@@ -374,7 +374,7 @@ public class Closure extends Function
   private static final void invalidParameter(LispObject obj)
     throws ConditionThrowable
   {
-    signal(new LispError(obj.writeToString() +
+    error(new LispError(obj.writeToString() +
                          " may not be used as a variable in a lambda list."));
   }
 
@@ -958,12 +958,12 @@ public class Closure extends Function
       {
         // Fixed arity.
         if (argsLength != arity)
-          signal(new WrongNumberOfArgumentsException(this));
+          error(new WrongNumberOfArgumentsException(this));
         return args;
       }
     // Not fixed arity.
     if (argsLength < minArgs)
-      signal(new WrongNumberOfArgumentsException(this));
+      error(new WrongNumberOfArgumentsException(this));
     if (thread == null)
       thread = LispThread.currentThread();
     final LispObject[] array = new LispObject[variables.length];
@@ -1070,7 +1070,7 @@ public class Closure extends Function
         else
           {
             if ((argsLeft % 2) != 0)
-              signal(new ProgramError("Odd number of keyword arguments."));
+              error(new ProgramError("Odd number of keyword arguments."));
             LispObject allowOtherKeysValue = null;
             for (int k = 0; k < keywordParameters.length; k++)
               {
@@ -1160,7 +1160,7 @@ public class Closure extends Function
                       {
                         if (!allowOtherKeys &&
                             (allowOtherKeysValue == null || allowOtherKeysValue == NIL))
-                          signal(new ProgramError("Unrecognized keyword argument " +
+                          error(new ProgramError("Unrecognized keyword argument " +
                                                   unrecognizedKeyword.writeToString()));
                       }
                   }
@@ -1207,7 +1207,7 @@ public class Closure extends Function
         if (argsUsed < argsLength)
           {
             if (restVar == null)
-              signal(new WrongNumberOfArgumentsException(this));
+              error(new WrongNumberOfArgumentsException(this));
           }
       }
     thread.lastSpecialBinding = lastSpecialBinding;
@@ -1223,12 +1223,12 @@ public class Closure extends Function
       {
         // Fixed arity.
         if (argsLength != arity)
-          signal(new WrongNumberOfArgumentsException(this));
+          error(new WrongNumberOfArgumentsException(this));
         return args;
       }
     // Not fixed arity.
     if (argsLength < minArgs)
-      signal(new WrongNumberOfArgumentsException(this));
+      error(new WrongNumberOfArgumentsException(this));
     final LispObject[] array = new LispObject[variables.length];
     int index = 0;
     // Required parameters.
@@ -1288,7 +1288,7 @@ public class Closure extends Function
         if (argsUsed < argsLength)
           {
             if (restVar == null)
-              signal(new WrongNumberOfArgumentsException(this));
+              error(new WrongNumberOfArgumentsException(this));
           }
       }
     return array;

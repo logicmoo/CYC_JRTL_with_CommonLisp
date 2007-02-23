@@ -2,7 +2,7 @@
  * Readtable.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id: Readtable.java,v 1.47 2007-02-22 16:03:48 piso Exp $
+ * $Id: Readtable.java,v 1.48 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -217,7 +217,7 @@ public class Readtable extends LispObject
             sb.append(" #\\");
             sb.append(name);
           }
-        signal(new ReaderError(sb.toString(), stream));
+        error(new ReaderError(sb.toString(), stream));
       }
   }
 
@@ -268,7 +268,7 @@ public class Readtable extends LispObject
     if (dispatchTable == null)
       {
         LispCharacter c = LispCharacter.getInstance(dispChar);
-        return signal(new LispError(c.writeToString() +
+        return error(new LispError(c.writeToString() +
                                     " is not a dispatch character."));
       }
     LispObject function =
@@ -284,7 +284,7 @@ public class Readtable extends LispObject
     if (dispatchTable == null)
       {
         LispCharacter c = LispCharacter.getInstance(dispChar);
-        signal(new LispError(c.writeToString() +
+        error(new LispError(c.writeToString() +
                              " is not a dispatch character."));
       }
     dispatchTable.functions[LispCharacter.toUpperCase(subChar)] = function;
@@ -393,7 +393,7 @@ public class Readtable extends LispObject
         else if (second instanceof Symbol)
           designator = second;
         else
-          return signal(new LispError(second.writeToString() +
+          return error(new LispError(second.writeToString() +
                                       " does not designate a function."));
         byte syntaxType;
         if (third != NIL)
@@ -417,7 +417,7 @@ public class Readtable extends LispObject
       public LispObject execute(LispObject[] args) throws ConditionThrowable
       {
         if (args.length < 1 || args.length > 3)
-          return signal(new WrongNumberOfArgumentsException(this));
+          return error(new WrongNumberOfArgumentsException(this));
         char dispChar = LispCharacter.getValue(args[0]);
         LispObject non_terminating_p;
         if (args.length > 1)
@@ -443,7 +443,7 @@ public class Readtable extends LispObject
       public LispObject execute(LispObject[] args) throws ConditionThrowable
       {
         if (args.length < 2 || args.length > 3)
-          return signal(new WrongNumberOfArgumentsException(this));
+          return error(new WrongNumberOfArgumentsException(this));
         char dispChar = LispCharacter.getValue(args[0]);
         char subChar = LispCharacter.getValue(args[1]);
         Readtable readtable;
@@ -464,7 +464,7 @@ public class Readtable extends LispObject
       public LispObject execute(LispObject[] args) throws ConditionThrowable
       {
         if (args.length < 3 || args.length > 4)
-          return signal(new WrongNumberOfArgumentsException(this));
+          return error(new WrongNumberOfArgumentsException(this));
         char dispChar = LispCharacter.getValue(args[0]);
         char subChar = LispCharacter.getValue(args[1]);
         LispObject function = coerceToFunction(args[2]);
@@ -487,7 +487,7 @@ public class Readtable extends LispObject
       public LispObject execute(LispObject[] args) throws ConditionThrowable
       {
         if (args.length < 2 || args.length > 4)
-          return signal(new WrongNumberOfArgumentsException(this));
+          return error(new WrongNumberOfArgumentsException(this));
         char toChar = LispCharacter.getValue(args[0]);
         char fromChar = LispCharacter.getValue(args[1]);
         Readtable toReadtable;
@@ -527,7 +527,7 @@ public class Readtable extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.READTABLE);
+            return type_error(arg, Symbol.READTABLE);
           }
       }
     };
@@ -549,7 +549,7 @@ public class Readtable extends LispObject
                 readtable.readtableCase = second;
                 return second;
               }
-            return signalTypeError(second, list5(Symbol.MEMBER,
+            return type_error(second, list5(Symbol.MEMBER,
                                                  Keyword.INVERT,
                                                  Keyword.PRESERVE,
                                                  Keyword.DOWNCASE,
@@ -557,7 +557,7 @@ public class Readtable extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.READTABLE);
+            return type_error(first, Symbol.READTABLE);
           }
       }
     };

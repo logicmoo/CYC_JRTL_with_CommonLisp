@@ -2,7 +2,7 @@
  * ComplexVector.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: ComplexVector.java,v 1.23 2006-01-07 00:56:27 piso Exp $
+ * $Id: ComplexVector.java,v 1.24 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,12 +89,12 @@ public final class ComplexVector extends AbstractVector
                 sb.append(") exceeds the capacity of the vector (");
                 sb.append(capacity());
                 sb.append(").");
-                signal(new LispError(sb.toString()));
+                error(new LispError(sb.toString()));
             } else if (n < 0) {
                 StringBuffer sb = new StringBuffer("The new fill pointer (");
                 sb.append(n);
                 sb.append(") is negative.");
-                signal(new LispError(sb.toString()));
+                error(new LispError(sb.toString()));
             } else
                 fillPointer = n;
         }
@@ -200,7 +200,7 @@ public final class ComplexVector extends AbstractVector
             return v;
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            return signal(new TypeError("Array index out of bounds: " + i + "."));
+            return error(new TypeError("Array index out of bounds: " + i + "."));
         }
     }
 
@@ -223,7 +223,7 @@ public final class ComplexVector extends AbstractVector
             if (n == elements.length)
                 return;
         }
-        signal(new LispError());
+        error(new LispError());
     }
 
     public LispObject reverse() throws ConditionThrowable
@@ -348,7 +348,7 @@ public final class ComplexVector extends AbstractVector
                 for (int i = 0; i < newCapacity; i++)
                     newElements[i] = initialContents.elt(i);
             } else
-                signal(new TypeError(initialContents, Symbol.SEQUENCE));
+                error(new TypeError(initialContents, Symbol.SEQUENCE));
             elements = newElements;
         } else {
             if (elements == null) {

@@ -2,7 +2,7 @@
  * MathFunctions.java
  *
  * Copyright (C) 2004-2006 Peter Graves
- * $Id: MathFunctions.java,v 1.35 2006-12-25 14:51:38 piso Exp $
+ * $Id: MathFunctions.java,v 1.36 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -48,7 +48,7 @@ public final class MathFunctions extends Lisp
             return result.divideBy(Fixnum.TWO.multiplyBy(Complex.getInstance(Fixnum.ZERO,
                                                                              Fixnum.ONE)));
         }
-        return signalTypeError(arg, Symbol.NUMBER);
+        return type_error(arg, Symbol.NUMBER);
     }
 
     // ### cos
@@ -73,7 +73,7 @@ public final class MathFunctions extends Lisp
             result = result.add(exp(n.multiplyBy(Fixnum.MINUS_ONE)));
             return result.divideBy(Fixnum.TWO);
         }
-        return signalTypeError(arg, Symbol.NUMBER);
+        return type_error(arg, Symbol.NUMBER);
     }
 
     // ### tan
@@ -172,7 +172,7 @@ public final class MathFunctions extends Lisp
         {
             if (arg.numberp())
                 return atan(arg);
-            return signalTypeError(arg, Symbol.NUMBER);
+            return type_error(arg, Symbol.NUMBER);
         }
 
         // "If both number1 and number2 are supplied for atan, the result is
@@ -186,9 +186,9 @@ public final class MathFunctions extends Lisp
             throws ConditionThrowable
         {
             if (!y.realp())
-                return signalTypeError(y, Symbol.REAL);
+                return type_error(y, Symbol.REAL);
             if (!x.realp())
-                return signalTypeError(x, Symbol.REAL);
+                return type_error(x, Symbol.REAL);
             double d1, d2;
             d1 = DoubleFloat.coerceToFloat(y).value;
             d2 = DoubleFloat.coerceToFloat(x).value;
@@ -540,7 +540,7 @@ public final class MathFunctions extends Lisp
     {
         if (arg.realp())
             return Complex.getInstance(cos(arg), sin(arg));
-        return signalTypeError(arg, Symbol.REAL);
+        return type_error(arg, Symbol.REAL);
     }
 
     // ### exp
@@ -558,16 +558,16 @@ public final class MathFunctions extends Lisp
             if (arg instanceof DoubleFloat) {
                 double d = Math.pow(Math.E, ((DoubleFloat)arg).value);
                 if (TRAP_OVERFLOW && Double.isInfinite(d))
-                    return signal(new FloatingPointOverflow(NIL));
+                    return error(new FloatingPointOverflow(NIL));
                 if (d == 0 && TRAP_UNDERFLOW)
-                    return signal(new FloatingPointUnderflow(NIL));
+                    return error(new FloatingPointUnderflow(NIL));
                 return new DoubleFloat(d);
             } else {
                 float f = (float) Math.pow(Math.E, SingleFloat.coerceToFloat(arg).value);
                 if (TRAP_OVERFLOW && Float.isInfinite(f))
-                    return signal(new FloatingPointOverflow(NIL));
+                    return error(new FloatingPointOverflow(NIL));
                 if (f == 0 && TRAP_UNDERFLOW)
-                    return signal(new FloatingPointUnderflow(NIL));
+                    return error(new FloatingPointUnderflow(NIL));
                 return new SingleFloat(f);
             }
         }
@@ -575,7 +575,7 @@ public final class MathFunctions extends Lisp
             Complex c = (Complex) arg;
             return exp(c.getRealPart()).multiplyBy(cis(c.getImaginaryPart()));
         }
-        return signalTypeError(arg, Symbol.NUMBER);
+        return type_error(arg, Symbol.NUMBER);
     }
 
     // ### sqrt
@@ -610,7 +610,7 @@ public final class MathFunctions extends Lisp
             }
             return exp(log(obj).divideBy(Fixnum.TWO));
         }
-        return signalTypeError(obj, Symbol.NUMBER);
+        return type_error(obj, Symbol.NUMBER);
     }
 
     private static Method log10Method = null;
@@ -703,7 +703,7 @@ public final class MathFunctions extends Lisp
                 }
             }
         }
-        signalTypeError(obj, Symbol.NUMBER);
+        type_error(obj, Symbol.NUMBER);
         return NIL;
     }
 
@@ -760,14 +760,14 @@ public final class MathFunctions extends Lisp
                 if (TRAP_OVERFLOW) {
                     if (result instanceof SingleFloat)
                         if (Float.isInfinite(((SingleFloat)result).value))
-                            return signal(new FloatingPointOverflow(NIL));
+                            return error(new FloatingPointOverflow(NIL));
                     if (result instanceof DoubleFloat)
                         if (Double.isInfinite(((DoubleFloat)result).value))
-                            return signal(new FloatingPointOverflow(NIL));
+                            return error(new FloatingPointOverflow(NIL));
                 }
                 if (TRAP_UNDERFLOW) {
                     if (result.zerop())
-                        return signal(new FloatingPointUnderflow(NIL));
+                        return error(new FloatingPointUnderflow(NIL));
                 }
                 return result;
             }
@@ -784,7 +784,7 @@ public final class MathFunctions extends Lisp
             else if (base instanceof DoubleFloat)
                 x = ((DoubleFloat)base).value;
             else
-                return signal(new LispError("EXPT: unsupported case: base is of type " +
+                return error(new LispError("EXPT: unsupported case: base is of type " +
                                             base.typeOf().writeToString()));
             if (power instanceof Ratio)
                 y = ((Ratio)power).doubleValue();
@@ -793,7 +793,7 @@ public final class MathFunctions extends Lisp
             else if (power instanceof DoubleFloat)
                 y = ((DoubleFloat)power).value;
             else
-                return signal(new LispError("EXPT: unsupported case: power is of type " +
+                return error(new LispError("EXPT: unsupported case: power is of type " +
                                             power.typeOf().writeToString()));
             double r = Math.pow(x, y);
             if (Double.isNaN(r)) {

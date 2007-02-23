@@ -2,7 +2,7 @@
  * CompiledFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: CompiledFunction.java,v 1.37 2005-11-04 13:09:37 piso Exp $
+ * $Id: CompiledFunction.java,v 1.38 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -156,7 +156,7 @@ public class CompiledFunction extends Closure
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
-        return signal(new LispError("Not implemented."));
+        return error(new LispError("Not implemented."));
     }
 
     // ### load-compiled-function
@@ -172,7 +172,7 @@ public class CompiledFunction extends Closure
                 namestring = arg.getStringValue();
             if (namestring != null)
                 return loadCompiledFunction(namestring);
-            return signal(new LispError("Unable to load " + arg.writeToString()));
+            return error(new LispError("Unable to load " + arg.writeToString()));
         }
     };
 
@@ -184,7 +184,7 @@ public class CompiledFunction extends Closure
         {
             if (arg instanceof Closure)
                 return ((Closure)arg).getVariableList();
-            return signalTypeError(arg, Symbol.COMPILED_FUNCTION);
+            return type_error(arg, Symbol.COMPILED_FUNCTION);
         }
     };
 }

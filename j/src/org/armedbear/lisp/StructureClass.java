@@ -2,7 +2,7 @@
  * StructureClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StructureClass.java,v 1.15 2005-07-16 14:44:03 piso Exp $
+ * $Id: StructureClass.java,v 1.16 2007-02-23 21:17:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -81,7 +81,7 @@ public class StructureClass extends SlotClass
             if (include != NIL) {
                 LispClass includedClass = LispClass.findClass(include);
                 if (includedClass == null)
-                    return signal(new SimpleError("Class " + include +
+                    return error(new SimpleError("Class " + include +
                                                   " is undefined."));
                 c.setCPL(new Cons(c, includedClass.getCPL()));
             } else

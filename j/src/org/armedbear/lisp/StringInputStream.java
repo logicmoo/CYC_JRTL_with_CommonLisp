@@ -2,7 +2,7 @@
  * StringInputStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringInputStream.java,v 1.17 2004-11-03 15:39:01 piso Exp $
+ * $Id: StringInputStream.java,v 1.18 2007-02-23 21:17:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -153,7 +153,7 @@ public final class StringInputStream extends Stream
         {
             if (arg instanceof StringInputStream)
                 return new Fixnum(((StringInputStream)arg).getOffset());
-            return signal(new TypeError(String.valueOf(arg) +
+            return error(new TypeError(String.valueOf(arg) +
                                         " is not a string input stream."));
         }
     };

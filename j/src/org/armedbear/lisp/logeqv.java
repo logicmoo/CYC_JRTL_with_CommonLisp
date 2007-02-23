@@ -2,7 +2,7 @@
  * logeqv.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: logeqv.java,v 1.6 2005-02-13 04:24:23 piso Exp $
+ * $Id: logeqv.java,v 1.7 2007-02-23 21:17:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ public final class logeqv extends Primitive
             return arg;
         if (arg instanceof Bignum)
             return arg;
-        return signal(new TypeError(arg, Symbol.INTEGER));
+        return error(new TypeError(arg, Symbol.INTEGER));
     }
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable
@@ -58,7 +58,7 @@ public final class logeqv extends Primitive
             else if (arg instanceof Bignum)
                 n = ((Bignum)arg).value;
             else
-                return signal(new TypeError(arg, Symbol.INTEGER));
+                return error(new TypeError(arg, Symbol.INTEGER));
             if (result == null)
                 result = n;
             else

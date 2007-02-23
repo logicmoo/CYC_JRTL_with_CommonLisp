@@ -2,7 +2,7 @@
  * LispCharacter.java
  *
  * Copyright (C) 2002-2007 Peter Graves
- * $Id: LispCharacter.java,v 1.76 2007-02-21 21:19:11 piso Exp $
+ * $Id: LispCharacter.java,v 1.77 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -159,7 +159,7 @@ public final class LispCharacter extends LispObject
       }
     catch (ClassCastException e)
       {
-        signalTypeError(obj, Symbol.CHARACTER);
+        type_error(obj, Symbol.CHARACTER);
         // Not reached.
         return 0;
       }
@@ -261,7 +261,7 @@ public final class LispCharacter extends LispObject
             if (name.length() == 1)
               return getInstance(name.charAt(0));
           }
-        return signalTypeError(arg, Symbol.CHARACTER_DESIGNATOR);
+        return type_error(arg, Symbol.CHARACTER_DESIGNATOR);
       }
     };
 
@@ -277,7 +277,7 @@ public final class LispCharacter extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.CHARACTER);
+            return type_error(arg, Symbol.CHARACTER);
           }
       }
     };
@@ -295,7 +295,7 @@ public final class LispCharacter extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.CHARACTER);
+            return type_error(arg, Symbol.CHARACTER);
           }
       }
     };
@@ -313,7 +313,7 @@ public final class LispCharacter extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.CHARACTER);
+            return type_error(arg, Symbol.CHARACTER);
           }
       }
     };
@@ -396,7 +396,7 @@ public final class LispCharacter extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.CHARACTER);
+            return type_error(arg, Symbol.CHARACTER);
           }
         if (c < 128)
           return constants[LOWER_CASE_CHARS[c]];
@@ -417,7 +417,7 @@ public final class LispCharacter extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.CHARACTER);
+            return type_error(arg, Symbol.CHARACTER);
           }
         if (c < 128)
           return constants[UPPER_CASE_CHARS[c]];
@@ -440,7 +440,7 @@ public final class LispCharacter extends LispObject
           {
             if (arg instanceof Bignum)
               return NIL;
-            return signalTypeError(arg, Symbol.INTEGER);
+            return type_error(arg, Symbol.INTEGER);
           }
         if (weight < 10)
           return constants['0' + weight];
@@ -459,7 +459,7 @@ public final class LispCharacter extends LispObject
             radix = -1;
           }
         if (radix < 2 || radix > 36)
-          return signalTypeError(second,
+          return type_error(second,
                                  list3(Symbol.INTEGER, Fixnum.TWO,
                                        Fixnum.constants[36]));
         int weight;
@@ -471,7 +471,7 @@ public final class LispCharacter extends LispObject
           {
             if (first instanceof Bignum)
               return NIL;
-            return signalTypeError(first, Symbol.INTEGER);
+            return type_error(first, Symbol.INTEGER);
           }
         if (weight >= radix)
           return NIL;
@@ -494,7 +494,7 @@ public final class LispCharacter extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.CHARACTER);
+            return type_error(arg, Symbol.CHARACTER);
           }
       }
       public LispObject execute(LispObject first, LispObject second)
@@ -507,7 +507,7 @@ public final class LispCharacter extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.CHARACTER);
+            return type_error(first, Symbol.CHARACTER);
           }
         try
           {
@@ -519,7 +519,7 @@ public final class LispCharacter extends LispObject
               }
           }
         catch (ClassCastException e) {}
-        return signalTypeError(second,
+        return type_error(second,
                                list3(Symbol.INTEGER, Fixnum.TWO,
                                      Fixnum.constants[36]));
       }
@@ -537,7 +537,7 @@ public final class LispCharacter extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.CHARACTER);
+            return type_error(arg, Symbol.CHARACTER);
           }
       }
     };
@@ -557,7 +557,7 @@ public final class LispCharacter extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.CHARACTER);
+            return type_error(arg, Symbol.CHARACTER);
           }
       }
     };
@@ -574,7 +574,7 @@ public final class LispCharacter extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.CHARACTER);
+            return type_error(arg, Symbol.CHARACTER);
           }
       }
     };
@@ -591,7 +591,7 @@ public final class LispCharacter extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.CHARACTER);
+            return type_error(arg, Symbol.CHARACTER);
           }
       }
     };

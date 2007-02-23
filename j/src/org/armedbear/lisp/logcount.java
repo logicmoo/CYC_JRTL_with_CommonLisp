@@ -2,7 +2,7 @@
  * logcount.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: logcount.java,v 1.5 2005-11-04 13:35:56 piso Exp $
+ * $Id: logcount.java,v 1.6 2007-02-23 21:17:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ public final class logcount extends Primitive
         else if (arg instanceof Bignum)
             n = ((Bignum)arg).value;
         else
-            return signalTypeError(arg, Symbol.INTEGER);
+            return type_error(arg, Symbol.INTEGER);
         return new Fixnum(n.bitCount());
     }
 

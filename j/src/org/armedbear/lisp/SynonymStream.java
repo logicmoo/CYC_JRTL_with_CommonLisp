@@ -2,7 +2,7 @@
  * SynonymStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SynonymStream.java,v 1.8 2004-11-03 15:39:02 piso Exp $
+ * $Id: SynonymStream.java,v 1.9 2007-02-23 21:17:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -199,7 +199,7 @@ public final class SynonymStream extends Stream
                 return ((SynonymStream)arg).symbol;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.SYNONYM_STREAM));
+                return error(new TypeError(arg, Symbol.SYNONYM_STREAM));
             }
         }
     };

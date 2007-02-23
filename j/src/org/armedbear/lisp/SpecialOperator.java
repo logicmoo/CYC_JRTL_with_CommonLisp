@@ -2,7 +2,7 @@
  * SpecialOperator.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: SpecialOperator.java,v 1.21 2005-10-23 16:05:50 piso Exp $
+ * $Id: SpecialOperator.java,v 1.22 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,32 +58,32 @@ public class SpecialOperator extends Operator
 
     public LispObject execute() throws ConditionThrowable
     {
-        return signal(new UndefinedFunction(getLambdaName()));
+        return error(new UndefinedFunction(getLambdaName()));
     }
 
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
-        return signal(new UndefinedFunction(getLambdaName()));
+        return error(new UndefinedFunction(getLambdaName()));
     }
 
     public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
-        return signal(new UndefinedFunction(getLambdaName()));
+        return error(new UndefinedFunction(getLambdaName()));
     }
 
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third)
         throws ConditionThrowable
     {
-        return signal(new UndefinedFunction(getLambdaName()));
+        return error(new UndefinedFunction(getLambdaName()));
     }
 
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third, LispObject fourth)
         throws ConditionThrowable
     {
-        return signal(new UndefinedFunction(getLambdaName()));
+        return error(new UndefinedFunction(getLambdaName()));
     }
 
     public LispObject execute(LispObject first, LispObject second,
@@ -91,7 +91,7 @@ public class SpecialOperator extends Operator
                               LispObject fifth)
         throws ConditionThrowable
     {
-        return signal(new UndefinedFunction(getLambdaName()));
+        return error(new UndefinedFunction(getLambdaName()));
     }
 
     public LispObject execute(LispObject first, LispObject second,
@@ -99,7 +99,7 @@ public class SpecialOperator extends Operator
                               LispObject fifth, LispObject sixth)
         throws ConditionThrowable
     {
-        return signal(new UndefinedFunction(getLambdaName()));
+        return error(new UndefinedFunction(getLambdaName()));
     }
 
     public LispObject execute(LispObject first, LispObject second,
@@ -108,7 +108,7 @@ public class SpecialOperator extends Operator
                               LispObject seventh)
         throws ConditionThrowable
     {
-        return signal(new UndefinedFunction(getLambdaName()));
+        return error(new UndefinedFunction(getLambdaName()));
     }
 
     public LispObject execute(LispObject first, LispObject second,
@@ -117,12 +117,12 @@ public class SpecialOperator extends Operator
                               LispObject seventh, LispObject eighth)
         throws ConditionThrowable
     {
-        return signal(new UndefinedFunction(getLambdaName()));
+        return error(new UndefinedFunction(getLambdaName()));
     }
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
-        return signal(new UndefinedFunction(getLambdaName()));
+        return error(new UndefinedFunction(getLambdaName()));
     }
 
     public String writeToString() throws ConditionThrowable

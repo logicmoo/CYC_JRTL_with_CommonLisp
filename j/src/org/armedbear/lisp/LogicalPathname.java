@@ -2,7 +2,7 @@
  * LogicalPathname.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: LogicalPathname.java,v 1.22 2005-10-23 18:11:10 piso Exp $
+ * $Id: LogicalPathname.java,v 1.23 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@ public final class LogicalPathname extends Pathname
         for (int i = 0; i < limit; i++) {
             char c = rest.charAt(i);
             if (LOGICAL_PATHNAME_CHARS.indexOf(c) < 0) {
-                signal(new ParseError("The character #\\" + c + " is not valid in a logical pathname."));
+                error(new ParseError("The character #\\" + c + " is not valid in a logical pathname."));
                 return;
             }
         }
@@ -114,7 +114,7 @@ public final class LogicalPathname extends Pathname
         for (int i = 0; i < limit; i++) {
             char c = s.charAt(i);
             if (LOGICAL_PATHNAME_COMPONENT_CHARS.indexOf(c) < 0) {
-                signal(new ParseError("Invalid character #\\" + c +
+                error(new ParseError("Invalid character #\\" + c +
                                       " in logical pathname component \"" + s +
                                       '"'));
                 // Not reached.
@@ -194,7 +194,7 @@ public final class LogicalPathname extends Pathname
             else if (part == Keyword.RELATIVE)
                 sb.append(';');
             else
-                signal(new FileError("Unsupported directory component " + part.writeToString() + ".",
+                error(new FileError("Unsupported directory component " + part.writeToString() + ".",
                                      this));
             temp = temp.cdr();
             while (temp != NIL) {
@@ -208,7 +208,7 @@ public final class LogicalPathname extends Pathname
                 else if (part == Keyword.UP)
                     sb.append("..");
                 else
-                    signal(new FileError("Unsupported directory component " + part.writeToString() + ".",
+                    error(new FileError("Unsupported directory component " + part.writeToString() + ".",
                                          this));
                 sb.append(';');
                 temp = temp.cdr();
@@ -271,13 +271,13 @@ public final class LogicalPathname extends Pathname
                 if (s.length() == 0) {
                     // "The null string, "", is not a valid value for any
                     // component of a logical pathname." 19.3.2.2
-                    return signal(new LispError("Invalid logical host name: \"" +
+                    return error(new LispError("Invalid logical host name: \"" +
                                                 s.getStringValue() + '"'));
                 }
                 return canonicalizeStringComponent(s);
             }
             catch (ClassCastException e) {
-                return signalTypeError(arg, Symbol.STRING);
+                return type_error(arg, Symbol.STRING);
             }
         }
     };
@@ -296,7 +296,7 @@ public final class LogicalPathname extends Pathname
                 if (h.length() == 0) {
                     // "The null string, "", is not a valid value for any
                     // component of a logical pathname." 19.3.2.2
-                    return signal(new LispError("Invalid logical host name: \"" +
+                    return error(new LispError("Invalid logical host name: \"" +
                                                 h + '"'));
                 }
                 if (Pathname.LOGICAL_PATHNAME_TRANSLATIONS.get(new SimpleString(h)) != null) {
@@ -304,7 +304,7 @@ public final class LogicalPathname extends Pathname
                     return new LogicalPathname(h, s.substring(s.indexOf(':') + 1));
                 }
             }
-            return signal(new TypeError("Logical namestring does not specify a host: \"" + s + '"'));
+            return error(new TypeError("Logical namestring does not specify a host: \"" + s + '"'));
         }
     };
 }

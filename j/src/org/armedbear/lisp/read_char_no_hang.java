@@ -2,7 +2,7 @@
  * read_char_no_hang.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: read_char_no_hang.java,v 1.4 2005-10-16 12:38:45 piso Exp $
+ * $Id: read_char_no_hang.java,v 1.5 2007-02-23 21:17:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,7 +35,7 @@ public final class read_char_no_hang extends Primitive
     {
         int length = args.length;
         if (length > 4)
-            signal(new WrongNumberOfArgumentsException(this));
+            error(new WrongNumberOfArgumentsException(this));
         Stream stream =
             length > 0 ? inSynonymOf(args[0]) : getStandardInput();
         boolean eofError = length > 1 ? (args[1] != NIL) : true;

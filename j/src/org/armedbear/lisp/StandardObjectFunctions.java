@@ -2,7 +2,7 @@
  * StandardObjectFunctions.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardObjectFunctions.java,v 1.13 2005-12-27 17:46:29 piso Exp $
+ * $Id: StandardObjectFunctions.java,v 1.14 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -38,7 +38,7 @@ public class StandardObjectFunctions extends Lisp
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.STANDARD_CLASS);
+            return type_error(arg, Symbol.STANDARD_CLASS);
           }
         return c.allocateInstance();
       }

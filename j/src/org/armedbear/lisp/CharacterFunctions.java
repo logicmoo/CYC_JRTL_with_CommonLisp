@@ -2,7 +2,7 @@
  * CharacterFunctions.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: CharacterFunctions.java,v 1.16 2006-05-17 11:55:03 piso Exp $
+ * $Id: CharacterFunctions.java,v 1.17 2007-02-23 21:17:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,13 +29,13 @@ public final class CharacterFunctions extends Lisp
     {
         public LispObject execute() throws ConditionThrowable
         {
-            return signal(new WrongNumberOfArgumentsException(this));
+            return error(new WrongNumberOfArgumentsException(this));
         }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof LispCharacter)
                 return T;
-            return signalTypeError(arg, Symbol.CHARACTER);
+            return type_error(arg, Symbol.CHARACTER);
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -49,7 +49,7 @@ public final class CharacterFunctions extends Lisp
                     datum = second;
                 else
                     datum = first;
-                return signalTypeError(datum, Symbol.CHARACTER);
+                return type_error(datum, Symbol.CHARACTER);
             }
         }
         public LispObject execute(LispObject[] array) throws ConditionThrowable
@@ -70,13 +70,13 @@ public final class CharacterFunctions extends Lisp
     {
         public LispObject execute() throws ConditionThrowable
         {
-            return signal(new WrongNumberOfArgumentsException(this));
+            return error(new WrongNumberOfArgumentsException(this));
         }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof LispCharacter)
                 return T;
-            return signalTypeError(arg, Symbol.CHARACTER);
+            return type_error(arg, Symbol.CHARACTER);
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -86,13 +86,13 @@ public final class CharacterFunctions extends Lisp
                 c1 = ((LispCharacter)first).value;
             }
             catch (ClassCastException e) {
-                return signalTypeError(first, Symbol.CHARACTER);
+                return type_error(first, Symbol.CHARACTER);
             }
             try {
                 c2 = ((LispCharacter)second).value;
             }
             catch (ClassCastException e) {
-                return signalTypeError(second, Symbol.CHARACTER);
+                return type_error(second, Symbol.CHARACTER);
             }
             if (c1 == c2)
                 return T;
@@ -126,13 +126,13 @@ public final class CharacterFunctions extends Lisp
     {
         public LispObject execute() throws ConditionThrowable
         {
-            return signal(new WrongNumberOfArgumentsException(this));
+            return error(new WrongNumberOfArgumentsException(this));
         }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof LispCharacter)
                 return T;
-            return signalTypeError(arg, Symbol.CHARACTER);
+            return type_error(arg, Symbol.CHARACTER);
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -161,13 +161,13 @@ public final class CharacterFunctions extends Lisp
     {
         public LispObject execute() throws ConditionThrowable
         {
-            return signal(new WrongNumberOfArgumentsException(this));
+            return error(new WrongNumberOfArgumentsException(this));
         }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof LispCharacter)
                 return T;
-            return signalTypeError(arg, Symbol.CHARACTER);
+            return type_error(arg, Symbol.CHARACTER);
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -196,13 +196,13 @@ public final class CharacterFunctions extends Lisp
     {
         public LispObject execute() throws ConditionThrowable
         {
-            return signal(new WrongNumberOfArgumentsException(this));
+            return error(new WrongNumberOfArgumentsException(this));
         }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof LispCharacter)
                 return T;
-            return signalTypeError(arg, Symbol.CHARACTER);
+            return type_error(arg, Symbol.CHARACTER);
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -216,7 +216,7 @@ public final class CharacterFunctions extends Lisp
                     datum = second;
                 else
                     datum = first;
-                return signalTypeError(datum, Symbol.CHARACTER);
+                return type_error(datum, Symbol.CHARACTER);
             }
         }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
@@ -228,7 +228,7 @@ public final class CharacterFunctions extends Lisp
                     chars[i] = ((LispCharacter)args[i]).value;
                 }
                 catch (ClassCastException e) {
-                    return signalTypeError(args[i], Symbol.CHARACTER);
+                    return type_error(args[i], Symbol.CHARACTER);
                 }
             }
             for (int i = 1; i < length; i++) {
@@ -245,13 +245,13 @@ public final class CharacterFunctions extends Lisp
     {
         public LispObject execute() throws ConditionThrowable
         {
-            return signal(new WrongNumberOfArgumentsException(this));
+            return error(new WrongNumberOfArgumentsException(this));
         }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof LispCharacter)
                 return T;
-            return signalTypeError(arg, Symbol.CHARACTER);
+            return type_error(arg, Symbol.CHARACTER);
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -265,7 +265,7 @@ public final class CharacterFunctions extends Lisp
                     datum = second;
                 else
                     datum = first;
-                return signalTypeError(datum, Symbol.CHARACTER);
+                return type_error(datum, Symbol.CHARACTER);
             }
         }
         public LispObject execute(LispObject first, LispObject second,
@@ -287,7 +287,7 @@ public final class CharacterFunctions extends Lisp
                     datum = second;
                 else
                     datum = third;
-                return signalTypeError(datum, Symbol.CHARACTER);
+                return type_error(datum, Symbol.CHARACTER);
             }
         }
         public LispObject execute(LispObject[] args) throws ConditionThrowable
@@ -299,7 +299,7 @@ public final class CharacterFunctions extends Lisp
                     chars[i] = ((LispCharacter)args[i]).value;
                 }
                 catch (ClassCastException e) {
-                    return signalTypeError(args[i], Symbol.CHARACTER);
+                    return type_error(args[i], Symbol.CHARACTER);
                 }
             }
             for (int i = 1; i < length; i++) {
@@ -316,13 +316,13 @@ public final class CharacterFunctions extends Lisp
     {
         public LispObject execute() throws ConditionThrowable
         {
-            return signal(new WrongNumberOfArgumentsException(this));
+            return error(new WrongNumberOfArgumentsException(this));
         }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof LispCharacter)
                 return T;
-            return signalTypeError(arg, Symbol.CHARACTER);
+            return type_error(arg, Symbol.CHARACTER);
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -351,13 +351,13 @@ public final class CharacterFunctions extends Lisp
     {
         public LispObject execute() throws ConditionThrowable
         {
-            return signal(new WrongNumberOfArgumentsException(this));
+            return error(new WrongNumberOfArgumentsException(this));
         }
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof LispCharacter)
                 return T;
-            return signalTypeError(arg, Symbol.CHARACTER);
+            return type_error(arg, Symbol.CHARACTER);
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable

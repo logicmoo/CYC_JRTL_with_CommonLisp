@@ -2,7 +2,7 @@
  * Complex.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: Complex.java,v 1.38 2006-03-20 01:27:40 piso Exp $
+ * $Id: Complex.java,v 1.39 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,9 +39,9 @@ public final class Complex extends LispObject
     throws ConditionThrowable
   {
     if (!realpart.realp())
-      return signalTypeError(realpart, Symbol.REAL);
+      return type_error(realpart, Symbol.REAL);
     if (!imagpart.realp())
-      return signalTypeError(imagpart, Symbol.REAL);
+      return type_error(imagpart, Symbol.REAL);
     if (realpart instanceof DoubleFloat)
       imagpart = DoubleFloat.coerceToFloat(imagpart);
     else if (imagpart instanceof DoubleFloat)
@@ -263,7 +263,7 @@ public final class Complex extends LispObject
           }
         return false;
       }
-    signalTypeError(obj, Symbol.NUMBER);
+    type_error(obj, Symbol.NUMBER);
     // Not reached.
     return false;
   }

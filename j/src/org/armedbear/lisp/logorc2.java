@@ -2,7 +2,7 @@
  * logorc2.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: logorc2.java,v 1.7 2004-11-03 15:27:24 piso Exp $
+ * $Id: logorc2.java,v 1.8 2007-02-23 21:17:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@ public final class logorc2 extends Primitive
                 BigInteger n2 = ((Bignum)second).value;
                 return number(n1.or(n2.not()));
             }
-            return signal(new TypeError(second, Symbol.INTEGER));
+            return error(new TypeError(second, Symbol.INTEGER));
         }
         if (first instanceof Bignum) {
             BigInteger n1 = ((Bignum)first).value;
@@ -57,9 +57,9 @@ public final class logorc2 extends Primitive
                 BigInteger n2 = ((Bignum)second).value;
                 return number(n1.or(n2.not()));
             }
-            return signal(new TypeError(second, Symbol.INTEGER));
+            return error(new TypeError(second, Symbol.INTEGER));
         }
-        return signal(new TypeError(first, Symbol.INTEGER));
+        return error(new TypeError(first, Symbol.INTEGER));
     }
 
     private static final Primitive LOGORC2 = new logorc2();

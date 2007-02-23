@@ -2,7 +2,7 @@
  * JProxy.java
  *
  * Copyright (C) 2002-2005 Peter Graves, Andras Simon
- * $Id: JProxy.java,v 1.8 2006-01-05 22:06:38 asimon Exp $
+ * $Id: JProxy.java,v 1.9 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,7 +41,7 @@ public final class JProxy extends Lisp
       {
         int length = args.length;
         if (length < 3 || length % 2 != 1)
-          return signal(new WrongNumberOfArgumentsException(this));
+          return error(new WrongNumberOfArgumentsException(this));
         Map lispDefinedMethods = new HashMap();
         for (int i = 1; i < length; i += 2)
           lispDefinedMethods.put(args[i].getStringValue(),

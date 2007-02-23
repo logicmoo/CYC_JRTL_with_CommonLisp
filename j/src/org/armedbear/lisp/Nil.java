@@ -2,7 +2,7 @@
  * Nil.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Nil.java,v 1.44 2006-03-26 18:37:23 piso Exp $
+ * $Id: Nil.java,v 1.45 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -111,7 +111,7 @@ public final class Nil extends Symbol
     public LispObject nthcdr(int n) throws ConditionThrowable
     {
         if (n < 0)
-            return signalTypeError(new Fixnum(n),
+            return type_error(new Fixnum(n),
                                    list2(Symbol.INTEGER, Fixnum.ZERO));
         return this;
     }
@@ -129,7 +129,7 @@ public final class Nil extends Symbol
     public LispObject NTH(int index) throws ConditionThrowable
     {
         if (index < 0)
-            signal(new TypeError(String.valueOf(index) +
+            error(new TypeError(String.valueOf(index) +
                                  " is not of type UNSIGNED-BYTE."));
         return NIL;
     }
@@ -143,19 +143,19 @@ public final class Nil extends Symbol
         catch (ClassCastException e) {
             if (arg instanceof Bignum) {
                 if (arg.minusp())
-                    return signal(new TypeError(arg, Symbol.UNSIGNED_BYTE));
+                    return error(new TypeError(arg, Symbol.UNSIGNED_BYTE));
                 return NIL;
             }
-            return signal(new TypeError(arg, Symbol.UNSIGNED_BYTE));
+            return error(new TypeError(arg, Symbol.UNSIGNED_BYTE));
         }
         if (index < 0)
-            signal(new TypeError(arg, Symbol.UNSIGNED_BYTE));
+            error(new TypeError(arg, Symbol.UNSIGNED_BYTE));
         return NIL;
     }
 
     public LispObject elt(int index) throws ConditionThrowable
     {
-        return signal(new TypeError("ELT: invalid index " + index + " for " + this + "."));
+        return error(new TypeError("ELT: invalid index " + index + " for " + this + "."));
     }
 
     public LispObject reverse()

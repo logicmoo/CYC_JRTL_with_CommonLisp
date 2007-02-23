@@ -2,7 +2,7 @@
  * StreamError.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: StreamError.java,v 1.22 2005-11-01 01:39:45 piso Exp $
+ * $Id: StreamError.java,v 1.23 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -142,7 +142,7 @@ public class StreamError extends LispError
                 return ((StreamError)arg).getStream();
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.STREAM_ERROR));
+                return error(new TypeError(arg, Symbol.STREAM_ERROR));
             }
         }
     };

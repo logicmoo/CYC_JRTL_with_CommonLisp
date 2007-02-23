@@ -2,7 +2,7 @@
  * last.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: last.java,v 1.9 2006-01-18 19:25:24 piso Exp $
+ * $Id: last.java,v 1.10 2007-02-23 21:17:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,7 +44,7 @@ public final class last extends Primitive
           }
       }
     else
-      return signalTypeError(arg, Symbol.LIST);
+      return type_error(arg, Symbol.LIST);
   }
 
   public LispObject execute(LispObject first, LispObject second)
@@ -82,7 +82,7 @@ public final class last extends Primitive
           }
         return result;
       }
-    return signalTypeError(second, Symbol.UNSIGNED_BYTE);
+    return type_error(second, Symbol.UNSIGNED_BYTE);
   }
 
   private static final Primitive LAST = new last();

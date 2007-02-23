@@ -2,7 +2,7 @@
  * Function.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Function.java,v 1.58 2005-10-25 14:40:30 piso Exp $
+ * $Id: Function.java,v 1.59 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -167,32 +167,32 @@ public abstract class Function extends Operator
 
     public LispObject execute() throws ConditionThrowable
     {
-        return signal(new WrongNumberOfArgumentsException(this));
+        return error(new WrongNumberOfArgumentsException(this));
     }
 
     public LispObject execute(LispObject arg) throws ConditionThrowable
     {
-        return signal(new WrongNumberOfArgumentsException(this));
+        return error(new WrongNumberOfArgumentsException(this));
     }
 
     public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
-        return signal(new WrongNumberOfArgumentsException(this));
+        return error(new WrongNumberOfArgumentsException(this));
     }
 
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third)
         throws ConditionThrowable
     {
-        return signal(new WrongNumberOfArgumentsException(this));
+        return error(new WrongNumberOfArgumentsException(this));
     }
 
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third, LispObject fourth)
         throws ConditionThrowable
     {
-        return signal(new WrongNumberOfArgumentsException(this));
+        return error(new WrongNumberOfArgumentsException(this));
     }
 
     public LispObject execute(LispObject first, LispObject second,
@@ -200,7 +200,7 @@ public abstract class Function extends Operator
                               LispObject fifth)
         throws ConditionThrowable
     {
-        return signal(new WrongNumberOfArgumentsException(this));
+        return error(new WrongNumberOfArgumentsException(this));
     }
 
     public LispObject execute(LispObject first, LispObject second,
@@ -208,7 +208,7 @@ public abstract class Function extends Operator
                               LispObject fifth, LispObject sixth)
         throws ConditionThrowable
     {
-        return signal(new WrongNumberOfArgumentsException(this));
+        return error(new WrongNumberOfArgumentsException(this));
     }
 
     public LispObject execute(LispObject first, LispObject second,
@@ -217,7 +217,7 @@ public abstract class Function extends Operator
                               LispObject seventh)
         throws ConditionThrowable
     {
-        return signal(new WrongNumberOfArgumentsException(this));
+        return error(new WrongNumberOfArgumentsException(this));
     }
 
     public LispObject execute(LispObject first, LispObject second,
@@ -226,12 +226,12 @@ public abstract class Function extends Operator
                               LispObject seventh, LispObject eighth)
         throws ConditionThrowable
     {
-        return signal(new WrongNumberOfArgumentsException(this));
+        return error(new WrongNumberOfArgumentsException(this));
     }
 
     public LispObject execute(LispObject[] args) throws ConditionThrowable
     {
-        return signal(new WrongNumberOfArgumentsException(this));
+        return error(new WrongNumberOfArgumentsException(this));
     }
 
     public String writeToString() throws ConditionThrowable
@@ -275,7 +275,7 @@ public abstract class Function extends Operator
     // Used by the JVM compiler.
     public final void argCountError() throws ConditionThrowable
     {
-        signal(new WrongNumberOfArgumentsException(this));
+        error(new WrongNumberOfArgumentsException(this));
     }
 
     // Profiling.

@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id: LispThread.java,v 1.91 2007-01-22 16:35:32 piso Exp $
+ * $Id: LispThread.java,v 1.92 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -385,7 +385,7 @@ public final class LispThread extends LispObject
             name.setSymbolValue(newValue);
             return newValue;
         } else
-            return signal(new UnboundVariable(name));
+            return error(new UnboundVariable(name));
     }
 
     // Returns symbol value or NIL if unbound.
@@ -431,7 +431,7 @@ public final class LispThread extends LispObject
                 throw new Throw(tag, result, this);
             rest = rest.cdr();
         }
-        signal(new ControlError("Attempt to throw to the nonexistent tag " +
+        error(new ControlError("Attempt to throw to the nonexistent tag " +
                                 tag.writeToString() + "."));
     }
 
@@ -997,17 +997,17 @@ public final class LispThread extends LispObject
         {
             final int length = args.length;
             if (length == 0)
-                signal(new WrongNumberOfArgumentsException(this));
+                error(new WrongNumberOfArgumentsException(this));
             LispObject name = NIL;
             if (length > 1) {
                 if ((length - 1) % 2 != 0)
-                    signal(new ProgramError("Odd number of keyword arguments."));
+                    error(new ProgramError("Odd number of keyword arguments."));
                 if (length > 3)
-                    signal(new WrongNumberOfArgumentsException(this));
+                    error(new WrongNumberOfArgumentsException(this));
                 if (args[1] == Keyword.NAME)
                     name = args[2].STRING();
                 else
-                    signal(new ProgramError("Unrecognized keyword argument " +
+                    error(new ProgramError("Unrecognized keyword argument " +
                                             args[1].writeToString() + "."));
             }
             return new LispThread(checkFunction(args[0]), name);
@@ -1035,7 +1035,7 @@ public final class LispThread extends LispObject
                 lispThread = (LispThread) arg;
             }
             catch (ClassCastException e) {
-                return signalTypeError(arg, Symbol.THREAD);
+                return type_error(arg, Symbol.THREAD);
             }
             return lispThread.javaThread.isAlive() ? T : NIL;
         }
@@ -1051,7 +1051,7 @@ public final class LispThread extends LispObject
                 return ((LispThread)arg).name;
             }
             catch (ClassCastException e) {
-                return signalTypeError(arg, Symbol.THREAD);
+                return type_error(arg, Symbol.THREAD);
             }
         }
     };
@@ -1064,7 +1064,7 @@ public final class LispThread extends LispObject
             double d =
                 ((DoubleFloat)arg.multiplyBy(new DoubleFloat(1000))).getValue();
             if (d < 0)
-                return signalTypeError(arg, list2(Symbol.REAL, Fixnum.ZERO));
+                return type_error(arg, list2(Symbol.REAL, Fixnum.ZERO));
             long millis = d < Long.MAX_VALUE ? (long) d : Long.MAX_VALUE;
             try {
                 Thread.sleep(millis);
@@ -1106,7 +1106,7 @@ public final class LispThread extends LispObject
                 thread = (LispThread) arg;
             }
             catch (ClassCastException e) {
-                return signalTypeError(arg, Symbol.THREAD);
+                return type_error(arg, Symbol.THREAD);
             }
             thread.setDestroyed(true);
             return T;
@@ -1124,13 +1124,13 @@ public final class LispThread extends LispObject
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2)
-                return signal(new WrongNumberOfArgumentsException(this));
+                return error(new WrongNumberOfArgumentsException(this));
             final LispThread thread;
             try {
                 thread = (LispThread) args[0];
             }
             catch (ClassCastException e) {
-                return signalTypeError(args[0], Symbol.THREAD);
+                return type_error(args[0], Symbol.THREAD);
             }
             LispObject fun = args[1];
             LispObject funArgs = NIL;
@@ -1159,7 +1159,7 @@ public final class LispThread extends LispObject
             throws ConditionThrowable
         {
             if (args.length > 1)
-                return signal(new WrongNumberOfArgumentsException(this));
+                return error(new WrongNumberOfArgumentsException(this));
             int limit = args.length > 0 ? Fixnum.getValue(args[0]) : 0;
             return currentThread().backtraceAsList(limit);
         }

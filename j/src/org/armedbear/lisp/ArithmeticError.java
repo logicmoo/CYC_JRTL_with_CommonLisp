@@ -2,7 +2,7 @@
  * ArithmeticError.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: ArithmeticError.java,v 1.15 2005-11-01 01:40:14 piso Exp $
+ * $Id: ArithmeticError.java,v 1.16 2007-02-23 21:17:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -114,7 +114,7 @@ public class ArithmeticError extends LispError
                 return ((ArithmeticError)arg).getOperation();
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.ARITHMETIC_ERROR));
+                return error(new TypeError(arg, Symbol.ARITHMETIC_ERROR));
             }
         }
     };
@@ -128,7 +128,7 @@ public class ArithmeticError extends LispError
                 return ((ArithmeticError)arg).getOperands();
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.ARITHMETIC_ERROR));
+                return error(new TypeError(arg, Symbol.ARITHMETIC_ERROR));
             }
         }
     };

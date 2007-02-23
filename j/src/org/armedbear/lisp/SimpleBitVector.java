@@ -2,7 +2,7 @@
  * SimpleBitVector.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: SimpleBitVector.java,v 1.14 2005-03-25 03:19:22 piso Exp $
+ * $Id: SimpleBitVector.java,v 1.15 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -128,7 +128,7 @@ public final class SimpleBitVector extends AbstractBitVector
         catch (ClassCastException e) {
             // Fall through...
         }
-        signal(new TypeError(newValue, Symbol.BIT));
+        error(new TypeError(newValue, Symbol.BIT));
     }
 
     protected int getBit(int index)
@@ -165,7 +165,7 @@ public final class SimpleBitVector extends AbstractBitVector
         }
         if (n == capacity)
             return;
-        signal(new LispError());
+        error(new LispError());
     }
 
     public AbstractVector adjustVector(int newCapacity,
@@ -185,7 +185,7 @@ public final class SimpleBitVector extends AbstractBitVector
                 for (int i = 0; i < newCapacity; i++)
                     v.aset(i, initialContents.elt(i));
             } else
-                signal(new TypeError(initialContents, Symbol.SEQUENCE));
+                error(new TypeError(initialContents, Symbol.SEQUENCE));
             return v;
         }
         if (capacity != newCapacity) {

@@ -2,7 +2,7 @@
  * StandardObject.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: StandardObject.java,v 1.61 2006-01-07 18:25:16 piso Exp $
+ * $Id: StandardObject.java,v 1.62 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -269,7 +269,7 @@ public class StandardObject extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.STANDARD_OBJECT);
+            return type_error(first, Symbol.STANDARD_OBJECT);
           }
         try
           {
@@ -277,7 +277,7 @@ public class StandardObject extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(second, Symbol.STANDARD_OBJECT);
+            return type_error(second, Symbol.STANDARD_OBJECT);
           }
         LispObject[] temp = obj1.slots;
         obj1.slots = obj2.slots;
@@ -299,7 +299,7 @@ public class StandardObject extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.STANDARD_OBJECT);
+            return type_error(arg, Symbol.STANDARD_OBJECT);
           }
         Layout layout = instance.layout;
         if (layout.isInvalid())
@@ -326,9 +326,9 @@ public class StandardObject extends LispObject
         catch (ClassCastException e)
           {
             if (!(first instanceof StandardObject))
-              return signalTypeError(first, Symbol.STANDARD_OBJECT);
+              return type_error(first, Symbol.STANDARD_OBJECT);
             if (!(second instanceof Layout))
-              return signalTypeError(second, Symbol.LAYOUT);
+              return type_error(second, Symbol.LAYOUT);
             // Not reached.
             return NIL;
           }
@@ -347,7 +347,7 @@ public class StandardObject extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.STANDARD_OBJECT);
+            return type_error(arg, Symbol.STANDARD_OBJECT);
           }
       }
     };
@@ -367,7 +367,7 @@ public class StandardObject extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.STANDARD_OBJECT);
+            return type_error(first, Symbol.STANDARD_OBJECT);
           }
         final int index;
         try
@@ -376,7 +376,7 @@ public class StandardObject extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(second,
+            return type_error(second,
                                    list3(Symbol.INTEGER, Fixnum.ZERO,
                                          new Fixnum(instance.slots.length)));
           }
@@ -387,7 +387,7 @@ public class StandardObject extends LispObject
           }
         catch (ArrayIndexOutOfBoundsException e)
           {
-            return signalTypeError(second,
+            return type_error(second,
                                    list3(Symbol.INTEGER, Fixnum.ZERO,
                                          new Fixnum(instance.slots.length)));
           }
@@ -417,7 +417,7 @@ public class StandardObject extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.STANDARD_OBJECT);
+            return type_error(first, Symbol.STANDARD_OBJECT);
           }
       }
     };
@@ -436,7 +436,7 @@ public class StandardObject extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.STANDARD_OBJECT);
+            return type_error(first, Symbol.STANDARD_OBJECT);
           }
         Layout layout = instance.layout;
         if (layout.isInvalid())

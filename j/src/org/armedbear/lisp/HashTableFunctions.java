@@ -2,7 +2,7 @@
  * HashTableFunctions.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: HashTableFunctions.java,v 1.8 2006-03-26 18:42:24 piso Exp $
+ * $Id: HashTableFunctions.java,v 1.9 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -47,7 +47,7 @@ public final class HashTableFunctions extends Lisp
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(size, Symbol.FIXNUM);
+            return type_error(size, Symbol.FIXNUM);
           }
         if (test == FUNCTION_EQL || test == NIL)
           return new EqlHashTable(n, rehashSize, rehashThreshold);
@@ -57,7 +57,7 @@ public final class HashTableFunctions extends Lisp
           return new EqualHashTable(n, rehashSize, rehashThreshold);
         if (test == FUNCTION_EQUALP)
           return new EqualpHashTable(n, rehashSize, rehashThreshold);
-        return signal(new LispError("Unsupported test for MAKE-HASH-TABLE: " +
+        return error(new LispError("Unsupported test for MAKE-HASH-TABLE: " +
                                     test.writeToString()));
       }
     };
@@ -75,7 +75,7 @@ public final class HashTableFunctions extends Lisp
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(ht, Symbol.HASH_TABLE);
+            return type_error(ht, Symbol.HASH_TABLE);
           }
       }
       public LispObject execute(LispObject key, LispObject ht,
@@ -88,7 +88,7 @@ public final class HashTableFunctions extends Lisp
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(ht, Symbol.HASH_TABLE);
+            return type_error(ht, Symbol.HASH_TABLE);
           }
       }
     };
@@ -107,7 +107,7 @@ public final class HashTableFunctions extends Lisp
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(second, Symbol.HASH_TABLE);
+            return type_error(second, Symbol.HASH_TABLE);
           }
         synchronized (ht)
           {
@@ -132,7 +132,7 @@ public final class HashTableFunctions extends Lisp
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(ht, Symbol.HASH_TABLE);
+            return type_error(ht, Symbol.HASH_TABLE);
           }
       }
       public LispObject execute(LispObject key, LispObject ht,
@@ -145,7 +145,7 @@ public final class HashTableFunctions extends Lisp
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(ht, Symbol.HASH_TABLE);
+            return type_error(ht, Symbol.HASH_TABLE);
           }
       }
     };
@@ -163,7 +163,7 @@ public final class HashTableFunctions extends Lisp
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(ht, Symbol.HASH_TABLE);
+            return type_error(ht, Symbol.HASH_TABLE);
           }
       }
     };
@@ -181,7 +181,7 @@ public final class HashTableFunctions extends Lisp
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(ht, Symbol.HASH_TABLE);
+            return type_error(ht, Symbol.HASH_TABLE);
           }
       }
     };
@@ -198,7 +198,7 @@ public final class HashTableFunctions extends Lisp
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.HASH_TABLE);
+            return type_error(arg, Symbol.HASH_TABLE);
           }
       }
     };
@@ -246,7 +246,7 @@ public final class HashTableFunctions extends Lisp
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.HASH_TABLE);
+            return type_error(arg, Symbol.HASH_TABLE);
           }
       }
     };
@@ -263,7 +263,7 @@ public final class HashTableFunctions extends Lisp
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.HASH_TABLE);
+            return type_error(arg, Symbol.HASH_TABLE);
           }
       }
     };
@@ -280,7 +280,7 @@ public final class HashTableFunctions extends Lisp
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.HASH_TABLE);
+            return type_error(arg, Symbol.HASH_TABLE);
           }
       }
     };
@@ -297,7 +297,7 @@ public final class HashTableFunctions extends Lisp
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.HASH_TABLE);
+            return type_error(arg, Symbol.HASH_TABLE);
           }
       }
     };
@@ -314,7 +314,7 @@ public final class HashTableFunctions extends Lisp
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.HASH_TABLE);
+            return type_error(arg, Symbol.HASH_TABLE);
           }
       }
     };
@@ -333,7 +333,7 @@ public final class HashTableFunctions extends Lisp
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(second, Symbol.HASH_TABLE);
+            return type_error(second, Symbol.HASH_TABLE);
           }
         return ht.MAPHASH(first);
       }

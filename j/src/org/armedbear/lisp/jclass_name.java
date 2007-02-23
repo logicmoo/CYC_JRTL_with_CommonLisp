@@ -2,7 +2,7 @@
  * jclass_name.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: jclass_name.java,v 1.1 2005-10-25 17:16:30 piso Exp $
+ * $Id: jclass_name.java,v 1.2 2007-02-23 21:17:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,7 +51,7 @@ public final class jclass_name extends Primitive
                 return new SimpleString(((Class)obj).getName());
             // Fall through.
         }
-        return signal(new LispError(arg.writeToString() + " does not designate a Java class."));
+        return error(new LispError(arg.writeToString() + " does not designate a Java class."));
     }
 
     // When called with two arguments, JCLASS-NAME tests whether CLASS-REF
@@ -72,13 +72,13 @@ public final class jclass_name extends Primitive
                 className = ((Class)obj).getName();
         }
         if (className == null)
-            return signal(new LispError(first.writeToString() + " does not designate a Java class."));
+            return error(new LispError(first.writeToString() + " does not designate a Java class."));
         final AbstractString name;
         try {
             name = (AbstractString) second;
         }
         catch (ClassCastException e) {
-            return signalTypeError(second, Symbol.STRING);
+            return type_error(second, Symbol.STRING);
         }
         return LispThread.currentThread().setValues(name.getStringValue().equals(className) ? T : NIL,
                                                     new SimpleString(className));

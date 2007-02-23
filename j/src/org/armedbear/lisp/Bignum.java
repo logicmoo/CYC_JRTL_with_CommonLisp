@@ -2,7 +2,7 @@
  * Bignum.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id: Bignum.java,v 1.82 2007-02-21 18:39:38 piso Exp $
+ * $Id: Bignum.java,v 1.83 2007-02-23 21:17:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -227,7 +227,7 @@ public final class Bignum extends LispObject
   {
     float f = value.floatValue();
     if (Float.isInfinite(f))
-      signal(new TypeError("The value " + writeToString() +
+      error(new TypeError("The value " + writeToString() +
                            " is too large to be converted to a single float."));
     return f;
   }
@@ -236,7 +236,7 @@ public final class Bignum extends LispObject
   {
     double d = value.doubleValue();
     if (Double.isInfinite(d))
-      signal(new TypeError("The value " + writeToString() +
+      error(new TypeError("The value " + writeToString() +
                            " is too large to be converted to a double float."));
     return d;
   }
@@ -249,7 +249,7 @@ public final class Bignum extends LispObject
       }
     catch (ClassCastException e)
       {
-        signalTypeError(obj, Symbol.BIGNUM);
+        type_error(obj, Symbol.BIGNUM);
         // Not reached.
         return null;
       }
@@ -292,7 +292,7 @@ public final class Bignum extends LispObject
         Complex c = (Complex) obj;
         return Complex.getInstance(add(c.getRealPart()), c.getImaginaryPart());
       }
-    return signalTypeError(obj, Symbol.NUMBER);
+    return type_error(obj, Symbol.NUMBER);
   }
 
   public LispObject subtract(LispObject obj) throws ConditionThrowable
@@ -318,7 +318,7 @@ public final class Bignum extends LispObject
         return Complex.getInstance(subtract(c.getRealPart()),
                                    Fixnum.ZERO.subtract(c.getImaginaryPart()));
       }
-    return signalTypeError(obj, Symbol.NUMBER);
+    return type_error(obj, Symbol.NUMBER);
   }
 
   public LispObject multiplyBy(int n) throws ConditionThrowable
@@ -358,7 +358,7 @@ public final class Bignum extends LispObject
         return Complex.getInstance(multiplyBy(c.getRealPart()),
                                    multiplyBy(c.getImaginaryPart()));
       }
-    return signalTypeError(obj, Symbol.NUMBER);
+    return type_error(obj, Symbol.NUMBER);
   }
 
   public LispObject divideBy(LispObject obj) throws ConditionThrowable
@@ -386,7 +386,7 @@ public final class Bignum extends LispObject
         return Complex.getInstance(multiplyBy(realPart).divideBy(denominator),
                                    Fixnum.ZERO.subtract(multiplyBy(imagPart).divideBy(denominator)));
       }
-    return signalTypeError(obj, Symbol.NUMBER);
+    return type_error(obj, Symbol.NUMBER);
   }
 
   public boolean isEqualTo(LispObject obj) throws ConditionThrowable
@@ -399,7 +399,7 @@ public final class Bignum extends LispObject
       return isEqualTo(((DoubleFloat)obj).rational());
     if (obj.numberp())
       return false;
-    signalTypeError(obj, Symbol.NUMBER);
+    type_error(obj, Symbol.NUMBER);
     // Not reached.
     return false;
   }
@@ -414,7 +414,7 @@ public final class Bignum extends LispObject
       return isNotEqualTo(((DoubleFloat)obj).rational());
     if (obj.numberp())
       return true;
-    signalTypeError(obj, Symbol.NUMBER);
+    type_error(obj, Symbol.NUMBER);
     // Not reached.
     return false;
   }
@@ -434,7 +434,7 @@ public final class Bignum extends LispObject
       return isLessThan(((SingleFloat)obj).rational());
     if (obj instanceof DoubleFloat)
       return isLessThan(((DoubleFloat)obj).rational());
-    signalTypeError(obj, Symbol.REAL);
+    type_error(obj, Symbol.REAL);
     // Not reached.
     return false;
   }
@@ -454,7 +454,7 @@ public final class Bignum extends LispObject
       return isGreaterThan(((SingleFloat)obj).rational());
     if (obj instanceof DoubleFloat)
       return isGreaterThan(((DoubleFloat)obj).rational());
-    signalTypeError(obj, Symbol.REAL);
+    type_error(obj, Symbol.REAL);
     // Not reached.
     return false;
   }
@@ -474,7 +474,7 @@ public final class Bignum extends LispObject
       return isLessThanOrEqualTo(((SingleFloat)obj).rational());
     if (obj instanceof DoubleFloat)
       return isLessThanOrEqualTo(((DoubleFloat)obj).rational());
-    signalTypeError(obj, Symbol.REAL);
+    type_error(obj, Symbol.REAL);
     // Not reached.
     return false;
   }
@@ -494,7 +494,7 @@ public final class Bignum extends LispObject
       return isGreaterThanOrEqualTo(((SingleFloat)obj).rational());
     if (obj instanceof DoubleFloat)
       return isGreaterThanOrEqualTo(((DoubleFloat)obj).rational());
-    signalTypeError(obj, Symbol.REAL);
+    type_error(obj, Symbol.REAL);
     // Not reached.
     return false;
   }
@@ -548,14 +548,14 @@ public final class Bignum extends LispObject
             return new DoubleFloat(doubleValue()).truncate(obj);
           }
         else
-          return signalTypeError(obj, Symbol.REAL);
+          return type_error(obj, Symbol.REAL);
       }
     catch (ArithmeticException e)
       {
         if (obj.zerop())
-          return signal(new DivisionByZero());
+          return error(new DivisionByZero());
         else
-          return signal(new ArithmeticError(e.getMessage()));
+          return error(new ArithmeticError(e.getMessage()));
       }
     return thread.setValues(value1, value2);
   }
@@ -578,12 +578,12 @@ public final class Bignum extends LispObject
       {
         BigInteger count = ((Bignum)obj).value;
         if (count.signum() > 0)
-          return signal(new LispError("Can't represent result of left shift."));
+          return error(new LispError("Can't represent result of left shift."));
         if (count.signum() < 0)
           return n.signum() >= 0 ? Fixnum.ZERO : Fixnum.MINUS_ONE;
         Debug.bug(); // Shouldn't happen.
       }
-    return signalTypeError(obj, Symbol.INTEGER);
+    return type_error(obj, Symbol.INTEGER);
   }
 
   public LispObject LOGNOT()
@@ -615,7 +615,7 @@ public final class Bignum extends LispObject
         return number(value.and(n));
       }
     else
-      return signalTypeError(obj, Symbol.INTEGER);
+      return type_error(obj, Symbol.INTEGER);
   }
 
   public LispObject LOGIOR(int n) throws ConditionThrowable
@@ -636,7 +636,7 @@ public final class Bignum extends LispObject
         return number(value.or(n));
       }
     else
-      return signalTypeError(obj, Symbol.INTEGER);
+      return type_error(obj, Symbol.INTEGER);
   }
 
   public LispObject LOGXOR(int n) throws ConditionThrowable
@@ -652,7 +652,7 @@ public final class Bignum extends LispObject
     else if (obj instanceof Bignum)
       n = ((Bignum)obj).value;
     else
-      return signalTypeError(obj, Symbol.INTEGER);
+      return type_error(obj, Symbol.INTEGER);
     return number(value.xor(n));
   }
 

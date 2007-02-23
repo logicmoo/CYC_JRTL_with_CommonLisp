@@ -2,7 +2,7 @@
  * EchoStream.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: EchoStream.java,v 1.14 2005-08-27 11:34:50 piso Exp $
+ * $Id: EchoStream.java,v 1.15 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -213,9 +213,9 @@ public final class EchoStream extends Stream
             throws ConditionThrowable
         {
             if (!(first instanceof Stream))
-                return signalTypeError(first, Symbol.STREAM);
+                return type_error(first, Symbol.STREAM);
             if (!(second instanceof Stream))
-                return signalTypeError(second, Symbol.STREAM);
+                return type_error(second, Symbol.STREAM);
             return new EchoStream((Stream) first, (Stream) second);
         }
     };
@@ -229,7 +229,7 @@ public final class EchoStream extends Stream
         {
             if (arg instanceof EchoStream)
                 return ((EchoStream)arg).getInputStream();
-            return signalTypeError(arg, Symbol.ECHO_STREAM);
+            return type_error(arg, Symbol.ECHO_STREAM);
         }
     };
 
@@ -242,7 +242,7 @@ public final class EchoStream extends Stream
         {
             if (arg instanceof EchoStream)
                 return ((EchoStream)arg).getOutputStream();
-            return signalTypeError(arg, Symbol.ECHO_STREAM);
+            return type_error(arg, Symbol.ECHO_STREAM);
         }
     };
 }

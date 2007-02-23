@@ -2,7 +2,7 @@
  * unbound_slot_instance.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: unbound_slot_instance.java,v 1.2 2004-11-03 15:39:02 piso Exp $
+ * $Id: unbound_slot_instance.java,v 1.3 2007-02-23 21:17:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ public final class unbound_slot_instance extends Primitive
     {
         if (arg instanceof UnboundSlot)
             return ((UnboundSlot)arg).getInstance();
-        return signal(new TypeError(arg, Symbol.UNBOUND_SLOT));
+        return error(new TypeError(arg, Symbol.UNBOUND_SLOT));
     }
 
     private static final unbound_slot_instance CELL_ERROR_NAME =

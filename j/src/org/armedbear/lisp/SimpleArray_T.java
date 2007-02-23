@@ -2,7 +2,7 @@
  * SimpleArray_T.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id: SimpleArray_T.java,v 1.3 2007-01-08 16:33:32 piso Exp $
+ * $Id: SimpleArray_T.java,v 1.4 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -89,14 +89,14 @@ public final class SimpleArray_T extends AbstractArray
                 data[index] = contents;
             }
             catch (ArrayIndexOutOfBoundsException e) {
-                signal(new LispError("Bad initial contents for array."));
+                error(new LispError("Bad initial contents for array."));
                 return -1;
             }
             ++index;
         } else {
             int dim = dims[0];
             if (dim != contents.length()) {
-                signal(new LispError("Bad initial contents for array."));
+                error(new LispError("Bad initial contents for array."));
                 return -1;
             }
             int[] newDims = new int[dims.length-1];
@@ -160,7 +160,7 @@ public final class SimpleArray_T extends AbstractArray
             return dimv[n];
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            signal(new TypeError("Bad array dimension " + n + "."));
+            error(new TypeError("Bad array dimension " + n + "."));
             return -1;
         }
     }
@@ -186,7 +186,7 @@ public final class SimpleArray_T extends AbstractArray
             return data[index];
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            return signal(new TypeError("Bad row major index " + index + "."));
+            return error(new TypeError("Bad row major index " + index + "."));
         }
     }
 
@@ -196,7 +196,7 @@ public final class SimpleArray_T extends AbstractArray
             data[index] = newValue;
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            signal(new TypeError("Bad row major index " + index + "."));
+            error(new TypeError("Bad row major index " + index + "."));
         }
     }
 
@@ -209,7 +209,7 @@ public final class SimpleArray_T extends AbstractArray
             sb.append(") for array of rank ");
             sb.append(rank);
             sb.append('.');
-            signal(new ProgramError(sb.toString()));
+            error(new ProgramError(sb.toString()));
         }
         int sum = 0;
         int size = 1;
@@ -224,7 +224,7 @@ public final class SimpleArray_T extends AbstractArray
                 sb.append(" for array ");
                 sb.append(this);
                 sb.append('.');
-                signal(new ProgramError(sb.toString()));
+                error(new ProgramError(sb.toString()));
             }
             sum += n * lastSize;
         }
@@ -237,7 +237,7 @@ public final class SimpleArray_T extends AbstractArray
             return data[getRowMajorIndex(subscripts)];
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            return signal(new TypeError("Bad row major index " +
+            return error(new TypeError("Bad row major index " +
                                         getRowMajorIndex(subscripts) + "."));
         }
     }
@@ -249,7 +249,7 @@ public final class SimpleArray_T extends AbstractArray
             data[getRowMajorIndex(subscripts)] = newValue;
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            signal(new TypeError("Bad row major index " +
+            error(new TypeError("Bad row major index " +
                                  getRowMajorIndex(subscripts) + "."));
         }
     }

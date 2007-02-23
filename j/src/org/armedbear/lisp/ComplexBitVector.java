@@ -2,7 +2,7 @@
  * ComplexBitVector.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: ComplexBitVector.java,v 1.15 2006-01-07 00:55:07 piso Exp $
+ * $Id: ComplexBitVector.java,v 1.16 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -79,12 +79,12 @@ public final class ComplexBitVector extends AbstractBitVector
                 sb.append(") exceeds the capacity of the vector (");
                 sb.append(capacity());
                 sb.append(").");
-                signal(new LispError(sb.toString()));
+                error(new LispError(sb.toString()));
             } else if (n < 0) {
                 StringBuffer sb = new StringBuffer("The new fill pointer (");
                 sb.append(n);
                 sb.append(") is negative.");
-                signal(new LispError(sb.toString()));
+                error(new LispError(sb.toString()));
             } else
                 fillPointer = n;
         }
@@ -162,7 +162,7 @@ public final class ComplexBitVector extends AbstractBitVector
         catch (ClassCastException e) {
             // Fall through...
         }
-        signalTypeError(newValue, Symbol.BIT);
+        type_error(newValue, Symbol.BIT);
     }
 
     protected void setBit(int index) throws ConditionThrowable
@@ -201,7 +201,7 @@ public final class ComplexBitVector extends AbstractBitVector
             if (n == capacity)
                 return;
         }
-        signal(new LispError());
+        error(new LispError());
     }
 
     public boolean isSimpleVector()
@@ -327,7 +327,7 @@ public final class ComplexBitVector extends AbstractBitVector
                     for (int i = 0; i < newCapacity; i++)
                         aset(i, initialContents.elt(i));
                 } else
-                    signalTypeError(initialContents, Symbol.SEQUENCE);
+                    type_error(initialContents, Symbol.SEQUENCE);
             } else {
                 long[] newBits = new long[size];
                 System.arraycopy(bits, 0, newBits, 0,

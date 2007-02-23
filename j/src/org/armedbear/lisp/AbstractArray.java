@@ -2,7 +2,7 @@
  * AbstractArray.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: AbstractArray.java,v 1.48 2006-01-06 19:22:12 piso Exp $
+ * $Id: AbstractArray.java,v 1.49 2007-02-23 21:17:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -108,7 +108,7 @@ public abstract class AbstractArray extends LispObject
             if (subscript instanceof Fixnum)
                 subs[i] = ((Fixnum)subscript).value;
             else
-                signalTypeError(subscript, Symbol.FIXNUM);
+                type_error(subscript, Symbol.FIXNUM);
         }
         return getRowMajorIndex(subs);
     }
@@ -123,7 +123,7 @@ public abstract class AbstractArray extends LispObject
             sb.append(") for array of rank ");
             sb.append(rank);
             sb.append('.');
-            signal(new ProgramError(sb.toString()));
+            error(new ProgramError(sb.toString()));
         }
         int sum = 0;
         int size = 1;
@@ -138,7 +138,7 @@ public abstract class AbstractArray extends LispObject
                 sb.append(" for array ");
                 sb.append(writeToString());
                 sb.append('.');
-                signal(new ProgramError(sb.toString()));
+                error(new ProgramError(sb.toString()));
             }
             sum += n * lastSize;
         }
@@ -170,7 +170,7 @@ public abstract class AbstractArray extends LispObject
                     if (dimv[i] == 0) {
                         for (int j = i + 1; j < dimv.length; j++) {
                             if (dimv[j] != 0) {
-                                signal(new PrintNotReadable(list2(Keyword.OBJECT,
+                                error(new PrintNotReadable(list2(Keyword.OBJECT,
                                                                   this)));
                                 return null; // Not reached.
                             }

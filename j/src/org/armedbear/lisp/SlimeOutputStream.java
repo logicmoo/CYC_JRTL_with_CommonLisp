@@ -2,7 +2,7 @@
  * SlimeOutputStream.java
  *
  * Copyright (C) 2004-2005 Andras Simon, Peter Graves
- * $Id: SlimeOutputStream.java,v 1.10 2006-06-27 19:41:03 asimon Exp $
+ * $Id: SlimeOutputStream.java,v 1.11 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -93,7 +93,7 @@ public final class SlimeOutputStream extends Stream
 
     private void writeError() throws ConditionThrowable
     {
-        signal(new TypeError("Attempt to write to a string output stream of element type NIL."));
+        error(new TypeError("Attempt to write to a string output stream of element type NIL."));
     }
 
     protected long _getFilePosition() throws ConditionThrowable

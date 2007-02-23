@@ -2,7 +2,7 @@
  * RuntimeClass.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: RuntimeClass.java,v 1.11 2006-01-09 21:11:53 asimon Exp $
+ * $Id: RuntimeClass.java,v 1.12 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ public class RuntimeClass extends Lisp
         {
             int length = args.length;
             if (length < 3 || length % 2 != 1)
-                return signal(new WrongNumberOfArgumentsException(this));
+                return error(new WrongNumberOfArgumentsException(this));
 	    RuntimeClass rc = new RuntimeClass();
 	    String className = args[0].getStringValue();
             for (int i = 1; i < length; i = i+2) {
@@ -73,7 +73,7 @@ public class RuntimeClass extends Lisp
                 return T;
 	    }
 	    else {
-                signal(new LispError("undefined Java class: " + cn));
+                error(new LispError("undefined Java class: " + cn));
                 return NIL;
 	    }
         }
@@ -98,17 +98,17 @@ public class RuntimeClass extends Lisp
                 }
             }
             catch (VerifyError e) {
-                return signal(new LispError("class verification failed: " +
+                return error(new LispError("class verification failed: " +
                                             e.getMessage()));
             }
             catch (LinkageError e) {
-                return signal(new LispError("class could not be linked: " +
+                return error(new LispError("class could not be linked: " +
                                             e.getMessage()));
             }
             catch (Throwable t) {
                 Debug.trace(t);
             }
-            return signal(
+            return error(
                 new LispError("unable to load ".concat(cn)));
         }
     };

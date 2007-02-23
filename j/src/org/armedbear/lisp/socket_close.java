@@ -2,7 +2,7 @@
  * socket_close.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: socket_close.java,v 1.2 2004-11-03 15:39:02 piso Exp $
+ * $Id: socket_close.java,v 1.3 2007-02-23 21:17:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ public final class socket_close extends Primitive
 	    return T;
         }
         catch (Exception e) {
-            return signal(new LispError(e.getMessage()));
+            return error(new LispError(e.getMessage()));
         }
     }
 

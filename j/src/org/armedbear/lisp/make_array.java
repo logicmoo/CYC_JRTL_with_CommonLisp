@@ -2,7 +2,7 @@
  * make_array.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: make_array.java,v 1.31 2005-12-20 12:02:18 piso Exp $
+ * $Id: make_array.java,v 1.32 2007-02-23 21:17:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -34,7 +34,7 @@ public final class make_array extends Primitive
   public LispObject execute(LispObject[] args) throws ConditionThrowable
   {
     if (args.length != 9)
-      return signal(new WrongNumberOfArgumentsException(this));
+      return error(new WrongNumberOfArgumentsException(this));
     LispObject dimensions = args[0];
     LispObject elementType = args[1];
     LispObject initialElement = args[2];
@@ -46,7 +46,7 @@ public final class make_array extends Primitive
     LispObject displacedIndexOffset = args[8];
     if (initialElementProvided != NIL && initialContents != NIL)
       {
-        return signal(new LispError("MAKE-ARRAY: cannot specify both " +
+        return error(new LispError("MAKE-ARRAY: cannot specify both " +
                                     "initial element and initial contents."));
       }
     final int rank = dimensions.listp() ? dimensions.length() : 1;
@@ -68,9 +68,9 @@ public final class make_array extends Primitive
         // displaced-to array.
         final AbstractArray array = checkArray(displacedTo);
         if (initialElementProvided != NIL)
-          return signal(new LispError("Initial element must not be specified for a displaced array."));
+          return error(new LispError("Initial element must not be specified for a displaced array."));
         if (initialContents != NIL)
-          return signal(new LispError("Initial contents must not be specified for a displaced array."));
+          return error(new LispError("Initial contents must not be specified for a displaced array."));
         final int displacement;
         if (displacedIndexOffset != NIL)
           displacement = Fixnum.getValue(displacedIndexOffset);
@@ -123,7 +123,7 @@ public final class make_array extends Primitive
               }
             else
               sb.append(" is negative.");
-            return signal(new LispError(sb.toString()));
+            return error(new LispError(sb.toString()));
           }
         final AbstractVector v;
         if (upgradedType == Symbol.CHARACTER)
@@ -190,7 +190,7 @@ public final class make_array extends Primitive
                   v.aset(i, initialContents.elt(i));
               }
             else
-              return signalTypeError(initialContents, Symbol.SEQUENCE);
+              return type_error(initialContents, Symbol.SEQUENCE);
           }
         if (fillPointer != NIL)
           v.setFillPointer(fillPointer);

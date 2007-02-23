@@ -2,7 +2,7 @@
  * function_info.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: function_info.java,v 1.6 2005-02-12 03:29:02 piso Exp $
+ * $Id: function_info.java,v 1.7 2007-02-23 21:17:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -71,7 +71,7 @@ public final class function_info extends Lisp
                             return LispThread.currentThread().setValues(cons.cdr(), T);
                         }
                     } else if (cons != NIL)
-                        signal(new TypeError(cons, Symbol.LIST));
+                        error(new TypeError(cons, Symbol.LIST));
                     info = info.cdr();
                 }
             }
@@ -102,7 +102,7 @@ public final class function_info extends Lisp
                         return value;
                     }
                 } else if (cons != NIL)
-                    signal(new TypeError(cons, Symbol.LIST));
+                    error(new TypeError(cons, Symbol.LIST));
                 alist = alist.cdr();
             }
             // Not found.

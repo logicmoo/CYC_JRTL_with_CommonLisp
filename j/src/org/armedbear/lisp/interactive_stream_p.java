@@ -2,7 +2,7 @@
  * interactive_stream_p.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: interactive_stream_p.java,v 1.3 2004-11-03 15:39:02 piso Exp $
+ * $Id: interactive_stream_p.java,v 1.4 2007-02-23 21:17:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@ public final class interactive_stream_p extends Primitive
     {
         if (arg instanceof Stream)
             return ((Stream)arg).isInteractive() ? T : NIL;
-        return signal(new TypeError(arg, Symbol.STREAM));
+        return error(new TypeError(arg, Symbol.STREAM));
     }
 
     private static final Primitive INTERACTIVE_STREAM_P = new interactive_stream_p();

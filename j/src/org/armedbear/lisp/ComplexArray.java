@@ -2,7 +2,7 @@
  * ComplexArray.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: ComplexArray.java,v 1.12 2005-03-25 03:19:20 piso Exp $
+ * $Id: ComplexArray.java,v 1.13 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,14 +80,14 @@ public final class ComplexArray extends AbstractArray
                 data[index] = contents;
             }
             catch (ArrayIndexOutOfBoundsException e) {
-                signal(new LispError("Bad initial contents for array."));
+                error(new LispError("Bad initial contents for array."));
                 return -1;
             }
             ++index;
         } else {
             int dim = dims[0];
             if (dim != contents.length()) {
-                signal(new LispError("Bad initial contents for array."));
+                error(new LispError("Bad initial contents for array."));
                 return -1;
             }
             int[] newDims = new int[dims.length-1];
@@ -142,7 +142,7 @@ public final class ComplexArray extends AbstractArray
             return dimv[n];
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            signal(new TypeError("Bad array dimension " + n + "."));
+            error(new TypeError("Bad array dimension " + n + "."));
             return -1;
         }
     }
@@ -177,7 +177,7 @@ public final class ComplexArray extends AbstractArray
                 return data[index];
             }
             catch (ArrayIndexOutOfBoundsException e) {
-                return signal(new TypeError("Bad row major index " + index + "."));
+                return error(new TypeError("Bad row major index " + index + "."));
             }
         } else
             return array.AREF(index + displacement);
@@ -190,7 +190,7 @@ public final class ComplexArray extends AbstractArray
                 data[index] = newValue;
             }
             catch (ArrayIndexOutOfBoundsException e) {
-                signal(new TypeError("Bad row major index " + index + "."));
+                error(new TypeError("Bad row major index " + index + "."));
             }
         } else
             array.aset(index + displacement, newValue);

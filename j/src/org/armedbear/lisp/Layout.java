@@ -2,7 +2,7 @@
  * Layout.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: Layout.java,v 1.27 2006-01-08 02:40:23 piso Exp $
+ * $Id: Layout.java,v 1.28 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -166,7 +166,7 @@ public final class Layout extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.CLASS);
+            return type_error(first, Symbol.CLASS);
           }
       }
 
@@ -184,7 +184,7 @@ public final class Layout extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.LAYOUT);
+            return type_error(arg, Symbol.LAYOUT);
           }
       }
     };
@@ -201,7 +201,7 @@ public final class Layout extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.LAYOUT);
+            return type_error(arg, Symbol.LAYOUT);
           }
       }
     };
@@ -247,7 +247,7 @@ public final class Layout extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.LAYOUT);
+            return type_error(first, Symbol.LAYOUT);
           }
       }
     };
@@ -281,7 +281,7 @@ public final class Layout extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(first, Symbol.LAYOUT);
+            return type_error(first, Symbol.LAYOUT);
           }
       }
     };
@@ -299,7 +299,7 @@ public final class Layout extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.CLASS);
+            return type_error(arg, Symbol.CLASS);
           }
         Layout oldLayout = lispClass.getClassLayout();
         Layout newLayout = new Layout(oldLayout);

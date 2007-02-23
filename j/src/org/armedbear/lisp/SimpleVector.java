@@ -2,7 +2,7 @@
  * SimpleVector.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: SimpleVector.java,v 1.24 2006-01-20 02:07:55 piso Exp $
+ * $Id: SimpleVector.java,v 1.25 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -156,7 +156,7 @@ public final class SimpleVector extends AbstractVector
       }
     catch (ClassCastException e)
       {
-        return signal(new TypeError(index, Symbol.FIXNUM));
+        return error(new TypeError(index, Symbol.FIXNUM));
       }
     catch (ArrayIndexOutOfBoundsException e)
       {
@@ -214,7 +214,7 @@ public final class SimpleVector extends AbstractVector
       }
     catch (ArrayIndexOutOfBoundsException e)
       {
-        return signal(new TypeError("Array index out of bounds: " + i + "."));
+        return error(new TypeError("Array index out of bounds: " + i + "."));
       }
   }
 
@@ -268,7 +268,7 @@ public final class SimpleVector extends AbstractVector
       }
     if (n == capacity)
       return;
-    signal(new LispError());
+    error(new LispError());
   }
 
   public LispObject reverse() throws ConditionThrowable
@@ -318,7 +318,7 @@ public final class SimpleVector extends AbstractVector
               newData[i] = initialContents.elt(i);
           }
         else
-          signal(new TypeError(initialContents, Symbol.SEQUENCE));
+          error(new TypeError(initialContents, Symbol.SEQUENCE));
         return new SimpleVector(newData);
       }
     if (capacity != newCapacity)
@@ -356,9 +356,9 @@ public final class SimpleVector extends AbstractVector
         catch (ClassCastException e)
           {
             if (first instanceof SimpleVector)
-              return signal(new TypeError(second, Symbol.FIXNUM));
+              return error(new TypeError(second, Symbol.FIXNUM));
             else
-              return signal(new TypeError(first, Symbol.SIMPLE_VECTOR));
+              return error(new TypeError(first, Symbol.SIMPLE_VECTOR));
           }
       }
     };
@@ -379,9 +379,9 @@ public final class SimpleVector extends AbstractVector
         catch (ClassCastException e)
           {
             if (first instanceof SimpleVector)
-              return signal(new TypeError(second, Symbol.FIXNUM));
+              return error(new TypeError(second, Symbol.FIXNUM));
             else
-              return signal(new TypeError(first, Symbol.SIMPLE_VECTOR));
+              return error(new TypeError(first, Symbol.SIMPLE_VECTOR));
           }
         catch (ArrayIndexOutOfBoundsException e)
           {

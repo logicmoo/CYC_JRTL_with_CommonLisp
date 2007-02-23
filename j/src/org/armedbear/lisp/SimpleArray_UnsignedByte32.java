@@ -2,7 +2,7 @@
  * SimpleArray_UnsignedByte32.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SimpleArray_UnsignedByte32.java,v 1.4 2005-10-23 16:39:49 piso Exp $
+ * $Id: SimpleArray_UnsignedByte32.java,v 1.5 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,14 +80,14 @@ public final class SimpleArray_UnsignedByte32 extends AbstractArray
                 data[index] = contents;
             }
             catch (ArrayIndexOutOfBoundsException e) {
-                signal(new LispError("Bad initial contents for array."));
+                error(new LispError("Bad initial contents for array."));
                 return -1;
             }
             ++index;
         } else {
             int dim = dims[0];
             if (dim != contents.length()) {
-                signal(new LispError("Bad initial contents for array."));
+                error(new LispError("Bad initial contents for array."));
                 return -1;
             }
             int[] newDims = new int[dims.length-1];
@@ -151,7 +151,7 @@ public final class SimpleArray_UnsignedByte32 extends AbstractArray
             return dimv[n];
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            signal(new TypeError("Bad array dimension " + n + "."));
+            error(new TypeError("Bad array dimension " + n + "."));
             return -1;
         }
     }
@@ -177,7 +177,7 @@ public final class SimpleArray_UnsignedByte32 extends AbstractArray
             return data[index];
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            return signal(new TypeError("Bad row major index " + index + "."));
+            return error(new TypeError("Bad row major index " + index + "."));
         }
     }
 
@@ -187,7 +187,7 @@ public final class SimpleArray_UnsignedByte32 extends AbstractArray
             data[index] = newValue;
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            signal(new TypeError("Bad row major index " + index + "."));
+            error(new TypeError("Bad row major index " + index + "."));
         }
     }
 
@@ -200,7 +200,7 @@ public final class SimpleArray_UnsignedByte32 extends AbstractArray
             sb.append(") for array of rank ");
             sb.append(rank);
             sb.append('.');
-            signal(new ProgramError(sb.toString()));
+            error(new ProgramError(sb.toString()));
         }
         int sum = 0;
         int size = 1;
@@ -215,7 +215,7 @@ public final class SimpleArray_UnsignedByte32 extends AbstractArray
                 sb.append(" for array ");
                 sb.append(this);
                 sb.append('.');
-                signal(new ProgramError(sb.toString()));
+                error(new ProgramError(sb.toString()));
             }
             sum += n * lastSize;
         }
@@ -228,7 +228,7 @@ public final class SimpleArray_UnsignedByte32 extends AbstractArray
             return data[getRowMajorIndex(subscripts)];
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            return signal(new TypeError("Bad row major index " +
+            return error(new TypeError("Bad row major index " +
                                         getRowMajorIndex(subscripts) + "."));
         }
     }
@@ -240,7 +240,7 @@ public final class SimpleArray_UnsignedByte32 extends AbstractArray
             data[getRowMajorIndex(subscripts)] = newValue;
         }
         catch (ArrayIndexOutOfBoundsException e) {
-            signal(new TypeError("Bad row major index " +
+            error(new TypeError("Bad row major index " +
                                  getRowMajorIndex(subscripts) + "."));
         }
     }
@@ -254,7 +254,7 @@ public final class SimpleArray_UnsignedByte32 extends AbstractArray
     public String writeToString() throws ConditionThrowable
     {
         if (Symbol.PRINT_READABLY.symbolValue() != NIL) {
-            signal(new PrintNotReadable(list2(Keyword.OBJECT, this)));
+            error(new PrintNotReadable(list2(Keyword.OBJECT, this)));
             // Not reached.
             return null;
         }

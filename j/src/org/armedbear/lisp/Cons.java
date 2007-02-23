@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Cons.java,v 1.72 2006-01-05 11:00:20 piso Exp $
+ * $Id: Cons.java,v 1.73 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -155,7 +155,7 @@ public final class Cons extends LispObject
   public LispObject nthcdr(int n) throws ConditionThrowable
   {
     if (n < 0)
-      return signalTypeError(new Fixnum(n),
+      return type_error(new Fixnum(n),
                              list2(Symbol.INTEGER, Fixnum.ZERO));
     LispObject result = this;
     for (int i = n; i-- > 0;)
@@ -259,7 +259,7 @@ public final class Cons extends LispObject
       }
     catch (ClassCastException e)
       {
-        signalTypeError(obj, Symbol.LIST);
+        type_error(obj, Symbol.LIST);
       }
     return length;
   }
@@ -267,7 +267,7 @@ public final class Cons extends LispObject
   public LispObject NTH(int index) throws ConditionThrowable
   {
     if (index < 0)
-      signalTypeError(new Fixnum(index), Symbol.UNSIGNED_BYTE);
+      type_error(new Fixnum(index), Symbol.UNSIGNED_BYTE);
     int i = 0;
     LispObject obj = this;
     while (true)
@@ -294,13 +294,13 @@ public final class Cons extends LispObject
           {
             // FIXME (when machines have enough memory for it to matter)
             if (arg.minusp())
-              return signalTypeError(arg, Symbol.UNSIGNED_BYTE);
+              return type_error(arg, Symbol.UNSIGNED_BYTE);
             return NIL;
           }
-        return signalTypeError(arg, Symbol.UNSIGNED_BYTE);
+        return type_error(arg, Symbol.UNSIGNED_BYTE);
       }
     if (index < 0)
-      signalTypeError(arg, Symbol.UNSIGNED_BYTE);
+      type_error(arg, Symbol.UNSIGNED_BYTE);
     int i = 0;
     LispObject obj = this;
     while (true)
@@ -317,7 +317,7 @@ public final class Cons extends LispObject
   public LispObject elt(int index) throws ConditionThrowable
   {
     if (index < 0)
-      signalTypeError(new Fixnum(index), Symbol.UNSIGNED_BYTE);
+      type_error(new Fixnum(index), Symbol.UNSIGNED_BYTE);
     int i = 0;
     Cons cons = this;
     while (true)
@@ -333,14 +333,14 @@ public final class Cons extends LispObject
             if (cons.cdr == NIL)
               {
                 // Index too large.
-                signalTypeError(new Fixnum(index),
+                type_error(new Fixnum(index),
                                 list3(Symbol.INTEGER, Fixnum.ZERO,
                                       new Fixnum(length() - 1)));
               }
             else
               {
                 // Dotted list.
-                signalTypeError(cons.cdr, Symbol.LIST);
+                type_error(cons.cdr, Symbol.LIST);
               }
             // Not reached.
             return NIL;
@@ -359,7 +359,7 @@ public final class Cons extends LispObject
         result = new Cons(cons.car, result);
       }
     if (cons.cdr != NIL)
-      return signalTypeError(cons.cdr, Symbol.LIST);
+      return type_error(cons.cdr, Symbol.LIST);
     return result;
   }
 
@@ -381,18 +381,18 @@ public final class Cons extends LispObject
               }
             while (cons.cdr instanceof Cons);
             if (cons.cdr != NIL)
-              return signalTypeError(cons.cdr, Symbol.LIST);
+              return type_error(cons.cdr, Symbol.LIST);
             cdr = list;
             cons1.cdr = cons;
           }
         else if (cons.cdr != NIL)
-          return signalTypeError(cons.cdr, Symbol.LIST);
+          return type_error(cons.cdr, Symbol.LIST);
         LispObject temp = car;
         car = cons.car;
         cons.car = temp;
       }
     else if (cdr != NIL)
-      return signalTypeError(cdr, Symbol.LIST);
+      return type_error(cdr, Symbol.LIST);
     return this;
   }
 
@@ -552,7 +552,7 @@ public final class Cons extends LispObject
 
   private final LispObject signalExecutionError() throws ConditionThrowable
   {
-    return signalTypeError(this, list3(Symbol.OR, Symbol.FUNCTION,
+    return type_error(this, list3(Symbol.OR, Symbol.FUNCTION,
                                        Symbol.SYMBOL));
   }
 

@@ -2,7 +2,7 @@
  * ConcatenatedStream.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: ConcatenatedStream.java,v 1.7 2005-10-16 11:27:42 piso Exp $
+ * $Id: ConcatenatedStream.java,v 1.8 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -86,7 +86,7 @@ public final class ConcatenatedStream extends Stream
     {
         if (streams == NIL) {
             if (eofError)
-                return signal(new EndOfFile(this));
+                return error(new EndOfFile(this));
             else
                 return eofValue;
         }
@@ -130,7 +130,7 @@ public final class ConcatenatedStream extends Stream
     protected void _unreadChar(int n) throws ConditionThrowable
     {
         if (unreadChar >= 0)
-            signal(new StreamError(this, "UNREAD-CHAR was invoked twice consecutively without an intervening call to READ-CHAR."));
+            error(new StreamError(this, "UNREAD-CHAR was invoked twice consecutively without an intervening call to READ-CHAR."));
         unreadChar = n;
     }
 
@@ -205,7 +205,7 @@ public final class ConcatenatedStream extends Stream
 
     private void outputStreamError() throws ConditionThrowable
     {
-        signal(new StreamError(this,
+        error(new StreamError(this,
                                String.valueOf(this) + " is not an output stream."));
     }
 
@@ -225,7 +225,7 @@ public final class ConcatenatedStream extends Stream
                         continue;
                     }
                 }
-                signal(new TypeError(String.valueOf(args[i]) +
+                error(new TypeError(String.valueOf(args[i]) +
                                      " is not an input stream."));
             }
             return new ConcatenatedStream(streams.nreverse());
@@ -242,7 +242,7 @@ public final class ConcatenatedStream extends Stream
                 return ((ConcatenatedStream)arg).streams;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(arg, Symbol.CONCATENATED_STREAM));
+                return error(new TypeError(arg, Symbol.CONCATENATED_STREAM));
             }
         }
     };

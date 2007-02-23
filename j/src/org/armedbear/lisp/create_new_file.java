@@ -2,7 +2,7 @@
  * create_new_file.java
  *
  * Copyright (C) 2004-2006 Peter Graves
- * $Id: create_new_file.java,v 1.7 2006-06-21 11:43:44 piso Exp $
+ * $Id: create_new_file.java,v 1.8 2007-02-23 21:17:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ public final class create_new_file extends Primitive
             return new File(namestring).createNewFile() ? T : NIL;
         }
         catch (IOException e) {
-            return signal(new StreamError(null, e));
+            return error(new StreamError(null, e));
         }
     }
 

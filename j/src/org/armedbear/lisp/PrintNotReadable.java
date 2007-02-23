@@ -2,7 +2,7 @@
  * PrintNotReadable.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: PrintNotReadable.java,v 1.12 2005-10-31 12:24:01 piso Exp $
+ * $Id: PrintNotReadable.java,v 1.13 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -101,7 +101,7 @@ public class PrintNotReadable extends LispError
                 return ((PrintNotReadable)arg).getInstanceSlotValue(Symbol.OBJECT);
             }
             catch (ClassCastException e) {
-                return signalTypeError(arg, Symbol.PRINT_NOT_READABLE);
+                return type_error(arg, Symbol.PRINT_NOT_READABLE);
             }
         }
     };

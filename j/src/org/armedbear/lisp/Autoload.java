@@ -2,7 +2,7 @@
  * Autoload.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: Autoload.java,v 1.258 2006-04-08 00:20:11 piso Exp $
+ * $Id: Autoload.java,v 1.259 2007-02-23 21:17:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -257,7 +257,7 @@ public class Autoload extends Function
                 }
                 return T;
             }
-            return signal(new TypeError(first));
+            return error(new TypeError(first));
         }
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
@@ -275,7 +275,7 @@ public class Autoload extends Function
                 }
                 return T;
             }
-            return signal(new TypeError(first));
+            return error(new TypeError(first));
         }
     };
 

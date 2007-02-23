@@ -2,7 +2,7 @@
  * ComplexString.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: ComplexString.java,v 1.35 2006-01-07 00:55:54 piso Exp $
+ * $Id: ComplexString.java,v 1.36 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -88,14 +88,14 @@ public final class ComplexString extends AbstractString
             sb.append(") exceeds the capacity of the vector (");
             sb.append(capacity());
             sb.append(").");
-            signal(new LispError(sb.toString()));
+            error(new LispError(sb.toString()));
           }
         else if (n < 0)
           {
             StringBuffer sb = new StringBuffer("The new fill pointer (");
             sb.append(n);
             sb.append(") is negative.");
-            signal(new LispError(sb.toString()));
+            error(new LispError(sb.toString()));
           }
         else
           fillPointer = n;
@@ -372,7 +372,7 @@ public final class ComplexString extends AbstractString
       }
     catch (ClassCastException e)
       {
-        signalTypeError(newValue, Symbol.CHARACTER);
+        type_error(newValue, Symbol.CHARACTER);
       }
   }
 
@@ -394,7 +394,7 @@ public final class ComplexString extends AbstractString
           }
         catch (ClassCastException e)
           {
-            signalTypeError(element, Symbol.CHARACTER);
+            type_error(element, Symbol.CHARACTER);
           }
       }
     else
@@ -429,7 +429,7 @@ public final class ComplexString extends AbstractString
           }
         catch (ClassCastException e)
           {
-            signalTypeError(element, Symbol.CHARACTER);
+            type_error(element, Symbol.CHARACTER);
           }
       }
     else
@@ -557,7 +557,7 @@ public final class ComplexString extends AbstractString
               newChars[i] = LispCharacter.getValue(initialContents.elt(i));
           }
         else
-          signalTypeError(initialContents, Symbol.SEQUENCE);
+          type_error(initialContents, Symbol.SEQUENCE);
         chars = newChars;
       }
     else

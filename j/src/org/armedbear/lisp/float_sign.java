@@ -2,7 +2,7 @@
  * float_sign.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: float_sign.java,v 1.3 2005-08-24 13:03:41 piso Exp $
+ * $Id: float_sign.java,v 1.4 2007-02-23 21:17:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -41,16 +41,16 @@ public final class float_sign extends Primitive
             long bits = Double.doubleToRawLongBits(d);
             return bits < 0 ? DoubleFloat.MINUS_ONE : DoubleFloat.ONE;
         }
-        return signalTypeError(arg, Symbol.FLOAT);
+        return type_error(arg, Symbol.FLOAT);
     }
 
     public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
         if (!first.floatp())
-            return signalTypeError(first, Symbol.FLOAT);
+            return type_error(first, Symbol.FLOAT);
         if (!second.floatp())
-            return signalTypeError(second, Symbol.FLOAT);
+            return type_error(second, Symbol.FLOAT);
         if (first.minusp()) {
             if (second.minusp())
                 return second;

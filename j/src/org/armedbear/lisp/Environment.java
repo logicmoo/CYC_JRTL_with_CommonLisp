@@ -2,7 +2,7 @@
  * Environment.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Environment.java,v 1.29 2006-01-20 13:40:08 piso Exp $
+ * $Id: Environment.java,v 1.30 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -300,7 +300,7 @@ public final class Environment extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.ENVIRONMENT);
+            return type_error(arg, Symbol.ENVIRONMENT);
           }
       }
     };
@@ -322,7 +322,7 @@ public final class Environment extends LispObject
           }
         catch (ClassCastException e)
           {
-            return signalTypeError(arg, Symbol.ENVIRONMENT);
+            return type_error(arg, Symbol.ENVIRONMENT);
           }
       }
     };

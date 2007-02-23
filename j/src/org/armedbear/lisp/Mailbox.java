@@ -2,7 +2,7 @@
  * Mailbox.java
  *
  * Copyright (C) 2004-2007 Peter Graves, Andras Simon
- * $Id: Mailbox.java,v 1.11 2007-02-22 16:24:43 piso Exp $
+ * $Id: Mailbox.java,v 1.12 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -124,7 +124,7 @@ public final class Mailbox extends LispObject
             return T;
           }
         else
-          return signalTypeError(first, Symbol.MAILBOX);
+          return type_error(first, Symbol.MAILBOX);
       }
     };
 
@@ -140,7 +140,7 @@ public final class Mailbox extends LispObject
             return mbox.read();
           }
         else
-          return signalTypeError(arg, Symbol.MAILBOX);
+          return type_error(arg, Symbol.MAILBOX);
       }
     };
 
@@ -156,7 +156,7 @@ public final class Mailbox extends LispObject
             return mbox.peek();
           }
         else
-          return signalTypeError(arg, Symbol.MAILBOX);
+          return type_error(arg, Symbol.MAILBOX);
       }
     };
 
@@ -172,7 +172,7 @@ public final class Mailbox extends LispObject
             return mbox.empty();
           }
         else
-            return signalTypeError(arg, Symbol.MAILBOX);
+            return type_error(arg, Symbol.MAILBOX);
       }
     };
 }

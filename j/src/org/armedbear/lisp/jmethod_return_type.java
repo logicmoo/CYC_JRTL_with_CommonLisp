@@ -2,7 +2,7 @@
  * jmethod_return_type.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: jmethod_return_type.java,v 1.1 2005-10-27 23:09:29 piso Exp $
+ * $Id: jmethod_return_type.java,v 1.2 2007-02-23 21:17:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,7 +40,7 @@ public final class jmethod_return_type extends Primitive
             method = (Method) ((JavaObject)arg).getObject();
         }
         catch (ClassCastException e) {
-            return signal(new LispError(arg.writeToString() + " does not designate a Java method."));
+            return error(new LispError(arg.writeToString() + " does not designate a Java method."));
         }
         return new JavaObject(method.getReturnType());
     }

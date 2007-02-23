@@ -2,7 +2,7 @@
  * StringOutputStream.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: StringOutputStream.java,v 1.16 2004-11-03 15:39:01 piso Exp $
+ * $Id: StringOutputStream.java,v 1.17 2007-02-23 21:17:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -96,7 +96,7 @@ public final class StringOutputStream extends Stream
 
     private void writeError() throws ConditionThrowable
     {
-        signal(new TypeError("Attempt to write to a string output stream of element type NIL."));
+        error(new TypeError("Attempt to write to a string output stream of element type NIL."));
     }
 
     protected long _getFilePosition() throws ConditionThrowable
@@ -144,7 +144,7 @@ public final class StringOutputStream extends Stream
                 return ((StringOutputStream)arg).getString();
             }
             catch (ClassCastException e) {
-                return signal(new TypeError(this, Symbol.STRING_OUTPUT_STREAM));
+                return error(new TypeError(this, Symbol.STRING_OUTPUT_STREAM));
             }
         }
     };

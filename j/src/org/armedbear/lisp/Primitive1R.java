@@ -2,7 +2,7 @@
  * Primitive1R.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: Primitive1R.java,v 1.2 2005-06-09 11:49:06 piso Exp $
+ * $Id: Primitive1R.java,v 1.3 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -142,6 +142,6 @@ public class Primitive1R extends Function
     protected LispObject _execute(LispObject first, LispObject second)
         throws ConditionThrowable
     {
-        return signal(new LispError("Not implemented."));
+        return error(new LispError("Not implemented."));
     }
 }

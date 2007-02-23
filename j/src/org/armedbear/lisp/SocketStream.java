@@ -2,7 +2,7 @@
  * SocketStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SocketStream.java,v 1.3 2004-10-13 00:22:19 piso Exp $
+ * $Id: SocketStream.java,v 1.4 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -59,7 +59,7 @@ public final class SocketStream extends TwoWayStream
 	    setOpen(false);
 	    return T;
 	} catch (Exception e) {
-	    return signal(new LispError(e.getMessage()));
+	    return error(new LispError(e.getMessage()));
 	}
     }
 

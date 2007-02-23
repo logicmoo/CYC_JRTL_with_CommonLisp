@@ -2,7 +2,7 @@
  * NilVector.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: NilVector.java,v 1.18 2005-08-04 18:08:22 piso Exp $
+ * $Id: NilVector.java,v 1.19 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -192,12 +192,12 @@ public final class NilVector extends AbstractString
 
     public LispObject accessError() throws ConditionThrowable
     {
-        return signal(new TypeError("Attempt to access an array of element type NIL."));
+        return error(new TypeError("Attempt to access an array of element type NIL."));
     }
 
     private void storeError(LispObject obj) throws ConditionThrowable
     {
-        signal(new TypeError(String.valueOf(obj) + " is not of type NIL."));
+        error(new TypeError(String.valueOf(obj) + " is not of type NIL."));
     }
 
     public String toString()

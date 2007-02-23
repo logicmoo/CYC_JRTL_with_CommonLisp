@@ -2,7 +2,7 @@
  * CaseFrobStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: CaseFrobStream.java,v 1.6 2004-11-03 15:27:21 piso Exp $
+ * $Id: CaseFrobStream.java,v 1.7 2007-02-23 21:17:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -176,7 +176,7 @@ public abstract class CaseFrobStream extends Stream
 
     private void notSupported() throws ConditionThrowable
     {
-        signal(new TypeError("Operation is not supported for streams of type CASE-FROB-STREAM."));
+        error(new TypeError("Operation is not supported for streams of type CASE-FROB-STREAM."));
     }
 
     // ### make-case-frob-stream target => case-frob-stream
@@ -195,7 +195,7 @@ public abstract class CaseFrobStream extends Stream
                 return new CapitalizeStream(target);
             if (second == Keyword.CAPITALIZE_FIRST)
                 return new CapitalizeFirstStream(target);
-            return signal(new TypeError(
+            return error(new TypeError(
                 "Kind must be :UPCASE, :DOWNCASE, :CAPITALIZE or :CAPITALIZE-FIRST."));
         }
     };

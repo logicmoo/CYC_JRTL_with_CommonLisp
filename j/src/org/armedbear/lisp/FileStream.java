@@ -2,7 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004-2006 Peter Graves
- * $Id: FileStream.java,v 1.30 2006-10-19 23:39:56 piso Exp $
+ * $Id: FileStream.java,v 1.31 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -140,7 +140,7 @@ public final class FileStream extends Stream
             streamNotInputStream();
         }
         catch (IOException e) {
-            signal(new StreamError(this, e));
+            error(new StreamError(this, e));
         }
         // Not reached.
         return NIL;
@@ -154,14 +154,14 @@ public final class FileStream extends Stream
                 length = raf.length();
             }
             catch (IOException e) {
-                signal(new StreamError(this, e));
+                error(new StreamError(this, e));
                 // Not reached.
                 return NIL;
             }
         } else {
             String namestring = pathname.getNamestring();
             if (namestring == null)
-                return signal(new SimpleError("Pathname has no namestring: " +
+                return error(new SimpleError("Pathname has no namestring: " +
                                               pathname.writeToString()));
             File file = new File(namestring);
             length = file.length(); // in 8-bit bytes
@@ -185,7 +185,7 @@ public final class FileStream extends Stream
                     // End of file.
                     if (sb.length() == 0) {
                         if (eofError)
-                            return signal(new EndOfFile(this));
+                            return error(new EndOfFile(this));
                         return thread.setValues(eofValue, T);
                     }
                     return thread.setValues(new SimpleString(sb), T);
@@ -234,7 +234,7 @@ public final class FileStream extends Stream
             streamNotInputStream();
         }
         catch (IOException e) {
-            signal(new StreamError(this, e));
+            error(new StreamError(this, e));
         }
         // Not reached.
         return -1;
@@ -283,7 +283,7 @@ public final class FileStream extends Stream
             streamNotInputStream();
         }
         catch (IOException e) {
-            signal(new StreamError(this, e));
+            error(new StreamError(this, e));
         }
     }
 
@@ -382,7 +382,7 @@ public final class FileStream extends Stream
             streamNotInputStream();
         }
         catch (IOException e) {
-            signal(new StreamError(this, e));
+            error(new StreamError(this, e));
         }
         // Not reached.
         return -1;
@@ -401,7 +401,7 @@ public final class FileStream extends Stream
                 streamNotOutputStream();
             }
             catch (IOException e) {
-                signal(new StreamError(this, e));
+                error(new StreamError(this, e));
             }
         }
     }
@@ -422,7 +422,7 @@ public final class FileStream extends Stream
             streamNotInputStream();
         }
         catch (IOException e) {
-            signal(new StreamError(this, e));
+            error(new StreamError(this, e));
         }
     }
 
@@ -439,7 +439,7 @@ public final class FileStream extends Stream
             return pos / bytesPerUnit;
         }
         catch (IOException e) {
-            signal(new StreamError(this, e));
+            error(new StreamError(this, e));
             // Not reached.
             return -1;
         }
@@ -464,7 +464,7 @@ public final class FileStream extends Stream
             raf.seek(pos);
         }
         catch (IOException e) {
-            signal(new StreamError(this, e));
+            error(new StreamError(this, e));
         }
         return true;
     }
@@ -478,7 +478,7 @@ public final class FileStream extends Stream
             setOpen(false);
         }
         catch (IOException e) {
-            signal(new StreamError(this, e));
+            error(new StreamError(this, e));
         }
     }
 
@@ -503,7 +503,7 @@ public final class FileStream extends Stream
             streamNotInputStream();
         }
         catch (IOException e) {
-            signal(new StreamError(this, e));
+            error(new StreamError(this, e));
         }
     }
 
@@ -532,7 +532,7 @@ public final class FileStream extends Stream
                 streamNotOutputStream();
             }
             catch (IOException e) {
-                signal(new StreamError(this, e));
+                error(new StreamError(this, e));
             }
         }
     }
@@ -557,21 +557,21 @@ public final class FileStream extends Stream
                 pathname = (Pathname) first;
             }
             catch (ClassCastException e) {
-                return signalTypeError(first, Symbol.PATHNAME);
+                return type_error(first, Symbol.PATHNAME);
             }
             final LispObject namestring;
             try {
                 namestring = (AbstractString) second;
             }
             catch (ClassCastException e) {
-                return signalTypeError(second, Symbol.STRING);
+                return type_error(second, Symbol.STRING);
             }
             LispObject elementType = third;
             LispObject direction = fourth;
             LispObject ifExists = fifth;
             if (direction != Keyword.INPUT && direction != Keyword.OUTPUT &&
                 direction != Keyword.IO)
-                signal(new LispError("Direction must be :INPUT, :OUTPUT, or :IO."));
+                error(new LispError("Direction must be :INPUT, :OUTPUT, or :IO."));
             try {
                 return new FileStream(pathname, namestring.getStringValue(),
                                       elementType, direction, ifExists);
@@ -580,7 +580,7 @@ public final class FileStream extends Stream
                 return NIL;
             }
             catch (IOException e) {
-                return signal(new StreamError(null, e));
+                return error(new StreamError(null, e));
             }
         }
     };

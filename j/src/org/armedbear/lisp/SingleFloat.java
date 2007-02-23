@@ -2,7 +2,7 @@
  * SingleFloat.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: SingleFloat.java,v 1.6 2006-03-26 18:38:03 piso Exp $
+ * $Id: SingleFloat.java,v 1.7 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -173,7 +173,7 @@ public final class SingleFloat extends LispObject
             return ((SingleFloat)obj).value;
         }
         catch (ClassCastException e) {
-            signal(new TypeError(obj, Symbol.FLOAT));
+            error(new TypeError(obj, Symbol.FLOAT));
             // Not reached.
             return 0;
         }
@@ -223,7 +223,7 @@ public final class SingleFloat extends LispObject
             Complex c = (Complex) obj;
             return Complex.getInstance(add(c.getRealPart()), c.getImaginaryPart());
         }
-        return signal(new TypeError(obj, Symbol.NUMBER));
+        return error(new TypeError(obj, Symbol.NUMBER));
     }
 
     public LispObject subtract(LispObject obj) throws ConditionThrowable
@@ -243,7 +243,7 @@ public final class SingleFloat extends LispObject
             return Complex.getInstance(subtract(c.getRealPart()),
                                        ZERO.subtract(c.getImaginaryPart()));
         }
-        return signal(new TypeError(obj, Symbol.NUMBER));
+        return error(new TypeError(obj, Symbol.NUMBER));
     }
 
     public LispObject multiplyBy(LispObject obj) throws ConditionThrowable
@@ -263,7 +263,7 @@ public final class SingleFloat extends LispObject
             return Complex.getInstance(multiplyBy(c.getRealPart()),
                                        multiplyBy(c.getImaginaryPart()));
         }
-        return signal(new TypeError(obj, Symbol.NUMBER));
+        return error(new TypeError(obj, Symbol.NUMBER));
     }
 
     public LispObject divideBy(LispObject obj) throws ConditionThrowable
@@ -288,7 +288,7 @@ public final class SingleFloat extends LispObject
                 multiplyBy(Fixnum.MINUS_ONE).multiplyBy(im).divideBy(denom);
             return Complex.getInstance(resX, resY);
         }
-        return signal(new TypeError(obj, Symbol.NUMBER));
+        return error(new TypeError(obj, Symbol.NUMBER));
     }
 
     public boolean isEqualTo(LispObject obj) throws ConditionThrowable
@@ -305,7 +305,7 @@ public final class SingleFloat extends LispObject
             return rational().isEqualTo(obj);
         if (obj instanceof Complex)
             return obj.isEqualTo(this);
-        signal(new TypeError(obj, Symbol.NUMBER));
+        error(new TypeError(obj, Symbol.NUMBER));
         // Not reached.
         return false;
     }
@@ -327,7 +327,7 @@ public final class SingleFloat extends LispObject
             return rational().isLessThan(obj);
         if (obj instanceof Ratio)
             return rational().isLessThan(obj);
-        signal(new TypeError(obj, Symbol.REAL));
+        error(new TypeError(obj, Symbol.REAL));
         // Not reached.
         return false;
     }
@@ -344,7 +344,7 @@ public final class SingleFloat extends LispObject
             return rational().isGreaterThan(obj);
         if (obj instanceof Ratio)
             return rational().isGreaterThan(obj);
-        signal(new TypeError(obj, Symbol.REAL));
+        error(new TypeError(obj, Symbol.REAL));
         // Not reached.
         return false;
     }
@@ -361,7 +361,7 @@ public final class SingleFloat extends LispObject
             return rational().isLessThanOrEqualTo(obj);
         if (obj instanceof Ratio)
             return rational().isLessThanOrEqualTo(obj);
-        signal(new TypeError(obj, Symbol.REAL));
+        error(new TypeError(obj, Symbol.REAL));
         // Not reached.
         return false;
     }
@@ -378,7 +378,7 @@ public final class SingleFloat extends LispObject
             return rational().isGreaterThanOrEqualTo(obj);
         if (obj instanceof Ratio)
             return rational().isGreaterThanOrEqualTo(obj);
-        signal(new TypeError(obj, Symbol.REAL));
+        error(new TypeError(obj, Symbol.REAL));
         // Not reached.
         return false;
     }
@@ -457,7 +457,7 @@ public final class SingleFloat extends LispObject
             LispObject remainder = subtract(product);
             return thread.setValues(result, remainder);
         }
-        return signal(new TypeError(obj, Symbol.REAL));
+        return error(new TypeError(obj, Symbol.REAL));
     }
 
     public int hashCode()
@@ -540,7 +540,7 @@ public final class SingleFloat extends LispObject
             return new SingleFloat(((Bignum)obj).floatValue());
         if (obj instanceof Ratio)
             return new SingleFloat(((Ratio)obj).floatValue());
-        signal(new TypeError("The value " + obj.writeToString() +
+        error(new TypeError("The value " + obj.writeToString() +
                              " cannot be converted to type SINGLE-FLOAT."));
         // Not reached.
         return null;

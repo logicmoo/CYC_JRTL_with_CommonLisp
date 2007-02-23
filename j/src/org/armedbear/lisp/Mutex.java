@@ -2,7 +2,7 @@
  * Mutex.java
  *
  * Copyright (C) 2004-2007 Peter Graves
- * $Id: Mutex.java,v 1.3 2007-02-11 15:10:53 piso Exp $
+ * $Id: Mutex.java,v 1.4 2007-02-23 21:17:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -106,11 +106,11 @@ public final class Mutex extends LispObject
                 return T;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError("The value " + arg.writeToString() +
+                return error(new TypeError("The value " + arg.writeToString() +
                                             " is not a mutex."));
             }
             catch (InterruptedException e) {
-                return signal(new LispError(
+                return error(new LispError(
                     "The thread " + LispThread.currentThread().writeToString() +
                     " was interrupted."));
             }
@@ -128,7 +128,7 @@ public final class Mutex extends LispObject
                 return T;
             }
             catch (ClassCastException e) {
-                return signal(new TypeError("The value " + arg.writeToString() +
+                return error(new TypeError("The value " + arg.writeToString() +
                                             " is not a mutex."));
             }
         }

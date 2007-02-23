@@ -2,7 +2,7 @@
  * delete_file.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: delete_file.java,v 1.10 2005-10-23 16:22:15 piso Exp $
+ * $Id: delete_file.java,v 1.11 2007-02-23 21:17:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ public final class delete_file extends Primitive
         if (pathname instanceof LogicalPathname)
             pathname = LogicalPathname.translateLogicalPathname((LogicalPathname)pathname);
         if (pathname.isWild())
-            return signal(new FileError("Bad place for a wild pathname.",
+            return error(new FileError("Bad place for a wild pathname.",
                                         pathname));
         final Pathname defaultedPathname =
             Pathname.mergePathnames(pathname,
@@ -50,7 +50,7 @@ public final class delete_file extends Primitive
                                     NIL);
         final String namestring = defaultedPathname.getNamestring();
         if (namestring == null)
-            return signal(new FileError("Pathname has no namestring: " + defaultedPathname.writeToString(),
+            return error(new FileError("Pathname has no namestring: " + defaultedPathname.writeToString(),
                                         defaultedPathname));
         final File file = new File(namestring);
         if (file.exists()) {
@@ -66,7 +66,7 @@ public final class delete_file extends Primitive
             sb.append(file.isDirectory() ? "directory " : "file ");
             sb.append(truename.writeToString());
             sb.append('.');
-            return signal(new FileError(sb.toString(), truename));
+            return error(new FileError(sb.toString(), truename));
         } else {
             // File does not exist.
             return T;

@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2006 Peter Graves, Andras Simon
- * $Id: Java.java,v 1.71 2006-01-12 03:03:02 piso Exp $
+ * $Id: Java.java,v 1.72 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -142,7 +142,7 @@ public final class Java extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2 || args.length > 4)
-                signal(new WrongNumberOfArgumentsException(this));
+                error(new WrongNumberOfArgumentsException(this));
             String fieldName = null;
             Class c;
             Field f;
@@ -195,19 +195,19 @@ public final class Java extends Lisp
                 return new JavaObject(f.get(instance));
             }
             catch (NoSuchFieldException e) {
-                signal(new LispError("no such field"));
+                error(new LispError("no such field"));
             }
             catch (SecurityException e) {
-                signal(new LispError("inaccessible field"));
+                error(new LispError("inaccessible field"));
             }
             catch (IllegalAccessException e) {
-                signal(new LispError("illegal access"));
+                error(new LispError("illegal access"));
             }
             catch (IllegalArgumentException e) {
-                signal(new LispError("illegal argument"));
+                error(new LispError("illegal argument"));
             }
             catch (Throwable t) {
-                signal(new LispError(getMessage(t)));
+                error(new LispError(getMessage(t)));
             }
             // Not reached.
             return NIL;
@@ -222,7 +222,7 @@ public final class Java extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 1)
-                signal(new WrongNumberOfArgumentsException(this));
+                error(new WrongNumberOfArgumentsException(this));
             try {
                 final Class c = javaClass(args[0]);
                 int argCount = 0;
@@ -245,13 +245,13 @@ public final class Java extends Lisp
                 throw new NoSuchMethodException();
             }
             catch (NoSuchMethodException e) {
-                signal(new LispError("no such constructor"));
+                error(new LispError("no such constructor"));
             }
             catch (ConditionThrowable e) {
                 throw e;
             }
             catch (Throwable t) {
-                signal(new LispError(getMessage(t)));
+                error(new LispError(getMessage(t)));
             }
             // Not reached.
             return NIL;
@@ -266,7 +266,7 @@ public final class Java extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2)
-                signal(new WrongNumberOfArgumentsException(this));
+                error(new WrongNumberOfArgumentsException(this));
             final Class c = javaClass(args[0]);
             String methodName = args[1].getStringValue();
             try {
@@ -302,13 +302,13 @@ public final class Java extends Lisp
                         sb.append(',');
                 }
                 sb.append(')');
-                signal(new LispError(sb.toString()));
+                error(new LispError(sb.toString()));
             }
             catch (ConditionThrowable e) {
                 throw e;
             }
             catch (Throwable t) {
-                signal(new LispError(getMessage(t)));
+                error(new LispError(getMessage(t)));
             }
             // Not reached.
             return NIL;
@@ -333,7 +333,7 @@ public final class Java extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2)
-                signal(new WrongNumberOfArgumentsException(this));
+                error(new WrongNumberOfArgumentsException(this));
             try {
                 Method m = null;
                 LispObject methodRef = args[0];
@@ -358,10 +358,10 @@ public final class Java extends Lisp
                             }
                         }
                         if (m == null)
-                            signal(new LispError("no such method"));
+                            error(new LispError("no such method"));
                     }
                 } else
-                    signal(new TypeError("wrong type: " + methodRef));
+                    error(new TypeError("wrong type: " + methodRef));
                 Object[] methodArgs = new Object[args.length-2];
                 Class[] argTypes = m.getParameterTypes();
                 for (int i = 2; i < args.length; i++) {
@@ -379,7 +379,7 @@ public final class Java extends Lisp
                     t = t.getCause();
                 Symbol condition = getCondition(t.getClass());
                 if (condition == null)
-                    signal(new JavaException(t));
+                    error(new JavaException(t));
                 else
                     Symbol.SIGNAL.execute(
                         condition,
@@ -400,7 +400,7 @@ public final class Java extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 1)
-                signal(new WrongNumberOfArgumentsException(this));
+                error(new WrongNumberOfArgumentsException(this));
             LispObject classRef = args[0];
             try {
                 Constructor constructor = (Constructor) JavaObject.getObject(classRef);
@@ -421,7 +421,7 @@ public final class Java extends Lisp
                     t = t.getCause();
                 Symbol condition = getCondition(t.getClass());
                 if (condition == null)
-                    signal(new JavaException(t));
+                    error(new JavaException(t));
                 else
                     Symbol.SIGNAL.execute(
                         condition,
@@ -443,7 +443,7 @@ public final class Java extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2)
-                signal(new WrongNumberOfArgumentsException(this));
+                error(new WrongNumberOfArgumentsException(this));
             try {
                 Class c = javaClass(args[0]);
                 int[] dimensions = new int[args.length - 1];
@@ -452,7 +452,7 @@ public final class Java extends Lisp
                 return new JavaObject(Array.newInstance(c, dimensions));
             }
             catch (Throwable t) {
-                signal(new JavaException(t));
+                error(new JavaException(t));
             }
             // Not reached.
             return NIL;
@@ -478,7 +478,7 @@ public final class Java extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2)
-                signal(new WrongNumberOfArgumentsException(this));
+                error(new WrongNumberOfArgumentsException(this));
             try {
                 Object a = args[0].javaInstance();
                 for (int i = 1; i<args.length - 1; i++)
@@ -488,7 +488,7 @@ public final class Java extends Lisp
             catch (Throwable t) {
                 Symbol condition = getCondition(t.getClass());
                 if (condition == null)
-                    signal(new JavaException(t));
+                    error(new JavaException(t));
                 else
                     Symbol.SIGNAL.execute(
                         condition,
@@ -510,7 +510,7 @@ public final class Java extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 3)
-                signal(new WrongNumberOfArgumentsException(this));
+                error(new WrongNumberOfArgumentsException(this));
             try {
                 Object a = args[0].javaInstance();
                 LispObject v = args[1];
@@ -522,7 +522,7 @@ public final class Java extends Lisp
             catch (Throwable t) {
                 Symbol condition = getCondition(t.getClass());
                 if (condition == null)
-                    signal(new JavaException(t));
+                    error(new JavaException(t));
                 else
                     Symbol.SIGNAL.execute(
                         condition,
@@ -544,7 +544,7 @@ public final class Java extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2)
-                signal(new WrongNumberOfArgumentsException(this));
+                error(new WrongNumberOfArgumentsException(this));
             return makeLispObject(jcall(args));
         }
     };
@@ -558,7 +558,7 @@ public final class Java extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 2)
-                signal(new WrongNumberOfArgumentsException(this));
+                error(new WrongNumberOfArgumentsException(this));
             return new JavaObject(jcall(args));
         }
     };
@@ -574,7 +574,7 @@ public final class Java extends Lisp
         else if (instanceArg instanceof JavaObject)
             instance = ((JavaObject)instanceArg).getObject();
         else {
-            signalTypeError(instanceArg,
+            type_error(instanceArg,
                             list3(Symbol.OR, Symbol.STRING, Symbol.JAVA_OBJECT));
             // Not reached.
             return null;
@@ -607,7 +607,7 @@ public final class Java extends Lisp
                 t = t.getCause();
             Symbol condition = getCondition(t.getClass());
             if (condition == null)
-                signal(new JavaException(t));
+                error(new JavaException(t));
             else
                 Symbol.SIGNAL.execute(
                     condition,
@@ -642,7 +642,7 @@ public final class Java extends Lisp
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {
             if (args.length < 1)
-                signal(new WrongNumberOfArgumentsException(this));
+                error(new WrongNumberOfArgumentsException(this));
             LispObject object = args[0];
             try {
                 if (args.length > 1) {
@@ -664,7 +664,7 @@ public final class Java extends Lisp
                 return new JavaObject(object.javaInstance());
             }
             catch (Throwable t) {
-                signal(new LispError("MAKE-IMMEDIATE-OBJECT: not implemented"));
+                error(new LispError("MAKE-IMMEDIATE-OBJECT: not implemented"));
             }
             // Not reached.
             return NIL;
@@ -701,7 +701,7 @@ public final class Java extends Lisp
                 return Class.forName(className, true, JavaClassLoader.getPersistentInstance());
             }
             catch (ClassNotFoundException ex) {
-                signal(new LispError("Class not found: " + className));
+                error(new LispError("Class not found: " + className));
                 // Not reached.
                 return null;
             }
@@ -738,7 +738,7 @@ public final class Java extends Lisp
             javaObject = (JavaObject) obj;
         }
         catch (ClassCastException e) {
-            signalTypeError(obj, list3(Symbol.OR, Symbol.STRING,
+            type_error(obj, list3(Symbol.OR, Symbol.STRING,
                                        Symbol.JAVA_OBJECT));
             // Not reached.
             return null;
@@ -747,7 +747,7 @@ public final class Java extends Lisp
             return (Class) javaObject.getObject();
         }
         catch (ClassCastException e) {
-            signal(new LispError(obj.writeToString() + " does not designate a Java class."));
+            error(new LispError(obj.writeToString() + " does not designate a Java class."));
             return null;
         }
     }

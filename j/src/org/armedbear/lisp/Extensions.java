@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2007 Peter Graves
- * $Id: Extensions.java,v 1.47 2007-02-11 15:47:45 piso Exp $
+ * $Id: Extensions.java,v 1.48 2007-02-23 21:17:33 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ public final class Extensions extends Lisp
         throws ConditionThrowable
       {
         if (args.length() != 2)
-          return signal(new WrongNumberOfArgumentsException(this));
+          return error(new WrongNumberOfArgumentsException(this));
         return eval(args.cadr(), env, LispThread.currentThread());
       }
     };
@@ -69,7 +69,7 @@ public final class Extensions extends Lisp
             list = ((Cons)list).cdr;
           }
         if (list != NIL)
-          signalTypeError(list, Symbol.LIST);
+          type_error(list, Symbol.LIST);
         return NIL;
       }
     };
@@ -88,7 +88,7 @@ public final class Extensions extends Lisp
             list = ((Cons)list).cdr;
           }
         if (list != NIL)
-          signalTypeError(list, Symbol.LIST);
+          type_error(list, Symbol.LIST);
         return NIL;
       }
     };

@@ -2,7 +2,7 @@
  * Utilities.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Utilities.java,v 1.14 2005-10-23 16:22:15 piso Exp $
+ * $Id: Utilities.java,v 1.15 2007-02-23 21:17:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -78,7 +78,7 @@ public final class Utilities extends Lisp
         String namestring = merged.getNamestring();
         if (namestring != null)
             return new File(namestring);
-        signal(new FileError("Pathname has no namestring: " + merged.writeToString(),
+        error(new FileError("Pathname has no namestring: " + merged.writeToString(),
                              merged));
         // Not reached.
         return null;
@@ -96,7 +96,7 @@ public final class Utilities extends Lisp
             return new Pathname(namestring);
         }
         catch (IOException e) {
-            signal(new LispError(e.getMessage()));
+            error(new LispError(e.getMessage()));
             // Not reached.
             return null;
         }

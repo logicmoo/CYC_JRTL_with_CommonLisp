@@ -2,7 +2,7 @@
  * lognor.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: lognor.java,v 1.8 2005-11-27 21:40:20 piso Exp $
+ * $Id: lognor.java,v 1.9 2007-02-23 21:17:36 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -42,7 +42,7 @@ public final class lognor extends Primitive
                 BigInteger n2 = ((Bignum)second).value;
                 return number(n1.or(n2).not());
             }
-            return signalTypeError(second, Symbol.INTEGER);
+            return type_error(second, Symbol.INTEGER);
         }
         if (first instanceof Bignum) {
             BigInteger n1 = ((Bignum)first).value;
@@ -54,9 +54,9 @@ public final class lognor extends Primitive
                 BigInteger n2 = ((Bignum)second).value;
                 return number(n1.or(n2).not());
             }
-            return signalTypeError(second, Symbol.INTEGER);
+            return type_error(second, Symbol.INTEGER);
         }
-        return signalTypeError(first, Symbol.INTEGER);
+        return type_error(first, Symbol.INTEGER);
     }
 
     private static final Primitive LOGNOR = new lognor();
