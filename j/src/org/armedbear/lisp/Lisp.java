@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2007 Peter Graves
- * $Id: Lisp.java,v 1.444 2007-02-22 16:03:48 piso Exp $
+ * $Id: Lisp.java,v 1.445 2007-02-23 17:39:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -334,11 +334,30 @@ public abstract class Lisp
     return Symbol.SIGNAL.execute(condition, Keyword.FORMAT_CONTROL, message);
   }
 
+  public static final LispObject error(LispObject condition)
+    throws ConditionThrowable
+  {
+    return Symbol.ERROR.execute(condition);
+  }
+
+  public static final LispObject error(LispObject condition, LispObject message)
+    throws ConditionThrowable
+  {
+    return Symbol.ERROR.execute(condition, Keyword.FORMAT_CONTROL, message);
+  }
+
   public static final LispObject signalTypeError(LispObject datum,
                                                  LispObject expectedType)
     throws ConditionThrowable
   {
     return signal(new TypeError(datum, expectedType));
+  }
+
+  public static final LispObject type_error(LispObject datum,
+                                            LispObject expectedType)
+    throws ConditionThrowable
+  {
+    return error(new TypeError(datum, expectedType));
   }
 
   protected static volatile boolean interrupted;
@@ -1436,14 +1455,14 @@ public abstract class Lisp
         final Stream stream = (Stream) obj;
         if (stream.isCharacterOutputStream())
           return stream;
-        signal(new TypeError("The value " + obj.writeToString() +
-                             " is not a character output stream."));
+        error(new TypeError("The value " + obj.writeToString() +
+                            " is not a character output stream."));
         // Not reached.
         return null;
       }
     catch (ClassCastException e)
       {
-        signalTypeError(obj, Symbol.STREAM);
+        type_error(obj, Symbol.STREAM);
         // Not reached.
         return null;
       }
