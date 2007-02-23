@@ -1,7 +1,7 @@
 ;;; clos.lisp
 ;;;
-;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: clos.lisp,v 1.211 2006-01-08 05:42:41 piso Exp $
+;;; Copyright (C) 2003-2007 Peter Graves
+;;; $Id: clos.lisp,v 1.212 2007-02-23 10:46:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -15,7 +15,7 @@
 ;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
-;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+;;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 ;;; Originally based on Closette.
 
@@ -2225,13 +2225,6 @@
                 :expected-type '(or symbol string)
                 :format-control "Bad argument to ~S: ~S."
                 :format-arguments (list fun-name datum)))))
-
-;; Originally defined in Primitives.java. Redefined here to support arbitrary
-;; conditions.
-(defun error (datum &rest arguments)
-  (let ((condition (coerce-to-condition datum arguments 'simple-error 'error)))
-    (signal condition)
-    (invoke-debugger condition)))
 
 (defgeneric make-load-form (object &optional environment))
 
