@@ -1,8 +1,8 @@
 /*
  * LispAPI.java
  *
- * Copyright (C) 2003-2005 Peter Graves
- * $Id: LispAPI.java,v 1.77 2005-11-21 14:11:26 piso Exp $
+ * Copyright (C) 2003-2007 Peter Graves
+ * $Id: LispAPI.java,v 1.78 2007-02-24 11:59:17 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.j;
@@ -96,8 +96,8 @@ public final class LispAPI extends Lisp
       }
     catch (ClassCastException e)
       {
-        signal(new TypeError("The value " + obj.writeToString() +
-                             " is not an editor."));
+        error(new TypeError("The value " + obj.writeToString() +
+                            " is not an editor."));
         // Not reached.
         return null;
       }
@@ -116,8 +116,8 @@ public final class LispAPI extends Lisp
       }
     catch (ClassCastException e)
       {
-        signal(new TypeError("The value " + obj.writeToString() +
-                             " is not a buffer."));
+        error(new TypeError("The value " + obj.writeToString() +
+                            " is not a buffer."));
         // Not reached.
         return null;
       }
@@ -134,8 +134,8 @@ public final class LispAPI extends Lisp
       }
     catch (ClassCastException e)
       {
-        signal(new TypeError("The value " + obj.writeToString() +
-                             " is not a keymap."));
+        error(new TypeError("The value " + obj.writeToString() +
+                            " is not a keymap."));
         // Not reached.
         return null;
       }
@@ -152,8 +152,8 @@ public final class LispAPI extends Lisp
       }
     catch (ClassCastException e)
       {
-        signal(new TypeError("The value " + obj.writeToString() +
-                             " is not a mark."));
+        error(new TypeError("The value " + obj.writeToString() +
+                            " is not a mark."));
         // Not reached.
         return null;
       }
@@ -170,8 +170,8 @@ public final class LispAPI extends Lisp
       }
     catch (ClassCastException e)
       {
-        signal(new TypeError("The value " + obj.writeToString() +
-                             " is not a line."));
+        error(new TypeError("The value " + obj.writeToString() +
+                            " is not a line."));
         // Not reached.
         return null;
       }
@@ -256,7 +256,7 @@ public final class LispAPI extends Lisp
       {
         Buffer buffer = checkBuffer(first);
         if (!(second instanceof AbstractString))
-          return signalTypeError(second, Symbol.STRING);
+          return type_error(second, Symbol.STRING);
         buffer.setTitle(second.getStringValue());
         return second;
       }
@@ -742,7 +742,7 @@ public final class LispAPI extends Lisp
                 while (n-- > 0)
                   {
                     if (!pos.next())
-                      return signal(new LispError("Reached end of buffer."));
+                      return error(new LispError("Reached end of buffer."));
                   }
               }
             else
@@ -750,7 +750,7 @@ public final class LispAPI extends Lisp
                 while (n++ < 0)
                   {
                     if (!pos.prev())
-                      return signal(new LispError("Reached beginning of buffer."));
+                      return error(new LispError("Reached beginning of buffer."));
                   }
               }
           }
@@ -851,7 +851,7 @@ public final class LispAPI extends Lisp
               return T;
             return NIL;
           }
-        return signal(new TypeError(second, Symbol.STRING));
+        return type_error(second, Symbol.STRING);
       }
     };
 
@@ -927,19 +927,14 @@ public final class LispAPI extends Lisp
         KeyMap keymap = checkKeymap(first);
         if (!(second instanceof LispCharacter ||
               second instanceof AbstractString))
-          return signal(new TypeError(second,
-                                      list2(Symbol.OR,
-                                            list2(Symbol.CHARACTER,
-                                                  Symbol.STRING))));
+          return type_error(second, list2(Symbol.OR,
+                                          list2(Symbol.CHARACTER,
+                                                Symbol.STRING)));
         Object command;
         if (third instanceof AbstractString)
-          {
-            command = third.getStringValue();
-          }
+          command = third.getStringValue();
         else if (third instanceof JavaObject)
-          {
-            command = checkKeymap(third);
-          }
+          command = checkKeymap(third);
         else
           {
             // Verify that the command can be coerced to a function.
@@ -1016,7 +1011,7 @@ public final class LispAPI extends Lisp
         String modeName = third.getStringValue();
         Mode mode = Editor.getModeList().getModeFromModeName(modeName);
         if (mode == null)
-          return signal(new LispError("Unknown mode \"".concat(modeName).concat("\"")));
+          return error(new LispError("Unknown mode \"".concat(modeName).concat("\"")));
         return mode.getKeyMap().mapKey(keyText, command) ? T : NIL;
       }
     };
@@ -1032,7 +1027,7 @@ public final class LispAPI extends Lisp
         String modeName = second.getStringValue();
         Mode mode = Editor.getModeList().getModeFromModeName(modeName);
         if (mode == null)
-          return signal(new LispError("Unknown mode \"".concat(modeName).concat("\"")));
+          return error(new LispError("Unknown mode \"".concat(modeName).concat("\"")));
         return mode.getKeyMap().unmapKey(keyText) ? T : NIL;
       }
     };
@@ -1050,7 +1045,7 @@ public final class LispAPI extends Lisp
           {
             // Not an advertised property.
             if (!(second instanceof AbstractString))
-              return signalTypeError(second, Symbol.STRING);
+              return type_error(second, Symbol.STRING);
             Editor.setGlobalProperty(key, second.getStringValue());
             return second;
           }
@@ -1077,8 +1072,8 @@ public final class LispAPI extends Lisp
                   }
                 catch (NumberFormatException e)
                   {
-                    return signal(new LispError(second.writeToString() +
-                                                " cannot be converted to a Java integer."));
+                    return error(new LispError(second.writeToString() +
+                                               " cannot be converted to a Java integer."));
                   }
                 preferences.setProperty(property, value);
                 return second;
@@ -1086,7 +1081,7 @@ public final class LispAPI extends Lisp
           }
         // It must be a string property.
         if (!(second instanceof AbstractString))
-          return signalTypeError(second, Symbol.STRING);
+          return type_error(second, Symbol.STRING);
         preferences.setProperty(property, second.getStringValue());
         return second;
       }
@@ -1101,20 +1096,20 @@ public final class LispAPI extends Lisp
         throws ConditionThrowable
       {
         if (!(first instanceof AbstractString))
-          return signalTypeError(first, Symbol.STRING);
+          return type_error(first, Symbol.STRING);
         String key = first.getStringValue();
         if (!(third instanceof AbstractString))
-          return signalTypeError(third, Symbol.STRING);
+          return type_error(third, Symbol.STRING);
         final Mode mode
           = Editor.getModeList().getModeFromModeName(third.getStringValue());
         if (mode == null)
-          return signal(new LispError(third.writeToString() +
-                                      " does not designate any mode."));
+          return error(new LispError(third.writeToString() +
+                                     " does not designate any mode."));
         Property property = Property.findProperty(key);
         if (property == null)
           // Not an advertised property.
-          return signal(new LispError(first.writeToString() +
-                                      " does not designate any property."));
+          return error(new LispError(first.writeToString() +
+                                     " does not designate any property."));
         if (property.isBooleanProperty())
           {
             mode.setProperty(property, second == NIL ? false : true);
@@ -1136,19 +1131,18 @@ public final class LispAPI extends Lisp
                   }
                 catch (NumberFormatException e)
                   {
-                    return signal(new LispError(second.writeToString() +
-                                                " cannot be converted to a Java integer."));
+                    return error(new LispError(second.writeToString() +
+                                               " cannot be converted to a Java integer."));
                   }
                 mode.setProperty(property, value);
                 return second;
               }
-            return signalTypeError(second,
-                                   list3(Symbol.OR, Symbol.FIXNUM,
-                                         Symbol.STRING));
+            return type_error(second, list3(Symbol.OR, Symbol.FIXNUM,
+                                            Symbol.STRING));
           }
         // It must be a string property.
         if (!(second instanceof AbstractString))
-          return signalTypeError(second, Symbol.STRING);
+          return type_error(second, Symbol.STRING);
         mode.setProperty(property, second.getStringValue());
         return second;
       }
@@ -1170,14 +1164,14 @@ public final class LispAPI extends Lisp
         throws ConditionThrowable
       {
         if (!(first instanceof AbstractString))
-          return signalTypeError(first, Symbol.STRING);
+          return type_error(first, Symbol.STRING);
         String key = first.getStringValue();
         Property property = Property.findProperty(key);
         if (property == null)
           {
             // Not an advertised property.
-            return signal(new LispError(first.writeToString() +
-                                        " does not designate any property."));
+            return error(new LispError(first.writeToString() +
+                                       " does not designate any property."));
           }
         final Buffer buffer = checkBuffer(third);
         if (property.isBooleanProperty())
@@ -1201,19 +1195,18 @@ public final class LispAPI extends Lisp
                   }
                 catch (NumberFormatException e)
                   {
-                    return signal(new LispError(second.writeToString() +
-                                                " cannot be converted to a Java integer."));
+                    return error(new LispError(second.writeToString() +
+                                               " cannot be converted to a Java integer."));
                   }
                 buffer.setProperty(property, value);
                 return second;
               }
-            return signalTypeError(second,
-                                   list3(Symbol.OR, Symbol.FIXNUM,
-                                         Symbol.STRING));
+            return type_error(second, list3(Symbol.OR, Symbol.FIXNUM,
+                                            Symbol.STRING));
           }
         // It must be a string property.
         if (!(second instanceof AbstractString))
-          return signalTypeError(second, Symbol.STRING);
+          return type_error(second, Symbol.STRING);
         buffer.setProperty(property, second.getStringValue());
         return second;
       }
@@ -1230,8 +1223,8 @@ public final class LispAPI extends Lisp
         if (property == null)
           {
             // Not an advertised property.
-            return signal(new LispError(arg.writeToString() +
-                                        " does not designate any property."));
+            return error(new LispError(arg.writeToString() +
+                                       " does not designate a property."));
           }
         if (property.isBooleanProperty())
           return preferences.getBooleanProperty(property) ? T : NIL;
@@ -1260,8 +1253,8 @@ public final class LispAPI extends Lisp
         if (property == null)
           {
             // Not an advertised property.
-            return signal(new LispError(first.writeToString() +
-                                        " does not designate any property."));
+            return error(new LispError(first.writeToString() +
+                                       " does not designate any property."));
           }
         final Buffer buffer = checkBuffer(second);
         if (property.isBooleanProperty())
@@ -1306,8 +1299,7 @@ public final class LispAPI extends Lisp
                     editor.insertString(obj.getStringValue());
                   }
                 else
-                  return signalTypeError(obj,
-                                         list3(Symbol.OR, Symbol.CHARACTER,
+                  return type_error(obj, list3(Symbol.OR, Symbol.CHARACTER,
                                                Symbol.STRING));
               }
             return NIL;
@@ -1423,8 +1415,8 @@ public final class LispAPI extends Lisp
           }
         catch (ClassCastException e)
           {
-            return signal(new LispError(arg.writeToString() +
-                                        " does not designate a compound edit."));
+            return error(new LispError(arg.writeToString() +
+                                       " does not designate a compound edit."));
           }
       }
     };
@@ -1540,7 +1532,7 @@ public final class LispAPI extends Lisp
             SwingUtilities.invokeLater(r);
             return NIL;
           }
-        return signal(new UndefinedFunction(arg));
+        return error(new UndefinedFunction(arg));
       }
     };
 
@@ -1567,8 +1559,8 @@ public final class LispAPI extends Lisp
       {
         if (arg instanceof BufferStream)
           return new JavaObject(((BufferStream)arg).getBuffer());
-        return signal(new LispError(arg.writeToString() +
-                                    "does not designate a buffer stream."));
+        return error(new LispError(arg.writeToString() +
+                                   "does not designate a buffer stream."));
       }
     };
 
@@ -1655,7 +1647,7 @@ public final class LispAPI extends Lisp
             SwingUtilities.invokeLater(r);
             return T;
           }
-        return signalTypeError(arg, Symbol.STRING);
+        return type_error(arg, Symbol.STRING);
       }
       public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
@@ -1680,7 +1672,7 @@ public final class LispAPI extends Lisp
             SwingUtilities.invokeLater(r);
             return T;
           }
-        return signalTypeError(first, Symbol.STRING);
+        return type_error(first, Symbol.STRING);
       }
     };
 
@@ -1692,12 +1684,12 @@ public final class LispAPI extends Lisp
       public LispObject execute(LispObject[] args) throws ConditionThrowable
       {
         if (args.length != 7)
-          return signal(new WrongNumberOfArgumentsException(this));
+          return error(new WrongNumberOfArgumentsException(this));
         final String pattern;
         if (args[0] instanceof AbstractString)
           pattern = args[0].getStringValue();
         else
-          return signal(new TypeError(args[0], Symbol.STRING));
+          return type_error(args[0], Symbol.STRING);
         final boolean backward;
         Symbol direction = checkSymbol(args[1]);
         if (direction == NIL || direction.getName().equals("BACKWARD"))
@@ -1705,7 +1697,7 @@ public final class LispAPI extends Lisp
         else if (direction.getName().equals("FORWARD"))
           backward = false;
         else
-          return signal(new LispError("Invalid direction " + direction.writeToString()));
+          return error(new LispError("Invalid direction " + direction.writeToString()));
         final Buffer buffer = checkBuffer(args[3]);
         final Position start;
         if (args[4] == NIL)
@@ -1724,8 +1716,8 @@ public final class LispAPI extends Lisp
               }
             catch (REException e)
               {
-                return signal(new LispError("Invalid regular expression: \"" +
-                                            pattern + '"'));
+                return error(new LispError("Invalid regular expression: \"" +
+                                           pattern + '"'));
               }
             if (backward)
               pos = search.reverseFindRegExp(buffer, start);
