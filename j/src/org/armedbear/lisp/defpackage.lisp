@@ -1,7 +1,7 @@
 ;;; defpackage.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves
-;;; $Id: defpackage.lisp,v 1.5 2007-02-22 17:51:00 piso Exp $
+;;; $Id: defpackage.lisp,v 1.6 2007-02-26 11:10:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -15,11 +15,17 @@
 ;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
-;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+;;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 (in-package "SYSTEM")
 
-;;; From CMUCL.
+;;; Adapted from CMUCL.
+
+(defun designated-package-name (designator)
+  (cond ((packagep designator)
+         (package-name designator))
+        (t
+         (string designator))))
 
 (defun stringify-names (names)
   (mapcar #'string names))
@@ -34,18 +40,6 @@
           (error 'program-error))))))
 
 (defmacro defpackage (package &rest options)
-  "Defines a new package called PACKAGE.  Each of OPTIONS should be one of the
-   following:
-   (:NICKNAMES {package-name}*)
-   (:SIZE <integer>)
-   (:SHADOW {symbol-name}*)
-   (:SHADOWING-IMPORT-FROM <package-name> {symbol-name}*)
-   (:USE {package-name}*)
-   (:IMPORT-FROM <package-name> {symbol-name}*)
-   (:INTERN {symbol-name}*)
-   (:EXPORT {symbol-name}*)
-   (:DOCUMENTATION doc-string)
-   All options except :SIZE and :DOCUMENTATION can be used multiple times."
   (let ((nicknames nil)
 	(size nil)
 	(shadows nil)
@@ -61,51 +55,51 @@
 	(error 'program-error "bad DEFPACKAGE option: ~S" option))
       (case (car option)
 	(:nicknames
-	 (setf nicknames (stringify-names (cdr option))))
+	 (setq nicknames (stringify-names (cdr option))))
 	(:size
 	 (cond (size
 		(error 'program-error "can't specify :SIZE twice"))
 	       ((and (consp (cdr option))
 		     (typep (second option) 'unsigned-byte))
-		(setf size (second option)))
+		(setq size (second option)))
 	       (t
 		(error 'program-error
 		 "bad :SIZE, must be a positive integer: ~S"
 		 (second option)))))
 	(:shadow
 	 (let ((new (stringify-names (cdr option))))
-	   (setf shadows (append shadows new))))
+	   (setq shadows (append shadows new))))
 	(:shadowing-import-from
-	 (let ((package-name (string (second option)))
-	       (names (stringify-names (cddr option))))
+	 (let ((package-name (designated-package-name (cadr option)))
+	       (symbol-names (stringify-names (cddr option))))
 	   (let ((assoc (assoc package-name shadowing-imports
 			       :test #'string=)))
 	     (if assoc
-		 (setf (cdr assoc) (append (cdr assoc) names))
-		 (setf shadowing-imports
-		       (acons package-name names shadowing-imports))))))
+		 (setf (cdr assoc) (append (cdr assoc) symbol-names))
+		 (setq shadowing-imports
+		       (acons package-name symbol-names shadowing-imports))))))
 	(:use
-	 (let ((new (stringify-names (cdr option))))
-	   (setf use (delete-duplicates (nconc use new) :test #'string=))
-	   (setf use-p t)))
+	 (let ((new (mapcar #'designated-package-name (cdr option))))
+	   (setq use (delete-duplicates (nconc use new) :test #'string=))
+	   (setq use-p t)))
 	(:import-from
-	 (let ((package-name (string (second option)))
-	       (names (stringify-names (cddr option))))
+	 (let ((package-name (designated-package-name (cadr option)))
+	       (symbol-names (stringify-names (cddr option))))
 	   (let ((assoc (assoc package-name imports
 			       :test #'string=)))
 	     (if assoc
-		 (setf (cdr assoc) (append (cdr assoc) names))
-		 (setf imports (acons package-name names imports))))))
+		 (setf (cdr assoc) (append (cdr assoc) symbol-names))
+		 (setq imports (acons package-name symbol-names imports))))))
 	(:intern
 	 (let ((new (stringify-names (cdr option))))
-	   (setf interns (append interns new))))
+	   (setq interns (append interns new))))
 	(:export
 	 (let ((new (stringify-names (cdr option))))
-	   (setf exports (append exports new))))
+	   (setq exports (append exports new))))
 	(:documentation
 	 (when doc
 	   (error 'program-error "can't specify :DOCUMENTATION twice"))
-	 (setf doc (coerce (second option) 'simple-string)))
+	 (setq doc (coerce (cadr option) 'simple-string)))
 	(t
 	 (error 'program-error "bad DEFPACKAGE option: ~S" option))))
     (check-disjoint `(:intern ,@interns) `(:export  ,@exports))
