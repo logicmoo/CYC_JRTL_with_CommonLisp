@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
-;;; Copyright (C) 2004-2006 Peter Graves
-;;; $Id: format.lisp,v 1.32 2006-02-25 04:20:54 piso Exp $
+;;; Copyright (C) 2004-2007 Peter Graves
+;;; $Id: format.lisp,v 1.33 2007-02-26 11:11:44 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -15,11 +15,11 @@
 ;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
-;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+;;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-;;; Adapted from SBCL and CMUCL.
+;;; Adapted from CMUCL/SBCL.
 
-(in-package #:system)
+(in-package "SYSTEM")
 
 ;;; From primordial-extensions.lisp.
 
@@ -27,29 +27,7 @@
 ;;; producing a symbol in the current package.
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (defun symbolicate (&rest things)
-    (let ((name (case (length things)
-		  ;; Why isn't this just the value in the T branch?
-		  ;; Well, this is called early in cold-init, before
-		  ;; the type system is set up; however, now that we
-		  ;; check for bad lengths, the type system is needed
-		  ;; for calls to CONCATENATE. So we need to make sure
-		  ;; that the calls are transformed away:
-		  (1 (concatenate 'string
-				  (the simple-base-string
-                                       (string (car things)))))
-		  (2 (concatenate 'string
-				  (the simple-base-string
-                                       (string (car things)))
-				  (the simple-base-string
-                                       (string (cadr things)))))
-		  (3 (concatenate 'string
-				  (the simple-base-string
-                                       (string (car things)))
-				  (the simple-base-string
-                                       (string (cadr things)))
-				  (the simple-base-string
-                                       (string (caddr things)))))
-		  (t (apply #'concatenate 'string (mapcar #'string things))))))
+    (let ((name (apply #'concatenate 'string (mapcar #'string things))))
       (values (intern name)))))
 
 ;;; a helper function for various macros which expect clauses of a
