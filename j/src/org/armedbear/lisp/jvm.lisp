@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
-;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: jvm.lisp,v 1.774 2007-02-23 21:17:35 piso Exp $
+;;; Copyright (C) 2003-2007 Peter Graves
+;;; $Id: jvm.lisp,v 1.775 2007-03-01 00:52:19 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -15,7 +15,7 @@
 ;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
-;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+;;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 (in-package #:extensions)
 
@@ -1713,7 +1713,7 @@
                  ((eq op 'PROGN)
                   (single-valued-p (car (last form))))
                  ((eq op 'BLOCK)
-                  (single-valued-p (third form)))
+                  (single-valued-p (car (last form))))
                  ((memq op '(LET LET*))
                   (single-valued-p (car (last (cddr form)))))
                  ((memq op '(AND OR))
@@ -1721,7 +1721,6 @@
                  ((eq op 'RETURN-FROM)
                   (single-valued-p (third form)))
                  ((memq op '(THE TRULY-THE))
-                  (dformat t "single-valued-p THE ~S~%" form)
                   (single-valued-p (third form)))
                  ((setf result-type
                         (or (function-result-type op)
