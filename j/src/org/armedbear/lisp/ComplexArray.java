@@ -1,8 +1,8 @@
 /*
  * ComplexArray.java
  *
- * Copyright (C) 2003-2004 Peter Graves
- * $Id: ComplexArray.java,v 1.13 2007-02-23 21:17:33 piso Exp $
+ * Copyright (C) 2003-2007 Peter Graves
+ * $Id: ComplexArray.java,v 1.14 2007-03-01 19:53:23 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.lisp;
@@ -41,7 +41,7 @@ public final class ComplexArray extends AbstractArray
         totalSize = computeTotalSize(dimv);
         data = new LispObject[totalSize];
         for (int i = totalSize; i-- > 0;)
-            data[i] = NIL;
+            data[i] = Fixnum.ZERO;
     }
 
     public ComplexArray(int[] dimv,

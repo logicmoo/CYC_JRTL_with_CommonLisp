@@ -2,7 +2,7 @@
  * SimpleArray_T.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id: SimpleArray_T.java,v 1.5 2007-03-01 17:39:32 piso Exp $
+ * $Id: SimpleArray_T.java,v 1.6 2007-03-01 19:52:42 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -35,12 +35,8 @@ public final class SimpleArray_T extends AbstractArray
     totalSize = computeTotalSize(dimv);
     data = new LispObject[totalSize];
     final LispObject initialElement;
-    if (elementType == Symbol.BIT)
-      initialElement = Fixnum.ZERO;
-    else
-      initialElement = NIL;
     for (int i = totalSize; i-- > 0;)
-      data[i] = initialElement;
+      data[i] = Fixnum.ZERO;
   }
 
   public SimpleArray_T(int[] dimv,

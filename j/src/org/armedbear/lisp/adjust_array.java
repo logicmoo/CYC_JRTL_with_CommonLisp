@@ -1,8 +1,8 @@
 /*
  * adjust_array.java
  *
- * Copyright (C) 2004 Peter Graves
- * $Id: adjust_array.java,v 1.15 2007-02-23 21:17:35 piso Exp $
+ * Copyright (C) 2004-2007 Peter Graves
+ * $Id: adjust_array.java,v 1.16 2007-03-01 19:54:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.lisp;
@@ -58,6 +58,8 @@ public final class adjust_array extends Primitive
                 array.aset(0, initialContents);
             return array;
         }
+        if (initialElementProvided == NIL && array.getElementType() == T)
+            initialElement = Fixnum.ZERO;
         if (array.getRank() == 1) {
             final int newSize;
             if (dimensions instanceof Cons && dimensions.length() == 1)
