@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id: Condition.java,v 1.48 2007-03-01 14:11:10 piso Exp $
+ * $Id: Condition.java,v 1.49 2007-03-01 14:34:54 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -82,6 +82,8 @@ public class Condition extends StandardObject
 
   public Condition(String message)
   {
+    super(StandardClass.CONDITION);
+    Debug.assertTrue(slots.length == 2);
     this.message = message;
   }
 
