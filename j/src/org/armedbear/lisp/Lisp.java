@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2007 Peter Graves
- * $Id: Lisp.java,v 1.446 2007-02-23 21:17:33 piso Exp $
+ * $Id: Lisp.java,v 1.447 2007-03-02 12:20:02 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.lisp;
@@ -2169,8 +2169,24 @@ public abstract class Lisp
                                                 Symbol.FEATURES.getSymbolValue()));
         isJava15OrLater = true;
       }
+    else if (version.startsWith("1.7"))
+      {
+        Symbol.FEATURES.setSymbolValue(new Cons(Keyword.JAVA_1_7,
+                                                Symbol.FEATURES.getSymbolValue()));
+        isJava15OrLater = true;
+      }
     else
       isJava15OrLater = false;
+  }
+  static
+  {
+    String os_arch = System.getProperty("os.arch");
+    if (os_arch.equals("amd64"))
+      Symbol.FEATURES.setSymbolValue(new Cons(Keyword.X86_64,
+                                              Symbol.FEATURES.getSymbolValue()));
+    else if (os_arch.equals("x86"))
+      Symbol.FEATURES.setSymbolValue(new Cons(Keyword.X86,
+                                              Symbol.FEATURES.getSymbolValue()));
   }
 
   static
