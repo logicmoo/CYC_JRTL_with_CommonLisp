@@ -1,8 +1,8 @@
 /*
  * StorageCondition.java
  *
- * Copyright (C) 2004-2005 Peter Graves
- * $Id: StorageCondition.java,v 1.4 2005-11-01 01:41:42 piso Exp $
+ * Copyright (C) 2004-2007 Peter Graves
+ * $Id: StorageCondition.java,v 1.5 2007-03-02 10:38:59 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,43 +16,43 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.lisp;
 
 public class StorageCondition extends SeriousCondition
 {
-    public StorageCondition() throws ConditionThrowable
-    {
-    }
+  public StorageCondition() throws ConditionThrowable
+  {
+  }
 
-    public StorageCondition(LispObject initArgs) throws ConditionThrowable
-    {
-        super(initArgs);
-    }
+  public StorageCondition(LispObject initArgs) throws ConditionThrowable
+  {
+    super(initArgs);
+  }
 
-    public StorageCondition(String message)
-    {
-        super(message);
-    }
+  public StorageCondition(String message)
+  {
+    super(message);
+  }
 
-    public LispObject typeOf()
-    {
-        return Symbol.STORAGE_CONDITION;
-    }
+  public LispObject typeOf()
+  {
+    return Symbol.STORAGE_CONDITION;
+  }
 
-    public LispObject classOf()
-    {
-        return StandardClass.STORAGE_CONDITION;
-    }
+  public LispObject classOf()
+  {
+    return StandardClass.STORAGE_CONDITION;
+  }
 
-    public LispObject typep(LispObject type) throws ConditionThrowable
-    {
-        if (type == Symbol.STORAGE_CONDITION)
-            return T;
-        if (type == StandardClass.STORAGE_CONDITION)
-            return T;
-        return super.typep(type);
-    }
+  public LispObject typep(LispObject type) throws ConditionThrowable
+  {
+    if (type == Symbol.STORAGE_CONDITION)
+      return T;
+    if (type == StandardClass.STORAGE_CONDITION)
+      return T;
+    return super.typep(type);
+  }
 }
