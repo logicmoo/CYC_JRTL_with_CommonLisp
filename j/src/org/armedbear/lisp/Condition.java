@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id: Condition.java,v 1.49 2007-03-01 14:34:54 piso Exp $
+ * $Id: Condition.java,v 1.50 2007-03-02 12:24:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -84,7 +84,15 @@ public class Condition extends StandardObject
   {
     super(StandardClass.CONDITION);
     Debug.assertTrue(slots.length == 2);
-    this.message = message;
+    try
+      {
+        setFormatControl(message);
+        setFormatArguments(NIL);
+      }
+    catch (Throwable t)
+      {
+        Debug.trace(t);
+      }
   }
 
   public final LispObject getFormatControl() throws ConditionThrowable
