@@ -1,8 +1,8 @@
 /*
  * Keyword.java
  *
- * Copyright (C) 2002-2005 Peter Graves
- * $Id: Keyword.java,v 1.49 2005-12-05 18:35:01 piso Exp $
+ * Copyright (C) 2002-2007 Peter Graves
+ * $Id: Keyword.java,v 1.50 2007-03-02 12:18:41 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.lisp;
@@ -81,6 +81,7 @@ public final class Keyword extends Lisp
         JAVA_1_4            = internKeyword("JAVA-1.4"),
         JAVA_1_5            = internKeyword("JAVA-1.5"),
         JAVA_1_6            = internKeyword("JAVA-1.6"),
+        JAVA_1_7            = internKeyword("JAVA-1.7"),
         KEY                 = internKeyword("KEY"),
         LINUX               = internKeyword("LINUX"),
         LOAD_TOPLEVEL       = internKeyword("LOAD-TOPLEVEL"),
@@ -128,5 +129,7 @@ public final class Keyword extends Lisp
         VERSION             = internKeyword("VERSION"),
         WILD                = internKeyword("WILD"),
         WILD_INFERIORS      = internKeyword("WILD-INFERIORS"),
-        WINDOWS             = internKeyword("WINDOWS");
+        WINDOWS             = internKeyword("WINDOWS"),
+        X86                 = internKeyword("X86"),
+        X86_64              = internKeyword("X86-64");
 }
