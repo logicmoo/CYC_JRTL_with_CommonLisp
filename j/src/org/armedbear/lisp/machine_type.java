@@ -2,7 +2,7 @@
  * machine_type.java
  *
  * Copyright (C) 2004-2007 Peter Graves
- * $Id: machine_type.java,v 1.3 2007-03-02 12:04:05 piso Exp $
+ * $Id: machine_type.java,v 1.4 2007-03-02 12:09:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,7 +31,12 @@ public final class machine_type extends Primitive
 
   public LispObject execute() throws ConditionThrowable
   {
-    return new SimpleString(System.getProperty("os.arch"));
+    String s = System.getProperty("os.arch");
+    if (s.equals("amd64"))
+      s = "X86-64";
+    else
+      s = s.toUpperCase();
+    return new SimpleString(s);
   }
 
   private static final Primitive MACHINE_TYPE = new machine_type();
