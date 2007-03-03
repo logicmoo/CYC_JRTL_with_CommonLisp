@@ -1,8 +1,8 @@
 /*
  * PropertiesDialog.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: PropertiesDialog.java,v 1.7 2003-08-04 16:15:01 piso Exp $
+ * Copyright (C) 1998-2007 Peter Graves
+ * $Id: PropertiesDialog.java,v 1.8 2007-03-03 15:02:51 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.j;
@@ -121,8 +121,14 @@ public final class PropertiesDialog extends AbstractDialog implements Constants
                     } else {
                         sb.append(" revision ");
                         sb.append(revision);
-                        if (buffer.getLastModified() != cvsEntry.getCheckoutTime())
-                            sb.append(" (locally modified)");
+                        final long last_modified = buffer.getLastModified();
+                        final long checkout = cvsEntry.getCheckoutTime();
+                        if (last_modified != checkout) {
+                            Log.debug("last_modified = " + last_modified);
+                            Log.debug("checkout      = " + checkout);
+                            if (Math.abs(last_modified - checkout) >= 1000)
+                                sb.append(" (locally modified)");
+                        }
                     }
                     group.add(Box.createVerticalStrut(6));
                     group.add(new StaticTextField(sb.toString()));

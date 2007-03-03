@@ -1,8 +1,8 @@
 /*
  * Buffer.java
  *
- * Copyright (C) 1998-2005 Peter Graves
- * $Id: Buffer.java,v 1.54 2005-07-03 16:02:34 piso Exp $
+ * Copyright (C) 1998-2007 Peter Graves
+ * $Id: Buffer.java,v 1.55 2007-03-03 15:03:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.j;
@@ -3055,8 +3055,11 @@ public class Buffer extends SystemBuffer
                 sb.append('A');
             } else {
                 sb.append(revision);
-                if (cvsEntry.getCheckoutTime() != lastModified)
-                    sb.append(" M");
+                final long checkout = cvsEntry.getCheckoutTime();
+                if (lastModified != checkout) {
+                    if (Math.abs(lastModified - checkout) >= 1000)
+                        sb.append(" M");
+                }
             }
             sb.append("   ");
         }
