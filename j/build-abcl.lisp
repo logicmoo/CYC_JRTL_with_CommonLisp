@@ -371,18 +371,18 @@
 
 ;; abcl/abcl.bat
 (defun make-launch-script ()
+  ;; Use the -Xss4M and -Xmx256M flags so that the default launch script can be
+  ;; used to build sbcl.
   (cond ((eq *platform* :windows)
          (with-open-file (s
                           (merge-pathnames "abcl.bat" *build-root*)
                           :direction :output
                           :if-exists :supersede)
-           (format s "~A -Xss4M -Xmx256M -cp ~A;~A org.armedbear.lisp.Main %1 %2 %3 %4 %5 %6 %7 %8 %9~%"
+           (format s "~A -Xss4M -Xmx256M -cp \"~A;~A\" org.armedbear.lisp.Main %1 %2 %3 %4 %5 %6 %7 %8 %9~%"
                    (safe-namestring *java*)
-                   (safe-namestring (merge-pathnames "src" *build-root*))
-                   (safe-namestring (merge-pathnames "abcl.jar" *build-root*)))))
+                   (namestring (merge-pathnames "src" *build-root*))
+                   (namestring (merge-pathnames "abcl.jar" *build-root*)))))
         (t
-         ;; Use the -Xmx256M flag on non-Windows platforms so that the default
-         ;; launch script can be used to build sbcl.
          (let ((pathname (merge-pathnames "abcl" *build-root*)))
            (with-open-file (s pathname :direction :output :if-exists :supersede)
              (if (eq *platform* :linux)
@@ -427,6 +427,8 @@
         (delete-file truename)))))
 
 (defun clean ()
+  (with-current-directory (*build-root*)
+    (delete-files (list "abcl.jar")))
   (with-current-directory (*abcl-dir*)
     (delete-files (directory "*.class"))
     (delete-files (directory "*.abcl"))
