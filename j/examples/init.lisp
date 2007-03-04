@@ -1,26 +1,7 @@
 ;;; init.lisp
-;;; $Id: init.lisp,v 1.35 2007-03-04 17:57:18 piso Exp $
+;;; $Id: init.lisp,v 1.36 2007-03-04 19:08:11 piso Exp $
 
 ;;; ~/.j/init.lisp (if it exists) is loaded automatically when j starts up.
-
-(defun load-theme (name)
-  (let ((filename (concatenate 'string "/home/peter/depot/j/themes/" name ".lisp")))
-    (unless (probe-file filename)
-      (error "file not found: ~A" filename))
-    (kill-theme)
-    (load filename)
-    (reset-display)
-    t))
-
-(defun hostname ()
-  (when (probe-file "/etc/hostname")
-    (with-open-file (f "/etc/hostname")
-      (read-line f))))
-
-(let ((hostname (hostname)))
-  (when hostname
-    (unless (member hostname '("mars" "prufrock") :test #'string=)
-      (load-theme "AnokhaClassic"))))
 
 (defun java-version ()
   (jstatic "getProperty" "java.lang.System" "java.version"))
