@@ -1,8 +1,8 @@
 /*
  * OpenFileTextFieldHandler.java
  *
- * Copyright (C) 1998-2005 Peter Graves
- * $Id: OpenFileTextFieldHandler.java,v 1.57 2005-07-03 15:59:25 piso Exp $
+ * Copyright (C) 1998-2007 Peter Graves
+ * $Id: OpenFileTextFieldHandler.java,v 1.58 2007-03-04 18:07:30 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.j;
@@ -217,7 +217,7 @@ public final class OpenFileTextFieldHandler extends DefaultTextFieldHandler
             }
         }
         // We failed. Use current directory.
-        if (currentDir.isRemote())
+        if (currentDir == null || currentDir.isRemote())
             currentDir = Directories.getUserHomeDirectory();
         candidate = File.getInstance(currentDir, entry);
         if (candidate == null) {
