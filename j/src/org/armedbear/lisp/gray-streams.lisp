@@ -1,7 +1,7 @@
 ;;; gray-streams.lisp
 ;;;
-;;; Copyright (C) 2004 Peter Graves
-;;; $Id: gray-streams.lisp,v 1.8 2004-09-10 14:42:01 asimon Exp $
+;;; Copyright (C) 2004-2007 Peter Graves, Andras Simon
+;;; $Id: gray-streams.lisp,v 1.9 2007-03-04 17:45:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -15,7 +15,7 @@
 ;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
-;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+;;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 ;;; Adapted from:
 ;;;; Gray Streams Implementation for Corman Lisp - Version 1.3
@@ -394,7 +394,6 @@
       value))
 
 (defun gray-read-char (&optional input-stream (eof-errorp t) eof-value recursive-p)
-  (declare (ignore recursive-p))
   (let ((stream (decode-read-arg input-stream)))
     (if (old-streamp stream)
         (funcall *old-read-char* stream eof-errorp eof-value recursive-p)
@@ -402,11 +401,9 @@
 
 (defun gray-peek-char (&optional peek-type input-stream (eof-errorp t)
                                  eof-value recursive-p)
-  (declare (ignore recursive-p))
   (let ((stream (decode-read-arg input-stream)))
     (if (old-streamp stream)
-        (funcall *old-peek-char* peek-type stream eof-errorp
-                 eof-value recursive-p)
+        (funcall *old-peek-char* peek-type stream eof-errorp eof-value recursive-p)
         (if (null peek-type)
             (check-for-eof (stream-peek-char stream) stream eof-errorp eof-value)
             (loop
@@ -434,7 +431,6 @@
 
 (defun gray-read-line (&optional input-stream (eof-error-p t)
                                  eof-value recursive-p)
-  (declare (ignore recursive-p))
   (let ((stream (decode-read-arg input-stream)))
     (if (old-streamp stream)
         (funcall *old-read-line* stream eof-error-p eof-value recursive-p)
@@ -454,7 +450,6 @@
 
 (defun gray-read-char-no-hang (&optional input-stream (eof-errorp t)
                                          eof-value recursive-p)
-  (declare (ignore recursive-p))
   (let ((stream (decode-read-arg input-stream)))
     (if (old-streamp stream)
         (funcall *old-read-char-no-hang* stream eof-errorp eof-value recursive-p)
