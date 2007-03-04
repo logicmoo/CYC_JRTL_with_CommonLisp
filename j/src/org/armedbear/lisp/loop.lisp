@@ -1,7 +1,7 @@
 ;;; loop.lisp
 ;;;
 ;;; Copyright (C) 2004-2007 Peter Graves
-;;; $Id: loop.lisp,v 1.14 2007-02-18 17:30:44 piso Exp $
+;;; $Id: loop.lisp,v 1.15 2007-03-04 17:46:25 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -15,7 +15,7 @@
 ;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
-;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+;;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 ;;; Adapted from SBCL.
 
@@ -546,7 +546,7 @@ code to be loaded.
 
 (defun loop-constantp (form)
   (constantp form))
-
+
 ;;;; LOOP iteration optimization
 
 (defvar *loop-duplicate-code*
@@ -572,12 +572,12 @@ code to be loaded.
     (+ 40 (* (- speed space) 10))))
 
 (defmacro loop-body (&environment env
-					 prologue
-					 before-loop
-					 main-body
-					 after-loop
-					 epilogue
-					 &aux rbefore rafter flagvar)
+                                  prologue
+                                  before-loop
+                                  main-body
+                                  after-loop
+                                  epilogue
+                     &aux rbefore rafter flagvar)
   (unless (= (length before-loop) (length after-loop))
     (error "LOOP-BODY called with non-synched before- and after-loop lists"))
   ;;All our work is done from these copies, working backwards from the end:
@@ -794,14 +794,17 @@ code to be loaded.
 	       (loop-error "The specified data type ~S is not a subtype of ~S."
 			   specified-type required-type)))
 	specified-type)))
-
+
 (defun subst-gensyms-for-nil (tree)
   (declare (special *ignores*))
   (cond
-    ((null tree) (car (push (gensym "LOOP-IGNORED-VAR-") *ignores*)))
-    ((atom tree) tree)
-    (t (cons (subst-gensyms-for-nil (car tree))
-	     (subst-gensyms-for-nil (cdr tree))))))
+    ((null tree)
+     (car (push (gensym "LOOP-IGNORED-VAR-") *ignores*)))
+    ((atom tree)
+     tree)
+    (t
+     (cons (subst-gensyms-for-nil (car tree))
+           (subst-gensyms-for-nil (cdr tree))))))
 
 (defmacro loop-destructuring-bind
     (lambda-list arg-list &rest body)
