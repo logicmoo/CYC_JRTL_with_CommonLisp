@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves
-;;; $Id: jvm.lisp,v 1.775 2007-03-01 00:52:19 piso Exp $
+;;; $Id: jvm.lisp,v 1.776 2007-03-04 17:47:55 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -17,24 +17,24 @@
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-(in-package #:extensions)
+(in-package "EXTENSIONS")
 
 (export 'defsubst)
 
-(in-package #:jvm)
+(in-package "JVM")
 
 (export '(compile-defun *catch-errors* jvm-compile jvm-compile-package
           derive-compiler-type))
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
-  (require '#:format)
-  (require '#:clos)
-  (require '#:print-object)
-  (require '#:compiler-types)
-  (require '#:known-functions)
-  (require '#:known-symbols)
-  (require '#:dump-form)
-  (require '#:opcodes))
+  (require "FORMAT")
+  (require "CLOS")
+  (require "PRINT-OBJECT")
+  (require "COMPILER-TYPES")
+  (require "KNOWN-FUNCTIONS")
+  (require "KNOWN-SYMBOLS")
+  (require "DUMP-FORM")
+  (require "OPCODES"))
 
 (defvar *closure-variables* nil)
 
@@ -4948,7 +4948,7 @@ representation, based on the derived type of the LispObject."
 
 (defun compile-multiple-value-call (form target representation)
   ;; FIXME What if we're called with a non-NIL representation?
-  (declare (ignore representation))
+  (aver (null representation))
   (case (length form)
     (1
      (error "Wrong number of arguments for MULTIPLE-VALUE-CALL."))
@@ -5054,8 +5054,8 @@ representation, based on the derived type of the LispObject."
                       (compile-form form nil nil)
                       (unless clear-values
                         (unless (single-valued-p form)
-                          (setf clear-values t)))))
-               (setf tail (cdr tail)))))))
+                          (setq clear-values t)))))
+               (setq tail (cdr tail)))))))
   t)
 
 (defun p2-m-v-b-node (block target)
@@ -5455,41 +5455,15 @@ representation, based on the derived type of the LispObject."
       (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-special-binding+))))
 
 (defun p2-locally (form target representation)
-;;   (format t "p2-locally~%")
-  ;; FIXME What if we're called with a non-NIL representation?
-  (declare (ignore representation))
   (let ((*speed*  *speed*)
         (*space*  *space*)
         (*safety* *safety*)
         (*debug*  *debug*)
         (*explain* *explain*)
-        (*inline-declarations* *inline-declarations*))
-    (process-optimization-declarations (cdr form))
-;;     (let ((*visible-variables* *visible-variables*)
-;;           (specials (process-special-declarations (cdr form))))
-;;       (dolist (var specials)
-;;         (format t "~S is special~%" var)
-;;         (push (make-variable :name var :special-p t) *visible-variables*))
-      (cond ((null (cdr form))
-             (when target
-               (emit-push-nil)
-               (emit-move-from-stack target)))
-            ((null representation)
-             (do ((forms (cdr form) (cdr forms)))
-                 ((null forms))
-               (compile-form (car forms) (if (cdr forms) nil target) nil)))
-            ;; FIXME maybe-emit-clear-values
-            (t
-             (do ((forms (cdr form) (cdr forms)))
-                 ((null forms))
-               (compile-form (car forms) (if (cdr forms) nil 'stack) nil))
-             ;; FIXME maybe-emit-clear-values
-             (fix-boxing representation nil)
-             (emit-move-from-stack target representation)
-             )
-            )
-;;       )
-    ))
+        (*inline-declarations* *inline-declarations*)
+        (body (cdr form)))
+    (process-optimization-declarations body)
+    (compile-progn-body body target representation)))
 
 (defknown find-tag (t) t)
 (defun find-tag (name)
@@ -9728,8 +9702,6 @@ representation, based on the derived type of the LispObject."
              ;; attributes count
              (write-u2 0 stream))))))
 
-(defvar *magic* t)
-
 (defun compile-xep (xep)
   (declare (type compiland xep))
   (let ((*all-variables* ())
@@ -9775,20 +9747,15 @@ representation, based on the derived type of the LispObject."
         (setf lambda-list (subseq lambda-list 0 (position '&AUX lambda-list)))
         (setf body (list (append (list 'LET* (cdr auxvars)) body))))
 
-
-      (when (and *magic*
-                 (null (compiland-parent compiland))
+      (when (and (null (compiland-parent compiland))
                  ;; FIXME support SETF functions!
                  (symbolp (compiland-name compiland)))
         (when (memq '&OPTIONAL lambda-list)
           (unless (or (memq '&KEY lambda-list) (memq '&REST lambda-list))
             (let ((required-args (subseq lambda-list 0 (position '&OPTIONAL lambda-list)))
-                  (optional-args (cdr (memq '&OPTIONAL lambda-list)))
-;;                   (*enable-dformat* t)
-                )
+                  (optional-args (cdr (memq '&OPTIONAL lambda-list))))
             (dformat t "optional-args = ~S~%" optional-args)
             (when (= (length optional-args) 1)
-;;               (sys::%format t "~%magic case~%")
               (let* ((optional-arg (car optional-args))
                      (name (if (consp optional-arg) (%car optional-arg) optional-arg))
                      (initform (if (consp optional-arg) (cadr optional-arg) nil))
@@ -9813,8 +9780,7 @@ representation, based on the derived type of the LispObject."
                            (let ((xep-compiland
                                   (make-compiland :lambda-expression (precompile-form xep-lambda-expression t)
                                                   :class-file (compiland-class-file compiland))))
-                             (compile-xep xep-compiland))
-                           )
+                             (compile-xep xep-compiland)))
                          (let ((xep-lambda-expression
                                 `(lambda ,(append required-args (list name))
                                    (let* ((,supplied-p-var t))
@@ -9823,11 +9789,9 @@ representation, based on the derived type of the LispObject."
                            (let ((xep-compiland
                                   (make-compiland :lambda-expression (precompile-form xep-lambda-expression t)
                                                   :class-file (compiland-class-file compiland))))
-                             (compile-xep xep-compiland))
-                           )
+                             (compile-xep xep-compiland)))
                          (setf lambda-list all-args)
-                         (setf (compiland-kind compiland) :internal)
-                         )
+                         (setf (compiland-kind compiland) :internal))
                         (t
                          (let ((xep-lambda-expression
                                 `(lambda ,required-args
@@ -9840,9 +9804,9 @@ representation, based on the derived type of the LispObject."
                              (compile-xep xep-compiland)))
                          (setf lambda-list all-args))))))))))
 
-      (let* ((closure (sys::make-closure `(lambda ,lambda-list nil) nil))
+      (let* ((closure (make-closure `(lambda ,lambda-list nil) nil))
              (syms (sys::varlist closure))
-             vars)
+             (vars nil))
         (dolist (sym syms)
           (let ((var (make-variable :name sym)))
             (push var vars)
@@ -9851,6 +9815,9 @@ representation, based on the derived type of the LispObject."
         (let ((*visible-variables* *visible-variables*))
           (dolist (var (compiland-arg-vars compiland))
             (push var *visible-variables*))
+          (let ((free-specials (process-declarations-for-vars body *visible-variables*)))
+            (dolist (var free-specials)
+              (push var *visible-variables*)))
           (setf (compiland-p1-result compiland)
                 (list* 'LAMBDA lambda-list (p1-body body))))))))
 
@@ -10001,7 +9968,7 @@ representation, based on the derived type of the LispObject."
     (setf (method-descriptor-index execute-method)
           (pool-name (method-descriptor execute-method)))
     (cond (*hairy-arglist-p*
-           (let* ((closure (sys::make-closure p1-result nil))
+           (let* ((closure (make-closure p1-result nil))
                   (parameter-names (sys::varlist closure))
                   (index 0))
              (dolist (name parameter-names)
