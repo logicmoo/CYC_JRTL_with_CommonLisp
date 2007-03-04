@@ -1,7 +1,7 @@
 ;;; pathnames.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves
-;;; $Id: pathnames.lisp,v 1.28 2007-02-17 17:27:44 piso Exp $
+;;; $Id: pathnames.lisp,v 1.29 2007-03-04 17:44:53 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -15,9 +15,9 @@
 ;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
-;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+;;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-(in-package #:system)
+(in-package "SYSTEM")
 
 (export '(logical-host-p))
 
@@ -339,7 +339,7 @@
 (defun parse-namestring (thing
                          &optional host (default-pathname *default-pathname-defaults*)
                          &key (start 0) end junk-allowed)
-  (declare (ignore default-pathname junk-allowed)) ; FIXME
+  (declare (ignore junk-allowed)) ; FIXME
   (cond ((eq host :unspecific)
          (setf host nil))
         (host
