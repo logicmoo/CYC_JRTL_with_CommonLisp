@@ -1,5 +1,5 @@
 ;;; init.lisp
-;;; $Id: init.lisp,v 1.34 2005-11-18 01:45:42 piso Exp $
+;;; $Id: init.lisp,v 1.35 2007-03-04 17:57:18 piso Exp $
 
 ;;; ~/.j/init.lisp (if it exists) is loaded automatically when j starts up.
 
@@ -26,13 +26,12 @@
   (jstatic "getProperty" "java.lang.System" "java.version"))
 
 (defun adjust-appearance ()
-  (unless (featurep :windows)
-    (when (member (subseq (java-version) 0 5)
-                  '("1.4.0" "1.4.1" "1.4.2" "1.5.0" "1.6.0")
-                  :test #'string=)
-      (set-global-property "adjustAscent" -2)
-      (set-global-property "adjustLeading" -2)
-      (reset-display))))
+  (when (member (subseq (java-version) 0 5)
+                '("1.4.0" "1.4.1" "1.4.2" "1.5.0" "1.6.0" "1.7.0")
+                :test #'string=)
+    (set-global-property "adjustAscent" -2)
+    (set-global-property "adjustLeading" -2)
+    (reset-display)))
 
 ;; Do it now!
 (adjust-appearance)
@@ -123,8 +122,8 @@
 (maybe-load "/home/peter/.j/key-pressed.lisp")
 (maybe-load "/home/peter/.j/update-check-enabled.lisp")
 
-(maybe-load #+windows "c:/perforce/depot/j/build-abcl.lisp"
-            #-windows "/home/peter/depot/j/build-abcl.lisp")
+(maybe-load #+windows "c:/cygwin/home/peter/j/build-abcl.lisp"
+            #-windows "/home/peter/j/build-abcl.lisp")
 
 (map-key-for-mode ")" "electricCloseParen" "Lisp Shell")
 
