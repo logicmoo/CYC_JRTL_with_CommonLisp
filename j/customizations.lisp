@@ -20,20 +20,20 @@
 (in-package #:build-abcl)
 
 ;; Standard compiler options.
-(setf *javac-options* "-g")
-(setf *jikes-options* "+D -g")
+(setq *javac-options* "-g")
+(setq *jikes-options* "+D -g")
 
 ;; *PLATFORM* will be either :WINDOWS, :DARWIN, :LINUX, or :UNKNOWN.
 (case *platform*
   (:windows
-   (setf *jdk*           "C:\\Program Files\\Java\\jdk1.5.0_06\\")
-   #+(or) (setf *java-compiler* "jikes")
+   (setq *jdk*           "C:\\Program Files\\Java\\jdk1.5.0_11\\")
+   #+(or) (setq *java-compiler* "jikes")
    )
   (:darwin
-   (setf *jdk*           "/usr/")
-   (setf *java-compiler* "jikes")
-   #+(or) (setf *jar*    "jar"))
+   (setq *jdk*           "/usr/")
+   (setq *java-compiler* "jikes")
+   #+(or) (setq *jar*    "jar"))
   ((:linux :unknown)
-   (setf *jdk*           "/home/peter/blackdown/j2sdk1.4.2/")
-   (setf *java-compiler* "jikes")
-   (setf *jar*           "fastjar")))
+   (setq *jdk*           "/home/peter/blackdown/j2sdk1.4.2/")
+   (setq *java-compiler* "jikes")
+   (setq *jar*           "fastjar")))
