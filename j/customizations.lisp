@@ -35,5 +35,4 @@
    #+(or) (setq *jar*    "jar"))
   ((:linux :unknown)
    (setq *jdk*           "/home/peter/sun/jdk1.5.0_11/")
-   (setq *java-compiler* "jikes")
    (setq *jar*           "fastjar")))
