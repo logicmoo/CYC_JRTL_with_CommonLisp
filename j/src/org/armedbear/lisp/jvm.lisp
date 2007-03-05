@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves
-;;; $Id: jvm.lisp,v 1.776 2007-03-04 17:47:55 piso Exp $
+;;; $Id: jvm.lisp,v 1.777 2007-03-05 11:54:37 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -425,7 +425,12 @@
             (TYPE
              (dolist (name (cddr decl))
                (let ((variable (find-variable name variables)))
-                 (when variable
+                 (when (and variable
+                            ;; Don't apply a declaration in a local function to
+                            ;; a variable defined in its parent. For an example,
+                            ;; see CREATE-GREEDY-NO-ZERO-MATCHER in cl-ppcre.
+                            ;; FIXME suboptimal, since we ignore the declaration
+                            (eq (variable-compiland variable) *current-compiland*))
                    (setf (variable-declared-type variable)
                          (make-compiler-type (cadr decl)))))))
             (t
