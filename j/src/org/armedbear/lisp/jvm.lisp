@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves
-;;; $Id: jvm.lisp,v 1.777 2007-03-05 11:54:37 piso Exp $
+;;; $Id: jvm.lisp,v 1.778 2007-03-05 12:39:06 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -417,7 +417,9 @@
             (SPECIAL
              (dolist (name (%cdr decl))
                (let ((variable (find-variable name variables)))
-                 (cond (variable
+                 (cond ((and variable
+                             ;; see comment below (and DO-ALL-SYMBOLS.11)
+                             (eq (variable-compiland variable) *current-compiland*))
                         (setf (variable-special-p variable) t))
                        (t
                         (dformat t "adding free special ~S~%" name)
