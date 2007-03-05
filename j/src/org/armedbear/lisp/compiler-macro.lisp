@@ -1,7 +1,7 @@
 ;;; compiler-macro.lisp
 ;;;
-;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: compiler-macro.lisp,v 1.10 2005-11-08 14:51:07 piso Exp $
+;;; Copyright (C) 2003-2007 Peter Graves
+;;; $Id: compiler-macro.lisp,v 1.11 2007-03-05 10:11:33 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -15,9 +15,9 @@
 ;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
-;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+;;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-(in-package #:system)
+(in-package "SYSTEM")
 
 (export 'compiler-macroexpand)
 
@@ -37,7 +37,7 @@
     (multiple-value-bind (body decls)
         (parse-defmacro lambda-list form body name 'defmacro :environment env)
       (let ((expander `(lambda (,form ,env)
-                         (declare (ignore ,env))
+                         (declare (ignorable ,env))
                          (block ,(fdefinition-block-name name) ,body))))
         `(progn
            (setf (compiler-macro-function ',name) (function ,expander))
