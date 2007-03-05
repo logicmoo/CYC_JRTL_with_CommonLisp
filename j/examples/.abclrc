@@ -32,11 +32,11 @@
 
 #+(or abcl clisp)
 (defun test-cl-ppcre ()
-  #+abcl (require '#:jvm)
+  #+abcl (require "JVM")
   (let ((*default-pathname-defaults* #-(or windows mswindows win32)
                                      #p"/home/peter/cl-ppcre-1.2.19/"
                                      #+(or windows mswindows win32)
-                                     #p"c:\\cygwin\\home\\peter\\cl-ppcre-1.2.13\\"))
+                                     #p"c:\\cygwin\\home\\peter\\cl-ppcre-1.2.19\\"))
     (map nil #'delete-file (directory "*.abcl"))
     (load "load.lisp")
     (let ((f (find-symbol "TEST" "CL-PPCRE-TEST")))
