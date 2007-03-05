@@ -1,7 +1,7 @@
 ;;; loop.lisp
 ;;;
 ;;; Copyright (C) 2004-2007 Peter Graves
-;;; $Id: loop.lisp,v 1.15 2007-03-04 17:46:25 piso Exp $
+;;; $Id: loop.lisp,v 1.16 2007-03-05 10:14:08 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1905,10 +1905,12 @@ code to be loaded.
 	(loop-named-var (ecase which
 			  (:hash-key 'hash-value)
 			  (:hash-value 'hash-key)))
-      ;; @@@@ LOOP-NAMED-VAR returns a second value of T if the name
-      ;; was actually specified, so clever code can throw away the
-      ;; GENSYM'ed-up variable if it isn't really needed. The
-      ;; following is for those implementations in which we cannot put
+      ;; @@@@ LOOP-NAMED-VAR returns a second value of T if the name was
+      ;; actually specified, so clever code can throw away the GENSYM'ed-up
+      ;; variable if it isn't really needed.
+      (unless other-p
+        (push `(ignorable ,other-var) *loop-declarations*))
+      ;; The following is for those implementations in which we cannot put
       ;; dummy NILs into MULTIPLE-VALUE-SETQ variable lists.
       (setq other-p t
 	    dummy-predicate-var (loop-when-it-var))
@@ -1934,6 +1936,7 @@ code to be loaded.
                 `(,val-var ,(setq val-var (gensym "LOOP-HASH-VAL-TEMP-"))
                            ,@post-steps))
           (push `(,val-var nil) bindings))
+        (push `(ignorable ,dummy-predicate-var) *loop-declarations*)
 	`(,bindings                     ;bindings
 	  ()                            ;prologue
 	  ()                            ;pre-test
@@ -1956,6 +1959,7 @@ code to be loaded.
         (package (or (cadar prep-phrases) '*package*)))
     (push `(with-package-iterator (,next-fn ,pkg-var ,@symbol-types))
 	  *loop-wrappers*)
+    (push `(ignorable ,(loop-when-it-var)) *loop-declarations*)
     `(((,variable nil ,data-type) (,pkg-var ,package))
       ()
       ()
@@ -1964,7 +1968,7 @@ code to be loaded.
 				 ,variable)
 	     (,next-fn)))
       ())))
-
+
 ;;;; ANSI LOOP
 
 (defun make-ansi-loop-universe (extended-p)
