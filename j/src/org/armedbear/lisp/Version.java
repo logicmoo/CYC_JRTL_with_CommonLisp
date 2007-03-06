@@ -1,8 +1,8 @@
 /*
  * Version.java
  *
- * Copyright (C) 2003-2005 Peter Graves
- * $Id: Version.java,v 1.199 2005-11-25 13:34:54 piso Exp $
+ * Copyright (C) 2003-2007 Peter Graves
+ * $Id: Version.java,v 1.200 2007-03-06 19:16:24 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,17 +16,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.lisp;
 
 public final class Version
 {
-    private Version() {}
+  private Version()
+  {
+  }
 
-    public static String getVersion()
-    {
-        return "0.0.9.1+";
-    }
+  public static String getVersion()
+  {
+    return "0.0.10";
+  }
 }
