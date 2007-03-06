@@ -1,8 +1,8 @@
 /*
  * HashTable.java
  *
- * Copyright (C) 2002-2006 Peter Graves
- * $Id: HashTable.java,v 1.56 2006-01-08 01:15:43 piso Exp $
+ * Copyright (C) 2002-2007 Peter Graves
+ * $Id: HashTable.java,v 1.57 2007-03-06 11:40:49 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.lisp;
@@ -209,8 +209,15 @@ public abstract class HashTable extends LispObject
 
   public String writeToString() throws ConditionThrowable
   {
+    if (Symbol.PRINT_READABLY.symbolValue(LispThread.currentThread()) != NIL)
+      {
+        error(new PrintNotReadable(list2(Keyword.OBJECT, this)));
+        return null; // Not reached.
+      }
     FastStringBuffer sb = new FastStringBuffer(getTest().writeToString());
-    sb.append(" hash table, ");
+    sb.append(' ');
+    sb.append(Symbol.HASH_TABLE.writeToString());
+    sb.append(' ');
     sb.append(count);
     if (count == 1)
       sb.append(" entry");
