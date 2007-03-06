@@ -17,7 +17,7 @@
 ;;; Directories should be specified with a trailing slash (or, on Windows, a
 ;;; trailing backslash).
 
-(in-package #:build-abcl)
+(in-package "BUILD-ABCL")
 
 ;; Standard compiler options.
 (setq *javac-options* "-g")
