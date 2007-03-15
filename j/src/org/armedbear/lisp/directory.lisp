@@ -1,7 +1,7 @@
 ;;; directory.lisp
 ;;;
-;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: directory.lisp,v 1.6 2005-12-13 17:29:44 piso Exp $
+;;; Copyright (C) 2004-2007 Peter Graves
+;;; $Id: directory.lisp,v 1.7 2007-03-15 18:56:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -15,9 +15,9 @@
 ;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
-;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+;;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-(in-package #:system)
+(in-package "SYSTEM")
 
 (defun pathname-as-file (pathname)
   (let ((directory (pathname-directory pathname)))
@@ -31,10 +31,14 @@
 (defun directory (pathspec &key)
   (let ((pathname (merge-pathnames pathspec)))
     (when (logical-pathname-p pathname)
-      (setf pathname (translate-logical-pathname pathname)))
+      (setq pathname (translate-logical-pathname pathname)))
     (if (wild-pathname-p pathname)
         (let ((namestring (directory-namestring pathname)))
           (when (and namestring (> (length namestring) 0))
+            #+windows
+            (let ((device (pathname-device pathname)))
+              (when device
+                (setq namestring (concatenate 'string device ":" namestring))))
             (let ((entries (list-directory namestring))
                   (matching-entries ()))
               (dolist (entry entries)
