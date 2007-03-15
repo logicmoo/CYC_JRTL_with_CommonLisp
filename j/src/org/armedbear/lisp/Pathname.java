@@ -1,8 +1,8 @@
 /*
  * Pathname.java
  *
- * Copyright (C) 2003-2005 Peter Graves
- * $Id: Pathname.java,v 1.110 2007-02-23 21:17:34 piso Exp $
+ * Copyright (C) 2003-2007 Peter Graves
+ * $Id: Pathname.java,v 1.111 2007-03-15 15:33:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.lisp;
@@ -346,8 +346,8 @@ public class Pathname extends LispObject
                     ; // Nothing to do.
             } else {
                 error(new FileError("Unsupported directory component " +
-                                     part.writeToString() + ".",
-                                     this));
+                                    part.writeToString() + ".",
+                                    this));
             }
             while (temp != NIL) {
                 part = temp.car();
@@ -361,7 +361,7 @@ public class Pathname extends LispObject
                     sb.append("..");
                 else
                     error(new FileError("Unsupported directory component " + part.writeToString() + ".",
-                                         this));
+                                        this));
                 sb.append(separatorChar);
                 temp = temp.cdr();
             }
@@ -549,8 +549,8 @@ public class Pathname extends LispObject
         if (h != null) {
             if (!h.equals(host.getStringValue())) {
                 error(new LispError("Host in " + s +
-                                     " does not match requested host " +
-                                     host.getStringValue()));
+                                    " does not match requested host " +
+                                    host.getStringValue()));
                 // Not reached.
                 return null;
             }
@@ -665,7 +665,7 @@ public class Pathname extends LispObject
             String namestring = pathname.getNamestring();
             if (namestring == null)
                 error(new SimpleError("Pathname has no namestring: " +
-                                       pathname.writeToString()));
+                                      pathname.writeToString()));
             return new SimpleString(namestring);
         }
     };
@@ -880,8 +880,8 @@ public class Pathname extends LispObject
             char c = s.charAt(i);
             if (c == '/' || c == '\\' && Utilities.isPlatformWindows) {
                 error(new LispError("Invalid character #\\" + c +
-                                     " in pathname component \"" + s +
-                                     '"'));
+                                    " in pathname component \"" + s +
+                                    '"'));
                 // Not reached.
                 return null;
             }
@@ -930,7 +930,7 @@ public class Pathname extends LispObject
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            return arg instanceof Pathname ? T : NIL;
+            return arg instanceof LogicalPathname ? T : NIL;
         }
     };
 
@@ -983,7 +983,7 @@ public class Pathname extends LispObject
                     }
                     catch (IOException e) {
                         return error(new FileError("Unable to list directory " + pathname.writeToString() + ".",
-                                                    pathname));
+                                                   pathname));
                     }
                 }
             }
@@ -1044,7 +1044,7 @@ public class Pathname extends LispObject
                 value = pathname.version;
             else
                 return error(new ProgramError("Unrecognized keyword " +
-                                               second.writeToString() + "."));
+                                              second.writeToString() + "."));
             if (value == Keyword.WILD || value == Keyword.WILD_INFERIORS)
                 return T;
             else
@@ -1190,7 +1190,7 @@ public class Pathname extends LispObject
             pathname = LogicalPathname.translateLogicalPathname((LogicalPathname)pathname);
         if (pathname.isWild())
             return error(new FileError("Bad place for a wild pathname.",
-                                        pathname));
+                                       pathname));
         final Pathname defaultedPathname =
             mergePathnames(pathname,
                            coerceToPathname(Symbol.DEFAULT_PATHNAME_DEFAULTS.symbolValue()),
@@ -1198,7 +1198,7 @@ public class Pathname extends LispObject
         final String namestring = defaultedPathname.getNamestring();
         if (namestring == null)
             return error(new FileError("Pathname has no namestring: " + defaultedPathname.writeToString(),
-                                        defaultedPathname));
+                                       defaultedPathname));
         final File file = new File(namestring);
         if (file.isDirectory())
             return Utilities.getDirectoryPathname(file);
@@ -1268,9 +1268,9 @@ public class Pathname extends LispObject
                                                                 truename(newName, true));
             }
             return error(new FileError("Unable to rename " +
-                                        original.writeToString() +
-                                        " to " + newName.writeToString() +
-                                        "."));
+                                       original.writeToString() +
+                                       " to " + newName.writeToString() +
+                                       "."));
         }
     };
 
