@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves
-;;; $Id: jvm.lisp,v 1.778 2007-03-05 12:39:06 piso Exp $
+;;; $Id: jvm.lisp,v 1.779 2007-03-17 18:19:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1470,12 +1470,13 @@
 
 (declaim (ftype (function (t t) cons) make-descriptor-info))
 (defun make-descriptor-info (arg-types return-type)
-  (let ((descriptor (with-output-to-string (s)
-                      (princ #\( s)
-                      (dolist (type arg-types)
-                        (princ type s))
-                      (princ #\) s)
-                      (princ (or return-type "V") s)))
+  (let ((descriptor (with-standard-io-syntax
+                      (with-output-to-string (s)
+                        (princ #\( s)
+                        (dolist (type arg-types)
+                          (princ type s))
+                        (princ #\) s)
+                        (princ (or return-type "V") s))))
         (stack-effect (let ((result (cond ((null return-type) 0)
                                           ((equal return-type "J") 2)
                                           (t 1))))
