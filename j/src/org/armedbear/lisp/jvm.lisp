@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves
-;;; $Id: jvm.lisp,v 1.779 2007-03-17 18:19:34 piso Exp $
+;;; $Id: jvm.lisp,v 1.780 2007-03-17 18:35:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -3873,7 +3873,7 @@ representation, based on the derived type of the LispObject."
                   (proclaimed-ftype op))
         (pushnew op *undefined-functions*)))
     (let ((numargs (length args)))
-      (case (length args)
+      (case numargs
         (1
          (when (compile-function-call-1 op args target representation)
            (return-from compile-function-call)))
@@ -3914,13 +3914,10 @@ representation, based on the derived type of the LispObject."
            (process-args args)
            (emit-call-execute numargs))
           (t
-           (unless (> *speed* *debug*)
-             (emit-push-current-thread))
+           (emit-push-current-thread)
            (emit 'swap) ; Stack: thread function
            (process-args args)
-           (if (> *speed* *debug*)
-               (emit-call-execute numargs)
-               (emit-call-thread-execute numargs))))))
+           (emit-call-thread-execute numargs)))))
 
 (define-source-transform funcall (&whole form fun &rest args)
   (cond ((> *debug* *speed*)
