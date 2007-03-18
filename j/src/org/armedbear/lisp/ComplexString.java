@@ -1,8 +1,8 @@
 /*
  * ComplexString.java
  *
- * Copyright (C) 2002-2005 Peter Graves
- * $Id: ComplexString.java,v 1.36 2007-02-23 21:17:33 piso Exp $
+ * Copyright (C) 2002-2007 Peter Graves
+ * $Id: ComplexString.java,v 1.37 2007-03-18 11:35:20 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.lisp;
@@ -129,7 +129,25 @@ public final class ComplexString extends AbstractString
       return chars;
     Debug.assertTrue(array != null);
     char[] copy = new char[capacity];
-    System.arraycopy(array.chars(), displacement, copy, 0, capacity);
+    if (array instanceof AbstractString)
+      System.arraycopy(array.chars(), displacement, copy, 0, capacity);
+    else if (array.getElementType() == Symbol.CHARACTER)
+      {
+        for (int i = 0; i < capacity; i++)
+          {
+            LispObject obj = array.AREF(displacement + i);
+            try
+              {
+                copy[i] = ((LispCharacter)obj).value;
+              }
+            catch (ClassCastException e)
+              {
+                type_error(obj, Symbol.CHARACTER);
+              }
+          }
+      }
+    else
+      type_error(array, Symbol.STRING);
     return copy;
   }
 
