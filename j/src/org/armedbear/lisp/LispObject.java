@@ -1,8 +1,8 @@
 /*
  * LispObject.java
  *
- * Copyright (C) 2002-2006 Peter Graves
- * $Id: LispObject.java,v 1.166 2007-02-23 21:17:33 piso Exp $
+ * Copyright (C) 2002-2007 Peter Graves
+ * $Id: LispObject.java,v 1.167 2007-03-18 11:33:57 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.lisp;
@@ -1016,7 +1016,7 @@ public class LispObject extends Lisp
 
   public char[] chars() throws ConditionThrowable
   {
-    error(new TypeError(this, Symbol.STRING));
+    type_error(this, Symbol.STRING);
     // Not reached.
     return null;
   }
