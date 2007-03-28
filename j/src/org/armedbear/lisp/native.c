@@ -1,8 +1,8 @@
 /*
  * native.c
  *
- * Copyright (C) 2004-2005 Peter Graves
- * $Id: native.c,v 1.1 2005-02-14 19:00:19 piso Exp $
+ * Copyright (C) 2004-2007 Peter Graves
+ * $Id: native.c,v 1.2 2007-03-28 12:18:01 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,31 +16,61 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 #include "native.h"
 #include <signal.h>
+#include <unistd.h>
 #include <sys/times.h>
 
-JNIEnv *_env;
-jclass _cls;
-jmethodID _mid;
+static int pipefds[2];
 
-void ctrl_c_handler()
+static void ctrl_c_handler(int sig)
 {
-    (*_env)->CallStaticVoidMethod(_env, _cls, _mid);
+  char c;
+
+  /* Posix mandates SYSV semantics... could use sigaction () */
+  signal(SIGINT, ctrl_c_handler);
+  write(pipefds[1], &c, 1);
+}
+
+void
+JNU_ThrowByName(JNIEnv *env, const char *name, const char *msg)
+{
+  jclass cls = (*env)->FindClass(env, name);
+  /* if cls is NULL, an exception has already been thrown */
+  if (cls != NULL)
+    (*env)->ThrowNew(env, cls, msg);
+  /* free the local ref */
+  (*env)->DeleteLocalRef(env, cls);
 }
 
 JNIEXPORT void JNICALL
 Java_org_armedbear_lisp_Native_installControlCHandler(JNIEnv *env, jclass cls)
 {
-    _env = env;
-    _cls = cls;
-    _mid = (*env)->GetStaticMethodID(env, cls, "callback", "()V");
-    signal(SIGINT, ctrl_c_handler);
-    while (1)
-        sleep(31536000);
+  jmethodID mid = (*env)->GetStaticMethodID(env, cls, "callback", "()V");
+
+  if (pipe(pipefds) != 0)
+    {
+      JNU_ThrowByName (env, "RuntimeException",
+                       "pipe() failed in installControlCHandler()");
+      return;
+    }
+
+  if (signal(SIGINT, ctrl_c_handler) == SIG_ERR)
+    {
+      JNU_ThrowByName (env, "RuntimeException",
+                       "signal() failed in installControlCHandler()");
+      return;
+    }
+
+  while (1)
+    {
+      char c;
+      read (pipefds[0], &c, 1);
+      (*env)->CallStaticVoidMethod(env, cls, mid);
+    }
 }
 
 JNIEXPORT jlong JNICALL
