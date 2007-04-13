@@ -227,6 +227,7 @@ dribble
 ecase
 echo-stream-input-stream
 echo-stream-output-stream
+ed
 eighth
 elt
 encode-universal-time
