@@ -2,7 +2,7 @@
  * ImapMailboxEntry.java
  *
  * Copyright (C) 2000-2007 Peter Graves <peter@armedbear.org>
- * $Id: ImapMailboxEntry.java,v 1.4 2007-04-14 16:21:23 piso Exp $
+ * $Id: ImapMailboxEntry.java,v 1.5 2007-04-14 19:03:11 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -148,6 +148,32 @@ import org.armedbear.j.Utilities;
         return null;
       }
     entry.subject = p.first == null ? "" : RFC2047.decode(p.first);
+    if (entry.subject.indexOf('\\') >= 0)
+      {
+        // strip out escape chars
+        String temp = entry.subject;
+        final int limit = temp.length();
+        FastStringBuffer sb = new FastStringBuffer();
+        boolean escaped = false;
+        for (int i = 0; i < limit; i++)
+          {
+            char c = temp.charAt(i);
+            if (escaped)
+              {
+                sb.append(c);
+                escaped =false;
+              }
+            else
+              {
+                // not escaped
+                if (c == '\\')
+                  escaped = true;
+                else
+                  sb.append(c);
+              }
+          }
+        entry.subject = sb.toString();
+      }
     remaining = p.second;
     // Next field is "From" (parenthesized list).
     p = parseParenthesizedList(remaining);
@@ -225,6 +251,8 @@ import org.armedbear.j.Utilities;
         entry.messageId = p.first;
       }
     while (false);
+    if (p == null)
+      return null;
     remaining = p.second;
     index = remaining.indexOf(REFERENCES_START);
     if (index >= 0)
@@ -336,7 +364,8 @@ import org.armedbear.j.Utilities;
   private static StringPair parseQuoted(String s)
   {
     s = s.trim();
-    if (s.length() == 0)
+    final int slen = s.length();
+    if (slen == 0)
       return null;
     String quoted = null;
     String remaining = null;
@@ -362,7 +391,7 @@ import org.armedbear.j.Utilities;
             Log.error("parseQuoted: length of literal is zero");
             return null;
           }
-        int begin = s.indexOf('\n', end+1);
+        int begin = s.indexOf('\n', end + 1);
         if (begin < 0)
           {
             Log.error("parseQuoted: no LF after literal");
@@ -370,9 +399,9 @@ import org.armedbear.j.Utilities;
           }
         ++begin; // Skip LF.
         end = begin + length;
-        if (end > s.length())
+        if (end > slen)
           {
-            Log.error("parseQuoted end > s.length()");
+            Log.error("parseQuoted end > slen");
             return null;
           }
         quoted = s.substring(begin, end);
@@ -385,11 +414,26 @@ import org.armedbear.j.Utilities;
       }
     else
       {
-        int begin = s.indexOf('"');
+        final int begin = s.indexOf('"');
         if (begin < 0)
           return null;
-        int end = s.indexOf('"', begin + 1);
-        if (end < 0)
+        int end = begin + 1;
+        while (end < slen)
+          {
+            char c = s.charAt(end);
+            if (c == '\\')
+              {
+                if (end < slen - 1)
+                  ++end;
+                else
+                  return null; // REVIEW
+              }
+            else if (c == '"')
+              break;
+            ++end;
+          }
+        if (end == slen)
+          // reached end of string without closing quote
           return null;
         quoted = s.substring(begin + 1, end);
         remaining = s.substring(end + 1);
@@ -441,10 +485,36 @@ import org.armedbear.j.Utilities;
     s = s.trim();
     if (s.startsWith("NIL"))
       return new StringPair(null, s.substring(3).trim());
-    int begin = s.indexOf("((");
+    final int begin = s.indexOf("((");
     if (begin < 0)
       return null;
-    int end = s.indexOf("))", begin);
+    int end = -1;
+    final int slen = s.length();
+    boolean in_quote = false;
+    char quote_char = '\0';
+    for (int i = begin + 2; i < slen; i++)
+      {
+        char c = s.charAt(i);
+        if (in_quote)
+          {
+            if (c == quote_char)
+              in_quote = false;
+          }
+        else
+          {
+            // not in quote
+            if (c == '"' || c == '\'')
+              {
+                in_quote = true;
+                quote_char = c;
+              }
+            else if (c == ')' && i < slen - 1 && s.charAt(i + 1) == ')')
+              {
+                end = i;
+                break;
+              }
+          }
+      }
     if (end < 0)
       return null;
     String list = s.substring(begin, end + 2);
