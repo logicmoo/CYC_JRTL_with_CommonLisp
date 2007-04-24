@@ -1,8 +1,8 @@
 /*
  * PythonFormatter.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: PythonFormatter.java,v 1.1.1.1 2002-09-24 16:08:58 piso Exp $
+ * Copyright (C) 2002-2007 Peter Graves <peter@armedbear.org>
+ * $Id: PythonFormatter.java,v 1.2 2007-04-24 07:34:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.j;
@@ -149,6 +149,11 @@ public final class PythonFormatter extends Formatter
                     i += 3;
                     endSegment(text, i, state);
                     state = PYTHON_STATE_NEUTRAL;
+                } else if (((c == '>' && text.regionMatches(i, ">>>", 0, 3)) ||
+                            (c == '.' && text.regionMatches(i, "...", 0, 3))) &&
+                           (text.substring(0, i).trim().length() == 0)) {
+                    endSegment(text, i, state);
+                    state = PYTHON_STATE_NEUTRAL;
                 } else
                     ++i;
                 continue;
@@ -157,6 +162,11 @@ public final class PythonFormatter extends Formatter
             if (state == PYTHON_STATE_TRIPLE_DOUBLE) {
                 if (c == '"' && text.regionMatches(i, "\"\"\"", 0, 3)) {
                     i += 3;
+                    endSegment(text, i, state);
+                    state = PYTHON_STATE_NEUTRAL;
+                } else if (((c == '>' && text.regionMatches(i, ">>>", 0, 3)) ||
+                            (c == '.' && text.regionMatches(i, "...", 0, 3))) &&
+                           (text.substring(0, i).trim().length() == 0)) {
                     endSegment(text, i, state);
                     state = PYTHON_STATE_NEUTRAL;
                 } else
