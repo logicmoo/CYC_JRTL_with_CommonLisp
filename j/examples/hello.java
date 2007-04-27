@@ -15,3 +15,9 @@ public class hello
       }
   }
 }
+
+// cd ~/j/examples
+// cp hello.java ../src
+// cd ../src
+// javac hello.java
+// java hello
