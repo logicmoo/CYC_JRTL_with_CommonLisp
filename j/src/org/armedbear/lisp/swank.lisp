@@ -1,7 +1,7 @@
 ;;; swank.lisp
 ;;;
-;;; Copyright (C) 2004-2006 Peter Graves
-;;; $Id: swank.lisp,v 1.20 2006-12-22 16:03:27 piso Exp $
+;;; Copyright (C) 2004-2007 Peter Graves <peter@armedbear.org>
+;;; $Id: swank.lisp,v 1.21 2007-04-30 23:57:34 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -15,12 +15,12 @@
 ;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
-;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+;;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 ;;; Adapted from SLIME, the "Superior Lisp Interaction Mode for Emacs",
 ;;; originally written by Eric Marsden, Luke Gorrie and Helmut Eller.
 
-(in-package #:swank)
+(in-package "SWANK")
 
 (defvar *stream* nil)
 
@@ -142,17 +142,28 @@
 
 (defvar keyword-package (find-package "KEYWORD"))
 
-;;; FIXME! FOO::BAR will intern FOO in BAR.
+(defun tokenize-symbol (string)
+  (let ((package (let ((pos (position #\: string)))
+                   (if pos (subseq string 0 pos) nil)))
+        (symbol (let ((pos (position #\: string :from-end t)))
+                  (if pos (subseq string (1+ pos)) string)))
+        (internp (search "::" string)))
+    (values symbol package internp)))
+
 (defun parse-symbol (string &optional (package *package*))
   "Find the symbol named STRING.
-   Return the symbol and a flag indicating if the symbol was found."
-  (multiple-value-bind (sym pos) (let ((*package* keyword-package))
-                                   (ignore-errors (read-from-string string)))
-    (if (and (symbolp sym) (eql (length string) pos))
-        (if (find #\: string)
-            (find-symbol (string sym) (symbol-package sym))
-            (find-symbol (string sym) package))
-        (values nil nil))))
+Return the symbol and a flag indicating whether the symbols was found."
+  (multiple-value-bind (sname pname) (tokenize-symbol string)
+    (let ((package (cond ((and pname
+                               (string= pname ""))
+                          keyword-package)
+                         (pname
+                          (find-package pname))
+                         (t
+                          package))))
+      (if package
+          (find-symbol sname package)
+          (values nil nil)))))
 
 (defun valid-operator-name-p (string)
   "Test if STRING names a function, macro, or special-operator."
