@@ -1,7 +1,7 @@
 ;;; macros.lisp
 ;;;
-;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: macros.lisp,v 1.33 2006-01-20 02:16:24 piso Exp $
+;;; Copyright (C) 2003-2007 Peter Graves
+;;; $Id: macros.lisp,v 1.34 2007-04-30 23:55:07 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -15,9 +15,9 @@
 ;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
-;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+;;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-(in-package #:system)
+(in-package "SYSTEM")
 
 (export 'defconst)
 

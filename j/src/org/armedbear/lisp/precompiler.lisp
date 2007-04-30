@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
-;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: precompiler.lisp,v 1.158 2007-02-19 16:59:48 piso Exp $
+;;; Copyright (C) 2003-2007 Peter Graves <peter@armedbear.org>
+;;; $Id: precompiler.lisp,v 1.159 2007-04-30 23:59:28 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -15,9 +15,9 @@
 ;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
-;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+;;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-(in-package #:system)
+(in-package "SYSTEM")
 
 (export '(*inline-declarations*
           process-optimization-declarations
@@ -466,7 +466,7 @@
 
 (defun precompile-progn (form)
   (let ((body (cdr form)))
-    (if (= (length body) 1)
+    (if (eql (length body) 1)
         (let ((res (precompile1 (%car body))))
           ;; If the result turns out to be a bare symbol, leave it wrapped
           ;; with PROGN so it won't be mistaken for a tag in an enclosing
