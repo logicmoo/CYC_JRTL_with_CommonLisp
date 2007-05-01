@@ -1,7 +1,7 @@
 ;;; defpackage.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves
-;;; $Id: defpackage.lisp,v 1.6 2007-02-26 11:10:30 piso Exp $
+;;; $Id: defpackage.lisp,v 1.7 2007-05-01 00:17:59 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -30,14 +30,22 @@
 (defun stringify-names (names)
   (mapcar #'string names))
 
-;; FIXME Better error reporting!
 (defun check-disjoint (&rest args)
   (let ((rest-args args))
     (dolist (arg1 args)
-      (setf rest-args (cdr rest-args))
-      (dolist (arg2 rest-args)
-        (when (remove-duplicates (intersection arg1 arg2 :test #'string=))
-          (error 'program-error))))))
+      (let ((key1 (car arg1))
+            (set1 (cdr arg1)))
+        (setq rest-args (cdr rest-args))
+        (dolist (arg2 rest-args)
+          (let* ((key2 (car arg2))
+                 (set2 (cdr arg2))
+                 (common (remove-duplicates (intersection set1 set2 :test #'string=))))
+            (when common
+              (error 'program-error
+                     :format-control
+                     "Parameters ~S and ~S must be disjoint, but have common elements: ~S"
+                     :format-arguments
+                     (list key1 key2 common)))))))))
 
 (defmacro defpackage (package &rest options)
   (let ((nicknames nil)
