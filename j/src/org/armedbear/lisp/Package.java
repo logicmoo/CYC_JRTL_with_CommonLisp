@@ -1,8 +1,8 @@
 /*
  * Package.java
  *
- * Copyright (C) 2002-2005 Peter Graves
- * $Id: Package.java,v 1.74 2007-02-23 21:17:34 piso Exp $
+ * Copyright (C) 2002-2007 Peter Graves <peter@armedbear.org>
+ * $Id: Package.java,v 1.75 2007-05-11 00:26:15 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.lisp;
@@ -674,7 +674,7 @@ public final class Package extends LispObject
 
     public final void addNickname(String s) throws ConditionThrowable
     {
-        // This call will throw an error if there's a naming conflict.
+        // This call will signal an error if there's a naming conflict.
         Packages.addNickname(this, s);
 
         if (nicknames != null) {
