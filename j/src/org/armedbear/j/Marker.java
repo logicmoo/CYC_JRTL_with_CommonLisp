@@ -2,7 +2,7 @@
  * Marker.java
  *
  * Copyright (C) 1998-2007 Peter Graves <peter@armedbear.org>
- * $Id: Marker.java,v 1.7 2007-05-15 16:24:13 piso Exp $
+ * $Id: Marker.java,v 1.8 2007-05-15 17:03:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -97,14 +97,15 @@ public final class Marker implements Constants
         editor.updateDotLine();
         editor.setUpdateFlag(REFRAME);
       }
-    else if (file == null)
-      {
-        return;
-      }
     else
       {
         // Marker is not in current buffer.
-        Buffer buf = Editor.getBufferList().findBuffer(file);
+        BufferList buffer_list = Editor.getBufferList();
+        Buffer buf = null;
+        if (file != null)
+          buf = buffer_list.findBuffer(file);
+        else if (buffer_list.contains(buffer))
+          buf = buffer;
         if (buf != null)
           {
             editor.makeNext(buf);
@@ -125,7 +126,7 @@ public final class Marker implements Constants
             editor.moveCaretToDotCol();
             editor.updateDotLine();
           }
-        else
+        else if (file != null)
           {
             buf = Buffer.createBuffer(file);
             editor.makeNext(buf);
@@ -136,6 +137,8 @@ public final class Marker implements Constants
               editor.getDot().setOffset(editor.getDotLine().length());
             editor.moveCaretToDotCol();
           }
+        else
+          return;
       }
     pos = new Position(editor.getDot());
     buffer = editor.getBuffer();
