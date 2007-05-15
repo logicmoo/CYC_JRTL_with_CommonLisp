@@ -1,8 +1,8 @@
 /*
  * Editor.java
  *
- * Copyright (C) 1998-2005 Peter Graves
- * $Id: Editor.java,v 1.160 2006-10-19 17:00:20 piso Exp $
+ * Copyright (C) 1998-2007 Peter Graves <peter@armedbear.org>
+ * $Id: Editor.java,v 1.161 2007-05-15 17:02:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.j;
@@ -7992,10 +7992,8 @@ public final class Editor extends JPanel implements Constants,
 
     public void pushPosition()
     {
-        if (buffer.getFile() != null) {
-            pushMarker(new Marker(buffer, dot));
-            status("Position saved");
-        }
+        pushMarker(new Marker(buffer, dot));
+        status("Position saved");
     }
 
     public void popPosition()
