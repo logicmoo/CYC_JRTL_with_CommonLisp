@@ -1,7 +1,7 @@
 ;;; arrays.lisp
 ;;;
-;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: arrays.lisp,v 1.20 2005-03-25 03:20:42 piso Exp $
+;;; Copyright (C) 2003-2007 Peter Graves <peter@armedbear.org>
+;;; $Id: arrays.lisp,v 1.21 2007-05-15 15:18:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -15,11 +15,11 @@
 ;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
-;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+;;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-(in-package #:system)
+(in-package "SYSTEM")
 
-(defconstant array-total-size-limit #x1000000)
+(defconstant array-total-size-limit most-positive-fixnum)
 (defconstant array-rank-limit 8)
 
 (defun make-array (dimensions &key
