@@ -1,8 +1,8 @@
 /*
  * Lisp.java
  *
- * Copyright (C) 2002-2007 Peter Graves
- * $Id: Lisp.java,v 1.447 2007-03-02 12:20:02 piso Exp $
+ * Copyright (C) 2002-2007 Peter Graves <peter@armedbear.org>
+ * $Id: Lisp.java,v 1.448 2007-05-15 15:18:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2246,7 +2246,7 @@ public abstract class Lisp
     Symbol.MACROEXPAND_HOOK.initializeSpecial(Symbol.FUNCALL);
   }
 
-  public static final int ARRAY_DIMENSION_MAX = 0x1000000;
+  public static final int ARRAY_DIMENSION_MAX = Integer.MAX_VALUE;
   static
   {
     // ### array-dimension-limit
