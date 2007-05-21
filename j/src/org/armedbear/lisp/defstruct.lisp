@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
-;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: defstruct.lisp,v 1.77 2005-11-30 22:24:32 piso Exp $
+;;; Copyright (C) 2003-2007 Peter Graves <peter@armedbear.org>
+;;; $Id: defstruct.lisp,v 1.78 2007-05-21 17:41:43 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -15,9 +15,9 @@
 ;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
-;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+;;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-(in-package #:system)
+(in-package "SYSTEM")
 
 (export 'compiler-defstruct)
 
@@ -224,15 +224,15 @@
         (push '&aux arglist)
         (dolist (arg aux)
           (push arg arglist)
-          (if (and (consp arg) (= (length arg) 2))
+          (if (and (consp arg) (eql (length arg) 2))
               (let ((var (first arg)))
                 (push var vars)
                 (push (get-slot var) types))
               (push (if (consp arg) (first arg) arg) skipped-vars))))
-      (setf arglist (nreverse arglist)
-            var (nreverse vars)
-            types (nreverse types)
-            skipped-vars (nreverse skipped-vars))
+      (setq arglist (nreverse arglist))
+      (setq vars (nreverse vars))
+      (setq types (nreverse types))
+      (setq skipped-vars (nreverse skipped-vars))
       (let ((values ()))
         (dolist (dsd *dd-slots*)
           (let ((name (dsd-name dsd))
@@ -408,14 +408,14 @@
          (2
           (push args *dd-constructors*)))))
     (:copier
-     (when (= (length option) 2)
+     (when (eql (length option) 2)
        (setf *dd-copier* (cadr option))))
     (:include
      (setf *dd-include* (cdr option)))
     (:initial-offset
      (setf *dd-initial-offset* (cadr option)))
     (:predicate
-     (when (= (length option) 2)
+     (when (eql (length option) 2)
        (setf *dd-predicate* (cadr option))))
     (:print-function
      (setf *dd-print-function* option))
