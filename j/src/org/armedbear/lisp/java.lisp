@@ -1,7 +1,7 @@
 ;;; java.lisp
 ;;;
-;;; Copyright (C) 2003-2005 Peter Graves, Andras Simon
-;;; $Id: java.lisp,v 1.25 2007-02-18 15:47:47 asimon Exp $
+;;; Copyright (C) 2003-2007 Peter Graves, Andras Simon
+;;; $Id: java.lisp,v 1.26 2007-05-31 19:11:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -15,9 +15,11 @@
 ;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
-;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+;;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 (in-package "JAVA")
+
+(require "CLOS")
 
 (defun jregister-handler (object event handler &key data count)
   (%jregister-handler object event handler data count))
@@ -39,10 +41,10 @@
         (implemented-methods
          (loop for m in method-names-and-defs
            for i from 0
-           if (evenp i) 
+           if (evenp i)
            do (assert (stringp m) (m) "Method names must be strings: ~s" m) and collect m
            else
-           do (assert (or (symbolp m) (functionp m)) (m) "Methods must be function designators: ~s" m))) 
+           do (assert (or (symbolp m) (functionp m)) (m) "Methods must be function designators: ~s" m)))
         (null (make-immediate-object nil :ref)))
     (loop for method across
       (jclass-methods interface :declared nil :public t)
@@ -186,4 +188,36 @@
            "java.lang.reflect.Modifier"
            (jcall (jmethod "java.lang.reflect.Member" "getModifiers") member)))
 
-(provide :java-extensions)
+(defmethod make-load-form ((object java-object) &optional environment)
+  (declare (ignore environment))
+  (let ((class-name (jclass-name (jclass-of object))))
+    (cond
+     ((string= class-name "java.lang.reflect.Constructor")
+      `(java:jconstructor ,(jclass-name
+                            (jcall (jmethod "java.lang.reflect.Constructor"
+                                            "getDeclaringClass") object))
+                          ,@(loop for arg-type across
+                              (jcall
+                               (jmethod "java.lang.reflect.Constructor"
+                                        "getParameterTypes")
+                               object)
+                              collecting
+                              (jclass-name arg-type))))
+     ((string= class-name "java.lang.reflect.Method")
+      `(java:jmethod ,(jclass-name
+                       (jcall (jmethod "java.lang.reflect.Method"
+                                       "getDeclaringClass") object))
+                     ,(jmethod-name object)
+                     ,@(loop for arg-type across
+                         (jcall
+                          (jmethod "java.lang.reflect.Method"
+                                   "getParameterTypes")
+                          object)
+                         collecting
+                         (jclass-name arg-type))))
+     ((jinstance-of-p object "java.lang.Class")
+      `(java:jclass ,class-name))
+     (t
+      (error "Unknown load-from for ~A" class-name)))))
+
+(provide "JAVA-EXTENSIONS")

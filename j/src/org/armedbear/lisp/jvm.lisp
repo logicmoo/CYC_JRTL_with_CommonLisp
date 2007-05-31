@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves
-;;; $Id: jvm.lisp,v 1.780 2007-03-17 18:35:27 piso Exp $
+;;; $Id: jvm.lisp,v 1.781 2007-05-31 19:10:47 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -34,7 +34,8 @@
   (require "KNOWN-FUNCTIONS")
   (require "KNOWN-SYMBOLS")
   (require "DUMP-FORM")
-  (require "OPCODES"))
+  (require "OPCODES")
+  (require "JAVA"))
 
 (defvar *closure-variables* nil)
 
@@ -3170,7 +3171,8 @@ representation, based on the derived type of the LispObject."
 (defknown declare-instance (t) t)
 (defun declare-instance (obj)
   (aver (not (null *compile-file-truename*)))
-  (aver (or (structure-object-p obj) (standard-object-p obj)))
+  (aver (or (structure-object-p obj) (standard-object-p obj)
+            (java:java-object-p obj)))
   (let* ((g (symbol-name (gensym)))
          (s (with-output-to-string (stream) (dump-form obj stream)))
          (*code* *static-code*))
@@ -3343,7 +3345,8 @@ representation, based on the derived type of the LispObject."
                       (declare-object form))))
            (emit 'getstatic *this-class* g +lisp-object+)))
         ((or (structure-object-p form)
-             (standard-object-p form))
+             (standard-object-p form)
+             (java:java-object-p form))
          (let ((g (if *compile-file-truename*
                       (declare-instance form)
                       (declare-object form))))
@@ -9352,6 +9355,40 @@ representation, based on the derived type of the LispObject."
           (t
            (compile-function-call form target representation)))))
 
+(defknown p2-java-jclass (t t t) t)
+(defun p2-java-jclass (form target representation)
+  (unless (and (= 2 (length form))
+               (stringp (cadr form)))
+    (compile-function-call form target representation)
+    (return-from p2-java-jclass))
+  (let ((c (ignore-errors (java:jclass (cadr form)))))
+    (if c (compile-constant c target representation)
+      ;; delay resolving the method to run-time; it's unavailable now
+      (compile-function-call form target representation))))
+
+(defknown p2-java-jconstructor (t t t) t)
+(defun p2-java-jconstructor (form target representation)
+  (unless (and (< 1 (length form))
+               (every #'stringp (cdr form)))
+    (compile-function-call form target representation)
+    (return-from p2-java-jconstructor))
+  (let ((c (ignore-errors (apply #'java:jconstructor (cdr form)))))
+    (if c (compile-constant c target representation)
+      ;; delay resolving the method to run-time; it's unavailable now
+      (compile-function-call form target representation))))
+
+(defknown p2-java-jmethod (t t t) t)
+(defun p2-java-jmethod (form target representation)
+  (unless (and (< 1 (length form))
+               (every #'stringp (cdr form)))
+    (compile-function-call form target representation)
+    (return-from p2-java-jmethod))
+  (let ((m (ignore-errors (apply #'java:jmethod (cdr form)))))
+    (if m (compile-constant m target representation)
+      ;; delay resolving the method to run-time; it's unavailable now
+      (compile-function-call form target representation))))
+
+
 (defknown p2-char= (t t t) t)
 (defun p2-char= (form target representation)
   (let* ((args (cdr form))
@@ -10415,6 +10452,9 @@ representation, based on the derived type of the LispObject."
   (install-p2-handler 'cdr                 'p2-cdr)
   (install-p2-handler 'char                'p2-char/schar)
   (install-p2-handler 'char-code           'p2-char-code)
+  (install-p2-handler 'java:jclass         'p2-java-jclass)
+  (install-p2-handler 'java:jconstructor   'p2-java-jconstructor)
+  (install-p2-handler 'java:jmethod        'p2-java-jmethod)
   (install-p2-handler 'char=               'p2-char=)
   (install-p2-handler 'characterp          'p2-characterp)
   (install-p2-handler 'classp              'p2-classp)
