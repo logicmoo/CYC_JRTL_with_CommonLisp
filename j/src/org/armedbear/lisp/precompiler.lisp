@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves <peter@armedbear.org>
-;;; $Id: precompiler.lisp,v 1.159 2007-04-30 23:59:28 piso Exp $
+;;; $Id: precompiler.lisp,v 1.160 2007-06-14 10:08:27 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -210,7 +210,7 @@
                     (NUMBER            . numberp)
                     (NUMBER            . numberp)
                     (PACKAGE           . packagep)
-                    (RATIONA           . rationalp)
+                    (RATIONAL          . rationalp)
                     (REAL              . realp)
                     (SIMPLE-BIT-VECTOR . simple-bit-vector-p)
                     (SIMPLE-STRING     . simple-string-p)
