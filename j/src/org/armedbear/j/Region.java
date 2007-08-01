@@ -1,8 +1,8 @@
 /*
  * Region.java
  *
- * Copyright (C) 1998-2002 Peter Graves
- * $Id: Region.java,v 1.2 2003-03-20 15:23:42 piso Exp $
+ * Copyright (C) 1998-2007 Peter Graves
+ * $Id: Region.java,v 1.3 2007-08-01 16:58:53 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.j;
@@ -317,6 +317,42 @@ public final class Region implements Constants
                     nextLine.setPrevious(beginLine);
                 buffer.needsRenumbering = true;
             }
+            buffer.modified();
+        }
+        finally {
+            buffer.unlockWrite();
+        }
+    }
+
+    // used by Buffer.enforceOutputLimit()
+    // deletes whole lines at beginning of buffer
+    public void deleteLines()
+    {
+        adjustMarkers();
+        try {
+            buffer.lockWrite();
+        }
+        catch (InterruptedException e) {
+            Log.error(e);
+            return;
+        }
+        try {
+            beginLine.setText(endLine.getText());
+            beginLine.setOriginalText(null);
+            Line nextLine = endLine.next();
+            Line line = beginLine;
+            while (line != endLine) {
+                Line next = line.next();
+                line.setPrevious(null);
+                line.setNext(null);
+                line = next;
+            }
+            endLine.setPrevious(null);
+            endLine.setNext(null);
+            beginLine.setNext(nextLine);
+            if (nextLine != null)
+                nextLine.setPrevious(beginLine);
+            buffer.needsRenumbering = true;
             buffer.modified();
         }
         finally {
