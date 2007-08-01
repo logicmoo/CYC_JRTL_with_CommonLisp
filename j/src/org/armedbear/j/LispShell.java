@@ -2,7 +2,7 @@
  * LispShell.java
  *
  * Copyright (C) 2002-2007 Peter Graves
- * $Id: LispShell.java,v 1.100 2007-02-12 19:38:59 piso Exp $
+ * $Id: LispShell.java,v 1.101 2007-08-01 17:04:07 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.j;
@@ -530,17 +530,15 @@ public class LispShell extends Shell
       {
         if (slime)
           {
-            // Slime.
-            if (posEndOfInput == null)
-              posEndOfInput = new Position(getFirstLine(), 0);
             final Position pos;
-            if (posBeforeLastPrompt != null && posEndOfInput != null)
+            if (posBeforeLastPrompt != null && posBeforeLastPrompt.getNextLine() != null)
               {
+                // prompt is still in the buffer
                 Position posLastPrompt =
                   new Position(posBeforeLastPrompt.getNextLine(), 0);
-                if (posEndOfInput.isAfter(posLastPrompt))
+                if (posEndOfInput != null && posEndOfInput.isAfter(posLastPrompt))
                   {
-                    // There has been user input since the last prompt.
+                    // there has been user input since the last prompt
                     pos = getEnd();
                   }
                 else
@@ -549,7 +547,11 @@ public class LispShell extends Shell
                   }
               }
             else
-              pos = getEnd();
+              {
+                posBeforeLastPrompt = null;
+                posEndOfInput = null;
+                pos = getEnd();
+              }
             if (pos != null)
               {
                 if (pos == posBeforeLastPrompt)
@@ -571,14 +573,14 @@ public class LispShell extends Shell
               }
             else
               {
-                // Empty buffer.
+                // empty buffer
                 setText(s);
                 setEndOfOutput(getEnd().copy());
               }
           }
         else
           {
-            // No slime.
+            // no slime
             Position pos = getEnd();
             if (pos != null)
               {
