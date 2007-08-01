@@ -2,7 +2,7 @@
  * Buffer.java
  *
  * Copyright (C) 1998-2007 Peter Graves
- * $Id: Buffer.java,v 1.55 2007-03-03 15:03:24 piso Exp $
+ * $Id: Buffer.java,v 1.56 2007-08-01 17:00:32 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2714,7 +2714,7 @@ public class Buffer extends SystemBuffer
             }
             Position end = new Position(line, 0);
             Region r = new Region(this, begin, end);
-            r.delete();
+            r.deleteLines();
             if (needsRenumbering)
                 renumber();
             resetUndo();
