@@ -93,6 +93,8 @@ public class ReaderThread extends Thread
                     sb.append(buf, 0, numChars);
                 if (timeOut > 0)
                     Thread.sleep(timeOut);
+                else
+                    Thread.yield();
             }
             while (reader.ready());
         }
