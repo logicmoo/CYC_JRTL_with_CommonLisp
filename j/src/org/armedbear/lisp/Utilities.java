@@ -1,8 +1,8 @@
 /*
  * Utilities.java
  *
- * Copyright (C) 2003-2005 Peter Graves
- * $Id: Utilities.java,v 1.15 2007-02-23 21:17:35 piso Exp $
+ * Copyright (C) 2003-2007 Peter Graves
+ * $Id: Utilities.java,v 1.16 2007-08-27 19:36:55 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.lisp;
@@ -33,7 +33,8 @@ public final class Utilities extends Lisp
         String osName = System.getProperty("os.name");
         isPlatformUnix = osName.startsWith("Linux") ||
             osName.startsWith("Mac OS X") || osName.startsWith("Solaris") ||
-            osName.startsWith("SunOS") || osName.startsWith("AIX");
+            osName.startsWith("SunOS") || osName.startsWith("AIX") ||
+            osName.startsWith("FreeBSD");
         isPlatformWindows = osName.startsWith("Windows");
     }
 
