@@ -1,8 +1,8 @@
 /*
  * SingleFloat.java
  *
- * Copyright (C) 2003-2006 Peter Graves
- * $Id: SingleFloat.java,v 1.7 2007-02-23 21:17:34 piso Exp $
+ * Copyright (C) 2003-2007 Peter Graves
+ * $Id: SingleFloat.java,v 1.8 2007-09-17 16:58:39 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.lisp;
@@ -25,9 +25,10 @@ import java.math.BigInteger;
 
 public final class SingleFloat extends LispObject
 {
-    public static final SingleFloat ZERO      = new SingleFloat(0);
-    public static final SingleFloat ONE       = new SingleFloat(1);
-    public static final SingleFloat MINUS_ONE = new SingleFloat(-1);
+    public static final SingleFloat ZERO       = new SingleFloat(0);
+    public static final SingleFloat MINUS_ZERO = new SingleFloat(-0.0f);
+    public static final SingleFloat ONE        = new SingleFloat(1);
+    public static final SingleFloat MINUS_ONE  = new SingleFloat(-1);
 
     public static final SingleFloat SINGLE_FLOAT_POSITIVE_INFINITY =
         new SingleFloat(Float.POSITIVE_INFINITY);
@@ -96,6 +97,13 @@ public final class SingleFloat extends LispObject
         if (this == obj)
             return true;
         if (obj instanceof SingleFloat) {
+            if (value == 0) {
+                // "If an implementation supports positive and negative zeros
+                // as distinct values, then (EQL 0.0 -0.0) returns false."
+                float f = ((SingleFloat)obj).value;
+                int bits = Float.floatToRawIntBits(f);
+                return bits == Float.floatToRawIntBits(value);
+            }
             if (value == ((SingleFloat)obj).value)
                 return true;
         }
@@ -107,6 +115,12 @@ public final class SingleFloat extends LispObject
         if (this == obj)
             return true;
         if (obj instanceof SingleFloat) {
+            if (value == 0) {
+                // same as EQL
+                float f = ((SingleFloat)obj).value;
+                int bits = Float.floatToRawIntBits(f);
+                return bits == Float.floatToRawIntBits(value);
+            }
             if (value == ((SingleFloat)obj).value)
                 return true;
         }
@@ -115,6 +129,7 @@ public final class SingleFloat extends LispObject
 
     public boolean equalp(int n)
     {
+        // "If two numbers are the same under =."
         return value == n;
     }
 
@@ -138,7 +153,7 @@ public final class SingleFloat extends LispObject
         if (value > 0)
             return this;
         if (value == 0) // 0.0 or -0.0
-            return SingleFloat.ZERO;
+            return ZERO;
         return new SingleFloat(- value);
     }
 
@@ -224,6 +239,15 @@ public final class SingleFloat extends LispObject
             return Complex.getInstance(add(c.getRealPart()), c.getImaginaryPart());
         }
         return error(new TypeError(obj, Symbol.NUMBER));
+    }
+
+    public LispObject negate()
+    {
+        if (value == 0) {
+            int bits = Float.floatToRawIntBits(value);
+            return (bits < 0) ? ZERO : MINUS_ZERO;
+        }
+        return new SingleFloat(-value);
     }
 
     public LispObject subtract(LispObject obj) throws ConditionThrowable
