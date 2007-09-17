@@ -7,21 +7,21 @@
 ;;;   .clisprc.lisp      (CLISP)
 ;;;   .lispworks         (LispWorks)
 
+(defparameter *ansi-tests-directory*
+  #-(or windows mswindows win32)
+  #p"/home/peter/xcl/x/ansi-tests/"
+  #+(or windows mswindows win32)
+  #p"c:\\msys\\1.0\\home\\peter\\xcl\\x\ansi-tests\\")
+
 (defun run-ansi-tests (&optional (compile-tests t))
   (format t "COMPILE-TESTS is ~A~%" compile-tests)
-  (let ((*default-pathname-defaults* #-(or windows mswindows win32)
-                                     #p"/home/peter/gcl/ansi-tests/"
-                                     #+(or windows mswindows win32)
-                                     #p"c:\\cygwin\\home\\peter\\gcl\\ansi-tests\\"))
+  (let ((*default-pathname-defaults* *ansi-tests-directory*))
     #+(and abcl unix)
     (run-shell-command "make clean" :directory *default-pathname-defaults*)
     (time (load (if compile-tests "compileit.lsp" "doit.lsp")))))
 
 (defun run-random-tests (size nvars count)
-  (let ((*default-pathname-defaults* #-(or windows mswindows win32)
-                                     #p"/home/peter/gcl/ansi-tests/"
-                                     #+(or windows mswindows win32)
-                                     #p"c:\\cygwin\\home\\peter\\gcl\\ansi-tests\\"))
+  (let ((*default-pathname-defaults* *ansi-tests-directory*))
     (load "gclload1.lsp")
     (load "random-int-form.lsp")
     (let ((f (find-symbol "TEST-RANDOM-INTEGER-FORMS" "CL-TEST")))
