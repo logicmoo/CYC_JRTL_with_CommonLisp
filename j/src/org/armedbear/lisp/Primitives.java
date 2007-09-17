@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2007 Peter Graves
- * $Id: Primitives.java,v 1.879 2007-02-23 21:17:34 piso Exp $
+ * $Id: Primitives.java,v 1.880 2007-09-17 16:57:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.lisp;
@@ -640,7 +640,7 @@ public final class Primitives extends Lisp
       }
       public LispObject execute(LispObject arg) throws ConditionThrowable
       {
-        return Fixnum.ZERO.subtract(arg);
+        return arg.negate();
       }
       public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
