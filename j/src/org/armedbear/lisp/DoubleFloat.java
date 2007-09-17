@@ -1,8 +1,8 @@
 /*
  * DoubleFloat.java
  *
- * Copyright (C) 2003-2006 Peter Graves
- * $Id: DoubleFloat.java,v 1.8 2007-02-23 21:17:33 piso Exp $
+ * Copyright (C) 2003-2007 Peter Graves
+ * $Id: DoubleFloat.java,v 1.9 2007-09-17 16:58:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.lisp;
@@ -25,9 +25,10 @@ import java.math.BigInteger;
 
 public final class DoubleFloat extends LispObject
 {
-    public static final DoubleFloat ZERO      = new DoubleFloat(0);
-    public static final DoubleFloat ONE       = new DoubleFloat(1);
-    public static final DoubleFloat MINUS_ONE = new DoubleFloat(-1);
+    public static final DoubleFloat ZERO       = new DoubleFloat(0);
+    public static final DoubleFloat MINUS_ZERO = new DoubleFloat(-0.0d);
+    public static final DoubleFloat ONE        = new DoubleFloat(1);
+    public static final DoubleFloat MINUS_ONE  = new DoubleFloat(-1);
 
     public static final DoubleFloat DOUBLE_FLOAT_POSITIVE_INFINITY =
         new DoubleFloat(Double.POSITIVE_INFINITY);
@@ -96,6 +97,13 @@ public final class DoubleFloat extends LispObject
         if (this == obj)
             return true;
         if (obj instanceof DoubleFloat) {
+            if (value == 0) {
+                // "If an implementation supports positive and negative zeros
+                // as distinct values, then (EQL 0.0 -0.0) returns false."
+                double d = ((DoubleFloat)obj).value;
+                long bits = Double.doubleToRawLongBits(d);
+                return bits == Double.doubleToRawLongBits(value);
+            }
             if (value == ((DoubleFloat)obj).value)
                 return true;
         }
@@ -107,6 +115,12 @@ public final class DoubleFloat extends LispObject
         if (this == obj)
             return true;
         if (obj instanceof DoubleFloat) {
+            if (value == 0) {
+                // same as EQL
+                double d = ((DoubleFloat)obj).value;
+                long bits = Double.doubleToRawLongBits(d);
+                return bits == Double.doubleToRawLongBits(value);
+            }
             if (value == ((DoubleFloat)obj).value)
                 return true;
         }
@@ -115,6 +129,7 @@ public final class DoubleFloat extends LispObject
 
     public boolean equalp(int n)
     {
+        // "If two numbers are the same under =."
         return value == n;
     }
 
@@ -138,7 +153,7 @@ public final class DoubleFloat extends LispObject
         if (value > 0)
             return this;
         if (value == 0) // 0.0 or -0.0
-            return DoubleFloat.ZERO;
+            return ZERO;
         return new DoubleFloat(- value);
     }
 
@@ -205,6 +220,15 @@ public final class DoubleFloat extends LispObject
     public final LispObject decr()
     {
         return new DoubleFloat(value - 1);
+    }
+
+    public LispObject negate()
+    {
+        if (value == 0) {
+            long bits = Double.doubleToRawLongBits(value);
+            return (bits < 0) ? ZERO : MINUS_ZERO;
+        }
+        return new DoubleFloat(-value);
     }
 
     public LispObject add(LispObject obj) throws ConditionThrowable
