@@ -2,7 +2,7 @@
  * Keyword.java
  *
  * Copyright (C) 2002-2007 Peter Graves
- * $Id: Keyword.java,v 1.50 2007-03-02 12:18:41 piso Exp $
+ * $Id: Keyword.java,v 1.51 2007-10-03 12:12:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -65,6 +65,7 @@ public final class Keyword extends Lisp
         FORMAT_ARGUMENTS    = internKeyword("FORMAT-ARGUMENTS"),
         FORMAT_CONTROL      = internKeyword("FORMAT-CONTROL"),
         FROM_END            = internKeyword("FROM-END"),
+        FREEBSD             = internKeyword("FREEBSD"),
         HOST                = internKeyword("HOST"),
         IF_DOES_NOT_EXIST   = internKeyword("IF-DOES-NOT-EXIST"),
         IF_EXISTS           = internKeyword("IF-EXISTS"),

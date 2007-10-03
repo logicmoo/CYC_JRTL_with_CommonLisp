@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2007 Peter Graves <peter@armedbear.org>
- * $Id: Lisp.java,v 1.448 2007-05-15 15:18:12 piso Exp $
+ * $Id: Lisp.java,v 1.449 2007-10-03 12:11:52 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -2131,6 +2131,15 @@ public abstract class Lisp
                                              Keyword.ANSI_CL,
                                              Keyword.UNIX,
                                              Keyword.DARWIN));
+      }
+    else if (osName.startsWith("FreeBSD"))
+      {
+        Symbol.FEATURES.setSymbolValue(list6(Keyword.ARMEDBEAR,
+                                             Keyword.ABCL,
+                                             Keyword.COMMON_LISP,
+                                             Keyword.ANSI_CL,
+                                             Keyword.UNIX,
+                                             Keyword.FREEBSD));
       }
     else if (osName.startsWith("Windows"))
       {

@@ -362,7 +362,9 @@
                        (cond ((eq *platform* :linux)
                               "linux")
                              ((search "SunOS" (software-type))
-                              "solaris"))))
+                              "solaris")
+                             ((search "FreeBSD" (software-type))
+                              "freebsd"))))
               (status
                (run-shell-command command :directory *abcl-dir*)))
          (unless (zerop status)
@@ -487,7 +489,8 @@
     ;; libabcl.so
     (when (and (or full libabcl)
                (or (eq *platform* :linux)
-                   (search "SunOS" (software-type))))
+                   (search "SunOS" (software-type))
+                   (search "FreeBSD" (software-type))))
       ;; A failure here is not fatal.
       (make-libabcl))
     ;; abcl/abcl.bat

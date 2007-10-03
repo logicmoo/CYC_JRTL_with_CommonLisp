@@ -1,8 +1,8 @@
 /*
  * Platform.java
  *
- * Copyright (C) 1998-2005 Peter Graves
- * $Id: Platform.java,v 1.7 2005-04-05 01:13:44 piso Exp $
+ * Copyright (C) 1998-2007 Peter Graves
+ * $Id: Platform.java,v 1.8 2007-10-03 12:12:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.j;
@@ -26,9 +26,10 @@ public final class Platform
     private static final String osName = System.getProperty("os.name");
     private static final boolean isPlatformLinux = osName.startsWith("Linux");
     private static final boolean isPlatformSunOS = osName.startsWith("SunOS");
+    private static final boolean isPlatformFreeBSD = osName.startsWith("FreeBSD");
     private static final boolean isPlatformUnix =
         isPlatformLinux || osName.startsWith("Mac OS X") ||
-        osName.startsWith("Solaris") || isPlatformSunOS ||
+        osName.startsWith("Solaris") || isPlatformSunOS || isPlatformFreeBSD ||
         osName.startsWith("AIX");
     private static final boolean isPlatformWindows =
         osName.startsWith("Windows");
@@ -49,6 +50,11 @@ public final class Platform
     public static final boolean isPlatformSunOS()
     {
         return isPlatformSunOS;
+    }
+
+    public static final boolean isPlatformFreeBSD()
+    {
+        return isPlatformFreeBSD;
     }
 
     public static final boolean isPlatformUnix()
