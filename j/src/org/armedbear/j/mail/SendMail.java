@@ -1,8 +1,8 @@
 /*
  * SendMail.java
  *
- * Copyright (C) 2000-2005 Peter Graves
- * $Id: SendMail.java,v 1.12 2005-11-19 17:11:42 piso Exp $
+ * Copyright (C) 2000-2007 Peter Graves
+ * $Id: SendMail.java,v 1.13 2007-10-12 17:27:19 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.j.mail;
@@ -334,7 +334,8 @@ public final class SendMail extends Buffer
                 // Not strictly equal. Check for same address.
                 String addr2 = ma2.getAddress();
                 if (addr.equals(addr2)) {
-                    list.remove(i);
+                    if (i < list.size())
+                        list.remove(i);
                     // We've removed ma from the list.
                     // Don't lose any extra information it may have.
                     if (ma2.getPersonal() == null || ma2.getPersonal().length() == 0) {
