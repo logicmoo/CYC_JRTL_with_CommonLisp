@@ -1,7 +1,7 @@
 ;;; java.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves, Andras Simon
-;;; $Id: java.lisp,v 1.26 2007-05-31 19:11:09 piso Exp $
+;;; $Id: java.lisp,v 1.27 2007-10-12 17:00:32 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -216,7 +216,7 @@
                          collecting
                          (jclass-name arg-type))))
      ((jinstance-of-p object "java.lang.Class")
-      `(java:jclass ,class-name))
+      `(java:jclass ,(jcall (jmethod "java.lang.Class" "getName") object)))
      (t
       (error "Unknown load-from for ~A" class-name)))))
 
