@@ -1,8 +1,8 @@
 /*
  * Directories.java
  *
- * Copyright (C) 1998-2003 Peter Graves
- * $Id: Directories.java,v 1.2 2003-06-28 23:52:27 piso Exp $
+ * Copyright (C) 1998-2007 Peter Graves
+ * $Id: Directories.java,v 1.3 2007-10-12 17:46:03 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.j;
@@ -36,15 +36,21 @@ public final class Directories
         if (userHomeDirectory == null) {
             // Home directory was not specified on the command line.
             if (Platform.isPlatformWindows()) {
+                // Look for existing .j directory.
                 FastStringBuffer sb = new FastStringBuffer("C:\\");
                 for (char c = 'C'; c <= 'Z'; c++) {
                     sb.setCharAt(0, c);
                     File dir = File.getInstance(sb.toString());
                     if (dir != null && dir.isDirectory() && dir.canWrite()) {
-                        userHomeDirectory = dir;
+                        File subdir = File.getInstance(dir, ".j");
+                        if (subdir != null && subdir.isDirectory())
+                            userHomeDirectory = dir;
                         break;
                     }
                 }
+                if (userHomeDirectory == null)
+                    // No existing .j directory.
+                    userHomeDirectory = File.getInstance(System.getenv("APPDATA"));
             } else {
                 // Not Windows.
                 userHomeDirectory =
