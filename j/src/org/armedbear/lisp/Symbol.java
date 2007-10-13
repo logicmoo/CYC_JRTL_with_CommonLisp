@@ -2,7 +2,7 @@
  * Symbol.java
  *
  * Copyright (C) 2002-2007 Peter Graves
- * $Id: Symbol.java,v 1.251 2007-02-23 21:17:35 piso Exp $
+ * $Id: Symbol.java,v 1.252 2007-10-13 14:03:34 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.lisp;
@@ -2860,6 +2860,8 @@ public class Symbol extends LispObject
     PACKAGE_EXT.addExternalSymbol("CHARACTER-DESIGNATOR");
   public static final Symbol INTERRUPT_LISP =
     PACKAGE_EXT.addExternalSymbol("INTERRUPT-LISP");
+  public static final Symbol GETENV =
+    PACKAGE_EXT.addExternalSymbol("GETENV");
 
   // MOP.
   public static final Symbol STANDARD_READER_METHOD =
