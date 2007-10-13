@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2007 Peter Graves
- * $Id: Extensions.java,v 1.48 2007-02-23 21:17:33 piso Exp $
+ * $Id: Extensions.java,v 1.49 2007-10-13 14:09:27 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.lisp;
@@ -237,4 +237,25 @@ public final class Extensions extends Lisp
         return T;
       }
     };
+
+  // ### getenv
+  private static final Primitive GETENV =
+      new Primitive("getenv", PACKAGE_EXT, true)
+  {
+    public LispObject execute(LispObject arg) throws ConditionThrowable
+    {
+      AbstractString string;
+      try {
+        string = (AbstractString) arg;
+      }
+      catch (ClassCastException e) {
+        return type_error(arg, Symbol.STRING);
+      }
+      String result = System.getenv(string.getStringValue());
+      if (result != null)
+        return new SimpleString(result);
+      else
+        return NIL;
+    }
+  };
 }
