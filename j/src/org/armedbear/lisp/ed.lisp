@@ -1,7 +1,7 @@
 ;;; ed.lisp
 ;;;
-;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: ed.lisp,v 1.6 2005-04-30 20:00:09 piso Exp $
+;;; Copyright (C) 2004-2007 Peter Graves
+;;; $Id: ed.lisp,v 1.7 2007-10-13 14:16:13 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -15,7 +15,7 @@
 ;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
-;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+;;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 ;;; Adapted from SBCL.
 
@@ -36,9 +36,12 @@ the file system."
   (values))
 
 (defun default-ed-function (what)
-  (let ((portfile (merge-pathnames ".j/port" (if (featurep :windows)
-                                                 "C:\\"
-                                                 (user-homedir-pathname))))
+  (let ((portfile (merge-pathnames ".j/port"
+                                   (if (featurep :windows)
+                                       (if (ext:probe-directory "C:\\.j")
+                                           "C:\\"
+                                           (ext:probe-directory (pathname (ext:getenv "APPDATA"))))
+                                       (user-homedir-pathname))))
         stream)
     (when (probe-file portfile)
       (let* ((port (with-open-file (s portfile) (read s nil nil)))
