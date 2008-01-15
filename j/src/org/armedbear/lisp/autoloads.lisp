@@ -1,7 +1,7 @@
 ;;; autoloads.lisp
 ;;;
-;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: autoloads.lisp,v 1.205 2006-02-14 02:30:42 piso Exp $
+;;; Copyright (C) 2003-2008 Peter Graves
+;;; $Id: autoloads.lisp,v 1.206 2008-01-15 10:55:14 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -15,9 +15,9 @@
 ;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
-;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+;;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-(in-package #:system)
+(in-package "SYSTEM")
 
 (autoload '(char/= char> char>= char-not-equal)
           "chars")
@@ -89,6 +89,7 @@
 (autoload 'deposit-field)
 (autoload 'mask-field)
 (autoload '(ensure-class ensure-generic-function make-condition
+            mop::ensure-method
             define-method-combination
             %defgeneric
             canonicalize-direct-superclasses)
