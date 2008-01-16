@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves
-;;; $Id: jvm.lisp,v 1.782 2008-01-14 23:38:09 piso Exp $
+;;; $Id: jvm.lisp,v 1.783 2008-01-16 00:25:30 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -1437,7 +1437,7 @@
   (emit 'getstatic +lisp-class+ "NIL" +lisp-object+))
 
 (defknown emit-push-t () t)
-(declaim (inline emit-push-nil))
+(declaim (inline emit-push-t))
 (defun emit-push-t ()
   (emit 'getstatic +lisp-class+ "T" +lisp-symbol+))
 
