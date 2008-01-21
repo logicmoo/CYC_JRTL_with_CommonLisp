@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
-;;; Copyright (C) 2003-2007 Peter Graves
-;;; $Id: jvm.lisp,v 1.783 2008-01-16 00:25:30 piso Exp $
+;;; Copyright (C) 2003-2008 Peter Graves
+;;; $Id: jvm.lisp,v 1.784 2008-01-21 19:42:00 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -27,6 +27,7 @@
           derive-compiler-type))
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
+  (require "LOOP")
   (require "FORMAT")
   (require "CLOS")
   (require "PRINT-OBJECT")
