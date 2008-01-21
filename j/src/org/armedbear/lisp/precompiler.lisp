@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
-;;; Copyright (C) 2003-2007 Peter Graves <peter@armedbear.org>
-;;; $Id: precompiler.lisp,v 1.160 2007-06-14 10:08:27 piso Exp $
+;;; Copyright (C) 2003-2008 Peter Graves <peter@armedbear.org>
+;;; $Id: precompiler.lisp,v 1.161 2008-01-21 17:42:16 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -382,6 +382,10 @@
 (declaim (ftype (function (t t) t) precompile-function-call))
 (defun precompile-function-call (form)
   (let ((op (car form)))
+    (when (and (consp op) (eq (%car op) 'LAMBDA))
+      (return-from precompile-function-call
+                   (cons (list* 'LAMBDA (cadr op) (mapcar #'precompile1 (cddr op)))
+                         (mapcar #'precompile1 (cdr form)))))
     (when (or (not *in-jvm-compile*) (notinline-p op))
       (return-from precompile-function-call (precompile-cons form)))
     (when (source-transform op)
