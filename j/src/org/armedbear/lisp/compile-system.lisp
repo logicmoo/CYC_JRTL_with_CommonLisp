@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
-;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-system.lisp,v 1.70 2006-01-14 13:27:11 piso Exp $
+;;; Copyright (C) 2004-2008 Peter Graves
+;;; $Id: compile-system.lisp,v 1.71 2008-01-25 12:07:38 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -15,13 +15,13 @@
 ;;;
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
-;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+;;; Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-(in-package #:system)
+(in-package "SYSTEM")
 
-(require '#:loop)
-(require '#:collect)
-(require '#:compile-file)
+(require "LOOP")
+(require "COLLECT")
+(require "COMPILE-FILE")
 
 (defun check-lisp-home ()
   (loop
@@ -136,6 +136,7 @@
                                      "delete-duplicates.lisp"
                                      "deposit-field.lisp"
                                      "describe.lisp"
+                                     "describe-compiler-policy.lisp"
                                      "directory.lisp"
                                      "disassemble.lisp"
                                      "do-all-symbols.lisp"
