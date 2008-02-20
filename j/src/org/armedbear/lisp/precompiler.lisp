@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2008 Peter Graves <peter@armedbear.org>
-;;; $Id: precompiler.lisp,v 1.162 2008-01-25 11:51:05 piso Exp $
+;;; $Id: precompiler.lisp,v 1.163 2008-02-20 18:31:15 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -548,13 +548,59 @@
   ;; Delegate to PRECOMPILE-PSETF so symbol macros are handled correctly.
   (precompile-psetf form))
 
-(defun maybe-rewrite-lambda (form)
-  (let* ((args (cdr form))
-         (lambda-list (car args))
-         (auxvars (memq '&AUX lambda-list)))
-    (when auxvars
+(defun rewrite-aux-vars-process-decls (forms arg-vars aux-vars)
+  (declare (ignore aux-vars))
+  (let ((lambda-decls nil)
+        (let-decls nil))
+    (dolist (form forms)
+      (unless (and (consp form) (eq (car form) 'DECLARE)) ; shouldn't happen
+        (return))
+      (dolist (decl (cdr form))
+        (case (car decl)
+          ((OPTIMIZE DECLARATION DYNAMIC-EXTENT FTYPE INLINE NOTINLINE)
+           (push (list 'DECLARE decl) lambda-decls))
+          (SPECIAL
+           (dolist (name (cdr decl))
+             (if (memq name arg-vars)
+                 (push (list 'DECLARE (list 'SPECIAL name)) lambda-decls)
+                 (push (list 'DECLARE (list 'SPECIAL name)) let-decls))))
+          (TYPE
+           (dolist (name (cddr decl))
+             (if (memq name arg-vars)
+                 (push (list 'DECLARE (list 'TYPE (cadr decl) name)) lambda-decls)
+                 (push (list 'DECLARE (list 'TYPE (cadr decl) name)) let-decls))))
+          (t
+           (dolist (name (cdr decl))
+             (if (memq name arg-vars)
+                 (push (list 'DECLARE (list (car decl) name)) lambda-decls)
+                 (push (list 'DECLARE (list (car decl) name)) let-decls)))))))
+    (setq lambda-decls (nreverse lambda-decls))
+    (setq let-decls (nreverse let-decls))
+    (values lambda-decls let-decls)))
+
+(defun rewrite-aux-vars (form)
+  (multiple-value-bind (body decls doc)
+      (parse-body (cddr form))
+    (declare (ignore doc)) ; FIXME
+    (let* ((lambda-list (cadr form))
+           (lets (cdr (memq '&AUX lambda-list)))
+           aux-vars)
+      (dolist (form lets)
+        (cond ((consp form)
+               (push (%car form) aux-vars))
+              (t
+               (push form aux-vars))))
+      (setq aux-vars (nreverse aux-vars))
       (setq lambda-list (subseq lambda-list 0 (position '&AUX lambda-list)))
-      (setf (cddr form) (list (append (list 'LET* (cdr auxvars)) (cddr form)))))
+      (multiple-value-bind (lambda-decls let-decls)
+          (rewrite-aux-vars-process-decls decls (lambda-list-names lambda-list) aux-vars)
+        `(lambda ,lambda-list ,@lambda-decls (let* ,lets ,@let-decls ,@body))))))
+
+(defun maybe-rewrite-lambda (form)
+  (let* ((lambda-list (cadr form)))
+    (when (memq '&AUX lambda-list)
+      (setq form (rewrite-aux-vars form))
+      (setq lambda-list (cadr form)))
     (multiple-value-bind (body decls doc)
         (parse-body (cddr form))
       (let* ((declared-specials (process-special-declarations decls))
