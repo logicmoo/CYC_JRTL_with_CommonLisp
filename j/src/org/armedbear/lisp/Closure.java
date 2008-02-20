@@ -1,8 +1,8 @@
 /*
  * Closure.java
  *
- * Copyright (C) 2002-2006 Peter Graves
- * $Id: Closure.java,v 1.111 2007-02-23 21:17:32 piso Exp $
+ * Copyright (C) 2002-2008 Peter Graves
+ * $Id: Closure.java,v 1.112 2008-02-20 18:30:25 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.lisp;
@@ -1438,4 +1438,15 @@ public class Closure extends Function
       return null;
     }
   }
+
+  // ### lambda-list-names
+  private static final Primitive LAMBDA_LIST_NAMES =
+      new Primitive("lambda-list-names", PACKAGE_SYS, true)
+    {
+      public LispObject execute(LispObject arg) throws ConditionThrowable
+      {
+        Closure closure = new Closure(list3(Symbol.LAMBDA, arg, NIL), new Environment());
+        return closure.getVariableList();
+      }
+    };
 }
