@@ -1,8 +1,8 @@
 /*
  * PageFormat.java
  *
- * Copyright (C) 2002 Peter Graves
- * $Id: PageFormat.java,v 1.1.1.1 2002-09-24 16:08:38 piso Exp $
+ * Copyright (C) 2002-2008 Peter Graves
+ * $Id: PageFormat.java,v 1.2 2008-03-07 17:33:35 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,7 +16,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.j;
@@ -65,7 +65,7 @@ public final class PageFormat extends java.awt.print.PageFormat
         String fontName = buffer.getStringProperty(Property.PRINTER_FONT_NAME);
         int fontSize = buffer.getIntegerProperty(Property.PRINTER_FONT_SIZE);
         if (fontSize <= 0)
-            fontSize = 10; // Default.
+            fontSize = 10; // default
         font = new Font(fontName, Font.PLAIN, fontSize);
         headerFont = footerFont = new Font(fontName, Font.BOLD, fontSize);
         lineHeight = fontSize + 1;
@@ -79,7 +79,7 @@ public final class PageFormat extends java.awt.print.PageFormat
         linesPerPage = height / lineHeight;
         if (header != null)
             linesPerPage -= 2;
-        linesPerPage -= 2; // Footer.
+        linesPerPage -= 3; // footer
     }
 
     public final Font getFont()
