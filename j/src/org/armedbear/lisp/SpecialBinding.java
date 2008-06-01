@@ -1,8 +1,8 @@
 /*
  * SpecialBinding.java
  *
- * Copyright (C) 2002-2005 Peter Graves
- * $Id: SpecialBinding.java,v 1.1 2005-02-28 02:48:42 piso Exp $
+ * Copyright (C) 2002-2008 Peter Graves
+ * $Id: SpecialBinding.java,v 1.2 2008-06-01 17:56:12 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -16,13 +16,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 package org.armedbear.lisp;
 
 // Package accessibility.
-final class SpecialBinding
+final public class SpecialBinding
 {
     final LispObject name;
     LispObject value;
