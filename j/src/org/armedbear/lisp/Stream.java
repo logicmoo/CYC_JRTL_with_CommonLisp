@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id: Stream.java,v 1.154 2007-02-23 21:17:34 piso Exp $
+ * $Id: Stream.java,v 1.155 2008-08-07 20:36:02 ehuelsmann Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -424,7 +424,7 @@ public class Stream extends LispObject
   public LispObject readStructure() throws ConditionThrowable
   {
     final LispThread thread = LispThread.currentThread();
-    LispObject obj = read(true, NIL, false, thread);
+    LispObject obj = read(true, NIL, true, thread);
     if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
       return NIL;
     if (obj.listp())
@@ -472,7 +472,7 @@ public class Stream extends LispObject
   public LispObject faslReadStructure() throws ConditionThrowable
   {
     final LispThread thread = LispThread.currentThread();
-    LispObject obj = faslRead(true, NIL, false, thread);
+    LispObject obj = faslRead(true, NIL, true, thread);
     if (Symbol.READ_SUPPRESS.symbolValue(thread) != NIL)
       return NIL;
     if (obj.listp())
