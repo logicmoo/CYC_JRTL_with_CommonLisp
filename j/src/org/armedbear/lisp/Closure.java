@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2008 Peter Graves
- * $Id: Closure.java,v 1.112 2008-02-20 18:30:25 piso Exp $
+ * $Id: Closure.java,v 1.113 2008-08-12 21:59:05 ehuelsmann Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -80,10 +80,10 @@ public class Closure extends Function
     if (lambdaList instanceof Cons)
       {
         final int length = lambdaList.length();
-        ArrayList required = null;
-        ArrayList optional = null;
-        ArrayList keywords = null;
-        ArrayList aux = null;
+        ArrayList<Parameter> required = null;
+        ArrayList<Parameter> optional = null;
+        ArrayList<Parameter> keywords = null;
+        ArrayList<Parameter> aux = null;
         int state = STATE_REQUIRED;
         LispObject remaining = lambdaList;
         while (remaining != NIL)
@@ -94,7 +94,7 @@ public class Closure extends Function
                 if (state == STATE_AUX)
                   {
                     if (aux == null)
-                      aux = new ArrayList();
+                      aux = new ArrayList<Parameter>();
                     aux.add(new Parameter((Symbol)obj, NIL, AUX));
                   }
                 else if (obj == Symbol.AND_OPTIONAL)
@@ -152,7 +152,7 @@ public class Closure extends Function
                     if (state == STATE_OPTIONAL)
                       {
                         if (optional == null)
-                          optional = new ArrayList();
+                          optional = new ArrayList<Parameter>();
                         optional.add(new Parameter((Symbol)obj, NIL, OPTIONAL));
                         if (maxArgs >= 0)
                           ++maxArgs;
@@ -160,7 +160,7 @@ public class Closure extends Function
                     else if (state == STATE_KEYWORD)
                       {
                         if (keywords == null)
-                          keywords = new ArrayList();
+                          keywords = new ArrayList<Parameter>();
                         keywords.add(new Parameter((Symbol)obj, NIL, KEYWORD));
                         if (maxArgs >= 0)
                           maxArgs += 2;
@@ -169,7 +169,7 @@ public class Closure extends Function
                       {
                         Debug.assertTrue(state == STATE_REQUIRED);
                         if (required == null)
-                          required = new ArrayList();
+                          required = new ArrayList<Parameter>();
                         required.add(new Parameter((Symbol)obj));
                         if (maxArgs >= 0)
                           ++maxArgs;
@@ -184,7 +184,7 @@ public class Closure extends Function
                     LispObject initForm = obj.cadr();
                     Debug.assertTrue(initForm != null);
                     if (aux == null)
-                      aux = new ArrayList();
+                      aux = new ArrayList<Parameter>();
                     aux.add(new Parameter(sym, initForm, AUX));
                   }
                 else if (state == STATE_OPTIONAL)
@@ -193,7 +193,7 @@ public class Closure extends Function
                     LispObject initForm = obj.cadr();
                     LispObject svar = obj.cdr().cdr().car();
                     if (optional == null)
-                      optional = new ArrayList();
+                      optional = new ArrayList<Parameter>();
                     optional.add(new Parameter(sym, initForm, svar, OPTIONAL));
                     if (maxArgs >= 0)
                       ++maxArgs;
@@ -225,7 +225,7 @@ public class Closure extends Function
                           svar = obj.car();
                       }
                     if (keywords == null)
-                      keywords = new ArrayList();
+                      keywords = new ArrayList<Parameter>();
                     keywords.add(new Parameter(keyword, var, initForm, svar));
                     if (maxArgs >= 0)
                       maxArgs += 2;
@@ -293,7 +293,7 @@ public class Closure extends Function
   // Also sets bindInitForms.
   private final Symbol[] processVariables()
   {
-    ArrayList vars = new ArrayList();
+    ArrayList<Symbol> vars = new ArrayList<Symbol>();
     if (requiredParameters != null)
       {
         for (int i = 0; i < requiredParameters.length; i++)
@@ -305,7 +305,7 @@ public class Closure extends Function
           {
             vars.add(optionalParameters[i].var);
             if (optionalParameters[i].svar != NIL)
-              vars.add(optionalParameters[i].svar);
+              vars.add((Symbol)optionalParameters[i].svar);
             if (!bindInitForms)
               if (!optionalParameters[i].initForm.constantp())
                 bindInitForms = true;
@@ -321,7 +321,7 @@ public class Closure extends Function
           {
             vars.add(keywordParameters[i].var);
             if (keywordParameters[i].svar != NIL)
-              vars.add(keywordParameters[i].svar);
+              vars.add((Symbol)keywordParameters[i].svar);
             if (!bindInitForms)
               if (!keywordParameters[i].initForm.constantp())
                 bindInitForms = true;
@@ -334,7 +334,7 @@ public class Closure extends Function
 
   private final Symbol[] processDeclarations() throws ConditionThrowable
   {
-    ArrayList arrayList = null;
+    ArrayList<Symbol> arrayList = null;
     LispObject forms = body;
     while (forms != NIL)
       {
@@ -352,7 +352,7 @@ public class Closure extends Function
                       {
                         Symbol var = checkSymbol(vars.car());
                         if (arrayList == null)
-                          arrayList = new ArrayList();
+                          arrayList = new ArrayList<Symbol>();
                         arrayList.add(var);
                         vars = vars.cdr();
                       }

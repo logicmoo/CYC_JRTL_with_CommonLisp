@@ -2,7 +2,7 @@
  * JavaClassLoader.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: JavaClassLoader.java,v 1.13 2005-10-15 16:13:20 piso Exp $
+ * $Id: JavaClassLoader.java,v 1.14 2008-08-12 21:59:07 ehuelsmann Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,7 +39,7 @@ public class JavaClassLoader extends ClassLoader
 
     private static JavaClassLoader persistentInstance;
 
-    private static Set packages = Collections.synchronizedSet(new HashSet());
+    private static Set packages = Collections.synchronizedSet(new HashSet<String>());
 
     public JavaClassLoader()
     {

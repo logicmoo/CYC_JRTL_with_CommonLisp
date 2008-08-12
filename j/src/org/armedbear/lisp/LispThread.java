@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id: LispThread.java,v 1.92 2007-02-23 21:17:33 piso Exp $
+ * $Id: LispThread.java,v 1.93 2008-08-12 21:59:11 ehuelsmann Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -21,7 +21,7 @@
 
 package org.armedbear.lisp;
 
-import java.util.HashMap;
+import java.util.WeakHashMap;
 import java.util.Iterator;
 
 public final class LispThread extends LispObject
@@ -30,7 +30,8 @@ public final class LispThread extends LispObject
 
     private static final Object lock = new Object();
 
-    private static HashMap map = new HashMap();
+    private static WeakHashMap<Thread,LispThread> map =
+       new WeakHashMap<Thread,LispThread>();
 
     private static Thread currentJavaThread;
     private static LispThread currentLispThread;
@@ -57,7 +58,7 @@ public final class LispThread extends LispObject
     private static void put(Thread javaThread, LispThread lispThread)
     {
         synchronized (lock) {
-            HashMap m = (HashMap) map.clone();
+            WeakHashMap<Thread,LispThread> m = new WeakHashMap<Thread,LispThread>(map);
             m.put(javaThread, lispThread);
             map = m;
         }
@@ -66,7 +67,7 @@ public final class LispThread extends LispObject
     public static void remove(Thread javaThread)
     {
         synchronized (lock) {
-            HashMap m = (HashMap) map.clone();
+            WeakHashMap<Thread,LispThread> m = new WeakHashMap<Thread,LispThread>(map);
             m.remove(javaThread);
             map = m;
         }

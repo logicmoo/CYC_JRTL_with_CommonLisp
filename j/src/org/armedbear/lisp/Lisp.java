@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2007 Peter Graves <peter@armedbear.org>
- * $Id: Lisp.java,v 1.449 2007-10-03 12:11:52 piso Exp $
+ * $Id: Lisp.java,v 1.450 2008-08-12 21:59:07 ehuelsmann Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -1129,9 +1129,9 @@ public abstract class Lisp
         if (bytesRemaining > 0)
           Debug.trace("bytesRemaining = " + bytesRemaining);
 
-        JavaClassLoader loader = new JavaClassLoader();
+        //JavaClassLoader loader = new JavaClassLoader();
         Class c =
-          loader.loadClassFromByteArray(null, bytes, 0, bytes.length);
+          (new JavaClassLoader()).loadClassFromByteArray(null, bytes, 0, bytes.length);
         if (c != null)
           {
             Constructor constructor = c.getConstructor((Class[])null);
@@ -1911,7 +1911,8 @@ public abstract class Lisp
   }
 
   // The compiler's object table.
-  private static final Hashtable objectTable = new Hashtable();
+  private static final Hashtable<String,LispObject> objectTable =
+          new Hashtable<String,LispObject>();
 
   public static final LispObject recall(SimpleString key)
   {

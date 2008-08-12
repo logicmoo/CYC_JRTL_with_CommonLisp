@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2007 Peter Graves <peter@armedbear.org>
- * $Id: Package.java,v 1.75 2007-05-11 00:26:15 piso Exp $
+ * $Id: Package.java,v 1.76 2008-08-12 21:59:11 ehuelsmann Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,10 +36,10 @@ public final class Package extends LispObject
     private final SymbolHashTable internalSymbols = new SymbolHashTable(16);
     private final SymbolHashTable externalSymbols = new SymbolHashTable(16);
 
-    private HashMap shadowingSymbols;
-    private ArrayList nicknames;
+    private HashMap<String,Symbol> shadowingSymbols;
+    private ArrayList<String> nicknames;
     private LispObject useList = null;
-    private ArrayList usedByList = null;
+    private ArrayList<Package> usedByList = null;
 
     // Anonymous package.
     public Package()
@@ -146,10 +146,10 @@ public final class Package extends LispObject
     public final synchronized void rename(String newName, LispObject newNicks)
         throws ConditionThrowable
     {
-        ArrayList arrayList = null;
+        ArrayList<String> arrayList = null;
         while (newNicks != NIL) {
             if (arrayList == null)
-                arrayList = new ArrayList();
+                arrayList = new ArrayList<String>();
             arrayList.add(javaString(newNicks.car()));
             newNicks = newNicks.cdr();
         }
@@ -555,7 +555,7 @@ public final class Package extends LispObject
         throws ConditionThrowable
     {
         if (shadowingSymbols == null)
-            shadowingSymbols = new HashMap();
+            shadowingSymbols = new HashMap<String,Symbol>();
         final SimpleString s = new SimpleString(symbolName);
         Symbol symbol = externalSymbols.get(s);
         if (symbol != null) {
@@ -612,7 +612,7 @@ public final class Package extends LispObject
         }
         internalSymbols.put(symbol.name, symbol);
         if (shadowingSymbols == null)
-            shadowingSymbols = new HashMap();
+            shadowingSymbols = new HashMap<String,Symbol>();
         Debug.assertTrue(shadowingSymbols.get(symbolName) == null);
         shadowingSymbols.put(symbolName, symbol);
     }
@@ -647,7 +647,7 @@ public final class Package extends LispObject
             if (pkg.usedByList != null)
                 Debug.assertTrue(!pkg.usedByList.contains(this));
             if (pkg.usedByList == null)
-                pkg.usedByList = new ArrayList();
+                pkg.usedByList = new ArrayList<Package>();
             pkg.usedByList.add(this);
         }
     }
@@ -681,7 +681,7 @@ public final class Package extends LispObject
             if (nicknames.contains(s))
                 return; // Nothing to do.
         } else
-            nicknames = new ArrayList();
+            nicknames = new ArrayList<String>();
 
         nicknames.add(s);
     }
@@ -746,9 +746,9 @@ public final class Package extends LispObject
         return externalSymbols.getSymbols();
     }
 
-    public synchronized List getAccessibleSymbols()
+    public synchronized List<Symbol> getAccessibleSymbols()
     {
-        ArrayList list = new ArrayList();
+        ArrayList<Symbol> list = new ArrayList<Symbol>();
         list.addAll(internalSymbols.getSymbols());
         list.addAll(externalSymbols.getSymbols());
         if (useList instanceof Cons) {
@@ -756,7 +756,7 @@ public final class Package extends LispObject
                 LispObject usedPackages = useList;
                 while (usedPackages != NIL) {
                     Package pkg = (Package) usedPackages.car();
-                    List symbols = pkg.externalSymbols.getSymbols();
+                    List<Symbol> symbols = pkg.externalSymbols.getSymbols();
                     for (int i = 0; i < symbols.size(); i++) {
                         Symbol symbol = (Symbol) symbols.get(i);
                         if (shadowingSymbols == null || shadowingSymbols.get(symbol.getName()) == null)

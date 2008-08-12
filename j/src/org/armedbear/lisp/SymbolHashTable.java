@@ -2,7 +2,7 @@
  * SymbolHashTable.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: SymbolHashTable.java,v 1.3 2005-11-07 02:29:50 piso Exp $
+ * $Id: SymbolHashTable.java,v 1.4 2008-08-12 21:59:13 ehuelsmann Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -196,9 +196,9 @@ public final class SymbolHashTable
         }
     }
 
-    public List getSymbols()
+    public List<Symbol> getSymbols()
     {
-        ArrayList list = new ArrayList();
+        ArrayList<Symbol> list = new ArrayList<Symbol>();
         for (int i = 0; i < buckets.length; i++) {
             HashEntry e = buckets[i];
             while (e != null) {
