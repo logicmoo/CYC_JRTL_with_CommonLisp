@@ -2,7 +2,7 @@
  * Packages.java
  *
  * Copyright (C) 2002-2007 Peter Graves <peter@armedbear.org>
- * $Id: Packages.java,v 1.15 2007-05-11 00:28:16 piso Exp $
+ * $Id: Packages.java,v 1.16 2008-08-13 06:39:06 ehuelsmann Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -28,8 +28,8 @@ import java.util.List;
 
 public final class Packages extends Lisp
 {
-  private static final ArrayList packages = new ArrayList();
-  private static final HashMap map = new HashMap();
+  private static final ArrayList<Package> packages = new ArrayList<Package>();
+  private static final HashMap<String,Package> map = new HashMap<String,Package>();
 
   public static final synchronized Package createPackage(String name)
   {
