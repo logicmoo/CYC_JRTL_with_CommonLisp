@@ -2,7 +2,7 @@
  * Mailbox.java
  *
  * Copyright (C) 2004-2007 Peter Graves, Andras Simon
- * $Id: Mailbox.java,v 1.12 2007-02-23 21:17:34 piso Exp $
+ * $Id: Mailbox.java,v 1.13 2008-08-13 15:13:06 ehuelsmann Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -26,7 +26,7 @@ import java.util.NoSuchElementException;
 
 public final class Mailbox extends LispObject
 {
-  private LinkedList box = new LinkedList();
+  private LinkedList<LispObject> box = new LinkedList<LispObject>();
 
   public LispObject typeOf()
   {

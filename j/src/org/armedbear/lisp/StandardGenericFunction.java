@@ -2,7 +2,7 @@
  * StandardGenericFunction.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: StandardGenericFunction.java,v 1.20 2007-02-23 21:17:34 piso Exp $
+ * $Id: StandardGenericFunction.java,v 1.21 2008-08-13 15:13:08 ehuelsmann Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -29,7 +29,8 @@ public final class StandardGenericFunction extends StandardObject
 
   private int numberOfRequiredArgs;
 
-  private HashMap cache;
+  private HashMap<CacheEntry,LispObject> cache;
+  private HashMap<LispObject,LispObject> slotCache;
 
   public StandardGenericFunction()
   {
@@ -673,9 +674,9 @@ public final class StandardGenericFunction extends StandardObject
             args = args.cdr();
           }
         CacheEntry classes = new CacheEntry(array);
-        HashMap ht = gf.cache;
+        HashMap<CacheEntry,LispObject> ht = gf.cache;
         if (ht == null)
-            ht = gf.cache = new HashMap();
+            ht = gf.cache = new HashMap<CacheEntry,LispObject>();
         ht.put(classes, third);
         return third;
       }
@@ -705,7 +706,7 @@ public final class StandardGenericFunction extends StandardObject
             args = args.cdr();
           }
         CacheEntry classes = new CacheEntry(array);
-        HashMap ht = gf.cache;
+        HashMap<CacheEntry,LispObject> ht = gf.cache;
         if (ht == null)
           return NIL;
         LispObject emf = (LispObject) ht.get(classes);
@@ -732,9 +733,9 @@ public final class StandardGenericFunction extends StandardObject
           }
         LispObject layout = second;
         LispObject location = third;
-        HashMap ht = gf.cache;
+        HashMap<LispObject,LispObject> ht = gf.slotCache;
         if (ht == null)
-          ht = gf.cache = new HashMap();
+          ht = gf.slotCache = new HashMap<LispObject,LispObject>();
         ht.put(layout, location);
         return third;
       }
@@ -757,7 +758,7 @@ public final class StandardGenericFunction extends StandardObject
             return type_error(first, Symbol.STANDARD_GENERIC_FUNCTION);
           }
         LispObject layout = second;
-        HashMap ht = gf.cache;
+        HashMap<LispObject,LispObject> ht = gf.slotCache;
         if (ht == null)
           return NIL;
         LispObject location = (LispObject) ht.get(layout);

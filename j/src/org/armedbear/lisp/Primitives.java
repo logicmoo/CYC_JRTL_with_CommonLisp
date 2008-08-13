@@ -2,7 +2,7 @@
  * Primitives.java
  *
  * Copyright (C) 2002-2007 Peter Graves
- * $Id: Primitives.java,v 1.881 2007-09-17 18:14:48 piso Exp $
+ * $Id: Primitives.java,v 1.882 2008-08-13 15:13:06 ehuelsmann Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -3996,7 +3996,7 @@ public final class Primitives extends Lisp
                                  " is not a function name."));
             return NIL;
           }
-        ArrayList arrayList = new ArrayList();
+        ArrayList<LispObject> arrayList = new ArrayList<LispObject>();
         while (args != NIL)
           {
             LispObject form = args.car();

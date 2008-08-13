@@ -2,7 +2,7 @@
  * ShellCommand.java
  *
  * Copyright (C) 2000-2005 Peter Graves
- * $Id: ShellCommand.java,v 1.9 2007-02-23 21:17:34 piso Exp $
+ * $Id: ShellCommand.java,v 1.10 2008-08-13 15:13:08 ehuelsmann Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -82,7 +82,7 @@ public final class ShellCommand extends Lisp implements Runnable
                         process = Runtime.getRuntime().exec(cmdarray);
                     }
                 } else if (Utilities.isPlatformWindows) {
-                    ArrayList list = new ArrayList();
+                    ArrayList<String> list = new ArrayList<String>();
                     list.add("cmd.exe");
                     list.add("/c");
                     if (directory != null) {
@@ -133,9 +133,9 @@ public final class ShellCommand extends Lisp implements Runnable
     }
 
     // Does not handle embedded single-quoted strings.
-    private static List tokenize(String s)
+    private static List<String> tokenize(String s)
     {
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<String>();
         StringBuffer sb = new StringBuffer();
         boolean inQuote = false;
         final int limit = s.length();
