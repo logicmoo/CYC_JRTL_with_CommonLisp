@@ -2,7 +2,7 @@
  * MathFunctions.java
  *
  * Copyright (C) 2004-2006 Peter Graves
- * $Id: MathFunctions.java,v 1.36 2007-02-23 21:17:34 piso Exp $
+ * $Id: MathFunctions.java,v 1.37 2008-08-13 16:22:30 ehuelsmann Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -234,6 +234,15 @@ public final class MathFunctions extends Lisp
     };
 
     private static Method sinhMethod = null;
+    static {
+        try {
+            sinhMethod = Class.forName("java.lang.Math")
+                    .getMethod("sinh", new Class[] { Double.TYPE });
+        }
+        catch (Throwable t) {
+            Debug.trace(t);
+        }
+    }
 
     private static LispObject sinh(LispObject arg) throws ConditionThrowable
     {
@@ -243,47 +252,33 @@ public final class MathFunctions extends Lisp
                 return Complex.getInstance(sinh(((Complex)arg).getRealPart()),
                                            im);
         }
-        if (isJava15OrLater) {
-            if (arg instanceof SingleFloat) {
-                try {
-                    if (sinhMethod == null) {
-                        Class c = Class.forName("java.lang.Math");
-                        Class[] parameterTypes = new Class[1];
-                        parameterTypes[0] = Double.TYPE;
-                        sinhMethod = c.getMethod("sinh", parameterTypes);
-                    }
-                    if (sinhMethod != null) {
-                        Object[] args;
-                        args = new Object[1];
-                        args[0] = new Double(((SingleFloat)arg).value);
-                        Double d = (Double) sinhMethod.invoke(null, args);
-                        return new SingleFloat((float)d.doubleValue());
-                    }
+        if (arg instanceof SingleFloat) {
+            try {
+                if (sinhMethod != null) {
+                    Object[] args;
+                    args = new Object[1];
+                    args[0] = new Double(((SingleFloat)arg).value);
+                    Double d = (Double) sinhMethod.invoke(null, args);
+                    return new SingleFloat((float)d.doubleValue());
                 }
-                catch (Throwable t) {
-                    Debug.trace(t);
-                    // Fall through...
+            }
+            catch (Throwable t) {
+                Debug.trace(t);
+                // Fall through...
+            }
+        } else if (arg instanceof DoubleFloat) {
+            try {
+                if (sinhMethod != null) {
+                    Object[] args;
+                    args = new Object[1];
+                    args[0] = new Double(((DoubleFloat)arg).value);
+                    Double d = (Double) sinhMethod.invoke(null, args);
+                    return new DoubleFloat(d.doubleValue());
                 }
-            } else if (arg instanceof DoubleFloat) {
-                try {
-                    if (sinhMethod == null) {
-                        Class c = Class.forName("java.lang.Math");
-                        Class[] parameterTypes = new Class[1];
-                        parameterTypes[0] = Double.TYPE;
-                        sinhMethod = c.getMethod("sinh", parameterTypes);
-                    }
-                    if (sinhMethod != null) {
-                        Object[] args;
-                        args = new Object[1];
-                        args[0] = new Double(((DoubleFloat)arg).value);
-                        Double d = (Double) sinhMethod.invoke(null, args);
-                        return new DoubleFloat(d.doubleValue());
-                    }
-                }
-                catch (Throwable t) {
-                    Debug.trace(t);
-                    // Fall through...
-                }
+            }
+            catch (Throwable t) {
+                Debug.trace(t);
+                // Fall through...
             }
         }
         LispObject result = exp(arg);
@@ -309,6 +304,15 @@ public final class MathFunctions extends Lisp
     };
 
     private static Method coshMethod = null;
+    static {
+        try {
+            coshMethod = Class.forName("java.lang.Math")
+                    .getMethod("cosh", new Class[] { Double.TYPE });
+        }
+        catch (Throwable t) {
+            Debug.trace(t);
+        }
+    }
 
     private static LispObject cosh(LispObject arg) throws ConditionThrowable
     {
@@ -318,47 +322,33 @@ public final class MathFunctions extends Lisp
                 return Complex.getInstance(cosh(((Complex)arg).getRealPart()),
                                            im);
         }
-        if (isJava15OrLater) {
-            if (arg instanceof SingleFloat) {
-                try {
-                    if (coshMethod == null) {
-                        Class c = Class.forName("java.lang.Math");
-                        Class[] parameterTypes = new Class[1];
-                        parameterTypes[0] = Double.TYPE;
-                        coshMethod = c.getMethod("cosh", parameterTypes);
-                    }
-                    if (coshMethod != null) {
-                        Object[] args;
-                        args = new Object[1];
-                        args[0] = new Double(((SingleFloat)arg).value);
-                        Double d = (Double) coshMethod.invoke(null, args);
-                        return new SingleFloat((float)d.doubleValue());
-                    }
+        if (arg instanceof SingleFloat) {
+            try {
+                if (coshMethod != null) {
+                    Object[] args;
+                    args = new Object[1];
+                    args[0] = new Double(((SingleFloat)arg).value);
+                    Double d = (Double) coshMethod.invoke(null, args);
+                    return new SingleFloat((float)d.doubleValue());
                 }
-                catch (Throwable t) {
-                    Debug.trace(t);
-                    // Fall through...
+            }
+            catch (Throwable t) {
+                Debug.trace(t);
+                // Fall through...
+            }
+        } else if (arg instanceof DoubleFloat) {
+            try {
+                if (coshMethod != null) {
+                    Object[] args;
+                    args = new Object[1];
+                    args[0] = new Double(((DoubleFloat)arg).value);
+                    Double d = (Double) coshMethod.invoke(null, args);
+                    return new DoubleFloat(d.doubleValue());
                 }
-            } else if (arg instanceof DoubleFloat) {
-                try {
-                    if (coshMethod == null) {
-                        Class c = Class.forName("java.lang.Math");
-                        Class[] parameterTypes = new Class[1];
-                        parameterTypes[0] = Double.TYPE;
-                        coshMethod = c.getMethod("cosh", parameterTypes);
-                    }
-                    if (coshMethod != null) {
-                        Object[] args;
-                        args = new Object[1];
-                        args[0] = new Double(((DoubleFloat)arg).value);
-                        Double d = (Double) coshMethod.invoke(null, args);
-                        return new DoubleFloat(d.doubleValue());
-                    }
-                }
-                catch (Throwable t) {
-                    Debug.trace(t);
-                    // Fall through...
-                }
+            }
+            catch (Throwable t) {
+                Debug.trace(t);
+                // Fall through...
             }
         }
         LispObject result = exp(arg);
@@ -375,53 +365,48 @@ public final class MathFunctions extends Lisp
     }
 
     private static Method tanhMethod = null;
+    static {
+        try {
+            tanhMethod = Class.forName("java.lang.Math")
+                    .getMethod("tanh", new Class[] { Double.TYPE });
+        }
+        catch (Throwable t) {
+            Debug.trace(t);
+        }
+    }
 
     // ### tanh
     private static final Primitive TANH = new Primitive("tanh", "number")
     {
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
-            if (isJava15OrLater) {
-                if (arg instanceof SingleFloat) {
-                    try {
-                        if (tanhMethod == null) {
-                            Class c = Class.forName("java.lang.Math");
-                            Class[] parameterTypes = new Class[1];
-                            parameterTypes[0] = Double.TYPE;
-                            tanhMethod = c.getMethod("tanh", parameterTypes);
-                        }
-                        if (tanhMethod != null) {
-                            Object[] args;
-                            args = new Object[1];
-                            args[0] = new Double(((SingleFloat)arg).value);
-                            Double d = (Double) tanhMethod.invoke(null, args);
-                            return new SingleFloat((float)d.doubleValue());
-                        }
+            if (arg instanceof SingleFloat) {
+                try {
+                    if (tanhMethod != null) {
+                        Object[] args;
+                        args = new Object[1];
+                        args[0] = new Double(((SingleFloat)arg).value);
+                        Double d = (Double) tanhMethod.invoke(null, args);
+                        return new SingleFloat((float)d.doubleValue());
                     }
-                    catch (Throwable t) {
-                        Debug.trace(t);
-                        // Fall through...
+                }
+                catch (Throwable t) {
+                    Debug.trace(t);
+                    // Fall through...
+                }
+            } else if (arg instanceof DoubleFloat) {
+                try {
+                    if (tanhMethod != null) {
+                        Object[] args;
+                        args = new Object[1];
+                        args[0] = new Double(((DoubleFloat)arg).value);
+                        Double d = (Double) tanhMethod.invoke(null, args);
+                        return new DoubleFloat(d.doubleValue());
                     }
-                } else if (arg instanceof DoubleFloat) {
-                    try {
-                        if (tanhMethod == null) {
-                            Class c = Class.forName("java.lang.Math");
-                            Class[] parameterTypes = new Class[1];
-                            parameterTypes[0] = Double.TYPE;
-                            tanhMethod = c.getMethod("tanh", parameterTypes);
-                        }
-                        if (tanhMethod != null) {
-                            Object[] args;
-                            args = new Object[1];
-                            args[0] = new Double(((DoubleFloat)arg).value);
-                            Double d = (Double) tanhMethod.invoke(null, args);
-                            return new DoubleFloat(d.doubleValue());
-                        }
-                    }
-                    catch (Throwable t) {
-                        Debug.trace(t);
-                        // Fall through...
-                    }
+                }
+                catch (Throwable t) {
+                    Debug.trace(t);
+                    // Fall through...
                 }
             }
             return sinh(arg).divideBy(cosh(arg));
@@ -614,6 +599,15 @@ public final class MathFunctions extends Lisp
     }
 
     private static Method log10Method = null;
+    static {
+        try {
+            log10Method = Class.forName("java.lang.Math")
+                    .getMethod("log10", new Class[] { Double.TYPE });
+        }
+        catch (Throwable t) {
+            Debug.trace(t);
+        }
+    }
 
     // ### log
     private static final Primitive LOG =
@@ -626,31 +620,23 @@ public final class MathFunctions extends Lisp
         public LispObject execute(LispObject number, LispObject base)
             throws ConditionThrowable
         {
-            if (isJava15OrLater) {
-                if (number.realp() && !number.minusp() && base.isEqualTo(new Fixnum(10))) {
-                    double d = DoubleFloat.coerceToFloat(number).value;
-                    try {
-                        if (log10Method == null) {
-                            Class c = Class.forName("java.lang.Math");
-                            Class[] parameterTypes = new Class[1];
-                            parameterTypes[0] = Double.TYPE;
-                            log10Method = c.getMethod("log10", parameterTypes);
-                        }
-                        if (log10Method != null) {
-                            Object[] args;
-                            args = new Object[1];
-                            args[0] = new Double(d);
-                            Double result = (Double) log10Method.invoke(null, args);
-                            if (number instanceof DoubleFloat || base instanceof DoubleFloat)
-                                return new DoubleFloat(result.doubleValue());
-                            else
-                                return new SingleFloat((float)result.doubleValue());
-                        }
+            if (number.realp() && !number.minusp() && base.isEqualTo(new Fixnum(10))) {
+                double d = DoubleFloat.coerceToFloat(number).value;
+                try {
+                   if (log10Method != null) {
+                        Object[] args;
+                        args = new Object[1];
+                        args[0] = new Double(d);
+                        Double result = (Double) log10Method.invoke(null, args);
+                        if (number instanceof DoubleFloat || base instanceof DoubleFloat)
+                            return new DoubleFloat(result.doubleValue());
+                        else
+                            return new SingleFloat((float)result.doubleValue());
                     }
-                    catch (Throwable t) {
-                        Debug.trace(t);
-                        // Fall through...
-                    }
+                }
+                catch (Throwable t) {
+                    Debug.trace(t);
+                    // Fall through...
                 }
             }
             return log(number).divideBy(log(base));
