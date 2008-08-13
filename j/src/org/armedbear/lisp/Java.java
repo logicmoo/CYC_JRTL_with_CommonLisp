@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2006 Peter Graves, Andras Simon
- * $Id: Java.java,v 1.72 2007-02-23 21:17:33 piso Exp $
+ * $Id: Java.java,v 1.73 2008-08-13 06:33:36 ehuelsmann Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -32,7 +32,8 @@ import java.util.HashMap;
 
 public final class Java extends Lisp
 {
-    private static final Map registeredExceptions = new HashMap();
+    private static final Map<Class,Symbol> registeredExceptions =
+       new HashMap<Class,Symbol>();
 
     private static final LispClass java_exception = LispClass.findClass(Symbol.JAVA_EXCEPTION);
 
@@ -53,7 +54,7 @@ public final class Java extends Lisp
             // FIXME Signal a continuable error if the exception is already registered.
             if ((symbol instanceof Symbol) && isJavaException(LispClass.findClass((Symbol) symbol))) {
                 registeredExceptions.put(classForName(className.getStringValue()),
-                                         symbol);
+                                         (Symbol)symbol);
                 return T;
             }
             return NIL;

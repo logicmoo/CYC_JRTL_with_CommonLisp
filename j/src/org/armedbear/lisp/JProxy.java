@@ -2,7 +2,7 @@
  * JProxy.java
  *
  * Copyright (C) 2002-2005 Peter Graves, Andras Simon
- * $Id: JProxy.java,v 1.9 2007-02-23 21:17:33 piso Exp $
+ * $Id: JProxy.java,v 1.10 2008-08-13 06:33:36 ehuelsmann Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@ import java.util.WeakHashMap;
 
 public final class JProxy extends Lisp
 {
-  private static final Map table = new WeakHashMap();
+  private static final Map<Object,Entry> table = new WeakHashMap<Object,Entry>();
 
   // ### %jnew-proxy interface &rest method-names-and-defs
   private static final Primitive _JNEW_PROXY =
@@ -42,7 +42,7 @@ public final class JProxy extends Lisp
         int length = args.length;
         if (length < 3 || length % 2 != 1)
           return error(new WrongNumberOfArgumentsException(this));
-        Map lispDefinedMethods = new HashMap();
+        Map<String,Function> lispDefinedMethods = new HashMap<String,Function>();
         for (int i = 1; i < length; i += 2)
           lispDefinedMethods.put(args[i].getStringValue(),
                                  (Function) args[i + 1]);

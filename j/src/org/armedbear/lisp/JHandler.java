@@ -2,7 +2,7 @@
  * JHandler.java
  *
  * Copyright (C) 2003-2005 Andras Simon, Peter Graves
- * $Id: JHandler.java,v 1.10 2007-02-23 21:17:33 piso Exp $
+ * $Id: JHandler.java,v 1.11 2008-08-13 06:33:36 ehuelsmann Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -27,7 +27,8 @@ import java.util.WeakHashMap;
 
 public final class JHandler extends Lisp
 {
-    private static final Map table = new WeakHashMap();
+    private static final Map<Object,Map<String,Entry>> table =
+       new WeakHashMap<Object,Map<String,Entry>>();
 
     public static void callLisp (String s, Object o)
     {
@@ -51,7 +52,7 @@ public final class JHandler extends Lisp
     public static void callLisp (String s, Object o, String as[], int ai[])
     {
         if (table.containsKey(o)) {
-            Map entryTable =  (Map)table.get(o);
+            Map<String,Entry> entryTable =  (Map<String,Entry>)table.get(o);
             if (entryTable.containsKey(s)) {
                 Function f = ((Entry)entryTable.get(s)).getHandler();
                 LispObject data = ((Entry)entryTable.get(s)).getData();
@@ -86,14 +87,14 @@ public final class JHandler extends Lisp
         {
             if (args.length != 5)
                 return error(new WrongNumberOfArgumentsException(this));
-            Map entryTable = null;
+            Map<String,Entry> entryTable = null;
             Object object = args[0].javaInstance();
             String event = ((Symbol)args[1]).getName();
             if (!table.containsKey(object)) {
-                entryTable = new HashMap();
+                entryTable = new HashMap<String,Entry>();
                 table.put(object,entryTable);
             } else {
-                entryTable = (Map)table.get(object);
+                entryTable = (Map<String,Entry>)table.get(object);
             }
             Entry entry = new Entry((Function) args[2], args[3], event, entryTable);
             if (args[4] != NIL)
@@ -108,10 +109,11 @@ public final class JHandler extends Lisp
         Function handler;
         LispObject data;
         int count = -1;
-        Map entryTable;
+        Map<String,Entry> entryTable;
         String event;
 
-        public Entry (Function handler, LispObject data, String event, Map entryTable)
+        public Entry (Function handler, LispObject data, String event,
+                      Map<String,Entry> entryTable)
         {
             this.entryTable = entryTable;
             this.event = event;
