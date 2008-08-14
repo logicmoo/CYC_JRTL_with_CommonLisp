@@ -865,6 +865,44 @@ public final class Fixnum extends LispObject
     return number(n & mask);
   }
 
+  final static BigInteger BIGINTEGER_TWO = new BigInteger ("2");
+
+  /** Computes fixnum^bignum, returning a fixnum or a bignum.
+    */
+  public LispObject pow(LispObject obj) throws ConditionThrowable
+  {
+    BigInteger y = Bignum.getValue(obj);
+
+    if (y.compareTo (BigInteger.ZERO) < 0)
+      return (new Fixnum(1)).divideBy(this.pow(new Bignum(y.negate())));
+
+    if (y.compareTo(BigInteger.ZERO) == 0)
+      // No need to test base here; CLHS says 0^0 == 1.
+      return new Fixnum(1);
+      
+    int x = this.value;
+
+    if (x == 0)
+      return new Fixnum(0);
+
+    if (x == 1)
+      return new Fixnum(1);
+
+    BigInteger xy = BigInteger.ONE;
+    BigInteger term = BigInteger.valueOf((long) x);
+
+    while (! y.equals(BigInteger.ZERO))
+    {
+      if (y.testBit(0))
+        xy = xy.multiply(term);
+
+      term = term.multiply(term);
+      y = y.shiftLeft(1);
+    }
+
+    return new Bignum(xy);
+  }
+
   public int hashCode()
   {
     return value;

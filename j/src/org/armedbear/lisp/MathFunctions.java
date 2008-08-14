@@ -757,6 +757,8 @@ public final class MathFunctions extends Lisp
                 }
                 return result;
             }
+            if (base instanceof Fixnum && power instanceof Bignum)
+                return ((Fixnum)base).pow(power);
             if (base instanceof Complex || power instanceof Complex)
                 return exp(power.multiplyBy(log(base)));
             final double x; // base
