@@ -737,11 +737,24 @@ public final class MathFunctions extends Lisp
                     result = Fixnum.ONE;
                 int pow = ((Fixnum)power).value;
                 if (pow > 0) {
-                    for (int i = pow; i-- > 0;)
-                        result = result.multiplyBy(base);
+                    LispObject term = base;
+                    while (pow != 0) {
+                        if ((pow & 1) == 1)
+                           result = result.multiplyBy(term);
+
+                        term = term.multiplyBy(term);
+                        pow = pow >> 1;
+                    }
                 } else if (pow < 0) {
-                    for (int i = -pow; i-- > 0;)
-                        result = result.divideBy(base);
+                    LispObject term = base;
+                    pow = -pow;
+                    while (pow != 0) {
+                        if ((pow & 1) == 1)
+                           result = result.divideBy(term);
+
+                        term = term.multiplyBy(term);
+                        pow = pow >> 1;
+                    }
                 }
                 if (TRAP_OVERFLOW) {
                     if (result instanceof SingleFloat)
