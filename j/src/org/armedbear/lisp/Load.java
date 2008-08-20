@@ -44,52 +44,57 @@ public final class Load extends Lisp
                     true);
     }
 
+    private static final File findLoadableFile(final String filename,
+                                               final String dir)
+    {
+        File file = new File(dir, filename);
+	if (!file.isFile()) {
+	    String extension = getExtension(filename);
+	    if (extension == null) {
+		// No extension specified. Try appending ".lisp" or ".abcl".
+		File lispFile = new File(dir, filename.concat(".lisp"));
+		File abclFile = new File(dir, filename.concat(".abcl"));
+		if (lispFile.isFile() && abclFile.isFile()) {
+		    if (abclFile.lastModified() > lispFile.lastModified()) {
+			return abclFile;
+		    } else {
+			return lispFile;
+		    }
+		} else if (abclFile.isFile()) {
+		    return abclFile;
+		} else if (lispFile.isFile()) {
+		    return lispFile;
+                }
+            }
+        } else
+            return file; // the file exists
+        return null; // this is the error case: the file does not exist
+                     // no need to check again at the caller
+    }
+
     public static final LispObject load(Pathname pathname,
-                                        final String filename,
+                                        String filename,
                                         boolean verbose,
                                         boolean print,
                                         boolean ifDoesNotExist)
         throws ConditionThrowable
     {
-        File file = null;
-        boolean isFile = false;
-        if (Utilities.isFilenameAbsolute(filename)) {
-            file = new File(filename);
-            if (file != null) {
-                isFile = file.isFile();
-                if (!isFile) {
-                    String extension = getExtension(filename);
-                    if (extension == null) {
-                        // No extension specified. Try appending ".lisp".
-                        file = new File(filename.concat(".lisp"));
-                        isFile = file.isFile();
-                    }
-                }
-            }
-        } else {
-            // Filename is not absolute.
-            String dir =
+	String dir = null;
+        if (!Utilities.isFilenameAbsolute(filename)) {
+	    dir =
                 coerceToPathname(Symbol.DEFAULT_PATHNAME_DEFAULTS.symbolValue()).getNamestring();
-            file = new File(dir, filename);
-            if (file != null) {
-                isFile = file.isFile();
-                if (!isFile) {
-                    String extension = getExtension(filename);
-                    if (extension == null) {
-                        // No extension specified. Try appending ".lisp".
-                        file = new File(dir, filename.concat(".lisp"));
-                        isFile = file.isFile();
-                    }
-                }
-            }
         }
-        if (!isFile) {
+
+	File file = findLoadableFile(filename, dir);
+        if (file == null) {
             if (ifDoesNotExist)
                 return error(new FileError("File not found: " + filename,
                                             pathname));
             else
                 return NIL;
         }
+
+	filename = file.getPath();
         ZipFile zipfile = null;
         if (checkZipFile(file))
         {
