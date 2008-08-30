@@ -58,7 +58,10 @@
             (%generic-function-name
              (%method-generic-function method))
             (method-qualifiers method)
-            (mapcar #'class-name
+            (mapcar #'(lambda (c)
+                        (if (typep c 'mop::eql-specializer)
+                            `(eql ,(mop::eql-specializer-object c))
+                          (class-name c)))
                     (%method-specializers method))))
   method)
 
