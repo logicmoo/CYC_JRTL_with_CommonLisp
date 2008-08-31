@@ -77,10 +77,10 @@ public final class PackageFunctions extends Lisp
         }
     };
 
-    // ### import
-    // import symbols &optional package => t
-    private static final Primitive IMPORT =
-        new Primitive("import", "symbols &optional package")
+    // ### %import
+    // %import symbols &optional package => t
+    private static final Primitive _IMPORT =
+        new Primitive("%import", PACKAGE_SYS, false)
     {
         public LispObject execute(LispObject[] args) throws ConditionThrowable
         {

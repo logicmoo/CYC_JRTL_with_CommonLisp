@@ -129,6 +129,7 @@
 (load-system-file "read-conditional")
 (load-system-file "macros")
 
+;; Redefined in package.lisp
 (defun make-package (package-name &key nicknames use)
   (%make-package package-name nicknames use))
 
@@ -292,6 +293,8 @@
 (load-system-file "pprint-dispatch")
 (load-system-file "pprint")
 (load-system-file "defsetf")
+(load-system-file "package")
+
 
 (defun preload-package (pkg)
   (%format t "Preloading ~S~%" (find-package pkg))

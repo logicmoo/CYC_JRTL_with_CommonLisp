@@ -190,6 +190,7 @@
                                      "parse-integer.lisp"
                                      "parse-lambda-list.lisp"
                                      "pathnames.lisp"
+                                     ;;"package.lisp"
                                      ;;"print-object.lisp"
                                      "print-unreadable-object.lisp"
                                      "proclaim.lisp"
