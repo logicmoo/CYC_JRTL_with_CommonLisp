@@ -47,6 +47,9 @@
                      :format-arguments
                      (list key1 key2 common)))))))))
 
+(defun ensure-available-symbols (symbols)
+   symbols)
+
 (defmacro defpackage (package &rest options)
   (let ((nicknames nil)
 	(size nil)
@@ -118,5 +121,6 @@
 		    `(:shadowing-import-from
 		      ,@(apply #'append (mapcar #'rest shadowing-imports))))
     `(%defpackage ,(string package) ',nicknames ',size
-                  ',shadows ',shadowing-imports ',(if use-p use nil)
-                  ',imports ',interns ',exports ',doc)))
+                  ',shadows (ensure-available-symbols ',shadowing-imports)
+                  ',(if use-p use nil)
+                  (ensure-available-symbols ',imports) ',interns ',exports ',doc)))

@@ -34,6 +34,32 @@
       :report "Use existing package"
       (return-from make-package (find-package name)))))
 
+;; Redefines function from defpackage.lisp, because there it's lacking restart-case
+
+(defun ensure-available-symbols (imports)
+  (remove nil
+          (mapcar #'(lambda (package-and-symbols)
+                      (let* ((package (find-package (designated-package-name (car package-and-symbols))))
+                             (new-symbols
+                              (remove nil
+                                      (mapcar #'(lambda (sym)
+                                                  (restart-case
+                                                      (progn
+                                                        (unless (find-symbol sym package)
+                                                          (error 'package-error
+                                                                 "The symbol ~A is not present in package ~A." sym (package-name package)))
+                                                        sym)
+                                                    (skip ()
+                                                      :report "Skip this symbol."
+                                                      nil)))
+                                              (cdr package-and-symbols)))))
+                        (when new-symbols
+                          (cons package new-symbols))))
+                  imports)))
+
+
+
+
 (defun import (symbols &optional (package *package* package-supplied-p))
   (dolist (symbol (if (listp symbols) symbols (list symbols)))
     (let* ((sym-name (string symbol))

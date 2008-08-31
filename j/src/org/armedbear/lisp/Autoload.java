@@ -376,7 +376,7 @@ public class Autoload extends Function
         autoload("hash-table-size", "HashTableFunctions");
         autoload("hash-table-test", "HashTableFunctions");
         autoload("hash-table-test", "HashTableFunctions");
-        autoload("import", "PackageFunctions");
+        autoload("%import", "PackageFunctions");
         autoload("input-stream-p", "input_stream_p");
         autoload("integer-decode-float", "FloatFunctions");
         autoload("interactive-stream-p", "interactive_stream_p");
