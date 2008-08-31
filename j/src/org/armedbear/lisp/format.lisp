@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2004-2007 Peter Graves
-;;; $Id: format.lisp,v 1.33 2007-02-26 11:11:44 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

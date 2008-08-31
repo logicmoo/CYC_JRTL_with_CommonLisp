@@ -2,7 +2,7 @@
  * Java.java
  *
  * Copyright (C) 2002-2006 Peter Graves, Andras Simon
- * $Id: Java.java,v 1.73 2008-08-13 06:33:36 ehuelsmann Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

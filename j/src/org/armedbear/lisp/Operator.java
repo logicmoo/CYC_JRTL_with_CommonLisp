@@ -2,7 +2,7 @@
  * Operator.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Operator.java,v 1.3 2005-04-08 10:46:23 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

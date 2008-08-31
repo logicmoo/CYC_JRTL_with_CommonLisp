@@ -1,7 +1,7 @@
 ;;; dolist.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: dolist.lisp,v 1.8 2005-12-23 16:56:38 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

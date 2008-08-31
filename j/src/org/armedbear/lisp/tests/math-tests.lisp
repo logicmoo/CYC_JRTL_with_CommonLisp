@@ -1,7 +1,7 @@
 ;;; math-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: math-tests.lisp,v 1.9 2006-10-03 10:49:13 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

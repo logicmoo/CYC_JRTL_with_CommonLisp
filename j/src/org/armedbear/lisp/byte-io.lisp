@@ -1,7 +1,7 @@
 ;;; byte-io.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: byte-io.lisp,v 1.8 2005-08-15 23:29:55 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: open.lisp,v 1.28 2006-06-21 11:44:32 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

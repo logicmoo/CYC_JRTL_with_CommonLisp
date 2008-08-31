@@ -2,7 +2,7 @@
  * SingleFloat.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id: SingleFloat.java,v 1.8 2007-09-17 16:58:39 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

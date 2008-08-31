@@ -1,7 +1,7 @@
 ;;; reduce.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: reduce.lisp,v 1.3 2005-08-23 12:21:10 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

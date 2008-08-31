@@ -1,7 +1,7 @@
 ;;; ldb.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: ldb.lisp,v 1.7 2005-12-04 19:13:04 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

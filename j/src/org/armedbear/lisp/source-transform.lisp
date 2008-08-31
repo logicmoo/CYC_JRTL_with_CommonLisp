@@ -1,7 +1,7 @@
 ;;; source-transform.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: source-transform.lisp,v 1.8 2005-07-29 13:54:30 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

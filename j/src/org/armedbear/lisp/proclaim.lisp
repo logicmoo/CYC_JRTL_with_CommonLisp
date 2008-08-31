@@ -1,7 +1,7 @@
 ;;; proclaim.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: proclaim.lisp,v 1.13 2006-01-17 17:55:13 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

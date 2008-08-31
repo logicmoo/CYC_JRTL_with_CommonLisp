@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves <peter@armedbear.org>
-;;; $Id: boot.lisp,v 1.243 2007-04-30 23:51:24 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

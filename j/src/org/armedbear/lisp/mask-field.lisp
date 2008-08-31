@@ -1,7 +1,7 @@
 ;;; mask-field.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: mask-field.lisp,v 1.1 2003-10-28 23:25:51 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

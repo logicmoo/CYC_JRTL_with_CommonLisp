@@ -2,7 +2,7 @@
  * PackageError.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: PackageError.java,v 1.21 2005-06-22 17:46:05 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

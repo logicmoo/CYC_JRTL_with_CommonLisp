@@ -1,7 +1,7 @@
 ;;; member-if.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: member-if.lisp,v 1.3 2003-07-02 18:35:00 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

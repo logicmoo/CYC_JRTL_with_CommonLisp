@@ -1,7 +1,7 @@
 ;;; copy-symbol.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: copy-symbol.lisp,v 1.2 2005-05-24 18:57:28 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

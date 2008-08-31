@@ -1,7 +1,7 @@
 ;;; swank-protocol.lisp
 ;;;
 ;;; Copyright (C) 2004-2007 Peter Graves
-;;; $Id: swank-protocol.lisp,v 1.8 2007-10-13 14:15:12 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

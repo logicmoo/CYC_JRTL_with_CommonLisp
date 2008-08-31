@@ -2,7 +2,7 @@
  * SlimeInputStream.java
  *
  * Copyright (C) 2004 Andras Simon, Peter Graves
- * $Id: SlimeInputStream.java,v 1.5 2005-09-24 19:41:01 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

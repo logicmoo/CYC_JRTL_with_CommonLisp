@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: pprint.lisp,v 1.53 2005-06-28 04:29:25 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

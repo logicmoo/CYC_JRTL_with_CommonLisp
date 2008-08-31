@@ -2,7 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2008 Peter Graves
- * $Id: Closure.java,v 1.113 2008-08-12 21:59:05 ehuelsmann Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

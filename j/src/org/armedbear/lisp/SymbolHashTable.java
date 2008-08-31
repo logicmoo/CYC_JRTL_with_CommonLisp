@@ -2,7 +2,7 @@
  * SymbolHashTable.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: SymbolHashTable.java,v 1.4 2008-08-12 21:59:13 ehuelsmann Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

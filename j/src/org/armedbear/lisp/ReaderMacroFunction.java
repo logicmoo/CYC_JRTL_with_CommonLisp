@@ -2,7 +2,7 @@
  * ReaderMacroFunction.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: ReaderMacroFunction.java,v 1.1 2004-03-11 19:00:11 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * Main.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Main.java,v 1.8 2006-01-19 19:42:09 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

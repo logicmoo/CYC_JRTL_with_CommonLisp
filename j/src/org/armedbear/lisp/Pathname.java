@@ -2,7 +2,7 @@
  * Pathname.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id: Pathname.java,v 1.111 2007-03-15 15:33:11 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

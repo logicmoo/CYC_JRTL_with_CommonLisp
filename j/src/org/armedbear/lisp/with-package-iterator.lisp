@@ -1,7 +1,7 @@
 ;;; with-package-iterator.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: with-package-iterator.lisp,v 1.3 2003-09-14 16:27:48 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

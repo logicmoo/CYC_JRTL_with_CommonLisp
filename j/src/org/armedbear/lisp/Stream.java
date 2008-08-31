@@ -2,7 +2,7 @@
  * Stream.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id: Stream.java,v 1.155 2008-08-07 20:36:02 ehuelsmann Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

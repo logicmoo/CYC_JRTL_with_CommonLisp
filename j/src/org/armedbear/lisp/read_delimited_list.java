@@ -2,7 +2,7 @@
  * read_delimited_list.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: read_delimited_list.java,v 1.2 2007-02-23 21:17:36 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

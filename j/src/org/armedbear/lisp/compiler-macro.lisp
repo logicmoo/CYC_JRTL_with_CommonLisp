@@ -1,7 +1,7 @@
 ;;; compiler-macro.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves
-;;; $Id: compiler-macro.lisp,v 1.11 2007-03-05 10:11:33 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

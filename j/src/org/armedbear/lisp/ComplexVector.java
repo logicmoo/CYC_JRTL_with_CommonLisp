@@ -2,7 +2,7 @@
  * ComplexVector.java
  *
  * Copyright (C) 2002-2007 Peter Graves
- * $Id: ComplexVector.java,v 1.25 2007-03-01 19:53:06 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

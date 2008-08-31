@@ -1,7 +1,7 @@
 ;;; with-thread-lock.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: with-thread-lock.lisp,v 1.1 2004-06-03 21:33:46 asimon Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * CapitalizeFirstStream.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: CapitalizeFirstStream.java,v 1.3 2005-10-16 02:03:28 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

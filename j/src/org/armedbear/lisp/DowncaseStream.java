@@ -2,7 +2,7 @@
  * DowncaseStream.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: DowncaseStream.java,v 1.2 2005-10-16 02:03:28 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

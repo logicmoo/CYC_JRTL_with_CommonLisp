@@ -1,7 +1,7 @@
 ;;; package.lisp
 ;;;
 ;;; Copyright (C) 2008 Erik Huelsmann
-;;; $Id: parse-integer.lisp,v 1.4 2003-09-08 13:35:25 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

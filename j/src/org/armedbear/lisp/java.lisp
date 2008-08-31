@@ -1,7 +1,7 @@
 ;;; java.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves, Andras Simon
-;;; $Id: java.lisp,v 1.27 2007-10-12 17:00:32 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

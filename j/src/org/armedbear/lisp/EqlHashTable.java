@@ -2,7 +2,7 @@
  * EqlHashTable.java
  *
  * Copyright (C) 2004-2006 Peter Graves
- * $Id: EqlHashTable.java,v 1.7 2006-01-08 01:16:08 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -1,7 +1,7 @@
 ;;; featurep.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: featurep.lisp,v 1.1 2005-06-18 14:54:14 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

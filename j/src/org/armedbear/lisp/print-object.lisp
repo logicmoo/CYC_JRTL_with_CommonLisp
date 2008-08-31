@@ -1,7 +1,7 @@
 ;;; print-object.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: print-object.lisp,v 1.14 2006-06-18 15:05:52 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

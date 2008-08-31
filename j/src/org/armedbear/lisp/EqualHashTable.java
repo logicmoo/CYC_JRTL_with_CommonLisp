@@ -2,7 +2,7 @@
  * EqualHashTable.java
  *
  * Copyright (C) 2004-2006 Peter Graves
- * $Id: EqualHashTable.java,v 1.8 2006-01-10 11:15:59 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

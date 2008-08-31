@@ -2,7 +2,7 @@
  * assq.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: assq.java,v 1.4 2005-05-09 15:11:07 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

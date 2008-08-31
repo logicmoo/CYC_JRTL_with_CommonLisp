@@ -2,7 +2,7 @@
  * Keyword.java
  *
  * Copyright (C) 2002-2007 Peter Graves
- * $Id: Keyword.java,v 1.51 2007-10-03 12:12:25 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

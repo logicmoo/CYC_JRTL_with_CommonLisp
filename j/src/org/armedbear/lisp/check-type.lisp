@@ -1,7 +1,7 @@
 ;;; check-type.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: check-type.lisp,v 1.3 2005-05-05 11:36:12 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

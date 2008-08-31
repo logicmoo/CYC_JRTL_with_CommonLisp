@@ -2,7 +2,7 @@
  * CompilerUnsupportedFeatureError.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: CompilerUnsupportedFeatureError.java,v 1.2 2005-11-02 03:05:11 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

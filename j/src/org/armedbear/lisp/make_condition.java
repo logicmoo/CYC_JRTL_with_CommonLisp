@@ -2,7 +2,7 @@
  * make_condition.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: make_condition.java,v 1.20 2005-06-24 01:30:25 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

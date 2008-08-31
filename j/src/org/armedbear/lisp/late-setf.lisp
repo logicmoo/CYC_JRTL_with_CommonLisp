@@ -1,7 +1,7 @@
 ;;; late-setf.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: late-setf.lisp,v 1.9 2005-06-17 17:31:49 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

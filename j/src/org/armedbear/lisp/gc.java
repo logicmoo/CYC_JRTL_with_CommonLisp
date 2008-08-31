@@ -2,7 +2,7 @@
  * gc.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: gc.java,v 1.3 2005-06-09 18:34:34 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

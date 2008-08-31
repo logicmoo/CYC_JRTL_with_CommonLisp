@@ -2,7 +2,7 @@
  * LispError.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: LispError.java,v 1.17 2006-03-11 18:01:22 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

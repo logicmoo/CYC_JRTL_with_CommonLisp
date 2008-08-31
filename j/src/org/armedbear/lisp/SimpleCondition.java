@@ -2,7 +2,7 @@
  * SimpleCondition.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SimpleCondition.java,v 1.17 2005-11-07 01:13:05 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

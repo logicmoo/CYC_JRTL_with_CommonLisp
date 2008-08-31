@@ -1,7 +1,7 @@
 ;;; trace.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves
-;;; $Id: trace.lisp,v 1.18 2007-02-20 18:55:34 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

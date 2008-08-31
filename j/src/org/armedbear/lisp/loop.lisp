@@ -1,7 +1,7 @@
 ;;; loop.lisp
 ;;;
 ;;; Copyright (C) 2004-2007 Peter Graves
-;;; $Id: loop.lisp,v 1.16 2007-03-05 10:14:08 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * ftruncate.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: ftruncate.java,v 1.7 2005-08-23 20:47:48 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005-2006 Peter Graves
-;;; $Id: compiler-types.lisp,v 1.28 2006-01-17 22:41:28 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

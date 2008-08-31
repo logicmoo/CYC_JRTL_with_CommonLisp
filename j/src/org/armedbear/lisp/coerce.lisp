@@ -1,7 +1,7 @@
 ;;; coerce.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: coerce.lisp,v 1.12 2006-01-07 17:34:15 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

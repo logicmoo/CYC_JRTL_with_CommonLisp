@@ -2,7 +2,7 @@
  * Package.java
  *
  * Copyright (C) 2002-2007 Peter Graves <peter@armedbear.org>
- * $Id: Package.java,v 1.76 2008-08-12 21:59:11 ehuelsmann Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

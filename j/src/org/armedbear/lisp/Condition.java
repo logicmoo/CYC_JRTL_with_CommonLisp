@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id: Condition.java,v 1.50 2007-03-02 12:24:12 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

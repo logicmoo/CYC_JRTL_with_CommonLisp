@@ -1,7 +1,7 @@
 ;;; arrays.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves <peter@armedbear.org>
-;;; $Id: arrays.lisp,v 1.21 2007-05-15 15:18:38 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

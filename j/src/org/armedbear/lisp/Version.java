@@ -2,7 +2,7 @@
  * Version.java
  *
  * Copyright (C) 2003-2008 Peter Graves
- * $Id: Version.java,v 1.220 2008-08-13 17:41:58 ehuelsmann Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

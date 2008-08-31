@@ -1,7 +1,7 @@
 ;;; read-conditional.lisp
 ;;;
 ;;; Copyright (C) 2005-2007 Peter Graves
-;;; $Id: read-conditional.lisp,v 1.3 2007-02-22 16:03:48 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

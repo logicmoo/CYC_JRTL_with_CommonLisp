@@ -1,7 +1,7 @@
 ;;; with-hash-table-iterator.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: with-hash-table-iterator.lisp,v 1.1 2003-09-09 23:21:04 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * FaslReadtable.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: FaslReadtable.java,v 1.1 2005-06-25 19:36:21 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

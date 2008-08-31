@@ -1,7 +1,7 @@
 ;;; with-open-file.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: with-open-file.lisp,v 1.1 2004-02-02 02:14:46 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

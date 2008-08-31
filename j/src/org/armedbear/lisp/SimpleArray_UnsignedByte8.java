@@ -2,7 +2,7 @@
  * SimpleArray_UnsignedByte8.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SimpleArray_UnsignedByte8.java,v 1.5 2007-02-23 21:17:34 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

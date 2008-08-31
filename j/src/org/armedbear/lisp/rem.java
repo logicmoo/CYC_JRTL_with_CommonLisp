@@ -2,7 +2,7 @@
  * rem.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: rem.java,v 1.3 2004-11-03 15:27:24 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

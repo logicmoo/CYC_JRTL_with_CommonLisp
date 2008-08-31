@@ -1,7 +1,7 @@
 ;;; typep.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: typep.lisp,v 1.31 2005-06-17 15:54:55 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

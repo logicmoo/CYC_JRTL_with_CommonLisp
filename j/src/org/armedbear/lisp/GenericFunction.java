@@ -2,7 +2,7 @@
  * GenericFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: GenericFunction.java,v 1.25 2005-08-16 18:19:48 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

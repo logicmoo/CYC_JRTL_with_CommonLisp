@@ -1,7 +1,7 @@
 ;;; enough-namestring.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: enough-namestring.lisp,v 1.6 2005-10-14 16:17:48 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

@@ -1,7 +1,7 @@
 ;;; bit-array-ops.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: bit-array-ops.lisp,v 1.5 2005-02-13 04:13:33 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

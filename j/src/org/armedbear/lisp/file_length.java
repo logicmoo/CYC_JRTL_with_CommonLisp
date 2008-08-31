@@ -2,7 +2,7 @@
  * file_length.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: file_length.java,v 1.6 2007-02-23 21:17:35 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

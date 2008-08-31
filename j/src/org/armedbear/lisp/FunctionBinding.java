@@ -2,7 +2,7 @@
  * FunctionBinding.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: FunctionBinding.java,v 1.1 2005-02-27 20:00:09 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

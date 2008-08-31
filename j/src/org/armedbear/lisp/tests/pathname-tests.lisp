@@ -1,7 +1,7 @@
 ;;; pathname-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: pathname-tests.lisp,v 1.51 2006-02-03 17:42:07 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

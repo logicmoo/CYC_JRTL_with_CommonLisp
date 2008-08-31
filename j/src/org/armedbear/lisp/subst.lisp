@@ -1,7 +1,7 @@
 ;;; subst.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: subst.lisp,v 1.4 2003-10-14 16:00:51 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

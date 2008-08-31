@@ -1,7 +1,7 @@
 ;;; numbers.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: numbers.lisp,v 1.38 2006-05-24 00:49:43 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

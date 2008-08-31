@@ -2,7 +2,7 @@
  * ReaderError.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: ReaderError.java,v 1.7 2005-06-23 00:09:34 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

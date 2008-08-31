@@ -1,7 +1,7 @@
 ;;; destructuring-bind.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: destructuring-bind.lisp,v 1.23 2007-02-15 11:21:30 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

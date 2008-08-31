@@ -1,7 +1,7 @@
 ;;; count.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: count.lisp,v 1.2 2003-07-02 17:55:58 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

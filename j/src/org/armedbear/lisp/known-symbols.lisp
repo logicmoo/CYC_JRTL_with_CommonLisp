@@ -1,7 +1,7 @@
 ;;; known-symbols.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-symbols.lisp,v 1.3 2005-12-04 13:35:16 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

@@ -1,7 +1,7 @@
 ;;; upgraded-complex-part-type.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: upgraded-complex-part-type.lisp,v 1.5 2005-03-13 01:48:21 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

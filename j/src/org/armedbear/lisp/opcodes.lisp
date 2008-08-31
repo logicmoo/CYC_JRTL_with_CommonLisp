@@ -1,7 +1,7 @@
 ;;; opcodes.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: opcodes.lisp,v 1.28 2006-01-20 03:09:09 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

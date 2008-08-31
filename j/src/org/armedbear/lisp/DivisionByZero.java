@@ -2,7 +2,7 @@
  * DivisionByZero.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: DivisionByZero.java,v 1.7 2005-06-22 17:45:20 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

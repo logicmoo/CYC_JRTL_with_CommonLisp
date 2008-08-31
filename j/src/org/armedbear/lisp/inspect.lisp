@@ -1,7 +1,7 @@
 ;;; inspect.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: inspect.lisp,v 1.14 2005-06-22 19:13:55 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

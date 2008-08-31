@@ -2,7 +2,7 @@
  * DispatchMacroFunction.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: DispatchMacroFunction.java,v 1.2 2004-04-18 04:50:17 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

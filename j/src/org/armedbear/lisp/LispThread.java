@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id: LispThread.java,v 1.93 2008-08-12 21:59:11 ehuelsmann Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

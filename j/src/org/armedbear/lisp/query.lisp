@@ -1,7 +1,7 @@
 ;;; query.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: query.lisp,v 1.1 2003-09-25 16:34:35 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

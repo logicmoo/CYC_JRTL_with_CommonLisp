@@ -2,7 +2,7 @@
  * logorc1.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: logorc1.java,v 1.8 2007-02-23 21:17:36 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * jclass_of.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: jclass_of.java,v 1.2 2005-10-25 14:44:24 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * arglist.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: arglist.java,v 1.21 2005-10-23 13:05:24 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2008 Peter Graves <peter@armedbear.org>
-;;; $Id: precompiler.lisp,v 1.163 2008-02-20 18:31:15 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

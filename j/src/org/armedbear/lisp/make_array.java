@@ -2,7 +2,7 @@
  * make_array.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: make_array.java,v 1.32 2007-02-23 21:17:36 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

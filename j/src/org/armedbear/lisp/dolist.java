@@ -2,7 +2,7 @@
  * dolist.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: dolist.java,v 1.15 2006-03-16 01:31:45 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -1,7 +1,7 @@
 ;;; print-unreadable-object.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: print-unreadable-object.lisp,v 1.7 2005-02-22 05:51:19 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

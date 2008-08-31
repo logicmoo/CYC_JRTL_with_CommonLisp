@@ -1,7 +1,7 @@
 ;;; remf.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: remf.lisp,v 1.2 2005-02-07 17:48:02 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

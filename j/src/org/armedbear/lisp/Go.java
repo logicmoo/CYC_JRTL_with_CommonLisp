@@ -2,7 +2,7 @@
  * Go.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Go.java,v 1.6 2005-11-01 01:36:44 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

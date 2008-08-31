@@ -2,7 +2,7 @@
  * LispObject.java
  *
  * Copyright (C) 2002-2007 Peter Graves
- * $Id: LispObject.java,v 1.167 2007-03-18 11:33:57 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

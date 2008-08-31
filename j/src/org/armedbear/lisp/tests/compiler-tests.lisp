@@ -1,7 +1,7 @@
 ;;; compiler-tests.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: compiler-tests.lisp,v 1.11 2005-12-26 14:13:25 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

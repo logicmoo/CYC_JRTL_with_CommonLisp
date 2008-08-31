@@ -2,7 +2,7 @@
  * FloatingPointInexact.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: FloatingPointInexact.java,v 1.5 2005-06-22 17:50:22 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

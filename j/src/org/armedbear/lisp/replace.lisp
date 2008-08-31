@@ -1,7 +1,7 @@
 ;;; replace.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: replace.lisp,v 1.5 2005-07-30 17:52:19 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

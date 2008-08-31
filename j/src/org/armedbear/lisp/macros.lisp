@@ -1,7 +1,7 @@
 ;;; macros.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves
-;;; $Id: macros.lisp,v 1.34 2007-04-30 23:55:07 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

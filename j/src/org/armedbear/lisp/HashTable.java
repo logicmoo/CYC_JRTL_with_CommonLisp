@@ -2,7 +2,7 @@
  * HashTable.java
  *
  * Copyright (C) 2002-2007 Peter Graves
- * $Id: HashTable.java,v 1.57 2007-03-06 11:40:49 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

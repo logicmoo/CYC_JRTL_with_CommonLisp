@@ -1,7 +1,7 @@
 ;;; ed.lisp
 ;;;
 ;;; Copyright (C) 2004-2007 Peter Graves
-;;; $Id: ed.lisp,v 1.7 2007-10-13 14:16:13 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

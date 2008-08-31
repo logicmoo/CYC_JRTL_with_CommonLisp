@@ -2,7 +2,7 @@
  * MathFunctions.java
  *
  * Copyright (C) 2004-2006 Peter Graves
- * $Id: MathFunctions.java,v 1.37 2008-08-13 16:22:30 ehuelsmann Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

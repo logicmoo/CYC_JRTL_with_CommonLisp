@@ -1,7 +1,7 @@
 ;;; multiple-value-setq.lisp
 ;;;
 ;;; Copyright (C) 2004-2007 Peter Graves
-;;; $Id: multiple-value-setq.lisp,v 1.2 2007-02-15 11:37:08 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

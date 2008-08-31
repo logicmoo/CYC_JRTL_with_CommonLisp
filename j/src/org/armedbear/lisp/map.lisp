@@ -1,7 +1,7 @@
 ;;; map.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: map.lisp,v 1.2 2005-12-30 20:24:49 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

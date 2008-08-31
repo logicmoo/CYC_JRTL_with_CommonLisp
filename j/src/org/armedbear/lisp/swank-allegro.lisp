@@ -1,7 +1,7 @@
 ;;; swank-allegro.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: swank-allegro.lisp,v 1.1 2005-02-04 19:33:13 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

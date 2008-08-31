@@ -2,7 +2,7 @@
  * cxr.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: cxr.java,v 1.12 2005-12-01 12:26:05 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

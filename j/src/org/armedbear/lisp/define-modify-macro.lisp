@@ -1,7 +1,7 @@
 ;;; define-modify-macro.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: define-modify-macro.lisp,v 1.4 2005-02-13 16:01:11 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

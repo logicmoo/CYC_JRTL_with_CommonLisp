@@ -1,7 +1,7 @@
 ;;; multiple-value-list.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: multiple-value-list.lisp,v 1.1 2004-03-31 02:43:15 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

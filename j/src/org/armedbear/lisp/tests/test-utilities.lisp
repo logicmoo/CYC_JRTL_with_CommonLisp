@@ -1,7 +1,7 @@
 ;;; test-utilities.lisp
 ;;;
 ;;; Copyright (C) 2005-2006 Peter Graves
-;;; $Id: test-utilities.lisp,v 1.9 2006-02-03 17:28:22 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

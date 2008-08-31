@@ -2,7 +2,7 @@
  * Do.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: Do.java,v 1.21 2006-03-19 19:09:54 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

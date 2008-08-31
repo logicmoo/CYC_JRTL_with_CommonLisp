@@ -1,7 +1,7 @@
 ;;; defpackage.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves
-;;; $Id: defpackage.lisp,v 1.7 2007-05-01 00:17:59 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

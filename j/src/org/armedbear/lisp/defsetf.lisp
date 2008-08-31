@@ -1,7 +1,7 @@
 ;;; defsetf.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: defsetf.lisp,v 1.3 2005-02-05 18:31:33 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

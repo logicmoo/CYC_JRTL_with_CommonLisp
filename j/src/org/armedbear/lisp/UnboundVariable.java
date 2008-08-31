@@ -2,7 +2,7 @@
  * UnboundVariable.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: UnboundVariable.java,v 1.16 2006-03-21 15:55:31 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

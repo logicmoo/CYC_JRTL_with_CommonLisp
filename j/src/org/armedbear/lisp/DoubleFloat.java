@@ -2,7 +2,7 @@
  * DoubleFloat.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id: DoubleFloat.java,v 1.9 2007-09-17 16:58:12 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

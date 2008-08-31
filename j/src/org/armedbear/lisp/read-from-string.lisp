@@ -1,7 +1,7 @@
 ;;; read-from-string.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: read-from-string.lisp,v 1.1 2005-03-19 19:56:30 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

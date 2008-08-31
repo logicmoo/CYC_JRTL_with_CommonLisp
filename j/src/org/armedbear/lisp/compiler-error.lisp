@@ -1,7 +1,7 @@
 ;;; compiler-error.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: compiler-error.lisp,v 1.2 2005-07-13 16:17:47 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

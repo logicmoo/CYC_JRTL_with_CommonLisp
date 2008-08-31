@@ -1,7 +1,7 @@
 ;;; runtime-class.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: runtime-class.lisp,v 1.16 2006-01-09 21:09:43 asimon Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

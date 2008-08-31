@@ -2,7 +2,7 @@
  * StandardMethodClass.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: StandardMethodClass.java,v 1.6 2005-12-27 17:38:08 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

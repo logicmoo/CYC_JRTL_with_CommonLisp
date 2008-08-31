@@ -1,7 +1,7 @@
 ;;; sublis.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: sublis.lisp,v 1.3 2003-07-02 17:59:34 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

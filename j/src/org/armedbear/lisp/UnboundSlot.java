@@ -2,7 +2,7 @@
  * UnboundSlot.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: UnboundSlot.java,v 1.8 2005-11-06 20:40:53 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

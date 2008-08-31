@@ -1,7 +1,7 @@
 ;;; pprint-dispatch.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: pprint-dispatch.lisp,v 1.3 2005-05-05 15:49:28 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

@@ -1,7 +1,7 @@
 ;;; run-shell-command.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: run-shell-command.lisp,v 1.1 2004-02-01 20:41:36 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

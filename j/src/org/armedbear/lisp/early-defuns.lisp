@@ -1,7 +1,7 @@
 ;;; early-defuns.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: early-defuns.lisp,v 1.41 2006-06-20 17:42:23 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

@@ -1,7 +1,7 @@
 ;;; pathnames.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves
-;;; $Id: pathnames.lisp,v 1.29 2007-03-04 17:44:53 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

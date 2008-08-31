@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardClass.java,v 1.47 2005-12-27 19:46:47 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

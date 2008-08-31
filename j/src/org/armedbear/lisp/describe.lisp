@@ -1,7 +1,7 @@
 ;;; describe.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: describe.lisp,v 1.9 2005-11-06 01:14:49 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

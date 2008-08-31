@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Cons.java,v 1.73 2007-02-23 21:17:33 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -1,7 +1,7 @@
 ;;; do-all-symbols.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: do-all-symbols.lisp,v 1.2 2005-05-09 23:06:36 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

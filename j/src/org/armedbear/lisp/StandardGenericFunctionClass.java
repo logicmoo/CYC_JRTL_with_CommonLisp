@@ -2,7 +2,7 @@
  * StandardGenericFunctionClass.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: StandardGenericFunctionClass.java,v 1.8 2005-12-27 17:37:38 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

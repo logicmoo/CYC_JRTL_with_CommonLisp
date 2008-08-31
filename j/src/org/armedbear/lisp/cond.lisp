@@ -1,7 +1,7 @@
 ;;; cond.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: cond.lisp,v 1.1 2004-03-31 02:46:02 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

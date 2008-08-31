@@ -2,7 +2,7 @@
  * zip.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: zip.java,v 1.4 2007-02-23 21:17:36 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

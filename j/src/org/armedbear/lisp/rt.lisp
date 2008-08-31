@@ -1,7 +1,7 @@
 ;;; rt.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: rt.lisp,v 1.166 2005-06-13 21:42:45 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * RuntimeClass.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: RuntimeClass.java,v 1.13 2008-08-13 15:13:07 ehuelsmann Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

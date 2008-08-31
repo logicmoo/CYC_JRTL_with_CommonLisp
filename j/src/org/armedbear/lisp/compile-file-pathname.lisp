@@ -1,7 +1,7 @@
 ;;; compile-file-pathname.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: compile-file-pathname.lisp,v 1.2 2005-04-10 18:12:02 piso Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

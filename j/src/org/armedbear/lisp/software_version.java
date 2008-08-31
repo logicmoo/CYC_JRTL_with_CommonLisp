@@ -2,7 +2,7 @@
  * software_version.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: software_version.java,v 1.2 2004-11-03 15:39:02 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

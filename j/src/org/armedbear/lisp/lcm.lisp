@@ -1,7 +1,7 @@
 ;;; lcm.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: lcm.lisp,v 1.2 2004-02-13 08:34:24 asimon Exp $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License

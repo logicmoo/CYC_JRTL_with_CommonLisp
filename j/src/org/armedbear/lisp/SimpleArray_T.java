@@ -2,7 +2,7 @@
  * SimpleArray_T.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id: SimpleArray_T.java,v 1.6 2007-03-01 19:52:42 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

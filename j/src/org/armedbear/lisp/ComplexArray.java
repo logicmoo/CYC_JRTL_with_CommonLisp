@@ -2,7 +2,7 @@
  * ComplexArray.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id: ComplexArray.java,v 1.14 2007-03-01 19:53:23 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
