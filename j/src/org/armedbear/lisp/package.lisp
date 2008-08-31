@@ -35,23 +35,20 @@
       (return-from make-package (find-package name)))))
 
 (defun import (symbols &optional (package *package* package-supplied-p))
-  (if package-supplied-p
-      (%import symbols package)
-      (%import symbols)))
-;;attempt to fix the import failures IMPORT.ERROR.4 and .5
-;;   (dolist (symbol (if (listp symbols) symbols (list symbols)))
-;;     (let* ((sym-name (string symbol))
-;;            (local-sym (find-symbol sym-name package)))
-;;       (restart-case
-;;           (progn
-;;             (when (and local-sym (not (eql symbol local-sym)))
-;;               (error 'package-error (format nil "Symbol ~S already accessible in package ~S." local-sym (package-name package))))
-;;             (if package-supplied-p
-;;                 (%import symbol package)
-;;                 (%import symbol)))
-;;         (continue ()
-;;           :report (lambda (s) (format s "Unintern ~S and continue" local-sym))
-;;           (unintern local-sym)
-;;           (%import symbol))
-;;         (abort ()
-;;           :report "Skip symbol")))))
+  (dolist (symbol (if (listp symbols) symbols (list symbols)))
+    (let* ((sym-name (string symbol))
+           (local-sym (find-symbol sym-name package)))
+      (restart-case
+          (progn
+            (when (and local-sym (not (eql symbol local-sym)))
+              (error 'package-error (format nil "Symbol ~S already accessible in package ~S." local-sym (package-name package))))
+            (if package-supplied-p
+                (%import symbol package)
+                (%import symbol)))
+        (unintern-existing ()
+          :report (lambda (s) (format s "Unintern ~S and continue" local-sym))
+          (unintern local-sym)
+          (%import symbol))
+        (skip ()
+          :report "Skip symbol"))))
+  T)
