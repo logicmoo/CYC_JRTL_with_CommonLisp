@@ -41,7 +41,9 @@
       (restart-case
           (progn
             (when (and local-sym (not (eql symbol local-sym)))
-              (error 'package-error (format nil "Symbol ~S already accessible in package ~S." local-sym (package-name package))))
+              (error 'package-error
+                     "Different symbol (~A) with the same name already accessible in package ~A."
+                     local-sym (package-name package)))
             (if package-supplied-p
                 (%import symbol package)
                 (%import symbol)))

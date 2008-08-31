@@ -32,6 +32,24 @@ public final class PackageError extends LispError
     protected void initialize(LispObject initArgs) throws ConditionThrowable
     {
         super.initialize(initArgs);
+
+        if (initArgs.listp() && initArgs.car().stringp()) {
+           setFormatControl(initArgs.car().getStringValue());
+           // When printing an error string, presumably, if the string contains
+           // a symbol, we'll want to complain about its full name, not the accessible
+           // name, because it may omit an (important) package name part.
+           // Two problems: (1) symbols can be contained in sublists
+           //               (2) symbols may not be printed, but used otherwise.
+           for (LispObject arg = initArgs.cdr(); arg != NIL; arg = arg.cdr()) {
+              if (arg.car() instanceof Symbol)
+                 arg.setCar(new SimpleString(((Symbol)arg.car()).getQualifiedName()));
+           }
+           setFormatArguments(initArgs.cdr());
+           setPackage(NIL);
+
+           return;
+        }
+
         LispObject pkg = NIL;
         LispObject first, second;
         while (initArgs != NIL) {
