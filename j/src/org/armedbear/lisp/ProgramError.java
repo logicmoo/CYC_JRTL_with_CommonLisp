@@ -32,6 +32,12 @@ public class ProgramError extends LispError
     {
         super(StandardClass.PROGRAM_ERROR);
         initialize(initArgs);
+
+        if (initArgs.listp() && initArgs.car().stringp()) {
+           setFormatControl(initArgs.car().getStringValue());
+           setFormatArguments(initArgs.cdr());
+	}
+
     }
 
     public ProgramError(String message) throws ConditionThrowable
