@@ -71,8 +71,8 @@
                      "Different symbol (~A) with the same name already accessible in package ~A."
                      local-sym (package-name package)))
             (if package-supplied-p
-                (%import symbol package)
-                (%import symbol)))
+                (%import (list symbol) package) ;; in order to pass NIL, wrap in a list
+                (%import (list symbol))))
         (unintern-existing ()
           :report (lambda (s) (format s "Unintern ~S and continue" local-sym))
           (unintern local-sym)
