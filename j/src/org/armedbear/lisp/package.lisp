@@ -61,7 +61,7 @@
 
 
 (defun import (symbols &optional (package *package* package-supplied-p))
-  (dolist (symbol (if (symbolp symbols) (list symbols) symbols))
+  (dolist (symbol (if (listp symbols) symbols (list symbols)))
     (let* ((sym-name (string symbol))
            (local-sym (find-symbol sym-name package)))
       (restart-case

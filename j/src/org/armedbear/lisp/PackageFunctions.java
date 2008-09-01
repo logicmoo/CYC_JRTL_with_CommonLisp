@@ -89,14 +89,13 @@ public final class PackageFunctions extends Lisp
             LispObject symbols = args[0];
             Package pkg =
                 args.length == 2 ? coerceToPackage(args[1]) : getCurrentPackage();
-            if (symbols instanceof Symbol)
-                pkg.importSymbol(checkSymbol(symbols));
-            else {
+            if (symbols.listp()) {
                 while (symbols != NIL) {
                     pkg.importSymbol(checkSymbol(symbols.car()));
                     symbols = symbols.cdr();
                 }
-            }
+            } else
+                pkg.importSymbol(checkSymbol(symbols));
             return T;
         }
     };
