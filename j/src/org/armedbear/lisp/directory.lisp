@@ -1,6 +1,7 @@
 ;;; directory.lisp
 ;;;
 ;;; Copyright (C) 2004-2007 Peter Graves
+;;; Copyright (C) 2008 Ville Voutilainen
 ;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
@@ -28,6 +29,31 @@
                    :type nil
                    :version nil)))
 
+(defun list-directories-with-wildcards (pathname)
+  (let* ((directory (pathname-directory pathname))
+	 (first-wild (position-if #'wild-p directory))
+	 (wild (and first-wild (nthcdr first-wild directory)))
+	 (non-wild (or (and first-wild
+			    (nbutlast directory
+				      (- (length directory) first-wild))
+			    directory)))
+	 (newpath (make-pathname :directory non-wild
+				 :name nil :type nil :defaults pathname))
+	 (entries (list-directory newpath)))
+    (if (not wild)
+	entries (mapcan (lambda (entry)
+                          (let* ((pathname (pathname entry))
+                                 (directory (pathname-directory pathname))
+                                 (rest-wild (cdr wild)))
+                            (unless (file-namestring pathname)
+                              (when rest-wild
+                                (setf directory (nconc directory rest-wild)))
+                              (list-directories-with-wildcards
+                               (make-pathname :directory directory
+                                              :defaults newpath)))))
+                        entries))))
+
+
 (defun directory (pathspec &key)
   (let ((pathname (merge-pathnames pathspec)))
     (when (logical-pathname-p pathname)
@@ -39,7 +65,7 @@
             (let ((device (pathname-device pathname)))
               (when device
                 (setq namestring (concatenate 'string device ":" namestring))))
-            (let ((entries (list-directory namestring))
+            (let ((entries (list-directories-with-wildcards namestring))
                   (matching-entries ()))
               (dolist (entry entries)
                 (cond ((file-directory-p entry)
