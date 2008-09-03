@@ -2,7 +2,7 @@
  * ShellCommand.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: ShellCommand.java,v 1.4 2003-06-16 15:21:29 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

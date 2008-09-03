@@ -2,7 +2,7 @@
  * Macro.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Macro.java,v 1.7 2005-03-07 19:47:54 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

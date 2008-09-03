@@ -2,7 +2,7 @@
  * EventSequence.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: EventSequence.java,v 1.2 2005-03-06 19:32:30 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * JdbCommands.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JdbCommands.java,v 1.9 2003-05-19 02:04:28 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

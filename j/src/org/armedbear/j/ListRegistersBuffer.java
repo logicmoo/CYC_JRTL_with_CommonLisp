@@ -2,7 +2,7 @@
  * ListRegistersBuffer.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: ListRegistersBuffer.java,v 1.2 2002-10-11 16:29:37 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

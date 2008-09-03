@@ -2,7 +2,7 @@
  * DescribeKeyDialog.java
  *
  * Copyright (C) 2000-2005 Peter Graves
- * $Id: DescribeKeyDialog.java,v 1.9 2005-03-06 19:31:08 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

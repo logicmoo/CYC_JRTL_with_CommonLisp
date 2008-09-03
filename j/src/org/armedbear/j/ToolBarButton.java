@@ -2,7 +2,7 @@
  * ToolBarButton.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: ToolBarButton.java,v 1.2 2002-10-02 18:22:47 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

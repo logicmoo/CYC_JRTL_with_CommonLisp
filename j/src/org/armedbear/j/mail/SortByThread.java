@@ -2,7 +2,7 @@
  * SortByThread.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: SortByThread.java,v 1.2 2003-05-30 14:59:57 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

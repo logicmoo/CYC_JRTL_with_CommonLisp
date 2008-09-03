@@ -2,7 +2,7 @@
  * DefaultTheme.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: DefaultTheme.java,v 1.3 2002-12-29 16:53:22 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

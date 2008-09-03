@@ -2,7 +2,7 @@
  * NewsCommands.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: NewsCommands.java,v 1.2 2002-11-15 20:20:21 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

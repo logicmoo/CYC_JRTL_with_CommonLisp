@@ -2,7 +2,7 @@
  * Drafts.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: Drafts.java,v 1.2 2002-10-11 01:42:37 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

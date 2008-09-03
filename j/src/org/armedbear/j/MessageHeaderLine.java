@@ -2,7 +2,7 @@
  * MessageHeaderLine.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: MessageHeaderLine.java,v 1.1 2002-10-04 23:51:36 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

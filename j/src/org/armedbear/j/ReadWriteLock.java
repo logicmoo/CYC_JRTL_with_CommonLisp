@@ -2,7 +2,7 @@
  * ReadWriteLock.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: ReadWriteLock.java,v 1.3 2002-10-06 23:59:46 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

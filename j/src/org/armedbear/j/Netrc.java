@@ -2,7 +2,7 @@
  * Netrc.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Netrc.java,v 1.2 2003-06-29 00:19:34 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

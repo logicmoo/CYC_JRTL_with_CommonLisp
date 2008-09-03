@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2002 Jens Luedicke <jens@irs-net.com>
  * based on PythonMode.java
- * $Id: RubyMode.java,v 1.1.1.1 2002-09-24 16:08:22 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

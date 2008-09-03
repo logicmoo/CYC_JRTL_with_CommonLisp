@@ -2,7 +2,7 @@
  * LineSegment.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: LineSegment.java,v 1.4 2004-04-02 03:31:05 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

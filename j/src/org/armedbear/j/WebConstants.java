@@ -2,7 +2,7 @@
  * WebConstants.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: WebConstants.java,v 1.2 2002-10-04 23:41:58 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

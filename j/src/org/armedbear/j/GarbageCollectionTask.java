@@ -2,7 +2,7 @@
  * GarbageCollectionTask.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: GarbageCollectionTask.java,v 1.1.1.1 2002-09-24 16:09:17 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

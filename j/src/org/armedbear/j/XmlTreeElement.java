@@ -2,7 +2,7 @@
  * XmlTreeElement.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: XmlTreeElement.java,v 1.2 2003-06-04 00:09:58 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

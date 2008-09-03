@@ -2,7 +2,7 @@
  * CTagger.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ObjCTagger.java,v 1.2 2003-12-30 19:25:17 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

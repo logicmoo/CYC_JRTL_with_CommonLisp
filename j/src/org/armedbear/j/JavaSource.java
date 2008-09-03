@@ -2,7 +2,7 @@
  * JavaSource.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: JavaSource.java,v 1.6 2003-05-18 19:26:02 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

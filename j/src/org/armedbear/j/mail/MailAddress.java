@@ -2,7 +2,7 @@
  * MailAddress.java
  *
  * Copyright (C) 2000-2006 Peter Graves
- * $Id: MailAddress.java,v 1.5 2006-06-27 14:52:04 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

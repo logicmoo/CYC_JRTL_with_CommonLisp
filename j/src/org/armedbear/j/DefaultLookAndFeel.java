@@ -2,7 +2,7 @@
  * DefaultLookAndFeel.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: DefaultLookAndFeel.java,v 1.7 2003-07-27 00:03:43 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

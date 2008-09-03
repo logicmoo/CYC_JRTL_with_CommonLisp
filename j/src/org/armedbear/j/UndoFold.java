@@ -2,7 +2,7 @@
  * UndoFold.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: UndoFold.java,v 1.1.1.1 2002-09-24 16:09:33 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

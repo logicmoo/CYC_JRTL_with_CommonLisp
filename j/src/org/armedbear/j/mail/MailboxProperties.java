@@ -2,7 +2,7 @@
  * MailboxProperties.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: MailboxProperties.java,v 1.4 2003-06-25 18:36:45 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

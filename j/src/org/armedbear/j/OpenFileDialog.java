@@ -2,7 +2,7 @@
  * OpenFileDialog.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: OpenFileDialog.java,v 1.2 2003-06-26 00:43:48 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

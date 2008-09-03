@@ -2,7 +2,7 @@
  * SplitPane.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SplitPane.java,v 1.1 2003-07-25 16:28:25 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

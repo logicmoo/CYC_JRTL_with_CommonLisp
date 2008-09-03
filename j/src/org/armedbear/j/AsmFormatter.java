@@ -2,7 +2,7 @@
  * AsmFormatter.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: AsmFormatter.java,v 1.3 2003-12-31 19:41:06 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

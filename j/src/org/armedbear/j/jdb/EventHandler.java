@@ -2,7 +2,7 @@
  * EventHandler.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: EventHandler.java,v 1.8 2003-05-28 16:11:49 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

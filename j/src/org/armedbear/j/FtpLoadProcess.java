@@ -2,7 +2,7 @@
  * FtpLoadProcess.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: FtpLoadProcess.java,v 1.2 2003-01-08 13:55:48 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * LispTag.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: LispTag.java,v 1.3 2003-10-11 00:12:01 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

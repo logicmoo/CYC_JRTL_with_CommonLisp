@@ -2,7 +2,7 @@
  * AboutDialog.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: AboutDialog.java,v 1.5 2005-11-19 16:51:40 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

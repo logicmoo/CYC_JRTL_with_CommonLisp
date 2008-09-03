@@ -2,7 +2,7 @@
  * GlobalTag.java
  *
  * Copyright (C) 1998-2006 Peter Graves
- * $Id: GlobalTag.java,v 1.5 2006-07-01 14:56:07 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

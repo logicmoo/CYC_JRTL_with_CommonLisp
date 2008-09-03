@@ -2,7 +2,7 @@
  * WebBuffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: WebBuffer.java,v 1.9 2003-08-13 15:13:51 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

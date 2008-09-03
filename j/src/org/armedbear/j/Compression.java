@@ -2,7 +2,7 @@
  * Compression.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Compression.java,v 1.1 2003-07-05 16:02:40 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

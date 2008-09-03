@@ -2,7 +2,7 @@
  * Property.java
  *
  * Copyright (C) 2000-2005 Peter Graves
- * $Id: Property.java,v 1.33 2006-10-19 16:31:00 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

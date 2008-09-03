@@ -2,7 +2,7 @@
  * NntpSession.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: NntpSession.java,v 1.8 2003-06-25 18:37:45 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

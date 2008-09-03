@@ -2,7 +2,7 @@
  * Search.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: Search.java,v 1.9 2004-09-05 20:01:33 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

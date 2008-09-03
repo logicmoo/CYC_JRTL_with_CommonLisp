@@ -2,7 +2,7 @@
  * MessageMode.java
  *
  * Copyright (C) 2000-2005 Peter Graves
- * $Id: MessageMode.java,v 1.5 2005-03-03 19:54:13 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

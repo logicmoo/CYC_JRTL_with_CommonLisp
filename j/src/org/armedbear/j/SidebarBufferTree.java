@@ -2,7 +2,7 @@
  * SidebarBufferTree.java
  *
  * Copyright (C) 2003-2004 Mike Rutter, Peter Graves
- * $Id: SidebarBufferTree.java,v 1.10 2004-09-16 16:49:55 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

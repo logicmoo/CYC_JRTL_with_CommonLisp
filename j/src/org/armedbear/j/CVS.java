@@ -2,7 +2,7 @@
  * CVS.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: CVS.java,v 1.11 2005-11-18 18:41:30 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

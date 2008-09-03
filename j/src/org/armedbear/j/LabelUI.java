@@ -2,7 +2,7 @@
  * LabelUI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: LabelUI.java,v 1.1 2003-07-24 16:22:57 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

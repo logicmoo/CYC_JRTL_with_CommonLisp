@@ -2,7 +2,7 @@
  * ModeList.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: ModeList.java,v 1.20 2005-02-17 01:26:48 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * ImapMailboxEntry.java
  *
  * Copyright (C) 2000-2007 Peter Graves <peter@armedbear.org>
- * $Id: ImapMailboxEntry.java,v 1.5 2007-04-14 19:03:11 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

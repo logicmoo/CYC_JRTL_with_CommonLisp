@@ -2,7 +2,7 @@
  * MethodBreakpoint.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: MethodBreakpoint.java,v 1.4 2003-05-25 01:25:14 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

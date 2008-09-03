@@ -2,7 +2,7 @@
  * RemoteShell.java
  *
  * Copyright (C) 2000-2004 Peter Graves
- * $Id: RemoteShell.java,v 1.7 2004-04-13 14:05:33 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

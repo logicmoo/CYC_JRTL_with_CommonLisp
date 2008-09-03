@@ -2,7 +2,7 @@
  * SshLoadProcess.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: SshLoadProcess.java,v 1.6 2003-05-19 12:20:28 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

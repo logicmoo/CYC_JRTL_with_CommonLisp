@@ -3,7 +3,7 @@
  *
  * Copyright (C) 2002 Jens Luedicke <jens@irs-net.com>
  * based on PythonTagger.java
- * $Id: RubyTagger.java,v 1.1.1.1 2002-09-24 16:08:05 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

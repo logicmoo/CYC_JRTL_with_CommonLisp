@@ -2,7 +2,7 @@
  * FastStringReader.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: FastStringReader.java,v 1.2 2002-12-07 10:51:08 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

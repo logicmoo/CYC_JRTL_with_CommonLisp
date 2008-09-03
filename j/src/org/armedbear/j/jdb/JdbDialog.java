@@ -2,7 +2,7 @@
  * JdbDialog.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: JdbDialog.java,v 1.2 2003-05-15 01:18:18 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

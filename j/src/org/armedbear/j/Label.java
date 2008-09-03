@@ -2,7 +2,7 @@
  * Label.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: Label.java,v 1.1 2003-07-23 00:25:28 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

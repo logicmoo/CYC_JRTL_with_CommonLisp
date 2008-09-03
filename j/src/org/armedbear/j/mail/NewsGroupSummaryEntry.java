@@ -2,7 +2,7 @@
  * NewsGroupSummaryEntry.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: NewsGroupSummaryEntry.java,v 1.3 2003-01-10 16:18:39 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

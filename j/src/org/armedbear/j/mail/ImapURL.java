@@ -2,7 +2,7 @@
  * ImapURL.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: ImapURL.java,v 1.2 2002-12-30 16:28:17 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

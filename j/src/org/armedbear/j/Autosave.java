@@ -2,7 +2,7 @@
  * Autosave.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Autosave.java,v 1.4 2005-07-04 21:46:56 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * SelectRegisterDialog.java
  *
  * Copyright (C) 2006 Peter Graves
- * $Id: SelectRegisterDialog.java,v 1.1 2006-11-06 11:03:55 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

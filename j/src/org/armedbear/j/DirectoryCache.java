@@ -2,7 +2,7 @@
  * DirectoryCache.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: DirectoryCache.java,v 1.4 2003-02-11 17:28:03 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

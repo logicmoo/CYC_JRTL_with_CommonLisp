@@ -2,7 +2,7 @@
  * DirectoryTree.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: DirectoryTree.java,v 1.6 2003-07-23 15:52:14 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

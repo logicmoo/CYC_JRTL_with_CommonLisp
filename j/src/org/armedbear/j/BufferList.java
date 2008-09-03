@@ -2,7 +2,7 @@
  * BufferList.java
  *
  * Copyright (C) 1998-2004 Peter Graves, Mike Rutter
- * $Id: BufferList.java,v 1.4 2004-06-27 14:37:03 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

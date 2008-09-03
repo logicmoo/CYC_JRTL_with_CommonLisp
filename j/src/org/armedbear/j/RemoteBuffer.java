@@ -2,7 +2,7 @@
  * RemoteBuffer.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: RemoteBuffer.java,v 1.8 2003-12-01 00:01:26 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

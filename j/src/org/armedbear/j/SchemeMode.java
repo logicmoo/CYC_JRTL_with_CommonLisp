@@ -2,7 +2,7 @@
  * SchemeMode.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: SchemeMode.java,v 1.2 2005-10-12 14:50:38 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * XmlMode.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: XmlMode.java,v 1.17 2004-04-22 17:49:38 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

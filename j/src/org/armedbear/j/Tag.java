@@ -2,7 +2,7 @@
  * Tag.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: Tag.java,v 1.2 2003-10-10 23:55:51 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

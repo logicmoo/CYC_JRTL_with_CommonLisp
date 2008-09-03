@@ -2,7 +2,7 @@
  * ToolTipUI.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ToolTipUI.java,v 1.1 2003-07-27 00:03:08 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

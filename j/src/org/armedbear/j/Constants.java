@@ -2,7 +2,7 @@
  * Constants.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Constants.java,v 1.20 2005-10-18 00:05:03 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

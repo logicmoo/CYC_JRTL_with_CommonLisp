@@ -2,7 +2,7 @@
  * InsertTagDialog.java
  *
  * Copyright (C) 2000-2004 Peter Graves
- * $Id: InsertTagDialog.java,v 1.3 2004-04-22 14:55:47 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

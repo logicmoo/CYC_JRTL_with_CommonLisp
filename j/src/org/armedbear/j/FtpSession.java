@@ -2,7 +2,7 @@
  * FtpSession.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: FtpSession.java,v 1.4 2003-05-25 13:43:17 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

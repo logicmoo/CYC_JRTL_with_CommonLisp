@@ -2,7 +2,7 @@
  * FindInFilesDialog.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: FindInFilesDialog.java,v 1.7 2003-07-27 01:12:55 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

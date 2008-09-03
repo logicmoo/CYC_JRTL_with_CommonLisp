@@ -2,7 +2,7 @@
  * ToolBar.java
  *
  * Copyright (C) 2000-2004 Peter Graves
- * $Id: ToolBar.java,v 1.7 2004-05-25 01:19:11 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

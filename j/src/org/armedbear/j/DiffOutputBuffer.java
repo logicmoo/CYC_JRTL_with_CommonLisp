@@ -2,7 +2,7 @@
  * DiffOutputBuffer.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: DiffOutputBuffer.java,v 1.3 2003-04-04 16:02:02 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

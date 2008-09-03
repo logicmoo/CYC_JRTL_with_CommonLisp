@@ -2,7 +2,7 @@
  * ThreadPanel.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: ThreadPanel.java,v 1.5 2003-06-09 16:33:39 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

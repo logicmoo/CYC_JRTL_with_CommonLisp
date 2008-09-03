@@ -2,7 +2,7 @@
  * LispShellMode.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: LispShellMode.java,v 1.22 2006-12-12 12:28:17 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

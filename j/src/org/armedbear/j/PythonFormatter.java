@@ -2,7 +2,7 @@
  * PythonFormatter.java
  *
  * Copyright (C) 2002-2007 Peter Graves <peter@armedbear.org>
- * $Id: PythonFormatter.java,v 1.2 2007-04-24 07:34:53 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

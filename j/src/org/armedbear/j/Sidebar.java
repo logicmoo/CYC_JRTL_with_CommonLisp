@@ -2,7 +2,7 @@
  * Sidebar.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: Sidebar.java,v 1.4 2003-08-07 17:34:07 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * CFormatter.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: CFormatter.java,v 1.3 2003-12-29 19:25:24 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

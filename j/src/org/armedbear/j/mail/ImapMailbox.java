@@ -2,7 +2,7 @@
  * ImapMailbox.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: ImapMailbox.java,v 1.5 2003-08-09 17:41:41 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

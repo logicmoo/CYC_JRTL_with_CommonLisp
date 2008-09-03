@@ -2,7 +2,7 @@
  * ProcessTable.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: ProcessTable.java,v 1.2 2002-10-05 01:04:10 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

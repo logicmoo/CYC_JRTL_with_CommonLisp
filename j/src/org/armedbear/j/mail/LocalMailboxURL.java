@@ -2,7 +2,7 @@
  * LocalMailboxURL.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: LocalMailboxURL.java,v 1.1.1.1 2002-09-24 16:09:46 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * UndoScrollCaret.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: UndoScrollCaret.java,v 1.1 2003-08-01 17:26:32 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

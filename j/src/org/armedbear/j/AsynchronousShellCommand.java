@@ -2,7 +2,7 @@
  * AsynchronousShellCommand.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: AsynchronousShellCommand.java,v 1.4 2003-04-04 14:03:04 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

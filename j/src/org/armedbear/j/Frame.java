@@ -2,7 +2,7 @@
  * Frame.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Frame.java,v 1.21 2006-10-19 17:00:21 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

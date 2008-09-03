@@ -2,7 +2,7 @@
  * CleanupThread.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: CleanupThread.java,v 1.2 2003-05-25 13:43:03 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

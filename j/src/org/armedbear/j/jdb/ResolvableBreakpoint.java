@@ -2,7 +2,7 @@
  * ResolvableBreakpoint.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: ResolvableBreakpoint.java,v 1.3 2003-05-15 01:17:05 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

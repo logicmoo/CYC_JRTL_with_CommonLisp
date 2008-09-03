@@ -2,7 +2,7 @@
  * LineSegmentList.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: LineSegmentList.java,v 1.4 2004-04-01 18:51:24 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * IList.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: IList.java,v 1.2 2002-10-08 02:48:56 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * Display.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Display.java,v 1.19 2005-10-17 22:23:49 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * SessionProperties.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: SessionProperties.java,v 1.4 2005-06-09 00:54:32 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

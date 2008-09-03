@@ -2,7 +2,7 @@
  * PopURL.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: PopURL.java,v 1.2 2002-12-27 03:53:18 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

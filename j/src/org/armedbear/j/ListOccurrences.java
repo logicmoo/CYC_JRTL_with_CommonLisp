@@ -2,7 +2,7 @@
  * ListOccurrences.java
  *
  * Copyright (C) 2000-2005 Peter Graves
- * $Id: ListOccurrences.java,v 1.9 2005-11-16 19:52:42 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

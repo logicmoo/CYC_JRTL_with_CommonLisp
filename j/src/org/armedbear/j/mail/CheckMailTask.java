@@ -2,7 +2,7 @@
  * CheckMailTask.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: CheckMailTask.java,v 1.2 2004-07-03 17:04:12 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * MenuItem.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: MenuItem.java,v 1.4 2003-10-15 12:07:24 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

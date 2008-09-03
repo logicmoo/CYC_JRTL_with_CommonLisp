@@ -2,7 +2,7 @@
  * WebFormatter.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: WebFormatter.java,v 1.2 2002-10-04 23:52:52 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

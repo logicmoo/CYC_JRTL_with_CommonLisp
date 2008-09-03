@@ -2,7 +2,7 @@
  * VMConnection.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: VMConnection.java,v 1.4 2003-05-18 01:27:55 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

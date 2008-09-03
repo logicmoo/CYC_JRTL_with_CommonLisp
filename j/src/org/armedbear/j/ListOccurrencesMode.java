@@ -2,7 +2,7 @@
  * ListOccurrencesMode.java
  *
  * Copyright (C) 2000-2005 Peter Graves
- * $Id: ListOccurrencesMode.java,v 1.3 2005-03-03 19:34:09 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

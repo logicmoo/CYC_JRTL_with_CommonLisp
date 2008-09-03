@@ -2,7 +2,7 @@
  * SessionBufferEntry.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: SessionBufferEntry.java,v 1.2 2003-03-20 15:21:00 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

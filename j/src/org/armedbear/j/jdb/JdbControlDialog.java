@@ -2,7 +2,7 @@
  * JdbControlDialog.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: JdbControlDialog.java,v 1.7 2003-05-20 15:35:15 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

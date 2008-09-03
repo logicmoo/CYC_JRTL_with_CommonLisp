@@ -2,7 +2,7 @@
  * LocalTag.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LocalTag.java,v 1.3 2003-05-07 01:34:07 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * ImageLoader.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: ImageLoader.java,v 1.2 2002-11-27 23:59:50 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

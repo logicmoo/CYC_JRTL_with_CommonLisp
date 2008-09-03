@@ -2,7 +2,7 @@
  * SidebarTagList.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: SidebarTagList.java,v 1.4 2003-11-30 00:06:22 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

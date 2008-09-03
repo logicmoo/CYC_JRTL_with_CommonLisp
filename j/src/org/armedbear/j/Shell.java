@@ -2,7 +2,7 @@
  * Shell.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Shell.java,v 1.34 2005-10-18 00:12:20 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

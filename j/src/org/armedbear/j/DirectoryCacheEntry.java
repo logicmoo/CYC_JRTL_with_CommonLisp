@@ -2,7 +2,7 @@
  * DirectoryCacheEntry.java
  *
  * Copyright (C) 2002 Peter Graves
- * $Id: DirectoryCacheEntry.java,v 1.2 2002-11-30 17:07:00 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

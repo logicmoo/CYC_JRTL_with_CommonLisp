@@ -2,7 +2,7 @@
  * Preferences.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: Preferences.java,v 1.6 2005-11-18 01:42:09 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * LispSyntaxIterator.java
  *
  * Copyright (C) 1998-2002 Peter Graves
- * $Id: LispSyntaxIterator.java,v 1.2 2002-10-18 21:35:47 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

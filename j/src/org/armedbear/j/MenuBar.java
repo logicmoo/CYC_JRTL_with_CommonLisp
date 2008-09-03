@@ -2,7 +2,7 @@
  * MenuBar.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: MenuBar.java,v 1.3 2003-07-23 00:17:11 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

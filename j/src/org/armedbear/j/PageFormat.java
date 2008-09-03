@@ -2,7 +2,7 @@
  * PageFormat.java
  *
  * Copyright (C) 2002-2008 Peter Graves
- * $Id: PageFormat.java,v 1.2 2008-03-07 17:33:35 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

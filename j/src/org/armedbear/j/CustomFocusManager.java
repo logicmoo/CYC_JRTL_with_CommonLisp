@@ -2,7 +2,7 @@
  * CustomFocusManager.java
  *
  * Copyright (C) 1999-2003 Peter Graves
- * $Id: CustomFocusManager.java,v 1.7 2003-12-04 16:55:03 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

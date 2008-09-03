@@ -2,7 +2,7 @@
  * ReplaceDialog.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: ReplaceDialog.java,v 1.5 2003-10-13 23:51:19 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

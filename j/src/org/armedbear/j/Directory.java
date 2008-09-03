@@ -2,7 +2,7 @@
  * Directory.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: Directory.java,v 1.28 2004-05-22 00:04:59 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

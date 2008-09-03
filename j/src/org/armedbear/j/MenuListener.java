@@ -2,7 +2,7 @@
  * MenuListener.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: MenuListener.java,v 1.2 2004-12-24 19:16:43 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

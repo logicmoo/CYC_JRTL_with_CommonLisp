@@ -2,7 +2,7 @@
  * CppTag.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: CppTag.java,v 1.2 2006-02-10 12:04:03 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

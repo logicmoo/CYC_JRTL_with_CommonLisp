@@ -2,7 +2,7 @@
  * MakefileFormatter.java
  *
  * Copyright (C) 2000-2006 Peter Graves
- * $Id: MakefileFormatter.java,v 1.3 2006-04-10 01:22:51 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * FilenameCompletion.java
  *
  * Copyright (C) 2000-2002 Peter Graves
- * $Id: FilenameCompletion.java,v 1.7 2003-01-06 04:04:31 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

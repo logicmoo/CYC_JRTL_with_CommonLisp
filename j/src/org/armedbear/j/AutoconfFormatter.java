@@ -2,7 +2,7 @@
  * AutoconfFormatter.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: AutoconfFormatter.java,v 1.2 2003-10-21 18:30:01 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * SidebarPanel.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: SidebarPanel.java,v 1.4 2003-07-24 19:40:44 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

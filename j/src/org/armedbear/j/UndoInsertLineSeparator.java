@@ -2,7 +2,7 @@
  * UndoInsertLineSeparator.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: UndoInsertLineSeparator.java,v 1.4 2003-06-11 15:07:58 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * RegionCommands.java
  *
  * Copyright (C) 1998-2004 Peter Graves
- * $Id: RegionCommands.java,v 1.4 2004-11-02 14:31:14 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

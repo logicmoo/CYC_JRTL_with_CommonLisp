@@ -2,7 +2,7 @@
  * AsmMode.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: AsmMode.java,v 1.2 2003-12-31 19:40:51 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

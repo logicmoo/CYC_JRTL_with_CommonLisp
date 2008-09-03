@@ -2,7 +2,7 @@
  * HtmlMode.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: HtmlMode.java,v 1.3 2005-03-28 19:32:22 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

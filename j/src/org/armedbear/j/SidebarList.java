@@ -2,7 +2,7 @@
  * SidebarList.java
  *
  * Copyright (C) 2000-2003 Peter Graves
- * $Id: SidebarList.java,v 1.4 2003-07-23 00:28:56 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

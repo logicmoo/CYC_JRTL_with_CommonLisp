@@ -2,7 +2,7 @@
  * FindDialog.java
  *
  * Copyright (C) 1998-2005 Peter Graves
- * $Id: FindDialog.java,v 1.5 2005-10-17 23:42:56 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

@@ -2,7 +2,7 @@
  * JumpCommands.java
  *
  * Copyright (C) 1998-2003 Peter Graves
- * $Id: JumpCommands.java,v 1.2 2003-07-01 12:44:43 piso Exp $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
