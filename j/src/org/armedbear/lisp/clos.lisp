@@ -1950,6 +1950,7 @@
 ;; initialization arguments that either fill slots or supply arguments to
 ;; methods, along with the predefined initialization argument :ALLOW-OTHER-KEYS."
 ;; 7.1.2
+#+nil
 (defun check-initargs (class initargs)
   (when (oddp (length initargs))
     (error 'program-error
@@ -1965,11 +1966,7 @@
                  :format-control "Invalid initarg ~S."
                  :format-arguments (list initarg)))))))
 
-;; FIXME: 20080830 ehuelsmann - The above method used to be commented out
-;; I switched the situation around, based upon my reading of the spec, the
-;; version above is not strict enough, but correct when it generates an error
-;; In other words: it allows unsupported arguments when ':allow-other-keys T'
-#+nil
+;; FIXME
 (defun check-initargs (class initargs)
   (declare (ignore class initargs)))
 
