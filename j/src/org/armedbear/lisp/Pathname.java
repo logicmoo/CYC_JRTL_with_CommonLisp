@@ -93,8 +93,30 @@ public class Pathname extends LispObject
             directory = list2(Keyword.RELATIVE, Keyword.UP);
             return;
         }
-        if (Utilities.isPlatformWindows)
+        if (Utilities.isPlatformWindows) {
+            if (s.startsWith("\\\\")) {
+               //UNC path support
+               // match \\<server>\<share>\[directories-and-files]
+
+               int shareIndex = s.indexOf('\\', 2);
+               int dirIndex = s.indexOf('\\', shareIndex + 1);
+
+               if (shareIndex == -1 || dirIndex == -1)
+                  error(new LispError("Unsupported UNC path format: \"" + s + '"'));
+
+               host = new SimpleString(s.substring(2, shareIndex));
+               device = new SimpleString(s.substring(shareIndex + 1, dirIndex));
+
+               Pathname p = new Pathname(s.substring(dirIndex));
+               directory = p.directory;
+               name = p.name;
+               type = p.type;
+               version = p.version;
+               return;
+            }
+
             s = s.replace('/', '\\');
+        }
         // Jar file support.
         int bang = s.indexOf("!/");
         if (bang >= 0) {
@@ -262,8 +284,13 @@ public class Pathname extends LispObject
         // the namestring." 19.2.2.2.3.1
         if (host != NIL) {
             Debug.assertTrue(host instanceof AbstractString);
+            if (! (this instanceof LogicalPathname))
+               sb.append("\\\\"); //UNC file support; if there's a host, it's a UNC path.
             sb.append(host.getStringValue());
-            sb.append(':');
+            if (this instanceof LogicalPathname)
+              sb.append(':');
+            else
+              sb.append(File.separatorChar);
         }
         if (device == NIL)
             ;
@@ -271,7 +298,9 @@ public class Pathname extends LispObject
             ;
         else if (device instanceof AbstractString) {
             sb.append(device.getStringValue());
-            sb.append(':');
+            if (this instanceof LogicalPathname
+                || host == NIL)
+              sb.append(':'); // non-UNC paths
         } else if (device instanceof Pathname) {
             sb.append(((Pathname)device).getNamestring());
             sb.append("!");
