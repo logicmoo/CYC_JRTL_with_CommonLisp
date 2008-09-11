@@ -432,18 +432,13 @@ public class Closure extends Function
         final LispThread thread = LispThread.currentThread();
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
-        if (specials != null)
-          {
-            for (int i = 0; i < specials.length; i++)
-              ext.declareSpecial(specials[i]);
-          }
-        bind(requiredParameters[0].var, arg, ext);
+        bindArg(requiredParameters[0].var, arg, ext, thread);
         if (arity != 1)
           {
             if (optionalParameters != null)
               bindOptionalParameterDefaults(ext, thread);
             if (restVar != null)
-              bind(restVar, NIL, ext);
+                bindArg(restVar, NIL, ext, thread);
             if (keywordParameters != null)
               bindKeywordParameterDefaults(ext, thread);
           }
@@ -481,19 +476,14 @@ public class Closure extends Function
         final LispThread thread = LispThread.currentThread();
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
-        if (specials != null)
-          {
-            for (int i = 0; i < specials.length; i++)
-              ext.declareSpecial(specials[i]);
-          }
-        bind(requiredParameters[0].var, first, ext);
-        bind(requiredParameters[1].var, second, ext);
+        bindArg(requiredParameters[0].var, first, ext, thread);
+        bindArg(requiredParameters[1].var, second, ext, thread);
         if (arity != 2)
           {
             if (optionalParameters != null)
               bindOptionalParameterDefaults(ext, thread);
             if (restVar != null)
-              bind(restVar, NIL, ext);
+                bindArg(restVar, NIL, ext, thread);
             if (keywordParameters != null)
               bindKeywordParameterDefaults(ext, thread);
           }
@@ -533,20 +523,15 @@ public class Closure extends Function
         final LispThread thread = LispThread.currentThread();
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
-        if (specials != null)
-          {
-            for (int i = 0; i < specials.length; i++)
-              ext.declareSpecial(specials[i]);
-          }
-        bind(requiredParameters[0].var, first, ext);
-        bind(requiredParameters[1].var, second, ext);
-        bind(requiredParameters[2].var, third, ext);
+        bindArg(requiredParameters[0].var, first, ext, thread);
+        bindArg(requiredParameters[1].var, second, ext, thread);
+        bindArg(requiredParameters[2].var, third, ext, thread);
         if (arity != 3)
           {
             if (optionalParameters != null)
               bindOptionalParameterDefaults(ext, thread);
             if (restVar != null)
-              bind(restVar, NIL, ext);
+                bindArg(restVar, NIL, ext, thread);
             if (keywordParameters != null)
               bindKeywordParameterDefaults(ext, thread);
           }
@@ -587,21 +572,16 @@ public class Closure extends Function
         final LispThread thread = LispThread.currentThread();
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
-        if (specials != null)
-          {
-            for (int i = 0; i < specials.length; i++)
-              ext.declareSpecial(specials[i]);
-          }
-        bind(requiredParameters[0].var, first, ext);
-        bind(requiredParameters[1].var, second, ext);
-        bind(requiredParameters[2].var, third, ext);
-        bind(requiredParameters[3].var, fourth, ext);
+        bindArg(requiredParameters[0].var, first, ext, thread);
+        bindArg(requiredParameters[1].var, second, ext, thread);
+        bindArg(requiredParameters[2].var, third, ext, thread);
+        bindArg(requiredParameters[3].var, fourth, ext, thread);
         if (arity != 4)
           {
             if (optionalParameters != null)
               bindOptionalParameterDefaults(ext, thread);
             if (restVar != null)
-              bind(restVar, NIL, ext);
+                bindArg(restVar, NIL, ext, thread);
             if (keywordParameters != null)
               bindKeywordParameterDefaults(ext, thread);
           }
@@ -644,22 +624,17 @@ public class Closure extends Function
         final LispThread thread = LispThread.currentThread();
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
-        if (specials != null)
-          {
-            for (int i = 0; i < specials.length; i++)
-              ext.declareSpecial(specials[i]);
-          }
-        bind(requiredParameters[0].var, first, ext);
-        bind(requiredParameters[1].var, second, ext);
-        bind(requiredParameters[2].var, third, ext);
-        bind(requiredParameters[3].var, fourth, ext);
-        bind(requiredParameters[4].var, fifth, ext);
+        bindArg(requiredParameters[0].var, first, ext, thread);
+        bindArg(requiredParameters[1].var, second, ext, thread);
+        bindArg(requiredParameters[2].var, third, ext, thread);
+        bindArg(requiredParameters[3].var, fourth, ext, thread);
+        bindArg(requiredParameters[4].var, fifth, ext, thread);
         if (arity != 5)
           {
             if (optionalParameters != null)
               bindOptionalParameterDefaults(ext, thread);
             if (restVar != null)
-              bind(restVar, NIL, ext);
+                bindArg(restVar, NIL, ext, thread);
             if (keywordParameters != null)
               bindKeywordParameterDefaults(ext, thread);
           }
@@ -703,23 +678,18 @@ public class Closure extends Function
         final LispThread thread = LispThread.currentThread();
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
-        if (specials != null)
-          {
-            for (int i = 0; i < specials.length; i++)
-              ext.declareSpecial(specials[i]);
-          }
-        bind(requiredParameters[0].var, first, ext);
-        bind(requiredParameters[1].var, second, ext);
-        bind(requiredParameters[2].var, third, ext);
-        bind(requiredParameters[3].var, fourth, ext);
-        bind(requiredParameters[4].var, fifth, ext);
-        bind(requiredParameters[5].var, sixth, ext);
+        bindArg(requiredParameters[0].var, first, ext, thread);
+        bindArg(requiredParameters[1].var, second, ext, thread);
+        bindArg(requiredParameters[2].var, third, ext, thread);
+        bindArg(requiredParameters[3].var, fourth, ext, thread);
+        bindArg(requiredParameters[4].var, fifth, ext, thread);
+        bindArg(requiredParameters[5].var, sixth, ext, thread);
         if (arity != 6)
           {
             if (optionalParameters != null)
               bindOptionalParameterDefaults(ext, thread);
             if (restVar != null)
-              bind(restVar, NIL, ext);
+                bindArg(restVar, NIL, ext, thread);
             if (keywordParameters != null)
               bindKeywordParameterDefaults(ext, thread);
           }
@@ -765,24 +735,19 @@ public class Closure extends Function
         final LispThread thread = LispThread.currentThread();
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
-        if (specials != null)
-          {
-            for (int i = 0; i < specials.length; i++)
-              ext.declareSpecial(specials[i]);
-          }
-        bind(requiredParameters[0].var, first, ext);
-        bind(requiredParameters[1].var, second, ext);
-        bind(requiredParameters[2].var, third, ext);
-        bind(requiredParameters[3].var, fourth, ext);
-        bind(requiredParameters[4].var, fifth, ext);
-        bind(requiredParameters[5].var, sixth, ext);
-        bind(requiredParameters[6].var, seventh, ext);
+        bindArg(requiredParameters[0].var, first, ext, thread);
+        bindArg(requiredParameters[1].var, second, ext, thread);
+        bindArg(requiredParameters[2].var, third, ext, thread);
+        bindArg(requiredParameters[3].var, fourth, ext, thread);
+        bindArg(requiredParameters[4].var, fifth, ext, thread);
+        bindArg(requiredParameters[5].var, sixth, ext, thread);
+        bindArg(requiredParameters[6].var, seventh, ext, thread);
         if (arity != 7)
           {
             if (optionalParameters != null)
               bindOptionalParameterDefaults(ext, thread);
             if (restVar != null)
-              bind(restVar, NIL, ext);
+                bindArg(restVar, NIL, ext, thread);
             if (keywordParameters != null)
               bindKeywordParameterDefaults(ext, thread);
           }
@@ -834,20 +799,20 @@ public class Closure extends Function
             for (int i = 0; i < specials.length; i++)
               ext.declareSpecial(specials[i]);
           }
-        bind(requiredParameters[0].var, first, ext);
-        bind(requiredParameters[1].var, second, ext);
-        bind(requiredParameters[2].var, third, ext);
-        bind(requiredParameters[3].var, fourth, ext);
-        bind(requiredParameters[4].var, fifth, ext);
-        bind(requiredParameters[5].var, sixth, ext);
-        bind(requiredParameters[6].var, seventh, ext);
-        bind(requiredParameters[7].var, eighth, ext);
+        bindArg(requiredParameters[0].var, first, ext, thread);
+        bindArg(requiredParameters[1].var, second, ext, thread);
+        bindArg(requiredParameters[2].var, third, ext, thread);
+        bindArg(requiredParameters[3].var, fourth, ext, thread);
+        bindArg(requiredParameters[4].var, fifth, ext, thread);
+        bindArg(requiredParameters[5].var, sixth, ext, thread);
+        bindArg(requiredParameters[6].var, seventh, ext, thread);
+        bindArg(requiredParameters[7].var, eighth, ext, thread);
         if (arity != 8)
           {
             if (optionalParameters != null)
               bindOptionalParameterDefaults(ext, thread);
             if (restVar != null)
-              bind(restVar, NIL, ext);
+                bindArg(restVar, NIL, ext, thread);
             if (keywordParameters != null)
               bindKeywordParameterDefaults(ext, thread);
           }
