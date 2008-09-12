@@ -132,119 +132,51 @@ public final class SpecialOperators extends Lisp
               break;
           }
         Environment ext = new Environment(env);
-        if (sequential)
+        while (varList != NIL)
           {
-            // LET*
-            while (varList != NIL)
+            final Symbol symbol;
+            LispObject value;
+            LispObject obj = varList.car();
+            if (obj instanceof Cons)
               {
-                final Symbol symbol;
-                LispObject value;
-                LispObject obj = varList.car();
-                if (obj instanceof Cons)
+                if (obj.length() > 2)
+                  return error(new LispError("The LET* binding specification " +
+                                              obj.writeToString() +
+                                              " is invalid."));
+                try
                   {
-                    if (obj.length() > 2)
-                      return error(new LispError("The LET* binding specification " +
-                                                  obj.writeToString() +
-                                                  " is invalid."));
-                    try
-                      {
-                        symbol = (Symbol) ((Cons)obj).car;
-                      }
-                    catch (ClassCastException e)
-                      {
-                        return type_error(((Cons)obj).car, Symbol.SYMBOL);
-                      }
-                    value = eval(obj.cadr(), ext, thread);
+                    symbol = (Symbol) ((Cons)obj).car;
                   }
-                else
+                catch (ClassCastException e)
                   {
-                    try
-                      {
-                        symbol = (Symbol) obj;
-                      }
-                    catch (ClassCastException e)
-                      {
-                        return type_error(obj, Symbol.SYMBOL);
-                      }
-                    value = NIL;
+                    return type_error(((Cons)obj).car, Symbol.SYMBOL);
                   }
-                if (specials != NIL && memq(symbol, specials))
-                  {
-                    thread.bindSpecial(symbol, value);
-                    ext.declareSpecial(symbol);
-                  }
-                else if (symbol.isSpecialVariable())
-                  {
-                    thread.bindSpecial(symbol, value);
-                  }
-                else
-                  ext.bind(symbol, value);
-                varList = ((Cons)varList).cdr;
+                value = eval(obj.cadr(), sequential ? ext : env, thread);
               }
-          }
-        else
-          {
-            // LET
-            final int length = varList.length();
-            LispObject[] vals = new LispObject[length];
-            for (int i = 0; i < length; i++)
+            else
               {
-                LispObject obj = ((Cons)varList).car;
-                if (obj instanceof Cons)
+                try
                   {
-                    if (obj.length() > 2)
-                      return error(new LispError("The LET binding specification " +
-                                                  obj.writeToString() +
-                                                  " is invalid."));
-                    vals[i] = eval(obj.cadr(), env, thread);
+                    symbol = (Symbol) obj;
                   }
-                else
-                  vals[i] = NIL;
-                varList = ((Cons)varList).cdr;
+                catch (ClassCastException e)
+                  {
+                    return type_error(obj, Symbol.SYMBOL);
+                  }
+                value = NIL;
               }
-            varList = args.car();
-            int i = 0;
-            while (varList != NIL)
+            if (specials != NIL && memq(symbol, specials))
               {
-                final Symbol symbol;
-                LispObject obj = varList.car();
-                if (obj instanceof Cons)
-                  {
-                    try
-                      {
-                        symbol = (Symbol) ((Cons)obj).car;
-                      }
-                    catch (ClassCastException e)
-                      {
-                        return type_error(((Cons)obj).car, Symbol.SYMBOL);
-                      }
-                  }
-                else
-                  {
-                    try
-                      {
-                        symbol = (Symbol) obj;
-                      }
-                    catch (ClassCastException e)
-                      {
-                        return type_error(obj, Symbol.SYMBOL);
-                      }
-                  }
-                LispObject value = vals[i];
-                if (specials != NIL && memq(symbol, specials))
-                  {
-                    thread.bindSpecial(symbol, value);
-                    ext.declareSpecial(symbol);
-                  }
-                else if (symbol.isSpecialVariable())
-                  {
-                    thread.bindSpecial(symbol, value);
-                  }
-                else
-                  ext.bind(symbol, value);
-                varList = ((Cons)varList).cdr;
-                ++i;
+                thread.bindSpecial(symbol, value);
+                ext.declareSpecial(symbol);
               }
+            else if (symbol.isSpecialVariable())
+              {
+                thread.bindSpecial(symbol, value);
+              }
+            else
+              ext.bind(symbol, value);
+            varList = ((Cons)varList).cdr;
           }
         // Make sure free special declarations are visible in the body.
         // "The scope of free declarations specifically does not include
