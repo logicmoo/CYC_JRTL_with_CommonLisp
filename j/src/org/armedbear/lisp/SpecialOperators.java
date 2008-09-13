@@ -97,7 +97,6 @@ public final class SpecialOperators extends Lisp
                                        boolean sequential)
     throws ConditionThrowable
   {
-    LispObject result = NIL;
     final LispThread thread = LispThread.currentThread();
     final SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
     try
@@ -347,8 +346,8 @@ public final class SpecialOperators extends Lisp
     // First argument is a list of local function definitions.
     LispObject defs = checkList(args.car());
     final LispThread thread = LispThread.currentThread();
-    SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
-    Environment ext = new Environment(env);
+    final SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
+    final Environment ext = new Environment(env);
     while (defs != NIL)
       {
         final LispObject def = checkList(defs.car());
@@ -397,7 +396,34 @@ public final class SpecialOperators extends Lisp
       }
     try
       {
-        return progn(args.cdr(), ext, thread);
+        final Environment innerEnv = new Environment(ext);
+        LispObject body = args.cdr();
+        while (body != NIL)
+          {
+            LispObject obj = body.car();
+            if (obj instanceof Cons && ((Cons)obj).car == Symbol.DECLARE)
+              {
+                LispObject decls = ((Cons)obj).cdr;
+                while (decls != NIL)
+                  {
+                    LispObject decl = decls.car();
+                    if (decl instanceof Cons && ((Cons)decl).car == Symbol.SPECIAL)
+                      {
+                        LispObject vars = ((Cons)decl).cdr;
+                        while (vars != NIL)
+                          {
+                            innerEnv.declareSpecial((Symbol)((Cons)vars).car);
+                            vars = ((Cons)vars).cdr;
+                          }
+                      }
+                    decls = ((Cons)decls).cdr;
+                  }
+                body = ((Cons)body).cdr;
+              }
+            else
+              break;
+          }
+        return progn(body, ext, thread);
       }
     finally
       {
