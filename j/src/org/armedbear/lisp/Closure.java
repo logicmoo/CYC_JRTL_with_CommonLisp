@@ -1296,10 +1296,12 @@ public class Closure extends Function
                                Environment env, LispThread thread)
         throws ConditionThrowable
     {
-        if (isSpecial(sym) && ! sym.isSpecialVariable())
+        if (isSpecial(sym)) {
             env.declareSpecial(sym);
-
-        bind(sym, value, env);
+            thread.bindSpecial(sym, value);
+        }
+        else
+            env.bind(sym, value);
     }
 
   private final void bindAuxVars(Environment env, LispThread thread)
