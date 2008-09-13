@@ -885,21 +885,14 @@ public class Closure extends Function
             ext.declareSpecial(specials[i]);
         }
     }
-    LispObject result = NIL;
-    LispObject prog = body;
     try
       {
-        while (prog != NIL)
-          {
-            result = eval(prog.car(), ext, thread);
-            prog = prog.cdr();
-          }
+        return progn(body, ext, thread);
       }
     finally
       {
         thread.lastSpecialBinding = lastSpecialBinding;
       }
-    return result;
   }
 
   private final boolean isSpecial(Symbol sym)
