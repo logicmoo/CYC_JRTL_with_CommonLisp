@@ -347,69 +347,62 @@ public final class SpecialOperators extends Lisp
     // First argument is a list of local function definitions.
     LispObject defs = checkList(args.car());
     final LispThread thread = LispThread.currentThread();
-    LispObject result;
-    if (defs != NIL)
+    SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
+    Environment ext = new Environment(env);
+    while (defs != NIL)
       {
-        SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
-        Environment ext = new Environment(env);
-        while (defs != NIL)
+        final LispObject def = checkList(defs.car());
+        final LispObject name = def.car();
+        final Symbol symbol;
+        if (name instanceof Symbol)
           {
-            final LispObject def = checkList(defs.car());
-            final LispObject name = def.car();
-            final Symbol symbol;
-            if (name instanceof Symbol)
+            symbol = checkSymbol(name);
+            if (symbol.getSymbolFunction() instanceof SpecialOperator)
               {
-                symbol = checkSymbol(name);
-                if (symbol.getSymbolFunction() instanceof SpecialOperator)
-                  {
-                    String message =
-                      symbol.getName() + " is a special operator and may not be redefined";
-                    return error(new ProgramError(message));
-                  }
+                String message =
+                  symbol.getName() + " is a special operator and may not be redefined";
+                return error(new ProgramError(message));
               }
-            else if (isValidSetfFunctionName(name))
-              symbol = checkSymbol(name.cadr());
-            else
-              return type_error(name, FUNCTION_NAME);
-            LispObject rest = def.cdr();
-            LispObject parameters = rest.car();
-            LispObject body = rest.cdr();
-            LispObject decls = NIL;
-            while (body.car() instanceof Cons && body.car().car() == Symbol.DECLARE)
-              {
-                decls = new Cons(body.car(), decls);
-                body = body.cdr();
-              }
-            body = new Cons(symbol, body);
-            body = new Cons(Symbol.BLOCK, body);
-            body = new Cons(body, NIL);
-            while (decls != NIL)
-              {
-                body = new Cons(decls.car(), body);
-                decls = decls.cdr();
-              }
-            LispObject lambda_expression =
-              new Cons(Symbol.LAMBDA, new Cons(parameters, body));
-            LispObject lambda_name =
-              list2(recursive ? Symbol.LABELS : Symbol.FLET, name);
-            Closure closure =
-              new Closure(lambda_name, lambda_expression,
-                          recursive ? ext : env);
-            ext.addFunctionBinding(name, closure);
-            defs = defs.cdr();
           }
-        try
+        else if (isValidSetfFunctionName(name))
+          symbol = checkSymbol(name.cadr());
+        else
+          return type_error(name, FUNCTION_NAME);
+        LispObject rest = def.cdr();
+        LispObject parameters = rest.car();
+        LispObject body = rest.cdr();
+        LispObject decls = NIL;
+        while (body.car() instanceof Cons && body.car().car() == Symbol.DECLARE)
           {
-            result = progn(args.cdr(), ext, thread);
+            decls = new Cons(body.car(), decls);
+            body = body.cdr();
           }
-        finally
+        body = new Cons(symbol, body);
+        body = new Cons(Symbol.BLOCK, body);
+        body = new Cons(body, NIL);
+        while (decls != NIL)
           {
-            thread.lastSpecialBinding = lastSpecialBinding;
+            body = new Cons(decls.car(), body);
+            decls = decls.cdr();
           }
+        LispObject lambda_expression =
+          new Cons(Symbol.LAMBDA, new Cons(parameters, body));
+        LispObject lambda_name =
+          list2(recursive ? Symbol.LABELS : Symbol.FLET, name);
+        Closure closure =
+          new Closure(lambda_name, lambda_expression,
+                      recursive ? ext : env);
+        ext.addFunctionBinding(name, closure);
+        defs = defs.cdr();
       }
-    else
-      result = progn(args.cdr(), env, thread);
-    return result;
+    try
+      {
+        return progn(args.cdr(), ext, thread);
+      }
+    finally
+      {
+        thread.lastSpecialBinding = lastSpecialBinding;
+      }
   }
 
   // ### the value-type form => result*
