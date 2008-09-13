@@ -140,9 +140,9 @@ public final class SpecialOperators extends Lisp
             if (obj instanceof Cons)
               {
                 if (obj.length() > 2)
-                  return error(new LispError("The LET* binding specification " +
-                                              obj.writeToString() +
-                                              " is invalid."));
+                  return error(new LispError("The " + (sequential ? "LET*" : "LET")
+                          + " binding specification " +
+                          obj.writeToString() + " is invalid."));
                 try
                   {
                     symbol = (Symbol) ((Cons)obj).car;
@@ -188,17 +188,12 @@ public final class SpecialOperators extends Lisp
             ext.declareSpecial(symbol);
             specials = ((Cons)specials).cdr;
           }
-        while (body != NIL)
-          {
-            result = eval(body.car(), ext, thread);
-            body = ((Cons)body).cdr;
-          }
+        return progn(body, ext, thread);
       }
     finally
       {
         thread.lastSpecialBinding = lastSpecialBinding;
       }
-    return result;
   }
 
   // ### symbol-macrolet
