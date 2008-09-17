@@ -210,6 +210,9 @@ public final class SpecialOperators extends Lisp
             try
               {
                 Environment ext = new Environment(env);
+                // Declare our free specials, this will correctly raise
+                LispObject body = ext.processDeclarations(args.cdr());
+
                 for (int i = varList.length(); i-- > 0;)
                   {
                     LispObject obj = varList.car();
@@ -217,7 +220,8 @@ public final class SpecialOperators extends Lisp
                     if (obj instanceof Cons && obj.length() == 2)
                       {
                         Symbol symbol = checkSymbol(obj.car());
-                        if (symbol.isSpecialVariable())
+                        if (symbol.isSpecialVariable()
+                             || ext.isDeclaredSpecial(symbol))
                           {
                             return error(new ProgramError(
                               "Attempt to bind the special variable " +
@@ -233,7 +237,7 @@ public final class SpecialOperators extends Lisp
                           obj.writeToString()));
                       }
                   }
-                return progn(args.cdr(), ext, thread);
+                return progn(body, ext, thread);
               }
             finally
               {
@@ -242,7 +246,7 @@ public final class SpecialOperators extends Lisp
           }
         else
           {
-            return progn(args.cdr(), ext, thread);
+            return progn(args.cdr(), env, thread);
           }
       }
     };
