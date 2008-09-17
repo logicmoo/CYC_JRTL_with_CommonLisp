@@ -204,7 +204,6 @@ public final class SpecialOperators extends Lisp
       {
         LispObject varList = checkList(args.car());
         final LispThread thread = LispThread.currentThread();
-        LispObject result = NIL;
         if (varList != NIL)
           {
             SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
@@ -234,12 +233,7 @@ public final class SpecialOperators extends Lisp
                           obj.writeToString()));
                       }
                   }
-                LispObject body = args.cdr();
-                while (body != NIL)
-                  {
-                    result = eval(body.car(), ext, thread);
-                    body = body.cdr();
-                  }
+                return progn(args.cdr(), ext, thread);
               }
             finally
               {
@@ -248,14 +242,8 @@ public final class SpecialOperators extends Lisp
           }
         else
           {
-            LispObject body = args.cdr();
-            while (body != NIL)
-              {
-                result = eval(body.car(), env, thread);
-                body = body.cdr();
-              }
+            return progn(args.cdr(), ext, thread);
           }
-        return result;
       }
     };
 
@@ -462,14 +450,7 @@ public final class SpecialOperators extends Lisp
             // Set up the new bindings.
             progvBindVars(symbols, values, thread);
             // Implicit PROGN.
-            LispObject result = NIL;
-            LispObject body = args.cdr().cdr();
-            while (body != NIL)
-              {
-                result = eval(body.car(), env, thread);
-                body = body.cdr();
-              }
-            return result;
+            return progn(args.cdr().cdr(), env, thread);
           }
         finally
           {
