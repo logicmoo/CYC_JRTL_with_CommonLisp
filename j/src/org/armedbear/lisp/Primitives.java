@@ -3499,8 +3499,9 @@ public final class Primitives extends Lisp
       {
         LispObject defs = checkList(args.car());
         final LispThread thread = LispThread.currentThread();
-        LispObject result;
-        if (defs != NIL)
+        final SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
+
+        try
           {
             Environment ext = new Environment(env);
             while (defs != NIL)
@@ -3517,11 +3518,12 @@ public final class Primitives extends Lisp
                 ext.addFunctionBinding(symbol, macroObject);
                 defs = defs.cdr();
               }
-            result = progn(args.cdr(), ext, thread);
+            return progn(ext.processDeclarations(args.cdr()), ext, thread);
           }
-        else
-          result = progn(args.cdr(), env, thread);
-        return result;
+        finally
+          {
+            thread.lastSpecialBinding = lastSpecialBinding;
+          }
       }
     };
 
