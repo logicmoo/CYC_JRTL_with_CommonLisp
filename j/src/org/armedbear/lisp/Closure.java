@@ -411,15 +411,8 @@ public class Closure extends Function
   {
     if (arity == 0)
       {
-        final LispThread thread = LispThread.currentThread();
-        LispObject result = NIL;
-        LispObject prog = body;
-        while (prog != NIL)
-          {
-            result = eval(prog.car(), environment, thread);
-            prog = prog.cdr();
-          }
-        return result;
+        return progn(body, environment, 
+                     LispThread.currentThread());
       }
     else
       return execute(new LispObject[0]);
@@ -444,21 +437,14 @@ public class Closure extends Function
           }
         if (auxVars != null)
           bindAuxVars(ext, thread);
-        LispObject result = NIL;
-        LispObject prog = body;
         try
           {
-            while (prog != NIL)
-              {
-                result = eval(prog.car(), ext, thread);
-                prog = prog.cdr();
-              }
+            return progn(body, ext, thread);
           }
         finally
           {
             thread.lastSpecialBinding = lastSpecialBinding;
           }
-        return result;
       }
     else
       {
@@ -489,21 +475,14 @@ public class Closure extends Function
           }
         if (auxVars != null)
           bindAuxVars(ext, thread);
-        LispObject result = NIL;
-        LispObject prog = body;
         try
           {
-            while (prog != NIL)
-              {
-                result = eval(prog.car(), ext, thread);
-                prog = prog.cdr();
-              }
+            return progn(body, ext, thread);
           }
         finally
           {
             thread.lastSpecialBinding = lastSpecialBinding;
           }
-        return result;
       }
     else
       {
@@ -537,21 +516,14 @@ public class Closure extends Function
           }
         if (auxVars != null)
           bindAuxVars(ext, thread);
-        LispObject result = NIL;
-        LispObject prog = body;
         try
           {
-            while (prog != NIL)
-              {
-                result = eval(prog.car(), ext, thread);
-                prog = prog.cdr();
-              }
+            return progn(body, ext, thread);
           }
         finally
           {
             thread.lastSpecialBinding = lastSpecialBinding;
           }
-        return result;
       }
     else
       {
@@ -587,21 +559,14 @@ public class Closure extends Function
           }
         if (auxVars != null)
           bindAuxVars(ext, thread);
-        LispObject result = NIL;
-        LispObject prog = body;
         try
           {
-            while (prog != NIL)
-              {
-                result = eval(prog.car(), ext, thread);
-                prog = prog.cdr();
-              }
+            return progn(body, ext, thread);
           }
         finally
           {
             thread.lastSpecialBinding = lastSpecialBinding;
           }
-        return result;
       }
     else
       {
@@ -640,21 +605,14 @@ public class Closure extends Function
           }
         if (auxVars != null)
           bindAuxVars(ext, thread);
-        LispObject result = NIL;
-        LispObject prog = body;
         try
           {
-            while (prog != NIL)
-              {
-                result = eval(prog.car(), ext, thread);
-                prog = prog.cdr();
-              }
+            return progn(body, ext, thread);
           }
         finally
           {
             thread.lastSpecialBinding = lastSpecialBinding;
           }
-        return result;
       }
     else
       {
@@ -695,21 +653,14 @@ public class Closure extends Function
           }
         if (auxVars != null)
           bindAuxVars(ext, thread);
-        LispObject result = NIL;
-        LispObject prog = body;
         try
           {
-            while (prog != NIL)
-              {
-                result = eval(prog.car(), ext, thread);
-                prog = prog.cdr();
-              }
+            return progn(body, ext, thread);
           }
         finally
           {
             thread.lastSpecialBinding = lastSpecialBinding;
           }
-        return result;
       }
     else
       {
@@ -753,21 +704,14 @@ public class Closure extends Function
           }
         if (auxVars != null)
           bindAuxVars(ext, thread);
-        LispObject result = NIL;
-        LispObject prog = body;
         try
           {
-            while (prog != NIL)
-              {
-                result = eval(prog.car(), ext, thread);
-                prog = prog.cdr();
-              }
+            return progn(body, ext, thread);
           }
         finally
           {
             thread.lastSpecialBinding = lastSpecialBinding;
           }
-        return result;
       }
     else
       {
@@ -818,21 +762,14 @@ public class Closure extends Function
           }
         if (auxVars != null)
           bindAuxVars(ext, thread);
-        LispObject result = NIL;
-        LispObject prog = body;
         try
           {
-            while (prog != NIL)
-              {
-                result = eval(prog.car(), ext, thread);
-                prog = prog.cdr();
-              }
+            return progn(body, ext, thread);
           }
         finally
           {
             thread.lastSpecialBinding = lastSpecialBinding;
           }
-        return result;
       }
     else
       {
