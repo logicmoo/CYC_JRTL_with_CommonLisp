@@ -417,6 +417,24 @@ public class Closure extends Function
     else
       return execute(new LispObject[0]);
   }
+    
+  private final void bindParameters(int arityValue,
+                                     Environment ext,
+                                     LispThread thread)
+  throws ConditionThrowable
+  {
+    if (arity != arityValue)
+      {
+        if (optionalParameters != null)
+          bindOptionalParameterDefaults(ext, thread);
+        if (restVar != null)
+          bindArg(restVar, NIL, ext, thread);
+        if (keywordParameters != null)
+          bindKeywordParameterDefaults(ext, thread);
+      }
+    if (auxVars != null)
+      bindAuxVars(ext, thread);
+  }
 
   public LispObject execute(LispObject arg) throws ConditionThrowable
   {
@@ -426,17 +444,7 @@ public class Closure extends Function
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
         bindArg(requiredParameters[0].var, arg, ext, thread);
-        if (arity != 1)
-          {
-            if (optionalParameters != null)
-              bindOptionalParameterDefaults(ext, thread);
-            if (restVar != null)
-                bindArg(restVar, NIL, ext, thread);
-            if (keywordParameters != null)
-              bindKeywordParameterDefaults(ext, thread);
-          }
-        if (auxVars != null)
-          bindAuxVars(ext, thread);
+	bindParameters(1, ext, thread);
         try
           {
             return progn(body, ext, thread);
@@ -464,17 +472,7 @@ public class Closure extends Function
         Environment ext = new Environment(environment);
         bindArg(requiredParameters[0].var, first, ext, thread);
         bindArg(requiredParameters[1].var, second, ext, thread);
-        if (arity != 2)
-          {
-            if (optionalParameters != null)
-              bindOptionalParameterDefaults(ext, thread);
-            if (restVar != null)
-                bindArg(restVar, NIL, ext, thread);
-            if (keywordParameters != null)
-              bindKeywordParameterDefaults(ext, thread);
-          }
-        if (auxVars != null)
-          bindAuxVars(ext, thread);
+	bindParameters(2, ext, thread);
         try
           {
             return progn(body, ext, thread);
@@ -505,17 +503,7 @@ public class Closure extends Function
         bindArg(requiredParameters[0].var, first, ext, thread);
         bindArg(requiredParameters[1].var, second, ext, thread);
         bindArg(requiredParameters[2].var, third, ext, thread);
-        if (arity != 3)
-          {
-            if (optionalParameters != null)
-              bindOptionalParameterDefaults(ext, thread);
-            if (restVar != null)
-                bindArg(restVar, NIL, ext, thread);
-            if (keywordParameters != null)
-              bindKeywordParameterDefaults(ext, thread);
-          }
-        if (auxVars != null)
-          bindAuxVars(ext, thread);
+	bindParameters(3, ext, thread);
         try
           {
             return progn(body, ext, thread);
@@ -548,17 +536,7 @@ public class Closure extends Function
         bindArg(requiredParameters[1].var, second, ext, thread);
         bindArg(requiredParameters[2].var, third, ext, thread);
         bindArg(requiredParameters[3].var, fourth, ext, thread);
-        if (arity != 4)
-          {
-            if (optionalParameters != null)
-              bindOptionalParameterDefaults(ext, thread);
-            if (restVar != null)
-                bindArg(restVar, NIL, ext, thread);
-            if (keywordParameters != null)
-              bindKeywordParameterDefaults(ext, thread);
-          }
-        if (auxVars != null)
-          bindAuxVars(ext, thread);
+	bindParameters(4, ext, thread);        
         try
           {
             return progn(body, ext, thread);
@@ -594,17 +572,7 @@ public class Closure extends Function
         bindArg(requiredParameters[2].var, third, ext, thread);
         bindArg(requiredParameters[3].var, fourth, ext, thread);
         bindArg(requiredParameters[4].var, fifth, ext, thread);
-        if (arity != 5)
-          {
-            if (optionalParameters != null)
-              bindOptionalParameterDefaults(ext, thread);
-            if (restVar != null)
-                bindArg(restVar, NIL, ext, thread);
-            if (keywordParameters != null)
-              bindKeywordParameterDefaults(ext, thread);
-          }
-        if (auxVars != null)
-          bindAuxVars(ext, thread);
+	bindParameters(5, ext, thread);
         try
           {
             return progn(body, ext, thread);
@@ -642,17 +610,7 @@ public class Closure extends Function
         bindArg(requiredParameters[3].var, fourth, ext, thread);
         bindArg(requiredParameters[4].var, fifth, ext, thread);
         bindArg(requiredParameters[5].var, sixth, ext, thread);
-        if (arity != 6)
-          {
-            if (optionalParameters != null)
-              bindOptionalParameterDefaults(ext, thread);
-            if (restVar != null)
-                bindArg(restVar, NIL, ext, thread);
-            if (keywordParameters != null)
-              bindKeywordParameterDefaults(ext, thread);
-          }
-        if (auxVars != null)
-          bindAuxVars(ext, thread);
+	bindParameters(6, ext, thread);
         try
           {
             return progn(body, ext, thread);
@@ -693,17 +651,7 @@ public class Closure extends Function
         bindArg(requiredParameters[4].var, fifth, ext, thread);
         bindArg(requiredParameters[5].var, sixth, ext, thread);
         bindArg(requiredParameters[6].var, seventh, ext, thread);
-        if (arity != 7)
-          {
-            if (optionalParameters != null)
-              bindOptionalParameterDefaults(ext, thread);
-            if (restVar != null)
-                bindArg(restVar, NIL, ext, thread);
-            if (keywordParameters != null)
-              bindKeywordParameterDefaults(ext, thread);
-          }
-        if (auxVars != null)
-          bindAuxVars(ext, thread);
+	bindParameters(7, ext, thread);
         try
           {
             return progn(body, ext, thread);
@@ -751,17 +699,7 @@ public class Closure extends Function
         bindArg(requiredParameters[5].var, sixth, ext, thread);
         bindArg(requiredParameters[6].var, seventh, ext, thread);
         bindArg(requiredParameters[7].var, eighth, ext, thread);
-        if (arity != 8)
-          {
-            if (optionalParameters != null)
-              bindOptionalParameterDefaults(ext, thread);
-            if (restVar != null)
-                bindArg(restVar, NIL, ext, thread);
-            if (keywordParameters != null)
-              bindKeywordParameterDefaults(ext, thread);
-          }
-        if (auxVars != null)
-          bindAuxVars(ext, thread);
+	bindParameters(8, ext, thread);
         try
           {
             return progn(body, ext, thread);
