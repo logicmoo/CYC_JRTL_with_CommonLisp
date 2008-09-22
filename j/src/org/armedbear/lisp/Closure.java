@@ -2,6 +2,7 @@
  * Closure.java
  *
  * Copyright (C) 2002-2008 Peter Graves
+ * Copyright (C) 2008 Ville Voutilainen
  * $Id$
  *
  * This program is free software; you can redistribute it and/or
@@ -436,6 +437,17 @@ public class Closure extends Function
       bindAuxVars(ext, thread);
   }
 
+  private final void bindRequiredParameters(Environment ext,
+                                            LispThread thread,
+                                            LispObject... objects)
+  throws ConditionThrowable
+  {
+    for (int i = 0; i < objects.length; ++i)
+      {
+        bindArg(requiredParameters[i].var, objects[i], ext, thread);
+      }
+  }
+                                            
   public LispObject execute(LispObject arg) throws ConditionThrowable
   {
     if (minArgs == 1)
@@ -443,8 +455,8 @@ public class Closure extends Function
         final LispThread thread = LispThread.currentThread();
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
-        bindArg(requiredParameters[0].var, arg, ext, thread);
-	bindParameters(1, ext, thread);
+        bindRequiredParameters(ext, thread, arg);
+        bindParameters(1, ext, thread);
         try
           {
             return progn(body, ext, thread);
@@ -470,9 +482,8 @@ public class Closure extends Function
         final LispThread thread = LispThread.currentThread();
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
-        bindArg(requiredParameters[0].var, first, ext, thread);
-        bindArg(requiredParameters[1].var, second, ext, thread);
-	bindParameters(2, ext, thread);
+        bindRequiredParameters(ext, thread, first, second);
+        bindParameters(2, ext, thread);
         try
           {
             return progn(body, ext, thread);
@@ -500,10 +511,8 @@ public class Closure extends Function
         final LispThread thread = LispThread.currentThread();
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
-        bindArg(requiredParameters[0].var, first, ext, thread);
-        bindArg(requiredParameters[1].var, second, ext, thread);
-        bindArg(requiredParameters[2].var, third, ext, thread);
-	bindParameters(3, ext, thread);
+        bindRequiredParameters(ext, thread, first, second, third);
+        bindParameters(3, ext, thread);
         try
           {
             return progn(body, ext, thread);
@@ -532,11 +541,8 @@ public class Closure extends Function
         final LispThread thread = LispThread.currentThread();
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
-        bindArg(requiredParameters[0].var, first, ext, thread);
-        bindArg(requiredParameters[1].var, second, ext, thread);
-        bindArg(requiredParameters[2].var, third, ext, thread);
-        bindArg(requiredParameters[3].var, fourth, ext, thread);
-	bindParameters(4, ext, thread);        
+        bindRequiredParameters(ext, thread, first, second, third, fourth);
+        bindParameters(4, ext, thread);        
         try
           {
             return progn(body, ext, thread);
@@ -567,12 +573,9 @@ public class Closure extends Function
         final LispThread thread = LispThread.currentThread();
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
-        bindArg(requiredParameters[0].var, first, ext, thread);
-        bindArg(requiredParameters[1].var, second, ext, thread);
-        bindArg(requiredParameters[2].var, third, ext, thread);
-        bindArg(requiredParameters[3].var, fourth, ext, thread);
-        bindArg(requiredParameters[4].var, fifth, ext, thread);
-	bindParameters(5, ext, thread);
+        bindRequiredParameters(ext, thread, first, second, third, fourth,
+                               fifth);
+        bindParameters(5, ext, thread);
         try
           {
             return progn(body, ext, thread);
@@ -604,13 +607,9 @@ public class Closure extends Function
         final LispThread thread = LispThread.currentThread();
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
-        bindArg(requiredParameters[0].var, first, ext, thread);
-        bindArg(requiredParameters[1].var, second, ext, thread);
-        bindArg(requiredParameters[2].var, third, ext, thread);
-        bindArg(requiredParameters[3].var, fourth, ext, thread);
-        bindArg(requiredParameters[4].var, fifth, ext, thread);
-        bindArg(requiredParameters[5].var, sixth, ext, thread);
-	bindParameters(6, ext, thread);
+        bindRequiredParameters(ext, thread, first, second, third, fourth,
+                               fifth, sixth);
+        bindParameters(6, ext, thread);
         try
           {
             return progn(body, ext, thread);
@@ -644,14 +643,9 @@ public class Closure extends Function
         final LispThread thread = LispThread.currentThread();
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
-        bindArg(requiredParameters[0].var, first, ext, thread);
-        bindArg(requiredParameters[1].var, second, ext, thread);
-        bindArg(requiredParameters[2].var, third, ext, thread);
-        bindArg(requiredParameters[3].var, fourth, ext, thread);
-        bindArg(requiredParameters[4].var, fifth, ext, thread);
-        bindArg(requiredParameters[5].var, sixth, ext, thread);
-        bindArg(requiredParameters[6].var, seventh, ext, thread);
-	bindParameters(7, ext, thread);
+        bindRequiredParameters(ext, thread, first, second, third, fourth,
+                               fifth, sixth, seventh);
+        bindParameters(7, ext, thread);
         try
           {
             return progn(body, ext, thread);
@@ -691,15 +685,9 @@ public class Closure extends Function
             for (int i = 0; i < specials.length; i++)
               ext.declareSpecial(specials[i]);
           }
-        bindArg(requiredParameters[0].var, first, ext, thread);
-        bindArg(requiredParameters[1].var, second, ext, thread);
-        bindArg(requiredParameters[2].var, third, ext, thread);
-        bindArg(requiredParameters[3].var, fourth, ext, thread);
-        bindArg(requiredParameters[4].var, fifth, ext, thread);
-        bindArg(requiredParameters[5].var, sixth, ext, thread);
-        bindArg(requiredParameters[6].var, seventh, ext, thread);
-        bindArg(requiredParameters[7].var, eighth, ext, thread);
-	bindParameters(8, ext, thread);
+        bindRequiredParameters(ext, thread, first, second, third, fourth,
+                               fifth, sixth, seventh, eighth);
+        bindParameters(8, ext, thread);
         try
           {
             return progn(body, ext, thread);
