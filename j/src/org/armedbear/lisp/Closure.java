@@ -447,7 +447,13 @@ public class Closure extends Function
         bindArg(requiredParameters[i].var, objects[i], ext, thread);
       }
   }
-                                            
+
+  public final LispObject invokeArrayExecute(LispObject... objects)
+  throws ConditionThrowable
+  {
+    return execute(objects);
+  }
+
   public LispObject execute(LispObject arg) throws ConditionThrowable
   {
     if (minArgs == 1)
@@ -456,7 +462,7 @@ public class Closure extends Function
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
         bindRequiredParameters(ext, thread, arg);
-        bindParameters(1, ext, thread);
+        bindParameters(minArgs, ext, thread);
         try
           {
             return progn(body, ext, thread);
@@ -468,9 +474,7 @@ public class Closure extends Function
       }
     else
       {
-        LispObject[] args = new LispObject[1];
-        args[0] = arg;
-        return execute(args);
+        return invokeArrayExecute(arg);
       }
   }
 
@@ -483,7 +487,7 @@ public class Closure extends Function
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
         bindRequiredParameters(ext, thread, first, second);
-        bindParameters(2, ext, thread);
+        bindParameters(minArgs, ext, thread);
         try
           {
             return progn(body, ext, thread);
@@ -495,10 +499,7 @@ public class Closure extends Function
       }
     else
       {
-        LispObject[] args = new LispObject[2];
-        args[0] = first;
-        args[1] = second;
-        return execute(args);
+        return invokeArrayExecute(first, second);
       }
   }
 
@@ -512,7 +513,7 @@ public class Closure extends Function
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
         bindRequiredParameters(ext, thread, first, second, third);
-        bindParameters(3, ext, thread);
+        bindParameters(minArgs, ext, thread);
         try
           {
             return progn(body, ext, thread);
@@ -524,11 +525,7 @@ public class Closure extends Function
       }
     else
       {
-        LispObject[] args = new LispObject[3];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        return execute(args);
+        return invokeArrayExecute(first, second, third);
       }
   }
 
@@ -542,7 +539,7 @@ public class Closure extends Function
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
         bindRequiredParameters(ext, thread, first, second, third, fourth);
-        bindParameters(4, ext, thread);        
+        bindParameters(minArgs, ext, thread);        
         try
           {
             return progn(body, ext, thread);
@@ -554,12 +551,7 @@ public class Closure extends Function
       }
     else
       {
-        LispObject[] args = new LispObject[4];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        args[3] = fourth;
-        return execute(args);
+        return invokeArrayExecute(first, second, third, fourth);
       }
   }
 
@@ -575,7 +567,7 @@ public class Closure extends Function
         Environment ext = new Environment(environment);
         bindRequiredParameters(ext, thread, first, second, third, fourth,
                                fifth);
-        bindParameters(5, ext, thread);
+        bindParameters(minArgs, ext, thread);
         try
           {
             return progn(body, ext, thread);
@@ -587,13 +579,7 @@ public class Closure extends Function
       }
     else
       {
-        LispObject[] args = new LispObject[5];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        args[3] = fourth;
-        args[4] = fifth;
-        return execute(args);
+        return invokeArrayExecute(first, second, third, fourth, fifth);
       }
   }
 
@@ -609,7 +595,7 @@ public class Closure extends Function
         Environment ext = new Environment(environment);
         bindRequiredParameters(ext, thread, first, second, third, fourth,
                                fifth, sixth);
-        bindParameters(6, ext, thread);
+        bindParameters(minArgs, ext, thread);
         try
           {
             return progn(body, ext, thread);
@@ -621,14 +607,8 @@ public class Closure extends Function
       }
     else
       {
-        LispObject[] args = new LispObject[6];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        args[3] = fourth;
-        args[4] = fifth;
-        args[5] = sixth;
-        return execute(args);
+        return invokeArrayExecute(first, second, third, fourth, fifth,
+                                  sixth);
       }
   }
 
@@ -645,7 +625,7 @@ public class Closure extends Function
         Environment ext = new Environment(environment);
         bindRequiredParameters(ext, thread, first, second, third, fourth,
                                fifth, sixth, seventh);
-        bindParameters(7, ext, thread);
+        bindParameters(minArgs, ext, thread);
         try
           {
             return progn(body, ext, thread);
@@ -657,15 +637,8 @@ public class Closure extends Function
       }
     else
       {
-        LispObject[] args = new LispObject[7];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        args[3] = fourth;
-        args[4] = fifth;
-        args[5] = sixth;
-        args[6] = seventh;
-        return execute(args);
+        return invokeArrayExecute(first, second, third, fourth, fifth,
+                                  sixth, seventh);
       }
   }
 
@@ -687,7 +660,7 @@ public class Closure extends Function
           }
         bindRequiredParameters(ext, thread, first, second, third, fourth,
                                fifth, sixth, seventh, eighth);
-        bindParameters(8, ext, thread);
+        bindParameters(minArgs, ext, thread);
         try
           {
             return progn(body, ext, thread);
@@ -699,16 +672,8 @@ public class Closure extends Function
       }
     else
       {
-        LispObject[] args = new LispObject[8];
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        args[3] = fourth;
-        args[4] = fifth;
-        args[5] = sixth;
-        args[6] = seventh;
-        args[7] = eighth;
-        return execute(args);
+        return invokeArrayExecute(first, second, third, fourth, fifth,
+                                  sixth, seventh, eighth);
       }
   }
 
