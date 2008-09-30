@@ -419,9 +419,10 @@ public class Closure extends Function
       return execute(new LispObject[0]);
   }
     
-  private final void bindParameters(int arityValue,
-                                     Environment ext,
-                                     LispThread thread)
+  private final LispObject bindParametersAndExecute(int arityValue,
+                                              Environment ext,
+                                              LispThread thread,
+                                              SpecialBinding lastSpecialBinding)
   throws ConditionThrowable
   {
     if (arity != arityValue)
@@ -435,6 +436,14 @@ public class Closure extends Function
       }
     if (auxVars != null)
       bindAuxVars(ext, thread);
+    try
+      {
+        return progn(body, ext, thread);
+      }
+    finally
+      {
+        thread.lastSpecialBinding = lastSpecialBinding;
+      }
   }
 
   private final void bindRequiredParameters(Environment ext,
@@ -462,15 +471,8 @@ public class Closure extends Function
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
         bindRequiredParameters(ext, thread, arg);
-        bindParameters(minArgs, ext, thread);
-        try
-          {
-            return progn(body, ext, thread);
-          }
-        finally
-          {
-            thread.lastSpecialBinding = lastSpecialBinding;
-          }
+        return bindParametersAndExecute(minArgs, ext, thread, 
+                                        lastSpecialBinding);
       }
     else
       {
@@ -487,15 +489,8 @@ public class Closure extends Function
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
         bindRequiredParameters(ext, thread, first, second);
-        bindParameters(minArgs, ext, thread);
-        try
-          {
-            return progn(body, ext, thread);
-          }
-        finally
-          {
-            thread.lastSpecialBinding = lastSpecialBinding;
-          }
+        return bindParametersAndExecute(minArgs, ext, thread, 
+                                        lastSpecialBinding);
       }
     else
       {
@@ -513,15 +508,8 @@ public class Closure extends Function
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
         bindRequiredParameters(ext, thread, first, second, third);
-        bindParameters(minArgs, ext, thread);
-        try
-          {
-            return progn(body, ext, thread);
-          }
-        finally
-          {
-            thread.lastSpecialBinding = lastSpecialBinding;
-          }
+        return bindParametersAndExecute(minArgs, ext, thread, 
+                                        lastSpecialBinding);
       }
     else
       {
@@ -539,15 +527,8 @@ public class Closure extends Function
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
         bindRequiredParameters(ext, thread, first, second, third, fourth);
-        bindParameters(minArgs, ext, thread);        
-        try
-          {
-            return progn(body, ext, thread);
-          }
-        finally
-          {
-            thread.lastSpecialBinding = lastSpecialBinding;
-          }
+        return bindParametersAndExecute(minArgs, ext, thread, 
+                                        lastSpecialBinding);
       }
     else
       {
@@ -567,15 +548,8 @@ public class Closure extends Function
         Environment ext = new Environment(environment);
         bindRequiredParameters(ext, thread, first, second, third, fourth,
                                fifth);
-        bindParameters(minArgs, ext, thread);
-        try
-          {
-            return progn(body, ext, thread);
-          }
-        finally
-          {
-            thread.lastSpecialBinding = lastSpecialBinding;
-          }
+        return bindParametersAndExecute(minArgs, ext, thread, 
+                                        lastSpecialBinding);
       }
     else
       {
@@ -595,15 +569,8 @@ public class Closure extends Function
         Environment ext = new Environment(environment);
         bindRequiredParameters(ext, thread, first, second, third, fourth,
                                fifth, sixth);
-        bindParameters(minArgs, ext, thread);
-        try
-          {
-            return progn(body, ext, thread);
-          }
-        finally
-          {
-            thread.lastSpecialBinding = lastSpecialBinding;
-          }
+        return bindParametersAndExecute(minArgs, ext, thread, 
+                                        lastSpecialBinding);
       }
     else
       {
@@ -625,15 +592,8 @@ public class Closure extends Function
         Environment ext = new Environment(environment);
         bindRequiredParameters(ext, thread, first, second, third, fourth,
                                fifth, sixth, seventh);
-        bindParameters(minArgs, ext, thread);
-        try
-          {
-            return progn(body, ext, thread);
-          }
-        finally
-          {
-            thread.lastSpecialBinding = lastSpecialBinding;
-          }
+        return bindParametersAndExecute(minArgs, ext, thread, 
+                                        lastSpecialBinding);
       }
     else
       {
@@ -660,15 +620,8 @@ public class Closure extends Function
           }
         bindRequiredParameters(ext, thread, first, second, third, fourth,
                                fifth, sixth, seventh, eighth);
-        bindParameters(minArgs, ext, thread);
-        try
-          {
-            return progn(body, ext, thread);
-          }
-        finally
-          {
-            thread.lastSpecialBinding = lastSpecialBinding;
-          }
+        return bindParametersAndExecute(minArgs, ext, thread, 
+                                        lastSpecialBinding);
       }
     else
       {
