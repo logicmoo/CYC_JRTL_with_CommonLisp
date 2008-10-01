@@ -297,18 +297,18 @@ public class Closure extends Function
     ArrayList<Symbol> vars = new ArrayList<Symbol>();
     if (requiredParameters != null)
       {
-        for (int i = 0; i < requiredParameters.length; i++)
-          vars.add(requiredParameters[i].var);
+        for (Parameter parameter : requiredParameters)
+          vars.add(parameter.var);
       }
     if (optionalParameters != null)
       {
-        for (int i = 0; i < optionalParameters.length; i++)
+        for (Parameter parameter : optionalParameters)
           {
-            vars.add(optionalParameters[i].var);
-            if (optionalParameters[i].svar != NIL)
-              vars.add((Symbol)optionalParameters[i].svar);
+            vars.add(parameter.var);
+            if (parameter.svar != NIL)
+              vars.add((Symbol)parameter.svar);
             if (!bindInitForms)
-              if (!optionalParameters[i].initForm.constantp())
+              if (!parameter.initForm.constantp())
                 bindInitForms = true;
           }
       }
@@ -318,13 +318,13 @@ public class Closure extends Function
       }
     if (keywordParameters != null)
       {
-        for (int i = 0; i < keywordParameters.length; i++)
+        for (Parameter parameter : keywordParameters)
           {
-            vars.add(keywordParameters[i].var);
-            if (keywordParameters[i].svar != NIL)
-              vars.add((Symbol)keywordParameters[i].svar);
+            vars.add(parameter.var);
+            if (parameter.svar != NIL)
+              vars.add((Symbol)parameter.svar);
             if (!bindInitForms)
-              if (!keywordParameters[i].initForm.constantp())
+              if (!parameter.initForm.constantp())
                 bindInitForms = true;
           }
       }
@@ -615,8 +615,8 @@ public class Closure extends Function
         Environment ext = new Environment(environment);
         if (specials != null)
           {
-            for (int i = 0; i < specials.length; i++)
-              ext.declareSpecial(specials[i]);
+            for (Symbol special : specials)
+              ext.declareSpecial(special);
           }
         bindRequiredParameters(ext, thread, first, second, third, fourth,
                                fifth, sixth, seventh, eighth);
@@ -653,17 +653,17 @@ public class Closure extends Function
       bindAuxVars(ext, thread);
     if (specials != null) {
       special:
-        for (int i = 0; i < specials.length; i++) {
-            for (int j = 0; j < variables.length; j++)
-                if (specials[i] == variables[j])
+        for (Symbol special : specials) {
+            for (Symbol var : variables)
+                if (special == var)
                     continue special;
 
             if (auxVars != null)
-                for (int j = 0; j < auxVars.length; j++)
-                    if (specials[i] == auxVars[j].var)
+                for (Parameter parameter : auxVars)
+                    if (special == parameter.var)
                         continue special;
 
-            ext.declareSpecial(specials[i]);
+            ext.declareSpecial(special);
         }
     }
     try
@@ -682,9 +682,9 @@ public class Closure extends Function
       return true;
     if (specials != null)
       {
-        for (int i = specials.length; i-- > 0;)
+        for (Symbol special : specials)
           {
-            if (sym == specials[i])
+            if (sym == special)
               return true;
           }
       }
@@ -815,9 +815,8 @@ public class Closure extends Function
             if ((argsLeft % 2) != 0)
               error(new ProgramError("Odd number of keyword arguments."));
             LispObject allowOtherKeysValue = null;
-            for (int k = 0; k < keywordParameters.length; k++)
+            for (Parameter parameter : keywordParameters)
               {
-                Parameter parameter = keywordParameters[k];
                 Symbol keyword = parameter.keyword;
                 LispObject value = null;
                 boolean unbound = true;
@@ -884,9 +883,9 @@ public class Closure extends Function
                           }
                         // Unused keyword argument.
                         boolean ok = false;
-                        for (int k = keywordParameters.length; k-- > 0;)
+                        for (Parameter parameter : keywordParameters)
                           {
-                            if (keywordParameters[k].keyword == keyword)
+                            if (parameter.keyword == keyword)
                               {
                                 // Found it!
                                 ok = true;
@@ -1041,9 +1040,8 @@ public class Closure extends Function
                                                    LispThread thread)
     throws ConditionThrowable
   {
-    for (int i = 0; i < optionalParameters.length; i++)
+    for (Parameter parameter : optionalParameters)
       {
-        Parameter parameter = optionalParameters[i];
         LispObject value;
         if (parameter.initVal != null)
           value = parameter.initVal;
@@ -1059,9 +1057,8 @@ public class Closure extends Function
                                                   LispThread thread)
     throws ConditionThrowable
   {
-    for (int i = 0; i < keywordParameters.length; i++)
+    for (Parameter parameter : keywordParameters)
       {
-        Parameter parameter = keywordParameters[i];
         LispObject value;
         if (parameter.initVal != null)
           value = parameter.initVal;
@@ -1089,9 +1086,8 @@ public class Closure extends Function
     throws ConditionThrowable
   {
     // Aux variable processing is analogous to LET* processing.
-    for (int i = 0; i < auxVars.length; i++)
+    for (Parameter parameter : auxVars)
       {
-        Parameter parameter = auxVars[i];
         Symbol sym = parameter.var;
         LispObject value;
 
