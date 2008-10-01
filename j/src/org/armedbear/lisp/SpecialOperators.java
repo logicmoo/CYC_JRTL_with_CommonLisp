@@ -281,13 +281,7 @@ public final class SpecialOperators extends Lisp
         final LispThread thread = LispThread.currentThread();
         final Environment ext = new Environment(env);
         args = ext.processDeclarations(args);
-        LispObject result = NIL;
-        while (args != NIL)
-          {
-            result = eval(args.car(), ext, thread);
-            args = args.cdr();
-          }
-        return result;
+        return progn(args, ext, thread);
       }
     };
 
@@ -299,13 +293,7 @@ public final class SpecialOperators extends Lisp
         throws ConditionThrowable
       {
         LispThread thread = LispThread.currentThread();
-        LispObject result = NIL;
-        while (args != NIL)
-          {
-            result = eval(args.car(), env, thread);
-            args = ((Cons)args).cdr;
-          }
-        return result;
+        return progn(args, env, thread);
       }
     };
 
