@@ -291,6 +291,23 @@ public class Closure extends Function
     specials = processDeclarations();
   }
 
+  private final void processParameters(ArrayList<Symbol> vars,
+				  final Parameter[] parameters)
+  {
+    if (parameters != null)
+      {
+        for (Parameter parameter : parameters)
+          {
+            vars.add(parameter.var);
+            if (parameter.svar != NIL)
+              vars.add((Symbol)parameter.svar);
+            if (!bindInitForms)
+              if (!parameter.initForm.constantp())
+                bindInitForms = true;
+          }
+      }
+  }
+
   // Also sets bindInitForms.
   private final Symbol[] processVariables()
   {
@@ -300,34 +317,12 @@ public class Closure extends Function
         for (Parameter parameter : requiredParameters)
           vars.add(parameter.var);
       }
-    if (optionalParameters != null)
-      {
-        for (Parameter parameter : optionalParameters)
-          {
-            vars.add(parameter.var);
-            if (parameter.svar != NIL)
-              vars.add((Symbol)parameter.svar);
-            if (!bindInitForms)
-              if (!parameter.initForm.constantp())
-                bindInitForms = true;
-          }
-      }
+    processParameters(vars, optionalParameters);
     if (restVar != null)
       {
         vars.add(restVar);
       }
-    if (keywordParameters != null)
-      {
-        for (Parameter parameter : keywordParameters)
-          {
-            vars.add(parameter.var);
-            if (parameter.svar != NIL)
-              vars.add((Symbol)parameter.svar);
-            if (!bindInitForms)
-              if (!parameter.initForm.constantp())
-                bindInitForms = true;
-          }
-      }
+    processParameters(vars, keywordParameters);
     Symbol[] array = new Symbol[vars.size()];
     vars.toArray(array);
     return array;
