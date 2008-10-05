@@ -679,14 +679,8 @@ public final class Primitives extends Lisp
         if (eval(args.car(), env, thread) != NIL)
           {
             args = args.cdr();
-            LispObject result = NIL;
             thread.clearValues();
-            while (args != NIL)
-              {
-                result = eval(args.car(), env, thread);
-                args = args.cdr();
-              }
-            return result;
+            return progn(args, env, thread);
           }
         return thread.setValues(NIL);
       }
@@ -705,14 +699,8 @@ public final class Primitives extends Lisp
         if (eval(args.car(), env, thread) == NIL)
           {
             args = args.cdr();
-            LispObject result = NIL;
             thread.clearValues();
-            while (args != NIL)
-              {
-                result = eval(args.car(), env, thread);
-                args = args.cdr();
-              }
-            return result;
+            return progn(args, env, thread);
           }
         return thread.setValues(NIL);
       }
@@ -3669,12 +3657,7 @@ public final class Primitives extends Lisp
         final LispObject stack = thread.getStack();
         try
           {
-            while (body != NIL)
-              {
-                result = eval(body.car(), ext, thread);
-                body = ((Cons)body).cdr;
-              }
-            return result;
+            return progn(body, ext, thread);
           }
         catch (Return ret)
           {
@@ -3741,12 +3724,7 @@ public final class Primitives extends Lisp
         final LispObject stack = thread.getStack();
         try
           {
-            while (body != NIL)
-              {
-                result = eval(body.car(), env, thread);
-                body = body.cdr();
-              }
-            return result;
+            return progn(body, env, thread);
           }
         catch (Throw t)
           {
@@ -3932,11 +3910,7 @@ public final class Primitives extends Lisp
         LispObject result = NIL;
         try
           {
-            while (body != NIL)
-              {
-                result = eval(body.car(), ext, thread);
-                body = ((Cons)body).cdr;
-              }
+            result  = progn(body, ext, thread);
           }
         finally
           {
