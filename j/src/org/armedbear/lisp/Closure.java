@@ -40,10 +40,15 @@ public class Closure extends Function
   private static final int STATE_REST     = 3;
   private static final int STATE_AUX      = 4;
 
-  private final Parameter[] requiredParameters;
-  private final Parameter[] optionalParameters;
-  private final Parameter[] keywordParameters;
-  private final Parameter[] auxVars;
+  private static final Parameter[] emptyParameterArray;
+  static 
+    {
+        emptyParameterArray = new Parameter[0];
+    }
+  private Parameter[] requiredParameters = emptyParameterArray;
+  private Parameter[] optionalParameters = emptyParameterArray;
+  private Parameter[] keywordParameters = emptyParameterArray;
+  private Parameter[] auxVars = emptyParameterArray;
   private final LispObject body;
   private final Environment environment;
   private final boolean andKey;
@@ -55,8 +60,13 @@ public class Closure extends Function
   private int minArgs;
   private int maxArgs;
 
-  private final Symbol[] variables;
-  private final Symbol[] specials;
+  private static final Symbol[] emptySymbolArray;
+  static 
+    {
+        emptySymbolArray = new Symbol[0];
+    }
+  private Symbol[] variables = emptySymbolArray;
+  private Symbol[] specials = emptySymbolArray;
 
   private boolean bindInitForms;
 
@@ -245,46 +255,34 @@ public class Closure extends Function
             requiredParameters = new Parameter[required.size()];
             required.toArray(requiredParameters);
           }
-        else
-          requiredParameters = null;
         if (optional != null)
           {
             optionalParameters = new Parameter[optional.size()];
             optional.toArray(optionalParameters);
           }
-        else
-          optionalParameters = null;
         if (keywords != null)
           {
             keywordParameters = new Parameter[keywords.size()];
             keywords.toArray(keywordParameters);
           }
-        else
-          keywordParameters = null;
         if (aux != null)
           {
             auxVars = new Parameter[aux.size()];
             aux.toArray(auxVars);
           }
-        else
-          auxVars = null;
       }
     else
       {
         // Lambda list is empty.
         Debug.assertTrue(lambdaList == NIL);
-        requiredParameters = null;
-        optionalParameters = null;
-        keywordParameters = null;
-        auxVars = null;
         arity = 0;
-        minArgs = maxArgs = 0;
+        maxArgs = 0;
       }
     this.body = lambdaExpression.cddr();
     this.environment = env;
     this.andKey = _andKey;
     this.allowOtherKeys = _allowOtherKeys;
-    minArgs = requiredParameters != null ? requiredParameters.length : 0;
+    minArgs = requiredParameters.length;
     if (arity >= 0)
       Debug.assertTrue(arity == minArgs);
     variables = processVariables();
@@ -292,19 +290,16 @@ public class Closure extends Function
   }
 
   private final void processParameters(ArrayList<Symbol> vars,
-				  final Parameter[] parameters)
+                                       final Parameter[] parameters)
   {
-    if (parameters != null)
+    for (Parameter parameter : parameters)
       {
-        for (Parameter parameter : parameters)
-          {
-            vars.add(parameter.var);
-            if (parameter.svar != NIL)
-              vars.add((Symbol)parameter.svar);
-            if (!bindInitForms)
-              if (!parameter.initForm.constantp())
-                bindInitForms = true;
-          }
+        vars.add(parameter.var);
+        if (parameter.svar != NIL)
+          vars.add((Symbol)parameter.svar);
+        if (!bindInitForms)
+          if (!parameter.initForm.constantp())
+            bindInitForms = true;
       }
   }
 
@@ -312,11 +307,8 @@ public class Closure extends Function
   private final Symbol[] processVariables()
   {
     ArrayList<Symbol> vars = new ArrayList<Symbol>();
-    if (requiredParameters != null)
-      {
-        for (Parameter parameter : requiredParameters)
-          vars.add(parameter.var);
-      }
+    for (Parameter parameter : requiredParameters)
+      vars.add(parameter.var);
     processParameters(vars, optionalParameters);
     if (restVar != null)
       {
@@ -361,7 +353,7 @@ public class Closure extends Function
           break;
       }
     if (arrayList == null)
-      return null;
+      return emptySymbolArray;
     Symbol[] array = new Symbol[arrayList.size()];
     arrayList.toArray(array);
     return array;
@@ -384,11 +376,8 @@ public class Closure extends Function
   public final LispObject getVariableList()
   {
     LispObject result = NIL;
-    if (variables != null)
-      {
-        for (int i = variables.length; i-- > 0;)
-          result = new Cons(variables[i], result);
-      }
+    for (int i = variables.length; i-- > 0;)
+      result = new Cons(variables[i], result);
     return result;
   }
 
@@ -422,15 +411,14 @@ public class Closure extends Function
   {
     if (arity != arityValue)
       {
-        if (optionalParameters != null)
+        if (optionalParameters.length > 0)
           bindOptionalParameterDefaults(ext, thread);
         if (restVar != null)
           bindArg(restVar, NIL, ext, thread);
-        if (keywordParameters != null)
+        if (keywordParameters.length > 0)
           bindKeywordParameterDefaults(ext, thread);
       }
-    if (auxVars != null)
-      bindAuxVars(ext, thread);
+    bindAuxVars(ext, thread);
     try
       {
         return progn(body, ext, thread);
@@ -608,11 +596,8 @@ public class Closure extends Function
         final LispThread thread = LispThread.currentThread();
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
-        if (specials != null)
-          {
-            for (Symbol special : specials)
-              ext.declareSpecial(special);
-          }
+        for (Symbol special : specials)
+          ext.declareSpecial(special);
         bindRequiredParameters(ext, thread, first, second, third, fourth,
                                fifth, sixth, seventh, eighth);
         return bindParametersAndExecute(minArgs, ext, thread, 
@@ -630,36 +615,30 @@ public class Closure extends Function
     final LispThread thread = LispThread.currentThread();
     SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
     Environment ext = new Environment(environment);
-    if (optionalParameters == null && keywordParameters == null)
+    if (optionalParameters.length == 0 && keywordParameters.length == 0)
       args = fastProcessArgs(args);
     else
       args = processArgs(args, thread);
     Debug.assertTrue(args.length == variables.length);
     if (envVar != null)
       {
-          bindArg(envVar, environment, ext, thread);
+        bindArg(envVar, environment, ext, thread);
       }
     for (int i = 0; i < variables.length; i++)
       {
         Symbol sym = variables[i];
         bindArg(sym, args[i], ext, thread);
       }
-    if (auxVars != null)
-      bindAuxVars(ext, thread);
-    if (specials != null) {
-      special:
-        for (Symbol special : specials) {
-            for (Symbol var : variables)
-                if (special == var)
-                    continue special;
-
-            if (auxVars != null)
-                for (Parameter parameter : auxVars)
-                    if (special == parameter.var)
-                        continue special;
-
-            ext.declareSpecial(special);
-        }
+    bindAuxVars(ext, thread);
+    special:
+    for (Symbol special : specials) {
+      for (Symbol var : variables)
+        if (special == var)
+          continue special;
+      for (Parameter parameter : auxVars)
+        if (special == parameter.var)
+          continue special;
+      ext.declareSpecial(special);
     }
     try
       {
@@ -689,7 +668,7 @@ public class Closure extends Function
   protected final LispObject[] processArgs(LispObject[] args, LispThread thread)
     throws ConditionThrowable
   {
-    if (optionalParameters == null && keywordParameters == null)
+    if (optionalParameters.length == 0 && keywordParameters.length == 0)
       return fastProcessArgs(args);
     final int argsLength = args.length;
     if (arity >= 0)
@@ -717,56 +696,49 @@ public class Closure extends Function
       if (envVar != null)
           bindArg(envVar, environment, ext, thread);
     // Required parameters.
-    if (requiredParameters != null)
+    for (int i = 0; i < minArgs; i++)
       {
-        for (int i = 0; i < minArgs; i++)
-          {
-            if (bindInitForms)
-                bindArg(requiredParameters[i].var, args[i], ext, thread);
-            array[index++] = args[i];
-          }
+        if (bindInitForms)
+          bindArg(requiredParameters[i].var, args[i], ext, thread);
+        array[index++] = args[i];
       }
     int i = minArgs;
     int argsUsed = minArgs;
     // Optional parameters.
-    if (optionalParameters != null)
+    for (Parameter parameter : optionalParameters)
       {
-        for (int j = 0; j < optionalParameters.length; j++)
+        if (i < argsLength)
           {
-            Parameter parameter = optionalParameters[j];
-            if (i < argsLength)
+            if (bindInitForms)
+              bindArg(parameter.var, args[i], ext, thread);
+            array[index++] = args[i];
+            ++argsUsed;
+            if (parameter.svar != NIL)
               {
                 if (bindInitForms)
-                    bindArg(parameter.var, args[i], ext, thread);
-                array[index++] = args[i];
-                ++argsUsed;
-                if (parameter.svar != NIL)
-                  {
-                    if (bindInitForms)
-                        bindArg((Symbol)parameter.svar, T, ext, thread);
-                    array[index++] = T;
-                  }
+                  bindArg((Symbol)parameter.svar, T, ext, thread);
+                array[index++] = T;
               }
-            else
-              {
-                // We've run out of arguments.
-                LispObject value;
-                if (parameter.initVal != null)
-                  value = parameter.initVal;
-                else
-                  value = eval(parameter.initForm, ext, thread);
-                if (bindInitForms)
-                    bindArg(parameter.var, value, ext, thread);
-                array[index++] = value;
-                if (parameter.svar != NIL)
-                  {
-                    if (bindInitForms)
-                        bindArg((Symbol)parameter.svar, NIL, ext, thread);
-                    array[index++] = NIL;
-                  }
-              }
-            ++i;
           }
+        else
+          {
+            // We've run out of arguments.
+            LispObject value;
+            if (parameter.initVal != null)
+              value = parameter.initVal;
+            else
+              value = eval(parameter.initForm, ext, thread);
+            if (bindInitForms)
+              bindArg(parameter.var, value, ext, thread);
+            array[index++] = value;
+            if (parameter.svar != NIL)
+              {
+                if (bindInitForms)
+                  bindArg((Symbol)parameter.svar, NIL, ext, thread);
+                array[index++] = NIL;
+              }
+          }
+        ++i;
       }
     // &rest parameter.
     if (restVar != null)
@@ -779,7 +751,7 @@ public class Closure extends Function
         array[index++] = rest;
       }
     // Keyword parameters.
-    if (keywordParameters != null)
+    if (keywordParameters.length > 0)
       {
         int argsLeft = argsLength - argsUsed;
         if (argsLeft == 0)
@@ -969,12 +941,9 @@ public class Closure extends Function
     final LispObject[] array = new LispObject[variables.length];
     int index = 0;
     // Required parameters.
-    if (requiredParameters != null)
+    for (int i = 0; i < minArgs; i++)
       {
-        for (int i = 0; i < minArgs; i++)
-          {
-            array[index++] = args[i];
-          }
+        array[index++] = args[i];
       }
     int argsUsed = minArgs;
     // &rest parameter.
