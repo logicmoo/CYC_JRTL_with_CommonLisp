@@ -411,12 +411,10 @@ public class Closure extends Function
   {
     if (arity != arityValue)
       {
-        if (optionalParameters.length > 0)
-          bindOptionalParameterDefaults(ext, thread);
+        bindParameterDefaults(optionalParameters, ext, thread);
         if (restVar != null)
           bindArg(restVar, NIL, ext, thread);
-        if (keywordParameters.length > 0)
-          bindKeywordParameterDefaults(ext, thread);
+        bindParameterDefaults(keywordParameters, ext, thread);
       }
     bindAuxVars(ext, thread);
     try
@@ -654,13 +652,10 @@ public class Closure extends Function
   {
     if (sym.isSpecialVariable())
       return true;
-    if (specials != null)
+    for (Symbol special : specials)
       {
-        for (Symbol special : specials)
-          {
-            if (sym == special)
-              return true;
-          }
+        if (sym == special)
+            return true;
       }
     return false;
   }
@@ -681,8 +676,6 @@ public class Closure extends Function
     // Not fixed arity.
     if (argsLength < minArgs)
       error(new WrongNumberOfArgumentsException(this));
-    if (thread == null)
-      thread = LispThread.currentThread();
     final LispObject[] array = new LispObject[variables.length];
     int index = 0;
     // The bindings established here (if any) are lost when this function
@@ -1000,28 +993,12 @@ public class Closure extends Function
     return array;
   }
 
-  private final void bindOptionalParameterDefaults(Environment env,
-                                                   LispThread thread)
+  private final void bindParameterDefaults(Parameter[] parameters,
+                                           Environment env,
+                                           LispThread thread)
     throws ConditionThrowable
   {
-    for (Parameter parameter : optionalParameters)
-      {
-        LispObject value;
-        if (parameter.initVal != null)
-          value = parameter.initVal;
-        else
-          value = eval(parameter.initForm, env, thread);
-        bindArg(parameter.var, value, env, thread);
-        if (parameter.svar != NIL)
-            bindArg((Symbol)parameter.svar, NIL, env, thread);
-      }
-  }
-
-  private final void bindKeywordParameterDefaults(Environment env,
-                                                  LispThread thread)
-    throws ConditionThrowable
-  {
-    for (Parameter parameter : keywordParameters)
+    for (Parameter parameter : parameters)
       {
         LispObject value;
         if (parameter.initVal != null)
