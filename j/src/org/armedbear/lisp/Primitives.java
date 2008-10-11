@@ -1396,66 +1396,16 @@ public final class Primitives extends Lisp
     {
       public LispObject execute(LispObject[] args) throws ConditionThrowable
       {
-        if (args.length < 1)
-          {
-            return error(new WrongNumberOfArgumentsException(this));
-          }
-        LispObject datum = args[0];
-        if (datum instanceof Condition)
-          {
-            error((Condition)datum);
-            return NIL;
-          }
-        if (datum instanceof Symbol)
-          {
-            LispObject initArgs = NIL;
-            for (int i = 1; i < args.length; i++)
-              initArgs = new Cons(args[i], initArgs);
-            initArgs = initArgs.nreverse();
-            Condition condition;
-            if (datum == Symbol.FILE_ERROR)
-              condition = new FileError(initArgs);
-            else if (datum == Symbol.PACKAGE_ERROR)
-              condition = new PackageError(initArgs);
-            else if (datum == Symbol.PARSE_ERROR)
-              condition = new ParseError(initArgs);
-            else if (datum == Symbol.PRINT_NOT_READABLE)
-              condition = new PrintNotReadable(initArgs);
-            else if (datum == Symbol.PROGRAM_ERROR)
-              condition = new ProgramError(initArgs);
-            else if (datum == Symbol.READER_ERROR)
-              condition = new ReaderError(initArgs);
-            else if (datum == Symbol.SIMPLE_CONDITION)
-              condition = new SimpleCondition(initArgs);
-            else if (datum == Symbol.SIMPLE_WARNING)
-              condition = new SimpleWarning(initArgs);
-            else if (datum == Symbol.UNBOUND_SLOT)
-              condition = new UnboundSlot(initArgs);
-            else if (datum == Symbol.WARNING)
-              condition = new Warning(initArgs);
-            else if (datum == Symbol.SIMPLE_ERROR)
-              condition = new SimpleError(initArgs);
-            else if (datum == Symbol.SIMPLE_TYPE_ERROR)
-              condition = new SimpleTypeError(initArgs);
-            else if (datum == Symbol.CONTROL_ERROR)
-              condition = new ControlError(initArgs);
-            else if (datum == Symbol.TYPE_ERROR)
-              condition = new TypeError(initArgs);
-            else if (datum == Symbol.UNDEFINED_FUNCTION)
-              condition = new UndefinedFunction(initArgs);
-            else
-              // Default.
-              condition = new  SimpleError(initArgs);
-            error(condition);
-            return NIL;
-          }
-        // Default is SIMPLE-ERROR.
-        LispObject formatControl = args[0];
-        LispObject formatArguments = NIL;
-        for (int i = 1; i < args.length; i++)
-          formatArguments = new Cons(args[i], formatArguments);
-        formatArguments = formatArguments.nreverse();
-        error(new SimpleError(formatControl, formatArguments));
+        Error e = new Error();
+
+        e.printStackTrace();
+
+        System.out.println("ERROR placeholder called with arguments:");
+        for (LispObject a : args)
+            System.out.println(a.writeToString());
+
+        //###FIXME: Bail out, but do it nicer...
+        System.exit(1);
         return NIL;
       }
     };
