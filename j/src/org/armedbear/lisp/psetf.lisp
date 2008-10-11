@@ -36,7 +36,7 @@
                       :format-control "Odd number of arguments to PSETF."))
              (multiple-value-bind
                (dummies vals newval setter getter)
-               (get-setf-expansion (car a) env)
+               (get-setf-expansion (macroexpand-1 (car a) env) env)
                (declare (ignore getter))
                (let*-bindings (mapcar #'list dummies vals))
                (mv-bindings (list newval (cadr a)))
