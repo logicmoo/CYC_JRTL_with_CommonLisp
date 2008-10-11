@@ -67,29 +67,21 @@
       <antcall target="abcl.stamp.hostname"/>
     </target>
 
-    <target name="j.stamp" depends="j.compile">
+    <target name="j.stamp" depends="abcl.stamp,j.compile">
       <echo message="${build}" file="${j.build.path}"/>    
     </target>
 
     <target name="abcl.stamp.version">
-<!-- XXX Not working, so use grep instead.  
       <java fork="true"
 	    classpath="${build.classes.dir}"
 	    outputproperty="abcl.version"
 	    classname="org.armedbear.lisp.Main">
-	<arg value="- -noinit"/>
-	<arg value="- -eval"/>
-	<arg value="(lisp-implementation-version)"/>
+	<arg value="--noinit"/>
+	<arg value="--noinform"/>
+	<arg value="--eval"/>
+	<arg value="(progn (format t (lisp-implementation-version)) (finish-output) (quit))"/>
       </java>
--->
-      <exec executable="grep" 
-	    outputproperty="abcl.version">
-	<arg value="--only-matching"/>
- 	<arg value="--max-count"/><arg value="1"/> 
-	<arg value="--regexp"/>
-	<arg value="\([0-9]\+\.\)\+[0-9]"/>
-	<arg value="${src.dir}/org/armedbear/lisp/Version.java"/>
-      </exec>
+
       <echo>Building ABCL version: ${abcl.version}</echo>
       <mkdir dir="${abcl.version.path}/.."/>
       <echo message="${abcl.version}" file="${abcl.version.path}"/> 
@@ -114,7 +106,6 @@
     <patternset id="abcl.source.lisp">
       <include name="org/armedbear/lisp/*.lisp"/>
       <include name="org/armedbear/lisp/tests/*.lisp"/>
-<!--      <include name="org/armedbear/lisp/awt/*.lisp"/> -->
     </patternset>
 
     <!-- Lisp files required at runtime -->
@@ -176,6 +167,8 @@
       <echo>Compiled ABCL with java version: ${java.version}</echo>
     </target>
 
+    <target name="j.pre-compile" depends="abcl.pre-compile"/>
+
     <target name="abcl.pre-compile">
       <!--- antversion fails in ant 1.7.1 <antversion property="ant.version" 
 	                                              atleast="1.7"/> -->
@@ -184,10 +177,9 @@
 
       <property name="j.compile.version.path"
 		value="${build.classes.dir}/org/armedbear/j/version"/>
-      <exec executable="which" 
-	    outputproperty="java.pathname">
-	<arg value="java"/>
-      </exec>
+
+      <property name="java.path"
+		value="${java.home}/bin/java"/>
 
       <exec executable="hostname" os="unix" 
 	    outputproperty="abcl.compile.hostname"/>
@@ -224,7 +216,7 @@
 	    file="${build.classes.dir}/org/armedbear/lisp/build"/>
     </target>
 
-    <target name="j.compile" depends="abcl.compile">
+    <target name="j.compile" depends="j.pre-compile">
       <javac destdir="${build.classes.dir}"
 	     debug="true"
 	     target="1.5">
@@ -335,15 +327,17 @@
 	<pathelement location="${abcl.jar.path}"/>
 	<pathelement path="${additional.jars}"/>
       </path>
-	  
+      <!-- set via '-Djava.options=JAVA_OPTIONS' or in 'build.properties -->
+      <property name="java.options" value=""/>
+
       <copy file="abcl.in" toFile="${abcl.wrapper.file}" overwrite="yes">
 	<filterset>
 	  <filter token="JAVA" 
-		  value="${java.pathname}"/>
+		  value="${java.path}"/>
 	  <filter token="ABCL_JAVA_OPTIONS" 
-		  value= ""/>
+		  value= "${java.options}"/>
 	  <filter token="ABCL_LIBPATH" 
-		  value="${basedir}/dist/libabcl.so"/>
+		  value="${basedir}/src/org/armedbear/lisp/libabcl.so"/>
 	  <filter token="ABCL_CLASSPATH" 
 		  value="${toString:abcl.runtime.classpath}"/>
 	</filterset>
@@ -360,7 +354,7 @@
       <property name="abcl.wrapper.file" value="abcl.bat"/>
     </target>
 
-    <target name="j.jar" depends="j.compile">
+    <target name="j.jar" depends="j.compile,j.stamp">
       <copy todir="${build.classes.dir}">
 	<fileset dir="${basedir}/src">
 	  <patternset refid="j.objects"/>
@@ -417,49 +411,65 @@
     </target>
 
     <target name="j.jpty" depends="j.jpty.compile"/>
-    <target name="j.jpty.compile">
+
+    <target name="j.jpty.compile" if="unix">
       <exec executable="gcc" dir="${src.dir}/jpty">
 	<arg line="-Wall -O2 jpty.c -o jpty"/>
       </exec>
     </target>
 
-    <target name="j.install" depends="j.install.unix, j.install.windows"/>
+    <target name="j.install" depends="j.jar,j.install.unix,j.install.windows">
+      <property name="j.install.data.dir" value="${j.install.root}/share"/>
+      <property name="j.install.bin.dir" value="${j.install.root}/bin"/>
 
-    <target name="install.unix" depends="j.jar,j.jpty" if="unix">
-      <property name="j.install.root" value="/usr/local"/>
-      <property name="j.install.data.path" value="${j.install.root}/share"/>
-      <property name="j.install.bin.path" value="${j.install.root}/bin"/>
-
-      <mkdir dir="${j.install.data.path}/j"/>
-      <copy file="${dist}/j.jar" todir="${j.install.data.path}/j"/>
-      <copy file="j.in" toFile="${j.install.bin.path}/j">
+      <mkdir dir="${j.install.data.dir}/j"/>
+      <copy file="${dist.dir}/j.jar" todir="${j.install.data.dir}/j"/>
+      <!-- set via '-Djava.options=JAVA_OPTIONS' or in 'build.properties -->
+      <property name="java.options" value=""/>
+      <copy file="${j.wrapper.file}.in" toFile="${j.install.bin.dir}/${j.wrapper.file}">
 	<filterset>
-	  <filter token="ABCL_CLASSPATH"
-		  value="${j.install.data.path}/j/j.jar"/>
+	  <filter token="JAVA" 
+		  value="${java.path}"/>
+	  <filter token="JAVA_OPTIONS" 
+		  value="${java.options}"/>
+	  <filter token="CLASSPATH"
+		  value="${j.install.data.dir}/j/j.jar"/>
 	</filterset>
       </copy>
-      <chmod file="${j.install.bin.path}/j" perm="ugo+rx"/>
+      <chmod file="${j.install.bin.dir}/j" perm="ugo+rx"/>
 
       <property name="j.install.themes.path"
-		value="${j.install.data.path}/j/themes"/>
-      <mkdir dir="${j.install.themes.path}"/>
-      <copy todir="{j.install.themes.path}">
+		value="${j.install.data.dir}/j/themes"/>
+      <mkdir dir="${j.install.themes.dir}"/>
+      <copy todir="{j.install.themes.dir}">
 	<fileset dir="${basedir}/themes"/>
       </copy>
 
       <property name="j.install.doc.path"
-		value="${j.install.data.path}/doc/j"/>
-      <mkdir dir="${j.install.doc.path}" />
+		value="${j.install.data.dir}/doc/j"/>
+      <mkdir dir="${j.install.doc.dir}" />
 
-      <copy file="${basedir}/jpty/jpty" todir="${bindir}"/>
-      <chmod file="${bindir}/jpty" perm="ugo+rx"/>
-      <copy todir="${datadir}/doc/j">
-	<fileset dir="${topdir}/doc"/>
+      <copy file="${basedir}/src/jpty/jpty" 
+            todir="${j.install.bin.dir}"
+	    failonerror="false"/>
+      <chmod file="${j.install.bin.dir}/jpty" perm="ugo+rx"/>
+      <copy todir="${j.install.data.dir}/doc/j">
+	<fileset dir="${basedir}/doc"/>
       </copy>
     </target>
 
-    <!-- Additional files to include in the source distributions relative to basedir -->
-    <patternset id="abcl.source.misc">
+    <target name="j.install.unix" depends="j.jpty" if="unix">
+      <property name="j.install.root" value="/usr/local"/>
+      <property name="j.wrapper.file" value="j"/>
+    </target>
+
+    <target name="j.install.windows" depends="j.jpty" if="windows">
+      <property name="j.install.root" value="c:/j"/>
+      <property name="j.wrapper.file" value="j.bat"/>
+    </target>
+
+    <patternset id="abcl.source.misc"
+		description="Additional includes in the source distributions relative to basedir">
       <include name="build.xml"/>
       <include name="build.properties.in"/>
       <include name="COPYING"/>
@@ -510,7 +520,7 @@
     </target>
 
     <import file="netbeans-build.xml" optional="true"/> 
-    <import file="j-build.xml" optional="true"/> 
+<!--    <import file="j-build.xml" optional="true"/>  -->
     <import file="not.org-build.xml" optional="true"/> 
 </project>
 
