@@ -432,6 +432,9 @@ public class Closure extends Function
                                             LispObject... objects)
   throws ConditionThrowable
   {
+    // &whole and &environment before anything
+    if (envVar != null)
+      bindArg(envVar, environment, ext, thread);
     for (int i = 0; i < objects.length; ++i)
       {
         bindArg(requiredParameters[i].var, objects[i], ext, thread);
