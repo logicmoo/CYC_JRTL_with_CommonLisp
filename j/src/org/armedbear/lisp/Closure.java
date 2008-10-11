@@ -403,13 +403,13 @@ public class Closure extends Function
       return execute(new LispObject[0]);
   }
     
-  private final LispObject bindParametersAndExecute(int arityValue,
+  private final LispObject bindParametersAndExecute(
                                               Environment ext,
                                               LispThread thread,
                                               SpecialBinding lastSpecialBinding)
   throws ConditionThrowable
   {
-    if (arity != arityValue)
+    if (arity != minArgs)
       {
         bindParameterDefaults(optionalParameters, ext, thread);
         if (restVar != null)
@@ -455,7 +455,7 @@ public class Closure extends Function
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
         bindRequiredParameters(ext, thread, arg);
-        return bindParametersAndExecute(minArgs, ext, thread, 
+        return bindParametersAndExecute(ext, thread, 
                                         lastSpecialBinding);
       }
     else
@@ -473,7 +473,7 @@ public class Closure extends Function
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
         bindRequiredParameters(ext, thread, first, second);
-        return bindParametersAndExecute(minArgs, ext, thread, 
+        return bindParametersAndExecute(ext, thread, 
                                         lastSpecialBinding);
       }
     else
@@ -492,7 +492,7 @@ public class Closure extends Function
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
         bindRequiredParameters(ext, thread, first, second, third);
-        return bindParametersAndExecute(minArgs, ext, thread, 
+        return bindParametersAndExecute(ext, thread, 
                                         lastSpecialBinding);
       }
     else
@@ -511,7 +511,7 @@ public class Closure extends Function
         SpecialBinding lastSpecialBinding = thread.lastSpecialBinding;
         Environment ext = new Environment(environment);
         bindRequiredParameters(ext, thread, first, second, third, fourth);
-        return bindParametersAndExecute(minArgs, ext, thread, 
+        return bindParametersAndExecute(ext, thread, 
                                         lastSpecialBinding);
       }
     else
@@ -532,7 +532,7 @@ public class Closure extends Function
         Environment ext = new Environment(environment);
         bindRequiredParameters(ext, thread, first, second, third, fourth,
                                fifth);
-        return bindParametersAndExecute(minArgs, ext, thread, 
+        return bindParametersAndExecute(ext, thread, 
                                         lastSpecialBinding);
       }
     else
@@ -553,7 +553,7 @@ public class Closure extends Function
         Environment ext = new Environment(environment);
         bindRequiredParameters(ext, thread, first, second, third, fourth,
                                fifth, sixth);
-        return bindParametersAndExecute(minArgs, ext, thread, 
+        return bindParametersAndExecute(ext, thread, 
                                         lastSpecialBinding);
       }
     else
@@ -576,7 +576,7 @@ public class Closure extends Function
         Environment ext = new Environment(environment);
         bindRequiredParameters(ext, thread, first, second, third, fourth,
                                fifth, sixth, seventh);
-        return bindParametersAndExecute(minArgs, ext, thread, 
+        return bindParametersAndExecute(ext, thread, 
                                         lastSpecialBinding);
       }
     else
@@ -601,7 +601,7 @@ public class Closure extends Function
           ext.declareSpecial(special);
         bindRequiredParameters(ext, thread, first, second, third, fourth,
                                fifth, sixth, seventh, eighth);
-        return bindParametersAndExecute(minArgs, ext, thread, 
+        return bindParametersAndExecute(ext, thread, 
                                         lastSpecialBinding);
       }
     else
