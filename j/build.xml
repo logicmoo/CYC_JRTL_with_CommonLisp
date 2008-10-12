@@ -330,7 +330,7 @@
       <!-- set via '-Djava.options=JAVA_OPTIONS' or in 'build.properties -->
       <property name="java.options" value=""/>
 
-      <copy file="abcl.in" toFile="${abcl.wrapper.file}" overwrite="yes">
+      <copy file="${abcl.wrapper.in.file}" toFile="${abcl.wrapper.file}" overwrite="yes">
 	<filterset>
 	  <filter token="JAVA" 
 		  value="${java.path}"/>
@@ -348,10 +348,12 @@
 
     <target name="abcl.wrapper.unix" if="unix">
       <property name="abcl.wrapper.file" value="abcl"/>
+      <property name="abcl.wrapper.in.file" value="abcl.in"/>
     </target>
 
     <target name="abcl.wrapper.windows" if="windows">
       <property name="abcl.wrapper.file" value="abcl.bat"/>
+      <property name="abcl.wrapper.in.file" value="abcl.bat.in"/>
     </target>
 
     <target name="j.jar" depends="j.compile,j.stamp">
