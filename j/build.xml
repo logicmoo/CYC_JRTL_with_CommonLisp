@@ -71,7 +71,7 @@
       <echo message="${build}" file="${j.build.path}"/>    
     </target>
 
-    <target name="abcl.stamp.version">
+    <target name="abcl.stamp.version" depends="abcl.compile">
       <java fork="true"
 	    classpath="${build.classes.dir}"
 	    outputproperty="abcl.version"
@@ -233,7 +233,6 @@
       </copy>
     </target>
 
-
     <!-- Adjust the patternset for ABCL source to use the much faster
          Ant 'uptodate' task to check if we need to compile the system
          fasls. -->
@@ -279,6 +278,7 @@
     </target>
 
     <target name="abcl.jar" depends="abcl.compile,abcl.stamp">
+      <mkdir dir="${dist.dir}"/>
       <loadfile property="abcl.version"
 		  srcFile="${abcl.version.path}"/>
       <jar destfile="${abcl.jar.path}"
@@ -470,7 +470,7 @@
       <property name="j.wrapper.file" value="j.bat"/>
     </target>
 
-    <patternset id="abcl.source.misc"
+    <patternset id="abcl.dist.misc"
 		description="Additional includes in the source distributions relative to basedir">
       <include name="build.xml"/>
       <include name="build.properties.in"/>
@@ -478,12 +478,26 @@
       <include name="README"/>
       <include name="abcl.in"/>
       <include name="abcl.bat.in"/>
-      <include name="test-abcl.asd"/>
-      <include name="build-abcl.asd"/>
+      
+      <!-- The remainder of these files are used by BUILD-ABCL to
+           build ABCL from Lisp but not used by Ant, include them in
+           the source distribution. -->
+      <include name="make-jar.in"/>
+      <include name="make-jar.bat.in"/>
+
       <include name="build-abcl.lisp"/>
       <include name="customizations.lisp.in"/>
+
+      <include name="test-abcl.asd"/>
+      <include name="build-abcl.asd"/>
     </patternset>
 
+    <patternset id="abcl.source.misc"
+		description="Additional includes in the source distribution relative to source root">
+      <include name="org/armedbear/lisp/LICENSE"/>
+      <include name="manifest-abcl"/>
+    </patternset>
+    
     <target name="abcl.source.prepare" depends="abcl.stamp.version">
       <property name="abcl.source.eol" value="asis"/>
       <echo>Using '${abcl.source.eol}' to drive line-ending transformations.</echo>
@@ -496,12 +510,13 @@
 	       preservelastmodified="true">
 	<patternset refid="abcl.source.java"/>
 	<patternset refid="abcl.source.lisp"/>
+	<patternset refid="abcl.source.misc"/>
       </fixcrlf>
       <fixcrlf srcdir="${basedir}" 
 	       eol="${abcl.source.eol}"
 	       destdir="${abcl.build.src.dir}"
 	       preservelastmodified="true">
-	<patternset refid="abcl.source.misc"/>
+	<patternset refid="abcl.dist.misc"/>
       </fixcrlf>
     </target>
 
