@@ -475,7 +475,9 @@
       <include name="build.xml"/>
       <include name="build.properties.in"/>
       <include name="COPYING"/>
+      <include name="README"/>
       <include name="abcl.in"/>
+      <include name="abcl.bat.in"/>
       <include name="test-abcl.asd"/>
       <include name="build-abcl.asd"/>
       <include name="build-abcl.lisp"/>
