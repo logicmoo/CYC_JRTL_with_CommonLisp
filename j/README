@@ -1,46 +1,63 @@
 GENERAL INFORMATION
--------------------
+===================
 
-Armed Bear Common Lisp is an implementation of ANSI Common Lisp that runs in a
-Java virtual machine.
+Armed Bear Common Lisp is an implementation of ANSI Common Lisp that
+runs in a Java virtual machine.
 
 
 LICENSE
--------
+=======
 
-Armed Bear Common Lisp is distributed under the GNU General Public License
-(with a special exception described below).
+Armed Bear Common Lisp is distributed under the GNU General Public
+License (with a special exception described below).
 
-A copy of GNU General Public License (GPL) is included in this distribution, in
-the file COPYING.
+A copy of GNU General Public License (GPL) is included in this
+distribution, in the file COPYING.
 
-Linking this software statically or dynamically with other modules is making a
-combined work based on this software. Thus, the terms and conditions of the GNU
-General Public License cover the whole combination.
+Linking this software statically or dynamically with other modules is
+making a combined work based on this software. Thus, the terms and
+conditions of the GNU General Public License cover the whole
+combination.
 
-As a special exception, the copyright holders of this software give you
-permission to link this software with independent modules to produce an
-executable, regardless of the license terms of these independent modules, and
-to copy and distribute the resulting executable under terms of your choice,
-provided that you also meet, for each linked independent module, the terms and
-conditions of the license of that module. An independent module is a module
-which is not derived from or based on this software. If you modify this
-software, you may extend this exception to your version of the software, but
-you are not obligated to do so. If you do not wish to do so, delete this
+As a special exception, the copyright holders of this software give
+you permission to link this software with independent modules to
+produce an executable, regardless of the license terms of these
+independent modules, and to copy and distribute the resulting
+executable under terms of your choice, provided that you also meet,
+for each linked independent module, the terms and conditions of the
+license of that module. An independent module is a module which is not
+derived from or based on this software. If you modify this software,
+you may extend this exception to your version of the software, but you
+are not obligated to do so. If you do not wish to do so, delete this
 exception statement from your version.
 
 
-INSTALLATION
-------------
+BUILDING
+========
 
-To build ABCL, you'll need a 1.4 or 1.5 JDK and a supported Common Lisp
-implementation (SBCL, CMUCL, OpenMCL, Allegro, LispWorks, or CLISP).
+To build ABCL, you'll need 
 
-Edit the file customizations.lisp, in the directory containing this README
-file, to suit your situation, paying attention to the comments in the file.
+1)  a 1.5 JDK, 
 
-Start up one of the supported Common Lisp implementations in the directory
-containing this README file.
+and either 
+
+2.1) a supported Common Lisp implementation (SBCL, CMUCL, OpenMCL,
+     Allegro, LispWorks, or CLISP)
+
+or 
+
+2.2) a version of Apache Ant (post 1.7.1)
+
+
+Lisp-based
+----------
+
+Copy the file 'customizations.lisp.in' to customization.lisp', in the
+directory containing this README file, editing to suit your situation,
+paying attention to the comments in the file.
+
+Start up one of the supported Common Lisp implementations in the
+directory containing this README file.
 
 Load build-abcl.lisp:
 
@@ -52,34 +69,49 @@ Then do:
 
 Wait for the build to finish and exit the host Lisp.
 
-Use abcl.bat on Windows or ./abcl on Unix to start ABCL. (Note that abcl.bat
-and abcl contain absolute paths, so you'll need to edit the relevant file if
-you move things around after the build.)
+Use abcl.bat on Windows or ./abcl on Unix to start ABCL. (Note that
+abcl.bat and abcl contain absolute paths, so you'll need to edit the
+relevant file if you move things around after the build.)
 
-If the build fails in the javac stage, you might have better luck with this:
+If the build fails in the javac stage, you might have better luck with
+this:
 
     (build-abcl:build-abcl :clean t :full t :batch nil)
 
-This invokes javac separately for each .java file, which is considerably slower
-but avoids running into limitations on command line length.
+This invokes javac separately for each .java file, which is
+considerably slower but avoids running into limitations on command
+line length.
+
+Ant-based
+---------
+
+With ant-1.7.1 in your path executing 
+
+    ant -find build.xml abcl.wrapper
+
+from the directory containing this README file will create an
+executable wrapper ('abcl' under UNIX, 'abcl.bat' under Windows) which
+can use to run ABCL.
 
 
 BUGS
-----
+====
 
-ABCL is a very young implementation. You are certain to encounter bugs.
+ABCL is a very young implementation. You are certain to encounter
+bugs.
 
 ABCL 0.0.9 fails 54 out of 21344 tests in the GCL ANSI test suite.
 
-ABCL's CLOS does not handle on-the-fly redefinition of classes correctly, and
-in any event is intolerably slow. There is no support for the long form of
-DEFINE-METHOD-COMBINATION, and certain other required CLOS features are also
-missing. Enough CLOS is there to run ASDF and CL-PPCRE, if you're in no hurry.
+ABCL's CLOS does not handle on-the-fly redefinition of classes
+correctly, and in any event is intolerably slow. There is no support
+for the long form of DEFINE-METHOD-COMBINATION, and certain other
+required CLOS features are also missing. Enough CLOS is there to run
+ASDF and CL-PPCRE, if you're in no hurry.
 
 There is no MOP worth mentioning.
 
-Since this is a very early public release, there might be build problems as
-well as runtime bugs.
+Since this is a very early public release, there might be build
+problems as well as runtime bugs.
 
 Please report problems to the j-devel mailing list:
 
