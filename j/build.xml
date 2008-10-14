@@ -106,6 +106,8 @@
     <patternset id="abcl.source.lisp">
       <include name="org/armedbear/lisp/*.lisp"/>
       <include name="org/armedbear/lisp/tests/*.lisp"/>
+      <include name="org/armedbear/lisp/java/awt/*.lisp"/>
+      <include name="org/armedbear/lisp/java/awt/*.java"/>
     </patternset>
 
     <!-- Lisp files required at runtime -->
