@@ -101,7 +101,7 @@ BUGS
 
 A lot of (renewed) energy has been spent to make ABCL a compliant
 and practically useable Common Lisp implementation.  Because of this,
-ABCL 0.0.11 now fails only 49 out of 21344 tests in the ANSI CL test
+ABCL 0.0.11 now fails only 47 out of 21702 tests in the ANSI CL test
 suite.  Next to that, the fail count of the Maxima test suite has been
 reduced from over 1400 in 0.0.10 to little more than 600 in 0.0.11.
 
