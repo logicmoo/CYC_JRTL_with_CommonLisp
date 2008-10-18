@@ -29,6 +29,6 @@ public final class Version
 
   public static String getVersion()
   {
-    return "0.0.10.22";
+    return "0.0.11";
   }
 }
