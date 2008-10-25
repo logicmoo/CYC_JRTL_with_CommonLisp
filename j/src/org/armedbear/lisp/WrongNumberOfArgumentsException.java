@@ -32,6 +32,8 @@ public final class WrongNumberOfArgumentsException extends ProgramError
         // own Java class as a convenience for the implementation.
         super(StandardClass.PROGRAM_ERROR);
         this.operator = operator;
+        setFormatControl(getMessage());
+        setFormatArguments(NIL);
     }
 
     public String getMessage()
