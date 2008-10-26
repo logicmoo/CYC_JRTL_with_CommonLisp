@@ -69,9 +69,9 @@
                   (matching-entries ()))
               (dolist (entry entries)
                 (cond ((file-directory-p entry)
-                       (when (pathname-match-p (pathname-as-file entry) pathname)
+                       (when (pathname-match-p (file-namestring (pathname-as-file entry)) (file-namestring pathname))
                          (push entry matching-entries)))
-                      ((pathname-match-p entry pathname)
+                      ((pathname-match-p (file-namestring entry) (file-namestring pathname))
                        (push entry matching-entries))))
               matching-entries)))
         ;; Not wild.
