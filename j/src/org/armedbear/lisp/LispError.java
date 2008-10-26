@@ -38,11 +38,6 @@ public class LispError extends SeriousCondition
     initialize(initArgs);
   }
 
-  protected void initialize(LispObject initArgs) throws ConditionThrowable
-  {
-    super.initialize(initArgs);
-  }
-
   public LispError(String message) throws ConditionThrowable
   {
     super(StandardClass.ERROR);
