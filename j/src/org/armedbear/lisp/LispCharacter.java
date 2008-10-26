@@ -172,7 +172,7 @@ public final class LispCharacter extends LispObject
 
   public Object javaInstance()
   {
-    return new Character(value);
+    return Character.valueOf(value);
   }
 
   public Object javaInstance(Class c)

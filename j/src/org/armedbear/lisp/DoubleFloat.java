@@ -201,14 +201,14 @@ public final class DoubleFloat extends LispObject
 
     public Object javaInstance()
     {
-        return new Double(value);
+        return Double.valueOf(value);
     }
 
     public Object javaInstance(Class c)
     {
         String cn = c.getName();
         if (cn.equals("java.lang.Float") || cn.equals("float"))
-            return new Float(value);
+            return Float.valueOf((float)value);
         return javaInstance();
     }
 

@@ -267,12 +267,12 @@ public final class SimpleString extends AbstractString
 
     public String getStringValue()
     {
-        return new String(chars);
+        return String.valueOf(chars);
     }
 
     public Object javaInstance()
     {
-        return new String(chars);
+        return String.valueOf(chars);
     }
 
     public Object javaInstance(Class c)

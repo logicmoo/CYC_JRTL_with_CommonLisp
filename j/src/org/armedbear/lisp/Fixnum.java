@@ -53,18 +53,18 @@ public final class Fixnum extends LispObject
 
   public Object javaInstance()
   {
-    return new Integer(value);
+    return Integer.valueOf(value);
   }
 
   public Object javaInstance(Class c)
   {
     String cn = c.getName();
     if (cn.equals("java.lang.Byte") || cn.equals("byte"))
-      return new Byte(((Integer)javaInstance()).byteValue());
+      return Byte.valueOf((byte)value);
     if (cn.equals("java.lang.Short") || cn.equals("short"))
-      return new Short(((Integer)javaInstance()).shortValue());
+      return Short.valueOf((short)value);
     if (cn.equals("java.lang.Long") || cn.equals("long"))
-      return new Long(((Integer)javaInstance()).longValue());
+      return Long.valueOf((long)value);
     return javaInstance();
   }
 
