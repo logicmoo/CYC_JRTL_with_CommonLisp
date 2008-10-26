@@ -1115,7 +1115,10 @@ output to *VERBOSE-OUT*.  Returns the shell's exit code."
 				 :wait t)))
     #+ecl ;; courtesy of Juan Jose Garcia Ripoll
     (si:system command)
-    #-(or openmcl clisp lispworks allegro scl cmu sbcl ecl)
+    
+    #+abcl
+    (ext:run-shell-command command :output *verbose-out*)
+    #-(or openmcl clisp lispworks allegro scl cmu sbcl ecl abcl)
     (error "RUN-SHELL-PROGRAM not implemented for this Lisp")
     ))
 
