@@ -108,7 +108,7 @@
                                      "asdf.lisp"
                                      "assert.lisp"
                                      "assoc.lisp"
-                                     ;;"autoloads.lisp"
+                                     "autoloads.lisp"
                                      "aver.lisp"
                                      "bit-array-ops.lisp"
                                      "boole.lisp"

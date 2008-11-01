@@ -113,7 +113,6 @@
     <!-- Lisp files required at runtime -->
     <patternset id="abcl.source.lisp.dist">
       <include name="org/armedbear/lisp/boot.lisp"/>
-      <include name="org/armedbear/lisp/autoloads.lisp"/>
     </patternset>
 
     <patternset id="abcl.objects">
@@ -240,7 +239,6 @@
     <patternset id="abcl.source.lisp.fasls">
       <patternset refid="abcl.source.lisp"/>
       <exclude name="org/armedbear/lisp/tests/*.lisp"/>
-      <exclude name="org/armedbear/lisp/autoloads.lisp"/>
       <exclude name="org/armedbear/lisp/boot.lisp"/>
       <exclude name="org/armedbear/lisp/emacs.lisp"/>
       <exclude name="org/armedbear/lisp/with-mutex.lisp"/>
