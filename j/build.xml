@@ -113,8 +113,7 @@
     <!-- Lisp files required at runtime -->
     <patternset id="abcl.source.lisp.dist">
       <include name="org/armedbear/lisp/boot.lisp"/>
-      <include name="org/armedbear/lisp/top-level.lisp"/>
-      <include name="org/armedbear/lisp/*.lisp"/> 
+      <include name="org/armedbear/lisp/autoloads.lisp"/>
     </patternset>
 
     <patternset id="abcl.objects">
@@ -253,8 +252,6 @@
       <exclude name="org/armedbear/lisp/slime-loader.lisp"/>
       <exclude name="org/armedbear/lisp/runtime-class.lisp"/>
       <exclude name="org/armedbear/lisp/run-benchmarks.lisp"/>
-      <exclude name="org/armedbear/lisp/print-object.lisp"/>
-      <exclude name="org/armedbear/lisp/package.lisp"/>
       <exclude name="org/armedbear/lisp/j.lisp"/>
     </patternset>
 
