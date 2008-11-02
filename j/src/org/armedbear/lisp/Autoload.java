@@ -425,8 +425,6 @@ public class Autoload extends Function
         autoload("print-not-readable-object", "PrintNotReadable");
         autoload("probe-file", "probe_file");
         autoload("rational", "FloatFunctions");
-        autoload("read-char-no-hang", "read_char_no_hang");
-        autoload("read-delimited-list", "read_delimited_list");
         autoload("rem", "rem");
         autoload("remhash", "HashTableFunctions");
         autoload("remhash", "HashTableFunctions");
