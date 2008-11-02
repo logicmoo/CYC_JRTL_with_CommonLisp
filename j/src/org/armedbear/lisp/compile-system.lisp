@@ -242,10 +242,6 @@
                                      "with-standard-io-syntax.lisp"
                                      "with-thread-lock.lisp"
                                      "write-sequence.lisp"))
-    (mapc #'compile-file-if-needed '("swank-protocol.lisp"
-                                     "slime.lisp"
-                                     "swank-abcl.lisp"
-                                     "swank.lisp"))
     t))
 
 (defun compile-system (&key quit (zip t))

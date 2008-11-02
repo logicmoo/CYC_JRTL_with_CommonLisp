@@ -241,13 +241,6 @@
       <exclude name="org/armedbear/lisp/tests/*.lisp"/>
       <exclude name="org/armedbear/lisp/boot.lisp"/>
       <exclude name="org/armedbear/lisp/emacs.lisp"/>
-      <exclude name="org/armedbear/lisp/with-mutex.lisp"/>
-      <exclude name="org/armedbear/lisp/swank-xcl.lisp"/>
-      <exclude name="org/armedbear/lisp/swank-sbcl.lisp"/>
-      <exclude name="org/armedbear/lisp/swank-package.lisp"/>
-      <exclude name="org/armedbear/lisp/swank-loader.lisp"/>
-      <exclude name="org/armedbear/lisp/swank-allegro.lisp"/>
-      <exclude name="org/armedbear/lisp/slime-loader.lisp"/>
       <exclude name="org/armedbear/lisp/runtime-class.lisp"/>
       <exclude name="org/armedbear/lisp/run-benchmarks.lisp"/>
       <exclude name="org/armedbear/lisp/j.lisp"/>
