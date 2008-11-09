@@ -191,12 +191,17 @@
       <exec executable="hostname" os="Linux" outputproperty="hostname"/>
 
       <condition property="abcl.java.version">
-	<matches string="${java.version}" pattern="1\.5"/>
+	<or>
+	  <matches string="${java.version}" pattern="1\.5"/>
+	  <matches string="${java.version}" pattern="1\.6\.0_1[0-9]"/>
+	</or>  
       </condition>
       <echo>java.version: ${java.version}</echo>
     </target>
     
-    <target name="abcl.java.warning" unless="abcl.java.version">
+    <target name="abcl.java.warning" 
+	    depends="abcl.pre-compile"
+	    unless="abcl.java.version">
       <echo>WARNING: Java version ${java.version} not recommended.</echo>
     </target>
 	
