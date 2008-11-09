@@ -36,6 +36,12 @@ import java.io.Writer;
 import java.math.BigInteger;
 import java.util.BitSet;
 
+
+/** The stream class
+ * 
+ * A base class for all Lisp built-in streams.
+ * 
+ */
 public class Stream extends LispObject
 {
   protected LispObject elementType;
@@ -55,7 +61,11 @@ public class Stream extends LispObject
   // Character output.
   private Writer writer;
 
-  // The number of characters on the current line of output (-1 if unknown).
+  /** The number of characters on the current line of output
+   * 
+   * Used to determine whether additional line feeds are
+   * required when calling FRESH-LINE
+   */
   protected int charPos;
 
   // Binary input.
@@ -188,16 +198,19 @@ public class Stream extends LispObject
     open = b;
   }
 
+  @Override
   public LispObject typeOf()
   {
     return Symbol.STREAM;
   }
 
+  @Override
   public LispObject classOf()
   {
     return BuiltInClass.STREAM;
   }
 
+  @Override
   public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
   {
     if (typeSpecifier == Symbol.STREAM)
@@ -1518,6 +1531,7 @@ public class Stream extends LispObject
     return T;
   }
 
+  @Override
   public String toString()
   {
     return unreadableString("STREAM");
@@ -1618,7 +1632,11 @@ public class Stream extends LispObject
                                 " is neither a string nor a character."));
   }
 
-  // Returns -1 at end of file.
+  /** Reads a character off an underlying stream
+   * 
+   * @return a character, or -1 at end-of-file
+   * @throws org.armedbear.lisp.ConditionThrowable
+   */
   protected int _readChar() throws ConditionThrowable
   {
     try
@@ -1647,6 +1665,11 @@ public class Stream extends LispObject
     return -1;
   }
 
+  /** Puts a character back into the (underlying) stream
+   * 
+   * @param n
+   * @throws org.armedbear.lisp.ConditionThrowable
+   */
   protected void _unreadChar(int n) throws ConditionThrowable
   {
     try
@@ -1667,6 +1690,11 @@ public class Stream extends LispObject
       }
   }
 
+  /** Returns a boolean indicating input readily available
+   * 
+   * @return true if a character is available
+   * @throws org.armedbear.lisp.ConditionThrowable
+   */
   protected boolean _charReady() throws ConditionThrowable
   {
     try
@@ -1686,6 +1714,12 @@ public class Stream extends LispObject
     return false;
   }
 
+  /** Writes a character into the underlying stream,
+   * updating charPos while doing so
+   * 
+   * @param c
+   * @throws org.armedbear.lisp.ConditionThrowable
+   */
   public void _writeChar(char c) throws ConditionThrowable
   {
     try
@@ -1710,6 +1744,14 @@ public class Stream extends LispObject
       }
   }
 
+  /** Writes a series of characters in the underlying stream,
+   * updating charPos while doing so
+   * 
+   * @param chars
+   * @param start
+   * @param end
+   * @throws org.armedbear.lisp.ConditionThrowable
+   */
   public void _writeChars(char[] chars, int start, int end)
     throws ConditionThrowable
   {
@@ -1749,6 +1791,12 @@ public class Stream extends LispObject
       }
   }
 
+  /** Writes a string to the underlying stream,
+   * updating charPos while doing so
+   * 
+   * @param s
+   * @throws org.armedbear.lisp.ConditionThrowable
+   */
   public void _writeString(String s) throws ConditionThrowable
   {
     try
@@ -1776,6 +1824,12 @@ public class Stream extends LispObject
       }
   }
 
+  /** Writes a string to the underlying stream, appending
+   * a new line and updating charPos while doing so
+   * 
+   * @param s
+   * @throws org.armedbear.lisp.ConditionThrowable
+   */
   public void _writeLine(String s) throws ConditionThrowable
   {
     try
@@ -1797,6 +1851,11 @@ public class Stream extends LispObject
   }
 
   // Reads an 8-bit byte.
+  /** Reads an 8-bit byte off the underlying stream
+   * 
+   * @return
+   * @throws org.armedbear.lisp.ConditionThrowable
+   */
   public int _readByte() throws ConditionThrowable
   {
     try
@@ -1812,6 +1871,11 @@ public class Stream extends LispObject
   }
 
   // Writes an 8-bit byte.
+  /** Writes an 8-bit byte off the underlying stream
+   * 
+   * @param n
+   * @throws org.armedbear.lisp.ConditionThrowable
+   */
   public void _writeByte(int n) throws ConditionThrowable
   {
     try
@@ -1829,6 +1893,10 @@ public class Stream extends LispObject
       }
   }
 
+  /** Flushes any buffered output in the (underlying) stream
+   * 
+   * @throws org.armedbear.lisp.ConditionThrowable
+   */
   public void _finishOutput() throws ConditionThrowable
   {
     try
@@ -1844,6 +1912,11 @@ public class Stream extends LispObject
       }
   }
 
+  /** Reads all input from the underlying stream,
+   * until _charReady() indicates no more input to be available
+   * 
+   * @throws org.armedbear.lisp.ConditionThrowable
+   */
   public void _clearInput() throws ConditionThrowable
   {
     if (reader != null)
@@ -1865,16 +1938,33 @@ public class Stream extends LispObject
       }
   }
 
+  /** Returns a (non-negative) file position integer or a negative value
+   * if the position cannot be determined.
+   * 
+   * @return non-negative value as a position spec
+   * @return negative value for 'unspecified'
+   * @throws org.armedbear.lisp.ConditionThrowable
+   */
   protected long _getFilePosition() throws ConditionThrowable
   {
     return -1;
   }
 
+  /** Sets the file position based on a position designator passed in arg
+   * 
+   * @param arg File position specifier as described in the CLHS
+   * @return true on success, false on failure
+   * @throws org.armedbear.lisp.ConditionThrowable
+   */
   protected boolean _setFilePosition(LispObject arg) throws ConditionThrowable
   {
     return false;
   }
 
+  /** Closes the stream and underlying streams
+   * 
+   * @throws org.armedbear.lisp.ConditionThrowable
+   */
   public void _close() throws ConditionThrowable
   {
     try
