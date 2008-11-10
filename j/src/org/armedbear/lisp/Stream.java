@@ -2034,6 +2034,7 @@ public class Stream extends LispObject
     new Primitive("%stream-write-char", PACKAGE_SYS, true,
                   "character output-stream")
     {
+      @Override
       public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
       {
@@ -2057,6 +2058,7 @@ public class Stream extends LispObject
     new Primitive("%write-char", PACKAGE_SYS, false,
                   "character output-stream")
     {
+      @Override
       public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
       {
@@ -2092,6 +2094,7 @@ public class Stream extends LispObject
     new Primitive("%write-string", PACKAGE_SYS, false,
                   "string output-stream start end")
     {
+      @Override
       public LispObject execute(LispObject first, LispObject second,
                                 LispObject third, LispObject fourth)
         throws ConditionThrowable
@@ -2153,6 +2156,7 @@ public class Stream extends LispObject
   private static final Primitive _FINISH_OUTPUT =
     new Primitive("%finish-output", PACKAGE_SYS, false, "output-stream")
     {
+      @Override
       public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         return finishOutput(arg);
@@ -2163,6 +2167,7 @@ public class Stream extends LispObject
   private static final Primitive _FORCE_OUTPUT =
     new Primitive("%force-output", PACKAGE_SYS, false, "output-stream")
     {
+      @Override
       public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         return finishOutput(arg);
@@ -2193,6 +2198,7 @@ public class Stream extends LispObject
   private static final Primitive CLEAR_INPUT =
     new Primitive(Symbol.CLEAR_INPUT, "&optional input-stream")
     {
+      @Override
       public LispObject execute(LispObject[] args) throws ConditionThrowable
       {
         if (args.length > 1)
@@ -2213,6 +2219,7 @@ public class Stream extends LispObject
   private static final Primitive _CLEAR_OUTPUT =
     new Primitive("%clear-output", PACKAGE_SYS, false, "output-stream")
     {
+      @Override
       public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         if (arg == T) // *TERMINAL-IO*
@@ -2229,6 +2236,7 @@ public class Stream extends LispObject
   private static final Primitive CLOSE =
     new Primitive(Symbol.CLOSE, "stream &key abort")
     {
+      @Override
       public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         try
@@ -2240,6 +2248,8 @@ public class Stream extends LispObject
             return type_error(arg, Symbol.STREAM);
           }
       }
+
+      @Override
       public LispObject execute(LispObject first, LispObject second,
                                 LispObject third)
         throws ConditionThrowable
@@ -2264,6 +2274,7 @@ public class Stream extends LispObject
   private static final Primitive OUT_SYNONYM_OF =
     new Primitive("out-synonym-of", PACKAGE_SYS, true, "stream-designator")
     {
+      @Override
       public LispObject execute (LispObject arg) throws ConditionThrowable
       {
         if (arg instanceof Stream)
@@ -2281,6 +2292,7 @@ public class Stream extends LispObject
   private static final Primitive WRITE_8_BITS =
     new Primitive("write-8-bits", PACKAGE_SYS, true, "byte stream")
     {
+      @Override
       public LispObject execute (LispObject first, LispObject second)
         throws ConditionThrowable
       {
@@ -2313,6 +2325,7 @@ public class Stream extends LispObject
     new Primitive("read-8-bits", PACKAGE_SYS, true,
                   "stream &optional eof-error-p eof-value")
     {
+      @Override
       public LispObject execute (LispObject first, LispObject second,
                                  LispObject third)
         throws ConditionThrowable
@@ -2320,6 +2333,8 @@ public class Stream extends LispObject
         return checkBinaryInputStream(first).readByte((second != NIL),
                                                       third);
       }
+
+      @Override
       public LispObject execute (LispObject[] args) throws ConditionThrowable
       {
         int length = args.length;
@@ -2338,6 +2353,7 @@ public class Stream extends LispObject
     new Primitive(Symbol.READ_LINE,
                   "&optional input-stream eof-error-p eof-value recursive-p")
     {
+      @Override
       public LispObject execute() throws ConditionThrowable
       {
         final LispObject obj = Symbol.STANDARD_INPUT.symbolValue();
@@ -2352,6 +2368,7 @@ public class Stream extends LispObject
           }
         return stream.readLine(true, NIL);
       }
+      @Override
       public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         if (arg == T)
@@ -2369,6 +2386,7 @@ public class Stream extends LispObject
           }
         return stream.readLine(true, NIL);
       }
+      @Override
       public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
       {
@@ -2387,6 +2405,7 @@ public class Stream extends LispObject
           }
         return stream.readLine(second != NIL, NIL);
       }
+      @Override
       public LispObject execute(LispObject first, LispObject second,
                                 LispObject third)
         throws ConditionThrowable
@@ -2406,6 +2425,7 @@ public class Stream extends LispObject
           }
         return stream.readLine(second != NIL, third);
       }
+      @Override
       public LispObject execute(LispObject first, LispObject second,
                                 LispObject third, LispObject fourth)
         throws ConditionThrowable
@@ -2433,6 +2453,7 @@ public class Stream extends LispObject
   private static final Primitive _READ_FROM_STRING =
     new Primitive("%read-from-string", PACKAGE_SYS, false)
     {
+      @Override
       public LispObject execute(LispObject first, LispObject second,
                                 LispObject third, LispObject fourth,
                                 LispObject fifth, LispObject sixth)
@@ -2469,6 +2490,7 @@ public class Stream extends LispObject
     new Primitive(Symbol.READ,
                   "&optional input-stream eof-error-p eof-value recursive-p")
     {
+      @Override
       public LispObject execute() throws ConditionThrowable
       {
         final LispThread thread = LispThread.currentThread();
@@ -2484,6 +2506,7 @@ public class Stream extends LispObject
           }
         return stream.read(true, NIL, false, thread);
       }
+      @Override
       public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         final LispThread thread = LispThread.currentThread();
@@ -2502,6 +2525,7 @@ public class Stream extends LispObject
           }
         return stream.read(true, NIL, false, thread);
       }
+      @Override
       public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
       {
@@ -2521,6 +2545,7 @@ public class Stream extends LispObject
           }
         return stream.read(second != NIL, NIL, false, thread);
       }
+      @Override
       public LispObject execute(LispObject first, LispObject second,
                                 LispObject third)
         throws ConditionThrowable
@@ -2541,6 +2566,7 @@ public class Stream extends LispObject
           }
         return stream.read(second != NIL, third, false, thread);
       }
+      @Override
       public LispObject execute(LispObject first, LispObject second,
                                 LispObject third, LispObject fourth)
         throws ConditionThrowable
@@ -2569,6 +2595,7 @@ public class Stream extends LispObject
     new Primitive(Symbol.READ_PRESERVING_WHITESPACE,
                   "&optional input-stream eof-error-p eof-value recursive-p")
     {
+      @Override
       public LispObject execute(LispObject[] args) throws ConditionThrowable
       {
         int length = args.length;
@@ -2591,25 +2618,30 @@ public class Stream extends LispObject
     new Primitive(Symbol.READ_CHAR,
                   "&optional input-stream eof-error-p eof-value recursive-p")
     {
+      @Override
       public LispObject execute() throws ConditionThrowable
       {
         return checkCharacterInputStream(Symbol.STANDARD_INPUT.symbolValue()).readChar();
       }
+      @Override
       public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         return inSynonymOf(arg).readChar();
       }
+      @Override
       public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
       {
         return inSynonymOf(first).readChar(second != NIL, NIL);
       }
+      @Override
       public LispObject execute(LispObject first, LispObject second,
                                 LispObject third)
         throws ConditionThrowable
       {
         return inSynonymOf(first).readChar(second != NIL, third);
       }
+      @Override
       public LispObject execute(LispObject first, LispObject second,
                                 LispObject third, LispObject fourth)
         throws ConditionThrowable
@@ -2623,6 +2655,7 @@ public class Stream extends LispObject
   private static final Primitive READ_CHAR_NO_HANG =
     new Primitive("read-char-no-hang", "&optional input-stream eof-error-p eof-value recursive-p") {
 
+      @Override
       public LispObject execute(LispObject[] args) throws ConditionThrowable
       {
         int length = args.length;
@@ -2642,6 +2675,7 @@ public class Stream extends LispObject
   private static final Primitive READ_DELIMITED_LIST =
     new Primitive("read-delimited-list", "char &optional input-stream recursive-p") {
 
+      @Override
       public LispObject execute(LispObject[] args) throws ConditionThrowable
       {
         int length = args.length;
@@ -2659,10 +2693,12 @@ public class Stream extends LispObject
   private static final Primitive UNREAD_CHAR =
     new Primitive(Symbol.UNREAD_CHAR, "character &optional input-stream")
     {
+      @Override
       public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         return getStandardInput().unreadChar(checkCharacter(arg));
       }
+      @Override
       public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
       {
@@ -2676,6 +2712,7 @@ public class Stream extends LispObject
     new Primitive("write-vector-unsigned-byte-8", PACKAGE_SYS, true,
                   "vector stream start end")
     {
+      @Override
       public LispObject execute(LispObject first, LispObject second,
                                 LispObject third, LispObject fourth)
         throws ConditionThrowable
@@ -2703,6 +2740,7 @@ public class Stream extends LispObject
     new Primitive("read-vector-unsigned-byte-8", PACKAGE_SYS, true,
                   "vector stream start end")
     {
+      @Override
       public LispObject execute(LispObject first, LispObject second,
                                 LispObject third, LispObject fourth)
         throws ConditionThrowable
@@ -2732,6 +2770,7 @@ public class Stream extends LispObject
   private static final Primitive FILE_POSITION =
     new Primitive("file-position", "stream &optional position-spec")
     {
+      @Override
       public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         final Stream stream;
@@ -2745,6 +2784,7 @@ public class Stream extends LispObject
           }
         return stream.getFilePosition();
       }
+      @Override
       public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
       {
@@ -2765,6 +2805,7 @@ public class Stream extends LispObject
   private static final Primitive STREAM_LINE_NUMBER =
     new Primitive("stream-line-number", PACKAGE_SYS, false, "stream")
     {
+      @Override
       public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         Stream stream = checkStream(arg);
@@ -2776,6 +2817,7 @@ public class Stream extends LispObject
   private static final Primitive STREAM_OFFSET =
     new Primitive("stream-offset", PACKAGE_SYS, false, "stream")
     {
+      @Override
       public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         Stream stream = checkStream(arg);
@@ -2787,6 +2829,7 @@ public class Stream extends LispObject
   private static final Primitive STREAM_CHARPOS =
     new Primitive("stream-charpos", PACKAGE_SYS, false)
     {
+      @Override
       public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         Stream stream = checkCharacterOutputStream(arg);
@@ -2798,6 +2841,7 @@ public class Stream extends LispObject
   private static final Primitive STREAM_SET_CHARPOS =
     new Primitive("stream-%set-charpos", PACKAGE_SYS, false)
     {
+      @Override
       public LispObject execute(LispObject first, LispObject second)
         throws ConditionThrowable
       {
