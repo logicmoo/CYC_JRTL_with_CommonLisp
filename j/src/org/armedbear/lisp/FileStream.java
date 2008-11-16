@@ -119,16 +119,19 @@ public final class FileStream extends Stream
             outputBuffer = null;
     }
 
+    @Override
     public LispObject typeOf()
     {
         return Symbol.FILE_STREAM;
     }
 
+    @Override
     public LispObject classOf()
     {
         return BuiltInClass.FILE_STREAM;
     }
 
+    @Override
     public LispObject typep(LispObject typeSpecifier) throws ConditionThrowable
     {
         if (typeSpecifier == Symbol.FILE_STREAM)
@@ -143,6 +146,7 @@ public final class FileStream extends Stream
         return pathname;
     }
 
+    @Override
     public LispObject listen() throws ConditionThrowable
     {
         try {
@@ -158,6 +162,7 @@ public final class FileStream extends Stream
         return NIL;
     }
 
+    @Override
     public LispObject fileLength() throws ConditionThrowable
     {
         final long length;
@@ -185,6 +190,7 @@ public final class FileStream extends Stream
         return number(length / bytesPerUnit);
     }
 
+    @Override
     public LispObject readLine(boolean eofError, LispObject eofValue)
         throws ConditionThrowable
     {
@@ -213,6 +219,7 @@ public final class FileStream extends Stream
     }
 
     // Returns -1 at end of file.
+    @Override
     protected int _readChar() throws ConditionThrowable
     {
         try {
@@ -252,6 +259,7 @@ public final class FileStream extends Stream
         return -1;
     }
 
+    @Override
     protected void _unreadChar(int n) throws ConditionThrowable
     {
         if (inputBuffer != null && inputBufferOffset > 0) {
@@ -299,11 +307,13 @@ public final class FileStream extends Stream
         }
     }
 
+    @Override
     protected boolean _charReady() throws ConditionThrowable
     {
         return true;
     }
 
+    @Override
     public void _writeChar(char c) throws ConditionThrowable
     {
         if (c == '\n') {
@@ -317,6 +327,7 @@ public final class FileStream extends Stream
         }
     }
 
+    @Override
     public void _writeChars(char[] chars, int start, int end)
         throws ConditionThrowable
     {
@@ -345,6 +356,7 @@ public final class FileStream extends Stream
         }
     }
 
+    @Override
     public void _writeString(String s) throws ConditionThrowable
     {
         final int length = s.length();
@@ -373,6 +385,7 @@ public final class FileStream extends Stream
         }
     }
 
+    @Override
     public void _writeLine(String s) throws ConditionThrowable
     {
         _writeString(s);
@@ -383,6 +396,7 @@ public final class FileStream extends Stream
     }
 
     // Reads an 8-bit byte.
+    @Override
     public int _readByte() throws ConditionThrowable
     {
         if (inputBuffer != null)
@@ -401,6 +415,7 @@ public final class FileStream extends Stream
     }
 
     // Writes an 8-bit byte.
+    @Override
     public void _writeByte(int n) throws ConditionThrowable
     {
         if (outputBuffer != null) {
@@ -418,12 +433,14 @@ public final class FileStream extends Stream
         }
     }
 
+    @Override
     public void _finishOutput() throws ConditionThrowable
     {
         if (outputBuffer != null)
             flushOutputBuffer();
     }
 
+    @Override
     public void _clearInput() throws ConditionThrowable
     {
         try {
@@ -438,6 +455,7 @@ public final class FileStream extends Stream
         }
     }
 
+    @Override
     protected long _getFilePosition() throws ConditionThrowable
     {
         if (inputBuffer != null) {
@@ -457,6 +475,7 @@ public final class FileStream extends Stream
         }
     }
 
+    @Override
     protected boolean _setFilePosition(LispObject arg) throws ConditionThrowable
     {
         if (outputBuffer != null)
@@ -481,6 +500,7 @@ public final class FileStream extends Stream
         return true;
     }
 
+    @Override
     public void _close() throws ConditionThrowable
     {
         if (outputBuffer != null)
@@ -549,6 +569,7 @@ public final class FileStream extends Stream
         }
     }
 
+    @Override
     public String writeToString() throws ConditionThrowable
     {
         return unreadableString(Symbol.FILE_STREAM);
@@ -559,6 +580,7 @@ public final class FileStream extends Stream
         new Primitive("make-file-stream", PACKAGE_SYS, true,
                       "pathname namestring element-type direction if-exists")
     {
+        @Override
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth,
                                   LispObject fifth)
