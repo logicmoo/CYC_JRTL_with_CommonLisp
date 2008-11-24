@@ -867,7 +867,7 @@
              (multiple-value-bind (body decls)
                  (parse-body body)
                (setf (compiland-lambda-expression compiland)
-                     `(lambda ,lambda-list ,@decls (block nil ,@body)))
+                     `(lambda ,lambda-list ,@decls ,@body))
                (let ((*visible-variables* *visible-variables*)
                      (*current-compiland* compiland))
                  (p1-compiland compiland)))
