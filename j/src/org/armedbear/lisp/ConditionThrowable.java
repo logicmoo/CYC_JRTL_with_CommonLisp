@@ -40,6 +40,14 @@ public class ConditionThrowable extends Throwable
     public ConditionThrowable()
     {
     }
+    /**
+     * Overridden in order to make ConditionThrowable construct
+     * faster. This avoids gathering stack trace information.
+     */
+    public Throwable fillInStackTrace()
+    {
+	return this;
+    }
 
     public ConditionThrowable(Condition condition)
     {
