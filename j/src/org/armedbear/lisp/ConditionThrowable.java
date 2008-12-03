@@ -44,6 +44,7 @@ public class ConditionThrowable extends Throwable
      * Overridden in order to make ConditionThrowable construct
      * faster. This avoids gathering stack trace information.
      */
+    @Override
     public Throwable fillInStackTrace()
     {
 	return this;
