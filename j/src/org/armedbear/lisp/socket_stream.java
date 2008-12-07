@@ -40,19 +40,19 @@ public final class socket_stream extends Primitive
 {
     private socket_stream()
     {
-        super("%socket-stream", PACKAGE_SYS, false, "socket element-type");
+        super("%socket-stream", PACKAGE_SYS, false, "socket element-type external-format");
     }
 
-    public LispObject execute(LispObject first, LispObject second)
+    public LispObject execute(LispObject first, LispObject second, LispObject third)
         throws ConditionThrowable
     {
         Socket socket = (Socket) ((JavaObject)first).getObject();
         LispObject elementType = second; // Checked by caller.
         try {
              Stream in =
-                 new Stream(socket.getInputStream(), elementType);
+                 new Stream(socket.getInputStream(), elementType, third);
              Stream out =
-                 new Stream(socket.getOutputStream(), elementType);
+                 new Stream(socket.getOutputStream(), elementType, third);
              return new SocketStream(socket, in, out);
         }
         catch (Exception e) {

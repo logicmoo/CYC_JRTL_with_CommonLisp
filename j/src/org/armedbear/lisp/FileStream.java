@@ -2,6 +2,7 @@
  * FileStream.java
  *
  * Copyright (C) 2004-2006 Peter Graves
+ * Copyright (C) 2008 Hideo at Yokohama
  * $Id$
  *
  * This program is free software; you can redistribute it and/or
@@ -34,32 +35,39 @@
 package org.armedbear.lisp;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import org.armedbear.lisp.util.RandomAccessCharacterFile;
 
 public final class FileStream extends Stream
 {
-    private static final int BUFSIZE = 4096;
-
-    private final RandomAccessFile raf;
-    private final RandomAccessFile in;
-    private final RandomAccessFile out;
+    private final RandomAccessCharacterFile racf;
     private final Pathname pathname;
     private final int bytesPerUnit;
-    private final byte[] inputBuffer;
-    private final byte[] outputBuffer;
-
-    private long inputBufferFilePosition;
-    private int inputBufferOffset;
-    private int inputBufferCount;
-    private int outputBufferOffset;
 
     public FileStream(Pathname pathname, String namestring,
                       LispObject elementType, LispObject direction,
-                      LispObject ifExists)
+                      LispObject ifExists, LispObject format)
         throws IOException
     {
+        /* externalFormat is a LispObject of which the first char is a
+         * name of a character encoding (such as :UTF-8 or :ISO-8859-1), used
+         * by ABCL as a string designator, unless the name is :CODE-PAGE.
+         * A real string is (thus) also allowed.
+         * 
+         * Then, a property list follows with 3 possible keys:
+         *   :ID (values: code page numbers supported by MS-DOS/IBM-DOS/MS-Windows
+         *   :EOL-STYLE (values: :CR / :LF / :CRLF [none means native])
+         *   :LITTLE-ENDIAN (values: NIL / T)
+         * 
+         * These definitions have been taken from FLEXI-STREAMS:
+         *    http://www.weitz.de/flexi-streams/#make-external-format
+         */
         final File file = new File(namestring);
         String mode = null;
         if (direction == Keyword.INPUT) {
@@ -73,10 +81,10 @@ public final class FileStream extends Stream
             isInputStream = true;
             isOutputStream = true;
         }
+        
         Debug.assertTrue(mode != null);
-        raf = new RandomAccessFile(file, mode);
-        in = isInputStream ? raf : null;
-        out = isOutputStream ? raf : null;
+        RandomAccessFile raf = new RandomAccessFile(file, mode);
+	
         // ifExists is ignored unless we have an output stream.
         if (isOutputStream) {
             final long length = file.isFile() ? file.length() : 0;
@@ -89,11 +97,23 @@ public final class FileStream extends Stream
                     raf.setLength(0);
             }
         }
+        setExternalFormat(format);
+        
+	// don't touch raf directly after passing it to racf.
+	// the state will become inconsistent if you do that.
+        racf = new RandomAccessCharacterFile(raf, encoding);
+
         this.pathname = pathname;
         this.elementType = elementType;
         if (elementType == Symbol.CHARACTER || elementType == Symbol.BASE_CHAR) {
             isCharacterStream = true;
             bytesPerUnit = 1;
+	    if (isInputStream) {
+		initAsCharacterInputStream(racf.getReader());
+	    }
+	    if (isOutputStream) {
+		initAsCharacterOutputStream(racf.getWriter());
+	    }
         } else {
             isBinaryStream = true;
             int width;
@@ -104,19 +124,13 @@ public final class FileStream extends Stream
                 width = 8;
             }
             bytesPerUnit = width / 8;
+	    if (isInputStream) {
+		initAsBinaryInputStream(racf.getInputStream());
+	    }
+	    if (isOutputStream) {
+		initAsBinaryOutputStream(racf.getOutputStream());
+	    }
         }
-        if (isBinaryStream && isInputStream && !isOutputStream && bytesPerUnit == 1)
-            inputBuffer = new byte[BUFSIZE];
-        else if (isCharacterStream && isInputStream && !isOutputStream)
-            inputBuffer = new byte[BUFSIZE];
-        else
-            inputBuffer = null;
-        if (isBinaryStream && isOutputStream && !isInputStream && bytesPerUnit == 1)
-            outputBuffer = new byte[BUFSIZE];
-        else if (isCharacterStream && isOutputStream && !isInputStream)
-            outputBuffer = new byte[BUFSIZE];
-        else
-            outputBuffer = null;
     }
 
     @Override
@@ -147,28 +161,12 @@ public final class FileStream extends Stream
     }
 
     @Override
-    public LispObject listen() throws ConditionThrowable
-    {
-        try {
-            return in.getFilePointer() < in.length() ? T : NIL;
-        }
-        catch (NullPointerException e) {
-            streamNotInputStream();
-        }
-        catch (IOException e) {
-            error(new StreamError(this, e));
-        }
-        // Not reached.
-        return NIL;
-    }
-
-    @Override
     public LispObject fileLength() throws ConditionThrowable
     {
         final long length;
         if (isOpen()) {
             try {
-                length = raf.length();
+                length = racf.length();
             }
             catch (IOException e) {
                 error(new StreamError(this, e));
@@ -191,116 +189,10 @@ public final class FileStream extends Stream
     }
 
     @Override
-    public LispObject readLine(boolean eofError, LispObject eofValue)
-        throws ConditionThrowable
-    {
-        if (inputBuffer != null) {
-            final LispThread thread = LispThread.currentThread();
-            final FastStringBuffer sb = new FastStringBuffer();
-            while (true) {
-                int n = _readChar();
-                if (n < 0) {
-                    // End of file.
-                    if (sb.length() == 0) {
-                        if (eofError)
-                            return error(new EndOfFile(this));
-                        return thread.setValues(eofValue, T);
-                    }
-                    return thread.setValues(new SimpleString(sb), T);
-                }
-                char c = (char) n;
-                if (c == '\n')
-                    return thread.setValues(new SimpleString(sb), NIL);
-                else
-                    sb.append(c);
-            }
-        } else
-            return super.readLine(eofError, eofValue);
-    }
-
-    // Returns -1 at end of file.
-    @Override
-    protected int _readChar() throws ConditionThrowable
-    {
-        try {
-            int c = _readByte();
-            if (Utilities.isPlatformWindows) {
-                if (c == '\r') {
-                    int c2 = _readByte();
-                    if (c2 == '\n') {
-                        ++lineNumber;
-                        return c2;
-                    }
-                    // '\r' was not followed by '\n'
-                    if (inputBuffer != null && inputBufferOffset > 0) {
-                        --inputBufferOffset;
-                    } else {
-                        clearInputBuffer();
-                        long pos = in.getFilePointer();
-                        if (pos > 0)
-                            in.seek(pos - 1);
-                    }
-                }
-                return c;
-            }
-            if (c == '\n') {
-                ++lineNumber;
-                return c;
-            }
-            return c;
-        }
-        catch (NullPointerException e) {
-            streamNotInputStream();
-        }
-        catch (IOException e) {
-            error(new StreamError(this, e));
-        }
-        // Not reached.
-        return -1;
-    }
-
-    @Override
     protected void _unreadChar(int n) throws ConditionThrowable
     {
-        if (inputBuffer != null && inputBufferOffset > 0) {
-            --inputBufferOffset;
-            if (n != '\n')
-                return;
-            --lineNumber;
-            if (!Utilities.isPlatformWindows)
-                return;
-            // Check for preceding '\r'.
-            if (inputBufferOffset > 0) {
-                if (inputBuffer[--inputBufferOffset] != '\r')
-                    ++inputBufferOffset;
-                return;
-            }
-            // We can't go back far enough in the buffered input. Reset and
-            // fall through...
-            ++inputBufferOffset;
-        }
         try {
-            long pos;
-            if (inputBuffer != null && inputBufferFilePosition >= 0)
-                pos = inputBufferFilePosition + inputBufferOffset;
-            else
-                pos = in.getFilePointer();
-            clearInputBuffer();
-            if (pos > 0)
-                in.seek(pos - 1);
-            if (Utilities.isPlatformWindows && n == '\n') {
-                // Check for preceding '\r'.
-                pos = in.getFilePointer();
-                if (pos > 0) {
-                    in.seek(pos - 1);
-                    n = in.read();
-                    if (n == '\r')
-                        in.seek(pos - 1);
-                }
-            }
-        }
-        catch (NullPointerException e) {
-            streamNotInputStream();
+            racf.unreadChar((char)n);
         }
         catch (IOException e) {
             error(new StreamError(this, e));
@@ -314,141 +206,14 @@ public final class FileStream extends Stream
     }
 
     @Override
-    public void _writeChar(char c) throws ConditionThrowable
-    {
-        if (c == '\n') {
-            if (Utilities.isPlatformWindows)
-                _writeByte((byte)'\r');
-            _writeByte((byte)c);
-            charPos = 0;
-        } else {
-            _writeByte((byte)c);
-            ++charPos;
-        }
-    }
-
-    @Override
-    public void _writeChars(char[] chars, int start, int end)
-        throws ConditionThrowable
-    {
-        if (Utilities.isPlatformWindows) {
-            for (int i = start; i < end; i++) {
-                char c = chars[i];
-                if (c == '\n') {
-                    _writeByte((byte)'\r');
-                    _writeByte((byte)c);
-                    charPos = 0;
-                } else {
-                    _writeByte((byte)c);
-                    ++charPos;
-                }
-            }
-        } else {
-            // We're not on Windows, so no newline conversion is necessary.
-            for (int i = start; i < end; i++) {
-                char c = chars[i];
-                _writeByte((byte)c);
-                if (c == '\n')
-                    charPos = 0;
-                else
-                    ++charPos;
-            }
-        }
-    }
-
-    @Override
-    public void _writeString(String s) throws ConditionThrowable
-    {
-        final int length = s.length();
-        if (Utilities.isPlatformWindows) {
-            for (int i = 0; i < length; i++) {
-                char c = s.charAt(i);
-                if (c == '\n') {
-                    _writeByte((byte)'\r');
-                    _writeByte((byte)c);
-                    charPos = 0;
-                } else {
-                    _writeByte((byte)c);
-                    ++charPos;
-                }
-            }
-        } else {
-            // We're not on Windows, so no newline conversion is necessary.
-            for (int i = 0; i < length; i++) {
-                char c = s.charAt(i);
-                _writeByte((byte)c);
-                if (c == '\n')
-                    charPos = 0;
-                else
-                    ++charPos;
-            }
-        }
-    }
-
-    @Override
-    public void _writeLine(String s) throws ConditionThrowable
-    {
-        _writeString(s);
-        if (Utilities.isPlatformWindows)
-            _writeByte((byte)'\r');
-        _writeByte((byte)'\n');
-        charPos = 0;
-    }
-
-    // Reads an 8-bit byte.
-    @Override
-    public int _readByte() throws ConditionThrowable
-    {
-        if (inputBuffer != null)
-            return readByteFromBuffer();
-        try {
-            return in.read(); // Reads an 8-bit byte.
-        }
-        catch (NullPointerException e) {
-            streamNotInputStream();
-        }
-        catch (IOException e) {
-            error(new StreamError(this, e));
-        }
-        // Not reached.
-        return -1;
-    }
-
-    // Writes an 8-bit byte.
-    @Override
-    public void _writeByte(int n) throws ConditionThrowable
-    {
-        if (outputBuffer != null) {
-            writeByteToBuffer((byte)n);
-        } else {
-            try {
-                out.write((byte)n); // Writes an 8-bit byte.
-            }
-            catch (NullPointerException e) {
-                streamNotOutputStream();
-            }
-            catch (IOException e) {
-                error(new StreamError(this, e));
-            }
-        }
-    }
-
-    @Override
-    public void _finishOutput() throws ConditionThrowable
-    {
-        if (outputBuffer != null)
-            flushOutputBuffer();
-    }
-
-    @Override
     public void _clearInput() throws ConditionThrowable
     {
         try {
-            in.seek(in.length());
-            clearInputBuffer();
-        }
-        catch (NullPointerException e) {
-            streamNotInputStream();
+	    if (isInputStream) {
+		racf.position(racf.length());
+	    } else {
+		streamNotInputStream();
+	    }
         }
         catch (IOException e) {
             error(new StreamError(this, e));
@@ -458,14 +223,8 @@ public final class FileStream extends Stream
     @Override
     protected long _getFilePosition() throws ConditionThrowable
     {
-        if (inputBuffer != null) {
-            if (inputBufferFilePosition >= 0)
-                return inputBufferFilePosition + inputBufferOffset;
-        }
-        if (outputBuffer != null)
-            flushOutputBuffer();
         try {
-            long pos = raf.getFilePointer();
+            long pos = racf.position();
             return pos / bytesPerUnit;
         }
         catch (IOException e) {
@@ -478,21 +237,17 @@ public final class FileStream extends Stream
     @Override
     protected boolean _setFilePosition(LispObject arg) throws ConditionThrowable
     {
-        if (outputBuffer != null)
-            flushOutputBuffer();
-        if (inputBuffer != null)
-            clearInputBuffer();
         try {
             long pos;
             if (arg == Keyword.START)
                 pos = 0;
             else if (arg == Keyword.END)
-                pos = raf.length();
+                pos = racf.length();
             else {
                 long n = Fixnum.getValue(arg); // FIXME arg might be a bignum
                 pos = n * bytesPerUnit;
             }
-            raf.seek(pos);
+            racf.position(pos);
         }
         catch (IOException e) {
             error(new StreamError(this, e));
@@ -503,69 +258,12 @@ public final class FileStream extends Stream
     @Override
     public void _close() throws ConditionThrowable
     {
-        if (outputBuffer != null)
-            flushOutputBuffer();
         try {
-            raf.close();
+            racf.close();
             setOpen(false);
         }
         catch (IOException e) {
             error(new StreamError(this, e));
-        }
-    }
-
-    private int readByteFromBuffer() throws ConditionThrowable
-    {
-        if (inputBufferOffset >= inputBufferCount) {
-            fillInputBuffer();
-            if (inputBufferCount < 0)
-                return -1;
-        }
-        return inputBuffer[inputBufferOffset++] & 0xff;
-    }
-
-    private void fillInputBuffer() throws ConditionThrowable
-    {
-        try {
-            inputBufferFilePosition = in.getFilePointer();
-            inputBufferOffset = 0;
-            inputBufferCount = in.read(inputBuffer, 0, BUFSIZE);
-        }
-        catch (NullPointerException e) {
-            streamNotInputStream();
-        }
-        catch (IOException e) {
-            error(new StreamError(this, e));
-        }
-    }
-
-    private void clearInputBuffer()
-    {
-        inputBufferFilePosition = -1;
-        inputBufferOffset = 0;
-        inputBufferCount = 0;
-    }
-
-    private void writeByteToBuffer(byte b) throws ConditionThrowable
-    {
-        if (outputBufferOffset == BUFSIZE)
-            flushOutputBuffer();
-        outputBuffer[outputBufferOffset++] = b;
-    }
-
-    private void flushOutputBuffer() throws ConditionThrowable
-    {
-        if (outputBufferOffset > 0) {
-            try {
-                out.write(outputBuffer, 0, outputBufferOffset);
-                outputBufferOffset = 0;
-            }
-            catch (NullPointerException e) {
-                streamNotOutputStream();
-            }
-            catch (IOException e) {
-                error(new StreamError(this, e));
-            }
         }
     }
 
@@ -575,15 +273,15 @@ public final class FileStream extends Stream
         return unreadableString(Symbol.FILE_STREAM);
     }
 
-    // ### make-file-stream pathname namestring element-type direction if-exists => stream
+    // ### make-file-stream pathname namestring element-type direction if-exists external-format => stream
     private static final Primitive MAKE_FILE_STREAM =
         new Primitive("make-file-stream", PACKAGE_SYS, true,
-                      "pathname namestring element-type direction if-exists")
+                      "pathname namestring element-type direction if-exists external-format")
     {
         @Override
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth,
-                                  LispObject fifth)
+                                  LispObject fifth, LispObject sixth)
             throws ConditionThrowable
         {
             final Pathname pathname;
@@ -603,12 +301,15 @@ public final class FileStream extends Stream
             LispObject elementType = third;
             LispObject direction = fourth;
             LispObject ifExists = fifth;
+            LispObject externalFormat = sixth;
+            
             if (direction != Keyword.INPUT && direction != Keyword.OUTPUT &&
                 direction != Keyword.IO)
                 error(new LispError("Direction must be :INPUT, :OUTPUT, or :IO."));
             try {
                 return new FileStream(pathname, namestring.getStringValue(),
-                                      elementType, direction, ifExists);
+                                      elementType, direction, ifExists,
+                                      externalFormat);
             }
             catch (FileNotFoundException e) {
                 return NIL;

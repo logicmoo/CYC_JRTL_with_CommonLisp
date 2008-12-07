@@ -31,15 +31,16 @@
 
 (in-package "SYSTEM")
 
-(defun get-socket-stream (socket &key (element-type 'character))
-  ":ELEMENT-TYPE must be CHARACTER or (UNSIGNED-BYTE 8); the default is CHARACTER."
+(defun get-socket-stream (socket &key (element-type 'character) (external-format :default))
+  ":ELEMENT-TYPE must be CHARACTER or (UNSIGNED-BYTE 8); the default is CHARACTER.
+EXTERNAL-FORMAT must be of the same format as specified for OPEN."
   (cond ((eq element-type 'character))
         ((equal element-type '(unsigned-byte 8)))
         (t
          (error 'simple-type-error
                 :format-control
                 ":ELEMENT-TYPE must be CHARACTER or (UNSIGNED-BYTE 8).")))
-  (%socket-stream socket element-type))
+  (%socket-stream socket element-type external-format))
 
 (defun make-socket (host port)
   (%make-socket host port))

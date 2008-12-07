@@ -47,23 +47,23 @@ public final class StringOutputStream extends Stream
     private StringOutputStream(LispObject elementType)
     {
         this.elementType = elementType;
-        isInputStream = false;
-        isOutputStream = true;
-        isCharacterStream = true;
-        isBinaryStream = false;
-        setWriter(stringWriter = new StringWriter());
+        this.eolStyle = EolStyle.RAW;
+        initAsCharacterOutputStream(stringWriter = new StringWriter());
     }
 
+    @Override
     public LispObject typeOf()
     {
         return Symbol.STRING_OUTPUT_STREAM;
     }
 
+    @Override
     public LispObject classOf()
     {
         return BuiltInClass.STRING_OUTPUT_STREAM;
     }
 
+    @Override
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.STRING_OUTPUT_STREAM)
@@ -77,45 +77,12 @@ public final class StringOutputStream extends Stream
         return super.typep(type);
     }
 
-    public void _writeChar(char c) throws ConditionThrowable
-    {
-        if (elementType == NIL)
-            writeError();
-        super._writeChar(c);
-    }
-
-    public void _writeChars(char[] chars, int start, int end)
-        throws ConditionThrowable
-    {
-        if (elementType == NIL)
-            writeError();
-        super._writeChars(chars, start, end);
-    }
-
-    public void _writeString(String s) throws ConditionThrowable
-    {
-        if (elementType == NIL)
-            writeError();
-        super._writeString(s);
-    }
-
-    public void _writeLine(String s) throws ConditionThrowable
-    {
-        if (elementType == NIL)
-            writeError();
-        super._writeLine(s);
-    }
-
-    private void writeError() throws ConditionThrowable
-    {
-        error(new TypeError("Attempt to write to a string output stream of element type NIL."));
-    }
-
+    @Override
     protected long _getFilePosition() throws ConditionThrowable
     {
         if (elementType == NIL)
             return 0;
-        return stringWriter.toString().length();
+        return stringWriter.getBuffer().length();
     }
 
     public LispObject getString() throws ConditionThrowable
@@ -128,6 +95,7 @@ public final class StringOutputStream extends Stream
         return s;
     }
 
+    @Override
     public String toString()
     {
         return unreadableString("STRING-OUTPUT-STREAM");
@@ -139,6 +107,7 @@ public final class StringOutputStream extends Stream
         new Primitive("%make-string-output-stream", PACKAGE_SYS, false,
                        "element-type")
     {
+        @Override
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return new StringOutputStream(arg);
@@ -150,6 +119,7 @@ public final class StringOutputStream extends Stream
     private static final Primitive GET_OUTPUT_STREAM_STRING =
         new Primitive("get-output-stream-string", "string-output-stream")
     {
+        @Override
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             try {

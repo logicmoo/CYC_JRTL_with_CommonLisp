@@ -33,12 +33,13 @@
 
 package org.armedbear.lisp;
 
+import java.io.StringReader;
+
 public final class StringInputStream extends Stream
 {
-    final String s;
-    final int start;
-    final int end;
-
+    private final StringReader stringReader;
+    private final int start;
+    
     public StringInputStream(String s)
     {
         this(s, 0, s.length());
@@ -52,26 +53,28 @@ public final class StringInputStream extends Stream
     public StringInputStream(String s, int start, int end)
     {
         elementType = Symbol.CHARACTER;
-        isInputStream = true;
-        isOutputStream = false;
-        isCharacterStream = true;
-        isBinaryStream = false;
-        this.s = s;
+        setExternalFormat(keywordDefault);
+        eolStyle = EolStyle.RAW;
+
         this.start = start;
-        this.end = end;
-        offset = start;
+        
+        stringReader = new StringReader(s.substring(start, end));
+        initAsCharacterInputStream(stringReader);
     }
 
+    @Override
     public LispObject typeOf()
     {
         return Symbol.STRING_INPUT_STREAM;
     }
 
+    @Override
     public LispObject classOf()
     {
         return BuiltInClass.STRING_INPUT_STREAM;
     }
 
+    @Override
     public LispObject typep(LispObject type) throws ConditionThrowable
     {
         if (type == Symbol.STRING_INPUT_STREAM)
@@ -85,57 +88,29 @@ public final class StringInputStream extends Stream
         return super.typep(type);
     }
 
-    public LispObject close(LispObject abort) throws ConditionThrowable
-    {
-        setOpen(false);
-        return T;
-    }
-
-    public LispObject listen()
-    {
-        return offset < end ? T : NIL;
-    }
-
-    protected int _readChar()
-    {
-        if (offset >= end)
-            return -1;
-        int n = s.charAt(offset);
-        ++offset;
-        if (n == '\n')
-            ++lineNumber;
-        return n;
-    }
-
-    protected void _unreadChar(int n)
-    {
-        if (offset > start) {
-            --offset;
-            if (n == '\n')
-                --lineNumber;
-        }
-    }
-
-    protected boolean _charReady()
-    {
-        return true;
-    }
-
+    @Override
     public String toString()
     {
         return unreadableString("STRING-INPUT-STREAM");
     }
 
+    @Override
+    public int getOffset() {
+        return start + super.getOffset();
+    }
+    
     // ### make-string-input-stream
     // make-string-input-stream string &optional start end => string-stream
     private static final Primitive MAKE_STRING_INPUT_STREAM =
         new Primitive("make-string-input-stream", "string &optional start end")
     {
+        @Override
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             return new StringInputStream(arg.getStringValue());
         }
 
+        @Override
         public LispObject execute(LispObject first, LispObject second)
             throws ConditionThrowable
         {
@@ -144,6 +119,7 @@ public final class StringInputStream extends Stream
             return new StringInputStream(s, start);
         }
 
+        @Override
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
             throws ConditionThrowable
@@ -161,6 +137,7 @@ public final class StringInputStream extends Stream
     private static final Primitive STRING_INPUT_STREAM_CURRENT =
         new Primitive("string-input-stream-current", PACKAGE_EXT, true, "stream")
     {
+        @Override
         public LispObject execute(LispObject arg) throws ConditionThrowable
         {
             if (arg instanceof StringInputStream)

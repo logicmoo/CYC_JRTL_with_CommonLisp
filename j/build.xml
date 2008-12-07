@@ -100,6 +100,7 @@
 
     <patternset id="abcl.source.java">
       <include name="org/armedbear/lisp/*.java"/>
+      <include name="org/armedbear/lisp/util/*.java"/>
       <include name="org/armedbear/Main.java"/>
     </patternset>
     
@@ -117,6 +118,7 @@
 
     <patternset id="abcl.objects">
       <include name="org/armedbear/lisp/*.class"/>
+      <include name="org/armedbear/lisp/util/*.class"/>
       <include name="org/armedbear/lisp/*.cls"/> 
       <include name="org/armedbear/lisp/*.abcl"/>
       <patternset refid="abcl.source.lisp.dist"/>

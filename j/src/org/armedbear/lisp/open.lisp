@@ -106,7 +106,7 @@
 	     (if-exists nil if-exists-given)
 	     (if-does-not-exist nil if-does-not-exist-given)
 	     (external-format :default))
-  (declare (ignore external-format)) ; FIXME
+;  (declare (ignore external-format)) ; FIXME
   (setf element-type (case element-type
                        ((character base-char)
                         'character)
@@ -143,7 +143,7 @@
                    :pathname pathname
                    :format-control "The file ~S does not exist."
                    :format-arguments (list namestring)))))
-       (make-file-stream pathname namestring element-type :input nil))
+       (make-file-stream pathname namestring element-type :input nil external-format))
       (:probe
        (case if-does-not-exist
          (:error
@@ -157,7 +157,8 @@
           ;; this abstract pathname if and only if a file with this name does
           ;; not yet exist." See java.io.File.createNewFile().
           (create-new-file namestring)))
-       (let ((stream (make-file-stream pathname namestring element-type :input nil)))
+       (let ((stream (make-file-stream pathname namestring element-type
+                                       :input nil external-format)))
          (when stream
            (close stream))
          stream))
@@ -204,7 +205,8 @@
           (error 'simple-error
                  :format-control "Option not supported: ~S."
                  :format-arguments (list if-exists))))
-       (let ((stream (make-file-stream pathname namestring element-type direction if-exists)))
+       (let ((stream (make-file-stream pathname namestring element-type
+                                       direction if-exists external-format)))
          (unless stream
            (error 'file-error
                   :pathname pathname
