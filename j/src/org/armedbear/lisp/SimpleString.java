@@ -118,9 +118,13 @@ public final class SimpleString extends AbstractString
             return T;
         if (type == Symbol.SIMPLE_ARRAY)
             return T;
+        if (type == Symbol.SIMPLE_BASE_STRING)
+            return T;
         if (type == BuiltInClass.SIMPLE_STRING)
             return T;
         if (type == BuiltInClass.SIMPLE_ARRAY)
+            return T;
+        if (type == BuiltInClass.SIMPLE_BASE_STRING)
             return T;
         return super.typep(type);
     }

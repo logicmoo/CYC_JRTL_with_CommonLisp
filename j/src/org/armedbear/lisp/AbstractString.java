@@ -40,8 +40,12 @@ public abstract class AbstractString extends AbstractVector
         if (type instanceof Symbol) {
             if (type == Symbol.STRING)
                 return T;
+            if (type == Symbol.BASE_STRING)
+                return T;
         }
         if (type == BuiltInClass.STRING)
+            return T;
+        if (type == BuiltInClass.BASE_STRING)
             return T;
         return super.typep(type);
     }
