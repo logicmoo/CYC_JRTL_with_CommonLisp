@@ -47,6 +47,7 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.util.BitSet;
 
 
@@ -129,22 +130,14 @@ public class Stream extends LispObject
   {
     this.elementType = elementType;
     setExternalFormat(format);
+    
     if (elementType == Symbol.CHARACTER || elementType == Symbol.BASE_CHAR)
       {
-        InputStreamReader inputStreamReader;
-        try
-          {
-            inputStreamReader =
-                    (encoding == null) ?
-                        new InputStreamReader(inputStream)
-                        : new InputStreamReader(inputStream, encoding);
-          }
-        catch (java.io.UnsupportedEncodingException e)
-          {
-            Debug.trace(e);
-            inputStreamReader =
-              new InputStreamReader(inputStream);
-          }
+        InputStreamReader inputStreamReader =
+            (encoding == null) ?
+                new InputStreamReader(inputStream)
+                : new InputStreamReader(inputStream,
+                    Charset.forName(encoding).newDecoder());
         initAsCharacterInputStream(new BufferedReader(inputStreamReader));
       }
     else
@@ -173,18 +166,11 @@ public class Stream extends LispObject
     setExternalFormat(format);
     if (elementType == Symbol.CHARACTER || elementType == Symbol.BASE_CHAR)
       {
-	Writer w;
-        try
-          {
-            w = (encoding == null) ?
+	Writer w =
+            (encoding == null) ?
                 new OutputStreamWriter(outputStream)
-                : new OutputStreamWriter(outputStream, encoding);
-          }
-        catch (java.io.UnsupportedEncodingException e)
-          {
-            Debug.trace(e);
-            w = new OutputStreamWriter(outputStream);
-          }
+                : new OutputStreamWriter(outputStream, 
+                    Charset.forName(encoding).newEncoder());
 	initAsCharacterOutputStream(w);
       }
     else
