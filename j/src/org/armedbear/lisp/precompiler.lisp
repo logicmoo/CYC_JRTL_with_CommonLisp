@@ -638,10 +638,11 @@
                    (setq var (second (%car var))) ;; *x*
                    (when (or (special-variable-p var) (memq var declared-specials))
                      (push var specials))))))
+        ;;//###FIXME: Ideally, we don't rewrite for specials at all
         (when specials
           ;; For each special...
           (dolist (special specials)
-            (let ((sym (gensym)))
+            (let ((sym special))
               (let ((res nil)
                     (keyp nil))
                 ;; Walk through the lambda list and replace each occurrence.
