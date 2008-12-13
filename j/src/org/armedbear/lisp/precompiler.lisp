@@ -713,14 +713,14 @@
         expansion)))
 
 (defun precompile-macrolet (form)
-  (let ((*local-functions-and-macros* *local-functions-and-macros*)
-        (macros (cadr form)))
-    (dolist (macro macros)
-      (let ((name (car macro))
-            (lambda-list (cadr macro))
-            (forms (cddr macro)))
-        (push (define-local-macro name lambda-list forms) *local-functions-and-macros*)
-        (push name *local-functions-and-macros*)))
+  (let ((*compile-file-environment*
+         (make-environment *compile-file-environment*)))
+    (dolist (definition (cadr form))
+      (environment-add-macro-definition
+       *compile-file-environment*
+       (car definition)
+       (make-macro (car definition)
+                   (make-expander-for-macrolet definition))))
     (multiple-value-bind (body decls)
         (parse-body (cddr form) nil)
       `(locally ,@decls ,@(mapcar #'precompile1 body)))))
