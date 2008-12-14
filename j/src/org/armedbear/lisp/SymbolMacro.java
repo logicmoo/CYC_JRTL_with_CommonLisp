@@ -47,13 +47,4 @@ public final class SymbolMacro extends LispObject
         return expansion;
     }
 
-    // ### make-symbol-macro
-    private static final Primitive MAKE_MACRO =
-        new Primitive("make-symbol-macro", PACKAGE_SYS, false)
-    {
-        public LispObject execute(LispObject arg) throws ConditionThrowable
-        {
-            return new SymbolMacro(arg);
-        }
-    };
 }

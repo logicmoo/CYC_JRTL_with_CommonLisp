@@ -308,6 +308,21 @@ public final class Environment extends LispObject
       }
     };
 
+  // ### environment-add-symbol-binding
+  public static final Primitive ENVIRONMENT_ADD_SYMBOL_BINDING =
+    new Primitive("environment-add-symbol-binding", PACKAGE_SYS, true,
+                  "environment symbol value")
+    {
+      @Override
+      public LispObject execute(LispObject first, LispObject second,
+                                LispObject third)
+        throws ConditionThrowable
+      {
+        checkEnvironment(first).bind(checkSymbol(second), third);
+        return first;
+      }
+    };
+    
   // ### empty-environment-p
   private static final Primitive EMPTY_ENVIRONMENT_P =
     new Primitive("empty-environment-p", PACKAGE_SYS, true, "environment")

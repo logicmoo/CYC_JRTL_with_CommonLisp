@@ -1728,6 +1728,17 @@ public final class Primitives extends Lisp
       }
     };
 
+  // ### make-symbol-macro
+  private static final Primitive MAKE_SYMBOL_MACRO =
+      new Primitive("make-symbol-macro", PACKAGE_SYS, true, "expansion")
+  {
+      public LispObject execute(LispObject arg) throws ConditionThrowable
+      {
+          return new SymbolMacro(arg);
+      }
+  };
+
+
   // ### %defparameter
   private static final Primitive _DEFPARAMETER =
     new Primitive("%defparameter", PACKAGE_SYS, false)

@@ -719,6 +719,8 @@
 
 (defun precompile-symbol-macrolet (form)
   (let ((*local-variables* *local-variables*)
+        (*compile-file-environment*
+         (make-environment *compile-file-environment*))
         (defs (cadr form)))
     (dolist (def defs)
       (let ((sym (car def))
@@ -727,7 +729,11 @@
           (error 'program-error
                  :format-control "Attempt to bind the special variable ~S with SYMBOL-MACROLET."
                  :format-arguments (list sym)))
-        (push (list sym :symbol-macro expansion) *local-variables*)))
+        (push (list sym :symbol-macro expansion) *local-variables*)
+        (environment-add-symbol-binding *compile-file-environment*
+                                        sym
+                                        (sys::make-symbol-macro expansion))
+        ))
     (multiple-value-bind (body decls)
         (parse-body (cddr form) nil)
       (when decls
