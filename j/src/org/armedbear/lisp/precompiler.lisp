@@ -828,8 +828,7 @@
         (arglist (cadr def))
         (body (cddr def)))
     ;; Macro names are shadowed by local functions.
-    (push nil *local-functions-and-macros*)
-    (push name *local-functions-and-macros*)
+    (environment-add-function-definition *compile-file-environment* name body)
     (list* name arglist (mapcar #'precompile1 body))))
 
 (defun precompile-local-functions (defs)
@@ -849,7 +848,8 @@
              (find-use name (%cdr expression))))))
 
 (defun precompile-flet/labels (form)
-  (let ((*local-functions-and-macros* *local-functions-and-macros*)
+  (let ((*compile-file-environment*
+         (make-environment *compile-file-environment*))
         (operator (car form))
         (locals (cadr form))
         (body (cddr form)))
