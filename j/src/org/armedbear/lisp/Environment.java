@@ -67,16 +67,19 @@ public final class Environment extends LispObject
     vars = new Binding(symbol, value, vars);
   }
 
+  @Override
   public LispObject typeOf()
   {
     return Symbol.ENVIRONMENT;
   }
 
+  @Override
   public LispObject classOf()
   {
     return BuiltInClass.ENVIRONMENT;
   }
 
+  @Override
   public LispObject typep(LispObject type) throws ConditionThrowable
   {
     if (type == Symbol.ENVIRONMENT)
@@ -247,6 +250,7 @@ public final class Environment extends LispObject
     return binding != null ? binding.specialp : false;
   }
 
+  @Override
   public String writeToString() throws ConditionThrowable
   {
     return unreadableString(Symbol.ENVIRONMENT);
@@ -257,10 +261,12 @@ public final class Environment extends LispObject
     new Primitive("make-environment", PACKAGE_SYS, true,
                   "&optional parent-environment")
     {
+      @Override
       public LispObject execute()
       {
         return new Environment();
       }
+      @Override
       public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         if (arg == NIL)
@@ -274,6 +280,7 @@ public final class Environment extends LispObject
     new Primitive("environment-add-macro-definition", PACKAGE_SYS, true,
                   "environment name expander")
     {
+      @Override
       public LispObject execute(LispObject first, LispObject second,
                                 LispObject third)
         throws ConditionThrowable
@@ -291,6 +298,7 @@ public final class Environment extends LispObject
     new Primitive("environment-add-function-definition", PACKAGE_SYS, true,
                   "environment name lambda-expression")
     {
+      @Override
       public LispObject execute(LispObject first, LispObject second,
                                 LispObject third)
         throws ConditionThrowable
@@ -304,6 +312,7 @@ public final class Environment extends LispObject
   private static final Primitive EMPTY_ENVIRONMENT_P =
     new Primitive("empty-environment-p", PACKAGE_SYS, true, "environment")
     {
+      @Override
       public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         try
@@ -321,6 +330,7 @@ public final class Environment extends LispObject
   private static final Primitive ENVIRONMENT_VARS =
     new Primitive("environment-variables", PACKAGE_SYS, true, "environment")
     {
+      @Override
       public LispObject execute(LispObject arg) throws ConditionThrowable
       {
         try
