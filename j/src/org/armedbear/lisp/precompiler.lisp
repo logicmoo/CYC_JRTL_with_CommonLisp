@@ -372,11 +372,6 @@
            (when (symbolp op)
              (cond ((setf handler (get op 'precompile-handler))
                     (return-from precompile1 (funcall handler form)))
-                   ((local-macro-function op)
-                    (let ((result (expand-local-macro (precompile-cons form))))
-                      (return-from precompile1 (if (equal result form)
-                                                   result
-                                                   (precompile1 result)))))
                    ((macro-function op *compile-file-environment*)
                     (return-from precompile1 (precompile1 (expand-macro form))))
                    ((special-operator-p op)
@@ -500,18 +495,14 @@
 (defun precompile-setf (form)
   (let ((place (second form)))
     (cond ((and (consp place)
-                (local-macro-function (%car place)))
-           (let ((expansion (expand-local-macro place)))
-             (precompile1 (list* 'SETF expansion (cddr form)))))
-          ((and (consp place)
                 (eq (%car place) 'VALUES))
-           (setf form
-                 (list* 'SETF
-                        (list* 'VALUES
-                               (mapcar #'precompile1 (%cdr place)))
-                        (cddr form)))
-           (precompile1 (expand-macro form)))
-          ((symbolp place)
+	   (setf form
+		 (list* 'SETF
+			(list* 'VALUES
+			       (mapcar #'precompile1 (%cdr place)))
+			(cddr form)))
+	   (precompile1 (expand-macro form)))
+	  ((symbolp place)
            (let ((varspec (find-varspec place)))
              (if (and varspec (eq (second varspec) :symbol-macro))
                  (precompile1 (list* 'SETF (copy-tree (third varspec)) (cddr form)))
@@ -691,9 +682,6 @@
       form))
 
 (defvar *local-functions-and-macros* ())
-
-(defun local-macro-function (name)
-  (getf *local-functions-and-macros* name))
 
 (defun precompile-macrolet (form)
   (let ((*compile-file-environment*
