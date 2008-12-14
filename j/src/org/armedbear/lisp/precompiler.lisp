@@ -690,27 +690,10 @@
       (precompile1 (expand-macro form))
       form))
 
-(defun define-local-macro (name lambda-list body)
-  (let* ((form (gensym))
-         (env (gensym))
-         (body (sys::parse-defmacro lambda-list form body name 'macrolet
-                                    :environment env))
-         (expander `(lambda (,form ,env) (block ,name ,body)))
-         (compiled-expander (sys::%compile nil expander)))
-    (coerce-to-function (or compiled-expander expander))))
-
 (defvar *local-functions-and-macros* ())
 
 (defun local-macro-function (name)
   (getf *local-functions-and-macros* name))
-
-(defun expand-local-macro (form)
-  (let ((expansion (funcall (local-macro-function (car form)) form nil)))
-    ;; If the expansion turns out to be a bare symbol, wrap it with PROGN so it
-    ;; won't be mistaken for a tag in an enclosing TAGBODY.
-    (if (symbolp expansion)
-        (list 'PROGN expansion)
-        expansion)))
 
 (defun precompile-macrolet (form)
   (let ((*compile-file-environment*
