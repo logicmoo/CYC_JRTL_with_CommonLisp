@@ -62,6 +62,18 @@
 (defmacro dformat (&rest ignored)
   (declare (ignore ignored)))
 
+
+(defmacro with-saved-compiler-policy (&body body)
+  "Saves compiler policy variables, restoring them after evaluating `body'."
+  `(let ((*speed* *speed*)
+         (*space* *space*)
+         (*safety* *safety*)
+         (*debug* *debug*)
+         (*explain* *explain*)
+         (*inline-declarations* *inline-declarations*))
+     ,@body))
+
+
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (defun generate-inline-expansion (block-name lambda-list body)
     (cond ((intersection lambda-list '(&optional &rest &key &allow-other-keys &aux) :test 'eq)
@@ -785,11 +797,7 @@
       (let ((variable (local-function-variable local-function)))
         (when variable
           (push variable *visible-variables*))))
-    (let ((*speed* *speed*)
-          (*safety* *safety*)
-          (*debug* *debug*)
-          (*explain* *explain*)
-          (*inline-declarations* *inline-declarations*))
+    (with-saved-compiler-policy
       (process-optimization-declarations (cddr form))
       (list* (car form) local-functions (p1-body (cddr form))))))
 
@@ -5461,12 +5469,7 @@ representation, based on the derived type of the LispObject."
     (dolist (variable (block-free-specials block))
       (push variable *visible-variables*))
     ;; Body of LET/LET*.
-    (let ((*speed*  *speed*)
-          (*space*  *space*)
-          (*safety* *safety*)
-          (*debug*  *debug*)
-          (*explain* *explain*)
-          (*inline-declarations* *inline-declarations*))
+    (with-saved-compiler-policy
       (process-optimization-declarations (cddr form))
       (compile-progn-body (cddr form) target representation))
     (when specialp
@@ -5476,15 +5479,10 @@ representation, based on the derived type of the LispObject."
       (emit 'putfield +lisp-thread-class+ "lastSpecialBinding" +lisp-special-binding+))))
 
 (defun p2-locally (form target representation)
-  (let ((*speed*  *speed*)
-        (*space*  *space*)
-        (*safety* *safety*)
-        (*debug*  *debug*)
-        (*explain* *explain*)
-        (*inline-declarations* *inline-declarations*)
-        (body (cdr form)))
-    (process-optimization-declarations body)
-    (compile-progn-body body target representation)))
+  (with-saved-compiler-policy
+    (let ((body (cdr form)))
+      (process-optimization-declarations body)
+      (compile-progn-body body target representation))))
 
 (defknown find-tag (t) t)
 (defun find-tag (name)
@@ -6030,13 +6028,10 @@ representation, based on the derived type of the LispObject."
                                                :lambda-list lambda-list)))
              (setf (compiland-class-file compiland) class-file)
              (with-class-file class-file
-               (let ((*current-compiland* compiland)
-                     (*speed* *speed*)
-                     (*safety* *safety*)
-                     (*debug* *debug*)
-                     (*explain* *explain*))
-                 (p2-compiland compiland)
-                 (write-class-file (compiland-class-file compiland))))
+               (let ((*current-compiland* compiland))
+                 (with-saved-compiler-policy
+                   (p2-compiland compiland)
+                   (write-class-file (compiland-class-file compiland)))))
              ;; Verify that the class file is loadable.
              (let ((*load-truename* (pathname pathname)))
                (unless (ignore-errors (load-compiled-function pathname))
@@ -6067,13 +6062,10 @@ representation, based on the derived type of the LispObject."
              (unwind-protect
                  (progn
                    (with-class-file class-file
-                     (let ((*current-compiland* compiland)
-                           (*speed* *speed*)
-                           (*safety* *safety*)
-                           (*debug* *debug*)
-                           (*explain* *explain*))
-                       (p2-compiland compiland)
-                       (write-class-file (compiland-class-file compiland))))
+                     (let ((*current-compiland* compiland))
+                       (with-saved-compiler-policy
+                         (p2-compiland compiland)
+                         (write-class-file (compiland-class-file compiland)))))
                    (setf (local-function-class-file local-function) class-file)
                    (setf (local-function-function local-function) (load-compiled-function pathname))
 
@@ -6104,13 +6096,10 @@ representation, based on the derived type of the LispObject."
                                                :lambda-list lambda-list)))
              (setf (compiland-class-file compiland) class-file)
              (with-class-file class-file
-               (let ((*current-compiland* compiland)
-                     (*speed* *speed*)
-                     (*safety* *safety*)
-                     (*debug* *debug*)
-                     (*explain* *explain*))
-                 (p2-compiland compiland)
-                 (write-class-file (compiland-class-file compiland))))
+               (let ((*current-compiland* compiland))
+                 (with-saved-compiler-policy
+                   (p2-compiland compiland)
+                   (write-class-file (compiland-class-file compiland)))))
              ;; Verify that the class file is loadable.
              (let ((*load-truename* (pathname pathname)))
                (unless (ignore-errors (load-compiled-function pathname))
@@ -6139,13 +6128,10 @@ representation, based on the derived type of the LispObject."
              (unwind-protect
                  (progn
                    (with-class-file class-file
-                     (let ((*current-compiland* compiland)
-                           (*speed* *speed*)
-                           (*safety* *safety*)
-                           (*debug* *debug*)
-                           (*explain* *explain*))
-                       (p2-compiland compiland)
-                       (write-class-file (compiland-class-file compiland))))
+                     (let ((*current-compiland* compiland))
+                       (with-saved-compiler-policy
+                         (p2-compiland compiland)
+                         (write-class-file (compiland-class-file compiland)))))
                    (setf (local-function-class-file local-function) class-file)
                    (let ((g (declare-object (load-compiled-function pathname))))
                      (emit 'getstatic *this-class* g +lisp-object+)
@@ -6218,13 +6204,10 @@ representation, based on the derived type of the LispObject."
                  (make-class-file :pathname (sys::next-classfile-name)
                                   :lambda-list lambda-list))
            (with-class-file (compiland-class-file compiland)
-             (let ((*current-compiland* compiland)
-                   (*speed* *speed*)
-                   (*safety* *safety*)
-                   (*debug* *debug*)
-                   (*explain* *explain*))
-               (p2-compiland compiland)
-               (write-class-file (compiland-class-file compiland))))
+             (let ((*current-compiland* compiland))
+               (with-saved-compiler-policy
+                 (p2-compiland compiland)
+                 (write-class-file (compiland-class-file compiland)))))
            (let ((class-file (compiland-class-file compiland)))
              (emit 'getstatic *this-class*
                    (declare-local-function (make-local-function :class-file class-file))
@@ -6237,13 +6220,10 @@ representation, based on the derived type of the LispObject."
              (unwind-protect
                  (progn
                    (with-class-file (compiland-class-file compiland)
-                     (let ((*current-compiland* compiland)
-                           (*speed* *speed*)
-                           (*safety* *safety*)
-                           (*debug* *debug*)
-                           (*explain* *explain*))
-                       (p2-compiland compiland)
-                       (write-class-file (compiland-class-file compiland))))
+                     (let ((*current-compiland* compiland))
+                       (with-saved-compiler-policy
+                         (p2-compiland compiland)
+                         (write-class-file (compiland-class-file compiland)))))
                    (emit 'getstatic *this-class*
                          (declare-object (load-compiled-function pathname))
                          +lisp-object+))
@@ -10261,31 +10241,27 @@ representation, based on the derived type of the LispObject."
         (*closure-variables* nil)
         (*undefined-variables* nil)
         (*local-functions* nil)
-        (*current-compiland* compiland)
-        (*speed* *speed*)
-        (*safety* *safety*)
-        (*debug* *debug*)
-        (*explain* *explain*)
-        (*inline-declarations* *inline-declarations*))
-    ;; Pass 1.
-    (p1-compiland compiland)
-    (setf *closure-variables*
-          (remove-if-not #'variable-used-non-locally-p *all-variables*))
-    (when *closure-variables*
+        (*current-compiland* compiland))
+    (with-saved-compiler-policy
+      ;; Pass 1.
+      (p1-compiland compiland)
       (setf *closure-variables*
-            (remove-if #'variable-special-p *closure-variables*))
+            (remove-if-not #'variable-used-non-locally-p *all-variables*))
       (when *closure-variables*
-        (let ((i 0))
-          (dolist (var (reverse *closure-variables*))
-            (setf (variable-closure-index var) i)
-            (dformat t "var = ~S closure index = ~S~%" (variable-name var)
-                     (variable-closure-index var))
-            (incf i)))))
-    ;; Pass 2.
-    (with-class-file (compiland-class-file compiland)
-      (p2-compiland compiland)
-      (write-class-file (compiland-class-file compiland)))
-    (class-file-pathname (compiland-class-file compiland))))
+        (setf *closure-variables*
+              (remove-if #'variable-special-p *closure-variables*))
+        (when *closure-variables*
+          (let ((i 0))
+            (dolist (var (reverse *closure-variables*))
+              (setf (variable-closure-index var) i)
+              (dformat t "var = ~S closure index = ~S~%" (variable-name var)
+                       (variable-closure-index var))
+              (incf i)))))
+      ;; Pass 2.
+      (with-class-file (compiland-class-file compiland)
+        (p2-compiland compiland)
+        (write-class-file (compiland-class-file compiland)))
+      (class-file-pathname (compiland-class-file compiland)))))
 
 (defvar *compiler-error-bailout*)
 
@@ -10381,16 +10357,12 @@ representation, based on the derived type of the LispObject."
            (warnings-p t)
            (failure-p t))
       (with-compilation-unit ()
-        (let* ((*speed* *speed*)
-               (*space* *space*)
-               (*safety* *safety*)
-               (*debug* *debug*)
-               (*explain* *explain*)
-               (tempfile (make-temp-file)))
-          (unwind-protect
-              (setf compiled-function
-                    (load-compiled-function (compile-defun name expr env tempfile)))
-            (delete-file tempfile)))
+        (with-saved-compiler-policy
+          (let* ((tempfile (make-temp-file)))
+            (unwind-protect
+                 (setf compiled-function
+                       (load-compiled-function (compile-defun name expr env tempfile)))
+              (delete-file tempfile))))
         (when (and name (functionp compiled-function))
           (sys::%set-lambda-name compiled-function name)
           (sys:set-call-count compiled-function (sys:call-count definition))
