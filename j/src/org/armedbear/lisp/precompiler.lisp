@@ -691,7 +691,9 @@
        *compile-file-environment*
        (car definition)
        (make-macro (car definition)
-                   (make-expander-for-macrolet definition))))
+                   (make-closure
+                    (make-expander-for-macrolet definition)
+                    NIL))))
     (multiple-value-bind (body decls)
         (parse-body (cddr form) nil)
       `(locally ,@decls ,@(mapcar #'precompile1 body)))))
