@@ -862,44 +862,31 @@
 (defun p1-function (form)
   (let ((form (copy-tree form))
         local-function)
-    (cond ((and (consp (cadr form)) (eq (caadr form) 'LAMBDA))
-           (when *current-compiland*
-             (incf (compiland-children *current-compiland*)))
-           (let* ((*current-compiland* *current-compiland*)
-                  (lambda-form (cadr form))
+    (cond ((and (consp (cadr form))
+                (or (eq (caadr form) 'LAMBDA)
+                    (eq (caadr form) 'NAMED-LAMBDA)))
+           (let* ((named-lambda-p (eq (caadr form) 'NAMED-LAMBDA))
+                  (named-lambda-form (when named-lambda-p
+                                       (cadr form)))
+                  (name (when named-lambda-p
+                          (cadr named-lambda-form)))
+                  (lambda-form (if named-lambda-p
+                                   (cons 'LAMBDA (cddr named-lambda-form))
+                                   (cadr form)))
                   (lambda-list (cadr lambda-form))
                   (body (cddr lambda-form))
-                  (compiland (make-compiland :name (gensym "ANONYMOUS-LAMBDA-")
+                  (compiland (make-compiland :name (if named-lambda-p
+                                                       name (gensym "ANONYMOUS-LAMBDA-"))
                                              :lambda-expression lambda-form
                                              :parent *current-compiland*)))
+             (when *current-compiland*
+               (incf (compiland-children *current-compiland*)))
              (multiple-value-bind (body decls)
                  (parse-body body)
                (setf (compiland-lambda-expression compiland)
-                     `(lambda ,lambda-list ,@decls ,@body))
-               (let ((*visible-variables* *visible-variables*)
-                     (*current-compiland* compiland))
-                 (p1-compiland compiland)))
-             (list 'FUNCTION compiland)))
-          ((and (consp (cadr form)) (eq (caadr form) 'NAMED-LAMBDA))
-           (when *current-compiland*
-             (incf (compiland-children *current-compiland*)))
-           (let* ((*current-compiland* *current-compiland*)
-;;                   (lambda-form (cadr form))
-                  (named-lambda-form (cadr form))
-                  (name (cadr named-lambda-form))
-                  (lambda-form (cons 'LAMBDA (cddr named-lambda-form)))
-                  (lambda-list (cadr lambda-form))
-                  (body (cddr lambda-form))
-                  (compiland (make-compiland :name name
-                                             :lambda-expression lambda-form
-                                             :parent *current-compiland*)))
-;;              (format t "p1-function named-lambda-form = ~S~%" named-lambda-form)
-;;              (format t "p1-function name = ~S~%" name)
-;;              (format t "p1-function lambda-form = ~S~%" lambda-form)
-             (multiple-value-bind (body decls)
-                 (parse-body body)
-               (setf (compiland-lambda-expression compiland)
-                     `(lambda ,lambda-list ,@decls (block nil ,@body)))
+                     (if named-lambda-p
+                         `(lambda ,lambda-list ,@decls (block nil ,@body))
+                         `(lambda ,lambda-list ,@decls ,@body)))
                (let ((*visible-variables* *visible-variables*)
                      (*current-compiland* compiland))
                  (p1-compiland compiland)))
@@ -3827,6 +3814,7 @@ representation, based on the derived type of the LispObject."
 
 (defknown process-args (t) t)
 (defun process-args (args)
+  ""
   (when args
     (let ((numargs (length args)))
       (let ((must-clear-values nil))
