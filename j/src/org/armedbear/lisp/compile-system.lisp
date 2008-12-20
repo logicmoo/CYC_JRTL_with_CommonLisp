@@ -88,6 +88,8 @@
     (load (compile-file-if-needed "compiler-types.lisp"))
     (load (compile-file-if-needed "compile-file.lisp"))
     (load (compile-file-if-needed "precompiler.lisp"))
+    (load (compile-file-if-needed "compiler-pass1.lisp"))
+    (load (compile-file-if-needed "compiler-pass2.lisp"))
     (load (compile-file-if-needed "jvm.lisp"))
     (load (compile-file-if-needed "source-transform.lisp"))
     (load (compile-file-if-needed "compiler-macro.lisp"))
