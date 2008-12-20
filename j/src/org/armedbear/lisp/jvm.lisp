@@ -29,8 +29,6 @@
 ;;; obligated to do so.  If you do not wish to do so, delete this
 ;;; exception statement from your version.
 
-(in-package "EXTENSIONS")
-
 (in-package "JVM")
 
 (export '(compile-defun *catch-errors* jvm-compile jvm-compile-package
@@ -280,8 +278,8 @@
         (t
          nil)))
 
-;; True for local functions defined with FLET or LABELS.
-(defvar *child-p* nil)
+(defvar *child-p* nil
+  "True for local functions created by FLET, LABELS and (NAMED-)LAMBDA")
 
 (defknown find-variable (symbol list) t)
 (defun find-variable (name variables)
