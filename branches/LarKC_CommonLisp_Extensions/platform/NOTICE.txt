@@ -1,0 +1,35 @@
+The files distributed with this notice constitute the LarKC platform prototype.
+
+Portions of the distributed files are Copyright (c) 1995-2008 Cycorp Inc.
+Portions of the distributed files are Copyright (c) 2008 Cycorp,  raziskovanje in eksperimentalni razvoj, d.o.o.
+
+All files are licensed under the Apache License, Version 2.0 (the "License");
+you may not use these files except in compliance with the License.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing by the licensing 
+party and the copyright holder, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
+Substantial portions of this code were developed by the Cyc project
+and by Cycorp Inc and Cycorp R.E.R. d.o.o, whose contributions are
+gratefully acknowledged.  Particular acknowledgement is due to Dr
+Douglas Lenat, the founder of the Cyc project, to Dr Ramanathan V
+Guha, an essential early contributor to the Cyc project and a seminal
+contributor to the semantic web, to Keith Goolsbey, the chief software
+architect for Cycorp, to Luka Bradeško, who prepared the code for
+release, to many many others in the Cyc project, Cycorp Inc, Cycorp
+R.E.R d.o.o, and the LarKC project, and to the elements of the United
+States Government and the European Commission and other organisations
+which have funded the Cyc and LarKC efforts.
+
+More information about Cyc is available at http://cyc.com, http://cycorp.eu, 
+http://research.cyc.com and http://opencyc.org
+More information about the Large Knowledge Collider is available at
+http://larkc.eu
+
+

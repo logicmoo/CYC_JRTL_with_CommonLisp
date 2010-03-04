@@ -1,0 +1,115 @@
+<?xml version="1.0" ?>
+<project name="platform" default="dist">
+  <dirname property="base" file="${ant.file.platform}"/>
+	<property name="src" location="${base}/src" />
+	<property name="dist" location="${base}/dist" />
+	<property name="conf" location="${base}/conf" />
+	<property name="ext" location="${base}/ext" />
+	<property name="lib" location="${base}/lib" />
+	<property name="docs" location="${base}/docs" />
+	<property name="plugins" location="${dist}/plugins" />
+	<property name="bin" location="${dist}/bin" />
+	<property name="jar" location="${bin}/larkc-platform.jar" />
+	
+
+  <target name="init">
+    <mkdir dir="${dist}"/>
+    <mkdir dir="${bin}"/>
+    <mkdir dir="${plugins}"/>
+    
+    <mkdir dir="${docs}"/>
+    <mkdir dir="${base}/bin"/>
+    
+  </target>
+
+	<path id="platform.lib">
+		<fileset dir="${lib}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	
+  	<target name="clean">
+		<delete dir="${dist}" />
+		<delete dir="${base}/bin" />
+  	</target>
+
+	<target name="compile" depends="init">
+		<copy todir="${base}/bin">
+			<fileset dir="${src}" />
+		</copy>
+		<javac debug="on" srcdir="${base}/bin" classpathref="platform.lib" destdir="${base}/bin" />
+	</target>
+
+	<target name="dist" depends="compile">
+		<copy todir="${bin}">
+			<fileset dir="${lib}" />
+		</copy>
+		<copy todir="${dist}">
+			<fileset dir="${base}/conf/run" />
+		</copy>
+		<copy todir="${dist}/ext">
+			 <fileset dir="${ext}" />
+		</copy>
+		<copy todir="${dist}/conf">
+			 <fileset dir="${conf}" />
+		</copy>
+		
+		<path id="platform.run">
+			<fileset dir="${bin}">
+				<include name="**/*.jar" />
+			</fileset>
+			<pathelement location="${dist}/conf" />
+			<pathelement location="${dist}/ext" />
+		</path>
+	
+		<manifestclasspath property="platform.manifest.classpath" jarfile="${jar}">
+			<classpath refid="platform.run" />
+		</manifestclasspath>
+			
+		<jar jarfile="${jar}" basedir="${base}/bin" >                  
+			<manifest>
+				<!-- <attribute name="Built-By" value="${user.name}"/> -->
+				<attribute name="Main-Class" value="eu.larkc.core.Larkc"/>
+				<attribute name="Class-Path" value="${platform.manifest.classpath}" />
+			</manifest>                                                          
+		</jar>
+
+		<delete dir="${base}/bin" />
+		<delete dir="${dist}/conf/run" />
+
+	</target>
+
+	<target name="create_distrib" depends="dist">
+
+		<jar jarfile="${jar}" basedir="${src}" update="true">                  
+		</jar>
+
+
+	</target>
+
+	<target name="run" depends="dist">
+		<java fork="true" memoryInitialSize="512M" classpathref="platform.run" classname="eu.larkc.core.Larkc">
+			<sysproperty key="java.util.logging.config.file" value="dist/conf/larkc.properties" />
+			<sysproperty key="Dgat.adaptor.path" value="ext/GAT/Adaptors" />
+			<sysproperty key="Dlog4j.configuration" value="ext/GAT/log/log4j.properties" />
+			<jvmarg value="-Xmx1024m" />
+		 </java>
+	</target>
+ 
+  <target name="doc" depends="">
+   <javadoc packagenames="eu.larkc.*"
+           sourcepath="src"
+           classpathref="platform.lib"
+           defaultexcludes="yes"
+           destdir="${docs}/api"
+           author="true"
+           version="true"
+           use="true"
+           windowtitle="LarKC platform API">
+    <bottom><![CDATA[<i>Copyright &#169; 2009 LarKC consortium. All Rights Reserved.</i>]]></bottom>
+    <link href="http://java.sun.com/javase/6/docs/api/"/>
+  </javadoc>
+  </target>
+</project>
+
+<!-- vim: set filetype=xml expandtab tabstop=2 shiftwidth=2 autoindent smartindent: -->
