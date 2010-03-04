@@ -1,0 +1,101 @@
+package eu.larkc.core.data;
+
+import org.openrdf.model.Statement;
+import org.openrdf.model.URI;
+
+import eu.larkc.core.query.SPARQLQuery;
+
+/**
+ * DataFactory is responsible to abstract the construction of different
+ * implementation used by in the API.
+ * 
+ * TODO: Consider if the name is still relevant.
+ * 
+ * @author vassil
+ * 
+ */
+public interface DataFactory {
+
+	/**
+	 * To consider the implementation of DefaultFactory, which to automated the
+	 * creation of the different factories.
+	 */
+	public final static DataFactory INSTANCE = DataFactoryImpl.getInstance();
+
+	/**
+	 * Creates a RDF graph that will be passed by value.
+	 * 
+	 * @param graph
+	 *            name (may be null)
+	 * @param sts
+	 *            collection of the statements
+	 * @return the graph
+	 */
+	public RdfGraph createRdfGraph(Iterable<Statement> sts, URI graph);
+
+	/**
+	 * Creates RDF graph from a remote location. If the URI could not be
+	 * resolved an exception will be generated during the construction of the
+	 * graph.
+	 * 
+	 * @param uri
+	 *            to be resolved
+	 * @return the constructed rdf graph
+	 */
+	public RdfGraph createRemoteRdfGraph(URI uri);
+
+	/**
+	 * Creates a connection to local storage.
+	 * 
+	 * @return a connection to the local store
+	 */
+	public RdfStoreConnection createRdfStoreConnection();
+
+	/**
+	 * Creates a connection to remote SPARQL endpoint. If the URI is not
+	 * resolvable or SPARQL enabled service could not be found an exception will
+	 * be generated after constructing the object.
+	 * 
+	 * @param uri
+	 * @return
+	 */
+	public SPARQLEndpoint createSPARQLEndpoint(URI uri);
+
+	/**
+	 * Create a SPARQL query from a string
+	 * 
+	 * @param query
+	 *            to be parsed
+	 * @return executable query by a SPARQL endpoint
+	 */
+	public SPARQLQuery createSPARQLQuery(String query);
+
+	/**
+	 * Creates a SPARQL query from a string to be executed against a specific
+	 * labeled group. The labeled group for now could not be specified as part
+	 * of the syntax like the dataset in FROM/FROM NAMED clauses.
+	 * 
+	 * @param query
+	 *            to be parsed
+	 * @param label
+	 *            labeled group to be used (may be null)
+	 * @return executable query by a SPARQL endpoint
+	 */
+	public SPARQLQuery createSPARQLQuery(String query, URI label);
+
+	/**
+	 * Creates a SPARQL query from a string to be executed against a specific
+	 * labeled group. The labeled group for now could not be specified as part
+	 * of the syntax like the dataset in FROM/FROM NAMED clauses.
+	 * 
+	 * @param query
+	 *            to be parsed
+	 * @param ns
+	 *            default namespace to be used in the expansion of the short
+	 *            qname in query
+	 * @param label
+	 *            labeled group to be used (may be null)
+	 * @return executable query by a SPARQL endpoint
+	 */
+	public SPARQLQuery createSPARQLQuery(String query, String ns, URI label);
+}

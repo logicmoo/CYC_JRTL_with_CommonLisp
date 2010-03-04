@@ -1,0 +1,95 @@
+@prefix larkc: <http://larkc.eu/plugin#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix wsl:   <http://www.wsmo.org/ns/wsmo-lite#> .
+@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+
+
+# Wsmo Lite definition
+wsl:ClassificationRoot	rdf:type rdfs:Class .
+wsl:NonFunctionalParameter rdf:type rdfs:Class .
+
+# Functional properties
+
+# Plug-in types
+larkc:Plugin   rdf:type   rdfs:Class, 
+                          wsl:ClassificationRoot .
+
+larkc:hasUri      rdf:type   rdf:Property;
+				  rdfs:domain larkc:Plugin;
+				  rdfs:range  xs:string.
+				  				  
+larkc:hasEndpoint rdf:type   rdf:Property;
+				  rdfs:domain larkc:Plugin;
+				  rdfs:range  xs:string.                        
+
+larkc:Identifier  rdf:type rdfs:Class ;
+                 rdfs:subClassOf larkc:Plugin .
+larkc:InformationSetTransformer rdf:type rdfs:Class ;
+                 rdfs:subClassOf larkc:Plugin .
+larkc:QueryTransformer rdf:type rdfs:Class ;
+                 rdfs:subClassOf larkc:Plugin .      
+larkc:Selecter    rdf:type rdfs:Class ;
+                 rdfs:subClassOf larkc:Plugin .
+larkc:Reasoner    rdf:type rdfs:Class ;
+                 rdfs:subClassOf larkc:Plugin .
+larkc:Decider     rdf:type rdfs:Class ;
+                 rdfs:subClassOf larkc:Plugin .
+                 
+# Data type hierarchy
+larkc:Resource		rdf:type rdfs:Class .
+
+larkc:InformationSet	rdf:type rdfs:Class ;
+			rdfs:subClassOf larkc:Resource .
+larkc:SetOfStatements		rdf:type rdfs:Class ;
+			rdfs:subClassOf larkc:InformationSet .                            
+larkc:RdfGraph		rdf:type rdfs:Class ;
+			rdfs:subClassOf larkc:SetOfStatements . 
+larkc:DataSet		rdf:type rdfs:Class ;
+			rdfs:subClassOf larkc:SetOfStatements .                            
+larkc:LabelledGroupOfStatements		rdf:type rdfs:Class ;
+			rdfs:subClassOf larkc:SetOfStatements .                            
+larkc:BooleanInformationSet	rdf:type rdfs:Class ;
+			rdfs:subClassOf larkc:InformationSet .
+larkc:NaturalLanguageDocument	rdf:type rdfs:Class ;
+			rdfs:subClassOf larkc:InformationSet .
+larkc:VariableBinding	rdf:type rdfs:Class ;
+			rdfs:subClassOf larkc:InformationSet .
+
+larkc:Query		rdf:type rdfs:Class ;
+			rdfs:subClassOf larkc:Resource .
+larkc:SPARQLQuery	rdf:type rdfs:Class ;
+			rdfs:subClassOf larkc:Query .
+larkc:TriplePatternQuery rdf:type rdfs:Class ;
+			rdfs:subClassOf larkc:Query .
+larkc:KeywordQuery rdf:type rdfs:Class ;
+			rdfs:subClassOf larkc:Query .
+			
+
+# Input / Output handling
+larkc:hasInputType rdf:type rdf:Property ;
+                  larkc:genldomain larkc:Plugin ;
+                  larkc:genlrange larkc:Resource .
+larkc:hasOutputType rdf:type rdf:Property;
+                   larkc:genldomain larkc:Plugin ;
+                  larkc:genlrange larkc:Resource .
+larkc:pluginByDataConnectsTo rdf:type owl:TransitiveProperty;
+   					larkc:genldomain larkc:Plugin ;
+                  larkc:genlrange larkc:Plugin .
+
+
+# Non-functional properties go here
+larkc:Scalability rdf:type rdfs:Class ;
+		rdfs:subClassOf wsl:NonFunctionalParameter .
+larkc:Cost	rdf:type rdfs:Class ;
+		rdfs:subClassOf wsl:NonFunctionalParameter .
+		
+larkc:euro	rdf:type	rdfs:Class .
+                 
+larkc:hasCostPerInvocation rdf:type rdf:Property ;
+			rdfs:domain larkc:Cost ;
+			rdfs:range  larkc:euro .
+larkc:hasScalability rdf:type rdf:Property ;
+			rdfs:domain larkc:Scalability ;
+			rdfs:range  xs:string .
