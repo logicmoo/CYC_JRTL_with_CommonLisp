@@ -39,7 +39,7 @@ import java.math.BigInteger;
 
 //// External Imports
 
-public  interface SubLObject extends Cloneable {
+public  interface SubLObject extends Cloneable, LispObject {
   
   SubLObject eval(SubLEnvironment env) 
   throws InvalidSubLExpressionException;

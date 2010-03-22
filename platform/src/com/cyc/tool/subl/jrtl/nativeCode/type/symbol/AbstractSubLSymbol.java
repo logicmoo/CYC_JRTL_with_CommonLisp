@@ -19,6 +19,7 @@
 
 package  com.cyc.tool.subl.jrtl.nativeCode.type.symbol;
 
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispSymbolImpl;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
@@ -42,7 +43,8 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLStream;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public  abstract class AbstractSubLSymbol extends AbstractSubLObject implements SubLSymbol {
+
+public  abstract class AbstractSubLSymbol extends LispSymbolImpl implements SubLSymbol {
   
   //// Constructors
   
@@ -51,6 +53,7 @@ public  abstract class AbstractSubLSymbol extends AbstractSubLObject implements 
    * SubLPackage are allowed to use this constructor.
    */
   AbstractSubLSymbol(SubLString symbolName, SubLPackage thePackage) {
+  	super(symbolName, thePackage);
     this.thePackage = thePackage;
     this.symbolName = symbolName;
     hashCode = ((thePackage == null) ? 0 : thePackage.hashCode()) ^ symbolName.hashCode();
@@ -312,8 +315,8 @@ public  abstract class AbstractSubLSymbol extends AbstractSubLObject implements 
   
   /** this version will not contain outer symbol quotes ("|") */
   // @ToDo get rid of me --APB
-  private final CharSequence getSymbolName() {
-    return getSymbolStringRep(getName(), isSpecialSymbol(getName()));
+  private final SubLString getSymbolName() {
+    return (SubLString) getSymbolStringRep(getName(), isSpecialSymbol(getName()));
   }
   
   /** this version will include "|" around name when needed */

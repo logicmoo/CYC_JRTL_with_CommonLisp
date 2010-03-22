@@ -126,7 +126,7 @@ public  final class Packages extends SubLTrampolineFile {
     if (packageSpec == UNPROVIDED) { packageSpec = SubLPackage.getCurrentPackage(); }
     SubLPackage thePackage = packageSpec.isPackage() 
       ? packageSpec.toPackage() : find_package(packageSpec).toPackage();
-    boolean result = thePackage.unintern(symbolTyped);
+    boolean result = thePackage.unintern(symbolTyped).getBooleanValue();
     return SubLObjectFactory.makeBoolean(result);
   } 
   

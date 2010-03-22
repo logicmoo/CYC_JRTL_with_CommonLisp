@@ -32,6 +32,11 @@ import java.util.Arrays;
 
 public  abstract class AbstractSubLSequence extends AbstractSubLObject implements SubLSequence {
   
+	// currently true in all subclasses anyways
+	@Override
+	public boolean isSequence() {
+		return true;
+	}
   //// Constructors
   
   //// Public Area

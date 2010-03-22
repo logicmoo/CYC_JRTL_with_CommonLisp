@@ -19,7 +19,27 @@
 
 package  com.cyc.tool.subl.jrtl.nativeCode.type.symbol;
 
+import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.NIL;
+import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.PACKAGE_KEYWORD;
+import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.T;
+import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp._PRINT_FASL_;
+import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.error;
+import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.javaString;
+import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.memq;
+import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.makeCons;
+import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.makeString;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.BuiltInClass;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Debug;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Keyword;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispPackages;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispSymbolImpl;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispSymbols;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispThread;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.PackageError;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.SymbolHashTable;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages;
@@ -46,7 +66,12 @@ import java.util.Set;
 
 //// External Imports
 
-public  final class SubLPackage extends AbstractSubLObject implements SubLObject {
+public  final class SubLPackage extends LispPackage implements SubLObject {
+  
+	protected void setJavaName(String javaName) {
+		this.javaName = javaName;
+    this.name = javaName==null?null:makeString(javaName);
+	}
   
   //// Constructors
   
@@ -54,6 +79,21 @@ public  final class SubLPackage extends AbstractSubLObject implements SubLObject
     init(name, useList, nickNames);
   }
   
+  // Anonymous package.
+  public SubLPackage()
+  {
+  }
+
+  public SubLPackage(String name)
+  {
+      setJavaName(name);
+  }
+
+  public SubLPackage(String name, int size)
+  {
+      setJavaName(name);
+  }
+
   //// Public Area
   
   public final SubLPackage toPackage() { // SubLPackage
@@ -166,11 +206,11 @@ public  final class SubLPackage extends AbstractSubLObject implements SubLObject
     }
   }
   
-  public boolean unintern(SubLSymbol symbol) {
-    Errors.unimplementedMethod("SubLPackage.unintern");
-    return false;
-  }
-  
+//  public boolean unintern(SubLSymbol symbol) {
+//    Errors.unimplementedMethod("SubLPackage.unintern");
+//    return false;
+//  }
+//  
   public boolean isLocked() {
     return isLocked;
   }
@@ -183,9 +223,9 @@ public  final class SubLPackage extends AbstractSubLObject implements SubLObject
     return PACKAGE_TYPE_NAME;
   }
   
-  public String toString() {
-    return "#<The " + getName() + " package" + (isLocked() ? "!>" : ">");
-  }
+//  public String toString() {
+//    return "#<The " + getName() + " package" + (isLocked() ? "!>" : ">");
+//  }
   
   public SubLList getUsesPackagesList() {
     return SubLObjectFactory.makeList(usesPackagesList);
@@ -199,11 +239,11 @@ public  final class SubLPackage extends AbstractSubLObject implements SubLObject
     return SubLObjectFactory.makeList(nickNames);
   }
   
-  public SubLList getShadowingSymbols() {
-    Errors.unimplementedMethod("SubLPackage.getShadowingSymbols");
-    //The follwoing code is correct but the list isn't currently being maintained properly
-    return SubLObjectFactory.makeList(shadowingSymbols);
-  }
+//  public SubLList getShadowingSymbols() {
+//    Errors.unimplementedMethod("SubLPackage.getShadowingSymbols");
+//    //The follwoing code is correct but the list isn't currently being maintained properly
+//    return SubLObjectFactory.makeList(shadowingSymbols);
+//  }
   
   public static final SubLList getAllPackages() {
     return allPackages;
@@ -1347,7 +1387,7 @@ public  final class SubLPackage extends AbstractSubLObject implements SubLObject
   
   //// Internal Rep
   
-  private SubLString name;
+  //private SubLString name;
   // @todo change these to List<> where possible
   private ArrayList<SubLPackage> usesPackagesList = new ArrayList<SubLPackage>();
   private ArrayList<SubLPackage> usedByPackagesList = new ArrayList<SubLPackage>();
