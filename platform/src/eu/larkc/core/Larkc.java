@@ -1,6 +1,8 @@
 package eu.larkc.core;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 
@@ -27,6 +29,8 @@ public final class Larkc {
 	
 	
 	public static void main(String[] args) {
+		//Logger.getLogger("eu.larkc.core.metadata.PluginRegistry").setLevel(Level.ALL);
+	    
 		if (args == null || args.length==0)
 			SubLMain.main(new String[]{"-i","conf"+ File.separator+"larkc-init.lisp", "-b"});
 		else

@@ -137,6 +137,45 @@ public  final class simplifier extends SubLTranslatedFile {
     }
   }
 
+
+  /** Assumes that NON-WFF is an ill-formed sentence.  Tries to simplify it into a well-formed sentence.
+   @return 0 sentence; the simplified version of NON-WFF.
+   @return 1 boolean; t iff the simplified version of NON-WFF is well-formed.
+   Assumes that the EL variable namespace is bound. */
+  @SubL(source = "cycl/simplifier.lisp", position = 11456) 
+  public static final SubLObject try_to_simplify_non_wff_into_wff(SubLObject non_wff, SubLObject wff_function, SubLObject arg2_to_wff_function) {
+    if ((wff_function == UNPROVIDED)) {
+      wff_function = Symbols.symbol_function($sym7$EL_WFF_);
+    }
+    if ((arg2_to_wff_function == UNPROVIDED)) {
+      arg2_to_wff_function = NIL;
+    }
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      if ((NIL != czer_vars.$try_to_simplify_non_wff_into_wffP$.getDynamicValue(thread))) {
+        {
+          SubLObject simpler_sentence = NIL;
+          SubLObject is_it_wff_nowP = NIL;
+          {
+            SubLObject _prev_bind_0 = czer_vars.$trying_to_simplify_non_wff_into_wffP$.currentBinding(thread);
+            try {
+              czer_vars.$trying_to_simplify_non_wff_into_wffP$.bind(T, thread);
+              simpler_sentence = simplify_cycl_sentence_deep(non_wff, UNPROVIDED);
+              is_it_wff_nowP = makeBoolean(((!(non_wff.equal(simpler_sentence)))
+                     && (NIL != ((NIL != arg2_to_wff_function) ? ((SubLObject) Functions.funcall(wff_function, simpler_sentence, arg2_to_wff_function)) : Functions.funcall(wff_function, simpler_sentence)))));
+            } finally {
+              czer_vars.$trying_to_simplify_non_wff_into_wffP$.rebind(_prev_bind_0, thread);
+            }
+          }
+          return Values.values(simpler_sentence, is_it_wff_nowP);
+        }
+      } else {
+        return Values.values(non_wff, NIL);
+      }
+    }
+  }
+
+  
   /** Returns the disjunction of the sentences in the list SENTENCE-LIST.
    If SIMPLIFY? is true, then if any of the sentences in SENTENCE-LIST are disjunctions themselves, they will be flattened:
    i.e. no resulting disjunct will itself be a disjunct (simplification is destructive).
@@ -329,8 +368,7 @@ public  final class simplifier extends SubLTranslatedFile {
         } else if ((NIL != el_utilities.atomic_sentenceP(sentence))) {
           result = simplify_cycl_literal(sentence, varP);
         } else if ((NIL == czer_vars.$simplify_using_semanticsP$.getDynamicValue(thread))) {
-        } else if ((NIL != Errors
-				.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 7178"))) {
+        } else if ((NIL != at_utilities.formula_denoting_functionP(sentence,UNPROVIDED))) {
           result = Errors
 				.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 10679");
         } else if ((NIL != term.unreified_skolem_termP(sentence))) {

@@ -129,8 +129,7 @@ public  final class wff_utilities extends SubLTranslatedFile {
       } else if ((NIL == forts.fort_p(object))) {
         return NIL;
       } else if ((NIL != wff_vars.$within_wffP$.getDynamicValue(thread))) {
-        Errors
-				.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 8093");
+      	wff.note_wff_violation(list($kw0$MAL_FORT,object));
       }
       return NIL;
     }

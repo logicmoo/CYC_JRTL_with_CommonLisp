@@ -147,6 +147,116 @@ public  final class at_utilities extends SubLTranslatedFile {
       return mt;
     }
   }
+  
+
+  @SubL(source = "cycl/at-utilities.lisp", position = 42575) 
+  public static final SubLObject violation_type(SubLObject violation) {
+    if (violation.isCons()) {
+      return violation.first();
+    }
+    return NIL;
+  }
+
+
+
+  /** is OBJECT a formula-denoting functional expression? */
+  @SubL(source = "cycl/at-utilities.lisp", position = 10282) 
+  public static final SubLObject formula_denoting_functionP(SubLObject object, SubLObject mt) {
+    if ((mt == UNPROVIDED)) {
+      mt = NIL;
+    }
+    if ((NIL != el_utilities.relation_expressionP(object))) {
+      return formula_functorP(cycl_utilities.nat_functor(object), mt);
+    }
+    return NIL;
+  }
+
+
+  /** does FUNCTOR a return a formula? */
+  @SubL(source = "cycl/at-utilities.lisp", position = 10497) 
+  public static final SubLObject formula_functorP(SubLObject functor, SubLObject mt) {
+    if ((mt == UNPROVIDED)) {
+      mt = NIL;
+    }
+    if ((NIL != term.nautP(functor, UNPROVIDED))) {
+      return formula_functorP(narts_high.find_nart(functor), mt);
+    } else if ((NIL != forts.fort_p(functor))) {
+      {
+        SubLObject formula_functorP = NIL;
+        if ((NIL == formula_functorP)) {
+          {
+            SubLObject csome_list_var = kb_accessors.result_isa(functor, mt);
+            SubLObject result_isa = NIL;
+            for (result_isa = csome_list_var.first(); (!(((NIL != formula_functorP)
+                  || (NIL == csome_list_var)))); csome_list_var = csome_list_var.rest(), result_isa = csome_list_var.first()) {
+              formula_functorP = el_utilities.formula_denoting_collectionP(result_isa);
+            }
+          }
+        }
+        return formula_functorP;
+      }
+    }
+    return NIL;
+  }
+
+  
+  @SubL(source = "cycl/at-utilities.lisp", position = 37119) 
+  public static final SubLObject note_at_violation(SubLObject note) {
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      if ((NIL != wff_vars.wff_debugP())) {
+        print_high.print(note, UNPROVIDED);
+      }
+      if ((NIL != note_at_violationP())) {
+        at_vars.$current_at_violation$.setDynamicValue(note, thread);
+        if ((NIL == recursive_violationP(note))) {
+          {
+            SubLObject item_var = note;
+            if ((NIL == conses_high.member(item_var, at_vars.$at_violations$.getDynamicValue(thread), Symbols.symbol_function(EQUAL), Symbols.symbol_function(IDENTITY)))) {
+              at_vars.$at_violations$.setDynamicValue(cons(item_var, at_vars.$at_violations$.getDynamicValue(thread)), thread);
+            }
+          }
+        }
+      }
+      return at_vars.$at_violations$.getDynamicValue(thread);
+    }
+  }
+
+  
+
+  @SubL(source = "cycl/at-utilities.lisp", position = 37387) 
+  public static final SubLObject recursive_violationP(SubLObject note) {
+    {
+      SubLObject pcase_var = note.first();
+      if (pcase_var.eql($kw98$MAL_ARG_WRT_COL_DEFN)) {
+        return Equality.eq(conses_high.fifth(note), $const99$CycLSentence_Assertible);
+      } else if (pcase_var.eql($kw100$MAL_ARG_WRT_NEC_DEFN)) {
+        return Equality.eq(conses_high.third(note), $const99$CycLSentence_Assertible);
+      }
+    }
+    return NIL;
+  }
+
+
+  @SubL(source = "cycl/at-utilities.lisp", position = 36967) 
+  public static final SubLObject note_at_violationP() {
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      return makeBoolean(((NIL != at_vars.$noting_at_violationsP$.getDynamicValue(thread))
+             && ((NIL == at_vars.$at_violations$.getDynamicValue(thread))
+              || (NIL != at_vars.$accumulating_at_violationsP$.getDynamicValue(thread)))));
+    }
+  }
+
+
+  @SubL(source = "cycl/at-utilities.lisp", position = 36833) 
+  public static final SubLObject semantic_violations() {
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      return Sequences.nreverse(Sequences.cconcatenate(wff_vars.$arity_violations$.getDynamicValue(thread), new SubLObject[] {at_vars.$at_violations$.getDynamicValue(thread), czer_vars.$semantic_violations$.getDynamicValue(thread)}));
+    }
+  }
+
 
   /** Association list of number -> generic-arg mappings. */
   @SubL(source = "cycl/at-utilities.lisp", position = 950) 
@@ -256,8 +366,7 @@ public  final class at_utilities extends SubLTranslatedFile {
   @SubL(source = "cycl/at-utilities.lisp", position = 7947) 
   public static final SubLObject logical_opP(SubLObject symbol) {
     return makeBoolean(((NIL != fort_types_interface.isa_logical_connectiveP(symbol, mt_vars.$anect_mt$.getGlobalValue()))
-          || (NIL != Errors
-				.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 29139"))));
+          || (NIL != fort_types_interface.isa_quantifierP(symbol,mt_vars.$anect_mt$.getGlobalValue()))));
   }
 
   @SubL(source = "cycl/at-utilities.lisp", position = 8181) 
@@ -282,6 +391,7 @@ public  final class at_utilities extends SubLTranslatedFile {
       }
     }
   }
+
 
   @SubL(source = "cycl/at-utilities.lisp", position = 8540) 
   public static final SubLObject clear_all_arg_type_predicate_caches() {

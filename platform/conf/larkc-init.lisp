@@ -22,20 +22,20 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;THE FOLLOWING ENABLES OPENCYC API;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(define robust-enable-tcp-server (type port handler)
-  (pif (fboundp 'enable-tcp-server)
-       ;; new way
-       (ret (enable-tcp-server type port))
-       ;; old way
-       (ret (sl::start-tcp-server port handler nil))))
-
-(csetq *base-tcp-port* 3600)
-(progn
-  (print "Enabling base TCP services to port 3600")
-  (finish-output))
-
-(robust-enable-tcp-server
- :cyc-api (api-port) 'api-server-top-level)
-;; CFASL server
-(robust-enable-tcp-server
- :cfasl (cfasl-port) 'cfasl-server-top-level)
+;(define robust-enable-tcp-server (type port handler)
+;  (pif (fboundp 'enable-tcp-server)
+;       ;; new way
+;       (ret (enable-tcp-server type port))
+;       ;; old way
+;       (ret (sl::start-tcp-server port handler nil))))
+;
+;(csetq *base-tcp-port* 3600)
+;(progn
+;  (print "Enabling base TCP services to port 3600")
+;  (finish-output))
+;
+;(robust-enable-tcp-server
+; :cyc-api (api-port) 'api-server-top-level)
+;;; CFASL server
+;(robust-enable-tcp-server
+; :cfasl (cfasl-port) 'cfasl-server-top-level)

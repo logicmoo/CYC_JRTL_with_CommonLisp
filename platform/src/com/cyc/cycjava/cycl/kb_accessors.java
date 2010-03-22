@@ -144,7 +144,119 @@ public  final class kb_accessors extends SubLTranslatedFile {
   public static final SubLObject asymmetric_predicateP(SubLObject predicate) {
     return fort_types_interface.asymmetric_binary_predicate_p(predicate);
   }
+  
 
+  /** Return a list of the collections that include as instances 
+the results of non-predicate function constant FUNCTOR. */
+  @SubL(source = "cycl/kb-accessors.lisp", position = 69912) 
+  public static final SubLObject result_isa(SubLObject functor, SubLObject mt) {
+    if ((mt == UNPROVIDED)) {
+      mt = NIL;
+    }
+    if ((NIL != forts.fort_p(functor))) {
+      return kb_mapping_utilities.pred_values_in_relevant_mts(functor, $const193$resultIsa, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    } else if ((NIL != czer_utilities.naut_with_corresponding_nartP(functor))) {
+      return result_isa(narts_high.find_nart(functor), mt);
+    } else if ((NIL != obsolete.reifiable_natP(functor, Symbols.symbol_function($sym79$CYC_VAR_), mt))) {
+      return meta_result_isa(cycl_utilities.nat_functor(functor), mt);
+    } else if ((NIL != function_to_arg_termP(functor))) {
+      return argn_isa(cycl_utilities.nat_arg2(functor, UNPROVIDED), cycl_utilities.nat_arg1(functor, UNPROVIDED), mt);
+    }
+    return NIL;
+  }
+
+
+  @SubL(source = "cycl/kb-accessors.lisp", position = 61427) 
+  public static final SubLObject function_to_arg_termP(SubLObject v_term) {
+    return makeBoolean((v_term.isCons()
+           && $const198$FunctionToArg.eql(cycl_utilities.nat_functor(v_term))));
+  }
+
+  
+
+  /** META-FUNCTOR is the functor of a function-denoting function;
+return the resultIsa collections inherited to instances of the 
+resultIsa of META-FUNCTOR */
+  @SubL(source = "cycl/kb-accessors.lisp", position = 75438) 
+  public static final SubLObject meta_result_isa(SubLObject meta_functor, SubLObject mt) {
+    if ((mt == UNPROVIDED)) {
+      mt = NIL;
+    }
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      if ((NIL != forts.fort_p(meta_functor))) {
+        {
+          SubLObject meta_result_isa = NIL;
+          {
+            SubLObject _prev_bind_0 = control_vars.$mapping_fn$.currentBinding(thread);
+            SubLObject _prev_bind_1 = control_vars.$mapping_fn_arg$.currentBinding(thread);
+            SubLObject _prev_bind_2 = control_vars.$mapping_fn_arg2$.currentBinding(thread);
+            SubLObject _prev_bind_3 = control_vars.$mapping_fn_arg3$.currentBinding(thread);
+            SubLObject _prev_bind_4 = control_vars.$mapping_fn_arg4$.currentBinding(thread);
+            SubLObject _prev_bind_5 = control_vars.$mapping_fn_arg5$.currentBinding(thread);
+            SubLObject _prev_bind_6 = control_vars.$mapping_fn_arg6$.currentBinding(thread);
+            try {
+              control_vars.$mapping_fn$.bind(Symbols.symbol_function($sym214$PRED_ARG_VALUES_IN_RELEVANT_MTS), thread);
+              control_vars.$mapping_fn_arg$.bind(ONE_INTEGER, thread);
+              control_vars.$mapping_fn_arg2$.bind($const200$relationAllInstance, thread);
+              control_vars.$mapping_fn_arg3$.bind($const193$resultIsa, thread);
+              control_vars.$mapping_fn_arg4$.bind(mt, thread);
+              control_vars.$mapping_fn_arg5$.bind(TWO_INTEGER, thread);
+              control_vars.$mapping_fn_arg6$.bind(ONE_INTEGER, thread);
+              {
+                SubLObject _prev_bind_0_16 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
+                try {
+                  sbhl_marking_vars.$sbhl_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
+                  {
+                    SubLObject _prev_bind_0_17 = sbhl_marking_vars.$sbhl_gather_space$.currentBinding(thread);
+                    try {
+                      sbhl_marking_vars.$sbhl_gather_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
+                      {
+                        SubLObject _prev_bind_0_18 = sbhl_marking_vars.$sbhl_suspend_new_spacesP$.currentBinding(thread);
+                        try {
+                          sbhl_marking_vars.$sbhl_suspend_new_spacesP$.bind(T, thread);
+                          {
+                            SubLObject cdolist_list_var = result_isa(meta_functor, mt);
+                            SubLObject result_isa = NIL;
+                            for (result_isa = cdolist_list_var.first(); (NIL != cdolist_list_var); cdolist_list_var = cdolist_list_var.rest(), result_isa = cdolist_list_var.first()) {
+                              meta_result_isa = ConsesLow.nconc(meta_result_isa, genls.gather_all_genls(Symbols.symbol_function($sym201$MAPPING_FUNCALL_ARG), result_isa, mt, UNPROVIDED, UNPROVIDED));
+                            }
+                          }
+                        } finally {
+                          sbhl_marking_vars.$sbhl_suspend_new_spacesP$.rebind(_prev_bind_0_18, thread);
+                        }
+                      }
+                      sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
+                    } finally {
+                      sbhl_marking_vars.$sbhl_gather_space$.rebind(_prev_bind_0_17, thread);
+                    }
+                  }
+                  sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_space$.getDynamicValue(thread));
+                } finally {
+                  sbhl_marking_vars.$sbhl_space$.rebind(_prev_bind_0_16, thread);
+                }
+              }
+              meta_result_isa = genls.min_cols(list_utilities.remove_duplicate_forts(meta_result_isa), UNPROVIDED, UNPROVIDED);
+            } finally {
+              control_vars.$mapping_fn_arg6$.rebind(_prev_bind_6, thread);
+              control_vars.$mapping_fn_arg5$.rebind(_prev_bind_5, thread);
+              control_vars.$mapping_fn_arg4$.rebind(_prev_bind_4, thread);
+              control_vars.$mapping_fn_arg3$.rebind(_prev_bind_3, thread);
+              control_vars.$mapping_fn_arg2$.rebind(_prev_bind_2, thread);
+              control_vars.$mapping_fn_arg$.rebind(_prev_bind_1, thread);
+              control_vars.$mapping_fn$.rebind(_prev_bind_0, thread);
+            }
+          }
+          return meta_result_isa;
+        }
+      } else if ((NIL != czer_utilities.naut_with_corresponding_nartP(meta_functor))) {
+        return meta_result_isa(narts_high.find_nart(meta_functor), mt);
+      }
+      return NIL;
+    }
+  }
+
+  
   /** Return T iff PREDICATE is an anti-symmetric predicate. */
   @SubL(source = "cycl/kb-accessors.lisp", position = 2032) 
   public static final SubLObject anti_symmetric_predicateP(SubLObject predicate) {
@@ -170,6 +282,43 @@ public  final class kb_accessors extends SubLTranslatedFile {
            && arity.arity(predicate).eql(TWO_INTEGER)));
   }
 
+
+  @SubL(source = "cycl/kb-accessors.lisp", position = 55888) 
+  public static final SubLObject admitting_defnsP(SubLObject col, SubLObject mt) {
+    if ((mt == UNPROVIDED)) {
+      mt = NIL;
+    }
+    return makeBoolean(((NIL != sufficient_defnsP(col, mt))
+          || (NIL != defining_defnsP(col, mt))));
+  }
+
+
+  @SubL(source = "cycl/kb-accessors.lisp", position = 56104) 
+  public static final SubLObject sufficient_defnsP(SubLObject col, SubLObject mt) {
+    if ((mt == UNPROVIDED)) {
+      mt = NIL;
+    }
+    return kb_mapping_utilities.some_pred_value_in_relevant_mts(col, $const179$defnSufficient, mt, UNPROVIDED, UNPROVIDED);
+  }
+
+  @SubL(source = "cycl/kb-accessors.lisp", position = 56217) 
+  public static final SubLObject necessary_defnsP(SubLObject col, SubLObject mt) {
+    if ((mt == UNPROVIDED)) {
+      mt = NIL;
+    }
+    return kb_mapping_utilities.some_pred_value_in_relevant_mts(col, $const180$defnNecessary, mt, UNPROVIDED, UNPROVIDED);
+  }
+
+
+  @SubL(source = "cycl/kb-accessors.lisp", position = 56000) 
+  public static final SubLObject defining_defnsP(SubLObject col, SubLObject mt) {
+    if ((mt == UNPROVIDED)) {
+      mt = NIL;
+    }
+    return kb_mapping_utilities.some_pred_value_in_relevant_mts(col, $const178$defnIff, mt, UNPROVIDED, UNPROVIDED);
+  }
+
+  
   /** Return T iff TERM is an instance of #$Cyclist somewhere. */
   @SubL(source = "cycl/kb-accessors.lisp", position = 4126) 
   public static final SubLObject cyclistP(SubLObject v_term) {

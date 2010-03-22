@@ -256,6 +256,229 @@ public  final class sbhl_search_methods extends SubLTranslatedFile {
     }
   }
 
+
+  
+  /** Applies FUNCTION to each element of NODE's forward true closure, combining any non-nil result with *sbhl-result* using COMBINE-FN. @see sbhl-gather-closure */
+  @SubL(source = "cycl/sbhl/sbhl-search-methods.lisp", position = 18010) 
+  public static final SubLObject sbhl_gather_all_forward_true_nodes(SubLObject module, SubLObject node, SubLObject function, SubLObject mt, SubLObject tv, SubLObject combine_fn) {
+    if ((mt == UNPROVIDED)) {
+      mt = NIL;
+    }
+    if ((tv == UNPROVIDED)) {
+      tv = NIL;
+    }
+    if ((combine_fn == UNPROVIDED)) {
+      combine_fn = NIL;
+    }
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      checkType(module, $sym0$SBHL_MODULE_P);
+      {
+        SubLObject combiner = ((NIL != combine_fn) ? ((SubLObject) combine_fn) : sbhl_search_vars.$sbhl_combine_fn$.getDynamicValue(thread));
+        SubLObject result = NIL;
+        {
+          SubLObject _prev_bind_0 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
+          SubLObject _prev_bind_1 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
+          SubLObject _prev_bind_2 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
+          SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+          SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+          try {
+            sbhl_search_vars.$sbhl_search_module$.bind(module, thread);
+            sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(module), thread);
+            sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(module), thread);
+            sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+            sbhl_module_vars.$sbhl_module$.bind(module, thread);
+            {
+              SubLObject mt_var = mt;
+              {
+                SubLObject _prev_bind_0_461 = mt_relevance_macros.$mt$.currentBinding(thread);
+                SubLObject _prev_bind_1_462 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                SubLObject _prev_bind_2_463 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                try {
+                  mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                  mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                  mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                  {
+                    SubLObject tv_var = tv;
+                    {
+                      SubLObject _prev_bind_0_464 = sbhl_search_vars.$sbhl_tv$.currentBinding(thread);
+                      SubLObject _prev_bind_1_465 = sbhl_search_vars.$relevant_sbhl_tv_function$.currentBinding(thread);
+                      try {
+                        sbhl_search_vars.$sbhl_tv$.bind(((NIL != tv_var) ? ((SubLObject) tv_var) : sbhl_search_vars.get_sbhl_true_tv()), thread);
+                        sbhl_search_vars.$relevant_sbhl_tv_function$.bind(((NIL != tv_var) ? ((SubLObject) $sym1$RELEVANT_SBHL_TV_IS_GENERAL_TV) : sbhl_search_vars.$relevant_sbhl_tv_function$.getDynamicValue(thread)), thread);
+                        if ((NIL != tv_var)) {
+                          if ((NIL != sbhl_paranoia.sbhl_object_type_checking_p())) {
+                            if ((NIL == sbhl_search_vars.sbhl_true_tv_p(tv_var))) {
+                              {
+                                SubLObject pcase_var = sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread);
+                                if (pcase_var.eql($kw2$ERROR)) {
+                                  sbhl_paranoia.sbhl_error(ONE_INTEGER, $str3$_A_is_not_a__A, tv_var, $sym4$SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                } else if (pcase_var.eql($kw5$CERROR)) {
+                                  sbhl_paranoia.sbhl_cerror(ONE_INTEGER, $str6$continue_anyway, $str3$_A_is_not_a__A, tv_var, $sym4$SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                } else if (pcase_var.eql($kw7$WARN)) {
+                                  Errors.warn($str3$_A_is_not_a__A, tv_var, $sym4$SBHL_TRUE_TV_P);
+                                } else {
+                                  Errors.warn($str8$_A_is_not_a_valid__sbhl_type_erro, sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread));
+                                  Errors.cerror($str6$continue_anyway, $str3$_A_is_not_a__A, tv_var, $sym4$SBHL_TRUE_TV_P);
+                                }
+                              }
+                            }
+                          }
+                        }
+                        {
+                          SubLObject _prev_bind_0_466 = sbhl_search_vars.$sbhl_search_truth$.currentBinding(thread);
+                          SubLObject _prev_bind_1_467 = sbhl_search_vars.$sbhl_search_direction$.currentBinding(thread);
+                          SubLObject _prev_bind_2_468 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
+                          try {
+                            sbhl_search_vars.$sbhl_search_truth$.bind($const9$True_JustificationTruth, thread);
+                            sbhl_search_vars.$sbhl_search_direction$.bind(sbhl_search_vars.get_sbhl_forward_search_direction(), thread);
+                            sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.get_sbhl_module_forward_direction(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), thread);
+                            {
+                              SubLObject source = sbhl_marking_vars.sbhl_new_space_source();
+                              {
+                                SubLObject _prev_bind_0_469 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
+                                try {
+                                  sbhl_marking_vars.$sbhl_space$.bind(((source == $kw10$OLD) ? ((SubLObject) sbhl_marking_vars.$sbhl_space$.getDynamicValue(thread)) : sbhl_marking_vars.sbhl_get_new_space(source)), thread);
+                                  {
+                                    SubLObject _prev_bind_0_470 = sbhl_marking_vars.$sbhl_gather_space$.currentBinding(thread);
+                                    try {
+                                      sbhl_marking_vars.$sbhl_gather_space$.bind(((source == $kw10$OLD) ? ((SubLObject) sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread)) : sbhl_marking_vars.sbhl_get_new_space(source)), thread);
+                                      {
+                                        SubLObject _prev_bind_0_471 = sbhl_search_vars.$sbhl_finishedP$.currentBinding(thread);
+                                        SubLObject _prev_bind_1_472 = sbhl_search_vars.$sbhl_stop_search_pathP$.currentBinding(thread);
+                                        SubLObject _prev_bind_2_473 = sbhl_search_vars.$sbhl_search_parent_marking$.currentBinding(thread);
+                                        SubLObject _prev_bind_3_474 = sbhl_search_vars.$sbhl_nodes_previous_marking$.currentBinding(thread);
+                                        SubLObject _prev_bind_4_475 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                        try {
+                                          sbhl_search_vars.$sbhl_finishedP$.bind(NIL, thread);
+                                          sbhl_search_vars.$sbhl_stop_search_pathP$.bind(NIL, thread);
+                                          sbhl_search_vars.$sbhl_search_parent_marking$.bind(NIL, thread);
+                                          sbhl_search_vars.$sbhl_nodes_previous_marking$.bind(NIL, thread);
+                                          sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                          {
+                                            SubLObject rw_lock_var = sbhl_link_vars.$sbhl_rw_lock$.getGlobalValue();
+                                            SubLObject needs_to_releaseP = NIL;
+                                            try {
+                                              needs_to_releaseP = ReadWriteLocks.rw_lock_seize_read_lock(rw_lock_var);
+                                              if ((NIL != sbhl_paranoia.sbhl_object_type_checking_p())) {
+                                                if ((!(function.isFunctionSpec()))) {
+                                                  {
+                                                    SubLObject pcase_var = sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread);
+                                                    if (pcase_var.eql($kw2$ERROR)) {
+                                                      sbhl_paranoia.sbhl_error(ONE_INTEGER, $str3$_A_is_not_a__A, function, $sym23$FUNCTION_SPEC_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                    } else if (pcase_var.eql($kw5$CERROR)) {
+                                                      sbhl_paranoia.sbhl_cerror(ONE_INTEGER, $str6$continue_anyway, $str3$_A_is_not_a__A, function, $sym23$FUNCTION_SPEC_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                    } else if (pcase_var.eql($kw7$WARN)) {
+                                                      Errors.warn($str3$_A_is_not_a__A, function, $sym23$FUNCTION_SPEC_P);
+                                                    } else {
+                                                      Errors.warn($str8$_A_is_not_a_valid__sbhl_type_erro, sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread));
+                                                      Errors.cerror($str6$continue_anyway, $str3$_A_is_not_a__A, function, $sym23$FUNCTION_SPEC_P);
+                                                    }
+                                                  }
+                                                }
+                                              }
+                                              {
+                                                SubLObject _prev_bind_0_476 = sbhl_search_vars.$sbhl_search_behavior$.currentBinding(thread);
+                                                SubLObject _prev_bind_1_477 = sbhl_marking_vars.$sbhl_terminating_marking_space$.currentBinding(thread);
+                                                try {
+                                                  sbhl_search_vars.$sbhl_search_behavior$.bind(sbhl_search_utilities.determine_sbhl_search_behavior(sbhl_search_vars.get_sbhl_search_module(), sbhl_search_vars.get_sbhl_search_direction(), sbhl_search_vars.get_sbhl_tv()), thread);
+                                                  sbhl_marking_vars.$sbhl_terminating_marking_space$.bind(sbhl_search_utilities.determine_sbhl_terminating_marking_space(sbhl_search_vars.$sbhl_search_behavior$.getDynamicValue(thread)), thread);
+                                                  result = sbhl_gather_closure(node, function, combiner);
+                                                } finally {
+                                                  sbhl_marking_vars.$sbhl_terminating_marking_space$.rebind(_prev_bind_1_477, thread);
+                                                  sbhl_search_vars.$sbhl_search_behavior$.rebind(_prev_bind_0_476, thread);
+                                                }
+                                              }
+                                            } finally {
+                                              if ((NIL != needs_to_releaseP)) {
+                                                ReadWriteLocks.rw_lock_release_read_lock(rw_lock_var);
+                                              }
+                                            }
+                                          }
+                                        } finally {
+                                          sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_4_475, thread);
+                                          sbhl_search_vars.$sbhl_nodes_previous_marking$.rebind(_prev_bind_3_474, thread);
+                                          sbhl_search_vars.$sbhl_search_parent_marking$.rebind(_prev_bind_2_473, thread);
+                                          sbhl_search_vars.$sbhl_stop_search_pathP$.rebind(_prev_bind_1_472, thread);
+                                          sbhl_search_vars.$sbhl_finishedP$.rebind(_prev_bind_0_471, thread);
+                                        }
+                                      }
+                                      if ((source == $kw12$RESOURCE)) {
+                                        sbhl_marking_vars.update_sbhl_resourced_spaces(sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
+                                      }
+                                    } finally {
+                                      sbhl_marking_vars.$sbhl_gather_space$.rebind(_prev_bind_0_470, thread);
+                                    }
+                                  }
+                                  if ((source == $kw12$RESOURCE)) {
+                                    sbhl_marking_vars.update_sbhl_resourced_spaces(sbhl_marking_vars.$sbhl_space$.getDynamicValue(thread));
+                                  }
+                                } finally {
+                                  sbhl_marking_vars.$sbhl_space$.rebind(_prev_bind_0_469, thread);
+                                }
+                              }
+                            }
+                          } finally {
+                            sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_2_468, thread);
+                            sbhl_search_vars.$sbhl_search_direction$.rebind(_prev_bind_1_467, thread);
+                            sbhl_search_vars.$sbhl_search_truth$.rebind(_prev_bind_0_466, thread);
+                          }
+                        }
+                      } finally {
+                        sbhl_search_vars.$relevant_sbhl_tv_function$.rebind(_prev_bind_1_465, thread);
+                        sbhl_search_vars.$sbhl_tv$.rebind(_prev_bind_0_464, thread);
+                      }
+                    }
+                  }
+                } finally {
+                  mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2_463, thread);
+                  mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1_462, thread);
+                  mt_relevance_macros.$mt$.rebind(_prev_bind_0_461, thread);
+                }
+              }
+            }
+          } finally {
+            sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
+            sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
+            sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2, thread);
+            sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1, thread);
+            sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0, thread);
+          }
+        }
+        return result;
+      }
+    }
+  }
+
+
+  /** @binds *sbhl-compose-fn*. @binds *sbhl-combine-fn*. @binds *sbhl-consider-node-fn*, to @see sbhl-apply-compose-fn-and-combine-with-result. Then performs @see sbhl-transitive-closure. */
+  @SubL(source = "cycl/sbhl/sbhl-search-methods.lisp", position = 19300) 
+  public static final SubLObject sbhl_gather_closure(SubLObject node, SubLObject function, SubLObject combine_fn) {
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      {
+        SubLObject result = NIL;
+        {
+          SubLObject _prev_bind_0 = sbhl_search_vars.$sbhl_compose_fn$.currentBinding(thread);
+          SubLObject _prev_bind_1 = sbhl_search_vars.$sbhl_combine_fn$.currentBinding(thread);
+          SubLObject _prev_bind_2 = sbhl_search_vars.$sbhl_consider_node_fn$.currentBinding(thread);
+          try {
+            sbhl_search_vars.$sbhl_compose_fn$.bind(function, thread);
+            sbhl_search_vars.$sbhl_combine_fn$.bind(combine_fn, thread);
+            sbhl_search_vars.$sbhl_consider_node_fn$.bind($sym27$SBHL_APPLY_COMPOSE_FN_AND_COMBINE_WITH_RESULT, thread);
+            result = sbhl_transitive_closure(node);
+          } finally {
+            sbhl_search_vars.$sbhl_consider_node_fn$.rebind(_prev_bind_2, thread);
+            sbhl_search_vars.$sbhl_combine_fn$.rebind(_prev_bind_1, thread);
+            sbhl_search_vars.$sbhl_compose_fn$.rebind(_prev_bind_0, thread);
+          }
+        }
+        return result;
+      }
+    }
+  }
+
+  
   /** @return listp; all backward true nodes accessbile to NODE via MODULE. */
   @SubL(source = "cycl/sbhl/sbhl-search-methods.lisp", position = 1625) 
   public static final SubLObject sbhl_all_backward_true_nodes(SubLObject module, SubLObject node, SubLObject mt, SubLObject tv) {

@@ -16,7 +16,6 @@ import eu.larkc.core.pluginManager.local.queue.Queue;
 import eu.larkc.core.query.Query;
 import eu.larkc.core.query.SPARQLQuery;
 import eu.larkc.plugin.Context;
-import eu.larkc.plugin.Contract;
 import eu.larkc.plugin.reason.Reasoner;
 
 /**
@@ -65,6 +64,8 @@ public class LocalReasonManagerFromCollectionInformationSetManager extends Local
 		}
 
 		public void run() {
+			mReasoner.initialise();
+			Context context = mReasoner.createContext();
 			for (;;) {
 				PluginManager.Message controlMessage = getNextControlMessage();
 
@@ -103,16 +104,16 @@ public class LocalReasonManagerFromCollectionInformationSetManager extends Local
 
 					InformationSet result = null;
 					if (sparqlQuery.isSelect()) {
-						result = mReasoner.sparqlSelect(sparqlQuery, statements, new Contract() {}, new Context() {});
+						result = mReasoner.sparqlSelect(sparqlQuery, statements, new SimpleContract(), context);
 					} 
 					else if (sparqlQuery.isConstruct()) {
-						result = mReasoner.sparqlConstruct(sparqlQuery, statements, new Contract() {}, new Context() {});
+						result = mReasoner.sparqlConstruct(sparqlQuery, statements, new SimpleContract(), context);
 					} 
 					else if (sparqlQuery.isDescribe()) {
-						result = mReasoner.sparqlDescribe(sparqlQuery, statements, new Contract() {}, new Context() {});
+						result = mReasoner.sparqlDescribe(sparqlQuery, statements, new SimpleContract(), context);
 					} 
 					else if (sparqlQuery.isAsk()) {
-						result = mReasoner.sparqlAsk(sparqlQuery, statements, new Contract() {}, new Context() {});
+						result = mReasoner.sparqlAsk(sparqlQuery, statements, new SimpleContract(), context);
 					}
 
 					putNextOutput(result);
@@ -122,6 +123,7 @@ public class LocalReasonManagerFromCollectionInformationSetManager extends Local
 				}
 			}
 			stopPrevious();
+			mReasoner.shutdown();
 		}
 	}
 }

@@ -80,6 +80,43 @@ public  final class wff_vars extends SubLTranslatedFile {
     }
   }
 
+
+  @SubL(source = "cycl/wff-vars.lisp", position = 7112) 
+  public static final SubLObject wff_expansion_formula() {
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      return $wff_expansion_formula$.getDynamicValue(thread);
+    }
+  }
+
+  
+  @SubL(source = "cycl/wff-vars.lisp", position = 2820) 
+  public static final SubLObject wff_debugP() {
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      return $wff_debugP$.getDynamicValue(thread);
+    }
+  }
+
+
+  @SubL(source = "cycl/wff-vars.lisp", position = 4943) 
+  public static final SubLObject wff_violation_data_terseP() {
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      return $wff_violation_data_terseP$.getDynamicValue(thread);
+    }
+  }
+
+
+  @SubL(source = "cycl/wff-vars.lisp", position = 6936) 
+  public static final SubLObject wff_original_formula() {
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      return $wff_original_formula$.getDynamicValue(thread);
+    }
+  }
+
+  
   @SubL(source = "cycl/wff-vars.lisp", position = 1279) 
   public static final SubLObject note_wff_property(SubLObject keyword, SubLObject variable, SubLObject v_default) {
     return dictionary.dictionary_enter(wff_properties_table(), keyword, list(variable, v_default));

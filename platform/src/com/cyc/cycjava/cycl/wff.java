@@ -236,6 +236,7 @@ public  final class wff extends SubLTranslatedFile {
     }
   }
 
+  
   @SubL(source = "cycl/wff.lisp", position = 2284) 
   public static final SubLObject wffP(SubLObject formula, SubLObject type, SubLObject mt) {
     if ((type == UNPROVIDED)) {
@@ -337,8 +338,7 @@ public  final class wff extends SubLTranslatedFile {
               if (((NIL != wff_utilities.$check_wff_constantsP$.getDynamicValue(thread))
                    && (NIL != mal_fortsP(sentence)))) {
                 wffP = NIL;
-                Errors
-						.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 8077");
+                note_wff_violation(list($kw13$MAL_FORTS,mal_forts(sentence)));
               }
             }
           } finally {
@@ -1533,8 +1533,7 @@ of the non-atomic sentence NASENT are semantically well-formed. */
         at_utilities.reset_semantic_violations(UNPROVIDED);
         wffP = wff_wrt_arg_typesP(formula, mt);
         if ((NIL == wffP)) {
-          note_wff_violations(Errors
-				.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 7237"));
+          note_wff_violations(at_utilities.semantic_violations());
         }
         return makeBoolean((NIL == wffP));
       }
@@ -1607,12 +1606,33 @@ of the non-atomic sentence NASENT are semantically well-formed. */
       SubLObject cdolist_list_var = violations;
       SubLObject violation = NIL;
       for (violation = cdolist_list_var.first(); (NIL != cdolist_list_var); cdolist_list_var = cdolist_list_var.rest(), violation = cdolist_list_var.first()) {
-        Errors
-				.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 8092");
+      	note_wff_violation(violation);
       }
     }
     return NIL;
   }
+  
+
+  /** @param violation a list, the first element of which is a keyword indicating the type of violation, and the rest provide additional information about the violation. */
+  @SubL(source = "cycl/wff.lisp", position = 51821) 
+  public static final SubLObject note_wff_violation(SubLObject violation) {
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      if ((NIL != wff_vars.wff_debugP())) {
+        print_high.print(violation, UNPROVIDED);
+      }
+      if ((NIL != note_wff_violationP())) {
+        {
+          SubLObject item_var = violation;
+          if ((NIL == conses_high.member(item_var, wff_vars.$wff_violations$.getDynamicValue(thread), Symbols.symbol_function(EQUAL), Symbols.symbol_function(IDENTITY)))) {
+            wff_vars.$wff_violations$.setDynamicValue(cons(item_var, wff_vars.$wff_violations$.getDynamicValue(thread)), thread);
+          }
+        }
+      }
+      return NIL;
+    }
+  }
+
 
   /** Gives an explanation of why SENTENCE is not wff to be asserted in MT. */
   @SubL(source = "cycl/wff.lisp", position = 55919) 
@@ -1640,11 +1660,582 @@ of the non-atomic sentence NASENT are semantically well-formed. */
     {
       SubLObject io_mode = conses_high.getf(v_properties, $kw104$IO_MODE, $kw96$NL);
       SubLObject violations = conses_high.getf(v_properties, $kw105$VIOLATIONS, NIL);
-      return Errors
-			.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 8005");
+      return explanation_of_why_not_wff_int(sentence,mt,io_mode,violations,$kw16$ASSERT,v_properties);
     }
   }
 
+
+  /** @return boolean; t iff FORMULA is a well-formed CycL query in MT wrt syntax and arity */
+  @SubL(source = "cycl/wff.lisp", position = 12683) 
+  public static final SubLObject wff_queryP(SubLObject formula, SubLObject mt, SubLObject v_properties) {
+    if ((mt == UNPROVIDED)) {
+      mt = mt_relevance_macros.$mt$.getDynamicValue();
+    }
+    if ((v_properties == UNPROVIDED)) {
+      v_properties = NIL;
+    }
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      {
+        SubLObject plist_var = v_properties;
+        checkType(plist_var, $sym0$PROPERTY_LIST_P);
+        {
+          SubLObject remainder = NIL;
+          for (remainder = plist_var; (NIL != remainder); remainder = conses_high.cddr(remainder)) {
+            {
+              SubLObject property = remainder.first();
+              SubLObject value = conses_high.cadr(remainder);
+              checkType(property, $sym1$WFF_PROPERTY_P);
+            }
+          }
+        }
+      }
+      {
+        SubLObject result = NIL;
+        {
+          SubLObject _prev_bind_0 = control_vars.$within_ask$.currentBinding(thread);
+          try {
+            control_vars.$within_ask$.bind(T, thread);
+            {
+              SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(hlmt_czer.canonicalize_hlmt(mt));
+              {
+                SubLObject _prev_bind_0_30 = mt_relevance_macros.$mt$.currentBinding(thread);
+                SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                SubLObject _prev_bind_3 = wff_utilities.$check_wff_semanticsP$.currentBinding(thread);
+                SubLObject _prev_bind_4 = at_vars.$at_check_relator_constraintsP$.currentBinding(thread);
+                try {
+                  mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                  mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                  mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                  wff_utilities.$check_wff_semanticsP$.bind(czer_main.check_wff_semanticsP(mt), thread);
+                  at_vars.$at_check_relator_constraintsP$.bind(wff_utilities.$check_wff_semanticsP$.getDynamicValue(thread), thread);
+                  {
+                    SubLObject wff_svs = wff_macros.new_wff_special_variable_state(v_properties);
+                    SubLObject svs = wff_svs;
+                    {
+                      SubLObject _prev_bind_0_31 = wff_vars.$wff_properties$.currentBinding(thread);
+                      try {
+                        wff_vars.$wff_properties$.bind(svs, thread);
+                        {
+                          SubLObject svs_var = svs;
+                          checkType(svs_var, $sym3$SPECIAL_VARIABLE_STATE_P);
+                          {
+                            SubLObject cprogv_var = special_variable_state.with_special_variable_state_variables(svs_var);
+                            final ArrayList old_values = Dynamic.extract_dynamic_values(cprogv_var);
+                            try {
+                              Dynamic.bind_dynamic_vars(cprogv_var, special_variable_state.with_special_variable_state_values(svs_var));
+                              result = el_wff_syntaxP(formula, UNPROVIDED);
+                            } finally {
+                              Dynamic.rebind_dynamic_vars(cprogv_var, old_values);
+                            }
+                          }
+                        }
+                      } finally {
+                        wff_vars.$wff_properties$.rebind(_prev_bind_0_31, thread);
+                      }
+                    }
+                  }
+                } finally {
+                  at_vars.$at_check_relator_constraintsP$.rebind(_prev_bind_4, thread);
+                  wff_utilities.$check_wff_semanticsP$.rebind(_prev_bind_3, thread);
+                  mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                  mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                  mt_relevance_macros.$mt$.rebind(_prev_bind_0_30, thread);
+                }
+              }
+            }
+          } finally {
+            control_vars.$within_ask$.rebind(_prev_bind_0, thread);
+          }
+        }
+        return result;
+      }
+    }
+  }
+
+
+  /** @param WFF-CONTEXT; :ask, :assert, or :default */
+  @SubL(source = "cycl/wff.lisp", position = 56330) 
+  public static final SubLObject explanation_of_why_not_wff_int(SubLObject sentence, SubLObject mt, SubLObject io_mode, SubLObject violations, SubLObject wff_context, SubLObject v_properties) {
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      {
+        SubLObject answer = NIL;
+        SubLObject wff_svs = wff_macros.new_wff_special_variable_state(v_properties);
+        SubLObject svs = wff_svs;
+        {
+          SubLObject _prev_bind_0 = wff_vars.$wff_properties$.currentBinding(thread);
+          try {
+            wff_vars.$wff_properties$.bind(svs, thread);
+            {
+              SubLObject svs_var = svs;
+              checkType(svs_var, $sym3$SPECIAL_VARIABLE_STATE_P);
+              {
+                SubLObject cprogv_var = special_variable_state.with_special_variable_state_variables(svs_var);
+                final ArrayList old_values = Dynamic.extract_dynamic_values(cprogv_var);
+                try {
+                  Dynamic.bind_dynamic_vars(cprogv_var, special_variable_state.with_special_variable_state_values(svs_var));
+                  if ((NIL == violations)) {
+                    {
+                      SubLObject pcase_var = wff_context;
+                      if (pcase_var.eql($kw107$ASK)) {
+                        violations = why_not_wff_ask(sentence, mt, UNPROVIDED);
+                      } else if (pcase_var.eql($kw16$ASSERT)) {
+                        violations = why_not_wff_assert(sentence, mt, UNPROVIDED);
+                      } else {
+                        violations = why_not_wff(sentence, mt, UNPROVIDED);
+                      }
+                    }
+                  }
+                  {
+                    SubLObject cdolist_list_var = violations;
+                    SubLObject why_not = NIL;
+                    for (why_not = cdolist_list_var.first(); (NIL != cdolist_list_var); cdolist_list_var = cdolist_list_var.rest(), why_not = cdolist_list_var.first()) {
+                      answer = cons(explain_wff_violation(why_not, io_mode), answer);
+                    }
+                  }
+                  if (((NIL != wff_suggestions())
+                       && (NIL != provide_wff_suggestionsP())
+                       && (io_mode == $kw96$NL))) {
+                    {
+                      SubLObject suggestions = explanation_of_wff_suggestion(sentence, mt, wff_suggestions());
+                      if ((NIL != suggestions)) {
+                        answer = cons(PrintLow.format(NIL, $str102$___a, suggestions), answer);
+                      }
+                    }
+                  }
+                  answer = Sequences.nreverse(answer);
+                  if (($kw96$NL == io_mode)) {
+                    answer = string_utilities.strcat(answer);
+                  }
+                } finally {
+                  Dynamic.rebind_dynamic_vars(cprogv_var, old_values);
+                }
+              }
+            }
+          } finally {
+            wff_vars.$wff_properties$.rebind(_prev_bind_0, thread);
+          }
+        }
+        return answer;
+      }
+    }
+  }
+
+  
+
+  @SubL(source = "cycl/wff.lisp", position = 44716) 
+  public static final SubLObject how_make_wffP(SubLObject sentence, SubLObject mt) {
+    if ((mt == UNPROVIDED)) {
+      mt = NIL;
+    }
+    if ((NIL != el_wffP(sentence, mt, UNPROVIDED))) {
+      return $const25$True;
+    } else {
+      return wff_suggestions();
+    }
+  }
+
+
+  @SubL(source = "cycl/wff.lisp", position = 44981) 
+  public static final SubLObject explanation_of_wff_suggestion(SubLObject sentence, SubLObject mt, SubLObject suggestions) {
+    if ((mt == UNPROVIDED)) {
+      mt = NIL;
+    }
+    if ((suggestions == UNPROVIDED)) {
+      suggestions = how_make_wffP(sentence, mt);
+    }
+    {
+      SubLObject answer = NIL;
+      SubLObject cdolist_list_var = suggestions;
+      SubLObject suggestion = NIL;
+      for (suggestion = cdolist_list_var.first(); (NIL != cdolist_list_var); cdolist_list_var = cdolist_list_var.rest(), suggestion = cdolist_list_var.first()) {
+        {
+          SubLObject pcase_var = suggestion.first();
+          if (pcase_var.eql($kw77$CHANGE_MT)) {
+            {
+              SubLObject datum = suggestion.rest();
+              SubLObject current = datum;
+              SubLObject sentence_1 = NIL;
+              SubLObject mt_50 = NIL;
+              SubLObject accommodating_mts = NIL;
+              cdestructuring_bind.destructuring_bind_must_consp(current, datum, $list78);
+              sentence_1 = current.first();
+              current = current.rest();
+              cdestructuring_bind.destructuring_bind_must_consp(current, datum, $list78);
+              mt_50 = current.first();
+              current = current.rest();
+              cdestructuring_bind.destructuring_bind_must_consp(current, datum, $list78);
+              accommodating_mts = current.first();
+              current = current.rest();
+              if ((NIL == current)) {
+                if ((NIL == accommodating_mts)) {
+                } else if ((!(sentence.equal(sentence_1)))) {
+                } else if ((NIL != list_utilities.singletonP(accommodating_mts))) {
+                  answer = cons(PrintLow.format(NIL, $str79$__Consider_asserting______s__in_m, sentence, accommodating_mts.first()), answer);
+                } else {
+                  answer = cons(PrintLow.format(NIL, $str80$__Consider_asserting______s__in_o, sentence, string_utilities.stringify_terms(accommodating_mts, $str81$__, $str82$__or_)), answer);
+                }
+              } else {
+                cdestructuring_bind.cdestructuring_bind_error(datum, $list78);
+              }
+            }
+          } else if (pcase_var.eql($kw83$REPLACE_TERM)) {
+            {
+              SubLObject datum = suggestion.rest();
+              SubLObject current = datum;
+              SubLObject old_term = NIL;
+              SubLObject new_term = NIL;
+              cdestructuring_bind.destructuring_bind_must_consp(current, datum, $list84);
+              old_term = current.first();
+              current = current.rest();
+              cdestructuring_bind.destructuring_bind_must_consp(current, datum, $list84);
+              new_term = current.first();
+              current = current.rest();
+              if ((NIL == current)) {
+                if ((NIL == new_term)) {
+                } else if (old_term.equal(new_term)) {
+                } else {
+                  answer = cons(PrintLow.format(NIL, $str85$__Consider_using_term______s__ins, new_term, old_term), answer);
+                }
+              } else {
+                cdestructuring_bind.cdestructuring_bind_error(datum, $list84);
+              }
+            }
+          } else if (pcase_var.eql($kw16$ASSERT)) {
+            {
+              SubLObject datum = suggestion.rest();
+              SubLObject current = datum;
+              SubLObject sentence_1 = NIL;
+              cdestructuring_bind.destructuring_bind_must_consp(current, datum, $list86);
+              sentence_1 = current.first();
+              current = current.rest();
+              {
+                SubLObject mt_51 = (current.isCons() ? ((SubLObject) current.first()) : NIL);
+                cdestructuring_bind.destructuring_bind_must_listp(current, datum, $list86);
+                current = current.rest();
+                if ((NIL == current)) {
+                  if ((NIL != mt_51)) {
+                    answer = cons(PrintLow.format(NIL, $str87$__Consider_asserting______s____in, sentence_1, mt_51), answer);
+                  } else {
+                    answer = cons(PrintLow.format(NIL, $str88$__Consider_asserting______s_, sentence_1), answer);
+                  }
+                } else {
+                  cdestructuring_bind.cdestructuring_bind_error(datum, $list86);
+                }
+              }
+            }
+          } else if (pcase_var.eql($kw89$UNASSERT)) {
+            {
+              SubLObject datum = suggestion.rest();
+              SubLObject current = datum;
+              SubLObject sentence_1 = NIL;
+              cdestructuring_bind.destructuring_bind_must_consp(current, datum, $list86);
+              sentence_1 = current.first();
+              current = current.rest();
+              {
+                SubLObject mt_52 = (current.isCons() ? ((SubLObject) current.first()) : NIL);
+                cdestructuring_bind.destructuring_bind_must_listp(current, datum, $list86);
+                current = current.rest();
+                if ((NIL == current)) {
+                  if ((NIL != mt_52)) {
+                    answer = cons(PrintLow.format(NIL, $str90$__Consider_unasserting______s____, sentence_1, mt_52), answer);
+                  } else {
+                    answer = cons(PrintLow.format(NIL, $str91$__Consider_unasserting______s_, sentence_1), answer);
+                  }
+                } else {
+                  cdestructuring_bind.cdestructuring_bind_error(datum, $list86);
+                }
+              }
+            }
+          } else {
+            answer = cons(PrintLow.format(NIL, $str92$__No_explanation_template_exists_, suggestion), answer);
+          }
+        }
+      }
+      return string_utilities.strcat(Sequences.nreverse(answer));
+    }
+  }
+
+
+  @SubL(source = "cycl/wff.lisp", position = 44106) 
+  public static final SubLObject wff_suggestions() {
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      return wff_vars.$wff_suggestions$.getDynamicValue(thread);
+    }
+  }
+
+  
+
+  @SubL(source = "cycl/wff.lisp", position = 58947) 
+  public static final SubLObject explain_wff_violation(SubLObject why_not, SubLObject io_mode) {
+    if ((io_mode == UNPROVIDED)) {
+      io_mode = $kw96$NL;
+    }
+    checkType(why_not, $sym112$WFF_VIOLATION_P);
+    if ((NIL != why_not)) {
+      {
+        SubLObject explanation_function = wff_module_datastructures.wff_violation_explanation_function(at_utilities.violation_type(why_not));
+        if ((NIL != explanation_function)) {
+          return Functions.funcall(explanation_function, why_not, io_mode);
+        } else {
+          return PrintLow.format(NIL, $str113$__No_explanation_template_exists_, why_not);
+        }
+      }
+    }
+    return NIL;
+  }
+
+  
+
+  @SubL(source = "cycl/wff.lisp", position = 50135) 
+  public static final SubLObject why_not_wff_assert(SubLObject sentence, SubLObject mt, SubLObject v_properties) {
+    if ((mt == UNPROVIDED)) {
+      mt = mt_relevance_macros.$mt$.getDynamicValue();
+    }
+    if ((v_properties == UNPROVIDED)) {
+      v_properties = NIL;
+    }
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      {
+        SubLObject plist_var = v_properties;
+        checkType(plist_var, $sym0$PROPERTY_LIST_P);
+        {
+          SubLObject remainder = NIL;
+          for (remainder = plist_var; (NIL != remainder); remainder = conses_high.cddr(remainder)) {
+            {
+              SubLObject property = remainder.first();
+              SubLObject value = conses_high.cadr(remainder);
+              checkType(property, $sym1$WFF_PROPERTY_P);
+            }
+          }
+        }
+      }
+      {
+        SubLObject result = NIL;
+        {
+          SubLObject _prev_bind_0 = control_vars.$within_assert$.currentBinding(thread);
+          try {
+            control_vars.$within_assert$.bind(T, thread);
+            {
+              SubLObject wff_svs = wff_macros.new_wff_special_variable_state(v_properties);
+              SubLObject svs = wff_svs;
+              {
+                SubLObject _prev_bind_0_59 = wff_vars.$wff_properties$.currentBinding(thread);
+                try {
+                  wff_vars.$wff_properties$.bind(svs, thread);
+                  {
+                    SubLObject svs_var = svs;
+                    checkType(svs_var, $sym3$SPECIAL_VARIABLE_STATE_P);
+                    {
+                      SubLObject cprogv_var = special_variable_state.with_special_variable_state_variables(svs_var);
+                      final ArrayList old_values = Dynamic.extract_dynamic_values(cprogv_var);
+                      try {
+                        Dynamic.bind_dynamic_vars(cprogv_var, special_variable_state.with_special_variable_state_values(svs_var));
+                        result = why_not_wff(sentence, mt, UNPROVIDED);
+                      } finally {
+                        Dynamic.rebind_dynamic_vars(cprogv_var, old_values);
+                      }
+                    }
+                  }
+                } finally {
+                  wff_vars.$wff_properties$.rebind(_prev_bind_0_59, thread);
+                }
+              }
+            }
+          } finally {
+            control_vars.$within_assert$.rebind(_prev_bind_0, thread);
+          }
+        }
+        return result;
+      }
+    }
+  }
+
+
+  @SubL(source = "cycl/wff.lisp", position = 49621) 
+  public static final SubLObject why_not_wff(SubLObject sentence, SubLObject mt, SubLObject v_properties) {
+    if ((mt == UNPROVIDED)) {
+      mt = mt_relevance_macros.$mt$.getDynamicValue();
+    }
+    if ((v_properties == UNPROVIDED)) {
+      v_properties = NIL;
+    }
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      {
+        SubLObject plist_var = v_properties;
+        checkType(plist_var, $sym0$PROPERTY_LIST_P);
+        {
+          SubLObject remainder = NIL;
+          for (remainder = plist_var; (NIL != remainder); remainder = conses_high.cddr(remainder)) {
+            {
+              SubLObject property = remainder.first();
+              SubLObject value = conses_high.cadr(remainder);
+              checkType(property, $sym1$WFF_PROPERTY_P);
+            }
+          }
+        }
+      }
+      {
+        SubLObject result = NIL;
+        {
+          SubLObject _prev_bind_0 = at_vars.$noting_at_violationsP$.currentBinding(thread);
+          SubLObject _prev_bind_1 = at_vars.$accumulating_at_violationsP$.currentBinding(thread);
+          SubLObject _prev_bind_2 = wff_vars.$noting_wff_violationsP$.currentBinding(thread);
+          SubLObject _prev_bind_3 = wff_vars.$accumulating_wff_violationsP$.currentBinding(thread);
+          SubLObject _prev_bind_4 = wff_vars.$wff_violations$.currentBinding(thread);
+          SubLObject _prev_bind_5 = wff_utilities.$check_wff_semanticsP$.currentBinding(thread);
+          try {
+            at_vars.$noting_at_violationsP$.bind(T, thread);
+            at_vars.$accumulating_at_violationsP$.bind(T, thread);
+            wff_vars.$noting_wff_violationsP$.bind(T, thread);
+            wff_vars.$accumulating_wff_violationsP$.bind(T, thread);
+            wff_vars.$wff_violations$.bind(NIL, thread);
+            wff_utilities.$check_wff_semanticsP$.bind(T, thread);
+            {
+              SubLObject wff_svs = wff_macros.new_wff_special_variable_state(v_properties);
+              SubLObject svs = wff_svs;
+              {
+                SubLObject _prev_bind_0_56 = wff_vars.$wff_properties$.currentBinding(thread);
+                try {
+                  wff_vars.$wff_properties$.bind(svs, thread);
+                  {
+                    SubLObject svs_var = svs;
+                    checkType(svs_var, $sym3$SPECIAL_VARIABLE_STATE_P);
+                    {
+                      SubLObject cprogv_var = special_variable_state.with_special_variable_state_variables(svs_var);
+                      final ArrayList old_values = Dynamic.extract_dynamic_values(cprogv_var);
+                      try {
+                        Dynamic.bind_dynamic_vars(cprogv_var, special_variable_state.with_special_variable_state_values(svs_var));
+                        el_wffP(sentence, mt, UNPROVIDED);
+                        if ((NIL != hlmt.hlmt_p(mt))) {
+                          if ((NIL == wff_violations())) {
+                            {
+                              SubLObject mt_var = mt;
+                              {
+                                SubLObject _prev_bind_0_57 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                                SubLObject _prev_bind_1_58 = mt_relevance_macros.$mt$.currentBinding(thread);
+                                try {
+                                  mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.possibly_in_mt_determine_function(mt_var), thread);
+                                  mt_relevance_macros.$mt$.bind(mt_relevance_macros.possibly_in_mt_determine_mt(mt_var), thread);
+                                  simplifier.simplify_cycl_sentence(sentence, UNPROVIDED);
+                                } finally {
+                                  mt_relevance_macros.$mt$.rebind(_prev_bind_1_58, thread);
+                                  mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0_57, thread);
+                                }
+                              }
+                            }
+                          }
+                        }
+                        result = wff_violations();
+                      } finally {
+                        Dynamic.rebind_dynamic_vars(cprogv_var, old_values);
+                      }
+                    }
+                  }
+                } finally {
+                  wff_vars.$wff_properties$.rebind(_prev_bind_0_56, thread);
+                }
+              }
+            }
+          } finally {
+            wff_utilities.$check_wff_semanticsP$.rebind(_prev_bind_5, thread);
+            wff_vars.$wff_violations$.rebind(_prev_bind_4, thread);
+            wff_vars.$accumulating_wff_violationsP$.rebind(_prev_bind_3, thread);
+            wff_vars.$noting_wff_violationsP$.rebind(_prev_bind_2, thread);
+            at_vars.$accumulating_at_violationsP$.rebind(_prev_bind_1, thread);
+            at_vars.$noting_at_violationsP$.rebind(_prev_bind_0, thread);
+          }
+        }
+        return result;
+      }
+    }
+  }
+
+
+  @SubL(source = "cycl/wff.lisp", position = 50899) 
+  public static final SubLObject why_not_wff_ask(SubLObject sentence, SubLObject mt, SubLObject v_properties) {
+    if ((mt == UNPROVIDED)) {
+      mt = mt_relevance_macros.$mt$.getDynamicValue();
+    }
+    if ((v_properties == UNPROVIDED)) {
+      v_properties = NIL;
+    }
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      {
+        SubLObject plist_var = v_properties;
+        checkType(plist_var, $sym0$PROPERTY_LIST_P);
+        {
+          SubLObject remainder = NIL;
+          for (remainder = plist_var; (NIL != remainder); remainder = conses_high.cddr(remainder)) {
+            {
+              SubLObject property = remainder.first();
+              SubLObject value = conses_high.cadr(remainder);
+              checkType(property, $sym1$WFF_PROPERTY_P);
+            }
+          }
+        }
+      }
+      {
+        SubLObject result = NIL;
+        {
+          SubLObject _prev_bind_0 = at_vars.$noting_at_violationsP$.currentBinding(thread);
+          SubLObject _prev_bind_1 = at_vars.$accumulating_at_violationsP$.currentBinding(thread);
+          SubLObject _prev_bind_2 = wff_vars.$noting_wff_violationsP$.currentBinding(thread);
+          SubLObject _prev_bind_3 = wff_vars.$accumulating_wff_violationsP$.currentBinding(thread);
+          SubLObject _prev_bind_4 = wff_vars.$wff_violations$.currentBinding(thread);
+          try {
+            at_vars.$noting_at_violationsP$.bind(T, thread);
+            at_vars.$accumulating_at_violationsP$.bind(T, thread);
+            wff_vars.$noting_wff_violationsP$.bind(T, thread);
+            wff_vars.$accumulating_wff_violationsP$.bind(T, thread);
+            wff_vars.$wff_violations$.bind(NIL, thread);
+            {
+              SubLObject wff_svs = wff_macros.new_wff_special_variable_state(v_properties);
+              SubLObject svs = wff_svs;
+              {
+                SubLObject _prev_bind_0_63 = wff_vars.$wff_properties$.currentBinding(thread);
+                try {
+                  wff_vars.$wff_properties$.bind(svs, thread);
+                  {
+                    SubLObject svs_var = svs;
+                    checkType(svs_var, $sym3$SPECIAL_VARIABLE_STATE_P);
+                    {
+                      SubLObject cprogv_var = special_variable_state.with_special_variable_state_variables(svs_var);
+                      final ArrayList old_values = Dynamic.extract_dynamic_values(cprogv_var);
+                      try {
+                        Dynamic.bind_dynamic_vars(cprogv_var, special_variable_state.with_special_variable_state_values(svs_var));
+                        wff_queryP(sentence, mt, UNPROVIDED);
+                        result = wff_violations();
+                      } finally {
+                        Dynamic.rebind_dynamic_vars(cprogv_var, old_values);
+                      }
+                    }
+                  }
+                } finally {
+                  wff_vars.$wff_properties$.rebind(_prev_bind_0_63, thread);
+                }
+              }
+            }
+          } finally {
+            wff_vars.$wff_violations$.rebind(_prev_bind_4, thread);
+            wff_vars.$accumulating_wff_violationsP$.rebind(_prev_bind_3, thread);
+            wff_vars.$noting_wff_violationsP$.rebind(_prev_bind_2, thread);
+            at_vars.$accumulating_at_violationsP$.rebind(_prev_bind_1, thread);
+            at_vars.$noting_at_violationsP$.rebind(_prev_bind_0, thread);
+          }
+        }
+        return result;
+      }
+    }
+  }
+
+  
   public static final SubLObject declare_wff_file() {
     declareFunction(myName, "el_wffP", "EL-WFF?", 1, 2, false);
     //declareFunction(myName, "el_wff_assertibleP", "EL-WFF-ASSERTIBLE?", 1, 2, false);

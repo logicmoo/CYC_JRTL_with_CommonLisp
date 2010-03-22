@@ -57,6 +57,8 @@ public class LocalCollectionInformationSetTransformManager extends LocalPluginMa
 
 		public void run() 
 		{
+			mTransformer.initialise();
+			Context context = mTransformer.createContext();
 			for (;;) 
 			{
 				PluginManager.Message controlMessage = getNextControlMessage();
@@ -88,7 +90,7 @@ public class LocalCollectionInformationSetTransformManager extends LocalPluginMa
 						
 						for (InformationSet is : resource)
 						{
-							callable = new Transformation(is, new Contract() {}, new Context() {});
+							callable = new Transformation(is, new SimpleContract(), context);
 							collection.add(callable);
 						}
 						
@@ -134,7 +136,7 @@ public class LocalCollectionInformationSetTransformManager extends LocalPluginMa
 						System.out.println("[DEBUG]: Thread pool is not activated");
 						for (InformationSet is : resource)
     					{
-							transformedResources.add(mTransformer.transform(is, new Contract() {}, new Context() {}));
+							transformedResources.add(mTransformer.transform(is, new Contract() {}, context));
 						}
 					}
 					
@@ -146,6 +148,7 @@ public class LocalCollectionInformationSetTransformManager extends LocalPluginMa
 				}
 			}
 			stopPrevious();
+			mTransformer.shutdown();
 		}
 	}
 	

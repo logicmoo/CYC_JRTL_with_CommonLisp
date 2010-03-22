@@ -7,7 +7,6 @@ import eu.larkc.core.pluginManager.PluginManager;
 import eu.larkc.core.pluginManager.local.queue.Queue;
 import eu.larkc.core.query.Query;
 import eu.larkc.plugin.Context;
-import eu.larkc.plugin.Contract;
 import eu.larkc.plugin.transform.QueryTransformer;
 
 /**
@@ -49,6 +48,8 @@ public class LocalCollectionQueryTransformManager extends LocalPluginManager <Co
 		}
 
 		public void run() {
+			mTransformer.initialise();
+			Context context = mTransformer.createContext();
 			for (;;) {
 				PluginManager.Message controlMessage = getNextControlMessage();
 
@@ -64,7 +65,7 @@ public class LocalCollectionQueryTransformManager extends LocalPluginManager <Co
 
 					Collection <Query> transformedQueries = new ArrayList <Query> ();
 					for (Query query : queries){
-						transformedQueries.addAll(mTransformer.transform(query, new Contract() {}, new Context() {}));
+						transformedQueries.addAll(mTransformer.transform(query, new SimpleContract(), context));
 					}
 					
 					putNextOutput(transformedQueries);
@@ -74,6 +75,7 @@ public class LocalCollectionQueryTransformManager extends LocalPluginManager <Co
 				}
 			}
 			stopPrevious();
+			mTransformer.shutdown();
 		}
 	}
 }

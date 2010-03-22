@@ -122,8 +122,7 @@ as a CycL constant name */
             if ((NIL != constant)) {
               return Values.values(constant, T);
             } else {
-              if ((NIL != Errors
-					.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 31824"))) {
+              if ((NIL != stream_forbids_constant_creation(stream))) {
                 reader.simple_reader_error($str3$_S_is_not_the_name_of_a_constant_, list(name));
               } else {
                 {
@@ -158,6 +157,20 @@ as a CycL constant name */
       return NIL;
     }
   }
+  
+
+  /** Return T iff STREAM forbids the creation of constant shells for unknown constants. */
+  @SubL(source = "cycl/constant-reader.lisp", position = 3475) 
+  public static final SubLObject stream_forbids_constant_creation(SubLObject stream) {
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      if ((NIL == control_vars.$read_require_constant_exists$.getDynamicValue(thread))) {
+        return NIL;
+      }
+      return T;
+    }
+  }
+
 
   @SubL(source = "cycl/constant-reader.lisp", position = 3066) 
   public static final SubLObject find_constant_by_name(SubLObject name) {

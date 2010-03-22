@@ -5,6 +5,7 @@ import java.util.Hashtable;
 public class OwlToCycMapping {
 	
 	private Hashtable<String, String> mapping;
+	private String SW_OPENCYC_URL = "http://sw.opencyc.org/2009/04/07/concept/en/";
 	
 	public OwlToCycMapping() {
 		// prepare mappings
@@ -12,11 +13,15 @@ public class OwlToCycMapping {
 		mapping.put("http://www.w3.org/2000/01/rdf-schema#Class", "Collection");
 		mapping.put("http://www.w3.org/1999/02/22-rdf-syntax-ns#type", "isa");
 		mapping.put("http://www.w3.org/2000/01/rdf-schema#subClassOf", "genls");
-		mapping.put("http://www.w3.org/2000/01/rdf-schema#domain", "arg1Isa");
+		mapping.put("http://www.w3.org/2000/01/rdf-schema#domain",	 "arg1Isa");
 		mapping.put("http://www.w3.org/2000/01/rdf-schema#range", "arg2Isa");
 		mapping.put("http://www.w3.org/1999/02/22-rdf-syntax-ns#Property", "BinaryPredicate");
 		mapping.put("http://www.w3.org/2002/07/owl#TransitiveProperty", "TransitiveBinaryPredicate");
+		
 		mapping.put("http://www.w3.org/2001/XMLSchema#string", "CharacterString");
+		mapping.put("http://www.w3.org/2001/XMLSchema#boolean", "TruthValue");
+		mapping.put("http://www.w3.org/2001/XMLSchema#float", "SubLRealNumber");
+		mapping.put("http://www.w3.org/2001/XMLSchema#int", "SubLInteger");
 		
 		mapping.put("http://www.w3.org/2000/01/rdf-schema#isDefinedBy", "containsInformationAbout");
 		mapping.put("http://www.w3.org/2000/01/rdf-schema#label", "prettyString");
@@ -24,18 +29,25 @@ public class OwlToCycMapping {
 		mapping.put("http://www.w3.org/2000/01/rdf-schema#Resource", "Thing");
 		
 		//the mapping to those two is missing in the rdf
-		mapping.put("http://larkc.eu/plugin#genlrange", "arg2Genl");
-		mapping.put("http://larkc.eu/plugin#genldomain", "arg1Genl");
+		//mapping.put("http://larkc.eu/plugin#genlrange", "arg2Genl");
+		//mapping.put("http://larkc.eu/plugin#genldomain", "arg1Genl");
 	}
 	
 	public boolean isCycEquivalent(String rdfTerm) {
-		return mapping.containsKey(rdfTerm);
+		if (mapping.containsKey(rdfTerm))
+			return true;
+		
+		return rdfTerm.startsWith(SW_OPENCYC_URL);
 	}
 	
 	public String getCycEquivalent(String rdfTerm) {
 		if (mapping.containsKey(rdfTerm)) {
 			return mapping.get(rdfTerm);
 		}
+		else if (rdfTerm.startsWith(SW_OPENCYC_URL)){
+			return rdfTerm.substring(SW_OPENCYC_URL.length());
+		}
+	
 		return null;
 	}
 	

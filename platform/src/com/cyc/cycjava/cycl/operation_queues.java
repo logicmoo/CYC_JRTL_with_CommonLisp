@@ -130,6 +130,55 @@ but need to be written to a transcript. */
     }
   }
 
+
+  @SubL(source = "cycl/operation-queues.lisp", position = 10108) 
+  public static final SubLObject add_to_local_queue(SubLObject form, SubLObject encapsulateP) {
+    if ((encapsulateP == UNPROVIDED)) {
+      encapsulateP = T;
+    }
+    {
+      SubLObject api_op = ((NIL != encapsulateP) ? ((SubLObject) form_to_api_op(form)) : form);
+      local_queue_enqueue(api_op);
+      return T;
+    }
+  }
+
+
+  /** Add bookkeeping info (if any) and other context to FORM,
+   then encapsulate it so it is externalizable. */
+  @SubL(source = "cycl/operation-queues.lisp", position = 14898) 
+  public static final SubLObject form_to_api_op(SubLObject form) {
+    {
+      SubLObject info = cyc_bookkeeping.cyc_bookkeeping_info();
+      if ((NIL != info)) {
+        return encapsulation.encapsulate(list($sym19$WITH_BOOKKEEPING_INFO, list($sym20$QUOTE, info), form));
+      } else {
+        return encapsulation.encapsulate(form);
+      }
+    }
+  }
+
+
+  @SubL(source = "cycl/operation-queues.lisp", position = 2400) 
+  public static final SubLObject local_queue_enqueue(SubLObject operation) {
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      {
+        SubLObject lock = $local_queue_lock$.getDynamicValue(thread);
+        SubLObject release = NIL;
+        try {
+          release = Locks.seize_lock(lock);
+          queues.enqueue(operation, $local_queue$.getGlobalValue());
+        } finally {
+          if ((NIL != release)) {
+            Locks.release_lock(lock);
+          }
+        }
+      }
+      return NIL;
+    }
+  }
+
   @SubL(source = "cycl/operation-queues.lisp", position = 5157) 
   public static final SubLObject transcript_queue_dequeue() {
     {

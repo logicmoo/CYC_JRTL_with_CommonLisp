@@ -118,6 +118,40 @@ public  final class sbhl_paranoia extends SubLTranslatedFile {
     }
   }
 
+
+  /** If *sbhl-trace-level* is greater than or equal to LEVEL, signal a cerror with CONTINUE-STR and FORMAT-STR. If *sbhl-trace-level* is within 2 of LEVEL, warn with FORMAT-STR. @see cerror. @see warn. */
+  @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 3615) 
+  public static final SubLObject sbhl_cerror(SubLObject level, SubLObject continue_str, SubLObject format_str, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5) {
+    if ((arg1 == UNPROVIDED)) {
+      arg1 = NIL;
+    }
+    if ((arg2 == UNPROVIDED)) {
+      arg2 = NIL;
+    }
+    if ((arg3 == UNPROVIDED)) {
+      arg3 = NIL;
+    }
+    if ((arg4 == UNPROVIDED)) {
+      arg4 = NIL;
+    }
+    if ((arg5 == UNPROVIDED)) {
+      arg5 = NIL;
+    }
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      checkType(level, $sym21$INTEGERP);
+      checkType(continue_str, $sym22$STRINGP);
+      checkType(format_str, $sym22$STRINGP);
+      if ($sbhl_trace_level$.getDynamicValue(thread).numGE(level)) {
+        Errors.cerror(continue_str, format_str, new SubLObject[] {arg1, arg2, arg3, arg4, arg5});
+      } else if (Numbers.add(TWO_INTEGER, $sbhl_trace_level$.getDynamicValue(thread)).numGE(level)) {
+        Errors.warn(format_str, new SubLObject[] {arg1, arg2, arg3, arg4, arg5});
+      }
+      return NIL;
+    }
+  }
+
+  
   /** If *sbhl-trace-level* is greater than or equal to LEVEL, warn with FORMAT-STR. @see warn. */
   @SubL(source = "cycl/sbhl/sbhl-paranoia.lisp", position = 4216) 
   public static final SubLObject sbhl_warn(SubLObject level, SubLObject format_str, SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4, SubLObject arg5) {

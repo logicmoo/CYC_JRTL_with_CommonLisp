@@ -5,7 +5,6 @@ import eu.larkc.core.data.SetOfStatements;
 import eu.larkc.core.pluginManager.PluginManager;
 import eu.larkc.core.pluginManager.local.queue.Queue;
 import eu.larkc.plugin.Context;
-import eu.larkc.plugin.Contract;
 import eu.larkc.plugin.select.Selecter;
 
 /**
@@ -47,6 +46,8 @@ public class LocalSelectFromDataSetManager extends LocalPluginManager <DataSet, 
 		}
 
 		public void run() {
+			mSelecter.initialise();
+			Context context = mSelecter.createContext();
 			for (;;) {
 				PluginManager.Message controlMessage = getNextControlMessage();
 
@@ -59,13 +60,14 @@ public class LocalSelectFromDataSetManager extends LocalPluginManager <DataSet, 
 						break;
 					}
 
-					putNextOutput(mSelecter.select(dataset, new Contract() {}, new Context() {}));
+					putNextOutput(mSelecter.select(dataset, new SimpleContract(), context));
 				} 
 				else if (controlMessage.equals(PluginManager.Message.STOP)) {
 					break;
 				}
 			}
 			stopPrevious();
+			mSelecter.shutdown();
 		}
 	}
 }

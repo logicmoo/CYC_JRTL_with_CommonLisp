@@ -380,14 +380,34 @@ i.e. contains no HL variables. */
       final SubLThread thread = SubLProcess.currentSubLThread();
       return makeBoolean((((NIL != relation_syntaxP(v_term, UNPROVIDED))
                && ((NIL != cycl_variables.cyc_varP(cycl_utilities.nat_functor(v_term)))
-                || (NIL != Errors
-						.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 31563")))
+                || (NIL != function_symbolP(cycl_utilities.nat_functor(v_term))))
                && ((NIL == wff_vars.$within_wffP$.getDynamicValue(thread))
                 || (NIL != Errors
 						.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 31567"))))
             || (NIL != cycl_utilities.find_ground_naut(v_term))));
     }
   }
+
+
+  @SubL(source = "cycl/term.lisp", position = 8670) 
+  public static final SubLObject function_symbolP(SubLObject symbol) {
+    if ((NIL != forts.fort_p(symbol))) {
+      return fort_types_interface.functionP(symbol);
+    } else {
+      return represented_first_order_termP(symbol);
+    }
+  }
+
+  @SubL(source = "cycl/term.lisp", position = 1669) 
+  public static final SubLObject represented_first_order_termP(SubLObject v_term) {
+    if ((NIL != v_term)) {
+      return makeBoolean(((NIL != forts.fort_p(v_term))
+            || (NIL != cycl_variables.el_varP(v_term))
+            || (NIL != function_termP(v_term))));
+    }
+    return NIL;
+  }
+
 
   @SubL(source = "cycl/term.lisp", position = 9173) 
   public static final SubLObject sentenceP(SubLObject formula, SubLObject varP) {

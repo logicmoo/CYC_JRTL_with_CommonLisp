@@ -112,6 +112,30 @@ public  final class el_utilities extends SubLTranslatedFile {
            && operator.equal(cycl_utilities.formula_arg0(formula))));
   }
 
+
+
+  /** @return boolean; t iff the instances of COLLECTION are constrained to be CycL formulas. */
+  @SubL(source = "cycl/el-utilities.lisp", position = 135680) 
+  public static final SubLObject formula_denoting_collectionP(SubLObject collection) {
+    return genls.genlP(collection, $const127$CycLFormula, mt_vars.$anect_mt$.getGlobalValue(), UNPROVIDED);
+  }
+
+  /** @return boolean; t iff the instances of COLLECTION are constrained to be CycL sentences. */
+  @SubL(source = "cycl/el-utilities.lisp", position = 135973) 
+  public static final SubLObject sentence_denoting_collectionP(SubLObject collection) {
+    return genls.genlP(collection, $const128$CycLSentence, mt_vars.$anect_mt$.getGlobalValue(), UNPROVIDED);
+  }
+
+  
+  /** @return boolean; t iff OBJECT is one of the user-defined bounded logical operators. */
+  @SubL(source = "cycl/el-utilities.lisp", position = 12445) 
+  public static final SubLObject user_defined_logical_operator_p(SubLObject object) {
+    return makeBoolean(((NIL != forts.fort_p(object))
+           && (NIL == cyc_const_logical_operator_p(object))
+           && (NIL != fort_types_interface.logical_connective_p(object))));
+  }
+
+  
   /** @return boolean; t iff OBJECT is a unary formula whose arg0 is the constant #$not.
    The formula is not required to be well-formed. */
   @SubL(source = "cycl/el-utilities.lisp", position = 2197) 

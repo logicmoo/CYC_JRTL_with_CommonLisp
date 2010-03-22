@@ -257,8 +257,7 @@ or NIL if it couldn't canonicalize. */
                                       if ((NIL == wffP)) {
                                         thread.resetMultipleValues();
                                         {
-                                          SubLObject simpler_formula = Errors
-												.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 10698");
+                                          SubLObject simpler_formula = simplifier.try_to_simplify_non_wff_into_wff(copied_formula,Symbols.symbol_function($sym14$CANON_WFF_),mt_relevance_macros.$mt$.getDynamicValue(thread));
                                           SubLObject is_it_wff_nowP = thread.secondMultipleValue();
                                           thread.resetMultipleValues();
                                           if ((NIL != is_it_wff_nowP)) {
