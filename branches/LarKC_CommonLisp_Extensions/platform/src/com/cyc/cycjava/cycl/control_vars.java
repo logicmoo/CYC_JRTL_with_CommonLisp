@@ -28,6 +28,8 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.*;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.*;
 import com.cyc.tool.subl.util.*;
+import com.cyc.tool.subl.util.SubLTranslatedFile.SubL;
+
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeDouble;
@@ -77,6 +79,10 @@ public  final class control_vars extends SubLTranslatedFile {
   @SubL(source = "cycl/control-vars.lisp", position = 888) 
   public static SubLSymbol $table_area$ = null;
 
+  /** The mt within which RKF interactions are assumed. */
+  @SubL(source = "cycl/control-vars.lisp", position = 29223) 
+  public static SubLSymbol $rkf_mt$ = null;
+  
   /** Controls modification of the HL store */
   @SubL(source = "cycl/control-vars.lisp", position = 1016) 
   public static SubLSymbol $hl_lock$ = null;
@@ -946,6 +952,7 @@ which uniquely identifies every separate Cyc image */
 
   public static final SubLObject setup_control_vars_file() {
     // CVS_ID("Id: control-vars.lisp 126640 2008-12-04 13:39:36Z builder ");
+	 $rkf_mt$ = defvar("*RKF-MT*", NIL);
     subl_macro_promotions.declare_defglobal($sym0$_TABLE_AREA_);
     subl_macro_promotions.declare_defglobal($sym1$_HL_LOCK_);
     utilities_macros.register_global_lock($sym1$_HL_LOCK_, $str2$HL_Store_Lock);

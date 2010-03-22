@@ -260,10 +260,8 @@ public  final class at_routines extends SubLTranslatedFile {
                                   if ((NIL == fort_types_interface.fort_has_typeP(arg, col, UNPROVIDED))) {
                                     if ((NIL == at_defns.defns_admitP(col, arg, UNPROVIDED))) {
                                       if ((NIL != at_vars.$noting_at_violationsP$.getDynamicValue(thread))) {
-                                        Errors
-												.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 11264");
-                                        Errors
-												.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 11265");
+                                    	  note_at_violations(arg_isa_violations(reln,arg,argnum,col));
+                                    	  note_at_violations(wff.wff_violations());
                                       }
                                       result = T;
                                       doneP = at_utilities.at_finishedP(result);
@@ -289,10 +287,8 @@ public  final class at_routines extends SubLTranslatedFile {
                                   wff_vars.$wff_violations$.bind(NIL, thread);
                                   if ((NIL == at_defns.has_typeP(arg, col, UNPROVIDED))) {
                                     if ((NIL != at_vars.$noting_at_violationsP$.getDynamicValue(thread))) {
-                                      Errors
-											.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 11266");
-                                      Errors
-											.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 11267");
+                                    	note_at_violations(arg_isa_violations(reln,arg,argnum,col));
+                                    	note_at_violations(wff.wff_violations());
                                     }
                                     result = T;
                                     doneP = at_utilities.at_finishedP(result);
@@ -334,6 +330,114 @@ public  final class at_routines extends SubLTranslatedFile {
     }
   }
 
+
+  @SubL(source = "cycl/at-routines.lisp", position = 3241) 
+  public static final SubLObject arg_isa_violations(SubLObject reln, SubLObject arg, SubLObject argnum, SubLObject col) {
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      {
+        SubLObject constraints = dictionary.dictionary_lookup($at_applicable_arg_types_with_assertions$.getDynamicValue(thread), col, UNPROVIDED);
+        SubLObject violations = NIL;
+        SubLObject cdolist_list_var = constraints;
+        SubLObject constraint_details = NIL;
+        for (constraint_details = cdolist_list_var.first(); (NIL != cdolist_list_var); cdolist_list_var = cdolist_list_var.rest(), constraint_details = cdolist_list_var.first()) {
+          violations = cons(arg_isa_violation(reln, arg, argnum, col, constraint_details), violations);
+        }
+        return violations;
+      }
+    }
+  }
+
+
+  @SubL(source = "cycl/at-routines.lisp", position = 3556) 
+  public static final SubLObject arg_isa_violation(SubLObject reln, SubLObject arg, SubLObject argnum, SubLObject col, SubLObject constraint_details) {
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      {
+        SubLObject mt = mt_relevance_macros.$mt$.getDynamicValue(thread);
+        SubLObject module = ((NIL != kb_accessors.admitting_defnsP(col, mt)) ? ((SubLObject) $kw8$MAL_ARG_WRT_COL_DEFN) : $kw9$MAL_ARG_WRT_ARG_ISA);
+        return arg_isa_violation_int(reln, arg, argnum, col, constraint_details, module);
+      }
+    }
+  }
+
+
+  @SubL(source = "cycl/at-routines.lisp", position = 3820) 
+  public static final SubLObject arg_isa_violation_int(SubLObject reln, SubLObject arg, SubLObject argnum, SubLObject col, SubLObject constraint_details, SubLObject module) {
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      {
+        SubLObject mt = mt_relevance_macros.$mt$.getDynamicValue(thread);
+        SubLObject data = NIL;
+        SubLObject datum = constraint_details;
+        SubLObject current = datum;
+        SubLObject constraint_reln = NIL;
+        SubLObject via = NIL;
+        SubLObject constraint_gaf = NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(current, datum, $list10);
+        constraint_reln = current.first();
+        current = current.rest();
+        cdestructuring_bind.destructuring_bind_must_consp(current, datum, $list10);
+        via = current.first();
+        current = current.rest();
+        cdestructuring_bind.destructuring_bind_must_consp(current, datum, $list10);
+        constraint_gaf = current.first();
+        current = current.rest();
+        if ((NIL == current)) {
+          if ((via != $kw11$SELF)) {
+            data = cons(list(via, constraint_reln), data);
+          }
+          if ((NIL == wff_vars.wff_violation_data_terseP())) {
+            if (((NIL != at_vars.$include_at_constraint_gafP$.getDynamicValue(thread))
+                 && (NIL != constraint_gaf))) {
+              data = cons(list($kw12$AT_CONSTRAINT_GAF, constraint_gaf), data);
+            }
+            data = ConsesLow.append(data, wff_violation_verbose_data());
+          }
+          return listS(module, new SubLObject[] {arg, reln, argnum, col, mt, ConsesLow.append(data, NIL)});
+        } else {
+          cdestructuring_bind.cdestructuring_bind_error(datum, $list10);
+        }
+      }
+      return NIL;
+    }
+  }
+
+
+  @SubL(source = "cycl/at-routines.lisp", position = 4413) 
+  public static final SubLObject wff_violation_verbose_data() {
+    {
+      SubLObject data = NIL;
+      if ((NIL != wff_vars.wff_formula())) {
+        data = cons(list($kw13$WFF_FORMULA, wff_vars.wff_formula()), data);
+      }
+      if ((NIL != wff_vars.wff_expansion_formula())) {
+        data = cons(list($kw14$WFF_EXPANSION_FORMULA, wff_vars.wff_expansion_formula()), data);
+      }
+      if ((NIL != wff_vars.wff_original_formula())) {
+        data = cons(list($kw15$WFF_ORIGINAL_FORMULA, wff_vars.wff_original_formula()), data);
+      }
+      return data;
+    }
+  }
+  
+  
+  
+
+  
+  @SubL(source = "cycl/at-routines.lisp", position = 42469) 
+  public static final SubLObject note_at_violations(SubLObject at_violations) {
+    {
+      SubLObject cdolist_list_var = at_violations;
+      SubLObject at_violation = NIL;
+      for (at_violation = cdolist_list_var.first(); (NIL != cdolist_list_var); cdolist_list_var = cdolist_list_var.rest(), at_violation = cdolist_list_var.first()) {
+        at_utilities.note_at_violation(at_violation);
+      }
+    }
+    return NIL;
+  }
+
+  
   /** are any arg-isa collections applicable to arg number 
    <argnum> of relation <reln> known to not include <arg> */
   @SubL(source = "cycl/at-routines.lisp", position = 4912) 
@@ -922,8 +1026,7 @@ public  final class at_routines extends SubLTranslatedFile {
                                  && (NIL != at_defns.at_denotational_term_p(arg, UNPROVIDED)))) {
                               if ((NIL == genls.genlP(arg, col, UNPROVIDED, UNPROVIDED))) {
                                 if ((NIL != at_vars.$noting_at_violationsP$.getDynamicValue(thread))) {
-                                  Errors
-										.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 11285");
+                              	  note_at_violations(arg_genl_violations(reln,arg,argnum,col));
                                 }
                                 result = T;
                                 doneP = at_utilities.at_finishedP(result);
@@ -953,6 +1056,68 @@ public  final class at_routines extends SubLTranslatedFile {
     }
   }
 
+
+  @SubL(source = "cycl/at-routines.lisp", position = 11340) 
+  public static final SubLObject arg_genl_violations(SubLObject reln, SubLObject arg, SubLObject argnum, SubLObject col) {
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      {
+        SubLObject constraints = dictionary.dictionary_lookup($at_applicable_arg_types_with_assertions$.getDynamicValue(thread), col, UNPROVIDED);
+        SubLObject violations = NIL;
+        SubLObject cdolist_list_var = constraints;
+        SubLObject constraint_details = NIL;
+        for (constraint_details = cdolist_list_var.first(); (NIL != cdolist_list_var); cdolist_list_var = cdolist_list_var.rest(), constraint_details = cdolist_list_var.first()) {
+          violations = cons(arg_genl_violation(reln, arg, argnum, col, constraint_details), violations);
+        }
+        return violations;
+      }
+    }
+  }
+
+
+  @SubL(source = "cycl/at-routines.lisp", position = 11657) 
+  public static final SubLObject arg_genl_violation(SubLObject reln, SubLObject arg, SubLObject argnum, SubLObject col, SubLObject constraint_details) {
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      {
+        SubLObject mt = mt_relevance_macros.$mt$.getDynamicValue(thread);
+        SubLObject module = $kw30$MAL_ARG_WRT_ARG_GENL;
+        SubLObject data = NIL;
+        SubLObject datum = constraint_details;
+        SubLObject current = datum;
+        SubLObject constraint_reln = NIL;
+        SubLObject via = NIL;
+        SubLObject constraint_gaf = NIL;
+        cdestructuring_bind.destructuring_bind_must_consp(current, datum, $list10);
+        constraint_reln = current.first();
+        current = current.rest();
+        cdestructuring_bind.destructuring_bind_must_consp(current, datum, $list10);
+        via = current.first();
+        current = current.rest();
+        cdestructuring_bind.destructuring_bind_must_consp(current, datum, $list10);
+        constraint_gaf = current.first();
+        current = current.rest();
+        if ((NIL == current)) {
+          if ((via != $kw11$SELF)) {
+            data = cons(list(via, constraint_reln), data);
+          }
+          if ((NIL == wff_vars.wff_violation_data_terseP())) {
+            if (((NIL != at_vars.$include_at_constraint_gafP$.getDynamicValue(thread))
+                 && (NIL != constraint_gaf))) {
+              data = cons(list($kw12$AT_CONSTRAINT_GAF, constraint_gaf), data);
+            }
+            data = ConsesLow.append(data, wff_violation_verbose_data());
+          }
+          return listS(module, new SubLObject[] {arg, reln, argnum, col, mt, ConsesLow.append(data, NIL)});
+        } else {
+          cdestructuring_bind.cdestructuring_bind_error(datum, $list10);
+        }
+      }
+      return NIL;
+    }
+  }
+
+  
   /** are any arg-isa collections applicable to arg number 
    <argnum> of relation <reln> known to not include <arg>? */
   @SubL(source = "cycl/at-routines.lisp", position = 12280) 

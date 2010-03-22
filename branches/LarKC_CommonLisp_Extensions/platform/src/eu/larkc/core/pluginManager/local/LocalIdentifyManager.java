@@ -10,7 +10,6 @@ import eu.larkc.core.pluginManager.PluginManager;
 import eu.larkc.core.pluginManager.local.queue.Queue;
 import eu.larkc.core.query.Query;
 import eu.larkc.plugin.Context;
-import eu.larkc.plugin.Contract;
 import eu.larkc.plugin.identify.Identifier;
 
 /**
@@ -52,6 +51,8 @@ public class LocalIdentifyManager extends LocalPluginManager <Query, Collection<
 		}
 
 		public void run() {
+			mIdentifier.initialise();
+			Context context = mIdentifier.createContext();
 			for (;;) {
 				PluginManager.Message controlMessage = getNextControlMessage();
 
@@ -67,7 +68,7 @@ public class LocalIdentifyManager extends LocalPluginManager <Query, Collection<
 					
 					boolean finishedThisQuery = false;
 					while (!finishedThisQuery){
-						Collection<InformationSet> resources = mIdentifier.identify(query, new Contract() {}, new Context() {});
+						Collection<InformationSet> resources = mIdentifier.identify(query, new SimpleContract(), context);
 						if (resources == null || resources.isEmpty()) {
 							finishedThisQuery = true;
 							break;
@@ -80,6 +81,7 @@ public class LocalIdentifyManager extends LocalPluginManager <Query, Collection<
 				}
 			}
 			stopPrevious();
+			mIdentifier.shutdown();
 		}
 	}
 }

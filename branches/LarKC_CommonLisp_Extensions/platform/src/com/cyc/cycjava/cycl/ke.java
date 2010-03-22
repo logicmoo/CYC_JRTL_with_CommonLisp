@@ -193,6 +193,70 @@ it is used, otherwise a unique identifier is generated.
     }
   }
 
+
+  @SubL(source = "cycl/ke.lisp", position = 14082) 
+  public static final SubLObject ke_assert(SubLObject formula, SubLObject mt, SubLObject strength, SubLObject direction) {
+    if ((strength == UNPROVIDED)) {
+      strength = NIL;
+    }
+    if ((direction == UNPROVIDED)) {
+      direction = NIL;
+    }
+    if ((NIL == strength)) {
+      strength = $kw40$DEFAULT;
+    }
+    if ((NIL != ensure_cyclist_ok())) {
+      mt = hlmt_czer.canonicalize_hlmt(mt);
+      {
+        SubLObject ans = do_edit_op(listS($sym41$FI_ASSERT, list($sym3$QUOTE, formula), list($sym3$QUOTE, mt), list($sym3$QUOTE, strength), ConsesLow.append(((NIL != direction) ? ((SubLObject) list(list($sym3$QUOTE, direction))) : NIL), NIL)));
+        SubLObject error = NIL;
+        if ((ans != $kw1$QUEUED)) {
+          error = fi.fi_get_error_int();
+        }
+        do_edit_op(list($sym42$FI_TIMESTAMP_ASSERTION, list($sym3$QUOTE, operation_communication.the_cyclist()), list($sym3$QUOTE, fi.the_date()), list($sym3$QUOTE, fi.ke_purpose()), list($sym3$QUOTE, fi.the_second())));
+        if ((ans != $kw1$QUEUED)) {
+          fi.signal_fi_error(error);
+        }
+        return ans;
+      }
+    }
+    return NIL;
+  }
+
+
+  @SubL(source = "cycl/ke.lisp", position = 41490) 
+  public static final SubLObject do_edit_op(SubLObject form) {
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      if ((NIL != api_control_vars.$use_local_queueP$.getDynamicValue(thread))) {
+        return operation_queues.add_to_local_queue(form, T);
+      } else {
+        return Eval.eval(form);
+      }
+    }
+  }
+
+
+  @SubL(source = "cycl/ke.lisp", position = 43260) 
+  public static final SubLObject ensure_cyclist_ok() {
+    if ((NIL == cyclist_is_guest())) {
+      return T;
+    }
+    Errors.error($str89$KB_editing_is_not_allowed_for_use);
+    return NIL;
+  }
+
+
+  /** Test to determine if the user should have editing privileges, or not. */
+  @SubL(source = "cycl/ke.lisp", position = 43048) 
+  public static final SubLObject cyclist_is_guest() {
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      return ((NIL != system_parameters.$allow_guest_to_editP$.getDynamicValue(thread)) ? ((SubLObject) NIL) : Equality.equalp(operation_communication.the_cyclist(), $const88$Guest));
+    }
+  }
+
+  
   /** Get the named constant if it exists.  
    Otherwise, Create new constant now and add operation to transcript. If EXTERNAL-ID is non-null 
    it is used, otherwise a unique identifier is generated.
@@ -220,6 +284,33 @@ it is used, otherwise a unique identifier is generated.
     }
   }
 
+
+  /** Assert FORMULA in MT now and add operation to transcript.
+FORMULA is assumed to be WFF.
+@return 0 boolean ;; t if success, o/w nil
+@return 1 list ;; error list of form (ERROR-TYPE ERROR-STRING) otherwise.
+@param FORMULA list
+@param MT microtheory
+@param STRENGTH keyword
+@param DIRECTION keyword
+@note Assumes cyclist is ok.
+@note The salient property of this function is that it never throws an error.
+@owner jantos
+@privacy done
+ */
+  @SubL(source = "cycl/ke.lisp", position = 17661) 
+  public static final SubLObject ke_assert_wff_now(SubLObject formula, SubLObject mt, SubLObject strength, SubLObject direction) {
+    if ((strength == UNPROVIDED)) {
+      strength = $kw40$DEFAULT;
+    }
+    if ((direction == UNPROVIDED)) {
+      direction = NIL;
+    }
+    return ke_assert_now_int(formula, mt, strength, direction, T);
+  }
+
+  
+  
   /** Do we keep the merged constant name info in the KB? */
   @SubL(source = "cycl/ke.lisp", position = 4754) 
   public static SubLSymbol $note_merged_constant_name$ = null;

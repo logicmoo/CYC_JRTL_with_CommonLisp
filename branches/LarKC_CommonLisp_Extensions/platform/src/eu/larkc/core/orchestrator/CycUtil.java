@@ -62,7 +62,9 @@ public class CycUtil {
 			@Override
 			public void handleStatement(Statement st) throws RDFHandlerException {
 				// make it into cyc assertion
-				addRdfTriple(st);
+				if (!addRdfTriple(st)){
+					throw new RDFHandlerException("Error adding this statement to Plug-in registry KB: " + st);
+				}
 			}
 			
 		};			
@@ -72,14 +74,14 @@ public class CycUtil {
 		parser.parse(inputStream, "http://larkc.cyc/");
 	}
 
-	public static final void addRdfTriple(Statement st) {
+	public static final boolean addRdfTriple(Statement st) throws RDFHandlerException {
 		// parse all three terms
 		SubLObject subjectCycL = addRdfTerm(st.getSubject().toString());
 		SubLObject predicateCycL = addRdfTerm(st.getPredicate().toString());
 		SubLObject objectCycL = addRdfTerm(st.getObject().toString());
 		// add it to the KB
 		SubLObject cycAssertion = list(predicateCycL, subjectCycL, objectCycL);
-		addAssertion(cycAssertion, mtStr);
+		return addAssertion(cycAssertion, mtStr);
 	}
 	
 	public static final SubLObject addRdfTerm(String rdfTerm) {	
@@ -113,31 +115,34 @@ public class CycUtil {
 		if (constSubL instanceof constant_handles.$constant_native) {
 			constant_handles.$constant_native constant = (constant_handles.$constant_native)constSubL;
 			if (constant.$suid == SubLNil.NIL) {
-				logger.fine("adding constant"+ constStr);
+				logger.info("adding constant: "+ constStr);
 				ke.ke_create_now(makeString(constStr), SubLFile.UNPROVIDED);
 			}
 		}
 	}
 	
-	public static final void addAssertion(String assertionStr, String _mtStr) {
+	public static final boolean addAssertion(String assertionStr, String _mtStr) {
 		SubLObject mt = CycUtil.toConst(_mtStr);
-		addAssertion(CycUtil.toAssertion(assertionStr), mt);	
+		return addAssertion(CycUtil.toAssertion(assertionStr), mt);	
 	}
 	
-	public static final void addAssertion(String assertionStr, SubLObject mt) {
-		addAssertion(CycUtil.toAssertion(assertionStr), mt);	
+	public static final boolean addAssertion(String assertionStr, SubLObject mt) {
+		return addAssertion(CycUtil.toAssertion(assertionStr), mt);	
 	}
 	
-	public static final void addAssertion(SubLObject assertion, String _mtStr) {
-		logger.fine("adding assertion"+ assertion);
-		//System.out.println(assertion);
+	public static final boolean addAssertion(SubLObject assertion, String _mtStr) {
 		SubLObject mt = CycUtil.toConst(_mtStr);
-		addAssertion(assertion, mt);	
+		return addAssertion(assertion, mt);	
 	}
 		
-	public static final void addAssertion(SubLObject assertion, SubLObject mt) {
-		//System.err.println("--------------------ASSERTION: " + assertion);
-		ke.ke_assert_now(assertion, mt, SubLFile.UNPROVIDED, SubLFile.UNPROVIDED);	
+	public static final boolean addAssertion(SubLObject assertion, SubLObject mt) {
+		logger.info("adding assertion: "+ assertion + " MT: " +mt);
+		SubLObject res = ke.ke_assert_now(assertion, mt, SubLFile.UNPROVIDED, SubLFile.UNPROVIDED);	
+		if (res.isNil()){
+			logger.warning("The assertion was not asserted. It violates the KB consistency!");
+			return false;
+		}
+		return true;
 	}
 	
 	public static final void addForwardRule(String forwardRuleStr, String _mtStr) {

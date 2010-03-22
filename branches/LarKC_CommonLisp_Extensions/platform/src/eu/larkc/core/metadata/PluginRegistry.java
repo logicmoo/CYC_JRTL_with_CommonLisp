@@ -63,11 +63,9 @@ import eu.larkc.plugin.decide.Decider;
  *
  */
 public class PluginRegistry {
-	private static Logger logger = 
-		Logger.getLogger(PluginRegistry.class.getCanonicalName());
+	private static Logger logger = Logger.getLogger(PluginRegistry.class.getCanonicalName());
 	
-	//count for registered plug-ins. Used also to generate unique id in the 
-	//internal kb.
+	//count for registered plug-ins. Used also to generate unique id in the internal kb.
    static int iPluginCount=0;
    private final HashMap<String, Class<?>> pluginClassH;
    private Class<Decider> decider=null;
@@ -104,38 +102,44 @@ public class PluginRegistry {
 		return this.getNewPluginInstance(javaTypeToCycConstant(sPluginId));
 	}
 	
+	
 	/**
 	 * Initialize the core concepts of the Larkc upper-level ontology.
 	 */
 	private void initializeLarkcKb() {		
 		// read larkc ontology
 		String LARKC_RDF = "larkc.rdf";
-		try {			
-			InputStream fstream = ClassLoader.getSystemClassLoader().getResourceAsStream(LARKC_RDF);
+		
+		InputStream fstream = ClassLoader.getSystemClassLoader().getResourceAsStream(LARKC_RDF);
+		try {
+			if (fstream==null) {
+				logger.severe("Cannot find the "+ LARKC_RDF+ " file. PLUGIN REGISTRY MIGHT NOT WORK!!");
+				return;
+			}
+				
 			CycUtil.loadRdfTurtle(fstream);
-			
-		   // add a rule used for inferring connections between plug-ins
-			String mtStr = "BaseKB";
-			//CycUtil.addConst("pluginByDataConnectsTo");
-		//	CycUtil.addAssertion(CycUtil.toAssertion("isa", "pluginByDataConnectsTo",
-			//		"TransitiveBinaryPredicate"), mtStr);
-			String forwardRuleStr = 
-					  "(#$implies " 
-					+ "  (#$and "
-					+ "    (#$genls ?X #$larkc-Plugin) "
-					+ "    (#$genls ?Y #$larkc-Plugin) "
-					+ "    (#$larkc-hasOutputType ?X ?TYPE) "
-					+ "    (#$larkc-hasInputType ?Y ?TYPE1) "
-					+ "    (#$genls ?TYPE ?TYPE1))"
-				//	+ "    (#$isa ?Z ?X)"
-				//	+ "    (#$isa ?V ?Y))"
-					+ "  (#$larkc-pluginByDataConnectsTo ?X ?Y))";
-			CycUtil.addForwardRule(forwardRuleStr, mtStr);
 		} catch (Exception e) {
-			logger.severe("Error parsing the "+ LARKC_RDF);
-	    	//Errors.handleError(e);
-		}
+			logger.severe("Error parsing the "+ LARKC_RDF+ ". PLUGIN REGISTRY MIGHT NOT WORK!! "+e.getMessage());
+		} 
+			
+		// add a rule used for inferring connections between plug-ins
+		String mtStr = "BaseKB";
+		// CycUtil.addConst("pluginByDataConnectsTo");
+		// CycUtil.addAssertion(CycUtil.toAssertion("isa", "pluginByDataConnectsTo", "TransitiveBinaryPredicate"), mtStr);
+		String forwardRuleStr = 
+			  "(#$implies " 
+			+ "  (#$and "
+			+ "    (#$genls ?X #$larkc-Plugin) "
+			+ "    (#$genls ?Y #$larkc-Plugin) "
+			+ "    (#$larkc-hasOutputType ?X ?TYPE) "
+			+ "    (#$larkc-hasInputType ?Y ?TYPE1) "
+			+ "    (#$genls ?TYPE ?TYPE1))"
+		//	+ "    (#$isa ?Z ?X)"
+		//	+ "    (#$isa ?V ?Y))"
+			+ "  (#$larkc-pluginByDataConnectsTo ?X ?Y))";
+		CycUtil.addForwardRule(forwardRuleStr, mtStr);
 	}
+	
 	
 	/**
 	 * Load plug-ins from the ini file and from PLATFORM/plugins.

@@ -170,8 +170,7 @@ public  final class cycl_grammar extends SubLTranslatedFile {
              && (NIL == wff_vars.$wff_violations$.getDynamicValue(thread)))) {
           if ((NIL != el_utilities.el_formula_p(object))) {
             if ((NIL != wff.note_wff_violationP())) {
-              Errors
-					.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 8024");
+            	wff.note_wff_violation(list($kw16$NOT_A_TRUTH_FUNCTION,cycl_formula_predicate(object)));
             }
           } else {
             if ((NIL != wff.note_wff_violationP())) {
@@ -193,14 +192,10 @@ public  final class cycl_grammar extends SubLTranslatedFile {
             || (NIL != cycl_quantified_sentence_p(object))
             || (NIL != cycl_variable_arity_sentence_p(object))
             || (NIL != cycl_atomic_sentence_p(object))
-            || (NIL != Errors
-					.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 30070"))
-            || (NIL != Errors
-					.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 30063"))
-            || (NIL != Errors
-					.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 30065"))
-            || (NIL != Errors
-					.handleMissingMethodError("This call was replaced for LarKC purposes. Originally a method was called. Refer to number 30072"))));
+            || (NIL != cycl_ternary_sentence_p(object))
+            || (NIL != cycl_quaternary_sentence_p(object))
+            || (NIL != cycl_quintary_sentence_p(object))
+            || (NIL != cycl_user_defined_logical_operator_sentence_p(object))));
     } else {
       return makeBoolean((((NIL != grammar_permits_hlP())
                && (NIL != Errors
@@ -209,6 +204,46 @@ public  final class cycl_grammar extends SubLTranslatedFile {
     }
   }
 
+
+  /** returns t iff OBJECT is of the form <user-defined logical operator> <sentence sequence> */
+  @SubL(source = "cycl/cycl-grammar.lisp", position = 17503) 
+  public static final SubLObject cycl_user_defined_logical_operator_sentence_p(SubLObject object) {
+    if (((NIL != grammar_permits_hlP())
+         && (NIL != assertion_handles.assertion_p(object)))) {
+      return cycl_user_defined_logical_operator_sentence_p(cycl_utilities.careful_hl_term_to_el_term(object));
+    } else if ((NIL == el_utilities.el_formula_p(object))) {
+    } else if ((NIL == el_utilities.user_defined_logical_operator_p(cycl_formula_predicate(object)))) {
+    } else {
+      return cycl_sentence_sequence_p(cycl_utilities.formula_args(object, $kw27$INCLUDE));
+    }
+    return NIL;
+  }
+
+  
+
+  /** returns t iff OBJECT is of the form <quintary operator> <sentence> <sentence> <sentence> <sentence> <sentence> */
+  @SubL(source = "cycl/cycl-grammar.lisp", position = 16160) 
+  public static final SubLObject cycl_quintary_sentence_p(SubLObject object) {
+    if (((NIL != grammar_permits_hlP())
+         && (NIL != assertion_handles.assertion_p(object)))) {
+      return cycl_quintary_sentence_p(cycl_utilities.careful_hl_term_to_el_term(object));
+    } else if ((NIL == el_utilities.el_formula_p(object))) {
+    } else if ((NIL == el_utilities.cyc_const_quintary_logical_op_p(cycl_formula_predicate(object)))) {
+    } else if ((!(el_utilities.formula_arity(object, UNPROVIDED).numE(FIVE_INTEGER)))) {
+      if ((NIL != wff.note_wff_violationP())) {
+        wff.note_wff_violation(list($kw21$ARITY_MISMATCH, object, cycl_formula_predicate(object), $str26$quintary_operator, FIVE_INTEGER, el_utilities.formula_arity(object, UNPROVIDED)));
+      }
+    } else {
+      return makeBoolean(((NIL != cycl_sentence_p(cycl_utilities.formula_arg1(object, UNPROVIDED)))
+             && (NIL != cycl_sentence_p(cycl_utilities.formula_arg2(object, UNPROVIDED)))
+             && (NIL != cycl_sentence_p(cycl_utilities.formula_arg3(object, UNPROVIDED)))
+             && (NIL != cycl_sentence_p(cycl_utilities.formula_arg4(object, UNPROVIDED)))
+             && (NIL != cycl_sentence_p(cycl_utilities.formula_arg5(object, UNPROVIDED)))));
+    }
+    return NIL;
+  }
+
+  
   /** returns t iff OBJECT is of the form <epsilon>
                                     or . <variable>
                                     or <sentence> <sentence sequence> */
@@ -220,6 +255,49 @@ public  final class cycl_grammar extends SubLTranslatedFile {
              && (NIL != cycl_sentence_sequence_p(el_utilities.rest_of_sequence(object))))));
   }
 
+  /** returns t iff OBJECT is of the form <quaternary operator> <sentence> <sentence> <sentence> <sentence> */
+  @SubL(source = "cycl/cycl-grammar.lisp", position = 15365) 
+  public static final SubLObject cycl_quaternary_sentence_p(SubLObject object) {
+    if (((NIL != grammar_permits_hlP())
+         && (NIL != assertion_handles.assertion_p(object)))) {
+      return cycl_quaternary_sentence_p(cycl_utilities.careful_hl_term_to_el_term(object));
+    } else if ((NIL == el_utilities.el_formula_p(object))) {
+    } else if ((NIL == el_utilities.cyc_const_quaternary_logical_op_p(cycl_formula_predicate(object)))) {
+    } else if ((!(el_utilities.formula_arity(object, UNPROVIDED).numE(FOUR_INTEGER)))) {
+      if ((NIL != wff.note_wff_violationP())) {
+        wff.note_wff_violation(list($kw21$ARITY_MISMATCH, object, cycl_formula_predicate(object), $str25$quaternary_operator, FOUR_INTEGER, el_utilities.formula_arity(object, UNPROVIDED)));
+      }
+    } else {
+      return makeBoolean(((NIL != cycl_sentence_p(cycl_utilities.formula_arg1(object, UNPROVIDED)))
+             && (NIL != cycl_sentence_p(cycl_utilities.formula_arg2(object, UNPROVIDED)))
+             && (NIL != cycl_sentence_p(cycl_utilities.formula_arg3(object, UNPROVIDED)))
+             && (NIL != cycl_sentence_p(cycl_utilities.formula_arg4(object, UNPROVIDED)))));
+    }
+    return NIL;
+  }
+
+
+  /** returns t iff OBJECT is of the form <ternary operator> <sentence> <sentence> <sentence> */
+  @SubL(source = "cycl/cycl-grammar.lisp", position = 14645) 
+  public static final SubLObject cycl_ternary_sentence_p(SubLObject object) {
+    if (((NIL != grammar_permits_hlP())
+         && (NIL != assertion_handles.assertion_p(object)))) {
+      return cycl_ternary_sentence_p(cycl_utilities.careful_hl_term_to_el_term(object));
+    } else if ((NIL == el_utilities.el_formula_p(object))) {
+    } else if ((NIL == el_utilities.cyc_const_ternary_logical_op_p(cycl_formula_predicate(object)))) {
+    } else if ((!(el_utilities.formula_arity(object, UNPROVIDED).numE(THREE_INTEGER)))) {
+      if ((NIL != wff.note_wff_violationP())) {
+        wff.note_wff_violation(list($kw21$ARITY_MISMATCH, object, cycl_formula_predicate(object), $str24$ternary_operator, THREE_INTEGER, el_utilities.formula_arity(object, UNPROVIDED)));
+      }
+    } else {
+      return makeBoolean(((NIL != cycl_sentence_p(cycl_utilities.formula_arg1(object, UNPROVIDED)))
+             && (NIL != cycl_sentence_p(cycl_utilities.formula_arg2(object, UNPROVIDED)))
+             && (NIL != cycl_sentence_p(cycl_utilities.formula_arg3(object, UNPROVIDED)))));
+    }
+    return NIL;
+  }
+
+  
   @SubL(source = "cycl/cycl-grammar.lisp", position = 12920) 
   public static final SubLObject cycl_truth_value_p(SubLObject object) {
     return makeBoolean((($const18$True == object)

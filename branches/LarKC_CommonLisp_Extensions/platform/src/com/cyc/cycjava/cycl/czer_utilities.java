@@ -142,6 +142,18 @@ public  final class czer_utilities extends SubLTranslatedFile {
     return NIL;
   }
 
+
+  /** @return booleanp; t iff TERM is a naut which has
+an already-reified NART counterpart. */
+  @SubL(source = "cycl/czer-utilities.lisp", position = 30790) 
+  public static final SubLObject naut_with_corresponding_nartP(SubLObject v_term) {
+    if ((NIL != term.ground_nautP(v_term, Symbols.symbol_function($sym60$VARIABLE_P)))) {
+      return list_utilities.sublisp_boolean(narts_high.find_nart(v_term));
+    }
+    return NIL;
+  }
+
+  
   /** @return booleanp; whether the canonicalizer should respect DIRECTIVE when
 canonicalizing the ARGNUMth argument position of RELATION in MT. */
   @SubL(source = "cycl/czer-utilities.lisp", position = 1696) 

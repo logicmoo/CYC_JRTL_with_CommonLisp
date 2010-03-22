@@ -4,7 +4,6 @@ import eu.larkc.core.data.InformationSet;
 import eu.larkc.core.pluginManager.PluginManager;
 import eu.larkc.core.pluginManager.local.queue.Queue;
 import eu.larkc.plugin.Context;
-import eu.larkc.plugin.Contract;
 import eu.larkc.plugin.transform.InformationSetTransformer;
 
 /**
@@ -46,6 +45,8 @@ public class LocalInformationSetTransformManager extends LocalPluginManager <Inf
 		}
 
 		public void run() {
+			mTransformer.initialise();
+			Context context = mTransformer.createContext();
 			for (;;) {
 				PluginManager.Message controlMessage = getNextControlMessage();
 
@@ -59,7 +60,7 @@ public class LocalInformationSetTransformManager extends LocalPluginManager <Inf
 						break;
 					}
 
-					InformationSet transformedResource = mTransformer.transform(resource, new Contract() {}, new Context() {});
+					InformationSet transformedResource = mTransformer.transform(resource, new SimpleContract(), context);
 					putNextOutput(transformedResource);
 				} 
 				else if (controlMessage.equals(PluginManager.Message.STOP)) {
@@ -67,6 +68,7 @@ public class LocalInformationSetTransformManager extends LocalPluginManager <Inf
 				}
 			}
 			stopPrevious();
+			mTransformer.shutdown();
 		}
 	}
 }

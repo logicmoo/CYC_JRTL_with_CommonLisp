@@ -77,6 +77,43 @@ public  final class wff_module_datastructures extends SubLTranslatedFile {
     Structures.makeStructDeclNative($wff_module_native.class, $sym0$WFF_MODULE, $sym1$WFF_MODULE_P, $list2, $list3, new String[] {"$name", "$plist"}, $list4, $list5, $sym6$PRINT_WFF_MODULE);
   }
 
+  @SubL(source = "cycl/wff-module-datastructures.lisp", position = 8196) 
+  public static final SubLObject wff_violation_explanation_function(SubLObject wff_violation_name) {
+    return wff_module_property(find_wff_module_by_name(wff_violation_name), $kw35$EXPLAIN_FUNC, NIL);
+  }
+
+  @SubL(source = "cycl/wff-module-datastructures.lisp", position = 8388) 
+  public static final SubLObject wff_violation_explanation_function_args(SubLObject wff_violation_name) {
+    return wff_module_property(find_wff_module_by_name(wff_violation_name), $kw36$EXPLAIN_ARGS, NIL);
+  }
+
+
+  @SubL(source = "cycl/wff-module-datastructures.lisp", position = 2926) 
+  public static final SubLObject wff_module_property(SubLObject wff_module, SubLObject property, SubLObject v_default) {
+    if ((v_default == UNPROVIDED)) {
+      v_default = NIL;
+    }
+    checkType(wff_module, $sym1$WFF_MODULE_P);
+    {
+      SubLObject plist = wff_module_plist(wff_module);
+      return conses_high.getf(plist, property, v_default);
+    }
+  }
+
+
+  @SubL(source = "cycl/wff-module-datastructures.lisp", position = 2804) 
+  public static final SubLObject wff_module_plist(SubLObject wff_module) {
+    checkType(wff_module, $sym1$WFF_MODULE_P);
+    return wff_mod_plist(wff_module);
+  }
+
+  @SubL(source = "cycl/wff-module-datastructures.lisp", position = 1315) 
+  public static final SubLObject wff_mod_plist(SubLObject object) {
+    checkType(object, $sym1$WFF_MODULE_P);
+    return object.getField3();
+  }
+
+
   @SubL(source = "cycl/wff-module-datastructures.lisp", position = 1315) 
   public static SubLSymbol $dtp_wff_module$ = null;
 

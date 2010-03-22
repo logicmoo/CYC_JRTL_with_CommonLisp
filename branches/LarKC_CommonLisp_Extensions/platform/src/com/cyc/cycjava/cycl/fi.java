@@ -178,6 +178,16 @@ public  final class fi extends SubLTranslatedFile {
     }
   }
 
+
+  @SubL(source = "cycl/fi.lisp", position = 7692) 
+  public static final SubLObject fi_get_error_int() {
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      return $fi_error$.getDynamicValue(thread);
+    }
+  }
+
+  
   @SubL(source = "cycl/fi.lisp", position = 8179) 
   public static SubLSymbol $fi_last_constant$ = null;
 

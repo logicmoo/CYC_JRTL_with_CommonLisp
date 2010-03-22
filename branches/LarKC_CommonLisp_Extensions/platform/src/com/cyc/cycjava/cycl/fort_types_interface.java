@@ -28,6 +28,8 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.*;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.*;
 import com.cyc.tool.subl.util.*;
+import com.cyc.tool.subl.util.SubLTranslatedFile.SubL;
+
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeBoolean;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeInteger;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.makeDouble;
@@ -121,6 +123,22 @@ public  final class fort_types_interface extends SubLTranslatedFile {
     }
   }
 
+
+  /** is TERM a quantifier? */
+  @SubL(source = "cycl/fort-types-interface.lisp", position = 22076) 
+  public static final SubLObject isa_quantifierP(SubLObject v_term, SubLObject mt) {
+    if ((mt == UNPROVIDED)) {
+      mt = NIL;
+    }
+    if ((NIL != forts.fort_p(v_term))) {
+      return quantifier_p(v_term);
+    } else {
+      return makeBoolean(((NIL != isa.isaP(v_term, $const42$Quantifier, mt, UNPROVIDED))
+            || (NIL != at_defns.quiet_sufficient_defns_admitP($const42$Quantifier, v_term, mt))));
+    }
+  }
+
+  
   @SubL(source = "cycl/fort-types-interface.lisp", position = 1850) 
   public static final SubLObject fort_has_type_in_any_mtP(SubLObject fort, SubLObject type) {
     {

@@ -158,6 +158,14 @@ public  final class hl_supports extends SubLTranslatedFile {
     return list_utilities.member_eqP(object, $hl_support_modules$.getGlobalValue());
   }
 
+
+  @SubL(source = "cycl/hl-supports.lisp", position = 10331) 
+  public static final SubLObject opaque_hl_support_p(SubLObject support) {
+    return makeBoolean(((NIL == assertion_handles.assertion_p(support))
+           && ($kw24$OPAQUE == arguments.support_module(support))));
+  }
+
+  
   /** Declare NAME as a new HL support module */
   @SubL(source = "cycl/hl-supports.lisp", position = 2451) 
   public static final SubLObject setup_hl_support_module(SubLObject name, SubLObject plist) {

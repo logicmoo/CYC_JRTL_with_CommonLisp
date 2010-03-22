@@ -1,28 +1,30 @@
 @prefix larkc: <http://larkc.eu/plugin#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix wsl:   <http://www.wsmo.org/ns/wsmo-lite#> .
-@prefix xs:   <http://www.w3.org/2001/XMLSchema#> .
-@prefix owl: <http://www.w3.org/2002/07/owl#>.
-
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#>.
+@prefix ocyc:  <http://sw.opencyc.org/2009/04/07/concept/en/>. 
 
 # Wsmo Lite definition
 wsl:ClassificationRoot	rdf:type rdfs:Class .
 wsl:NonFunctionalParameter rdf:type rdfs:Class .
 
-# Functional properties
+##################################### 
+# Functional properties 
+#####################################
 
 # Plug-in types
 larkc:Plugin   rdf:type   rdfs:Class, 
                           wsl:ClassificationRoot .
 
-larkc:hasUri      rdf:type   rdf:Property;
+larkc:hasUri  rdf:type   rdf:Property;
 				  rdfs:domain larkc:Plugin;
-				  rdfs:range  xs:string.
+				  rdfs:range  xsd:string.
 				  				  
 larkc:hasEndpoint rdf:type   rdf:Property;
 				  rdfs:domain larkc:Plugin;
-				  rdfs:range  xs:string.                        
+				  rdfs:range  xsd:string.                        
 
 larkc:Identifier  rdf:type rdfs:Class ;
                  rdfs:subClassOf larkc:Plugin .
@@ -69,27 +71,306 @@ larkc:KeywordQuery rdf:type rdfs:Class ;
 
 # Input / Output handling
 larkc:hasInputType rdf:type rdf:Property ;
-                  larkc:genldomain larkc:Plugin ;
-                  larkc:genlrange larkc:Resource .
+                  ocyc:arg1Genl larkc:Plugin ;
+                  ocyc:arg2Genl larkc:Resource .
 larkc:hasOutputType rdf:type rdf:Property;
-                   larkc:genldomain larkc:Plugin ;
-                  larkc:genlrange larkc:Resource .
+                   ocyc:arg1Genl larkc:Plugin ;
+                  ocyc:arg2Genl larkc:Resource .
 larkc:pluginByDataConnectsTo rdf:type owl:TransitiveProperty;
-   					larkc:genldomain larkc:Plugin ;
-                  larkc:genlrange larkc:Plugin .
+   					ocyc:arg1Genl larkc:Plugin ;
+                  ocyc:arg2Genl larkc:Plugin .
 
 
-# Non-functional properties go here
-larkc:Scalability rdf:type rdfs:Class ;
-		rdfs:subClassOf wsl:NonFunctionalParameter .
-larkc:Cost	rdf:type rdfs:Class ;
-		rdfs:subClassOf wsl:NonFunctionalParameter .
-		
-larkc:euro	rdf:type	rdfs:Class .
-                 
-larkc:hasCostPerInvocation rdf:type rdf:Property ;
-			rdfs:domain larkc:Cost ;
-			rdfs:range  larkc:euro .
-larkc:hasScalability rdf:type rdf:Property ;
-			rdfs:domain larkc:Scalability ;
-			rdfs:range  xs:string .
+##################################### 
+# Non-functional properties 
+#####################################
+
+#################
+#Cachable
+larkc:Cachable   rdf:type   rdfs:Class;
+ 					  rdfs:subClassOf wsl:NonFunctionalParameter .
+
+larkc:isCachable rdf:type rdf:Property ;
+                 rdfs:domain larkc:Plugin ;
+                 rdfs:range larkc:Cachable .
+
+larkc:hasCachableValue rdf:type rdf:Property ;
+                       rdfs:domain larkc:Cachable ;
+                       rdfs:range xsd:boolean .
+     
+####################                  
+#Completeness
+larkc:Completeness   rdf:type   rdfs:Class;
+							rdfs:subClassOf wsl:NonFunctionalParameter .
+
+    larkc:hasCompleteness rdf:type rdf:Property ; 
+                         rdfs:domain larkc:Reasoner ; 
+                         rdfs:range larkc:Completeness . 
+
+    larkc:hasCompletenessValue rdf:type rdf:Property ; 
+                              rdfs:domain larkc:Completeness ;
+                              rdfs:range xsd:boolean . 
+
+####################                  
+#Soundness
+larkc:Soundness   rdf:type   rdfs:Class;
+                  rdfs:subClassOf wsl:NonFunctionalParameter .
+
+    larkc:hasSoundness rdf:type rdf:Property ; 
+                       rdfs:domain larkc:Reasoner ; 
+                       rdfs:range larkc:Soundness . 
+
+    larkc:hasSoundnessValue rdf:type rdf:Property ; 
+                            rdfs:domain larkc:Soundness ;
+                            rdfs:range xsd:boolean . 
+                            
+####################                  
+#Recall
+ larkc:Recall      rdf:type   rdfs:Class;
+                   rdfs:subClassOf wsl:NonFunctionalParameter .
+
+    larkc:hasRecall rdf:type rdf:Property ; 
+                    rdfs:domain larkc:Plugin ; 
+                    rdfs:range larkc:Recall . 
+
+    larkc:hasRecallValue rdf:type rdf:Property ; 
+                         rdfs:domain larkc:Recall ;
+                         rdfs:range xsd:float . 
+
+####################                  
+#Precision
+larkc:Precision      rdf:type   rdfs:Class;
+     rdfs:subClassOf wsl:NonFunctionalParameter .
+
+    larkc:hasPrecision rdf:type rdf:Property ; 
+                       rdfs:domain larkc:Plugin ; 
+                       rdfs:range larkc:Precision . 
+
+    larkc:hasPrecisionValue rdf:type rdf:Property ; 
+                            rdfs:domain larkc:Precision ;
+                            rdfs:range xsd:float . 
+
+####################                  
+#F- measure
+ larkc:FMeasure rdf:type   rdfs:Class;
+                rdfs:subClassOf wsl:NonFunctionalParameter .
+
+    larkc:hasFMeasure rdf:type rdf:Property ; 
+                      rdfs:domain larkc:Plugin ; 
+                      rdfs:range larkc:FMeasure . 
+
+    larkc:hasFMeasureValue rdf:type rdf:Property ; 
+                           rdfs:domain larkc:FMeasure ;
+                           rdfs:range xsd:float . 
+
+####################                  
+#ROC curve
+larkc:ROCCurve rdf:type   rdfs:Class;
+rdfs:subClassOf wsl:NonFunctionalParameter .
+
+    larkc:hasROCCurve rdf:type rdf:Property ; 
+                      rdfs:domain larkc:Plugin ; 
+                      rdfs:range larkc:ROCCurve . 
+
+    larkc:hasROCCurveValue rdf:type rdf:Property ; 
+                           rdfs:domain larkc:ROCCurve ;
+                           rdfs:range larkc:Resource .
+####################                  
+#UAC - the area under the ROC curve
+ larkc:AUC rdf:type   rdfs:Class;
+ rdfs:subClassOf wsl:NonFunctionalParameter .
+
+    larkc:hasAUC rdf:type rdf:Property ; 
+                 rdfs:domain larkc:Plugin ; 
+                 rdfs:range larkc:AUC . 
+
+    larkc:hasAUCValue rdf:type rdf:Property ; 
+                      rdfs:domain larkc:AUC ;
+                      rdfs:range larkc:Resource . 
+
+###################
+# Infrastructure
+######################
+larkc:ExecutionEnvironment rdf:type   rdfs:Class;
+rdfs:subClassOf wsl:NonFunctionalParameter .
+
+    larkc:Limits rdf:type   rdfs:Class.
+ 
+    larkc:Memory rdf:type   rdfs:Class;
+    rdfs:subClassOf wsl:NonFunctionalParameter ;
+                 rdfs:subClassOf larkc:Limits .
+
+    larkc:hasMemory rdf:type rdf:Property ; 
+                    rdfs:domain larkc:ExecutionEnvironment ; 
+                    rdfs:range larkc:Memory .
+
+    larkc:hasMemoryValue rdf:type rdf:Property ; 
+                         rdfs:domain larkc:Memory ; 
+                         rdfs:range xsd:int .
+
+    ####TODO: this should be removed for test
+    larkc:MemoryUnit rdf:type   rdfs:Class.
+ 
+    larkc:hasMemoryUnit rdf:type rdf:Property ; 
+                        rdfs:domain larkc:Memory ; 
+                        rdfs:range larkc:MemoryUnit .
+
+    
+
+    larkc:Byte a larkc:MemoryUnit . 
+
+	
+	 larkc:CPU  rdf:type   rdfs:Class;
+     rdfs:subClassOf wsl:NonFunctionalParameter ;
+              rdfs:subClassOf larkc:Limits .
+
+    larkc:hasCPU rdf:type rdf:Property ; 
+                 rdfs:domain larkc:ExecutionEnvironment ; 
+                 rdfs:range larkc:CPU .
+
+    larkc:CPUSpeed rdf:type rdfs:Class . 
+                
+    larkc:hasCPUSpeed rdf:type rdf:Property ; 
+                           rdfs:domain larkc:CPU ; 
+                           rdfs:range larkc:CPUSpeed .
+
+    larkc:hasCPUSpeedValue rdf:type rdf:Property ; 
+                           rdfs:domain larkc:CPUSpeed ; 
+                           rdfs:range xsd:int .
+
+ #TODO:  
+    larkc:FrequencyUnit rdf:type rdfs:Class . 
+    
+    larkc:hasCPUSpeedUnit rdf:type rdf:Property ; 
+                          rdfs:domain larkc:CPUSpeed ; 
+                          rdfs:range larkc:FrequencyUnit .
+   
+  
+
+    larkc:Hertz a larkc:FrequencyUnit . 
+
+
+    larkc:requiresExecutionEnvironment rdf:type rdf:Property ; 
+                                       rdfs:domain larkc:Plugin ; 
+                                       rdfs:range larkc:ExecutionEnvironment . 
+
+    larkc:requiresMemory rdf:type rdf:Property ; 
+                         rdfs:domain larkc:Plugin ; 
+                         rdfs:range larkc:Memory . 
+
+    larkc:requiresCPU rdf:type rdf:Property ; 
+                      rdfs:domain larkc:Plugin ; 
+                      rdfs:range larkc:CPU . 
+
+##############
+# DeploymentFactor
+ larkc:DeploymentFactor rdf:type   rdfs:Class;
+ rdfs:subClassOf wsl:NonFunctionalParameter ;
+                           rdfs:subClassOf larkc:Limits .
+
+    larkc:hasDeploymentFactor rdf:type rdf:Property ; 
+                              rdfs:domain larkc:Plugin ; 
+                              rdfs:range larkc:DeploymentFactor . 
+                              
+###############
+#Class limits - something that has a min and a max value
+ larkc:Limits rdf:type rdfs:Class .
+
+    larkc:hasMinimum rdf:type rdf:Property ; 
+                     rdfs:domain larkc:Limits ; 
+                     rdfs:range xsd:float . 
+
+    larkc:hasMaximum rdf:type rdf:Property ; 
+                     rdfs:domain larkc:Limits ; 
+                     rdfs:range xsd:float . 
+
+#####################
+#Performance
+ larkc:Performance rdf:type   rdfs:Class;
+ rdfs:subClassOf wsl:NonFunctionalParameter .
+
+    larkc:hasPerformance rdf:type rdf:Property ; 
+                         rdfs:domain larkc:Plugin ; 
+                         rdfs:range larkc:Performance . 
+
+    larkc:forExecutionEnvironment rdf:type rdf:Property ; 
+                                  rdfs:domain larkc:Performance ; 
+                                  rdfs:range larkc:ExecutionEnvironment . 
+
+#TODO:
+ larkc:TemporalDuration rdf:type   rdfs:Class.
+    larkc:hasEstimatedInvocationTime rdf:type rdf:Property ; 
+                                     rdfs:domain larkc:Performance ; 
+                                     rdfs:range larkc:TemporalDuration . 
+
+#############
+#Cardinality
+    larkc:Cardinality rdf:type   rdfs:Class;
+    rdfs:subClassOf wsl:NonFunctionalParameter .
+
+    larkc:hasCardinality rdf:type rdf:Property ;
+                         rdfs:domain larkc:Plugin ; 
+                         rdfs:range larkc:Cardinality . 
+
+ #TODO:
+ larkc:CardinalityValue rdf:type   rdfs:Class.
+ 
+    larkc:hasCardinalityValue rdf:type rdf:Property ; 
+                              rdfs:domain larkc:Cardinality ;
+                              rdfs:range larkc:CardinalityValue . 
+
+    larkc:CardinalityValue rdf:type rdfs:Class . 
+
+    larkc:OneToOne a larkc:CardinalityValue . 
+    larkc:OneToMany a larkc:CardinalityValue . 
+    larkc:ManyToOne a larkc:CardinalityValue . 
+    
+#############
+#Temporal
+      larkc:TemporalEntity  rdf:type rdfs:Class .
+    
+    larkc:TemporalDuration rdfs:subClassOf wsl:NonFunctionalParameter ;
+                           rdfs:subClassOf larkc:TemporalEntity .
+    
+    larkc:UnitOfDuration  rdf:type rdfs:Class .
+    
+    larkc:hasUnitOfDuration rdf:type rdf:Property ; 
+                            rdfs:domain larkc:TemporalDuration ; 
+                            rdfs:range larkc:UnitOfDuration . 
+ 
+    larkc:hasDurationValue rdf:type rdf:Property ; 
+                           rdfs:domain larkc:TemporalDuration ; 
+                           rdfs:range xsd:int . 
+  
+    larkc:Milliseconds a larkc:UnitOfDuration .
+
+
+#############
+#Scalability
+    larkc:Scalability rdf:type   rdfs:Class;
+    rdfs:subClassOf wsl:NonFunctionalParameter .
+
+    larkc:hasScalability rdf:type rdf:Property ; 
+                         rdfs:domain larkc:Plugin ; 
+                         rdfs:range larkc:Scalability .  
+
+    larkc:hasScalabilityValue rdf:type rdf:Property ; 
+                              rdfs:domain larkc:Scalability ;
+                              rdfs:range xsd:string . 
+
+############
+#Financial
+    larkc:Cost rdf:type   rdfs:Class;
+    rdfs:subClassOf wsl:NonFunctionalParameter . 
+    
+    larkc:hasAmount rdf:type rdf:Property ; 
+                    rdfs:domain larkc:Cost ;
+                    rdfs:range xsd:float . 
+
+    larkc:hasCurrency rdf:type rdf:Property ; 
+                      rdfs:domain larkc:Cost ;
+                      rdfs:range xsd:string . 
+
+    larkc:hasCostPerInvocation rdf:type rdf:Property ; 
+                               rdfs:domain larkc:Plugin ; 
+                               rdfs:range larkc:Cost . 

@@ -182,6 +182,25 @@ public  final class genls extends SubLTranslatedFile {
     }
     return genlP(spec, genl, mt, tv);
   }
+  
+
+  /** gather results of applying FN to every (all) genls of COL
+   (FN must not effect the current sbhl space) */
+  @SubL(source = "cycl/genls.lisp", position = 18210) 
+  public static final SubLObject gather_all_genls(SubLObject fn, SubLObject col, SubLObject mt, SubLObject tv, SubLObject combine_fn) {
+    if ((mt == UNPROVIDED)) {
+      mt = NIL;
+    }
+    if ((tv == UNPROVIDED)) {
+      tv = NIL;
+    }
+    if ((combine_fn == UNPROVIDED)) {
+      combine_fn = NIL;
+    }
+    return sbhl_search_methods.sbhl_gather_all_forward_true_nodes(sbhl_module_vars.get_sbhl_module($const0$genls), col, fn, mt, tv, combine_fn);
+  }
+
+  
 
   /** Returns whether (#$genls SPEC GENL) can be inferred.
    (ascending transitive search; inexpensive) */

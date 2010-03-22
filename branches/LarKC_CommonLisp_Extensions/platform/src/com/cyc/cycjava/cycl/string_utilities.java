@@ -176,6 +176,72 @@ public  final class string_utilities extends SubLTranslatedFile {
     }
   }
 
+
+  /** Like cconcatenate, but takes a list of strings as its argument. */
+  @SubL(source = "cycl/string-utilities.lisp", position = 86945) 
+  public static final SubLObject strcat(SubLObject string_list) {
+    if ((NIL == string_list)) {
+      return NIL;
+    } else {
+      return Functions.apply(Symbols.symbol_function($sym87$CCONCATENATE), string_list);
+    }
+  }
+
+
+  @SubL(source = "cycl/string-utilities.lisp", position = 119787) 
+  public static final SubLObject stringify_terms(SubLObject terms, SubLObject separator, SubLObject last_separator) {
+    if ((separator == UNPROVIDED)) {
+      separator = $str19$_;
+    }
+    if ((last_separator == UNPROVIDED)) {
+      last_separator = separator;
+    }
+    return stringify_items(terms, Symbols.symbol_function($sym111$FORT_PRINT_NAME), separator, last_separator);
+  }
+
+
+  @SubL(source = "cycl/string-utilities.lisp", position = 120245) 
+  public static final SubLObject stringify_items(SubLObject items, SubLObject accessor, SubLObject separator, SubLObject last_separator) {
+    if ((accessor == UNPROVIDED)) {
+      accessor = Symbols.symbol_function($sym112$STR_BY_TYPE);
+    }
+    if ((separator == UNPROVIDED)) {
+      separator = $str19$_;
+    }
+    if ((last_separator == UNPROVIDED)) {
+      last_separator = separator;
+    }
+    if ((NIL == items)) {
+      return $empty_string$.getGlobalValue();
+    } else if ((NIL != list_utilities.singletonP(items))) {
+      return str_by_type(Functions.funcall(accessor, items.first()));
+    } else {
+      {
+        SubLObject names = Mapping.mapcar(Symbols.symbol_function($sym112$STR_BY_TYPE), Mapping.mapcar(accessor, Sequences.reverse(items)));
+        SubLObject result = Sequences.cconcatenate(conses_high.second(names), new SubLObject[] {last_separator, names.first()});
+        SubLObject cdolist_list_var = conses_high.cddr(names);
+        SubLObject name = NIL;
+        for (name = cdolist_list_var.first(); (NIL != cdolist_list_var); cdolist_list_var = cdolist_list_var.rest(), name = cdolist_list_var.first()) {
+          result = Sequences.cconcatenate(name, new SubLObject[] {separator, result});
+        }
+        return PrintLow.format(NIL, result);
+      }
+    }
+  }
+
+
+  @SubL(source = "cycl/string-utilities.lisp", position = 120756) 
+  public static final SubLObject str_by_type(SubLObject object) {
+    if (object.isString()) {
+      return object;
+    } else if ((NIL != constant_handles.constant_p(object))) {
+      return constants_high.constant_name(object);
+    } else {
+      return str(object);
+    }
+  }
+
+  
   /** dynamic variable used only by char-set-position */
   @SubL(source = "cycl/string-utilities.lisp", position = 34826) 
   public static SubLSymbol $char_set$ = null;

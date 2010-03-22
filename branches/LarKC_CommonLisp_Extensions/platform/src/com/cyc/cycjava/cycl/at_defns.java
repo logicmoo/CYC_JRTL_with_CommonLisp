@@ -141,6 +141,45 @@ public  final class at_defns extends SubLTranslatedFile {
     }
   }
 
+
+  /** @return boolean; t iff some sufficient defn of COLLECTION admits TERM; 
+   don't generate violation messages */
+  @SubL(source = "cycl/at-defns.lisp", position = 26259) 
+  public static final SubLObject quiet_sufficient_defns_admitP(SubLObject collection, SubLObject v_term, SubLObject mt) {
+    if ((mt == UNPROVIDED)) {
+      mt = NIL;
+    }
+    {
+      final SubLThread thread = SubLProcess.currentSubLThread();
+      {
+        SubLObject result = NIL;
+        {
+          SubLObject _prev_bind_0 = at_vars.$noting_at_violationsP$.currentBinding(thread);
+          SubLObject _prev_bind_1 = at_vars.$accumulating_at_violationsP$.currentBinding(thread);
+          SubLObject _prev_bind_2 = wff_vars.$noting_wff_violationsP$.currentBinding(thread);
+          SubLObject _prev_bind_3 = wff_vars.$accumulating_wff_violationsP$.currentBinding(thread);
+          SubLObject _prev_bind_4 = at_vars.$at_apply_necessary_defnsP$.currentBinding(thread);
+          try {
+            at_vars.$noting_at_violationsP$.bind(NIL, thread);
+            at_vars.$accumulating_at_violationsP$.bind(NIL, thread);
+            wff_vars.$noting_wff_violationsP$.bind(NIL, thread);
+            wff_vars.$accumulating_wff_violationsP$.bind(NIL, thread);
+            at_vars.$at_apply_necessary_defnsP$.bind(NIL, thread);
+            result = defns_admitP(collection, v_term, mt);
+          } finally {
+            at_vars.$at_apply_necessary_defnsP$.rebind(_prev_bind_4, thread);
+            wff_vars.$accumulating_wff_violationsP$.rebind(_prev_bind_3, thread);
+            wff_vars.$noting_wff_violationsP$.rebind(_prev_bind_2, thread);
+            at_vars.$accumulating_at_violationsP$.rebind(_prev_bind_1, thread);
+            at_vars.$noting_at_violationsP$.rebind(_prev_bind_0, thread);
+          }
+        }
+        return result;
+      }
+    }
+  }
+
+  
   @SubL(source = "cycl/at-defns.lisp", position = 6243) 
   public static SubLSymbol $use_new_defns_functionsP$ = null;
 

@@ -112,6 +112,18 @@ public  final class cycl_utilities extends SubLTranslatedFile {
     }
   }
 
+
+  /** returns the 2nd argument of NAT.
+   returns NIL if NAT is not a nat. */
+  @SubL(source = "cycl/cycl-utilities.lisp", position = 100679) 
+  public static final SubLObject nat_arg2(SubLObject nat, SubLObject seqvar_handling) {
+    if ((seqvar_handling == UNPROVIDED)) {
+      seqvar_handling = $kw19$IGNORE;
+    }
+    return nat_arg(nat, TWO_INTEGER, seqvar_handling);
+  }
+
+  
   @SubL(source = "cycl/cycl-utilities.lisp", position = 2813) 
   public static final SubLObject opaque_argP_int(SubLObject formula, SubLObject argnum, SubLObject opaque_arg_function) {
     {
@@ -129,6 +141,28 @@ public  final class cycl_utilities extends SubLTranslatedFile {
     }
   }
 
+
+  /** returns the 4th argument of FORMULA.
+   returns NIL if FORMULA is not a formula. */
+  @SubL(source = "cycl/cycl-utilities.lisp", position = 88562) 
+  public static final SubLObject formula_arg4(SubLObject formula, SubLObject seqvar_handling) {
+    if ((seqvar_handling == UNPROVIDED)) {
+      seqvar_handling = $kw19$IGNORE;
+    }
+    return formula_arg(formula, FOUR_INTEGER, seqvar_handling);
+  }
+
+  /** returns the 5th argument of FORMULA.
+   returns NIL if FORMULA is not a formula. */
+  @SubL(source = "cycl/cycl-utilities.lisp", position = 88771) 
+  public static final SubLObject formula_arg5(SubLObject formula, SubLObject seqvar_handling) {
+    if ((seqvar_handling == UNPROVIDED)) {
+      seqvar_handling = $kw19$IGNORE;
+    }
+    return formula_arg(formula, FIVE_INTEGER, seqvar_handling);
+  }
+
+  
   @SubL(source = "cycl/cycl-utilities.lisp", position = 3265) 
   public static final SubLObject default_opaque_argP(SubLObject formula, SubLObject argnum) {
     if ((NIL != el_utilities.formula_arityL(formula, argnum, UNPROVIDED))) {
