@@ -41,6 +41,10 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public abstract class AbstractString extends AbstractSubLArraySequence implements LispSequence 
 {
+	@Override
+	public SubLObject AREF(int index) {
+		return CHAR(index);
+	}
 	
 	 @Override
 	public boolean isVector() {

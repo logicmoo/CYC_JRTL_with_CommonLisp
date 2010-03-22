@@ -260,21 +260,21 @@ public  /*final*/ class SubLString extends AbstractString implements SubLObject,
     return true;
   }
   
-//  /** Two strings are equalp iff they are case-insensitively equal. */
-//  public boolean equalp(SubLObject obj) {
-//    if (obj == null) { return false; }//   
-//    if (!obj.isString()) { return super.equalp(obj); }
-//    final SubLString other = obj.toStr();
-//    if (other.size != size) {
-//      return false;
-//    }
-//    for (int i = 0; i < size; i++) {
-//      if (Character.toUpperCase(buf[i]) != Character.toUpperCase(other.buf[i])) {
-//        return false;
-//      }
-//    }
-//    return true;
-//  }
+  /** Two strings are equalp iff they are case-insensitively equal. */
+  public boolean equalp(SubLObject obj) {
+    if (obj == null) { return false; }//   
+    if (!obj.isString()) { return super.equalp(obj); }
+    final SubLString other = obj.toStr();
+    if (other.size != size) {
+      return false;
+    }
+    for (int i = 0; i < size; i++) {
+      if (Character.toUpperCase(buf[i]) != Character.toUpperCase(other.buf[i])) {
+        return false;
+      }
+    }
+    return true;
+  }
   
   public static final String STRING_TYPE_NAME = "STRING";
   
