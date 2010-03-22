@@ -492,7 +492,7 @@ public class AbstractLispObject extends SubLInchworm implements SubLObject
 
   public int cl_length()
   {
-  	Debug.trace("called length on " + this.writeToString());
+  	if (this instanceof SubLSequence) return size();
     return toSeq().cl_length();
   }
 
