@@ -20,10 +20,6 @@
 	<classpathentry kind="lib" path="lib/javagat/commons-logging-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/javagat/GAT-API.jar"/>
 	<classpathentry kind="lib" path="lib/javagat/GAT-engine.jar"/>
-	<classpathentry kind="lib" path="lib/javagat/GAT-tests.jar"/>
-	<classpathentry kind="lib" path="lib/javagat/slf4j-api-1.5.3.jar"/>
-	<classpathentry kind="lib" path="lib/javagat/slf4j-log4j12-1.5.3.jar"/>
-	<classpathentry kind="lib" path="lib/javagat/xercesImpl.jar"/>
 	<classpathentry kind="lib" path="lib/javagat/xmlParserAPIs.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
