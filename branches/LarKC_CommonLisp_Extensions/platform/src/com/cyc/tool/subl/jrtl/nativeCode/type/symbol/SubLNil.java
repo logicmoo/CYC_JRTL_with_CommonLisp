@@ -587,5 +587,23 @@ public  final class SubLNil extends AbstractSubLList implements SubLList, SubLSy
   private static final SubLObject[] EMPTY_SUBL_OBJECT_ARRAY = new SubLObject[0];
   
   private static final List<SubLObject> EMPTY_LIST = Collections.unmodifiableList(new ArrayList<SubLObject>());
+
+	@Override
+	public int getSpecialIndex() {
+		unimplimentedLispFunction();
+		return 0;
+	}
+
+	@Override
+	public void setLispPackage(SubLObject nil) {
+		unimplimentedLispFunction();
+		
+	}
+
+	@Override
+	public void setSpecialIndex(int n) {
+		unimplimentedLispFunction();
+		
+	}
   
 }

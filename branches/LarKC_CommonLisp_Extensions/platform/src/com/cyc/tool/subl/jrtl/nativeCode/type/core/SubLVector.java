@@ -19,6 +19,7 @@
 
 package  com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.AbstractArray;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -285,6 +286,62 @@ public  final class SubLVector extends AbstractSubLArraySequence implements SubL
   private SubLObject[] vect;
   private int size = 0;
   
+	@Override
+	public AbstractArray adjustArray(int size, SubLObject initialElement, SubLObject initialContents) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public AbstractArray adjustArray(int size, AbstractArray displacedTo, int displacement) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public int capacity() {
+		unimplimentedLispFunction();
+		return 0;
+	}
+
+	@Override
+	public SubLObject reverse() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public void shrink(int n) {
+		unimplimentedLispFunction();
+		
+	}
+
+	@Override
+	public SubLObject subseq(int start, int end) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public void aset(int index, SubLObject newValue) {
+		unimplimentedLispFunction();
+		
+	}
+
+	@Override
+	public void fillVoid(SubLObject obj) {
+		unimplimentedLispFunction();
+		
+	}
+
+	@Override
+	public SubLObject getElementType() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+
 //// Main
-  
+
+
 }

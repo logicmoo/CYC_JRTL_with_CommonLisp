@@ -18,6 +18,9 @@
 */
 
 package  com.cyc.tool.subl.jrtl.nativeCode.type.core;
+
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.AbstractSubLArray;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.AbstractSubLVector;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
@@ -25,7 +28,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
 //// External Imports
 
  
-public  abstract class AbstractSubLArraySequence extends AbstractSubLSequence implements SubLSequence {
+public  abstract class AbstractSubLArraySequence extends AbstractSubLVector implements SubLSequence {
   
   //// Constructors
   

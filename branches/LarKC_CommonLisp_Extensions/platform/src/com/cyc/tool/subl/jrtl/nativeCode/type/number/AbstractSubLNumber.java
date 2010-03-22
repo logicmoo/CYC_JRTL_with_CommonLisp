@@ -20,6 +20,10 @@
 package  com.cyc.tool.subl.jrtl.nativeCode.type.number;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.AbstractString;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Environment;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
@@ -41,7 +45,7 @@ import java.math.*;
 
 public  abstract class AbstractSubLNumber
     extends Number
-    implements SubLNumber, SubLObject, Comparable, CommonSymbols {
+    implements SubLNumber, SubLObject, Comparable, CommonSymbols, LispObject {
   
   //// Constructors
   
@@ -902,6 +906,995 @@ public  abstract class AbstractSubLNumber
   public final SubLObject ninth() { return get(8); }
   public final SubLObject tenth() { return get(9); }
   
+	private void unimplimentedLispFunction() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public SubLObject ABS() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject AREF(int index) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject AREF(SubLObject index) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject ATOM() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject CHAR(int index) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject CHARACTERP() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject COMPLEXP() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject CONSTANTP() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject DENOMINATOR() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject ENDP() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject EQ(SubLObject obj) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject EQL(SubLObject obj) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject EQUAL(SubLObject obj) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject EQUALP(SubLObject obj) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject EVENP() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject FLOATP() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject INTEGERP() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject IS_E(SubLObject obj) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject IS_GE(SubLObject obj) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject IS_GT(SubLObject obj) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject IS_LE(SubLObject obj) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject IS_LT(SubLObject obj) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject IS_NE(SubLObject obj) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject LDB(int size, int position) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject LENGTH() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject LISTP() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject LOGAND(int n) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject LOGAND(SubLObject obj) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject LOGIOR(int n) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject LOGIOR(SubLObject obj) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject LOGNOT() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject LOGXOR(int n) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject LOGXOR(SubLObject obj) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject MINUSP() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject MOD(SubLObject divisor) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject MOD(int divisor) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject NOT() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject NTH(int index) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject NTH(SubLObject arg) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject NUMBERP() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject NUMERATOR() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject ODDP() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject PLUSP() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject RATIONALP() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject REALP() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject SCHAR(int index) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject SIMPLE_STRING_P() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject SLOT_VALUE(SubLObject slotName) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject STRING() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject STRINGP() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject SVREF(int index) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject SYMBOLP() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject VECTORP() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject VECTOR_PUSH_EXTEND(SubLObject element) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject VECTOR_PUSH_EXTEND(SubLObject element, SubLObject extension) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject ZEROP() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject add(int n) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public int aref(int index) {
+		unimplimentedLispFunction();
+		return 0;
+	}
+
+	@Override
+	public long aref_long(int index) {
+		unimplimentedLispFunction();
+		return 0;
+	}
+
+	@Override
+	public void aset(int index, int n) {
+		unimplimentedLispFunction();
+		
+	}
+
+	@Override
+	public void aset(int index, SubLObject newValue) {
+		unimplimentedLispFunction();
+		
+	}
+
+	@Override
+	public void aset(SubLObject index, SubLObject newValue) {
+		unimplimentedLispFunction();
+		
+	}
+
+	@Override
+	public SubLObject ash(int shift) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject ash(SubLObject obj) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject car() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject cddr() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject cdr() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public char[] chars() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public int cl_length() {
+		unimplimentedLispFunction();
+		return 0;
+	}
+
+	@Override
+	public SubLObject classOf() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public boolean constantp() {
+		unimplimentedLispFunction();
+		return false;
+	}
+
+	@Override
+	public SubLObject[] copyToArray() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject dispatch(SubLObject[] args) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject divideBy(SubLObject obj) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject elt(int index) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public boolean endp() {
+		unimplimentedLispFunction();
+		return false;
+	}
+
+	@Override
+	public boolean eql(char c) {
+		unimplimentedLispFunction();
+		return false;
+	}
+
+	@Override
+	public boolean eql(int n) {
+		unimplimentedLispFunction();
+		return false;
+	}
+
+	@Override
+	public boolean equal(int n) {
+		unimplimentedLispFunction();
+		return false;
+	}
+
+	@Override
+	public boolean equalp(int n) {
+		unimplimentedLispFunction();
+		return false;
+	}
+
+	@Override
+	public SubLObject execute(SubLObject args, Environment env) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject execute() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject execute(SubLObject arg) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject execute(SubLObject first, SubLObject second) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth, SubLObject fifth) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth, SubLObject fifth,
+			SubLObject sixth) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth, SubLObject fifth,
+			SubLObject sixth, SubLObject seventh) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth, SubLObject fifth,
+			SubLObject sixth, SubLObject seventh, SubLObject eighth) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject execute(SubLObject[] args) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public boolean getBooleanValue() {
+		unimplimentedLispFunction();
+		return false;
+	}
+
+	@Override
+	public SubLObject getCallCount() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject getDescription() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject getDocumentation(SubLObject docType) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public int getFixnumSlotValue(int index) {
+		unimplimentedLispFunction();
+		return 0;
+	}
+
+	@Override
+	public int getHotCount() {
+		unimplimentedLispFunction();
+		return 0;
+	}
+
+	@Override
+	public SubLObject getParts() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject getPropertyList() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+
+	@Override
+	public SubLObject getSlotValue(int index) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public boolean getSlotValueAsBoolean(int index) {
+		unimplimentedLispFunction();
+		return false;
+	}
+
+	@Override
+	public SubLObject getSlotValue_0() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject getSlotValue_1() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject getSlotValue_2() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject getSlotValue_3() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public char[] getStringChars() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject getSymbolFunction() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject getSymbolFunctionOrDie() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+
+	@Override
+	public SubLObject getSymbolValue() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public void incrementCallCount(int arity) {
+		unimplimentedLispFunction();
+		
+	}
+
+	@Override
+	public void incrementHotCount() {
+		unimplimentedLispFunction();
+		
+	}
+
+	@Override
+	public boolean isCharacter() {
+		unimplimentedLispFunction();
+		return false;
+	}
+
+
+	@Override
+	public boolean isEqualTo(int n) {
+		unimplimentedLispFunction();
+		return false;
+	}
+
+	@Override
+	public boolean isEven() {
+		unimplimentedLispFunction();
+		return false;
+	}
+
+	@Override
+	public boolean isGreaterThan(int n) {
+		unimplimentedLispFunction();
+		return false;
+	}
+
+	@Override
+	public boolean isGreaterThanOrEqualTo(int n) {
+		unimplimentedLispFunction();
+		return false;
+	}
+
+	@Override
+	public boolean isLessThan(int n) {
+		unimplimentedLispFunction();
+		return false;
+	}
+
+	@Override
+	public boolean isLessThanOrEqualTo(int n) {
+		unimplimentedLispFunction();
+		return false;
+	}
+
+	@Override
+	public boolean isNotEqualTo(int n) {
+		unimplimentedLispFunction();
+		return false;
+	}
+
+	@Override
+	public boolean isNotEqualTo(SubLObject obj) {
+		unimplimentedLispFunction();
+		return false;
+	}
+
+	@Override
+	public boolean isOdd() {
+		unimplimentedLispFunction();
+		return false;
+	}
+
+	@Override
+	public boolean isSpecialOperator() {
+		unimplimentedLispFunction();
+		return false;
+	}
+
+	@Override
+	public boolean isSpecialVariable() {
+		unimplimentedLispFunction();
+		return false;
+	}
+
+	@Override
+	public Object javaInstance() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public <T> Object javaInstance(Class<T> c) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public Object lockableInstance() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject multiplyBy(int n) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject negate() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject noFillPointer() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject nreverse() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public int psxhash() {
+		unimplimentedLispFunction();
+		return 0;
+	}
+
+	@Override
+	public int psxhash(int depth) {
+		unimplimentedLispFunction();
+		return 0;
+	}
+
+	@Override
+	public SubLObject push(SubLObject obj) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public boolean rationalp() {
+		unimplimentedLispFunction();
+		return false;
+	}
+
+	@Override
+	public boolean realp() {
+		unimplimentedLispFunction();
+		return false;
+	}
+
+	@Override
+	public SubLObject resolve() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject reverse() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public void setCallCount(int n) {
+		unimplimentedLispFunction();
+		
+	}
+
+	@Override
+	public void setCar(SubLObject obj) {
+		unimplimentedLispFunction();
+		
+	}
+
+	@Override
+	public void setCdr(SubLObject obj) {
+		unimplimentedLispFunction();
+		
+	}
+
+	@Override
+	public void setDocumentation(SubLObject docType, SubLObject documentation) {
+		unimplimentedLispFunction();
+		
+	}
+
+	@Override
+	public void setHotCount(int n) {
+		unimplimentedLispFunction();
+		
+	}
+
+	@Override
+	public void setPropertyList(SubLObject obj) {
+		unimplimentedLispFunction();
+		
+	}
+
+	@Override
+	public void setSlotValue(int index, SubLObject value) {
+		unimplimentedLispFunction();
+		
+	}
+
+	@Override
+	public void setSlotValue(SubLObject slotName, SubLObject newValue) {
+		unimplimentedLispFunction();
+		
+	}
+
+	@Override
+	public void setSlotValue_0(SubLObject value) {
+		unimplimentedLispFunction();
+		
+	}
+
+	@Override
+	public void setSlotValue_1(SubLObject value) {
+		unimplimentedLispFunction();
+		
+	}
+
+	@Override
+	public void setSlotValue_2(SubLObject value) {
+		unimplimentedLispFunction();
+		
+	}
+
+	@Override
+	public void setSlotValue_3(SubLObject value) {
+		unimplimentedLispFunction();
+		
+	}
+
+
+	@Override
+	public SubLObject subtract(int n) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public void svset(int index, SubLObject newValue) {
+		unimplimentedLispFunction();
+		
+	}
+
+	@Override
+	public int sxhash() {
+		unimplimentedLispFunction();
+		return 0;
+	}
+
+
+	@Override
+	public SubLObject toSubLFunction() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject truncate(SubLObject obj) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject typeOf() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public SubLObject typep(SubLObject typeSpecifier) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public String unreadableString(String s) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public String unreadableString(SubLSymbol sym) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public String unreadableString(String s, boolean identity) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public String unreadableString(SubLSymbol symbol, boolean identity) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public void vectorPushExtend(SubLObject element) {
+		unimplimentedLispFunction();
+		
+	}
+
+	@Override
+	public String writeToString() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public int hashCodeLisp() {
+		return hashCode();
+	}
   //// Protected Area
   
   //// Private Area

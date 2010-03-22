@@ -22,13 +22,15 @@ package  com.cyc.tool.subl.util;
 //// Internal Imports
 
 //// External Imports
+
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.AbstractLispObject;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CatchableThrow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import java.util.logging.Level;
 
-public  abstract class SafeRunnable implements Runnable {
+public  abstract class SafeRunnable extends AbstractLispObject implements Runnable {
   
   //// Constructors
   

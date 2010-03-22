@@ -27,7 +27,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
 import com.cyc.tool.subl.util.SubLFiles.*;
 
-public  interface SubLSymbol extends SubLObject {
+public  interface SubLSymbol extends SubLObject, LispSymbol {
   
   //// Public Area
  
@@ -109,6 +109,10 @@ public  interface SubLSymbol extends SubLObject {
   public static final char SYMBOL_NAME_QUOTE = '|';
   
   public static final int INVALID_BINDING_INDEX = Integer.MIN_VALUE;
+
+	String getJavaSymbolName();
+
+	int hashCodeLisp();
   
   //// Protected Area
   

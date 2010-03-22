@@ -19,6 +19,9 @@
 
 package  com.cyc.tool.subl.jrtl.nativeCode.type.core;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.AbstractLispObject;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
@@ -38,12 +41,14 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLOutputTextStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+
 import java.math.BigInteger;
+
 
 
 //// External Imports
 
-public  abstract class AbstractSubLObject implements SubLObject {
+public  abstract class AbstractSubLObject extends AbstractLispObject implements SubLObject {
   
   //// Constructors
   
@@ -63,12 +68,12 @@ public  abstract class AbstractSubLObject implements SubLObject {
   
   /** By default, equal just trampolines down to eql. */
   public boolean equal(SubLObject obj) {
-    return eql(obj);
+    return eql(obj) || super.equal(obj);
   }
   
   /** By default, equalp just trampolines down to equal. */
   public boolean equalp(SubLObject obj) {
-    return equal(obj);
+    return equal(obj) || super.equalp(obj);
   }
   
   /** SubLObjects are not equal to non-SubLObjects unless this method is overridden. */
@@ -112,7 +117,11 @@ public  abstract class AbstractSubLObject implements SubLObject {
   }
   
   public final int superHash() {
-    return super.hashCode();
+    return super.superHash();
+  }
+  
+	public int hashCodeLisp() {
+		return super.superHash();
   }
 
   public String toTypeName() {
@@ -120,12 +129,12 @@ public  abstract class AbstractSubLObject implements SubLObject {
   }
   
   public SubLSymbol getType(){ 
-    Errors.error(this + " does not have a type defined.");
+    Errors.error(this + " does not have a type defined");
     return null;
   }
   
   public SubLFixnum getTypeCode() {
-    Errors.error(this + " does not have a typecode defined.");
+    Errors.error(this + " does not have a typecode defined");
     return null;
   }
   
@@ -146,381 +155,384 @@ public  abstract class AbstractSubLObject implements SubLObject {
   
   /** Method created to avoid casting */
   public int getNumSize() { //SubLNumber
-    Errors.error("Not a number: " + this + ".");
+    type_error(this,"NUMBER");
     return -1;
   }
   public SubLObject inc() { //SubLNumber
-    return Errors.error("Not a number: " + this + ".");
+    return type_error(this,"NUMBER");
   }
   public SubLObject dec() { //SubLNumber
-    return Errors.error("Not a number: " + this + ".");
+    return type_error(this,"NUMBER");
   }
   public SubLObject add(SubLObject num) { //SubLNumber
-    return Errors.error("Not a number: " + this + ".");
+    return type_error(this,"NUMBER");
   }
   public SubLObject sub(SubLObject num) { //SubLNumber
-    return Errors.error("Not a number: " + this + ".");
+    return type_error(this,"NUMBER");
   }
   public SubLObject mult(SubLObject num) { //SubLNumber
-    return Errors.error("Not a number: " + this + ".");
+    return type_error(this,"NUMBER");
   }
   /** Method created to avoid casting */
   public SubLObject currentBinding(SubLObject[] bindings) { //SubLSymbol
-    Errors.error("Illegal attempt to get binding for non symbol: " + this + ".");
+    Errors.error("Illegal attempt to get binding for non symbol: " + this + "");
     return SubLNil.NIL;
   }
   public void bind(SubLObject newValue, SubLObject[] bindings) { //SubLSymbol
-    Errors.error("Illegal attempt to bind non symbol: " + this + ".");
+    Errors.error("Illegal attempt to bind non symbol: " + this + "");
   }
   public void rebind(SubLObject oldValue, SubLObject[] bindings) { //SubLSymbol
-    Errors.error("Illegal attempt to rebind non symbol: " + this + ".");
+    Errors.error("Illegal attempt to rebind non symbol: " + this + "");
+  }
+  private SubLObject type_error(AbstractSubLObject abstractSubLObject, String string) {
+  	 return Lisp.type_error(this, LispObjectFactory.makeString(string));
   }
   /** Method created to avoid casting */
   public SubLCharacter getCharacter(int index) { // SubLString
-    Errors.error(this + " is not of type: STRING.");
+    type_error(this,"STRING");
     return null;
   }
   public SubLObject get(SubLObject obj) { // SubLHashTable
-    Errors.error(this + " is not of type: HASHTABLE.");
+    type_error(this,"HASHTABLE");
     return SubLNil.NIL;
   }
   /** Method created to avoid casting */
   public SubLObject put(SubLObject key, SubLObject value) { // SubLHashTable
-    Errors.error(this + " is not of type: HASHTABLE.");
+    type_error(this,"HASHTABLE");
     return SubLNil.NIL;
   }
   /** Method created to avoid casting */
   public SubLObject remove(SubLObject obj) { // SubLHashTable
-    Errors.error(this + " is not of type: HASHTABLE.");
+    type_error(this,"HASHTABLE");
     return SubLNil.NIL;
   }
   public boolean hasKey(SubLObject obj) { // SubLKeyhash
-    Errors.error(this + " is not of type: KEYHASH.");
+    type_error(this,"KEYHASH");
     return false;
   }
   /** Method created to avoid casting */
   public void addKey(SubLObject key) { // SubLKeyhash
-    Errors.error(this + " is not of type: KEYHASH.");
+    type_error(this,"KEYHASH");
   }
   /** Method created to avoid casting */
   public boolean remKey(SubLObject obj) { // SubLKeyhash
-    Errors.error(this + " is not of type: HASHTABLE.");
+    type_error(this,"HASHTABLE");
     return false;
   }
   /** Method created to avoid casting */
   public int size() { // SubLSequence
-    Errors.error(this + " is not of type: SEQUENCE.");
+    type_error(this,"SEQUENCE");
     return -1;
   }
   /** Method created to avoid casting */
   public SubLObject get(int index) { // SubLSequence
-    Errors.error(this + " is not of type: SEQUENCE.");
+    type_error(this,"SEQUENCE");
     return SubLNil.NIL;
   }
   /** Method created to avoid casting */
   public void set(int index, SubLObject val) { // SubLSequence
-    Errors.error(this + " is not of type: SEQUENCE.");
+    type_error(this,"SEQUENCE");
   }
   /** Method created to avoid casting */
   public SubLSequence reverse(boolean isDestructive) { // SubLSequence
-    Errors.error(this + " is not of type: SEQUENCE.");
+    type_error(this,"SEQUENCE");
     return SubLNil.NIL;
   }
   /** Method created to avoid casting */
   public boolean numL(SubLObject x) { // SubLNumber
-    Errors.error(this + " is not of type: NUMBER.");
+    type_error(this,"NUMBER");
     return false;
   }
   /** Method created to avoid casting */
   public boolean numLE(SubLObject x) { // SubLNumber
-    Errors.error(this + " is not of type: NUMBER.");
+    type_error(this,"NUMBER");
     return false;
   }
   /** Method created to avoid casting */
   public boolean numG(SubLObject x) { // SubLNumber
-    Errors.error(this + " is not of type: NUMBER.");
+    type_error(this,"NUMBER");
     return false;
   }
   /** Method created to avoid casting */
   public boolean numGE(SubLObject x) { // SubLNumber
-    Errors.error(this + " is not of type: NUMBER.");
+    type_error(this,"NUMBER");
     return false;
   }
   /** Method created to avoid casting */
   public boolean numE(SubLObject x) { // SubLNumber
-    Errors.error(this + " is not of type: NUMBER.");
+    type_error(this,"NUMBER");
     return false;
   }
   /** Method created to avoid casting */
   public boolean isPositive() { // SubLNumber
-    Errors.error(this + " is not of type: NUMBER.");
+    type_error(this,"NUMBER");
     return false;
   }
   /** Method created to avoid casting */
   public boolean isNegative() { // SubLNumber
-    Errors.error(this + " is not of type: NUMBER.");
+    type_error(this,"NUMBER");
     return false;
   }
   /** Method created to avoid casting */
   public boolean isZero() { // SubLNumber
-    Errors.error(this + " is not of type: NUMBER.");
+    type_error(this,"NUMBER");
     return false;
   }
   /** Method created to avoid casting */
   public int intValue() { // SubLNumber
-    Errors.error(this + " is not of type: NUMBER.");
+    type_error(this,"NUMBER");
     return Integer.MIN_VALUE;
   }
   /** Method created to avoid casting */
   public long longValue() { // SubLNumber
-    Errors.error(this + " is not of type: NUMBER.");
+    type_error(this,"NUMBER");
     return Long.MIN_VALUE;
   }
   /** Method created to avoid casting */
   public double doubleValue() { // SubLNumber
-    Errors.error(this + " is not of type: NUMBER.");
+    type_error(this,"NUMBER");
     return Double.MIN_VALUE;
   }
   /** Method created to avoid casting */
   public BigInteger bigIntegerValue() { // SubLNumber
-    Errors.error(this + " is not of type: NUMBER.");
+    type_error(this,"NUMBER");
     return BigInteger.ZERO;
   }
   /** Method created to avoid casting */
   public SubLObject rest() { // SubLList
-    Errors.error(this + " is not of type: LIST.");
+    type_error(this,"LIST");
     return SubLNil.NIL;
   }
   /** Method created to avoid casting */
   public SubLObject first() { // SubLList
-    Errors.error(this + " is not of type: LIST.");
+    type_error(this,"LIST");
     return SubLNil.NIL;
   }
   /** Method created to avoid casting */
   public SubLCons setFirst(SubLObject first) { // SubLList
-    Errors.error(this + " is not of type: LIST.");
+    type_error(this,"LIST");
     return null;
   }
   /** Method created to avoid casting */
   public SubLCons setRest(SubLObject rest) { // SubLList
-    Errors.error(this + " is not of type: LIST.");
+    type_error(this,"LIST");
     return null;
   }
   public SubLList asConsList() { // SubLList
-    Errors.error(this + " is not of type: LIST.");
+    type_error(this,"LIST");
     return null;
   }
   public SubLList asArrayList() { // SubLList
-    Errors.error(this + " is not of type: LIST.");
+    type_error(this,"LIST");
     return null;
   }
   public boolean isArrayBased() { // SubLList
-    Errors.error(this + " is not of type: LIST.");
+    type_error(this,"LIST");
     return true;
   }
   public SubLObject last(int i) { // SubLList
-    Errors.error(this + " is not of type: LIST.");
+    type_error(this,"LIST");
     return null;
   }
   public SubLObject nthCdr(int index) { // SubLList
-    Errors.error(this + " is not of type: LIST.");
+    type_error(this,"LIST");
     return null;
   }
   /** Method created to avoid casting */
   public String getString() { // SubLString
-    Errors.error(this + " is not of type: STRING.");
+    type_error(this,"STRING");
     return "";
   }
   /** Method created to avoid casting */
   public SubLObject getField(int fieldNum) { // SubLStruct
-    Errors.error(this + " is not of type: STRUCT.");
+    type_error(this,"STRUCT");
     return SubLNil.NIL;
   }
   /** Method created to avoid casting */
   public void setField(int fieldNum, SubLObject value) { // SubLStruct
-    Errors.error(this + " is not of type: STRUCT.");
+    type_error(this,"STRUCT");
   }
   /** Method created to avoid casting */
   public SubLStream getStream(boolean followSynonymStream) { // SubLStream
-    Errors.error(this + " is not of type: STREAM.");
+    type_error(this,"STREAM");
     return null;
   }
   /** Method created to avoid casting */
   public SubLInputStream toInputStream() { // SubLStream
-    Errors.error(this + " is not of type: INPUT-STREAM.");
+    type_error(this,"INPUT-STREAM");
     return null;
   }
   /** Method created to avoid casting */
   public SubLInputTextStream toInputTextStream() { // SubLStream
-    Errors.error(this + " is not of type: INPUT-TEXT-STREAM.");
+    type_error(this,"INPUT-TEXT-STREAM");
     return null;
   }
   /** Method created to avoid casting */
   public SubLInputBinaryStream toInputBinaryStream() { // SubLStream
-    Errors.error(this + " is not of type: INPUT-BINARY-STREAM.");
+    type_error(this,"INPUT-BINARY-STREAM");
     return null;
   }
   /** Method created to avoid casting */
   public SubLOutputStream toOutputStream() { // SubLStream
-    Errors.error(this + " is not of type: OUTPUT-STREAM.");
+    type_error(this,"OUTPUT-STREAM");
     return null;
   }
   /** Method created to avoid casting */
   public SubLOutputTextStream toOutputTextStream() { // SubLStream
-    Errors.error(this + " is not of type: OUTPUT-TEXT-STREAM.");
+    type_error(this,"OUTPUT-TEXT-STREAM");
     return null;
   }
   /** Method created to avoid casting */
   public SubLOutputBinaryStream toOutputBinaryStream() { // SubLStream
-    Errors.error(this + " is not of type: OUTPUT-BINARY-STREAM.");
+    type_error(this,"OUTPUT-BINARY-STREAM");
     return null;
   }
   /** Method created to avoid casting */
   public SubLFunction getFunc() { // SubLFunction
-    Errors.error(this + " is not of type: FUNCTION.");
+    type_error(this,"FUNCTION");
     return null;
   }
   /** Method created to avoid casting */
   public SubLPackage toPackage() { // SubLPackage
-    Errors.error(this + " is not of type: PACKAGE.");
+    type_error(this,"PACKAGE");
     return null;
   }
   /** Method created to avoid casting */
   public SubLStruct toStruct() { // SubLStruct
-    Errors.error(this + " is not of type: STRUCTURE.");
+    type_error(this,"STRUCTURE");
     return null;
   }
   /** Method created to avoid casting */
   public SubLVector toVect() { // SubLVector
-    Errors.error(this + " is not of type: VECTOR.");
+    type_error(this,"VECTOR");
     return null;
   }
   /** Method created to avoid casting */
   public SubLSymbol toSymbol() { // SubLSymbol
-    Errors.error(this + " is not of type: SYMBOL.");
+    type_error(this,"SYMBOL");
     return null;
   }
   /** Method created to avoid casting */
   public SubLList toList() { // SubLList
-    Errors.error(this + " is not of type: LIST.");
+    type_error(this,"LIST");
     return null;
   }
   /** Method created to avoid casting */
   public SubLSequence toSeq() { // SubLSequence
-    Errors.error(this + " is not of type: SEQUENCE.");
+    type_error(this,"SEQUENCE");
     return null;
   }
   /** Method created to avoid casting */
   public SubLCharacter toChar() { // SubLCharacter
-    Errors.error(this + " is not of type: CHAR.");
+    type_error(this,"CHAR");
     return null;
   }
   /** Method created to avoid casting */
   public SubLGuid toGuid() { // SubLGuid
-    Errors.error(this + " is not of type: GUID.");
+    type_error(this,"GUID");
     return null;
   }
   /** Method created to avoid casting */
   public SubLSemaphore toSemaphore() { // SubLSemaphore
-    Errors.error(this + " is not of type: SEMAPHORE.");
+    type_error(this,"SEMAPHORE");
     return null;
   }
   /** Method created to avoid casting */
   public SubLString toStr() { // SubLString
-    Errors.error(this + " is not of type: STRING.");
+    type_error(this,"STRING");
     return null;
   }
   /** Method created to avoid casting */
   public SubLMacro toMacro() { // SubLMacro
-    Errors.error(this + " is not of type: MACRO.");
+    type_error(this,"MACRO");
     return null;
   }
   /** Method created to avoid casting */
   public SubLEnvironment toEnv() { // SubLEnvironment
-    Errors.error(this + " is not of type: ENVIRONMENT.");
+    type_error(this,"ENVIRONMENT");
     return null;
   }
   /** Method created to avoid casting */
   public SubLCons toCons() { // SubLCons
-    Errors.error(this + " is not of type: CONS.");
+    type_error(this,"CONS");
     return null;
   }
   /** Method created to avoid casting */
   public final SubLNumber toNumber() { // SubLNumber
-    Errors.error(this + " is not of type: NUMBER.");
+    type_error(this,"NUMBER");
     return null;
   }
   /** Method created to avoid casting */
   public final SubLProcess toProcess() { // SubLProcess
-    Errors.error(this + " is not of type: PROCESS.");
+    type_error(this,"PROCESS");
     return null;
   }
   /** Method created to avoid casting */
   public SubLLock toLock() { // SubLLock
-    Errors.error(this + " is not of type: LOCK.");
+    type_error(this,"LOCK");
     return null;
   }
   /** Method created to avoid casting */
   public SubLReadWriteLock toReadWriteLock() { // SubLLock
-    Errors.error(this + " is not of type: READ-WRITE-LOCK.");
+    type_error(this,"READ-WRITE-LOCK");
     return null;
   }
   /** Method created to avoid casting */
   public SubLInteger toInteger() { // SubLInteger
-    Errors.error(this + " is not of type: INTEGER.");
+    type_error(this,"INTEGER");
     return null;
   }
   /** Method created to avoid casting */
   public SubLFixnum toFixnum() { // SubLFixnum
-    Errors.error(this + " is not of type: FIXNUM.");
+    type_error(this,"FIXNUM");
     return null;
   }
   /** Method created to avoid casting */
   public SubLDoubleFloat toDouble() { // SubLDoubleFloat
-    Errors.error(this + " is not of type: FLOAT.");
+    type_error(this,"FLOAT");
     return null;
   }
   /** Method created to avoid casting */
   public SubLHashtable toHashtable() { // SubLHashtable
-    Errors.error(this + " is not of type: HASHTABLE.");
+    type_error(this,"HASHTABLE");
     return null;
   }
   /** Method created to avoid casting */
   public SubLHashtableIterator toHashtableIterator() { // SubLHashtableIterator
-    Errors.error(this + " is not of type: HASHTABLE-ITERATOR.");
+    type_error(this,"HASHTABLE-ITERATOR");
     return null;
   }
   /** Method created to avoid casting */
   public SubLKeyhash toKeyhash() { // SubLKeyhash
-    Errors.error(this + " is not of type: KEYHASH.");
+    type_error(this,"KEYHASH");
     return null;
   }
   /** Method created to avoid casting */
   public SubLKeyhashIterator toKeyhashIterator() { // SubLKeyhashIterator
-    Errors.error(this + " is not of type: KEYHASH-ITERATOR.");
+    type_error(this,"KEYHASH-ITERATOR");
     return null;
   }
   /** Method created to avoid casting */
   public SubLRegexPattern toRegexPattern() { // SubLHashtableIterator
-    Errors.error(this + " is not of type: REGEX-PATTERN.");
+    type_error(this,"REGEX-PATTERN");
     return null;
   }
   /** Method created to avoid casting */
   public char charValue() { // SubLCharacter
-    Errors.error(this + " is not of type: CHAR.");
+    type_error(this,"CHAR");
     return 0;
   }
   /** Method created to avoid instanceof tests */
   public String getFileDesignator() {
-    Errors.error(this + " is not a file name designator.");
+    Errors.error(this + " is not a file name designator");
     return null;
   }
   
   private final SubLObject structFieldError(int fieldNum) {
     if (!(this instanceof SubLStruct)) {
-      Errors.error(this + " is not of type STRUCTURE.");
+      type_error(this ,"STRUCTURE");
     } else {
-      Errors.error(this + " does not have a slot: " + fieldNum + ".");
+      Errors.error(this + " does not have a slot: " + fieldNum + "");
     }
     return SubLNil.NIL;
   }
@@ -711,5 +723,9 @@ public  abstract class AbstractSubLObject implements SubLObject {
   //// Internal Rep
   
   //// Main
-  
+  @Override
+  public String toString() {
+  	System.err.println("TOSTRING ON " + this.writeToString());
+  	return writeToString();
+  }
 }

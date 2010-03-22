@@ -9,6 +9,8 @@
  */
 
 package com.cyc.tool.subl.jrtl.nativeCode.type.number;
+
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;

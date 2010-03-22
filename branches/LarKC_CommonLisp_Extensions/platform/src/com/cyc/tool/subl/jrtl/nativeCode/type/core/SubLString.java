@@ -20,6 +20,8 @@
 package  com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCharacter.CharCompareDesc;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.AbstractArray;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.AbstractString;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -41,9 +43,12 @@ import java.util.List;
 
 //// External Imports
 
-public  final class SubLString extends AbstractSubLArraySequence implements SubLObject, SubLSequence, Cloneable, CharSequence  {
+public  /*final*/ class SubLString extends AbstractString implements SubLObject, SubLSequence, Cloneable, CharSequence  {
   
   //// Constructors
+	protected SubLString() {
+		
+	}
   
   /** Creates a new instance of SubLString. */
   SubLString(String str) {
@@ -255,21 +260,21 @@ public  final class SubLString extends AbstractSubLArraySequence implements SubL
     return true;
   }
   
-  /** Two strings are equalp iff they are case-insensitively equal. */
-  public boolean equalp(SubLObject obj) {
-    if (obj == null) { return false; }
-    if (!obj.isString()) { return false; }
-    final SubLString other = obj.toStr();
-    if (other.size != size) {
-      return false;
-    }
-    for (int i = 0; i < size; i++) {
-      if (Character.toUpperCase(buf[i]) != Character.toUpperCase(other.buf[i])) {
-        return false;
-      }
-    }
-    return true;
-  }
+//  /** Two strings are equalp iff they are case-insensitively equal. */
+//  public boolean equalp(SubLObject obj) {
+//    if (obj == null) { return false; }//   
+//    if (!obj.isString()) { return super.equalp(obj); }
+//    final SubLString other = obj.toStr();
+//    if (other.size != size) {
+//      return false;
+//    }
+//    for (int i = 0; i < size; i++) {
+//      if (Character.toUpperCase(buf[i]) != Character.toUpperCase(other.buf[i])) {
+//        return false;
+//      }
+//    }
+//    return true;
+//  }
   
   public static final String STRING_TYPE_NAME = "STRING";
   
@@ -430,7 +435,8 @@ public  final class SubLString extends AbstractSubLArraySequence implements SubL
     return buf[index];
   }
   
-  public final void setChar(int index, char newChar) {
+ // non final in order to let ComplexString override
+  public void setChar(int index, char newChar) {
     buf[index] = newChar;
     setMutated();
   }
@@ -525,7 +531,7 @@ public  final class SubLString extends AbstractSubLArraySequence implements SubL
   public final boolean isDouble() { return false; }
   public final boolean isChar() { return false; }
   public final boolean isString() { return true; }
-  public final boolean isVector() { return false; }
+  public final boolean isVector() { return true; } //per HyperSpec
   public final boolean isFunction() { return false; }
   public final boolean isFunctionSpec() { return false; }
   public final boolean isMacroOperator() { return false; }
@@ -578,8 +584,63 @@ public  final class SubLString extends AbstractSubLArraySequence implements SubL
   
   //// Internal Rep
   
-  private char[] buf;
-  private int size = 0;
+  protected char[] buf;
+  protected int size = 0;
   private String string = null;
   int hash = 0;
+
+	@Override
+	public void fill(char c) {
+		Arrays.fill(buf, c);
+		string = null;
+	}
+
+	@Override
+	public AbstractArray adjustArray(int size, SubLObject initialElement, SubLObject initialContents) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public AbstractArray adjustArray(int size, AbstractArray displacedTo, int displacement) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public int capacity() {
+		unimplimentedLispFunction();
+		return 0;
+	}
+
+	@Override
+	public SubLObject reverse() {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public void shrink(int n) {
+		unimplimentedLispFunction();
+		
+	}
+
+	@Override
+	public SubLObject subseq(int start, int end) {
+		unimplimentedLispFunction();
+		return null;
+	}
+
+	@Override
+	public void aset(int index, SubLObject newValue) {
+		unimplimentedLispFunction();
+		
+	}
+
+	@Override
+	public void fillVoid(SubLObject obj) {
+		unimplimentedLispFunction();
+		
+	}
+
 }
