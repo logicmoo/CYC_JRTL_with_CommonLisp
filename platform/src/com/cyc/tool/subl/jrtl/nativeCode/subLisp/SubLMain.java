@@ -7,6 +7,7 @@
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 // Internal imports
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Interpreter;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLSequence;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.util.*;
@@ -79,6 +80,7 @@ public final class SubLMain {
       e.printStackTrace(); // @hack
     }
     SubLPackage.initPackages();
+  	Interpreter.initializeLisp();
     try {
       PatchFileLoader.PATCH_FILE_LOADER.loadClass("com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols", true);
       SubLSymbol sym = CommonSymbols.EQ; // @hack to make sure this get initialized first
