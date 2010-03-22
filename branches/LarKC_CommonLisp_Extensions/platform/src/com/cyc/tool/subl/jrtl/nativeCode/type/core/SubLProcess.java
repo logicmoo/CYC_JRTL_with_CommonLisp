@@ -122,7 +122,7 @@ public  abstract class SubLProcess extends SafeRunnable implements Runnable, Sub
   }
   
   public final int superHash() {
-    return super.hashCode();
+    return super.superHash();
   }
   
   public final void run() {
