@@ -38,6 +38,7 @@ import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperatorFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 

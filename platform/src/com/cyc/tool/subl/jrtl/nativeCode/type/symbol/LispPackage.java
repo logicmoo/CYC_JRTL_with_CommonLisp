@@ -846,7 +846,8 @@ public abstract class LispPackage extends AbstractLispObject
          if (getJavaName != null) {
             StringBuilder sb = new StringBuilder("#<PACKAGE \"");
             sb.append(getJavaName);
-            sb.append("\">");
+            sb.append("\"");
+            sb.append(toSubLPackage().isLocked() ? "!>" : ">");
             return sb.toString();
         } else
             return unreadableString("PACKAGE");
