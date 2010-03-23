@@ -37,6 +37,13 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public  final class SubLReadWriteLock extends AbstractSubLObject implements SubLObject {
   
+	// common lisp additions
+	@Override
+	public String writeToString() {
+		// TODO Auto-generated method stub
+		return toString();
+	}
+
   //// Constructors
   
   /** Creates a new instance of SubLLock. */

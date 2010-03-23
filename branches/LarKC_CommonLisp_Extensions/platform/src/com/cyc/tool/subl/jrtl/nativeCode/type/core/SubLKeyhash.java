@@ -41,6 +41,13 @@ import java.util.Map;
 
 public  final class SubLKeyhash extends AbstractSubLObject implements SubLObject {
   
+	// common lisp additions
+	@Override
+	public String writeToString() {
+		// TODO Auto-generated method stub
+		return toString();
+	}
+
   //// Constructors
   
   /** Creates a new instance of SubLHashtable. */

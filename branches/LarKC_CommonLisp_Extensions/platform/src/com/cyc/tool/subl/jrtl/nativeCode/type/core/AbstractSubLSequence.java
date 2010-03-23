@@ -32,6 +32,11 @@ import java.util.Arrays;
 
 public  abstract class AbstractSubLSequence extends AbstractSubLObject implements SubLSequence {
   
+	@Override
+	public String writeToString() {
+		// TODO Auto-generated method stub
+		return toString();
+	}
 	// currently true in all subclasses anyways
 	@Override
 	public boolean isSequence() {

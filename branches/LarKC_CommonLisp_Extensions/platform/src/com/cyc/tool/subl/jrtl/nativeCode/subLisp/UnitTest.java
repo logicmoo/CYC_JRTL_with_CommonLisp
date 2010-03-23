@@ -7007,7 +7007,7 @@ public class UnitTest extends TestCase implements CommonSymbols {
     testEvalEquals("T", "*MY-TEST-VAR*");
     File jfile = new File("ext/");
     if (jfile.isDirectory() && jfile.exists()) {
-      testEvalEquals("T","(load-external-code \""+jfile.getAbsolutePath()+"\")");
+      testEvalEquals("T","(load-external-code \""+jfile.getAbsolutePath().replace("\\", "\\\\")+"\")");
     }
     // classpath test
     jfile = new File("httpd/htdocs/java/ql/lib/cyc-framework.jar");

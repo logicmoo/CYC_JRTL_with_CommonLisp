@@ -723,8 +723,8 @@ public  abstract class AbstractSubLObject extends AbstractLispObject implements 
   //// Internal Rep
   
   //// Main
-	public String writeToString()
-  {
-    return toString();
-  }
+//	public String writeToString()
+//  {
+//    return toString();
+//  }
 }

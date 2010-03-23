@@ -35,6 +35,13 @@ import java.util.concurrent.TimeUnit;
 
 public  final class SubLSemaphore extends AbstractSubLObject implements SubLObject {
   
+	// common lisp additions
+	@Override
+	public String writeToString() {
+		// TODO Auto-generated method stub
+		return toString();
+	}
+
   //// Constructors
   
   /** Creates a new instance of SubLSemaphore. */

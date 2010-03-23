@@ -35,6 +35,13 @@ import java.io.File;
 
 public  abstract class AbstractSubLStream extends AbstractSubLObject implements SubLStream {
   
+	// common lisp additions
+	@Override
+	final public String writeToString() {
+		// TODO Auto-generated method stub
+		return toString();
+	}
+
   //// Constructors
   
   public AbstractSubLStream(SubLSymbol elementType, SubLSymbol direction,

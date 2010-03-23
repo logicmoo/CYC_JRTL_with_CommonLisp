@@ -51,6 +51,13 @@ import com.cyc.tool.subl.util.SubLFiles.*;
  */
 final public class SubLQuote extends AbstractSubLObject implements SubLObject, SubLSymbol {
   
+	// common lisp additions
+	@Override
+	public String writeToString() {
+		// TODO Auto-generated method stub
+		return toString();
+	}
+
   //// Constructors
   
   /** Creates a new instance of SubLQuote. */

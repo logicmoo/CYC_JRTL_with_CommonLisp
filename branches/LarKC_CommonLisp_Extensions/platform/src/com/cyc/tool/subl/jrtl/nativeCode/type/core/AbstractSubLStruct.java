@@ -32,6 +32,12 @@ import java.util.Map;
 
 public  abstract class AbstractSubLStruct extends AbstractSubLObject implements SubLStruct {
   
+	@Override
+	public String writeToString() {
+		// TODO Auto-generated method stub
+		return toString();
+	}
+	
   //// Constructors
   
   /** Creates a new instance of SubLStruct. */

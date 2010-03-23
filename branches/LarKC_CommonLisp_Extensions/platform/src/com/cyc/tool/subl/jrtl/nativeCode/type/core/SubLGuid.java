@@ -33,6 +33,13 @@ import com.cyc.tool.subl.util.UUID;
 
 public  final class SubLGuid extends AbstractSubLObject implements SubLObject, Comparable<SubLGuid> {
   
+	// common lisp additions
+	@Override
+	public String writeToString() {
+		// TODO Auto-generated method stub
+		return toString();
+	}
+
   //// Constructors
   
   /** Creates a new instance of SubLGuid. */

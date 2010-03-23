@@ -29,6 +29,13 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public  final class SubLEnvironment extends AbstractSubLObject {
   
+	// common lisp additions
+	@Override
+	public String writeToString() {
+		// TODO Auto-generated method stub
+		return toString();
+	}	
+	
   //// Constructors
   
   /**

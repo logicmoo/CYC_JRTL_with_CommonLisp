@@ -30,6 +30,13 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public  final class SubLCharacter extends AbstractSubLObject implements SubLObject, Comparable {
   
+	// common lisp addtions
+	@Override
+	public String writeToString() {
+		// TODO Auto-generated method stub
+		return toString();
+	}
+	
   //// Constructors
   
   /**

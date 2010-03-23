@@ -45,6 +45,7 @@ public final class Main
       {
         public void run()
         {
+          Site.isSubLisp = false;
           Interpreter interpreter = Interpreter.createDefaultInstance(args);
           if (interpreter != null)
           interpreter.run();

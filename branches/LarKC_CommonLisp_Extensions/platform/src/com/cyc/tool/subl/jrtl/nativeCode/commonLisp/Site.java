@@ -51,6 +51,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public final class Site {
     private static SubLObject LISP_HOME;
+		public static boolean isSubLisp = true;
   	public static final boolean useForNameLoader = false;
   	
 	private static void init() {

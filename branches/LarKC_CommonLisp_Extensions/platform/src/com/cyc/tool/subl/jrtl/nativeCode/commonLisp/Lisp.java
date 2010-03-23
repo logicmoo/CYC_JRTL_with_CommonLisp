@@ -48,6 +48,7 @@ import java.util.Hashtable;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
@@ -306,6 +307,8 @@ public final class Lisp {
 
 	{
 		pushJavaStackFrames();
+		if (Site.isSubLisp) return Errors.error(condition.getParts().writeToString());
+		else
 		return LispSymbols.ERROR.execute(condition);
 	}
 

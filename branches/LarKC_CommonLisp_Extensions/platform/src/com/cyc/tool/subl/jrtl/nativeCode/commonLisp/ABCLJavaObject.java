@@ -237,22 +237,24 @@ public final class ABCLJavaObject extends AbstractLispObject implements JavaObje
     }
 
     @Override
-    public <T> Object javaInstance(Class<T> c) {
-    	final Class cc;
-	if(obj == null) {
-	    if(c.isPrimitive()) {
-		throw new NullPointerException("Cannot assign null to " + c);
-	    }
-	    return obj;
-	} else {
-	    cc = JavaFunctions.maybeBoxClass(c);
-	    if(cc.isAssignableFrom(intendedClass)) {
-		return obj;
-	    } else {
-		return error(new TypeError(intendedClass.getName() + " is not assignable to " + c.getName()));
-	    }
+	public <T> Object javaInstance(Class<T> c) {
+		final Class cc;
+		if (obj == null) {
+			if (c.isPrimitive()) {
+				throw new NullPointerException("Cannot assign null to " + c);
+			}
+			return obj;
+		} else {
+			cc = JavaFunctions.maybeBoxClass(c);
+			if (cc.isInstance(obj))
+				return obj;
+			if (cc.isAssignableFrom(intendedClass)) {
+				return obj;
+			} else {
+				return error(new TypeError(intendedClass.getName() + " is not assignable to " + c.getName()));
+			}
+		}
 	}
-    }
 
     /** Returns the encapsulated Java object for
      * interoperability with wait, notify, synchronized, etc.
