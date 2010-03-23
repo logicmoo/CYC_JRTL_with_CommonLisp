@@ -490,6 +490,7 @@ public  final class SubLPackage extends LispPackage implements SubLObject {
         Errors.error("A package named " + name + " already exists.");
       }
       this.name = name;
+      this.javaName = name.getString();
       //verify nicknames are unique and store
       for (SubLObject cur = nickNames; cur != SubLNil.NIL; cur = cur.rest()) {
         SubLObject nickName = cur.first();

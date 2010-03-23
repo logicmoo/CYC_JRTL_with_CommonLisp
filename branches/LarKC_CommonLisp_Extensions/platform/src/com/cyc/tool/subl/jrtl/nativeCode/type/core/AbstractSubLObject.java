@@ -412,11 +412,11 @@ public  abstract class AbstractSubLObject extends AbstractLispObject implements 
     type_error(this,"SYMBOL");
     return null;
   }
-  /** Method created to avoid casting */
-  public SubLList toList() { // SubLList
-    type_error(this,"LIST");
-    return null;
-  }
+//  /** Method created to avoid casting */
+//  public SubLList toList() { // SubLList
+//    type_error(this,"LIST");
+//    return null;
+//  }
   /** Method created to avoid casting */
   public SubLSequence toSeq() { // SubLSequence
     type_error(this,"SEQUENCE");
@@ -723,9 +723,8 @@ public  abstract class AbstractSubLObject extends AbstractLispObject implements 
   //// Internal Rep
   
   //// Main
-  @Override
-  public String toString() {
-  	System.err.println("TOSTRING ON " + this.writeToString());
-  	return writeToString();
+	public String writeToString()
+  {
+    return toString();
   }
 }

@@ -73,5 +73,8 @@ public  abstract class SafeRunnable extends AbstractLispObject implements Runnab
   //// Internal Rep9
   
   //// Main
-  
+  @Override
+  public String writeToString() {
+  	return unreadableString(getClass().getSuperclass().getSimpleName());
+  }
 }

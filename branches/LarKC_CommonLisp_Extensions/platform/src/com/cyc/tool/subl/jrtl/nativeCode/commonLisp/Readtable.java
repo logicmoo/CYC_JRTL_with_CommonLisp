@@ -43,6 +43,11 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public class Readtable extends AbstractLispObject
 {
+  @Override
+  public String writeToString() {
+  	return unreadableString(getClass().getSimpleName());
+  }
+
   public static final byte SYNTAX_TYPE_CONSTITUENT           = 0;
   public static final byte SYNTAX_TYPE_WHITESPACE            = 1;
   public static final byte SYNTAX_TYPE_TERMINATING_MACRO     = 2;

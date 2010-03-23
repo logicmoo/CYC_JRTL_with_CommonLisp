@@ -48,5 +48,8 @@ public final class SymbolMacro extends AbstractLispObject
     {
         return expansion;
     }
-
+    @Override
+    public String writeToString() {
+    	return unreadableString(getClass().getSimpleName());
+    }
 }

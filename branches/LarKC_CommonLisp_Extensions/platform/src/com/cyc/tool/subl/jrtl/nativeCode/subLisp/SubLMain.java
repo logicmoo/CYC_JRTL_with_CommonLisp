@@ -80,7 +80,6 @@ public final class SubLMain {
       e.printStackTrace(); // @hack
     }
     SubLPackage.initPackages();
-  	Interpreter.initializeLisp();
     try {
       PatchFileLoader.PATCH_FILE_LOADER.loadClass("com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols", true);
       SubLSymbol sym = CommonSymbols.EQ; // @hack to make sure this get initialized first
@@ -164,6 +163,8 @@ public final class SubLMain {
     
     AbstractSubLSequence.init();
 
+  	Interpreter.initializeLisp();
+  	
     if (!shouldRunInBackground()) {
       setMainReader(new SubLReader());
       getMainReader().setThread(SubLProcess.currentSubLThread());

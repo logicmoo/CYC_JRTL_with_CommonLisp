@@ -50,8 +50,13 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLSequence;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumber;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public class AbstractLispObject extends SubLInchworm implements SubLObject
+public abstract class AbstractLispObject extends SubLInchworm implements SubLObject
 {
+	
+	@Override
+	public String toString() {
+		return writeToString();
+	}
 
 	//SubLObject
 	public BigInteger bigIntegerValue() {
@@ -240,7 +245,7 @@ public class AbstractLispObject extends SubLInchworm implements SubLObject
 
   public SubLObject second()
   {
-    return toList().second();
+    return toList().get(1);
   }
 
   public SubLObject cddr()
@@ -250,7 +255,7 @@ public class AbstractLispObject extends SubLInchworm implements SubLObject
 
   public SubLObject third()
   {
-    return toList().third();
+    return toList().get(2);
   }
 
   public SubLObject nthCdr(int n)
@@ -720,10 +725,7 @@ public class AbstractLispObject extends SubLInchworm implements SubLObject
     return toSymbol().getSymbolFunctionOrDie();
   }
 
-	public String writeToString()
-  {
-    return toString();
-  }
+	public abstract String writeToString();
 
   public String unreadableString(String s) {
      return unreadableString(s, true);
@@ -1240,10 +1242,12 @@ public class AbstractLispObject extends SubLInchworm implements SubLObject
   }
   
   public SubLSymbol toSymbol() {
+  	if (this instanceof SubLSymbol) return (SubLSymbol)this;  
 		return type_error(this, LispSymbols.SYMBOL).toSymbol();
 	}
 
   public SubLList toList() {
+  	if (this instanceof SubLList) return (SubLList)this;  
 		return type_error(this, LispSymbols.LIST).toList();
 	}
 
@@ -1278,6 +1282,9 @@ public class AbstractLispObject extends SubLInchworm implements SubLObject
 	public SubLProcess toProcess() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	public int hashCode(int currentDepth) {
+		return psxhash(currentDepth);
 	}
 }
 

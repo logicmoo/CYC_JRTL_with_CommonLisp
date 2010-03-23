@@ -416,6 +416,11 @@ public class StandardGenericFunctionTrampolines {
 		public EqlSpecialization(SubLObject eqlTo) {
 			this.eqlTo = eqlTo;
 		}
+	  @Override
+	  public String writeToString() {
+	  	return unreadableString(getClass().getSimpleName());
+	  }
+
 	}
 
 	public static final StandardGenericFunction checkStandardGenericFunction(SubLObject obj)

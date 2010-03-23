@@ -36,11 +36,12 @@ package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
 
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public final class Nil extends LispSymbolImpl implements  LispSequence
+public final class Nil extends LispSymbolImpl implements LispSequence,SubLList
 {
   // SubLList
   @Override
