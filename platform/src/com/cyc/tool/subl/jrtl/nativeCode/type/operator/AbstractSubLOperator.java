@@ -24,6 +24,21 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject;
 
 public  abstract class AbstractSubLOperator extends AbstractSubLObject implements SubLOperator {
   
+	// common lisp additions
+	@Override
+	public String writeToString() {
+		// TODO Auto-generated method stub
+		return toString();
+	}
+	
+	//todo make abstract - prefers to be overriden
+	public String toString() {
+		if (functionSymbol==null)
+			return unreadableString(getClass().getSimpleName());
+		return unreadableString(getClass().getSimpleName()+" " + functionSymbol.writeToString());
+		
+	}
+	
   //// Constructors
   
   /** Creates a new instance of AbstractSubLOperator. */

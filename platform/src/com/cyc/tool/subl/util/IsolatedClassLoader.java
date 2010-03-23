@@ -320,9 +320,9 @@ public class IsolatedClassLoader extends URLClassLoader {
     if (!ALLOW_DYNAMIC_LOADING_OF_CODE) {
       Errors.error("Loading of dynamic code is not allowed at this time.");
     }
-    URI uri = URI.create(stringTyped);
+    // not needed URI uri = URI.create(stringTyped);
     File jfile = new File(stringTyped);
-    stringTyped = jfile.getAbsolutePath();
+    stringTyped = jfile.getAbsolutePath();    
     String className;
     if (!jfile.exists()) {
       // inner .jar reference "myproj.jar!mypackage/myclass.class"

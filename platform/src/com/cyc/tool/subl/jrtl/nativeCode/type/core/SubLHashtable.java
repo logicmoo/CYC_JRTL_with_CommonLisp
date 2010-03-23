@@ -38,6 +38,13 @@ import java.util.Map;
 
 public  final class SubLHashtable extends AbstractSubLObject implements SubLObject {
   
+	// common lisp additions
+	@Override
+	public String writeToString() {
+		// TODO Auto-generated method stub
+		return toString();
+	}
+
   //// Constructors
   
   /** Creates a new instance of SubLHashtable. */

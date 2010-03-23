@@ -42,6 +42,7 @@ import java.util.WeakHashMap;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCharacter;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -55,7 +56,7 @@ public abstract class AbstractLispObject extends SubLInchworm implements SubLObj
 	
 	@Override
 	public String toString() {
-		return writeToString();
+		return super.toString();
 	}
 
 	//SubLObject
@@ -493,6 +494,12 @@ public abstract class AbstractLispObject extends SubLInchworm implements SubLObj
   public boolean isCharacter()
   {
     return false;
+  }
+  
+  @Override
+  public SubLObject get(int index) {
+  	// TODO Auto-generated method stub
+  	return elt(index);
   }
 
   public int cl_length()
@@ -1285,6 +1292,12 @@ public abstract class AbstractLispObject extends SubLInchworm implements SubLObj
 	}
 	public int hashCode(int currentDepth) {
 		return psxhash(currentDepth);
+	}
+	
+	@Override
+	public SubLCharacter toChar() {
+		if (this instanceof SubLCharacter) return (SubLCharacter)this;
+		return type_error(this, LispSymbols.CHAR).toChar();
 	}
 }
 
