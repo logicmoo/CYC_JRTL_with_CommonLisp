@@ -22,6 +22,7 @@ package  com.cyc.tool.subl.jrtl.nativeCode.type.core;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCharacter.CharCompareDesc;
 import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.AbstractArray;
 import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.AbstractString;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.SimpleString;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -43,7 +44,7 @@ import java.util.List;
 
 //// External Imports
 
-public  /*final*/ class SubLString extends AbstractString implements SubLObject, SubLSequence, Cloneable, CharSequence  {
+public abstract  /*final*/ class SubLString extends AbstractString implements SubLObject, SubLSequence, Cloneable, CharSequence  {
   
   //// Constructors
 	protected SubLString() {
@@ -51,14 +52,14 @@ public  /*final*/ class SubLString extends AbstractString implements SubLObject,
 	}
   
   /** Creates a new instance of SubLString. */
-  SubLString(String str) {
+	protected SubLString(String str) {
     if (str == null) { str = ""; }
     buf = str.toCharArray();
     size = buf.length;
     string = str;
   }
   
-  SubLString(int length, char defaultChar) {
+	protected SubLString(int length, char defaultChar) {
     if (size < 0) {
       Errors.error("Attempt to create string with negative size: " + size);
     }
@@ -68,13 +69,13 @@ public  /*final*/ class SubLString extends AbstractString implements SubLObject,
   }
   
   /** Creates a new instance of SubLString. */
-  private SubLString(char[] chars) {
+	protected SubLString(char[] chars) {
     buf = chars;
     size = buf.length;
   }
   
   /** Creates a new instance of SubLString. */
-  private SubLString(char[] chars, int length) {
+	protected SubLString(char[] chars, int length) {
     if (chars.length < length) {
       Errors.error("Error in string constructor.");
     }
@@ -84,7 +85,7 @@ public  /*final*/ class SubLString extends AbstractString implements SubLObject,
   }
   
   /** Creates a new instance of SubLString. */
-  private SubLString(char[] chars, int start, int end) {
+	protected SubLString(char[] chars, int start, int end) {
     size = end - start;
     if (chars.length < size) {
       Errors.error("Error in string constructor.");
@@ -138,7 +139,7 @@ public  /*final*/ class SubLString extends AbstractString implements SubLObject,
   }
   
   public final SubLObject makeCopy() {
-    return new SubLString(getString());
+    return new SimpleString(getString());
   }
   
   public final boolean isArrayBased() {
@@ -157,7 +158,7 @@ public  /*final*/ class SubLString extends AbstractString implements SubLObject,
       SubLObject obj = (SubLObject)newBuf.get(i);
       theBuff[i] = obj.charValue();
     }
-    return new SubLString(theBuff);
+    return new SimpleString(theBuff);
   }
   
   public String getString() {
@@ -408,22 +409,23 @@ public  /*final*/ class SubLString extends AbstractString implements SubLObject,
   
   public SubLString leftTrim(SubLSequence charsToTrim) {
     int trimCount = calCharsToTrim(charsToTrim, true);
-    return new SubLString(toCharArray(), trimCount, size());
+    return new SimpleString(toCharArray(), trimCount, size());
   }
   
   public SubLString rightTrim(SubLSequence charsToTrim) {
     int trimCount = calCharsToTrim(charsToTrim, false);
-    return new SubLString(toCharArray(), 0, size() - trimCount);
+    return new SimpleString(toCharArray(), 0, size() - trimCount);
   }
   
   public SubLString trim(SubLSequence charsToTrim) {
     int startTrimCount = calCharsToTrim(charsToTrim, true);
-    if (startTrimCount == size()) {
+    int size = size();
+    if (startTrimCount == size) {
       return SubLObjectFactory.makeString("");
     }
     int endTrimCount = calCharsToTrim(charsToTrim, false);
-    int size = size();
-    SubLString result = new SubLString(toCharArray(), startTrimCount, size - endTrimCount);
+    size = size();
+    SubLString result = new SimpleString(toCharArray(), startTrimCount, size - endTrimCount);
     return result;
   }
   

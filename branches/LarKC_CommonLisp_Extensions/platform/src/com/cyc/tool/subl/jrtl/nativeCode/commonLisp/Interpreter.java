@@ -159,7 +159,13 @@ public final class Interpreter
     public static synchronized void initializeLisp()
     {
         if (!initialized) {
-            Load.loadSystemFile("boot.lisp", false, false, false);
+        	  boolean b = Site.isSubLisp;
+        	  try {
+        	  	Site.isSubLisp = false;
+              Load.loadSystemFile("boot.lisp", false, false, false);              
+        	  } finally {
+        	  	Site.isSubLisp = b;
+        	  }
             initialized = true;
         }
     }
