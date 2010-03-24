@@ -36,6 +36,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLGuid;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInOutTextStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLStream;
@@ -46,6 +47,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader;
 import com.cyc.tool.subl.util.IsolatedClassLoader;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
+import java.net.*;
 
 //// External Imports
 import junit.framework.Assert;
@@ -4942,15 +4944,15 @@ public class UnitTest extends TestCase implements CommonSymbols {
      */
     
     // non-destructive tests
-    testEvalEquals("\"units/acip/\"",
+    testEvalPathEquals("\"units/acip/\"",
       "(construct-filename '(\"units\" \"acip\") nil nil t)");
-    testEvalEquals("\"/cyc/top/units/tiny/core-kb.lisp\"",
+    testEvalPathEquals("\"/cyc/top/units/tiny/core-kb.lisp\"",
       "(construct-filename '(\"cyc\" \"top\" \"units\" \"tiny\") \"core-kb\" \"lisp\" nil)");
-    testEvalEquals("\"cyc/top/units/tiny/core-kb.lisp\"",
+    testEvalPathEquals("\"cyc/top/units/tiny/core-kb.lisp\"",
       "(construct-filename '(\"cyc\" \"top\" \"units\" \"tiny\") \"core-kb\" \"lisp\" T)");
-    testEvalEquals("'(\"/cyc/top/units/tiny/core-kb.lisp\")",
+    testEvalPathEquals("'(\"/cyc/top/units/tiny/core-kb.lisp\")",
       "(directory \"/cyc/top/units/tiny/\" t)");
-    testEvalEquals("'(\"core-kb.lisp\")",
+    testEvalPathEquals("'(\"core-kb.lisp\")",
       "(directory \"/cyc/top/units/tiny/\" NIL)");
     testEvalEquals("T","(directory-p \"/cyc/top/units/\")");
     testEvalEquals("NIL","(directory-p \"/cyc/top/units/tiny/core-kb.lisp\")");
@@ -5071,10 +5073,26 @@ public class UnitTest extends TestCase implements CommonSymbols {
     
   }
   
-  public static void testGUIDs() {
+  private static void testEvalPathEquals(String path, String slisp) {
+  	 if (File.separatorChar=='\\') {
+	  		 if (path.startsWith("\"")) 
+	  			 path = path.replace("/", "\\\\");
+	  		 else
+	  			 path = path.replace("/", "\\");
+	  		 if (path.startsWith("\\")) path = "C:" + path;
+  	 }
+  	 try {
+  		 testEvalEquals(path, slisp);
+  	 } catch (SubLException sle) {
+  		 System.out.println(""+sle + " in test "+slisp + " => "  + path);  	
+  		
+  	 }
+	}
+
+	public static void testGUIDs() {
     // make sure that we can construct all GUIDs
     if (SHOULD_PRINT_TESTS) {
-      System.out.println("Testing that GUID versions #1 (CRTL) and #4 (UUID.java) are readable ....");
+    	System.out.println("Testing that GUID versions #1 (CRTL) and #4 (UUID.java) are readable ....");
     }
     List<String> allGuidStrings = new ArrayList<String>( EXAMPLE_NON_CORE_GUIDS.length + EXAMPLE_CORE_GUIDS.length);
     List<SubLGuid> allGuids = new ArrayList<SubLGuid>(allGuidStrings.size());

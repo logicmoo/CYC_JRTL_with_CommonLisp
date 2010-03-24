@@ -19,6 +19,7 @@
 
 package  com.cyc.tool.subl.jrtl.nativeCode.type.core;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.SimpleString;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions;
@@ -558,12 +559,12 @@ public  final class SubLObjectFactory {
   
   public static final SubLString makeString(String str) {
     Threads.possiblyHandleInterrupts(true);
-    return new SubLString(str);
+    return new SimpleString(str);
   }
   
   public static final SubLString makeString(int size, char defaultChar) {
     Threads.possiblyHandleInterrupts(true);
-    return new SubLString(size, defaultChar);
+    return new SimpleString(size, defaultChar);
   }
   
   public static final SubLStruct makeStructInterpreted(int size) {
@@ -810,7 +811,7 @@ public  final class SubLObjectFactory {
   }
   
   public static final SubLReadWriteLock makeReadWriteLock(String name) {
-    return new SubLReadWriteLock(new SubLString(name));
+    return new SubLReadWriteLock(new SimpleString(name));
   }
   
   //// Protected Area

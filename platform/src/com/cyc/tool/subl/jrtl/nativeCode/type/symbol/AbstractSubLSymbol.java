@@ -57,7 +57,7 @@ public  abstract class AbstractSubLSymbol extends LispSymbolImpl implements SubL
     this.thePackage = thePackage;
     this.symbolName = symbolName;
     hashCode = ((thePackage == null) ? 0 : thePackage.hashCode()) ^ symbolName.hashCode();
-    if ((thePackage == SubLPackage.KEYWORD_PACKAGE) && (!isKeyword())) { //@todo get rid of this test
+    if ((thePackage!=null && thePackage == SubLPackage.KEYWORD_PACKAGE) && (!isKeyword())) { //@todo get rid of this test
       Errors.error("Got invalid keyword: '" + thePackage + ":" + symbolName + "'");
     }
   }

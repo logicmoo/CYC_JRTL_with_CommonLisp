@@ -8,6 +8,7 @@ package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 // Internal imports
 import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Interpreter;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Site;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLSequence;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.util.*;
@@ -75,6 +76,7 @@ public final class SubLMain {
   /** This is unfortunately public so it can be called by unit tests */
   public static void initializeSubL(String[] args) {
     try {
+    	//if (Site.isSubLisp) Interpreter.initializeLisp();
       PatchFileLoader.PATCH_FILE_LOADER.loadClass("com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage", true);
     } catch (Exception e) {
       e.printStackTrace(); // @hack
@@ -150,6 +152,7 @@ public final class SubLMain {
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms");
+  	if (Site.isSubLisp) Interpreter.initializeLisp();
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.character_names");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.math_utilities");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility");
@@ -162,9 +165,6 @@ public final class SubLMain {
     UnaryFunction.initialize(); // this must come after ConsesLow -APB
     
     AbstractSubLSequence.init();
-
-  	Interpreter.initializeLisp();
-  	
     if (!shouldRunInBackground()) {
       setMainReader(new SubLReader());
       getMainReader().setThread(SubLProcess.currentSubLThread());

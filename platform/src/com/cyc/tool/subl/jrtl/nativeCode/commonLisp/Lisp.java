@@ -306,9 +306,8 @@ public final class Lisp {
 	public static final SubLObject error(SubLObject condition)
 
 	{
-		pushJavaStackFrames();
 		if (Site.isSubLisp) return Errors.error(condition.getParts().writeToString());
-		else
+		pushJavaStackFrames();
 		return LispSymbols.ERROR.execute(condition);
 	}
 

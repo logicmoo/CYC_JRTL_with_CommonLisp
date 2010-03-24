@@ -68,8 +68,9 @@ public class SimpleString extends SubLString
 
     public SimpleString(String s)
     {
-        size = s.length();
-        buf = s.toCharArray();
+    	super(s);
+//        size = s.length();
+//        buf = s.toCharArray();
     }
 
     public SimpleString(StringBuffer sb)
@@ -86,11 +87,20 @@ public class SimpleString extends SubLString
 
     public SimpleString(char[] chars)
     {
-        this.buf = chars;
-        size = chars.length;
+			 super(chars);
+//        this.buf = chars;
+//        size = chars.length;
     }
 
-    @Override
+    public SimpleString(int size, char defaultChar) {
+			 super(size,defaultChar);
+		}
+
+		public SimpleString(char[] charArray,  int start, int end) {
+			super(charArray,start,end);
+		}
+
+		@Override
     public char[] chars()
     {
         return buf;
@@ -265,6 +275,7 @@ public class SimpleString extends SubLString
     	if (size!=buf.length)  {
     		Debug.dumpStack("capacity!=chars.length " + writeToString());
     	}
+      setMutated();
     	Arrays.fill(buf, c);
     }
 
@@ -276,6 +287,7 @@ public class SimpleString extends SubLString
             System.arraycopy(buf, 0, newArray, 0, n);
             buf = newArray;
             size = n;
+            setMutated();
             return;
         }
         if (n == size)
@@ -290,6 +302,7 @@ public class SimpleString extends SubLString
         int i, j;
         for (i = 0, j = size - 1; i < size; i++, j--)
             result.buf[i] = buf[j];
+        setMutated();
         return result;
     }
 
@@ -305,19 +318,20 @@ public class SimpleString extends SubLString
             ++i;
             --j;
         }
+        setMutated();
         return this;
     }
 
-    @Override
-    public String getString()
-    {
-        return String.valueOf(buf);
-    }
+//    @Override
+//    public String getString()
+//    {
+//        return String.valueOf(buf);
+//    }
 
     @Override
     public Object javaInstance()
     {
-        return String.valueOf(buf);
+        return getString();
     }
 
     @Override
@@ -355,6 +369,7 @@ public class SimpleString extends SubLString
     {
         try {
             buf[index] = c;
+            setMutated();
         }
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(index, size);
@@ -426,6 +441,7 @@ public class SimpleString extends SubLString
     {
         try {
             buf[index] = obj.charValue();
+            setMutated();
         }
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(index, size);
