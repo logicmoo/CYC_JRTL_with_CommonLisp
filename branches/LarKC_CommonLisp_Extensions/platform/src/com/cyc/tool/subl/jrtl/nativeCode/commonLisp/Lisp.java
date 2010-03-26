@@ -64,7 +64,7 @@ public final class Lisp {
 	// Packages.
 	public static final SubLPackage PACKAGE_CL = LispPackages.createPackage("COMMON-LISP", 1024);
 	public static final SubLPackage PACKAGE_CL_USER = LispPackages.createPackage("COMMON-LISP-USER", 1024);
-	public static final SubLPackage PACKAGE_KEYWORD = LispPackages.createPackage("KEYWORD", 1024);
+	public static final SubLPackage PACKAGE_KEYWORD = LispPackages.findPackage("KEYWORD");
 	public static final SubLPackage PACKAGE_SYS = LispPackages.createPackage("SYSTEM");
 	public static final SubLPackage PACKAGE_MOP = LispPackages.createPackage("MOP");
 	public static final SubLPackage PACKAGE_TPL = LispPackages.createPackage("TOP-LEVEL");
@@ -306,7 +306,7 @@ public final class Lisp {
 	public static final SubLObject error(SubLObject condition)
 
 	{
-		if (Site.isSubLisp) return Errors.error(condition.getParts().writeToString());
+		if (Main.isSubLisp) return Errors.error(condition.getParts().writeToString());
 		pushJavaStackFrames();
 		return LispSymbols.ERROR.execute(condition);
 	}

@@ -42,6 +42,10 @@ public  abstract class AbstractSubLSequence extends AbstractSubLObject implement
 	public boolean isSequence() {
 		return true;
 	}
+	
+	@Override
+	abstract public boolean isArrayBased();
+	
   //// Constructors
   
   //// Public Area

@@ -706,8 +706,8 @@ public  abstract class AbstractSubLObject extends AbstractLispObject implements 
   }
 
   
-  public final SubLObject second() { return get(1); }
-  public final SubLObject third() { return get(2); }
+  public SubLObject second() { return get(1); }
+  public SubLObject third() { return get(2); }
   public final SubLObject fourth() { return get(3); }
   public final SubLObject fifth() { return get(4); }
   public final SubLObject sixth() { return get(5); }

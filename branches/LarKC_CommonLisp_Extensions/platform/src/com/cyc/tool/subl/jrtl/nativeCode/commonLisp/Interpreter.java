@@ -76,8 +76,8 @@ public final class Interpreter
 
     public static synchronized Interpreter createDefaultInstance(String[] args)
     {
-        if (interpreter != null)
-            return null;
+        if (interpreter == null)
+        //    return null;
         interpreter = new Interpreter();
 
         if (args != null)
@@ -159,12 +159,12 @@ public final class Interpreter
     public static synchronized void initializeLisp()
     {
         if (!initialized) {
-        	  boolean b = Site.isSubLisp;
+        	  boolean b = Main.isSubLisp;
         	  try {
-        	  	Site.isSubLisp = false;
+        	  	Main.isSubLisp = false;
               Load.loadSystemFile("boot.lisp", false, false, false);              
         	  } finally {
-        	  	Site.isSubLisp = b;
+        	  	Main.isSubLisp = b;
         	  }
             initialized = true;
         }

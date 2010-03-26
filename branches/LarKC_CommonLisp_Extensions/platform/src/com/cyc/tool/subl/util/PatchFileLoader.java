@@ -61,11 +61,13 @@ public  final class PatchFileLoader extends ClassLoader {
           }
           c = findClass(name);
         } else {
-          throw new ClassNotFoundException(name);
+          //throw new ClassNotFoundException(name);
         }
       } catch (ClassNotFoundException e) {
-        //Finaly, only if not already loaded and not my class then load from default
-        c = super.loadClass(name, false);
+        //Finaly, only if not already loaded and not my class then load from default        
+      }
+      if (c==null) {
+      	c = super.loadClass(name, false);
       }
     }
     if (c == null) {
