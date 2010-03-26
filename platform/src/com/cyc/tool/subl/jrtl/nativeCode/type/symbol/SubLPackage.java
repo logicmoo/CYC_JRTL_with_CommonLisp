@@ -71,6 +71,8 @@ public  final class SubLPackage extends LispPackage implements SubLObject {
 	protected void setJavaName(String javaName) {
 		this.javaName = javaName;
     this.name = javaName==null?null:makeString(javaName);
+    packageNameToPackageMapNative.put(javaName, this);
+    packageNameToPackageMap.put(name, this);    
 	}
   
   //// Constructors
@@ -82,6 +84,7 @@ public  final class SubLPackage extends LispPackage implements SubLObject {
   // Anonymous package.
   public SubLPackage()
   {
+  	setJavaName("null");
   }
 
   public SubLPackage(String name)
@@ -91,7 +94,7 @@ public  final class SubLPackage extends LispPackage implements SubLObject {
 
   public SubLPackage(String name, int size)
   {
-      setJavaName(name);
+      this(name);
   }
 
   //// Public Area
@@ -228,7 +231,7 @@ public  final class SubLPackage extends LispPackage implements SubLObject {
 //  }
   
   public SubLList getUsesPackagesList() {
-    return SubLObjectFactory.makeList(usesPackagesList);
+    return usesPackagesList.toList();// SubLObjectFactory.makeList(usesPackagesList);
   }
   
   public SubLList getUsedByPackagesList() {
@@ -285,12 +288,14 @@ public  final class SubLPackage extends LispPackage implements SubLObject {
       if (result != null) {
         return result;
       }
-      for (int i = 0,  size = usesPackagesList.size(); i < size; i++) {
-        SubLPackage parentPackage = usesPackagesList.get(i);
+      SubLObject use = this.usesPackagesList;
+      while (use instanceof SubLCons) {
+        SubLPackage parentPackage = use.first().toPackage();
         SubLSymbol sym = parentPackage.retrieveSymbol(symbolName);
         if (sym != null && parentPackage.isExported(sym)) {
           return sym;
-        }
+        }      	
+        use = use.rest();
       }
       return null;
     }
@@ -491,6 +496,8 @@ public  final class SubLPackage extends LispPackage implements SubLObject {
       }
       this.name = name;
       this.javaName = name.getString();
+      LispPackages.map.put(javaName, this);
+      LispPackages.packages.add(this);
       //verify nicknames are unique and store
       for (SubLObject cur = nickNames; cur != SubLNil.NIL; cur = cur.rest()) {
         SubLObject nickName = cur.first();
@@ -520,9 +527,11 @@ public  final class SubLPackage extends LispPackage implements SubLObject {
           Errors.error("Error while creating a package.", e);
         }
         if (curPackage == null) { continue; }
-        if (!usesPackagesList.contains(curPackage)) {
-          usesPackagesList.add(curPackage);
-        }
+        usesPackagesList = useList;//.copyList();
+//        if (usesPackagesList==null) usesPackagesList = makeCons(curPackage);
+//        else if (!memq(curPackage, usesPackagesList)) {
+//        	usesPackagesList = usesPackagesList.push(curPackage);
+//        }
       }
       //update globals
       if (allPackages == null) {
@@ -1390,8 +1399,7 @@ public  final class SubLPackage extends LispPackage implements SubLObject {
   
   //private SubLString name;
   // @todo change these to List<> where possible
-  private ArrayList<SubLPackage> usesPackagesList = new ArrayList<SubLPackage>();
-  private ArrayList<SubLPackage> usedByPackagesList = new ArrayList<SubLPackage>();
+  //private ArrayList<SubLPackage> usesPackagesList = new ArrayList<SubLPackage>();
   private ArrayList<SubLString>  nickNames = new ArrayList<SubLString>();
   private ArrayList<SubLSymbol>  shadowingSymbols = new ArrayList<SubLSymbol>();
   private Set<SubLSymbol>        exportedSymbols = new HashSet<SubLSymbol>();

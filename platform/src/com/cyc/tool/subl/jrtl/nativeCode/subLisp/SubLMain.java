@@ -8,7 +8,7 @@ package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 // Internal imports
 import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Interpreter;
-import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Site;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Main;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLSequence;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.util.*;
@@ -152,7 +152,7 @@ public final class SubLMain {
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms");
-  	if (Site.isSubLisp) Interpreter.initializeLisp();
+  	if (Main.isSubLisp) Interpreter.initializeLisp();
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.character_names");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.math_utilities");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility");

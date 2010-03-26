@@ -19,6 +19,10 @@
 
 package  com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.JavaException;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispError;
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Main;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
@@ -164,11 +168,13 @@ public  final class Errors extends SubLTrampolineFile {
   }
 
   public static final SubLObject error(String str) {
+  	if (!Main.isSubLisp) return Lisp.error(new LispError(str));
     error(str, null);
     throw SubLObjectFactory.makeException("Unexpected situation."); // this should never happen
   }
 
   public static final SubLObject error(Exception e) {
+  	if (!Main.isSubLisp) return Lisp.error(new JavaException(e));
     error(e instanceof SubLException ? null : e.toString(), e);
     throw SubLObjectFactory.makeException("Unexpected situation."); // this should never happen
   }

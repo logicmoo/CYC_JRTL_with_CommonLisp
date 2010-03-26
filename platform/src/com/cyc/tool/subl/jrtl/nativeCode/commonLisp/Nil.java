@@ -38,12 +38,15 @@ import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLSequence;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public final class Nil extends LispSymbolImpl implements LispSequence,SubLList
 {
-  // SubLList
+  final public static SubLSymbol NIL = new Nil(PACKAGE_CL);
+
+	// SubLList
   @Override
   public SubLObject get(int index) {
   	return this;
@@ -56,8 +59,18 @@ public final class Nil extends LispSymbolImpl implements LispSequence,SubLList
 	public SubLObject first() {
 		return this;
 		}
-    final public static SubLSymbol NIL = new Nil(PACKAGE_CL);
+	
+	 @Override
+	public SubLList toList() {
+		// TODO Auto-generated method stub
+		return this;
+	}
 
+	 @Override
+	public SubLSequence toSeq() {
+		return this;
+	}
+	 
     private Nil(SubLPackage pkg)
     {
         super("NIL", pkg);

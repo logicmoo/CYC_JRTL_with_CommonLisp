@@ -2,7 +2,7 @@
  * JavaObject.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: JavaObject.java 12513 2010-03-02 22:35:36Z ehuelsmann $
+ * $Id: JavaObject.java 12570 2010-03-23 12:59:08Z mevenson $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -36,11 +36,14 @@ package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
 
-import java.lang.reflect.*;
-
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.math.BigInteger;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Set;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
 
@@ -249,6 +252,13 @@ public final class ABCLJavaObject extends AbstractLispObject implements JavaObje
 			if (cc.isInstance(obj))
 				return obj;
 			if (cc.isAssignableFrom(intendedClass)) {
+              // narrower type of 'obj'?
+
+              // ME 20100323: I decided not to because a) we don't
+              // know the "proper" class to narrow to (i.e. maybe
+              // there's something "narrower" and b) I'm not sure how
+              // primitive types relate to their boxed
+              // representations.  
 				return obj;
 			} else {
 				return error(new TypeError(intendedClass.getName() + " is not assignable to " + c.getName()));
@@ -334,20 +344,22 @@ public final class ABCLJavaObject extends AbstractLispObject implements JavaObje
     public SubLObject getParts() {
 	if(obj != null) {
 	    SubLObject parts = NIL;
-	    if(obj.getClass().isArray()) {
-		SubLString empty = makeString("");
+            parts = parts.push(makeCons("Java class",
+                                        makeJavaObject(obj.getClass())));
+            if (intendedClass != null) {
+                parts = parts.push(makeCons("intendedClass", new SimpleString(intendedClass.getCanonicalName())));
+            }
+	    if (obj.getClass().isArray()) {
 		int length = Array.getLength(obj);
-		for(int i = 0; i < length; i++) {
-		    parts = parts.push
-			(makeCons(empty, ABCLJavaObject.makeJavaObject(Array.get(obj, i))));
+		for (int i = 0; i < length; i++) {
+		    parts = parts
+                        .push(makeCons(new SimpleString(i), 
+                                       makeJavaObject(Array.get(obj, i))));
 		}
-		parts = parts.nreverse();
 	    } else {
-		parts = parts.push(makeCons("Java class",
-					    new ABCLJavaObject(obj.getClass())));
 		parts = LispSymbols.NCONC.execute(parts, getInspectedFields());
 	    }
-	    return parts;
+	    return parts.nreverse();
 	} else {
 	    return NIL;
 	}

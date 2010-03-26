@@ -53,7 +53,11 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public abstract class AbstractLispObject extends SubLInchworm implements SubLObject
 {
-	
+  @Override
+  public boolean isCons() {
+  	return false;
+  }
+
 	@Override
 	public String toString() {
 		return super.toString();

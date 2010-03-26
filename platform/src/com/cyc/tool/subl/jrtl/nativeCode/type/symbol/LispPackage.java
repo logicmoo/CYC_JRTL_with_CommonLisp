@@ -67,8 +67,8 @@ public abstract class LispPackage extends AbstractLispObject
 
   protected HashMap<String,SubLSymbol> shadowingSymbolsHT;
   protected ArrayList<String> nicknames;
-  protected SubLObject useList = null;
-  protected ArrayList<SubLPackage> usedByList = null;
+  protected SubLObject usesPackagesList = null;
+  protected ArrayList<SubLObject> usedByPackagesList = new ArrayList<SubLObject>();
   
 	protected String javaName;
   protected SubLString name;
@@ -169,7 +169,7 @@ public abstract class LispPackage extends AbstractLispObject
 
     {
         ArrayList<String> arrayList = null;
-        while (newNicks != NIL) {
+        while (newNicks instanceof SubLCons) {
             if (arrayList == null)
                 arrayList = new ArrayList<String>();
             arrayList.add(javaString(newNicks.first()));
@@ -219,9 +219,9 @@ public abstract class LispPackage extends AbstractLispObject
         if (symbol != null)
             return symbol;
         // Look in external symbols of used packages.
-        if (useList instanceof SubLCons) {
-            SubLObject usedPackages = useList;
-            while (usedPackages != NIL) {
+        if (usesPackagesList instanceof SubLCons) {
+            SubLObject usedPackages = usesPackagesList;
+            while (usedPackages instanceof SubLCons) {
                 SubLPackage pkg = (SubLPackage) usedPackages.first();
                 symbol = pkg.findExternalSymbol(name);
                 if (symbol != null)
@@ -246,9 +246,9 @@ public abstract class LispPackage extends AbstractLispObject
         if (symbol != null)
             return thread.setValues(symbol, Keyword.INTERNAL);
         // Look in external symbols of used packages.
-        if (useList instanceof SubLCons) {
-            SubLObject usedPackages = useList;
-            while (usedPackages != NIL) {
+        if (usesPackagesList instanceof SubLCons) {
+            SubLObject usedPackages = usesPackagesList;
+            while (usedPackages instanceof SubLCons) {
                 SubLPackage pkg = (SubLPackage) usedPackages.first();
                 symbol = pkg.findExternalSymbol(s);
                 if (symbol != null)
@@ -310,9 +310,9 @@ public abstract class LispPackage extends AbstractLispObject
         if (symbol != null)
             return symbol;
         // Look in external symbols of used packages.
-        if (useList instanceof SubLCons) {
-            SubLObject usedPackages = useList;
-            while (usedPackages != NIL) {
+        if (usesPackagesList instanceof SubLCons) {
+            SubLObject usedPackages = usesPackagesList;
+            while (usedPackages instanceof SubLCons) {
                 SubLPackage pkg = (SubLPackage) usedPackages.first();
                 symbol = pkg.findExternalSymbol(symbolName, hash);
                 if (symbol != null)
@@ -336,9 +336,9 @@ public abstract class LispPackage extends AbstractLispObject
         if (symbol != null)
             return (SubLSymbol) thread.setValues(symbol, Keyword.INTERNAL);
         // Look in external symbols of used packages.
-        if (useList instanceof SubLCons) {
-            SubLObject usedPackages = useList;
-            while (usedPackages != NIL) {
+        if (usesPackagesList instanceof SubLCons) {
+            SubLObject usedPackages = usesPackagesList;
+            while (usedPackages instanceof SubLCons) {
                 SubLPackage pkg = (SubLPackage) usedPackages.first();
                 symbol = pkg.findExternalSymbol(s, hash);
                 if (symbol != null)
@@ -364,10 +364,10 @@ public abstract class LispPackage extends AbstractLispObject
             export(symbol);
             return symbol;
         }
-        if (useList instanceof SubLCons) {
+        if (usesPackagesList instanceof SubLCons) {
             // Look in external symbols of used packages.
-            SubLObject usedPackages = useList;
-            while (usedPackages != NIL) {
+            SubLObject usedPackages = usesPackagesList;
+            while (usedPackages instanceof SubLCons) {
                 SubLPackage pkg = (SubLPackage) usedPackages.first();
                 symbol = pkg.findExternalSymbol(s, hash);
                 if (symbol != null) {
@@ -398,9 +398,9 @@ public abstract class LispPackage extends AbstractLispObject
             // Check for conflicts that might be exposed in used package list
             // if we remove the shadowing symbol.
             SubLSymbol sym = null;
-            if (useList instanceof SubLCons) {
-                SubLObject usedPackages = useList;
-                while (usedPackages != NIL) {
+            if (usesPackagesList instanceof SubLCons) {
+                SubLObject usedPackages = usesPackagesList;
+                while (usedPackages instanceof SubLCons) {
                     SubLPackage pkg = (SubLPackage) usedPackages.first();
                     SubLSymbol s = pkg.findExternalSymbol(symbolName);
                     if (s != null) {
@@ -476,8 +476,8 @@ public abstract class LispPackage extends AbstractLispObject
             added = true;
         }
         if (added || internalSymbols.getHT(symbolName) == symbol) {
-            if (usedByList != null) {
-                for (Iterator it = usedByList.iterator(); it.hasNext();) {
+            if (usedByPackagesList != null) {
+                for (Iterator it = usedByPackagesList.iterator(); it.hasNext();) {
                     SubLPackage pkg = (SubLPackage) it.next();
                     SubLSymbol sym = pkg.findAccessibleSymbol(symbolName);
                     if (sym != null && sym != symbol) {
@@ -523,9 +523,9 @@ public abstract class LispPackage extends AbstractLispObject
             }
         } else {
             // Signal an error if symbol is not accessible.
-            if (useList instanceof SubLCons) {
-                SubLObject usedPackages = useList;
-                while (usedPackages != NIL) {
+            if (usesPackagesList instanceof SubLCons) {
+                SubLObject usedPackages = usesPackagesList;
+                while (usedPackages instanceof SubLCons) {
                     SubLPackage pkg = (SubLPackage) usedPackages.first();
                     if (pkg.findExternalSymbol(symbolName) == symbol)
                         return; // OK.
@@ -576,9 +576,9 @@ public abstract class LispPackage extends AbstractLispObject
                 where = Keyword.INTERNAL;
             } else {
                 // Look in external symbols of used packages.
-                if (useList instanceof SubLCons) {
-                    SubLObject usedPackages = useList;
-                    while (usedPackages != NIL) {
+                if (usesPackagesList instanceof SubLCons) {
+                    SubLObject usedPackages = usesPackagesList;
+                    while (usedPackages instanceof SubLCons) {
                         SubLPackage pkg = (SubLPackage) usedPackages.first();
                         sym = pkg.findExternalSymbol(symbolName);
                         if (sym != null) {
@@ -611,9 +611,9 @@ public abstract class LispPackage extends AbstractLispObject
     // symbols of PACKAGE."
     public void usePackage(SubLPackage pkg)
     {
-        if (useList == null)
-            useList = NIL;
-        if (!memq(pkg, useList)) {
+        if (usesPackagesList == null)
+            usesPackagesList = NIL;
+        if (!memq(pkg, usesPackagesList)) {
             // "USE-PACKAGE checks for name conflicts between the newly
             // imported symbols and those already accessible in package."
             List symbols = pkg.getExternalSymbols();
@@ -632,32 +632,32 @@ public abstract class LispPackage extends AbstractLispObject
                     }
                 }
             }
-            useList = useList.push(pkg);
+            usesPackagesList = usesPackagesList.push(pkg);
             // Add toSubLPackage() package to the used-by list of pkg.
-            if (pkg.usedByList != null)
-                Debug.assertTrue(!pkg.usedByList.contains(toSubLPackage()));
-            if (pkg.usedByList == null)
-                pkg.usedByList = new ArrayList<SubLPackage>();
-            pkg.usedByList.add(toSubLPackage());
+            if (pkg.usedByPackagesList != null)
+                Debug.assertTrue(!pkg.usedByPackagesList.contains(toSubLPackage()));
+            if (pkg.usedByPackagesList == null)
+                pkg.usedByPackagesList = new ArrayList<SubLObject>();
+            pkg.usedByPackagesList.add(toSubLPackage());
         }
     }
 
     public void unusePackage(SubLPackage pkg)
     {
-        if (useList instanceof SubLCons) {
-            if (memq(pkg, useList)) {
+        if (usesPackagesList instanceof SubLCons) {
+            if (memq(pkg, usesPackagesList)) {
                 // FIXME Modify the original list instead of copying it!
                 SubLObject newList = NIL;
-                while (useList != NIL) {
-                    if (useList.first() != pkg)
-                        newList = newList.push(useList.first());
-                    useList = useList.rest();
+                while (usesPackagesList instanceof SubLCons) {
+                    if (usesPackagesList.first() != pkg)
+                        newList = newList.push(usesPackagesList.first());
+                    usesPackagesList = usesPackagesList.rest();
                 }
-                useList = newList.nreverse();
-                Debug.assertTrue(!memq(pkg, useList));
-                Debug.assertTrue(pkg.usedByList != null);
-                Debug.assertTrue(pkg.usedByList.contains(toSubLPackage()));
-                pkg.usedByList.remove(toSubLPackage());
+                usesPackagesList = newList.nreverse();
+                Debug.assertTrue(!memq(pkg, usesPackagesList));
+                Debug.assertTrue(pkg.usedByPackagesList != null);
+                Debug.assertTrue(pkg.usedByPackagesList.contains(toSubLPackage()));
+                pkg.usedByPackagesList.remove(toSubLPackage());
             }
         }
     }
@@ -697,21 +697,21 @@ public abstract class LispPackage extends AbstractLispObject
 
     public SubLObject getUseList()
     {
-        if (useList == null)
-            useList = NIL;
-        return useList;
+        if (usesPackagesList == null)
+            usesPackagesList = NIL;
+        return usesPackagesList;
     }
 
     public boolean uses(SubLObject pkg)
     {
-        return (useList instanceof SubLCons) && memq(pkg, useList);
+        return (usesPackagesList instanceof SubLCons) && memq(pkg, usesPackagesList);
     }
 
     public SubLObject getUsedByList()
     {
         SubLObject list = NIL;
-        if (usedByList != null) {
-            for (Iterator it = usedByList.iterator(); it.hasNext();) {
+        if (usedByPackagesList != null) {
+            for (Iterator it = usedByPackagesList.iterator(); it.hasNext();) {
                 SubLPackage pkg = (SubLPackage) it.next();
                 list = makeCons(pkg, list);
             }
@@ -741,9 +741,9 @@ public abstract class LispPackage extends AbstractLispObject
         ArrayList<SubLSymbol> list = new ArrayList<SubLSymbol>();
         list.addAll(internalSymbols.getSymbols());
         list.addAll(externalSymbols.getSymbols());
-        if (useList instanceof SubLCons) {
-            SubLObject usedPackages = useList;
-            while (usedPackages != NIL) {
+        if (usesPackagesList instanceof SubLCons) {
+            SubLObject usedPackages = usesPackagesList;
+            while (usedPackages instanceof SubLCons) {
                 SubLPackage pkg = (SubLPackage) usedPackages.first();
                 List<SubLSymbol> symbols = ((LispPackage)pkg).externalSymbols.getSymbols();
                 for (int i = 0; i < symbols.size(); i++) {
@@ -778,9 +778,9 @@ public abstract class LispPackage extends AbstractLispObject
     public synchronized SubLObject PACKAGE_INHERITED_SYMBOLS()
     {
         SubLObject list = NIL;
-        if (useList instanceof SubLCons) {
-            SubLObject usedPackages = useList;
-            while (usedPackages != NIL) {
+        if (usesPackagesList instanceof SubLCons) {
+            SubLObject usedPackages = usesPackagesList;
+            while (usedPackages instanceof SubLCons) {
                 SubLPackage pkg = (SubLPackage) usedPackages.first();
                 List externals = pkg.getExternalSymbols();
                 for (int i = externals.size(); i-- > 0;) {

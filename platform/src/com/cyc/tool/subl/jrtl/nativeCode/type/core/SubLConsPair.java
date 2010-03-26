@@ -19,6 +19,7 @@
 
 package  com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispConsPair;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -36,14 +37,17 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.ComparatorGenericKey;
 import com.cyc.tool.subl.util.ComparatorIdentityKey;
 
-public  final class SubLConsPair extends AbstractSubLList implements SubLCons, SubLList, CommonSymbols{
+public  final class SubLConsPair extends LispConsPair implements SubLCons, SubLList, CommonSymbols{
   
   //// Constructors
   
   /** Creates a new instance of SubLConsPair. */
-  SubLConsPair(SubLObject car, SubLObject cdr) {
-    this.car = car;
-    this.cdr = cdr;
+  public SubLConsPair(SubLObject car, SubLObject cdr) {
+  	super(car,cdr);
+  }
+  
+  public SubLConsPair(SubLObject car) {
+  	super(car);
   }
   
   //// Public Area
@@ -1193,7 +1197,7 @@ public  final class SubLConsPair extends AbstractSubLList implements SubLCons, S
   
   //// Internal Rep
   
-  private SubLObject car;
-  private SubLObject cdr;
+//  private SubLObject car;
+ // private SubLObject cdr;
   
 }

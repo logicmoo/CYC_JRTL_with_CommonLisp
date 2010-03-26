@@ -52,7 +52,7 @@ public final class Time
       @Override
       public SubLObject execute(SubLObject arg)
       {
-      	SubLConsPair.setCount(0);
+      	LispConsPair.setCount(0);
         long realStart = System.currentTimeMillis();
         try
           {
@@ -61,7 +61,7 @@ public final class Time
         finally
           {
             long realElapsed = System.currentTimeMillis() - realStart;
-            long count = SubLConsPair.getCount();
+            long count = LispConsPair.getCount();
             LispStream out =
               checkCharacterOutputStream(LispSymbols.TRACE_OUTPUT.symbolValue());
             out.freshLine();

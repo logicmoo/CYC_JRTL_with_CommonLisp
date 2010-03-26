@@ -228,7 +228,7 @@
 (defconstant +lisp-thread-class+ "com/cyc/tool/subl/jrtl/nativeCode/commonLisp/LispThread")
 (defconstant +lisp-thread+ "Lcom/cyc/tool/subl/jrtl/nativeCode/commonLisp/LispThread;")
 (defconstant +lisp-cons-class+ "com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLCons")
-(defconstant +lisp-cons-pair-class+ "com/cyc/tool/subl/jrtl/nativeCode/commonLisp/SubLConsPair")
+(defconstant +lisp-cons-pair-class+ "com/cyc/tool/subl/jrtl/nativeCode/type/core/SubLConsPair")
 (defconstant +lisp-cons+ "Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLCons;")
 (defconstant +lisp-integer-class+ "com/cyc/tool/subl/jrtl/nativeCode/commonLisp/LispInteger")
 (defconstant +lisp-integer+ "Lcom/cyc/tool/subl/jrtl/nativeCode/commonLisp/LispInteger;")

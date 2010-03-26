@@ -42,13 +42,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.LispPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 
 public final class LispPackages
 {
-  private static final ArrayList<SubLPackage> packages = new ArrayList<SubLPackage>();
-  private static final HashMap<String,SubLPackage> map = new HashMap<String,SubLPackage>();
+	public static final ArrayList<SubLPackage> packages = new ArrayList<SubLPackage>();
+  public static final HashMap<String,SubLPackage> map = new HashMap<String,SubLPackage>();
 
   public static final synchronized SubLPackage createPackage(String name)
   {
@@ -57,10 +58,10 @@ public final class LispPackages
 
   public static final synchronized SubLPackage createPackage(String name, int size)
   {
-    SubLPackage pkg = (SubLPackage) map.get(name);
+    SubLPackage pkg = findPackage(name);
     if (pkg == null)
       {
-        pkg = size != 0 ? new SubLPackage(name, size) : new SubLPackage(name);
+        pkg =size != 0 ? new SubLPackage(name, size) : new SubLPackage(name);
         packages.add(pkg);
         map.put(name, pkg);
       }
@@ -73,7 +74,7 @@ public final class LispPackages
 
   {
     final String name = pkg.getJavaName();
-    if (map.get(name) != null)
+    if (findPackage(name) != null)
       {
         error(new LispError("A package named " + name + " already exists."));
         return;
@@ -100,7 +101,7 @@ public final class LispPackages
   public static final synchronized SubLPackage makePackage(String name)
 
   {
-    if (map.get(name) != null)
+    if (findPackage(name) != null)
       {
         error(new LispError("A package named " + name + " already exists."));
         // Not reached.
@@ -115,7 +116,7 @@ public final class LispPackages
   public static final synchronized void addNickname(SubLPackage pkg, String nickname)
 
   {
-    Object obj = map.get(nickname);
+    Object obj = findPackage(nickname);
     if (obj != null && obj != pkg)
       {
         error(new PackageError("A package named " + nickname + " already exists."));

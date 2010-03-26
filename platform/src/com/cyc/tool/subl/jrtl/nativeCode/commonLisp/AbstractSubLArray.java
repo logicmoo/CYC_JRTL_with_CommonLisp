@@ -42,6 +42,11 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 public abstract class AbstractSubLArray extends AbstractSubLSequence implements AbstractArray
 {
 	
+		 @Override
+		public boolean isArrayBased() {
+			 return true;
+		}
+	
   	 @Override
   	public int size() {
   		 return cl_length();

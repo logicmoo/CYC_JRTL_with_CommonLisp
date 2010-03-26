@@ -87,15 +87,15 @@ public class LispObjectFactory {
 	}
 
 	public static SubLCons makeCons(SubLObject car) {
-		return new SubLConsPair(car);
+		return SubLObjectFactory.makeCons(car, NIL);
 	}
 
 	public static SubLCons makeCons(SubLObject car, SubLObject cdr) {
-		return new SubLConsPair(car, cdr);
+		return SubLObjectFactory.makeCons(car, cdr);
 	}
 
 	public static SubLCons makeCons(String car, SubLObject cdr) {
-		return new SubLConsPair(car, cdr);
+		return SubLObjectFactory.makeCons(makeString(car), cdr);
 	}
 
 	public static Fixnum makeInteger(int n) {

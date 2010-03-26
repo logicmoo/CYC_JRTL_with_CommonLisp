@@ -1006,7 +1006,6 @@ abstract public class SubLInchworm implements ISubLInchworm {
 
 	
 	public boolean isArrayBased() {
-		unimplimentedSubLFunction();
 		return false;
 	}
 

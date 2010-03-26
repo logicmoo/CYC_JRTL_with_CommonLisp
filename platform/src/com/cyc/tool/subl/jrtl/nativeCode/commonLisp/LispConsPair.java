@@ -36,11 +36,12 @@ package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
 
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public final class SubLConsPair extends AbstractLispObject implements SubLCons
+public abstract class LispConsPair extends AbstractSubLList implements SubLCons
 {
 	@Override
 	public int consLength() {
@@ -48,8 +49,13 @@ public final class SubLConsPair extends AbstractLispObject implements SubLCons
 		return cl_length();
 	}
 	
-  private SubLObject car;
-  private SubLObject cdr;
+	@Override
+	public boolean isArrayBased() {
+		return false;
+	}
+	
+  protected SubLObject car;
+  protected SubLObject cdr;
 
   /* (non-Javadoc)
 	 * @see com.cyc.tool.subl.jrtl.nativeCode.commonLisp.SubLCons#setCdr(com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObject)
@@ -65,21 +71,21 @@ public final class SubLConsPair extends AbstractLispObject implements SubLCons
 		return cdr;
 	}
 
-	public SubLConsPair(SubLObject car, SubLObject cdr)
+	public LispConsPair(SubLObject car, SubLObject cdr)
   {
     this.setCar(car);
     this.setCdr(cdr);
     ++count;
   }
 
-  public SubLConsPair(SubLObject car)
+  public LispConsPair(SubLObject car)
   {
     this.setCar(car);
     this.setCdr(NIL);
     ++count;
   }
 
-  public SubLConsPair(String name, SubLObject value)
+  public LispConsPair(String name, SubLObject value)
   {
     this.setCar(makeString(name));
     this.setCdr(value != null ? value : NULL_VALUE);
@@ -192,11 +198,15 @@ public final class SubLConsPair extends AbstractLispObject implements SubLCons
 	 * @see com.cyc.tool.subl.jrtl.nativeCode.commonLisp.SubLCons#cddr()
 	 */
   @Override
-  public final SubLObject cddr()
+  public SubLObject cddr()
   {
     return rest().rest();
   }
 
+  @Override
+  public boolean isCons() {
+  	return true;
+  }
   /* (non-Javadoc)
 	 * @see com.cyc.tool.subl.jrtl.nativeCode.commonLisp.SubLCons#caddr()
 	 */
@@ -286,10 +296,11 @@ public final class SubLConsPair extends AbstractLispObject implements SubLCons
 	 * @see com.cyc.tool.subl.jrtl.nativeCode.commonLisp.SubLCons#equal(com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObject)
 	 */
   @Override
-  public final boolean equal(SubLObject obj)
+  public boolean equal(SubLObject obj)
   {
     if (this == obj)
       return true;
+    if (obj.isArrayBased()) { return super.equal(obj); }
     if (obj instanceof SubLCons)
       {
         if (first().equal(((SubLCons)obj).first()) && rest().equal(((SubLCons)obj).rest()))
@@ -302,10 +313,11 @@ public final class SubLConsPair extends AbstractLispObject implements SubLCons
 	 * @see com.cyc.tool.subl.jrtl.nativeCode.commonLisp.SubLCons#equalp(com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObject)
 	 */
   @Override
-  public final boolean equalp(SubLObject obj)
+  public boolean equalp(SubLObject obj)
   {
     if (this == obj)
       return true;
+    if (obj.isArrayBased()) { return super.equalp(obj); }
     if (obj instanceof SubLCons)
       {
         if (first().equalp(((SubLCons)obj).first()) && rest().equalp(((SubLCons)obj).rest()))
@@ -489,7 +501,7 @@ public final class SubLConsPair extends AbstractLispObject implements SubLCons
 	 * @see com.cyc.tool.subl.jrtl.nativeCode.commonLisp.SubLCons#isList()
 	 */
   @Override
-  public final boolean isList()
+  public boolean isList()
   {
     return true;
   }
