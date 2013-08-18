@@ -715,7 +715,16 @@ public  abstract class AbstractSubLObject extends AbstractLispObject implements 
   public final SubLObject eighth() { return get(7); }
   public final SubLObject ninth() { return get(8); }
   public final SubLObject tenth() { return get(9); }
-  
+
+  public boolean isPackageIterator() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+  public boolean isAlien() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	  
   //// Protected Area
   
   //// Private Area

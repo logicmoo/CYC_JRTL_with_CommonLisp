@@ -1964,4 +1964,14 @@ public class SubLException extends RuntimeException implements SubLObject {
 		// TODO Auto-generated method stub
 		return hashCode();
 	}
+	
+	  public boolean isPackageIterator() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+	  public boolean isAlien() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+		  
 }

@@ -1895,6 +1895,16 @@ public  abstract class AbstractSubLNumber
 	public int hashCodeLisp() {
 		return hashCode();
 	}
+	
+	  public boolean isPackageIterator() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+	  public boolean isAlien() {
+			// TODO Auto-generated method stub
+			return false;
+		}
+		  
   //// Protected Area
   
   //// Private Area

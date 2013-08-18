@@ -247,6 +247,7 @@ public  interface SubLObject extends Cloneable, LispObject {
   public static final int MAX_HASH_LENGTH = 8;
   public static final int MAX_HASH_DEPTH = 8;
   public static final int DEFAULT_EXCEEDED_HASH_VALUE = 0;
+boolean isPackageIterator();
   
   
 }
