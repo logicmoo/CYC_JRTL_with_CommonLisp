@@ -432,7 +432,7 @@ public interface LispObject {
 
   public abstract SubLObject STRING();
 
-  public abstract char[] chars();
+  public abstract char[] charsOld();
 
   public abstract char[] getStringChars();
 

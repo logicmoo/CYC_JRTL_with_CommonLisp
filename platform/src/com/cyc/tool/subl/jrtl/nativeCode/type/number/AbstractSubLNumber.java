@@ -1314,7 +1314,7 @@ public  abstract class AbstractSubLNumber
 	}
 
 	@Override
-	public char[] chars() {
+	public char[] charsOld() {
 		unimplimentedLispFunction();
 		return null;
 	}

@@ -1375,7 +1375,7 @@ public class SubLException extends RuntimeException implements SubLObject {
 	}
 
 	@Override
-	public char[] chars() {
+	public char[] charsOld() {
 		unimplimentedLispFunction();
 		return null;
 	}

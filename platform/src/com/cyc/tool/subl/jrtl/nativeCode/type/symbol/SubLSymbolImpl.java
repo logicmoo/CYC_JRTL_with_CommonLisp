@@ -185,7 +185,9 @@ public  final class SubLSymbolImpl extends AbstractSubLSymbol implements SubLSym
   }
 
   public final SubLObject getDynamicValue() {
-    SubLObject result = ((SubLThread)Thread.currentThread()).bindingsList[id];
+	Thread th = Thread.currentThread();
+	  
+    SubLObject result = ((SubLThread)th).bindingsList[id];
     if (result != UNBOUND) { return result; }
     result = value; //avoid multiple references to value since it is volatile
     return (result != UNBOUND) ? result : Errors.error(this + " is not bound.");

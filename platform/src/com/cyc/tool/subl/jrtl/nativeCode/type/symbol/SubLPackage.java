@@ -258,6 +258,7 @@ public  final class SubLPackage extends LispPackage implements SubLObject {
       if (result != null) {
         return result;
       }
+      if(usesPackagesList==null) return null;
       for (int i = 0,  size = usesPackagesList.size(); i < size; i++) {
         result = ((SubLPackage) usesPackagesList.get(i)).retrieveSymbol(symbolName);
         if (result != null) {

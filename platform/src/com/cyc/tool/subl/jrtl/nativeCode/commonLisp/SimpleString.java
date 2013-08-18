@@ -38,6 +38,7 @@ import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
 
@@ -100,8 +101,8 @@ public class SimpleString extends SubLString
 			super(charArray,start,end);
 		}
 
-		@Override
-    public char[] chars()
+    @Override
+    public char[] charsOld()
     {
         return buf;
     }

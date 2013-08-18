@@ -2483,7 +2483,7 @@ abstract public class SubLInchworm implements ISubLInchworm {
 	}
 
 	
-	public char[] chars() {
+	public char[] charsOld() {
 		unimplimentedLispFunction();
 		return null;
 	}

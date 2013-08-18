@@ -114,7 +114,7 @@ public class StreamFunctions {
 
 		{
 			final SubLString s = checkString(first);
-			char[] chars = s.chars();
+			char[] chars = s.charsOld();
 			final LispStream out = outSynonymOf(second);
 			final int start = third.intValue();
 			final int end;

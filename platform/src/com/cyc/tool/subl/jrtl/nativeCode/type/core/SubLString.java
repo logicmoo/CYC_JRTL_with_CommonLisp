@@ -304,6 +304,7 @@ public abstract  /*final*/ class SubLString extends AbstractString implements Su
     return h;
   }
   
+    @Override
   public final int size() {
     return size;
   }

@@ -148,15 +148,14 @@ public final class ComplexString extends SubLString
     return LispThread.currentThread().setValues(value1, value2);
   }
 
-  @Override
-  public char[] chars()
+  public char[] charsOld()
   {
     if (buf != null)
       return buf;
     Debug.assertTrue(array != null);
     char[] copy = new char[size];
     if (array instanceof SubLString)
-      System.arraycopy(array.chars(), displacement, copy, 0, size);
+      System.arraycopy(array.charsOld(), displacement, copy, 0, size);
     else if (array.getElementType() == LispSymbols.CHARACTER)
       {
         for (int i = 0; i < size; i++)
@@ -174,9 +173,9 @@ public final class ComplexString extends SubLString
   public char[] getStringChars()
   {
     if (fillPointer < 0)
-      return chars();
+      return charsOld();
     char[] ret = new char[fillPointer];
-    System.arraycopy(chars(), 0, ret, 0, fillPointer);
+    System.arraycopy(charsOld(), 0, ret, 0, fillPointer);
     return ret;
   }
 
@@ -325,15 +324,15 @@ public final class ComplexString extends SubLString
   public String getString()
   {
     if (fillPointer >= 0)
-      return new String(chars(), 0, fillPointer);
+      return new String(charsOld(), 0, fillPointer);
     else
-      return new String(chars());
+      return new String(charsOld());
   }
 
   @Override
   public Object javaInstance()
   {
-    return new String(chars());
+    return new String(charsOld());
   }
 
   @Override

@@ -110,6 +110,7 @@ public final class SubLMain {
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.Guids");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables");
+    SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.JavaLink");
     //SubLFiles.initialize("Keyhashes");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.ReadWriteLocks");
@@ -117,7 +118,13 @@ public final class SubLMain {
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.Processes");
+        try {
+            SubLPackage.setCurrentPackage(SubLPackage.CYC_PACKAGE);
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.Regex");
+        }
+        finally {
+            SubLPackage.setCurrentPackage(SubLPackage.SUBLISP_PACKAGE);
+        }
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.Storage");
@@ -147,10 +154,10 @@ public final class SubLMain {
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.environment");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.foreign");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.format");
+        SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.random");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind");
-    SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation");
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms");
   	if (Main.isSubLisp) Interpreter.initializeLisp();
     SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.character_names");
@@ -171,14 +178,20 @@ public final class SubLMain {
     }
   }
   
+    public static boolean isInternalInitializationDone() {
+        return SubLMain.isSubLInitialized;
+    }
+    
   public static void initializeTranslatedSystems() {
     // @todo make this more flexible once we translate multiple systems
     // or want to ship it without the dependency on cyc
+        try {
     SubLPackage.setCurrentPackage(SubLPackage.CYC_PACKAGE);
     try {
       Eval.initialize_subl_interface_file(SubLObjectFactory.
           makeString("com.cyc.cycjava.cycl.cycl"));
     } catch (Exception e) {
+      // Logger.getAnonymousLogger().log(Level.SEVERE, e.getMessage(), e);
       // ignore
     } finally {
       try {
@@ -190,6 +203,10 @@ public final class SubLMain {
     }
     PrintLow.registerJRTLPrintMethods();
   }
+        finally {
+            SubLMain.isSubLInitialized = true;
+        }
+    }
 
   public static void handlePatches() {
     // placeholder
@@ -214,8 +231,13 @@ public final class SubLMain {
   }
   
   public static boolean shouldQuitAfterExecutingInitializationForm() {
-    Boolean value = (Boolean)me.argNameToArgValueMap.get("-q");
-    return (value == Boolean.TRUE);
+        final Boolean value = (Boolean)SubLMain.me.argNameToArgValueMap.get("-q");
+        return value == Boolean.TRUE;
+    }
+    
+    public static boolean isInAllegroCompatibilityMode() {
+        final Boolean value = (Boolean)SubLMain.me.argNameToArgValueMap.get("-a");
+        return value == Boolean.TRUE;
   }
   
   public static boolean shouldRunInBackground() {
@@ -232,12 +254,20 @@ public final class SubLMain {
     return Errors.unimplementedMethod("SubLMain.get_red_object()");
   }
   
-  public static final boolean isInitialized() {
-    return isInitialized;
+    public static boolean isInitialized() {
+        return SubLMain.isInitialized;
+    }
+    
+    public static void setIsInitialized() {
+        SubLMain.isInitialized = true;
   }
   
-  public static final void setIsInitialized() {
-    isInitialized = true;
+    public static boolean isFullyInitialized() {
+        return SubLMain.isFullyInitialized;
+    }
+    
+    public static void setIsFullyInitialized() {
+        SubLMain.isFullyInitialized = true;
   }
   
   public static void setMainReader(SubLReader reader) {
@@ -431,6 +461,8 @@ public final class SubLMain {
   private static Set<String> argRequiredCommandLineArgs = new HashSet<String>();
   private Map<String, Object> argNameToArgValueMap = new HashMap<String, Object>();
   private static boolean isInitialized = false;
+  private static boolean isFullyInitialized = false;
+  private static boolean isSubLInitialized = false;
   private static final Set<SubLFunction> lowMemoryCallbacks = new HashSet<SubLFunction>();
   private static final Semaphore lowMemorySemaphore = new Semaphore(0);
   
@@ -452,12 +484,14 @@ public final class SubLMain {
     final Runtime rt = Runtime.getRuntime();
     SubLMain.me.handlePatches();
     SubLMain.me.processCommandLineArgs(args);
+    
     try {
       SubLProcess subLProcess = new SubLProcess("Initial Lisp Listener") {
         public void safeRun() {
           try {
+              
            // if (!shouldRunInBackground()) {
-              System.out.println("Starting LarKC.");
+              System.out.println("Starting CYC/LarKC.");
            // }
             long startTime = System.currentTimeMillis();
             try {

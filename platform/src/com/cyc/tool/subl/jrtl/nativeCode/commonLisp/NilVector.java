@@ -48,7 +48,7 @@ public final class NilVector extends SubLString
     }
 
     @Override
-    public char[] chars()
+    public char[] charsOld()
     {
         if (capacity != 0)
             accessError();

@@ -1156,9 +1156,9 @@ public abstract class AbstractLispObject extends SubLInchworm implements SubLObj
     return error(new TypeError(writeToString() + " cannot be coerced to a string."));
   }
 
-  public char[] chars()
+  public char[] charsOld()
   {
-    return checkString(this).chars();
+    return checkString(this).charsOld();
   }
 
   public char[] getStringChars()
