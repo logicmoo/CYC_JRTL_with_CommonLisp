@@ -50,7 +50,11 @@ public final class LispThread extends LispObject
     final static ConcurrentHashMap<Thread,LispThread> map =
        new ConcurrentHashMap<Thread,LispThread>();
 
+	
     LispObject threadValue = NIL;
+
+	static Thread oneOnlyJT;
+	static LispThread oneOnlyLT;
 
     private static ThreadLocal<LispThread> threads = new ThreadLocal<LispThread>(){
         @Override
@@ -59,14 +63,17 @@ public final class LispThread extends LispObject
             LispThread thread = LispThread.map.get(thisThread);
             if (thread == null) {
                 thread = new LispThread(thisThread);
+				oneOnlyJT=thisThread;
+				oneOnlyLT=thread;
                 LispThread.map.put(thisThread,thread);
             }
             return thread;
         }
     };
 
-    public static final LispThread currentThread()
-    {
+
+	public static final LispThread currentThread() {
+		if(Thread.currentThread()==oneOnlyJT) return oneOnlyLT;
         return threads.get();
     }
 
@@ -664,6 +671,8 @@ public final class LispThread extends LispObject
     }
     
     private void ensureStackCapacity(int itemsToPush) {
+		if (NO_STACK_FRAMES)
+			return;
         if (stackPtr + (itemsToPush - 1) >= stack.length)
             grow(itemsToPush);
     }
@@ -672,6 +681,9 @@ public final class LispThread extends LispObject
     private static final int SEGMENT_SIZE = (1 << 19) - 4; // 4 MiB page on x86_64
 
     private void grow(int numEntries) {
+    	if(NO_STACK_FRAMES) {
+    		return;
+    	}
         topStackSegment.stackPtr = stackPtr;
         if (spareStackSegment != null) {
             // Use spare segement if available
@@ -701,6 +713,9 @@ public final class LispThread extends LispObject
     }
 
     private StackFrame getStackTop() {
+    	if(NO_STACK_FRAMES) {
+    		return null;
+    	}
         topStackSegment.stackPtr = stackPtr;
         if (stackPtr == 0) {
             assert topStackSegment.next == null;
@@ -733,6 +748,9 @@ public final class LispThread extends LispObject
     }
     
     public final void pushStackFrame(JavaStackFrame frame) {
+		if (NO_STACK_FRAMES)
+			return;
+
         frame.setNext(getStackTop());
         ensureStackCapacity(1);
         stack[stackPtr] = frame;
@@ -740,6 +758,9 @@ public final class LispThread extends LispObject
     }
 
     private void popStackFrame(int numArgs) {
+    	if(NO_STACK_FRAMES) {
+    		return;
+    	}
         // Pop off intervening JavaFrames until we get back to a LispFrame
         Object stackObj = stack[stackPtr - 1];
         if (stackObj instanceof StackMarker) {
@@ -765,6 +786,9 @@ public final class LispThread extends LispObject
     }
     
     private void popStackSegment() {
+		if (NO_STACK_FRAMES)
+			return;
+
         topStackSegment.stackPtr = 0;
         if (topStackSegment.next != null) {
             spareStackSegment = topStackSegment;
@@ -779,8 +803,9 @@ public final class LispThread extends LispObject
         return (stackTop != null) ? stackTop.setEnv(env) : null;
     }
 
-    public void resetStack()
-    {
+	public void resetStack() {
+		if (NO_STACK_FRAMES)
+    		return;
         topStackSegment = new StackSegment(INITIAL_SEGMENT_SIZE, null);
         stack = topStackSegment.stack;
         spareStackSegment = null;
@@ -788,23 +813,24 @@ public final class LispThread extends LispObject
     }
 
     @Override
-    public LispObject execute(LispObject function)
-    {
+	public LispObject execute(LispObject function) {
+		if (NO_STACK_FRAMES)
+			return function.execute();
         ensureStackCapacity(STACK_FRAME_EXTRA);
         stack[stackPtr] = function;
         stack[stackPtr + 1] = STACK_MARKER_0;
         stackPtr += STACK_FRAME_EXTRA;
         try {
             return function.execute();
-        }
-        finally {
+		} finally {
             popStackFrame(0);
         }
     }
 
     @Override
-    public LispObject execute(LispObject function, LispObject arg)
-    {
+	public LispObject execute(LispObject function, LispObject arg) {
+		if (NO_STACK_FRAMES)
+			return function.execute(arg);
         ensureStackCapacity(1 + STACK_FRAME_EXTRA);
         stack[stackPtr] = function;
         stack[stackPtr + 1] = arg;
@@ -812,16 +838,15 @@ public final class LispThread extends LispObject
         stackPtr += 1 + STACK_FRAME_EXTRA;
         try {
             return function.execute(arg);
-        }
-        finally {
+		} finally {
             popStackFrame(1);
         }
     }
 
     @Override
-    public LispObject execute(LispObject function, LispObject first,
-                              LispObject second)
-    {
+	public LispObject execute(LispObject function, LispObject first, LispObject second) {
+		if (NO_STACK_FRAMES)
+			return function.execute(first, second);
         ensureStackCapacity(2 + STACK_FRAME_EXTRA);
         stack[stackPtr] = function;
         stack[stackPtr + 1] = first;
@@ -830,16 +855,15 @@ public final class LispThread extends LispObject
         stackPtr += 2 + STACK_FRAME_EXTRA;
         try {
             return function.execute(first, second);
-        }
-        finally {
+		} finally {
             popStackFrame(2);
         }
     }
 
     @Override
-    public LispObject execute(LispObject function, LispObject first,
-                              LispObject second, LispObject third)
-    {
+	public LispObject execute(LispObject function, LispObject first, LispObject second, LispObject third) {
+		if (NO_STACK_FRAMES)
+			return function.execute(first, second, third);
         ensureStackCapacity(3 + STACK_FRAME_EXTRA);
         stack[stackPtr] = function;
         stack[stackPtr + 1] = first;
@@ -849,17 +873,16 @@ public final class LispThread extends LispObject
         stackPtr += 3 + STACK_FRAME_EXTRA;
         try {
             return function.execute(first, second, third);
-        }
-        finally {
+		} finally {
             popStackFrame(3);
         }
     }
 
     @Override
-    public LispObject execute(LispObject function, LispObject first,
-                              LispObject second, LispObject third,
-                              LispObject fourth)
-    {
+	public LispObject execute(LispObject function, LispObject first, LispObject second, LispObject third,
+			LispObject fourth) {
+		if (NO_STACK_FRAMES)
+			return function.execute(first, second, third, fourth);
         ensureStackCapacity(4 + STACK_FRAME_EXTRA);
         stack[stackPtr] = function;
         stack[stackPtr + 1] = first;
@@ -870,17 +893,16 @@ public final class LispThread extends LispObject
         stackPtr += 4 + STACK_FRAME_EXTRA;
         try {
             return function.execute(first, second, third, fourth);
-        }
-        finally {
+		} finally {
             popStackFrame(4);
         }
     }
 
     @Override
-    public LispObject execute(LispObject function, LispObject first,
-                              LispObject second, LispObject third,
-                              LispObject fourth, LispObject fifth)
-    {
+	public LispObject execute(LispObject function, LispObject first, LispObject second, LispObject third,
+			LispObject fourth, LispObject fifth) {
+		if (NO_STACK_FRAMES)
+			return function.execute(first, second, third, fourth, fifth);
         ensureStackCapacity(5 + STACK_FRAME_EXTRA);
         stack[stackPtr] = function;
         stack[stackPtr + 1] = first;
@@ -892,18 +914,16 @@ public final class LispThread extends LispObject
         stackPtr += 5 + STACK_FRAME_EXTRA;
         try {
             return function.execute(first, second, third, fourth, fifth);
-        }
-        finally {
+		} finally {
             popStackFrame(5);
         }
     }
 
     @Override
-    public LispObject execute(LispObject function, LispObject first,
-                              LispObject second, LispObject third,
-                              LispObject fourth, LispObject fifth,
-                              LispObject sixth)
-    {
+	public LispObject execute(LispObject function, LispObject first, LispObject second, LispObject third,
+			LispObject fourth, LispObject fifth, LispObject sixth) {
+		if (NO_STACK_FRAMES)
+			return function.execute(first, second, third, fourth, fifth, sixth);
         ensureStackCapacity(6 + STACK_FRAME_EXTRA);
         stack[stackPtr] = function;
         stack[stackPtr + 1] = first;
@@ -916,18 +936,16 @@ public final class LispThread extends LispObject
         stackPtr += 6 + STACK_FRAME_EXTRA;
         try {
             return function.execute(first, second, third, fourth, fifth, sixth);
-        }
-        finally {
+		} finally {
             popStackFrame(6);
         }
     }
 
     @Override
-    public LispObject execute(LispObject function, LispObject first,
-                              LispObject second, LispObject third,
-                              LispObject fourth, LispObject fifth,
-                              LispObject sixth, LispObject seventh)
-    {
+	public LispObject execute(LispObject function, LispObject first, LispObject second, LispObject third,
+			LispObject fourth, LispObject fifth, LispObject sixth, LispObject seventh) {
+		if (NO_STACK_FRAMES)
+			return function.execute(first, second, third, fourth, fifth, sixth, seventh);
         ensureStackCapacity(7 + STACK_FRAME_EXTRA);
         stack[stackPtr] = function;
         stack[stackPtr + 1] = first;
@@ -940,20 +958,16 @@ public final class LispThread extends LispObject
         stack[stackPtr + 8] = STACK_MARKER_7;
         stackPtr += 7 + STACK_FRAME_EXTRA;
         try {
-            return function.execute(first, second, third, fourth, fifth, sixth,
-                                    seventh);
-        }
-        finally {
+			return function.execute(first, second, third, fourth, fifth, sixth, seventh);
+		} finally {
             popStackFrame(7);
         }
     }
 
-    public LispObject execute(LispObject function, LispObject first,
-                              LispObject second, LispObject third,
-                              LispObject fourth, LispObject fifth,
-                              LispObject sixth, LispObject seventh,
-                              LispObject eighth)
-    {
+	public LispObject execute(LispObject function, LispObject first, LispObject second, LispObject third,
+			LispObject fourth, LispObject fifth, LispObject sixth, LispObject seventh, LispObject eighth) {
+		if (NO_STACK_FRAMES)
+			return function.execute(first, second, third, fourth, fifth, sixth, seventh, eighth);
         ensureStackCapacity(8 + STACK_FRAME_EXTRA);
         stack[stackPtr] = function;
         stack[stackPtr + 1] = first;
@@ -967,16 +981,15 @@ public final class LispThread extends LispObject
         stack[stackPtr + 9] = STACK_MARKER_8;
         stackPtr += 8 + STACK_FRAME_EXTRA;
         try {
-            return function.execute(first, second, third, fourth, fifth, sixth,
-                                    seventh, eighth);
-        }
-        finally {
+			return function.execute(first, second, third, fourth, fifth, sixth, seventh, eighth);
+		} finally {
             popStackFrame(8);
         }
     }
 
-    public LispObject execute(LispObject function, LispObject[] args)
-    {
+	public LispObject execute(LispObject function, LispObject[] args) {
+		if (NO_STACK_FRAMES)
+			return function.execute(args);
         ensureStackCapacity(args.length + STACK_FRAME_EXTRA);
         stack[stackPtr] = function;
         System.arraycopy(args, 0, stack, stackPtr + 1, args.length);
@@ -984,8 +997,7 @@ public final class LispThread extends LispObject
         stackPtr += args.length + STACK_FRAME_EXTRA;
         try {
             return function.execute(args);
-        }
-        finally {
+		} finally {
             popStackFrame(args.length);
         }
     }
@@ -1021,8 +1033,9 @@ public final class LispThread extends LispObject
         }
     }
 
-    public LispObject backtrace(int limit)
-    {
+	public LispObject backtrace(int limit) {
+		if (NO_STACK_FRAMES)
+			return NIL;
         StackFrame stackTop = getStackTop();
         LispObject result = NIL;
         if (stackTop != null) {
@@ -1040,6 +1053,8 @@ public final class LispThread extends LispObject
 
     public void incrementCallCounts()
     {
+	   if (NO_STACK_FRAMES)
+			return;
         topStackSegment.stackPtr = stackPtr;
         int depth = 0;
         for (StackSegment segment = topStackSegment; segment != null; segment = segment.next) {
