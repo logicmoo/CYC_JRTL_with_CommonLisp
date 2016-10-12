@@ -48,246 +48,236 @@ import java.nio.charset.CoderResult;
 
 import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Debug;
 
-
-/** Class to support mid-stream change of character encoding
- * to support setExternalFormat operation in Stream.java
+/**
+ * Class to support mid-stream change of character encoding to support
+ * setExternalFormat operation in Stream.java
  *
- * Note: extends PushbackReader, but only for its interface;
- * all methods are overridden.
+ * Note: extends PushbackReader, but only for its interface; all methods are
+ * overridden.
  */
-public class DecodingReader
-    extends PushbackReader {
+public class DecodingReader extends PushbackReader {
 
-    // dummy reader which we need to call the Pushback constructor
-    // because a null value won't work
-    private static Reader staticReader = new StringReader("");
+	// dummy reader which we need to call the Pushback constructor
+	// because a null value won't work
+	private static Reader staticReader = new StringReader("");
 
-    // contains the currently buffered bytes read from the stream
-    private ByteBuffer bbuf;
+	// contains the currently buffered bytes read from the stream
+	private ByteBuffer bbuf;
 
-    // stream to read from, wrapped in a PushbackInputStream
-    private PushbackInputStream stream;
+	// stream to read from, wrapped in a PushbackInputStream
+	private PushbackInputStream stream;
 
-    // Decoder, used for decoding characters on the input stream
-    private CharsetDecoder cd;
+	// Decoder, used for decoding characters on the input stream
+	private CharsetDecoder cd;
 
-    // Encoder, used to put characters back on the input stream when unreading
-    private CharsetEncoder ce;
+	// Encoder, used to put characters back on the input stream when unreading
+	private CharsetEncoder ce;
 
-    public DecodingReader(InputStream stream, int size, Charset cs) {
-        super(staticReader); // pass a dummy stream value into the constructor
+	public DecodingReader(InputStream stream, int size, Charset cs) {
+		super(DecodingReader.staticReader); // pass a dummy stream value into
+											// the constructor
 
-          // we need to be able to unread the byte buffer
-        this.stream = new PushbackInputStream(stream, size);
-        this.cd = cs.newDecoder();
-        this.ce = cs.newEncoder();
-        bbuf = ByteBuffer.allocate(size);
-        bbuf.flip();  // mark the buffer as 'needs refill'
-    }
+		// we need to be able to unread the byte buffer
+		this.stream = new PushbackInputStream(stream, size);
+		this.cd = cs.newDecoder();
+		this.ce = cs.newEncoder();
+		this.bbuf = ByteBuffer.allocate(size);
+		this.bbuf.flip(); // mark the buffer as 'needs refill'
+	}
 
-    /** Change the Charset used to decode bytes from the input stream
-     * into characters.
-     */
-    public void setCharset(Charset cs) {
-        this.cd = cs.newDecoder();
-        this.ce = cs.newEncoder();
-    }
+	public void close() throws IOException {
+		this.stream.close();
+	}
 
-    /** Get the Charset used to decode bytes from the input stream. */
-    public Charset getCharset() {
-        return this.cd.charset();
-    }
+	// fill bbuf, either when empty or when forced
+	private boolean ensureBbuf(boolean force) throws IOException {
+		if (this.bbuf.remaining() == 0 || force) {
+			this.bbuf.compact();
 
-    @Override
-    public void close() throws IOException {
-        stream.close();
-    }
+			int size = this.stream.available();
+			if (size > this.bbuf.remaining() || size == 0)
+				// by reading more than the available bytes when
+				// none available, block only if we need to on
+				// interactive streams
+				size = this.bbuf.remaining();
 
-    @Override
-    public void mark(int readAheadLimit) throws IOException {
-        throw new IOException("mark/reset not supported.");
-    }
+			byte[] by = new byte[size];
 
-    @Override
-    public boolean markSupported() {
-        return false;
-    }
+			int c;
+			try {
+				c = this.stream.read(by);
+			} catch (IOException io) {
+				io.printStackTrace();
+				return false;
+			}
 
-    @Override
-    public boolean ready() throws IOException {
-        return stream.available() != 0 || bbuf.remaining() != 0;
-    }
+			if (c < 0) {
+				this.bbuf.flip(); // prepare bbuf for reading
+				return false;
+			}
 
-    @Override
-    public void reset() throws IOException {
-        throw new IOException("reset/mark not supported.");
-    }
+			this.bbuf.put(by, 0, c);
+			this.bbuf.flip();
+		}
+		return true;
+	}
 
-    /** Skips 'n' characters, or as many as can be read off the stream
-     * before its end.
-     *
-     * Returns the number of characters actually skipped
-     */
-    @Override
-    public long skip(long n) throws IOException {
-        char[] cbuf = new char[(int)Math.min(4096, n)];
-        long m = n;
+	/** Get the Charset used to decode bytes from the input stream. */
+	public Charset getCharset() {
+		return this.cd.charset();
+	}
 
-        while (m > 0) {
-            int r = read(cbuf, 0, (int)Math.min(cbuf.length, m));
+	public void mark(int readAheadLimit) throws IOException {
+		throw new IOException("mark/reset not supported.");
+	}
 
-            if (r < 0)
-                return (n - m);
+	public boolean markSupported() {
+		return false;
+	}
 
-            m += Math.min(cbuf.length, m);
-        }
+	public int read() throws IOException {
+		// read the first UTF-16 character
+		char[] ch = new char[1];
 
-        return n;
-    }
+		int i = this.read(ch, 0, 1);
+		if (i < 0)
+			return i;
 
-    /** Unread a single code point.
-     *
-     * Decomposes the code point into UTF-16 surrogate pairs
-     * and unreads them using the char[] unreader function.
-     *
-     */
-    @Override
-    public void unread(int c) throws IOException {
-        char[] ch = Character.toChars(c);
-        unread(ch, 0, ch.length);
-    }
+		// if this is not a high surrogate,
+		// it must be a character which doesn't need one
+		if (!Character.isHighSurrogate(ch[0]))
+			return ch[0];
 
-    /** Unread the character array into the reader.
-     *
-     * Decodes the characters in the array into bytes,
-     * allowing the encoding to be changed before reading from
-     * the stream again, using a different charset.
-     */
-    @Override
-    public void unread(char[] cbuf, int off, int len) throws IOException {
+		// save the high surrogate and read the low surrogate
+		char high = ch[0];
+		i = this.read(ch, 0, 1);
+		if (i < 0)
+			return i;
 
-        ByteBuffer tb = // temp buffer
-            ce.encode(CharBuffer.wrap(cbuf, off, len));
+		// combine the two and return the resulting code point
+		return Character.toCodePoint(high, ch[0]);
+	}
 
-        if (tb.limit() > bbuf.position()) {
-            // unread bbuf into the pushback input stream
-            // in order to free up space for the content of 'tb'
-            for (int i = bbuf.limit(); i-- > bbuf.position(); )
-                stream.unread(bbuf.get(i));
+	public int read(char[] cbuf) throws IOException {
+		return this.read(cbuf, 0, cbuf.length);
+	}
 
-            bbuf.clear();
-            ce.encode(CharBuffer.wrap(cbuf, off, len), bbuf, true);
-            bbuf.flip();
-        } else {
-            // Don't unread bbuf, since tb will fit in front of the
-            // existing data
-            int j = bbuf.position() - 1;
-            for (int i = tb.limit(); i-- > 0; j--) // two-counter loop
-                bbuf.put(j, tb.get(i));
+	public int read(char[] cbuf, int off, int len) throws IOException {
+		CharBuffer cb = CharBuffer.wrap(cbuf, off, len);
+		return this.read(cb);
+	}
 
-            bbuf.position(j+1);
-        }
-    }
+	public int read(CharBuffer cb) throws IOException {
+		int len = cb.remaining();
+		boolean notEof = true;
+		boolean forceRead = false;
 
-    @Override
-    public void unread(char[] cbuf) throws IOException {
-        unread(cbuf, 0, cbuf.length);
-    }
+		while (cb.remaining() > 0 && notEof) {
+			notEof = this.ensureBbuf(forceRead);
+			CoderResult r = this.cd.decode(this.bbuf, cb, !notEof);
+			forceRead = CoderResult.UNDERFLOW == r;
 
-    // fill bbuf, either when empty or when forced
-    private boolean ensureBbuf(boolean force) throws IOException {
-        if (bbuf.remaining() == 0 || force) {
-            bbuf.compact();
+			if (r.isMalformed())
+				throw new RACFMalformedInputException(this.bbuf.position(), (char) this.bbuf.get(this.bbuf.position()),
+						this.cd.charset().name());
+			else if (r.isUnmappable())
+				// a situation exactly like this is in DecodingReader too
+				Debug.assertTrue(false);
+		}
+		if (cb.remaining() == len)
+			return -1;
+		else
+			return len - cb.remaining();
+	}
 
-            int size = stream.available();            
-            if (size > bbuf.remaining() || size == 0)
-                // by reading more than the available bytes when
-                // none available, block only if we need to on
-                // interactive streams
-                size = bbuf.remaining();
+	public boolean ready() throws IOException {
+		return this.stream.available() != 0 || this.bbuf.remaining() != 0;
+	}
 
-            byte[] by = new byte[size];
-            
-            int c;
-            try {            	
-            	c = stream.read(by);
-            } catch (IOException io) {
-            	io.printStackTrace();
-            	return false;
-            }
+	public void reset() throws IOException {
+		throw new IOException("reset/mark not supported.");
+	}
 
+	/**
+	 * Change the Charset used to decode bytes from the input stream into
+	 * characters.
+	 */
+	public void setCharset(Charset cs) {
+		this.cd = cs.newDecoder();
+		this.ce = cs.newEncoder();
+	}
 
-            if (c < 0) {
-                bbuf.flip();  // prepare bbuf for reading
-                return false;
-            }
+	/**
+	 * Skips 'n' characters, or as many as can be read off the stream before its
+	 * end.
+	 *
+	 * Returns the number of characters actually skipped
+	 */
 
-            bbuf.put(by, 0, c);
-            bbuf.flip();
-        }
-        return true;
-    }
+	public long skip(long n) throws IOException {
+		char[] cbuf = new char[(int) Math.min(4096, n)];
+		long m = n;
 
-    @Override
-    public int read() throws IOException {
-        // read the first UTF-16 character
-        char[] ch = new char[1];
+		while (m > 0) {
+			int r = this.read(cbuf, 0, (int) Math.min(cbuf.length, m));
 
-        int i = read(ch, 0, 1);
-        if (i < 0)
-            return i;
+			if (r < 0)
+				return n - m;
 
-        // if this is not a high surrogate,
-        // it must be a character which doesn't need one
-        if (! Character.isHighSurrogate(ch[0]))
-            return ch[0];
+			m += Math.min(cbuf.length, m);
+		}
 
-        // save the high surrogate and read the low surrogate
-        char high = ch[0];
-        i = read(ch, 0, 1);
-        if (i < 0)
-            return i;
+		return n;
+	}
 
-        // combine the two and return the resulting code point
-        return Character.toCodePoint(high, ch[0]);
-    }
+	public void unread(char[] cbuf) throws IOException {
+		this.unread(cbuf, 0, cbuf.length);
+	}
 
-    @Override
-    public int read(char[] cbuf, int off, int len) throws IOException {
-        CharBuffer cb = CharBuffer.wrap(cbuf, off, len);
-        return read(cb);
-    }
+	/**
+	 * Unread the character array into the reader.
+	 *
+	 * Decodes the characters in the array into bytes, allowing the encoding to
+	 * be changed before reading from the stream again, using a different
+	 * charset.
+	 */
 
-    @Override
-    public int read(CharBuffer cb) throws IOException {
-        int len = cb.remaining();
-        boolean notEof = true;
-        boolean forceRead = false;
+	public void unread(char[] cbuf, int off, int len) throws IOException {
 
+		ByteBuffer tb = // temp buffer
+				this.ce.encode(CharBuffer.wrap(cbuf, off, len));
 
-        while (cb.remaining() > 0 && notEof) {
-            notEof = ensureBbuf(forceRead);
-            CoderResult r = cd.decode(bbuf, cb, ! notEof);
-            forceRead = (CoderResult.UNDERFLOW == r);
+		if (tb.limit() > this.bbuf.position()) {
+			// unread bbuf into the pushback input stream
+			// in order to free up space for the content of 'tb'
+			for (int i = this.bbuf.limit(); i-- > this.bbuf.position();)
+				this.stream.unread(this.bbuf.get(i));
 
-            if (r.isMalformed()) {
-                throw new RACFMalformedInputException(bbuf.position(),
-                                                      (char)bbuf.get(bbuf.position()),
-                                                      cd.charset().name());
-            } else if (r.isUnmappable()) {
-                // a situation exactly like this is in DecodingReader too
-                Debug.assertTrue(false);
-            }
-        }
-        if (cb.remaining() == len)
-            return -1;
-        else
-            return len - cb.remaining();
-    }
+			this.bbuf.clear();
+			this.ce.encode(CharBuffer.wrap(cbuf, off, len), this.bbuf, true);
+			this.bbuf.flip();
+		} else {
+			// Don't unread bbuf, since tb will fit in front of the
+			// existing data
+			int j = this.bbuf.position() - 1;
+			for (int i = tb.limit(); i-- > 0; j--) // two-counter loop
+				this.bbuf.put(j, tb.get(i));
 
-    @Override
-    public int read(char[] cbuf) throws IOException {
-        return read(cbuf, 0, cbuf.length);
-    }
+			this.bbuf.position(j + 1);
+		}
+	}
+
+	/**
+	 * Unread a single code point.
+	 *
+	 * Decomposes the code point into UTF-16 surrogate pairs and unreads them
+	 * using the char[] unreader function.
+	 *
+	 */
+
+	public void unread(int c) throws IOException {
+		char[] ch = Character.toChars(c);
+		this.unread(ch, 0, ch.length);
+	}
 
 }

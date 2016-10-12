@@ -33,494 +33,400 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.stream.IntStream;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 
-public class SimpleString extends SubLString
-{
-//    private int size;
-//    private char[] buf;
+public class SimpleString extends SubLString {
+	// private int size;
+	// private char[] buf;
 
-    public SimpleString(LispCharacter c)
-    {
-        buf = new char[1];
-        buf[0] = c.value;
-        size = 1;
-    }
+	public SimpleString(char c) {
+		this.buf = new char[1];
+		this.buf[0] = c;
+		this.size = 1;
+	}
 
-    public SimpleString(char c)
-    {
-        buf = new char[1];
-        buf[0] = c;
-        size = 1;
-    }
+	public SimpleString(char[] chars) {
+		super(chars);
+		// this.buf = chars;
+		// size = chars.length;
+	}
 
-    public SimpleString(int capacity)
-    {
-        this.size = capacity;
-        buf = new char[capacity];
-    }
+	public SimpleString(char[] charArray, int start, int end) {
+		super(charArray, start, end);
+	}
 
-    public SimpleString(String s)
-    {
-    	super(s);
-//        size = s.length();
-//        buf = s.toCharArray();
-    }
+	public SimpleString(int capacity) {
+		this.size = capacity;
+		this.buf = new char[capacity];
+	}
 
-    public SimpleString(StringBuffer sb)
-    {
-        buf = new char[size = sb.length()];
-        sb.getChars(0, size, buf, 0);
-    }
+	public SimpleString(int size, char defaultChar) {
+		super(size, defaultChar);
+	}
 
-    public SimpleString(StringBuilder sb)
-    {
-        buf = sb.toString().toCharArray();
-        size = buf.length;
-    }
+	public SimpleString(LispCharacter c) {
+		this.buf = new char[1];
+		this.buf[0] = c.value;
+		this.size = 1;
+	}
 
-    public SimpleString(char[] chars)
-    {
-			 super(chars);
-//        this.buf = chars;
-//        size = chars.length;
-    }
+	public SimpleString(String s) {
+		super(s);
+		// size = s.length();
+		// buf = s.toCharArray();
+	}
 
-    public SimpleString(int size, char defaultChar) {
-			 super(size,defaultChar);
+	public SimpleString(StringBuffer sb) {
+		this.buf = new char[this.size = sb.length()];
+		sb.getChars(0, this.size, this.buf, 0);
+	}
+
+	public SimpleString(StringBuilder sb) {
+		this.buf = sb.toString().toCharArray();
+		this.size = this.buf.length;
+	}
+
+	public AbstractVector adjustArray(int newCapacity, AbstractArray displacedTo, int displacement)
+
+	{
+		return new ComplexString(newCapacity, displacedTo, displacement);
+	}
+
+	public AbstractVector adjustArray(int newCapacity, SubLObject initialElement, SubLObject initialContents)
+
+	{
+		if (initialContents != null) {
+			char[] newChars = new char[newCapacity];
+			if (initialContents.isList()) {
+				SubLObject list = initialContents;
+				for (int i = 0; i < newCapacity; i++) {
+					newChars[i] = list.first().charValue();
+					list = list.rest();
+				}
+			} else if (initialContents.isVector())
+				for (int i = 0; i < newCapacity; i++)
+					newChars[i] = initialContents.elt(i).charValue();
+			else
+				Lisp.type_error(initialContents, LispSymbols.SEQUENCE);
+			return LispObjectFactory.makeString(newChars);
 		}
-
-		public SimpleString(char[] charArray,  int start, int end) {
-			super(charArray,start,end);
+		if (this.size != newCapacity) {
+			char[] newChars = new char[newCapacity];
+			System.arraycopy(this.buf, 0, newChars, 0, Math.min(newCapacity, this.size));
+			if (initialElement != null && this.size < newCapacity) {
+				char c = initialElement.charValue();
+				for (int i = this.size; i < newCapacity; i++)
+					newChars[i] = c;
+			}
+			return LispObjectFactory.makeString(newChars);
 		}
+		// No change.
+		return this;
+	}
 
-    @Override
-    public char[] charsOld()
-    {
-        return buf;
-    }
+	public SubLObject AREF(int index) {
+		try {
+			return LispCharacter.makeChar(this.buf[index]);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			this.badIndex(index, this.size);
+			return Lisp.NIL; // Not reached.
+		}
+	}
 
-    @Override
-    public char[] getStringChars()
-    {
-        return buf;
-    }
+	public SubLObject AREF(SubLObject index) {
+		try {
+			return LispCharacter.makeChar(this.buf[index.intValue()]);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			this.badIndex(((Fixnum) index).value, this.size);
+			return Lisp.NIL; // Not reached.
+		}
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return list(LispSymbols.SIMPLE_BASE_STRING, LispObjectFactory.makeInteger(size));
-    }
+	public void aset(int index, SubLObject obj) {
+		try {
+			this.buf[index] = obj.charValue();
+			this.setMutated();
+		} catch (ArrayIndexOutOfBoundsException e) {
+			this.badIndex(index, this.size);
+		}
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return BuiltInClass.SIMPLE_BASE_STRING;
-    }
+	public int capacity() {
+		return this.size;
+	}
 
-    @Override
-    public SubLObject getDescription()
-    {
-        StringBuilder sb = new StringBuilder("A simple-string (");
-        sb.append(size);
-        sb.append(") \"");
-        sb.append(buf);
-        sb.append('"');
-        return makeString(sb);
-    }
+	public SubLObject CHAR(int index) {
+		try {
+			return LispCharacter.makeChar(this.buf[index]);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			this.badIndex(index, this.size);
+			return Lisp.NIL; // Not reached.
+		}
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.SIMPLE_STRING)
-            return T;
-        if (type == LispSymbols.SIMPLE_ARRAY)
-            return T;
-        if (type == LispSymbols.SIMPLE_BASE_STRING)
-            return T;
-        if (type == BuiltInClass.SIMPLE_STRING)
-            return T;
-        if (type == BuiltInClass.SIMPLE_ARRAY)
-            return T;
-        if (type == BuiltInClass.SIMPLE_BASE_STRING)
-            return T;
-        return super.typep(type);
-    }
+	public char charAt(int index) {
+		try {
+			return this.buf[index];
+		} catch (ArrayIndexOutOfBoundsException e) {
+			this.badIndex(index, this.size);
+			return 0; // Not reached.
+		}
+	}
 
-    @Override
-    public SubLObject SIMPLE_STRING_P()
-    {
-        return T;
-    }
+	public char[] charsOld() {
+		return this.buf;
+	}
 
-    @Override
-    public boolean hasFillPointer()
-    {
-        return false;
-    }
+	public int cl_length() {
+		return this.size;
+	}
 
-    @Override
-    public boolean isAdjustable()
-    {
-        return false;
-    }
+	public SubLObject classOf() {
+		return BuiltInClass.SIMPLE_BASE_STRING;
+	}
 
-    @Override
-    public boolean equal(SubLObject obj)
-    {
-        if (this == obj)
-            return true;
-        if (obj instanceof SimpleString) {
-            SimpleString string = (SimpleString) obj;
-            if (string.size != size)
-                return false;
-            for (int i = size; i-- > 0;)
-                if (string.buf[i] != buf[i])
-                    return false;
-            return true;
-        }
-        if (obj instanceof SubLString) {
-            SubLString string = (SubLString) obj;
-            if (string.cl_length() != size)
-                return false;
-            for (int i = cl_length(); i-- > 0;)
-                if (string.charAt(i) != buf[i])
-                    return false;
-            return true;
-        }
-        if (obj instanceof NilVector)
-            return obj.equal(this);
-        return false;
-    }
+	public SubLObject elt(int index) {
+		try {
+			return LispCharacter.makeChar(this.buf[index]);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			this.badIndex(index, this.size);
+			return Lisp.NIL; // Not reached.
+		}
+	}
 
-    @Override
-    public boolean equalp(SubLObject obj)
-    {
-        if (this == obj)
-            return true;
-        if (obj instanceof SimpleString) {
-            SimpleString string = (SimpleString) obj;
-            if (string.size != size)
-                return false;
-            for (int i = size; i-- > 0;) {
-                if (string.buf[i] != buf[i]) {
-                    if (CharacterFunctions.toLowerCase(string.buf[i]) != CharacterFunctions.toLowerCase(buf[i]))
-                        return false;
-                }
-            }
-            return true;
-        }
-        if (obj instanceof SubLString) {
-            SubLString string = (SubLString) obj;
-            if (string.cl_length() != size)
-                return false;
-            for (int i = cl_length(); i-- > 0;) {
-                if (string.charAt(i) != buf[i]) {
-                    if (CharacterFunctions.toLowerCase(string.charAt(i)) != CharacterFunctions.toLowerCase(buf[i]))
-                        return false;
-                }
-            }
-            return true;
-        }
-        if (obj instanceof AbstractBitVector)
-            return false;
-        if (obj instanceof AbstractArray)
-            return obj.equalp(this);
-        return false;
-    }
+	public boolean equal(SubLObject obj) {
+		if (this == obj)
+			return true;
+		if (obj instanceof SimpleString) {
+			SimpleString string = (SimpleString) obj;
+			if (string.size != this.size)
+				return false;
+			for (int i = this.size; i-- > 0;)
+				if (string.buf[i] != this.buf[i])
+					return false;
+			return true;
+		}
+		if (obj instanceof SubLString) {
+			SubLString string = (SubLString) obj;
+			if (string.cl_length() != this.size)
+				return false;
+			for (int i = this.cl_length(); i-- > 0;)
+				if (string.charAt(i) != this.buf[i])
+					return false;
+			return true;
+		}
+		if (obj instanceof NilVector)
+			return obj.equal(this);
+		return false;
+	}
 
-    public final SubLString substring(int start)
-    {
-        return substring(start, size);
-    }
+	public boolean equalp(SubLObject obj) {
+		if (this == obj)
+			return true;
+		if (obj instanceof SimpleString) {
+			SimpleString string = (SimpleString) obj;
+			if (string.size != this.size)
+				return false;
+			for (int i = this.size; i-- > 0;)
+				if (string.buf[i] != this.buf[i])
+					if (CharacterFunctions.toLowerCase(string.buf[i]) != CharacterFunctions.toLowerCase(this.buf[i]))
+						return false;
+			return true;
+		}
+		if (obj instanceof SubLString) {
+			SubLString string = (SubLString) obj;
+			if (string.cl_length() != this.size)
+				return false;
+			for (int i = this.cl_length(); i-- > 0;)
+				if (string.charAt(i) != this.buf[i])
+					if (CharacterFunctions.toLowerCase(string.charAt(i)) != CharacterFunctions.toLowerCase(this.buf[i]))
+						return false;
+			return true;
+		}
+		if (obj instanceof AbstractBitVector)
+			return false;
+		if (obj instanceof AbstractArray)
+			return obj.equalp(this);
+		return false;
+	}
 
-    public final SubLString substring(int start, int end)
+	public void fill(char c) {
+		if (this.size != this.buf.length)
+			Debug.dumpStack("capacity!=chars.length " + this.writeToString());
+		this.setMutated();
+		Arrays.fill(this.buf, c);
+	}
 
-    {
-    	SimpleString s = (SimpleString)makeString(end - start);
-        int i = start, j = 0;
-        try {
-            while (i < end)
-                s.buf[j++] = buf[i++];
-            return s;
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            error(new TypeError("Array index out of bounds: " + i));
-            // Not reached.
-            return null;
-        }
-    }
+	public void fillVoid(SubLObject obj) {
+		this.fill(obj.charValue());
+	}
 
-    @Override
-    public final SubLObject subseq(int start, int end)
-    {
-        return substring(start, end);
-    }
+	public SubLObject getDescription() {
+		StringBuilder sb = new StringBuilder("A simple-string (");
+		sb.append(this.size);
+		sb.append(") \"");
+		sb.append(this.buf);
+		sb.append('"');
+		return LispObjectFactory.makeString(sb);
+	}
 
-    @Override
-    public void fillVoid(SubLObject obj)
-    {
-        fill(obj.charValue());
-    }
+	public char[] getStringChars() {
+		return this.buf;
+	}
 
-    @Override
-    public void fill(char c)
-    {
-    	if (size!=buf.length)  {
-    		Debug.dumpStack("capacity!=chars.length " + writeToString());
-    	}
-      setMutated();
-    	Arrays.fill(buf, c);
-    }
+	public boolean hasFillPointer() {
+		return false;
+	}
 
-    @Override
-    public void shrink(int n)
-    {
-        if (n < size) {
-            char[] newArray = new char[n];
-            System.arraycopy(buf, 0, newArray, 0, n);
-            buf = newArray;
-            size = n;
-            setMutated();
-            return;
-        }
-        if (n == size)
-            return;
-        error(new LispError());
-    }
+	//
+	// public String getString()
+	// {
+	// return String.valueOf(buf);
+	// }
 
-    @Override
-    public SubLObject reverse()
-    {
-    	SimpleString result = (SimpleString)makeString(size);
-        int i, j;
-        for (i = 0, j = size - 1; i < size; i++, j--)
-            result.buf[i] = buf[j];
-        setMutated();
-        return result;
-    }
+	public boolean isAdjustable() {
+		return false;
+	}
 
-    @Override
-    public SubLObject nreverse()
-    {
-        int i = 0;
-        int j = size - 1;
-        while (i < j) {
-            char temp = buf[i];
-            buf[i] = buf[j];
-            buf[j] = temp;
-            ++i;
-            --j;
-        }
-        setMutated();
-        return this;
-    }
+	public Object javaInstance() {
+		return this.getString();
+	}
 
-//    @Override
-//    public String getString()
-//    {
-//        return String.valueOf(buf);
-//    }
+	public Object javaInstance(Class c) {
+		return this.javaInstance();
+	}
 
-    @Override
-    public Object javaInstance()
-    {
-        return getString();
-    }
+	public SubLObject nreverse() {
+		int i = 0;
+		int j = this.size - 1;
+		while (i < j) {
+			char temp = this.buf[i];
+			this.buf[i] = this.buf[j];
+			this.buf[j] = temp;
+			++i;
+			--j;
+		}
+		this.setMutated();
+		return this;
+	}
 
-    @Override
-    public Object javaInstance(Class c)
-    {
-        return javaInstance();
-    }
+	// For EQUALP hash tables.
 
-    @Override
-    public final int capacity()
-    {
-        return size;
-    }
+	public int psxhash() {
+		int hashCode = 0;
+		for (int i = 0; i < this.size; i++) {
+			hashCode += Character.toUpperCase(this.buf[i]);
+			hashCode += hashCode << 10;
+			hashCode ^= hashCode >> 6;
+		}
+		hashCode += hashCode << 3;
+		hashCode ^= hashCode >> 11;
+		hashCode += hashCode << 15;
+		return hashCode & 0x7fffffff;
+	}
 
-    @Override
-    public final int cl_length()
-    {
-        return size;
-    }
+	public SubLObject reverse() {
+		SimpleString result = (SimpleString) LispObjectFactory.makeString(this.size);
+		int i, j;
+		for (i = 0, j = this.size - 1; i < this.size; i++, j--)
+			result.buf[i] = this.buf[j];
+		this.setMutated();
+		return result;
+	}
 
-    @Override
-    public char charAt(int index)
-    {
-        try {
-            return buf[index];
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, size);
-            return 0; // Not reached.
-        }
-    }
+	public SubLObject SCHAR(int index) {
+		try {
+			return LispCharacter.makeChar(this.buf[index]);
+		} catch (ArrayIndexOutOfBoundsException e) {
+			this.badIndex(index, this.size);
+			return Lisp.NIL; // Not reached.
+		}
+	}
 
-    @Override
-    public void setChar(int index, char c)
-    {
-        try {
-            buf[index] = c;
-            setMutated();
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, size);
-        }
-    }
+	public void setChar(int index, char c) {
+		try {
+			this.buf[index] = c;
+			this.setMutated();
+		} catch (ArrayIndexOutOfBoundsException e) {
+			this.badIndex(index, this.size);
+		}
+	}
 
-    @Override
-    public SubLObject elt(int index)
-    {
-        try {
-            return LispCharacter.makeChar(buf[index]);
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, size);
-            return NIL; // Not reached.
-        }
-    }
+	public void shrink(int n) {
+		if (n < this.size) {
+			char[] newArray = new char[n];
+			System.arraycopy(this.buf, 0, newArray, 0, n);
+			this.buf = newArray;
+			this.size = n;
+			this.setMutated();
+			return;
+		}
+		if (n == this.size)
+			return;
+		Lisp.error(new LispError());
+	}
 
-    @Override
-    public SubLObject CHAR(int index)
-    {
-        try {
-            return LispCharacter.makeChar(buf[index]);
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, size);
-            return NIL; // Not reached.
-        }
-    }
+	public SubLObject SIMPLE_STRING_P() {
+		return Lisp.T;
+	}
 
-    @Override
-    public SubLObject SCHAR(int index)
-    {
-        try {
-            return LispCharacter.makeChar(buf[index]);
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, size);
-            return NIL; // Not reached.
-        }
-    }
+	public SubLObject subseq(int start, int end) {
+		return this.substring(start, end);
+	}
 
-    @Override
-    public SubLObject AREF(int index)
-    {
-        try {
-            return LispCharacter.makeChar(buf[index]);
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, size);
-            return NIL; // Not reached.
-        }
-    }
+	public SubLString substring(int start) {
+		return this.substring(start, this.size);
+	}
 
-    @Override
-    public SubLObject AREF(SubLObject index)
-    {
-        try {
-            return LispCharacter.makeChar(buf[index.intValue()]);
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(((Fixnum)index).value, size);
-            return NIL; // Not reached.
-        }
-    }
+	public SubLString substring(int start, int end)
 
-    @Override
-    public void aset(int index, SubLObject obj)
-    {
-        try {
-            buf[index] = obj.charValue();
-            setMutated();
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            badIndex(index, size);
-        }
-    }
+	{
+		SimpleString s = (SimpleString) LispObjectFactory.makeString(end - start);
+		int i = start, j = 0;
+		try {
+			while (i < end)
+				s.buf[j++] = this.buf[i++];
+			return s;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			Lisp.error(new TypeError("Array index out of bounds: " + i));
+			// Not reached.
+			return null;
+		}
+	}
 
-    @Override
-    public int sxhash()
-    {
-        int hashCode = 0;
-        for (int i = 0; i < size; i++) {
-            hashCode += buf[i];
-            hashCode += (hashCode << 10);
-            hashCode ^= (hashCode >> 6);
-        }
-        hashCode += (hashCode << 3);
-        hashCode ^= (hashCode >> 11);
-        hashCode += (hashCode << 15);
-        return (hashCode & 0x7fffffff);
-    }
+	public int sxhash() {
+		int hashCode = 0;
+		for (int i = 0; i < this.size; i++) {
+			hashCode += this.buf[i];
+			hashCode += hashCode << 10;
+			hashCode ^= hashCode >> 6;
+		}
+		hashCode += hashCode << 3;
+		hashCode ^= hashCode >> 11;
+		hashCode += hashCode << 15;
+		return hashCode & 0x7fffffff;
+	}
 
-    // For EQUALP hash tables.
-    @Override
-    public int psxhash()
-    {
-        int hashCode = 0;
-        for (int i = 0; i < size; i++) {
-            hashCode += Character.toUpperCase(buf[i]);
-            hashCode += (hashCode << 10);
-            hashCode ^= (hashCode >> 6);
-        }
-        hashCode += (hashCode << 3);
-        hashCode ^= (hashCode >> 11);
-        hashCode += (hashCode << 15);
-        return (hashCode & 0x7fffffff);
-    }
+	public SubLObject typeOf() {
+		return Lisp.list(LispSymbols.SIMPLE_BASE_STRING, LispObjectFactory.makeInteger(this.size));
+	}
 
-    @Override
-    public AbstractVector adjustArray(int newCapacity,
-                                       SubLObject initialElement,
-                                       SubLObject initialContents)
-
-    {
-        if (initialContents != null) {
-            char[] newChars = new char[newCapacity];
-            if (initialContents.isList()) {
-                SubLObject list = initialContents;
-                for (int i = 0; i < newCapacity; i++) {
-                    newChars[i] = list.first().charValue();
-                    list = list.rest();
-                }
-            } else if (initialContents.isVector()) {
-                for (int i = 0; i < newCapacity; i++)
-                    newChars[i] = initialContents.elt(i).charValue();
-            } else
-                type_error(initialContents, LispSymbols.SEQUENCE);
-            return makeString(newChars);
-        }
-        if (size != newCapacity) {
-            char[] newChars = new char[newCapacity];
-            System.arraycopy(buf, 0, newChars, 0, Math.min(newCapacity, size));
-            if (initialElement != null && size < newCapacity) {
-                final char c = initialElement.charValue();
-                for (int i = size; i < newCapacity; i++)
-                    newChars[i] = c;
-            }
-            return makeString(newChars);
-        }
-        // No change.
-        return this;
-    }
-
-    @Override
-    public AbstractVector adjustArray(int newCapacity,
-                                       AbstractArray displacedTo,
-                                       int displacement)
-
-    {
-        return new ComplexString(newCapacity, displacedTo, displacement);
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.SIMPLE_STRING)
+			return Lisp.T;
+		if (type == LispSymbols.SIMPLE_ARRAY)
+			return Lisp.T;
+		if (type == LispSymbols.SIMPLE_BASE_STRING)
+			return Lisp.T;
+		if (type == BuiltInClass.SIMPLE_STRING)
+			return Lisp.T;
+		if (type == BuiltInClass.SIMPLE_ARRAY)
+			return Lisp.T;
+		if (type == BuiltInClass.SIMPLE_BASE_STRING)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

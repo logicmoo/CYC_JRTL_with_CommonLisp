@@ -35,41 +35,38 @@ package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-/** This class is the parent class of all non-local transfer of
- * control events in ABCL. The classes inheriting from this class each
- * represent a transfer of control event as it is available in the
- * standard: GO (represented by Go), RETURN (by Return) and THROW (by Throw).
+/**
+ * This class is the parent class of all non-local transfer of control events in
+ * ABCL. The classes inheriting from this class each represent a transfer of
+ * control event as it is available in the standard: GO (represented by Go),
+ * RETURN (by Return) and THROW (by Throw).
  *
- * Please note that you should <b>only</b> be using these classes in case
- * you've establisched a corresponding TAGBODY, BLOCK or CATCH-like
- * construct in your code.
+ * Please note that you should <b>only</b> be using these classes in case you've
+ * establisched a corresponding TAGBODY, BLOCK or CATCH-like construct in your
+ * code.
  *
- * Otherwise, be aware that if you are mixing Lisp and Java code,
- * Lisp code being called into might throw one of the three exception types
- * and cause execution to be transferred to the nearest handler - presumably
- * outside your Java code.
+ * Otherwise, be aware that if you are mixing Lisp and Java code, Lisp code
+ * being called into might throw one of the three exception types and cause
+ * execution to be transferred to the nearest handler - presumably outside your
+ * Java code.
  *
  */
-abstract public class ControlTransfer extends RuntimeException
-{
-    public ControlTransfer()
-    {
-    }
-    
-    /**
-     * Overridden in order to make ControlTransfer construct
-     * faster. This avoids gathering stack trace information.
-     */
-    @Override
-    public Throwable fillInStackTrace()
-    {
-        return this;
-    }
+abstract public class ControlTransfer extends java.lang.Error {
+	public ControlTransfer() {
+	}
 
-    public ControlTransfer(String message)
-    {
-        super(message);
-    }
+	public ControlTransfer(String message) {
+		super(message);
+	}
 
-    public abstract SubLObject getCondition();
+	/**
+	 * Overridden in order to make ControlTransfer construct faster. This avoids
+	 * gathering stack trace information.
+	 */
+
+	public Throwable fillInStackTrace() {
+		return this;
+	}
+
+	public abstract SubLObject getCondition();
 }

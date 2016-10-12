@@ -33,60 +33,25 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
-
 public interface LispCons extends SubLList {
-
-	public abstract void setCdr(SubLObject cdr);
-
-	public abstract SubLObject rest();
-
-	public abstract SubLObject typeOf();
-
-	public abstract SubLObject classOf();
-
-	public abstract SubLObject typep(SubLObject typeSpecifier);
-
-	public abstract boolean constantp();
-
-	public abstract boolean isAtom();
-
-	public abstract SubLCons setFirst(SubLObject obj);
-
-	public abstract SubLCons setRest(SubLObject obj);
-
-	public abstract SubLObject second();
 
 	public abstract SubLObject cddr();
 
-	public abstract SubLObject third();
+	public abstract int cl_length();
 
-	public abstract SubLObject nthCdr(int n);
+	public abstract SubLObject classOf();
 
-	public abstract int sxhash();
+	public abstract boolean constantp();
 
-	public abstract int psxhash();
+	public abstract SubLObject[] copyToArray();
+
+	public abstract SubLObject elt(int index);
+
+	public abstract boolean endp();
 
 	public abstract boolean equal(SubLObject obj);
 
 	public abstract boolean equalp(SubLObject obj);
-
-	public abstract int cl_length();
-
-	public abstract SubLObject NTH(int index);
-
-	public abstract SubLObject NTH(SubLObject arg);
-
-	public abstract SubLObject elt(int index);
-
-	public abstract SubLObject reverse();
-
-	public abstract SubLObject nreverse();
-
-	public abstract boolean isList();
-
-	public abstract boolean endp();
-
-	public abstract SubLObject[] copyToArray();
 
 	public abstract SubLObject execute();
 
@@ -112,11 +77,45 @@ public interface LispCons extends SubLList {
 
 	public abstract SubLObject execute(SubLObject[] args);
 
-	public abstract String toString();
+	public abstract SubLObject first();
 
-	public abstract String writeToString();
+	public abstract boolean isAtom();
+
+	public abstract boolean isList();
+
+	public abstract SubLObject nreverse();
+
+	public abstract SubLObject NTH(int index);
+
+	public abstract SubLObject NTH(SubLObject arg);
+
+	public abstract SubLObject nthCdr(int n);
+
+	public abstract int psxhash();
+
+	public abstract SubLObject rest();
+
+	public abstract SubLObject reverse();
+
+	public abstract SubLObject second();
 
 	public abstract void setCar(SubLObject car);
 
-	public abstract SubLObject first();
+	public abstract void setCdr(SubLObject cdr);
+
+	public abstract SubLCons setFirst(SubLObject obj);
+
+	public abstract SubLCons setRest(SubLObject obj);
+
+	public abstract int sxhash();
+
+	public abstract SubLObject third();
+
+	public abstract String toString();
+
+	public abstract SubLObject typeOf();
+
+	public abstract SubLObject typep(SubLObject typeSpecifier);
+
+	public abstract String writeToString();
 }

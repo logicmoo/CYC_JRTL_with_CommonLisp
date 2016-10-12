@@ -20,55 +20,53 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp.java.awt;
 
-
 import java.awt.Window;
 import java.awt.event.WindowEvent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.JHandler;
 
-public class WindowAdapter extends java.awt.event.WindowAdapter 
-{
-    private void call(String s, WindowEvent windowevent) {
-        JHandler.callLisp(s, windowevent.getWindow());
-    }
+public class WindowAdapter extends java.awt.event.WindowAdapter {
+	public static synchronized void addTo(Window window) {
+		window.addWindowListener(new WindowAdapter());
+	}
 
-    public static synchronized void addTo(Window window) {
-        window.addWindowListener(new WindowAdapter());
-    }
+	private void call(String s, WindowEvent windowevent) {
+		JHandler.callLisp(s, windowevent.getWindow());
+	}
 
-    public void windowOpened(WindowEvent windowevent) {
-        call("WINDOWOPENED", windowevent);
-    }
+	public void windowActivated(WindowEvent windowevent) {
+		this.call("WINDOWACTIVATED", windowevent);
+	}
 
-    public void windowClosed(WindowEvent windowevent) {
-        call("WINDOWCLOSED", windowevent);
-    }
+	public void windowClosed(WindowEvent windowevent) {
+		this.call("WINDOWCLOSED", windowevent);
+	}
 
-    public void windowClosing(WindowEvent windowevent) {
-        call("WINDOWCLOSING", windowevent);
-    }
+	public void windowClosing(WindowEvent windowevent) {
+		this.call("WINDOWCLOSING", windowevent);
+	}
 
-    public void windowActivated(WindowEvent windowevent) {
-        call("WINDOWACTIVATED", windowevent);
-    }
+	public void windowDeactivated(WindowEvent windowevent) {
+		this.call("WINDOWDEACTIVATED", windowevent);
+	}
 
-    public void windowDeactivated(WindowEvent windowevent) {
-        call("WINDOWDEACTIVATED", windowevent);
-    }
+	public void windowDeiconified(WindowEvent windowevent) {
+		this.call("WINDOWDEICONIFIED", windowevent);
+	}
 
-    public void windowIconified(WindowEvent windowevent) {
-        call("WINDOWICONIFIED", windowevent);
-    }
+	public void windowGainedFocus(WindowEvent windowevent) {
+		this.call("WINDOWGAINEDFOCUS", windowevent);
+	}
 
-    public void windowDeiconified(WindowEvent windowevent) {
-        call("WINDOWDEICONIFIED", windowevent);
-    }
+	public void windowIconified(WindowEvent windowevent) {
+		this.call("WINDOWICONIFIED", windowevent);
+	}
 
-    public void windowGainedFocus(WindowEvent windowevent) {
-        call("WINDOWGAINEDFOCUS", windowevent);
-    }
+	public void windowLostFocus(WindowEvent windowevent) {
+		this.call("WINDOWLOSTFOCUS", windowevent);
+	}
 
-    public void windowLostFocus(WindowEvent windowevent) {
-        call("WINDOWLOSTFOCUS", windowevent);
-    }
+	public void windowOpened(WindowEvent windowevent) {
+		this.call("WINDOWOPENED", windowevent);
+	}
 }

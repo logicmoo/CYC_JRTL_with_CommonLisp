@@ -33,57 +33,45 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class SimpleError extends LispError
-{
-    public SimpleError(SubLObject formatControl, SubLObject formatArguments)
+public class SimpleError extends LispError {
+	public SimpleError(String message) {
+		super(StandardClass.SIMPLE_ERROR);
+		this.setFormatControl(message);
+		this.setFormatArguments(Lisp.NIL);
+	}
 
-    {
-        super(StandardClass.SIMPLE_ERROR);
-        setFormatControl(formatControl);
-        setFormatArguments(formatArguments);
-    }
+	public SimpleError(SubLObject initArgs) {
+		super(StandardClass.SIMPLE_ERROR);
+		this.initialize(initArgs);
+	}
 
-    public SimpleError(SubLObject initArgs)
-    {
-        super(StandardClass.SIMPLE_ERROR);
-        initialize(initArgs);
-    }
+	public SimpleError(SubLObject formatControl, SubLObject formatArguments)
 
-    public SimpleError(String message)
-    {
-        super(StandardClass.SIMPLE_ERROR);
-        setFormatControl(message);
-        setFormatArguments(NIL);
-    }
+	{
+		super(StandardClass.SIMPLE_ERROR);
+		this.setFormatControl(formatControl);
+		this.setFormatArguments(formatArguments);
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.SIMPLE_ERROR;
-    }
+	public SubLObject classOf() {
+		return StandardClass.SIMPLE_ERROR;
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.SIMPLE_ERROR;
-    }
+	public SubLObject typeOf() {
+		return LispSymbols.SIMPLE_ERROR;
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.SIMPLE_ERROR)
-            return T;
-        if (type == StandardClass.SIMPLE_ERROR)
-            return T;
-        if (type == LispSymbols.SIMPLE_CONDITION)
-            return T;
-        if (type == StandardClass.SIMPLE_CONDITION)
-            return T;
-        return super.typep(type);
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.SIMPLE_ERROR)
+			return Lisp.T;
+		if (type == StandardClass.SIMPLE_ERROR)
+			return Lisp.T;
+		if (type == LispSymbols.SIMPLE_CONDITION)
+			return Lisp.T;
+		if (type == StandardClass.SIMPLE_CONDITION)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

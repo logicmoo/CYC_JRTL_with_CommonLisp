@@ -32,77 +32,58 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public interface AbstractVector extends AbstractArray
-{
+public interface AbstractVector extends AbstractArray {
 
-  public SubLObject typep(SubLObject type);
+	public abstract AbstractArray adjustArray(int size, AbstractArray displacedTo, int displacement);
 
-  public abstract boolean isVector();
+	public abstract AbstractArray adjustArray(int size, SubLObject initialElement, SubLObject initialContents);
 
+	public AbstractArray adjustArray(int[] dims, AbstractArray displacedTo, int displacement);
 
-  public boolean equalp(SubLObject obj);
+	public AbstractArray adjustArray(int[] dims, SubLObject initialElement, SubLObject initialContents);
 
+	public abstract int capacity();
 
-  public abstract int getRank();
+	public int checkIndex(int index);
 
+	public SubLObject deleteEq(SubLObject item);
 
-  public abstract SubLObject getDimensions();
+	public SubLObject deleteEql(SubLObject item);
 
+	public boolean equalp(SubLObject obj);
 
-  public abstract int getDimension(int n);
+	public abstract int getDimension(int n);
 
+	public abstract SubLObject getDimensions();
 
-  public abstract int getTotalSize();
+	public abstract int getRank();
 
-  public abstract int capacity();
+	public abstract int getTotalSize();
 
-  public abstract SubLObject subseq(int start, int end);
+	// abstract void badIndex(int index, int limit);
 
-  public SubLObject deleteEq(SubLObject item);
+	public boolean isSimpleVector();
 
-  public SubLObject deleteEql(SubLObject item);
-  public abstract void shrink(int n);
+	public abstract boolean isVector();
 
-  public int checkIndex(int index);
+	public SubLObject nreverse();
 
-  //abstract void badIndex(int index, int limit);
+	public int psxhash();
 
-  public void setFillPointer(int n);
-  public void setFillPointer(SubLObject obj);
+	public abstract SubLObject reverse();
 
-  public boolean isSimpleVector();
+	public void setFillPointer(int n);
 
+	public void setFillPointer(SubLObject obj);
 
-  public abstract SubLObject reverse();
+	public abstract void shrink(int n);
 
+	public abstract SubLObject subseq(int start, int end);
 
-  public SubLObject nreverse();
+	public SubLObject typep(SubLObject type);
 
-  public String writeToString();
-  // For EQUALP hash tables.
-
-  public int psxhash();
-
-  public abstract AbstractArray adjustArray(int size,
-                                              SubLObject initialElement,
-                                              SubLObject initialContents)
-   ;
-  public abstract AbstractArray adjustArray(int size,
-                                              AbstractArray displacedTo,
-                                              int displacement)
-   ;
-
-
-  public AbstractArray adjustArray(int[] dims,
-                                              SubLObject initialElement,
-                                              SubLObject initialContents);
-
-  public AbstractArray adjustArray(int[] dims,
-                                              AbstractArray displacedTo,
-                                              int displacement);
+	public String writeToString();
+	// For EQUALP hash tables.
 }

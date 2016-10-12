@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,59 +17,57 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.tool.subl.jrtl.nativeCode.type.exception;
+package com.cyc.tool.subl.jrtl.nativeCode.type.exception;
 
 //// Internal Imports
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 
-
 //// External Imports
 
-public  final class ExceptionFactory {
+public class ExceptionFactory {
 
-  //// Constructors
+	//// Constructors
 
-  /** Creates a new instance of ExceptionFactory. */
-  private ExceptionFactory() {
-  }
+	public static SubLException makeException() {
+		return new SubLException();
+	}
 
-  //// Public Area
+	//// Public Area
 
-  public static final SubLException makeException() {
-    return new SubLException();
-  }
+	public static SubLException makeException(String str) {
+		return new SubLException(str);
+	}
 
-  public static final SubLException makeException(String str) {
-    return new SubLException(str);
-  }
+	public static SubLException makeException(String str, Throwable t) {
+		ExceptionFactory.verifyHandleable(t);
+		return new SubLException(str, t);
+	}
 
-  public static final SubLException makeException(SubLString str) {
-    return makeException(str.getString());
-  }
+	public static SubLException makeException(SubLString str) {
+		return ExceptionFactory.makeException(str.getString());
+	}
 
-  public static final SubLException makeException(String str, Throwable t) {
-    verifyHandleable(t);
-    return new SubLException(str, t);
-  }
+	public static SubLException makeException(SubLString str, Throwable t) {
+		ExceptionFactory.verifyHandleable(t);
+		return ExceptionFactory.makeException(str.getString(), t);
+	}
 
-  public static final SubLException makeException(SubLString str, Throwable t) {
-    verifyHandleable(t);
-    return makeException(str.getString(), t);
-  }
+	private static void verifyHandleable(Throwable t) {
+		if (t != null && t instanceof Unhandleable)
+			throw (Unhandleable) t;
+	}
 
-  //// Protected Area
+	//// Protected Area
 
-  //// Private Area
-  
-  private static final void verifyHandleable(Throwable t) {
-    if ((t != null) && (t instanceof Unhandleable)) {
-      throw (Unhandleable)t;
-    }
-  }
+	//// Private Area
 
-  //// Internal Rep
+	/** Creates a new instance of ExceptionFactory. */
+	private ExceptionFactory() {
+	}
 
-  //// Main
+	//// Internal Rep
+
+	//// Main
 
 }

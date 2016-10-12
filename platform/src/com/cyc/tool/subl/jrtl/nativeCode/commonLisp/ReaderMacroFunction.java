@@ -33,54 +33,42 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 
-public abstract class ReaderMacroFunction extends Function
-{
+public abstract class ReaderMacroFunction extends Function {
 
-	@Override
+	public ReaderMacroFunction(String name) {
+		super(name);
+	}
+
+	public ReaderMacroFunction(String name, String arglist) {
+		super(name, arglist);
+	}
+
+	public ReaderMacroFunction(String name, SubLPackage pkg) {
+		super(name, pkg);
+	}
+
+	public ReaderMacroFunction(String name, SubLPackage pkg, boolean exported) {
+		super(name, pkg, exported);
+	}
+
+	public ReaderMacroFunction(String name, SubLPackage pkg, boolean exported, String arglist) {
+		super(name, pkg, exported, arglist);
+	}
+
+	public abstract SubLObject execute(LispStream stream, char c);
+
+	public SubLObject execute(SubLObject first, SubLObject second)
+
+	{
+		LispStream stream = Lisp.inSynonymOf(first);
+		char c = second.charValue();
+		return this.execute(stream, c);
+	}
+
 	public void incrementCallCount(int arity) {
 		super.incrementCallCount(arity);
 	}
-    public ReaderMacroFunction(String name)
-    {
-        super(name);
-    }
-
-    public ReaderMacroFunction(String name, String arglist)
-    {
-        super(name, arglist);
-    }
-
-    public ReaderMacroFunction(String name, SubLPackage pkg)
-    {
-        super(name, pkg);
-    }
-
-    public ReaderMacroFunction(String name, SubLPackage pkg, boolean exported)
-    {
-        super(name, pkg, exported);
-    }
-
-    public ReaderMacroFunction(String name, SubLPackage pkg, boolean exported,
-                      String arglist)
-    {
-        super(name, pkg, exported, arglist);
-    }
-
-    @Override
-    public SubLObject execute(SubLObject first, SubLObject second)
-
-    {
-        LispStream stream = inSynonymOf(first);
-        char c = second.charValue();
-        return execute(stream, c);
-    }
-
-    public abstract SubLObject execute(LispStream stream, char c)
-       ;
 }

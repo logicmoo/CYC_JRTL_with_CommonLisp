@@ -27,6 +27,7 @@ import java.awt.Choice;
 import java.awt.ItemSelectable;
 import java.awt.List;
 import java.awt.event.ItemEvent;
+
 import javax.swing.AbstractButton;
 import javax.swing.ButtonModel;
 import javax.swing.DefaultButtonModel;
@@ -34,80 +35,68 @@ import javax.swing.JComboBox;
 
 import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.JHandler;
 
+public class ItemListener implements java.awt.event.ItemListener {
+	public static synchronized void addTo(AbstractButton abstractbutton) {
+		ItemListener itemlistener = new ItemListener();
+		itemlistener.handle = abstractbutton;
+		abstractbutton.addItemListener(itemlistener);
+	}
 
-public class ItemListener implements java.awt.event.ItemListener
-{
-    public void itemStateChanged(ItemEvent itemevent)
-    {
-        String as[] = { itemevent.paramString(), itemevent.getItem().toString() };
-        int ai[] = { itemevent.getStateChange() != ItemEvent.SELECTED ? 0 : 1 };
-        JHandler.callLisp("ITEMSTATECHANGED", handle, as, ai);
-    }
+	public static synchronized void addTo(ButtonModel buttonmodel) {
+		ItemListener itemlistener = new ItemListener();
+		itemlistener.handle = buttonmodel;
+		buttonmodel.addItemListener(itemlistener);
+	}
 
-    public static synchronized void addTo(Checkbox checkbox)
-    {
-        ItemListener itemlistener = new ItemListener();
-        itemlistener.handle = checkbox;
-        checkbox.addItemListener(itemlistener);
-    }
+	public static synchronized void addTo(Checkbox checkbox) {
+		ItemListener itemlistener = new ItemListener();
+		itemlistener.handle = checkbox;
+		checkbox.addItemListener(itemlistener);
+	}
 
-    public static synchronized void addTo(CheckboxMenuItem checkboxmenuitem)
-    {
-        ItemListener itemlistener = new ItemListener();
-        itemlistener.handle = checkboxmenuitem;
-        checkboxmenuitem.addItemListener(itemlistener);
-    }
+	public static synchronized void addTo(CheckboxMenuItem checkboxmenuitem) {
+		ItemListener itemlistener = new ItemListener();
+		itemlistener.handle = checkboxmenuitem;
+		checkboxmenuitem.addItemListener(itemlistener);
+	}
 
-    public static synchronized void addTo(Choice choice)
-    {
-        ItemListener itemlistener = new ItemListener();
-        itemlistener.handle = choice;
-        choice.addItemListener(itemlistener);
-    }
+	public static synchronized void addTo(Choice choice) {
+		ItemListener itemlistener = new ItemListener();
+		itemlistener.handle = choice;
+		choice.addItemListener(itemlistener);
+	}
 
-    public static synchronized void addTo(ItemSelectable itemselectable)
-    {
-        ItemListener itemlistener = new ItemListener();
-        itemlistener.handle = itemselectable;
-        itemselectable.addItemListener(itemlistener);
-    }
+	public static synchronized void addTo(DefaultButtonModel defaultbuttonmodel) {
+		ItemListener itemlistener = new ItemListener();
+		itemlistener.handle = defaultbuttonmodel;
+		defaultbuttonmodel.addItemListener(itemlistener);
+	}
 
-    public static synchronized void addTo(List list)
-    {
-        ItemListener itemlistener = new ItemListener();
-        itemlistener.handle = list;
-        list.addItemListener(itemlistener);
-    }
+	// Swing
 
-    //Swing
+	public static synchronized void addTo(ItemSelectable itemselectable) {
+		ItemListener itemlistener = new ItemListener();
+		itemlistener.handle = itemselectable;
+		itemselectable.addItemListener(itemlistener);
+	}
 
-    public static synchronized void addTo(AbstractButton abstractbutton)
-    {
-        ItemListener itemlistener = new ItemListener();
-        itemlistener.handle = abstractbutton;
-        abstractbutton.addItemListener(itemlistener);
-    }
+	public static synchronized void addTo(JComboBox jcombobox) {
+		ItemListener itemlistener = new ItemListener();
+		itemlistener.handle = jcombobox;
+		jcombobox.addItemListener(itemlistener);
+	}
 
-    public static synchronized void addTo(ButtonModel buttonmodel)
-    {
-        ItemListener itemlistener = new ItemListener();
-        itemlistener.handle = buttonmodel;
-        buttonmodel.addItemListener(itemlistener);
-    }
+	public static synchronized void addTo(List list) {
+		ItemListener itemlistener = new ItemListener();
+		itemlistener.handle = list;
+		list.addItemListener(itemlistener);
+	}
 
-    public static synchronized void addTo(DefaultButtonModel defaultbuttonmodel)
-    {
-        ItemListener itemlistener = new ItemListener();
-        itemlistener.handle = defaultbuttonmodel;
-        defaultbuttonmodel.addItemListener(itemlistener);
-    }
+	private Object handle;
 
-    public static synchronized void addTo(JComboBox jcombobox)
-    {
-        ItemListener itemlistener = new ItemListener();
-        itemlistener.handle = jcombobox;
-        jcombobox.addItemListener(itemlistener);
-    }
-
-    private Object handle;
+	public void itemStateChanged(ItemEvent itemevent) {
+		String as[] = { itemevent.paramString(), itemevent.getItem().toString() };
+		int ai[] = { itemevent.getStateChange() != ItemEvent.SELECTED ? 0 : 1 };
+		JHandler.callLisp("ITEMSTATECHANGED", this.handle, as, ai);
+	}
 }

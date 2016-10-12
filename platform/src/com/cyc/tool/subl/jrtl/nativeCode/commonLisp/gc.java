@@ -33,43 +33,36 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
 // ### gc
-public final class gc extends JavaPrimitive
-{
-    private gc()
-    {
-        super("gc", PACKAGE_EXT);
-    }
+public class gc extends JavaPrimitive {
+	private static Primitive GC = new gc();
 
-    @Override
-    public SubLObject execute()
-    {
-        Runtime runtime = Runtime.getRuntime();
-        long free = 0;
-        long maxFree = 0;
-        while (true) {
-            try {
-                runtime.gc();
-                Thread.sleep(100);
-                runtime.runFinalization();
-                Thread.sleep(100);
-                runtime.gc();
-                Thread.sleep(100);
-            }
-            catch (InterruptedException e) {}
-            free = runtime.freeMemory();
-            if (free > maxFree)
-                maxFree = free;
-            else
-                break;
-        }
-        return number(free);
-    }
+	private gc() {
+		super("gc", Lisp.PACKAGE_EXT);
+	}
 
-    private static final Primitive GC = new gc();
+	public SubLObject execute() {
+		Runtime runtime = Runtime.getRuntime();
+		long free = 0;
+		long maxFree = 0;
+		while (true) {
+			try {
+				runtime.gc();
+				Thread.sleep(100);
+				runtime.runFinalization();
+				Thread.sleep(100);
+				runtime.gc();
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+			}
+			free = runtime.freeMemory();
+			if (free > maxFree)
+				maxFree = free;
+			else
+				break;
+		}
+		return Lisp.number(free);
+	}
 }

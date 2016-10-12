@@ -33,57 +33,52 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.type.symbol;
 
-
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
-
-public interface LispSymbol extends SubLObject
-{
-  public boolean isKeyword();
-  
-  public boolean isSymbol();
-
-	public SubLObject symbolValue(LispThread thread);
-
-	public SubLObject symbolValue();
-
-	public void setSymbolValue(SubLObject arglist);
-
-	public void setSymbolFunction(SubLObject standardGenericFunction);
-
-	public void setBuiltInFunction(boolean b);
-
-	public void initializeSpecial(SubLObject t);
-
-	public void setLispPackage(SubLObject nil);
-
-	public void initializeConstant(SubLObject makeSingle);
-
-	public String getQualifiedName();
-
-	public SubLObject symbolValueNoThrow();
-
+public interface LispSymbol extends SubLObject {
 	public String getJavaSymbolName();
-
-	public boolean isBuiltInFunction();
 
 	public SubLObject getLispPackage();
 
-	public void setSpecial(boolean b);
-
-	public boolean isConstant();
-
-	public SubLString getSubLName();
-	
-	public SubLObject getSymbolSetfFunctionOrDie();
+	public String getQualifiedName();
 
 	public int getSpecialIndex();
 
+	public SubLString getSubLName();
+
+	public SubLObject getSymbolSetfFunctionOrDie();
+
+	public void initializeConstant(SubLObject makeSingle);
+
+	public void initializeSpecial(SubLObject t);
+
+	public boolean isBuiltInFunction();
+
+	public boolean isConstant();
+
+	public boolean isKeyword();
+
+	public boolean isSymbol();
+
+	public void setBuiltInFunction(boolean b);
+
+	public void setLispPackage(SubLObject nil);
+
+	public void setSpecial(boolean b);
+
 	public void setSpecialIndex(int n);
 
-	//public Symbol addFunction(String upperCase, LispObject function);
+	public void setSymbolFunction(SubLObject standardGenericFunction);
+
+	public void setSymbolValue(SubLObject arglist);
+
+	public SubLObject symbolValue();
+
+	public SubLObject symbolValue(LispThread thread);
+
+	public SubLObject symbolValueNoThrow();
+
+	// public Symbol addFunction(String upperCase, LispObject function);
 }

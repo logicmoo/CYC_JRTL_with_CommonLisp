@@ -33,27 +33,37 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
-import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public final class SocketFunctions {
+public class SocketFunctions {
 
-	//### %make-socket
-	private static final Primitive MAKE_SOCKET = new make_socket();
-
-	public final static class make_socket extends JavaPrimitive {
-		make_socket() {
-			super("%make-socket", PACKAGE_SYS, false, "host port");
+	public static class make_server_socket extends JavaPrimitive {
+		make_server_socket() {
+			super("%make-server-socket", Lisp.PACKAGE_SYS, false, "port element-type");
 		}
 
-		@Override
+		public SubLObject execute(SubLObject first)
+
+		{
+			int port = first.intValue();
+			try {
+				ServerSocket socket = new ServerSocket(port);
+				return new ABCLJavaObject(socket);
+			} catch (Exception e) {
+				return Lisp.error(new LispError(e.getMessage()));
+			}
+		}
+
+	}
+
+	public static class make_socket extends JavaPrimitive {
+		make_socket() {
+			super("%make-socket", Lisp.PACKAGE_SYS, false, "host port");
+		}
+
 		public SubLObject execute(SubLObject first, SubLObject second)
 
 		{
@@ -63,91 +73,35 @@ public final class SocketFunctions {
 				Socket socket = new Socket(host, port);
 				return new ABCLJavaObject(socket);
 			} catch (Exception e) {
-				return error(new LispError(e.getMessage()));
+				return Lisp.error(new LispError(e.getMessage()));
 			}
 		}
 
 	}
 
-	//### %make-server-socket
-	private static final Primitive MAKE_SERVER_SOCKET = new make_server_socket();
-
-	public final static class make_server_socket extends JavaPrimitive {
-		make_server_socket() {
-			super("%make-server-socket", PACKAGE_SYS, false, "port element-type");
-		}
-
-		@Override
-		public SubLObject execute(SubLObject first)
-
-		{
-			int port = first.intValue();
-			try {
-				ServerSocket socket = new ServerSocket(port);
-				return new ABCLJavaObject(socket);
-			} catch (Exception e) {
-				return error(new LispError(e.getMessage()));
-			}
-		}
-
-	}
-
-	// ### %server-socket-close
-	private static final Primitive SERVER_SOCKET_CLOSE = new server_socket_close();
-
-	public final static class server_socket_close extends JavaPrimitive {
+	public static class server_socket_close extends JavaPrimitive {
 		protected server_socket_close() {
-			super("%server-socket-close", PACKAGE_SYS, false, "socket");
+			super("%server-socket-close", Lisp.PACKAGE_SYS, false, "socket");
 		}
 
-		@Override
 		public SubLObject execute(SubLObject first)
 
 		{
 			try {
 				ServerSocket serverSocket = (ServerSocket) ABCLJavaObject.getObject(first);
 				serverSocket.close();
-				return T;
+				return Lisp.T;
 			} catch (Exception e) {
-				return error(new LispError(e.getMessage()));
+				return Lisp.error(new LispError(e.getMessage()));
 			}
 		}
 	}
 
-	//### %socket-stream
-	private static final Primitive SOCKET_STREAM = new socket_stream();
-
-	public final static class socket_stream extends JavaPrimitive {
-		protected socket_stream() {
-			super("%socket-stream", PACKAGE_SYS, false, "socket element-type external-format");
-		}
-
-		@Override
-		public SubLObject execute(SubLObject first, SubLObject second, SubLObject third)
-
-		{
-			Socket socket = (Socket) ((JavaObject) first).getObject();
-			SubLObject elementType = second; // Checked by caller.
-			try {
-				LispStream in = makeStream(LispSymbols.SYSTEM_STREAM, socket.getInputStream(), elementType, third);
-				LispStream out = makeStream(LispSymbols.SYSTEM_STREAM, socket.getOutputStream(), elementType, third);
-				return new SocketStream(socket, in, out);
-			} catch (Exception e) {
-				return error(new LispError(e.getMessage()));
-			}
-		}
-
-	}
-
-	//### %socket-accept
-	private static final Primitive SOCKET_ACCEPT = new socket_accept();
-
-	public final static class socket_accept extends JavaPrimitive {
+	public static class socket_accept extends JavaPrimitive {
 		protected socket_accept() {
-			super("%socket-accept", PACKAGE_SYS, false, "socket");
+			super("%socket-accept", Lisp.PACKAGE_SYS, false, "socket");
 		}
 
-		@Override
 		public SubLObject execute(SubLObject first)
 
 		{
@@ -156,33 +110,70 @@ public final class SocketFunctions {
 				Socket socket = serverSocket.accept();
 				return new ABCLJavaObject(socket);
 			} catch (Exception e) {
-				return error(new LispError(e.getMessage()));
+				return Lisp.error(new LispError(e.getMessage()));
 			}
 		}
 
 	}
 
-	//### %socket-close
-	private static final Primitive SOCKET_CLOSE = new socket_close();
-
-	public final static class socket_close extends JavaPrimitive {
+	public static class socket_close extends JavaPrimitive {
 		protected socket_close() {
-			super("%socket-close", PACKAGE_SYS, false, "socket");
+			super("%socket-close", Lisp.PACKAGE_SYS, false, "socket");
 		}
 
-		@Override
 		public SubLObject execute(SubLObject first)
 
 		{
 			Socket socket = (Socket) ABCLJavaObject.getObject(first);
 			try {
 				socket.close();
-				return T;
+				return Lisp.T;
 			} catch (Exception e) {
-				return error(new LispError(e.getMessage()));
+				return Lisp.error(new LispError(e.getMessage()));
 			}
 		}
 
 	}
+
+	public static class socket_stream extends JavaPrimitive {
+		protected socket_stream() {
+			super("%socket-stream", Lisp.PACKAGE_SYS, false, "socket element-type external-format");
+		}
+
+		public SubLObject execute(SubLObject first, SubLObject second, SubLObject third)
+
+		{
+			Socket socket = (Socket) ((JavaObject) first).getObject();
+			SubLObject elementType = second; // Checked by caller.
+			try {
+				LispStream in = LispObjectFactory.makeStream(LispSymbols.SYSTEM_STREAM, socket.getInputStream(),
+						elementType, third);
+				LispStream out = LispObjectFactory.makeStream(LispSymbols.SYSTEM_STREAM, socket.getOutputStream(),
+						elementType, third);
+				return new SocketStream(socket, in, out);
+			} catch (Exception e) {
+				return Lisp.error(new LispError(e.getMessage()));
+			}
+		}
+
+	}
+
+	// ### %make-socket
+	private static Primitive MAKE_SOCKET = new make_socket();
+
+	// ### %make-server-socket
+	private static Primitive MAKE_SERVER_SOCKET = new make_server_socket();
+
+	// ### %server-socket-close
+	private static Primitive SERVER_SOCKET_CLOSE = new server_socket_close();
+
+	// ### %socket-stream
+	private static Primitive SOCKET_STREAM = new socket_stream();
+
+	// ### %socket-accept
+	private static Primitive SOCKET_ACCEPT = new socket_accept();
+
+	// ### %socket-close
+	private static Primitive SOCKET_CLOSE = new socket_close();
 
 }

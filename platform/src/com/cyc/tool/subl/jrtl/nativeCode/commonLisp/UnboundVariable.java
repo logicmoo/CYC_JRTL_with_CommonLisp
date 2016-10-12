@@ -33,60 +33,46 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class UnboundVariable extends CellError
-{
-  // obj is either the unbound variable itself or an initArgs list.
-  public UnboundVariable(SubLObject obj)
-  {
-    super(StandardClass.UNBOUND_VARIABLE);
-    if (obj instanceof SubLCons)
-      initialize(obj);
-    else
-      setCellName(obj);
-  }
+public class UnboundVariable extends CellError {
+	// obj is either the unbound variable itself or an initArgs list.
+	public UnboundVariable(SubLObject obj) {
+		super(StandardClass.UNBOUND_VARIABLE);
+		if (obj instanceof SubLCons)
+			this.initialize(obj);
+		else
+			this.setCellName(obj);
+	}
 
-  @Override
-  public String getMessage()
-  {
-    LispThread thread = LispThread.currentThread();
-    final SpecialBindingsMark mark = thread.markSpecialBindings();
-    thread.bindSpecial(LispSymbols.PRINT_ESCAPE, T);
-    StringBuffer sb = new StringBuffer("The variable ");
-    try {
-        sb.append(getCellName().writeToString());
-    }
-    finally {
-        thread.resetSpecialBindings(mark);
-    }
-    sb.append(" is unbound.");
-    return sb.toString();
-  }
+	public SubLObject classOf() {
+		return StandardClass.UNBOUND_VARIABLE;
+	}
 
-  @Override
-  public SubLObject typeOf()
-  {
-    return LispSymbols.UNBOUND_VARIABLE;
-  }
+	public String getMessage() {
+		LispThread thread = LispThread.currentThread();
+		SpecialBindingsMark mark = thread.markSpecialBindings();
+		thread.bindSpecial(LispSymbols.PRINT_ESCAPE, Lisp.T);
+		StringBuffer sb = new StringBuffer("The variable ");
+		try {
+			sb.append(this.getCellName().writeToString());
+		} finally {
+			thread.resetSpecialBindings(mark);
+		}
+		sb.append(" is unbound.");
+		return sb.toString();
+	}
 
-  @Override
-  public SubLObject classOf()
-  {
-    return StandardClass.UNBOUND_VARIABLE;
-  }
+	public SubLObject typeOf() {
+		return LispSymbols.UNBOUND_VARIABLE;
+	}
 
-  @Override
-  public SubLObject typep(SubLObject type)
-  {
-    if (type == LispSymbols.UNBOUND_VARIABLE)
-      return T;
-    if (type == StandardClass.UNBOUND_VARIABLE)
-      return T;
-    return super.typep(type);
-  }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.UNBOUND_VARIABLE)
+			return Lisp.T;
+		if (type == StandardClass.UNBOUND_VARIABLE)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

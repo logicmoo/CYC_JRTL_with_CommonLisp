@@ -20,7 +20,6 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp.java.awt;
 
-
 import java.awt.Component;
 import java.awt.event.KeyEvent;
 
@@ -28,28 +27,24 @@ import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.JHandler;
 
 public class KeyAdapter extends java.awt.event.KeyAdapter {
 
-    public static synchronized void addTo(Component component) {
-        component.addKeyListener(new KeyAdapter());
-    }
+	public static synchronized void addTo(Component component) {
+		component.addKeyListener(new KeyAdapter());
+	}
 
-    private void call(String s, KeyEvent keyevent) {
-        int ai[] = {
-            keyevent.getModifiers(), 
-	    keyevent.isActionKey() ? 1 : 0, 
-	    keyevent.getKeyCode()
-        };
-        JHandler.callLisp(s, keyevent.getComponent(), keyevent.paramString(), ai);
-    }
+	private void call(String s, KeyEvent keyevent) {
+		int ai[] = { keyevent.getModifiers(), keyevent.isActionKey() ? 1 : 0, keyevent.getKeyCode() };
+		JHandler.callLisp(s, keyevent.getComponent(), keyevent.paramString(), ai);
+	}
 
-    public void keyPressed(KeyEvent keyevent) {
-        call("KEYPRESSED", keyevent);
-    }
+	public void keyPressed(KeyEvent keyevent) {
+		this.call("KEYPRESSED", keyevent);
+	}
 
-    public void keyReleased(KeyEvent keyevent) {
-        call("KEYRELEASED", keyevent);
-    }
+	public void keyReleased(KeyEvent keyevent) {
+		this.call("KEYRELEASED", keyevent);
+	}
 
-    public void keyTyped(KeyEvent keyevent) {
-        call("KEYTYPED", keyevent);
-    }
+	public void keyTyped(KeyEvent keyevent) {
+		this.call("KEYTYPED", keyevent);
+	}
 }

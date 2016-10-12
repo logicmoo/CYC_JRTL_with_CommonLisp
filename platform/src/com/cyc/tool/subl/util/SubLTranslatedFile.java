@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,7 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.tool.subl.util;
+package com.cyc.tool.subl.util;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Resourcer;
@@ -29,27 +29,28 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
 
 //// External Imports
 
-public  abstract class SubLTranslatedFile extends SubLTrampolineFile implements CommonSymbols, SubLFile {
-  
-  //// Public Area
-  
-  public static final SubLObject[] EMPTY_SUBL_OBJECT_ARRAY = Resourcer.EMPTY_SUBL_OBJECT_ARRAY;
-  
-  public static final SubLFunction extractFunctionNamed(String name) {
-    return SubLObjectFactory.makeSymbol(name).getFunc();
-  }
-  
-  public static @interface SubL {
-    String source();
-    long position();
-  }
-  
-  //// Protected Area
-  
-  //// Private Area
-  
-  //// Internal Rep
-  
-  //// Main
-  
+public abstract class SubLTranslatedFile extends SubLTrampolineFile implements CommonSymbols, SubLFile {
+
+	//// Public Area
+
+	public static @interface SubL {
+		long position();
+
+		String source();
+	}
+
+	public static SubLObject[] EMPTY_SUBL_OBJECT_ARRAY = Resourcer.EMPTY_SUBL_OBJECT_ARRAY;
+
+	public static SubLFunction extractFunctionNamed(String name) {
+		return SubLObjectFactory.makeSymbol(name).getFunc();
+	}
+
+	//// Protected Area
+
+	//// Private Area
+
+	//// Internal Rep
+
+	//// Main
+
 }

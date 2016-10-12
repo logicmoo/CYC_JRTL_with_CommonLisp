@@ -33,50 +33,39 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class SimpleWarning extends Warning
-{
-    public SimpleWarning(SubLObject initArgs)
-    {
-        super(StandardClass.SIMPLE_WARNING);
-        initialize(initArgs);
-    }
+public class SimpleWarning extends Warning {
+	public SimpleWarning(SubLObject initArgs) {
+		super(StandardClass.SIMPLE_WARNING);
+		this.initialize(initArgs);
+	}
 
-    public SimpleWarning(SubLObject formatControl, SubLObject formatArguments)
+	public SimpleWarning(SubLObject formatControl, SubLObject formatArguments)
 
-    {
-        super(StandardClass.SIMPLE_WARNING);
-        setFormatControl(formatControl);
-        setFormatArguments(formatArguments);
-    }
+	{
+		super(StandardClass.SIMPLE_WARNING);
+		this.setFormatControl(formatControl);
+		this.setFormatArguments(formatArguments);
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.SIMPLE_WARNING;
-    }
+	public SubLObject classOf() {
+		return StandardClass.SIMPLE_WARNING;
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.SIMPLE_WARNING;
-    }
+	public SubLObject typeOf() {
+		return LispSymbols.SIMPLE_WARNING;
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.SIMPLE_WARNING)
-            return T;
-        if (type == StandardClass.SIMPLE_WARNING)
-            return T;
-        if (type == LispSymbols.SIMPLE_CONDITION)
-            return T;
-        if (type == StandardClass.SIMPLE_CONDITION)
-            return T;
-        return super.typep(type);
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.SIMPLE_WARNING)
+			return Lisp.T;
+		if (type == StandardClass.SIMPLE_WARNING)
+			return Lisp.T;
+		if (type == LispSymbols.SIMPLE_CONDITION)
+			return Lisp.T;
+		if (type == StandardClass.SIMPLE_CONDITION)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

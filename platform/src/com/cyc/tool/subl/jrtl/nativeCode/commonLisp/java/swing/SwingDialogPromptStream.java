@@ -14,49 +14,46 @@ import javax.swing.JTextField;
 
 import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.java.DialogPromptStream;
 
-
 public class SwingDialogPromptStream extends DialogPromptStream {
 
-	JDialog dialog = new JDialog((Frame)null, true);
+	JDialog dialog = new JDialog((Frame) null, true);
 	private JLabel prompt = new JLabel();
 	private JTextField input = new JTextField(32);
-	
+
 	public SwingDialogPromptStream() {
 		this("Prompt");
 	}
-	
+
 	public SwingDialogPromptStream(String title) {
 		super();
-		dialog.setTitle(title);
+		this.dialog.setTitle(title);
 		JPanel tmpPanel = new JPanel();
-		tmpPanel.add(prompt);
-		tmpPanel.add(input);
-		dialog.add(tmpPanel);
+		tmpPanel.add(this.prompt);
+		tmpPanel.add(this.input);
+		this.dialog.add(tmpPanel);
 		JButton okBtn = new JButton("Ok");
 		okBtn.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				synchronized(dialog) {
-					dialog.dispose();
+				synchronized (SwingDialogPromptStream.this.dialog) {
+					SwingDialogPromptStream.this.dialog.dispose();
 				}
 			}
 		});
 		tmpPanel = new JPanel(new FlowLayout());
 		tmpPanel.add(okBtn);
-		dialog.add(tmpPanel, BorderLayout.SOUTH);
+		this.dialog.add(tmpPanel, BorderLayout.SOUTH);
 	}
-	
-	@Override
+
 	protected void closeDialog() {
-		dialog.dispose();
+		this.dialog.dispose();
 	}
-	
-	@Override
+
 	protected String readInputFromModalDialog(String promptText) {
-		prompt.setText(promptText);
-		dialog.pack();
-		dialog.setVisible(true);
-		return input.getText();
+		this.prompt.setText(promptText);
+		this.dialog.pack();
+		this.dialog.setVisible(true);
+		return this.input.getText();
 	}
-	
+
 }

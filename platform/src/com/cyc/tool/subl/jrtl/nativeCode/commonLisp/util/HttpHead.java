@@ -32,7 +32,6 @@
  */
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp.util;
 
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -45,123 +44,118 @@ import java.net.URL;
 
 import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Debug;
 
-/** 
+/**
  * Use HTTP/1.1 HEAD to retrieve the specified header field.
  */
 public class HttpHead {
-    static private String get(String urlString, String key) {
-        URL url = null;
-        try {
-            url = new URL(urlString);
-        } catch (MalformedURLException e) {
-            log("Failed to form url from " + "'" + urlString + "'" + ": " + e);
-        }
-        return get(url, key);
-    }
+	static private String findHeader(BufferedReader in, String key) {
+		String result = null;
+		String line;
+		try {
+			while ((line = in.readLine()) != null) {
+				int i = line.indexOf(":");
+				if (i == -1)
+					continue; // XXX parse multi-line HTTP headers
+				String k = line.substring(0, i);
+				String v = line.substring(i + 1).trim();
+				if (k.equals(key)) {
+					result = v;
+					break;
+				}
+			}
+		} catch (IOException e) {
+			HttpHead.log("Failed to read headers: " + e);
+		}
+		return result;
+	}
 
-    static public String get(URL url, String key) {
-        Socket socket = null;
-        String result = null;
-        try {
-            String protocol = url.getProtocol();
-            if (!protocol.equals("http")) {
-                log("The protocol " + "'" + protocol + "'" + " is not http.");
-                return result;
-            }
+	static private String get(String urlString, String key) {
+		URL url = null;
+		try {
+			url = new URL(urlString);
+		} catch (MalformedURLException e) {
+			HttpHead.log("Failed to form url from " + "'" + urlString + "'" + ": " + e);
+		}
+		return HttpHead.get(url, key);
+	}
 
-            socket = new Socket(Proxy.NO_PROXY); // XXX add Proxy
+	static public String get(URL url, String key) {
+		Socket socket = null;
+		String result = null;
+		try {
+			String protocol = url.getProtocol();
+			if (!protocol.equals("http")) {
+				HttpHead.log("The protocol " + "'" + protocol + "'" + " is not http.");
+				return result;
+			}
 
-            int port = url.getPort();
-            if (port == -1) {
-                port = 80;
-            }
-            InetSocketAddress address = new InetSocketAddress(url.getHost(), port);
-            try {
-                socket.connect(address, 5000); // ??? too long?  too short?
-            } catch (IOException ex) {
-                log("Connection failed: " + ex);
-                return result;
-            }
+			socket = new Socket(Proxy.NO_PROXY); // XXX add Proxy
 
-            PrintWriter out = null;
-            BufferedReader in = null;
-            try {
-                out = new PrintWriter(socket.getOutputStream());
-                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            } catch (IOException e) {
-                log("Failed to establish socket io: " + e);
-                return result;
-            }
+			int port = url.getPort();
+			if (port == -1)
+				port = 80;
+			InetSocketAddress address = new InetSocketAddress(url.getHost(), port);
+			try {
+				socket.connect(address, 5000); // ??? too long? too short?
+			} catch (IOException ex) {
+				HttpHead.log("Connection failed: " + ex);
+				return result;
+			}
 
-            String path = url.getPath();
-            out.println("HEAD " + url + " HTTP/1.1");
-            out.println("Connection: close");
-            out.println("");
-            out.flush();
+			PrintWriter out = null;
+			BufferedReader in = null;
+			try {
+				out = new PrintWriter(socket.getOutputStream());
+				in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			} catch (IOException e) {
+				HttpHead.log("Failed to establish socket io: " + e);
+				return result;
+			}
 
-            String line = null;
-            try {
-                line = in.readLine();
-            } catch (IOException e) {
-                log("Failed to read HTTP response: " + e);
-            }
-            String status[] = line.split("\\s");
-            if (status[1].equals("200")) {
-                result = findHeader(in, key);
-            } else if (status[1].startsWith("3")) {
-                // Follow redirects ad nauseum
-                String location = findHeader(in, "Location");
-                if (location != null) {
-                    return get(location, key);
-                }
-            } else {
-                log("Unexpected response: " + line);
-            }
-        } finally {
-            try {
-                socket.close();
-            } catch (IOException e) {
-            }
-        }
-        return result;
-    }
+			String path = url.getPath();
+			out.println("HEAD " + url + " HTTP/1.1");
+			out.println("Connection: close");
+			out.println("");
+			out.flush();
 
-    static private String findHeader(BufferedReader in, String key) {
-        String result = null;
-        String line;
-        try {
-            while ((line = in.readLine()) != null) {
-                int i = line.indexOf(":");
-                if (i == -1) {
-                    continue; // XXX parse multi-line HTTP headers
-                }
-                String k = line.substring(0, i);
-                String v = line.substring(i + 1).trim();
-                if (k.equals(key)) {
-                    result = v;
-                    break;
-                }
-            }
-        } catch (IOException e) {
-            log("Failed to read headers: " + e);
-        }
-        return result;
-    }
+			String line = null;
+			try {
+				line = in.readLine();
+			} catch (IOException e) {
+				HttpHead.log("Failed to read HTTP response: " + e);
+			}
+			String status[] = line.split("\\s");
+			if (status[1].equals("200"))
+				result = HttpHead.findHeader(in, key);
+			else if (status[1].startsWith("3")) {
+				// Follow redirects ad nauseum
+				String location = HttpHead.findHeader(in, "Location");
+				if (location != null)
+					return HttpHead.get(location, key);
+			} else
+				HttpHead.log("Unexpected response: " + line);
+		} finally {
+			try {
+				socket.close();
+			} catch (IOException e) {
+			}
+		}
+		return result;
+	}
 
-    static private void log(String message) {
-        Debug.warn(message);
-    }
+	static private void log(String message) {
+		Debug.warn(message);
+	}
 
-    public static void main(String argv[]) {
-        if (argv.length != 1) {
-            System.out.println("Usage: <cmd> URL");
-            return;
-        }
-        String modified = get(argv[0], "Last-Modified");
-        if (modified != null) {
-            System.out.println("Last-Modified: " + modified);
-        } else {
-            System.out.println("No result returned.");
-        }
-    }
+	public static void main(String argv[]) {
+		if (argv.length != 1) {
+			System.out.println("Usage: <cmd> URL");
+			return;
+		}
+		String modified = HttpHead.get(argv[0], "Last-Modified");
+		if (modified != null)
+			System.out.println("Last-Modified: " + modified);
+		else
+			System.out.println("No result returned.");
+	}
 }

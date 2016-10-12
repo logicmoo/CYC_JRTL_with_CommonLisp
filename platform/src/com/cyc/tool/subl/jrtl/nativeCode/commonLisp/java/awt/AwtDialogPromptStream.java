@@ -14,49 +14,46 @@ import javax.swing.JButton;
 
 import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.java.DialogPromptStream;
 
-
 public class AwtDialogPromptStream extends DialogPromptStream {
 
-	Dialog dialog = new Dialog((Frame)null, true);
+	Dialog dialog = new Dialog((Frame) null, true);
 	private Label prompt = new Label();
 	private TextField input = new TextField(32);
-	
+
 	public AwtDialogPromptStream() {
 		this("Prompt");
 	}
-	
+
 	public AwtDialogPromptStream(String title) {
 		super();
-		dialog.setTitle(title);
+		this.dialog.setTitle(title);
 		Panel tmpPanel = new Panel();
-		tmpPanel.add(prompt);
-		tmpPanel.add(input);
-		dialog.add(tmpPanel);
+		tmpPanel.add(this.prompt);
+		tmpPanel.add(this.input);
+		this.dialog.add(tmpPanel);
 		JButton okBtn = new JButton("Ok");
 		okBtn.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				synchronized(dialog) {
-					dialog.dispose();
+				synchronized (AwtDialogPromptStream.this.dialog) {
+					AwtDialogPromptStream.this.dialog.dispose();
 				}
 			}
 		});
 		tmpPanel = new Panel(new FlowLayout());
 		tmpPanel.add(okBtn);
-		dialog.add(tmpPanel, BorderLayout.SOUTH);
+		this.dialog.add(tmpPanel, BorderLayout.SOUTH);
 	}
-	
-	@Override
+
 	protected void closeDialog() {
-		dialog.dispose();
+		this.dialog.dispose();
 	}
-	
-	@Override
+
 	protected String readInputFromModalDialog(String promptText) {
-		prompt.setText(promptText);
-		dialog.pack();
-		dialog.setVisible(true);
-		return input.getText();
+		this.prompt.setText(promptText);
+		this.dialog.pack();
+		this.dialog.setVisible(true);
+		return this.input.getText();
 	}
-	
+
 }

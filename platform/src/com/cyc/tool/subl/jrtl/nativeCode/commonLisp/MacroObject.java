@@ -33,114 +33,84 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public final class MacroObject extends Function
-{
-  protected final SubLObject name;
-  public final SubLObject expander;
+public class MacroObject extends Function {
+	protected SubLObject name;
+	public SubLObject expander;
 
-  public MacroObject(SubLObject name, SubLObject expander)
-  {
-    this.name = name;
-    this.expander = expander;
-    if (name instanceof SubLSymbol && name != NIL && expander instanceof Function)
-      ((Function)expander).setLambdaName(list(LispSymbols.MACRO_FUNCTION,
-                                               name));
-  }
+	public MacroObject(SubLObject name, SubLObject expander) {
+		this.name = name;
+		this.expander = expander;
+		if (name instanceof SubLSymbol && name != Lisp.NIL && expander instanceof Function)
+			((Function) expander).setLambdaName(Lisp.list(LispSymbols.MACRO_FUNCTION, name));
+	}
 
-  @Override
-  public SubLObject execute()
-  {
-    return error(new UndefinedFunction(name));
-  }
+	public SubLObject execute() {
+		return Lisp.error(new UndefinedFunction(this.name));
+	}
 
-  @Override
-  public SubLObject execute(SubLObject arg)
-  {
-    return error(new UndefinedFunction(name));
-  }
+	public SubLObject execute(SubLObject arg) {
+		return Lisp.error(new UndefinedFunction(this.name));
+	}
 
-  @Override
-  public SubLObject execute(SubLObject first, SubLObject second)
+	public SubLObject execute(SubLObject first, SubLObject second)
 
-  {
-    return error(new UndefinedFunction(name));
-  }
+	{
+		return Lisp.error(new UndefinedFunction(this.name));
+	}
 
-  @Override
-  public SubLObject execute(SubLObject first, SubLObject second,
-                            SubLObject third)
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third)
 
-  {
-    return error(new UndefinedFunction(name));
-  }
+	{
+		return Lisp.error(new UndefinedFunction(this.name));
+	}
 
-  @Override
-  public SubLObject execute(SubLObject first, SubLObject second,
-                            SubLObject third, SubLObject fourth)
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth)
 
-  {
-    return error(new UndefinedFunction(name));
-  }
+	{
+		return Lisp.error(new UndefinedFunction(this.name));
+	}
 
-  @Override
-  public SubLObject execute(SubLObject first, SubLObject second,
-                            SubLObject third, SubLObject fourth,
-                            SubLObject fifth)
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
+			SubLObject fifth)
 
-  {
-    return error(new UndefinedFunction(name));
-  }
+	{
+		return Lisp.error(new UndefinedFunction(this.name));
+	}
 
-  @Override
-  public SubLObject execute(SubLObject first, SubLObject second,
-                            SubLObject third, SubLObject fourth,
-                            SubLObject fifth, SubLObject sixth)
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
+			SubLObject fifth, SubLObject sixth)
 
-  {
-    return error(new UndefinedFunction(name));
-  }
+	{
+		return Lisp.error(new UndefinedFunction(this.name));
+	}
 
-  @Override
-  public SubLObject execute(SubLObject first, SubLObject second,
-                            SubLObject third, SubLObject fourth,
-                            SubLObject fifth, SubLObject sixth,
-                            SubLObject seventh)
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
+			SubLObject fifth, SubLObject sixth, SubLObject seventh)
 
-  {
-    return error(new UndefinedFunction(name));
-  }
+	{
+		return Lisp.error(new UndefinedFunction(this.name));
+	}
 
-  @Override
-  public SubLObject execute(SubLObject first, SubLObject second,
-                            SubLObject third, SubLObject fourth,
-                            SubLObject fifth, SubLObject sixth,
-                            SubLObject seventh, SubLObject eighth)
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
+			SubLObject fifth, SubLObject sixth, SubLObject seventh, SubLObject eighth)
 
-  {
-    return error(new UndefinedFunction(name));
-  }
+	{
+		return Lisp.error(new UndefinedFunction(this.name));
+	}
 
-  @Override
-  public SubLObject execute(SubLObject[] args)
-  {
-    return error(new UndefinedFunction(name));
-  }
+	public SubLObject execute(SubLObject[] args) {
+		return Lisp.error(new UndefinedFunction(this.name));
+	}
 
-  @Override
-  public String writeToString()
-  {
-    return unreadableString("MACRO-OBJECT");
-  }
-
-	@Override
 	public void incrementCallCount(int arity) {
-		expander.incrementCallCount(arity);
+		this.expander.incrementCallCount(arity);
 		super.incrementCallCount(arity);
+	}
+
+	public String writeToString() {
+		return this.unreadableString("MACRO-OBJECT");
 	}
 }

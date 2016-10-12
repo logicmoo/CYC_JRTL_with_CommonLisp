@@ -33,53 +33,39 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public class LispError extends SeriousCondition
-{
-  public LispError()
-  {
-  }
+public class LispError extends SeriousCondition {
+	public LispError() {
+	}
 
-  protected LispError(LispClass cls)
-  {
-    super(cls);
-  }
+	protected LispError(LispClass cls) {
+		super(cls);
+	}
 
-  public LispError(SubLObject initArgs)
-  {
-    super(StandardClass.ERROR);
-    initialize(initArgs);
-  }
+	public LispError(String message) {
+		super(StandardClass.ERROR);
+		this.setFormatControl(message);
+	}
 
-  public LispError(String message)
-  {
-    super(StandardClass.ERROR);
-    setFormatControl(message);
-  }
+	public LispError(SubLObject initArgs) {
+		super(StandardClass.ERROR);
+		this.initialize(initArgs);
+	}
 
-  @Override
-  public SubLObject typeOf()
-  {
-    return LispSymbols.ERROR;
-  }
+	public SubLObject classOf() {
+		return StandardClass.ERROR;
+	}
 
-  @Override
-  public SubLObject classOf()
-  {
-    return StandardClass.ERROR;
-  }
+	public SubLObject typeOf() {
+		return LispSymbols.ERROR;
+	}
 
-  @Override
-  public SubLObject typep(SubLObject type)
-  {
-    if (type == LispSymbols.ERROR)
-      return T;
-    if (type == StandardClass.ERROR)
-      return T;
-    return super.typep(type);
-  }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.ERROR)
+			return Lisp.T;
+		if (type == StandardClass.ERROR)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

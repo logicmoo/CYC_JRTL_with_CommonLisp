@@ -33,78 +33,62 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import java.io.StringWriter;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 
-public final class StringOutputStream extends Stream
-{
-    private final StringWriter stringWriter;
+public class StringOutputStream extends Stream {
+	private StringWriter stringWriter;
 
-    public StringOutputStream()
-    {
-        this(LispSymbols.CHARACTER);
-    }
+	public StringOutputStream() {
+		this(LispSymbols.CHARACTER);
+	}
 
-    StringOutputStream(SubLObject elementType)
-    {
-        super(LispSymbols.STRING_OUTPUT_STREAM);
-        this.elementType = elementType;
-        this.eolStyle = EolStyle.RAW;
-        initAsCharacterOutputStream(stringWriter = new StringWriter());
-    }
+	StringOutputStream(SubLObject elementType) {
+		super(LispSymbols.STRING_OUTPUT_STREAM);
+		this.elementType = elementType;
+		this.eolStyle = EolStyle.RAW;
+		this.initAsCharacterOutputStream(this.stringWriter = new StringWriter());
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.STRING_OUTPUT_STREAM;
-    }
+	public long _getFilePosition() {
+		if (this.elementType == Lisp.NIL)
+			return 0;
+		return this.stringWriter.getBuffer().length();
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return BuiltInClass.STRING_OUTPUT_STREAM;
-    }
+	public SubLObject classOf() {
+		return BuiltInClass.STRING_OUTPUT_STREAM;
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.STRING_OUTPUT_STREAM)
-            return T;
-        if (type == LispSymbols.STRING_STREAM)
-            return T;
-        if (type == BuiltInClass.STRING_OUTPUT_STREAM)
-            return T;
-        if (type == BuiltInClass.STRING_STREAM)
-            return T;
-        return super.typep(type);
-    }
+	public SubLObject getOutputString() {
+		if (this.elementType == Lisp.NIL)
+			return new NilVector(0);
+		StringBuffer sb = this.stringWriter.getBuffer();
+		SubLString s = LispObjectFactory.makeString(sb);
+		sb.setLength(0);
+		return s;
+	}
 
-    @Override
-    public long _getFilePosition()
-    {
-        if (elementType == NIL)
-            return 0;
-        return stringWriter.getBuffer().length();
-    }
+	public String toString() {
+		return this.unreadableString("STRING-OUTPUT-STREAM");
+	}
 
-    public SubLObject getOutputString()
-    {
-        if (elementType == NIL)
-            return new NilVector(0);
-        StringBuffer sb = stringWriter.getBuffer();
-        SubLString s = makeString(sb);
-        sb.setLength(0);
-        return s;
-    }
+	public SubLObject typeOf() {
+		return LispSymbols.STRING_OUTPUT_STREAM;
+	}
 
-    @Override
-    public String toString()
-    {
-        return unreadableString("STRING-OUTPUT-STREAM");
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.STRING_OUTPUT_STREAM)
+			return Lisp.T;
+		if (type == LispSymbols.STRING_STREAM)
+			return Lisp.T;
+		if (type == BuiltInClass.STRING_OUTPUT_STREAM)
+			return Lisp.T;
+		if (type == BuiltInClass.STRING_STREAM)
+			return Lisp.T;
+		return super.typep(type);
+	}
 
 }

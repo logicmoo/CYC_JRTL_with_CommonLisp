@@ -33,72 +33,54 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class ByteArrayOutputStream extends Stream
-{
-    private final java.io.ByteArrayOutputStream byteArrayOutputStream;
+public class ByteArrayOutputStream extends Stream {
+	private java.io.ByteArrayOutputStream byteArrayOutputStream;
 
-    public ByteArrayOutputStream()
-    {
-        this(UNSIGNED_BYTE_8); //Declared in Stream.java
-    }
-
-    ByteArrayOutputStream(SubLObject elementType)
-    {
-        super(LispSymbols.SYSTEM_STREAM);
-        this.elementType = elementType;
-        initAsBinaryOutputStream(byteArrayOutputStream = new java.io.ByteArrayOutputStream(2048));
-        // based on statistics of ABCL's own .cls files
-        // as per 20100111, 2048 is the 70th percentile,
-        // meaning that only 30% of all .cls files is bigger
-
-        // However, *every* .cls file is bigger than 32 bytes;
-        // we want to prevent buffer resizing
-    }
-
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.STREAM; //TODO
-    }
-
-    @Override
-    public SubLObject classOf()
-    {
-        return BuiltInClass.STREAM; //TODO
-    }
-
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        return super.typep(type); //TODO
-    }
-
-    @Override
-    public long _getFilePosition()
-    {
-        if (elementType == NIL)
-            return 0;
-        return byteArrayOutputStream.size();
-    }
-
-    public byte[] getByteArray()
-    {
-        if (elementType == NIL) {
-            return new byte[0];
-	} else {
-	    return byteArrayOutputStream.toByteArray();
+	public ByteArrayOutputStream() {
+		this(Lisp.UNSIGNED_BYTE_8); // Declared in Stream.java
 	}
-    }
 
-    @Override
-    public String toString()
-    {
-        return unreadableString("BYTE-ARRAY-OUTPUT-STREAM");
-    }
+	ByteArrayOutputStream(SubLObject elementType) {
+		super(LispSymbols.SYSTEM_STREAM);
+		this.elementType = elementType;
+		this.initAsBinaryOutputStream(this.byteArrayOutputStream = new java.io.ByteArrayOutputStream(2048));
+		// based on statistics of ABCL's own .cls files
+		// as per 20100111, 2048 is the 70th percentile,
+		// meaning that only 30% of all .cls files is bigger
+
+		// However, *every* .cls file is bigger than 32 bytes;
+		// we want to prevent buffer resizing
+	}
+
+	public long _getFilePosition() {
+		if (this.elementType == Lisp.NIL)
+			return 0;
+		return this.byteArrayOutputStream.size();
+	}
+
+	public SubLObject classOf() {
+		return BuiltInClass.STREAM; // TODO
+	}
+
+	public byte[] getByteArray() {
+		if (this.elementType == Lisp.NIL)
+			return new byte[0];
+		else
+			return this.byteArrayOutputStream.toByteArray();
+	}
+
+	public String toString() {
+		return this.unreadableString("BYTE-ARRAY-OUTPUT-STREAM");
+	}
+
+	public SubLObject typeOf() {
+		return LispSymbols.STREAM; // TODO
+	}
+
+	public SubLObject typep(SubLObject type) {
+		return super.typep(type); // TODO
+	}
 
 }

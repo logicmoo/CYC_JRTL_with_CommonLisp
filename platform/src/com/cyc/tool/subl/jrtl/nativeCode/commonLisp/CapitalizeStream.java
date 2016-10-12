@@ -33,50 +33,38 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-public final class CapitalizeStream extends CaseFrobStream
-{
-    private boolean inWord;
+public class CapitalizeStream extends CaseFrobStream {
+	private boolean inWord;
 
-    public CapitalizeStream(LispStream target)
-    {
-        super(target);
-    }
+	public CapitalizeStream(LispStream target) {
+		super(target);
+	}
 
-    @Override
-    public void _writeChar(char c)
-    {
-        if (inWord) {
-            if (Character.isUpperCase(c)) {
-                c = CharacterFunctions.toLowerCase(c);
-            } else if (!Character.isLowerCase(c) && !Character.isDigit(c)) {
-                inWord = false;
-            }
-        } else {
-            // Not in a word.
-            if (Character.isUpperCase(c)) {
-                inWord = true;
-            } else if (Character.isLowerCase(c)) {
-                c = CharacterFunctions.toUpperCase(c);
-                inWord = true;
-            } else if (Character.isDigit(c)) {
-                inWord = true;
-            }
-        }
-        target._writeChar(c);
-    }
+	public void _writeChar(char c) {
+		if (this.inWord) {
+			if (Character.isUpperCase(c))
+				c = CharacterFunctions.toLowerCase(c);
+			else if (!Character.isLowerCase(c) && !Character.isDigit(c))
+				this.inWord = false;
+		} else // Not in a word.
+		if (Character.isUpperCase(c))
+			this.inWord = true;
+		else if (Character.isLowerCase(c)) {
+			c = CharacterFunctions.toUpperCase(c);
+			this.inWord = true;
+		} else if (Character.isDigit(c))
+			this.inWord = true;
+		this.target._writeChar(c);
+	}
 
-    @Override
-    public void _writeString(String s)
-    {
-        final int limit = s.length();
-        for (int i = 0; i < limit; i++)
-            _writeChar(s.charAt(i));
-    }
+	public void _writeLine(String s) {
+		this.target._writeString(s);
+		this.target._writeChar('\n');
+	}
 
-    @Override
-    public void _writeLine(String s)
-    {
-        target._writeString(s);
-        target._writeChar('\n');
-    }
+	public void _writeString(String s) {
+		int limit = s.length();
+		for (int i = 0; i < limit; i++)
+			this._writeChar(s.charAt(i));
+	}
 }

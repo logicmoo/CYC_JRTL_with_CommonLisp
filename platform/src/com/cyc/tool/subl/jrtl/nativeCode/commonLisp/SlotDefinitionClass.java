@@ -33,40 +33,27 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 
-public final class SlotDefinitionClass extends StandardClass
-{
-    public static final int SLOT_INDEX_NAME             = 0;
-    public static final int SLOT_INDEX_INITFUNCTION     = 1;
-    public static final int SLOT_INDEX_INITFORM         = 2;
-    public static final int SLOT_INDEX_INITARGS         = 3;
-    public static final int SLOT_INDEX_READERS          = 4;
-    public static final int SLOT_INDEX_WRITERS          = 5;
-    public static final int SLOT_INDEX_ALLOCATION       = 6;
-    public static final int SLOT_INDEX_ALLOCATION_CLASS = 7;
-    public static final int SLOT_INDEX_LOCATION         = 8;
+public class SlotDefinitionClass extends StandardClass {
+	public static int SLOT_INDEX_NAME = 0;
+	public static int SLOT_INDEX_INITFUNCTION = 1;
+	public static int SLOT_INDEX_INITFORM = 2;
+	public static int SLOT_INDEX_INITARGS = 3;
+	public static int SLOT_INDEX_READERS = 4;
+	public static int SLOT_INDEX_WRITERS = 5;
+	public static int SLOT_INDEX_ALLOCATION = 6;
+	public static int SLOT_INDEX_ALLOCATION_CLASS = 7;
+	public static int SLOT_INDEX_LOCATION = 8;
 
-    public SlotDefinitionClass()
-    {
-        super(LispSymbols.SLOT_DEFINITION, list(StandardClass.STANDARD_OBJECT));
-        SubLPackage pkg = PACKAGE_SYS;
-        SubLObject[] instanceSlotNames = {
-            pkg.intern("NAME"),
-            pkg.intern("INITFUNCTION"),
-            pkg.intern("INITFORM"),
-            pkg.intern("INITARGS"),
-            pkg.intern("READERS"),
-            pkg.intern("WRITERS"),
-            pkg.intern("ALLOCATION"),
-            pkg.intern("ALLOCATION-CLASS"),
-            pkg.intern("LOCATION")
-        };
-        setClassLayout(new Layout(this, instanceSlotNames, NIL));
-        setFinalized(true);
-    }
+	public SlotDefinitionClass() {
+		super(LispSymbols.SLOT_DEFINITION, Lisp.list(StandardClass.STANDARD_OBJECT));
+		SubLPackage pkg = Lisp.PACKAGE_SYS;
+		SubLObject[] instanceSlotNames = { pkg.intern("NAME"), pkg.intern("INITFUNCTION"), pkg.intern("INITFORM"),
+				pkg.intern("INITARGS"), pkg.intern("READERS"), pkg.intern("WRITERS"), pkg.intern("ALLOCATION"),
+				pkg.intern("ALLOCATION-CLASS"), pkg.intern("LOCATION") };
+		this.setClassLayout(new Layout(this, instanceSlotNames, Lisp.NIL));
+		this.setFinalized(true);
+	}
 }

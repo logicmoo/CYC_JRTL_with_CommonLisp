@@ -33,82 +33,77 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public interface AbstractArray extends SubLObject, LispSequence
-{
- 
-    abstract public SubLObject typep(SubLObject type);
-    
-    abstract public boolean equalp(SubLObject obj);
+public interface AbstractArray extends SubLObject, LispSequence {
 
-    abstract public boolean isDisplaced();
+	/**
+	 *
+	 * @param dims
+	 * @param displacedTo
+	 * @param displacement
+	 * @return
+	 */
+	public abstract AbstractArray adjustArray(int[] dims, AbstractArray displacedTo, int displacement);
 
-    abstract public SubLObject arrayDisplacement();
+	/**
+	 * Returns a newly allocated array or the current array with adjusted
+	 * dimensions.
+	 *
+	 * @param dims
+	 * @param initialElement
+	 * @c null if none
+	 * @param initialContents
+	 * @c null if none
+	 * @return @c this or a new array
+	 */
+	public abstract AbstractArray adjustArray(int[] dims, SubLObject initialElement, SubLObject initialContents);
 
-    abstract public boolean hasFillPointer();
+	abstract public SubLObject arrayDisplacement();
 
-    abstract public int getFillPointer();
+	public abstract void aset(int index, SubLObject newValue);
 
-    abstract public void setFillPointer(SubLObject fillPointer);
+	abstract public boolean equalp(SubLObject obj);
 
-    abstract public void setFillPointer(int fillPointer);
+	public abstract void fillVoid(SubLObject obj);
 
-    abstract public boolean isAdjustable();
+	abstract public SubLObject get(int[] subscripts);
 
-    public abstract int getRank();
+	public abstract int getDimension(int n);
 
-    public abstract SubLObject getDimensions();
+	public abstract SubLObject getDimensions();
 
-    public abstract int getDimension(int n);
+	public abstract SubLObject getElementType();
 
-    public abstract SubLObject getElementType();
+	abstract public int getFillPointer();
 
-    public abstract int getTotalSize();
+	public abstract int getRank();
 
-    public abstract void aset(int index, SubLObject newValue);
+	abstract public int getRowMajorIndex(int[] subscripts);
 
-//    // FIXME Detect overflow!
-    //abstract protected static int computeTotalSize(int[] dimensions);
+	abstract public int getRowMajorIndex(SubLObject[] subscripts);
 
-    abstract public int getRowMajorIndex(SubLObject[] subscripts);
+	public abstract int getTotalSize();
 
-    abstract public int getRowMajorIndex(int[] subscripts);
+	// // FIXME Detect overflow!
+	// abstract protected static int computeTotalSize(int[] dimensions);
 
-    abstract public SubLObject get(int[] subscripts);
+	abstract public boolean hasFillPointer();
 
-    abstract public void set(int[] subscripts, SubLObject newValue);
+	abstract public boolean isAdjustable();
 
-    public abstract void fillVoid(SubLObject obj);
+	abstract public boolean isDisplaced();
 
-    abstract public String writeToString(int[] dimv);
-   
-    // For EQUALP hash tables.
-    public abstract int psxhash();
+	// For EQUALP hash tables.
+	public abstract int psxhash();
 
-    /** Returns a newly allocated array or the current array with
-     * adjusted dimensions.
-     *
-     * @param dims
-     * @param initialElement @c null if none
-     * @param initialContents @c null if none
-     * @return @c this or a new array
-     */
-    public abstract AbstractArray adjustArray(int[] dims,
-                                              SubLObject initialElement,
-                                              SubLObject initialContents);
+	abstract public void set(int[] subscripts, SubLObject newValue);
 
-    /**
-     *
-     * @param dims
-     * @param displacedTo
-     * @param displacement
-     * @return
-     */
-    public abstract AbstractArray adjustArray(int[] dims,
-                                              AbstractArray displacedTo,
-                                              int displacement);
+	abstract public void setFillPointer(int fillPointer);
+
+	abstract public void setFillPointer(SubLObject fillPointer);
+
+	abstract public SubLObject typep(SubLObject type);
+
+	abstract public String writeToString(int[] dimv);
 }

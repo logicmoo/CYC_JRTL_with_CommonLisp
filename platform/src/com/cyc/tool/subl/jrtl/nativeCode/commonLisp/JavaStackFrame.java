@@ -33,105 +33,97 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public class JavaStackFrame 
-  extends StackFrame
-{
-  public final StackTraceElement javaFrame;
+public class JavaStackFrame extends StackFrame {
+	static SubLSymbol CLASS = Lisp.internKeyword("CLASS");
 
-  public JavaStackFrame(StackTraceElement javaFrame)
-  {
-    this.javaFrame = javaFrame;
-  }
+	static SubLSymbol METHOD = Lisp.internKeyword("METHOD");
 
-  @Override
-  public SubLObject typeOf() { 
-    return LispSymbols.JAVA_STACK_FRAME; 
-  }
+	static SubLSymbol FILE = Lisp.internKeyword("FILE");
 
-  @Override
-  public SubLObject classOf()   { return BuiltInClass.JAVA_STACK_FRAME; }
+	static SubLSymbol LINE = Lisp.internKeyword("LINE");
 
-  @Override
-  public String writeToString() { 
-    final String JAVA_STACK_FRAME = "JAVA-STACK-FRAME";
-    return unreadableString(JAVA_STACK_FRAME + " "
-				+ toLispString().getString());
-  }
+	static SubLSymbol NATIVE_METHOD = Lisp.internKeyword("NATIVE-METHOD");
 
-  @Override
-  public SubLObject typep(SubLObject typeSpecifier) 
+	public StackTraceElement javaFrame;
 
-  {
-     if (typeSpecifier == LispSymbols.JAVA_STACK_FRAME)
-       return T;
-     if (typeSpecifier == BuiltInClass.JAVA_STACK_FRAME)
-       return T;
-     return super.typep(typeSpecifier);
-   }
+	public JavaStackFrame(StackTraceElement javaFrame) {
+		this.javaFrame = javaFrame;
+	}
 
-  static final SubLSymbol CLASS = internKeyword("CLASS");
-  static final SubLSymbol METHOD = internKeyword("METHOD");
-  static final SubLSymbol FILE = internKeyword("FILE");
-  static final SubLSymbol LINE = internKeyword("LINE");
-  static final SubLSymbol NATIVE_METHOD = internKeyword("NATIVE-METHOD");
+	public SubLObject classOf() {
+		return BuiltInClass.JAVA_STACK_FRAME;
+	}
 
-  public SubLObject toLispList()
-  {
-    SubLObject result = Lisp.NIL;
-    
-    if ( javaFrame == null) 
-      return result;
+	public SubLObject getParts()
 
-    result = result.push(CLASS);
-    result = result.push(makeString(javaFrame.getClassName()));
-    result = result.push(METHOD);
-    result = result.push(makeString(javaFrame.getMethodName()));
-    result = result.push(FILE);
-    result = result.push(makeString(javaFrame.getFileName()));
-    result = result.push(LINE);
-    result = result.push(LispObjectFactory.makeInteger(javaFrame.getLineNumber()));
-    if (javaFrame.isNativeMethod()) {
-      result = result.push(NATIVE_METHOD);
-      result = result.push(LispSymbols.T);
-    }
+	{
+		SubLObject result = Lisp.NIL;
+		result = result
+				.push(LispObjectFactory.makeCons("CLASS", LispObjectFactory.makeString(this.javaFrame.getClassName())));
+		result = result.push(
+				LispObjectFactory.makeCons("METHOD", LispObjectFactory.makeString(this.javaFrame.getMethodName())));
+		result = result
+				.push(LispObjectFactory.makeCons("FILE", LispObjectFactory.makeString(this.javaFrame.getFileName())));
+		result = result.push(
+				LispObjectFactory.makeCons("LINE", LispObjectFactory.makeInteger(this.javaFrame.getLineNumber())));
+		result = result.push(LispObjectFactory.makeCons("NATIVE-METHOD",
+				LispObjectFactory.makeBoolean(this.javaFrame.isNativeMethod())));
+		return result.nreverse();
+	}
 
-    return result.nreverse();
-  }
-
-  @Override
-  public SubLString toLispString() 
-
-  {
-    return makeString(javaFrame.toString());
-  }
-
-  @Override
-  public SubLObject getParts() 
-
-  { 
-    SubLObject result = NIL;
-    result = result.push(makeCons("CLASS", 
-				  makeString(javaFrame.getClassName())));
-    result = result.push(makeCons("METHOD", 
-				  makeString(javaFrame.getMethodName())));
-    result = result.push(makeCons("FILE", 
-				  makeString(javaFrame.getFileName())));
-    result = result.push(makeCons("LINE",
-				  LispObjectFactory.makeInteger(javaFrame.getLineNumber())));
-    result = result.push(makeCons("NATIVE-METHOD",
-    		makeBoolean(javaFrame.isNativeMethod())));
-    return result.nreverse();
-  }
-
-	@Override
 	public void incrementCalls() {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	public SubLObject toLispList() {
+		SubLObject result = Lisp.NIL;
+
+		if (this.javaFrame == null)
+			return result;
+
+		result = result.push(JavaStackFrame.CLASS);
+		result = result.push(LispObjectFactory.makeString(this.javaFrame.getClassName()));
+		result = result.push(JavaStackFrame.METHOD);
+		result = result.push(LispObjectFactory.makeString(this.javaFrame.getMethodName()));
+		result = result.push(JavaStackFrame.FILE);
+		result = result.push(LispObjectFactory.makeString(this.javaFrame.getFileName()));
+		result = result.push(JavaStackFrame.LINE);
+		result = result.push(LispObjectFactory.makeInteger(this.javaFrame.getLineNumber()));
+		if (this.javaFrame.isNativeMethod()) {
+			result = result.push(JavaStackFrame.NATIVE_METHOD);
+			result = result.push(LispSymbols.T);
+		}
+
+		return result.nreverse();
+	}
+
+	public SubLString toLispString()
+
+	{
+		return LispObjectFactory.makeString(this.javaFrame.toString());
+	}
+
+	public SubLObject typeOf() {
+		return LispSymbols.JAVA_STACK_FRAME;
+	}
+
+	public SubLObject typep(SubLObject typeSpecifier)
+
+	{
+		if (typeSpecifier == LispSymbols.JAVA_STACK_FRAME)
+			return Lisp.T;
+		if (typeSpecifier == BuiltInClass.JAVA_STACK_FRAME)
+			return Lisp.T;
+		return super.typep(typeSpecifier);
+	}
+
+	public String writeToString() {
+		String JAVA_STACK_FRAME = "JAVA-STACK-FRAME";
+		return this.unreadableString(JAVA_STACK_FRAME + " " + this.toLispString().getString());
 	}
 }

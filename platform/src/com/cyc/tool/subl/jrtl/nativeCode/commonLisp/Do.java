@@ -33,379 +33,334 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public final class Do {
-    // ### do
-    private static final SpecialOperator DO = new sf_do();
-    private static final class sf_do extends SpecialOperator {
-        sf_do() {
-            super(LispSymbols.DO, "varlist endlist &body body");
-        }
+public class Do {
+	public static class dolist extends SpecialOperator {
+		protected dolist() {
+			super(LispSymbols.DOLIST);
+		}
 
-        @Override
-        public SubLObject execute(SubLObject args, Environment env)
+		public SubLObject execute(SubLObject args, Environment env)
 
-        {
-            return _do(args, env, false);
-        }
-    };
+		{
+			SubLObject bodyForm = args.rest();
+			args = args.first();
+			SubLSymbol var = Lisp.checkSymbol(args.first());
+			SubLObject listForm = args.second();
+			LispThread thread = LispThread.currentThread();
+			SubLObject resultForm = args.rest().rest().first();
+			SpecialBindingsMark mark = thread.markSpecialBindings();
+			// Process declarations.
+			SubLObject bodyAndDecls = Lisp.parseBody(bodyForm, false);
+			SubLObject specials = Lisp.parseSpecials(bodyAndDecls.NTH(1));
+			bodyForm = bodyAndDecls.first();
 
-    // ### do*
-    private static final SpecialOperator DO_STAR = new sf_do_star();
-    private static final class sf_do_star extends SpecialOperator {
-        sf_do_star() {
-            super(LispSymbols.DO_STAR, "varlist endlist &body body");
-        }
+			SubLObject blockId = new BlockLispObject();
+			Environment ext = new Environment(env);
+			try {
+				// Implicit block.
+				ext.addBlock(Lisp.NIL, blockId);
+				// Evaluate the list form.
+				SubLObject list = Lisp.checkList(Lisp.eval(listForm, ext, thread));
+				// Look for tags.
+				SubLObject remaining = bodyForm;
+				SubLObject localTags = Lisp.preprocessTagBody(bodyForm, ext);
 
-        @Override
-        public SubLObject execute(SubLObject args, Environment env)
+				Object binding;
+				if (specials != Lisp.NIL && Lisp.memq(var, specials)) {
+					thread.bindSpecial(var, null);
+					binding = thread.getSpecialBinding(var);
+					ext.declareSpecial(var);
+				} else if (var.isSpecialVariable()) {
+					thread.bindSpecial(var, null);
+					binding = thread.getSpecialBinding(var);
+				} else {
+					ext.bindSymbolVoid(var, null);
+					binding = ext.getBinding(var);
+				}
+				while (specials != Lisp.NIL) {
+					ext.declareSpecial(Lisp.checkSymbol(specials.first()));
+					specials = specials.rest();
+				}
+				while (list != Lisp.NIL) {
+					if (binding instanceof SpecialBinding)
+						((SpecialBinding) binding).value = list.first();
+					else
+						((Binding) binding).value = list.first();
 
-        {
-            return _do(args, env, true);
-        }
-    };
+					Lisp.processTagBody(bodyForm, localTags, ext);
 
-    static final SubLObject _do(SubLObject args, Environment env,
-                                        boolean sequential)
-
-    {
-        SubLObject varlist = args.first();
-        SubLObject second = args.second();
-        SubLObject end_test_form = second.first();
-        SubLObject result_forms = second.rest();
-        SubLObject body = args.cddr();
-        // Process variable specifications.
-        final int numvars = varlist.cl_length();
-        SubLSymbol[] vars = new SubLSymbol[numvars];
-        SubLObject[] initforms = makeLispObjectArray(numvars);
-        SubLObject[] stepforms = makeLispObjectArray(numvars);
-        for (int i = 0; i < numvars; i++) {
-            final SubLObject varspec = varlist.first();
-            if (varspec instanceof SubLCons) {
-                vars[i] = checkSymbol(varspec.first());
-                initforms[i] = varspec.second();
-                // Is there a step form?
-                if (varspec.cddr() != NIL)
-                    stepforms[i] = varspec.third();
-            } else {
-                // Not a cons, must be a symbol.
-                vars[i] = checkSymbol(varspec);
-                initforms[i] = NIL;
-            }
-            varlist = varlist.rest();
-        }
-        final LispThread thread = LispThread.currentThread();
-        final SpecialBindingsMark mark = thread.markSpecialBindings();
-        // Process declarations.
-
-        final SubLObject bodyAndDecls = parseBody(body, false);
-        SubLObject specials = parseSpecials(bodyAndDecls.NTH(1));
-        body = bodyAndDecls.first();
-
-        Environment ext = new Environment(env);
-        for (int i = 0; i < numvars; i++) {
-            SubLSymbol var = vars[i];
-            SubLObject value = eval(initforms[i], (sequential ? ext : env), thread);
-            ext = new Environment(ext);
-            if (specials != NIL && memq(var, specials))
-                thread.bindSpecial(var, value);
-            else if (var.isSpecialVariable())
-                thread.bindSpecial(var, value);
-            else
-                ext.bindSymbolVoid(var, value);
-        }
-        SubLObject list = specials;
-        while (list != NIL) {
-            ext.declareSpecial(checkSymbol(list.first()));
-            list = list.rest();
-        }
-        // Look for tags.
-        SubLObject localTags = preprocessTagBody(body, ext);
-        SubLObject blockId = new BlockLispObject();
-        try {
-            // Implicit block.
-            ext.addBlock(NIL, blockId);
-            while (true) {
-                // Execute body.
-                // Test for termination.
-                if (eval(end_test_form, ext, thread) != NIL)
-                    break;
-
-                processTagBody(body, localTags, ext);
-
-                // Update variables.
-                if (sequential) {
-                    for (int i = 0; i < numvars; i++) {
-                        SubLObject step = stepforms[i];
-                        if (step != null) {
-                            SubLSymbol symbol = vars[i];
-                            SubLObject value = eval(step, ext, thread);
-                            if (symbol.isSpecialVariable()
-                                    || ext.isDeclaredSpecial(symbol))
-                                thread.rebindSpecial(symbol, value);
-                            else
-                                ext.rebind(symbol, value);
-                        }
-                    }
-                } else {
-                    // Evaluate step forms.
-                    SubLObject results[] = makeLispObjectArray(numvars);
-                    for (int i = 0; i < numvars; i++) {
-                        SubLObject step = stepforms[i];
-                        if (step != null) {
-                            SubLObject result = eval(step, ext, thread);
-                            results[i] = result;
-                        }
-                    }
-                    // Update variables.
-                    for (int i = 0; i < numvars; i++) {
-                        if (results[i] != null) {
-                            SubLSymbol symbol = vars[i];
-                            SubLObject value = results[i];
-                            if (symbol.isSpecialVariable()
-                                    || ext.isDeclaredSpecial(symbol))
-                                thread.rebindSpecial(symbol, value);
-                            else
-                                ext.rebind(symbol, value);
-                        }
-                    }
-                }
-                if (interrupted)
-                    handleInterrupt();
-            }
-            SubLObject result = progn(result_forms, ext, thread);
-            return result;
-        } catch (Return ret) {
-            if (ret.getBlock() == blockId) {
-                return ret.getResult();
-            }
-            throw ret;
-        }
-        finally {
-            thread.resetSpecialBindings(mark);
-            ext.inactive = true;
-        }
-    }
-    
-    // ### dolist
-    private static final dolist DOLIST = new dolist();
-    public final static class dolist extends SpecialOperator {
-    protected dolist()
-    {
-      super(LispSymbols.DOLIST);
-    }
-
-    @Override
-    public SubLObject execute(SubLObject args, Environment env)
-
-    {
-      SubLObject bodyForm = args.rest();
-      args = args.first();
-      SubLSymbol var = checkSymbol(args.first());
-      SubLObject listForm = args.second();
-      final LispThread thread = LispThread.currentThread();
-      SubLObject resultForm = args.rest().rest().first();
-      final SpecialBindingsMark mark = thread.markSpecialBindings();
-      // Process declarations.
-      SubLObject bodyAndDecls = parseBody(bodyForm, false);
-      SubLObject specials = parseSpecials(bodyAndDecls.NTH(1));
-      bodyForm = bodyAndDecls.first();
-
-      SubLObject blockId = new BlockLispObject();
-      final Environment ext = new Environment(env);
-      try
-        {
-          // Implicit block.
-          ext.addBlock(NIL, blockId);
-          // Evaluate the list form.
-          SubLObject list = checkList(Lisp.eval(listForm, ext, thread));
-          // Look for tags.
-          SubLObject remaining = bodyForm;
-          SubLObject localTags = preprocessTagBody(bodyForm, ext);
-
-          final Object binding;
-          if (specials != NIL && memq(var, specials))
-            {
-              thread.bindSpecial(var, null);
-              binding = thread.getSpecialBinding(var);
-              ext.declareSpecial(var);
-            }
-          else if (var.isSpecialVariable())
-            {
-              thread.bindSpecial(var, null);
-              binding = thread.getSpecialBinding(var);
-            }
-          else
-            {
-              ext.bindSymbolVoid(var, null);
-              binding = ext.getBinding(var);
-            }
-          while (specials != NIL)
-            {
-              ext.declareSpecial(checkSymbol(specials.first()));
-              specials = specials.rest();
-            }
-          while (list != NIL)
-            {
-              if (binding instanceof SpecialBinding)
-                ((SpecialBinding)binding).value = list.first();
-              else
-                ((Binding)binding).value = list.first();
-
-              processTagBody(bodyForm, localTags, ext);
-
-              list = list.rest();
-              if (interrupted)
-                handleInterrupt();
-            }
-          if (binding instanceof SpecialBinding)
-            ((SpecialBinding)binding).value = NIL;
-          else
-            ((Binding)binding).value = NIL;
-          SubLObject result = Lisp.eval(resultForm, ext, thread);
-          return result;
-        }
-      catch (Return ret)
-        {
-          if (ret.getBlock() == blockId)
-            {
-              return ret.getResult();
-            }
-          throw ret;
-        }
-      finally
-        {
-          thread.resetSpecialBindings(mark);
-          ext.inactive = true;
-        }
-    }
+					list = list.rest();
+					if (Lisp.interrupted)
+						Lisp.handleInterrupt();
+				}
+				if (binding instanceof SpecialBinding)
+					((SpecialBinding) binding).value = Lisp.NIL;
+				else
+					((Binding) binding).value = Lisp.NIL;
+				SubLObject result = Lisp.eval(resultForm, ext, thread);
+				return result;
+			} catch (Return ret) {
+				if (ret.getBlock() == blockId)
+					return ret.getResult();
+				throw ret;
+			} finally {
+				thread.resetSpecialBindings(mark);
+				ext.inactive = true;
+			}
+		}
 	}
 
-    private static final dotimes DOTIMES = new dotimes();
-    public final static class dotimes extends SpecialOperator
-    {
-      dotimes()
-      {
-        super(LispSymbols.DOTIMES);
-      }
+	public static class dotimes extends SpecialOperator {
+		dotimes() {
+			super(LispSymbols.DOTIMES);
+		}
 
-      @Override
-      public SubLObject execute(SubLObject args, Environment env)
+		public SubLObject execute(SubLObject args, Environment env)
 
-      {
-        SubLObject bodyForm = args.rest();
-        args = args.first();
-        SubLSymbol var = checkSymbol(args.first());
-        SubLObject countForm = args.second();
-        final LispThread thread = LispThread.currentThread();
-        SubLObject resultForm = args.rest().rest().first();
-        final SpecialBindingsMark mark = thread.markSpecialBindings();
+		{
+			SubLObject bodyForm = args.rest();
+			args = args.first();
+			SubLSymbol var = Lisp.checkSymbol(args.first());
+			SubLObject countForm = args.second();
+			LispThread thread = LispThread.currentThread();
+			SubLObject resultForm = args.rest().rest().first();
+			SpecialBindingsMark mark = thread.markSpecialBindings();
 
-        SubLObject bodyAndDecls = parseBody(bodyForm, false);
-        SubLObject specials = parseSpecials(bodyAndDecls.NTH(1));
-        bodyForm = bodyAndDecls.first();
+			SubLObject bodyAndDecls = Lisp.parseBody(bodyForm, false);
+			SubLObject specials = Lisp.parseSpecials(bodyAndDecls.NTH(1));
+			bodyForm = bodyAndDecls.first();
 
-        SubLObject blockId = new BlockLispObject();
-        final Environment ext = new Environment(env);
-        try
-          {
-            ext.addBlock(NIL, blockId);
+			SubLObject blockId = new BlockLispObject();
+			Environment ext = new Environment(env);
+			try {
+				ext.addBlock(Lisp.NIL, blockId);
 
-            SubLObject limit = Lisp.eval(countForm, ext, thread);
-            SubLObject localTags = preprocessTagBody(bodyForm, ext);
+				SubLObject limit = Lisp.eval(countForm, ext, thread);
+				SubLObject localTags = Lisp.preprocessTagBody(bodyForm, ext);
 
-            SubLObject result;
-            // Establish a reusable binding.
-            final Object binding;
-            if (specials != NIL && memq(var, specials))
-              {
-                thread.bindSpecial(var, null);
-                binding = thread.getSpecialBinding(var);
-                ext.declareSpecial(var);
-              }
-            else if (var.isSpecialVariable())
-              {
-                thread.bindSpecial(var, null);
-                binding = thread.getSpecialBinding(var);
-              }
-            else
-              {
-                ext.bindSymbolVoid(var, null);
-                binding = ext.getBinding(var);
-              }
-            while (specials != NIL)
-              {
-                ext.declareSpecial(checkSymbol(specials.first()));
-                specials = specials.rest();
-              }
-            if (limit instanceof Fixnum)
-              {
-                int count = ((Fixnum)limit).value;
-                int i;
-                for (i = 0; i < count; i++)
-                  {
-                    if (binding instanceof SpecialBinding)
-                      ((SpecialBinding)binding).value = LispObjectFactory.makeInteger(i);
-                    else
-                      ((Binding)binding).value = LispObjectFactory.makeInteger(i);
+				SubLObject result;
+				// Establish a reusable binding.
+				Object binding;
+				if (specials != Lisp.NIL && Lisp.memq(var, specials)) {
+					thread.bindSpecial(var, null);
+					binding = thread.getSpecialBinding(var);
+					ext.declareSpecial(var);
+				} else if (var.isSpecialVariable()) {
+					thread.bindSpecial(var, null);
+					binding = thread.getSpecialBinding(var);
+				} else {
+					ext.bindSymbolVoid(var, null);
+					binding = ext.getBinding(var);
+				}
+				while (specials != Lisp.NIL) {
+					ext.declareSpecial(Lisp.checkSymbol(specials.first()));
+					specials = specials.rest();
+				}
+				if (limit instanceof Fixnum) {
+					int count = ((Fixnum) limit).value;
+					int i;
+					for (i = 0; i < count; i++) {
+						if (binding instanceof SpecialBinding)
+							((SpecialBinding) binding).value = LispObjectFactory.makeInteger(i);
+						else
+							((Binding) binding).value = LispObjectFactory.makeInteger(i);
 
-                    processTagBody(bodyForm, localTags, ext);
+						Lisp.processTagBody(bodyForm, localTags, ext);
 
-                    if (interrupted)
-                      handleInterrupt();
-                  }
-                if (binding instanceof SpecialBinding)
-                  ((SpecialBinding)binding).value = LispObjectFactory.makeInteger(i);
-                else
-                  ((Binding)binding).value = LispObjectFactory.makeInteger(i);
-                result = Lisp.eval(resultForm, ext, thread);
-              }
-            else if (limit instanceof Bignum)
-              {
-                SubLObject i = Fixnum.ZERO;
-                while (i.numL(limit))
-                  {
-                    if (binding instanceof SpecialBinding)
-                      ((SpecialBinding)binding).value = i;
-                    else
-                      ((Binding)binding).value = i;
+						if (Lisp.interrupted)
+							Lisp.handleInterrupt();
+					}
+					if (binding instanceof SpecialBinding)
+						((SpecialBinding) binding).value = LispObjectFactory.makeInteger(i);
+					else
+						((Binding) binding).value = LispObjectFactory.makeInteger(i);
+					result = Lisp.eval(resultForm, ext, thread);
+				} else if (limit instanceof Bignum) {
+					SubLObject i = Fixnum.ZERO;
+					while (i.numL(limit)) {
+						if (binding instanceof SpecialBinding)
+							((SpecialBinding) binding).value = i;
+						else
+							((Binding) binding).value = i;
 
-                    processTagBody(bodyForm, localTags, ext);
+						Lisp.processTagBody(bodyForm, localTags, ext);
 
-                    i = i.inc();
-                    if (interrupted)
-                      handleInterrupt();
-                  }
-                if (binding instanceof SpecialBinding)
-                  ((SpecialBinding)binding).value = i;
-                else
-                  ((Binding)binding).value = i;
-                result = Lisp.eval(resultForm, ext, thread);
-              }
-            else
-              return error(new TypeError(limit, LispSymbols.INTEGER));
-            return result;
-          }
-        catch (Return ret)
-          {
-            if (ret.getBlock() == blockId)
-              {
-                return ret.getResult();
-              }
-            throw ret;
-          }
-        finally
-          {
-            thread.resetSpecialBindings(mark);
-            ext.inactive = true;
-          }
-      }
-    }
+						i = i.inc();
+						if (Lisp.interrupted)
+							Lisp.handleInterrupt();
+					}
+					if (binding instanceof SpecialBinding)
+						((SpecialBinding) binding).value = i;
+					else
+						((Binding) binding).value = i;
+					result = Lisp.eval(resultForm, ext, thread);
+				} else
+					return Lisp.error(new TypeError(limit, LispSymbols.INTEGER));
+				return result;
+			} catch (Return ret) {
+				if (ret.getBlock() == blockId)
+					return ret.getResult();
+				throw ret;
+			} finally {
+				thread.resetSpecialBindings(mark);
+				ext.inactive = true;
+			}
+		}
+	};
+
+	private static class sf_do extends SpecialOperator {
+		sf_do() {
+			super(LispSymbols.DO, "varlist endlist &body body");
+		}
+
+		public SubLObject execute(SubLObject args, Environment env)
+
+		{
+			return Do._do(args, env, false);
+		}
+	}
+
+	private static class sf_do_star extends SpecialOperator {
+		sf_do_star() {
+			super(LispSymbols.DO_STAR, "varlist endlist &body body");
+		}
+
+		public SubLObject execute(SubLObject args, Environment env)
+
+		{
+			return Do._do(args, env, true);
+		}
+	};
+
+	// ### do
+	private static SpecialOperator DO = new sf_do();
+
+	// ### do*
+	private static SpecialOperator DO_STAR = new sf_do_star();
+
+	// ### dolist
+	private static dolist DOLIST = new dolist();
+
+	private static dotimes DOTIMES = new dotimes();
+
+	static SubLObject _do(SubLObject args, Environment env, boolean sequential)
+
+	{
+		SubLObject varlist = args.first();
+		SubLObject second = args.second();
+		SubLObject end_test_form = second.first();
+		SubLObject result_forms = second.rest();
+		SubLObject body = args.cddr();
+		// Process variable specifications.
+		int numvars = varlist.cl_length();
+		SubLSymbol[] vars = new SubLSymbol[numvars];
+		SubLObject[] initforms = LispObjectFactory.makeLispObjectArray(numvars);
+		SubLObject[] stepforms = LispObjectFactory.makeLispObjectArray(numvars);
+		for (int i = 0; i < numvars; i++) {
+			SubLObject varspec = varlist.first();
+			if (varspec instanceof SubLCons) {
+				vars[i] = Lisp.checkSymbol(varspec.first());
+				initforms[i] = varspec.second();
+				// Is there a step form?
+				if (varspec.cddr() != Lisp.NIL)
+					stepforms[i] = varspec.third();
+			} else {
+				// Not a cons, must be a symbol.
+				vars[i] = Lisp.checkSymbol(varspec);
+				initforms[i] = Lisp.NIL;
+			}
+			varlist = varlist.rest();
+		}
+		LispThread thread = LispThread.currentThread();
+		SpecialBindingsMark mark = thread.markSpecialBindings();
+		// Process declarations.
+
+		SubLObject bodyAndDecls = Lisp.parseBody(body, false);
+		SubLObject specials = Lisp.parseSpecials(bodyAndDecls.NTH(1));
+		body = bodyAndDecls.first();
+
+		Environment ext = new Environment(env);
+		for (int i = 0; i < numvars; i++) {
+			SubLSymbol var = vars[i];
+			SubLObject value = Lisp.eval(initforms[i], sequential ? ext : env, thread);
+			ext = new Environment(ext);
+			if (specials != Lisp.NIL && Lisp.memq(var, specials))
+				thread.bindSpecial(var, value);
+			else if (var.isSpecialVariable())
+				thread.bindSpecial(var, value);
+			else
+				ext.bindSymbolVoid(var, value);
+		}
+		SubLObject list = specials;
+		while (list != Lisp.NIL) {
+			ext.declareSpecial(Lisp.checkSymbol(list.first()));
+			list = list.rest();
+		}
+		// Look for tags.
+		SubLObject localTags = Lisp.preprocessTagBody(body, ext);
+		SubLObject blockId = new BlockLispObject();
+		try {
+			// Implicit block.
+			ext.addBlock(Lisp.NIL, blockId);
+			while (true) {
+				// Execute body.
+				// Test for termination.
+				if (Lisp.eval(end_test_form, ext, thread) != Lisp.NIL)
+					break;
+
+				Lisp.processTagBody(body, localTags, ext);
+
+				// Update variables.
+				if (sequential)
+					for (int i = 0; i < numvars; i++) {
+						SubLObject step = stepforms[i];
+						if (step != null) {
+							SubLSymbol symbol = vars[i];
+							SubLObject value = Lisp.eval(step, ext, thread);
+							if (symbol.isSpecialVariable() || ext.isDeclaredSpecial(symbol))
+								thread.rebindSpecial(symbol, value);
+							else
+								ext.rebind(symbol, value);
+						}
+					}
+				else {
+					// Evaluate step forms.
+					SubLObject results[] = LispObjectFactory.makeLispObjectArray(numvars);
+					for (int i = 0; i < numvars; i++) {
+						SubLObject step = stepforms[i];
+						if (step != null) {
+							SubLObject result = Lisp.eval(step, ext, thread);
+							results[i] = result;
+						}
+					}
+					// Update variables.
+					for (int i = 0; i < numvars; i++)
+						if (results[i] != null) {
+							SubLSymbol symbol = vars[i];
+							SubLObject value = results[i];
+							if (symbol.isSpecialVariable() || ext.isDeclaredSpecial(symbol))
+								thread.rebindSpecial(symbol, value);
+							else
+								ext.rebind(symbol, value);
+						}
+				}
+				if (Lisp.interrupted)
+					Lisp.handleInterrupt();
+			}
+			SubLObject result = Lisp.progn(result_forms, ext, thread);
+			return result;
+		} catch (Return ret) {
+			if (ret.getBlock() == blockId)
+				return ret.getResult();
+			throw ret;
+		} finally {
+			thread.resetSpecialBindings(mark);
+			ext.inactive = true;
+		}
+	}
 
 }

@@ -36,177 +36,168 @@ package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public final class SymbolHashTable
-{
-    private static final float LOAD_FACTOR = 0.75f;
+public class SymbolHashTable {
+	private static class HashEntry {
+		SubLSymbol symbol;
+		HashEntry next;
 
-    private int threshold;
-    private HashEntry[] buckets;
-    private int count;
+		HashEntry(SubLSymbol symbol) {
+			this.symbol = symbol;
+		}
+	}
 
-    private int mask;
+	private static float LOAD_FACTOR = 0.75f;
 
-    public SymbolHashTable(int size)
-    {
-        buckets = new HashEntry[calculateInitialCapacity(size)];
-        threshold = (int) (size * LOAD_FACTOR);
-        mask = buckets.length - 1;
-    }
+	private static int calculateInitialCapacity(int size) {
+		int capacity = 1;
+		while (capacity < size)
+			capacity <<= 1;
+		return capacity;
+	}
 
-    private static int calculateInitialCapacity(int size)
-    {
-        int capacity = 1;
-        while (capacity < size)
-            capacity <<= 1;
-        return capacity;
-    }
+	private int threshold;
 
-    public SubLSymbol getHT(SubLString key)
-    {
-        HashEntry e = buckets[key.sxhash() & mask];
-        while (e != null) {
-            if (key.equal(e.symbol.getSubLName()))
-                return e.symbol; // Return the symbol.
-            e = e.next;
-        }
-        return null;
-    }
+	private HashEntry[] buckets;
 
-    public SubLSymbol getHT(SubLString key, int hash)
-    {
-        HashEntry e = buckets[hash & mask];
-        while (e != null) {
-            if (key.equal(e.symbol.getSubLName()))
-                return e.symbol; // Return the symbol.
-            e = e.next;
-        }
-        return null;
-    }
+	private int count;
 
-    public void putHT(final SubLString key, final SubLSymbol symbol)
-    {
-        int index = key.sxhash() & mask;
-        HashEntry e = buckets[index];
-        while (e != null) {
-            if (key.equal(e.symbol.getSubLName())) {
-                if (e.symbol != symbol) {
-                    Debug.trace("replacing existing key for " + key.getString() +
-                                " in package " + e.symbol.getLispPackage().writeToString());
-                    Thread.dumpStack();
-                    e.symbol = symbol;
-                }
-                return;
-            }
-            e = e.next;
-        }
-        // Not found. We need to add a new entry.
-        if (++count > threshold) {
-            rehash();
-            // We need a new index for the bigger table.
-            index = key.sxhash() & mask;
-        }
-        e = new HashEntry(symbol);
-        e.next = buckets[index];
-        buckets[index] = e;
-    }
+	private int mask;
 
-    public void putHT(SubLSymbol symbol)
-    {
-        int index = symbol.sxhash() & mask;
-        HashEntry e = buckets[index];
-        while (e != null) {
-            if (symbol.getSubLName().equal(e.symbol.getSubLName())) {
-                if (e.symbol != symbol) {
-                    Debug.trace("replacing existing key for " + symbol.getJavaSymbolName());
-                    Thread.dumpStack();
-                    e.symbol = symbol; // Replace existing key.
-                }
-                return;
-            }
-            e = e.next;
-        }
-        // Not found. We need to add a new entry.
-        if (++count > threshold) {
-            rehash();
-            // Need a new hash value to suit the bigger table.
-            index = symbol.sxhash() & mask;
-        }
-        e = new HashEntry(symbol);
-        e.next = buckets[index];
-        buckets[index] = e;
-    }
+	public SymbolHashTable(int size) {
+		this.buckets = new HashEntry[SymbolHashTable.calculateInitialCapacity(size)];
+		this.threshold = (int) (size * SymbolHashTable.LOAD_FACTOR);
+		this.mask = this.buckets.length - 1;
+	}
 
-    public SubLObject removeHT(SubLObject key)
-    {
-        if (key instanceof SubLSymbol)
-            key = ((SubLSymbol)key).getSubLName();
-        int index = key.sxhash() & mask;
-        HashEntry e = buckets[index];
-        HashEntry last = null;
-        while (e != null) {
-            if (key.equal(e.symbol.getSubLName())) {
-                if (last == null)
-                    buckets[index] = e.next;
-                else
-                    last.next = e.next;
-                --count;
-                return e.symbol; // The key is the value!
-            }
-            last = e;
-            e = e.next;
-        }
-        return null;
-    }
+	public SubLSymbol getHT(SubLString key) {
+		HashEntry e = this.buckets[key.sxhash() & this.mask];
+		while (e != null) {
+			if (key.equal(e.symbol.getSubLName()))
+				return e.symbol; // Return the symbol.
+			e = e.next;
+		}
+		return null;
+	}
 
-    private void rehash()
-    {
-        HashEntry[] oldBuckets = buckets;
-        int newCapacity = buckets.length * 2;
-        threshold = (int) (newCapacity * LOAD_FACTOR);
-        buckets = new HashEntry[newCapacity];
-        mask = buckets.length - 1;
-        for (int i = oldBuckets.length; i-- > 0;) {
-            HashEntry e = oldBuckets[i];
-            while (e != null) {
-                final int index = e.symbol.sxhash() & mask;
-                HashEntry dest = buckets[index];
-                if (dest != null) {
-                    while (dest.next != null)
-                        dest = dest.next;
-                    dest.next = e;
-                } else
-                    buckets[index] = e;
-                HashEntry next = e.next;
-                e.next = null;
-                e = next;
-            }
-        }
-    }
+	public SubLSymbol getHT(SubLString key, int hash) {
+		HashEntry e = this.buckets[hash & this.mask];
+		while (e != null) {
+			if (key.equal(e.symbol.getSubLName()))
+				return e.symbol; // Return the symbol.
+			e = e.next;
+		}
+		return null;
+	}
 
-    public List<SubLSymbol> getSymbols()
-    {
-        ArrayList<SubLSymbol> list = new ArrayList<SubLSymbol>();
-        for (int i = 0; i < buckets.length; i++) {
-            HashEntry e = buckets[i];
-            while (e != null) {
-                list.add(e.symbol);
-                e = e.next;
-            }
-        }
-        return list;
-    }
+	public List<SubLSymbol> getSymbols() {
+		ArrayList<SubLSymbol> list = new ArrayList<SubLSymbol>();
+		for (int i = 0; i < this.buckets.length; i++) {
+			HashEntry e = this.buckets[i];
+			while (e != null) {
+				list.add(e.symbol);
+				e = e.next;
+			}
+		}
+		return list;
+	}
 
-    private static class HashEntry
-    {
-        SubLSymbol symbol;
-        HashEntry next;
+	public void putHT(SubLString key, SubLSymbol symbol) {
+		int index = key.sxhash() & this.mask;
+		HashEntry e = this.buckets[index];
+		while (e != null) {
+			if (key.equal(e.symbol.getSubLName())) {
+				if (e.symbol != symbol) {
+					Debug.trace("replacing existing key for " + key.getString() + " in package "
+							+ e.symbol.getLispPackage().writeToString());
+					Thread.dumpStack();
+					e.symbol = symbol;
+				}
+				return;
+			}
+			e = e.next;
+		}
+		// Not found. We need to add a new entry.
+		if (++this.count > this.threshold) {
+			this.rehash();
+			// We need a new index for the bigger table.
+			index = key.sxhash() & this.mask;
+		}
+		e = new HashEntry(symbol);
+		e.next = this.buckets[index];
+		this.buckets[index] = e;
+	}
 
-        HashEntry(SubLSymbol symbol)
-        {
-            this.symbol = symbol;
-        }
-    }
+	public void putHT(SubLSymbol symbol) {
+		int index = symbol.sxhash() & this.mask;
+		HashEntry e = this.buckets[index];
+		while (e != null) {
+			if (symbol.getSubLName().equal(e.symbol.getSubLName())) {
+				if (e.symbol != symbol) {
+					Debug.trace("replacing existing key for " + symbol.getJavaSymbolName());
+					Thread.dumpStack();
+					e.symbol = symbol; // Replace existing key.
+				}
+				return;
+			}
+			e = e.next;
+		}
+		// Not found. We need to add a new entry.
+		if (++this.count > this.threshold) {
+			this.rehash();
+			// Need a new hash value to suit the bigger table.
+			index = symbol.sxhash() & this.mask;
+		}
+		e = new HashEntry(symbol);
+		e.next = this.buckets[index];
+		this.buckets[index] = e;
+	}
+
+	private void rehash() {
+		HashEntry[] oldBuckets = this.buckets;
+		int newCapacity = this.buckets.length * 2;
+		this.threshold = (int) (newCapacity * SymbolHashTable.LOAD_FACTOR);
+		this.buckets = new HashEntry[newCapacity];
+		this.mask = this.buckets.length - 1;
+		for (int i = oldBuckets.length; i-- > 0;) {
+			HashEntry e = oldBuckets[i];
+			while (e != null) {
+				int index = e.symbol.sxhash() & this.mask;
+				HashEntry dest = this.buckets[index];
+				if (dest != null) {
+					while (dest.next != null)
+						dest = dest.next;
+					dest.next = e;
+				} else
+					this.buckets[index] = e;
+				HashEntry next = e.next;
+				e.next = null;
+				e = next;
+			}
+		}
+	}
+
+	public SubLObject removeHT(SubLObject key) {
+		if (key instanceof SubLSymbol)
+			key = ((SubLSymbol) key).getSubLName();
+		int index = key.sxhash() & this.mask;
+		HashEntry e = this.buckets[index];
+		HashEntry last = null;
+		while (e != null) {
+			if (key.equal(e.symbol.getSubLName())) {
+				if (last == null)
+					this.buckets[index] = e.next;
+				else
+					last.next = e.next;
+				--this.count;
+				return e.symbol; // The key is the value!
+			}
+			last = e;
+			e = e.next;
+		}
+		return null;
+	}
 }

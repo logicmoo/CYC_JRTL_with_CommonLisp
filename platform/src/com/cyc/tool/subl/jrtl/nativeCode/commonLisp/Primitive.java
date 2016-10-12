@@ -33,253 +33,204 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 class JavaPrimitive extends Primitive {
-  public JavaPrimitive(SubLObject name)
-  {
-      super(name);
-  }
+	public JavaPrimitive(String name) {
+		super(name);
+	}
 
-  public JavaPrimitive(String name)
-  {
-      super(name);
-  }
+	public JavaPrimitive(String name, String arglist) {
+		super(name, arglist);
+	}
 
-  public JavaPrimitive(SubLSymbol symbol, String arglist)
-  {
-      super(symbol, arglist);
-  }
+	public JavaPrimitive(String name, SubLPackage pkg) {
+		super(name, pkg);
+	}
 
-  public JavaPrimitive(SubLSymbol symbol, String arglist, String docstring)
-  {
-      super(symbol, arglist, docstring);
-  }
+	public JavaPrimitive(String name, SubLPackage pkg, boolean exported) {
+		super(name, pkg, exported);
+	}
 
-  public JavaPrimitive(String name, String arglist)
-  {
-      super(name, arglist);
-  }
+	public JavaPrimitive(String name, SubLPackage pkg, boolean exported, String arglist) {
+		super(name, pkg, exported, arglist);
+	}
 
-  public JavaPrimitive(SubLObject name, SubLObject lambdaList)
-  {
-      super(name, lambdaList);
-  }
+	public JavaPrimitive(String name, SubLPackage pkg, boolean exported, String arglist, String docstring) {
+		super(name, pkg, exported, arglist, docstring);
+	}
 
-  public JavaPrimitive(String name, SubLPackage pkg)
-  {
-      super(name, pkg);
-  }
+	public JavaPrimitive(SubLObject name) {
+		super(name);
+	}
 
-  public JavaPrimitive(String name, SubLPackage pkg, boolean exported)
-  {
-      super(name, pkg, exported);
-  }
+	public JavaPrimitive(SubLObject name, SubLObject lambdaList) {
+		super(name, lambdaList);
+	}
 
-  public JavaPrimitive(String name, SubLPackage pkg, boolean exported,
-                   String arglist)
-  {
-      super(name, pkg, exported, arglist);
-  }
+	public JavaPrimitive(SubLSymbol symbol, String arglist) {
+		super(symbol, arglist);
+	}
 
-  public JavaPrimitive(String name, SubLPackage pkg, boolean exported,
-                   String arglist, String docstring)
-  {
-      super(name, pkg, exported, arglist, docstring);
-  }
-  @Override
-  public SubLObject typep(SubLObject typeSpecifier)
-  {
-      if (typeSpecifier == LispSymbols.JAVA_COMPILED_FUNCTION)
-          return T;
-      return super.typep(typeSpecifier);
-  }
-  @Override
-  public SubLObject typeOf() {
-  	return LispSymbols.JAVA_COMPILED_FUNCTION;
-  }
+	public JavaPrimitive(SubLSymbol symbol, String arglist, String docstring) {
+		super(symbol, arglist, docstring);
+	}
+
+	public SubLObject typeOf() {
+		return LispSymbols.JAVA_COMPILED_FUNCTION;
+	}
+
+	public SubLObject typep(SubLObject typeSpecifier) {
+		if (typeSpecifier == LispSymbols.JAVA_COMPILED_FUNCTION)
+			return Lisp.T;
+		return super.typep(typeSpecifier);
+	}
 }
-public class Primitive extends Function
-{
 
-    public Primitive(SubLObject name)
-    {
-        super(name);
-    }
+public class Primitive extends Function {
 
-    public Primitive(String name)
-    {
-        super(name);
-    }
+	public Primitive(String name) {
+		super(name);
+	}
 
-    public Primitive(SubLSymbol symbol, String arglist)
-    {
-        super(symbol, arglist);
-    }
+	public Primitive(String name, String arglist) {
+		super(name, arglist);
+	}
 
-    public Primitive(SubLSymbol symbol, String arglist, String docstring)
-    {
-        super(symbol, arglist, docstring);
-    }
+	public Primitive(String name, SubLPackage pkg) {
+		super(name, pkg);
+	}
 
-    public Primitive(String name, String arglist)
-    {
-        super(name, arglist);
-    }
+	public Primitive(String name, SubLPackage pkg, boolean exported) {
+		super(name, pkg, exported);
+	}
 
-    public Primitive(SubLObject name, SubLObject lambdaList)
-    {
-        super(name, lambdaList);
-    }
+	public Primitive(String name, SubLPackage pkg, boolean exported, String arglist) {
+		super(name, pkg, exported, arglist);
+	}
 
-    public Primitive(String name, SubLPackage pkg)
-    {
-        super(name, pkg);
-    }
+	public Primitive(String name, SubLPackage pkg, boolean exported, String arglist, String docstring) {
+		super(name, pkg, exported, arglist, docstring);
+	}
 
-    public Primitive(String name, SubLPackage pkg, boolean exported)
-    {
-        super(name, pkg, exported);
-    }
+	public Primitive(SubLObject name) {
+		super(name);
+	}
 
-    public Primitive(String name, SubLPackage pkg, boolean exported,
-                     String arglist)
-    {
-        super(name, pkg, exported, arglist);
-    }
+	public Primitive(SubLObject name, SubLObject lambdaList) {
+		super(name, lambdaList);
+	}
 
-    public Primitive(String name, SubLPackage pkg, boolean exported,
-                     String arglist, String docstring)
-    {
-        super(name, pkg, exported, arglist, docstring);
-    }
+	public Primitive(SubLSymbol symbol, String arglist) {
+		super(symbol, arglist);
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.COMPILED_FUNCTION;
-    }
+	public Primitive(SubLSymbol symbol, String arglist, String docstring) {
+		super(symbol, arglist, docstring);
+	}
 
-    @Override
-    public SubLObject execute()
-    {
-        SubLObject[] args = makeLispObjectArray(0);
-        return execute(args);
-    }
+	public SubLObject execute() {
+		SubLObject[] args = LispObjectFactory.makeLispObjectArray(0);
+		return this.execute(args);
+	}
 
-    @Override
-    public SubLObject execute(SubLObject arg)
-    {
-        SubLObject[] args = makeLispObjectArray(1);
-        args[0] = arg;
-        return execute(args);
-    }
+	public SubLObject execute(SubLObject arg) {
+		SubLObject[] args = LispObjectFactory.makeLispObjectArray(1);
+		args[0] = arg;
+		return this.execute(args);
+	}
 
-    @Override
-    public SubLObject execute(SubLObject first, SubLObject second)
+	public SubLObject execute(SubLObject first, SubLObject second)
 
-    {
-        SubLObject[] args = makeLispObjectArray(2);
-        args[0] = first;
-        args[1] = second;
-        return execute(args);
-    }
+	{
+		SubLObject[] args = LispObjectFactory.makeLispObjectArray(2);
+		args[0] = first;
+		args[1] = second;
+		return this.execute(args);
+	}
 
-    @Override
-    public SubLObject execute(SubLObject first, SubLObject second,
-                              SubLObject third)
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third)
 
-    {
-        SubLObject[] args = makeLispObjectArray(3);
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        return execute(args);
-    }
+	{
+		SubLObject[] args = LispObjectFactory.makeLispObjectArray(3);
+		args[0] = first;
+		args[1] = second;
+		args[2] = third;
+		return this.execute(args);
+	}
 
-    @Override
-    public SubLObject execute(SubLObject first, SubLObject second,
-                              SubLObject third, SubLObject fourth)
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth)
 
-    {
-        SubLObject[] args = makeLispObjectArray(4);
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        args[3] = fourth;
-        return execute(args);
-    }
+	{
+		SubLObject[] args = LispObjectFactory.makeLispObjectArray(4);
+		args[0] = first;
+		args[1] = second;
+		args[2] = third;
+		args[3] = fourth;
+		return this.execute(args);
+	}
 
-    @Override
-    public SubLObject execute(SubLObject first, SubLObject second,
-                              SubLObject third, SubLObject fourth,
-                              SubLObject fifth)
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
+			SubLObject fifth)
 
-    {
-        SubLObject[] args = makeLispObjectArray(5);
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        args[3] = fourth;
-        args[4] = fifth;
-        return execute(args);
-    }
+	{
+		SubLObject[] args = LispObjectFactory.makeLispObjectArray(5);
+		args[0] = first;
+		args[1] = second;
+		args[2] = third;
+		args[3] = fourth;
+		args[4] = fifth;
+		return this.execute(args);
+	}
 
-    @Override
-    public SubLObject execute(SubLObject first, SubLObject second,
-                              SubLObject third, SubLObject fourth,
-                              SubLObject fifth, SubLObject sixth)
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
+			SubLObject fifth, SubLObject sixth)
 
-    {
-        SubLObject[] args = makeLispObjectArray(6);
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        args[3] = fourth;
-        args[4] = fifth;
-        args[5] = sixth;
-        return execute(args);
-    }
+	{
+		SubLObject[] args = LispObjectFactory.makeLispObjectArray(6);
+		args[0] = first;
+		args[1] = second;
+		args[2] = third;
+		args[3] = fourth;
+		args[4] = fifth;
+		args[5] = sixth;
+		return this.execute(args);
+	}
 
-    @Override
-    public SubLObject execute(SubLObject first, SubLObject second,
-                              SubLObject third, SubLObject fourth,
-                              SubLObject fifth, SubLObject sixth,
-                              SubLObject seventh)
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
+			SubLObject fifth, SubLObject sixth, SubLObject seventh)
 
-    {
-        SubLObject[] args = makeLispObjectArray(7);
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        args[3] = fourth;
-        args[4] = fifth;
-        args[5] = sixth;
-        args[6] = seventh;
-        return execute(args);
-    }
+	{
+		SubLObject[] args = LispObjectFactory.makeLispObjectArray(7);
+		args[0] = first;
+		args[1] = second;
+		args[2] = third;
+		args[3] = fourth;
+		args[4] = fifth;
+		args[5] = sixth;
+		args[6] = seventh;
+		return this.execute(args);
+	}
 
-    @Override
-    public SubLObject execute(SubLObject first, SubLObject second,
-                              SubLObject third, SubLObject fourth,
-                              SubLObject fifth, SubLObject sixth,
-                              SubLObject seventh, SubLObject eighth)
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
+			SubLObject fifth, SubLObject sixth, SubLObject seventh, SubLObject eighth)
 
-    {
-        SubLObject[] args = makeLispObjectArray(8);
-        args[0] = first;
-        args[1] = second;
-        args[2] = third;
-        args[3] = fourth;
-        args[4] = fifth;
-        args[5] = sixth;
-        args[6] = seventh;
-        args[7] = eighth;
-        return execute(args);
-    }
+	{
+		SubLObject[] args = LispObjectFactory.makeLispObjectArray(8);
+		args[0] = first;
+		args[1] = second;
+		args[2] = third;
+		args[3] = fourth;
+		args[4] = fifth;
+		args[5] = sixth;
+		args[6] = seventh;
+		args[7] = eighth;
+		return this.execute(args);
+	}
+
+	public SubLObject typeOf() {
+		return LispSymbols.COMPILED_FUNCTION;
+	}
 }

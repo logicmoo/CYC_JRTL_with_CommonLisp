@@ -33,50 +33,36 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class EndOfFile extends StreamError
-{
-    public EndOfFile(LispStream stream)
-    {
-        super(StandardClass.END_OF_FILE);
-        setStream(stream);
-    }
+public class EndOfFile extends StreamError {
+	public EndOfFile(LispStream stream) {
+		super(StandardClass.END_OF_FILE);
+		this.setStream(stream);
+	}
 
-    public EndOfFile(SubLObject initArgs)
-    {
-        super(StandardClass.END_OF_FILE);
-        initialize(initArgs);
-    }
+	public EndOfFile(SubLObject initArgs) {
+		super(StandardClass.END_OF_FILE);
+		this.initialize(initArgs);
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.END_OF_FILE;
-    }
+	public SubLObject classOf() {
+		return StandardClass.END_OF_FILE;
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.END_OF_FILE;
-    }
+	public String getMessage() {
+		return this.unreadableString(LispSymbols.END_OF_FILE);
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.END_OF_FILE)
-            return T;
-        if (type == StandardClass.END_OF_FILE)
-            return T;
-        return super.typep(type);
-    }
+	public SubLObject typeOf() {
+		return LispSymbols.END_OF_FILE;
+	}
 
-    @Override
-    public String getMessage()
-    {
-        return unreadableString(LispSymbols.END_OF_FILE);
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.END_OF_FILE)
+			return Lisp.T;
+		if (type == StandardClass.END_OF_FILE)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

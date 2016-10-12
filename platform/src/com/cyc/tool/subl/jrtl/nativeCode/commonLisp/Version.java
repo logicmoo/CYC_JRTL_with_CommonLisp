@@ -33,18 +33,15 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-public final class Version
-{
-  private Version()
-  {
-  }
+public class Version {
+	public static String getVersion() {
+		return "0.20.0-dev";
+	}
 
-  public static String getVersion()
-  {
-    return "0.20.0-dev";
-  }
-  
-  public static void main(String args[]) {
-    System.out.println(Version.getVersion());
-  }
+	public static void main(String args[]) {
+		System.out.println(Version.getVersion());
+	}
+
+	private Version() {
+	}
 }

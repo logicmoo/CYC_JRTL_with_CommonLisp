@@ -35,21 +35,18 @@ package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class SymbolMacro extends AbstractLispObject
-{
-    private SubLObject expansion;
+public class SymbolMacro extends AbstractLispObject {
+	private SubLObject expansion;
 
-    public SymbolMacro(SubLObject expansion)
-    {
-        this.expansion = expansion;
-    }
+	public SymbolMacro(SubLObject expansion) {
+		this.expansion = expansion;
+	}
 
-    public SubLObject getExpansion()
-    {
-        return expansion;
-    }
-    @Override
-    public String writeToString() {
-    	return unreadableString(getClass().getSimpleName());
-    }
+	public SubLObject getExpansion() {
+		return this.expansion;
+	}
+
+	public String writeToString() {
+		return this.unreadableString(this.getClass().getSimpleName());
+	}
 }

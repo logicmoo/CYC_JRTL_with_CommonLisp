@@ -33,76 +33,60 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import java.io.StringReader;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class StringInputStream extends Stream
-{
-    private final StringReader stringReader;
-    private final int start;
-    
-    public StringInputStream(String s)
-    {
-        this(s, 0, s.length());
-    }
+public class StringInputStream extends Stream {
+	private StringReader stringReader;
+	private int start;
 
-    public StringInputStream(String s, int start)
-    {
-        this(s, start, s.length());
-    }
+	public StringInputStream(String s) {
+		this(s, 0, s.length());
+	}
 
-    public StringInputStream(String s, int start, int end)
-    {
-        super(LispSymbols.STRING_INPUT_STREAM);
-        elementType = LispSymbols.CHARACTER;
-        setExternalFormat(keywordDefault);
-        eolStyle = EolStyle.RAW;
+	public StringInputStream(String s, int start) {
+		this(s, start, s.length());
+	}
 
-        this.start = start;
-        
-        stringReader = new StringReader(s.substring(start, end));
-        initAsCharacterInputStream(stringReader);
-    }
+	public StringInputStream(String s, int start, int end) {
+		super(LispSymbols.STRING_INPUT_STREAM);
+		this.elementType = LispSymbols.CHARACTER;
+		this.setExternalFormat(Stream.keywordDefault);
+		this.eolStyle = EolStyle.RAW;
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.STRING_INPUT_STREAM;
-    }
+		this.start = start;
 
-    @Override
-    public SubLObject classOf()
-    {
-        return BuiltInClass.STRING_INPUT_STREAM;
-    }
+		this.stringReader = new StringReader(s.substring(start, end));
+		this.initAsCharacterInputStream(this.stringReader);
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.STRING_INPUT_STREAM)
-            return T;
-        if (type == LispSymbols.STRING_STREAM)
-            return T;
-        if (type == BuiltInClass.STRING_INPUT_STREAM)
-            return T;
-        if (type == BuiltInClass.STRING_STREAM)
-            return T;
-        return super.typep(type);
-    }
+	public SubLObject classOf() {
+		return BuiltInClass.STRING_INPUT_STREAM;
+	}
 
-    @Override
-    public String toString()
-    {
-        return unreadableString("STRING-INPUT-STREAM");
-    }
+	public int getOffset() {
+		return this.start + super.getOffset();
+	}
 
-    @Override
-    public int getOffset() {
-        return start + super.getOffset();
-    }
-    
-  }
+	public String toString() {
+		return this.unreadableString("STRING-INPUT-STREAM");
+	}
+
+	public SubLObject typeOf() {
+		return LispSymbols.STRING_INPUT_STREAM;
+	}
+
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.STRING_INPUT_STREAM)
+			return Lisp.T;
+		if (type == LispSymbols.STRING_STREAM)
+			return Lisp.T;
+		if (type == BuiltInClass.STRING_INPUT_STREAM)
+			return Lisp.T;
+		if (type == BuiltInClass.STRING_STREAM)
+			return Lisp.T;
+		return super.typep(type);
+	}
+
+}

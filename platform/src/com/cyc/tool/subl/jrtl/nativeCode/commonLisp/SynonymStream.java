@@ -33,197 +33,139 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public final class SynonymStream extends Stream
-{
-    final SubLSymbol symbol;
+public class SynonymStream extends Stream {
+	SubLSymbol symbol;
 
-    SynonymStream(SubLSymbol symbol)
-    {
-        super(LispSymbols.SYNONYM_STREAM);
-        this.symbol = symbol;
-    }
+	SynonymStream(SubLSymbol symbol) {
+		super(LispSymbols.SYNONYM_STREAM);
+		this.symbol = symbol;
+	}
 
-    @Override
-    public boolean isInputStream()
-    {
-        return checkStream(symbol.symbolValue()).isInputStream();
-    }
+	public boolean _charReady() throws java.io.IOException {
+		return Lisp.checkStream(this.symbol.symbolValue())._charReady();
+	}
 
-    @Override
-    public boolean isOutputStream()
-    {
-        return checkStream(symbol.symbolValue()).isOutputStream();
-    }
+	public void _clearInput() {
+		Lisp.checkStream(this.symbol.symbolValue())._clearInput();
+	}
 
-    @Override
-    public boolean isCharacterInputStream()
-    {
-        return checkStream(symbol.symbolValue()).isCharacterInputStream();
-    }
+	public void _close() {
+		Lisp.checkStream(this.symbol.symbolValue())._close();
+	}
 
-    @Override
-    public boolean isBinaryInputStream()
-    {
-        return checkStream(symbol.symbolValue()).isBinaryInputStream();
-    }
+	public void _finishOutput() {
+		Lisp.checkStream(this.symbol.symbolValue())._finishOutput();
+	}
 
-    @Override
-    public boolean isCharacterOutputStream()
-    {
-        return checkStream(symbol.symbolValue()).isCharacterOutputStream();
-    }
+	public long _getFilePosition() {
+		return Lisp.checkStream(this.symbol.symbolValue())._getFilePosition();
+	}
 
-    @Override
-    public boolean isBinaryOutputStream()
-    {
-        return checkStream(symbol.symbolValue()).isBinaryOutputStream();
-    }
+	// Reads an 8-bit byte.
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.SYNONYM_STREAM;
-    }
+	public int _readByte() {
+		return Lisp.checkStream(this.symbol.symbolValue())._readByte();
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return BuiltInClass.SYNONYM_STREAM;
-    }
+	public int _readChar() throws java.io.IOException {
+		return Lisp.checkStream(this.symbol.symbolValue())._readChar();
+	}
 
-    @Override
-    public SubLObject typep(SubLObject typeSpecifier)
-    {
-        if (typeSpecifier == LispSymbols.SYNONYM_STREAM)
-            return T;
-        if (typeSpecifier == BuiltInClass.SYNONYM_STREAM)
-            return T;
-        return super.typep(typeSpecifier);
-    }
+	public boolean _setFilePosition(SubLObject arg) {
+		return Lisp.checkStream(this.symbol.symbolValue())._setFilePosition(arg);
+	}
 
-    @Override
-    public SubLObject getElementType()
-    {
-        return checkStream(symbol.symbolValue()).getElementType();
-    }
+	public void _unreadChar(int n) throws java.io.IOException {
+		Lisp.checkStream(this.symbol.symbolValue())._unreadChar(n);
+	}
 
-    @Override
-    public SubLObject listen()
-    {
-        return checkStream(symbol.symbolValue()).listen();
-    }
+	// Writes an 8-bit byte.
 
-    @Override
-    public SubLObject fileLength()
-    {
-        return checkStream(symbol.symbolValue()).fileLength();
-    }
+	public void _writeByte(int n) {
+		Lisp.checkStream(this.symbol.symbolValue())._writeByte(n);
+	}
 
-    @Override
-    public SubLObject fileStringLength(SubLObject arg)
-    {
-        return checkStream(symbol.symbolValue()).fileStringLength(arg);
-    }
+	public void _writeChar(char c) {
+		Lisp.checkStream(this.symbol.symbolValue())._writeChar(c);
+	}
 
-    @Override
-    public int _readChar() throws java.io.IOException
-    {
-        return checkStream(symbol.symbolValue())._readChar();
-    }
+	public void _writeChars(char[] chars, int start, int end)
 
-    @Override
-    public void _unreadChar(int n) throws java.io.IOException
-    {
-        checkStream(symbol.symbolValue())._unreadChar(n);
-    }
+	{
+		Lisp.checkStream(this.symbol.symbolValue())._writeChars(chars, start, end);
+	}
 
-    @Override
-    public boolean _charReady() throws java.io.IOException
-    {
-        return checkStream(symbol.symbolValue())._charReady();
-    }
+	public void _writeLine(String s) {
+		Lisp.checkStream(this.symbol.symbolValue())._writeLine(s);
+	}
 
-    @Override
-    public void _writeChar(char c)
-    {
-        checkStream(symbol.symbolValue())._writeChar(c);
-    }
+	public void _writeString(String s) {
+		Lisp.checkStream(this.symbol.symbolValue())._writeString(s);
+	}
 
-    @Override
-    public void _writeChars(char[] chars, int start, int end)
+	public SubLObject classOf() {
+		return BuiltInClass.SYNONYM_STREAM;
+	}
 
-    {
-        checkStream(symbol.symbolValue())._writeChars(chars, start, end);
-    }
+	public SubLObject fileLength() {
+		return Lisp.checkStream(this.symbol.symbolValue()).fileLength();
+	}
 
-    @Override
-    public void _writeString(String s)
-    {
-        checkStream(symbol.symbolValue())._writeString(s);
-    }
+	public SubLObject fileStringLength(SubLObject arg) {
+		return Lisp.checkStream(this.symbol.symbolValue()).fileStringLength(arg);
+	}
 
-    @Override
-    public void _writeLine(String s)
-    {
-        checkStream(symbol.symbolValue())._writeLine(s);
-    }
+	public SubLObject getElementType() {
+		return Lisp.checkStream(this.symbol.symbolValue()).getElementType();
+	}
 
-    // Reads an 8-bit byte.
-    @Override
-    public int _readByte()
-    {
-        return checkStream(symbol.symbolValue())._readByte();
-    }
+	public boolean isBinaryInputStream() {
+		return Lisp.checkStream(this.symbol.symbolValue()).isBinaryInputStream();
+	}
 
-    // Writes an 8-bit byte.
-    @Override
-    public void _writeByte(int n)
-    {
-        checkStream(symbol.symbolValue())._writeByte(n);
-    }
+	public boolean isBinaryOutputStream() {
+		return Lisp.checkStream(this.symbol.symbolValue()).isBinaryOutputStream();
+	}
 
-    @Override
-    public void _finishOutput()
-    {
-        checkStream(symbol.symbolValue())._finishOutput();
-    }
+	public boolean isCharacterInputStream() {
+		return Lisp.checkStream(this.symbol.symbolValue()).isCharacterInputStream();
+	}
 
-    @Override
-    public void _clearInput()
-    {
-        checkStream(symbol.symbolValue())._clearInput();
-    }
+	public boolean isCharacterOutputStream() {
+		return Lisp.checkStream(this.symbol.symbolValue()).isCharacterOutputStream();
+	}
 
-    @Override
-		public long _getFilePosition()
-    {
-        return checkStream(symbol.symbolValue())._getFilePosition();
-    }
+	public boolean isInputStream() {
+		return Lisp.checkStream(this.symbol.symbolValue()).isInputStream();
+	}
 
-    @Override
-		public boolean _setFilePosition(SubLObject arg)
-    {
-        return checkStream(symbol.symbolValue())._setFilePosition(arg);
-    }
+	public boolean isOutputStream() {
+		return Lisp.checkStream(this.symbol.symbolValue()).isOutputStream();
+	}
 
-    @Override
-    public void _close()
-    {
-        checkStream(symbol.symbolValue())._close();
-    }
+	public SubLObject listen() {
+		return Lisp.checkStream(this.symbol.symbolValue()).listen();
+	}
 
-    @Override
-    public String writeToString()
-    {
-        StringBuffer sb = new StringBuffer("SYNONYM-STREAM ");
-        sb.append(symbol.writeToString());
-        return unreadableString(sb.toString());
-    }
+	public SubLObject typeOf() {
+		return LispSymbols.SYNONYM_STREAM;
+	}
+
+	public SubLObject typep(SubLObject typeSpecifier) {
+		if (typeSpecifier == LispSymbols.SYNONYM_STREAM)
+			return Lisp.T;
+		if (typeSpecifier == BuiltInClass.SYNONYM_STREAM)
+			return Lisp.T;
+		return super.typep(typeSpecifier);
+	}
+
+	public String writeToString() {
+		StringBuffer sb = new StringBuffer("SYNONYM-STREAM ");
+		sb.append(this.symbol.writeToString());
+		return this.unreadableString(sb.toString());
+	}
 
 }

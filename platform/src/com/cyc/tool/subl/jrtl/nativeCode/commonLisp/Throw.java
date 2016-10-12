@@ -35,30 +35,25 @@ package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class Throw extends ControlTransfer
-{
-    public final SubLObject tag;
-    private final SubLObject result;
-    private final SubLObject[] values;
+public class Throw extends ControlTransfer {
+	public SubLObject tag;
+	private SubLObject result;
+	private SubLObject[] values;
 
-    public Throw(SubLObject tag, SubLObject result, LispThread thread)
+	public Throw(SubLObject tag, SubLObject result, LispThread thread)
 
-    {
-        this.tag = tag;
-        this.result = result;
-        values = thread._values;
-    }
+	{
+		this.tag = tag;
+		this.result = result;
+		this.values = thread._values;
+	}
 
-    public SubLObject getResult(LispThread thread)
-    {
-        thread._values = values;
-        return result;
-    }
+	public SubLObject getCondition() {
+		return new ControlError("Attempt to throw to the nonexistent tag " + this.tag.writeToString() + ".");
+	}
 
-    @Override
-    public SubLObject getCondition()
-    {
-        return new ControlError("Attempt to throw to the nonexistent tag " +
-                                tag.writeToString() + ".");
-    }
+	public SubLObject getResult(LispThread thread) {
+		thread._values = this.values;
+		return this.result;
+	}
 }

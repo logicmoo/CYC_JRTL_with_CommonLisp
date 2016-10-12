@@ -33,24 +33,18 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
+public class IllegalMonitorState extends ProgramError {
+	public IllegalMonitorState()
 
-public final class IllegalMonitorState extends ProgramError
-{
-    public IllegalMonitorState()
+	{
+		// This is really just an ordinary PROGRAM-ERROR, broken out into its
+		// own Java class as a convenience for the implementation.
+		super(StandardClass.PROGRAM_ERROR);
+		this.setFormatControl(this.getMessage());
+		this.setFormatArguments(Lisp.NIL);
+	}
 
-    {
-        // This is really just an ordinary PROGRAM-ERROR, broken out into its
-        // own Java class as a convenience for the implementation.
-        super(StandardClass.PROGRAM_ERROR);
-        setFormatControl(getMessage());
-        setFormatArguments(NIL);
-    }
-
-    @Override
-    public String getMessage()
-    {
-        return "Illegal monitor state.";
-    }
+	public String getMessage() {
+		return "Illegal monitor state.";
+	}
 }

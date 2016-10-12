@@ -33,569 +33,488 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import java.util.Iterator;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public class Readtable extends AbstractLispObject
-{
-  @Override
-  public String writeToString() {
-  	return unreadableString(getClass().getSimpleName());
-  }
+public class Readtable extends AbstractLispObject {
+	protected static class DispatchTable {
+		protected CharHashMap<SubLObject> functions;
 
-  public static final byte SYNTAX_TYPE_CONSTITUENT           = 0;
-  public static final byte SYNTAX_TYPE_WHITESPACE            = 1;
-  public static final byte SYNTAX_TYPE_TERMINATING_MACRO     = 2;
-  public static final byte SYNTAX_TYPE_NON_TERMINATING_MACRO = 3;
-  public static final byte SYNTAX_TYPE_SINGLE_ESCAPE         = 4;
-  public static final byte SYNTAX_TYPE_MULTIPLE_ESCAPE       = 5;
+		public DispatchTable() {
+			this.functions = new CharHashMap<SubLObject>(SubLObject.class, null);
+		}
 
-  protected final CharHashMap<Byte> syntax = new CharHashMap<Byte>(Byte.class,SYNTAX_TYPE_CONSTITUENT);
-  protected final CharHashMap<SubLObject> readerMacroFunctions = new CharHashMap<SubLObject>(SubLObject.class,null);
-  protected final CharHashMap<DispatchTable> dispatchTables = new CharHashMap<DispatchTable>(DispatchTable.class,null);
+		@SuppressWarnings("unchecked")
+		public DispatchTable(DispatchTable dt) {
+			this.functions = (CharHashMap<SubLObject>) dt.functions.clone();
+		}
+	}
 
-  protected SubLObject readtableCase;
+	public static byte SYNTAX_TYPE_CONSTITUENT = 0;
+	public static byte SYNTAX_TYPE_WHITESPACE = 1;
+	public static byte SYNTAX_TYPE_TERMINATING_MACRO = 2;
+	public static byte SYNTAX_TYPE_NON_TERMINATING_MACRO = 3;
+	public static byte SYNTAX_TYPE_SINGLE_ESCAPE = 4;
+	public static byte SYNTAX_TYPE_MULTIPLE_ESCAPE = 5;
 
-  public Readtable()
-  {
-    initialize();
-  }
+	// ### readtablep
+	private static Primitive READTABLEP = new JavaPrimitive("readtablep", "object") {
 
-  protected void initialize()
-  {
-    Byte[] syntax = this.syntax.constants;
-    syntax[9]    = SYNTAX_TYPE_WHITESPACE; // tab
-    syntax[10]   = SYNTAX_TYPE_WHITESPACE; // linefeed
-    syntax[12]   = SYNTAX_TYPE_WHITESPACE; // form feed
-    syntax[13]   = SYNTAX_TYPE_WHITESPACE; // return
-    syntax[' ']  = SYNTAX_TYPE_WHITESPACE;
+		public SubLObject execute(SubLObject arg) {
+			return arg instanceof Readtable ? Lisp.T : Lisp.NIL;
+		}
+	};
+	// ### copy-readtable
+	private static Primitive COPY_READTABLE = new JavaPrimitive("copy-readtable",
+			"&optional from-readtable to-readtable") {
 
-    syntax['"']  = SYNTAX_TYPE_TERMINATING_MACRO;
-    syntax['\''] = SYNTAX_TYPE_TERMINATING_MACRO;
-    syntax['(']  = SYNTAX_TYPE_TERMINATING_MACRO;
-    syntax[')']  = SYNTAX_TYPE_TERMINATING_MACRO;
-    syntax[',']  = SYNTAX_TYPE_TERMINATING_MACRO;
-    syntax[';']  = SYNTAX_TYPE_TERMINATING_MACRO;
-    syntax['`']  = SYNTAX_TYPE_TERMINATING_MACRO;
+		public SubLObject execute() {
+			return new Readtable(Lisp.currentReadtable());
+		}
 
-    syntax['#']  = SYNTAX_TYPE_NON_TERMINATING_MACRO;
+		public SubLObject execute(SubLObject arg) {
+			return new Readtable(arg);
+		}
 
-    syntax['\\'] = SYNTAX_TYPE_SINGLE_ESCAPE;
-    syntax['|']  = SYNTAX_TYPE_MULTIPLE_ESCAPE;
+		public SubLObject execute(SubLObject first, SubLObject second)
 
-    SubLObject[] readerMacroFunctions = this.readerMacroFunctions.constants;
-    readerMacroFunctions[';']  = LispReader.READ_COMMENT;
-    readerMacroFunctions['"']  = LispReader.READ_STRING;
-    readerMacroFunctions['(']  = LispReader.READ_LIST;
-    readerMacroFunctions[')']  = LispReader.READ_RIGHT_PAREN;
-    readerMacroFunctions['\''] = LispReader.READ_QUOTE;
-    readerMacroFunctions['#']  = LispReader.READ_DISPATCH_CHAR;
+		{
+			Readtable from = Lisp.designator_readtable(first);
+			if (second == Lisp.NIL)
+				return new Readtable(from);
+			Readtable to = Lisp.checkReadtable(second);
+			Readtable.copyReadtable(from, to);
+			return to;
+		}
+	};
+	// ### get-macro-character char &optional readtable
+	// => function, non-terminating-p
+	private static Primitive GET_MACRO_CHARACTER = new JavaPrimitive("get-macro-character",
+			"char &optional readtable") {
 
-    // BACKQUOTE-MACRO and COMMA-MACRO are defined in backquote.lisp.
-    readerMacroFunctions['`']  = LispSymbols.BACKQUOTE_MACRO;
-    readerMacroFunctions[',']  = LispSymbols.COMMA_MACRO;
+		public SubLObject execute(SubLObject arg) {
+			char c = arg.charValue();
+			Readtable rt = Lisp.currentReadtable();
+			return rt.getMacroCharacter(c);
+		}
 
-    DispatchTable dt = new DispatchTable();
-    SubLObject[] dtfunctions = dt.functions.constants;
-    dtfunctions['(']  = LispReader.SHARP_LEFT_PAREN;
-    dtfunctions['*']  = LispReader.SHARP_STAR;
-    dtfunctions['.']  = LispReader.SHARP_DOT;
-    dtfunctions[':']  = LispReader.SHARP_COLON;
-    dtfunctions['A']  = LispReader.SHARP_A;
-    dtfunctions['B']  = LispReader.SHARP_B;
-    dtfunctions['C']  = LispReader.SHARP_C;
-    dtfunctions['O']  = LispReader.SHARP_O;
-    dtfunctions['P']  = LispReader.SHARP_P;
-    dtfunctions['R']  = LispReader.SHARP_R;
-    dtfunctions['S']  = LispReader.SHARP_S;
-    dtfunctions['X']  = LispReader.SHARP_X;
-    dtfunctions['\''] = LispReader.SHARP_QUOTE;
-    dtfunctions['\\'] = LispReader.SHARP_BACKSLASH;
-    dtfunctions['|']  = LispReader.SHARP_VERTICAL_BAR;
-    dtfunctions[')']  = LispReader.SHARP_ILLEGAL;
-    dtfunctions['<']  = LispReader.SHARP_ILLEGAL;
-    dtfunctions[' ']  = LispReader.SHARP_ILLEGAL;
-    dtfunctions[8]    = LispReader.SHARP_ILLEGAL; // backspace
-    dtfunctions[9]    = LispReader.SHARP_ILLEGAL; // tab
-    dtfunctions[10]   = LispReader.SHARP_ILLEGAL; // newline, linefeed
-    dtfunctions[12]   = LispReader.SHARP_ILLEGAL; // page
-    dtfunctions[13]   = LispReader.SHARP_ILLEGAL; // return
+		public SubLObject execute(SubLObject first, SubLObject second)
 
-    dispatchTables.constants['#'] = dt;
+		{
+			char c = first.charValue();
+			Readtable rt = Lisp.designator_readtable(second);
+			return rt.getMacroCharacter(c);
+		}
+	};
 
-    readtableCase = Keyword.UPCASE;
-  }
+	// ### set-macro-character char new-function &optional non-terminating-p
+	// readtable
+	// => t
+	private static Primitive SET_MACRO_CHARACTER = new JavaPrimitive("set-macro-character",
+			"char new-function &optional non-terminating-p readtable") {
 
-  public Readtable(SubLObject obj)
-  {
-    Readtable rt;
-    if (obj == NIL)
-      rt = checkReadtable(STANDARD_READTABLE.symbolValue());
-    else
-      rt = checkReadtable(obj);
-    synchronized (rt)
-      {
-        copyReadtable(rt, this);
-      }
-  }
+		public SubLObject execute(SubLObject first, SubLObject second)
 
-  // FIXME synchronization
-  static void copyReadtable(Readtable from, Readtable to)
-  {
-    Iterator<Character> charIterator = from.syntax.getCharIterator();
-      while (charIterator.hasNext()) {
-        char c = charIterator.next();
-          Byte dt = from.syntax.get(c);
-          if (dt!=null) {
-              to.syntax.put(c, dt);          
-          } else {
-              to.syntax.put(c, null);          
-          }      
-      }      
-      charIterator = from.readerMacroFunctions.getCharIterator();
-      while (charIterator.hasNext()) {
-        char c = charIterator.next();
-          SubLObject dt = from.readerMacroFunctions.get(c);
-          if (dt!=null) {
-              to.readerMacroFunctions.put(c, dt);          
-          } else {
-              to.readerMacroFunctions.put(c, null);          
-          }      
-      }
-      charIterator = from.dispatchTables.getCharIterator();
-      while (charIterator.hasNext()) {
-        char c = charIterator.next();
-          DispatchTable dt = from.dispatchTables.get(c);
-          if (dt!=null) {
-              to.dispatchTables.put(c, new DispatchTable(dt));          
-          } else {
-              to.dispatchTables.put(c, null);          
-          }      
-      }
-      to.readtableCase = from.readtableCase;
-  }
+		{
+			return this.execute(first, second, Lisp.NIL, Lisp.currentReadtable());
+		}
 
-  @Override
-  public SubLObject typeOf()
-  {
-    return LispSymbols.READTABLE;
-  }
+		public SubLObject execute(SubLObject first, SubLObject second, SubLObject third)
 
-  @Override
-  public SubLObject classOf()
-  {
-    return BuiltInClass.READTABLE;
-  }
+		{
+			return this.execute(first, second, third, Lisp.currentReadtable());
+		}
 
-  @Override
-  public SubLObject typep(SubLObject type)
-  {
-    if (type == LispSymbols.READTABLE)
-      return T;
-    if (type == BuiltInClass.READTABLE)
-      return T;
-    return super.typep(type);
-  }
+		public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth)
 
-  @Override
-  public String toString()
-  {
-    return unreadableString("READTABLE");
-  }
+		{
+			char c = first.charValue();
+			SubLObject designator;
+			if (second instanceof Function || second instanceof StandardGenericFunction)
+				designator = second;
+			else if (second instanceof SubLSymbol)
+				designator = second;
+			else
+				return Lisp.error(new LispError(second.writeToString() + " does not designate a function."));
+			byte syntaxType;
+			if (third != Lisp.NIL)
+				syntaxType = Readtable.SYNTAX_TYPE_NON_TERMINATING_MACRO;
+			else
+				syntaxType = Readtable.SYNTAX_TYPE_TERMINATING_MACRO;
+			Readtable rt = Lisp.designator_readtable(fourth);
+			// REVIEW synchronization
+			rt.syntax.put(c, syntaxType);
+			rt.readerMacroFunctions.put(c, designator);
+			return Lisp.T;
+		}
+	};
 
-  public SubLObject getReadtableCase()
-  {
-    return readtableCase;
-  }
+	// ### make-dispatch-macro-character char &optional non-terminating-p
+	// readtable
+	// => t
+	private static Primitive MAKE_DISPATCH_MACRO_CHARACTER = new JavaPrimitive("make-dispatch-macro-character",
+			"char &optional non-terminating-p readtable") {
 
-  public boolean isWhitespace(char c)
-  {
-    return getSyntaxType(c) == SYNTAX_TYPE_WHITESPACE;
-  }
+		public SubLObject execute(SubLObject[] args) {
+			if (args.length < 1 || args.length > 3)
+				return Lisp.error(new WrongNumberOfArgumentsException(this));
+			char dispChar = args[0].charValue();
+			SubLObject non_terminating_p;
+			if (args.length > 1)
+				non_terminating_p = args[1];
+			else
+				non_terminating_p = Lisp.NIL;
+			Readtable readtable;
+			if (args.length == 3)
+				readtable = Lisp.checkReadtable(args[2]);
+			else
+				readtable = Lisp.currentReadtable();
+			readtable.makeDispatchMacroCharacter(dispChar, non_terminating_p);
+			return Lisp.T;
+		}
+	};
 
-  public byte getSyntaxType(char c)
-  {
-    return syntax.get(c);
-  }
+	// ### get-dispatch-macro-character disp-char sub-char &optional readtable
+	// => function
+	private static Primitive GET_DISPATCH_MACRO_CHARACTER = new JavaPrimitive("get-dispatch-macro-character",
+			"disp-char sub-char &optional readtable") {
 
-  public boolean isInvalid(char c)
-  {
-    switch (c)
-      {
-      case 8:
-      case 9:
-      case 10:
-      case 12:
-      case 13:
-      case 32:
-      case 127:
-        return true;
-      default:
-        return false;
-      }
-  }
+		public SubLObject execute(SubLObject[] args) {
+			if (args.length < 2 || args.length > 3)
+				return Lisp.error(new WrongNumberOfArgumentsException(this));
+			char dispChar = args[0].charValue();
+			char subChar = args[1].charValue();
+			Readtable readtable;
+			if (args.length == 3)
+				readtable = Lisp.designator_readtable(args[2]);
+			else
+				readtable = Lisp.currentReadtable();
+			return readtable.getDispatchMacroCharacter(dispChar, subChar);
+		}
+	};
 
-  public void checkInvalid(char c, LispStream stream)
-  {
-    // "... no mechanism is provided for changing the constituent trait of a
-    // character." (2.1.4.2)
-    if (isInvalid(c))
-      {
-        String name = CharacterFunctions.charToName(c);
-        StringBuilder sb = new StringBuilder("Invalid character");
-        if (name != null)
-          {
-            sb.append(" #\\");
-            sb.append(name);
-          }
-        error(new ReaderError(sb.toString(), stream));
-      }
-  }
+	// ### set-dispatch-macro-character disp-char sub-char new-function
+	// &optional readtable
+	// => t
+	private static Primitive SET_DISPATCH_MACRO_CHARACTER = new JavaPrimitive("set-dispatch-macro-character",
+			"disp-char sub-char new-function &optional readtable") {
 
-  public SubLObject getReaderMacroFunction(char c)
-  {
-    return readerMacroFunctions.get(c);
-  }
+		public SubLObject execute(SubLObject[] args) {
+			if (args.length < 3 || args.length > 4)
+				return Lisp.error(new WrongNumberOfArgumentsException(this));
+			char dispChar = args[0].charValue();
+			char subChar = args[1].charValue();
+			SubLObject function = Lisp.coerceToFunction(args[2]);
+			Readtable readtable;
+			if (args.length == 4)
+				readtable = Lisp.designator_readtable(args[3]);
+			else
+				readtable = Lisp.currentReadtable();
+			readtable.setDispatchMacroCharacter(dispChar, subChar, function);
+			return Lisp.T;
+		}
+	};
 
-  SubLObject getMacroCharacter(char c)
-  {
-    SubLObject function = getReaderMacroFunction(c);
-    SubLObject non_terminating_p;
-    if (function != null)
-      {
-        if (syntax.get(c) == SYNTAX_TYPE_NON_TERMINATING_MACRO)
-          non_terminating_p = T;
-        else
-          non_terminating_p = NIL;
-      }
-    else
-      {
-        function = NIL;
-        non_terminating_p = NIL;
-      }
-    return LispThread.currentThread().setValues(function, non_terminating_p);
-  }
+	// ### set-syntax-from-char to-char from-char &optional to-readtable
+	// from-readtable
+	// => t
+	private static Primitive SET_SYNTAX_FROM_CHAR = new JavaPrimitive("set-syntax-from-char",
+			"to-char from-char &optional to-readtable from-readtable") {
 
-  void makeDispatchMacroCharacter(char dispChar, SubLObject non_terminating_p)
-  {
-    byte syntaxType;
-    if (non_terminating_p != NIL)
-      syntaxType = SYNTAX_TYPE_NON_TERMINATING_MACRO;
-    else
-      syntaxType = SYNTAX_TYPE_TERMINATING_MACRO;
-    // FIXME synchronization
-    syntax.put(dispChar,syntaxType);
-    readerMacroFunctions.put(dispChar, LispReader.READ_DISPATCH_CHAR);
-    dispatchTables.put(dispChar, new DispatchTable());
-  }
+		public SubLObject execute(SubLObject[] args) {
+			if (args.length < 2 || args.length > 4)
+				return Lisp.error(new WrongNumberOfArgumentsException(this));
+			char toChar = args[0].charValue();
+			char fromChar = args[1].charValue();
+			Readtable toReadtable;
+			if (args.length > 2)
+				toReadtable = Lisp.checkReadtable(args[2]);
+			else
+				toReadtable = Lisp.currentReadtable();
+			Readtable fromReadtable;
+			if (args.length > 3)
+				fromReadtable = Lisp.designator_readtable(args[3]);
+			else
+				fromReadtable = Lisp.checkReadtable(Lisp.STANDARD_READTABLE.symbolValue());
+			// REVIEW synchronization
+			toReadtable.syntax.put(toChar, fromReadtable.syntax.get(fromChar));
+			toReadtable.readerMacroFunctions.put(toChar, fromReadtable.readerMacroFunctions.get(fromChar));
+			// "If the character is a dispatching macro character, its entire
+			// dispatch table of reader macro functions is copied."
+			DispatchTable found = fromReadtable.dispatchTables.get(fromChar);
+			if (found != null)
+				toReadtable.dispatchTables.put(toChar, new DispatchTable(found));
+			else
+				// Don't leave behind dispatch tables when fromChar
+				// doesn't have one
+				toReadtable.dispatchTables.put(toChar, null);
+			return Lisp.T;
+		}
+	};
 
-  public SubLObject getDispatchMacroCharacter(char dispChar, char subChar)
+	// ### readtable-case readtable => mode
+	private static Primitive READTABLE_CASE = new JavaPrimitive("readtable-case", "readtable") {
 
-  {
-    DispatchTable dispatchTable = dispatchTables.get(dispChar);
-    if (dispatchTable == null)
-      {
-        LispCharacter c = LispCharacter.makeChar(dispChar);
-        return error(new LispError(c.writeToString() +
-                                    " is not a dispatch character."));
-      }
-    SubLObject function =
-      dispatchTable.functions.get(CharacterFunctions.toUpperCase(subChar));
-    return (function != null) ? function : NIL;
-  }
+		public SubLObject execute(SubLObject arg) {
+			return Lisp.checkReadtable(arg).readtableCase;
+		}
+	};
 
-  public void setDispatchMacroCharacter(char dispChar, char subChar,
-                                        SubLObject function)
+	// ### %set-readtable-case readtable new-mode => new-mode
+	private static Primitive _SET_READTABLE_CASE = new JavaPrimitive("%set-readtable-case", Lisp.PACKAGE_SYS, false,
+			"readtable new-mode") {
 
-  {
-    DispatchTable dispatchTable = dispatchTables.get(dispChar);
-    if (dispatchTable == null)
-      {
-        LispCharacter c = LispCharacter.makeChar(dispChar);
-        error(new LispError(c.writeToString() +
-                             " is not a dispatch character."));
-      }
-    dispatchTable.functions.put(CharacterFunctions.toUpperCase(subChar), function);
-  }
+		public SubLObject execute(SubLObject first, SubLObject second)
 
-  protected static class DispatchTable
-  {
-	protected final CharHashMap<SubLObject> functions;
+		{
+			Readtable readtable = Lisp.checkReadtable(first);
+			if (second == Keyword.UPCASE || second == Keyword.DOWNCASE || second == Keyword.INVERT
+					|| second == Keyword.PRESERVE) {
+				readtable.readtableCase = second;
+				return second;
+			}
+			return Lisp.type_error(second,
+					Lisp.list(LispSymbols.MEMBER, Keyword.INVERT, Keyword.PRESERVE, Keyword.DOWNCASE, Keyword.UPCASE));
+		}
+	};
 
-    public DispatchTable()
-    {
-      functions = new CharHashMap<SubLObject>(SubLObject.class,null);
-    }
+	// FIXME synchronization
+	static void copyReadtable(Readtable from, Readtable to) {
+		Iterator<Character> charIterator = from.syntax.getCharIterator();
+		while (charIterator.hasNext()) {
+			char c = charIterator.next();
+			Byte dt = from.syntax.get(c);
+			if (dt != null)
+				to.syntax.put(c, dt);
+			else
+				to.syntax.put(c, null);
+		}
+		charIterator = from.readerMacroFunctions.getCharIterator();
+		while (charIterator.hasNext()) {
+			char c = charIterator.next();
+			SubLObject dt = from.readerMacroFunctions.get(c);
+			if (dt != null)
+				to.readerMacroFunctions.put(c, dt);
+			else
+				to.readerMacroFunctions.put(c, null);
+		}
+		charIterator = from.dispatchTables.getCharIterator();
+		while (charIterator.hasNext()) {
+			char c = charIterator.next();
+			DispatchTable dt = from.dispatchTables.get(c);
+			if (dt != null)
+				to.dispatchTables.put(c, new DispatchTable(dt));
+			else
+				to.dispatchTables.put(c, null);
+		}
+		to.readtableCase = from.readtableCase;
+	}
 
-    @SuppressWarnings("unchecked")
-    public DispatchTable(DispatchTable dt)
-    {
-      functions = (CharHashMap<SubLObject>) dt.functions.clone();
-    }
-  }
+	protected CharHashMap<Byte> syntax = new CharHashMap<Byte>(Byte.class, Readtable.SYNTAX_TYPE_CONSTITUENT);
 
-  // ### readtablep
-  private static final Primitive READTABLEP =
-    new JavaPrimitive("readtablep", "object")
-    {
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-        return arg instanceof Readtable ? T : NIL;
-      }
-    };
+	protected CharHashMap<SubLObject> readerMacroFunctions = new CharHashMap<SubLObject>(SubLObject.class, null);
 
-  // ### copy-readtable
-  private static final Primitive COPY_READTABLE =
-    new JavaPrimitive("copy-readtable", "&optional from-readtable to-readtable")
-    {
-      @Override
-      public SubLObject execute()
-      {
-        return new Readtable(currentReadtable());
-      }
+	protected CharHashMap<DispatchTable> dispatchTables = new CharHashMap<DispatchTable>(DispatchTable.class, null);
 
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-        return new Readtable(arg);
-      }
+	protected SubLObject readtableCase;
 
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second)
+	public Readtable() {
+		this.initialize();
+	}
 
-      {
-        Readtable from = designator_readtable(first);
-        if (second == NIL)
-          return new Readtable(from);
-        Readtable to = checkReadtable(second);
-        copyReadtable(from, to);
-        return to;
-      }
-    };
+	public Readtable(SubLObject obj) {
+		Readtable rt;
+		if (obj == Lisp.NIL)
+			rt = Lisp.checkReadtable(Lisp.STANDARD_READTABLE.symbolValue());
+		else
+			rt = Lisp.checkReadtable(obj);
+		synchronized (rt) {
+			Readtable.copyReadtable(rt, this);
+		}
+	}
 
-  // ### get-macro-character char &optional readtable
-  // => function, non-terminating-p
-  private static final Primitive GET_MACRO_CHARACTER =
-    new JavaPrimitive("get-macro-character", "char &optional readtable")
-    {
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-        char c = arg.charValue();
-        Readtable rt = currentReadtable();
-        return rt.getMacroCharacter(c);
-      }
+	public void checkInvalid(char c, LispStream stream) {
+		// "... no mechanism is provided for changing the constituent trait of a
+		// character." (2.1.4.2)
+		if (this.isInvalid(c)) {
+			String name = CharacterFunctions.charToName(c);
+			StringBuilder sb = new StringBuilder("Invalid character");
+			if (name != null) {
+				sb.append(" #\\");
+				sb.append(name);
+			}
+			Lisp.error(new ReaderError(sb.toString(), stream));
+		}
+	}
 
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second)
+	public SubLObject classOf() {
+		return BuiltInClass.READTABLE;
+	}
 
-      {
-        char c = first.charValue();
-        Readtable rt = designator_readtable(second);
-        return rt.getMacroCharacter(c);
-      }
-    };
+	public SubLObject getDispatchMacroCharacter(char dispChar, char subChar)
 
-  // ### set-macro-character char new-function &optional non-terminating-p readtable
-  // => t
-  private static final Primitive SET_MACRO_CHARACTER =
-    new JavaPrimitive("set-macro-character",
-                  "char new-function &optional non-terminating-p readtable")
-    {
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second)
+	{
+		DispatchTable dispatchTable = this.dispatchTables.get(dispChar);
+		if (dispatchTable == null) {
+			LispCharacter c = LispCharacter.makeChar(dispChar);
+			return Lisp.error(new LispError(c.writeToString() + " is not a dispatch character."));
+		}
+		SubLObject function = dispatchTable.functions.get(CharacterFunctions.toUpperCase(subChar));
+		return function != null ? function : Lisp.NIL;
+	}
 
-      {
-        return execute(first, second, NIL, currentReadtable());
-      }
+	SubLObject getMacroCharacter(char c) {
+		SubLObject function = this.getReaderMacroFunction(c);
+		SubLObject non_terminating_p;
+		if (function != null) {
+			if (this.syntax.get(c) == Readtable.SYNTAX_TYPE_NON_TERMINATING_MACRO)
+				non_terminating_p = Lisp.T;
+			else
+				non_terminating_p = Lisp.NIL;
+		} else {
+			function = Lisp.NIL;
+			non_terminating_p = Lisp.NIL;
+		}
+		return LispThread.currentThread().setValues(function, non_terminating_p);
+	}
 
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second,
-                                SubLObject third)
+	public SubLObject getReaderMacroFunction(char c) {
+		return this.readerMacroFunctions.get(c);
+	}
 
-      {
-        return execute(first, second, third, currentReadtable());
-      }
+	public SubLObject getReadtableCase() {
+		return this.readtableCase;
+	}
 
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second,
-                                SubLObject third, SubLObject fourth)
+	public byte getSyntaxType(char c) {
+		return this.syntax.get(c);
+	}
 
-      {
-        char c = first.charValue();
-        final SubLObject designator;
-        if (second instanceof Function
-            || second instanceof StandardGenericFunction)
-          designator = second;
-        else if (second instanceof SubLSymbol)
-          designator = second;
-        else
-          return error(new LispError(second.writeToString() +
-                                      " does not designate a function."));
-        byte syntaxType;
-        if (third != NIL)
-          syntaxType = SYNTAX_TYPE_NON_TERMINATING_MACRO;
-        else
-          syntaxType = SYNTAX_TYPE_TERMINATING_MACRO;
-        Readtable rt = designator_readtable(fourth);
-        // REVIEW synchronization
-        rt.syntax.put(c, syntaxType);
-        rt.readerMacroFunctions.put(c, designator);
-        return T;
-      }
-    };
+	protected void initialize() {
+		Byte[] syntax = this.syntax.constants;
+		syntax[9] = Readtable.SYNTAX_TYPE_WHITESPACE; // tab
+		syntax[10] = Readtable.SYNTAX_TYPE_WHITESPACE; // linefeed
+		syntax[12] = Readtable.SYNTAX_TYPE_WHITESPACE; // form feed
+		syntax[13] = Readtable.SYNTAX_TYPE_WHITESPACE; // return
+		syntax[' '] = Readtable.SYNTAX_TYPE_WHITESPACE;
 
-  // ### make-dispatch-macro-character char &optional non-terminating-p readtable
-  // => t
-  private static final Primitive MAKE_DISPATCH_MACRO_CHARACTER =
-    new JavaPrimitive("make-dispatch-macro-character",
-                  "char &optional non-terminating-p readtable")
-    {
-      @Override
-      public SubLObject execute(SubLObject[] args)
-      {
-        if (args.length < 1 || args.length > 3)
-          return error(new WrongNumberOfArgumentsException(this));
-        char dispChar = args[0].charValue();
-        SubLObject non_terminating_p;
-        if (args.length > 1)
-          non_terminating_p = args[1];
-        else
-          non_terminating_p = NIL;
-        Readtable readtable;
-        if (args.length == 3)
-          readtable = checkReadtable(args[2]);
-        else
-          readtable = currentReadtable();
-        readtable.makeDispatchMacroCharacter(dispChar, non_terminating_p);
-        return T;
-      }
-    };
+		syntax['"'] = Readtable.SYNTAX_TYPE_TERMINATING_MACRO;
+		syntax['\''] = Readtable.SYNTAX_TYPE_TERMINATING_MACRO;
+		syntax['('] = Readtable.SYNTAX_TYPE_TERMINATING_MACRO;
+		syntax[')'] = Readtable.SYNTAX_TYPE_TERMINATING_MACRO;
+		syntax[','] = Readtable.SYNTAX_TYPE_TERMINATING_MACRO;
+		syntax[';'] = Readtable.SYNTAX_TYPE_TERMINATING_MACRO;
+		syntax['`'] = Readtable.SYNTAX_TYPE_TERMINATING_MACRO;
 
-  // ### get-dispatch-macro-character disp-char sub-char &optional readtable
-  // => function
-  private static final Primitive GET_DISPATCH_MACRO_CHARACTER =
-    new JavaPrimitive("get-dispatch-macro-character",
-                  "disp-char sub-char &optional readtable")
-    {
-      @Override
-      public SubLObject execute(SubLObject[] args)
-      {
-        if (args.length < 2 || args.length > 3)
-          return error(new WrongNumberOfArgumentsException(this));
-        char dispChar = args[0].charValue();
-        char subChar = args[1].charValue();
-        Readtable readtable;
-        if (args.length == 3)
-          readtable = designator_readtable(args[2]);
-        else
-          readtable = currentReadtable();
-        return readtable.getDispatchMacroCharacter(dispChar, subChar);
-      }
-    };
+		syntax['#'] = Readtable.SYNTAX_TYPE_NON_TERMINATING_MACRO;
 
-  // ### set-dispatch-macro-character disp-char sub-char new-function &optional readtable
-  // => t
-  private static final Primitive SET_DISPATCH_MACRO_CHARACTER =
-    new JavaPrimitive("set-dispatch-macro-character",
-                  "disp-char sub-char new-function &optional readtable")
-    {
-      @Override
-      public SubLObject execute(SubLObject[] args)
-      {
-        if (args.length < 3 || args.length > 4)
-          return error(new WrongNumberOfArgumentsException(this));
-        char dispChar = args[0].charValue();
-        char subChar = args[1].charValue();
-        SubLObject function = coerceToFunction(args[2]);
-        Readtable readtable;
-        if (args.length == 4)
-          readtable = designator_readtable(args[3]);
-        else
-          readtable = currentReadtable();
-        readtable.setDispatchMacroCharacter(dispChar, subChar, function);
-        return T;
-      }
-    };
+		syntax['\\'] = Readtable.SYNTAX_TYPE_SINGLE_ESCAPE;
+		syntax['|'] = Readtable.SYNTAX_TYPE_MULTIPLE_ESCAPE;
 
-  // ### set-syntax-from-char to-char from-char &optional to-readtable from-readtable
-  // => t
-  private static final Primitive SET_SYNTAX_FROM_CHAR =
-    new JavaPrimitive("set-syntax-from-char",
-                  "to-char from-char &optional to-readtable from-readtable")
-    {
-      @Override
-      public SubLObject execute(SubLObject[] args)
-      {
-        if (args.length < 2 || args.length > 4)
-          return error(new WrongNumberOfArgumentsException(this));
-        char toChar = args[0].charValue();
-        char fromChar = args[1].charValue();
-        Readtable toReadtable;
-        if (args.length > 2)
-          toReadtable = checkReadtable(args[2]);
-        else
-          toReadtable = currentReadtable();
-        Readtable fromReadtable;
-        if (args.length > 3)
-          fromReadtable = designator_readtable(args[3]);
-        else
-          fromReadtable = checkReadtable(STANDARD_READTABLE.symbolValue());
-        // REVIEW synchronization
-        toReadtable.syntax.put(toChar, fromReadtable.syntax.get(fromChar));
-        toReadtable.readerMacroFunctions.put(toChar,
-        		fromReadtable.readerMacroFunctions.get(fromChar));
-        // "If the character is a dispatching macro character, its entire
-        // dispatch table of reader macro functions is copied."
-        DispatchTable found = fromReadtable.dispatchTables.get(fromChar);
-        if (found!=null)
-        	toReadtable.dispatchTables.put(toChar, new DispatchTable(found));          
-        else
-            // Don't leave behind dispatch tables when fromChar
-            // doesn't have one
-        	toReadtable.dispatchTables.put(toChar, null);
-        return T;
-      }
-    };
+		SubLObject[] readerMacroFunctions = this.readerMacroFunctions.constants;
+		readerMacroFunctions[';'] = LispReader.READ_COMMENT;
+		readerMacroFunctions['"'] = LispReader.READ_STRING;
+		readerMacroFunctions['('] = LispReader.READ_LIST;
+		readerMacroFunctions[')'] = LispReader.READ_RIGHT_PAREN;
+		readerMacroFunctions['\''] = LispReader.READ_QUOTE;
+		readerMacroFunctions['#'] = LispReader.READ_DISPATCH_CHAR;
 
-  // ### readtable-case readtable => mode
-  private static final Primitive READTABLE_CASE =
-    new JavaPrimitive("readtable-case", "readtable")
-    {
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-          return checkReadtable(arg).readtableCase;
-      }
-    };
+		// BACKQUOTE-MACRO and COMMA-MACRO are defined in backquote.lisp.
+		readerMacroFunctions['`'] = LispSymbols.BACKQUOTE_MACRO;
+		readerMacroFunctions[','] = LispSymbols.COMMA_MACRO;
 
-  // ### %set-readtable-case readtable new-mode => new-mode
-  private static final Primitive _SET_READTABLE_CASE =
-    new JavaPrimitive("%set-readtable-case", PACKAGE_SYS, false,
-                  "readtable new-mode")
-    {
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second)
+		DispatchTable dt = new DispatchTable();
+		SubLObject[] dtfunctions = dt.functions.constants;
+		dtfunctions['('] = LispReader.SHARP_LEFT_PAREN;
+		dtfunctions['*'] = LispReader.SHARP_STAR;
+		dtfunctions['.'] = LispReader.SHARP_DOT;
+		dtfunctions[':'] = LispReader.SHARP_COLON;
+		dtfunctions['A'] = LispReader.SHARP_A;
+		dtfunctions['B'] = LispReader.SHARP_B;
+		dtfunctions['C'] = LispReader.SHARP_C;
+		dtfunctions['O'] = LispReader.SHARP_O;
+		dtfunctions['P'] = LispReader.SHARP_P;
+		dtfunctions['R'] = LispReader.SHARP_R;
+		dtfunctions['S'] = LispReader.SHARP_S;
+		dtfunctions['X'] = LispReader.SHARP_X;
+		dtfunctions['\''] = LispReader.SHARP_QUOTE;
+		dtfunctions['\\'] = LispReader.SHARP_BACKSLASH;
+		dtfunctions['|'] = LispReader.SHARP_VERTICAL_BAR;
+		dtfunctions[')'] = LispReader.SHARP_ILLEGAL;
+		dtfunctions['<'] = LispReader.SHARP_ILLEGAL;
+		dtfunctions[' '] = LispReader.SHARP_ILLEGAL;
+		dtfunctions[8] = LispReader.SHARP_ILLEGAL; // backspace
+		dtfunctions[9] = LispReader.SHARP_ILLEGAL; // tab
+		dtfunctions[10] = LispReader.SHARP_ILLEGAL; // newline, linefeed
+		dtfunctions[12] = LispReader.SHARP_ILLEGAL; // page
+		dtfunctions[13] = LispReader.SHARP_ILLEGAL; // return
 
-      {
-            final Readtable readtable = checkReadtable(first);
-            if (second == Keyword.UPCASE || second == Keyword.DOWNCASE ||
-                second == Keyword.INVERT || second == Keyword.PRESERVE)
-              {
-                readtable.readtableCase = second;
-                return second;
-              }
-            return type_error(second, list(LispSymbols.MEMBER,
-                                                 Keyword.INVERT,
-                                                 Keyword.PRESERVE,
-                                                 Keyword.DOWNCASE,
-                                                 Keyword.UPCASE));
-      }
-    };
+		this.dispatchTables.constants['#'] = dt;
+
+		this.readtableCase = Keyword.UPCASE;
+	}
+
+	public boolean isInvalid(char c) {
+		switch (c) {
+		case 8:
+		case 9:
+		case 10:
+		case 12:
+		case 13:
+		case 32:
+		case 127:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	public boolean isWhitespace(char c) {
+		return this.getSyntaxType(c) == Readtable.SYNTAX_TYPE_WHITESPACE;
+	}
+
+	void makeDispatchMacroCharacter(char dispChar, SubLObject non_terminating_p) {
+		byte syntaxType;
+		if (non_terminating_p != Lisp.NIL)
+			syntaxType = Readtable.SYNTAX_TYPE_NON_TERMINATING_MACRO;
+		else
+			syntaxType = Readtable.SYNTAX_TYPE_TERMINATING_MACRO;
+		// FIXME synchronization
+		this.syntax.put(dispChar, syntaxType);
+		this.readerMacroFunctions.put(dispChar, LispReader.READ_DISPATCH_CHAR);
+		this.dispatchTables.put(dispChar, new DispatchTable());
+	}
+
+	public void setDispatchMacroCharacter(char dispChar, char subChar, SubLObject function)
+
+	{
+		DispatchTable dispatchTable = this.dispatchTables.get(dispChar);
+		if (dispatchTable == null) {
+			LispCharacter c = LispCharacter.makeChar(dispChar);
+			Lisp.error(new LispError(c.writeToString() + " is not a dispatch character."));
+		}
+		dispatchTable.functions.put(CharacterFunctions.toUpperCase(subChar), function);
+	}
+
+	public String toString() {
+		return this.unreadableString("READTABLE");
+	}
+
+	public SubLObject typeOf() {
+		return LispSymbols.READTABLE;
+	}
+
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.READTABLE)
+			return Lisp.T;
+		if (type == BuiltInClass.READTABLE)
+			return Lisp.T;
+		return super.typep(type);
+	}
+
+	public String writeToString() {
+		return this.unreadableString(this.getClass().getSimpleName());
+	}
 }

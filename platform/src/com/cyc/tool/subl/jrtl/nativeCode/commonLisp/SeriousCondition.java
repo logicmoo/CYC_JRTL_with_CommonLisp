@@ -33,57 +33,41 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public class SeriousCondition extends Condition
-{
-    public SeriousCondition()
-    {
-    }
+public class SeriousCondition extends Condition {
+	public SeriousCondition() {
+	}
 
-    protected SeriousCondition(LispClass cls)
-    {
-        super(cls);
-    }
+	protected SeriousCondition(LispClass cls) {
+		super(cls);
+	}
 
-    public SeriousCondition(SubLObject initArgs)
-    {
-        super(initArgs);
-    }
+	public SeriousCondition(String message) {
+		super(message);
+	}
 
-    @Override
-    protected void initialize(SubLObject initArgs)
-    {
-        super.initialize(initArgs);
-    }
+	public SeriousCondition(SubLObject initArgs) {
+		super(initArgs);
+	}
 
-    public SeriousCondition(String message)
-    {
-        super(message);
-    }
+	public SubLObject classOf() {
+		return StandardClass.SERIOUS_CONDITION;
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.SERIOUS_CONDITION;
-    }
+	protected void initialize(SubLObject initArgs) {
+		super.initialize(initArgs);
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.SERIOUS_CONDITION;
-    }
+	public SubLObject typeOf() {
+		return LispSymbols.SERIOUS_CONDITION;
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.SERIOUS_CONDITION)
-            return T;
-        if (type == StandardClass.SERIOUS_CONDITION)
-            return T;
-        return super.typep(type);
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.SERIOUS_CONDITION)
+			return Lisp.T;
+		if (type == StandardClass.SERIOUS_CONDITION)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

@@ -33,69 +33,53 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public class ForwardReferencedClass extends LispClass
-{
-    public ForwardReferencedClass(SubLSymbol name)
-    {
-        super(name);
-    }
+public class ForwardReferencedClass extends LispClass {
+	// ### make-forward-referenced-class
+	private static Primitive MAKE_FORWARD_REFERENCED_CLASS = new JavaPrimitive("make-forward-referenced-class",
+			Lisp.PACKAGE_SYS, true) {
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.FORWARD_REFERENCED_CLASS;
-    }
+		public SubLObject execute(SubLObject arg)
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.FORWARD_REFERENCED_CLASS;
-    }
+		{
+			if (arg instanceof SubLSymbol) {
+				SubLSymbol name = (SubLSymbol) arg;
+				ForwardReferencedClass c = new ForwardReferencedClass(name);
+				LispClass.addClass(name, c);
+				return c;
+			}
+			return Lisp.error(new TypeError(arg.writeToString() + " is not a valid class name."));
+		}
+	};
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.FORWARD_REFERENCED_CLASS)
-            return T;
-        if (type == StandardClass.FORWARD_REFERENCED_CLASS)
-            return T;
-        return super.typep(type);
-    }
+	public ForwardReferencedClass(SubLSymbol name) {
+		super(name);
+	}
 
-    @Override
-    public String writeToString()
-    {
-        StringBuffer sb =
-            new StringBuffer(LispSymbols.FORWARD_REFERENCED_CLASS.writeToString());
-        if (getLispClassName() != null) {
-            sb.append(' ');
-            sb.append(getLispClassName().writeToString());
-        }
-        return unreadableString(sb.toString());
-    }
+	public SubLObject classOf() {
+		return StandardClass.FORWARD_REFERENCED_CLASS;
+	}
 
-    // ### make-forward-referenced-class
-    private static final Primitive MAKE_FORWARD_REFERENCED_CLASS =
-        new JavaPrimitive("make-forward-referenced-class", PACKAGE_SYS, true)
-    {
-        @Override
-        public SubLObject execute(SubLObject arg)
+	public SubLObject typeOf() {
+		return LispSymbols.FORWARD_REFERENCED_CLASS;
+	}
 
-        {
-            if (arg instanceof SubLSymbol) {
-                SubLSymbol name = (SubLSymbol) arg;
-                ForwardReferencedClass c = new ForwardReferencedClass(name);
-                LispClass.addClass(name, c);
-                return c;
-            }
-                return error(new TypeError(arg.writeToString() +
-                                            " is not a valid class name."));
-        }
-    };
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.FORWARD_REFERENCED_CLASS)
+			return Lisp.T;
+		if (type == StandardClass.FORWARD_REFERENCED_CLASS)
+			return Lisp.T;
+		return super.typep(type);
+	}
+
+	public String writeToString() {
+		StringBuffer sb = new StringBuffer(LispSymbols.FORWARD_REFERENCED_CLASS.writeToString());
+		if (this.getLispClassName() != null) {
+			sb.append(' ');
+			sb.append(this.getLispClassName().writeToString());
+		}
+		return this.unreadableString(sb.toString());
+	}
 }

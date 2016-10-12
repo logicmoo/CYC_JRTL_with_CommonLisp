@@ -33,11 +33,9 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-/** This class merely serves as the super class for
- * Fixnum and Bignum
+/**
+ * This class merely serves as the super class for Fixnum and Bignum
  */
-abstract public class LispInteger extends NumericLispObject
-{
-
+abstract public class LispInteger extends NumericLispObject {
 
 }

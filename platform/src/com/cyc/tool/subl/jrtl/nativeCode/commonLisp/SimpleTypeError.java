@@ -33,59 +33,43 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class SimpleTypeError extends TypeError
-{
-    public SimpleTypeError(SubLObject initArgs)
-    {
-        super(StandardClass.SIMPLE_TYPE_ERROR);
-        initialize(initArgs);
-    }
+public class SimpleTypeError extends TypeError {
+	public SimpleTypeError(SubLObject initArgs) {
+		super(StandardClass.SIMPLE_TYPE_ERROR);
+		this.initialize(initArgs);
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.SIMPLE_TYPE_ERROR;
-    }
+	public SubLObject classOf() {
+		return StandardClass.SIMPLE_TYPE_ERROR;
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.SIMPLE_TYPE_ERROR;
-    }
+	public String getMessage() {
+		SubLObject formatControl = this.getFormatControl();
+		if (formatControl != Lisp.NIL) {
+			SubLObject formatArguments = this.getFormatArguments();
+			// (apply 'format (append '(nil format-control) format-arguments))
+			SubLObject result = Primitives.APPLY.execute(LispSymbols.FORMAT,
+					Primitives.APPEND.execute(Lisp.list(Lisp.NIL, formatControl), formatArguments));
+			return result.getString();
+		}
+		return super.getMessage();
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.SIMPLE_TYPE_ERROR)
-            return T;
-        if (type == StandardClass.SIMPLE_TYPE_ERROR)
-            return T;
-        if (type == LispSymbols.SIMPLE_CONDITION)
-            return T;
-        if (type == StandardClass.SIMPLE_CONDITION)
-            return T;
-        return super.typep(type);
-    }
+	public SubLObject typeOf() {
+		return LispSymbols.SIMPLE_TYPE_ERROR;
+	}
 
-    @Override
-    public String getMessage()
-    {
-        SubLObject formatControl = getFormatControl();
-        if (formatControl != NIL) {
-            SubLObject formatArguments = getFormatArguments();
-            // (apply 'format (append '(nil format-control) format-arguments))
-            SubLObject result =
-                Primitives.APPLY.execute(LispSymbols.FORMAT,
-                                         Primitives.APPEND.execute(list(NIL,
-                                                                         formatControl),
-                                                                   formatArguments));
-            return result.getString();
-        }
-        return super.getMessage();
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.SIMPLE_TYPE_ERROR)
+			return Lisp.T;
+		if (type == StandardClass.SIMPLE_TYPE_ERROR)
+			return Lisp.T;
+		if (type == LispSymbols.SIMPLE_CONDITION)
+			return Lisp.T;
+		if (type == StandardClass.SIMPLE_CONDITION)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

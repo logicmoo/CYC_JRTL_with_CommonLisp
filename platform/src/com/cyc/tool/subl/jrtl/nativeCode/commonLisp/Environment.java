@@ -33,354 +33,295 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public final class Environment extends AbstractLispObject
-{
-  Binding vars;
-  FunctionBinding lastFunctionBinding;
-  private Binding blocks;
-  private Binding tags;
-  public boolean inactive; //default value: false == active
+public class Environment extends AbstractLispObject {
+	// ### make-environment
+	public static Primitive MAKE_ENVIRONMENT = new JavaPrimitive("make-environment", Lisp.PACKAGE_SYS, true,
+			"&optional parent-environment") {
 
-  public Environment() {}
+		public SubLObject execute() {
+			return new Environment();
+		}
 
-  public Environment(Environment parent)
-  {
-    if (parent != null)
-      {
-        vars = parent.vars;
-        lastFunctionBinding = parent.lastFunctionBinding;
-        blocks = parent.blocks;
-        tags = parent.tags;
-      }
-  }
+		public SubLObject execute(SubLObject arg) {
+			if (arg == Lisp.NIL)
+				return new Environment();
+			return new Environment(Lisp.checkEnvironment(arg));
+		}
+	};
+	// ### environment-add-macro-definition
+	public static Primitive ENVIRONMENT_ADD_MACRO_DEFINITION = new JavaPrimitive("environment-add-macro-definition",
+			Lisp.PACKAGE_SYS, true, "environment name expander") {
 
-  // Construct a new Environment extending parent with the specified symbol-
-  // value binding.
-  public Environment(Environment parent, SubLSymbol symbol, SubLObject value)
-  {
-    this(parent);
-    vars = new Binding(symbol, value, vars);
-  }
+		public SubLObject execute(SubLObject first, SubLObject second, SubLObject third)
 
-  @Override
-  public SubLObject typeOf()
-  {
-    return LispSymbols.ENVIRONMENT;
-  }
+		{
+			Environment env = Lisp.checkEnvironment(first);
+			SubLObject name = second;
+			SubLObject expander = third;
+			env.addFunctionBinding(name, expander);
+			return env;
+		}
+	};
+	// ### environment-add-function-definition
+	public static Primitive ENVIRONMENT_ADD_FUNCTION_DEFINITION = new JavaPrimitive(
+			"environment-add-function-definition", Lisp.PACKAGE_SYS, true, "environment name lambda-expression") {
 
-  @Override
-  public SubLObject classOf()
-  {
-    return BuiltInClass.ENVIRONMENT;
-  }
+		public SubLObject execute(SubLObject first, SubLObject second, SubLObject third)
 
-  @Override
-  public SubLObject typep(SubLObject type)
-  {
-    if (type == LispSymbols.ENVIRONMENT)
-      return T;
-    if (type == BuiltInClass.ENVIRONMENT)
-      return T;
-    return super.typep(type);
-  }
+		{
+			Lisp.checkEnvironment(first).addFunctionBinding(second, third);
+			return first;
+		}
+	};
+	// ### environment-add-symbol-binding
+	public static Primitive ENVIRONMENT_ADD_SYMBOL_BINDING = new JavaPrimitive("environment-add-symbol-binding",
+			Lisp.PACKAGE_SYS, true, "environment symbol value") {
 
-  public boolean isEmpty()
-  {
-    if (lastFunctionBinding != null)
-      return false;
-    if (vars != null)
-      {
-        for (Binding binding = vars; binding != null; binding = binding.next)
-          if (!binding.specialp)
-            return false;
-      }
-    return true;
-  }
+		public SubLObject execute(SubLObject first, SubLObject second, SubLObject third)
 
-  public void bindSymbolVoid(SubLSymbol symbol, SubLObject value)
-  {
-    vars = new Binding(symbol, value, vars);
-  }
+		{
+			Lisp.checkEnvironment(first).bindSymbolVoid(Lisp.checkSymbol(second), third);
+			return first;
+		}
+	};
+	// ### empty-environment-p
+	private static Primitive EMPTY_ENVIRONMENT_P = new JavaPrimitive("empty-environment-p", Lisp.PACKAGE_SYS, true,
+			"environment") {
 
-  public void rebind(SubLSymbol symbol, SubLObject value)
-  {
-    Binding binding = getBinding(symbol);
-    binding.value = value;
-  }
+		public SubLObject execute(SubLObject arg) {
+			return Lisp.checkEnvironment(arg).isEmpty() ? Lisp.T : Lisp.NIL;
+		}
+	};
 
-  public SubLObject lookup(SubLObject symbol)
-  {
-    Binding binding = vars;
-    while (binding != null)
-      {
-        if (binding.symbol == symbol)
-          return binding.value;
-        binding = binding.next;
-      }
-    return null;
-  }
+	// ### environment-variables
+	private static Primitive ENVIRONMENT_VARS = new JavaPrimitive("environment-variables", Lisp.PACKAGE_SYS, true,
+			"environment") {
 
-  public Binding getBinding(SubLObject symbol)
-  {
-    Binding binding = vars;
-    while (binding != null)
-      {
-        if (binding.symbol == symbol)
-          return binding;
-        binding = binding.next;
-      }
-    return null;
-  }
+		public SubLObject execute(SubLObject arg) {
+			Environment env = Lisp.checkEnvironment(arg);
+			SubLObject result = Lisp.NIL;
+			for (Binding binding = env.vars; binding != null; binding = binding.next)
+				if (!binding.specialp)
+					result = result.push(LispObjectFactory.makeCons(binding.symbol, binding.value));
+			return result.nreverse();
+		}
+	};
 
-  // Function bindings.
-  public void addFunctionBinding(SubLObject name, SubLObject value)
-  {
-    lastFunctionBinding =
-      new FunctionBinding(name, value, lastFunctionBinding);
-  }
+	// ### environment-all-variables
+	private static Primitive ENVIRONMENT_ALL_VARS = new JavaPrimitive("environment-all-variables", Lisp.PACKAGE_SYS,
+			true, "environment") {
 
-  public SubLObject lookupFunction(SubLObject name)
+		public SubLObject execute(SubLObject arg) {
+			Environment env = Lisp.checkEnvironment(arg);
+			SubLObject result = Lisp.NIL;
+			for (Binding binding = env.vars; binding != null; binding = binding.next)
+				if (binding.specialp)
+					result = result.push(binding.symbol);
+				else
+					result = result.push(LispObjectFactory.makeCons(binding.symbol, binding.value));
+			return result.nreverse();
+		}
+	};
 
-  {
-    FunctionBinding binding = lastFunctionBinding;
-    if (name instanceof SubLSymbol)
-      {
-        while (binding != null)
-          {
-            if (binding.name == name)
-              return binding.value;
-            binding = binding.next;
-          }
-        // Not found in environment.
-        return name.getSymbolFunction();
-      }
-    if (name instanceof SubLCons)
-      {
-        while (binding != null)
-          {
-            if (binding.name.equal(name))
-              return binding.value;
-            binding = binding.next;
-          }
-      }
-    return null;
-  }
+	// ### environment-all-functions
+	private static Primitive ENVIRONMENT_ALL_FUNS = new JavaPrimitive("environment-all-functions", Lisp.PACKAGE_SYS,
+			true, "environment") {
 
-  public void addBlock(SubLObject symbol, SubLObject block)
-  {
-    blocks = new Binding(symbol, this, block, blocks);
-  }
+		public SubLObject execute(SubLObject arg) {
+			Environment env = Lisp.checkEnvironment(arg);
+			SubLObject result = Lisp.NIL;
+			for (FunctionBinding binding = env.lastFunctionBinding; binding != null; binding = binding.next)
+				result = result.push(LispObjectFactory.makeCons(binding.name, binding.value));
+			return result.nreverse();
+		}
+	};
 
-  public SubLObject lookupBlock(SubLObject symbol)
-  {
-    Binding binding = blocks;
-    while (binding != null)
-      {
-        if (binding.symbol == symbol)
-          return binding.value;
-        binding = binding.next;
-      }
-    return null;
-  }
+	Binding vars;
 
-  public Binding getBlockBinding(SubLObject block)
-  {
-    Binding binding = blocks;
-    while (binding != null)
-      {
-        if (binding.symbol == block)
-          return binding;
-        binding = binding.next;
-      }
-    return null;
-  }
+	FunctionBinding lastFunctionBinding;
 
-  public void addTagBinding(SubLObject tag, SubLObject code)
-  {
-    tags = new Binding(tag, this, code, tags);
-  }
+	private Binding blocks;
 
-  public Binding getTagBinding(SubLObject tag)
-  {
-    Binding binding = tags;
-    while (binding != null)
-      {
-        if (binding.symbol.eql(tag))
-          return binding;
-        binding = binding.next;
-      }
-    return null;
-  }
+	private Binding tags;
 
-  // Returns body with declarations removed.
-  public SubLObject processDeclarations(SubLObject body)
+	public boolean inactive; // default value: false == active
 
-  {
-    SubLObject bodyAndDecls = parseBody(body, false);
-    SubLObject specials = parseSpecials(bodyAndDecls.NTH(1));
-    for (; specials != NIL; specials = specials.rest())
-      declareSpecial(checkSymbol(specials.first()));
+	public Environment() {
+	}
 
-    return bodyAndDecls.first();
-  }
+	public Environment(Environment parent) {
+		if (parent != null) {
+			this.vars = parent.vars;
+			this.lastFunctionBinding = parent.lastFunctionBinding;
+			this.blocks = parent.blocks;
+			this.tags = parent.tags;
+		}
+	}
 
-  public void declareSpecial(SubLSymbol var)
-  {
-    vars = new Binding(var, null, vars);
-    vars.specialp = true;
-  }
+	// Construct a new Environment extending parent with the specified symbol-
+	// value binding.
+	public Environment(Environment parent, SubLSymbol symbol, SubLObject value) {
+		this(parent);
+		this.vars = new Binding(symbol, value, this.vars);
+	}
 
-    /** Return true if a symbol is declared special.
-     *
-     * If there is no binding in the current (lexical) environment,
-     * the current dynamic environment (thread) is checked.
-     */
-  public boolean isDeclaredSpecial(SubLSymbol var)
-  {
-    Binding binding = getBinding(var);
-    return (binding != null) ? binding.specialp :
-        (LispThread.currentThread().getSpecialBinding(var) != null);
-  }
+	public void addBlock(SubLObject symbol, SubLObject block) {
+		this.blocks = new Binding(symbol, this, block, this.blocks);
+	}
 
-  @Override
-  public String writeToString()
-  {
-    return unreadableString(LispSymbols.ENVIRONMENT);
-  }
+	// Function bindings.
+	public void addFunctionBinding(SubLObject name, SubLObject value) {
+		if (Main.isSubLisp) {
+			Errors.warn("flet?!!?" + name);
+		}
+		this.lastFunctionBinding = new FunctionBinding(name, value, this.lastFunctionBinding);
+	}
 
-  // ### make-environment
-  public static final Primitive MAKE_ENVIRONMENT =
-    new JavaPrimitive("make-environment", PACKAGE_SYS, true,
-                  "&optional parent-environment")
-    {
-      @Override
-      public SubLObject execute()
-      {
-        return new Environment();
-      }
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-        if (arg == NIL)
-          return new Environment();
-        return new Environment(checkEnvironment(arg));
-      }
-    };
+	public void addTagBinding(SubLObject tag, SubLObject code) {
+		this.tags = new Binding(tag, this, code, this.tags);
+	}
 
-  // ### environment-add-macro-definition
-  public static final Primitive ENVIRONMENT_ADD_MACRO_DEFINITION =
-    new JavaPrimitive("environment-add-macro-definition", PACKAGE_SYS, true,
-                  "environment name expander")
-    {
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second,
-                                SubLObject third)
+	public void bindSymbolVoid(SubLSymbol symbol, SubLObject value) {
+		this.vars = new Binding(symbol, value, this.vars);
+	}
 
-      {
-        Environment env = checkEnvironment(first);
-        SubLObject name = second;
-        SubLObject expander = third;
-        env.addFunctionBinding(name, expander);
-        return env;
-      }
-    };
+	public SubLObject classOf() {
+		return BuiltInClass.ENVIRONMENT;
+	}
 
-  // ### environment-add-function-definition
-  public static final Primitive ENVIRONMENT_ADD_FUNCTION_DEFINITION =
-    new JavaPrimitive("environment-add-function-definition", PACKAGE_SYS, true,
-                  "environment name lambda-expression")
-    {
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second,
-                                SubLObject third)
+	public void declareSpecial(SubLSymbol var) {
+		this.vars = new Binding(var, null, this.vars);
+		this.vars.specialp = true;
+	}
 
-      {
-        checkEnvironment(first).addFunctionBinding(second, third);
-        return first;
-      }
-    };
+	public Binding getBinding(SubLObject symbol) {
+		Binding binding = this.vars;
+		while (binding != null) {
+			if (binding.symbol == symbol)
+				return binding;
+			binding = binding.next;
+		}
+		return null;
+	}
 
-  // ### environment-add-symbol-binding
-  public static final Primitive ENVIRONMENT_ADD_SYMBOL_BINDING =
-    new JavaPrimitive("environment-add-symbol-binding", PACKAGE_SYS, true,
-                  "environment symbol value")
-    {
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second,
-                                SubLObject third)
+	public Binding getBlockBinding(SubLObject block) {
+		Binding binding = this.blocks;
+		while (binding != null) {
+			if (binding.symbol == block)
+				return binding;
+			binding = binding.next;
+		}
+		return null;
+	}
 
-      {
-        checkEnvironment(first).bindSymbolVoid(checkSymbol(second), third);
-        return first;
-      }
-    };
+	public Binding getTagBinding(SubLObject tag) {
+		Binding binding = this.tags;
+		while (binding != null) {
+			if (binding.symbol.eql(tag))
+				return binding;
+			binding = binding.next;
+		}
+		return null;
+	}
 
-  // ### empty-environment-p
-  private static final Primitive EMPTY_ENVIRONMENT_P =
-    new JavaPrimitive("empty-environment-p", PACKAGE_SYS, true, "environment")
-    {
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-          return checkEnvironment(arg).isEmpty() ? T : NIL;
-      }
-    };
+	/**
+	 * Return true if a symbol is declared special.
+	 *
+	 * If there is no binding in the current (lexical) environment, the current
+	 * dynamic environment (thread) is checked.
+	 */
+	public boolean isDeclaredSpecial(SubLSymbol var) {
+		Binding binding = this.getBinding(var);
+		return binding != null ? binding.specialp : LispThread.currentThread().getSpecialBinding(var) != null;
+	}
 
-  // ### environment-variables
-  private static final Primitive ENVIRONMENT_VARS =
-    new JavaPrimitive("environment-variables", PACKAGE_SYS, true, "environment")
-    {
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-            Environment env = checkEnvironment(arg);
-            SubLObject result = NIL;
-            for (Binding binding = env.vars; binding != null; binding = binding.next)
-              if (!binding.specialp)
-                result = result.push(makeCons(binding.symbol, binding.value));
-            return result.nreverse();
-      }
-    };
+	public boolean isEmpty() {
+		if (this.lastFunctionBinding != null)
+			return false;
+		if (this.vars != null)
+			for (Binding binding = this.vars; binding != null; binding = binding.next)
+				if (!binding.specialp)
+					return false;
+		return true;
+	}
 
-  // ### environment-all-variables
-  private static final Primitive ENVIRONMENT_ALL_VARS =
-    new JavaPrimitive("environment-all-variables", PACKAGE_SYS, true, "environment")
-    {
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-            Environment env = checkEnvironment(arg);
-            SubLObject result = NIL;
-            for (Binding binding = env.vars;
-                 binding != null; binding = binding.next)
-              if (binding.specialp)
-                result = result.push(binding.symbol);
-              else
-                result = result.push(makeCons(binding.symbol, binding.value));
-            return result.nreverse();
-      }
-    };
+	public SubLObject lookup(SubLObject symbol) {
+		Binding binding = this.vars;
+		while (binding != null) {
+			if (binding.symbol == symbol)
+				return binding.value;
+			binding = binding.next;
+		}
+		return null;
+	}
 
-  // ### environment-all-functions
-  private static final Primitive ENVIRONMENT_ALL_FUNS =
-    new JavaPrimitive("environment-all-functions", PACKAGE_SYS, true, "environment")
-    {
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-            Environment env = checkEnvironment(arg);
-            SubLObject result = NIL;
-            for (FunctionBinding binding = env.lastFunctionBinding;
-                 binding != null; binding = binding.next)
-            result = result.push(makeCons(binding.name, binding.value));
-            return result.nreverse();
-      }
-    };
+	public SubLObject lookupBlock(SubLObject symbol) {
+		Binding binding = this.blocks;
+		while (binding != null) {
+			if (binding.symbol == symbol)
+				return binding.value;
+			binding = binding.next;
+		}
+		return null;
+	}
+
+	public SubLObject lookupFunction(SubLObject name)
+
+	{
+		FunctionBinding binding = this.lastFunctionBinding;
+		if (name instanceof SubLSymbol) {
+			while (binding != null) {
+				if (binding.name == name)
+					return binding.value;
+				binding = binding.next;
+			}
+			// Not found in environment.
+			return name.getSymbolFunction();
+		}
+		if (name instanceof SubLCons)
+			while (binding != null) {
+				if (binding.name.equal(name))
+					return binding.value;
+				binding = binding.next;
+			}
+		return null;
+	}
+
+	// Returns body with declarations removed.
+	public SubLObject processDeclarations(SubLObject body)
+
+	{
+		SubLObject bodyAndDecls = Lisp.parseBody(body, false);
+		SubLObject specials = Lisp.parseSpecials(bodyAndDecls.NTH(1));
+		for (; specials != Lisp.NIL; specials = specials.rest())
+			this.declareSpecial(Lisp.checkSymbol(specials.first()));
+
+		return bodyAndDecls.first();
+	}
+
+	public void rebind(SubLSymbol symbol, SubLObject value) {
+		Binding binding = this.getBinding(symbol);
+		binding.value = value;
+	}
+
+	public SubLObject typeOf() {
+		return LispSymbols.ENVIRONMENT;
+	}
+
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.ENVIRONMENT)
+			return Lisp.T;
+		if (type == BuiltInClass.ENVIRONMENT)
+			return Lisp.T;
+		return super.typep(type);
+	}
+
+	public String writeToString() {
+		return this.unreadableString(LispSymbols.ENVIRONMENT);
+	}
 }

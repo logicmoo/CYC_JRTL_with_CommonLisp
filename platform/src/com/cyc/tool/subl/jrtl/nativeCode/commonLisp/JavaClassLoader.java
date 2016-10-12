@@ -33,89 +33,72 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 public class JavaClassLoader extends ClassLoader {
 
-    private static JavaClassLoader persistentInstance;
+	private static JavaClassLoader persistentInstance;
 
-    private static Set<String> packages = Collections.synchronizedSet(new HashSet<String>());
+	private static Set<String> packages = Collections.synchronizedSet(new HashSet<String>());
 
-    public JavaClassLoader()
-    {
-        super(JavaClassLoader.class.getClassLoader());
-    }
+	private static void definePackage(String packageName) {
+		if (packageName != null && !JavaClassLoader.packages.contains(packageName)) {
+			JavaClassLoader.persistentInstance.definePackage(packageName, "", "1.0", "", "", "1.0", "", null);
+			JavaClassLoader.packages.add(packageName);
+		}
+	}
 
-    public static JavaClassLoader getPersistentInstance()
-    {
-        return getPersistentInstance(null);
-    }
+	public static JavaClassLoader getPersistentInstance() {
+		return JavaClassLoader.getPersistentInstance(null);
+	}
 
-    public static JavaClassLoader getPersistentInstance(String packageName)
-    {
-        if (persistentInstance == null)
-            persistentInstance = new JavaClassLoader();
-	definePackage(packageName);
-        return persistentInstance;
-    }
+	public static JavaClassLoader getPersistentInstance(String packageName) {
+		if (JavaClassLoader.persistentInstance == null)
+			JavaClassLoader.persistentInstance = new JavaClassLoader();
+		JavaClassLoader.definePackage(packageName);
+		return JavaClassLoader.persistentInstance;
+	}
 
-    private static void definePackage(String packageName)
-    {
-        if (packageName != null && !packages.contains(packageName)) {
-            persistentInstance.definePackage(packageName,"","1.0","","","1.0","",null);
-            packages.add(packageName);
-        }
-    }
+	public JavaClassLoader() {
+		super(JavaClassLoader.class.getClassLoader());
+	}
 
-    public Class<?> loadClassFromByteArray(byte[] classbytes) {
-        return loadClassFromByteArray(null, classbytes);
-    }
+	public Class<?> loadClassFromByteArray(byte[] classbytes) {
+		return this.loadClassFromByteArray(null, classbytes);
+	}
 
-    public Class<?> loadClassFromByteArray(String className,
-                                                byte[] classbytes)
-    {
-        try {
-            long length = classbytes.length;
-            if (length < Integer.MAX_VALUE) {
-                Class<?> c =
-                    defineClass(className, classbytes, 0, (int) length);
-                if (c != null) {
-                    resolveClass(c);
-                    return c;
-                }
-            }
-        }
-    	catch (LinkageError e) {
-                throw e;
-    	}
-        catch (Throwable t) {
-            Debug.trace(t);
-        }
-        return null;
-    }
+	public Class<?> loadClassFromByteArray(String className, byte[] classbytes) {
+		try {
+			long length = classbytes.length;
+			if (length < Integer.MAX_VALUE) {
+				Class<?> c = this.defineClass(className, classbytes, 0, (int) length);
+				if (c != null) {
+					this.resolveClass(c);
+					return c;
+				}
+			}
+		} catch (LinkageError e) {
+			throw e;
+		} catch (Throwable t) {
+			Debug.trace(t);
+		}
+		return null;
+	}
 
-    public Class<?> loadClassFromByteArray(String className, byte[] bytes,
-                                                int offset, int length)
-    {
-        try {
-            Class<?> c = defineClass(className, bytes, offset, length);
-            if (c != null) {
-                resolveClass(c);
-                return c;
-            }
-        }
-        catch (VerifyError e)
-          {
-            error(new LispError("Class verification failed: " + e.getMessage()));
-          }
-        catch (Throwable t) {
-            Debug.trace(t);
-        }
-        return null;
-    }
+	public Class<?> loadClassFromByteArray(String className, byte[] bytes, int offset, int length) {
+		try {
+			Class<?> c = this.defineClass(className, bytes, offset, length);
+			if (c != null) {
+				this.resolveClass(c);
+				return c;
+			}
+		} catch (VerifyError e) {
+			Lisp.error(new LispError("Class verification failed: " + e.getMessage()));
+		} catch (Throwable t) {
+			Debug.trace(t);
+		}
+		return null;
+	}
 }

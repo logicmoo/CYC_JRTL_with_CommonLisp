@@ -35,82 +35,77 @@ package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class FaslReadtable extends Readtable
-{
-    public FaslReadtable()
-    {
-        super();
-    }
+public class FaslReadtable extends Readtable {
+	private static FaslReadtable instance = new FaslReadtable();
 
-    @Override
-    protected void initialize()
-    {
-    	Byte[] syntax = this.syntax.constants;
-        syntax[9]    = SYNTAX_TYPE_WHITESPACE; // tab
-        syntax[10]   = SYNTAX_TYPE_WHITESPACE; // linefeed
-        syntax[12]   = SYNTAX_TYPE_WHITESPACE; // form feed
-        syntax[13]   = SYNTAX_TYPE_WHITESPACE; // return
-        syntax[' ']  = SYNTAX_TYPE_WHITESPACE;
+	public static FaslReadtable getInstance() {
+		return FaslReadtable.instance;
+	}
 
-        syntax['"']  = SYNTAX_TYPE_TERMINATING_MACRO;
-        syntax['\''] = SYNTAX_TYPE_TERMINATING_MACRO;
-        syntax['(']  = SYNTAX_TYPE_TERMINATING_MACRO;
-        syntax[')']  = SYNTAX_TYPE_TERMINATING_MACRO;
-        syntax[',']  = SYNTAX_TYPE_TERMINATING_MACRO;
-        syntax[';']  = SYNTAX_TYPE_TERMINATING_MACRO;
-        syntax['`']  = SYNTAX_TYPE_TERMINATING_MACRO;
+	public FaslReadtable() {
+		super();
+	}
 
-        syntax['#']  = SYNTAX_TYPE_NON_TERMINATING_MACRO;
+	protected void initialize() {
+		Byte[] syntax = this.syntax.constants;
+		syntax[9] = Readtable.SYNTAX_TYPE_WHITESPACE; // tab
+		syntax[10] = Readtable.SYNTAX_TYPE_WHITESPACE; // linefeed
+		syntax[12] = Readtable.SYNTAX_TYPE_WHITESPACE; // form feed
+		syntax[13] = Readtable.SYNTAX_TYPE_WHITESPACE; // return
+		syntax[' '] = Readtable.SYNTAX_TYPE_WHITESPACE;
 
-        syntax['\\'] = SYNTAX_TYPE_SINGLE_ESCAPE;
-        syntax['|']  = SYNTAX_TYPE_MULTIPLE_ESCAPE;
+		syntax['"'] = Readtable.SYNTAX_TYPE_TERMINATING_MACRO;
+		syntax['\''] = Readtable.SYNTAX_TYPE_TERMINATING_MACRO;
+		syntax['('] = Readtable.SYNTAX_TYPE_TERMINATING_MACRO;
+		syntax[')'] = Readtable.SYNTAX_TYPE_TERMINATING_MACRO;
+		syntax[','] = Readtable.SYNTAX_TYPE_TERMINATING_MACRO;
+		syntax[';'] = Readtable.SYNTAX_TYPE_TERMINATING_MACRO;
+		syntax['`'] = Readtable.SYNTAX_TYPE_TERMINATING_MACRO;
 
-        SubLObject[] readerMacroFunctions = this.readerMacroFunctions.constants;
-        readerMacroFunctions[';']  = FaslReader.FASL_READ_COMMENT;
-        readerMacroFunctions['"']  = FaslReader.FASL_READ_STRING;
-        readerMacroFunctions['(']  = FaslReader.FASL_READ_LIST;
-        readerMacroFunctions[')']  = FaslReader.FASL_READ_RIGHT_PAREN;
-        readerMacroFunctions['\''] = FaslReader.FASL_READ_QUOTE;
-        readerMacroFunctions['#']  = FaslReader.FASL_READ_DISPATCH_CHAR;
+		syntax['#'] = Readtable.SYNTAX_TYPE_NON_TERMINATING_MACRO;
 
-        // BACKQUOTE-MACRO and COMMA-MACRO are defined in backquote.lisp.
-        readerMacroFunctions['`']  = LispSymbols.BACKQUOTE_MACRO;
-        readerMacroFunctions[',']  = LispSymbols.COMMA_MACRO;
+		syntax['\\'] = Readtable.SYNTAX_TYPE_SINGLE_ESCAPE;
+		syntax['|'] = Readtable.SYNTAX_TYPE_MULTIPLE_ESCAPE;
 
-        DispatchTable dt = new DispatchTable();
-        SubLObject[] dtfunctions = dt.functions.constants;
-        dtfunctions['(']  = FaslReader.FASL_SHARP_LEFT_PAREN;
-        dtfunctions['*']  = FaslReader.FASL_SHARP_STAR;
-        dtfunctions['.']  = FaslReader.FASL_SHARP_DOT;
-        dtfunctions[':']  = FaslReader.FASL_SHARP_COLON;
-        dtfunctions['A']  = FaslReader.FASL_SHARP_A;
-        dtfunctions['B']  = FaslReader.FASL_SHARP_B;
-        dtfunctions['C']  = FaslReader.FASL_SHARP_C;
-        dtfunctions['O']  = FaslReader.FASL_SHARP_O;
-        dtfunctions['P']  = FaslReader.FASL_SHARP_P;
-        dtfunctions['R']  = FaslReader.FASL_SHARP_R;
-        dtfunctions['S']  = FaslReader.FASL_SHARP_S;
-        dtfunctions['X']  = FaslReader.FASL_SHARP_X;
-        dtfunctions['\''] = FaslReader.FASL_SHARP_QUOTE;
-        dtfunctions['\\'] = FaslReader.FASL_SHARP_BACKSLASH;
-        dtfunctions['|']  = FaslReader.FASL_SHARP_VERTICAL_BAR;
-        dtfunctions[')']  = FaslReader.FASL_SHARP_ILLEGAL;
-        dtfunctions['<']  = FaslReader.FASL_SHARP_ILLEGAL;
-        dtfunctions[' ']  = FaslReader.FASL_SHARP_ILLEGAL;
-        dtfunctions[8]    = FaslReader.FASL_SHARP_ILLEGAL; // backspace
-        dtfunctions[9]    = FaslReader.FASL_SHARP_ILLEGAL; // tab
-        dtfunctions[10]   = FaslReader.FASL_SHARP_ILLEGAL; // newline, linefeed
-        dtfunctions[12]   = FaslReader.FASL_SHARP_ILLEGAL; // page
-        dtfunctions[13]   = FaslReader.FASL_SHARP_ILLEGAL; // return
-        dispatchTables.constants['#'] = dt;
+		SubLObject[] readerMacroFunctions = this.readerMacroFunctions.constants;
+		readerMacroFunctions[';'] = FaslReader.FASL_READ_COMMENT;
+		readerMacroFunctions['"'] = FaslReader.FASL_READ_STRING;
+		readerMacroFunctions['('] = FaslReader.FASL_READ_LIST;
+		readerMacroFunctions[')'] = FaslReader.FASL_READ_RIGHT_PAREN;
+		readerMacroFunctions['\''] = FaslReader.FASL_READ_QUOTE;
+		readerMacroFunctions['#'] = FaslReader.FASL_READ_DISPATCH_CHAR;
 
-        readtableCase = Keyword.UPCASE;
-    }
+		// BACKQUOTE-MACRO and COMMA-MACRO are defined in backquote.lisp.
+		readerMacroFunctions['`'] = LispSymbols.BACKQUOTE_MACRO;
+		readerMacroFunctions[','] = LispSymbols.COMMA_MACRO;
 
-    private static final FaslReadtable instance = new FaslReadtable();
+		DispatchTable dt = new DispatchTable();
+		SubLObject[] dtfunctions = dt.functions.constants;
+		dtfunctions['('] = FaslReader.FASL_SHARP_LEFT_PAREN;
+		dtfunctions['*'] = FaslReader.FASL_SHARP_STAR;
+		dtfunctions['.'] = FaslReader.FASL_SHARP_DOT;
+		dtfunctions[':'] = FaslReader.FASL_SHARP_COLON;
+		dtfunctions['A'] = FaslReader.FASL_SHARP_A;
+		dtfunctions['B'] = FaslReader.FASL_SHARP_B;
+		dtfunctions['C'] = FaslReader.FASL_SHARP_C;
+		dtfunctions['O'] = FaslReader.FASL_SHARP_O;
+		dtfunctions['P'] = FaslReader.FASL_SHARP_P;
+		dtfunctions['R'] = FaslReader.FASL_SHARP_R;
+		dtfunctions['S'] = FaslReader.FASL_SHARP_S;
+		dtfunctions['X'] = FaslReader.FASL_SHARP_X;
+		dtfunctions['\''] = FaslReader.FASL_SHARP_QUOTE;
+		dtfunctions['\\'] = FaslReader.FASL_SHARP_BACKSLASH;
+		dtfunctions['|'] = FaslReader.FASL_SHARP_VERTICAL_BAR;
+		dtfunctions[')'] = FaslReader.FASL_SHARP_ILLEGAL;
+		dtfunctions['<'] = FaslReader.FASL_SHARP_ILLEGAL;
+		dtfunctions[' '] = FaslReader.FASL_SHARP_ILLEGAL;
+		dtfunctions[8] = FaslReader.FASL_SHARP_ILLEGAL; // backspace
+		dtfunctions[9] = FaslReader.FASL_SHARP_ILLEGAL; // tab
+		dtfunctions[10] = FaslReader.FASL_SHARP_ILLEGAL; // newline, linefeed
+		dtfunctions[12] = FaslReader.FASL_SHARP_ILLEGAL; // page
+		dtfunctions[13] = FaslReader.FASL_SHARP_ILLEGAL; // return
+		this.dispatchTables.constants['#'] = dt;
 
-    public static final FaslReadtable getInstance()
-    {
-        return instance;
-    }
+		this.readtableCase = Keyword.UPCASE;
+	}
 }

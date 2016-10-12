@@ -33,193 +33,143 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public class TwoWayStream extends Stream
-{
-    public final LispStream in;
-    public final LispStream out;
+public class TwoWayStream extends Stream {
+	public LispStream in;
+	public LispStream out;
 
-    public TwoWayStream(LispStream in, LispStream out)
-    {
-        super(LispSymbols.TWO_WAY_STREAM);
-        this.in = in;
-        this.out = out;
-        isInputStream = true;
-        isOutputStream = true;
-    }
+	public TwoWayStream(LispStream in, LispStream out) {
+		super(LispSymbols.TWO_WAY_STREAM);
+		this.in = in;
+		this.out = out;
+		this.isInputStream = true;
+		this.isOutputStream = true;
+	}
 
-    public TwoWayStream(LispStream in, LispStream out, boolean interactive)
-    {
-        this(in, out);
-        setInteractive(interactive);
-    }
+	public TwoWayStream(LispStream in, LispStream out, boolean interactive) {
+		this(in, out);
+		this.setInteractive(interactive);
+	}
 
-    @Override
-    public SubLObject getElementType()
-    {
-        SubLObject itype = in.getElementType();
-        SubLObject otype = out.getElementType();
-        if (itype.equal(otype))
-            return itype;
-        return list(LispSymbols.AND, itype, otype);
-    }
+	public boolean _charReady() throws java.io.IOException {
+		return this.in._charReady();
+	}
 
-    public LispStream getInputStream()
-    {
-        return in;
-    }
+	public void _clearInput() {
+		this.in._clearInput();
+	}
 
-    public LispStream getOutputStream()
-    {
-        return out;
-    }
+	public void _finishOutput() {
+		this.out._finishOutput();
+	}
 
-    @Override
-    public boolean isCharacterInputStream()
-    {
-        return in.isCharacterInputStream();
-    }
+	// Reads an 8-bit byte.
 
-    @Override
-    public boolean isBinaryInputStream()
-    {
-        return in.isBinaryInputStream();
-    }
+	public int _readByte() {
+		return this.in._readByte();
+	}
 
-    @Override
-    public boolean isCharacterOutputStream()
-    {
-        return out.isCharacterOutputStream();
-    }
+	// Returns -1 at end of file.
 
-    @Override
-    public boolean isBinaryOutputStream()
-    {
-        return out.isBinaryOutputStream();
-    }
+	public int _readChar() throws java.io.IOException {
+		return this.in._readChar();
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.TWO_WAY_STREAM;
-    }
+	public void _unreadChar(int n) throws java.io.IOException {
+		this.in._unreadChar(n);
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return BuiltInClass.TWO_WAY_STREAM;
-    }
+	// Writes an 8-bit byte.
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.TWO_WAY_STREAM)
-            return T;
-        if (type == BuiltInClass.TWO_WAY_STREAM)
-            return T;
-        return super.typep(type);
-    }
+	public void _writeByte(int n) {
+		this.out._writeByte(n);
+	}
 
-    // Returns -1 at end of file.
-    @Override
-    public int _readChar() throws java.io.IOException
-    {
-        return in._readChar();
-    }
+	public void _writeChar(char c) {
+		this.out._writeChar(c);
+	}
 
-    @Override
-    public void _unreadChar(int n) throws java.io.IOException
-    {
-        in._unreadChar(n);
-    }
+	public void _writeChars(char[] chars, int start, int end)
 
-    @Override
-    public boolean _charReady() throws java.io.IOException
-    {
-        return in._charReady();
-    }
+	{
+		this.out._writeChars(chars, start, end);
+	}
 
-    @Override
-    public void _writeChar(char c)
-    {
-        out._writeChar(c);
-    }
+	public void _writeLine(String s) {
+		this.out._writeLine(s);
+	}
 
-    @Override
-    public void _writeChars(char[] chars, int start, int end)
+	public void _writeString(String s) {
+		this.out._writeString(s);
+	}
 
-    {
-        out._writeChars(chars, start, end);
-    }
+	public SubLObject classOf() {
+		return BuiltInClass.TWO_WAY_STREAM;
+	}
 
-    @Override
-    public void _writeString(String s)
-    {
-        out._writeString(s);
-    }
+	public SubLObject close(SubLObject abort) {
+		// "The effect of CLOSE on a constructed stream is to close the
+		// argument stream only. There is no effect on the constituents of
+		// composite streams."
+		this.setOpen(false);
+		return Lisp.T;
+	}
 
-    @Override
-    public void _writeLine(String s)
-    {
-        out._writeLine(s);
-    }
+	public SubLObject freshLine() {
+		return this.out.freshLine();
+	}
 
-    // Reads an 8-bit byte.
-    @Override
-    public int _readByte()
-    {
-        return in._readByte();
-    }
+	public SubLObject getElementType() {
+		SubLObject itype = this.in.getElementType();
+		SubLObject otype = this.out.getElementType();
+		if (itype.equal(otype))
+			return itype;
+		return Lisp.list(LispSymbols.AND, itype, otype);
+	}
 
-    // Writes an 8-bit byte.
-    @Override
-    public void _writeByte(int n)
-    {
-        out._writeByte(n);
-    }
+	public LispStream getInputStream() {
+		return this.in;
+	}
 
-    @Override
-    public void _finishOutput()
-    {
-        out._finishOutput();
-    }
+	public LispStream getOutputStream() {
+		return this.out;
+	}
 
-    @Override
-    public void _clearInput()
-    {
-        in._clearInput();
-    }
+	public boolean isBinaryInputStream() {
+		return this.in.isBinaryInputStream();
+	}
 
-    @Override
-    public SubLObject listen()
-    {
-        return in.listen();
-    }
+	public boolean isBinaryOutputStream() {
+		return this.out.isBinaryOutputStream();
+	}
 
-    @Override
-    public SubLObject freshLine()
-    {
-        return out.freshLine();
-    }
+	public boolean isCharacterInputStream() {
+		return this.in.isCharacterInputStream();
+	}
 
-    @Override
-    public SubLObject close(SubLObject abort)
-    {
-        // "The effect of CLOSE on a constructed stream is to close the
-        // argument stream only. There is no effect on the constituents of
-        // composite streams."
-        setOpen(false);
-        return T;
-    }
+	public boolean isCharacterOutputStream() {
+		return this.out.isCharacterOutputStream();
+	}
 
-    @Override
-    public String writeToString()
-    {
-        return unreadableString(LispSymbols.TWO_WAY_STREAM);
-    }
+	public SubLObject listen() {
+		return this.in.listen();
+	}
+
+	public SubLObject typeOf() {
+		return LispSymbols.TWO_WAY_STREAM;
+	}
+
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.TWO_WAY_STREAM)
+			return Lisp.T;
+		if (type == BuiltInClass.TWO_WAY_STREAM)
+			return Lisp.T;
+		return super.typep(type);
+	}
+
+	public String writeToString() {
+		return this.unreadableString(LispSymbols.TWO_WAY_STREAM);
+	}
 
 }

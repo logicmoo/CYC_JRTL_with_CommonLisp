@@ -1,23 +1,15 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *   
- *   http://www.apache.org/licenses/LICENSE-2.0
- * 
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
+//
+//
+//
+package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
-package  com.cyc.tool.subl.jrtl.nativeCode.subLisp;
+import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.concurrent.CountDownLatch;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -27,290 +19,366 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
+import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLDigestInputTextStream;
+import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputTextStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLStreamFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.format;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high;
 import com.cyc.tool.subl.util.IsolatedClassLoader;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLPatcher;
-import java.io.File;
 
-//// Internal Imports
+public class Eval implements SubLFile {
+	public static SubLFile me;
 
-//// External Imports
+	public static SubLSymbol $star$;
 
-public  class Eval implements SubLFile {
-  
-  //// Constructors
-  
-  /** Creates a new instance of Eval. */
-  public Eval() {}
-  public static final SubLFile me = new Eval();
-  
-  //// Public Area
-  
-  public static SubLSymbol $star$;
-  public static SubLSymbol $star_star$;
-  public static SubLSymbol $star_star_star$;
-  public static SubLSymbol $evaluator_method$;
-  
-  public static final SubLObject eval(SubLObject form) {
-    return form.eval(SubLEnvironment.currentEnvironment());
-  }
-  
-  public static final SubLObject macroexpand_1(SubLObject form, SubLObject env) {
-    if (env == UNPROVIDED) { env = SubLEnvironment.currentEnvironment(); }
-    if (form.isCons()) {
-      SubLObject operatorSymbol = form.first();
-      if (operatorSymbol.isSymbol()) {
-        SubLOperator operator = operatorSymbol.toSymbol().getFunction();
-        if (operator.isMacroOperator()) {
-          SubLFunction macroExpander = operator.toMacro().getMacroExpander();
-          SubLObject expandedForm = macroExpander.apply(form.toCons(), env.toEnv());
-          return Values.values(expandedForm, T);
-        }
-      }
-    }
-    return Values.values(form, NIL);
-  }
-  
-  private static final SubLSymbol EOF_KEYWORD = SubLObjectFactory.makeKeyword("EOF");
-  private static final SubLString LOAD_ERROR_STRING_1 = SubLObjectFactory.makeString("Read error occured at position ~S of file ~S");
-  private static final SubLString LOAD_ERROR_STRING_2 = SubLObjectFactory.makeString("Could not load file ~S.");
-  
-  
-  public static final SubLObject load(SubLObject filename) {
-    boolean success = false;
-    SubLObject stream = NIL;
-    try {
-      stream = SubLStreamFactory.makeFileStream(filename.getString(), INPUT_KEYWORD,
-        TEXT_KEYWORD, NIL, ERROR_KEYWORD, NIL);
-      boolean done = false;
-      while (!done) {
-        Values.resetMultipleValues();
-        SubLObject form = reader.read_ignoring_errors(stream, NIL, EOF_KEYWORD);
-        SubLObject error = SubLProcess.nthMultipleValue(ONE_INTEGER);
-        Values.resetMultipleValues();
-        if (error == ERROR_KEYWORD) {
-          if (form != EOF_KEYWORD) {
-            Errors.error(LOAD_ERROR_STRING_1, streams_high.file_position(stream, UNPROVIDED), filename);
-          } else {
-            success = true;
-          }
-          done = true;
-        } else {
-          Eval.eval(form);
-        }
-      }
-    } finally {
-      if (stream.isStream()) {
-        streams_high.close(stream, UNPROVIDED);
-      }
-    }
-    if (success) { return T; }
-    Errors.error(LOAD_ERROR_STRING_2, filename);
-    return NIL;
-  }
-  
-  
-  // @todo move this somewhere more appropriate -APB
-  public static final File openFileForReading(String filename) {
-    // @todo convert filename to Java format before opening -APB
-    File file = new File(filename);
-    if (!file.exists()) {
-      Errors.error("File doesn't exist: " + filename);
-    }
-    if (file.isDirectory()) {
-      Errors.error("Expected file but got directory: " + filename);
-    }
-    if (!file.canRead()) {
-      Errors.error("File is unreadable: " + filename);
-    }
-    return file;
-  }
-  
-  public static final SubLObject function_information(SubLObject function, SubLObject environment) {
-    return Errors.unimplementedMethod("function-information");
-  }
-  
-  public static final SubLObject macroexpand(SubLObject form, SubLObject env) {
-    if (env == UNPROVIDED) { env = SubLEnvironment.currentEnvironment(); }
-    int i = -1;
-    SubLObject expandedForm = form;
-    SubLObject expanded_p = NIL;
-    do {
-      Values.resetMultipleValues();
-      expandedForm = macroexpand_1(expandedForm, env);
-      expanded_p = SubLProcess.nthMultipleValue(ONE_INTEGER);
-      Values.resetMultipleValues();      
-      i++;
-    } while (expanded_p != NIL);
+	public static SubLSymbol $star_star$;
 
-    // figure out how often expansion was done
-    expanded_p = i == 0 ? NIL : T;
-    Values.resetMultipleValues();
-    return Values.values(expandedForm, expanded_p);
-  }
-  
-  public static final SubLObject variable_information(SubLObject variable, SubLObject environment) {
-    return Errors.unimplementedMethod("variable-information");
-  }
-  
-  public static final SubLObject constantp(SubLObject object, SubLObject env) {
-    if (object.isSymbol()) {
-      SubLSymbol symbol = object.toSymbol();
-      if (symbol.isConstantSymbol()) { return T; }
-      return NIL;
-    } else {
-      if (!object.isCons()) { return T; }
-      return NIL;
-    }
-  }
-  
-  public static final SubLObject get_initial_continuation() {
-    return UNPROVIDED;
-  }
-  
-  public static final SubLObject set_initial_continuation(SubLObject continuation) {
-    return continuation;
-  }  
-  /**
-   * #'INITIALIZE-SUBL-INTERFACE-FILE
-   * 
-   * Initializes a class that is already in the system 
-   * @param className (stringp) in the form of "com.cyc.myproject.SubLTrampolines"
-   * @return T if successful otherwise throws a {@link SubLException}
-   */
-  public static final SubLObject initialize_subl_interface_file(SubLObject className) {
-    String stringTyped = className.getString();
-    try {
-      // ensure loadable
-      if (!SubLFile.class.isAssignableFrom(Class.forName(stringTyped, false, isolatedClassLoader))) {
-        Errors.error(stringTyped + " is not a SubLFile.");
-      }
-    } catch (ClassNotFoundException e) {
-      Errors.error("Not found: " + stringTyped, e);
-    }
-    Class fileClass = null;
-    try { // ensure <clinit>        
-      fileClass = Class.forName(stringTyped, true, isolatedClassLoader);
-    } catch (Exception e) {
-      Errors.error("Error loading " + stringTyped, e);
-      return NIL;
-    }
-    Object file = null;
-    try { // In the case of SL2J generated classes <clinit> already populated a field called "me"
-      // We rather reuse this instance instead of trying to create our own
-      java.lang.reflect.Field field = fileClass.getDeclaredField("me");
-      field.setAccessible(true);
-      if (java.lang.reflect.Modifier.isStatic(field.getModifiers())) file = field.get(null);
-    } catch (IllegalArgumentException e) {
-    } catch (IllegalAccessException e) {
-    } catch (SecurityException e) {
-    } catch (NoSuchFieldException e) {
-    }
-    // No static "me" field was accessible 
-    if (file == null) try { // This is for non translated use-cases
-      file = fileClass.newInstance();
-    } catch (InstantiationException e) {
-      Errors.error("Error creating " + stringTyped, e);
-    } catch (IllegalAccessException e) {
-      Errors.error("Error accessing " + stringTyped, e);
-    }
-    if (file instanceof SubLFile) {
-      SubLFiles.initialize((SubLFile) file);
-      return T; // LOAD- functions traditionally return T
-    } else {
-      Errors.error(stringTyped + " in not a SubLFile.");
-    }
-    return NIL;
-  }
+	public static SubLSymbol $star_star_star$;
 
-  /**
-   * #'LOAD-EXTERNAL-CODE
-   * 
-   * Prepares a .class file for initialization.
-   * Or Adds a .jar file to the CLASSPATH
-   * Or Adds a Directory to the CLASSPATH
-   * 
-   * @param path (stringp) in the form of a java resource specifier
-   * @return T if successful otherwise throws a {@link SubLException}
-   *    
-   */
-  public static final SubLObject load_external_code(SubLObject path) {
-    if (!IsolatedClassLoader.ALLOW_DYNAMIC_LOADING_OF_CODE) {
-      Errors.error("Dynamic loading of code is not currently allowed.");
-    }
-    String stringTyped = path.getString();
-    try {
-      isolatedClassLoader.addCode(stringTyped);
-      return T;
-    } catch (Exception e) {
-      Errors.error("Error loading jar!class: " + stringTyped, e);
-      return NIL;
-    }
-  }
-  
-  public static final SubLObject patchSubLFile(SubLObject fullClassName) {
-    initialize_subl_interface_file(fullClassName);
-    return NIL;
-  }
+	public static SubLSymbol $evaluator_method$;
 
-  public static final SubLObject loadSubLPatch(SubLObject jarOrClassFilePath, SubLObject patcherFileName) {
-    if (patcherFileName == UNPROVIDED) {
-      Errors.unimplementedMethod("loadSubLPatch: Loading a patch without patcher file name.");
-    }
-    load_external_code(jarOrClassFilePath);
-    try {
-      Class patcherClass = Class.forName(patcherFileName.getString());
-      SubLPatcher patcher = (SubLPatcher)patcherClass.getConstructor().newInstance();
-      patcher.doPatch();
-    } catch (Exception e) {
-      Errors.error("Unable to load patch: jarOrClassFilePath" + e);
-    }
-    return NIL;
-  }
-  
-  //// Initializers
-  
-  public void declareFunctions() {
-    SubLFiles.declareFunction(me, "constantp", "CONSTANTP", 1, 1, false);
-    SubLFiles.declareFunction(me, "eval",          "EVAL",          1, 0, false);
-    SubLFiles.declareFunction(me, "macroexpand_1", "MACROEXPAND-1", 1, 1, false);
-    SubLFiles.declareFunction(me, "load", "LOAD", 1, 0, false);
-    SubLFiles.declareFunction(me, "function_information", "FUNCTION-INFORMATION", 1, 1, false);
-    SubLFiles.declareFunction(me, "macroexpand", "MACROEXPAND", 1, 1, false);
-    SubLFiles.declareFunction(me, "variable_information", "VARIABLE-INFORMATION", 1, 1, false);
-    
-    SubLFiles.declareFunction(me, "get_initial_continuation", "GET-INITIAL-CONTINUATION", 0, 0, false);
-    SubLFiles.declareFunction(me, "set_initial_continuation", "SET-INITIAL-CONTINUATION", 1, 0, false);
-    SubLFiles.declareFunction(me, "initialize_subl_interface_file", "INITIALIZE-SUBL-INTERFACE-FILE", 1, 0, false);
-    SubLFiles.declareFunction(me, "load_external_code", "LOAD-EXTERNAL-CODE", 1, 0, false);
-    SubLFiles.declareFunction(me, "patchSubLFile", "PATCH-SUBL-FILE", 1, 0, false);
-    SubLFiles.declareFunction(me, "loadSubLPatch", "LOAD-SUBL-PATCH", 1, 1, false);
-  }
-  
-  public void initializeVariables() {
-    $star$           = SubLFiles.defvar(me, "*",   NIL);
-    $star_star$      = SubLFiles.defvar(me, "**",  NIL);
-    $star_star_star$ = SubLFiles.defvar(me, "***", NIL);
-    
-    $evaluator_method$ = SubLFiles.defvar(me, "*%EVALUATOR-METHOD*", NIL);
-  }
-  
-  public void runTopLevelForms() {
-  }
-  
-  //// Protected Area
-  
-  //// Private Area
-  
-  private static final IsolatedClassLoader isolatedClassLoader = new IsolatedClassLoader();
-  
-  //// Internal Rep
-  
-  //// Main
-  
+	private static SubLSymbol EOF_KEYWORD;
+
+	private static SubLString LOAD_ERROR_STRING_1;
+
+	private static SubLString LOAD_ERROR_STRING_2;
+
+	private static SubLString EVAL_ERROR_STRING;
+
+	public static String FILE_DIGEST_ALGORITHM = "SHA-1";
+
+	private static IsolatedClassLoader isolatedClassLoader;
+
+	static {
+		Eval.me = new Eval();
+		Eval.EOF_KEYWORD = SubLObjectFactory.makeKeyword("EOF");
+		Eval.LOAD_ERROR_STRING_1 = SubLObjectFactory.makeString("Read error occured at position ~S of file ~S");
+		Eval.LOAD_ERROR_STRING_2 = SubLObjectFactory.makeString("Could not load file ~S.");
+		Eval.EVAL_ERROR_STRING = SubLObjectFactory.makeString("Could not evaluate form~%  ~S~%after ~A:~A");
+		Eval.isolatedClassLoader = new IsolatedClassLoader();
+	}
+
+	public static SubLObject constantp(SubLObject object, SubLObject env) {
+		if (object.isSymbol()) {
+			SubLSymbol symbol = object.toSymbol();
+			if (symbol.isConstantSymbol())
+				return CommonSymbols.T;
+			return CommonSymbols.NIL;
+		} else {
+			if (!object.isCons())
+				return CommonSymbols.T;
+			return CommonSymbols.NIL;
+		}
+	}
+
+	public static SubLObject eval(final String str) {
+		if (Thread.currentThread().getClass() != SubLThread.class) {
+			final ArrayList<SubLObject> result = new ArrayList<SubLObject>(1);
+			final ArrayList<SubLException> resultException = new ArrayList<SubLException>(1);
+			final CountDownLatch cdl = new CountDownLatch(1);
+			SubLObjectFactory.makeProcess(SubLObjectFactory.makeString("Eval Process"), new Runnable() {
+
+				public void run() {
+					Throwable ex = null;
+					boolean isEmpty = true;
+					try {
+						synchronized (result) {
+							result.add(Eval.eval(reader.read_from_string(SubLObjectFactory.makeString(str),
+									CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED,
+									CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED)));
+							isEmpty = false;
+						}
+					} catch (Throwable t) {
+						ex = t;
+					} finally {
+						if (isEmpty)
+							synchronized (resultException) {
+								if (ex != null) {
+									if (ex instanceof SubLException)
+										resultException.add((SubLException) ex);
+									else
+										resultException.add(SubLObjectFactory.makeException(ex.getMessage(), ex));
+								} else
+									resultException.add(SubLObjectFactory
+											.makeException("Internal error: unable to find expected exception."));
+							}
+						cdl.countDown();
+					}
+				}
+			});
+			try {
+				cdl.await();
+			} catch (InterruptedException ie) {
+				Thread.currentThread().interrupt();
+				return CommonSymbols.ERROR_KEYWORD;
+			}
+			synchronized (resultException) {
+				if (!resultException.isEmpty()) {
+					SubLException e = resultException.get(0);
+					e.fillInStackTrace();
+					throw e;
+				}
+			}
+			synchronized (result) {
+				if (result.isEmpty())
+					throw new RuntimeException("Internal error: no result found from worker thread.");
+				return result.get(0);
+			}
+		}
+		return Eval.eval(reader.read_from_string(SubLObjectFactory.makeString(str), CommonSymbols.UNPROVIDED,
+				CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED,
+				CommonSymbols.UNPROVIDED));
+	}
+
+	public static SubLObject eval(SubLObject form) {
+		return form.eval(SubLEnvironment.currentEnvironment());
+	}
+
+	public static SubLObject function_information(SubLObject function, SubLObject environment) {
+		return Errors.unimplementedMethod("function-information");
+	}
+
+	public static SubLObject get_initial_continuation() {
+		return CommonSymbols.UNPROVIDED;
+	}
+
+	/**
+	 * #'INITIALIZE-SUBL-INTERFACE-FILE
+	 *
+	 * Initializes a class that is already in the system
+	 *
+	 * @param className
+	 *            (stringp) in the form of "com.cyc.myproject.SubLTrampolines"
+	 * @return T if successful otherwise throws a {@link SubLException}
+	 */
+	public static SubLObject initialize_subl_interface_file(SubLObject className) {
+		String stringTyped = className.getString();
+		try {
+			if (!SubLFile.class.isAssignableFrom(Class.forName(stringTyped, false, Eval.isolatedClassLoader)))
+				Errors.error(stringTyped + " is not a SubLFile.");
+		} catch (ClassNotFoundException e) {
+			Errors.error("Not found: " + stringTyped, e);
+		}
+		Class fileClass = null;
+		try {
+			fileClass = Class.forName(stringTyped, true, Eval.isolatedClassLoader);
+		} catch (Exception e2) {
+			Errors.error("Error loading " + stringTyped, e2);
+			return CommonSymbols.NIL;
+		}
+		Object file = null;
+		try {
+			Field field = fileClass.getDeclaredField("me");
+			field.setAccessible(true);
+			if (Modifier.isStatic(field.getModifiers()))
+				file = field.get(null);
+		} catch (IllegalArgumentException e5) {
+		} catch (IllegalAccessException e4) {
+		} catch (SecurityException e6) {
+		} catch (NoSuchFieldException ex) {
+		}
+		if (file == null)
+			try {
+				file = fileClass.newInstance();
+			} catch (InstantiationException e3) {
+				Errors.error("Error creating " + stringTyped, e3);
+			} catch (IllegalAccessException e4) {
+				Errors.error("Error accessing " + stringTyped, e4);
+			}
+		if (file instanceof SubLFile) {
+			SubLFiles.initialize((SubLFile) file);
+			return CommonSymbols.T;
+		}
+		Errors.error(stringTyped + " in not a SubLFile.");
+		return CommonSymbols.NIL;
+	}
+
+	public static SubLObject load(SubLObject filename) {
+		boolean success = false;
+		SubLObject stream = CommonSymbols.NIL;
+		try {
+			String theFilename = filename.getString();
+			SubLInputTextStream fileStream = (SubLInputTextStream) (stream = SubLStreamFactory
+					.makeFileStream(theFilename, CommonSymbols.INPUT_KEYWORD, CommonSymbols.TEXT_KEYWORD,
+							CommonSymbols.NIL, CommonSymbols.ERROR_KEYWORD, CommonSymbols.NIL)
+					.toInputTextStream());
+			SubLDigestInputTextStream digestStream = null;
+			try {
+				digestStream = (SubLDigestInputTextStream) (stream = new SubLDigestInputTextStream(fileStream,
+						MessageDigest.getInstance("SHA-1")));
+			} catch (NoSuchAlgorithmException ex) {
+			}
+			System.out.println(";;; loading " + theFilename + " ... ");
+			boolean done = false;
+			while (!done) {
+				Values.resetMultipleValues();
+				SubLObject pos = streams_high.file_position(stream, CommonSymbols.UNPROVIDED);
+				SubLObject form = reader.read_ignoring_errors(digestStream, CommonSymbols.NIL, Eval.EOF_KEYWORD);
+				SubLObject error = SubLProcess.nthMultipleValue(CommonSymbols.ONE_INTEGER);
+				Values.resetMultipleValues();
+				if (error == CommonSymbols.ERROR_KEYWORD) {
+					if (form != Eval.EOF_KEYWORD)
+						Errors.error(Eval.LOAD_ERROR_STRING_1,
+								streams_high.file_position(stream, CommonSymbols.UNPROVIDED), filename);
+					else
+						success = true;
+					done = true;
+				} else
+					try {
+						Eval.eval(form);
+					} catch (Exception xcpt) {
+						SubLObject args = SubLObjectFactory.makeList(new SubLObject[] { form, filename, pos });
+						SubLObject msg = format.really_format(CommonSymbols.NIL, Eval.EVAL_ERROR_STRING, args);
+						Errors.error(msg.toStr(), xcpt);
+					}
+			}
+			System.out.print(";;; ... " + theFilename + " loaded");
+			if (digestStream != null) {
+				System.out.print("; SHA-1: ");
+				String digest = digestStream.getDigest();
+				System.out.print(digest);
+			}
+			System.out.println();
+			System.out.flush();
+		} finally {
+			if (stream.isStream())
+				streams_high.close(stream, CommonSymbols.UNPROVIDED);
+		}
+		if (success)
+			return CommonSymbols.T;
+		Errors.error(Eval.LOAD_ERROR_STRING_2, filename);
+		return CommonSymbols.NIL;
+	}
+
+	/**
+	 * #'LOAD-EXTERNAL-CODE
+	 *
+	 * Prepares a .class file for initialization. Or Adds a .jar file to the
+	 * CLASSPATH Or Adds a Directory to the CLASSPATH
+	 *
+	 * @param path
+	 *            (stringp) in the form of a java resource specifier
+	 * @return T if successful otherwise throws a {@link SubLException}
+	 *
+	 */
+	public static SubLObject load_external_code(SubLObject path) {
+		String stringTyped = path.getString();
+		try {
+			Eval.isolatedClassLoader.addCode(stringTyped);
+			return CommonSymbols.T;
+		} catch (Exception e) {
+			Errors.error("Error loading jar!class: " + stringTyped, e);
+			return CommonSymbols.NIL;
+		}
+	}
+
+	public static SubLObject loadSubLPatch(SubLObject jarOrClassFilePath, SubLObject patcherFileName) {
+		if (patcherFileName == CommonSymbols.UNPROVIDED)
+			Errors.unimplementedMethod("loadSubLPatch: Loading a patch without patcher file name.");
+		Eval.load_external_code(jarOrClassFilePath);
+		try {
+			Class patcherClass = Class.forName(patcherFileName.getString());
+			SubLPatcher patcher = (SubLPatcher) patcherClass.getConstructor(new Class[0]).newInstance(new Object[0]);
+			patcher.doPatch();
+		} catch (Exception e) {
+			Errors.error("Unable to load patch: jarOrClassFilePath" + e);
+		}
+		return CommonSymbols.NIL;
+	}
+
+	public static SubLObject macroexpand(SubLObject form, SubLObject env) {
+		if (env == CommonSymbols.UNPROVIDED)
+			env = SubLEnvironment.currentEnvironment();
+		int i = -1;
+		SubLObject expandedForm = form;
+		SubLObject expanded_p = CommonSymbols.NIL;
+		do {
+			Values.resetMultipleValues();
+			expandedForm = Eval.macroexpand_1(expandedForm, env);
+			expanded_p = SubLProcess.nthMultipleValue(CommonSymbols.ONE_INTEGER);
+			Values.resetMultipleValues();
+			++i;
+		} while (expanded_p != CommonSymbols.NIL);
+		expanded_p = i == 0 ? CommonSymbols.NIL : CommonSymbols.T;
+		Values.resetMultipleValues();
+		return Values.values(expandedForm, expanded_p);
+	}
+
+	public static SubLObject macroexpand_1(SubLObject form, SubLObject env) {
+		if (env == CommonSymbols.UNPROVIDED)
+			env = SubLEnvironment.currentEnvironment();
+		if (form.isCons()) {
+			SubLObject operatorSymbol = form.first();
+			if (operatorSymbol.isSymbol()) {
+				SubLOperator operator = operatorSymbol.toSymbol().getFunction();
+				if (operator.isMacroOperator()) {
+					SubLFunction macroExpander = operator.toMacro().getMacroExpander();
+					SubLObject expandedForm = macroExpander.apply(form.toCons(), env.toEnv());
+					return Values.values(expandedForm, CommonSymbols.T);
+				}
+			}
+		}
+		return Values.values(form, CommonSymbols.NIL);
+	}
+
+	// @todo move this somewhere more appropriate -APB
+	public static File openFileForReading(String filename) {
+		// @todo convert filename to Java format before opening -APB
+		File file = new File(filename);
+		if (!file.exists())
+			Errors.error("File doesn't exist: " + filename);
+		if (file.isDirectory())
+			Errors.error("Expected file but got directory: " + filename);
+		if (!file.canRead())
+			Errors.error("File is unreadable: " + filename);
+		return file;
+	}
+
+	public static SubLObject patchSubLFile(SubLObject fullClassName) {
+		Eval.initialize_subl_interface_file(fullClassName);
+		return CommonSymbols.NIL;
+	}
+
+	public static SubLObject set_initial_continuation(SubLObject continuation) {
+		return continuation;
+	}
+
+	public static SubLObject variable_information(SubLObject variable, SubLObject environment) {
+		return Errors.unimplementedMethod("variable-information");
+	}
+
+	public void declareFunctions() {
+		SubLFiles.declareFunction(Eval.me, "constantp", "CONSTANTP", 1, 1, false);
+		SubLFiles.declareFunction(Eval.me, "eval", "EVAL", 1, 0, false);
+		SubLFiles.declareFunction(Eval.me, "macroexpand_1", "MACROEXPAND-1", 1, 1, false);
+		SubLFiles.declareFunction(Eval.me, "load", "LOAD", 1, 0, false);
+		SubLFiles.declareFunction(Eval.me, "function_information", "FUNCTION-INFORMATION", 1, 1, false);
+		SubLFiles.declareFunction(Eval.me, "macroexpand", "MACROEXPAND", 1, 1, false);
+		SubLFiles.declareFunction(Eval.me, "variable_information", "VARIABLE-INFORMATION", 1, 1, false);
+		SubLFiles.declareFunction(Eval.me, "get_initial_continuation", "%GET-INITIAL-CONTINUATION", 0, 0, false);
+		SubLFiles.declareFunction(Eval.me, "set_initial_continuation", "%SET-INITIAL-CONTINUATION", 1, 0, false);
+		SubLFiles.declareFunction(Eval.me, "get_initial_continuation", "GET-INITIAL-CONTINUATION", 0, 0, false);
+		SubLFiles.declareFunction(Eval.me, "set_initial_continuation", "SET-INITIAL-CONTINUATION", 1, 0, false);
+		SubLFiles.declareFunction(Eval.me, "initialize_subl_interface_file", "INITIALIZE-SUBL-INTERFACE-FILE", 1, 0,
+				false);
+		SubLFiles.declareFunction(Eval.me, "load_external_code", "LOAD-EXTERNAL-CODE", 1, 0, false);
+		SubLFiles.declareFunction(Eval.me, "patchSubLFile", "PATCH-SUBL-FILE", 1, 0, false);
+		SubLFiles.declareFunction(Eval.me, "loadSubLPatch", "LOAD-SUBL-PATCH", 1, 1, false);
+	}
+
+	public void initializeVariables() {
+		Eval.$star$ = SubLFiles.defvar(Eval.me, "*", CommonSymbols.NIL);
+		Eval.$star_star$ = SubLFiles.defvar(Eval.me, "**", CommonSymbols.NIL);
+		Eval.$star_star_star$ = SubLFiles.defvar(Eval.me, "***", CommonSymbols.NIL);
+
+		Eval.$evaluator_method$ = SubLFiles.defvar(Eval.me, "*%EVALUATOR-METHOD*", CommonSymbols.NIL);
+	}
+
+	public void runTopLevelForms() {
+	}
 }

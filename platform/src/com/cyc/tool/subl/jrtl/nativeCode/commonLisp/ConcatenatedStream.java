@@ -33,226 +33,179 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class ConcatenatedStream extends Stream
-{
-    SubLObject streams;
+public class ConcatenatedStream extends Stream {
+	SubLObject streams;
 
-    ConcatenatedStream(SubLObject streams)
-    {
-        super(LispSymbols.CONCATENATED_STREAM);
-        this.streams = streams;
-        isInputStream = true;
-    }
+	private int unreadChar = -1;
 
-    @Override
-    public boolean isCharacterInputStream()
-    {
-        if (streams == NIL)
-            return true;
-        return ((LispStream)streams.first()).isCharacterInputStream();
-    }
+	ConcatenatedStream(SubLObject streams) {
+		super(LispSymbols.CONCATENATED_STREAM);
+		this.streams = streams;
+		this.isInputStream = true;
+	}
 
-    @Override
-    public boolean isBinaryInputStream()
-    {
-        if (streams == NIL)
-            return true;
-        return ((LispStream)streams.first()).isBinaryInputStream();
-    }
+	public boolean _charReady() throws java.io.IOException {
+		if (this.unreadChar >= 0)
+			return true;
+		if (this.streams == Lisp.NIL)
+			return false;
+		LispStream stream = (LispStream) this.streams.first();
+		if (stream._charReady())
+			return true;
+		SubLObject remainingStreams = this.streams.rest();
+		while (remainingStreams != Lisp.NIL) {
+			stream = (LispStream) remainingStreams.first();
+			if (stream._charReady())
+				return true;
+			remainingStreams = remainingStreams.rest();
+		}
+		return false;
+	}
 
-    @Override
-    public boolean isCharacterOutputStream()
-    {
-        return false;
-    }
+	public void _clearInput() {
+		// FIXME
+	}
 
-    @Override
-    public boolean isBinaryOutputStream()
-    {
-        return false;
-    }
+	public void _finishOutput() {
+		this.outputStreamError();
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.CONCATENATED_STREAM;
-    }
+	// Reads an 8-bit byte.
 
-    @Override
-    public SubLObject classOf()
-    {
-        return BuiltInClass.CONCATENATED_STREAM;
-    }
+	public int _readByte() {
+		if (this.streams == Lisp.NIL)
+			return -1;
+		LispStream stream = (LispStream) this.streams.first();
+		int n = stream._readByte();
+		if (n >= 0)
+			return n;
+		this.streams = this.streams.rest();
+		return this._readByte();
+	}
 
-    @Override
-    public SubLObject typep(SubLObject typeSpecifier)
-    {
-        if (typeSpecifier == LispSymbols.CONCATENATED_STREAM)
-            return T;
-        if (typeSpecifier == BuiltInClass.CONCATENATED_STREAM)
-            return T;
-        return super.typep(typeSpecifier);
-    }
+	// Returns -1 at end of file.
 
-    @Override
-    public SubLObject getElementType()
-    {
-        if (streams == NIL)
-            return NIL;
-        return ((LispStream)streams.first()).getElementType();
-    }
+	public int _readChar() throws java.io.IOException {
+		int n;
+		if (this.unreadChar >= 0) {
+			n = this.unreadChar;
+			this.unreadChar = -1;
+			return n;
+		}
+		if (this.streams == Lisp.NIL)
+			return -1;
+		LispStream stream = (LispStream) this.streams.first();
+		n = stream._readChar();
+		if (n >= 0)
+			return n;
+		this.streams = this.streams.rest();
+		return this._readChar();
+	}
 
-    @Override
-    public SubLObject readCharNoHang(boolean eofError, SubLObject eofValue)
+	public void _unreadChar(int n) {
+		if (this.unreadChar >= 0)
+			Lisp.error(new StreamError(this,
+					"UNREAD-CHAR was invoked twice consecutively without an intervening call to READ-CHAR."));
+		this.unreadChar = n;
+	}
 
-    {
-        if (streams == NIL) {
-            if (eofError)
-                return error(new EndOfFile(this));
-            else
-                return eofValue;
-        }
-	try 
-	  {
-	    return _charReady() ? readChar(eofError, eofValue) : NIL;
-	  }
-	catch (java.io.IOException e)
-	  {
-	    return error(new StreamError(this, e));
-	  }
-    }
+	// Writes an 8-bit byte.
 
-    @Override
-    public SubLObject listen()
-    {
-        if (unreadChar >= 0)
-            return T;
-        if (streams == NIL)
-            return NIL;
-        SubLObject obj = readCharNoHang(false, this);
-        if (obj == this)
-            return NIL;
-        unreadChar = ((LispCharacter)obj).charValue();
-        return T;
-    }
+	public void _writeByte(int n) {
+		this.outputStreamError();
+	}
 
-    private int unreadChar = -1;
+	public void _writeChar(char c) {
+		this.outputStreamError();
+	}
 
-    // Returns -1 at end of file.
-    @Override
-    public int _readChar() throws java.io.IOException
-    {
-        int n;
-        if (unreadChar >= 0) {
-            n = unreadChar;
-            unreadChar = -1;
-            return n;
-        }
-        if (streams == NIL)
-            return -1;
-        LispStream stream = (LispStream) streams.first();
-        n = stream._readChar();
-        if (n >= 0)
-            return n;
-        streams = streams.rest();
-        return _readChar();
-    }
+	public void _writeChars(char[] chars, int start, int end)
 
-    @Override
-    public void _unreadChar(int n)
-    {
-        if (unreadChar >= 0)
-            error(new StreamError(this, "UNREAD-CHAR was invoked twice consecutively without an intervening call to READ-CHAR."));
-        unreadChar = n;
-    }
+	{
+		this.outputStreamError();
+	}
 
-    @Override
-    public boolean _charReady() throws java.io.IOException
-    {
-        if (unreadChar >= 0)
-            return true;
-        if (streams == NIL)
-            return false;
-        LispStream stream = (LispStream) streams.first();
-        if (stream._charReady())
-            return true;
-        SubLObject remainingStreams = streams.rest();
-        while (remainingStreams != NIL) {
-            stream = (LispStream) remainingStreams.first();
-            if (stream._charReady())
-                return true;
-            remainingStreams = remainingStreams.rest();
-        }
-        return false;
-    }
+	public void _writeLine(String s) {
+		this.outputStreamError();
+	}
 
-    @Override
-    public void _writeChar(char c)
-    {
-        outputStreamError();
-    }
+	public void _writeString(String s) {
+		this.outputStreamError();
+	}
 
-    @Override
-    public void _writeChars(char[] chars, int start, int end)
+	public SubLObject classOf() {
+		return BuiltInClass.CONCATENATED_STREAM;
+	}
 
-    {
-        outputStreamError();
-    }
+	public SubLObject getElementType() {
+		if (this.streams == Lisp.NIL)
+			return Lisp.NIL;
+		return ((LispStream) this.streams.first()).getElementType();
+	}
 
-    @Override
-    public void _writeString(String s)
-    {
-        outputStreamError();
-    }
+	public boolean isBinaryInputStream() {
+		if (this.streams == Lisp.NIL)
+			return true;
+		return ((LispStream) this.streams.first()).isBinaryInputStream();
+	}
 
-    @Override
-    public void _writeLine(String s)
-    {
-        outputStreamError();
-    }
+	public boolean isBinaryOutputStream() {
+		return false;
+	}
 
-    // Reads an 8-bit byte.
-    @Override
-    public int _readByte()
-    {
-        if (streams == NIL)
-            return -1;
-        LispStream stream = (LispStream) streams.first();
-        int n = stream._readByte();
-        if (n >= 0)
-            return n;
-        streams = streams.rest();
-        return _readByte();
-    }
+	public boolean isCharacterInputStream() {
+		if (this.streams == Lisp.NIL)
+			return true;
+		return ((LispStream) this.streams.first()).isCharacterInputStream();
+	}
 
-    // Writes an 8-bit byte.
-    @Override
-    public void _writeByte(int n)
-    {
-        outputStreamError();
-    }
+	public boolean isCharacterOutputStream() {
+		return false;
+	}
 
-    @Override
-    public void _finishOutput()
-    {
-        outputStreamError();
-    }
+	public SubLObject listen() {
+		if (this.unreadChar >= 0)
+			return Lisp.T;
+		if (this.streams == Lisp.NIL)
+			return Lisp.NIL;
+		SubLObject obj = this.readCharNoHang(false, this);
+		if (obj == this)
+			return Lisp.NIL;
+		this.unreadChar = ((LispCharacter) obj).charValue();
+		return Lisp.T;
+	}
 
-    @Override
-    public void _clearInput()
-    {
-        // FIXME
-    }
+	private void outputStreamError() {
+		Lisp.error(new StreamError(this, String.valueOf(this) + " is not an output stream."));
+	}
 
-    private void outputStreamError()
-    {
-        error(new StreamError(this,
-                               String.valueOf(this) + " is not an output stream."));
-    }
+	public SubLObject readCharNoHang(boolean eofError, SubLObject eofValue)
 
-   }
+	{
+		if (this.streams == Lisp.NIL)
+			if (eofError)
+				return Lisp.error(new EndOfFile(this));
+			else
+				return eofValue;
+		try {
+			return this._charReady() ? this.readChar(eofError, eofValue) : Lisp.NIL;
+		} catch (java.io.IOException e) {
+			return Lisp.error(new StreamError(this, e));
+		}
+	}
+
+	public SubLObject typeOf() {
+		return LispSymbols.CONCATENATED_STREAM;
+	}
+
+	public SubLObject typep(SubLObject typeSpecifier) {
+		if (typeSpecifier == LispSymbols.CONCATENATED_STREAM)
+			return Lisp.T;
+		if (typeSpecifier == BuiltInClass.CONCATENATED_STREAM)
+			return Lisp.T;
+		return super.typep(typeSpecifier);
+	}
+
+}

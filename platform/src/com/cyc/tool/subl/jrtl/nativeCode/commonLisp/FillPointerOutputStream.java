@@ -33,50 +33,39 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
+public class FillPointerOutputStream extends Stream {
+	class Writer extends java.io.Writer {
 
-public final class FillPointerOutputStream extends Stream
-{
-    ComplexString string;
+		public void close() {
+		}
 
-    FillPointerOutputStream(ComplexString string)
-    {
-        super(LispSymbols.SYSTEM_STREAM);
-        elementType = LispSymbols.CHARACTER;
-        isOutputStream = true;
-        isInputStream = false;
-        isCharacterStream = true;
-        isBinaryStream = false;
-        this.string = string;
-        setWriter(new Writer());
-    }
+		public void flush() {
+		}
 
-    class Writer extends java.io.Writer
-    {
-        @Override
-        public void write(char cbuf[], int off, int len)
-        {
-            int fp = string.getFillPointer();
-            if (fp >= 0) {
-                final int limit = Math.min(cbuf.length, off + len);
-                string.ensureCapacity(fp + limit);
-                for (int i = off; i < limit; i++) {
-                    string.setChar(fp, cbuf[i]);
-                    ++fp;
-                }
-            }
-            string.setFillPointer(fp);
-        }
+		public void write(char cbuf[], int off, int len) {
+			int fp = FillPointerOutputStream.this.string.getFillPointer();
+			if (fp >= 0) {
+				int limit = Math.min(cbuf.length, off + len);
+				FillPointerOutputStream.this.string.ensureCapacity(fp + limit);
+				for (int i = off; i < limit; i++) {
+					FillPointerOutputStream.this.string.setChar(fp, cbuf[i]);
+					++fp;
+				}
+			}
+			FillPointerOutputStream.this.string.setFillPointer(fp);
+		}
+	}
 
-        @Override
-        public void flush()
-        {
-        }
+	ComplexString string;
 
-        @Override
-        public void close()
-        {
-        }
-    }
+	FillPointerOutputStream(ComplexString string) {
+		super(LispSymbols.SYSTEM_STREAM);
+		this.elementType = LispSymbols.CHARACTER;
+		this.isOutputStream = true;
+		this.isInputStream = false;
+		this.isCharacterStream = true;
+		this.isBinaryStream = false;
+		this.string = string;
+		this.setWriter(new Writer());
+	}
 }

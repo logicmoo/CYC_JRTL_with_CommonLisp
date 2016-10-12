@@ -29,7 +29,21 @@ import javax.script.ScriptEngineFactory;
 
 public class AbclScriptEngineFactory implements ScriptEngineFactory {
 
-	private static final AbclScriptEngine THE_ONLY_ONE_ENGINE = new AbclScriptEngine();
+	private static AbclScriptEngine THE_ONLY_ONE_ENGINE = new AbclScriptEngine();
+
+	public static String escape(String raw) {
+		StringBuilder sb = new StringBuilder();
+		int len = raw.length();
+		char c;
+		for (int i = 0; i < len; ++i) {
+			c = raw.charAt(i);
+			if (c != '"')
+				sb.append(c);
+			else
+				sb.append("\\\"");
+		}
+		return sb.toString();
+	}
 
 	public String getEngineName() {
 		return "ABCL Script";
@@ -51,21 +65,6 @@ public class AbclScriptEngineFactory implements ScriptEngineFactory {
 
 	public String getLanguageVersion() {
 		return "ANSI X3.226:1994";
-	}
-
-	public static String escape(String raw) {
-		StringBuilder sb = new StringBuilder();
-		int len = raw.length();
-		char c;
-		for (int i = 0; i < len; ++i) {
-			c = raw.charAt(i);
-			if (c != '"') {
-				sb.append(c);
-			} else {
-				sb.append("\\\"");
-			}
-		}
-		return sb.toString();
 	}
 
 	public String getMethodCallSyntax(String obj, String method, String... args) {
@@ -116,7 +115,7 @@ public class AbclScriptEngineFactory implements ScriptEngineFactory {
 	}
 
 	public ScriptEngine getScriptEngine() {
-		return THE_ONLY_ONE_ENGINE;
+		return AbclScriptEngineFactory.THE_ONLY_ONE_ENGINE;
 	}
 
 }

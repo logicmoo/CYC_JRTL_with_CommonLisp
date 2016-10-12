@@ -33,55 +33,42 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 
-public abstract class DispatchMacroFunction extends Function
-{
-    public DispatchMacroFunction(String name)
-    {
-        super(name);
-    }
+public abstract class DispatchMacroFunction extends Function {
+	public DispatchMacroFunction(String name) {
+		super(name);
+	}
 
-    public DispatchMacroFunction(String name, String arglist)
-    {
-        super(name, arglist);
-    }
+	public DispatchMacroFunction(String name, String arglist) {
+		super(name, arglist);
+	}
 
-    public DispatchMacroFunction(String name, SubLPackage pkg)
-    {
-        super(name, pkg);
-    }
+	public DispatchMacroFunction(String name, SubLPackage pkg) {
+		super(name, pkg);
+	}
 
-    public DispatchMacroFunction(String name, SubLPackage pkg, boolean exported)
-    {
-        super(name, pkg, exported);
-    }
-    
-    public DispatchMacroFunction(String name, SubLPackage pkg, boolean exported,
-                      String arglist)
-    {
-        super(name, pkg, exported, arglist);
-    }
+	public DispatchMacroFunction(String name, SubLPackage pkg, boolean exported) {
+		super(name, pkg, exported);
+	}
 
-    @Override
-    public SubLObject execute(SubLObject first, SubLObject second,
-                              SubLObject third)
+	public DispatchMacroFunction(String name, SubLPackage pkg, boolean exported, String arglist) {
+		super(name, pkg, exported, arglist);
+	}
 
-    {
-        LispStream stream = inSynonymOf(first);
-        char c = second.charValue();
-        int n;
-        if (third == NIL)
-            n = -1;
-        else
-            n = third.intValue();
-        return execute(stream, c, n);
-    }
+	public abstract SubLObject execute(LispStream stream, char c, int n);
 
-    public abstract SubLObject execute(LispStream stream, char c, int n)
-       ;
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third)
+
+	{
+		LispStream stream = Lisp.inSynonymOf(first);
+		char c = second.charValue();
+		int n;
+		if (third == Lisp.NIL)
+			n = -1;
+		else
+			n = third.intValue();
+		return this.execute(stream, c, n);
+	}
 }

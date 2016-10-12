@@ -33,117 +33,92 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import java.io.StringWriter;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class SlimeOutputStream extends Stream
-{
-    private final StringWriter stringWriter;
-    final Function f;
+public class SlimeOutputStream extends Stream {
+	private StringWriter stringWriter;
+	Function f;
 
-    SlimeOutputStream(Function f)
-    {
-        super(LispSymbols.SLIME_OUTPUT_STREAM);
-        this.elementType = LispSymbols.CHARACTER;
-        isInputStream = false;
-        isOutputStream = true;
-        isCharacterStream = true;
-        isBinaryStream = false;
-        setWriter(stringWriter = new StringWriter());
-        this.f = f;
-    }
+	SlimeOutputStream(Function f) {
+		super(LispSymbols.SLIME_OUTPUT_STREAM);
+		this.elementType = LispSymbols.CHARACTER;
+		this.isInputStream = false;
+		this.isOutputStream = true;
+		this.isCharacterStream = true;
+		this.isBinaryStream = false;
+		this.setWriter(this.stringWriter = new StringWriter());
+		this.f = f;
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.SLIME_OUTPUT_STREAM;
-    }
+	public void _finishOutput() {
+		super._finishOutput();
+		if (this.stringWriter.getBuffer().length() > 0) {
+			String s = this.stringWriter.toString();
+			this.stringWriter.getBuffer().setLength(0);
+			LispThread.currentThread().execute(this.f, LispObjectFactory.makeString(s));
+		}
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return BuiltInClass.SLIME_OUTPUT_STREAM;
-    }
+	public long _getFilePosition() {
+		if (this.elementType == Lisp.NIL)
+			return 0;
+		return this.stringWriter.toString().length();
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.SLIME_OUTPUT_STREAM)
-            return T;
-        if (type == LispSymbols.STRING_STREAM)
-            return T;
-        if (type == BuiltInClass.SLIME_OUTPUT_STREAM)
-            return T;
-        if (type == BuiltInClass.STRING_STREAM)
-            return T;
-        return super.typep(type);
-    }
+	public void _writeChar(char c) {
+		if (this.elementType == Lisp.NIL)
+			this.writeError();
+		super._writeChar(c);
+	}
 
-    @Override
-    public void _writeChar(char c)
-    {
-        if (elementType == NIL)
-            writeError();
-        super._writeChar(c);
-    }
+	public void _writeChars(char[] chars, int start, int end)
 
-    @Override
-    public void _writeChars(char[] chars, int start, int end)
+	{
+		if (this.elementType == Lisp.NIL)
+			this.writeError();
+		super._writeChars(chars, start, end);
+	}
 
-    {
-        if (elementType == NIL)
-            writeError();
-        super._writeChars(chars, start, end);
-    }
+	public void _writeLine(String s) {
+		if (this.elementType == Lisp.NIL)
+			this.writeError();
+		super._writeLine(s);
+	}
 
-    @Override
-    public void _writeString(String s)
-    {
-        if (elementType == NIL)
-            writeError();
-        super._writeString(s);
-    }
+	public void _writeString(String s) {
+		if (this.elementType == Lisp.NIL)
+			this.writeError();
+		super._writeString(s);
+	}
 
-    @Override
-    public void _writeLine(String s)
-    {
-        if (elementType == NIL)
-            writeError();
-        super._writeLine(s);
-    }
+	public SubLObject classOf() {
+		return BuiltInClass.SLIME_OUTPUT_STREAM;
+	}
 
-    private void writeError()
-    {
-        error(new TypeError("Attempt to write to a string output stream of element type NIL."));
-    }
+	public String toString() {
+		return this.unreadableString("SLIME-OUTPUT-STREAM");
+	}
 
-    @Override
-    public long _getFilePosition()
-    {
-        if (elementType == NIL)
-            return 0;
-        return stringWriter.toString().length();
-    }
+	public SubLObject typeOf() {
+		return LispSymbols.SLIME_OUTPUT_STREAM;
+	}
 
-    @Override
-    public void _finishOutput()
-    {
-        super._finishOutput ();
-        if (stringWriter.getBuffer().length() > 0) {
-            String s = stringWriter.toString();
-            stringWriter.getBuffer().setLength(0);
-            LispThread.currentThread().execute(f, makeString(s));
-        }
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.SLIME_OUTPUT_STREAM)
+			return Lisp.T;
+		if (type == LispSymbols.STRING_STREAM)
+			return Lisp.T;
+		if (type == BuiltInClass.SLIME_OUTPUT_STREAM)
+			return Lisp.T;
+		if (type == BuiltInClass.STRING_STREAM)
+			return Lisp.T;
+		return super.typep(type);
+	}
 
-    @Override
-    public String toString()
-    {
-        return unreadableString("SLIME-OUTPUT-STREAM");
-    }
+	private void writeError() {
+		Lisp.error(new TypeError("Attempt to write to a string output stream of element type NIL."));
+	}
 
 }

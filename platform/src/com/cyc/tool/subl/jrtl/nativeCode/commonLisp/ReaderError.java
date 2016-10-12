@@ -33,63 +33,48 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class ReaderError extends StreamError
-{
-    public ReaderError(String message)
-    {
-        super(StandardClass.READER_ERROR);
-        setFormatControl(message);
-        setFormatArguments(NIL);
-    }
+public class ReaderError extends StreamError {
+	public ReaderError(String message) {
+		super(StandardClass.READER_ERROR);
+		this.setFormatControl(message);
+		this.setFormatArguments(Lisp.NIL);
+	}
 
-    public ReaderError(String message, LispStream stream)
-    {
-        super(StandardClass.READER_ERROR);
-        setFormatControl(message);
-        setFormatArguments(NIL);
-        setStream(stream);
-    }
+	public ReaderError(String message, LispStream stream) {
+		super(StandardClass.READER_ERROR);
+		this.setFormatControl(message);
+		this.setFormatArguments(Lisp.NIL);
+		this.setStream(stream);
+	}
 
-    public ReaderError(SubLObject initArgs)
-    {
-        super(StandardClass.READER_ERROR);
-        initialize(initArgs);
-    }
+	public ReaderError(SubLObject initArgs) {
+		super(StandardClass.READER_ERROR);
+		this.initialize(initArgs);
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.READER_ERROR;
-    }
+	public SubLObject classOf() {
+		return StandardClass.READER_ERROR;
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.READER_ERROR;
-    }
+	public String getMessage() {
+		return this.message;
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.READER_ERROR)
-            return T;
-        if (type == StandardClass.READER_ERROR)
-            return T;
-        if (type == LispSymbols.PARSE_ERROR)
-            return T;
-        if (type == StandardClass.PARSE_ERROR)
-            return T;
-        return super.typep(type);
-    }
+	public SubLObject typeOf() {
+		return LispSymbols.READER_ERROR;
+	}
 
-    @Override
-    public String getMessage()
-    {
-        return message;
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.READER_ERROR)
+			return Lisp.T;
+		if (type == StandardClass.READER_ERROR)
+			return Lisp.T;
+		if (type == LispSymbols.PARSE_ERROR)
+			return Lisp.T;
+		if (type == StandardClass.PARSE_ERROR)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

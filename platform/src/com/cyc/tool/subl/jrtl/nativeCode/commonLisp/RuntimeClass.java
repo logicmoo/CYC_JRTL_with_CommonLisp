@@ -33,167 +33,136 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
-import java.io.File;
-import java.util.Map;
 import java.util.HashMap;
 //import org.objectweb.asm.Opcodes;
+import java.util.Map;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public class RuntimeClass
-{
-    static Map<String,RuntimeClass> classes = new HashMap<String,RuntimeClass>();
+public class RuntimeClass {
+	static Map<String, RuntimeClass> classes = new HashMap<String, RuntimeClass>();
 
-    private Map<String,Function> methods = new HashMap<String,Function>();
+	// ### %jnew-runtime-class
+	// %jnew-runtime-class class-name &rest method-names-and-defs
+	private static Primitive _JNEW_RUNTIME_CLASS = new JavaPrimitive("%jnew-runtime-class", Lisp.PACKAGE_JAVA, false,
+			"class-name &rest method-names-and-defs") {
 
-    // ### %jnew-runtime-class
-    // %jnew-runtime-class class-name &rest method-names-and-defs
-    private static final Primitive _JNEW_RUNTIME_CLASS =
-        new JavaPrimitive("%jnew-runtime-class", PACKAGE_JAVA, false, "class-name &rest method-names-and-defs")
-    {
-        @Override
-        public SubLObject execute(SubLObject[] args)
-        {
-            int length = args.length;
-            if (length < 3 || length % 2 != 1)
-                return error(new WrongNumberOfArgumentsException(this));
-	      RuntimeClass rc = new RuntimeClass();
-	      String className = args[0].getString();
-            for (int i = 1; i < length; i = i+2) {
-                String methodName = args[i].getString();
-                rc.addLispMethod(methodName, (Function)args[i+1]);
-	      }
-            classes.put(className, rc);
-	      return T;
-        }
-    };
+		public SubLObject execute(SubLObject[] args) {
+			int length = args.length;
+			if (length < 3 || length % 2 != 1)
+				return Lisp.error(new WrongNumberOfArgumentsException(this));
+			RuntimeClass rc = new RuntimeClass();
+			String className = args[0].getString();
+			for (int i = 1; i < length; i = i + 2) {
+				String methodName = args[i].getString();
+				rc.addLispMethod(methodName, (Function) args[i + 1]);
+			}
+			RuntimeClass.classes.put(className, rc);
+			return Lisp.T;
+		}
+	};
 
-    // ### jredefine-method
-    // %jredefine-method class-name method-name method-def
-    private static final Primitive _JREDEFINE_METHOD =
-        new JavaPrimitive("%jredefine-method", PACKAGE_JAVA, false,
-                      "class-name method-name method-def")
-    {
-        @Override
-        public SubLObject execute(SubLObject className, SubLObject methodName,
-                                  SubLObject methodDef)
+	// ### jredefine-method
+	// %jredefine-method class-name method-name method-def
+	private static Primitive _JREDEFINE_METHOD = new JavaPrimitive("%jredefine-method", Lisp.PACKAGE_JAVA, false,
+			"class-name method-name method-def") {
 
-        {
+		public SubLObject execute(SubLObject className, SubLObject methodName, SubLObject methodDef)
 
-	    String cn = className.getString();
-	    String mn = methodName.getString();
-	    Function def = (Function) methodDef;
-	    RuntimeClass rc = null;
-	    if (classes.containsKey(cn)) {
-                rc = (RuntimeClass) classes.get(cn);
-                rc.addLispMethod(mn, def);
-                return T;
-	    }
-	    else {
-                error(new LispError("undefined Java class: " + cn));
-                return NIL;
-	    }
-        }
-    };
+		{
 
-    // ### %load-java-class-from-byte-array
-    private static final Primitive _LOAD_JAVA_CLASS_FROM_BYTE_ARRAY =
-        new JavaPrimitive("%load-java-class-from-byte-array", PACKAGE_JAVA, false,
-                      "classname bytearray")
-    {
-        @Override
-        public SubLObject execute(SubLObject className, SubLObject classBytes)
+			String cn = className.getString();
+			String mn = methodName.getString();
+			Function def = (Function) methodDef;
+			RuntimeClass rc = null;
+			if (RuntimeClass.classes.containsKey(cn)) {
+				rc = RuntimeClass.classes.get(cn);
+				rc.addLispMethod(mn, def);
+				return Lisp.T;
+			} else {
+				Lisp.error(new LispError("undefined Java class: " + cn));
+				return Lisp.NIL;
+			}
+		}
+	};
 
-        {
-            String cn = className.getString();
-	      String pn = cn.substring(0,cn.lastIndexOf('.'));
-	      byte[] cb = (byte[]) classBytes.javaInstance();
-            try {
-                JavaClassLoader loader = JavaClassLoader.getPersistentInstance(pn);
-                Class c = loader.loadClassFromByteArray(cn, cb);
-                if (c != null) {
-                    return T;
-                }
-            }
-            catch (VerifyError e) {
-                return error(new LispError("class verification failed: " +
-                                            e.getMessage()));
-            }
-            catch (LinkageError e) {
-                return error(new LispError("class could not be linked: " +
-                                            e.getMessage()));
-            }
-            return error(
-                new LispError("unable to load ".concat(cn)));
-        }
-    };
+	// ### %load-java-class-from-byte-array
+	private static Primitive _LOAD_JAVA_CLASS_FROM_BYTE_ARRAY = new JavaPrimitive("%load-java-class-from-byte-array",
+			Lisp.PACKAGE_JAVA, false, "classname bytearray") {
 
-    public static final SubLObject evalC(SubLObject function,
-                                         SubLObject args,
-                                         Environment env,
-                                         LispThread thread)
+		public SubLObject execute(SubLObject className, SubLObject classBytes)
 
-    {
-        return evalCall(function, args, env, thread);
-    }
+		{
+			String cn = className.getString();
+			String pn = cn.substring(0, cn.lastIndexOf('.'));
+			byte[] cb = (byte[]) classBytes.javaInstance();
+			try {
+				JavaClassLoader loader = JavaClassLoader.getPersistentInstance(pn);
+				Class c = loader.loadClassFromByteArray(cn, cb);
+				if (c != null)
+					return Lisp.T;
+			} catch (VerifyError e) {
+				return Lisp.error(new LispError("class verification failed: " + e.getMessage()));
+			} catch (LinkageError e) {
+				return Lisp.error(new LispError("class could not be linked: " + e.getMessage()));
+			}
+			return Lisp.error(new LispError("unable to load ".concat(cn)));
+		}
+	};
 
-    public static RuntimeClass getRuntimeClass(String className) {
-        return (RuntimeClass) classes.get(className);
-    }
+	public static SubLObject evalC(SubLObject function, SubLObject args, Environment env, LispThread thread)
 
-    public Function getLispMethod(String methodName) {
-        return (Function) methods.get(methodName);
-    }
+	{
+		return Lisp.evalCall(function, args, env, thread);
+	}
 
-    void addLispMethod(String methodName, Function def) {
-        methods.put(methodName, def);
-    }
+	public static RuntimeClass getRuntimeClass(String className) {
+		return RuntimeClass.classes.get(className);
+	}
 
-    public static final SubLObject makeLispObject(Object obj)
-    {
-        return new ABCLJavaObject(obj);
-    }
+	public static SubLObject makeLispObject(boolean i) {
+		return i ? Lisp.T : Lisp.NIL;
+	}
 
-    public static final Fixnum makeLispObject(byte i)
-    {
-        return LispObjectFactory.makeInteger(i);
-    }
+	public static Fixnum makeLispObject(byte i) {
+		return LispObjectFactory.makeInteger(i);
+	}
 
-    public static final Fixnum makeLispObject(short i)
-    {
-        return LispObjectFactory.makeInteger(i);
-    }
+	public static LispCharacter makeLispObject(char i) {
+		return LispCharacter.makeChar(i);
+	}
 
-    public static final Fixnum makeLispObject(int i)
-    {
-        return LispObjectFactory.makeInteger(i);
-    }
+	public static DoubleFloat makeLispObject(double i) {
+		return LispObjectFactory.makeDouble(i);
+	}
 
-    public static final LispInteger makeLispObject(long i)
-    {
-        return LispObjectFactory.makeBignum(i);
-    }
+	public static SingleFloat makeLispObject(float i) {
+		return LispObjectFactory.makeSingle(i);
+	}
 
-    public static final SingleFloat makeLispObject(float i)
-    {
-        return makeSingle(i);
-    }
+	public static Fixnum makeLispObject(int i) {
+		return LispObjectFactory.makeInteger(i);
+	}
 
-    public static final DoubleFloat makeLispObject(double i)
-    {
-        return makeDouble(i);
-    }
+	public static LispInteger makeLispObject(long i) {
+		return LispObjectFactory.makeBignum(i);
+	}
 
-    public static final LispCharacter makeLispObject(char i)
-    {
-        return LispCharacter.makeChar(i);
-    }
+	public static SubLObject makeLispObject(Object obj) {
+		return new ABCLJavaObject(obj);
+	}
 
-    public static final SubLObject makeLispObject(boolean i)
-    {
-        return i ? T : NIL;
-    }
+	public static Fixnum makeLispObject(short i) {
+		return LispObjectFactory.makeInteger(i);
+	}
+
+	private Map<String, Function> methods = new HashMap<String, Function>();
+
+	void addLispMethod(String methodName, Function def) {
+		this.methods.put(methodName, def);
+	}
+
+	public Function getLispMethod(String methodName) {
+		return this.methods.get(methodName);
+	}
 }

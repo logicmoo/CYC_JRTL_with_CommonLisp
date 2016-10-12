@@ -33,139 +33,113 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public class StreamError extends LispError
-{
-    private final Throwable cause;
+public class StreamError extends LispError {
+	// ### stream-error-stream
+	private static Primitive STREAM_ERROR_STREAM = new JavaPrimitive("stream-error-stream", "condition") {
 
-    protected StreamError(LispClass cls)
-    {
-        super(cls);
-        cause = null;
-    }
+		public SubLObject execute(SubLObject arg) {
+			if (arg instanceof StreamError)
+				return ((StreamError) arg).getStream();
+			return Lisp.error(new TypeError(arg, LispSymbols.STREAM_ERROR));
+		}
+	};
 
-    public StreamError(String message)
-    {
-        super(StandardClass.STREAM_ERROR);
-        setFormatControl(message);
-        setFormatArguments(NIL);
-        setStream(NIL);
-        cause = null;
-    }
+	private Throwable cause;
 
-    public StreamError(LispStream stream)
-    {
-        super(StandardClass.STREAM_ERROR);
-        setStream(stream != null ? stream : NIL);
-        cause = null;
-    }
+	protected StreamError(LispClass cls) {
+		super(cls);
+		this.cause = null;
+	}
 
-    public StreamError(String message, LispStream stream)
-    {
-        super(StandardClass.STREAM_ERROR);
-        setFormatControl(message);
-        setFormatArguments(NIL);
-        setStream(stream != null ? stream : NIL);
-        cause = null;
-    }
+	public StreamError(LispStream stream) {
+		super(StandardClass.STREAM_ERROR);
+		this.setStream(stream != null ? stream : Lisp.NIL);
+		this.cause = null;
+	}
 
-    public StreamError(SubLObject initArgs)
-    {
-        super(StandardClass.STREAM_ERROR);
-        initialize(initArgs);
-        cause = null;
-    }
+	public StreamError(LispStream stream, String message) {
+		super(StandardClass.STREAM_ERROR);
+		this.setFormatControl(message);
+		this.setFormatArguments(Lisp.NIL);
+		this.setStream(stream != null ? stream : Lisp.NIL);
+		this.cause = null;
+	}
 
-    @Override
-    protected void initialize(SubLObject initArgs)
-    {
-        super.initialize(initArgs);
-        while (initArgs != NIL) {
-            SubLObject first = initArgs.first();
-            initArgs = initArgs.rest();
-            if (first == Keyword.STREAM) {
-                setStream(initArgs.first());
-                break;
-            }
-            initArgs = initArgs.rest();
-        }
-    }
+	public StreamError(LispStream stream, Throwable cause) {
+		super(StandardClass.STREAM_ERROR);
+		this.setStream(stream != null ? stream : Lisp.NIL);
+		this.setFormatControl(cause.getMessage());
+		this.setFormatArguments(Lisp.NIL);
+		this.cause = cause;
+	}
 
-    public StreamError(LispStream stream, String message)
-    {
-        super(StandardClass.STREAM_ERROR);
-        setFormatControl(message);
-        setFormatArguments(NIL);
-        setStream(stream != null ? stream : NIL);
-        cause = null;
-    }
+	public StreamError(String message) {
+		super(StandardClass.STREAM_ERROR);
+		this.setFormatControl(message);
+		this.setFormatArguments(Lisp.NIL);
+		this.setStream(Lisp.NIL);
+		this.cause = null;
+	}
 
-    public StreamError(LispStream stream, Throwable cause)
-    {
-        super(StandardClass.STREAM_ERROR);
-        setStream(stream != null ? stream : NIL);
-        setFormatControl(cause.getMessage());
-        setFormatArguments(NIL);
-        this.cause = cause;
-    }
+	public StreamError(String message, LispStream stream) {
+		super(StandardClass.STREAM_ERROR);
+		this.setFormatControl(message);
+		this.setFormatArguments(Lisp.NIL);
+		this.setStream(stream != null ? stream : Lisp.NIL);
+		this.cause = null;
+	}
 
-    public final SubLObject getStream()
-    {
-        return getInstanceSlotValue(LispSymbols.STREAM);
-    }
+	public StreamError(SubLObject initArgs) {
+		super(StandardClass.STREAM_ERROR);
+		this.initialize(initArgs);
+		this.cause = null;
+	}
 
-    protected final void setStream(SubLObject stream)
-    {
-        setInstanceSlotValue(LispSymbols.STREAM, stream);
-    }
+	public SubLObject classOf() {
+		return StandardClass.STREAM_ERROR;
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.STREAM_ERROR;
-    }
+	public String getMessage() {
+		if (this.cause != null) {
+			String s = this.cause.getMessage();
+			if (s != null && s.length() > 0)
+				return s;
+		}
+		return null;
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.STREAM_ERROR;
-    }
+	public SubLObject getStream() {
+		return this.getInstanceSlotValue(LispSymbols.STREAM);
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.STREAM_ERROR)
-            return T;
-        if (type == StandardClass.STREAM_ERROR)
-            return T;
-        return super.typep(type);
-    }
+	protected void initialize(SubLObject initArgs) {
+		super.initialize(initArgs);
+		while (initArgs != Lisp.NIL) {
+			SubLObject first = initArgs.first();
+			initArgs = initArgs.rest();
+			if (first == Keyword.STREAM) {
+				this.setStream(initArgs.first());
+				break;
+			}
+			initArgs = initArgs.rest();
+		}
+	}
 
-    @Override
-    public String getMessage()
-    {
-        if (cause != null) {
-            String s = cause.getMessage();
-            if (s != null && s.length() > 0)
-                return s;
-        }
-        return null;
-    }
+	protected void setStream(SubLObject stream) {
+		this.setInstanceSlotValue(LispSymbols.STREAM, stream);
+	}
 
-    // ### stream-error-stream
-    private static final Primitive STREAM_ERROR_STREAM =
-        new JavaPrimitive("stream-error-stream", "condition")
-    {
-        @Override
-        public SubLObject execute(SubLObject arg)
-        {
-            if (arg instanceof StreamError)
-                return ((StreamError)arg).getStream();
-            return error(new TypeError(arg, LispSymbols.STREAM_ERROR));
-        }
-    };
+	public SubLObject typeOf() {
+		return LispSymbols.STREAM_ERROR;
+	}
+
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.STREAM_ERROR)
+			return Lisp.T;
+		if (type == StandardClass.STREAM_ERROR)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

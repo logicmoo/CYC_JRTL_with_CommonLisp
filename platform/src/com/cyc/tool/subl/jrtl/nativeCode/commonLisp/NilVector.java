@@ -33,242 +33,183 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
+public class NilVector extends SubLString {
+	private int capacity;
 
-public final class NilVector extends SubLString
-{
-    private int capacity;
+	public NilVector(int capacity) {
+		this.capacity = capacity;
+	}
 
-    public NilVector(int capacity)
-    {
-        this.capacity = capacity;
-    }
+	public SubLObject accessError() {
+		return Lisp.error(new TypeError("Attempt to access an array of element type NIL."));
+	}
 
-    @Override
-    public char[] charsOld()
-    {
-        if (capacity != 0)
-            accessError();
-        return new char[0];
-    }
+	public AbstractVector adjustArray(int size, AbstractArray displacedTo, int displacement)
 
-    @Override
-    public char[] getStringChars()
-    {
-        if (capacity != 0)
-            accessError();
-        return new char[0];
-    }
+	{
+		this.accessError();
+		// Not reached.
+		return null;
+	}
 
-    @Override
-    public String getString()
-    {
-        if (capacity != 0)
-            accessError();
-        return "";
-    }
+	public AbstractVector adjustArray(int newCapacity, SubLObject initialElement, SubLObject initialContents)
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return list(LispSymbols.NIL_VECTOR, LispObjectFactory.makeInteger(capacity));
-    }
+	{
+		this.accessError();
+		// Not reached.
+		return null;
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return BuiltInClass.NIL_VECTOR;
-    }
+	public SubLObject AREF(int index) {
+		return this.accessError();
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.NIL_VECTOR)
-            return T;
-        if (type == LispSymbols.SIMPLE_STRING)
-            return T;
-        if (type == LispSymbols.SIMPLE_ARRAY)
-            return T;
-        if (type == BuiltInClass.NIL_VECTOR)
-            return T;
-        if (type == BuiltInClass.SIMPLE_STRING)
-            return T;
-        if (type == BuiltInClass.SIMPLE_ARRAY)
-            return T;
-        return super.typep(type);
-    }
+	public void aset(int index, SubLObject newValue) {
+		this.storeError(newValue);
+	}
 
-    @Override
-    public SubLObject SIMPLE_STRING_P()
-    {
-        return T;
-    }
+	public int capacity() {
+		return this.capacity;
+	}
 
-    @Override
-    public boolean equal(SubLObject obj)
-    {
-        if (obj instanceof NilVector) {
-            if (capacity != ((NilVector)obj).capacity)
-                return false;
-            if (capacity != 0) {
-                accessError();
-                // Not reached.
-                return false;
-            }
-            return true;
-        }
-        if (obj instanceof SubLString) {
-            if (capacity != obj.cl_length())
-                return false;
-            if (capacity != 0) {
-                accessError();
-                // Not reached.
-                return false;
-            }
-            return true;
-        }
-        return false;
-    }
+	public SubLObject CHAR(int index) {
+		return this.accessError();
+	}
 
-//    public String getValue()
-//    {
-//        if (capacity == 0)
-//            return "";
-//        accessError();
-//        // Not reached.
-//        return null;
-//    }
+	public char charAt(int index) {
+		this.accessError();
+		// Not reached.
+		return 0;
+	}
 
-    @Override
-    public int cl_length()
-    {
-        return capacity;
-    }
+	// public String getValue()
+	// {
+	// if (capacity == 0)
+	// return "";
+	// accessError();
+	// // Not reached.
+	// return null;
+	// }
 
-    @Override
-    public int capacity()
-    {
-        return capacity;
-    }
+	public char[] charsOld() {
+		if (this.capacity != 0)
+			this.accessError();
+		return new char[0];
+	}
 
-    @Override
-    public SubLObject getElementType()
-    {
-        return NIL;
-    }
+	public int cl_length() {
+		return this.capacity;
+	}
 
-    @Override
-    public SubLObject CHAR(int index)
-    {
-        return accessError();
-    }
+	public SubLObject classOf() {
+		return BuiltInClass.NIL_VECTOR;
+	}
 
-    @Override
-    public SubLObject SCHAR(int index)
-    {
-        return accessError();
-    }
+	public boolean equal(SubLObject obj) {
+		if (obj instanceof NilVector) {
+			if (this.capacity != ((NilVector) obj).capacity)
+				return false;
+			if (this.capacity != 0) {
+				this.accessError();
+				// Not reached.
+				return false;
+			}
+			return true;
+		}
+		if (obj instanceof SubLString) {
+			if (this.capacity != obj.cl_length())
+				return false;
+			if (this.capacity != 0) {
+				this.accessError();
+				// Not reached.
+				return false;
+			}
+			return true;
+		}
+		return false;
+	}
 
-    @Override
-    public SubLObject AREF(int index)
-    {
-        return accessError();
-    }
+	public void fill(char c) {
+		this.storeError(LispCharacter.makeChar(c));
+	}
 
-    @Override
-    public void aset(int index, SubLObject newValue)
-    {
-        storeError(newValue);
-    }
+	public void fillVoid(SubLObject obj) {
+		this.storeError(obj);
+	}
 
-    @Override
-    public char charAt(int index)
-    {
-        accessError();
-        // Not reached.
-        return 0;
-    }
+	public SubLObject getElementType() {
+		return Lisp.NIL;
+	}
 
-    @Override
-    public void setChar(int index, char c)
-    {
-        storeError(LispCharacter.makeChar(c));
-    }
+	public String getString() {
+		if (this.capacity != 0)
+			this.accessError();
+		return "";
+	}
 
-    @Override
-    public SubLObject subseq(int start, int end)
-    {
-        if (capacity == 0 && start == 0 && end == 0)
-            return this;
-        return accessError();
-    }
+	public char[] getStringChars() {
+		if (this.capacity != 0)
+			this.accessError();
+		return new char[0];
+	}
 
-    @Override
-    public void fillVoid(SubLObject obj)
-    {
-        storeError(obj);
-    }
+	public SubLObject reverse() {
+		return this.accessError();
+	}
 
-    @Override
-    public void fill(char c)
-    {
-        storeError(LispCharacter.makeChar(c));
-    }
+	public SubLObject SCHAR(int index) {
+		return this.accessError();
+	}
 
-    @Override
-    public void shrink(int n)
-    {
-    }
+	public void setChar(int index, char c) {
+		this.storeError(LispCharacter.makeChar(c));
+	}
 
-    @Override
-    public SubLObject reverse()
-    {
-        return accessError();
-    }
+	public void shrink(int n) {
+	}
 
-    public SubLObject accessError()
-    {
-        return error(new TypeError("Attempt to access an array of element type NIL."));
-    }
+	public SubLObject SIMPLE_STRING_P() {
+		return Lisp.T;
+	}
 
-    private void storeError(SubLObject obj)
-    {
-        error(new TypeError(String.valueOf(obj) + " is not of type NIL."));
-    }
+	private void storeError(SubLObject obj) {
+		Lisp.error(new TypeError(String.valueOf(obj) + " is not of type NIL."));
+	}
 
-    @Override
-    public String toString()
-    {
-        return unreadableString("NIL-VECTOR");
-    }
+	public SubLObject subseq(int start, int end) {
+		if (this.capacity == 0 && start == 0 && end == 0)
+			return this;
+		return this.accessError();
+	}
 
-    @Override
-    public int sxhash()
-    {
-        return 0;
-    }
+	public int sxhash() {
+		return 0;
+	}
 
-    @Override
-    public AbstractVector adjustArray(int newCapacity,
-                                       SubLObject initialElement,
-                                       SubLObject initialContents)
+	public String toString() {
+		return this.unreadableString("NIL-VECTOR");
+	}
 
-    {
-        accessError();
-        // Not reached.
-        return null;
-    }
+	public SubLObject typeOf() {
+		return Lisp.list(LispSymbols.NIL_VECTOR, LispObjectFactory.makeInteger(this.capacity));
+	}
 
-    @Override
-    public AbstractVector adjustArray(int size, AbstractArray displacedTo,
-                                       int displacement)
-
-    {
-        accessError();
-        // Not reached.
-        return null;
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.NIL_VECTOR)
+			return Lisp.T;
+		if (type == LispSymbols.SIMPLE_STRING)
+			return Lisp.T;
+		if (type == LispSymbols.SIMPLE_ARRAY)
+			return Lisp.T;
+		if (type == BuiltInClass.NIL_VECTOR)
+			return Lisp.T;
+		if (type == BuiltInClass.SIMPLE_STRING)
+			return Lisp.T;
+		if (type == BuiltInClass.SIMPLE_ARRAY)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

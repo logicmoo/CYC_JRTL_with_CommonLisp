@@ -36,130 +36,117 @@ package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public final class EqHashTable extends LispHashtable
-{
-    private SubLObject cachedKey;
-    private int cachedIndex;
+public class EqHashTable extends LispHashtable {
+	private SubLObject cachedKey;
+	private int cachedIndex;
 
-    private int mask;
+	private int mask;
 
-    public EqHashTable(int size, SubLObject rehashSize,
-                       SubLObject rehashThreshold)
-    {
-        super(calculateInitialCapacity(size), rehashSize, rehashThreshold);
-        mask = buckets.length - 1;
-    }
+	public EqHashTable(int size, SubLObject rehashSize, SubLObject rehashThreshold) {
+		super(LispHashtable.calculateInitialCapacity(size), rehashSize, rehashThreshold);
+		this.mask = this.buckets.length - 1;
+	}
 
-    @Override
-    public SubLSymbol getTest()
-    {
-        return LispSymbols.EQ;
-    }
+	public SubLObject getHT(SubLObject key) {
+		int index;
+		if (key == this.cachedKey)
+			index = this.cachedIndex;
+		else {
+			index = key.sxhash() & this.mask;
+			this.cachedKey = key;
+			this.cachedIndex = index;
+		}
+		HashEntry e = this.buckets[index];
+		while (e != null) {
+			if (key == e.key)
+				return e.value;
+			e = e.next;
+		}
+		return null;
+	}
 
-    @Override
-    public SubLObject getHT(SubLObject key)
-    {
-        final int index;
-        if (key == cachedKey) {
-            index = cachedIndex;
-        } else {
-            index = key.sxhash() & mask;
-            cachedKey = key;
-            cachedIndex = index;
-        }
-        HashEntry e = buckets[index];
-        while (e != null) {
-            if (key == e.key)
-                return e.value;
-            e = e.next;
-        }
-        return null;
-    }
+	public SubLSymbol getTest() {
+		return LispSymbols.EQ;
+	}
 
-    @Override
-    public void putVoid(SubLObject key, SubLObject value)
-    {
-        int index;
-        if (key == cachedKey) {
-            index = cachedIndex;
-        } else {
-            index = key.sxhash() & mask;
-            cachedKey = key;
-            cachedIndex = index;
-        }
-        HashEntry e = buckets[index];
-        while (e != null) {
-            if (key == e.key) {
-                e.value = value;
-                return;
-            }
-            e = e.next;
-        }
-        // Not found. We need to add a new entry.
-        if (++count > threshold) {
-            rehash();
-            // Need a new hash value to suit the bigger table.
-            index = key.sxhash() & mask;
-            cachedKey = key;
-            cachedIndex = index;
-        }
-        e = new HashEntry(key, value);
-        e.next = buckets[index];
-        buckets[index] = e;
-    }
+	public void putVoid(SubLObject key, SubLObject value) {
+		int index;
+		if (key == this.cachedKey)
+			index = this.cachedIndex;
+		else {
+			index = key.sxhash() & this.mask;
+			this.cachedKey = key;
+			this.cachedIndex = index;
+		}
+		HashEntry e = this.buckets[index];
+		while (e != null) {
+			if (key == e.key) {
+				e.value = value;
+				return;
+			}
+			e = e.next;
+		}
+		// Not found. We need to add a new entry.
+		if (++this.count > this.threshold) {
+			this.rehash();
+			// Need a new hash value to suit the bigger table.
+			index = key.sxhash() & this.mask;
+			this.cachedKey = key;
+			this.cachedIndex = index;
+		}
+		e = new HashEntry(key, value);
+		e.next = this.buckets[index];
+		this.buckets[index] = e;
+	}
 
-    @Override
-    public SubLObject removeHT(SubLObject key)
-    {
-        final int index;
-        if (key == cachedKey) {
-            index = cachedIndex;
-        } else {
-            index = key.sxhash() & mask;
-            cachedKey = key;
-            cachedIndex = index;
-        }
-        HashEntry e = buckets[index];
-        HashEntry last = null;
-        while (e != null) {
-            if (key == e.key) {
-                if (last == null)
-                    buckets[index] = e.next;
-                else
-                    last.next = e.next;
-                --count;
-                return e.value;
-            }
-            last = e;
-            e = e.next;
-        }
-        return null;
-    }
+	public void rehash() {
+		this.cachedKey = null; // Invalidate the cache!
+		HashEntry[] oldBuckets = this.buckets;
+		int newCapacity = this.buckets.length * 2;
+		this.threshold = (int) (newCapacity * LispHashtable.loadFactor);
+		this.buckets = new HashEntry[newCapacity];
+		this.mask = this.buckets.length - 1;
+		for (int i = oldBuckets.length; i-- > 0;) {
+			HashEntry e = oldBuckets[i];
+			while (e != null) {
+				int index = e.key.sxhash() & this.mask;
+				HashEntry dest = this.buckets[index];
+				if (dest != null) {
+					while (dest.next != null)
+						dest = dest.next;
+					dest.next = e;
+				} else
+					this.buckets[index] = e;
+				HashEntry next = e.next;
+				e.next = null;
+				e = next;
+			}
+		}
+	}
 
-    @Override
-    public void rehash()
-    {
-        cachedKey = null; // Invalidate the cache!
-        HashEntry[] oldBuckets = buckets;
-        final int newCapacity = buckets.length * 2;
-        threshold = (int) (newCapacity * loadFactor);
-        buckets = new HashEntry[newCapacity];
-        mask = buckets.length - 1;
-        for (int i = oldBuckets.length; i-- > 0;) {
-            HashEntry e = oldBuckets[i];
-            while (e != null) {
-                final int index = e.key.sxhash() & mask;
-                HashEntry dest = buckets[index];
-                if (dest != null) {
-                    while (dest.next != null)
-                        dest = dest.next;
-                    dest.next = e;
-                } else
-                    buckets[index] = e;
-                HashEntry next = e.next;
-                e.next = null;
-                e = next;
-            }
-        }
-    }
+	public SubLObject removeHT(SubLObject key) {
+		int index;
+		if (key == this.cachedKey)
+			index = this.cachedIndex;
+		else {
+			index = key.sxhash() & this.mask;
+			this.cachedKey = key;
+			this.cachedIndex = index;
+		}
+		HashEntry e = this.buckets[index];
+		HashEntry last = null;
+		while (e != null) {
+			if (key == e.key) {
+				if (last == null)
+					this.buckets[index] = e.next;
+				else
+					last.next = e.next;
+				--this.count;
+				return e.value;
+			}
+			last = e;
+			e = e.next;
+		}
+		return null;
+	}
 }

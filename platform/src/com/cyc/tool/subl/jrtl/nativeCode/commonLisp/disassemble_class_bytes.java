@@ -33,57 +33,49 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 
 // ### disassemble-class-bytes
-public final class disassemble_class_bytes extends JavaPrimitive
-{
-    private disassemble_class_bytes()
-    {
-        super("disassemble-class-bytes", PACKAGE_SYS, true, "java-object");
-    }
+public class disassemble_class_bytes extends JavaPrimitive {
+	private static Primitive DISASSEMBLE_CLASS_BYTES = new disassemble_class_bytes();
 
-    @Override
-    public SubLObject execute(SubLObject arg)
-    {
-        if (arg instanceof JavaObject) {
-            byte[] bytes = (byte[]) ((JavaObject)arg).getObject();
-            try {
-                File file = File.createTempFile("abcl", ".class", null);
-                FileOutputStream out = new FileOutputStream(file);
-                out.write(bytes);
-                out.close();
-                SubLObject disassembler = _DISASSEMBLER_.symbolValue();
-                StringBuffer command = new StringBuffer();
-                if (disassembler instanceof SubLString) {
-                    command.append(disassembler.getString());
-                    command.append(" ");
-                    command.append(file.getPath());
-                } else if (disassembler instanceof Operator) {
-                    Pathname p = Pathname.makePathname(file);
-                    SubLObject commandResult = disassembler.execute(p);
-                    command.append(commandResult.getString());
-                } else {
-                    return makeString("No disassembler is available.");
-                }                        
-                ShellCommand sc = new ShellCommand(command.toString(), null, null);
-                sc.run();
-                file.delete();
-                return makeString(sc.getOutput());
-            } catch (IOException e) {
-                Debug.trace(e);
-            }
-        }
-        return NIL;
-    }
+	private disassemble_class_bytes() {
+		super("disassemble-class-bytes", Lisp.PACKAGE_SYS, true, "java-object");
+	}
 
-    private static final Primitive DISASSEMBLE_CLASS_BYTES =
-        new disassemble_class_bytes();
+	public SubLObject execute(SubLObject arg) {
+		if (arg instanceof JavaObject) {
+			byte[] bytes = (byte[]) ((JavaObject) arg).getObject();
+			try {
+				File file = File.createTempFile("abcl", ".class", null);
+				FileOutputStream out = new FileOutputStream(file);
+				out.write(bytes);
+				out.close();
+				SubLObject disassembler = Lisp._DISASSEMBLER_.symbolValue();
+				StringBuffer command = new StringBuffer();
+				if (disassembler instanceof SubLString) {
+					command.append(disassembler.getString());
+					command.append(" ");
+					command.append(file.getPath());
+				} else if (disassembler instanceof Operator) {
+					Pathname p = Pathname.makePathname(file);
+					SubLObject commandResult = disassembler.execute(p);
+					command.append(commandResult.getString());
+				} else
+					return LispObjectFactory.makeString("No disassembler is available.");
+				ShellCommand sc = new ShellCommand(command.toString(), null, null);
+				sc.run();
+				file.delete();
+				return LispObjectFactory.makeString(sc.getOutput());
+			} catch (IOException e) {
+				Debug.trace(e);
+			}
+		}
+		return Lisp.NIL;
+	}
 }

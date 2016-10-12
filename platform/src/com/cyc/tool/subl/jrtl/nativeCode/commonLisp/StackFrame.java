@@ -33,35 +33,33 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
+public abstract class StackFrame extends AbstractLispObject {
+	StackFrame next;
 
-public abstract class StackFrame 
-  extends AbstractLispObject
-{
-  @Override
-    public SubLObject typep(SubLObject typeSpecifier) 
+	StackFrame getNext() {
+		return this.next;
+	}
 
-   {
-     if (typeSpecifier == LispSymbols.STACK_FRAME)
-       return T;
-     if (typeSpecifier == BuiltInClass.STACK_FRAME)
-       return T;
-     return super.typep(typeSpecifier);
-   }
-  
-  StackFrame next;
-  
-  void setNext(StackFrame nextFrame) {
-    this.next = nextFrame;
-  }
-  StackFrame getNext() {
-    return this.next;
-  }
-  
-  public abstract SubLObject toLispList();
-  public abstract SubLString toLispString();
 	public abstract void incrementCalls();
+
+	void setNext(StackFrame nextFrame) {
+		this.next = nextFrame;
+	}
+
+	public abstract SubLObject toLispList();
+
+	public abstract SubLString toLispString();
+
+	public SubLObject typep(SubLObject typeSpecifier)
+
+	{
+		if (typeSpecifier == LispSymbols.STACK_FRAME)
+			return Lisp.T;
+		if (typeSpecifier == BuiltInClass.STACK_FRAME)
+			return Lisp.T;
+		return super.typep(typeSpecifier);
+	}
 }

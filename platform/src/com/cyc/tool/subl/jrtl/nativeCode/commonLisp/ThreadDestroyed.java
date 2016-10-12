@@ -33,10 +33,8 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-public class ThreadDestroyed extends Error
-{
-    public ThreadDestroyed()
-    {
-    }
+public class ThreadDestroyed extends Error {
+	public ThreadDestroyed() {
+	}
 
 }

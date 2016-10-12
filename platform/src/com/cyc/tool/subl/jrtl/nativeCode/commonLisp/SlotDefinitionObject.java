@@ -33,68 +33,53 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public final class SlotDefinitionObject extends StandardObject
-{
-  public SlotDefinitionObject()
-  {
-    super(StandardClass.SLOT_DEFINITION,
-          StandardClass.SLOT_DEFINITION.getClassLayout().getLength());
-    slots[SlotDefinitionClass.SLOT_INDEX_LOCATION] = NIL;
-  }
+public class SlotDefinitionObject extends StandardObject {
+	public SlotDefinitionObject() {
+		super(StandardClass.SLOT_DEFINITION, StandardClass.SLOT_DEFINITION.getClassLayout().getLength());
+		this.slots[SlotDefinitionClass.SLOT_INDEX_LOCATION] = Lisp.NIL;
+	}
 
-  public SlotDefinitionObject(SubLObject name, SubLObject readers)
-  {
-    this();
-    Debug.assertTrue(name instanceof SubLSymbol);
-    slots[SlotDefinitionClass.SLOT_INDEX_NAME] = name;
-    slots[SlotDefinitionClass.SLOT_INDEX_INITFUNCTION] = NIL;
-    slots[SlotDefinitionClass.SLOT_INDEX_INITARGS] =
-      makeCons(PACKAGE_KEYWORD.intern(((SubLSymbol)name).getJavaSymbolName()));
-    slots[SlotDefinitionClass.SLOT_INDEX_READERS] = readers;
-    slots[SlotDefinitionClass.SLOT_INDEX_ALLOCATION] = Keyword.INSTANCE;
-  }
+	public SlotDefinitionObject(SubLObject name, SubLObject readers) {
+		this();
+		Debug.assertTrue(name instanceof SubLSymbol);
+		this.slots[SlotDefinitionClass.SLOT_INDEX_NAME] = name;
+		this.slots[SlotDefinitionClass.SLOT_INDEX_INITFUNCTION] = Lisp.NIL;
+		this.slots[SlotDefinitionClass.SLOT_INDEX_INITARGS] = LispObjectFactory
+				.makeCons(Lisp.PACKAGE_KEYWORD.intern(((SubLSymbol) name).getJavaSymbolName()));
+		this.slots[SlotDefinitionClass.SLOT_INDEX_READERS] = readers;
+		this.slots[SlotDefinitionClass.SLOT_INDEX_ALLOCATION] = Keyword.INSTANCE;
+	}
 
-  public SlotDefinitionObject(SubLObject name, SubLObject readers,
-                        SubLObject initForm)
-  {
-    this();
-    Debug.assertTrue(name instanceof SubLSymbol);
-    slots[SlotDefinitionClass.SLOT_INDEX_NAME] = name;
-    slots[SlotDefinitionClass.SLOT_INDEX_INITFUNCTION] = NIL;
-    slots[SlotDefinitionClass.SLOT_INDEX_INITFORM] = initForm;
-    slots[SlotDefinitionClass.SLOT_INDEX_INITARGS] =
-      makeCons(PACKAGE_KEYWORD.intern(((SubLSymbol)name).getJavaSymbolName()));
-    slots[SlotDefinitionClass.SLOT_INDEX_READERS] = readers;
-    slots[SlotDefinitionClass.SLOT_INDEX_ALLOCATION] = Keyword.INSTANCE;
-  }
-  
-   public final SubLObject getSlotDefName()
-  {
-    return slots[SlotDefinitionClass.SLOT_INDEX_NAME];
-  }
+	public SlotDefinitionObject(SubLObject name, SubLObject readers, SubLObject initForm) {
+		this();
+		Debug.assertTrue(name instanceof SubLSymbol);
+		this.slots[SlotDefinitionClass.SLOT_INDEX_NAME] = name;
+		this.slots[SlotDefinitionClass.SLOT_INDEX_INITFUNCTION] = Lisp.NIL;
+		this.slots[SlotDefinitionClass.SLOT_INDEX_INITFORM] = initForm;
+		this.slots[SlotDefinitionClass.SLOT_INDEX_INITARGS] = LispObjectFactory
+				.makeCons(Lisp.PACKAGE_KEYWORD.intern(((SubLSymbol) name).getJavaSymbolName()));
+		this.slots[SlotDefinitionClass.SLOT_INDEX_READERS] = readers;
+		this.slots[SlotDefinitionClass.SLOT_INDEX_ALLOCATION] = Keyword.INSTANCE;
+	}
 
-  public final void setLocation(int i)
-  {
-    slots[SlotDefinitionClass.SLOT_INDEX_LOCATION] = LispObjectFactory.makeInteger(i);
-  }
+	public SubLObject getSlotDefName() {
+		return this.slots[SlotDefinitionClass.SLOT_INDEX_NAME];
+	}
 
-  @Override
-  public String writeToString()
-  {
-    StringBuilder sb =
-      new StringBuilder(LispSymbols.SLOT_DEFINITION.writeToString());
-    SubLObject name = slots[SlotDefinitionClass.SLOT_INDEX_NAME];
-    if (name != null && name != NIL)
-      {
-        sb.append(' ');
-        sb.append(name.writeToString());
-      }
-    return unreadableString(sb.toString());
-  }
+	public void setLocation(int i) {
+		this.slots[SlotDefinitionClass.SLOT_INDEX_LOCATION] = LispObjectFactory.makeInteger(i);
+	}
+
+	public String writeToString() {
+		StringBuilder sb = new StringBuilder(LispSymbols.SLOT_DEFINITION.writeToString());
+		SubLObject name = this.slots[SlotDefinitionClass.SLOT_INDEX_NAME];
+		if (name != null && name != Lisp.NIL) {
+			sb.append(' ');
+			sb.append(name.writeToString());
+		}
+		return this.unreadableString(sb.toString());
+	}
 }

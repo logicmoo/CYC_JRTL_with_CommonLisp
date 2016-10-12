@@ -35,34 +35,31 @@ package com.cyc.tool.subl.jrtl.nativeCode.commonLisp.util;
 
 import java.nio.charset.MalformedInputException;
 
-
-/** Class - derived from MalformedInputException -
- * which holds information required to allow higher level
- * systems to invoke a lisp restart function to set replacement characters.
+/**
+ * Class - derived from MalformedInputException - which holds information
+ * required to allow higher level systems to invoke a lisp restart function to
+ * set replacement characters.
  */
-public class RACFMalformedInputException
-    extends MalformedInputException {
+public class RACFMalformedInputException extends MalformedInputException {
 
-    final int position;
-    final char character;
-    final String charsetName;
-    
-    public RACFMalformedInputException(int position, char character,
-                                       String charsetName) {
-        super(1); // 1 == fake length
-        this.position = position;
-        this.character = character;
-        this.charsetName = charsetName;
-    }
+	int position;
+	char character;
+	String charsetName;
 
-    @Override
-    public String getMessage() {
-        return "Input value 0x" + Integer.toHexString(character)
-            + " is malformed while recoding with charset " + charsetName;
-    }
+	public RACFMalformedInputException(int position, char character, String charsetName) {
+		super(1); // 1 == fake length
+		this.position = position;
+		this.character = character;
+		this.charsetName = charsetName;
+	}
 
-    public int getPosition() {
-        return position;
-    }
+	public String getMessage() {
+		return "Input value 0x" + Integer.toHexString(this.character) + " is malformed while recoding with charset "
+				+ this.charsetName;
+	}
+
+	public int getPosition() {
+		return this.position;
+	}
 
 }

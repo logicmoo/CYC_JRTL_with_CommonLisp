@@ -33,167 +33,126 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public class SpecialOperator extends Operator
-{
-    private int[] callCount = new int[12];
-    private int hotCount;
+public class SpecialOperator extends Operator {
+	private int[] callCount = new int[12];
+	private int hotCount;
 
-    public SpecialOperator(SubLSymbol symbol)
-    {
-        symbol.setSymbolFunction(this);
-        setLambdaName(symbol);
-    }
+	public SpecialOperator(String name, SubLPackage pkg, boolean exported, String arglist) {
+		SubLSymbol symbol;
+		if (exported)
+			symbol = pkg.internAndExport(name.toUpperCase());
+		else
+			symbol = pkg.intern(name.toUpperCase());
+		symbol.setSymbolFunction(this);
+		this.setLambdaName(symbol);
+		this.setLambdaList(LispObjectFactory.makeString(arglist));
+	}
 
-    public SpecialOperator(SubLSymbol symbol, String arglist)
-    {
-        symbol.setSymbolFunction(this);
-        setLambdaName(symbol);
-        setLambdaList(makeString(arglist));
-    }
+	public SpecialOperator(SubLSymbol symbol) {
+		symbol.setSymbolFunction(this);
+		this.setLambdaName(symbol);
+	}
 
-    public SpecialOperator(String name, SubLPackage pkg, boolean exported,
-                           String arglist)
-    {
-        SubLSymbol symbol;
-        if (exported)
-           symbol = pkg.internAndExport(name.toUpperCase());
-        else
-           symbol = pkg.intern(name.toUpperCase());
-        symbol.setSymbolFunction(this);
-        setLambdaName(symbol);
-        setLambdaList(makeString(arglist));
-    }
+	public SpecialOperator(SubLSymbol symbol, String arglist) {
+		symbol.setSymbolFunction(this);
+		this.setLambdaName(symbol);
+		this.setLambdaList(LispObjectFactory.makeString(arglist));
+	}
 
-    @Override
-    public SubLObject execute()
-    {
-        return error(new UndefinedFunction(getLambdaName()));
-    }
+	public SubLObject execute() {
+		return Lisp.error(new UndefinedFunction(this.getLambdaName()));
+	}
 
-    @Override
-    public SubLObject execute(SubLObject arg)
-    {
-        return error(new UndefinedFunction(getLambdaName()));
-    }
+	public SubLObject execute(SubLObject arg) {
+		return Lisp.error(new UndefinedFunction(this.getLambdaName()));
+	}
 
-    @Override
-    public SubLObject execute(SubLObject first, SubLObject second)
+	public SubLObject execute(SubLObject first, SubLObject second)
 
-    {
-        return error(new UndefinedFunction(getLambdaName()));
-    }
+	{
+		return Lisp.error(new UndefinedFunction(this.getLambdaName()));
+	}
 
-    @Override
-    public SubLObject execute(SubLObject first, SubLObject second,
-                              SubLObject third)
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third)
 
-    {
-        return error(new UndefinedFunction(getLambdaName()));
-    }
+	{
+		return Lisp.error(new UndefinedFunction(this.getLambdaName()));
+	}
 
-    @Override
-    public SubLObject execute(SubLObject first, SubLObject second,
-                              SubLObject third, SubLObject fourth)
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth)
 
-    {
-        return error(new UndefinedFunction(getLambdaName()));
-    }
+	{
+		return Lisp.error(new UndefinedFunction(this.getLambdaName()));
+	}
 
-    @Override
-    public SubLObject execute(SubLObject first, SubLObject second,
-                              SubLObject third, SubLObject fourth,
-                              SubLObject fifth)
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
+			SubLObject fifth)
 
-    {
-        return error(new UndefinedFunction(getLambdaName()));
-    }
+	{
+		return Lisp.error(new UndefinedFunction(this.getLambdaName()));
+	}
 
-    @Override
-    public SubLObject execute(SubLObject first, SubLObject second,
-                              SubLObject third, SubLObject fourth,
-                              SubLObject fifth, SubLObject sixth)
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
+			SubLObject fifth, SubLObject sixth)
 
-    {
-        return error(new UndefinedFunction(getLambdaName()));
-    }
+	{
+		return Lisp.error(new UndefinedFunction(this.getLambdaName()));
+	}
 
-    @Override
-    public SubLObject execute(SubLObject first, SubLObject second,
-                              SubLObject third, SubLObject fourth,
-                              SubLObject fifth, SubLObject sixth,
-                              SubLObject seventh)
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
+			SubLObject fifth, SubLObject sixth, SubLObject seventh)
 
-    {
-        return error(new UndefinedFunction(getLambdaName()));
-    }
+	{
+		return Lisp.error(new UndefinedFunction(this.getLambdaName()));
+	}
 
-    @Override
-    public SubLObject execute(SubLObject first, SubLObject second,
-                              SubLObject third, SubLObject fourth,
-                              SubLObject fifth, SubLObject sixth,
-                              SubLObject seventh, SubLObject eighth)
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
+			SubLObject fifth, SubLObject sixth, SubLObject seventh, SubLObject eighth)
 
-    {
-        return error(new UndefinedFunction(getLambdaName()));
-    }
+	{
+		return Lisp.error(new UndefinedFunction(this.getLambdaName()));
+	}
 
-    @Override
-    public SubLObject execute(SubLObject[] args)
-    {
-        return error(new UndefinedFunction(getLambdaName()));
-    }
+	public SubLObject execute(SubLObject[] args) {
+		return Lisp.error(new UndefinedFunction(this.getLambdaName()));
+	}
 
-    @Override
-    public String writeToString()
-    {
-        StringBuffer sb = new StringBuffer("#<SPECIAL-OPERATOR ");
-        sb.append(lambdaName.writeToString());
-        sb.append(">");
-        return sb.toString();
-    }
+	// Profiling.
 
-    // Profiling.
-    @Override
-    public final SubLObject getCallCount()
-    {
-      return Profiler.makeCallCounts(callCount);
-    }
+	public SubLObject getCallCount() {
+		return Profiler.makeCallCounts(this.callCount);
+	}
 
-    @Override
-    public final void setCallCount(int n)
-    {
-        callCount[0] = n;
-    }
+	public int getHotCount() {
+		return this.hotCount;
+	}
 
-    @Override
-    public final void incrementCallCount(int arity)
-    {
-  		if (arity>10) arity = -1;
-        ++callCount[arity+1];
-    }
+	public void incrementCallCount(int arity) {
+		if (arity > 10)
+			arity = -1;
+		++this.callCount[arity + 1];
+	}
 
-    @Override
-    public final int getHotCount()
-    {
-        return hotCount;
-    }
+	public void incrementHotCount() {
+		++this.hotCount;
+	}
 
-    @Override
-    public final void setHotCount(int n)
-    {
-    	hotCount = n;
-    }
+	public void setCallCount(int n) {
+		this.callCount[0] = n;
+	}
 
-    @Override
-    public final void incrementHotCount()
-    {
-        ++hotCount;
-    }
+	public void setHotCount(int n) {
+		this.hotCount = n;
+	}
+
+	public String writeToString() {
+		StringBuffer sb = new StringBuffer("#<SPECIAL-OPERATOR ");
+		sb.append(this.lambdaName.writeToString());
+		sb.append(">");
+		return sb.toString();
+	}
 }

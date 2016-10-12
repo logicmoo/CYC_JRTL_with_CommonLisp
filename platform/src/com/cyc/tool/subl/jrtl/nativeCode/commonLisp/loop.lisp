@@ -517,7 +517,7 @@ code to be loaded.
 ;;; LOOP-EMIT-FINAL-VALUE, q.v.
 (defvar *loop-after-epilogue*)
 
-;;; the "culprit" responsible for supplying a final value from the
+;;; the "culprit" responsible for supplying a value from the
 ;;; loop. This is so LOOP-EMIT-FINAL-VALUE can moan about multiple
 ;;; return values being supplied.
 (defvar *loop-final-value-culprit*)

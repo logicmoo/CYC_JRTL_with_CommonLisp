@@ -33,49 +33,33 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 
-public final class StandardReaderMethodClass extends StandardClass
-{
-  // From StandardMethodClass.java:
-  public static final int SLOT_INDEX_GENERIC_FUNCTION = 0;
-  public static final int SLOT_INDEX_LAMBDA_LIST      = 1;
-  public static final int SLOT_INDEX_SPECIALIZERS     = 2;
-  public static final int SLOT_INDEX_QUALIFIERS       = 3;
-  public static final int SLOT_INDEX_FUNCTION         = 4;
-  public static final int SLOT_INDEX_FAST_FUNCTION    = 5;
-  public static final int SLOT_INDEX_DOCUMENTATION    = 6;
+public class StandardReaderMethodClass extends StandardClass {
+	// From StandardMethodClass.java:
+	public static int SLOT_INDEX_GENERIC_FUNCTION = 0;
+	public static int SLOT_INDEX_LAMBDA_LIST = 1;
+	public static int SLOT_INDEX_SPECIALIZERS = 2;
+	public static int SLOT_INDEX_QUALIFIERS = 3;
+	public static int SLOT_INDEX_FUNCTION = 4;
+	public static int SLOT_INDEX_FAST_FUNCTION = 5;
+	public static int SLOT_INDEX_DOCUMENTATION = 6;
 
-  // Added:
-  public static final int SLOT_INDEX_SLOT_NAME        = 7;
+	// Added:
+	public static int SLOT_INDEX_SLOT_NAME = 7;
 
-  public StandardReaderMethodClass()
-  {
-    super(LispSymbols.STANDARD_READER_METHOD,
-          list(StandardClass.STANDARD_READER_METHOD));
-    SubLPackage pkg = PACKAGE_SYS;
-    SubLObject[] instanceSlotNames =
-      {
-        LispSymbols.GENERIC_FUNCTION,
-        pkg.intern("LAMBDA-LIST"),
-        pkg.intern("SPECIALIZERS"),
-        pkg.intern("QUALIFIERS"),
-        LispSymbols.FUNCTION,
-        pkg.intern("FAST-FUNCTION"),
-        LispSymbols.DOCUMENTATION,
-        pkg.intern("SLOT-NAME")
-      };
-    setClassLayout(new Layout(this, instanceSlotNames, NIL));
-    setFinalized(true);
-  }
+	public StandardReaderMethodClass() {
+		super(LispSymbols.STANDARD_READER_METHOD, Lisp.list(StandardClass.STANDARD_READER_METHOD));
+		SubLPackage pkg = Lisp.PACKAGE_SYS;
+		SubLObject[] instanceSlotNames = { LispSymbols.GENERIC_FUNCTION, pkg.intern("LAMBDA-LIST"),
+				pkg.intern("SPECIALIZERS"), pkg.intern("QUALIFIERS"), LispSymbols.FUNCTION, pkg.intern("FAST-FUNCTION"),
+				LispSymbols.DOCUMENTATION, pkg.intern("SLOT-NAME") };
+		this.setClassLayout(new Layout(this, instanceSlotNames, Lisp.NIL));
+		this.setFinalized(true);
+	}
 
-  @Override
-  public SubLObject allocateInstance()
-  {
-    return new StandardReaderMethod();
-  }
+	public SubLObject allocateInstance() {
+		return new StandardReaderMethod();
+	}
 }

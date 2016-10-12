@@ -33,56 +33,43 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public class ProgramError extends LispError
-{
-    protected ProgramError(LispClass cls)
-    {
-        super(cls);
-    }
-
-    public ProgramError(SubLObject initArgs)
-    {
-        super(StandardClass.PROGRAM_ERROR);
-        initialize(initArgs);
-
-        if (initArgs.isList() && initArgs.first().isString()) {
-           setFormatControl(initArgs.first().getString());
-           setFormatArguments(initArgs.rest());
+public class ProgramError extends LispError {
+	protected ProgramError(LispClass cls) {
+		super(cls);
 	}
 
-    }
+	public ProgramError(String message) {
+		super(StandardClass.PROGRAM_ERROR);
+		this.setFormatControl(message);
+		this.setFormatArguments(Lisp.NIL);
+	}
 
-    public ProgramError(String message)
-    {
-        super(StandardClass.PROGRAM_ERROR);
-        setFormatControl(message);
-        setFormatArguments(NIL);
-    }
+	public ProgramError(SubLObject initArgs) {
+		super(StandardClass.PROGRAM_ERROR);
+		this.initialize(initArgs);
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.PROGRAM_ERROR;
-    }
+		if (initArgs.isList() && initArgs.first().isString()) {
+			this.setFormatControl(initArgs.first().getString());
+			this.setFormatArguments(initArgs.rest());
+		}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.PROGRAM_ERROR;
-    }
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.PROGRAM_ERROR)
-            return T;
-        if (type == StandardClass.PROGRAM_ERROR)
-            return T;
-        return super.typep(type);
-    }
+	public SubLObject classOf() {
+		return StandardClass.PROGRAM_ERROR;
+	}
+
+	public SubLObject typeOf() {
+		return LispSymbols.PROGRAM_ERROR;
+	}
+
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.PROGRAM_ERROR)
+			return Lisp.T;
+		if (type == StandardClass.PROGRAM_ERROR)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

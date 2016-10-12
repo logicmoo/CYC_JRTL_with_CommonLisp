@@ -33,106 +33,81 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
-import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.TimeZone;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class Time
-{
+public class Time {
 
-  // ### %time
-  private static final Primitive _TIME =
-    new JavaPrimitive("%time", PACKAGE_SYS, false)
-    {
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-      	LispConsPair.setCount(0);
-        long realStart = System.currentTimeMillis();
-        try
-          {
-            return arg.execute();
-          }
-        finally
-          {
-            long realElapsed = System.currentTimeMillis() - realStart;
-            long count = LispConsPair.getCount();
-            LispStream out =
-              checkCharacterOutputStream(LispSymbols.TRACE_OUTPUT.symbolValue());
-            out.freshLine();
-            StringBuilder sb = new StringBuilder();
-            sb.append(String.valueOf((float)realElapsed / 1000));
-            sb.append(" seconds real time");
-            sb.append(System.getProperty("line.separator"));
-            sb.append(count);
-            sb.append(" cons cell");
-            if (count != 1)
-              sb.append('s');
-            sb.append(System.getProperty("line.separator"));
-            out._writeString(sb.toString());
-            out._finishOutput();
-          }
-      }
-    };
+	// ### %time
+	private static Primitive _TIME = new JavaPrimitive("%time", Lisp.PACKAGE_SYS, false) {
 
-  // ### get-internal-real-time
-  private static final Primitive GET_INTERNAL_REAL_TIME =
-  	new JavaPrimitive("get-internal-real-time", "")
-    {
-      @Override
-      public SubLObject execute()
-      {
-        return number(System.currentTimeMillis());
-      }
-    };
+		public SubLObject execute(SubLObject arg) {
+			LispConsPair.setCount(0);
+			long realStart = System.currentTimeMillis();
+			try {
+				return arg.execute();
+			} finally {
+				long realElapsed = System.currentTimeMillis() - realStart;
+				long count = LispConsPair.getCount();
+				LispStream out = Lisp.checkCharacterOutputStream(LispSymbols.TRACE_OUTPUT.symbolValue());
+				out.freshLine();
+				StringBuilder sb = new StringBuilder();
+				sb.append(String.valueOf((float) realElapsed / 1000));
+				sb.append(" seconds real time");
+				sb.append(System.getProperty("line.separator"));
+				sb.append(count);
+				sb.append(" cons cell");
+				if (count != 1)
+					sb.append('s');
+				sb.append(System.getProperty("line.separator"));
+				out._writeString(sb.toString());
+				out._finishOutput();
+			}
+		}
+	};
 
-  // ### get-internal-run-time
-  private static final Primitive GET_INTERNAL_RUN_TIME =
-    new JavaPrimitive("get-internal-run-time", "")
-    {
-      @Override
-      public SubLObject execute()
-      {
-        return number(System.currentTimeMillis());
-      }
-    };
+	// ### get-internal-real-time
+	private static Primitive GET_INTERNAL_REAL_TIME = new JavaPrimitive("get-internal-real-time", "") {
 
-  // ### get-universal-time
-  private static final Primitive GET_UNIVERSAL_TIME =
-    new JavaPrimitive("get-universal-time", "")
-    {
-      @Override
-      public SubLObject execute()
-      {
-        return number(System.currentTimeMillis() / 1000 + 2208988800L);
-      }
-    };
+		public SubLObject execute() {
+			return Lisp.number(System.currentTimeMillis());
+		}
+	};
 
-  // ### default-time-zone => offset daylight-p
-  private static final Primitive DEFAULT_TIME_ZONE =
-    new JavaPrimitive("default-time-zone", PACKAGE_SYS, false)
-    {
-      @Override
-      public SubLObject execute()
-      {
-        TimeZone tz = TimeZone.getDefault();
-        //int offset = tz.getOffset(System.currentTimeMillis());
-        // Classpath hasn't implemented TimeZone.getOffset(long).
-        int rawOffset = tz.getRawOffset();
-        final boolean inDaylightTime =
-          tz.inDaylightTime(new Date(System.currentTimeMillis()));
-        if (inDaylightTime)
-          rawOffset += tz.getDSTSavings();
-        // "Time zone values increase with motion to the west..."
-        // Convert milliseconds to hours.
-        return LispThread.currentThread().setValues(
-          LispObjectFactory.makeInteger(- rawOffset).divideBy(LispObjectFactory.makeInteger(3600000)),
-          inDaylightTime ? T : NIL);
-      }
-    };
+	// ### get-internal-run-time
+	private static Primitive GET_INTERNAL_RUN_TIME = new JavaPrimitive("get-internal-run-time", "") {
+
+		public SubLObject execute() {
+			return Lisp.number(System.currentTimeMillis());
+		}
+	};
+
+	// ### get-universal-time
+	private static Primitive GET_UNIVERSAL_TIME = new JavaPrimitive("get-universal-time", "") {
+
+		public SubLObject execute() {
+			return Lisp.number(System.currentTimeMillis() / 1000 + 2208988800L);
+		}
+	};
+
+	// ### default-time-zone => offset daylight-p
+	private static Primitive DEFAULT_TIME_ZONE = new JavaPrimitive("default-time-zone", Lisp.PACKAGE_SYS, false) {
+
+		public SubLObject execute() {
+			TimeZone tz = TimeZone.getDefault();
+			// int offset = tz.getOffset(System.currentTimeMillis());
+			// Classpath hasn't implemented TimeZone.getOffset(long).
+			int rawOffset = tz.getRawOffset();
+			boolean inDaylightTime = tz.inDaylightTime(new Date(System.currentTimeMillis()));
+			if (inDaylightTime)
+				rawOffset += tz.getDSTSavings();
+			// "Time zone values increase with motion to the west..."
+			// Convert milliseconds to hours.
+			return LispThread.currentThread().setValues(
+					LispObjectFactory.makeInteger(-rawOffset).divideBy(LispObjectFactory.makeInteger(3600000)),
+					inDaylightTime ? Lisp.T : Lisp.NIL);
+		}
+	};
 }

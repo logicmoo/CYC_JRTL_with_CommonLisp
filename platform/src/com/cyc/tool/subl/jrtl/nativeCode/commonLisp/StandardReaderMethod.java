@@ -33,47 +33,36 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class StandardReaderMethod extends StandardMethod
-{
-  public StandardReaderMethod()
-  {
-    super(StandardClass.STANDARD_READER_METHOD,
-          StandardClass.STANDARD_READER_METHOD.getClassLayout().getLength());
-  }
+public class StandardReaderMethod extends StandardMethod {
+	// ### reader-method-slot-name
+	private static Primitive READER_METHOD_SLOT_NAME = new JavaPrimitive("reader-method-slot-name", Lisp.PACKAGE_MOP,
+			false, "reader-method") {
 
-  // ### reader-method-slot-name
-  private static final Primitive READER_METHOD_SLOT_NAME =
-      new JavaPrimitive("reader-method-slot-name", PACKAGE_MOP, false, "reader-method")
-  {
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-          if (arg instanceof StandardReaderMethod)
-              return ((StandardReaderMethod)arg).slots[StandardReaderMethodClass.SLOT_INDEX_SLOT_NAME];
-          return type_error(arg, LispSymbols.STANDARD_READER_METHOD);
-      }
-  };
+		public SubLObject execute(SubLObject arg) {
+			if (arg instanceof StandardReaderMethod)
+				return ((StandardReaderMethod) arg).slots[StandardReaderMethodClass.SLOT_INDEX_SLOT_NAME];
+			return Lisp.type_error(arg, LispSymbols.STANDARD_READER_METHOD);
+		}
+	};
 
-  // ### set-reader-method-slot-name
-  private static final Primitive SET_READER_METHOD_SLOT_NAME =
-      new JavaPrimitive("set-reader-method-slot-name", PACKAGE_MOP, false,
-                    "reader-method slot-name")
-  {
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second)
+	// ### set-reader-method-slot-name
+	private static Primitive SET_READER_METHOD_SLOT_NAME = new JavaPrimitive("set-reader-method-slot-name",
+			Lisp.PACKAGE_MOP, false, "reader-method slot-name") {
 
-      {
-          if (first instanceof StandardReaderMethod)
-          {
-              ((StandardReaderMethod)first).slots[StandardReaderMethodClass.SLOT_INDEX_SLOT_NAME] = second;
-              return second;
-          }
-              return type_error(first, LispSymbols.STANDARD_READER_METHOD);
-      }
-  };
+		public SubLObject execute(SubLObject first, SubLObject second)
+
+		{
+			if (first instanceof StandardReaderMethod) {
+				((StandardReaderMethod) first).slots[StandardReaderMethodClass.SLOT_INDEX_SLOT_NAME] = second;
+				return second;
+			}
+			return Lisp.type_error(first, LispSymbols.STANDARD_READER_METHOD);
+		}
+	};
+
+	public StandardReaderMethod() {
+		super(StandardClass.STANDARD_READER_METHOD, StandardClass.STANDARD_READER_METHOD.getClassLayout().getLength());
+	}
 }

@@ -33,96 +33,80 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public final class PackageError extends LispError
-{
-    public PackageError(SubLObject initArgs)
-    {
-        super(StandardClass.PACKAGE_ERROR);
-        initialize(initArgs);
-    }
+public class PackageError extends LispError {
+	public PackageError(String message) {
+		super(StandardClass.PACKAGE_ERROR);
+		this.setFormatControl(message);
+	}
 
-    @Override
-    protected void initialize(SubLObject initArgs)
-    {
-        super.initialize(initArgs);
+	public PackageError(SubLObject initArgs) {
+		super(StandardClass.PACKAGE_ERROR);
+		this.initialize(initArgs);
+	}
 
-        if (initArgs.isList() && initArgs.first().isString()) {
-           setFormatControl(initArgs.first().getString());
-           // When printing an error string, presumably, if the string contains
-           // a symbol, we'll want to complain about its full name, not the accessible
-           // name, because it may omit an (important) package name part.
-           // Two problems: (1) symbols can be contained in sublists
-           //               (2) symbols may not be printed, but used otherwise.
-           for (SubLObject arg = initArgs.rest(); arg != NIL; arg = arg.rest()) {
-              if (arg.first() instanceof SubLSymbol)
-                 arg.setCar(makeString(((SubLSymbol)arg.first()).getQualifiedName()));
-           }
-           setFormatArguments(initArgs.rest());
-           setPackage(NIL);
+	public SubLObject classOf() {
+		return StandardClass.PACKAGE_ERROR;
+	}
 
-           return;
-        }
+	public SubLObject getLispPackage() {
+		Debug.assertTrue(this.layout != null);
+		int index = this.layout.getSlotIndex(LispSymbols.PACKAGE);
+		Debug.assertTrue(index >= 0);
+		return this.slots[index];
+	}
 
-        SubLObject pkg = NIL;
-        SubLObject first, second;
-        while (initArgs != NIL) {
-            first = initArgs.first();
-            initArgs = initArgs.rest();
-            second = initArgs.first();
-            initArgs = initArgs.rest();
-            if (first == Keyword.PACKAGE)
-                pkg = second;
-        }
-        setPackage(pkg);
-    }
+	protected void initialize(SubLObject initArgs) {
+		super.initialize(initArgs);
 
-    public PackageError(String message)
-    {
-        super(StandardClass.PACKAGE_ERROR);
-        setFormatControl(message);
-    }
+		if (initArgs.isList() && initArgs.first().isString()) {
+			this.setFormatControl(initArgs.first().getString());
+			// When printing an error string, presumably, if the string contains
+			// a symbol, we'll want to complain about its full name, not the
+			// accessible
+			// name, because it may omit an (important) package name part.
+			// Two problems: (1) symbols can be contained in sublists
+			// (2) symbols may not be printed, but used otherwise.
+			for (SubLObject arg = initArgs.rest(); arg != Lisp.NIL; arg = arg.rest())
+				if (arg.first() instanceof SubLSymbol)
+					arg.setCar(LispObjectFactory.makeString(((SubLSymbol) arg.first()).getQualifiedName()));
+			this.setFormatArguments(initArgs.rest());
+			this.setPackage(Lisp.NIL);
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.PACKAGE_ERROR;
-    }
+			return;
+		}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.PACKAGE_ERROR;
-    }
+		SubLObject pkg = Lisp.NIL;
+		SubLObject first, second;
+		while (initArgs != Lisp.NIL) {
+			first = initArgs.first();
+			initArgs = initArgs.rest();
+			second = initArgs.first();
+			initArgs = initArgs.rest();
+			if (first == Keyword.PACKAGE)
+				pkg = second;
+		}
+		this.setPackage(pkg);
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.PACKAGE_ERROR)
-            return T;
-        if (type == StandardClass.PACKAGE_ERROR)
-            return T;
-        return super.typep(type);
-    }
+	public void setPackage(SubLObject pkg) {
+		Debug.assertTrue(this.layout != null);
+		int index = this.layout.getSlotIndex(LispSymbols.PACKAGE);
+		Debug.assertTrue(index >= 0);
+		this.slots[index] = pkg;
+	}
 
-    public SubLObject getLispPackage()
-    {
-        Debug.assertTrue(layout != null);
-        int index = layout.getSlotIndex(LispSymbols.PACKAGE);
-        Debug.assertTrue(index >= 0);
-        return slots[index];
-    }
+	public SubLObject typeOf() {
+		return LispSymbols.PACKAGE_ERROR;
+	}
 
-    public void setPackage(SubLObject pkg)
-    {
-        Debug.assertTrue(layout != null);
-        int index = layout.getSlotIndex(LispSymbols.PACKAGE);
-        Debug.assertTrue(index >= 0);
-        slots[index] = pkg;
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.PACKAGE_ERROR)
+			return Lisp.T;
+		if (type == StandardClass.PACKAGE_ERROR)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

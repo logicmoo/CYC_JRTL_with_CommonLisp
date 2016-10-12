@@ -33,45 +33,33 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class ControlError extends LispError
-{
-    public ControlError(SubLObject initArgs)
-    {
-        super(StandardClass.CONTROL_ERROR);
-        initialize(initArgs);
-    }
+public class ControlError extends LispError {
+	public ControlError(String message) {
+		super(StandardClass.CONTROL_ERROR);
+		this.setFormatControl(message);
+		this.setFormatArguments(Lisp.NIL);
+	}
 
-    public ControlError(String message)
-    {
-        super(StandardClass.CONTROL_ERROR);
-        setFormatControl(message);
-        setFormatArguments(NIL);
-    }
+	public ControlError(SubLObject initArgs) {
+		super(StandardClass.CONTROL_ERROR);
+		this.initialize(initArgs);
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.CONTROL_ERROR;
-    }
+	public SubLObject classOf() {
+		return StandardClass.CONTROL_ERROR;
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.CONTROL_ERROR;
-    }
+	public SubLObject typeOf() {
+		return LispSymbols.CONTROL_ERROR;
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.CONTROL_ERROR)
-            return T;
-        if (type == StandardClass.CONTROL_ERROR)
-            return T;
-        return super.typep(type);
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.CONTROL_ERROR)
+			return Lisp.T;
+		if (type == StandardClass.CONTROL_ERROR)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

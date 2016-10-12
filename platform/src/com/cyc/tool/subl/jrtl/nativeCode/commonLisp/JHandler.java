@@ -33,133 +33,111 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public final class JHandler
-{
-    static final Map<Object,Map<String,Entry>> table =
-       new WeakHashMap<Object,Map<String,Entry>>();
+public class JHandler {
+	private static class Entry {
+		Function handler;
+		SubLObject data;
+		int count = -1;
+		Map<String, Entry> entryTable;
+		String event;
 
-    public static void callLisp (String s, Object o)
-    {
-        callLisp(s, o, "");
-    }
+		public Entry(Function handler, SubLObject data, String event, Map<String, Entry> entryTable) {
+			this.entryTable = entryTable;
+			this.event = event;
+			this.handler = handler;
+			this.data = data;
+		}
 
-    public static void callLisp (String s, Object o, String s1)
-    {
-        callLisp(s, o, s1, new int[] {});
-    }
+		public void addCount(int count) {
+			this.count = count;
+		}
 
-    public static void callLisp (String s, Object o, String s1, int ai[]) {
-        callLisp(s, o, new String[] { s1 }, ai);
-    }
+		public void addData(SubLObject data) {
+			this.data = data;
+		}
 
-    public static void callLisp (String s, Object o, String as[])
-    {
-        callLisp(s, o, as, new int[] {});
-    }
+		public Fixnum getCount() {
+			if (this.count == 0)
+				this.entryTable.remove(this.event);
+			return LispObjectFactory.makeInteger(this.count--);
+		}
 
-    public static void callLisp (String s, Object o, String as[], int ai[])
-    {
-        if (table.containsKey(o)) {
-            Map<String,Entry> entryTable =  (Map<String,Entry>)table.get(o);
-            if (entryTable.containsKey(s)) {
-                Function f = ((Entry)entryTable.get(s)).getHandler();
-                SubLObject data = ((Entry)entryTable.get(s)).getData();
-                Fixnum count = ((Entry)entryTable.get(s)).getCount();
-                Fixnum[] lispAi = new Fixnum[ai.length];
-                for (int i = 0; i < ai.length; i++) {
-                    lispAi[i] = LispObjectFactory.makeInteger(ai[i]);
-                }
-                SubLObject lispAiVector = makeSimpleVector(lispAi);
-                SubLString[] lispAs = new SubLString[as.length];
-                for (int i = 0; i < as.length; i++) {
-                    lispAs[i] = makeString(as[i]);
-                }
-                SubLObject lispAsVector = makeSimpleVector(lispAs);
-                SubLObject[] args = new SubLObject[] //FIXME: count -> seq_num
-                { data, new ABCLJavaObject(o), lispAiVector, lispAsVector, internKeyword(s), count };
-                f.execute(args);
-            }
-        }
-    }
+		public SubLObject getData() {
+			return this.data;
+		}
 
-    // jregister-handler1 object event handler data count
-    private static final Primitive _JREGISTER_HANDLER =
-        new JavaPrimitive("%jregister-handler", PACKAGE_JAVA)
-    {
-        @Override
-        public SubLObject execute(SubLObject[] args)
-        {
-            if (args.length != 5)
-                return error(new WrongNumberOfArgumentsException(this));
-            Map<String,Entry> entryTable = null;
-            Object object = args[0].javaInstance();
-            String event = ((SubLSymbol)args[1]).getJavaSymbolName();
-            if (!table.containsKey(object)) {
-                entryTable = new HashMap<String,Entry>();
-                table.put(object,entryTable);
-            } else {
-                entryTable = (Map<String,Entry>)table.get(object);
-            }
-            Entry entry = new Entry((Function) args[2], args[3], event, entryTable);
-            if (args[4] != NIL)
-                entry.addCount(((Fixnum)args[4]).value);
-            entryTable.put(event,entry);
-            return T;
-        }
-    };
+		public Function getHandler() {
+			return this.handler;
+		}
+	}
 
-    private static class Entry
-    {
-        Function handler;
-        SubLObject data;
-        int count = -1;
-        Map<String,Entry> entryTable;
-        String event;
+	static Map<Object, Map<String, Entry>> table = new WeakHashMap<Object, Map<String, Entry>>();
 
-        public Entry (Function handler, SubLObject data, String event,
-                      Map<String,Entry> entryTable)
-        {
-            this.entryTable = entryTable;
-            this.event = event;
-            this.handler = handler;
-            this.data = data;
-        }
+	// jregister-handler1 object event handler data count
+	private static Primitive _JREGISTER_HANDLER = new JavaPrimitive("%jregister-handler", Lisp.PACKAGE_JAVA) {
 
-        public Function getHandler ()
-        {
-            return handler;
-        }
+		public SubLObject execute(SubLObject[] args) {
+			if (args.length != 5)
+				return Lisp.error(new WrongNumberOfArgumentsException(this));
+			Map<String, Entry> entryTable = null;
+			Object object = args[0].javaInstance();
+			String event = ((SubLSymbol) args[1]).getJavaSymbolName();
+			if (!JHandler.table.containsKey(object)) {
+				entryTable = new HashMap<String, Entry>();
+				JHandler.table.put(object, entryTable);
+			} else
+				entryTable = JHandler.table.get(object);
+			Entry entry = new Entry((Function) args[2], args[3], event, entryTable);
+			if (args[4] != Lisp.NIL)
+				entry.addCount(((Fixnum) args[4]).value);
+			entryTable.put(event, entry);
+			return Lisp.T;
+		}
+	};
 
-        public void addData (SubLObject data)
-        {
-            this.data = data;
-        }
+	public static void callLisp(String s, Object o) {
+		JHandler.callLisp(s, o, "");
+	}
 
-        public SubLObject getData ()
-        {
-            return data;
-        }
+	public static void callLisp(String s, Object o, String s1) {
+		JHandler.callLisp(s, o, s1, new int[] {});
+	}
 
-        public void addCount (int count)
-        {
-            this.count = count;
-        }
+	public static void callLisp(String s, Object o, String as[]) {
+		JHandler.callLisp(s, o, as, new int[] {});
+	}
 
-        public Fixnum getCount ()
-        {
-            if (count == 0)
-                entryTable.remove(event);
-            return (LispObjectFactory.makeInteger (count--));
-        }
-    }
+	public static void callLisp(String s, Object o, String s1, int ai[]) {
+		JHandler.callLisp(s, o, new String[] { s1 }, ai);
+	}
+
+	public static void callLisp(String s, Object o, String as[], int ai[]) {
+		if (JHandler.table.containsKey(o)) {
+			Map<String, Entry> entryTable = JHandler.table.get(o);
+			if (entryTable.containsKey(s)) {
+				Function f = entryTable.get(s).getHandler();
+				SubLObject data = entryTable.get(s).getData();
+				Fixnum count = entryTable.get(s).getCount();
+				Fixnum[] lispAi = new Fixnum[ai.length];
+				for (int i = 0; i < ai.length; i++)
+					lispAi[i] = LispObjectFactory.makeInteger(ai[i]);
+				SubLObject lispAiVector = LispObjectFactory.makeSimpleVector(lispAi);
+				SubLString[] lispAs = new SubLString[as.length];
+				for (int i = 0; i < as.length; i++)
+					lispAs[i] = LispObjectFactory.makeString(as[i]);
+				SubLObject lispAsVector = LispObjectFactory.makeSimpleVector(lispAs);
+				SubLObject[] args = new SubLObject[] // FIXME: count -> seq_num
+				{ data, new ABCLJavaObject(o), lispAiVector, lispAsVector, Lisp.internKeyword(s), count };
+				f.execute(args);
+			}
+		}
+	}
 }

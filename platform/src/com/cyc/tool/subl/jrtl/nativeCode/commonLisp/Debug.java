@@ -33,61 +33,50 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public final class Debug
-{
-    
-    public static final void assertTrue(boolean b)
-    {
-        if (!b) {
-            String msg = "ABCL Debug.assertTrue() assertion failed!";
-            System.err.println(msg);
-            Error e = new Error(msg);
-            e.printStackTrace();
-            throw e;
-        }
-    }
+public class Debug {
 
-    // Does not throw an exception.
-    public static void bug()
-    {
-        trace(new Exception("BUG!"));
-    }
+	public static SubLSymbol _DEBUG_WARN_ = Lisp.exportSpecial("*DEBUG-WARN*", Lisp.PACKAGE_SYS, Lisp.NIL);
 
-    public static final void trace(String s)
-    {
-        System.err.println(s);
-    }
-
-    public static final void trace(Throwable t)
-    {
-        t.printStackTrace();
-    }
-
-    public static final SubLSymbol _DEBUG_WARN_
-        = exportSpecial("*DEBUG-WARN*", PACKAGE_SYS, NIL);
-
-    public static void setDebugWarnings(boolean flag) {
-        if (flag) {
-            _DEBUG_WARN_.setSymbolValue(T);
-        } else {
-            _DEBUG_WARN_.setSymbolValue(NIL);
-        }
-    }
-    
-    public static final void warn(String s) {
-        if (_DEBUG_WARN_.getSymbolValue() != null) {
-            trace(s);
-        }
-    }
-
-		public static void dumpStack(String string) {
-			Thread.dumpStack();
-			trace(string);
-			
+	public static void assertTrue(boolean b) {
+		if (!b) {
+			String msg = "ABCL Debug.assertTrue() assertion failed!";
+			System.err.println(msg);
+			Error e = new Error(msg);
+			e.printStackTrace();
+			throw e;
 		}
+	}
+
+	// Does not throw an exception.
+	public static void bug() {
+		Debug.trace(new Exception("BUG!"));
+	}
+
+	public static void dumpStack(String string) {
+		Thread.dumpStack();
+		Debug.trace(string);
+
+	}
+
+	public static void setDebugWarnings(boolean flag) {
+		if (flag)
+			Debug._DEBUG_WARN_.setSymbolValue(Lisp.T);
+		else
+			Debug._DEBUG_WARN_.setSymbolValue(Lisp.NIL);
+	}
+
+	public static void trace(String s) {
+		System.err.println(s);
+	}
+
+	public static void trace(Throwable t) {
+		t.printStackTrace();
+	}
+
+	public static void warn(String s) {
+		if (Debug._DEBUG_WARN_.getSymbolValue() != null)
+			Debug.trace(s);
+	}
 }

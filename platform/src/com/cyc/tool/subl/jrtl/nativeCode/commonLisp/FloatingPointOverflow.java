@@ -33,39 +33,29 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class FloatingPointOverflow extends ArithmeticError
-{
-    public FloatingPointOverflow(SubLObject initArgs)
+public class FloatingPointOverflow extends ArithmeticError {
+	public FloatingPointOverflow(SubLObject initArgs)
 
-    {
-        super(StandardClass.FLOATING_POINT_OVERFLOW);
-        initialize(initArgs);
-    }
+	{
+		super(StandardClass.FLOATING_POINT_OVERFLOW);
+		this.initialize(initArgs);
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.FLOATING_POINT_OVERFLOW;
-    }
+	public SubLObject classOf() {
+		return StandardClass.FLOATING_POINT_OVERFLOW;
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.FLOATING_POINT_OVERFLOW;
-    }
+	public SubLObject typeOf() {
+		return LispSymbols.FLOATING_POINT_OVERFLOW;
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.FLOATING_POINT_OVERFLOW)
-            return T;
-        if (type == StandardClass.FLOATING_POINT_OVERFLOW)
-            return T;
-        return super.typep(type);
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.FLOATING_POINT_OVERFLOW)
+			return Lisp.T;
+		if (type == StandardClass.FLOATING_POINT_OVERFLOW)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

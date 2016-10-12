@@ -33,52 +33,39 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class UndefinedFunction extends CellError
-{
-  // obj is either the name of the undefined function or an initArgs list.
-  public UndefinedFunction(SubLObject obj)
-  {
-    super(StandardClass.UNDEFINED_FUNCTION);
-    if (obj instanceof SubLCons)
-      initialize(obj);
-    else
-      setCellName(obj);
-  }
+public class UndefinedFunction extends CellError {
+	// obj is either the name of the undefined function or an initArgs list.
+	public UndefinedFunction(SubLObject obj) {
+		super(StandardClass.UNDEFINED_FUNCTION);
+		if (obj instanceof SubLCons)
+			this.initialize(obj);
+		else
+			this.setCellName(obj);
+	}
 
-  @Override
-  public SubLObject typeOf()
-  {
-    return LispSymbols.UNDEFINED_FUNCTION;
-  }
+	public SubLObject classOf() {
+		return StandardClass.UNDEFINED_FUNCTION;
+	}
 
-  @Override
-  public SubLObject classOf()
-  {
-    return StandardClass.UNDEFINED_FUNCTION;
-  }
+	public String getMessage() {
+		StringBuilder sb = new StringBuilder("The function ");
+		sb.append(this.getCellName().writeToString());
+		sb.append(" is undefined.");
+		return sb.toString();
+	}
 
-  @Override
-  public SubLObject typep(SubLObject type)
-  {
-    if (type == LispSymbols.UNDEFINED_FUNCTION)
-      return T;
-    if (type == StandardClass.UNDEFINED_FUNCTION)
-      return T;
-    return super.typep(type);
-  }
+	public SubLObject typeOf() {
+		return LispSymbols.UNDEFINED_FUNCTION;
+	}
 
-  @Override
-  public String getMessage()
-  {
-    StringBuilder sb = new StringBuilder("The function ");
-    sb.append(getCellName().writeToString());
-    sb.append(" is undefined.");
-    return sb.toString();
-  }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.UNDEFINED_FUNCTION)
+			return Lisp.T;
+		if (type == StandardClass.UNDEFINED_FUNCTION)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

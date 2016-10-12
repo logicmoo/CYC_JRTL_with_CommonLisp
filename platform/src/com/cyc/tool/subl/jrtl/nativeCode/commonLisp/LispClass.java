@@ -33,372 +33,304 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public abstract class LispClass extends StandardObject
-{
-	
-  
-  @Override
-  public String toString() {
-  	try {
-  	return writeToString();
-  	} catch (Throwable e) {
-    	return super.toString();
+public abstract class LispClass extends StandardObject {
+
+	private static EqHashTable map = new EqHashTable(256, Lisp.NIL, Lisp.NIL);
+
+	private static boolean debugClassLayout = false;
+
+	// ### find-class symbol &optional errorp environment => class
+	private static Primitive FIND_CLASS = new JavaPrimitive(LispSymbols.FIND_CLASS,
+			"symbol &optional errorp environment") {
+
+		public SubLObject execute(SubLObject arg) {
+			return LispClass.findClass(arg, true);
+		}
+
+		public SubLObject execute(SubLObject first, SubLObject second)
+
+		{
+			return LispClass.findClass(first, second != Lisp.NIL);
+		}
+
+		public SubLObject execute(SubLObject first, SubLObject second, SubLObject third)
+
+		{
+			// FIXME Use environment!
+			return LispClass.findClass(first, second != Lisp.NIL);
+		}
+	};
+
+	// ### %set-find-class
+	private static Primitive _SET_FIND_CLASS = new JavaPrimitive("%set-find-class", Lisp.PACKAGE_SYS, true) {
+
+		public SubLObject execute(SubLObject first, SubLObject second)
+
+		{
+			SubLSymbol name = Lisp.checkSymbol(first);
+			if (second == Lisp.NIL) {
+				LispClass.removeClass(name);
+				return second;
+			}
+			LispClass c = Lisp.checkClass(second);
+			LispClass.addClass(name, c);
+			return second;
+		}
+	};
+
+	// ### subclassp
+	private static Primitive SUBCLASSP = new JavaPrimitive(LispSymbols.SUBCLASSP, "class") {
+
+		public SubLObject execute(SubLObject first, SubLObject second)
+
+		{
+			LispClass c = Lisp.checkClass(first);
+			return c.subclassp(second) ? Lisp.T : Lisp.NIL;
+		}
+	};
+
+	public static LispClass addClass(SubLSymbol symbol, LispClass c) {
+		synchronized (LispClass.map) {
+			LispClass.map.putVoid(symbol, c);
+		}
+		return c;
+	}
+
+	public static SubLObject findClass(SubLObject name, boolean errorp)
+
+	{
+		SubLSymbol symbol = Lisp.checkSymbol(name);
+		LispClass c;
+		synchronized (LispClass.map) {
+			c = (LispClass) LispClass.map.getHT(symbol);
+		}
+		if (c != null)
+			return c;
+		if (errorp) {
+			StringBuilder sb = new StringBuilder("There is no class named ");
+			sb.append(name.writeToString());
+			sb.append('.');
+			return Lisp.error(new LispError(sb.toString()));
+		}
+		return Lisp.NIL;
+	}
+
+	public static LispClass findClass(SubLSymbol symbol) {
+		synchronized (LispClass.map) {
+			return (LispClass) LispClass.map.getHT(symbol);
 		}
 	}
-  
-  private static final EqHashTable map = new EqHashTable(256, NIL, NIL);
 
-	private static final boolean debugClassLayout = false;
+	public static void removeClass(SubLSymbol symbol) {
+		synchronized (LispClass.map) {
+			LispClass.map.removeHT(symbol);
+		}
+	}
 
-  public static LispClass addClass(SubLSymbol symbol, LispClass c)
-  {
-    synchronized (map)
-      {
-        map.putVoid(symbol, c);
-      }
-    return c;
-  }
+	private int sxhash;
+	private SubLObject name;
+	private SubLObject propertyList;
+	private Layout classLayout;
+	private SubLObject directSuperclasses = Lisp.NIL;
+	private SubLObject directSubclasses = Lisp.NIL;
+	private SubLObject classPrecedenceList = Lisp.NIL;
+	private SubLObject directMethods = Lisp.NIL;
 
-  public static void removeClass(SubLSymbol symbol)
-  {
-    synchronized (map)
-      {
-        map.removeHT(symbol);
-      }
-  }
+	private SubLObject documentation = Lisp.NIL;
 
-  public static LispClass findClass(SubLSymbol symbol)
-  {
-    synchronized (map)
-      {
-        return (LispClass) map.getHT(symbol);
-      }
-  }
+	private boolean finalized;
 
-  public static SubLObject findClass(SubLObject name, boolean errorp)
+	protected LispClass(Layout layout) {
+		super(layout, layout == null ? 0 : layout.getLength());
+		this.sxhash = this.hashCodeLisp() & 0x7fffffff;
+		// classLayout = layout;
+	}
 
-  {
-    final SubLSymbol symbol = checkSymbol(name);
-    final LispClass c;
-    synchronized (map)
-      {
-        c = (LispClass) map.getHT(symbol);
-      }
-    if (c != null)
-      return c;
-    if (errorp)
-      {
-        StringBuilder sb =
-          new StringBuilder("There is no class named ");
-        sb.append(name.writeToString());
-        sb.append('.');
-        return error(new LispError(sb.toString()));
-      }
-    return NIL;
-  }
+	protected LispClass(Layout layout, SubLSymbol symbol) {
+		super(layout, layout == null ? 0 : layout.getLength());
+		this.setLispClassName(symbol);
+		this.sxhash = this.hashCodeLisp() & 0x7fffffff;
+	}
 
-  private final int sxhash;
+	protected LispClass(Layout layout, SubLSymbol symbol, SubLObject directSuperclasses) {
+		super(layout, layout == null ? 0 : layout.getLength());
+		this.sxhash = this.hashCodeLisp() & 0x7fffffff;
+		this.setLispClassName(symbol);
+		this.setDirectSuperclasses(directSuperclasses);
+	}
 
-  private SubLObject name;
-  private SubLObject propertyList;
-  private Layout classLayout;
-  private SubLObject directSuperclasses = NIL;
-  private SubLObject directSubclasses = NIL;
-  private SubLObject classPrecedenceList = NIL;
-  private SubLObject directMethods = NIL;
-  private SubLObject documentation = NIL;
-  private boolean finalized;
+	protected LispClass(SubLSymbol symbol) {
+		this(null, symbol);
+	}
 
-  protected LispClass(Layout layout)
-  {
-    super(layout, layout == null ? 0 : layout.getLength());
-    sxhash = hashCodeLisp() & 0x7fffffff;
-    //classLayout = layout;
-  }
+	public SubLObject classOf() {
+		return StandardClass.CLASS;
+	}
 
-  protected LispClass(SubLSymbol symbol)
-  {
-    this(null, symbol);
-  }
+	public Layout getClassLayout() {
+		// Layout classLayout = layout;
+		if (this.classLayout == null && LispClass.debugClassLayout) {
+			String str = this.writeToString() + this.getDebugParts().writeToString();
+			Debug.trace(";; WARNING NULL CLASSLAYOUT " + str);
+			return this.classLayout;
+		}
+		return this.classLayout;
+	}
 
-  protected LispClass(Layout layout, SubLSymbol symbol)
-  {
-    super(layout, layout == null ? 0 : layout.getLength());
-    setLispClassName(symbol);
-    sxhash = hashCodeLisp() & 0x7fffffff;
-  }
+	public SubLObject getCPL() {
+		return this.classPrecedenceList;
+	}
 
-  protected LispClass(Layout layout,
-                      SubLSymbol symbol, SubLObject directSuperclasses)
-  {
-    super(layout, layout == null ? 0 : layout.getLength());
-    sxhash = hashCodeLisp() & 0x7fffffff;
-    setLispClassName(symbol);
-    setDirectSuperclasses(directSuperclasses);
-  }
+	public SubLObject getDebugParts() {
+		SubLObject result = Lisp.NIL;
+		result = result.push(LispObjectFactory.makeCons("NAME", this.name != null ? this.name : Lisp.NIL));
+		result = result
+				.push(LispObjectFactory.makeCons("LAYOUT", this.classLayout != null ? this.classLayout : Lisp.NIL));
+		result = result.push(LispObjectFactory.makeCons("DIRECT-SUPERCLASSES", this.getDirectSuperclasses()));
+		result = result.push(LispObjectFactory.makeCons("DIRECT-SUBCLASSES", this.getDirectSubclasses()));
+		result = result.push(LispObjectFactory.makeCons("CLASS-PRECEDENCE-LIST", this.getCPL()));
+		result = result.push(LispObjectFactory.makeCons("DIRECT-METHODS", this.getDirectMethods()));
+		result = result.push(LispObjectFactory.makeCons("DOCUMENTATION", this.getDocumentation()));
+		return result.nreverse();
+	}
 
-  @Override
-  public SubLObject getParts()
-  {
-    SubLObject result = NIL;
-    result = result.push(makeCons("NAME", name != null ? name : NIL));
-    result = result.push(makeCons("LAYOUT",
-                                  getClassLayout() != null
-                                  ? getClassLayout() : NIL));
-    result = result.push(makeCons("DIRECT-SUPERCLASSES",
-                                  getDirectSuperclasses()));
-    result = result.push(makeCons("DIRECT-SUBCLASSES", getDirectSubclasses()));
-    result = result.push(makeCons("CLASS-PRECEDENCE-LIST", getCPL()));
-    result = result.push(makeCons("DIRECT-METHODS", getDirectMethods()));
-    result = result.push(makeCons("DOCUMENTATION", getDocumentation()));
-    return result.nreverse();
-  }
+	public SubLObject getDirectMethods() {
+		return this.directMethods;
+	}
 
-  
-  public SubLObject getDebugParts()
-  {
-    SubLObject result = NIL;
-    result = result.push(makeCons("NAME", name != null ? name : NIL));
-    result = result.push(makeCons("LAYOUT",
-                                  classLayout != null
-                                  ? classLayout : NIL));
-    result = result.push(makeCons("DIRECT-SUPERCLASSES",
-                                  getDirectSuperclasses()));
-    result = result.push(makeCons("DIRECT-SUBCLASSES", getDirectSubclasses()));
-    result = result.push(makeCons("CLASS-PRECEDENCE-LIST", getCPL()));
-    result = result.push(makeCons("DIRECT-METHODS", getDirectMethods()));
-    result = result.push(makeCons("DOCUMENTATION", getDocumentation()));
-    return result.nreverse();
-  }
-  
-  @Override
-  public final int sxhash()
-  {
-    return sxhash;
-  }
+	public SubLObject getDirectSubclasses() {
+		return this.directSubclasses;
+	}
 
-  public SubLObject getLispClassName()
-  {
-    return name;
-  }
+	public SubLObject getDirectSuperclasses() {
+		return this.directSuperclasses;
+	}
 
-  public void setLispClassName(SubLObject name)
-  {
-    this.name = name;
-  }
+	public SubLObject getDocumentation() {
+		return this.documentation;
+	}
 
-  @Override
-  public final SubLObject getPropertyList()
-  {
-    if (propertyList == null)
-      propertyList = NIL;
-    return propertyList;
-  }
+	public int getLayoutLength() {
+		if (this.layout == null)
+			return 0;
+		return this.layout.getLength();
+	}
 
-  @Override
-  public final void setPropertyList(SubLObject obj)
-  {
-    if (obj == null)
-      throw new NullPointerException();
-    propertyList = obj;
-  }
+	public SubLObject getLispClassName() {
+		return this.name;
+	}
 
-  public Layout getClassLayout()
-  {
-  	//Layout classLayout = layout;
-  	if (classLayout==null && debugClassLayout) {
-  		String str = this.writeToString() + this.getDebugParts().writeToString();
-  		Debug.trace(";; WARNING NULL CLASSLAYOUT "+str);
-      return classLayout;  		
-  	}
-    return classLayout;
-  }
+	public SubLObject getParts() {
+		SubLObject result = Lisp.NIL;
+		result = result.push(LispObjectFactory.makeCons("NAME", this.name != null ? this.name : Lisp.NIL));
+		result = result.push(
+				LispObjectFactory.makeCons("LAYOUT", this.getClassLayout() != null ? this.getClassLayout() : Lisp.NIL));
+		result = result.push(LispObjectFactory.makeCons("DIRECT-SUPERCLASSES", this.getDirectSuperclasses()));
+		result = result.push(LispObjectFactory.makeCons("DIRECT-SUBCLASSES", this.getDirectSubclasses()));
+		result = result.push(LispObjectFactory.makeCons("CLASS-PRECEDENCE-LIST", this.getCPL()));
+		result = result.push(LispObjectFactory.makeCons("DIRECT-METHODS", this.getDirectMethods()));
+		result = result.push(LispObjectFactory.makeCons("DOCUMENTATION", this.getDocumentation()));
+		return result.nreverse();
+	}
 
-  public void setClassLayout(Layout layout)
-  {
-  	classLayout = layout;
-  	//this.layout = layout;
-  }
+	public SubLObject getPropertyList() {
+		if (this.propertyList == null)
+			this.propertyList = Lisp.NIL;
+		return this.propertyList;
+	}
 
-  public final int getLayoutLength()
-  {
-    if (layout == null)
-      return 0;
-    return layout.getLength();
-  }
+	public boolean isFinalized() {
+		return this.finalized;
+	}
 
-  public SubLObject getDirectSuperclasses()
-  {
-    return directSuperclasses;
-  }
+	public void setClassLayout(Layout layout) {
+		this.classLayout = layout;
+		// this.layout = layout;
+	}
 
-  public void setDirectSuperclasses(SubLObject directSuperclasses)
-  {
-    this.directSuperclasses = directSuperclasses;
-  }
+	public void setCPL(SubLObject... cpl) {
+		SubLObject obj1 = cpl[0];
+		if (obj1 instanceof SubLCons && cpl.length == 1)
+			this.classPrecedenceList = obj1;
+		else {
+			Debug.assertTrue(obj1 == this);
+			SubLObject l = Lisp.NIL;
+			for (int i = cpl.length; i-- > 0;)
+				l = LispObjectFactory.makeCons(cpl[i], l);
+			this.classPrecedenceList = l;
+		}
+	}
 
-  public final boolean isFinalized()
-  {
-    return finalized;
-  }
+	public void setDirectMethods(SubLObject methods) {
+		this.directMethods = methods;
+	}
 
-  public final void setFinalized(boolean b)
-  {
-    finalized = b;
-  }
+	public void setDirectSubclasses(SubLObject directSubclasses) {
+		this.directSubclasses = directSubclasses;
+	}
 
-  // When there's only one direct superclass...
-  public final void setDirectSuperclass(SubLObject superclass)
-  {
-    setDirectSuperclasses(makeCons(superclass));
-  }
+	// When there's only one direct superclass...
+	public void setDirectSuperclass(SubLObject superclass) {
+		this.setDirectSuperclasses(LispObjectFactory.makeCons(superclass));
+	}
 
-  public SubLObject getDirectSubclasses()
-  {
-    return directSubclasses;
-  }
+	public void setDirectSuperclasses(SubLObject directSuperclasses) {
+		this.directSuperclasses = directSuperclasses;
+	}
 
-  public void setDirectSubclasses(SubLObject directSubclasses)
-  {
-    this.directSubclasses = directSubclasses;
-  }
+	public void setDocumentation(SubLObject doc) {
+		this.documentation = doc;
+	}
 
-  public SubLObject getCPL()
-  {
-    return classPrecedenceList;
-  }
+	public void setFinalized(boolean b) {
+		this.finalized = b;
+	}
 
-  public void setCPL(SubLObject... cpl)
-  {
-    SubLObject obj1 = cpl[0];
-    if (obj1 instanceof SubLCons && cpl.length == 1)
-      classPrecedenceList = obj1;
-    else
-      {
-        Debug.assertTrue(obj1 == this);
-        SubLObject l = NIL;
-        for (int i = cpl.length; i-- > 0;)
-            l = makeCons(cpl[i], l);
-        classPrecedenceList = l;
-      }
-  }
+	public void setLispClassName(SubLObject name) {
+		this.name = name;
+	}
 
-  public SubLObject getDirectMethods()
-  {
-    return directMethods;
-  }
+	public void setPropertyList(SubLObject obj) {
+		if (obj == null)
+			throw new NullPointerException();
+		this.propertyList = obj;
+	}
 
-  public void setDirectMethods(SubLObject methods)
-  {
-    directMethods = methods;
-  }
+	public boolean subclassp(SubLObject obj) {
+		SubLObject cpl = this.getCPL();
+		while (cpl != Lisp.NIL) {
+			if (cpl.first() == obj)
+				return true;
+			cpl = ((SubLCons) cpl).rest();
+		}
+		return false;
+	}
 
-  public SubLObject getDocumentation()
-  {
-    return documentation;
-  }
+	public int sxhash() {
+		return this.sxhash;
+	}
 
-  public void setDocumentation(SubLObject doc)
-  {
-    documentation = doc;
-  }
+	public String toString() {
+		try {
+			return this.writeToString();
+		} catch (Throwable e) {
+			return super.toString();
+		}
+	}
 
-  @Override
-  public SubLObject typeOf()
-  {
-    return LispSymbols.CLASS;
-  }
+	public SubLObject typeOf() {
+		return LispSymbols.CLASS;
+	}
 
-  @Override
-  public SubLObject classOf()
-  {
-    return StandardClass.CLASS;
-  }
-
-  @Override
-  public SubLObject typep(SubLObject type)
-  {
-    if (type == LispSymbols.CLASS)
-      return T;
-    if (type == StandardClass.CLASS)
-      return T;
-    return super.typep(type);
-  }
-
-  public boolean subclassp(SubLObject obj)
-  {
-    SubLObject cpl = getCPL();
-    while (cpl != NIL)
-      {
-        if (cpl.first() == obj)
-          return true;
-        cpl = ((SubLCons)cpl).rest();
-      }
-    return false;
-  }
-
-  // ### find-class symbol &optional errorp environment => class
-  private static final Primitive FIND_CLASS =
-    new JavaPrimitive(LispSymbols.FIND_CLASS, "symbol &optional errorp environment")
-    {
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-        return findClass(arg, true);
-      }
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second)
-
-      {
-        return findClass(first, second != NIL);
-      }
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second,
-                                SubLObject third)
-
-      {
-        // FIXME Use environment!
-        return findClass(first, second != NIL);
-      }
-    };
-
-  // ### %set-find-class
-  private static final Primitive _SET_FIND_CLASS =
-    new JavaPrimitive("%set-find-class", PACKAGE_SYS, true)
-    {
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second)
-
-      {
-        final SubLSymbol name = checkSymbol(first);
-        if (second == NIL)
-          {
-            removeClass(name);
-            return second;
-          }
-        final LispClass c = checkClass(second);
-        addClass(name, c);
-        return second;
-      }
-    };
-
-  // ### subclassp
-  private static final Primitive SUBCLASSP =
-    new JavaPrimitive(LispSymbols.SUBCLASSP, "class")
-    {
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second)
-
-      {
-        final LispClass c = checkClass(first);
-        return c.subclassp(second) ? T : NIL;
-      }
-    };
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.CLASS)
+			return Lisp.T;
+		if (type == StandardClass.CLASS)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

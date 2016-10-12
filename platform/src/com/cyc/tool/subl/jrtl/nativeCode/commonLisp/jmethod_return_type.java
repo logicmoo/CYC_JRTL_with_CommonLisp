@@ -33,33 +33,27 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import java.lang.reflect.Method;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
 // ### jmethod-return-type method => class
-public final class jmethod_return_type extends JavaPrimitive
-{
-    private jmethod_return_type()
-    {
-        super(LispSymbols.JMETHOD_RETURN_TYPE, "method",
-"Returns a reference to the Class object that represents the formal return type of METHOD.");
-    }
+public class jmethod_return_type extends JavaPrimitive {
+	private static Primitive JMETHOD_RETURN_TYPE = new jmethod_return_type();
 
-    @Override
-    public SubLObject execute(SubLObject arg)
+	private jmethod_return_type() {
+		super(LispSymbols.JMETHOD_RETURN_TYPE, "method",
+				"Returns a reference to the Class object that represents the formal return type of METHOD.");
+	}
 
-    {
-        if (arg instanceof JavaObject) {
-            Object method = ((JavaObject)arg).getObject();
-            if (method instanceof Method)
-            return new ABCLJavaObject(((Method)method).getReturnType());
-        }
-        return error(new LispError(arg.writeToString() + " does not designate a Java method."));
-    }
+	public SubLObject execute(SubLObject arg)
 
-    private static final Primitive JMETHOD_RETURN_TYPE = new jmethod_return_type();
+	{
+		if (arg instanceof JavaObject) {
+			Object method = ((JavaObject) arg).getObject();
+			if (method instanceof Method)
+				return new ABCLJavaObject(((Method) method).getReturnType());
+		}
+		return Lisp.error(new LispError(arg.writeToString() + " does not designate a Java method."));
+	}
 }

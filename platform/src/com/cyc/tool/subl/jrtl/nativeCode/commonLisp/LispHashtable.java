@@ -33,285 +33,243 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public abstract class LispHashtable extends AbstractLispObject implements HashTable
-{
-  private static final int DEFAULT_SIZE = 16;
+public abstract class LispHashtable extends AbstractLispObject implements HashTable {
+	protected static class HashEntry {
+		SubLObject key;
+		SubLObject value;
+		HashEntry next;
 
-  protected static final float loadFactor = 0.75f;
+		HashEntry(SubLObject key, SubLObject value) {
+			this.key = key;
+			this.value = value;
+		}
+	}
 
-  protected final SubLObject rehashSize;
-  protected final SubLObject rehashThreshold;
+	private static int DEFAULT_SIZE = 16;
 
-  // The rounded product of the capacity and the load factor. When the number
-  // of elements exceeds the threshold, the implementation calls rehash().
-  protected int threshold;
+	protected static float loadFactor = 0.75f;
 
-  // Array containing the actual key-value mappings.
-  protected HashEntry[] buckets;
+	protected static int calculateInitialCapacity(int size) {
+		int capacity = 1;
+		while (capacity < size)
+			capacity <<= 1;
+		return capacity;
+	}
 
-  // The number of key-value pairs.
-  protected int count;
+	protected SubLObject rehashSize;
 
-  protected LispHashtable()
-  {
-    rehashSize = makeSingle(1.5f); // FIXME
-    rehashThreshold = makeSingle(0.75f); // FIXME
-    buckets = new HashEntry[DEFAULT_SIZE];
-    threshold = (int) (DEFAULT_SIZE * loadFactor);
-  }
+	protected SubLObject rehashThreshold;
 
-  protected LispHashtable(int size, SubLObject rehashSize,
-                      SubLObject rehashThreshold)
-  {
-    this.rehashSize = rehashSize;
-    this.rehashThreshold = rehashThreshold;
-    buckets = new HashEntry[size];
-    threshold = (int) (size * loadFactor);
-  }
+	// The rounded product of the capacity and the load factor. When the number
+	// of elements exceeds the threshold, the implementation calls rehash().
+	protected int threshold;
 
-  protected static int calculateInitialCapacity(int size)
-  {
-    int capacity = 1;
-    while (capacity < size)
-      capacity <<= 1;
-    return capacity;
-  }
+	// Array containing the actual key-value mappings.
+	protected HashEntry[] buckets;
 
-  public final SubLObject getRehashSize()
-  {
-    return rehashSize;
-  }
+	// The number of key-value pairs.
+	protected int count;
 
-  public final SubLObject getRehashThreshold()
-  {
-    return rehashThreshold;
-  }
+	protected LispHashtable() {
+		this.rehashSize = LispObjectFactory.makeSingle(1.5f); // FIXME
+		this.rehashThreshold = LispObjectFactory.makeSingle(0.75f); // FIXME
+		this.buckets = new HashEntry[LispHashtable.DEFAULT_SIZE];
+		this.threshold = (int) (LispHashtable.DEFAULT_SIZE * LispHashtable.loadFactor);
+	}
 
-  public int getSize()
-  {
-    return buckets.length;
-  }
+	protected LispHashtable(int size, SubLObject rehashSize, SubLObject rehashThreshold) {
+		this.rehashSize = rehashSize;
+		this.rehashThreshold = rehashThreshold;
+		this.buckets = new HashEntry[size];
+		this.threshold = (int) (size * LispHashtable.loadFactor);
+	}
 
-  public int getCount()
-  {
-    return count;
-  }
+	public SubLObject classOf() {
+		return BuiltInClass.HASH_TABLE;
+	}
 
-  public abstract SubLSymbol getTest();
+	public synchronized void clear() {
+		for (int i = this.buckets.length; i-- > 0;)
+			this.buckets[i] = null;
+		this.count = 0;
+	}
 
-  @Override
-  public SubLObject typeOf()
-  {
-    return LispSymbols.HASH_TABLE;
-  }
+	// Returns a list of (key . value) pairs.
+	public SubLObject ENTRIES() {
+		SubLObject list = Lisp.NIL;
+		for (int i = this.buckets.length; i-- > 0;) {
+			HashEntry e = this.buckets[i];
+			while (e != null) {
+				list = LispObjectFactory.makeCons(LispObjectFactory.makeCons(e.key, e.value), list);
+				e = e.next;
+			}
+		}
+		return list;
+	}
 
-  @Override
-  public SubLObject classOf()
-  {
-    return BuiltInClass.HASH_TABLE;
-  }
+	public boolean equalp(SubLObject obj) {
+		if (this == obj)
+			return true;
+		if (obj instanceof HashTable) {
+			HashTable ht = (HashTable) obj;
+			if (this.count != ht.getCount())
+				return false;
+			if (this.getTest() != ht.getTest())
+				return false;
+			SubLObject entries = this.ENTRIES();
+			while (entries != Lisp.NIL) {
+				SubLObject entry = entries.first();
+				SubLObject key = entry.first();
+				SubLObject value = entry.rest();
+				if (!value.equalp(ht.getHT(key)))
+					return false;
+				entries = entries.rest();
+			}
+			return true;
+		}
+		return false;
+	}
 
-  @Override
-  public SubLObject typep(SubLObject type)
-  {
-    if (type == LispSymbols.HASH_TABLE)
-      return T;
-    if (type == BuiltInClass.HASH_TABLE)
-      return T;
-    return super.typep(type);
-  }
+	public int getCount() {
+		return this.count;
+	}
 
-  @Override
-  public boolean equalp(SubLObject obj)
-  {
-    if (this == obj)
-      return true;
-    if (obj instanceof HashTable)
-      {
-        HashTable ht = (HashTable) obj;
-        if (count != ht.getCount())
-          return false;
-        if (getTest() != ht.getTest())
-          return false;
-        SubLObject entries = ENTRIES();
-        while (entries != NIL)
-          {
-            SubLObject entry = entries.first();
-            SubLObject key = entry.first();
-            SubLObject value = entry.rest();
-            if (!value.equalp(ht.getHT(key)))
-              return false;
-            entries = entries.rest();
-          }
-        return true;
-      }
-    return false;
-  }
+	// gethash key hash-table &optional default => value, present-p
+	public synchronized SubLObject gethash(SubLObject key)
 
-  @Override
-  public SubLObject getParts()
-  {
-    SubLObject parts = NIL;
-    for (int i = 0; i < buckets.length; i++)
-      {
-        HashEntry e = buckets[i];
-        while (e != null)
-          {
-            parts = parts.push(makeCons("KEY [bucket " + i + "]", e.key));
-            parts = parts.push(makeCons("VALUE", e.value));
-            e = e.next;
-          }
-      }
-    return parts.nreverse();
-  }
+	{
+		SubLObject value = this.getHT(key);
+		SubLObject presentp;
+		if (value == null)
+			value = presentp = Lisp.NIL;
+		else
+			presentp = Lisp.T;
+		return LispThread.currentThread().setValues(value, presentp);
+	}
 
-  public synchronized void clear()
-  {
-    for (int i = buckets.length; i-- > 0;)
-      buckets[i] = null;
-    count = 0;
-  }
+	// gethash key hash-table &optional default => value, present-p
+	public synchronized SubLObject gethash(SubLObject key, SubLObject defaultValue)
 
-  // gethash key hash-table &optional default => value, present-p
-  public synchronized SubLObject gethash(SubLObject key)
+	{
+		SubLObject value = this.getHT(key);
+		SubLObject presentp;
+		if (value == null) {
+			value = defaultValue;
+			presentp = Lisp.NIL;
+		} else
+			presentp = Lisp.T;
+		return LispThread.currentThread().setValues(value, presentp);
+	}
 
-  {
-    SubLObject value = getHT(key);
-    final SubLObject presentp;
-    if (value == null)
-      value = presentp = NIL;
-    else
-      presentp = T;
-    return LispThread.currentThread().setValues(value, presentp);
-  }
+	public synchronized SubLObject gethash1(SubLObject key)
 
-  // gethash key hash-table &optional default => value, present-p
-  public synchronized SubLObject gethash(SubLObject key,
-                                         SubLObject defaultValue)
+	{
+		SubLObject value = this.getHT(key);
+		return value != null ? value : Lisp.NIL;
+	}
 
-  {
-    SubLObject value = getHT(key);
-    final SubLObject presentp;
-    if (value == null)
-      {
-        value = defaultValue;
-        presentp = NIL;
-      }
-    else
-      presentp = T;
-    return LispThread.currentThread().setValues(value, presentp);
-  }
+	public abstract SubLObject getHT(SubLObject key);
 
-  public synchronized SubLObject gethash1(SubLObject key)
+	public SubLObject getParts() {
+		SubLObject parts = Lisp.NIL;
+		for (int i = 0; i < this.buckets.length; i++) {
+			HashEntry e = this.buckets[i];
+			while (e != null) {
+				parts = parts.push(LispObjectFactory.makeCons("KEY [bucket " + i + "]", e.key));
+				parts = parts.push(LispObjectFactory.makeCons("VALUE", e.value));
+				e = e.next;
+			}
+		}
+		return parts.nreverse();
+	}
 
-  {
-    final SubLObject value = getHT(key);
-    return value != null ? value : NIL;
-  }
+	public SubLObject getRehashSize() {
+		return this.rehashSize;
+	}
 
-  public synchronized SubLObject puthash(SubLObject key, SubLObject newValue)
+	public SubLObject getRehashThreshold() {
+		return this.rehashThreshold;
+	}
 
-  {
-    putVoid(key, newValue);
-    return newValue;
-  }
+	public int getSize() {
+		return this.buckets.length;
+	}
 
-  // remhash key hash-table => generalized-boolean
-  public synchronized SubLObject remhash(SubLObject key)
+	public abstract SubLSymbol getTest();
 
-  {
-    // A value in a Lisp hash table can never be null, so...
-    return removeHT(key) != null ? T : NIL;
-  }
+	public SubLObject MAPHASH(SubLObject function) {
+		for (int i = this.buckets.length; i-- > 0;) {
+			HashEntry e = this.buckets[i];
+			while (e != null) {
+				function.execute(e.key, e.value);
+				e = e.next;
+			}
+		}
+		return Lisp.NIL;
+	}
 
-  @Override
-  public String writeToString()
-  {
-    if (LispSymbols.PRINT_READABLY.symbolValue(LispThread.currentThread()) != NIL)
-      {
-        error(new PrintNotReadable(list(Keyword.OBJECT, this)));
-        return null; // Not reached.
-      }
-    StringBuilder sb = new StringBuilder(getTest().writeToString());
-    sb.append(' ');
-    sb.append(LispSymbols.HASH_TABLE.writeToString());
-    sb.append(' ');
-    sb.append(count);
-    if (count == 1)
-      sb.append(" entry");
-    else
-      sb.append(" entries");
-    sb.append(", ");
-    sb.append(buckets.length);
-    sb.append(" buckets");
-    return unreadableString(sb.toString());
-  }
+	// For EQUALP hash tables.
 
-  public abstract SubLObject getHT(SubLObject key);
+	public int psxhash() {
+		long result = 2062775257; // Chosen at random.
+		result = Lisp.mix(result, this.count);
+		result = Lisp.mix(result, this.getTest().sxhash());
+		return (int) (result & 0x7fffffff);
+	}
 
-  public abstract void putVoid(SubLObject key, SubLObject value)
-   ;
+	public synchronized SubLObject puthash(SubLObject key, SubLObject newValue)
 
-  public abstract SubLObject removeHT(SubLObject key);
+	{
+		this.putVoid(key, newValue);
+		return newValue;
+	}
 
-  public abstract void rehash();
+	public abstract void putVoid(SubLObject key, SubLObject value);
 
-  // Returns a list of (key . value) pairs.
-  public SubLObject ENTRIES()
-  {
-    SubLObject list = NIL;
-    for (int i = buckets.length; i-- > 0;)
-      {
-        HashEntry e = buckets[i];
-        while (e != null)
-          {
-            list = makeCons(makeCons(e.key, e.value), list);
-            e = e.next;
-          }
-      }
-    return list;
-  }
+	public abstract void rehash();
 
-  public SubLObject MAPHASH(SubLObject function)
-  {
-    for (int i = buckets.length; i-- > 0;)
-      {
-        HashEntry e = buckets[i];
-        while (e != null)
-          {
-            function.execute(e.key, e.value);
-            e = e.next;
-          }
-      }
-    return NIL;
-  }
+	// remhash key hash-table => generalized-boolean
+	public synchronized SubLObject remhash(SubLObject key)
 
-  protected static class HashEntry
-  {
-    SubLObject key;
-    SubLObject value;
-    HashEntry next;
+	{
+		// A value in a Lisp hash table can never be null, so...
+		return this.removeHT(key) != null ? Lisp.T : Lisp.NIL;
+	}
 
-    HashEntry(SubLObject key, SubLObject value)
-    {
-      this.key = key;
-      this.value = value;
-    }
-  }
+	public abstract SubLObject removeHT(SubLObject key);
 
-  // For EQUALP hash tables.
-  @Override
-  public int psxhash()
-  {
-    long result = 2062775257; // Chosen at random.
-    result = mix(result, count);
-    result = mix(result, getTest().sxhash());
-    return (int) (result & 0x7fffffff);
-  }
+	public SubLObject typeOf() {
+		return LispSymbols.HASH_TABLE;
+	}
+
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.HASH_TABLE)
+			return Lisp.T;
+		if (type == BuiltInClass.HASH_TABLE)
+			return Lisp.T;
+		return super.typep(type);
+	}
+
+	public String writeToString() {
+		if (LispSymbols.PRINT_READABLY.symbolValue(LispThread.currentThread()) != Lisp.NIL) {
+			Lisp.error(new PrintNotReadable(Lisp.list(Keyword.OBJECT, this)));
+			return null; // Not reached.
+		}
+		StringBuilder sb = new StringBuilder(this.getTest().writeToString());
+		sb.append(' ');
+		sb.append(LispSymbols.HASH_TABLE.writeToString());
+		sb.append(' ');
+		sb.append(this.count);
+		if (this.count == 1)
+			sb.append(" entry");
+		else
+			sb.append(" entries");
+		sb.append(", ");
+		sb.append(this.buckets.length);
+		sb.append(" buckets");
+		return this.unreadableString(sb.toString());
+	}
 }

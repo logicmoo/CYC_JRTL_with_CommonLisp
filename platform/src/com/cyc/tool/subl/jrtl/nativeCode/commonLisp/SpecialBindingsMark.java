@@ -33,26 +33,26 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-/** Class used to mark special bindings state.
- * Returned by LispThread.markSpecialBindings() and consumed by
+/**
+ * Class used to mark special bindings state. Returned by
+ * LispThread.markSpecialBindings() and consumed by
  * LispThread.resetSpecialBindings() to abstract from the implementation.
  */
 final public class SpecialBindingsMark {
 
-    /** The index in the specials array of the saved binding. */
-    int idx;
+	/** The index in the specials array of the saved binding. */
+	int idx;
 
-    /** Special binding state to be restored */
-    // package level access
-    SpecialBinding binding;
-    SpecialBindingsMark next;
+	/** Special binding state to be restored */
+	// package level access
+	SpecialBinding binding;
+	SpecialBindingsMark next;
 
-    /** Constructor to be called by LispThread.markSpecialBindings() only */
-    // package level access
-    SpecialBindingsMark(int idx, SpecialBinding binding,
-                        SpecialBindingsMark next) {
-        this.idx = idx;
-        this.binding = binding;
-        this.next = next;
-    }
+	/** Constructor to be called by LispThread.markSpecialBindings() only */
+	// package level access
+	SpecialBindingsMark(int idx, SpecialBinding binding, SpecialBindingsMark next) {
+		this.idx = idx;
+		this.binding = binding;
+		this.next = next;
+	}
 }

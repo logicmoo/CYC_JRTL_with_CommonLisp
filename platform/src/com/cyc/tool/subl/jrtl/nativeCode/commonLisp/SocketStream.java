@@ -33,60 +33,45 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import java.net.Socket;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class SocketStream extends TwoWayStream
-{
-    private final Socket socket;
+public class SocketStream extends TwoWayStream {
+	private Socket socket;
 
-    public SocketStream(Socket socket, LispStream in, LispStream out)
-    {
-	super(in, out);
-        this.socket = socket;
-    }
-
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.SOCKET_STREAM;
-    }
-
-    @Override
-    public SubLObject classOf()
-    {
-        return BuiltInClass.SOCKET_STREAM;
-    }
-
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.SOCKET_STREAM)
-            return T;
-        if (type == BuiltInClass.SOCKET_STREAM)
-            return T;
-        return super.typep(type);
-    }
-
-    @Override
-    public SubLObject close(SubLObject abort)
-    {
-	try {
-	    socket.close();
-	    setOpen(false);
-	    return T;
-	} catch (Exception e) {
-	    return error(new LispError(e.getMessage()));
+	public SocketStream(Socket socket, LispStream in, LispStream out) {
+		super(in, out);
+		this.socket = socket;
 	}
-    }
 
-    @Override
-    public String toString()
-    {
-        return unreadableString("SOCKET-STREAM");
-    }
+	public SubLObject classOf() {
+		return BuiltInClass.SOCKET_STREAM;
+	}
+
+	public SubLObject close(SubLObject abort) {
+		try {
+			this.socket.close();
+			this.setOpen(false);
+			return Lisp.T;
+		} catch (Exception e) {
+			return Lisp.error(new LispError(e.getMessage()));
+		}
+	}
+
+	public String toString() {
+		return this.unreadableString("SOCKET-STREAM");
+	}
+
+	public SubLObject typeOf() {
+		return LispSymbols.SOCKET_STREAM;
+	}
+
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.SOCKET_STREAM)
+			return Lisp.T;
+		if (type == BuiltInClass.SOCKET_STREAM)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

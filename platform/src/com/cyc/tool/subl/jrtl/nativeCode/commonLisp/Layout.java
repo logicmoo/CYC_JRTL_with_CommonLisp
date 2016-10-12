@@ -33,250 +33,205 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public class Layout extends AbstractLispObject
-{
-  private final LispClass lispClass;
-  public final EqHashTable slotTable;
+public class Layout extends AbstractLispObject {
+	// ### make-layout
+	private static Primitive MAKE_LAYOUT = new JavaPrimitive("make-layout", Lisp.PACKAGE_SYS, true,
+			"class instance-slots class-slots") {
 
-  final SubLObject[] slotNames;
-  final SubLObject sharedSlots;
+		public SubLObject execute(SubLObject first, SubLObject second, SubLObject third)
 
-  private boolean invalid;
+		{
+			return new Layout(Lisp.checkClass(first), Lisp.checkList(second), Lisp.checkList(third));
+		}
 
-  public Layout(LispClass lispClass, SubLObject instanceSlots, SubLObject sharedSlots)
-  {
-    this.lispClass = lispClass;
-    Debug.assertTrue(instanceSlots.isList());
-    int length = instanceSlots.cl_length();
-    slotNames = makeLispObjectArray(length);
-    int i = 0;
+	};
+	// ### layout-class
+	private static Primitive LAYOUT_CLASS = new JavaPrimitive("layout-class", Lisp.PACKAGE_SYS, true, "layout") {
 
-    while (instanceSlots != NIL)
-      {
-        slotNames[i++] = instanceSlots.first();
-        instanceSlots = instanceSlots.rest();
-      }
+		public SubLObject execute(SubLObject arg) {
+			return Lisp.checkLayout(arg).getLispClass();
+		}
+	};
 
-    Debug.assertTrue(i == length);
-    this.sharedSlots = sharedSlots;
-    slotTable = initializeSlotTable(slotNames);
-  }
+	// ### layout-length
+	private static Primitive LAYOUT_LENGTH = new JavaPrimitive("layout-length", Lisp.PACKAGE_SYS, true, "layout") {
 
-  public Layout(LispClass lispClass, SubLObject[] instanceSlotNames,
-                SubLObject sharedSlots)
-  {
-    this.lispClass = lispClass;
-    this.slotNames = instanceSlotNames;
-    this.sharedSlots = sharedSlots;
-    slotTable = initializeSlotTable(slotNames);
-  }
+		public SubLObject execute(SubLObject arg) {
+			return LispObjectFactory.makeInteger(Lisp.checkLayout(arg).slotNames.length);
+		}
+	};
+	// ### layout-slot-index layout slot-name => index
+	private static Primitive LAYOUT_SLOT_INDEX = new JavaPrimitive("layout-slot-index", Lisp.PACKAGE_SYS, true) {
 
-  // Copy constructor.
-  Layout(Layout oldLayout)
-  {
-    lispClass = oldLayout.getLispClass();
-    slotNames = oldLayout.slotNames;
-    sharedSlots = oldLayout.sharedSlots;
-    slotTable = initializeSlotTable(slotNames);
-  }
+		public SubLObject execute(SubLObject first, SubLObject second)
 
-  private EqHashTable initializeSlotTable(SubLObject[] slotNames)
-  {
-    EqHashTable ht = new EqHashTable(slotNames.length, NIL, NIL);
-    for (int i = slotNames.length; i-- > 0;)
-      ht.putVoid(slotNames[i], LispObjectFactory.makeInteger(i));
-    return ht;
-  }
+		{
+			SubLObject slotNames[] = Lisp.checkLayout(first).slotNames;
+			for (int i = slotNames.length; i-- > 0;)
+				if (slotNames[i] == second)
+					return LispObjectFactory.makeInteger(i);
+			return Lisp.NIL;
+		}
+	};
 
-  @Override
-  public SubLObject getParts()
-  {
-    SubLObject result = NIL;
-    result = result.push(makeCons("class", getLispClass()));
-    for (int i = 0; i < slotNames.length; i++)
-      {
-        result = result.push(makeCons("slot " + i, slotNames[i]));
-      }
-    result = result.push(makeCons("shared slots", sharedSlots));
-    return result.nreverse();
-  }
+	// ### layout-slot-location layout slot-name => location
+	private static Primitive LAYOUT_SLOT_LOCATION = new JavaPrimitive("layout-slot-location", Lisp.PACKAGE_SYS, true,
+			"layout slot-name") {
 
-  public LispClass getLispClass()
-  {
-    return lispClass;
-  }
+		public SubLObject execute(SubLObject first, SubLObject second)
 
-  public boolean isInvalid()
-  {
-    return invalid;
-  }
+		{
+			Layout layOutFirst = Lisp.checkLayout(first);
+			SubLObject slotNames[] = layOutFirst.slotNames;
+			int limit = slotNames.length;
+			for (int i = 0; i < limit; i++)
+				if (slotNames[i] == second)
+					return LispObjectFactory.makeInteger(i);
+			// Reaching here, it's not an instance slot.
+			SubLObject rest = layOutFirst.sharedSlots;
+			while (rest != Lisp.NIL) {
+				SubLObject location = rest.first();
+				if (location.first() == second)
+					return location;
+				rest = rest.rest();
+			}
+			return Lisp.NIL;
+		}
+	};
 
-  public void invalidate()
-  {
-    invalid = true;
-  }
+	// ### %make-instances-obsolete class => class
+	private static Primitive _MAKE_INSTANCES_OBSOLETE = new JavaPrimitive("%make-instances-obsolete", Lisp.PACKAGE_SYS,
+			true, "class") {
 
-  public SubLObject[] getSlotNames()
-  {
-    return slotNames;
-  }
+		public SubLObject execute(SubLObject arg) {
+			LispClass lispClass = Lisp.checkClass(arg);
+			Layout oldLayout = lispClass.getClassLayout();
+			if (oldLayout == null) {
+				oldLayout = null;
+				System.err.println("CANT %make-instances-obsolete " + lispClass);
+				return arg;
+			}
+			Layout newLayout = new Layout(oldLayout);
+			lispClass.setClassLayout(newLayout);
+			oldLayout.invalidate();
+			return arg;
+		}
+	};
 
-  public int getLength()
-  {
-    return slotNames.length;
-  }
+	private LispClass lispClass;
 
-  public SubLObject getSharedSlots()
-  {
-    return sharedSlots;
-  }
+	public EqHashTable slotTable;
 
-  @Override
-  public String writeToString()
-  {
-    return unreadableString(LispSymbols.LAYOUT);
-  }
+	SubLObject[] slotNames;
 
-  // Generates a list of slot definitions for the slot names in this layout.
-  protected SubLObject generateSlotDefinitions()
-  {
-    SubLObject list = NIL;
-    for (int i = slotNames.length; i-- > 0;)
-      list = list.push(new SlotDefinitionObject(slotNames[i], NIL));
+	SubLObject sharedSlots;
 
-    return list;
-  }
+	private boolean invalid;
 
-  // ### make-layout
-  private static final Primitive MAKE_LAYOUT =
-    new JavaPrimitive("make-layout", PACKAGE_SYS, true,
-                  "class instance-slots class-slots")
-    {
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second,
-                                SubLObject third)
+	// Copy constructor.
+	Layout(Layout oldLayout) {
+		this.lispClass = oldLayout.getLispClass();
+		this.slotNames = oldLayout.slotNames;
+		this.sharedSlots = oldLayout.sharedSlots;
+		this.slotTable = this.initializeSlotTable(this.slotNames);
+	}
 
-      {
-          return new Layout(checkClass(first), checkList(second),
-                              checkList(third));
-      }
+	public Layout(LispClass lispClass, SubLObject instanceSlots, SubLObject sharedSlots) {
+		this.lispClass = lispClass;
+		Debug.assertTrue(instanceSlots.isList());
+		int length = instanceSlots.cl_length();
+		this.slotNames = LispObjectFactory.makeLispObjectArray(length);
+		int i = 0;
 
-    };
+		while (instanceSlots != Lisp.NIL) {
+			this.slotNames[i++] = instanceSlots.first();
+			instanceSlots = instanceSlots.rest();
+		}
 
-  // ### layout-class
-  private static final Primitive LAYOUT_CLASS =
-    new JavaPrimitive("layout-class", PACKAGE_SYS, true, "layout")
-    {
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-          return checkLayout(arg).getLispClass();
-      }
-    };
+		Debug.assertTrue(i == length);
+		this.sharedSlots = sharedSlots;
+		this.slotTable = this.initializeSlotTable(this.slotNames);
+	}
 
-  // ### layout-length
-  private static final Primitive LAYOUT_LENGTH =
-    new JavaPrimitive("layout-length", PACKAGE_SYS, true, "layout")
-    {
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-          return LispObjectFactory.makeInteger(checkLayout(arg).slotNames.length);
-      }
-    };
+	public Layout(LispClass lispClass, SubLObject[] instanceSlotNames, SubLObject sharedSlots) {
+		this.lispClass = lispClass;
+		this.slotNames = instanceSlotNames;
+		this.sharedSlots = sharedSlots;
+		this.slotTable = this.initializeSlotTable(this.slotNames);
+	}
 
-  public int getSlotIndex(SubLObject slotName)
-  {
-    SubLObject index = slotTable.getHT(slotName);
-    if (index != null)
-      return ((Fixnum)index).value;
-    return -1;
-  }
+	// Generates a list of slot definitions for the slot names in this layout.
+	protected SubLObject generateSlotDefinitions() {
+		SubLObject list = Lisp.NIL;
+		for (int i = this.slotNames.length; i-- > 0;)
+			list = list.push(new SlotDefinitionObject(this.slotNames[i], Lisp.NIL));
 
-  public SubLObject getSharedSlotLocation(SubLObject slotName)
+		return list;
+	}
 
-  {
-    SubLObject rest = sharedSlots;
-    while (rest != NIL)
-      {
-        SubLObject location = rest.first();
-        if (location.first() == slotName)
-          return location;
-        rest = rest.rest();
-      }
-    return null;
-  }
+	public int getLength() {
+		return this.slotNames.length;
+	}
 
-  // ### layout-slot-index layout slot-name => index
-  private static final Primitive LAYOUT_SLOT_INDEX =
-    new JavaPrimitive("layout-slot-index", PACKAGE_SYS, true)
-    {
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second)
+	public LispClass getLispClass() {
+		return this.lispClass;
+	}
 
-      {
-          final SubLObject slotNames[] = checkLayout(first).slotNames;
-          for (int i = slotNames.length; i-- > 0;)
-            {
-              if (slotNames[i] == second)
-                return LispObjectFactory.makeInteger(i);
-            }
-          return NIL;
-      }
-    };
+	public SubLObject getParts() {
+		SubLObject result = Lisp.NIL;
+		result = result.push(LispObjectFactory.makeCons("class", this.getLispClass()));
+		for (int i = 0; i < this.slotNames.length; i++)
+			result = result.push(LispObjectFactory.makeCons("slot " + i, this.slotNames[i]));
+		result = result.push(LispObjectFactory.makeCons("shared slots", this.sharedSlots));
+		return result.nreverse();
+	}
 
-  // ### layout-slot-location layout slot-name => location
-  private static final Primitive LAYOUT_SLOT_LOCATION =
-    new JavaPrimitive("layout-slot-location", PACKAGE_SYS, true, "layout slot-name")
-    {
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second)
+	public SubLObject getSharedSlotLocation(SubLObject slotName)
 
-      {
-                final Layout layOutFirst = checkLayout(first);
-            final SubLObject slotNames[] = layOutFirst.slotNames;
-            final int limit = slotNames.length;
-            for (int i = 0; i < limit; i++)
-              {
-                if (slotNames[i] == second)
-                  return LispObjectFactory.makeInteger(i);
-              }
-            // Reaching here, it's not an instance slot.
-            SubLObject rest = layOutFirst.sharedSlots;
-            while (rest != NIL)
-              {
-                SubLObject location = rest.first();
-                if (location.first() == second)
-                  return location;
-                rest = rest.rest();
-              }
-            return NIL;
-          }      
-    };
+	{
+		SubLObject rest = this.sharedSlots;
+		while (rest != Lisp.NIL) {
+			SubLObject location = rest.first();
+			if (location.first() == slotName)
+				return location;
+			rest = rest.rest();
+		}
+		return null;
+	}
 
-  // ### %make-instances-obsolete class => class
-  private static final Primitive _MAKE_INSTANCES_OBSOLETE =
-    new JavaPrimitive("%make-instances-obsolete", PACKAGE_SYS, true, "class")
-    {
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-        final LispClass lispClass = checkClass(arg);
-        Layout oldLayout = lispClass.getClassLayout();
-        if (oldLayout==null) {
-        	oldLayout = null;
-        	System.err.println("CANT %make-instances-obsolete " + lispClass);
-        	return arg;
-        }
-        Layout newLayout = new Layout(oldLayout);
-        lispClass.setClassLayout(newLayout);
-        oldLayout.invalidate();
-        return arg;
-      }
-    };
+	public SubLObject getSharedSlots() {
+		return this.sharedSlots;
+	}
+
+	public int getSlotIndex(SubLObject slotName) {
+		SubLObject index = this.slotTable.getHT(slotName);
+		if (index != null)
+			return ((Fixnum) index).value;
+		return -1;
+	}
+
+	public SubLObject[] getSlotNames() {
+		return this.slotNames;
+	}
+
+	private EqHashTable initializeSlotTable(SubLObject[] slotNames) {
+		EqHashTable ht = new EqHashTable(slotNames.length, Lisp.NIL, Lisp.NIL);
+		for (int i = slotNames.length; i-- > 0;)
+			ht.putVoid(slotNames[i], LispObjectFactory.makeInteger(i));
+		return ht;
+	}
+
+	public void invalidate() {
+		this.invalid = true;
+	}
+
+	public boolean isInvalid() {
+		return this.invalid;
+	}
+
+	public String writeToString() {
+		return this.unreadableString(LispSymbols.LAYOUT);
+	}
 }

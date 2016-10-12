@@ -33,50 +33,33 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 
-public final class StandardGenericFunctionClass extends StandardClass
-{
-  public static final int SLOT_INDEX_NAME                      = 0;
-  public static final int SLOT_INDEX_LAMBDA_LIST               = 1;
-  public static final int SLOT_INDEX_REQUIRED_ARGS             = 2;
-  public static final int SLOT_INDEX_INITIAL_METHODS           = 3;
-  public static final int SLOT_INDEX_METHODS                   = 4;
-  public static final int SLOT_INDEX_METHOD_CLASS              = 5;
-  public static final int SLOT_INDEX_METHOD_COMBINATION        = 6;
-  public static final int SLOT_INDEX_ARGUMENT_PRECEDENCE_ORDER = 7;
-  public static final int SLOT_INDEX_CLASSES_TO_EMF_TABLE      = 8;
-  public static final int SLOT_INDEX_DOCUMENTATION             = 9;
+public class StandardGenericFunctionClass extends StandardClass {
+	public static int SLOT_INDEX_NAME = 0;
+	public static int SLOT_INDEX_LAMBDA_LIST = 1;
+	public static int SLOT_INDEX_REQUIRED_ARGS = 2;
+	public static int SLOT_INDEX_INITIAL_METHODS = 3;
+	public static int SLOT_INDEX_METHODS = 4;
+	public static int SLOT_INDEX_METHOD_CLASS = 5;
+	public static int SLOT_INDEX_METHOD_COMBINATION = 6;
+	public static int SLOT_INDEX_ARGUMENT_PRECEDENCE_ORDER = 7;
+	public static int SLOT_INDEX_CLASSES_TO_EMF_TABLE = 8;
+	public static int SLOT_INDEX_DOCUMENTATION = 9;
 
-  public StandardGenericFunctionClass()
-  {
-    super(LispSymbols.STANDARD_GENERIC_FUNCTION,
-          list(StandardClass.GENERIC_FUNCTION));
-    SubLPackage pkg = PACKAGE_SYS;
-    SubLObject[] instanceSlotNames =
-      {
-        pkg.intern("NAME"),
-        pkg.intern("LAMBDA-LIST"),
-        pkg.intern("REQUIRED-ARGS"),
-        pkg.intern("INITIAL-METHODS"),
-        pkg.intern("METHODS"),
-        pkg.intern("METHOD-CLASS"),
-        pkg.intern("METHOD-COMBINATION"),
-        pkg.intern("ARGUMENT-PRECEDENCE-ORDER"),
-        pkg.intern("CLASSES-TO-EMF-TABLE"),
-        LispSymbols.DOCUMENTATION
-      };
-    setClassLayout(new Layout(this, instanceSlotNames, NIL));
-    setFinalized(true);
-  }
+	public StandardGenericFunctionClass() {
+		super(LispSymbols.STANDARD_GENERIC_FUNCTION, Lisp.list(StandardClass.GENERIC_FUNCTION));
+		SubLPackage pkg = Lisp.PACKAGE_SYS;
+		SubLObject[] instanceSlotNames = { pkg.intern("NAME"), pkg.intern("LAMBDA-LIST"), pkg.intern("REQUIRED-ARGS"),
+				pkg.intern("INITIAL-METHODS"), pkg.intern("METHODS"), pkg.intern("METHOD-CLASS"),
+				pkg.intern("METHOD-COMBINATION"), pkg.intern("ARGUMENT-PRECEDENCE-ORDER"),
+				pkg.intern("CLASSES-TO-EMF-TABLE"), LispSymbols.DOCUMENTATION };
+		this.setClassLayout(new Layout(this, instanceSlotNames, Lisp.NIL));
+		this.setFinalized(true);
+	}
 
-  @Override
-  public SubLObject allocateInstance()
-  {
-    return new StandardGenericFunction();
-  }
+	public SubLObject allocateInstance() {
+		return new StandardGenericFunction();
+	}
 }

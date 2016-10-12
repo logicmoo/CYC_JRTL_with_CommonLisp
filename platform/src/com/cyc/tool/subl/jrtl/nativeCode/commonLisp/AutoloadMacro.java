@@ -33,91 +33,78 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public final class AutoloadMacro extends Autoload
-{
-    private AutoloadMacro(SubLSymbol symbol)
-    {
-        super(symbol);
-    }
+public class AutoloadMacro extends Autoload {
+	// ### autoload-macro
+	private static Primitive AUTOLOAD_MACRO = new JavaPrimitive("autoload-macro", Lisp.PACKAGE_EXT, true) {
 
-    private AutoloadMacro(SubLSymbol symbol, String fileName)
-    {
-        super(symbol, fileName, null);
-    }
+		public SubLObject execute(SubLObject first) {
+			if (first instanceof SubLSymbol) {
+				SubLSymbol symbol = (SubLSymbol) first;
+				AutoloadMacro.installAutoloadMacro(symbol, null);
+				return Lisp.T;
+			}
+			if (first instanceof SubLCons) {
+				for (SubLObject list = first; list != Lisp.NIL; list = list.rest()) {
+					SubLSymbol symbol = Lisp.checkSymbol(list.first());
+					AutoloadMacro.installAutoloadMacro(symbol, null);
+				}
+				return Lisp.T;
+			}
+			return Lisp.error(new TypeError(first));
+		}
 
-    static void installAutoloadMacro(SubLSymbol symbol, String fileName)
+		public SubLObject execute(SubLObject first, SubLObject second)
 
-    {
-        AutoloadMacro am = new AutoloadMacro(symbol, fileName);
-        if (symbol.getSymbolFunction() instanceof SpecialOperator)
-        	Lisp.put(symbol, LispSymbols.MACROEXPAND_MACRO, am);
-        else
-            symbol.setSymbolFunction(am);
-    }
+		{
+			String fileName = second.getString();
+			if (first instanceof SubLSymbol) {
+				SubLSymbol symbol = (SubLSymbol) first;
+				AutoloadMacro.installAutoloadMacro(symbol, fileName);
+				return Lisp.T;
+			}
+			if (first instanceof SubLCons) {
+				for (SubLObject list = first; list != Lisp.NIL; list = list.rest()) {
+					SubLSymbol symbol = Lisp.checkSymbol(list.first());
+					AutoloadMacro.installAutoloadMacro(symbol, fileName);
+				}
+				return Lisp.T;
+			}
+			return Lisp.error(new TypeError(first));
+		}
+	};
 
-    @Override
-    public void load()
-    {
-        Load.loadSystemFile(getFileName(), true);
-    }
+	static void installAutoloadMacro(SubLSymbol symbol, String fileName)
 
-    @Override
-    public String writeToString()
-    {
-        StringBuffer sb = new StringBuffer("#<AUTOLOAD-MACRO ");
-        sb.append(getSymbol().writeToString());
-        sb.append(" \"");
-        sb.append(getFileName());
-        sb.append("\">");
-        return sb.toString();
-    }
+	{
+		AutoloadMacro am = new AutoloadMacro(symbol, fileName);
+		if (symbol.getSymbolFunction() instanceof SpecialOperator)
+			Lisp.put(symbol, LispSymbols.MACROEXPAND_MACRO, am);
+		else
+			symbol.setSymbolFunction(am);
+	}
 
-    // ### autoload-macro
-    private static final Primitive AUTOLOAD_MACRO =
-        new JavaPrimitive("autoload-macro", PACKAGE_EXT, true)
-    {
-        @Override
-        public SubLObject execute(SubLObject first)
-        {
-            if (first instanceof SubLSymbol) {
-                SubLSymbol symbol = (SubLSymbol) first;
-                installAutoloadMacro(symbol, null);
-                return T;
-            }
-            if (first instanceof SubLCons) {
-                for (SubLObject list = first; list != NIL; list = list.rest()) {
-                    SubLSymbol symbol = checkSymbol(list.first());
-                    installAutoloadMacro(symbol, null);
-                }
-                return T;
-            }
-            return error(new TypeError(first));
-        }
-        @Override
-        public SubLObject execute(SubLObject first, SubLObject second)
+	private AutoloadMacro(SubLSymbol symbol) {
+		super(symbol);
+	}
 
-        {
-            final String fileName = second.getString();
-            if (first instanceof SubLSymbol) {
-                SubLSymbol symbol = (SubLSymbol) first;
-                installAutoloadMacro(symbol, fileName);
-                return T;
-            }
-            if (first instanceof SubLCons) {
-                for (SubLObject list = first; list != NIL; list = list.rest()) {
-                    SubLSymbol symbol = checkSymbol(list.first());
-                    installAutoloadMacro(symbol, fileName);
-                }
-                return T;
-            }
-            return error(new TypeError(first));
-        }
-    };
+	private AutoloadMacro(SubLSymbol symbol, String fileName) {
+		super(symbol, fileName, null);
+	}
+
+	public void load() {
+		Load.loadSystemFile(this.getFileName(), true);
+	}
+
+	public String writeToString() {
+		StringBuffer sb = new StringBuffer("#<AUTOLOAD-MACRO ");
+		sb.append(this.getSymbol().writeToString());
+		sb.append(" \"");
+		sb.append(this.getFileName());
+		sb.append("\">");
+		return sb.toString();
+	}
 }

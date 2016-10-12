@@ -33,81 +33,63 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public class CellError extends LispError
-{
-    protected CellError(LispClass cls)
-    {
-        super(cls);
-    }
+public class CellError extends LispError {
+	protected CellError(LispClass cls) {
+		super(cls);
+	}
 
-    public CellError(SubLObject initArgs)
-    {
-        super(StandardClass.CELL_ERROR);
-        initialize(initArgs);
-    }
+	public CellError(SubLObject initArgs) {
+		super(StandardClass.CELL_ERROR);
+		this.initialize(initArgs);
+	}
 
-    @Override
-    protected void initialize(SubLObject initArgs)
-    {
-        super.initialize(initArgs);
-        SubLObject name = NIL;
-        while (initArgs != NIL) {
-            SubLObject first = initArgs.first();
-            initArgs = initArgs.rest();
-            if (first == Keyword.NAME) {
-                name = initArgs.first();
-                break;
-            }
-            initArgs = initArgs.rest();
-        }
-        setCellName(name);
-    }
+	public SubLObject classOf() {
+		return StandardClass.CELL_ERROR;
+	}
 
-    public final SubLObject getCellName()
-    {
-        return getInstanceSlotValue(LispSymbols.NAME);
-    }
+	public SubLObject getCellName() {
+		return this.getInstanceSlotValue(LispSymbols.NAME);
+	}
 
-    protected final void setCellName(SubLObject name)
-    {
-        setInstanceSlotValue(LispSymbols.NAME, name);
-    }
+	public String getMessage() {
+		if (LispSymbols.PRINT_ESCAPE.symbolValue() == Lisp.NIL)
+			return super.getMessage();
+		StringBuffer sb = new StringBuffer(this.typeOf().writeToString());
+		sb.append(' ');
+		sb.append(this.getCellName().writeToString());
+		return this.unreadableString(sb.toString());
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.CELL_ERROR;
-    }
+	protected void initialize(SubLObject initArgs) {
+		super.initialize(initArgs);
+		SubLObject name = Lisp.NIL;
+		while (initArgs != Lisp.NIL) {
+			SubLObject first = initArgs.first();
+			initArgs = initArgs.rest();
+			if (first == Keyword.NAME) {
+				name = initArgs.first();
+				break;
+			}
+			initArgs = initArgs.rest();
+		}
+		this.setCellName(name);
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.CELL_ERROR;
-    }
+	protected void setCellName(SubLObject name) {
+		this.setInstanceSlotValue(LispSymbols.NAME, name);
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.CELL_ERROR)
-            return T;
-        if (type == StandardClass.CELL_ERROR)
-            return T;
-        return super.typep(type);
-    }
+	public SubLObject typeOf() {
+		return LispSymbols.CELL_ERROR;
+	}
 
-    @Override
-    public String getMessage()
-    {
-        if (LispSymbols.PRINT_ESCAPE.symbolValue() == NIL)
-            return super.getMessage();
-        StringBuffer sb = new StringBuffer(typeOf().writeToString());
-        sb.append(' ');
-        sb.append(getCellName().writeToString());
-        return unreadableString(sb.toString());
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.CELL_ERROR)
+			return Lisp.T;
+		if (type == StandardClass.CELL_ERROR)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

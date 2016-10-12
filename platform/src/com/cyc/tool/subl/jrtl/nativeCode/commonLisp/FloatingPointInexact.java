@@ -33,38 +33,27 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class FloatingPointInexact extends ArithmeticError
-{
-    public FloatingPointInexact(SubLObject initArgs)
-    {
-        super(StandardClass.FLOATING_POINT_INEXACT);
-        initialize(initArgs);
-    }
+public class FloatingPointInexact extends ArithmeticError {
+	public FloatingPointInexact(SubLObject initArgs) {
+		super(StandardClass.FLOATING_POINT_INEXACT);
+		this.initialize(initArgs);
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.FLOATING_POINT_INEXACT;
-    }
+	public SubLObject classOf() {
+		return StandardClass.FLOATING_POINT_INEXACT;
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.FLOATING_POINT_INEXACT;
-    }
+	public SubLObject typeOf() {
+		return LispSymbols.FLOATING_POINT_INEXACT;
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.FLOATING_POINT_INEXACT)
-            return T;
-        if (type == StandardClass.FLOATING_POINT_INEXACT)
-            return T;
-        return super.typep(type);
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.FLOATING_POINT_INEXACT)
+			return Lisp.T;
+		if (type == StandardClass.FLOATING_POINT_INEXACT)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

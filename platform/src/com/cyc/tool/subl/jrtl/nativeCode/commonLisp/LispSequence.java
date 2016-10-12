@@ -5,8 +5,10 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLSequence;
 
 public interface LispSequence extends SubLObject, SubLSequence {
 
-  public abstract void fillVoid(SubLObject obj);
-  public void aset(int index, SubLObject obj);
-  public SubLObject NTH(int index);
- 
+	public void aset(int index, SubLObject obj);
+
+	public abstract void fillVoid(SubLObject obj);
+
+	public SubLObject NTH(int index);
+
 }

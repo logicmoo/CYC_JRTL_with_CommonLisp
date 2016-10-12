@@ -33,43 +33,29 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 
-public final class StandardMethodClass extends StandardClass
-{
-  public static final int SLOT_INDEX_GENERIC_FUNCTION = 0;
-  public static final int SLOT_INDEX_LAMBDA_LIST      = 1;
-  public static final int SLOT_INDEX_SPECIALIZERS     = 2;
-  public static final int SLOT_INDEX_QUALIFIERS       = 3;
-  public static final int SLOT_INDEX_FUNCTION         = 4;
-  public static final int SLOT_INDEX_FAST_FUNCTION    = 5;
-  public static final int SLOT_INDEX_DOCUMENTATION    = 6;
+public class StandardMethodClass extends StandardClass {
+	public static int SLOT_INDEX_GENERIC_FUNCTION = 0;
+	public static int SLOT_INDEX_LAMBDA_LIST = 1;
+	public static int SLOT_INDEX_SPECIALIZERS = 2;
+	public static int SLOT_INDEX_QUALIFIERS = 3;
+	public static int SLOT_INDEX_FUNCTION = 4;
+	public static int SLOT_INDEX_FAST_FUNCTION = 5;
+	public static int SLOT_INDEX_DOCUMENTATION = 6;
 
-  public StandardMethodClass()
-  {
-    super(LispSymbols.STANDARD_METHOD, list(StandardClass.METHOD));
-    SubLPackage pkg = PACKAGE_SYS;
-    SubLObject[] instanceSlotNames =
-      {
-        LispSymbols.GENERIC_FUNCTION,
-        pkg.intern("LAMBDA-LIST"),
-        pkg.intern("SPECIALIZERS"),
-        pkg.intern("QUALIFIERS"),
-        LispSymbols.FUNCTION,
-        pkg.intern("FAST-FUNCTION"),
-        LispSymbols.DOCUMENTATION
-      };
-    setClassLayout(new Layout(this, instanceSlotNames, NIL));
-    setFinalized(true);
-  }
+	public StandardMethodClass() {
+		super(LispSymbols.STANDARD_METHOD, Lisp.list(StandardClass.METHOD));
+		SubLPackage pkg = Lisp.PACKAGE_SYS;
+		SubLObject[] instanceSlotNames = { LispSymbols.GENERIC_FUNCTION, pkg.intern("LAMBDA-LIST"),
+				pkg.intern("SPECIALIZERS"), pkg.intern("QUALIFIERS"), LispSymbols.FUNCTION, pkg.intern("FAST-FUNCTION"),
+				LispSymbols.DOCUMENTATION };
+		this.setClassLayout(new Layout(this, instanceSlotNames, Lisp.NIL));
+		this.setFinalized(true);
+	}
 
-  @Override
-  public SubLObject allocateInstance()
-  {
-    return new StandardMethod();
-  }
+	public SubLObject allocateInstance() {
+		return new StandardMethod();
+	}
 }

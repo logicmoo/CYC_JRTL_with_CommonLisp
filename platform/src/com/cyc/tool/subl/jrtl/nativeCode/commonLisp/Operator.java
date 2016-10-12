@@ -33,58 +33,45 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public abstract class Operator extends AbstractLispObject
-{
-	
-  @Override
-  public abstract SubLObject getCallCount();
-  @Override
-  public abstract void setCallCount(int n);
+public abstract class Operator extends AbstractLispObject {
 
-  @Override
-  public String toString() {
-  	return writeToString();
-  }
-  
-  @Override
-  public abstract void incrementCallCount(int arity);
+	// public Object callCount = new int[12];
+	protected SubLObject lambdaName;
 
-	//public Object callCount = new int[12];
-    protected SubLObject lambdaName;
+	private SubLObject lambdaList;
 
-    private SubLObject lambdaList;
+	public abstract SubLObject getCallCount();
 
-    public final SubLObject getLambdaName()
-    {
-        return lambdaName;
-    }
+	public SubLObject getLambdaList() {
+		return this.lambdaList;
+	}
 
-    public final void setLambdaName(SubLObject obj)
-    {
-        lambdaName = obj;
-    }
+	public SubLObject getLambdaName() {
+		return this.lambdaName;
+	}
 
-    public final SubLObject getLambdaList()
-    {
-        return lambdaList;
-    }
+	public SubLObject getParts() {
+		SubLObject result = Lisp.NIL;
+		result = result.push(LispObjectFactory.makeCons("lambda-name", this.lambdaName));
+		result = result.push(LispObjectFactory.makeCons("lambda-list", this.lambdaList));
+		return result.nreverse();
+	}
 
-    public final void setLambdaList(SubLObject obj)
-    {
-        lambdaList = obj;
-    }
+	public abstract void incrementCallCount(int arity);
 
-    @Override
-    public SubLObject getParts()
-    {
-        SubLObject result = NIL;
-        result = result.push(makeCons("lambda-name", lambdaName));
-        result = result.push(makeCons("lambda-list", lambdaList));
-        return result.nreverse();
-    }
+	public abstract void setCallCount(int n);
+
+	public void setLambdaList(SubLObject obj) {
+		this.lambdaList = obj;
+	}
+
+	public void setLambdaName(SubLObject obj) {
+		this.lambdaName = obj;
+	}
+
+	public String toString() {
+		return this.writeToString();
+	}
 }

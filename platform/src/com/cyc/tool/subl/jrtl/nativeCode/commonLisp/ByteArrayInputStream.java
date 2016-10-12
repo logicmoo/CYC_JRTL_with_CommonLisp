@@ -33,67 +33,50 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class ByteArrayInputStream extends Stream
-{
-    private final java.io.ByteArrayInputStream byteArrayInputStream;
+public class ByteArrayInputStream extends Stream {
+	// ### %make-byte-array-input-stream
+	// %make-byte-array-input-stream bytes &optional element-type =>
+	// byte-array-input-stream
+	private static Primitive MAKE_BYTE_ARRAY_INPUT_STREAM = new Primitive("%make-byte-array-input-stream",
+			Lisp.PACKAGE_SYS, false, "bytes &optional element-type") {
 
-    public ByteArrayInputStream(byte[] bytes)
-    {
-        this(bytes, UNSIGNED_BYTE_8); //Declared in Stream.java
-    }
+		public SubLObject execute(SubLObject bytes) {
+			return new ByteArrayInputStream((byte[]) bytes.javaInstance(byte[].class));
+		}
 
-    ByteArrayInputStream(byte[] bytes, SubLObject elementType)
-    {
-        super(LispSymbols.SYSTEM_STREAM);
-        this.elementType = elementType;
-        initAsBinaryInputStream(byteArrayInputStream = new java.io.ByteArrayInputStream(bytes));
-    }
+		public SubLObject execute(SubLObject bytes, SubLObject elementType) {
+			return new ByteArrayInputStream((byte[]) bytes.javaInstance(byte[].class), elementType);
+		}
+	};
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.STREAM; //TODO
-    }
+	private java.io.ByteArrayInputStream byteArrayInputStream;
 
-    @Override
-    public SubLObject classOf()
-    {
-        return BuiltInClass.STREAM; //TODO
-    }
+	public ByteArrayInputStream(byte[] bytes) {
+		this(bytes, Lisp.UNSIGNED_BYTE_8); // Declared in Stream.java
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        return super.typep(type); //TODO
-    }
+	ByteArrayInputStream(byte[] bytes, SubLObject elementType) {
+		super(LispSymbols.SYSTEM_STREAM);
+		this.elementType = elementType;
+		this.initAsBinaryInputStream(this.byteArrayInputStream = new java.io.ByteArrayInputStream(bytes));
+	}
 
-    @Override
-    public String toString()
-    {
-        return unreadableString("BYTE-ARRAY-INPUT-STREAM");
-    }
+	public SubLObject classOf() {
+		return BuiltInClass.STREAM; // TODO
+	}
 
-    // ### %make-byte-array-input-stream
-    // %make-byte-array-input-stream bytes &optional element-type => byte-array-input-stream
-    private static final Primitive MAKE_BYTE_ARRAY_INPUT_STREAM =
-        new Primitive("%make-byte-array-input-stream", PACKAGE_SYS, false,
-                       "bytes &optional element-type")
-    {
+	public String toString() {
+		return this.unreadableString("BYTE-ARRAY-INPUT-STREAM");
+	}
 
-        @Override
-        public SubLObject execute(SubLObject bytes) {
-            return new ByteArrayInputStream((byte[]) bytes.javaInstance(byte[].class));
-        }
+	public SubLObject typeOf() {
+		return LispSymbols.STREAM; // TODO
+	}
 
-        @Override
-        public SubLObject execute(SubLObject bytes, SubLObject elementType)
-        {
-            return new ByteArrayInputStream((byte[]) bytes.javaInstance(byte[].class), elementType);
-        }
-    };
+	public SubLObject typep(SubLObject type) {
+		return super.typep(type); // TODO
+	}
 
 }

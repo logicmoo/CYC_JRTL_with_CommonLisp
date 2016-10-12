@@ -33,69 +33,64 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 
 // ### jclass-name class-ref &optional name
-public final class jclass_name extends JavaPrimitive
-{
-    private jclass_name()
-    {
-        super(LispSymbols.JCLASS_NAME, "class-ref &optional name",
-"When called with one argument, returns the name of the Java class\n" +
-"  designated by CLASS-REF. When called with two arguments, tests\n" +
-"  whether CLASS-REF matches NAME.");
-    }
+public class jclass_name extends JavaPrimitive {
+	private static Primitive JCLASS_NAME = new jclass_name();
 
-    // When called with one argument, JCLASS-NAME returns the name of the class
-    // referenced by CLASS-REF.
-    @Override
-    public SubLObject execute(SubLObject arg)
+	private jclass_name() {
+		super(LispSymbols.JCLASS_NAME, "class-ref &optional name",
+				"When called with one argument, returns the name of the Java class\n"
+						+ "  designated by CLASS-REF. When called with two arguments, tests\n"
+						+ "  whether CLASS-REF matches NAME.");
+	}
 
-    {
-        if (arg instanceof SubLString) {
-            String s = arg.getString();
-            try {
-                return makeString((Class.forName(s)).getName());
-            }
-            catch (ClassNotFoundException e) {
-                // Fall through.
-            }
-        } else if (arg instanceof JavaObject) {
-            Object obj = ((JavaObject)arg).getObject();
-            if (obj instanceof Class)
-                return makeString(((Class)obj).getName());
-            // Fall through.
-        }
-        return error(new LispError(arg.writeToString() + " does not designate a Java class."));
-    }
+	// When called with one argument, JCLASS-NAME returns the name of the class
+	// referenced by CLASS-REF.
 
-    // When called with two arguments, JCLASS-NAME tests whether CLASS-REF
-    // matches NAME.
-    @Override
-    public SubLObject execute(SubLObject first, SubLObject second)
+	public SubLObject execute(SubLObject arg)
 
-    {
-        String className = null;
-        if (first instanceof SubLString) {
-            String s = first.getString();
-            try {
-                className = (Class.forName(s)).getName();
-            }
-            catch (ClassNotFoundException e) {}
-        } else if (first instanceof JavaObject) {
-            Object obj = ((JavaObject)first).getObject();
-            if (obj instanceof Class)
-                className = ((Class)obj).getName();
-        }
-        if (className == null)
-            return error(new LispError(first.writeToString() + " does not designate a Java class."));
-        final SubLString name = checkString(second);
-        return LispThread.currentThread().setValues(name.getString().equals(className) ? T : NIL,
-                                                    makeString(className));
-    }
+	{
+		if (arg instanceof SubLString) {
+			String s = arg.getString();
+			try {
+				return LispObjectFactory.makeString(Class.forName(s).getName());
+			} catch (ClassNotFoundException e) {
+				// Fall through.
+			}
+		} else if (arg instanceof JavaObject) {
+			Object obj = ((JavaObject) arg).getObject();
+			if (obj instanceof Class)
+				return LispObjectFactory.makeString(((Class) obj).getName());
+			// Fall through.
+		}
+		return Lisp.error(new LispError(arg.writeToString() + " does not designate a Java class."));
+	}
 
-    private static final Primitive JCLASS_NAME = new jclass_name();
+	// When called with two arguments, JCLASS-NAME tests whether CLASS-REF
+	// matches NAME.
+
+	public SubLObject execute(SubLObject first, SubLObject second)
+
+	{
+		String className = null;
+		if (first instanceof SubLString) {
+			String s = first.getString();
+			try {
+				className = Class.forName(s).getName();
+			} catch (ClassNotFoundException e) {
+			}
+		} else if (first instanceof JavaObject) {
+			Object obj = ((JavaObject) first).getObject();
+			if (obj instanceof Class)
+				className = ((Class) obj).getName();
+		}
+		if (className == null)
+			return Lisp.error(new LispError(first.writeToString() + " does not designate a Java class."));
+		SubLString name = Lisp.checkString(second);
+		return LispThread.currentThread().setValues(name.getString().equals(className) ? Lisp.T : Lisp.NIL,
+				LispObjectFactory.makeString(className));
+	}
 }

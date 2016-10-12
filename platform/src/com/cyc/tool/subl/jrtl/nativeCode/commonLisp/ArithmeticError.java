@@ -33,126 +33,100 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public class ArithmeticError extends LispError
-{
-    protected ArithmeticError(LispClass cls)
-    {
-        super(cls);
-    }
+public class ArithmeticError extends LispError {
+	// ### arithmetic-error-operation
+	private static Primitive ARITHMETIC_ERROR_OPERATION = new JavaPrimitive("arithmetic-error-operation", "condition") {
 
-    public ArithmeticError(SubLObject initArgs)
-    {
-        super(StandardClass.ARITHMETIC_ERROR);
-        initialize(initArgs);
-    }
+		public SubLObject execute(SubLObject arg) {
+			if (arg instanceof ArithmeticError)
+				return ((ArithmeticError) arg).getOperation();
+			else
+				return Lisp.error(new TypeError(arg, LispSymbols.ARITHMETIC_ERROR));
+		}
+	};
 
-    @Override
-    protected void initialize(SubLObject initArgs)
-    {
-        super.initialize(initArgs);
-        SubLObject operation = NIL;
-        SubLObject operands = NIL;
-        SubLObject first, second;
-        while (initArgs != NIL) {
-            first = initArgs.first();
-            initArgs = initArgs.rest();
-            second = initArgs.first();
-            initArgs = initArgs.rest();
-            if (first == Keyword.OPERATION)
-                operation = second;
-            else if (first == Keyword.OPERANDS)
-                operands = second;
-        }
-        setOperation(operation);
-        setOperands(operands);
-    }
+	// ### arithmetic-error-operands
+	private static Primitive ARITHMETIC_ERROR_OPERANDS = new JavaPrimitive("arithmetic-error-operands", "condition") {
 
-    public ArithmeticError(String message)
-    {
-        super(StandardClass.ARITHMETIC_ERROR);
-        setFormatControl(message);
-        setFormatArguments(NIL);
-        setOperation(NIL);
-        setOperands(NIL);
-    }
+		public SubLObject execute(SubLObject arg) {
+			if (arg instanceof ArithmeticError)
+				return ((ArithmeticError) arg).getOperands();
+			else
+				return Lisp.error(new TypeError(arg, LispSymbols.ARITHMETIC_ERROR));
+		}
+	};
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.ARITHMETIC_ERROR;
-    }
+	protected ArithmeticError(LispClass cls) {
+		super(cls);
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.ARITHMETIC_ERROR;
-    }
+	public ArithmeticError(String message) {
+		super(StandardClass.ARITHMETIC_ERROR);
+		this.setFormatControl(message);
+		this.setFormatArguments(Lisp.NIL);
+		this.setOperation(Lisp.NIL);
+		this.setOperands(Lisp.NIL);
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.ARITHMETIC_ERROR)
-            return T;
-        if (type == StandardClass.ARITHMETIC_ERROR)
-            return T;
-        return super.typep(type);
-    }
+	public ArithmeticError(SubLObject initArgs) {
+		super(StandardClass.ARITHMETIC_ERROR);
+		this.initialize(initArgs);
+	}
 
-    final SubLObject getOperation()
-    {
-        return getInstanceSlotValue(LispSymbols.OPERATION);
-    }
+	public SubLObject classOf() {
+		return StandardClass.ARITHMETIC_ERROR;
+	}
 
-    private final void setOperation(SubLObject operation)
+	SubLObject getOperands() {
+		return this.getInstanceSlotValue(LispSymbols.OPERANDS);
+	}
 
-    {
-        setInstanceSlotValue(LispSymbols.OPERATION, operation);
-    }
+	SubLObject getOperation() {
+		return this.getInstanceSlotValue(LispSymbols.OPERATION);
+	}
 
-    final SubLObject getOperands()
-    {
-        return getInstanceSlotValue(LispSymbols.OPERANDS);
-    }
+	protected void initialize(SubLObject initArgs) {
+		super.initialize(initArgs);
+		SubLObject operation = Lisp.NIL;
+		SubLObject operands = Lisp.NIL;
+		SubLObject first, second;
+		while (initArgs != Lisp.NIL) {
+			first = initArgs.first();
+			initArgs = initArgs.rest();
+			second = initArgs.first();
+			initArgs = initArgs.rest();
+			if (first == Keyword.OPERATION)
+				operation = second;
+			else if (first == Keyword.OPERANDS)
+				operands = second;
+		}
+		this.setOperation(operation);
+		this.setOperands(operands);
+	}
 
-    private final void setOperands(SubLObject operands)
+	private void setOperands(SubLObject operands)
 
-    {
-        setInstanceSlotValue(LispSymbols.OPERANDS, operands);
-    }
+	{
+		this.setInstanceSlotValue(LispSymbols.OPERANDS, operands);
+	}
 
-    // ### arithmetic-error-operation
-    private static final Primitive ARITHMETIC_ERROR_OPERATION =
-        new JavaPrimitive("arithmetic-error-operation", "condition")
-    {
-        @Override
-        public SubLObject execute(SubLObject arg)
-        {
-            if (arg instanceof ArithmeticError) {
-                return ((ArithmeticError)arg).getOperation();
-            }
-            else {
-                return error(new TypeError(arg, LispSymbols.ARITHMETIC_ERROR));
-            }
-        }
-    };
-    // ### arithmetic-error-operands
-    private static final Primitive ARITHMETIC_ERROR_OPERANDS =
-        new JavaPrimitive("arithmetic-error-operands", "condition")
-    {
-        @Override
-        public SubLObject execute(SubLObject arg)
-        {
-            if (arg instanceof ArithmeticError) {
-                return ((ArithmeticError)arg).getOperands();
-            }
-            else {
-                return error(new TypeError(arg, LispSymbols.ARITHMETIC_ERROR));
-            }
-        }
-    };
+	private void setOperation(SubLObject operation)
+
+	{
+		this.setInstanceSlotValue(LispSymbols.OPERATION, operation);
+	}
+
+	public SubLObject typeOf() {
+		return LispSymbols.ARITHMETIC_ERROR;
+	}
+
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.ARITHMETIC_ERROR)
+			return Lisp.T;
+		if (type == StandardClass.ARITHMETIC_ERROR)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

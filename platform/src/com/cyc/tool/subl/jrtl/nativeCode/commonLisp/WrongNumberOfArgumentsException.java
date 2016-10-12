@@ -33,60 +33,51 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class WrongNumberOfArgumentsException extends ProgramError
-{
-    private Operator operator;
-    private int expectedArgs;
-    //private String message;
+public class WrongNumberOfArgumentsException extends ProgramError {
+	private Operator operator;
+	private int expectedArgs;
+	// private String message;
 
-    public WrongNumberOfArgumentsException(Operator operator) {
-	this(operator, -1);
-    }
-
-    public WrongNumberOfArgumentsException(Operator operator, int expectedArgs) {
-        // This is really just an ordinary PROGRAM-ERROR, broken out into its
-        // own Java class as a convenience for the implementation.
-        super(StandardClass.PROGRAM_ERROR);
-        this.operator = operator;
-	this.expectedArgs = expectedArgs;
-        setFormatControl(getMessage());
-        setFormatArguments(NIL);
-    }
-
-    public WrongNumberOfArgumentsException(String message) {
-        super(StandardClass.PROGRAM_ERROR);
-	if(message == null) {
-	    throw new NullPointerException("message can not be null");
+	public WrongNumberOfArgumentsException(Operator operator) {
+		this(operator, -1);
 	}
-	this.message = message;
-        setFormatControl(getMessage());
-        setFormatArguments(NIL);
-    }
 
-    @Override
-    public String getMessage()
-    {
-	if(message != null) {
-	    return message;
+	public WrongNumberOfArgumentsException(Operator operator, int expectedArgs) {
+		// This is really just an ordinary PROGRAM-ERROR, broken out into its
+		// own Java class as a convenience for the implementation.
+		super(StandardClass.PROGRAM_ERROR);
+		this.operator = operator;
+		this.expectedArgs = expectedArgs;
+		this.setFormatControl(this.getMessage());
+		this.setFormatArguments(Lisp.NIL);
 	}
-        StringBuilder sb =
-            new StringBuilder("Wrong number of arguments");
-        SubLObject lambdaName = operator.getLambdaName();
-        if (lambdaName != null && lambdaName != NIL) {
-            sb.append(" for ");
-            sb.append(operator.getLambdaName().writeToString());
-        }
-	if(expectedArgs >= 0) {
-	    sb.append("; ");
-	    sb.append(expectedArgs);
-	    sb.append(" expected");
+
+	public WrongNumberOfArgumentsException(String message) {
+		super(StandardClass.PROGRAM_ERROR);
+		if (message == null)
+			throw new NullPointerException("message can not be null");
+		this.message = message;
+		this.setFormatControl(this.getMessage());
+		this.setFormatArguments(Lisp.NIL);
 	}
-        sb.append('.');
-        return message = sb.toString();
-    }
+
+	public String getMessage() {
+		if (this.message != null)
+			return this.message;
+		StringBuilder sb = new StringBuilder("Wrong number of arguments");
+		SubLObject lambdaName = this.operator.getLambdaName();
+		if (lambdaName != null && lambdaName != Lisp.NIL) {
+			sb.append(" for ");
+			sb.append(this.operator.getLambdaName().writeToString());
+		}
+		if (this.expectedArgs >= 0) {
+			sb.append("; ");
+			sb.append(this.expectedArgs);
+			sb.append(" expected");
+		}
+		sb.append('.');
+		return this.message = sb.toString();
+	}
 }

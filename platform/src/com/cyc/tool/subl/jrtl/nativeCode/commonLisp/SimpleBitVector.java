@@ -33,310 +33,258 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
 // "The type of a bit vector that is not displaced to another array, has no
 // fill pointer, and is not expressly adjustable is a subtype of type SIMPLE-
 // BIT-VECTOR."
-public final class SimpleBitVector extends AbstractBitVector
-{
-    public SimpleBitVector(int capacity)
-    {
-        this.capacity = capacity;
-        int size = capacity >>> 6; // 64 bits in a long
-        // If the capacity is not an integral multiple of 64, we'll need one
-        // more long.
-        if ((capacity & LONG_MASK) != 0)
-            ++size;
-        bits = new long[size];
-    }
+public class SimpleBitVector extends AbstractBitVector {
+	public SimpleBitVector(int capacity) {
+		this.capacity = capacity;
+		int size = capacity >>> 6; // 64 bits in a long
+		// If the capacity is not an integral multiple of 64, we'll need one
+		// more long.
+		if ((capacity & AbstractBitVector.LONG_MASK) != 0)
+			++size;
+		this.bits = new long[size];
+	}
 
-    public SimpleBitVector(String s)
-    {
-        this(s.length());
-        for (int i = capacity; i-- > 0;) {
-            char c = s.charAt(i);
-            if (c == '0') {
-            } else if (c == '1')
-                setBit(i);
-            else
-                Debug.assertTrue(false);
-        }
-    }
+	public SimpleBitVector(String s) {
+		this(s.length());
+		for (int i = this.capacity; i-- > 0;) {
+			char c = s.charAt(i);
+			if (c == '0') {
+			} else if (c == '1')
+				this.setBit(i);
+			else
+				Debug.assertTrue(false);
+		}
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return list(LispSymbols.SIMPLE_BIT_VECTOR, LispObjectFactory.makeInteger(capacity));
-    }
+	public AbstractVector adjustArray(int newCapacity, AbstractArray displacedTo, int displacement)
 
-    @Override
-    public SubLObject classOf()
-    {
-        return BuiltInClass.SIMPLE_BIT_VECTOR;
-    }
+	{
+		return new ComplexBitVector(newCapacity, displacedTo, displacement);
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.SIMPLE_BIT_VECTOR)
-            return T;
-        if (type == LispSymbols.SIMPLE_ARRAY)
-            return T;
-        if (type == BuiltInClass.SIMPLE_BIT_VECTOR)
-            return T;
-        if (type == BuiltInClass.SIMPLE_ARRAY)
-            return T;
-        return super.typep(type);
-    }
+	public AbstractVector adjustArray(int newCapacity, SubLObject initialElement, SubLObject initialContents)
 
-    @Override
-    public boolean hasFillPointer()
-    {
-        return false;
-    }
+	{
+		if (initialContents != null) {
+			SimpleBitVector v = new SimpleBitVector(newCapacity);
+			if (initialContents.isList()) {
+				SubLObject list = initialContents;
+				for (int i = 0; i < newCapacity; i++) {
+					v.aset(i, list.first());
+					list = list.rest();
+				}
+			} else if (initialContents.isVector())
+				for (int i = 0; i < newCapacity; i++)
+					v.aset(i, initialContents.elt(i));
+			else
+				Lisp.error(new TypeError(initialContents, LispSymbols.SEQUENCE));
+			return v;
+		}
+		if (this.capacity != newCapacity) {
+			SimpleBitVector v = new SimpleBitVector(newCapacity);
+			int limit = Math.min(this.capacity, newCapacity);
+			for (int i = limit; i-- > 0;)
+				if (this.getBit(i) == 1)
+					v.setBit(i);
+				else
+					v.clearBit(i);
+			if (initialElement != null && this.capacity < newCapacity) {
+				int n = initialElement.intValue();
+				if (n == 1)
+					for (int i = this.capacity; i < newCapacity; i++)
+						v.setBit(i);
+				else
+					for (int i = this.capacity; i < newCapacity; i++)
+						v.clearBit(i);
+			}
+			return v;
+		}
+		// No change.
+		return this;
+	}
 
-    @Override
-    public boolean isAdjustable()
-    {
-        return false;
-    }
+	SimpleBitVector and(SimpleBitVector v, SimpleBitVector result) {
+		if (result == null)
+			result = new SimpleBitVector(this.capacity);
+		for (int i = this.bits.length; i-- > 0;)
+			result.bits[i] = this.bits[i] & v.bits[i];
+		return result;
+	}
 
-    @Override
-    public boolean isSimpleVector()
-    {
-        return true;
-    }
+	SimpleBitVector andc1(SimpleBitVector v, SimpleBitVector result) {
+		if (result == null)
+			result = new SimpleBitVector(this.capacity);
+		for (int i = this.bits.length; i-- > 0;)
+			result.bits[i] = ~this.bits[i] & v.bits[i];
+		return result;
+	}
 
-    @Override
-    public int cl_length()
-    {
-        return capacity;
-    }
+	SimpleBitVector andc2(SimpleBitVector v, SimpleBitVector result) {
+		if (result == null)
+			result = new SimpleBitVector(this.capacity);
+		for (int i = this.bits.length; i-- > 0;)
+			result.bits[i] = this.bits[i] & ~v.bits[i];
+		return result;
+	}
 
-    @Override
-    public SubLObject elt(int index)
-    {
-        if (index < 0 || index >= cl_length())
-            badIndex(index, cl_length());
-        int offset = index >> 6; // Divide by 64.
-        return (bits[offset] & (1L << (index & LONG_MASK))) != 0 ? Fixnum.ONE : Fixnum.ZERO;
-    }
+	public SubLObject AREF(int index) {
+		if (index < 0 || index >= this.capacity)
+			this.badIndex(index, this.capacity);
+		int offset = index >> 6;
+		return (this.bits[offset] & 1L << (index & AbstractBitVector.LONG_MASK)) != 0 ? Fixnum.ONE : Fixnum.ZERO;
+	}
 
-    @Override
-    public SubLObject AREF(int index)
-    {
-        if (index < 0 || index >= capacity)
-            badIndex(index, capacity);
-        int offset = index >> 6;
-        return (bits[offset] & (1L << (index & LONG_MASK))) != 0 ? Fixnum.ONE : Fixnum.ZERO;
-    }
+	public void aset(int index, SubLObject newValue) {
+		if (index < 0 || index >= this.capacity)
+			this.badIndex(index, this.capacity);
+		int offset = index >> 6;
+		if (newValue instanceof Fixnum)
+			switch (((Fixnum) newValue).value) {
+			case 0:
+				this.bits[offset] &= ~(1L << (index & AbstractBitVector.LONG_MASK));
+				return;
+			case 1:
+				this.bits[offset] |= 1L << (index & AbstractBitVector.LONG_MASK);
+				return;
+			}
+		// Fall through...
+		Lisp.type_error(newValue, LispSymbols.BIT);
+	}
 
-    @Override
-    public void aset(int index, SubLObject newValue)
-    {
-        if (index < 0 || index >= capacity)
-            badIndex(index, capacity);
-        final int offset = index >> 6;
-        if (newValue instanceof Fixnum) {
-            switch (((Fixnum)newValue).value) {
-                case 0:
-                    bits[offset] &= ~(1L << (index & LONG_MASK));
-                    return;
-                case 1:
-                    bits[offset] |= 1L << (index & LONG_MASK);
-                    return;
-            }
-        }
-        // Fall through...
-        type_error(newValue, LispSymbols.BIT);
-    }
+	public int cl_length() {
+		return this.capacity;
+	}
 
-    @Override
-    protected int getBit(int index)
-    {
-        int offset = index >> 6;
-        return (bits[offset] & (1L << (index & LONG_MASK))) != 0 ? 1 : 0;
-    }
+	public SubLObject classOf() {
+		return BuiltInClass.SIMPLE_BIT_VECTOR;
+	}
 
-    @Override
-    protected void setBit(int index)
-    {
-        int offset = index >> 6;
-        bits[offset] |= 1L << (index & LONG_MASK);
-    }
+	protected void clearBit(int index) {
+		int offset = index >> 6;
+		this.bits[offset] &= ~(1L << (index & AbstractBitVector.LONG_MASK));
+	}
 
-    @Override
-    protected void clearBit(int index)
-    {
-        int offset = index >> 6;
-        bits[offset] &= ~(1L << (index & LONG_MASK));
-    }
+	public SubLObject elt(int index) {
+		if (index < 0 || index >= this.cl_length())
+			this.badIndex(index, this.cl_length());
+		int offset = index >> 6; // Divide by 64.
+		return (this.bits[offset] & 1L << (index & AbstractBitVector.LONG_MASK)) != 0 ? Fixnum.ONE : Fixnum.ZERO;
+	}
 
-    @Override
-    public void shrink(int n)
-    {
-        if (n < capacity) {
-            int size = n >>> 6;
-            if ((n & LONG_MASK) != 0)
-                ++size;
-            if (size < bits.length) {
-                long[] newbits = new long[size];
-                System.arraycopy(bits, 0, newbits, 0, size);
-                bits = newbits;
-            }
-            capacity = n;
-            return;
-        }
-        if (n == capacity)
-            return;
-        error(new LispError());
-    }
+	SimpleBitVector eqv(SimpleBitVector v, SimpleBitVector result) {
+		if (result == null)
+			result = new SimpleBitVector(this.capacity);
+		for (int i = this.bits.length; i-- > 0;)
+			result.bits[i] = ~(this.bits[i] ^ v.bits[i]);
+		return result;
+	}
 
-    @Override
-    public AbstractVector adjustArray(int newCapacity,
-                                       SubLObject initialElement,
-                                       SubLObject initialContents)
+	protected int getBit(int index) {
+		int offset = index >> 6;
+		return (this.bits[offset] & 1L << (index & AbstractBitVector.LONG_MASK)) != 0 ? 1 : 0;
+	}
 
-    {
-        if (initialContents != null) {
-            SimpleBitVector v = new SimpleBitVector(newCapacity);
-            if (initialContents.isList()) {
-                SubLObject list = initialContents;
-                for (int i = 0; i < newCapacity; i++) {
-                    v.aset(i, list.first());
-                    list = list.rest();
-                }
-            } else if (initialContents.isVector()) {
-                for (int i = 0; i < newCapacity; i++)
-                    v.aset(i, initialContents.elt(i));
-            } else
-                error(new TypeError(initialContents, LispSymbols.SEQUENCE));
-            return v;
-        }
-        if (capacity != newCapacity) {
-            SimpleBitVector v = new SimpleBitVector(newCapacity);
-            final int limit = Math.min(capacity, newCapacity);
-            for (int i = limit; i-- > 0;) {
-                if (getBit(i) == 1)
-                    v.setBit(i);
-                else
-                    v.clearBit(i);
-            }
-            if (initialElement != null && capacity < newCapacity) {
-                int n = initialElement.intValue();
-                if (n == 1)
-                    for (int i = capacity; i < newCapacity; i++)
-                        v.setBit(i);
-                else
-                    for (int i = capacity; i < newCapacity; i++)
-                        v.clearBit(i);
-            }
-            return v;
-        }
-        // No change.
-        return this;
-    }
+	public boolean hasFillPointer() {
+		return false;
+	}
 
-    @Override
-    public AbstractVector adjustArray(int newCapacity,
-                                       AbstractArray displacedTo,
-                                       int displacement)
+	SimpleBitVector ior(SimpleBitVector v, SimpleBitVector result) {
+		if (result == null)
+			result = new SimpleBitVector(this.capacity);
+		for (int i = this.bits.length; i-- > 0;)
+			result.bits[i] = this.bits[i] | v.bits[i];
+		return result;
+	}
 
-    {
-        return new ComplexBitVector(newCapacity, displacedTo, displacement);
-    }
+	public boolean isAdjustable() {
+		return false;
+	}
 
-    SimpleBitVector and(SimpleBitVector v, SimpleBitVector result)
-    {
-        if (result == null)
-            result = new SimpleBitVector(capacity);
-        for (int i = bits.length; i-- > 0;)
-            result.bits[i] = bits[i] & v.bits[i];
-        return result;
-    }
+	public boolean isSimpleVector() {
+		return true;
+	}
 
-    SimpleBitVector ior(SimpleBitVector v, SimpleBitVector result)
-    {
-        if (result == null)
-            result = new SimpleBitVector(capacity);
-        for (int i = bits.length; i-- > 0;)
-            result.bits[i] = bits[i] | v.bits[i];
-        return result;
-    }
+	SimpleBitVector nand(SimpleBitVector v, SimpleBitVector result) {
+		if (result == null)
+			result = new SimpleBitVector(this.capacity);
+		for (int i = this.bits.length; i-- > 0;)
+			result.bits[i] = ~(this.bits[i] & v.bits[i]);
+		return result;
+	}
 
-    SimpleBitVector xor(SimpleBitVector v, SimpleBitVector result)
-    {
-        if (result == null)
-            result = new SimpleBitVector(capacity);
-        for (int i = bits.length; i-- > 0;)
-            result.bits[i] = bits[i] ^ v.bits[i];
-        return result;
-    }
+	SimpleBitVector nor(SimpleBitVector v, SimpleBitVector result) {
+		if (result == null)
+			result = new SimpleBitVector(this.capacity);
+		for (int i = this.bits.length; i-- > 0;)
+			result.bits[i] = ~(this.bits[i] | v.bits[i]);
+		return result;
+	}
 
-    SimpleBitVector eqv(SimpleBitVector v, SimpleBitVector result)
-    {
-        if (result == null)
-            result = new SimpleBitVector(capacity);
-        for (int i = bits.length; i-- > 0;)
-            result.bits[i] = ~(bits[i] ^ v.bits[i]);
-        return result;
-    }
+	SimpleBitVector orc1(SimpleBitVector v, SimpleBitVector result) {
+		if (result == null)
+			result = new SimpleBitVector(this.capacity);
+		for (int i = this.bits.length; i-- > 0;)
+			result.bits[i] = ~this.bits[i] | v.bits[i];
+		return result;
+	}
 
-    SimpleBitVector nand(SimpleBitVector v, SimpleBitVector result)
-    {
-        if (result == null)
-            result = new SimpleBitVector(capacity);
-        for (int i = bits.length; i-- > 0;)
-            result.bits[i] = ~(bits[i] & v.bits[i]);
-        return result;
-    }
+	SimpleBitVector orc2(SimpleBitVector v, SimpleBitVector result) {
+		if (result == null)
+			result = new SimpleBitVector(this.capacity);
+		for (int i = this.bits.length; i-- > 0;)
+			result.bits[i] = this.bits[i] | ~v.bits[i];
+		return result;
+	}
 
-    SimpleBitVector nor(SimpleBitVector v, SimpleBitVector result)
-    {
-        if (result == null)
-            result = new SimpleBitVector(capacity);
-        for (int i = bits.length; i-- > 0;)
-            result.bits[i] = ~(bits[i] | v.bits[i]);
-        return result;
-    }
+	protected void setBit(int index) {
+		int offset = index >> 6;
+		this.bits[offset] |= 1L << (index & AbstractBitVector.LONG_MASK);
+	}
 
-    SimpleBitVector andc1(SimpleBitVector v, SimpleBitVector result)
-    {
-        if (result == null)
-            result = new SimpleBitVector(capacity);
-        for (int i = bits.length; i-- > 0;)
-            result.bits[i] = ~bits[i] & v.bits[i];
-        return result;
-    }
+	public void shrink(int n) {
+		if (n < this.capacity) {
+			int size = n >>> 6;
+			if ((n & AbstractBitVector.LONG_MASK) != 0)
+				++size;
+			if (size < this.bits.length) {
+				long[] newbits = new long[size];
+				System.arraycopy(this.bits, 0, newbits, 0, size);
+				this.bits = newbits;
+			}
+			this.capacity = n;
+			return;
+		}
+		if (n == this.capacity)
+			return;
+		Lisp.error(new LispError());
+	}
 
-    SimpleBitVector andc2(SimpleBitVector v, SimpleBitVector result)
-    {
-        if (result == null)
-            result = new SimpleBitVector(capacity);
-        for (int i = bits.length; i-- > 0;)
-            result.bits[i] = bits[i] & ~v.bits[i];
-        return result;
-    }
+	public SubLObject typeOf() {
+		return Lisp.list(LispSymbols.SIMPLE_BIT_VECTOR, LispObjectFactory.makeInteger(this.capacity));
+	}
 
-    SimpleBitVector orc1(SimpleBitVector v, SimpleBitVector result)
-    {
-        if (result == null)
-            result = new SimpleBitVector(capacity);
-        for (int i = bits.length; i-- > 0;)
-            result.bits[i] = ~bits[i] | v.bits[i];
-        return result;
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.SIMPLE_BIT_VECTOR)
+			return Lisp.T;
+		if (type == LispSymbols.SIMPLE_ARRAY)
+			return Lisp.T;
+		if (type == BuiltInClass.SIMPLE_BIT_VECTOR)
+			return Lisp.T;
+		if (type == BuiltInClass.SIMPLE_ARRAY)
+			return Lisp.T;
+		return super.typep(type);
+	}
 
-    SimpleBitVector orc2(SimpleBitVector v, SimpleBitVector result)
-    {
-        if (result == null)
-            result = new SimpleBitVector(capacity);
-        for (int i = bits.length; i-- > 0;)
-            result.bits[i] = bits[i] | ~v.bits[i];
-        return result;
-    }
+	SimpleBitVector xor(SimpleBitVector v, SimpleBitVector result) {
+		if (result == null)
+			result = new SimpleBitVector(this.capacity);
+		for (int i = this.bits.length; i-- > 0;)
+			result.bits[i] = this.bits[i] ^ v.bits[i];
+		return result;
+	}
 }

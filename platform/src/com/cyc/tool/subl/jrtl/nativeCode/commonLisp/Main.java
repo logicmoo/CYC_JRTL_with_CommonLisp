@@ -33,46 +33,44 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import junit.textui.TestRunner;
-
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThreadPool;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 
-public final class Main
-{
-  public static final long startTimeMillis = System.currentTimeMillis();
-
-  public static void main(final String[] args)
-  {
-    // Run the interpreter in a secondary thread so we can control the stack
-    // size.
-    try {
-      SubLProcess subLProcess = new SubLProcess("Initial Lisp Listener") {
-        public void safeRun() {
-          Main.isSubLisp = true;
-          SubLMain.me.initializeSubL(args);
-          SubLMain.me.initializeTranslatedSystems();
-          SubLMain.setMainReader(null);
-          //SubLFiles.initialize(Keyhashes.me);
-          SSS.setDynamicValue(SubLObjectFactory.makeInteger(212));
-          SubLMain.setIsInitialized();
-          Main.isSubLisp = false;
-          Interpreter interpreter = Interpreter.createDefaultInstance(args);
-          if (interpreter != null) interpreter.run();
-          System.exit(0);
-        }
-      };
-      SubLThreadPool.getDefaultPool().execute(subLProcess);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-//    Thread t = new Thread(null, r, "interpreter", 4194304L);
-//    LispThread lt = new LispThread(t);
-//    t.start();
-    
-  }
+public class Main {
+	public static long startTimeMillis = System.currentTimeMillis();
 
 	public static boolean isSubLisp = true;
+
+	public static void main(final String[] args) {
+		// Run the interpreter in a secondary thread so we can control the stack
+		// size.
+		try {
+			SubLProcess subLProcess = new SubLProcess("Initial Lisp Listener") {
+				public void safeRun() {
+					Main.isSubLisp = true;
+					SubLMain.initializeSubL(args);
+					SubLMain.initializeTranslatedSystems();
+					SubLMain.setMainReader(null);
+					// SubLFiles.initialize(Keyhashes.me);
+					CommonSymbols.SSS.setDynamicValue(SubLObjectFactory.makeInteger(212));
+					SubLMain.setIsInitialized();
+					Main.isSubLisp = false;
+					Interpreter interpreter = Interpreter.createDefaultInstance(args);
+					if (interpreter != null)
+						interpreter.run();
+					System.exit(0);
+				}
+			};
+			SubLThreadPool.getDefaultPool().execute(subLProcess);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// Thread t = new Thread(null, r, "interpreter", 4194304L);
+		// LispThread lt = new LispThread(t);
+		// t.start();
+
+	}
 }

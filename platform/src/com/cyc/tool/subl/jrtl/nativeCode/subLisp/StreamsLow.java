@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,9 +17,10 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.tool.subl.jrtl.nativeCode.subLisp;
+package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInOutTextStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputTextStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLOutputTextStream;
@@ -36,119 +37,135 @@ import com.cyc.tool.subl.util.SubLTrampolineFile;
 
 //// External Imports
 
-public  class StreamsLow extends SubLTrampolineFile {
-  
-  //// Constructors
-  
-  /** Creates a new instance of StreamsLow. */
-  public StreamsLow() {}
-  public static final SubLFile me = new StreamsLow();
-  
-  
-  //// Public Area
-  
-  public static SubLSymbol $terminal_io$;
-  public static SubLSymbol $standard_input$;
-  public static SubLSymbol $standard_output$;
-  public static SubLSymbol $error_output$;
-  public static SubLSymbol $debug_io$;
-  public static SubLSymbol $null_input$;
-  public static SubLSymbol $null_output$;
-  public static SubLSymbol $query_io$;
-  public static SubLSymbol $trace_output$;
+public class StreamsLow extends SubLTrampolineFile {
 
-  public static SubLInputTextStream originalInputStream;
-  public static SubLOutputTextStream originalOutputStream;
-  public static SubLOutputTextStream originalErrorStream;
+	//// Constructors
 
-  public static SubLSynonymStream originalSynInputStream;
-  public static SubLSynonymStream originalSynOutputStream;
-  public static SubLSynonymStream originalSynErrorStream;
+	public static SubLFile me = new StreamsLow();
 
-  public static SubLInOutTextStream originalIOStream;
-  
-  public static final SubLObject open(SubLObject fileSpec, SubLObject[]keys) {
-    String fileSpecTyped = fileSpec.getFileDesignator();
-    if ((keys.length % 2) == 1) {
-      Errors.error("Need an even number of arguments to OPEN.");
-    }
-    SubLSymbol direction = INPUT_KEYWORD;
-    SubLSymbol elementType = TEXT_KEYWORD;
-    SubLSymbol ifExists = ERROR_KEYWORD;
-    SubLSymbol ifNotExists = ERROR_KEYWORD;
-    for (int i = 0, size = keys.length; i < size; i += 2) {
-      SubLObject curKey = keys[i];
-      SubLObject curVal = keys[i+1];
-      if (curKey == DIRECTION_KEYWORD) {
-        direction = (SubLSymbol)curVal;
-      } else if (curKey == ELEMENT_TYPE_KEYWORD) {
-        elementType = (SubLSymbol)curVal;
-      } else if (curKey == IF_EXISTS_KEYWORD) {
-        ifExists = (SubLSymbol)curVal;
-      } else if (curKey == IF_DOES_NOT_EXIST_KEYWORD) {
-        ifNotExists = (SubLSymbol)curVal;
-      } else if (curKey == EXTERNAL_FORMAT_KEYWORD) {
-        ; //ignore for now...probably want to introduce a CharsetSpec type for this -APB
-      } else {
-        Errors.error("OPEN got unexpected parameter " + curKey + ".");
-      }
-    }
-    SubLStream result = SubLStreamFactory.makeFileStream(fileSpecTyped, direction,
-      elementType, ifExists, ifNotExists, NIL);
-    if (result == null) {
-      return NIL;
-    }
-    return result;
-  }
-  
-  public static final SubLObject wide_newline_stream_p(SubLObject stream) {
-    return (stream.getStream(true).getNewline().length() > 1) ? T : (SubLBoolean)NIL;
-  }
-  
-  //// Initializers
-  
-  public void declareFunctions() {
-    SubLFiles.declareFunction(me, "open",  "OPEN",  1, 0, true);
-    SubLFiles.declareFunction(me, "wide_newline_stream_p",  "WIDE-NEWLINE-STREAM-P",  1, 0, false);
-  }
-  
-  public void initializeVariables() {
-    originalInputStream = SubLStreamFactory.makeInputTextStream(System.in);
-    originalOutputStream = SubLStreamFactory.makeOutputTextStream(System.out);
-    originalErrorStream = SubLStreamFactory.makeOutputTextStream(System.out);
-    SubLInOutTextStream ioStream = SubLStreamFactory.makeInOutTextStream(originalInputStream, originalOutputStream);
-    originalIOStream = ioStream;
-    ioStream.setIsInteractive(true);
-    $terminal_io$ = SubLFiles.defvar(me, "*TERMINAL-IO*",     ioStream);
-    SubLSynonymStream ioSynonymStream = SubLStreamFactory.makeUnclosableSynonymStream(TERMINAL_IO);
-    SubLSynonymStream ioSynonymStream2 = SubLStreamFactory.makeUnclosableSynonymStream(TERMINAL_IO);
-    SubLSynonymStream ioSynonymStream3 = SubLStreamFactory.makeUnclosableSynonymStream(TERMINAL_IO);
-    SubLSynonymStream ioSynonymStream4 = SubLStreamFactory.makeUnclosableSynonymStream(TERMINAL_IO);
-    SubLSynonymStream ioSynonymStream5 = SubLStreamFactory.makeUnclosableSynonymStream(TERMINAL_IO);
-    SubLSynonymStream ioSynonymStream6 = SubLStreamFactory.makeUnclosableSynonymStream(TERMINAL_IO);
-    originalSynInputStream = ioSynonymStream;
-    originalSynOutputStream = ioSynonymStream2;
-    originalSynErrorStream = ioSynonymStream3;
-    $standard_input$ = SubLFiles.defvar(me, "*STANDARD-INPUT*",  ioSynonymStream);
-    $standard_output$ = SubLFiles.defvar(me, "*STANDARD-OUTPUT*", ioSynonymStream2);
-    $error_output$ = SubLFiles.defvar(me, "*ERROR-OUTPUT*",    ioSynonymStream3);
-    originalErrorStream = $error_output$.toOutputTextStream();
-    $debug_io$ = SubLFiles.defvar(me, "*DEBUG-IO*", ioSynonymStream4);
-    $null_input$ = SubLFiles.defvar(me, "*NULL-INPUT*", SubLStreamFactory.NULL_IN_STREAM);
-    $null_output$ = SubLFiles.defvar(me, "*NULL-OUTPUT*", SubLStreamFactory.NULL_OUT_STREAM);
-    $query_io$ = SubLFiles.defvar(me, "*QUERY-IO*", ioSynonymStream5);
-    $trace_output$ = SubLFiles.defvar(me, "*TRACE-OUTPUT*", ioSynonymStream6);
-  }
-  
-  public void runTopLevelForms() {
-  }
-  
-  //// Protected Area
-  
-  //// Private Area
-  
-  //// Internal Rep
-  
-  //// Main
-  
+	public static SubLSymbol $terminal_io$;
+
+	//// Public Area
+
+	public static SubLSymbol $standard_input$;
+	public static SubLSymbol $standard_output$;
+	public static SubLSymbol $error_output$;
+	public static SubLSymbol $debug_io$;
+	public static SubLSymbol $null_input$;
+	public static SubLSymbol $null_output$;
+	public static SubLSymbol $query_io$;
+	public static SubLSymbol $trace_output$;
+	public static SubLSymbol $stream_initial_input_buffer_size$;
+	public static SubLSymbol $stream_initial_output_buffer_size$;
+	public static SubLSymbol $should_memory_map_files$;
+	public static SubLInputTextStream originalInputStream;
+
+	public static SubLOutputTextStream originalOutputStream;
+	public static SubLOutputTextStream originalErrorStream;
+	public static SubLSynonymStream originalSynInputStream;
+
+	public static SubLSynonymStream originalSynOutputStream;
+	public static SubLSynonymStream originalSynErrorStream;
+	public static SubLInOutTextStream originalIOStream;
+
+	public static SubLObject isMemoryMappedStream(SubLObject stream) {
+		if (!stream.isStream())
+			return CommonSymbols.NIL;
+		return stream.getStream(true).isMemoryMapped() ? CommonSymbols.RET_T : CommonSymbols.NIL;
+	}
+
+	public static SubLObject open(SubLObject fileSpec, SubLObject[] keys) {
+		String fileSpecTyped = fileSpec.getFileDesignator();
+		if (keys.length % 2 == 1)
+			Errors.error("Need an even number of arguments to OPEN.");
+		SubLSymbol direction = CommonSymbols.INPUT_KEYWORD;
+		SubLSymbol elementType = CommonSymbols.TEXT_KEYWORD;
+		SubLSymbol ifExists = CommonSymbols.ERROR_KEYWORD;
+		SubLSymbol ifNotExists = CommonSymbols.ERROR_KEYWORD;
+		for (int i = 0, size = keys.length; i < size; i += 2) {
+			SubLObject curKey = keys[i];
+			SubLObject curVal = keys[i + 1];
+			if (curKey == CommonSymbols.DIRECTION_KEYWORD)
+				direction = (SubLSymbol) curVal;
+			else if (curKey == CommonSymbols.ELEMENT_TYPE_KEYWORD)
+				elementType = (SubLSymbol) curVal;
+			else if (curKey == CommonSymbols.IF_EXISTS_KEYWORD)
+				ifExists = (SubLSymbol) curVal;
+			else if (curKey == CommonSymbols.IF_DOES_NOT_EXIST_KEYWORD)
+				ifNotExists = (SubLSymbol) curVal;
+			else if (curKey == CommonSymbols.EXTERNAL_FORMAT_KEYWORD)
+				; // ignore for now...probably want to introduce a CharsetSpec
+					// type for this -APB
+			else
+				Errors.error("OPEN got unexpected parameter " + curKey + ".");
+		}
+		SubLStream result = SubLStreamFactory.makeFileStream(fileSpecTyped, direction, elementType, ifExists,
+				ifNotExists, CommonSymbols.NIL);
+		if (result == null)
+			return CommonSymbols.NIL;
+		return result;
+	}
+
+	public static SubLObject wide_newline_stream_p(SubLObject stream) {
+		return stream.getStream(true).getNewline().length() > 1 ? CommonSymbols.T : (SubLBoolean) CommonSymbols.NIL;
+	}
+
+	/** Creates a new instance of StreamsLow. */
+	public StreamsLow() {
+	}
+
+	//// Initializers
+
+	public void declareFunctions() {
+		SubLFiles.declareFunction(StreamsLow.me, "open", "OPEN", 1, 0, true);
+		SubLFiles.declareFunction(StreamsLow.me, "wide_newline_stream_p", "WIDE-NEWLINE-STREAM-P", 1, 0, false);
+		SubLFiles.declareFunction(StreamsLow.me, "isMemoryMappedStream", "MEMORY-MAPPED-STREAM-P", 1, 0, false);
+	}
+
+	public void initializeVariables() {
+		StreamsLow.originalInputStream = SubLStreamFactory.makeInputTextStream(System.in);
+		StreamsLow.originalOutputStream = SubLStreamFactory.makeOutputTextStream(System.out);
+		StreamsLow.originalErrorStream = SubLStreamFactory.makeOutputTextStream(System.out);
+		SubLInOutTextStream ioStream = SubLStreamFactory.makeInOutTextStream(StreamsLow.originalInputStream,
+				StreamsLow.originalOutputStream);
+		StreamsLow.originalIOStream = ioStream;
+		ioStream.setIsInteractive(true);
+		StreamsLow.$terminal_io$ = SubLFiles.defvar(StreamsLow.me, "*TERMINAL-IO*", ioStream);
+		SubLSynonymStream ioSynonymStream = SubLStreamFactory.makeUnclosableSynonymStream(CommonSymbols.TERMINAL_IO);
+		SubLSynonymStream ioSynonymStream2 = SubLStreamFactory.makeUnclosableSynonymStream(CommonSymbols.TERMINAL_IO);
+		SubLSynonymStream ioSynonymStream3 = SubLStreamFactory.makeUnclosableSynonymStream(CommonSymbols.TERMINAL_IO);
+		SubLSynonymStream ioSynonymStream4 = SubLStreamFactory.makeUnclosableSynonymStream(CommonSymbols.TERMINAL_IO);
+		SubLSynonymStream ioSynonymStream5 = SubLStreamFactory.makeUnclosableSynonymStream(CommonSymbols.TERMINAL_IO);
+		SubLSynonymStream ioSynonymStream6 = SubLStreamFactory.makeUnclosableSynonymStream(CommonSymbols.TERMINAL_IO);
+		StreamsLow.originalSynInputStream = ioSynonymStream;
+		StreamsLow.originalSynOutputStream = ioSynonymStream2;
+		StreamsLow.originalSynErrorStream = ioSynonymStream3;
+		StreamsLow.$standard_input$ = SubLFiles.defvar(StreamsLow.me, "*STANDARD-INPUT*", ioSynonymStream);
+		StreamsLow.$standard_output$ = SubLFiles.defvar(StreamsLow.me, "*STANDARD-OUTPUT*", ioSynonymStream2);
+		StreamsLow.$error_output$ = SubLFiles.defvar(StreamsLow.me, "*ERROR-OUTPUT*", ioSynonymStream3);
+		StreamsLow.originalErrorStream = StreamsLow.$error_output$.toOutputTextStream();
+		StreamsLow.$debug_io$ = SubLFiles.defvar(StreamsLow.me, "*DEBUG-IO*", ioSynonymStream4);
+		StreamsLow.$null_input$ = SubLFiles.defvar(StreamsLow.me, "*NULL-INPUT*", SubLStreamFactory.NULL_IN_STREAM);
+		StreamsLow.$null_output$ = SubLFiles.defvar(StreamsLow.me, "*NULL-OUTPUT*", SubLStreamFactory.NULL_OUT_STREAM);
+		StreamsLow.$query_io$ = SubLFiles.defvar(StreamsLow.me, "*QUERY-IO*", ioSynonymStream5);
+		StreamsLow.$trace_output$ = SubLFiles.defvar(StreamsLow.me, "*TRACE-OUTPUT*", ioSynonymStream6);
+		StreamsLow.$stream_initial_input_buffer_size$ = SubLFiles.defvar(StreamsLow.me,
+				"*STREAM-INITIAL-INPUT-BUFFER-SIZE*", SubLObjectFactory.makeInteger(16384));
+		StreamsLow.$stream_initial_output_buffer_size$ = SubLFiles.defvar(StreamsLow.me,
+				"*STREAM-INITIAL-OUTPUT-BUFFER-SIZE*", SubLObjectFactory.makeInteger(16384));
+		StreamsLow.$should_memory_map_files$ = SubLFiles.defvar(StreamsLow.me, "*SHOULD-MEMORY-MAP-FILES?*",
+				CommonSymbols.NIL);
+	}
+
+	public void runTopLevelForms() {
+	}
+
+	//// Protected Area
+
+	//// Private Area
+
+	//// Internal Rep
+
+	//// Main
+
 }

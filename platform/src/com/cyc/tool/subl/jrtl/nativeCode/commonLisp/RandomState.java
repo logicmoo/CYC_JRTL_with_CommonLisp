@@ -33,10 +33,6 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.InlinedPrimitiveRegistry.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -45,165 +41,139 @@ import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.util.Random;
 
+import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.InlinedPrimitiveRegistry.InlinableMethod;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
+public class RandomState extends AbstractLispObject {
+	// ### random limit &optional random-state => random-number
+	private static Primitive RANDOM = new JavaPrimitive(LispSymbols.RANDOM, "limit &optional random-state") {
 
-public final class RandomState extends AbstractLispObject
-{
-    private Random random;
+		public SubLObject execute(SubLObject arg) {
+			RandomState randomState = (RandomState) LispSymbols._RANDOM_STATE_.symbolValue();
+			return randomState.random(arg);
+		}
 
-    public RandomState()
-    {
-        random = new Random();
-    }
+		public SubLObject execute(SubLObject first, SubLObject second)
 
-    public RandomState(RandomState rs)
-    {
-        try {
-            File file = File.createTempFile("MAKE-RANDOM-STATE", null);
-            FileOutputStream fileOut = new FileOutputStream(file);
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-            out.writeObject(rs.random);
-            out.close();
-            FileInputStream fileIn = new FileInputStream(file);
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            random = (Random) in.readObject();
-            in.close();
-            file.delete(); // FIXME: file leak on exception
-        }
-        catch (Throwable t) { // ANY exception gets converted to a lisp error
-            error(new LispError("Unable to copy random state."));
-        }
-    }
+		{
+			if (second instanceof RandomState) {
+				RandomState randomState = (RandomState) second;
+				return randomState.random(first);
+			}
+			return Lisp.type_error(first, LispSymbols.RANDOM_STATE);
+		}
+	};
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.RANDOM_STATE;
-    }
+	// ### make-random-state &optional state
+	private static Primitive MAKE_RANDOM_STATE = new JavaPrimitive(LispSymbols.MAKE_RANDOM_STATE, "&optional state") {
 
-    @Override
-    public SubLObject classOf()
-    {
-        return BuiltInClass.RANDOM_STATE;
-    }
+		public SubLObject execute() {
+			return new RandomState((RandomState) LispSymbols._RANDOM_STATE_.symbolValue());
+		}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.RANDOM_STATE)
-            return T;
-        if (type == BuiltInClass.RANDOM_STATE)
-            return T;
-        return super.typep(type);
-    }
+		public SubLObject execute(SubLObject arg)
 
-    @Override
-    public String writeToString()
-    {
-        return unreadableString(LispSymbols.RANDOM_STATE);
-    }
+		{
+			if (arg == Lisp.NIL)
+				return new RandomState((RandomState) LispSymbols._RANDOM_STATE_.symbolValue());
+			if (arg == Lisp.T)
+				return new RandomState();
+			if (arg instanceof RandomState)
+				return new RandomState((RandomState) arg);
+			return Lisp.type_error(arg, LispSymbols.RANDOM_STATE);
+		}
+	};
 
-    public SubLObject random(SubLObject arg)
-    {
-        if (arg instanceof Fixnum) {
-            int limit = ((Fixnum)arg).value;
-            if (limit > 0) {
-                int n = random.nextInt((int)limit);
-                return LispObjectFactory.makeInteger(n);
-            }
-        } else if (arg instanceof Bignum) {
-            BigInteger limit = ((Bignum)arg).bigIntegerValue();
-            if (limit.signum() > 0) {
-                int bitLength = limit.bitLength();
-                BigInteger rand = new BigInteger(bitLength + 1, random);
-                BigInteger remainder = rand.remainder(limit);
-                return number(remainder);
-            }
-        } else if (arg instanceof SingleFloat) {
-            float limit = ((SingleFloat)arg).value;
-            if (limit > 0) {
-                float rand = random.nextFloat();
-                return makeSingle(rand * limit);
-            }
-        } else if (arg instanceof DoubleFloat) {
-            double limit = ((DoubleFloat)arg).value;
-            if (limit > 0) {
-                double rand = random.nextDouble();
-                return makeDouble(rand * limit);
-            }
-        }
-        return type_error(arg, list(LispSymbols.OR,
-                                          list(LispSymbols.INTEGER, Fixnum.ONE),
-                                          list(LispSymbols.FLOAT, list(Fixnum.ZERO))));
-    }
+	// ### random-state-p
+	private static Primitive RANDOM_STATE_P = new JavaPrimitive(LispSymbols.RANDOM_STATE_P, "object") {
 
-    // ### random limit &optional random-state => random-number
-    private static final Primitive RANDOM =
-        new JavaPrimitive(LispSymbols.RANDOM, "limit &optional random-state")
-    {
-        @Override
-        public SubLObject execute(SubLObject arg)
-        {
-            RandomState randomState =
-                (RandomState) LispSymbols._RANDOM_STATE_.symbolValue();
-            return randomState.random(arg);
-        }
-        @Override
-        public SubLObject execute(SubLObject first, SubLObject second)
+		public SubLObject execute(SubLObject arg) {
+			return arg instanceof RandomState ? Lisp.T : Lisp.NIL;
+		}
+	};
 
-        {
-            if (second instanceof RandomState) {
-                RandomState randomState = (RandomState) second;
-                return randomState.random(first);
-            }
-            return type_error(first, LispSymbols.RANDOM_STATE);
-        }
-    };
-    
-    @InlinableMethod
-    static public SubLObject RANDOM_execute(SubLObject arg)
-    {
-        RandomState randomState =
-            (RandomState) LispSymbols._RANDOM_STATE_.symbolValue();
-        return randomState.random(arg);
-    }
+	static {
+		InlinedPrimitiveRegistry.inlineStaticsNow(RandomState.class);
+	}
 
-    // ### make-random-state &optional state
-    private static final Primitive MAKE_RANDOM_STATE =
-        new JavaPrimitive(LispSymbols.MAKE_RANDOM_STATE, "&optional state")
-    {
-        @Override
-        public SubLObject execute()
-        {
-            return new RandomState((RandomState)LispSymbols._RANDOM_STATE_.symbolValue());
-        }
-        @Override
-        public SubLObject execute(SubLObject arg)
+	@InlinableMethod
+	static public SubLObject RANDOM_execute(SubLObject arg) {
+		RandomState randomState = (RandomState) LispSymbols._RANDOM_STATE_.symbolValue();
+		return randomState.random(arg);
+	}
 
-        {
-            if (arg == NIL)
-                return new RandomState((RandomState)LispSymbols._RANDOM_STATE_.symbolValue());
-            if (arg == T)
-                return new RandomState();
-            if (arg instanceof RandomState)
-                return new RandomState((RandomState)arg);
-            return type_error(arg, LispSymbols.RANDOM_STATE);
-        }
-    };
+	private Random random;
 
-    // ### random-state-p
-    private static final Primitive RANDOM_STATE_P =
-        new JavaPrimitive(LispSymbols.RANDOM_STATE_P, "object")
-    {
-        @Override
-        public SubLObject execute(SubLObject arg)
-        {
-            return arg instanceof RandomState ? T : NIL;
-        }
-    };
-    
-    static {
-    	InlinedPrimitiveRegistry.inlineStaticsNow(RandomState.class);
-    }
+	public RandomState() {
+		this.random = new Random();
+	}
+
+	public RandomState(RandomState rs) {
+		try {
+			File file = File.createTempFile("MAKE-RANDOM-STATE", null);
+			FileOutputStream fileOut = new FileOutputStream(file);
+			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			out.writeObject(rs.random);
+			out.close();
+			FileInputStream fileIn = new FileInputStream(file);
+			ObjectInputStream in = new ObjectInputStream(fileIn);
+			this.random = (Random) in.readObject();
+			in.close();
+			file.delete(); // FIXME: file leak on exception
+		} catch (Throwable t) { // ANY exception gets converted to a lisp error
+			Lisp.error(new LispError("Unable to copy random state."));
+		}
+	}
+
+	public SubLObject classOf() {
+		return BuiltInClass.RANDOM_STATE;
+	}
+
+	public SubLObject random(SubLObject arg) {
+		if (arg instanceof Fixnum) {
+			int limit = ((Fixnum) arg).value;
+			if (limit > 0) {
+				int n = this.random.nextInt(limit);
+				return LispObjectFactory.makeInteger(n);
+			}
+		} else if (arg instanceof Bignum) {
+			BigInteger limit = ((Bignum) arg).bigIntegerValue();
+			if (limit.signum() > 0) {
+				int bitLength = limit.bitLength();
+				BigInteger rand = new BigInteger(bitLength + 1, this.random);
+				BigInteger remainder = rand.remainder(limit);
+				return Lisp.number(remainder);
+			}
+		} else if (arg instanceof SingleFloat) {
+			float limit = ((SingleFloat) arg).value;
+			if (limit > 0) {
+				float rand = this.random.nextFloat();
+				return LispObjectFactory.makeSingle(rand * limit);
+			}
+		} else if (arg instanceof DoubleFloat) {
+			double limit = ((DoubleFloat) arg).value;
+			if (limit > 0) {
+				double rand = this.random.nextDouble();
+				return LispObjectFactory.makeDouble(rand * limit);
+			}
+		}
+		return Lisp.type_error(arg, Lisp.list(LispSymbols.OR, Lisp.list(LispSymbols.INTEGER, Fixnum.ONE),
+				Lisp.list(LispSymbols.FLOAT, Lisp.list(Fixnum.ZERO))));
+	}
+
+	public SubLObject typeOf() {
+		return LispSymbols.RANDOM_STATE;
+	}
+
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.RANDOM_STATE)
+			return Lisp.T;
+		if (type == BuiltInClass.RANDOM_STATE)
+			return Lisp.T;
+		return super.typep(type);
+	}
+
+	public String writeToString() {
+		return this.unreadableString(LispSymbols.RANDOM_STATE);
+	}
 }

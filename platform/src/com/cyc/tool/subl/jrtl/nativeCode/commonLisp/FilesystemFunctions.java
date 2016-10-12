@@ -33,277 +33,251 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import java.io.File;
 import java.io.IOException;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 
+public class FilesystemFunctions {
 
-public final class FilesystemFunctions
-{
+	private static class _make_logical_pathname extends JavaPrimitive {
+		_make_logical_pathname() {
+			super("%make-logical-pathname", Lisp.PACKAGE_SYS, true, "namestring");
+		}
 
-  // ### canonicalize-logical-host host => canonical-host
-  private static final Primitive CANONICALIZE_LOGICAL_HOST = new canonicalize_logical_host();
-  private static class canonicalize_logical_host extends JavaPrimitive {
-      canonicalize_logical_host() {
-          super("canonicalize-logical-host", PACKAGE_SYS, true, "host");
-      }
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-          SubLString s = checkString(arg);
-          if (s.cl_length() == 0) {
-              // "The null string, "", is not a valid value for any
-              // component of a logical pathname." 19.3.2.2
-              return error(new LispError("Invalid logical host name: \"" +
-                                         s.getString() + '"'));
-          }
-          return LogicalPathname.canonicalizeStringComponent(s);
-      }
-  }
+		public SubLObject execute(SubLObject arg)
 
-  // ### %make-logical-pathname namestring => logical-pathname
-  private static final Primitive _MAKE_LOGICAL_PATHNAME = new _make_logical_pathname();
-  private static class _make_logical_pathname extends JavaPrimitive {
-      _make_logical_pathname() {
-          super("%make-logical-pathname", PACKAGE_SYS, true, "namestring");
-      }
-      @Override
-      public SubLObject execute(SubLObject arg)
+		{
+			// Check for a logical pathname host.
+			String s = arg.getString();
+			String h = Pathname.getHostString(s);
+			if (h != null) {
+				if (h.length() == 0)
+					// "The null string, "", is not a valid value for any
+					// component of a logical pathname." 19.3.2.2
+					return Lisp.error(new LispError("Invalid logical host name: \"" + h + '"'));
+				if (Pathname.LOGICAL_PATHNAME_TRANSLATIONS.getHT(LispObjectFactory.makeString(h)) != null)
+					// A defined logical pathname host.
+					return new LogicalPathname(h, s.substring(s.indexOf(':') + 1));
+			}
+			return Lisp.error(new TypeError("Logical namestring does not specify a host: \"" + s + '"'));
+		}
+	}
 
-      {
-          // Check for a logical pathname host.
-          String s = arg.getString();
-          String h = LogicalPathname.getHostString(s);
-          if (h != null) {
-              if (h.length() == 0) {
-                  // "The null string, "", is not a valid value for any
-                  // component of a logical pathname." 19.3.2.2
-                  return error(new LispError("Invalid logical host name: \"" +
-                                              h + '"'));
-              }
-              if (Pathname.LOGICAL_PATHNAME_TRANSLATIONS.getHT(makeString(h)) != null) {
-                  // A defined logical pathname host.
-                  return new LogicalPathname(h, s.substring(s.indexOf(':') + 1));
-              }
-          }
-          return error(new TypeError("Logical namestring does not specify a host: \"" + s + '"'));
-      }
-  }
-    // ### probe-file
-    // probe-file pathspec => truename
-    private static final Primitive PROBE_FILE =
-        new JavaPrimitive("probe-file", "pathspec")
-    {
-        @Override
-        public SubLObject execute(SubLObject arg)
-        {
-            return Pathname.truename(arg, false);
-        }
-    };
+	private static class canonicalize_logical_host extends JavaPrimitive {
+		canonicalize_logical_host() {
+			super("canonicalize-logical-host", Lisp.PACKAGE_SYS, true, "host");
+		}
 
-    // ### truename
-    // truename filespec => truename
-    private static final Primitive TRUENAME =
-        new JavaPrimitive("truename", "filespec")
-    {
-        @Override
-        public SubLObject execute(SubLObject arg)
-        {
-            return Pathname.truename(arg, true);
-        }
-    };
+		public SubLObject execute(SubLObject arg) {
+			SubLString s = Lisp.checkString(arg);
+			if (s.cl_length() == 0)
+				// "The null string, "", is not a valid value for any
+				// component of a logical pathname." 19.3.2.2
+				return Lisp.error(new LispError("Invalid logical host name: \"" + s.getString() + '"'));
+			return LogicalPathname.canonicalizeStringComponent(s);
+		}
+	}
 
-    // ### probe-directory
-    // probe-directory pathspec => truename
-    private static final Primitive PROBE_DIRECTORY =
-        new JavaPrimitive("probe-directory", PACKAGE_EXT, true)
-    {
-        @Override
-        public SubLObject execute(SubLObject arg)
-        {
-            Pathname pathname = coerceToPathname(arg);
-            if (pathname.isWild())
-                error(new FileError("Bad place for a wild pathname.", pathname));
-            File file = Utilities.getFile(pathname);
-            return file.isDirectory() ? Utilities.getDirectoryPathname(file) : NIL;
-        }
-    };
+	// ### create-new-file
+	static public class create_new_file extends JavaPrimitive {
+		protected create_new_file() {
+			super("create-new-file", Lisp.PACKAGE_SYS, true, "namestring");
+		}
 
-    // ### file-directory-p
-    // file-directory-p pathspec => generalized-boolean
-    private static final Primitive FILE_DIRECTORY_P =
-        new JavaPrimitive("file-directory-p", PACKAGE_EXT, true)
-    {
-        @Override
-        public SubLObject execute(SubLObject arg)
-        {
-            Pathname pathname = coerceToPathname(arg);
-            if (pathname.isWild())
-                error(new FileError("Bad place for a wild pathname.", pathname));
-            File file = Utilities.getFile(pathname);
-            return file.isDirectory() ? T : NIL;
-        }
-    };
-    
+		public SubLObject execute(SubLObject arg) {
+			String namestring = arg.getString();
+			try {
+				return new File(namestring).createNewFile() ? Lisp.T : Lisp.NIL;
+			} catch (IOException e) {
+				return Lisp.error(new StreamError(null, e));
+			}
+		}
 
-    // ### create-new-file
-    static public final class create_new_file extends JavaPrimitive {
-    	protected create_new_file() {
-        super("create-new-file", PACKAGE_SYS, true, "namestring");
-      }
+	}
 
-      @Override
-      public SubLObject execute(SubLObject arg) {
-        final String namestring = arg.getString();
-        try {
-          return new File(namestring).createNewFile() ? T : NIL;
-        } catch (IOException e) {
-          return error(new StreamError(null, e));
-        }
-      }
+	static public class delete_file extends JavaPrimitive {
+		protected delete_file() {
+			super("delete-file", "filespec");
+		}
 
-    }
+		// ### delete-file filespec => t
 
-    private static final Primitive CREATE_NEW_FILE = new create_new_file();
+		public SubLObject execute(SubLObject arg) {
+			// Don't follow symlinks! We want to delete the symlink itself, not
+			// the linked-to file.
+			Pathname pathname = Lisp.coerceToPathname(arg);
+			if (arg instanceof LispStream)
+				((LispStream) arg)._close();
+			if (pathname instanceof LogicalPathname)
+				pathname = LogicalPathname.translateLogicalPathname((LogicalPathname) pathname);
+			if (pathname.isWild())
+				return Lisp.error(new FileError("Bad place for a wild pathname.", pathname));
+			Pathname defaultedPathname = Pathname.mergePathnames(pathname,
+					Lisp.coerceToPathname(LispSymbols.DEFAULT_PATHNAME_DEFAULTS.symbolValue()), Lisp.NIL);
+			String namestring = defaultedPathname.getNamestring();
+			if (namestring == null)
+				return Lisp.error(new FileError("Pathname has no namestring: " + defaultedPathname.writeToString(),
+						defaultedPathname));
+			File file = new File(namestring);
+			ZipCache.remove(file);
+			if (file.exists()) {
+				// File exists.
+				for (int i = 0; i < 5; i++) {
+					if (file.delete())
+						return Lisp.T;
+					System.gc();
+					Thread.yield();
+				}
+				Pathname truename = new Pathname(file.getAbsolutePath());
+				StringBuilder sb = new StringBuilder("Unable to delete ");
+				sb.append(file.isDirectory() ? "directory " : "file ");
+				sb.append(truename.writeToString());
+				sb.append('.');
+				return Lisp.error(new FileError(sb.toString(), truename));
+			} else
+				// File does not exist.
+				return Lisp.T;
+		}
 
-    static public final class delete_file extends JavaPrimitive {
-    	protected delete_file() {
-        super("delete-file", "filespec");
-      }
+	}
 
-      // ### delete-file filespec => t
-      @Override
-      public SubLObject execute(SubLObject arg) {
-        // Don't follow symlinks! We want to delete the symlink itself, not
-        // the linked-to file.
-        Pathname pathname = coerceToPathname(arg);
-        if (arg instanceof LispStream)
-          ((LispStream) arg)._close();
-        if (pathname instanceof LogicalPathname)
-          pathname = LogicalPathname.translateLogicalPathname((LogicalPathname) pathname);
-        if (pathname.isWild())
-          return error(new FileError("Bad place for a wild pathname.", pathname));
-        final Pathname defaultedPathname = Pathname.mergePathnames(pathname,
-            coerceToPathname(LispSymbols.DEFAULT_PATHNAME_DEFAULTS.symbolValue()), NIL);
-        final String namestring = defaultedPathname.getNamestring();
-        if (namestring == null)
-          return error(new FileError("Pathname has no namestring: " + defaultedPathname.writeToString(),
-              defaultedPathname));
-        final File file = new File(namestring);
-        ZipCache.remove(file);
-        if (file.exists()) {
-          // File exists.
-          for (int i = 0; i < 5; i++) {
-            if (file.delete())
-              return T;
-            System.gc();
-            Thread.yield();
-          }
-          Pathname truename = new Pathname(file.getAbsolutePath());
-          StringBuilder sb = new StringBuilder("Unable to delete ");
-          sb.append(file.isDirectory() ? "directory " : "file ");
-          sb.append(truename.writeToString());
-          sb.append('.');
-          return error(new FileError(sb.toString(), truename));
-        } else {
-          // File does not exist.
-          return T;
-        }
-      }
+	// ### file-author
+	static public class file_author extends JavaPrimitive {
+		protected file_author() {
+			super("file-author");
+		}
 
-    }
+		public SubLObject execute(SubLObject arg) {
+			Pathname pathname = Lisp.coerceToPathname(arg);
+			if (pathname.isWild())
+				Lisp.error(new FileError("Bad place for a wild pathname.", pathname));
+			return Lisp.NIL;
+		}
 
-    private static final Primitive DELETE_FILE = new delete_file();
+	}
 
-    // ### file-author
-    static public final class file_author extends JavaPrimitive {
-    	protected file_author() {
-        super("file-author");
-      }
+	// ### file-error-pathname
+	static public class file_error_pathname extends JavaPrimitive {
+		protected file_error_pathname() {
+			super("file-error-pathname");
+		}
 
-      @Override
-      public SubLObject execute(SubLObject arg) {
-        Pathname pathname = coerceToPathname(arg);
-        if (pathname.isWild())
-          error(new FileError("Bad place for a wild pathname.", pathname));
-        return NIL;
-      }
+		public SubLObject execute(SubLObject arg) {
+			return arg instanceof FileError ? ((FileError) arg).getPathname() : Lisp.NIL;
+		}
 
-    }
+	}
 
-    private static final Primitive FILE_AUTHOR = new file_author();
+	static public class file_length extends JavaPrimitive {
+		protected file_length() {
+			super("file-length", "stream");
+		}
 
-    // ### file-error-pathname
-    static public final class file_error_pathname extends JavaPrimitive {
-    	protected file_error_pathname() {
-        super("file-error-pathname");
-      }
+		// ### file-length
+		// file-length stream => length
 
-      @Override
-      public SubLObject execute(SubLObject arg) {
-        return arg instanceof FileError ? ((FileError) arg).getPathname() : NIL;
-      }
+		public SubLObject execute(SubLObject arg) {
+			return Lisp.checkStream(arg).fileLength();
+		}
 
-    }
+	}
 
-    private static final file_error_pathname FILE_ERROR_PATHNAME = new file_error_pathname();
+	// ### file-string-length
+	static public class file_string_length extends JavaPrimitive {
+		protected file_string_length() {
+			super("file-string-length", "stream object");
+		}
 
-    static public final class file_length extends JavaPrimitive {
-    	protected file_length() {
-        super("file-length", "stream");
-      }
+		public SubLObject execute(SubLObject first, SubLObject second)
 
-      // ### file-length
-      // file-length stream => length
-      @Override
-      public SubLObject execute(SubLObject arg) {
-        return checkStream(arg).fileLength();
-      }
+		{
+			return Lisp.checkStream(first).fileStringLength(second);
+		}
 
-    }
+	}
 
-    private static final Primitive FILE_LENGTH = new file_length();
+	// ### file-write-date
+	static public class file_write_date extends JavaPrimitive {
+		protected file_write_date() {
+			super("file-write-date");
+		}
 
-    // ### file-string-length
-    static public final class file_string_length extends JavaPrimitive {
-      protected file_string_length() {
-        super("file-string-length", "stream object");
-      }
+		public SubLObject execute(SubLObject arg) {
+			Pathname pathname = Lisp.coerceToPathname(arg);
+			if (pathname.isWild())
+				Lisp.error(new FileError("Bad place for a wild pathname.", pathname));
+			long lastModified = pathname.getLastModified();
+			if (lastModified == 0)
+				return Lisp.NIL;
+			return Lisp.number(lastModified / 1000 + 2208988800L);
+		}
 
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second)
+	}
 
-      {
-        return checkStream(first).fileStringLength(second);
-      }
+	// ### canonicalize-logical-host host => canonical-host
+	private static Primitive CANONICALIZE_LOGICAL_HOST = new canonicalize_logical_host();
 
-    }
+	// ### %make-logical-pathname namestring => logical-pathname
+	private static Primitive _MAKE_LOGICAL_PATHNAME = new _make_logical_pathname();
 
-    private static final Primitive FILE_STRING_LENGTH = new file_string_length();
+	// ### probe-file
+	// probe-file pathspec => truename
+	private static Primitive PROBE_FILE = new JavaPrimitive("probe-file", "pathspec") {
 
-    // ### file-write-date
-    static public final class file_write_date extends JavaPrimitive {
-    	protected file_write_date() {
-        super("file-write-date");
-      }
+		public SubLObject execute(SubLObject arg) {
+			return Pathname.truename(arg, false);
+		}
+	};
 
-      @Override
-      public SubLObject execute(SubLObject arg) {
-        Pathname pathname = coerceToPathname(arg);
-        if (pathname.isWild())
-          error(new FileError("Bad place for a wild pathname.", pathname));
-        long lastModified = pathname.getLastModified();
-        if (lastModified == 0)
-          return NIL;
-        return number(lastModified / 1000 + 2208988800L);
-      }
+	// ### truename
+	// truename filespec => truename
+	private static Primitive TRUENAME = new JavaPrimitive("truename", "filespec") {
 
-    }
+		public SubLObject execute(SubLObject arg) {
+			return Pathname.truename(arg, true);
+		}
+	};
 
-    private static final Primitive FILE_WRITE_DATE = new file_write_date();
+	// ### probe-directory
+	// probe-directory pathspec => truename
+	private static Primitive PROBE_DIRECTORY = new JavaPrimitive("probe-directory", Lisp.PACKAGE_EXT, true) {
+
+		public SubLObject execute(SubLObject arg) {
+			Pathname pathname = Lisp.coerceToPathname(arg);
+			if (pathname.isWild())
+				Lisp.error(new FileError("Bad place for a wild pathname.", pathname));
+			File file = Utilities.getFile(pathname);
+			return file.isDirectory() ? Utilities.getDirectoryPathname(file) : Lisp.NIL;
+		}
+	};
+
+	// ### file-directory-p
+	// file-directory-p pathspec => generalized-boolean
+	private static Primitive FILE_DIRECTORY_P = new JavaPrimitive("file-directory-p", Lisp.PACKAGE_EXT, true) {
+
+		public SubLObject execute(SubLObject arg) {
+			Pathname pathname = Lisp.coerceToPathname(arg);
+			if (pathname.isWild())
+				Lisp.error(new FileError("Bad place for a wild pathname.", pathname));
+			File file = Utilities.getFile(pathname);
+			return file.isDirectory() ? Lisp.T : Lisp.NIL;
+		}
+	};
+
+	private static Primitive CREATE_NEW_FILE = new create_new_file();
+
+	private static Primitive DELETE_FILE = new delete_file();
+
+	private static Primitive FILE_AUTHOR = new file_author();
+
+	private static file_error_pathname FILE_ERROR_PATHNAME = new file_error_pathname();
+
+	private static Primitive FILE_LENGTH = new file_length();
+
+	private static Primitive FILE_STRING_LENGTH = new file_string_length();
+
+	private static Primitive FILE_WRITE_DATE = new file_write_date();
 
 }

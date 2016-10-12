@@ -33,603 +33,478 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public class ABCLStructureObject extends AbstractStructureObject
-{
-  final SubLObject[] slots;
+public class ABCLStructureObject extends AbstractStructureObject {
+	// ### structure-object-p object => generalized-boolean
+	private static Primitive STRUCTURE_OBJECT_P = new JavaPrimitive("structure-object-p", Lisp.PACKAGE_SYS, true,
+			"object") {
 
-  public ABCLStructureObject(SubLSymbol symbol)
+		public SubLObject execute(SubLObject arg) {
+			return arg instanceof StructureObject ? Lisp.T : Lisp.NIL;
+		}
+	};
 
-  {
-  	super(symbol);
-    if (structureClass == null) {
-        System.err.println("No mitens sitten: " + BuiltInClass.SYSTEM_STREAM.toString());
-        System.err.println("joopa joo:" + LispSymbols.SYSTEM_STREAM.getJavaSymbolName());
-        System.err.println("Oh noes, structure object got a null class:" + symbol.toString() + ", symbol name:" + symbol.getJavaSymbolName() );
-    }
-    slots = makeLispObjectArray(0);
-  }
+	// ### structure-length instance => length
+	private static Primitive STRUCTURE_LENGTH = new JavaPrimitive("structure-length", Lisp.PACKAGE_SYS, true,
+			"instance") {
 
-  public ABCLStructureObject(SubLSymbol symbol, SubLObject[] slots)
+		public SubLObject execute(SubLObject arg) {
+			if (arg instanceof StructureObject)
+				return LispObjectFactory.makeInteger(((StructureObject) arg).getNumSlots());
+			return Lisp.type_error(arg, LispSymbols.STRUCTURE_OBJECT);
+		}
+	};
 
-  {
-  	super(symbol);
-    this.slots = slots;
-  }
+	// ### structure-ref instance index => value
+	private static Primitive STRUCTURE_REF = new JavaPrimitive("structure-ref", Lisp.PACKAGE_SYS, true) {
 
-  public ABCLStructureObject(SubLSymbol symbol, SubLObject obj0)
+		public SubLObject execute(SubLObject first, SubLObject second)
 
-  {
-  	super(symbol);
-    SubLObject[] slots = makeLispObjectArray(1);
-    slots[0] = obj0;
-    this.slots = slots;
-  }
+		{
+			if (first instanceof StructureObject)
+				try {
+					return ((StructureObject) first).getSlotValue(second.intValue());
+				} catch (ArrayIndexOutOfBoundsException e) {
+					// Shouldn't happen.
+					return Lisp.error(new LispError("Internal error."));
+				}
+			return Lisp.type_error(first, LispSymbols.STRUCTURE_OBJECT);
+		}
+	};
 
-  public ABCLStructureObject(SubLSymbol symbol, SubLObject obj0, SubLObject obj1)
+	// ### structure-set instance index new-value => new-value
+	private static Primitive STRUCTURE_SET = new JavaPrimitive("structure-set", Lisp.PACKAGE_SYS, true) {
 
-  {
-  	super(symbol);
-    SubLObject[] slots = makeLispObjectArray(2);
-    slots[0] = obj0;
-    slots[1] = obj1;
-    this.slots = slots;
-  }
+		public SubLObject execute(SubLObject first, SubLObject second, SubLObject third)
 
-  public ABCLStructureObject(SubLSymbol symbol, SubLObject obj0, SubLObject obj1,
-                         SubLObject obj2)
+		{
 
-  {
-  	super(symbol);
-    SubLObject[] slots = makeLispObjectArray(3);
-    slots[0] = obj0;
-    slots[1] = obj1;
-    slots[2] = obj2;
-    this.slots = slots;
-  }
+			if (first instanceof StructureObject)
+				try {
+					((StructureObject) first).setSlotValue(second.intValue(), third);
+					return third;
+				} catch (ArrayIndexOutOfBoundsException e) {
+					// Shouldn't happen.
+					return Lisp.error(new LispError("Internal error."));
+				}
+			return Lisp.type_error(first, LispSymbols.STRUCTURE_OBJECT);
+		}
+	};
 
-  public ABCLStructureObject(SubLSymbol symbol, SubLObject obj0, SubLObject obj1,
-                         SubLObject obj2, SubLObject obj3)
+	// ### make-structure
+	private static Primitive MAKE_STRUCTURE = new JavaPrimitive("make-structure", Lisp.PACKAGE_SYS, true) {
 
-  {
-  	super(symbol);
-    SubLObject[] slots = makeLispObjectArray(4);
-    slots[0] = obj0;
-    slots[1] = obj1;
-    slots[2] = obj2;
-    slots[3] = obj3;
-    this.slots = slots;
-  }
+		public SubLObject execute(SubLObject first, SubLObject second)
 
-  public ABCLStructureObject(SubLSymbol symbol, SubLObject obj0, SubLObject obj1,
-                         SubLObject obj2, SubLObject obj3, SubLObject obj4)
+		{
+			return new ABCLStructureObject(Lisp.checkSymbol(first), second);
+		}
 
-  {
-  	super(symbol);
-    slots = makeLispObjectArray(5);
-    slots[0] = obj0;
-    slots[1] = obj1;
-    slots[2] = obj2;
-    slots[3] = obj3;
-    slots[4] = obj4;
-    //this.slots = slots;
-  }
+		public SubLObject execute(SubLObject first, SubLObject second, SubLObject third)
 
-  public ABCLStructureObject(SubLSymbol symbol, SubLObject obj0, SubLObject obj1,
-                         SubLObject obj2, SubLObject obj3, SubLObject obj4,
-                         SubLObject obj5)
+		{
+			return new ABCLStructureObject(Lisp.checkSymbol(first), second, third);
+		}
 
-  {
-  	super(symbol);
-    SubLObject[] slots = makeLispObjectArray(6);
-    slots[0] = obj0;
-    slots[1] = obj1;
-    slots[2] = obj2;
-    slots[3] = obj3;
-    slots[4] = obj4;
-    slots[5] = obj5;
-    this.slots = slots;
-  }
+		public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth)
 
-  public ABCLStructureObject(StructureObject obj)
-  {
-    super((SubLSymbol) obj.typeOf());
-  	final SubLObject[] oslots = obj.getSlots();
-    slots = new SubLObject[oslots.length];
-    for (int i = slots.length; i-- > 0;)
-      slots[i] = oslots[i];
-  }
+		{
+			return new ABCLStructureObject(Lisp.checkSymbol(first), second, third, fourth);
+		}
 
-  @Override
-  public SubLObject typeOf()
-  {
-    return structureClass.getLispClassName();
-  }
+		public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
+				SubLObject fifth)
 
-  @Override
-  public SubLObject classOf()
-  {
-    return structureClass;
-  }
+		{
+			return new ABCLStructureObject(Lisp.checkSymbol(first), second, third, fourth, fifth);
+		}
 
-  @Override
-  public SubLObject getParts()
-  {
-    SubLObject result = NIL;
-    result = result.push(makeCons("class", structureClass));
-    SubLObject effectiveSlots = structureClass.getSlotDefinitions();
-    SubLObject[] effectiveSlotsArray = effectiveSlots.copyToArray();
-    Debug.assertTrue(effectiveSlotsArray.length == slots.length);
-    for (int i = 0; i < slots.length; i++)
-      {
-        SimpleVector slotDefinition = (SimpleVector) effectiveSlotsArray[i];
-        SubLObject slotName = slotDefinition.AREF(1);
-        result = result.push(makeCons(slotName, slots[i]));
-      }
-    return result.nreverse();
-  }
+		public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
+				SubLObject fifth, SubLObject sixth)
 
-  @Override
-  public SubLObject typep(SubLObject type)
-  {
-    if (type instanceof StructureClass)
-      return memq(type, structureClass.getCPL()) ? T : NIL;
-    if (type == structureClass.getLispClassName())
-      return T;
-    if (type == LispSymbols.STRUCTURE_OBJECT)
-      return T;
-    if (type == BuiltInClass.STRUCTURE_OBJECT)
-      return T;
-    if (type instanceof SubLSymbol)
-      {
-        LispClass c = LispClass.findClass((SubLSymbol)type);
-        if (c != null)
-          return memq(c, structureClass.getCPL()) ? T : NIL;
-      }
-    return super.typep(type);
-  }
+		{
+			return new ABCLStructureObject(Lisp.checkSymbol(first), second, third, fourth, fifth, sixth);
+		}
 
-  @Override
-  public boolean equalp(SubLObject obj)
-  {
-    if (this == obj)
-      return true;
-    if (obj instanceof StructureObject)
-      {
-        StructureObject o = (StructureObject) obj;
-        if (structureClass != o.getStructureClass())
-          return false;
-      	final SubLObject[] oslots = o.getSlots();
-        for (int i = 0; i < slots.length; i++)
-          {
-            if (!slots[i].equalp(oslots[i]))
-              return false;
-          }
-        return true;
-      }
-    return false;
-  }
+		public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
+				SubLObject fifth, SubLObject sixth, SubLObject seventh)
 
-  @Override
-  public SubLObject getSlotValue_0()
-  {
-    try
-      {
-        return slots[0];
-      }
-    catch (ArrayIndexOutOfBoundsException e)
-      {
-        return badIndex(0);
-      }
-  }
+		{
+			return new ABCLStructureObject(Lisp.checkSymbol(first), second, third, fourth, fifth, sixth, seventh);
+		}
+	};
 
-  @Override
-  public SubLObject getSlotValue_1()
-  {
-    try
-      {
-        return slots[1];
-      }
-    catch (ArrayIndexOutOfBoundsException e)
-      {
-        return badIndex(1);
-      }
-  }
+	// ### %make-structure name slot-values => object
+	private static Primitive _MAKE_STRUCTURE = new JavaPrimitive("%make-structure", Lisp.PACKAGE_SYS, true) {
 
-  @Override
-  public SubLObject getSlotValue_2()
-  {
-    try
-      {
-        return slots[2];
-      }
-    catch (ArrayIndexOutOfBoundsException e)
-      {
-        return badIndex(2);
-      }
-  }
+		public SubLObject execute(SubLObject first, SubLObject second)
 
-  @Override
-  public SubLObject getSlotValue_3()
-  {
-    try
-      {
-        return slots[3];
-      }
-    catch (ArrayIndexOutOfBoundsException e)
-      {
-        return badIndex(3);
-      }
-  }
+		{
+			return new ABCLStructureObject(Lisp.checkSymbol(first), second.copyToArray());
+		}
+	};
 
-  @Override
-  public SubLObject getSlotValue(int index)
-  {
-    try
-      {
-        return slots[index];
-      }
-    catch (ArrayIndexOutOfBoundsException e)
-      {
-        return badIndex(index);
-      }
-  }
+	// ### copy-structure structure => copy
+	private static Primitive COPY_STRUCTURE = new JavaPrimitive(LispSymbols.COPY_STRUCTURE, "structure") {
 
-  @Override
-  public int getFixnumSlotValue(int index)
-  {
-    try
-      {
-        return slots[index].intValue();
-				//          if (obj instanceof Fixnum) return ((Fixnum)obj).value;
-				//          type_error(obj, LispSymbols.FIXNUM);
-				//      // Not reached.
-				//          return 0;
-      }
-    catch (ArrayIndexOutOfBoundsException e)
-      {
-        badIndex(index);
-        // Not reached.
-        return 0;
-      }
-  }
+		public SubLObject execute(SubLObject arg) {
+			if (arg instanceof StructureObject)
+				return new ABCLStructureObject((StructureObject) arg);
+			return Lisp.type_error(arg, LispSymbols.STRUCTURE_OBJECT);
+		}
+	};
 
-  @Override
-  public boolean getSlotValueAsBoolean(int index)
-  {
-    try
-      {
-        return slots[index] != NIL ? true : false;
-      }
-    catch (ArrayIndexOutOfBoundsException e)
-      {
-        badIndex(index);
-        // Not reached.
-        return false;
-      }
-  }
+	SubLObject[] slots;
 
-  @Override
-  public void setSlotValue_0(SubLObject value)
+	public ABCLStructureObject(StructureObject obj) {
+		super((SubLSymbol) obj.typeOf());
+		final SubLObject[] oslots = obj.getSlots();
+		this.slots = new SubLObject[oslots.length];
+		for (int i = this.slots.length; i-- > 0;)
+			this.slots[i] = oslots[i];
+	}
 
-  {
-    try
-      {
-        slots[0] = value;
-      }
-    catch (ArrayIndexOutOfBoundsException e)
-      {
-        badIndex(0);
-      }
-  }
+	public ABCLStructureObject(SubLSymbol symbol)
 
-  @Override
-  public void setSlotValue_1(SubLObject value)
+	{
+		super(symbol);
+		if (this.structureClass == null) {
+			System.err.println("No mitens sitten: " + BuiltInClass.SYSTEM_STREAM.toString());
+			System.err.println("joopa joo:" + LispSymbols.SYSTEM_STREAM.getJavaSymbolName());
+			System.err.println("Oh noes, structure object got a null class:" + symbol.toString() + ", symbol name:"
+					+ symbol.getJavaSymbolName());
+		}
+		this.slots = LispObjectFactory.makeLispObjectArray(0);
+	}
 
-  {
-    try
-      {
-        slots[1] = value;
-      }
-    catch (ArrayIndexOutOfBoundsException e)
-      {
-        badIndex(1);
-      }
-  }
+	public ABCLStructureObject(SubLSymbol symbol, SubLObject obj0)
 
-  @Override
-  public void setSlotValue_2(SubLObject value)
+	{
+		super(symbol);
+		SubLObject[] slots = LispObjectFactory.makeLispObjectArray(1);
+		slots[0] = obj0;
+		this.slots = slots;
+	}
 
-  {
-    try
-      {
-        slots[2] = value;
-      }
-    catch (ArrayIndexOutOfBoundsException e)
-      {
-        badIndex(2);
-      }
-  }
+	public ABCLStructureObject(SubLSymbol symbol, SubLObject obj0, SubLObject obj1)
 
-  @Override
-  public void setSlotValue_3(SubLObject value)
+	{
+		super(symbol);
+		SubLObject[] slots = LispObjectFactory.makeLispObjectArray(2);
+		slots[0] = obj0;
+		slots[1] = obj1;
+		this.slots = slots;
+	}
 
-  {
-    try
-      {
-        slots[3] = value;
-      }
-    catch (ArrayIndexOutOfBoundsException e)
-      {
-        badIndex(3);
-      }
-  }
+	public ABCLStructureObject(SubLSymbol symbol, SubLObject obj0, SubLObject obj1, SubLObject obj2)
 
-  @Override
-  public void setSlotValue(int index, SubLObject value)
+	{
+		super(symbol);
+		SubLObject[] slots = LispObjectFactory.makeLispObjectArray(3);
+		slots[0] = obj0;
+		slots[1] = obj1;
+		slots[2] = obj2;
+		this.slots = slots;
+	}
 
-  {
-    try
-      {
-        slots[index] = value;
-      }
-    catch (ArrayIndexOutOfBoundsException e)
-      {
-        badIndex(index);
-      }
-  }
+	public ABCLStructureObject(SubLSymbol symbol, SubLObject obj0, SubLObject obj1, SubLObject obj2, SubLObject obj3)
 
-  @Override
-  public final int psxhash(int depth)
-  {
-    int result = mix(structureClass.sxhash(), 7814971);
-    if (depth > 0)
-      {
-        int limit = slots.length;
-        if (limit > 4)
-          limit = 4;
-        for (int i = 0; i < limit; i++)
-          result = mix(slots[i].psxhash(depth - 1), result);
-      }
-    return result & 0x7fffffff;
-  }
+	{
+		super(symbol);
+		SubLObject[] slots = LispObjectFactory.makeLispObjectArray(4);
+		slots[0] = obj0;
+		slots[1] = obj1;
+		slots[2] = obj2;
+		slots[3] = obj3;
+		this.slots = slots;
+	}
 
-  @Override
-  public String writeToString()
-  {
-    try
-      {
-        final LispThread thread = LispThread.currentThread();
-        // FIXME
-        if (typep(LispSymbols.RESTART) != NIL)
-          {
-            SubLSymbol PRINT_RESTART = PACKAGE_SYS.intern("PRINT-RESTART");
-            SubLObject fun = PRINT_RESTART.getSymbolFunction();
-            StringOutputStream stream = new StringOutputStream();
-            thread.execute(fun, this, stream);
-            return stream.getOutputString().getString();
-          }
-        if (_PRINT_STRUCTURE_.symbolValue(thread) == NIL)
-          return unreadableString(structureClass.getLispClassName().writeToString());
-        int maxLevel = Integer.MAX_VALUE;
-        SubLObject printLevel = LispSymbols.PRINT_LEVEL.symbolValue(thread);
-        if (printLevel instanceof Fixnum)
-          maxLevel = ((Fixnum)printLevel).value;
-        SubLObject currentPrintLevel =
-          _CURRENT_PRINT_LEVEL_.symbolValue(thread);
-        int currentLevel = currentPrintLevel.intValue();
-        if (currentLevel >= maxLevel && slots.length > 0)
-          return "#";
-        StringBuilder sb = new StringBuilder("#S(");
-        sb.append(structureClass.getLispClassName().writeToString());
-        if (currentLevel < maxLevel)
-          {
-            SubLObject effectiveSlots = structureClass.getSlotDefinitions();
-            SubLObject[] effectiveSlotsArray = effectiveSlots.copyToArray();
-            Debug.assertTrue(effectiveSlotsArray.length == slots.length);
-            final SubLObject printLength = LispSymbols.PRINT_LENGTH.symbolValue(thread);
-            final int limit;
-            if (printLength instanceof Fixnum)
-              limit = Math.min(slots.length, ((Fixnum)printLength).value);
-            else
-              limit = slots.length;
-            final boolean printCircle =
-              (LispSymbols.PRINT_CIRCLE.symbolValue(thread) != NIL);
-            for (int i = 0; i < limit; i++)
-              {
-                sb.append(' ');
-                SimpleVector slotDefinition = (SimpleVector) effectiveSlotsArray[i];
-                // FIXME AREF(1)
-                SubLObject slotName = slotDefinition.AREF(1);
-                Debug.assertTrue(slotName instanceof SubLSymbol);
-                sb.append(':');
-                sb.append(((SubLSymbol)slotName).getSubLName().getString());
-                sb.append(' ');
-                if (printCircle)
-                  {
-                    StringOutputStream stream = new StringOutputStream();
-                    thread.execute(LispSymbols.OUTPUT_OBJECT.getSymbolFunction(),
-                                   slots[i], stream);
-                    sb.append(stream.getOutputString().getString());
-                  }
-                else
-                  sb.append(slots[i].writeToString());
-              }
-            if (limit < slots.length)
-              sb.append(" ...");
-          }
-        sb.append(')');
-        return sb.toString();
-      }
-    catch (StackOverflowError e)
-      {
-	e.printStackTrace();
-        error(new StorageCondition("Stack overflow."));
-        return null; // Not reached.
-      }
-  }
+	public ABCLStructureObject(SubLSymbol symbol, SubLObject obj0, SubLObject obj1, SubLObject obj2, SubLObject obj3,
+			SubLObject obj4)
 
-  // ### structure-object-p object => generalized-boolean
-  private static final Primitive STRUCTURE_OBJECT_P =
-    new JavaPrimitive("structure-object-p", PACKAGE_SYS, true, "object")
-    {
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-        return arg instanceof StructureObject ? T : NIL;
-      }
-    };
+	{
+		super(symbol);
+		this.slots = LispObjectFactory.makeLispObjectArray(5);
+		this.slots[0] = obj0;
+		this.slots[1] = obj1;
+		this.slots[2] = obj2;
+		this.slots[3] = obj3;
+		this.slots[4] = obj4;
+		// this.slots = slots;
+	}
 
-  // ### structure-length instance => length
-  private static final Primitive STRUCTURE_LENGTH =
-    new JavaPrimitive("structure-length", PACKAGE_SYS, true, "instance")
-    {
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-          if (arg instanceof StructureObject)
-            return LispObjectFactory.makeInteger(((StructureObject)arg).getNumSlots());
-        return type_error(arg, LispSymbols.STRUCTURE_OBJECT);
-      }
-    };
+	public ABCLStructureObject(SubLSymbol symbol, SubLObject obj0, SubLObject obj1, SubLObject obj2, SubLObject obj3,
+			SubLObject obj4, SubLObject obj5)
 
-  // ### structure-ref instance index => value
-  private static final Primitive STRUCTURE_REF =
-    new JavaPrimitive("structure-ref", PACKAGE_SYS, true)
-    {
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second)
+	{
+		super(symbol);
+		SubLObject[] slots = LispObjectFactory.makeLispObjectArray(6);
+		slots[0] = obj0;
+		slots[1] = obj1;
+		slots[2] = obj2;
+		slots[3] = obj3;
+		slots[4] = obj4;
+		slots[5] = obj5;
+		this.slots = slots;
+	}
 
-      {
-    if (first instanceof StructureObject)
-        try
-          {
-            return ((StructureObject)first).getSlotValue(second.intValue());
-          }
-        catch (ArrayIndexOutOfBoundsException e)
-          {
-            // Shouldn't happen.
-            return error(new LispError("Internal error."));
-          }      
-      return type_error(first, LispSymbols.STRUCTURE_OBJECT);
-      }
-    };
+	public ABCLStructureObject(SubLSymbol symbol, SubLObject[] slots)
 
-  // ### structure-set instance index new-value => new-value
-  private static final Primitive STRUCTURE_SET =
-    new JavaPrimitive("structure-set", PACKAGE_SYS, true)
-    {
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second,
-                                SubLObject third)
+	{
+		super(symbol);
+		this.slots = slots;
+	}
 
-      {
-          
-            if (first instanceof StructureObject)
-                try
-                  {
-                    ((StructureObject)first).setSlotValue(second.intValue(), third);
-                    return third;
-                  }
-                catch (ArrayIndexOutOfBoundsException e)
-                  {
-                    // Shouldn't happen.
-                    return error(new LispError("Internal error."));
-                  }      
-              return type_error(first, LispSymbols.STRUCTURE_OBJECT);
-              }      
-    };
+	public SubLObject classOf() {
+		return this.structureClass;
+	}
 
-  // ### make-structure
-  private static final Primitive MAKE_STRUCTURE =
-    new JavaPrimitive("make-structure", PACKAGE_SYS, true)
-    {
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second)
+	public boolean equalp(SubLObject obj) {
+		if (this == obj)
+			return true;
+		if (obj instanceof StructureObject) {
+			StructureObject o = (StructureObject) obj;
+			if (this.structureClass != o.getStructureClass())
+				return false;
+			final SubLObject[] oslots = o.getSlots();
+			for (int i = 0; i < this.slots.length; i++)
+				if (!this.slots[i].equalp(oslots[i]))
+					return false;
+			return true;
+		}
+		return false;
+	}
 
-      {
-          return new ABCLStructureObject(checkSymbol(first), second);
-      }
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second,
-                                SubLObject third)
-
-      {
-          return new ABCLStructureObject(checkSymbol(first), second, third);
-      }
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second,
-                                SubLObject third, SubLObject fourth)
-
-      {
-          return new ABCLStructureObject(checkSymbol(first), second, third, fourth);
-      }
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second,
-                                SubLObject third, SubLObject fourth,
-                                SubLObject fifth)
-
-      {
-          return new ABCLStructureObject(checkSymbol(first), second, third, fourth,
-                  fifth);
-      }
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second,
-                                SubLObject third, SubLObject fourth,
-                                SubLObject fifth, SubLObject sixth)
-
-      {
-          return new ABCLStructureObject(checkSymbol(first), second, third, fourth,
-                  fifth, sixth);
-      }
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second,
-                                SubLObject third, SubLObject fourth,
-                                SubLObject fifth, SubLObject sixth,
-                                SubLObject seventh)
-
-      {
-          return new ABCLStructureObject(checkSymbol(first), second, third, fourth,
-                  fifth, sixth, seventh);
-      }
-    };
-
-  // ### %make-structure name slot-values => object
-  private static final Primitive _MAKE_STRUCTURE =
-    new JavaPrimitive("%make-structure", PACKAGE_SYS, true)
-    {
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second)
-
-      {
-          return new ABCLStructureObject(checkSymbol(first), second.copyToArray());
-      }
-    };
-
-  // ### copy-structure structure => copy
-  private static final Primitive COPY_STRUCTURE =
-    new JavaPrimitive(LispSymbols.COPY_STRUCTURE, "structure")
-    {
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-          if (arg instanceof StructureObject)
-            return new ABCLStructureObject((StructureObject)arg);
-          return type_error(arg, LispSymbols.STRUCTURE_OBJECT);
-      }
-    };
-
-	@Override
-	public SubLObject[] getSlots() {
-		return slots;
+	public int getFixnumSlotValue(int index) {
+		try {
+			return this.slots[index].intValue();
+			// if (obj instanceof Fixnum) return ((Fixnum)obj).value;
+			// type_error(obj, LispSymbols.FIXNUM);
+			// // Not reached.
+			// return 0;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			this.badIndex(index);
+			// Not reached.
+			return 0;
+		}
 	}
 
 	public int getNumSlots() {
-		return slots.length;
+		return this.slots.length;
+	}
+
+	public SubLObject getParts() {
+		SubLObject result = Lisp.NIL;
+		result = result.push(LispObjectFactory.makeCons("class", this.structureClass));
+		SubLObject effectiveSlots = this.structureClass.getSlotDefinitions();
+		SubLObject[] effectiveSlotsArray = effectiveSlots.copyToArray();
+		Debug.assertTrue(effectiveSlotsArray.length == this.slots.length);
+		for (int i = 0; i < this.slots.length; i++) {
+			SimpleVector slotDefinition = (SimpleVector) effectiveSlotsArray[i];
+			SubLObject slotName = slotDefinition.AREF(1);
+			result = result.push(LispObjectFactory.makeCons(slotName, this.slots[i]));
+		}
+		return result.nreverse();
+	}
+
+	public SubLObject[] getSlots() {
+		return this.slots;
+	}
+
+	public SubLObject getSlotValue(int index) {
+		try {
+			return this.slots[index];
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return this.badIndex(index);
+		}
+	}
+
+	public SubLObject getSlotValue_0() {
+		try {
+			return this.slots[0];
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return this.badIndex(0);
+		}
+	}
+
+	public SubLObject getSlotValue_1() {
+		try {
+			return this.slots[1];
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return this.badIndex(1);
+		}
+	}
+
+	public SubLObject getSlotValue_2() {
+		try {
+			return this.slots[2];
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return this.badIndex(2);
+		}
+	}
+
+	public SubLObject getSlotValue_3() {
+		try {
+			return this.slots[3];
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return this.badIndex(3);
+		}
+	}
+
+	public boolean getSlotValueAsBoolean(int index) {
+		try {
+			return this.slots[index] != Lisp.NIL ? true : false;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			this.badIndex(index);
+			// Not reached.
+			return false;
+		}
+	}
+
+	public int psxhash(int depth) {
+		int result = Lisp.mix(this.structureClass.sxhash(), 7814971);
+		if (depth > 0) {
+			int limit = this.slots.length;
+			if (limit > 4)
+				limit = 4;
+			for (int i = 0; i < limit; i++)
+				result = Lisp.mix(this.slots[i].psxhash(depth - 1), result);
+		}
+		return result & 0x7fffffff;
+	}
+
+	public void setSlotValue(int index, SubLObject value)
+
+	{
+		try {
+			this.slots[index] = value;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			this.badIndex(index);
+		}
+	}
+
+	public void setSlotValue_0(SubLObject value)
+
+	{
+		try {
+			this.slots[0] = value;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			this.badIndex(0);
+		}
+	}
+
+	public void setSlotValue_1(SubLObject value)
+
+	{
+		try {
+			this.slots[1] = value;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			this.badIndex(1);
+		}
+	}
+
+	public void setSlotValue_2(SubLObject value)
+
+	{
+		try {
+			this.slots[2] = value;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			this.badIndex(2);
+		}
+	}
+
+	public void setSlotValue_3(SubLObject value)
+
+	{
+		try {
+			this.slots[3] = value;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			this.badIndex(3);
+		}
+	}
+
+	public SubLObject typeOf() {
+		return this.structureClass.getLispClassName();
+	}
+
+	public SubLObject typep(SubLObject type) {
+		if (type instanceof StructureClass)
+			return Lisp.memq(type, this.structureClass.getCPL()) ? Lisp.T : Lisp.NIL;
+		if (type == this.structureClass.getLispClassName())
+			return Lisp.T;
+		if (type == LispSymbols.STRUCTURE_OBJECT)
+			return Lisp.T;
+		if (type == BuiltInClass.STRUCTURE_OBJECT)
+			return Lisp.T;
+		if (type instanceof SubLSymbol) {
+			LispClass c = LispClass.findClass((SubLSymbol) type);
+			if (c != null)
+				return Lisp.memq(c, this.structureClass.getCPL()) ? Lisp.T : Lisp.NIL;
+		}
+		return super.typep(type);
+	}
+
+	public String writeToString() {
+		try {
+			LispThread thread = LispThread.currentThread();
+			// FIXME
+			if (this.typep(LispSymbols.RESTART) != Lisp.NIL) {
+				SubLSymbol PRINT_RESTART = Lisp.PACKAGE_SYS.intern("PRINT-RESTART");
+				SubLObject fun = PRINT_RESTART.getSymbolFunction();
+				StringOutputStream stream = new StringOutputStream();
+				thread.execute(fun, this, stream);
+				return stream.getOutputString().getString();
+			}
+			if (Lisp._PRINT_STRUCTURE_.symbolValue(thread) == Lisp.NIL)
+				return this.unreadableString(this.structureClass.getLispClassName().writeToString());
+			int maxLevel = Integer.MAX_VALUE;
+			SubLObject printLevel = LispSymbols.PRINT_LEVEL.symbolValue(thread);
+			if (printLevel instanceof Fixnum)
+				maxLevel = ((Fixnum) printLevel).value;
+			SubLObject currentPrintLevel = Lisp._CURRENT_PRINT_LEVEL_.symbolValue(thread);
+			int currentLevel = currentPrintLevel.intValue();
+			if (currentLevel >= maxLevel && this.slots.length > 0)
+				return "#";
+			StringBuilder sb = new StringBuilder("#S(");
+			sb.append(this.structureClass.getLispClassName().writeToString());
+			if (currentLevel < maxLevel) {
+				SubLObject effectiveSlots = this.structureClass.getSlotDefinitions();
+				SubLObject[] effectiveSlotsArray = effectiveSlots.copyToArray();
+				Debug.assertTrue(effectiveSlotsArray.length == this.slots.length);
+				SubLObject printLength = LispSymbols.PRINT_LENGTH.symbolValue(thread);
+				int limit;
+				if (printLength instanceof Fixnum)
+					limit = Math.min(this.slots.length, ((Fixnum) printLength).value);
+				else
+					limit = this.slots.length;
+				boolean printCircle = LispSymbols.PRINT_CIRCLE.symbolValue(thread) != Lisp.NIL;
+				for (int i = 0; i < limit; i++) {
+					sb.append(' ');
+					SimpleVector slotDefinition = (SimpleVector) effectiveSlotsArray[i];
+					// FIXME AREF(1)
+					SubLObject slotName = slotDefinition.AREF(1);
+					Debug.assertTrue(slotName instanceof SubLSymbol);
+					sb.append(':');
+					sb.append(((SubLSymbol) slotName).getSubLName().getString());
+					sb.append(' ');
+					if (printCircle) {
+						StringOutputStream stream = new StringOutputStream();
+						thread.execute(LispSymbols.OUTPUT_OBJECT.getSymbolFunction(), this.slots[i], stream);
+						sb.append(stream.getOutputString().getString());
+					} else
+						sb.append(this.slots[i].writeToString());
+				}
+				if (limit < this.slots.length)
+					sb.append(" ...");
+			}
+			sb.append(')');
+			return sb.toString();
+		} catch (StackOverflowError e) {
+			e.printStackTrace();
+			Lisp.error(new StorageCondition("Stack overflow."));
+			return null; // Not reached.
+		}
 	}
 }

@@ -33,265 +33,216 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class ComplexArray_UnsignedByte8 extends AbstractComplexArray
-{
-    private final int[] dimv;
-    private int totalSize;
+public class ComplexArray_UnsignedByte8 extends AbstractComplexArray {
+	private int[] dimv;
+	private int totalSize;
 
-    // For non-displaced arrays.
-    private byte[] data;
+	// For non-displaced arrays.
+	private byte[] data;
 
-    // For displaced arrays.
-    private AbstractArray array;
-    private int displacement;
+	// For displaced arrays.
+	private AbstractArray array;
+	private int displacement;
 
-    public ComplexArray_UnsignedByte8(int[] dimv)
-    {
-        this.dimv = dimv;
-        totalSize = computeTotalSize(dimv);
-        data = new byte[totalSize];
-    }
+	public ComplexArray_UnsignedByte8(int[] dimv) {
+		this.dimv = dimv;
+		this.totalSize = AbstractSubLArray.computeTotalSize(dimv);
+		this.data = new byte[this.totalSize];
+	}
 
-    public ComplexArray_UnsignedByte8(int[] dimv, SubLObject initialContents)
+	public ComplexArray_UnsignedByte8(int[] dimv, AbstractArray array, int displacement) {
+		this.dimv = dimv;
+		this.array = array;
+		this.displacement = displacement;
+		this.totalSize = AbstractSubLArray.computeTotalSize(dimv);
+	}
 
-    {
-        this.dimv = dimv;
-        final int rank = dimv.length;
-        SubLObject rest = initialContents;
-        for (int i = 0; i < rank; i++) {
-            dimv[i] = rest.cl_length();
-            rest = rest.elt(0);
-        }
-        totalSize = computeTotalSize(dimv);
-        data = new byte[totalSize];
-        setInitialContents(0, dimv, initialContents, 0);
-    }
+	public ComplexArray_UnsignedByte8(int[] dimv, SubLObject initialContents)
 
-    public ComplexArray_UnsignedByte8(int[] dimv, AbstractArray array, int displacement)
-    {
-        this.dimv = dimv;
-        this.array = array;
-        this.displacement = displacement;
-        totalSize = computeTotalSize(dimv);
-    }
+	{
+		this.dimv = dimv;
+		int rank = dimv.length;
+		SubLObject rest = initialContents;
+		for (int i = 0; i < rank; i++) {
+			dimv[i] = rest.cl_length();
+			rest = rest.elt(0);
+		}
+		this.totalSize = AbstractSubLArray.computeTotalSize(dimv);
+		this.data = new byte[this.totalSize];
+		this.setInitialContents(0, dimv, initialContents, 0);
+	}
 
-    private int setInitialContents(int axis, int[] dims, SubLObject contents,
-                                   int index)
+	public AbstractArray adjustArray(int[] dims, AbstractArray displacedTo, int displacement) {
+		if (this.isAdjustable()) {
+			for (int i = 0; i < dims.length; i++)
+				this.dimv[i] = dims[i];
 
-    {
-        if (dims.length == 0) {
-            try {
-                data[index] = coerceLispObjectToJavaByte(contents);
-            }
-            catch (ArrayIndexOutOfBoundsException e) {
-                error(new LispError("Bad initial contents for array."));
-                return -1;
-            }
-            ++index;
-        } else {
-            int dim = dims[0];
-            if (dim != contents.cl_length()) {
-                error(new LispError("Bad initial contents for array."));
-                return -1;
-            }
-            int[] newDims = new int[dims.length-1];
-            for (int i = 1; i < dims.length; i++)
-                newDims[i-1] = dims[i];
-            if (contents.isList()) {
-                for (int i = contents.cl_length();i-- > 0;) {
-                    SubLObject content = contents.first();
-                    index =
-                        setInitialContents(axis + 1, newDims, content, index);
-                    contents = contents.rest();
-                }
-            } else {
-                AbstractVector v = checkVector(contents);
-                final int length = v.cl_length();
-                for (int i = 0; i < length; i++) {
-                    SubLObject content = v.AREF(i);
-                    index =
-                        setInitialContents(axis + 1, newDims, content, index);
-                }
-            }
-        }
-        return index;
-    }
+			this.data = null;
+			this.array = displacedTo;
+			this.displacement = displacement;
+			this.totalSize = AbstractSubLArray.computeTotalSize(dims);
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return list(LispSymbols.ARRAY, UNSIGNED_BYTE_8, getDimensions());
-    }
+			return this;
+		} else {
+			ComplexArray_UnsignedByte8 a = new ComplexArray_UnsignedByte8(dims, displacedTo, displacement);
 
-    @Override
-    public SubLObject classOf()
-    {
-        return BuiltInClass.ARRAY;
-    }
+			return a;
+		}
+	}
 
-    @Override
-    public int getRank()
-    {
-        return dimv.length;
-    }
+	public AbstractArray adjustArray(int[] dims, SubLObject initialElement, SubLObject initialContents) {
+		if (this.isAdjustable()) {
+			if (initialContents != null)
+				this.setInitialContents(0, dims, initialContents, 0);
+			else {
+				// ### FIXME Take the easy way out: we don't want to reorganize
+				// all of the array code yet
+				SimpleArray_UnsignedByte8 tempArray = new SimpleArray_UnsignedByte8(dims);
+				if (initialElement != null)
+					tempArray.fillVoid(initialElement);
+				SimpleArray_UnsignedByte8.copyArray(this, tempArray);
+				this.data = tempArray.data;
 
-    @Override
-    public SubLObject getDimensions()
-    {
-        SubLObject result = NIL;
-        for (int i = dimv.length; i-- > 0;)
-            result = makeCons(LispObjectFactory.makeInteger(dimv[i]), result);
-        return result;
-    }
+				for (int i = 0; i < dims.length; i++)
+					this.dimv[i] = dims[i];
+			}
+			return this;
+		} else if (initialContents != null)
+			return new ComplexArray_UnsignedByte8(dims, initialContents);
+		else {
+			ComplexArray_UnsignedByte8 newArray = new ComplexArray_UnsignedByte8(dims);
+			if (initialElement != null)
+				newArray.fillVoid(initialElement);
+			return newArray;
+		}
+	}
 
-    @Override
-    public int getDimension(int n)
-    {
-        try {
-            return dimv[n];
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            error(new TypeError("Bad array dimension " + n + "."));
-            return -1;
-        }
-    }
+	public SubLObject AREF(int index) {
+		if (this.data != null)
+			try {
+				return Lisp.coerceJavaByteToLispObject(this.data[index]);
+			} catch (ArrayIndexOutOfBoundsException e) {
+				return Lisp.error(new TypeError("Bad row major index " + index + "."));
+			}
+		else
+			return this.array.AREF(index + this.displacement);
+	}
 
-    @Override
-    public SubLObject getElementType()
-    {
-        return UNSIGNED_BYTE_8;
-    }
+	public SubLObject arrayDisplacement() {
+		SubLObject value1, value2;
+		if (this.array != null) {
+			value1 = this.array;
+			value2 = LispObjectFactory.makeInteger(this.displacement);
+		} else {
+			value1 = Lisp.NIL;
+			value2 = Fixnum.ZERO;
+		}
+		return LispThread.currentThread().setValues(value1, value2);
+	}
 
-    @Override
-    public int getTotalSize()
-    {
-        return totalSize;
-    }
+	public void aset(int index, SubLObject newValue) {
+		if (this.data != null)
+			try {
+				this.data[index] = Lisp.coerceLispObjectToJavaByte(newValue);
+			} catch (ArrayIndexOutOfBoundsException e) {
+				Lisp.error(new TypeError("Bad row major index " + index + "."));
+			}
+		else
+			this.array.aset(index + this.displacement, newValue);
+	}
 
-    @Override
-    public SubLObject arrayDisplacement()
-    {
-        SubLObject value1, value2;
-        if (array != null) {
-            value1 = array;
-            value2 = LispObjectFactory.makeInteger(displacement);
-        } else {
-            value1 = NIL;
-            value2 = Fixnum.ZERO;
-        }
-        return LispThread.currentThread().setValues(value1, value2);
-    }
+	public SubLObject classOf() {
+		return BuiltInClass.ARRAY;
+	}
 
-    @Override
-    public SubLObject AREF(int index)
-    {
-        if (data != null) {
-            try {
-                return coerceJavaByteToLispObject(data[index]);
-            }
-            catch (ArrayIndexOutOfBoundsException e) {
-                return error(new TypeError("Bad row major index " + index + "."));
-            }
-        } else
-            return array.AREF(index + displacement);
-    }
+	public void fillVoid(SubLObject obj) {
+		if (this.data != null) {
+			byte b = Lisp.coerceLispObjectToJavaByte(obj);
+			for (int i = this.data.length; i-- > 0;)
+				this.data[i] = b;
+		} else
+			for (int i = this.totalSize; i-- > 0;)
+				this.aset(i, obj);
+	}
 
-    @Override
-    public void aset(int index, SubLObject newValue)
-    {
-        if (data != null) {
-            try {
-                data[index] = coerceLispObjectToJavaByte(newValue);
-            }
-            catch (ArrayIndexOutOfBoundsException e) {
-                error(new TypeError("Bad row major index " + index + "."));
-            }
-        } else
-            array.aset(index + displacement, newValue);
-    }
+	public int getDimension(int n) {
+		try {
+			return this.dimv[n];
+		} catch (ArrayIndexOutOfBoundsException e) {
+			Lisp.error(new TypeError("Bad array dimension " + n + "."));
+			return -1;
+		}
+	}
 
-    @Override
-    public void fillVoid(SubLObject obj)
-    {
-        if (data != null) {
-            byte b = coerceLispObjectToJavaByte(obj);
-            for (int i = data.length; i-- > 0;)
-                data[i] = b;
-        } else {
-            for (int i = totalSize; i-- > 0;)
-                aset(i, obj);
-        }
-    }
+	public SubLObject getDimensions() {
+		SubLObject result = Lisp.NIL;
+		for (int i = this.dimv.length; i-- > 0;)
+			result = LispObjectFactory.makeCons(LispObjectFactory.makeInteger(this.dimv[i]), result);
+		return result;
+	}
 
-    @Override
-    public String writeToString()
-    {
-        if (LispSymbols.PRINT_READABLY.symbolValue() != NIL) {
-            error(new PrintNotReadable(list(Keyword.OBJECT, this)));
-            // Not reached.
-            return null;
-        }
-        return writeToString(dimv);
-    }
+	public SubLObject getElementType() {
+		return Lisp.UNSIGNED_BYTE_8;
+	}
 
+	public int getRank() {
+		return this.dimv.length;
+	}
 
-    @Override
-    public AbstractArray adjustArray(int[] dims,
-                                              SubLObject initialElement,
-                                              SubLObject initialContents)
-            {
-        if (isAdjustable()) {
-            if (initialContents != null)
-                setInitialContents(0, dims, initialContents, 0);
-            else {
-                //### FIXME Take the easy way out: we don't want to reorganize
-                // all of the array code yet
-                SimpleArray_UnsignedByte8 tempArray = new SimpleArray_UnsignedByte8(dims);
-                if (initialElement != null)
-                    tempArray.fillVoid(initialElement);
-                SimpleArray_UnsignedByte8.copyArray(this, tempArray);
-                this.data = tempArray.data;
+	public int getTotalSize() {
+		return this.totalSize;
+	}
 
-                for (int i = 0; i < dims.length; i++)
-                    dimv[i] = dims[i];
-            }
-            return this;
-        } else {
-            if (initialContents != null)
-                return new ComplexArray_UnsignedByte8(dims, initialContents);
-            else {
-                ComplexArray_UnsignedByte8 newArray = new ComplexArray_UnsignedByte8(dims);
-                if (initialElement != null)
-                    newArray.fillVoid(initialElement);
-                return newArray;
-            }
-        }
-    }
+	private int setInitialContents(int axis, int[] dims, SubLObject contents, int index)
 
-    @Override
-    public AbstractArray adjustArray(int[] dims,
-                                              AbstractArray displacedTo,
-                                              int displacement)
-            {
-        if (isAdjustable()) {
-            for (int i = 0; i < dims.length; i++)
-                dimv[i] = dims[i];
+	{
+		if (dims.length == 0) {
+			try {
+				this.data[index] = Lisp.coerceLispObjectToJavaByte(contents);
+			} catch (ArrayIndexOutOfBoundsException e) {
+				Lisp.error(new LispError("Bad initial contents for array."));
+				return -1;
+			}
+			++index;
+		} else {
+			int dim = dims[0];
+			if (dim != contents.cl_length()) {
+				Lisp.error(new LispError("Bad initial contents for array."));
+				return -1;
+			}
+			int[] newDims = new int[dims.length - 1];
+			for (int i = 1; i < dims.length; i++)
+				newDims[i - 1] = dims[i];
+			if (contents.isList())
+				for (int i = contents.cl_length(); i-- > 0;) {
+					SubLObject content = contents.first();
+					index = this.setInitialContents(axis + 1, newDims, content, index);
+					contents = contents.rest();
+				}
+			else {
+				AbstractVector v = Lisp.checkVector(contents);
+				int length = v.cl_length();
+				for (int i = 0; i < length; i++) {
+					SubLObject content = v.AREF(i);
+					index = this.setInitialContents(axis + 1, newDims, content, index);
+				}
+			}
+		}
+		return index;
+	}
 
-            this.data = null;
-            this.array = displacedTo;
-            this.displacement = displacement;
-            this.totalSize = computeTotalSize(dims);
+	public SubLObject typeOf() {
+		return Lisp.list(LispSymbols.ARRAY, Lisp.UNSIGNED_BYTE_8, this.getDimensions());
+	}
 
-            return this;
-        } else {
-            ComplexArray_UnsignedByte8 a = new ComplexArray_UnsignedByte8(dims, displacedTo, displacement);
-
-            return a;
-        }
-    }
+	public String writeToString() {
+		if (LispSymbols.PRINT_READABLY.symbolValue() != Lisp.NIL) {
+			Lisp.error(new PrintNotReadable(Lisp.list(Keyword.OBJECT, this)));
+			// Not reached.
+			return null;
+		}
+		return this.writeToString(this.dimv);
+	}
 }

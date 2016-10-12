@@ -35,47 +35,39 @@ package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class Return extends ControlTransfer
-{
-    public final SubLObject tag;
-    public final SubLObject block;
-    public final SubLObject result;
+public class Return extends ControlTransfer {
+	public SubLObject tag;
+	public SubLObject block;
+	public SubLObject result;
 
-    public Return(SubLObject tag, SubLObject block, SubLObject result)
-    {
-        this.tag = tag;
-        this.block = block;
-        this.result = result;
-    }
+	public Return(SubLObject tag, SubLObject result) {
+		this.tag = tag;
+		this.block = null;
+		this.result = result;
+	}
 
-    public Return(SubLObject tag, SubLObject result)
-    {
-        this.tag = tag;
-        this.block = null;
-        this.result = result;
-    }
+	public Return(SubLObject tag, SubLObject block, SubLObject result) {
+		this.tag = tag;
+		this.block = block;
+		this.result = result;
+	}
 
-    public SubLObject getTag()
-    {
-        return tag;
-    }
+	public SubLObject getBlock() {
+		return this.block;
+	}
 
-    public SubLObject getBlock()
-    {
-        return block;
-    }
+	public SubLObject getCondition() {
+		StringBuilder sb = new StringBuilder("No block named ");
+		sb.append(this.tag.writeToString());
+		sb.append(" is currently visible.");
+		return new ControlError(sb.toString());
+	}
 
-    public SubLObject getResult()
-    {
-        return result;
-    }
+	public SubLObject getResult() {
+		return this.result;
+	}
 
-    @Override
-    public SubLObject getCondition()
-    {
-        StringBuilder sb = new StringBuilder("No block named ");
-        sb.append(tag.writeToString());
-        sb.append(" is currently visible.");
-        return new ControlError(sb.toString());
-    }
+	public SubLObject getTag() {
+		return this.tag;
+	}
 }

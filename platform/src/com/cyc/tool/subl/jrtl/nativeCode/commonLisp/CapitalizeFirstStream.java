@@ -33,40 +33,32 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-public final class CapitalizeFirstStream extends CaseFrobStream
-{
-    boolean virgin = true;
+public class CapitalizeFirstStream extends CaseFrobStream {
+	boolean virgin = true;
 
-    public CapitalizeFirstStream(LispStream target)
-    {
-        super(target);
-    }
+	public CapitalizeFirstStream(LispStream target) {
+		super(target);
+	}
 
-    @Override
-    public void _writeChar(char c)
-    {
-        if (virgin) {
-            if (Character.isLetterOrDigit(c)) {
-                c = CharacterFunctions.toUpperCase(c);
-                virgin = false;
-            }
-        } else
-            c = CharacterFunctions.toLowerCase(c);
-        target._writeChar(c);
-    }
+	public void _writeChar(char c) {
+		if (this.virgin) {
+			if (Character.isLetterOrDigit(c)) {
+				c = CharacterFunctions.toUpperCase(c);
+				this.virgin = false;
+			}
+		} else
+			c = CharacterFunctions.toLowerCase(c);
+		this.target._writeChar(c);
+	}
 
-    @Override
-    public void _writeString(String s)
-    {
-        final int length = s.length();
-        for (int i = 0; i < length; i++)
-            _writeChar(s.charAt(i));
-    }
+	public void _writeLine(String s) {
+		this._writeString(s);
+		this._writeChar('\n');
+	}
 
-    @Override
-    public void _writeLine(String s)
-    {
-        _writeString(s);
-        _writeChar('\n');
-    }
+	public void _writeString(String s) {
+		int length = s.length();
+		for (int i = 0; i < length; i++)
+			this._writeChar(s.charAt(i));
+	}
 }

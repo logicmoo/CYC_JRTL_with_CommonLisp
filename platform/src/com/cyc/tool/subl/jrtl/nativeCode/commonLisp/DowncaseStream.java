@@ -33,28 +33,20 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-public final class DowncaseStream extends CaseFrobStream
-{
-    public DowncaseStream(LispStream target)
-    {
-        super(target);
-    }
+public class DowncaseStream extends CaseFrobStream {
+	public DowncaseStream(LispStream target) {
+		super(target);
+	}
 
-    @Override
-    public void _writeChar(char c)
-    {
-        target._writeChar(CharacterFunctions.toLowerCase(c));
-    }
+	public void _writeChar(char c) {
+		this.target._writeChar(CharacterFunctions.toLowerCase(c));
+	}
 
-    @Override
-    public void _writeString(String s)
-    {
-        target._writeString(s.toLowerCase());
-    }
+	public void _writeLine(String s) {
+		this.target._writeLine(s.toLowerCase());
+	}
 
-    @Override
-    public void _writeLine(String s)
-    {
-        target._writeLine(s.toLowerCase());
-    }
+	public void _writeString(String s) {
+		this.target._writeString(s.toLowerCase());
+	}
 }

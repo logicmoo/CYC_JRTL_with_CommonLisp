@@ -35,33 +35,27 @@ package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class Go extends ControlTransfer
-{
-    public final SubLObject tagbody;
-    public final SubLObject tag;
+public class Go extends ControlTransfer {
+	public SubLObject tagbody;
+	public SubLObject tag;
 
-    public Go(SubLObject tagbody, SubLObject tag)
-    {
-        this.tagbody = tagbody;
-        this.tag = tag;
-    }
+	public Go(SubLObject tagbody, SubLObject tag) {
+		this.tagbody = tagbody;
+		this.tag = tag;
+	}
 
-    public SubLObject getTagBody()
-    {
-        return tagbody;
-    }
+	public SubLObject getCondition() {
+		StringBuffer sb = new StringBuffer("No tag named ");
+		sb.append(this.tag.writeToString());
+		sb.append(" is currently visible");
+		return new ControlError(sb.toString());
+	}
 
-    public SubLObject getTag()
-    {
-        return tag;
-    }
+	public SubLObject getTag() {
+		return this.tag;
+	}
 
-    @Override
-    public SubLObject getCondition()
-    {
-        StringBuffer sb = new StringBuffer("No tag named ");
-        sb.append(tag.writeToString());
-        sb.append(" is currently visible");
-        return new ControlError(sb.toString());
-    }
+	public SubLObject getTagBody() {
+		return this.tagbody;
+	}
 }

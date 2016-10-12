@@ -33,24 +33,23 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
-import java.math.BigInteger;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
 public interface StructureObject extends SubLObject {
 
-	public SubLObject typeOf();
+	SubLObject badIndex(int n);
 
 	public SubLObject classOf();
 
+	public boolean equalp(SubLObject obj);
+
+	public int getNumSlots();
+
 	public SubLObject getParts();
 
-	public SubLObject typep(SubLObject type);
+	public SubLObject[] getSlots();
 
-	public boolean equalp(SubLObject obj);
+	abstract public SubLObject getSlotValue(int index);
 
 	abstract public SubLObject getSlotValue_0();
 
@@ -60,7 +59,13 @@ public interface StructureObject extends SubLObject {
 
 	abstract public SubLObject getSlotValue_3();
 
-	abstract public SubLObject getSlotValue(int index);
+	public StructureClass getStructureClass();
+
+	public int psxhash();
+
+	public int psxhash(int depth);
+
+	abstract public void setSlotValue(int index, SubLObject value);
 
 	abstract public void setSlotValue_0(SubLObject value);
 
@@ -70,20 +75,10 @@ public interface StructureObject extends SubLObject {
 
 	abstract public void setSlotValue_3(SubLObject value);
 
-	abstract public void setSlotValue(int index, SubLObject value);
+	public SubLObject typeOf();
 
-	SubLObject badIndex(int n);
-
-	public int psxhash();
-
-	public int psxhash(int depth);
+	public SubLObject typep(SubLObject type);
 
 	public String writeToString();
-
-	public StructureClass getStructureClass();
-
-	public SubLObject[] getSlots();
-
-	public int getNumSlots();
 
 }

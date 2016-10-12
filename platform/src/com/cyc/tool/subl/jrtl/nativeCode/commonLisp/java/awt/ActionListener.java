@@ -20,66 +20,65 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp.java.awt;
 
-
-import java.awt.event.ActionEvent;
 import java.awt.Button;
 import java.awt.List;
 import java.awt.MenuItem;
 import java.awt.TextField;
+import java.awt.event.ActionEvent;
+
 import javax.swing.AbstractButton;
 import javax.swing.JTextField;
 
 import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.JHandler;
 
-public class ActionListener implements java.awt.event.ActionListener 
-{
-    public void actionPerformed(ActionEvent actionevent) {
-        String as[] = { actionevent.paramString(), actionevent.getActionCommand() };
-        int ai[] = { actionevent.getModifiers() };
-	long al[] = { actionevent.getWhen() }; // not yet used
-        JHandler.callLisp("ACTIONPERFORMED", handle, as, ai);
-    }
+public class ActionListener implements java.awt.event.ActionListener {
+	// takes care of JButton, JMenuItem, JToggleButton etc.
+	public static synchronized void addTo(AbstractButton ab) {
+		ActionListener actionlistener = new ActionListener();
+		actionlistener.handle = ab;
+		ab.addActionListener(actionlistener);
+	}
 
-    //AWT
+	// AWT
 
-    public static synchronized void addTo(Button button) {
-        ActionListener actionlistener = new ActionListener();
-        actionlistener.handle = button;
-        button.addActionListener(actionlistener);
-    }
+	public static synchronized void addTo(Button button) {
+		ActionListener actionlistener = new ActionListener();
+		actionlistener.handle = button;
+		button.addActionListener(actionlistener);
+	}
 
-    public static synchronized void addTo(List list) {
-        ActionListener actionlistener = new ActionListener();
-        actionlistener.handle = list;
-        list.addActionListener(actionlistener);
-    }
+	public static synchronized void addTo(JTextField textfield) {
+		ActionListener actionlistener = new ActionListener();
+		actionlistener.handle = textfield;
+		textfield.addActionListener(actionlistener);
+	}
 
-    public static synchronized void addTo(MenuItem menuitem) {
-        ActionListener actionlistener = new ActionListener();
-        actionlistener.handle = menuitem;
-        menuitem.addActionListener(actionlistener);
-    }
+	public static synchronized void addTo(List list) {
+		ActionListener actionlistener = new ActionListener();
+		actionlistener.handle = list;
+		list.addActionListener(actionlistener);
+	}
 
-    public static synchronized void addTo(TextField textfield) {
-        ActionListener actionlistener = new ActionListener();
-        actionlistener.handle = textfield;
-        textfield.addActionListener(actionlistener);
-    }
+	public static synchronized void addTo(MenuItem menuitem) {
+		ActionListener actionlistener = new ActionListener();
+		actionlistener.handle = menuitem;
+		menuitem.addActionListener(actionlistener);
+	}
 
-    //Swing
-  
-    //takes care of JButton, JMenuItem, JToggleButton etc.
-    public static synchronized void addTo(AbstractButton ab) {
-        ActionListener actionlistener = new ActionListener();
-        actionlistener.handle = ab;
-        ab.addActionListener(actionlistener);
-    }
+	// Swing
 
-    public static synchronized void addTo(JTextField textfield) {
-        ActionListener actionlistener = new ActionListener();
-        actionlistener.handle = textfield;
-        textfield.addActionListener(actionlistener);
-    }
+	public static synchronized void addTo(TextField textfield) {
+		ActionListener actionlistener = new ActionListener();
+		actionlistener.handle = textfield;
+		textfield.addActionListener(actionlistener);
+	}
 
-    private Object handle;
+	private Object handle;
+
+	public void actionPerformed(ActionEvent actionevent) {
+		String as[] = { actionevent.paramString(), actionevent.getActionCommand() };
+		int ai[] = { actionevent.getModifiers() };
+		long al[] = { actionevent.getWhen() }; // not yet used
+		JHandler.callLisp("ACTIONPERFORMED", this.handle, as, ai);
+	}
 }

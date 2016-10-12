@@ -35,22 +35,22 @@ package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-/** This class serves merely to store a reference to an
- * object, used in the closure array.
+/**
+ * This class serves merely to store a reference to an object, used in the
+ * closure array.
  *
- * Objects of this type are used to model the fact that
- * closures close over bindings and not over values.
+ * Objects of this type are used to model the fact that closures close over
+ * bindings and not over values.
  *
  */
-public class ClosureBinding
-{
-    public SubLObject value;
+public class ClosureBinding {
+	public SubLObject value;
 
-    public ClosureBinding(SubLObject value) {
-        this.value = value;
-    }
-    @Override
-    public String toString() {
-    	return "ClosureBinding"+System.identityHashCode(this)+"="+value;
-    }
+	public ClosureBinding(SubLObject value) {
+		this.value = value;
+	}
+
+	public String toString() {
+		return "ClosureBinding" + System.identityHashCode(this) + "=" + this.value;
+	}
 }

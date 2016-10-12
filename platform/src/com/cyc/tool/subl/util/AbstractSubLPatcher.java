@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,42 +17,39 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.tool.subl.util;
+package com.cyc.tool.subl.util;
 
 //// Internal Imports
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 
 //// External Imports
 
-public  abstract class AbstractSubLPatcher implements SubLPatcher {
+public abstract class AbstractSubLPatcher implements SubLPatcher {
 
-  //// Constructors
+	//// Constructors
 
-  /** Creates a new instance of AbstractSubLPatcher. */
-  public AbstractSubLPatcher() {
-  }
+	/** Creates a new instance of AbstractSubLPatcher. */
+	public AbstractSubLPatcher() {
+	}
 
-  //// Public Area
-  
-  public void doPatch() {
-    String[] patchedClasses = getPatchedClasses();
-    if (patchedClasses == null) {
-      return;
-    }
-    for (String className : patchedClasses) {
-      Eval.patchSubLFile(makeString(className));
-    }
-  }
+	//// Public Area
 
-  //// Protected Area
+	public void doPatch() {
+		String[] patchedClasses = this.getPatchedClasses();
+		if (patchedClasses == null)
+			return;
+		for (String className : patchedClasses)
+			Eval.patchSubLFile(SubLObjectFactory.makeString(className));
+	}
 
-  //// Private Area
+	//// Protected Area
 
-  //// Internal Rep
+	//// Private Area
 
-  //// Main
+	//// Internal Rep
+
+	//// Main
 
 }

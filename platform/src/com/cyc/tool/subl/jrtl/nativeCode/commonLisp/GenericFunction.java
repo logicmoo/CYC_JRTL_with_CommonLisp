@@ -33,29 +33,22 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public abstract class GenericFunction extends StandardObject
-{
-    protected GenericFunction(LispClass cls, int length)
-    {
-        super(cls, length);
-    }
+public abstract class GenericFunction extends StandardObject {
+	protected GenericFunction(LispClass cls, int length) {
+		super(cls, length);
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.GENERIC_FUNCTION)
-            return T;
-        if (type == StandardClass.GENERIC_FUNCTION)
-            return T;
-        if (type == LispSymbols.FUNCTION)
-            return T;
-        if (type == BuiltInClass.FUNCTION)
-            return T;
-        return super.typep(type);
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.GENERIC_FUNCTION)
+			return Lisp.T;
+		if (type == StandardClass.GENERIC_FUNCTION)
+			return Lisp.T;
+		if (type == LispSymbols.FUNCTION)
+			return Lisp.T;
+		if (type == BuiltInClass.FUNCTION)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

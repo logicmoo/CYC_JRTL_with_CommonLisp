@@ -33,280 +33,224 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
 
-public class StandardMethod extends StandardObject
-{
-  public StandardMethod()
-  {
-    super(StandardClass.STANDARD_METHOD,
-          StandardClass.STANDARD_METHOD.getClassLayout().getLength());
-  }
+public class StandardMethod extends StandardObject {
+	// ### method-lambda-list
+	// generic function
+	private static Primitive METHOD_LAMBDA_LIST = new JavaPrimitive("method-lambda-list", Lisp.PACKAGE_SYS, true,
+			"method") {
 
-  protected StandardMethod(LispClass cls, int length)
-  {
-    super(cls, length);
-  }
+		public SubLObject execute(SubLObject arg) {
+			return StandardMethod.checkStandardMethod(arg).slots[StandardMethodClass.SLOT_INDEX_LAMBDA_LIST];
+		}
+	};
 
-  public StandardMethod(StandardGenericFunction gf,
-                        Function fastFunction,
-                        SubLObject lambdaList,
-                        SubLObject specializers)
-  {
-    this();
-    slots[StandardMethodClass.SLOT_INDEX_GENERIC_FUNCTION] = gf;
-    slots[StandardMethodClass.SLOT_INDEX_LAMBDA_LIST] = lambdaList;
-    slots[StandardMethodClass.SLOT_INDEX_SPECIALIZERS] = specializers;
-    slots[StandardMethodClass.SLOT_INDEX_QUALIFIERS] = NIL;
-    slots[StandardMethodClass.SLOT_INDEX_FUNCTION] = NIL;
-    slots[StandardMethodClass.SLOT_INDEX_FAST_FUNCTION] = fastFunction;
-    slots[StandardMethodClass.SLOT_INDEX_DOCUMENTATION] = NIL;
-  }
+	// ### set-method-lambda-list
+	private static Primitive SET_METHOD_LAMBDA_LIST = new JavaPrimitive("set-method-lambda-list", Lisp.PACKAGE_SYS,
+			true, "method lambda-list") {
 
-  // ### method-lambda-list
-  // generic function
-  private static final Primitive METHOD_LAMBDA_LIST =
-    new JavaPrimitive("method-lambda-list", PACKAGE_SYS, true, "method")
-    {
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-          return checkStandardMethod(arg).slots[StandardMethodClass.SLOT_INDEX_LAMBDA_LIST];
-      }
-    };
+		public SubLObject execute(SubLObject first, SubLObject second)
 
-  // ### set-method-lambda-list
-  private static final Primitive SET_METHOD_LAMBDA_LIST =
-    new JavaPrimitive("set-method-lambda-list", PACKAGE_SYS, true,
-                  "method lambda-list")
-    {
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second)
+		{
+			StandardMethod.checkStandardMethod(first).slots[StandardMethodClass.SLOT_INDEX_LAMBDA_LIST] = second;
+			return second;
+		}
+	};
 
-      {
-          checkStandardMethod(first).slots[StandardMethodClass.SLOT_INDEX_LAMBDA_LIST] = second;
-          return second;
-      }
-    };
+	// ### method-qualifiers
+	private static Primitive _METHOD_QUALIFIERS = new JavaPrimitive("%method-qualifiers", Lisp.PACKAGE_SYS, true,
+			"method") {
 
-  // ### method-qualifiers
-  private static final Primitive _METHOD_QUALIFIERS =
-    new JavaPrimitive("%method-qualifiers", PACKAGE_SYS, true, "method")
-    {
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-          return checkStandardMethod(arg).slots[StandardMethodClass.SLOT_INDEX_QUALIFIERS];
-      }
-    };
+		public SubLObject execute(SubLObject arg) {
+			return StandardMethod.checkStandardMethod(arg).slots[StandardMethodClass.SLOT_INDEX_QUALIFIERS];
+		}
+	};
 
-  // ### set-method-qualifiers
-  private static final Primitive SET_METHOD_QUALIFIERS =
-    new JavaPrimitive("set-method-qualifiers", PACKAGE_SYS, true,
-                  "method qualifiers")
-    {
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second)
+	// ### set-method-qualifiers
+	private static Primitive SET_METHOD_QUALIFIERS = new JavaPrimitive("set-method-qualifiers", Lisp.PACKAGE_SYS, true,
+			"method qualifiers") {
 
-      {          
-          checkStandardMethod(first).slots[StandardMethodClass.SLOT_INDEX_QUALIFIERS] = second;
-          return second;
-      }
-    };
+		public SubLObject execute(SubLObject first, SubLObject second)
 
-  // ### method-documentation
-  private static final Primitive METHOD_DOCUMENTATION =
-    new JavaPrimitive("method-documentation", PACKAGE_SYS, true, "method")
-    {
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-          return checkStandardMethod(arg).slots[StandardMethodClass.SLOT_INDEX_DOCUMENTATION];
-      }
-    };
+		{
+			StandardMethod.checkStandardMethod(first).slots[StandardMethodClass.SLOT_INDEX_QUALIFIERS] = second;
+			return second;
+		}
+	};
 
-  // ### set-method-documentation
-  private static final Primitive SET_METHOD_DOCUMENTATION =
-    new JavaPrimitive("set-method-documentation", PACKAGE_SYS, true,
-                  "method documentation")
-    {
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second)
+	// ### method-documentation
+	private static Primitive METHOD_DOCUMENTATION = new JavaPrimitive("method-documentation", Lisp.PACKAGE_SYS, true,
+			"method") {
 
-      {
-          checkStandardMethod(first).slots[StandardMethodClass.SLOT_INDEX_DOCUMENTATION] = second;
-          return second;
-      }
-    };
+		public SubLObject execute(SubLObject arg) {
+			return StandardMethod.checkStandardMethod(arg).slots[StandardMethodClass.SLOT_INDEX_DOCUMENTATION];
+		}
+	};
 
-  public SubLOperator getFunction()
-  {
-    return (SubLOperator) slots[StandardMethodClass.SLOT_INDEX_FUNCTION];
-  }
+	// ### set-method-documentation
+	private static Primitive SET_METHOD_DOCUMENTATION = new JavaPrimitive("set-method-documentation", Lisp.PACKAGE_SYS,
+			true, "method documentation") {
 
-  @Override
-  public String writeToString()
-  {
-    SubLObject genericFunction =
-      slots[StandardMethodClass.SLOT_INDEX_GENERIC_FUNCTION];
-    if (genericFunction instanceof StandardGenericFunction)
-      {
-        SubLObject name =
-          ((StandardGenericFunction)genericFunction).getGenericFunctionName();
-        if (name != null)
-          {
-            StringBuilder sb = new StringBuilder();
-            sb.append(getLispClass().getLispClassName().writeToString());
-            sb.append(' ');
-            sb.append(name.writeToString());
-            SubLObject specializers =
-              slots[StandardMethodClass.SLOT_INDEX_SPECIALIZERS];
-            if (specializers != null)
-              {
-                SubLObject specs = specializers;
-                SubLObject names = NIL;
-                while (specs != NIL)
-                  {
-                    SubLObject spec = specs.first();
-                    if (spec instanceof LispClass)
-                      names = names.push(((LispClass)spec).getLispClassName());
-                    else
-                      names = names.push(spec);
-                    specs = specs.rest();
-                  }
-                sb.append(' ');
-                sb.append(names.nreverse().writeToString());
-              }
-            return unreadableString(sb.toString());
-          }
-      }
-    return super.writeToString();
-  }
+		public SubLObject execute(SubLObject first, SubLObject second)
 
-  // ### %method-generic-function
-  private static final Primitive _METHOD_GENERIC_FUNCTION =
-    new JavaPrimitive("%method-generic-function", PACKAGE_SYS, true)
-    {
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-          return checkStandardMethod(arg).slots[StandardMethodClass.SLOT_INDEX_GENERIC_FUNCTION];
-      }
-    };
+		{
+			StandardMethod.checkStandardMethod(first).slots[StandardMethodClass.SLOT_INDEX_DOCUMENTATION] = second;
+			return second;
+		}
+	};
 
-  // ### %set-method-generic-function
-  private static final Primitive _SET_METHOD_GENERICFUNCTION =
-    new JavaPrimitive("%set-method-generic-function", PACKAGE_SYS, true)
-    {
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second)
+	// ### %method-generic-function
+	private static Primitive _METHOD_GENERIC_FUNCTION = new JavaPrimitive("%method-generic-function", Lisp.PACKAGE_SYS,
+			true) {
 
-      {
-          checkStandardMethod(first).slots[StandardMethodClass.SLOT_INDEX_GENERIC_FUNCTION] = second;
-          return second;
-      }
-    };
+		public SubLObject execute(SubLObject arg) {
+			return StandardMethod.checkStandardMethod(arg).slots[StandardMethodClass.SLOT_INDEX_GENERIC_FUNCTION];
+		}
+	};
 
-  // ### %method-function
-  private static final Primitive _METHOD_FUNCTION =
-    new JavaPrimitive("%method-function", PACKAGE_SYS, true, "method")
-    {
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-          return checkStandardMethod(arg).slots[StandardMethodClass.SLOT_INDEX_FUNCTION];
-      }
-    };
+	// ### %set-method-generic-function
+	private static Primitive _SET_METHOD_GENERICFUNCTION = new JavaPrimitive("%set-method-generic-function",
+			Lisp.PACKAGE_SYS, true) {
 
-  // ### %set-method-function
-  private static final Primitive _SET_METHOD_FUNCTION =
-    new JavaPrimitive("%set-method-function", PACKAGE_SYS, true,
-                  "method function")
-    {
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second)
+		public SubLObject execute(SubLObject first, SubLObject second)
 
-      {
-          checkStandardMethod(first).slots[StandardMethodClass.SLOT_INDEX_FUNCTION] = second;
-          return second;
-      }
-    };
+		{
+			StandardMethod.checkStandardMethod(first).slots[StandardMethodClass.SLOT_INDEX_GENERIC_FUNCTION] = second;
+			return second;
+		}
+	};
 
-  // ### %method-fast-function
-  private static final Primitive _METHOD_FAST_FUNCTION =
-    new JavaPrimitive("%method-fast-function", PACKAGE_SYS, true, "method")
-    {
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-          return checkStandardMethod(arg).slots[StandardMethodClass.SLOT_INDEX_FAST_FUNCTION];
-      }
-    };
+	// ### %method-function
+	private static Primitive _METHOD_FUNCTION = new JavaPrimitive("%method-function", Lisp.PACKAGE_SYS, true,
+			"method") {
 
-  // ### %set-method-fast-function
-  private static final Primitive _SET_METHOD_FAST_FUNCTION =
-    new JavaPrimitive("%set-method-fast-function", PACKAGE_SYS, true,
-                  "method fast-function")
-    {
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second)
+		public SubLObject execute(SubLObject arg) {
+			return StandardMethod.checkStandardMethod(arg).slots[StandardMethodClass.SLOT_INDEX_FUNCTION];
+		}
+	};
 
-      {
-          checkStandardMethod(first).slots[StandardMethodClass.SLOT_INDEX_FAST_FUNCTION] = second;
-          return second;
-      }
-    };
+	// ### %set-method-function
+	private static Primitive _SET_METHOD_FUNCTION = new JavaPrimitive("%set-method-function", Lisp.PACKAGE_SYS, true,
+			"method function") {
 
-  // ### %method-specializers
-  private static final Primitive _METHOD_SPECIALIZERS =
-    new JavaPrimitive("%method-specializers", PACKAGE_SYS, true, "method")
-    {
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-          return checkStandardMethod(arg).slots[StandardMethodClass.SLOT_INDEX_SPECIALIZERS];
-      }
-    };
+		public SubLObject execute(SubLObject first, SubLObject second)
 
-  // ### %set-method-specializers
-  private static final Primitive _SET_METHOD_SPECIALIZERS =
-    new JavaPrimitive("%set-method-specializers", PACKAGE_SYS, true,
-                  "method specializers")
-    {
-      @Override
-      public SubLObject execute(SubLObject first, SubLObject second)
+		{
+			StandardMethod.checkStandardMethod(first).slots[StandardMethodClass.SLOT_INDEX_FUNCTION] = second;
+			return second;
+		}
+	};
 
-      {
-          checkStandardMethod(first).slots[StandardMethodClass.SLOT_INDEX_SPECIALIZERS] = second;
-          return second;
-      }
-    };
+	// ### %method-fast-function
+	private static Primitive _METHOD_FAST_FUNCTION = new JavaPrimitive("%method-fast-function", Lisp.PACKAGE_SYS, true,
+			"method") {
 
-  private static final StandardGenericFunction METHOD_SPECIALIZERS =
-    new StandardGenericFunction("method-specializers",
-                                PACKAGE_MOP,
-                                true,
-                                _METHOD_SPECIALIZERS,
-                                list(LispSymbols.METHOD),
-                                list(StandardClass.STANDARD_METHOD));
+		public SubLObject execute(SubLObject arg) {
+			return StandardMethod.checkStandardMethod(arg).slots[StandardMethodClass.SLOT_INDEX_FAST_FUNCTION];
+		}
+	};
 
-  private static final StandardGenericFunction METHOD_QUALIFIERS =
-    new StandardGenericFunction("method-qualifiers",
-                                PACKAGE_MOP,
-                                true,
-                                _METHOD_QUALIFIERS,
-                                list(LispSymbols.METHOD),
-                                list(StandardClass.STANDARD_METHOD));
+	// ### %set-method-fast-function
+	private static Primitive _SET_METHOD_FAST_FUNCTION = new JavaPrimitive("%set-method-fast-function",
+			Lisp.PACKAGE_SYS, true, "method fast-function") {
 
-        final public static StandardMethod checkStandardMethod(SubLObject first)
-        {
-                if (first instanceof StandardMethod)
-                        return (StandardMethod) first;
-                return (StandardMethod) type_error(first, LispSymbols.METHOD);
-        }
+		public SubLObject execute(SubLObject first, SubLObject second)
+
+		{
+			StandardMethod.checkStandardMethod(first).slots[StandardMethodClass.SLOT_INDEX_FAST_FUNCTION] = second;
+			return second;
+		}
+	};
+
+	// ### %method-specializers
+	private static Primitive _METHOD_SPECIALIZERS = new JavaPrimitive("%method-specializers", Lisp.PACKAGE_SYS, true,
+			"method") {
+
+		public SubLObject execute(SubLObject arg) {
+			return StandardMethod.checkStandardMethod(arg).slots[StandardMethodClass.SLOT_INDEX_SPECIALIZERS];
+		}
+	};
+
+	// ### %set-method-specializers
+	private static Primitive _SET_METHOD_SPECIALIZERS = new JavaPrimitive("%set-method-specializers", Lisp.PACKAGE_SYS,
+			true, "method specializers") {
+
+		public SubLObject execute(SubLObject first, SubLObject second)
+
+		{
+			StandardMethod.checkStandardMethod(first).slots[StandardMethodClass.SLOT_INDEX_SPECIALIZERS] = second;
+			return second;
+		}
+	};
+
+	private static StandardGenericFunction METHOD_SPECIALIZERS = new StandardGenericFunction("method-specializers",
+			Lisp.PACKAGE_MOP, true, StandardMethod._METHOD_SPECIALIZERS, Lisp.list(LispSymbols.METHOD),
+			Lisp.list(StandardClass.STANDARD_METHOD));
+
+	private static StandardGenericFunction METHOD_QUALIFIERS = new StandardGenericFunction("method-qualifiers",
+			Lisp.PACKAGE_MOP, true, StandardMethod._METHOD_QUALIFIERS, Lisp.list(LispSymbols.METHOD),
+			Lisp.list(StandardClass.STANDARD_METHOD));
+
+	public static StandardMethod checkStandardMethod(SubLObject first) {
+		if (first instanceof StandardMethod)
+			return (StandardMethod) first;
+		return (StandardMethod) Lisp.type_error(first, LispSymbols.METHOD);
+	}
+
+	public StandardMethod() {
+		super(StandardClass.STANDARD_METHOD, StandardClass.STANDARD_METHOD.getClassLayout().getLength());
+	}
+
+	protected StandardMethod(LispClass cls, int length) {
+		super(cls, length);
+	}
+
+	public StandardMethod(StandardGenericFunction gf, Function fastFunction, SubLObject lambdaList,
+			SubLObject specializers) {
+		this();
+		this.slots[StandardMethodClass.SLOT_INDEX_GENERIC_FUNCTION] = gf;
+		this.slots[StandardMethodClass.SLOT_INDEX_LAMBDA_LIST] = lambdaList;
+		this.slots[StandardMethodClass.SLOT_INDEX_SPECIALIZERS] = specializers;
+		this.slots[StandardMethodClass.SLOT_INDEX_QUALIFIERS] = Lisp.NIL;
+		this.slots[StandardMethodClass.SLOT_INDEX_FUNCTION] = Lisp.NIL;
+		this.slots[StandardMethodClass.SLOT_INDEX_FAST_FUNCTION] = fastFunction;
+		this.slots[StandardMethodClass.SLOT_INDEX_DOCUMENTATION] = Lisp.NIL;
+	}
+
+	public SubLOperator getFunction() {
+		return (SubLOperator) this.slots[StandardMethodClass.SLOT_INDEX_FUNCTION];
+	}
+
+	public String writeToString() {
+		SubLObject genericFunction = this.slots[StandardMethodClass.SLOT_INDEX_GENERIC_FUNCTION];
+		if (genericFunction instanceof StandardGenericFunction) {
+			SubLObject name = ((StandardGenericFunction) genericFunction).getGenericFunctionName();
+			if (name != null) {
+				StringBuilder sb = new StringBuilder();
+				sb.append(this.getLispClass().getLispClassName().writeToString());
+				sb.append(' ');
+				sb.append(name.writeToString());
+				SubLObject specializers = this.slots[StandardMethodClass.SLOT_INDEX_SPECIALIZERS];
+				if (specializers != null) {
+					SubLObject specs = specializers;
+					SubLObject names = Lisp.NIL;
+					while (specs != Lisp.NIL) {
+						SubLObject spec = specs.first();
+						if (spec instanceof LispClass)
+							names = names.push(((LispClass) spec).getLispClassName());
+						else
+							names = names.push(spec);
+						specs = specs.rest();
+					}
+					sb.append(' ');
+					sb.append(names.nreverse().writeToString());
+				}
+				return this.unreadableString(sb.toString());
+			}
+		}
+		return super.writeToString();
+	}
 
 }

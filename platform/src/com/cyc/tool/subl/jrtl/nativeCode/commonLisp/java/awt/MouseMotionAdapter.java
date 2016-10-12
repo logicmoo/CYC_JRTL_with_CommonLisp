@@ -20,38 +20,31 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp.java.awt;
 
-
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.JHandler;
 
-public class MouseMotionAdapter extends java.awt.event.MouseMotionAdapter 
-{
-    public static synchronized void addTo(Component component) {
-        component.addMouseMotionListener(new MouseMotionAdapter());
-    }
+public class MouseMotionAdapter extends java.awt.event.MouseMotionAdapter {
+	public static synchronized void addTo(Component component) {
+		component.addMouseMotionListener(new MouseMotionAdapter());
+	}
 
-    private void call(String s, MouseEvent mouseevent) {
-        int ai[] = {
-            mouseevent.getModifiers(), 
-	    mouseevent.isPopupTrigger() ? 1 : 0, 
-	    mouseevent.getClickCount(), 
-	    mouseevent.getX(), 
-	    mouseevent.getY()
-        };
-        JHandler.callLisp(s, mouseevent.getComponent(), mouseevent.paramString(), ai);
-    }
+	private void call(String s, MouseEvent mouseevent) {
+		int ai[] = { mouseevent.getModifiers(), mouseevent.isPopupTrigger() ? 1 : 0, mouseevent.getClickCount(),
+				mouseevent.getX(), mouseevent.getY() };
+		JHandler.callLisp(s, mouseevent.getComponent(), mouseevent.paramString(), ai);
+	}
 
-    public void mouseDragged(MouseEvent mouseevent) {
-        call("MOUSEDRAGGED", mouseevent);
-    }
+	public void mouseDragged(MouseEvent mouseevent) {
+		this.call("MOUSEDRAGGED", mouseevent);
+	}
 
-    public void mouseMoved(MouseEvent mouseevent) {
-        call("MOUSEMOVED", mouseevent);
-    }
+	public void mouseMoved(MouseEvent mouseevent) {
+		this.call("MOUSEMOVED", mouseevent);
+	}
 
-    public void mouseWheel(MouseEvent mouseevent) {
-        call("MOUSEWHEEL", mouseevent);
-    }
+	public void mouseWheel(MouseEvent mouseevent) {
+		this.call("MOUSEWHEEL", mouseevent);
+	}
 }

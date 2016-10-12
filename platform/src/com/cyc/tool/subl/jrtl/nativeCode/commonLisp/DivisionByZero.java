@@ -33,44 +33,32 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class DivisionByZero extends ArithmeticError
-{
-    public DivisionByZero()
-    {
-        super(StandardClass.DIVISION_BY_ZERO);
-        setFormatControl("Arithmetic error DIVISION-BY-ZERO signalled.");
-    }
+public class DivisionByZero extends ArithmeticError {
+	public DivisionByZero() {
+		super(StandardClass.DIVISION_BY_ZERO);
+		this.setFormatControl("Arithmetic error DIVISION-BY-ZERO signalled.");
+	}
 
-    public DivisionByZero(SubLObject initArgs)
-    {
-        super(StandardClass.DIVISION_BY_ZERO);
-        initialize(initArgs);
-    }
+	public DivisionByZero(SubLObject initArgs) {
+		super(StandardClass.DIVISION_BY_ZERO);
+		this.initialize(initArgs);
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.DIVISION_BY_ZERO;
-    }
+	public SubLObject classOf() {
+		return StandardClass.DIVISION_BY_ZERO;
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.DIVISION_BY_ZERO;
-    }
+	public SubLObject typeOf() {
+		return LispSymbols.DIVISION_BY_ZERO;
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.DIVISION_BY_ZERO)
-            return T;
-        if (type == StandardClass.DIVISION_BY_ZERO)
-            return T;
-        return super.typep(type);
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.DIVISION_BY_ZERO)
+			return Lisp.T;
+		if (type == StandardClass.DIVISION_BY_ZERO)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

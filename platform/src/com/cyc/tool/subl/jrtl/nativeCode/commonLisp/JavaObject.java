@@ -33,23 +33,14 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
-import java.lang.reflect.*;
-
-import java.math.BigInteger;
-
-import java.util.*;
-
 public interface JavaObject {
-
-	Object getObject();
-
-	String writeToString();
 
 	Class<?> getIntendedClass();
 
+	Object getObject();
+
 	Object javaInstance();
+
+	String writeToString();
 
 }

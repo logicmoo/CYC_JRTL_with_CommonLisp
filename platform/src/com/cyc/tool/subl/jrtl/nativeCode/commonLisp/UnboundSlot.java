@@ -33,82 +33,64 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class UnboundSlot extends CellError
-{
-    public UnboundSlot(SubLObject initArgs)
-    {
-        super(StandardClass.UNBOUND_SLOT);
-        initialize(initArgs);
-    }
+public class UnboundSlot extends CellError {
+	public UnboundSlot(SubLObject initArgs) {
+		super(StandardClass.UNBOUND_SLOT);
+		this.initialize(initArgs);
+	}
 
-    @Override
-    protected void initialize(SubLObject initArgs)
-    {
-        super.initialize(initArgs);
-        while (initArgs != NIL) {
-            SubLObject first = initArgs.first();
-            initArgs = initArgs.rest();
-            if (first == Keyword.INSTANCE) {
-                setInstance(initArgs.first());
-                break;
-            }
-            initArgs = initArgs.rest();
-        }
-    }
+	public SubLObject classOf() {
+		return StandardClass.UNBOUND_SLOT;
+	}
 
-    public SubLObject getInstance()
-    {
-        return getInstanceSlotValue(LispSymbols.INSTANCE);
-    }
+	public SubLObject getInstance() {
+		return this.getInstanceSlotValue(LispSymbols.INSTANCE);
+	}
 
-    private void setInstance(SubLObject instance)
-    {
-        setInstanceSlotValue(LispSymbols.INSTANCE, instance);
-    }
+	public String getMessage() {
+		LispThread thread = LispThread.currentThread();
+		SpecialBindingsMark mark = thread.markSpecialBindings();
+		thread.bindSpecial(LispSymbols.PRINT_ESCAPE, Lisp.T);
+		try {
+			StringBuilder sb = new StringBuilder("The slot ");
+			sb.append(this.getCellName().writeToString());
+			sb.append(" is unbound in the object ");
+			sb.append(this.getInstance().writeToString());
+			sb.append('.');
+			return sb.toString();
+		} finally {
+			thread.resetSpecialBindings(mark);
+		}
+	}
 
-    @Override
-    public String getMessage()
-    {
-        final LispThread thread = LispThread.currentThread();
-        final SpecialBindingsMark mark = thread.markSpecialBindings();
-        thread.bindSpecial(LispSymbols.PRINT_ESCAPE, T);
-        try {
-            StringBuilder sb = new StringBuilder("The slot ");
-            sb.append(getCellName().writeToString());
-            sb.append(" is unbound in the object ");
-            sb.append(getInstance().writeToString());
-            sb.append('.');
-            return sb.toString();
-        }
-        finally {
-            thread.resetSpecialBindings(mark);
-        }
-    }
+	protected void initialize(SubLObject initArgs) {
+		super.initialize(initArgs);
+		while (initArgs != Lisp.NIL) {
+			SubLObject first = initArgs.first();
+			initArgs = initArgs.rest();
+			if (first == Keyword.INSTANCE) {
+				this.setInstance(initArgs.first());
+				break;
+			}
+			initArgs = initArgs.rest();
+		}
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.UNBOUND_SLOT;
-    }
+	private void setInstance(SubLObject instance) {
+		this.setInstanceSlotValue(LispSymbols.INSTANCE, instance);
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.UNBOUND_SLOT;
-    }
+	public SubLObject typeOf() {
+		return LispSymbols.UNBOUND_SLOT;
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.UNBOUND_SLOT)
-            return T;
-        if (type == StandardClass.UNBOUND_SLOT)
-            return T;
-        return super.typep(type);
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.UNBOUND_SLOT)
+			return Lisp.T;
+		if (type == StandardClass.UNBOUND_SLOT)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

@@ -33,135 +33,110 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.LispPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 
-public final class LispPackages
-{
-	public static final ArrayList<SubLPackage> packages = new ArrayList<SubLPackage>();
-  public static final HashMap<String,SubLPackage> map = new HashMap<String,SubLPackage>();
+public class LispPackages {
+	public static ArrayList<SubLPackage> packages = new ArrayList<SubLPackage>();
+	public static HashMap<String, SubLPackage> map = new HashMap<String, SubLPackage>();
 
-  public static final synchronized SubLPackage createPackage(String name)
-  {
-    return createPackage(name, 0);
-  }
+	public static synchronized void addNickname(SubLPackage pkg, String nickname)
 
-  public static final synchronized SubLPackage createPackage(String name, int size)
-  {
-    SubLPackage pkg = findPackage(name);
-    if (pkg == null)
-      {
-        pkg =size != 0 ? new SubLPackage(name, size) : new SubLPackage(name);
-        packages.add(pkg);
-        map.put(name, pkg);
-      }
-    else
-      Debug.trace("package " + name + " already exists");
-    return pkg;
-  }
+	{
+		Object obj = LispPackages.findPackage(nickname);
+		if (obj != null && obj != pkg) {
+			Lisp.error(new PackageError("A package named " + nickname + " already exists."));
+			return;
+		}
+		LispPackages.map.put(nickname, pkg);
+	}
 
-  public static final synchronized void addPackage(SubLPackage pkg)
+	public static synchronized void addPackage(SubLPackage pkg)
 
-  {
-    final String name = pkg.getJavaName();
-    if (findPackage(name) != null)
-      {
-        error(new LispError("A package named " + name + " already exists."));
-        return;
-      }
-    packages.add(pkg);
-    map.put(name, pkg);
-    List nicknames = pkg.getNicknames();
-    if (nicknames != null)
-      {
-        for (Iterator it = nicknames.iterator(); it.hasNext();)
-          {
-            String nickname = (String) it.next();
-            addNickname(pkg, nickname);
-          }
-      }
-  }
+	{
+		String name = pkg.getJavaName();
+		if (LispPackages.findPackage(name) != null) {
+			Lisp.error(new LispError("A package named " + name + " already exists."));
+			return;
+		}
+		LispPackages.packages.add(pkg);
+		LispPackages.map.put(name, pkg);
+		List nicknames = pkg.getNicknames();
+		if (nicknames != null)
+			for (Iterator it = nicknames.iterator(); it.hasNext();) {
+				String nickname = (String) it.next();
+				LispPackages.addNickname(pkg, nickname);
+			}
+	}
 
-  // Returns null if package doesn't exist.
-  public static final synchronized SubLPackage findPackage(String name)
-  {
-    return (SubLPackage) map.get(name);
-  }
+	public static synchronized SubLPackage createPackage(String name) {
+		return LispPackages.createPackage(name, 0);
+	}
 
-  public static final synchronized SubLPackage makePackage(String name)
+	public static synchronized SubLPackage createPackage(String name, int size) {
+		SubLPackage pkg = LispPackages.findPackage(name);
+		if (pkg == null) {
+			pkg = size != 0 ? new SubLPackage(name, size) : new SubLPackage(name);
+			LispPackages.packages.add(pkg);
+			LispPackages.map.put(name, pkg);
+		} else
+			Debug.trace("package " + name + " already exists");
+		return pkg;
+	}
 
-  {
-    if (findPackage(name) != null)
-      {
-        error(new LispError("A package named " + name + " already exists."));
-        // Not reached.
-        return null;
-      }
-    SubLPackage pkg = new SubLPackage(name);
-    packages.add(pkg);
-    map.put(name, pkg);
-    return pkg;
-  }
+	// Removes name and nicknames from map, removes pkg from packages.
+	public static synchronized boolean deletePackage(SubLPackage pkg) {
+		String name = pkg.getJavaName();
+		if (name != null) {
+			LispPackages.map.remove(name);
+			List nicknames = pkg.getNicknames();
+			if (nicknames != null)
+				for (Iterator it = nicknames.iterator(); it.hasNext();) {
+					String nickname = (String) it.next();
+					LispPackages.map.remove(nickname);
+				}
+			LispPackages.packages.remove(pkg);
+			return true;
+		}
+		return false;
+	}
 
-  public static final synchronized void addNickname(SubLPackage pkg, String nickname)
+	// Returns null if package doesn't exist.
+	public static synchronized SubLPackage findPackage(String name) {
+		return LispPackages.map.get(name);
+	}
 
-  {
-    Object obj = findPackage(nickname);
-    if (obj != null && obj != pkg)
-      {
-        error(new PackageError("A package named " + nickname + " already exists."));
-        return;
-      }
-    map.put(nickname, pkg);
-  }
+	public static synchronized SubLPackage[] getAllPackages() {
+		SubLPackage[] array = new SubLPackage[LispPackages.packages.size()];
+		LispPackages.packages.toArray(array);
+		return array;
+	}
 
-  // Removes name and nicknames from map, removes pkg from packages.
-  public static final synchronized boolean deletePackage(SubLPackage pkg)
-  {
-    String name = pkg.getJavaName();
-    if (name != null)
-      {
-        map.remove(name);
-        List nicknames = pkg.getNicknames();
-        if (nicknames != null)
-          {
-            for (Iterator it = nicknames.iterator(); it.hasNext();)
-              {
-                String nickname = (String) it.next();
-                map.remove(nickname);
-              }
-          }
-        packages.remove(pkg);
-        return true;
-      }
-    return false;
-  }
+	public static synchronized SubLObject listAllPackages() {
+		SubLObject result = Lisp.NIL;
+		for (Iterator it = LispPackages.packages.iterator(); it.hasNext();) {
+			SubLPackage pkg = (SubLPackage) it.next();
+			result = LispObjectFactory.makeCons(pkg, result);
+		}
+		return result;
+	}
 
-  public static final synchronized SubLObject listAllPackages()
-  {
-    SubLObject result = NIL;
-    for (Iterator it = packages.iterator(); it.hasNext();)
-      {
-        SubLPackage pkg = (SubLPackage) it.next();
-        result = makeCons(pkg, result);
-      }
-    return result;
-  }
+	public static synchronized SubLPackage makePackage(String name)
 
-  public static final synchronized SubLPackage[] getAllPackages()
-  {
-    SubLPackage[] array = new SubLPackage[packages.size()];
-    packages.toArray(array);
-    return array;
-  }
+	{
+		if (LispPackages.findPackage(name) != null) {
+			Lisp.error(new LispError("A package named " + name + " already exists."));
+			// Not reached.
+			return null;
+		}
+		SubLPackage pkg = new SubLPackage(name);
+		LispPackages.packages.add(pkg);
+		LispPackages.map.put(name, pkg);
+		return pkg;
+	}
 }

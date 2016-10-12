@@ -33,9 +33,6 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import java.util.Hashtable;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -43,336 +40,301 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public class AutoloadedFunctionProxy extends Function {
 
-    public enum FunctionType
-    {
-        NORMAL, SETF, MACRO
-    };
+	private static class function_preload extends JavaPrimitive {
+		function_preload() {
+			super("function-preload", Lisp.PACKAGE_SYS, false, "name");
+		}
 
-    /** List of symbols that need to be saved upon instantiation of a
-     * proxy and restored while loading the actual function.
-     */
-    final static SubLSymbol[] symsToSave =
-        new SubLSymbol[]
-        {
-            AUTOLOADING_CACHE, // allow loading local preloaded functions
-            Load._FASL_ANONYMOUS_PACKAGE_, // package for uninterned symbols
-            LispSymbols._PACKAGE_,              // current package
-            LispSymbols.LOAD_TRUENAME           // LOAD-TIME-VALUE depends on this
-        };
+		@SuppressWarnings("unchecked")
 
-    final private SubLSymbol symbol;
-    final private String name;
-    final private SubLObject cache;
-    final private SubLObject[] savedSyms;
-    final private FunctionType fType;
-    Function fun = null;
+		public SubLObject execute(SubLObject name) {
+			if (Site.useForNameLoader)
+				return Lisp.T;
+			String namestring = name.getString();
+			LispThread thread = LispThread.currentThread();
+			Hashtable cache = (Hashtable) Lisp.AUTOLOADING_CACHE.symbolValue(thread).javaInstance();
 
-    public AutoloadedFunctionProxy(SubLSymbol symbol, SubLObject name,
-                                   SubLObject cache,
-                                   SubLObject[] savedSyms,
-                                   FunctionType ft) {
-        super();
-        this.symbol = symbol;
-        this.name = name.getString();
-        this.cache = cache;
-        this.savedSyms = savedSyms;
-        Debug.assertTrue(! (cache instanceof Nil));
-        this.fType = ft;
-    }
+			Pathname pathname = new Pathname(namestring);
+			byte[] bytes = Lisp.readFunctionBytes(pathname);
+			cache.put(namestring, bytes);
 
-    /** Resolve this instance by returning the function we're proxy for */
-    @Override
-    public SubLObject resolve() {
-        return load();
-    }
+			return Lisp.T;
+		}
+	};
 
-    public SubLObject getCallCount() {
-    	if (fun!=null) return fun.getCallCount();
-    	return super.getCallCount();
-    }
+	public enum FunctionType {
+		NORMAL, SETF, MACRO
+	}
 
-  	@Override
-  	public void incrementCallCount(int arity) {
-  		if (arity>10) arity = -1;
-  		callCount[arity+1]++;
-  		if (fun!=null) fun.incrementCallCount(arity);
-  		else super.incrementCallCount(arity);
-  	}
-  	
-    final private synchronized Function load() {
-        if (fun != null)
-            return fun;
+	private static class proxy_preloaded_function extends JavaPrimitive {
+		proxy_preloaded_function() {
+			super("proxy-preloaded-function", Lisp.PACKAGE_SYS, false, "symbol name");
+		}
 
-        
-        LispThread thread = LispThread.currentThread();
-        SpecialBindingsMark mark = thread.markSpecialBindings();
+		public SubLObject execute(SubLObject symbol, SubLObject name) {
+			LispThread thread = LispThread.currentThread();
+			SubLSymbol sym;
+			Function fun;
+			FunctionType fType = FunctionType.NORMAL;
 
-        for (int i = 0; i < symsToSave.length; i++)
-            thread.bindSpecial(symsToSave[i], savedSyms[i]);
+			if (symbol instanceof SubLSymbol)
+				sym = (SubLSymbol) symbol;
+			else if (Lisp.isValidSetfFunctionName(symbol)) {
+				sym = (SubLSymbol) symbol.second();
+				fType = FunctionType.SETF;
+			} else if (Lisp.isValidMacroFunctionName(symbol)) {
+				sym = (SubLSymbol) symbol.second();
+				fType = FunctionType.MACRO;
+			} else {
+				Lisp.checkSymbol(symbol); // generate an error
+				return null; // not reached
+			}
 
-        // set a specific reader environment, because we may be triggered in
-        // any undefined dynamic environment; we want something predictable
-        thread.bindSpecial(LispSymbols.READ_SUPPRESS, NIL);
-        thread.bindSpecial(LispSymbols.READ_EVAL, T);
-        thread.bindSpecial(LispSymbols.READ_BASE, LispObjectFactory.makeInteger(10));
-        // don't need to bind *READ-DEFAULT-FLOAT-FORMAT*,
-        // because DUMP-FORM sets it to NIL, forcing exponent markers everywhere
+			SubLObject cache = Lisp.AUTOLOADING_CACHE.symbolValue(thread);
+			if (cache instanceof Nil)
+				// during EVAL-WHEN :compile-toplevel, this function will
+				// be called without a caching environment; we'll need to
+				// forward to the compiled function loader
+				return Lisp.loadCompiledFunction(name.getString());
+			else {
+				SubLObject[] cachedSyms = new SubLObject[AutoloadedFunctionProxy.symsToSave.length];
+				for (int i = 0; i < AutoloadedFunctionProxy.symsToSave.length; i++)
+					cachedSyms[i] = AutoloadedFunctionProxy.symsToSave[i].symbolValue(thread);
 
-        try {
-        if (Site.useForNameLoader) {
-        	SubLObject o = Lisp.loadCompiledFunction(name);
-        	if (o instanceof Function) {
-        		fun = (Function)o;
-          if (symbol != null)
-            installFunction(fType, symbol, fun);          
-          return fun;
-        	}
-        }
-        byte[] classbytes =
-            (byte[])((Hashtable)cache.javaInstance()).get(name);
-            fun = loadClassBytes(classbytes);
-        }
-        catch (Throwable t) {
-            Debug.trace(t);
-        } // ### fixme
-        finally {
-            thread.resetSpecialBindings(mark);
-        }
+				fun = new AutoloadedFunctionProxy(sym, name, cache, cachedSyms, fType);
+				fun.setClassBytes((byte[]) ((Hashtable) cache.javaInstance()).get(name.getString()));
+			}
+			return fun;
+		}
+	}
 
-        if (symbol != null)
-            installFunction(fType, symbol, fun);
+	/**
+	 * List of symbols that need to be saved upon instantiation of a proxy and
+	 * restored while loading the actual function.
+	 */
+	static SubLSymbol[] symsToSave = new SubLSymbol[] { Lisp.AUTOLOADING_CACHE, // allow
+			// loading
+			// local
+			// preloaded
+			// functions
+			Load._FASL_ANONYMOUS_PACKAGE_, // package for uninterned symbols
+			LispSymbols._PACKAGE_, // current package
+			LispSymbols.LOAD_TRUENAME // LOAD-TIME-VALUE depends on this
+	};
+	// ### proxy-preloaded-function symbol name => function
+	private static Primitive PROXY_PRELOADED_FUNCTION = new proxy_preloaded_function();
+	// ### function-preload name => success
+	private static Primitive FUNCTION_PRELOAD = new function_preload();
 
-        return fun;
-    }
+	static private void installFunction(FunctionType fType, SubLSymbol sym, Function fun) {
 
-    final static private void installFunction(FunctionType fType,
-                                              SubLSymbol sym, Function fun) {
+		if (fType == FunctionType.SETF)
+			Lisp.put(sym, LispSymbols.SETF_FUNCTION, fun);
+		else if (fType == FunctionType.MACRO) {
+			if (sym.getSymbolFunction() instanceof SpecialOperator)
+				Lisp.put(sym, LispSymbols.MACROEXPAND_MACRO, new MacroObject(sym, fun));
+			else
+				sym.setSymbolFunction(new MacroObject(sym, fun));
+		} else
+			sym.setSymbolFunction(fun);
+	}
 
-        if (fType == FunctionType.SETF)
-        	Lisp.put(sym, LispSymbols.SETF_FUNCTION, fun);
-        else if (fType == FunctionType.MACRO) {
-            if (sym.getSymbolFunction() instanceof SpecialOperator)
-            	Lisp.put(sym, LispSymbols.MACROEXPAND_MACRO,
-                    new MacroObject(sym, fun));
-            else
-                sym.setSymbolFunction(new MacroObject(sym, fun));
-        } else
-            sym.setSymbolFunction(fun);
-    }
+	@SuppressWarnings("unchecked")
+	public static SubLObject loadPreloadedFunction(String name) {
 
-    @Override
-    public SubLObject execute()
-    {
-        return load().execute();
-    }
+		LispThread thread = LispThread.currentThread();
+		SubLObject value = Lisp.AUTOLOADING_CACHE.symbolValue(thread);
 
-    @Override
-    public SubLObject execute(SubLObject arg)
-    {
-        return load().execute(arg);
-    }
+		if (value instanceof Nil) {
+			byte[] bytes = Lisp.readFunctionBytes(new Pathname(name));
+			return bytes == null ? null : Lisp.loadClassBytes(bytes);
+		}
 
-    @Override
-    public SubLObject execute(SubLObject first, SubLObject second)
+		Hashtable cache = (Hashtable) value.javaInstance();
+		byte[] bytes = (byte[]) cache.get(name);
+		if (bytes == null)
+			return Lisp.error(new LispError("Function '" + name + "' not preloaded" + " while preloading requested."));
+		try {
+			return Lisp.loadClassBytes(bytes);
+		} catch (VerifyError e) {
+			return Lisp.error(new LispError("Class verification failed: " + e.getMessage()));
+		} catch (Throwable t) {
+			Debug.trace(t);
+		}
+		return Lisp.error(new FileError("Can't read file off stream."));
+	}
 
-    {
-        return load().execute(first, second);
-    }
+	final static SubLObject makePreloadingContext() {
+		return new ABCLJavaObject(new Hashtable());
+	}
 
-    @Override
-    public SubLObject execute(SubLObject first, SubLObject second,
-                              SubLObject third)
+	private SubLSymbol symbol;
 
-    {
-        return load().execute(first, second, third);
-    }
+	private String name;
 
-    @Override
-    public SubLObject execute(SubLObject first, SubLObject second,
-                              SubLObject third, SubLObject fourth)
+	private SubLObject cache;
 
-    {
-        return load().execute(first, second, third, fourth);
-    }
+	private SubLObject[] savedSyms;
 
-    @Override
-    public SubLObject execute(SubLObject first, SubLObject second,
-                              SubLObject third, SubLObject fourth,
-                              SubLObject fifth)
+	private FunctionType fType;
 
-    {
-        return load().execute(first, second, third, fourth, fifth);
-    }
+	Function fun = null;
 
-    @Override
-    public SubLObject execute(SubLObject first, SubLObject second,
-                              SubLObject third, SubLObject fourth,
-                              SubLObject fifth, SubLObject sixth)
+	public AutoloadedFunctionProxy(SubLSymbol symbol, SubLObject name, SubLObject cache, SubLObject[] savedSyms,
+			FunctionType ft) {
+		super();
+		this.symbol = symbol;
+		this.name = name.getString();
+		this.cache = cache;
+		this.savedSyms = savedSyms;
+		Debug.assertTrue(!(cache instanceof Nil));
+		this.fType = ft;
+	}
 
-    {
-        return load().execute(first, second, third, fourth, fifth, sixth);
-    }
+	public SubLObject classOf() {
+		return this.resolve().classOf();
+	}
 
-    @Override
-    public SubLObject execute(SubLObject first, SubLObject second,
-                              SubLObject third, SubLObject fourth,
-                              SubLObject fifth, SubLObject sixth,
-                              SubLObject seventh)
+	public boolean equal(SubLObject obj) {
+		return super.equal(obj) || this.resolve().equal(obj);
+	}
 
-    {
-        return load().execute(first, second, third, fourth, fifth, sixth,
-                              seventh);
-    }
+	public boolean equalp(SubLObject obj) {
+		return super.equalp(obj) || this.resolve().equalp(obj);
+	}
 
-    @Override
-    public SubLObject execute(SubLObject first, SubLObject second,
-                              SubLObject third, SubLObject fourth,
-                              SubLObject fifth, SubLObject sixth,
-                              SubLObject seventh, SubLObject eighth)
+	public SubLObject execute() {
+		return this.load().execute();
+	}
 
-    {
-        return load().execute(first, second, third, fourth, fifth, sixth,
-                              seventh, eighth);
-    }
+	public SubLObject execute(SubLObject arg) {
+		return this.load().execute(arg);
+	}
 
-    @Override
-    public SubLObject execute(SubLObject[] args)
-    {
-        return load().execute(args);
-    }
-    
-    @Override
-    public String writeToString() {
-    	return resolve().writeToString();
-    }
+	public SubLObject execute(SubLObject first, SubLObject second)
 
-    @Override
-    public SubLObject typeOf() {
-    	return resolve().typeOf();
-    }
-    
-    @Override
-    public SubLObject typep(SubLObject typeSpecifier) {
-    	return super.typep(typeSpecifier) == T?T:resolve().typep(typeSpecifier);
-    }
+	{
+		return this.load().execute(first, second);
+	}
 
-    @Override
-    public SubLObject classOf() {
-    	return resolve().classOf();
-    }
-    
-    @Override
-    public boolean equalp(SubLObject obj) {
-      return super.equalp(obj) || resolve().equalp(obj);
-    }
-    @Override
-    public boolean equal(SubLObject obj) {
-      return super.equal(obj) || resolve().equal(obj);
-    }
-    
-    @SuppressWarnings("unchecked")
-    final public static SubLObject loadPreloadedFunction(String name) {
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third)
 
-      LispThread thread = LispThread.currentThread();
-      SubLObject value = AUTOLOADING_CACHE.symbolValue(thread);
+	{
+		return this.load().execute(first, second, third);
+	}
 
-      if (value instanceof Nil) {
-          byte[] bytes = readFunctionBytes(new Pathname(name));
-          return (bytes == null) ? null : loadClassBytes(bytes);
-      }
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth)
 
-      Hashtable cache = (Hashtable)value.javaInstance();
-      byte[] bytes = (byte[])cache.get(name);
-      if (bytes == null)
-          return error(new LispError("Function '" + name + "' not preloaded" +
-                                     " while preloading requested."));
-      try {
-        return loadClassBytes(bytes);
-      }
-      catch (VerifyError e)
-      {
-        return error(new LispError("Class verification failed: " +
-                                   e.getMessage()));
-      }
-      catch (Throwable t)
-      {
-        Debug.trace(t);
-      }
-      return error(new FileError("Can't read file off stream."));
-    }
+	{
+		return this.load().execute(first, second, third, fourth);
+	}
 
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
+			SubLObject fifth)
 
-		final static SubLObject makePreloadingContext() {
-        return new ABCLJavaObject(new Hashtable());
-    }
+	{
+		return this.load().execute(first, second, third, fourth, fifth);
+	}
 
-    // ### proxy-preloaded-function symbol name => function
-    final private static Primitive PROXY_PRELOADED_FUNCTION = new proxy_preloaded_function();
-    final private static class proxy_preloaded_function extends JavaPrimitive {
-        proxy_preloaded_function() {
-            super("proxy-preloaded-function", PACKAGE_SYS, false,
-                  "symbol name");
-        }
-        @Override
-        final public SubLObject execute(SubLObject symbol, SubLObject name) {
-            LispThread thread = LispThread.currentThread();
-            SubLSymbol sym;
-            Function fun;
-            FunctionType fType = FunctionType.NORMAL;
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
+			SubLObject fifth, SubLObject sixth)
 
-            if (symbol instanceof SubLSymbol)
-                sym = (SubLSymbol)symbol;
-            else if (isValidSetfFunctionName(symbol)) {
-                sym = (SubLSymbol)symbol.second();
-                fType = FunctionType.SETF;
-            } else if (isValidMacroFunctionName(symbol)) {
-                sym = (SubLSymbol)symbol.second();
-                fType = FunctionType.MACRO;
-            } else {
-                checkSymbol(symbol); // generate an error
-                return null; // not reached
-            }
+	{
+		return this.load().execute(first, second, third, fourth, fifth, sixth);
+	}
 
-            SubLObject cache = AUTOLOADING_CACHE.symbolValue(thread);
-            if (cache instanceof Nil)
-                // during EVAL-WHEN :compile-toplevel, this function will
-                // be called without a caching environment; we'll need to
-                // forward to the compiled function loader
-                return loadCompiledFunction(name.getString());
-            else {
-                SubLObject[] cachedSyms = new SubLObject[symsToSave.length];
-                for (int i = 0; i < symsToSave.length; i++)
-                    cachedSyms[i] = symsToSave[i].symbolValue(thread);
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
+			SubLObject fifth, SubLObject sixth, SubLObject seventh)
 
-                fun = new AutoloadedFunctionProxy(sym, name, cache,
-                                                  cachedSyms, fType);
-                fun.setClassBytes((byte[])((Hashtable)cache.javaInstance())
-                                  .get(name.getString()));
-            }
-            return fun;
-        }
-    }
+	{
+		return this.load().execute(first, second, third, fourth, fifth, sixth, seventh);
+	}
 
-    //  ### function-preload name => success
-    final private static Primitive FUNCTION_PRELOAD = new function_preload();
-    private static class function_preload extends JavaPrimitive {
-        function_preload() {
-            super("function-preload", PACKAGE_SYS, false, "name");
-        }
-        @SuppressWarnings("unchecked")
-        @Override
-        final public SubLObject execute(SubLObject name) {
-        	if (Site.useForNameLoader) return T;
-            String namestring = name.getString();
-            LispThread thread = LispThread.currentThread();
-            Hashtable cache
-                = (Hashtable)AUTOLOADING_CACHE.symbolValue(thread).javaInstance();
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
+			SubLObject fifth, SubLObject sixth, SubLObject seventh, SubLObject eighth)
 
-            Pathname pathname = new Pathname(namestring);
-            byte[] bytes = readFunctionBytes(pathname);
-            cache.put(namestring, bytes);
-            
-            return T;
-        }
-    }
+	{
+		return this.load().execute(first, second, third, fourth, fifth, sixth, seventh, eighth);
+	}
+
+	public SubLObject execute(SubLObject[] args) {
+		return this.load().execute(args);
+	}
+
+	public SubLObject getCallCount() {
+		if (this.fun != null)
+			return this.fun.getCallCount();
+		return super.getCallCount();
+	}
+
+	public void incrementCallCount(int arity) {
+		if (arity > 10)
+			arity = -1;
+		this.callCount[arity + 1]++;
+		if (this.fun != null)
+			this.fun.incrementCallCount(arity);
+		else
+			super.incrementCallCount(arity);
+	}
+
+	private synchronized Function load() {
+		if (this.fun != null)
+			return this.fun;
+
+		LispThread thread = LispThread.currentThread();
+		SpecialBindingsMark mark = thread.markSpecialBindings();
+
+		for (int i = 0; i < AutoloadedFunctionProxy.symsToSave.length; i++)
+			thread.bindSpecial(AutoloadedFunctionProxy.symsToSave[i], this.savedSyms[i]);
+
+		// set a specific reader environment, because we may be triggered in
+		// any undefined dynamic environment; we want something predictable
+		thread.bindSpecial(LispSymbols.READ_SUPPRESS, Lisp.NIL);
+		thread.bindSpecial(LispSymbols.READ_EVAL, Lisp.T);
+		thread.bindSpecial(LispSymbols.READ_BASE, LispObjectFactory.makeInteger(10));
+		// don't need to bind *READ-DEFAULT-FLOAT-FORMAT*,
+		// because DUMP-FORM sets it to NIL, forcing exponent markers everywhere
+
+		try {
+			if (Site.useForNameLoader) {
+				SubLObject o = Lisp.loadCompiledFunction(this.name);
+				if (o instanceof Function) {
+					this.fun = (Function) o;
+					if (this.symbol != null)
+						AutoloadedFunctionProxy.installFunction(this.fType, this.symbol, this.fun);
+					return this.fun;
+				}
+			}
+			byte[] classbytes = (byte[]) ((Hashtable) this.cache.javaInstance()).get(this.name);
+			this.fun = Lisp.loadClassBytes(classbytes);
+		} catch (Throwable t) {
+			Debug.trace(t);
+		} // ### fixme
+		finally {
+			thread.resetSpecialBindings(mark);
+		}
+
+		if (this.symbol != null)
+			AutoloadedFunctionProxy.installFunction(this.fType, this.symbol, this.fun);
+
+		return this.fun;
+	}
+
+	/** Resolve this instance by returning the function we're proxy for */
+
+	public SubLObject resolve() {
+		return this.load();
+	}
+
+	public SubLObject typeOf() {
+		return this.resolve().typeOf();
+	}
+
+	public SubLObject typep(SubLObject typeSpecifier) {
+		return super.typep(typeSpecifier) == Lisp.T ? Lisp.T : this.resolve().typep(typeSpecifier);
+	}
+
+	public String writeToString() {
+		return this.resolve().writeToString();
+	}
 }

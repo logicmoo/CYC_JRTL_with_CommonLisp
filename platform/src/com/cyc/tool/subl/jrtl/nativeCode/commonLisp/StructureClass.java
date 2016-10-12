@@ -33,100 +33,78 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public class StructureClass extends SlotClass
-{
-    StructureClass(SubLSymbol symbol)
-    {
-        super(symbol, makeCons(BuiltInClass.STRUCTURE_OBJECT));
-    }
+public class StructureClass extends SlotClass {
+	// ### make-structure-class name direct-slots slots include => class
+	private static Primitive MAKE_STRUCTURE_CLASS = new JavaPrimitive("make-structure-class", Lisp.PACKAGE_SYS, false) {
 
-    public StructureClass(SubLSymbol symbol, SubLObject directSuperclasses)
-    {
-        super(symbol, directSuperclasses);
-    }
+		public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth)
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.STRUCTURE_CLASS;
-    }
+		{
+			SubLSymbol symbol = Lisp.checkSymbol(first);
+			LispClass existingClass = LispClass.findClass(symbol);
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.STRUCTURE_CLASS;
-    }
+			if (existingClass instanceof StructureClass)
+				// DEFSTRUCT-REDEFINITION write-up
+				// states the effects from re-definition are undefined
+				// we punt: our compiler bootstrapping depends on
+				// the class not being redefined (remaining in the
+				// same location in the class hierarchy)
+				return existingClass;
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.STRUCTURE_CLASS)
-            return T;
-        if (type == StandardClass.STRUCTURE_CLASS)
-            return T;
-        return super.typep(type);
-    }
+			SubLObject directSlots = Lisp.checkList(second);
+			SubLObject slots = Lisp.checkList(third);
+			SubLSymbol include = Lisp.checkSymbol(fourth);
 
-    @Override
-    public SubLObject getDescription()
-    {
-        return makeString(writeToString());
-    }
+			StructureClass c = new StructureClass(symbol);
+			if (include != Lisp.NIL) {
+				LispClass includedClass = LispClass.findClass(include);
+				if (includedClass == null)
+					return Lisp.error(new SimpleError("Class " + include + " is undefined."));
+				c.setCPL(LispObjectFactory.makeCons(c, includedClass.getCPL()));
+			} else
+				c.setCPL(c, BuiltInClass.STRUCTURE_OBJECT, BuiltInClass.CLASS_T);
+			c.setDirectSlotDefinitions(directSlots);
+			c.setSlotDefinitions(slots);
+			LispClass.addClass(symbol, c);
+			return c;
+		}
+	};
 
-    @Override
-    public String writeToString()
-    {
-        StringBuffer sb = new StringBuffer("#<STRUCTURE-CLASS ");
-        sb.append(getLispClassName().writeToString());
-        sb.append('>');
-        return sb.toString();
-    }
+	StructureClass(SubLSymbol symbol) {
+		super(symbol, LispObjectFactory.makeCons(BuiltInClass.STRUCTURE_OBJECT));
+	}
 
-    // ### make-structure-class name direct-slots slots include => class
-    private static final Primitive MAKE_STRUCTURE_CLASS =
-        new JavaPrimitive("make-structure-class", PACKAGE_SYS, false)
-    {
-        @Override
-        public SubLObject execute(SubLObject first, SubLObject second,
-                                  SubLObject third, SubLObject fourth)
+	public StructureClass(SubLSymbol symbol, SubLObject directSuperclasses) {
+		super(symbol, directSuperclasses);
+	}
 
-        {
-            SubLSymbol symbol = checkSymbol(first);
-            LispClass existingClass = LispClass.findClass(symbol);
+	public SubLObject classOf() {
+		return StandardClass.STRUCTURE_CLASS;
+	}
 
-            if (existingClass instanceof StructureClass)
-                // DEFSTRUCT-REDEFINITION write-up
-                // states the effects from re-definition are undefined
-                // we punt: our compiler bootstrapping depends on
-                // the class not being redefined (remaining in the
-                // same location in the class hierarchy)
-                return existingClass;
+	public SubLObject getDescription() {
+		return LispObjectFactory.makeString(this.writeToString());
+	}
 
+	public SubLObject typeOf() {
+		return LispSymbols.STRUCTURE_CLASS;
+	}
 
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.STRUCTURE_CLASS)
+			return Lisp.T;
+		if (type == StandardClass.STRUCTURE_CLASS)
+			return Lisp.T;
+		return super.typep(type);
+	}
 
-            SubLObject directSlots = checkList(second);
-            SubLObject slots = checkList(third);
-            SubLSymbol include = checkSymbol(fourth);
-
-            StructureClass c = new StructureClass(symbol);
-            if (include != NIL) {
-                LispClass includedClass = LispClass.findClass(include);
-                if (includedClass == null)
-                    return error(new SimpleError("Class " + include +
-                                                  " is undefined."));
-                c.setCPL(makeCons(c, includedClass.getCPL()));
-            } else
-                c.setCPL(c, BuiltInClass.STRUCTURE_OBJECT, BuiltInClass.CLASS_T);
-            c.setDirectSlotDefinitions(directSlots);
-            c.setSlotDefinitions(slots);
-            addClass(symbol, c);
-            return c;
-        }
-    };
+	public String writeToString() {
+		StringBuffer sb = new StringBuffer("#<STRUCTURE-CLASS ");
+		sb.append(this.getLispClassName().writeToString());
+		sb.append('>');
+		return sb.toString();
+	}
 }

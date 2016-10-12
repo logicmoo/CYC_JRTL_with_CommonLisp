@@ -33,168 +33,148 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
+public class ConditionFunctions {
+	public static class cell_error_name extends JavaPrimitive {
+		cell_error_name() {
+			super(LispSymbols.CELL_ERROR_NAME, "condition");
+		}
 
-public final class ConditionFunctions {
-  private static final Primitive MAKE_CONDITION = new make_condition();
-	
-  public static final class make_condition extends JavaPrimitive
-  {
-    make_condition()
-    {
-        super("%make-condition", PACKAGE_SYS, true);
-    }
+		public SubLObject execute(SubLObject arg) {
+			StandardObject obj;
+			if (arg instanceof StandardObject)
+				obj = (StandardObject) arg;
+			else
+				return Lisp.type_error(arg, LispSymbols.STANDARD_OBJECT);
+			return obj.getInstanceSlotValue(LispSymbols.NAME);
+		}
+	}
 
-    // ### %make-condition
-    // %make-condition type slot-initializations => condition
-    @Override
-    public SubLObject execute(SubLObject type, SubLObject initArgs)
+	public static class make_condition extends JavaPrimitive {
+		make_condition() {
+			super("%make-condition", Lisp.PACKAGE_SYS, true);
+		}
 
-    {
-        final SubLSymbol symbol;
-        if (type instanceof SubLSymbol)
-            symbol = (SubLSymbol) type;
-        else if (type instanceof LispClass)
-            symbol = checkSymbol(((LispClass)type).getLispClassName());
-        else {
-            // This function only works on symbols and classes.
-            return NIL;
-        }
+		// ### %make-condition
+		// %make-condition type slot-initializations => condition
 
-        if (symbol == LispSymbols.ARITHMETIC_ERROR)
-            return new ArithmeticError(initArgs);
-        if (symbol == LispSymbols.CELL_ERROR)
-            return new CellError(initArgs);
-        if (symbol == LispSymbols.CONDITION)
-            return new Condition(initArgs);
-        if (symbol == LispSymbols.CONTROL_ERROR)
-            return new ControlError(initArgs);
-        if (symbol == LispSymbols.DIVISION_BY_ZERO)
-            return new DivisionByZero(initArgs);
-        if (symbol == LispSymbols.END_OF_FILE)
-            return new EndOfFile(initArgs);
-        if (symbol == LispSymbols.ERROR)
-            return new LispError(initArgs);
-        if (symbol == LispSymbols.FILE_ERROR)
-            return new FileError(initArgs);
-        if (symbol == LispSymbols.FLOATING_POINT_INEXACT)
-            return new FloatingPointInexact(initArgs);
-        if (symbol == LispSymbols.FLOATING_POINT_INVALID_OPERATION)
-            return new FloatingPointInvalidOperation(initArgs);
-        if (symbol == LispSymbols.FLOATING_POINT_OVERFLOW)
-            return new FloatingPointOverflow(initArgs);
-        if (symbol == LispSymbols.FLOATING_POINT_UNDERFLOW)
-            return new FloatingPointUnderflow(initArgs);
-        if (symbol == LispSymbols.PACKAGE_ERROR)
-            return new PackageError(initArgs);
-        if (symbol == LispSymbols.PARSE_ERROR)
-            return new ParseError(initArgs);
-        if (symbol == LispSymbols.PRINT_NOT_READABLE)
-            return new PrintNotReadable(initArgs);
-        if (symbol == LispSymbols.PROGRAM_ERROR)
-            return new ProgramError(initArgs);
-        if (symbol == LispSymbols.READER_ERROR)
-            return new ReaderError(initArgs);
-        if (symbol == LispSymbols.SERIOUS_CONDITION)
-            return new SeriousCondition(initArgs);
-        if (symbol == LispSymbols.SIMPLE_CONDITION)
-            return new SimpleCondition(initArgs);
-        if (symbol == LispSymbols.SIMPLE_ERROR)
-            return new SimpleError(initArgs);
-        if (symbol == LispSymbols.SIMPLE_TYPE_ERROR)
-            return new SimpleTypeError(initArgs);
-        if (symbol == LispSymbols.SIMPLE_WARNING)
-            return new SimpleWarning(initArgs);
-        if (symbol == LispSymbols.STORAGE_CONDITION)
-            return new StorageCondition(initArgs);
-        if (symbol == LispSymbols.STREAM_ERROR)
-            return new StreamError(initArgs);
-        if (symbol == LispSymbols.STYLE_WARNING)
-            return new StyleWarning(initArgs);
-        if (symbol == LispSymbols.TYPE_ERROR)
-            return new TypeError(initArgs);
-        if (symbol == LispSymbols.UNBOUND_SLOT)
-            return new UnboundSlot(initArgs);
-        if (symbol == LispSymbols.UNBOUND_VARIABLE)
-            return new UnboundVariable(initArgs);
-        if (symbol == LispSymbols.UNDEFINED_FUNCTION)
-            return new UndefinedFunction(initArgs);
-        if (symbol == LispSymbols.WARNING)
-            return new Warning(initArgs);
+		public SubLObject execute(SubLObject type, SubLObject initArgs)
 
-        if (symbol == LispSymbols.COMPILER_ERROR)
-            return new CompilerError(initArgs);
-        if (symbol == LispSymbols.COMPILER_UNSUPPORTED_FEATURE_ERROR)
-            return new CompilerUnsupportedFeatureError(initArgs);
+		{
+			SubLSymbol symbol;
+			if (type instanceof SubLSymbol)
+				symbol = (SubLSymbol) type;
+			else if (type instanceof LispClass)
+				symbol = Lisp.checkSymbol(((LispClass) type).getLispClassName());
+			else
+				// This function only works on symbols and classes.
+				return Lisp.NIL;
 
-        return NIL;
-    }
-  }
-    // ### cell-error-name
-    private static final Primitive CELL_ERROR_NAME = new cell_error_name();
-    public static final class cell_error_name extends JavaPrimitive
-    {
-        cell_error_name()
-        {
-            super(LispSymbols.CELL_ERROR_NAME, "condition");
-        }
+			if (symbol == LispSymbols.ARITHMETIC_ERROR)
+				return new ArithmeticError(initArgs);
+			if (symbol == LispSymbols.CELL_ERROR)
+				return new CellError(initArgs);
+			if (symbol == LispSymbols.CONDITION)
+				return new Condition(initArgs);
+			if (symbol == LispSymbols.CONTROL_ERROR)
+				return new ControlError(initArgs);
+			if (symbol == LispSymbols.DIVISION_BY_ZERO)
+				return new DivisionByZero(initArgs);
+			if (symbol == LispSymbols.END_OF_FILE)
+				return new EndOfFile(initArgs);
+			if (symbol == LispSymbols.ERROR)
+				return new LispError(initArgs);
+			if (symbol == LispSymbols.FILE_ERROR)
+				return new FileError(initArgs);
+			if (symbol == LispSymbols.FLOATING_POINT_INEXACT)
+				return new FloatingPointInexact(initArgs);
+			if (symbol == LispSymbols.FLOATING_POINT_INVALID_OPERATION)
+				return new FloatingPointInvalidOperation(initArgs);
+			if (symbol == LispSymbols.FLOATING_POINT_OVERFLOW)
+				return new FloatingPointOverflow(initArgs);
+			if (symbol == LispSymbols.FLOATING_POINT_UNDERFLOW)
+				return new FloatingPointUnderflow(initArgs);
+			if (symbol == LispSymbols.PACKAGE_ERROR)
+				return new PackageError(initArgs);
+			if (symbol == LispSymbols.PARSE_ERROR)
+				return new ParseError(initArgs);
+			if (symbol == LispSymbols.PRINT_NOT_READABLE)
+				return new PrintNotReadable(initArgs);
+			if (symbol == LispSymbols.PROGRAM_ERROR)
+				return new ProgramError(initArgs);
+			if (symbol == LispSymbols.READER_ERROR)
+				return new ReaderError(initArgs);
+			if (symbol == LispSymbols.SERIOUS_CONDITION)
+				return new SeriousCondition(initArgs);
+			if (symbol == LispSymbols.SIMPLE_CONDITION)
+				return new SimpleCondition(initArgs);
+			if (symbol == LispSymbols.SIMPLE_ERROR)
+				return new SimpleError(initArgs);
+			if (symbol == LispSymbols.SIMPLE_TYPE_ERROR)
+				return new SimpleTypeError(initArgs);
+			if (symbol == LispSymbols.SIMPLE_WARNING)
+				return new SimpleWarning(initArgs);
+			if (symbol == LispSymbols.STORAGE_CONDITION)
+				return new StorageCondition(initArgs);
+			if (symbol == LispSymbols.STREAM_ERROR)
+				return new StreamError(initArgs);
+			if (symbol == LispSymbols.STYLE_WARNING)
+				return new StyleWarning(initArgs);
+			if (symbol == LispSymbols.TYPE_ERROR)
+				return new TypeError(initArgs);
+			if (symbol == LispSymbols.UNBOUND_SLOT)
+				return new UnboundSlot(initArgs);
+			if (symbol == LispSymbols.UNBOUND_VARIABLE)
+				return new UnboundVariable(initArgs);
+			if (symbol == LispSymbols.UNDEFINED_FUNCTION)
+				return new UndefinedFunction(initArgs);
+			if (symbol == LispSymbols.WARNING)
+				return new Warning(initArgs);
 
-        @Override
-        public SubLObject execute(SubLObject arg)
-        {
-            final StandardObject obj;
-            if (arg instanceof StandardObject) {
-                obj = (StandardObject) arg;
-            }
-            else {
-                return type_error(arg, LispSymbols.STANDARD_OBJECT);
-            }
-            return obj.getInstanceSlotValue(LispSymbols.NAME);
-        }
-    }
-    
-    private static final Primitive PACKAGE_ERROR_PACKAGE =
-      new package_error_package();
+			if (symbol == LispSymbols.COMPILER_ERROR)
+				return new CompilerError(initArgs);
+			if (symbol == LispSymbols.COMPILER_UNSUPPORTED_FEATURE_ERROR)
+				return new CompilerUnsupportedFeatureError(initArgs);
 
-   // ### package-error-package
-    public final static class package_error_package extends JavaPrimitive
-    {
-        package_error_package()
-        {
-            super("package-error-package");
-        }
+			return Lisp.NIL;
+		}
+	}
 
-        @Override
-        public SubLObject execute(SubLObject arg)
-        {
-            if (arg instanceof PackageError)
-                return ((PackageError)arg).getLispPackage();
-            return type_error(arg, LispSymbols.PACKAGE_ERROR);
-        }
-    }
+	// ### package-error-package
+	public static class package_error_package extends JavaPrimitive {
+		package_error_package() {
+			super("package-error-package");
+		}
 
-  // ### unbound-slot-instance
-    private static final unbound_slot_instance UNBOUND_SLOT_INSTANCE =
-      new unbound_slot_instance();
-    public final static class unbound_slot_instance extends JavaPrimitive
-    {
-        unbound_slot_instance()
-        {
-            super("unbound-slot-instance");
-        }
+		public SubLObject execute(SubLObject arg) {
+			if (arg instanceof PackageError)
+				return ((PackageError) arg).getLispPackage();
+			return Lisp.type_error(arg, LispSymbols.PACKAGE_ERROR);
+		}
+	}
 
-        @Override
-        public SubLObject execute(SubLObject arg)
-        {
-            if (arg instanceof UnboundSlot)
-                return ((UnboundSlot)arg).getInstance();
-            return error(new TypeError(arg, LispSymbols.UNBOUND_SLOT));
-        }
+	public static class unbound_slot_instance extends JavaPrimitive {
+		unbound_slot_instance() {
+			super("unbound-slot-instance");
+		}
 
-    }
+		public SubLObject execute(SubLObject arg) {
+			if (arg instanceof UnboundSlot)
+				return ((UnboundSlot) arg).getInstance();
+			return Lisp.error(new TypeError(arg, LispSymbols.UNBOUND_SLOT));
+		}
+
+	}
+
+	private static Primitive MAKE_CONDITION = new make_condition();
+
+	// ### cell-error-name
+	private static Primitive CELL_ERROR_NAME = new cell_error_name();
+
+	private static Primitive PACKAGE_ERROR_PACKAGE = new package_error_package();
+
+	// ### unbound-slot-instance
+	private static unbound_slot_instance UNBOUND_SLOT_INSTANCE = new unbound_slot_instance();
 }

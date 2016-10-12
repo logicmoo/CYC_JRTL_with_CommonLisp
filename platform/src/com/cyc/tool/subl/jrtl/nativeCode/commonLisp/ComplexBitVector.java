@@ -33,369 +33,319 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class ComplexBitVector extends AbstractBitVector
-{
-    private int fillPointer = -1; // -1 indicates no fill pointer.
-    private boolean isDisplaced;
+public class ComplexBitVector extends AbstractBitVector {
+	private int fillPointer = -1; // -1 indicates no fill pointer.
+	private boolean isDisplaced;
 
-    // For displaced bit vectors.
-    private AbstractArray array;
-    private int displacement;
+	// For displaced bit vectors.
+	private AbstractArray array;
+	private int displacement;
 
-    public ComplexBitVector(int capacity)
-    {
-        this.capacity = capacity;
-        int size = capacity >>> 6;
-        if ((capacity & LONG_MASK) != 0)
-            ++size;
-        bits = new long[size];
-    }
+	public ComplexBitVector(int capacity) {
+		this.capacity = capacity;
+		int size = capacity >>> 6;
+		if ((capacity & AbstractBitVector.LONG_MASK) != 0)
+			++size;
+		this.bits = new long[size];
+	}
 
-    public ComplexBitVector(int capacity, AbstractArray array, int displacement)
-    {
-        this.capacity = capacity;
-        this.array = array;
-        this.displacement = displacement;
-        isDisplaced = true;
-    }
+	public ComplexBitVector(int capacity, AbstractArray array, int displacement) {
+		this.capacity = capacity;
+		this.array = array;
+		this.displacement = displacement;
+		this.isDisplaced = true;
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return list(LispSymbols.BIT_VECTOR, LispObjectFactory.makeInteger(capacity));
-    }
+	public AbstractVector adjustArray(int size, AbstractArray displacedTo, int displacement)
 
-    @Override
-    public boolean hasFillPointer()
-    {
-        return fillPointer >= 0;
-    }
+	{
+		this.capacity = size;
+		this.array = displacedTo;
+		this.displacement = displacement;
+		this.bits = null;
+		this.isDisplaced = true;
+		return this;
+	}
 
-    @Override
-    public int getFillPointer()
-    {
-        return fillPointer;
-    }
+	public AbstractVector adjustArray(int newCapacity, SubLObject initialElement, SubLObject initialContents)
 
-    @Override
-    public void setFillPointer(int n)
-    {
-        fillPointer = n;
-    }
+	{
+		if (this.bits == null) {
+			// Copy array.
+			int size = this.capacity >>> 6;
+			if ((this.capacity & AbstractBitVector.LONG_MASK) != 0)
+				++size;
+			this.bits = new long[size];
+			for (int i = 0; i < this.capacity; i++) {
+				int n = this.array.AREF(this.displacement + i).intValue();
+				if (n == 1)
+					this.setBit(i);
+				else
+					this.clearBit(i);
+			}
+			this.array = null;
+			this.displacement = 0;
+			this.isDisplaced = false;
+		}
+		if (this.capacity != newCapacity) {
+			int size = newCapacity >>> 6;
+			if ((newCapacity & AbstractBitVector.LONG_MASK) != 0)
+				++size;
+			if (initialContents != null) {
+				this.bits = new long[size];
+				this.capacity = newCapacity;
+				if (initialContents.isList()) {
+					SubLObject list = initialContents;
+					for (int i = 0; i < newCapacity; i++) {
+						this.aset(i, list.first());
+						list = list.rest();
+					}
+				} else if (initialContents.isVector())
+					for (int i = 0; i < newCapacity; i++)
+						this.aset(i, initialContents.elt(i));
+				else
+					Lisp.type_error(initialContents, LispSymbols.SEQUENCE);
+			} else {
+				long[] newBits = new long[size];
+				System.arraycopy(this.bits, 0, newBits, 0, Math.min(this.bits.length, newBits.length));
+				this.bits = newBits;
+				if (newCapacity > this.capacity && initialElement != null) {
+					int n = initialElement.intValue();
+					if (n == 1)
+						for (int i = this.capacity; i < newCapacity; i++)
+							this.setBit(i);
+					else
+						for (int i = this.capacity; i < newCapacity; i++)
+							this.clearBit(i);
+				}
+			}
+			this.capacity = newCapacity;
+		}
+		return this;
+	}
 
-    @Override
-    public void setFillPointer(SubLObject obj)
-    {
-        if (obj == T)
-            fillPointer = capacity();
-        else {
-            int n = obj.intValue();
-            if (n > capacity()) {
-                StringBuffer sb = new StringBuffer("The new fill pointer (");
-                sb.append(n);
-                sb.append(") exceeds the capacity of the vector (");
-                sb.append(capacity());
-                sb.append(").");
-                error(new LispError(sb.toString()));
-            } else if (n < 0) {
-                StringBuffer sb = new StringBuffer("The new fill pointer (");
-                sb.append(n);
-                sb.append(") is negative.");
-                error(new LispError(sb.toString()));
-            } else
-                fillPointer = n;
-        }
-    }
+	public SubLObject AREF(int index) {
+		if (index < 0 || index >= this.capacity)
+			this.badIndex(index, this.capacity);
+		if (this.bits != null) {
+			int offset = index >> 6;
+			return (this.bits[offset] & 1L << index) != 0 ? Fixnum.ONE : Fixnum.ZERO;
+		} else
+			// Displaced bit vector.
+			return this.array.AREF(index + this.displacement);
+	}
 
-    @Override
-    public SubLObject arrayDisplacement()
-    {
-        SubLObject value1, value2;
-        if (array != null) {
-            value1 = array;
-            value2 = LispObjectFactory.makeInteger(displacement);
-        } else {
-            value1 = NIL;
-            value2 = Fixnum.ZERO;
-        }
-        return LispThread.currentThread().setValues(value1, value2);
-    }
+	public SubLObject arrayDisplacement() {
+		SubLObject value1, value2;
+		if (this.array != null) {
+			value1 = this.array;
+			value2 = LispObjectFactory.makeInteger(this.displacement);
+		} else {
+			value1 = Lisp.NIL;
+			value2 = Fixnum.ZERO;
+		}
+		return LispThread.currentThread().setValues(value1, value2);
+	}
 
-    @Override
-    public int cl_length()
-    {
-        return fillPointer >= 0 ? fillPointer : capacity;
-    }
+	public void aset(int index, SubLObject newValue) {
+		if (index < 0 || index >= this.capacity)
+			this.badIndex(index, this.capacity);
+		if (newValue instanceof Fixnum)
+			switch (((Fixnum) newValue).value) {
+			case 0:
+				if (this.bits != null) {
+					int offset = index >> 6;
+					this.bits[offset] &= ~(1L << index);
+				} else
+					this.clearBit(index);
+				return;
+			case 1:
+				if (this.bits != null) {
+					int offset = index >> 6;
+					this.bits[offset] |= 1L << index;
+				} else
+					this.setBit(index);
+				return;
+			}
+		// Fall through...
+		Lisp.type_error(newValue, LispSymbols.BIT);
+	}
 
-    @Override
-    public SubLObject elt(int index)
-    {
-        if (index >= cl_length())
-            badIndex(index, cl_length());
-        return AREF(index);
-    }
+	public int cl_length() {
+		return this.fillPointer >= 0 ? this.fillPointer : this.capacity;
+	}
 
-    @Override
-    public SubLObject AREF(int index)
-    {
-        if (index < 0 || index >= capacity)
-            badIndex(index, capacity);
-        if (bits != null) {
-            int offset = index >> 6;
-            return (bits[offset] & (1L << index)) != 0 ? Fixnum.ONE : Fixnum.ZERO;
-        } else {
-            // Displaced bit vector.
-            return array.AREF(index + displacement);
-        }
-    }
+	protected void clearBit(int index) {
+		if (this.bits != null) {
+			int offset = index >> 6;
+			this.bits[offset] &= ~(1L << index);
+		} else
+			this.array.aset(index + this.displacement, Fixnum.ZERO);
+	}
 
-    @Override
-    protected int getBit(int index)
-    {
-        if (bits != null) {
-            int offset = index >> 6;
-            return (bits[offset] & (1L << index)) != 0 ? 1 : 0;
-        } else
-					return array.AREF(index + displacement).intValue();
-					//          if (obj instanceof Fixnum) return ((Fixnum)obj).value;
-					//          type_error(obj, LispSymbols.FIXNUM);
-					//      // Not reached.
-					//          return 0;
-    }
+	public SubLObject elt(int index) {
+		if (index >= this.cl_length())
+			this.badIndex(index, this.cl_length());
+		return this.AREF(index);
+	}
 
-    @Override
-    public void aset(int index, SubLObject newValue)
-    {
-        if (index < 0 || index >= capacity)
-            badIndex(index, capacity);
-        if (newValue instanceof Fixnum) {
-            switch (((Fixnum)newValue).value) {
-                case 0:
-                    if (bits != null) {
-                        final int offset = index >> 6;
-                        bits[offset] &= ~(1L << index);
-                    } else
-                        clearBit(index);
-                    return;
-                case 1:
-                    if (bits != null) {
-                        final int offset = index >> 6;
-                        bits[offset] |= 1L << index;
-                    } else
-                        setBit(index);
-                    return;
-            }
-        }
-            // Fall through...
-        type_error(newValue, LispSymbols.BIT);
-    }
+	private void ensureCapacity(int minCapacity) {
+		if (this.bits != null) {
+			if (this.capacity < minCapacity) {
+				int size = minCapacity >>> 6;
+				if ((minCapacity & AbstractBitVector.LONG_MASK) != 0)
+					++size;
+				long[] newBits = new long[size];
+				System.arraycopy(this.bits, 0, newBits, 0, this.bits.length);
+				this.bits = newBits;
+				this.capacity = minCapacity;
+			}
+		} else {
+			Debug.assertTrue(this.array != null);
+			if (this.capacity < minCapacity || this.array.getTotalSize() - this.displacement < minCapacity) {
+				// Copy array.
+				int size = minCapacity >>> 6;
+				if ((minCapacity & AbstractBitVector.LONG_MASK) != 0)
+					++size;
+				this.bits = new long[size];
+				int limit = Math.min(this.capacity, this.array.getTotalSize() - this.displacement);
+				for (int i = 0; i < limit; i++) {
+					int n = this.array.AREF(this.displacement + i).intValue();
+					if (n == 1)
+						this.setBit(i);
+					else
+						this.clearBit(i);
+				}
+				this.capacity = minCapacity;
+				this.array = null;
+				this.displacement = 0;
+				this.isDisplaced = false;
+			}
+		}
+	}
 
-    @Override
-    protected void setBit(int index)
-    {
-        if (bits != null) {
-            int offset = index >> 6;
-            bits[offset] |= 1L << index;
-        } else
-            array.aset(index + displacement, Fixnum.ONE);
-    }
+	protected int getBit(int index) {
+		if (this.bits != null) {
+			int offset = index >> 6;
+			return (this.bits[offset] & 1L << index) != 0 ? 1 : 0;
+		} else
+			return this.array.AREF(index + this.displacement).intValue();
+		// if (obj instanceof Fixnum) return ((Fixnum)obj).value;
+		// type_error(obj, LispSymbols.FIXNUM);
+		// // Not reached.
+		// return 0;
+	}
 
-    @Override
-    protected void clearBit(int index)
-    {
-        if (bits != null) {
-            int offset = index >> 6;
-            bits[offset] &= ~(1L << index);
-        } else
-            array.aset(index + displacement, Fixnum.ZERO);
-    }
+	public int getFillPointer() {
+		return this.fillPointer;
+	}
 
-    @Override
-    public void shrink(int n)
-    {
-        if (bits != null) {
-            if (n < capacity) {
-                int size = n >>> 6;
-                if ((n & LONG_MASK) != 0)
-                    ++size;
-                if (size < bits.length) {
-                    long[] newbits = new long[size];
-                    System.arraycopy(bits, 0, newbits, 0, size);
-                    bits = newbits;
-                }
-                capacity = n;
-                return;
-            }
-            if (n == capacity)
-                return;
-        }
-        error(new LispError());
-    }
+	public boolean hasFillPointer() {
+		return this.fillPointer >= 0;
+	}
 
-    @Override
-    public boolean isSimpleVector()
-    {
-        return false;
-    }
+	public boolean isSimpleVector() {
+		return false;
+	}
 
-    // FIXME
-    @Override
-    public void vectorPushExtend(SubLObject element)
-    {
-        final int fp = getFillPointer();
-        if (fp < 0)
-            noFillPointer();
-        if (fp >= capacity()) {
-            // Need to extend vector.
-            ensureCapacity(capacity() * 2 + 1);
-        }
-        aset(fp, element);
-        setFillPointer(fp + 1);
-    }
+	protected void setBit(int index) {
+		if (this.bits != null) {
+			int offset = index >> 6;
+			this.bits[offset] |= 1L << index;
+		} else
+			this.array.aset(index + this.displacement, Fixnum.ONE);
+	}
 
-    // FIXME
-    @Override
-    public SubLObject VECTOR_PUSH_EXTEND(SubLObject element)
+	public void setFillPointer(int n) {
+		this.fillPointer = n;
+	}
 
-    {
-        vectorPushExtend(element);
-        return LispObjectFactory.makeInteger(getFillPointer() - 1);
-    }
+	public void setFillPointer(SubLObject obj) {
+		if (obj == Lisp.T)
+			this.fillPointer = this.capacity();
+		else {
+			int n = obj.intValue();
+			if (n > this.capacity()) {
+				StringBuffer sb = new StringBuffer("The new fill pointer (");
+				sb.append(n);
+				sb.append(") exceeds the capacity of the vector (");
+				sb.append(this.capacity());
+				sb.append(").");
+				Lisp.error(new LispError(sb.toString()));
+			} else if (n < 0) {
+				StringBuffer sb = new StringBuffer("The new fill pointer (");
+				sb.append(n);
+				sb.append(") is negative.");
+				Lisp.error(new LispError(sb.toString()));
+			} else
+				this.fillPointer = n;
+		}
+	}
 
-    // FIXME
-    @Override
-    public SubLObject VECTOR_PUSH_EXTEND(SubLObject element, SubLObject extension)
+	public void shrink(int n) {
+		if (this.bits != null) {
+			if (n < this.capacity) {
+				int size = n >>> 6;
+				if ((n & AbstractBitVector.LONG_MASK) != 0)
+					++size;
+				if (size < this.bits.length) {
+					long[] newbits = new long[size];
+					System.arraycopy(this.bits, 0, newbits, 0, size);
+					this.bits = newbits;
+				}
+				this.capacity = n;
+				return;
+			}
+			if (n == this.capacity)
+				return;
+		}
+		Lisp.error(new LispError());
+	}
 
-    {
-        int ext = extension.intValue();
-        final int fp = getFillPointer();
-        if (fp < 0)
-            noFillPointer();
-        if (fp >= capacity()) {
-            // Need to extend vector.
-            ext = Math.max(ext, capacity() + 1);
-            ensureCapacity(capacity() + ext);
-        }
-        aset(fp, element);
-        setFillPointer(fp + 1);
-        return LispObjectFactory.makeInteger(fp);
-    }
+	public SubLObject typeOf() {
+		return Lisp.list(LispSymbols.BIT_VECTOR, LispObjectFactory.makeInteger(this.capacity));
+	}
 
-    private final void ensureCapacity(int minCapacity)
-    {
-        if (bits != null) {
-            if (capacity < minCapacity) {
-                int size = minCapacity >>> 6;
-                if ((minCapacity & LONG_MASK) != 0)
-                    ++size;
-                long[] newBits = new long[size];
-                System.arraycopy(bits, 0, newBits, 0, bits.length);
-                bits = newBits;
-                capacity = minCapacity;
-            }
-        } else {
-            Debug.assertTrue(array != null);
-            if (capacity < minCapacity ||
-                array.getTotalSize() - displacement < minCapacity)
-            {
-                // Copy array.
-                int size = minCapacity >>> 6;
-                if ((minCapacity & LONG_MASK) != 0)
-                    ++size;
-                bits = new long[size];
-                final int limit =
-                    Math.min(capacity, array.getTotalSize() - displacement);
-                for (int i = 0; i < limit; i++) {
-                    int n = array.AREF(displacement + i).intValue();
-                    if (n == 1)
-                        setBit(i);
-                    else
-                        clearBit(i);
-                }
-                capacity = minCapacity;
-                array = null;
-                displacement = 0;
-                isDisplaced = false;
-            }
-        }
-    }
+	// FIXME
 
-    @Override
-    public AbstractVector adjustArray(int newCapacity,
-                                       SubLObject initialElement,
-                                       SubLObject initialContents)
+	public SubLObject VECTOR_PUSH_EXTEND(SubLObject element)
 
-    {
-        if (bits == null) {
-            // Copy array.
-            int size = capacity >>> 6;
-            if ((capacity & LONG_MASK) != 0)
-                ++size;
-            bits = new long[size];
-            for (int i = 0; i < capacity; i++) {
-                int n = array.AREF(displacement + i).intValue();
-                if (n == 1)
-                    setBit(i);
-                else
-                    clearBit(i);
-            }
-            array = null;
-            displacement = 0;
-            isDisplaced = false;
-        }
-        if (capacity != newCapacity) {
-            int size = newCapacity >>> 6;
-            if ((newCapacity & LONG_MASK) != 0)
-                ++size;
-            if (initialContents != null) {
-                bits = new long[size];
-                capacity = newCapacity;
-                if (initialContents.isList()) {
-                    SubLObject list = initialContents;
-                    for (int i = 0; i < newCapacity; i++) {
-                        aset(i, list.first());
-                        list = list.rest();
-                    }
-                } else if (initialContents.isVector()) {
-                    for (int i = 0; i < newCapacity; i++)
-                        aset(i, initialContents.elt(i));
-                } else
-                    type_error(initialContents, LispSymbols.SEQUENCE);
-            } else {
-                long[] newBits = new long[size];
-                System.arraycopy(bits, 0, newBits, 0,
-                                 Math.min(bits.length, newBits.length));
-                bits = newBits;
-                if (newCapacity > capacity && initialElement != null) {
-                    int n = initialElement.intValue();
-                    if (n == 1)
-                        for (int i = capacity; i < newCapacity; i++)
-                            setBit(i);
-                    else
-                        for (int i = capacity; i < newCapacity; i++)
-                            clearBit(i);
-                }
-            }
-            capacity = newCapacity;
-        }
-        return this;
-    }
+	{
+		this.vectorPushExtend(element);
+		return LispObjectFactory.makeInteger(this.getFillPointer() - 1);
+	}
 
-    @Override
-    public AbstractVector adjustArray(int size, AbstractArray displacedTo,
-                                       int displacement)
+	// FIXME
 
-    {
-        capacity = size;
-        array = displacedTo;
-        this.displacement = displacement;
-        bits = null;
-        isDisplaced = true;
-        return this;
-    }
+	public SubLObject VECTOR_PUSH_EXTEND(SubLObject element, SubLObject extension)
+
+	{
+		int ext = extension.intValue();
+		int fp = this.getFillPointer();
+		if (fp < 0)
+			this.noFillPointer();
+		if (fp >= this.capacity()) {
+			// Need to extend vector.
+			ext = Math.max(ext, this.capacity() + 1);
+			this.ensureCapacity(this.capacity() + ext);
+		}
+		this.aset(fp, element);
+		this.setFillPointer(fp + 1);
+		return LispObjectFactory.makeInteger(fp);
+	}
+
+	// FIXME
+
+	public void vectorPushExtend(SubLObject element) {
+		int fp = this.getFillPointer();
+		if (fp < 0)
+			this.noFillPointer();
+		if (fp >= this.capacity())
+			// Need to extend vector.
+			this.ensureCapacity(this.capacity() * 2 + 1);
+		this.aset(fp, element);
+		this.setFillPointer(fp + 1);
+	}
 }

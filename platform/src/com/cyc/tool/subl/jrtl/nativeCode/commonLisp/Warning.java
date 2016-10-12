@@ -33,41 +33,29 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public class Warning extends Condition
-{
-    protected Warning()
-    {
-    }
+public class Warning extends Condition {
+	protected Warning() {
+	}
 
-    public Warning(SubLObject initArgs)
-    {
-        super(initArgs);
-    }
+	public Warning(SubLObject initArgs) {
+		super(initArgs);
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.WARNING;
-    }
+	public SubLObject classOf() {
+		return StandardClass.WARNING;
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.WARNING;
-    }
+	public SubLObject typeOf() {
+		return LispSymbols.WARNING;
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.WARNING)
-            return T;
-        if (type == StandardClass.WARNING)
-            return T;
-        return super.typep(type);
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.WARNING)
+			return Lisp.T;
+		if (type == StandardClass.WARNING)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

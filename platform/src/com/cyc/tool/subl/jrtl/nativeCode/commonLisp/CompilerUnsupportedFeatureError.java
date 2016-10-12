@@ -33,37 +33,26 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public class CompilerUnsupportedFeatureError extends Condition
-{
-    public CompilerUnsupportedFeatureError(SubLObject initArgs)
-    {
-        super(initArgs);
-    }
+public class CompilerUnsupportedFeatureError extends Condition {
+	public CompilerUnsupportedFeatureError(SubLObject initArgs) {
+		super(initArgs);
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.COMPILER_UNSUPPORTED_FEATURE_ERROR;
-    }
+	public SubLObject classOf() {
+		return StandardClass.COMPILER_UNSUPPORTED_FEATURE_ERROR;
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.COMPILER_UNSUPPORTED_FEATURE_ERROR;
-    }
+	public SubLObject typeOf() {
+		return LispSymbols.COMPILER_UNSUPPORTED_FEATURE_ERROR;
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.COMPILER_UNSUPPORTED_FEATURE_ERROR)
-            return T;
-        if (type == StandardClass.COMPILER_UNSUPPORTED_FEATURE_ERROR)
-            return T;
-        return super.typep(type);
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.COMPILER_UNSUPPORTED_FEATURE_ERROR)
+			return Lisp.T;
+		if (type == StandardClass.COMPILER_UNSUPPORTED_FEATURE_ERROR)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

@@ -1,12 +1,12 @@
 /***
  *   Copyright (c) 1995-2009 Cycorp Inc.
- * 
+ *
  *   Licensed under the Apache License, Version 2.0 (the "License");
  *   you may not use this file except in compliance with the License.
  *   You may obtain a copy of the License at
- *   
+ *
  *   http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  *   Unless required by applicable law or agreed to in writing, software
  *   distributed under the License is distributed on an "AS IS" BASIS,
  *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,77 +17,78 @@
  *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
 */
 
-package  com.cyc.tool.subl.util;
+package com.cyc.tool.subl.util;
+
 import java.util.ArrayList;
 
-public  abstract class ObjectPool {
-  
-  //// Constructors
+public abstract class ObjectPool {
 
-  public ObjectPool() {
-    this(DEFAULT_POOL_SIZE);
-  }
-  
-  public ObjectPool(int initialSize) {
-    pool = new ArrayList<Object>(initialSize);
-    currentCapacity = initialSize;
-  }
-  
-  //// Public Area
-  
-  public abstract void resetPoolItem(Object item);
-  
-  public abstract Object makePoolItem();
-  
-  // @todo add background task for shrinking pools -APB
-  
-  public final Object acquire() {
-    init();
-    int size = pool.size();
-    if (size == 0) {
-      int previousCapacity = currentCapacity;
-      currentCapacity  = (currentCapacity * 3)/2 + 1;
-      pool.ensureCapacity(currentCapacity);
-      for (int i = 0, curSize = (currentCapacity - previousCapacity); i < curSize; i++) {
-        Object obj = makePoolItem();
-        pool.add(obj);
-      }
-      size = pool.size();
-    }
-    final Object result = pool.remove(size - 1);
-    return result;
-  }
-  
-  public final void release(Object item) {
-    resetPoolItem(item);
-    pool.add(item);
-  }
-  
-  public ObjectPool init() {
-    if (!isInitialized) {
-      for (int i = 0; i < currentCapacity; i++) {
-        Object obj = makePoolItem();
-        pool.add(obj);
-      }
-      isInitialized = true;
-    }
-    return this;
-  }
-  
-  //// Protected Area
-  
-  //// Private Area
-  
-  //// Internal Rep
-  
-  private ArrayList<Object> pool = new ArrayList<Object>();
-  
-  private int currentCapacity;
-  
-  private static final int DEFAULT_POOL_SIZE = 64;
-  
-  private boolean isInitialized = false;
-  
-  //// Main
-  
+	//// Constructors
+
+	private static int DEFAULT_POOL_SIZE = 64;
+
+	private ArrayList<Object> pool = new ArrayList<Object>();
+
+	//// Public Area
+
+	private int currentCapacity;
+
+	private boolean isInitialized = false;
+
+	// @todo add background task for shrinking pools -APB
+
+	public ObjectPool() {
+		this(ObjectPool.DEFAULT_POOL_SIZE);
+	}
+
+	public ObjectPool(int initialSize) {
+		this.pool = new ArrayList<Object>(initialSize);
+		this.currentCapacity = initialSize;
+	}
+
+	public Object acquire() {
+		this.init();
+		int size = this.pool.size();
+		if (size == 0) {
+			int previousCapacity = this.currentCapacity;
+			this.currentCapacity = this.currentCapacity * 3 / 2 + 1;
+			this.pool.ensureCapacity(this.currentCapacity);
+			for (int i = 0, curSize = this.currentCapacity - previousCapacity; i < curSize; i++) {
+				Object obj = this.makePoolItem();
+				this.pool.add(obj);
+			}
+			size = this.pool.size();
+		}
+		Object result = this.pool.remove(size - 1);
+		return result;
+	}
+
+	//// Protected Area
+
+	//// Private Area
+
+	//// Internal Rep
+
+	public ObjectPool init() {
+		if (!this.isInitialized) {
+			for (int i = 0; i < this.currentCapacity; i++) {
+				Object obj = this.makePoolItem();
+				this.pool.add(obj);
+			}
+			this.isInitialized = true;
+		}
+		return this;
+	}
+
+	public abstract Object makePoolItem();
+
+	public void release(Object item) {
+		this.resetPoolItem(item);
+		this.pool.add(item);
+	}
+
+	public abstract void resetPoolItem(Object item);
+
+	//// Main
+
 }

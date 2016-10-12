@@ -33,87 +33,71 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class FileError extends LispError
-{
-    // initArgs is either a normal initArgs list or a pathname.
-    public FileError(SubLObject initArgs)
-    {
-        super(StandardClass.FILE_ERROR);
-        if (initArgs instanceof SubLCons)
-            initialize(initArgs);
-        else
-            setPathname(initArgs);
-    }
+public class FileError extends LispError {
+	public FileError(String message) {
+		super(StandardClass.FILE_ERROR);
+		this.setFormatControl(message);
+		this.setFormatArguments(Lisp.NIL);
+		this.setPathname(Lisp.NIL);
+	}
 
-    @Override
-    protected void initialize(SubLObject initArgs)
-    {
-        super.initialize(initArgs);
-        SubLObject pathname = NIL;
-        while (initArgs != NIL) {
-            SubLObject first = initArgs.first();
-            initArgs = initArgs.rest();
-            if (first == Keyword.PATHNAME) {
-                pathname = initArgs.first();
-                break;
-            }
-            initArgs = initArgs.rest();
-        }
-        setPathname(pathname);
-    }
+	public FileError(String message, SubLObject pathname)
 
-    public FileError(String message)
-    {
-        super(StandardClass.FILE_ERROR);
-        setFormatControl(message);
-        setFormatArguments(NIL);
-        setPathname(NIL);
-    }
+	{
+		super(StandardClass.FILE_ERROR);
+		this.setFormatControl(message);
+		this.setFormatArguments(Lisp.NIL);
+		this.setPathname(pathname);
+	}
 
-    public FileError(String message, SubLObject pathname)
+	// initArgs is either a normal initArgs list or a pathname.
+	public FileError(SubLObject initArgs) {
+		super(StandardClass.FILE_ERROR);
+		if (initArgs instanceof SubLCons)
+			this.initialize(initArgs);
+		else
+			this.setPathname(initArgs);
+	}
 
-    {
-        super(StandardClass.FILE_ERROR);
-        setFormatControl(message);
-        setFormatArguments(NIL);
-        setPathname(pathname);
-    }
+	public SubLObject classOf() {
+		return StandardClass.FILE_ERROR;
+	}
 
-    public SubLObject getPathname()
-    {
-        return getInstanceSlotValue(LispSymbols.PATHNAME);
-    }
+	public SubLObject getPathname() {
+		return this.getInstanceSlotValue(LispSymbols.PATHNAME);
+	}
 
-    private void setPathname(SubLObject pathname)
-    {
-        setInstanceSlotValue(LispSymbols.PATHNAME, pathname);
-    }
+	protected void initialize(SubLObject initArgs) {
+		super.initialize(initArgs);
+		SubLObject pathname = Lisp.NIL;
+		while (initArgs != Lisp.NIL) {
+			SubLObject first = initArgs.first();
+			initArgs = initArgs.rest();
+			if (first == Keyword.PATHNAME) {
+				pathname = initArgs.first();
+				break;
+			}
+			initArgs = initArgs.rest();
+		}
+		this.setPathname(pathname);
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.FILE_ERROR;
-    }
+	private void setPathname(SubLObject pathname) {
+		this.setInstanceSlotValue(LispSymbols.PATHNAME, pathname);
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.FILE_ERROR;
-    }
+	public SubLObject typeOf() {
+		return LispSymbols.FILE_ERROR;
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.FILE_ERROR)
-            return T;
-        if (type == StandardClass.FILE_ERROR)
-            return T;
-        return super.typep(type);
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.FILE_ERROR)
+			return Lisp.T;
+		if (type == StandardClass.FILE_ERROR)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

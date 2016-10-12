@@ -33,77 +33,60 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public class SimpleCondition extends Condition
-{
-    public SimpleCondition()
-    {
-        setFormatControl(NIL);
-        setFormatArguments(NIL);
-    }
+public class SimpleCondition extends Condition {
+	// ### simple-condition-format-control
+	private static Primitive SIMPLE_CONDITION_FORMAT_CONTROL = new JavaPrimitive(
+			LispSymbols.SIMPLE_CONDITION_FORMAT_CONTROL, "condition") {
 
-    public SimpleCondition(SubLObject formatControl, SubLObject formatArguments)
+		public SubLObject execute(SubLObject arg) {
+			return LispSymbols.STD_SLOT_VALUE.execute(arg, LispSymbols.FORMAT_CONTROL);
+		}
+	};
 
-    {
-        setFormatControl(formatControl);
-        setFormatArguments(formatArguments);
-    }
+	// ### simple-condition-format-arguments
+	private static Primitive SIMPLE_CONDITION_FORMAT_ARGUMENTS = new JavaPrimitive(
+			LispSymbols.SIMPLE_CONDITION_FORMAT_ARGUMENTS, "condition") {
 
-    public SimpleCondition(SubLObject initArgs)
-    {
-        super(initArgs);
-    }
+		public SubLObject execute(SubLObject arg) {
+			return LispSymbols.STD_SLOT_VALUE.execute(arg, LispSymbols.FORMAT_ARGUMENTS);
+		}
+	};
 
-    public SimpleCondition(String message)
-    {
-        super(message);
-    }
+	public SimpleCondition() {
+		this.setFormatControl(Lisp.NIL);
+		this.setFormatArguments(Lisp.NIL);
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.SIMPLE_CONDITION;
-    }
+	public SimpleCondition(String message) {
+		super(message);
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.SIMPLE_CONDITION;
-    }
+	public SimpleCondition(SubLObject initArgs) {
+		super(initArgs);
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.SIMPLE_CONDITION)
-            return T;
-        if (type == StandardClass.SIMPLE_CONDITION)
-            return T;
-        return super.typep(type);
-    }
+	public SimpleCondition(SubLObject formatControl, SubLObject formatArguments)
 
-    // ### simple-condition-format-control
-    private static final Primitive SIMPLE_CONDITION_FORMAT_CONTROL =
-        new JavaPrimitive(LispSymbols.SIMPLE_CONDITION_FORMAT_CONTROL, "condition")
-    {
-        @Override
-        public SubLObject execute(SubLObject arg)
-        {
-            return LispSymbols.STD_SLOT_VALUE.execute(arg, LispSymbols.FORMAT_CONTROL);
-        }
-    };
+	{
+		this.setFormatControl(formatControl);
+		this.setFormatArguments(formatArguments);
+	}
 
-    // ### simple-condition-format-arguments
-    private static final Primitive SIMPLE_CONDITION_FORMAT_ARGUMENTS =
-        new JavaPrimitive(LispSymbols.SIMPLE_CONDITION_FORMAT_ARGUMENTS, "condition")
-    {
-        @Override
-        public SubLObject execute(SubLObject arg)
-        {
-            return LispSymbols.STD_SLOT_VALUE.execute(arg, LispSymbols.FORMAT_ARGUMENTS);
-        }
-    };
+	public SubLObject classOf() {
+		return StandardClass.SIMPLE_CONDITION;
+	}
+
+	public SubLObject typeOf() {
+		return LispSymbols.SIMPLE_CONDITION;
+	}
+
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.SIMPLE_CONDITION)
+			return Lisp.T;
+		if (type == StandardClass.SIMPLE_CONDITION)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

@@ -33,25 +33,19 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public class StandardObjectFunctions
-{
-  // ### std-allocate-instance class => instance
-  private static final Primitive STD_ALLOCATE_INSTANCE =
-    new JavaPrimitive("std-allocate-instance", PACKAGE_SYS, true, "class")
-    {
-      @Override
-      public SubLObject execute(SubLObject arg)
-      {
-        if (arg == StandardClass.STANDARD_CLASS)
-          return new StandardClass();
-        if (arg instanceof StandardClass)
-                return ((StandardClass)arg).allocateInstance();
-        return type_error(arg, LispSymbols.STANDARD_CLASS);
-      }
-    };
+public class StandardObjectFunctions {
+	// ### std-allocate-instance class => instance
+	private static Primitive STD_ALLOCATE_INSTANCE = new JavaPrimitive("std-allocate-instance", Lisp.PACKAGE_SYS, true,
+			"class") {
+
+		public SubLObject execute(SubLObject arg) {
+			if (arg == StandardClass.STANDARD_CLASS)
+				return new StandardClass();
+			if (arg instanceof StandardClass)
+				return ((StandardClass) arg).allocateInstance();
+			return Lisp.type_error(arg, LispSymbols.STANDARD_CLASS);
+		}
+	};
 }

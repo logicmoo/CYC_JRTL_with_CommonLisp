@@ -33,72 +33,56 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public class JavaException extends LispError
-{
-    private final Throwable throwable;
+public class JavaException extends LispError {
+	// ### java-exception-cause java-exception => cause
+	private static Primitive JAVA_EXCEPTION_CAUSE = new JavaPrimitive(LispSymbols.JAVA_EXCEPTION_CAUSE,
+			"java-exception", "Returns the cause of JAVA-EXCEPTION. (The cause is the Java Throwable\n"
+					+ "  object that caused JAVA-EXCEPTION to be signalled.)") {
 
-    public JavaException(Throwable throwable)
-    {
-        super(StandardClass.JAVA_EXCEPTION);
-        Debug.assertTrue(slots.length == 3);
-        Debug.assertTrue(throwable != null);
-        this.throwable = throwable;
-        setInstanceSlotValue(LispSymbols.CAUSE, new ABCLJavaObject(throwable));
-    }
+		public SubLObject execute(SubLObject arg) {
+			return LispSymbols.STD_SLOT_VALUE.execute(arg, LispSymbols.CAUSE);
+		}
+	};
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.JAVA_EXCEPTION;
-    }
+	private Throwable throwable;
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.JAVA_EXCEPTION;
-    }
+	public JavaException(Throwable throwable) {
+		super(StandardClass.JAVA_EXCEPTION);
+		Debug.assertTrue(this.slots.length == 3);
+		Debug.assertTrue(throwable != null);
+		this.throwable = throwable;
+		this.setInstanceSlotValue(LispSymbols.CAUSE, new ABCLJavaObject(throwable));
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.JAVA_EXCEPTION)
-            return T;
-        if (type == StandardClass.JAVA_EXCEPTION)
-            return T;
-        return super.typep(type);
-    }
+	public SubLObject classOf() {
+		return StandardClass.JAVA_EXCEPTION;
+	}
 
-    @Override
-    public String getMessage()
-    {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        throwable.printStackTrace(pw);
-        String s = sw.toString();
-        final String separator = System.getProperty("line.separator");
-        if (s.endsWith(separator))
-            s = s.substring(0, s.length() - separator.length());
-        return s;
-    }
+	public String getMessage() {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		this.throwable.printStackTrace(pw);
+		String s = sw.toString();
+		String separator = System.getProperty("line.separator");
+		if (s.endsWith(separator))
+			s = s.substring(0, s.length() - separator.length());
+		return s;
+	}
 
-    // ### java-exception-cause java-exception => cause
-    private static final Primitive JAVA_EXCEPTION_CAUSE =
-        new JavaPrimitive(LispSymbols.JAVA_EXCEPTION_CAUSE, "java-exception",
-"Returns the cause of JAVA-EXCEPTION. (The cause is the Java Throwable\n" +
-"  object that caused JAVA-EXCEPTION to be signalled.)")
-    {
-        @Override
-        public SubLObject execute(SubLObject arg)
-        {
-            return LispSymbols.STD_SLOT_VALUE.execute(arg, LispSymbols.CAUSE);
-        }
-    };
+	public SubLObject typeOf() {
+		return LispSymbols.JAVA_EXCEPTION;
+	}
+
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.JAVA_EXCEPTION)
+			return Lisp.T;
+		if (type == StandardClass.JAVA_EXCEPTION)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

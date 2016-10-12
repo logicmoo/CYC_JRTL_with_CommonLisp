@@ -33,97 +33,164 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.net.UnknownHostException;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public final class Site {
-    private static SubLObject LISP_HOME;
-		public static final boolean useForNameLoader = false;
-  	
-	private static void init() {
-		String s = System.getProperty("abcl.home");
-		if (s != null) {
-			String fileSeparator = System.getProperty("file.separator");
-			if (!s.endsWith(fileSeparator)) {
-                s += fileSeparator;
-			}
-			LISP_HOME = new Pathname(s);      
-			return; // dmiles adds this workaround until mevenson fixes build
-		}
-		URL url = Lisp.class.getResource("boot.lisp");
-		if (url != null) {
-            if (!Pathname.isSupportedProtocol(url.getProtocol())) {
-              LISP_HOME = NIL;
-            } else {
-              Pathname p = new Pathname(url);
-              p.name = NIL;
-              p.type = NIL;
-              p.invalidateNamestring();
-              LISP_HOME = p;
-            }
-      			Debug.trace("LISP_HOME = " +LISP_HOME);
-			return;
-		}
-		Debug.trace("Unable to determine LISP_HOME.");
-	}
-
-    public static final SubLObject getLispHome(){
-		if (LISP_HOME == null) {
-			init();
-		}
-		return LISP_HOME;
-	}
-
-	// ### *lisp-home*
-	private static final SubLSymbol _LISP_HOME_ = exportSpecial("*LISP-HOME*", PACKAGE_EXT, NIL);
-
-	static {
-        SubLObject p  = Site.getLispHome();
-		if (p != null)
-			_LISP_HOME_.setSymbolValue(p);
-	}
-
-	// ### software-type
-	private static final Primitive SOFTWARE_TYPE = new software_type();
-
-	public final static class software_type extends JavaPrimitive {
-		software_type() {
-			super("software-type");
+public class Site {
+	public static class lisp_implementation_type extends JavaPrimitive {
+		lisp_implementation_type() {
+			super("lisp-implementation-type", "");
 		}
 
-		@Override
 		public SubLObject execute() {
-			return makeString(System.getProperty("os.name"));
+			return LispObjectFactory.makeString("Armed Bear Common Lisp");
 		}
 
-		// ### software-version
-		private static final Primitive SOFTWARE_VERSION = new software_version();
+	}
 
-		public final static class software_version extends JavaPrimitive {
+	// lisp_implementation_version <no arguments> => description
+	public static class lisp_implementation_version extends JavaPrimitive {
+		lisp_implementation_version() {
+			super("lisp-implementation-version", "");
+		}
+
+		public SubLObject execute() {
+			return LispObjectFactory.makeString(Version.getVersion());
+		}
+
+	}
+
+	public static class machine_type extends JavaPrimitive {
+		machine_type() {
+			super("machine-type");
+		}
+
+		public SubLObject execute() {
+			String s = System.getProperty("os.arch");
+			if (s == null)
+				s = "UNKNOWN";
+			else if (s.equals("amd64"))
+				s = "X86-64";
+			else
+				s = s.toUpperCase();
+			return LispObjectFactory.makeString(s);
+		}
+
+	}
+
+	public static class machine_version extends JavaPrimitive {
+		machine_version() {
+			super("machine-version");
+		}
+
+		public SubLObject execute() {
+			String osName = System.getProperty("os.name");
+			if (osName != null && osName.toLowerCase().startsWith("linux"))
+				try {
+					FileInputStream in = new FileInputStream("/proc/cpuinfo");
+					if (in != null) {
+						BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+						try {
+							String s;
+							while ((s = reader.readLine()) != null) {
+								int start = s.indexOf("model name");
+								if (start >= 0) {
+									start = s.indexOf(':', start);
+									if (start >= 0)
+										return LispObjectFactory.makeString(s.substring(start + 1).trim());
+								}
+							}
+						} finally {
+							reader.close();
+						}
+					}
+				} catch (IOException e) {
+				}
+			return Lisp.NIL;
+		}
+
+	}
+
+	public static class software_type extends JavaPrimitive {
+		public static class software_version extends JavaPrimitive {
 			software_version() {
 				super("software-version");
 			}
 
-			@Override
 			public SubLObject execute() {
-				return makeString(System.getProperty("os.version"));
+				return LispObjectFactory.makeString(System.getProperty("os.version"));
 			}
 
 		}
+
+		// ### software-version
+		private static Primitive SOFTWARE_VERSION = new software_version();
+
+		software_type() {
+			super("software-type");
+		}
+
+		public SubLObject execute() {
+			return LispObjectFactory.makeString(System.getProperty("os.name"));
+		}
 	}
+
+	private static SubLObject LISP_HOME;
+
+	public static boolean useForNameLoader = false;
+
+	// ### *lisp-home*
+	private static SubLSymbol _LISP_HOME_ = Lisp.exportSpecial("*LISP-HOME*", Lisp.PACKAGE_EXT, Lisp.NIL);
+
+	static {
+		SubLObject p = Site.getLispHome();
+		if (p != null)
+			Site._LISP_HOME_.setSymbolValue(p);
+	}
+
+	// ### software-type
+	private static Primitive SOFTWARE_TYPE = new software_type();
+
+	private static Primitive MACHINE_INSTANCE = new JavaPrimitive("machine-instance") {
+
+		public SubLObject execute() {
+			return Site.getHostName();
+		}
+	};
+
+	private static Primitive LONG_SITE_NAME = new JavaPrimitive("long-site-name") {
+
+		public SubLObject execute() {
+			return Site.getHostName();
+		}
+	};
+
+	private static Primitive SHORT_SITE_NAME = new JavaPrimitive("short-site-name") {
+
+		public SubLObject execute() {
+			return Site.getHostName();
+		}
+	};
+
+	// ### machine-type
+	private static Primitive MACHINE_TYPE = new machine_type();
+
+	// ### machine-version
+	private static Primitive MACHINE_VERSION = new machine_version();
+
+	// ### lisp-implementation-type <no arguments> => description
+	private static lisp_implementation_type LISP_IMPLEMENTATION_TYPE = new lisp_implementation_type();
+
+	// ### lisp_implementation_version
+	private static lisp_implementation_version LISP_IMPLEMENTATION_VERSION = new lisp_implementation_version();
 
 	static SubLObject getHostName() {
 		String hostName = null;
@@ -136,120 +203,39 @@ public final class Site {
 		if (addr != null)
 			hostName = addr.getHostName();
 
-		return hostName != null ? makeString(hostName) : NIL;
+		return hostName != null ? LispObjectFactory.makeString(hostName) : Lisp.NIL;
 	}
 
-	private static final Primitive MACHINE_INSTANCE = new JavaPrimitive("machine-instance") {
-		@Override
-		public SubLObject execute() {
-			return getHostName();
-		}
-	};
-
-	private static final Primitive LONG_SITE_NAME = new JavaPrimitive("long-site-name") {
-		@Override
-		public SubLObject execute() {
-			return getHostName();
-		}
-	};
-
-	private static final Primitive SHORT_SITE_NAME = new JavaPrimitive("short-site-name") {
-		@Override
-		public SubLObject execute() {
-			return getHostName();
-		}
-	};
-
-	//### machine-type
-	private static final Primitive MACHINE_TYPE = new machine_type();
-
-	public final static class machine_type extends JavaPrimitive {
-		machine_type() {
-			super("machine-type");
-		}
-
-		@Override
-		public SubLObject execute() {
-			String s = System.getProperty("os.arch");
-			if (s == null)
-				s = "UNKNOWN";
-			else if (s.equals("amd64"))
-				s = "X86-64";
-			else
-				s = s.toUpperCase();
-			return makeString(s);
-		}
-
+	public static SubLObject getLispHome() {
+		if (Site.LISP_HOME == null)
+			Site.init();
+		return Site.LISP_HOME;
 	}
 
-	//### machine-version
-	private static final Primitive MACHINE_VERSION = new machine_version();
-
-	public final static class machine_version extends JavaPrimitive {
-		machine_version() {
-			super("machine-version");
+	private static void init() {
+		String s = System.getProperty("abcl.home");
+		if (s != null) {
+			String fileSeparator = System.getProperty("file.separator");
+			if (!s.endsWith(fileSeparator))
+				s += fileSeparator;
+			Site.LISP_HOME = new Pathname(s);
+			return; // dmiles adds this workaround until mevenson fixes build
 		}
-
-		@Override
-		public SubLObject execute() {
-			String osName = System.getProperty("os.name");
-			if (osName != null && osName.toLowerCase().startsWith("linux")) {
-				try {
-					FileInputStream in = new FileInputStream("/proc/cpuinfo");
-					if (in != null) {
-						BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-						try {
-							String s;
-							while ((s = reader.readLine()) != null) {
-								int start = s.indexOf("model name");
-								if (start >= 0) {
-									start = s.indexOf(':', start);
-									if (start >= 0) {
-										return makeString(s.substring(start + 1).trim());
-									}
-								}
-							}
-						} finally {
-							reader.close();
-						}
-					}
-				} catch (IOException e) {
-				}
+		URL url = Lisp.class.getResource("boot.lisp");
+		if (url != null) {
+			if (!Pathname.isSupportedProtocol(url.getProtocol()))
+				Site.LISP_HOME = Lisp.NIL;
+			else {
+				Pathname p = new Pathname(url);
+				p.name = Lisp.NIL;
+				p.type = Lisp.NIL;
+				p.invalidateNamestring();
+				Site.LISP_HOME = p;
 			}
-			return NIL;
+			Debug.trace("LISP_HOME = " + Site.LISP_HOME);
+			return;
 		}
-
-	}
-
-	//### lisp-implementation-type <no arguments> => description
-	private static final lisp_implementation_type LISP_IMPLEMENTATION_TYPE = new lisp_implementation_type();
-
-	public final static class lisp_implementation_type extends JavaPrimitive {
-		lisp_implementation_type() {
-			super("lisp-implementation-type", "");
-		}
-
-		@Override
-		public SubLObject execute() {
-			return makeString("Armed Bear Common Lisp");
-		}
-
-	}
-
-	//### lisp_implementation_version
-	private static final lisp_implementation_version LISP_IMPLEMENTATION_VERSION = new lisp_implementation_version();
-
-	//lisp_implementation_version <no arguments> => description
-	public final static class lisp_implementation_version extends JavaPrimitive {
-		lisp_implementation_version() {
-			super("lisp-implementation-version", "");
-		}
-
-		@Override
-		public SubLObject execute() {
-			return makeString(Version.getVersion());
-		}
-
+		Debug.trace("Unable to determine LISP_HOME.");
 	}
 
 }

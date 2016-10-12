@@ -36,21 +36,18 @@ package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
 // Package accessibility.
-final class FunctionBinding
-{
-    SubLObject name;
-    SubLObject value;
-    final FunctionBinding next;
+final class FunctionBinding {
+	SubLObject name;
+	SubLObject value;
+	FunctionBinding next;
 
-    FunctionBinding()
-    {
-        next = null;
-    }
+	FunctionBinding() {
+		this.next = null;
+	}
 
-    FunctionBinding(SubLObject name, SubLObject value, FunctionBinding next)
-    {
-        this.name = name;
-        this.value = value;
-        this.next = next;
-    }
+	FunctionBinding(SubLObject name, SubLObject value, FunctionBinding next) {
+		this.name = name;
+		this.value = value;
+		this.next = next;
+	}
 }

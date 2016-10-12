@@ -36,109 +36,86 @@ package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public final class EqualpHashTable extends LispHashtable
-{
-  public EqualpHashTable(int size, SubLObject rehashSize,
-                         SubLObject rehashThreshold)
-  {
-    super(size, rehashSize, rehashThreshold);
-  }
+public class EqualpHashTable extends LispHashtable {
+	public EqualpHashTable(int size, SubLObject rehashSize, SubLObject rehashThreshold) {
+		super(size, rehashSize, rehashThreshold);
+	}
 
-  @Override
-  public SubLSymbol getTest()
-  {
-    return LispSymbols.EQUALP;
-  }
+	public SubLObject getHT(SubLObject key) {
+		int index = key.psxhash() % this.buckets.length;
+		HashEntry e = this.buckets[index];
+		while (e != null) {
+			if (key.equalp(e.key))
+				return e.value;
+			e = e.next;
+		}
+		return null;
+	}
 
-  @Override
-  public SubLObject getHT(SubLObject key)
-  {
-    final int index = key.psxhash() % buckets.length;
-    HashEntry e = buckets[index];
-    while (e != null)
-      {
-        if (key.equalp(e.key))
-          return e.value;
-        e = e.next;
-      }
-    return null;
-  }
+	public SubLSymbol getTest() {
+		return LispSymbols.EQUALP;
+	}
 
-  @Override
-  public void putVoid(SubLObject key, SubLObject value)
-  {
-    int index = key.psxhash() % buckets.length;
-    HashEntry e = buckets[index];
-    while (e != null)
-      {
-        if (key.equalp(e.key))
-          {
-            e.value = value;
-            return;
-          }
-        e = e.next;
-      }
-    // Not found. We need to add a new entry.
-    if (++count > threshold)
-      {
-        rehash();
-        // Need a new hash value to suit the bigger table.
-        index = key.psxhash() % buckets.length;
-      }
-    e = new HashEntry(key, value);
-    e.next = buckets[index];
-    buckets[index] = e;
-  }
+	public void putVoid(SubLObject key, SubLObject value) {
+		int index = key.psxhash() % this.buckets.length;
+		HashEntry e = this.buckets[index];
+		while (e != null) {
+			if (key.equalp(e.key)) {
+				e.value = value;
+				return;
+			}
+			e = e.next;
+		}
+		// Not found. We need to add a new entry.
+		if (++this.count > this.threshold) {
+			this.rehash();
+			// Need a new hash value to suit the bigger table.
+			index = key.psxhash() % this.buckets.length;
+		}
+		e = new HashEntry(key, value);
+		e.next = this.buckets[index];
+		this.buckets[index] = e;
+	}
 
-  @Override
-  public SubLObject removeHT(SubLObject key)
-  {
-    final int index = key.psxhash() % buckets.length;
-    HashEntry e = buckets[index];
-    HashEntry last = null;
-    while (e != null)
-      {
-        if (key.equalp(e.key))
-          {
-            if (last == null)
-              buckets[index] = e.next;
-            else
-              last.next = e.next;
-            --count;
-            return e.value;
-          }
-        last = e;
-        e = e.next;
-      }
-    return null;
-  }
+	public void rehash() {
+		HashEntry[] oldBuckets = this.buckets;
+		int newCapacity = this.buckets.length * 2 + 1;
+		this.threshold = (int) (newCapacity * LispHashtable.loadFactor);
+		this.buckets = new HashEntry[newCapacity];
+		for (int i = oldBuckets.length; i-- > 0;) {
+			HashEntry e = oldBuckets[i];
+			while (e != null) {
+				int index = e.key.psxhash() % this.buckets.length;
+				HashEntry dest = this.buckets[index];
+				if (dest != null) {
+					while (dest.next != null)
+						dest = dest.next;
+					dest.next = e;
+				} else
+					this.buckets[index] = e;
+				HashEntry next = e.next;
+				e.next = null;
+				e = next;
+			}
+		}
+	}
 
-  @Override
-  public void rehash()
-  {
-    HashEntry[] oldBuckets = buckets;
-    int newCapacity = buckets.length * 2 + 1;
-    threshold = (int) (newCapacity * loadFactor);
-    buckets = new HashEntry[newCapacity];
-    for (int i = oldBuckets.length; i-- > 0;)
-      {
-        HashEntry e = oldBuckets[i];
-        while (e != null)
-          {
-            final int index = e.key.psxhash() % buckets.length;
-            HashEntry dest = buckets[index];
-            if (dest != null)
-              {
-                while (dest.next != null)
-                  dest = dest.next;
-                dest.next = e;
-              }
-            else
-              buckets[index] = e;
-            HashEntry next = e.next;
-            e.next = null;
-            e = next;
-          }
-      }
-  }
+	public SubLObject removeHT(SubLObject key) {
+		int index = key.psxhash() % this.buckets.length;
+		HashEntry e = this.buckets[index];
+		HashEntry last = null;
+		while (e != null) {
+			if (key.equalp(e.key)) {
+				if (last == null)
+					this.buckets[index] = e.next;
+				else
+					last.next = e.next;
+				--this.count;
+				return e.value;
+			}
+			last = e;
+			e = e.next;
+		}
+		return null;
+	}
 }

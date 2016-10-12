@@ -33,39 +33,29 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class FloatingPointUnderflow extends ArithmeticError
-{
-    public FloatingPointUnderflow(SubLObject initArgs)
+public class FloatingPointUnderflow extends ArithmeticError {
+	public FloatingPointUnderflow(SubLObject initArgs)
 
-    {
-        super(StandardClass.FLOATING_POINT_UNDERFLOW);
-        initialize(initArgs);
-    }
+	{
+		super(StandardClass.FLOATING_POINT_UNDERFLOW);
+		this.initialize(initArgs);
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.FLOATING_POINT_UNDERFLOW;
-    }
+	public SubLObject classOf() {
+		return StandardClass.FLOATING_POINT_UNDERFLOW;
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.FLOATING_POINT_UNDERFLOW;
-    }
+	public SubLObject typeOf() {
+		return LispSymbols.FLOATING_POINT_UNDERFLOW;
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.FLOATING_POINT_UNDERFLOW)
-            return T;
-        if (type == StandardClass.FLOATING_POINT_UNDERFLOW)
-            return T;
-        return super.typep(type);
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.FLOATING_POINT_UNDERFLOW)
+			return Lisp.T;
+		if (type == StandardClass.FLOATING_POINT_UNDERFLOW)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

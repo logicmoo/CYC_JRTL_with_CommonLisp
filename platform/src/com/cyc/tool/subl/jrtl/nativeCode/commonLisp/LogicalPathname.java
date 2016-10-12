@@ -33,254 +33,230 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import java.util.HashMap;
 import java.util.StringTokenizer;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 
-public final class LogicalPathname extends Pathname
-{
-    private static final String LOGICAL_PATHNAME_CHARS =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-;*.";
+public class LogicalPathname extends Pathname {
+	private static String LOGICAL_PATHNAME_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-;*.";
 
-    private static final HashMap map = new HashMap();
+	private static HashMap map = new HashMap();
 
-    protected LogicalPathname()
-    {
-    }
+	private static String LOGICAL_PATHNAME_COMPONENT_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-";
 
-    protected LogicalPathname(Pathname p) {
-        super(p);
-    }
+	public static SubLString canonicalizeStringComponent(SubLString s)
 
-    public LogicalPathname(String host, String rest)
-    {
-        final int limit = rest.length();
-        for (int i = 0; i < limit; i++) {
-            char c = rest.charAt(i);
-            if (LOGICAL_PATHNAME_CHARS.indexOf(c) < 0) {
-                error(new ParseError("The character #\\" + c + " is not valid in a logical pathname."));
-                return;
-            }
-        }
+	{
+		int limit = s.cl_length();
+		for (int i = 0; i < limit; i++) {
+			char c = s.charAt(i);
+			if (LogicalPathname.LOGICAL_PATHNAME_COMPONENT_CHARS.indexOf(c) < 0) {
+				Lisp.error(new ParseError("Invalid character #\\" + c + " in logical pathname component \"" + s + '"'));
+				// Not reached.
+				return null;
+			}
+		}
+		return LispObjectFactory.makeString(s.getString().toUpperCase());
+	}
 
-        this.host = makeString(host);
+	private static SubLObject parseDirectory(String s)
 
-        // "The device component of a logical pathname is always :UNSPECIFIC;
-        // no other component of a logical pathname can be :UNSPECIFIC."
-        device = Keyword.UNSPECIFIC;
+	{
+		SubLObject result;
+		if (s.charAt(0) == ';') {
+			result = LispObjectFactory.makeCons(Keyword.RELATIVE);
+			s = s.substring(1);
+		} else
+			result = LispObjectFactory.makeCons(Keyword.ABSOLUTE);
+		StringTokenizer st = new StringTokenizer(s, ";");
+		while (st.hasMoreTokens()) {
+			String token = st.nextToken();
+			SubLObject obj;
+			if (token.equals("*"))
+				obj = Keyword.WILD;
+			else if (token.equals("**"))
+				obj = Keyword.WILD_INFERIORS;
+			else if (token.equals("..")) {
+				if (result.first() instanceof SubLString) {
+					result = result.rest();
+					continue;
+				}
+				obj = Keyword.UP;
+			} else
+				obj = LispObjectFactory.makeString(token.toUpperCase());
+			result = LispObjectFactory.makeCons(obj, result);
+		}
+		return result.nreverse();
+	}
 
-        int semi = rest.lastIndexOf(';');
-        if (semi >= 0) {
-            // Directory.
-            String d = rest.substring(0, semi + 1);
-            directory = parseDirectory(d);
-            rest = rest.substring(semi + 1);
-        } else {
-            // "If a relative-directory-marker precedes the directories, the
-            // directory component parsed is as relative; otherwise, the
-            // directory component is parsed as absolute."
-            directory = makeCons(Keyword.ABSOLUTE);
-        }
+	public static Pathname translateLogicalPathname(LogicalPathname pathname)
 
-        int dot = rest.indexOf('.');
-        if (dot >= 0) {
-            String n = rest.substring(0, dot);
-            if (n.equals("*"))
-                name = Keyword.WILD;
-            else
-                name = makeString(n.toUpperCase());
-            rest = rest.substring(dot + 1);
-            dot = rest.indexOf('.');
-            if (dot >= 0) {
-                String t = rest.substring(0, dot);
-                if (t.equals("*"))
-                    type = Keyword.WILD;
-                else
-                    type = makeString(t.toUpperCase());
-                // What's left is the version.
-                String v = rest.substring(dot + 1);
-                if (v.equals("*"))
-                    version = Keyword.WILD;
-                else if (v.equals("NEWEST") || v.equals("newest"))
-                    version = Keyword.NEWEST;
-                else
-                    version = PACKAGE_CL.intern("PARSE-INTEGER").execute(makeString(v));
-            } else {
-                String t = rest;
-                if (t.equals("*"))
-                    type = Keyword.WILD;
-                else
-                    type = makeString(t.toUpperCase());
-            }
-        } else {
-            String n = rest;
-            if (n.equals("*"))
-                name = Keyword.WILD;
-            else if (n.length() > 0)
-                name = makeString(n.toUpperCase());
-        }
-    }
+	{
+		return (Pathname) LispSymbols.TRANSLATE_LOGICAL_PATHNAME.execute(pathname);
+	}
 
-    private static final String LOGICAL_PATHNAME_COMPONENT_CHARS =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-";
+	protected LogicalPathname() {
+	}
 
-    public static final SubLString canonicalizeStringComponent(SubLString s)
+	protected LogicalPathname(Pathname p) {
+		super(p);
+	}
 
-    {
-        final int limit = s.cl_length();
-        for (int i = 0; i < limit; i++) {
-            char c = s.charAt(i);
-            if (LOGICAL_PATHNAME_COMPONENT_CHARS.indexOf(c) < 0) {
-                error(new ParseError("Invalid character #\\" + c +
-                                      " in logical pathname component \"" + s +
-                                      '"'));
-                // Not reached.
-                return null;
-            }
-        }
-        return makeString(s.getString().toUpperCase());
-    }
+	public LogicalPathname(String host, String rest) {
+		int limit = rest.length();
+		for (int i = 0; i < limit; i++) {
+			char c = rest.charAt(i);
+			if (LogicalPathname.LOGICAL_PATHNAME_CHARS.indexOf(c) < 0) {
+				Lisp.error(new ParseError("The character #\\" + c + " is not valid in a logical pathname."));
+				return;
+			}
+		}
 
-    public static Pathname translateLogicalPathname(LogicalPathname pathname)
+		this.host = LispObjectFactory.makeString(host);
 
-    {
-        return (Pathname) LispSymbols.TRANSLATE_LOGICAL_PATHNAME.execute(pathname);
-    }
+		// "The device component of a logical pathname is always :UNSPECIFIC;
+		// no other component of a logical pathname can be :UNSPECIFIC."
+		this.device = Keyword.UNSPECIFIC;
 
-    private static final SubLObject parseDirectory(String s)
+		int semi = rest.lastIndexOf(';');
+		if (semi >= 0) {
+			// Directory.
+			String d = rest.substring(0, semi + 1);
+			this.directory = LogicalPathname.parseDirectory(d);
+			rest = rest.substring(semi + 1);
+		} else
+			// "If a relative-directory-marker precedes the directories, the
+			// directory component parsed is as relative; otherwise, the
+			// directory component is parsed as absolute."
+			this.directory = LispObjectFactory.makeCons(Keyword.ABSOLUTE);
 
-    {
-        SubLObject result;
-        if (s.charAt(0) == ';') {
-            result = makeCons(Keyword.RELATIVE);
-            s = s.substring(1);
-        } else
-            result = makeCons(Keyword.ABSOLUTE);
-        StringTokenizer st = new StringTokenizer(s, ";");
-        while (st.hasMoreTokens()) {
-            String token = st.nextToken();
-            SubLObject obj;
-            if (token.equals("*"))
-                obj = Keyword.WILD;
-            else if (token.equals("**"))
-                obj = Keyword.WILD_INFERIORS;
-            else if (token.equals("..")) {
-                if (result.first() instanceof SubLString) {
-                    result = result.rest();
-                    continue;
-                }
-                obj= Keyword.UP;
-            } else
-                obj = makeString(token.toUpperCase());
-            result = makeCons(obj, result);
-        }
-        return result.nreverse();
-    }
+		int dot = rest.indexOf('.');
+		if (dot >= 0) {
+			String n = rest.substring(0, dot);
+			if (n.equals("*"))
+				this.name = Keyword.WILD;
+			else
+				this.name = LispObjectFactory.makeString(n.toUpperCase());
+			rest = rest.substring(dot + 1);
+			dot = rest.indexOf('.');
+			if (dot >= 0) {
+				String t = rest.substring(0, dot);
+				if (t.equals("*"))
+					this.type = Keyword.WILD;
+				else
+					this.type = LispObjectFactory.makeString(t.toUpperCase());
+				// What's left is the version.
+				String v = rest.substring(dot + 1);
+				if (v.equals("*"))
+					this.version = Keyword.WILD;
+				else if (v.equals("NEWEST") || v.equals("newest"))
+					this.version = Keyword.NEWEST;
+				else
+					this.version = Lisp.PACKAGE_CL.intern("PARSE-INTEGER").execute(LispObjectFactory.makeString(v));
+			} else {
+				String t = rest;
+				if (t.equals("*"))
+					this.type = Keyword.WILD;
+				else
+					this.type = LispObjectFactory.makeString(t.toUpperCase());
+			}
+		} else {
+			String n = rest;
+			if (n.equals("*"))
+				this.name = Keyword.WILD;
+			else if (n.length() > 0)
+				this.name = LispObjectFactory.makeString(n.toUpperCase());
+		}
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.LOGICAL_PATHNAME;
-    }
+	public SubLObject classOf() {
+		return BuiltInClass.LOGICAL_PATHNAME;
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return BuiltInClass.LOGICAL_PATHNAME;
-    }
+	protected String getDirectoryNamestring() {
+		StringBuilder sb = new StringBuilder();
+		// "If a pathname is converted to a namestring, the symbols NIL and
+		// :UNSPECIFIC cause the field to be treated as if it were empty. That
+		// is, both NIL and :UNSPECIFIC cause the component not to appear in
+		// the namestring." 19.2.2.2.3.1
+		if (this.directory != Lisp.NIL) {
+			SubLObject temp = this.directory;
+			SubLObject part = temp.first();
+			if (part == Keyword.ABSOLUTE) {
+			} else if (part == Keyword.RELATIVE)
+				sb.append(';');
+			else
+				Lisp.error(new FileError("Unsupported directory component " + part.writeToString() + ".", this));
+			temp = temp.rest();
+			while (temp != Lisp.NIL) {
+				part = temp.first();
+				if (part instanceof SubLString)
+					sb.append(part.getString());
+				else if (part == Keyword.WILD)
+					sb.append('*');
+				else if (part == Keyword.WILD_INFERIORS)
+					sb.append("**");
+				else if (part == Keyword.UP)
+					sb.append("..");
+				else
+					Lisp.error(new FileError("Unsupported directory component " + part.writeToString() + ".", this));
+				sb.append(';');
+				temp = temp.rest();
+			}
+		}
+		return sb.toString();
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.LOGICAL_PATHNAME)
-            return T;
-        if (type == BuiltInClass.LOGICAL_PATHNAME)
-            return T;
-        return super.typep(type);
-    }
+	public SubLObject typeOf() {
+		return LispSymbols.LOGICAL_PATHNAME;
+	}
 
-    @Override
-    protected String getDirectoryNamestring()
-    {
-        StringBuilder sb = new StringBuilder();
-        // "If a pathname is converted to a namestring, the symbols NIL and
-        // :UNSPECIFIC cause the field to be treated as if it were empty. That
-        // is, both NIL and :UNSPECIFIC cause the component not to appear in
-        // the namestring." 19.2.2.2.3.1
-        if (directory != NIL) {
-            SubLObject temp = directory;
-            SubLObject part = temp.first();
-            if (part == Keyword.ABSOLUTE) {
-            } else if (part == Keyword.RELATIVE)
-                sb.append(';');
-            else
-                error(new FileError("Unsupported directory component " + part.writeToString() + ".",
-                                     this));
-            temp = temp.rest();
-            while (temp != NIL) {
-                part = temp.first();
-                if (part instanceof SubLString)
-                    sb.append(part.getString());
-                else if (part == Keyword.WILD)
-                    sb.append('*');
-                else if (part == Keyword.WILD_INFERIORS)
-                    sb.append("**");
-                else if (part == Keyword.UP)
-                    sb.append("..");
-                else
-                    error(new FileError("Unsupported directory component " + part.writeToString() + ".",
-                                         this));
-                sb.append(';');
-                temp = temp.rest();
-            }
-        }
-        return sb.toString();
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.LOGICAL_PATHNAME)
+			return Lisp.T;
+		if (type == BuiltInClass.LOGICAL_PATHNAME)
+			return Lisp.T;
+		return super.typep(type);
+	}
 
-    @Override
-    public String writeToString()
-    {
-        final LispThread thread = LispThread.currentThread();
-        boolean printReadably = (LispSymbols.PRINT_READABLY.symbolValue(thread) != NIL);
-        boolean printEscape = (LispSymbols.PRINT_ESCAPE.symbolValue(thread) != NIL);
-        StringBuilder sb = new StringBuilder();
-        if (printReadably || printEscape)
-            sb.append("#P\"");
-        sb.append(host.getString());
-        sb.append(':');
-        if (directory != NIL)
-            sb.append(getDirectoryNamestring());
-        if (name != NIL) {
-            if (name == Keyword.WILD)
-                sb.append('*');
-            else
-                sb.append(name.getString());
-        }
-        if (type != NIL) {
-            sb.append('.');
-            if (type == Keyword.WILD)
-                sb.append('*');
-            else
-                sb.append(type.getString());
-        }
-        if (version.isInteger()) {
-            sb.append('.');
-            int base = LispSymbols.PRINT_BASE.symbolValue(thread).intValue();
-            if (version instanceof Fixnum)
-                sb.append(Integer.toString(((Fixnum)version).value, base).toUpperCase());
-            else if (version instanceof Bignum)
-                sb.append(((Bignum)version).bigIntegerValue().toString(base).toUpperCase());
-        } else if (version == Keyword.WILD) {
-            sb.append(".*");
-        } else if (version == Keyword.NEWEST) {
-            sb.append(".NEWEST");
-        }
-        if (printReadably || printEscape)
-            sb.append('"');
-        return sb.toString();
-    }
+	public String writeToString() {
+		LispThread thread = LispThread.currentThread();
+		boolean printReadably = LispSymbols.PRINT_READABLY.symbolValue(thread) != Lisp.NIL;
+		boolean printEscape = LispSymbols.PRINT_ESCAPE.symbolValue(thread) != Lisp.NIL;
+		StringBuilder sb = new StringBuilder();
+		if (printReadably || printEscape)
+			sb.append("#P\"");
+		sb.append(this.host.getString());
+		sb.append(':');
+		if (this.directory != Lisp.NIL)
+			sb.append(this.getDirectoryNamestring());
+		if (this.name != Lisp.NIL)
+			if (this.name == Keyword.WILD)
+				sb.append('*');
+			else
+				sb.append(this.name.getString());
+		if (this.type != Lisp.NIL) {
+			sb.append('.');
+			if (this.type == Keyword.WILD)
+				sb.append('*');
+			else
+				sb.append(this.type.getString());
+		}
+		if (this.version.isInteger()) {
+			sb.append('.');
+			int base = LispSymbols.PRINT_BASE.symbolValue(thread).intValue();
+			if (this.version instanceof Fixnum)
+				sb.append(Integer.toString(((Fixnum) this.version).value, base).toUpperCase());
+			else if (this.version instanceof Bignum)
+				sb.append(((Bignum) this.version).bigIntegerValue().toString(base).toUpperCase());
+		} else if (this.version == Keyword.WILD)
+			sb.append(".*");
+		else if (this.version == Keyword.NEWEST)
+			sb.append(".NEWEST");
+		if (printReadably || printEscape)
+			sb.append('"');
+		return sb.toString();
+	}
 }

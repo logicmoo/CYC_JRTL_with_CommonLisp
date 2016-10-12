@@ -33,45 +33,33 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class ParseError extends LispError
-{
-    public ParseError(String message)
-    {
-        super(StandardClass.PARSE_ERROR);
-        setFormatControl(message);
-        setFormatArguments(NIL);
-    }
+public class ParseError extends LispError {
+	public ParseError(String message) {
+		super(StandardClass.PARSE_ERROR);
+		this.setFormatControl(message);
+		this.setFormatArguments(Lisp.NIL);
+	}
 
-    public ParseError(SubLObject initArgs)
-    {
-        super(StandardClass.PARSE_ERROR);
-        initialize(initArgs);
-    }
+	public ParseError(SubLObject initArgs) {
+		super(StandardClass.PARSE_ERROR);
+		this.initialize(initArgs);
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.PARSE_ERROR;
-    }
+	public SubLObject classOf() {
+		return StandardClass.PARSE_ERROR;
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.PARSE_ERROR;
-    }
+	public SubLObject typeOf() {
+		return LispSymbols.PARSE_ERROR;
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.PARSE_ERROR)
-            return T;
-        if (type == StandardClass.PARSE_ERROR)
-            return T;
-        return super.typep(type);
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.PARSE_ERROR)
+			return Lisp.T;
+		if (type == StandardClass.PARSE_ERROR)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

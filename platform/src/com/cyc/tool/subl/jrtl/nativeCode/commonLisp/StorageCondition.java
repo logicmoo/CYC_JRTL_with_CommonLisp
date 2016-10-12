@@ -33,46 +33,33 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public class StorageCondition extends SeriousCondition
-{
-  public StorageCondition()
-  {
-  }
+public class StorageCondition extends SeriousCondition {
+	public StorageCondition() {
+	}
 
-  public StorageCondition(SubLObject initArgs)
-  {
-    super(initArgs);
-  }
+	public StorageCondition(String message) {
+		super(message);
+	}
 
-  public StorageCondition(String message)
-  {
-    super(message);
-  }
+	public StorageCondition(SubLObject initArgs) {
+		super(initArgs);
+	}
 
-  @Override
-  public SubLObject typeOf()
-  {
-    return LispSymbols.STORAGE_CONDITION;
-  }
+	public SubLObject classOf() {
+		return StandardClass.STORAGE_CONDITION;
+	}
 
-  @Override
-  public SubLObject classOf()
-  {
-    return StandardClass.STORAGE_CONDITION;
-  }
+	public SubLObject typeOf() {
+		return LispSymbols.STORAGE_CONDITION;
+	}
 
-  @Override
-  public SubLObject typep(SubLObject type)
-  {
-    if (type == LispSymbols.STORAGE_CONDITION)
-      return T;
-    if (type == StandardClass.STORAGE_CONDITION)
-      return T;
-    return super.typep(type);
-  }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.STORAGE_CONDITION)
+			return Lisp.T;
+		if (type == StandardClass.STORAGE_CONDITION)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

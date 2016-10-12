@@ -33,15 +33,11 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import java.math.BigInteger;
-import java.util.List;
-import java.util.WeakHashMap;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.LispObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCharacter;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -49,1259 +45,1082 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLSequence;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumber;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackageIterator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public abstract class AbstractLispObject extends SubLInchworm implements SubLObject
-{
-  @Override
-  public boolean isCons() {
-  	return false;
-  }
+public abstract class AbstractLispObject extends SubLInchworm implements SubLObject {
+	public AbstractLispObject() {
+	}
 
-	@Override
+	public SubLObject ABS() {
+		return this.toNumber().ABS();
+	}
+
+	public SubLObject add(int n) {
+		return this.add(LispObjectFactory.makeInteger(n));
+	}
+
+	public SubLObject add(SubLObject obj) {
+		return this.toNumber().add(obj);
+	}
+
+	public int aref(int index) {
+		return this.AREF(index).intValue();
+	}
+
+	public SubLObject AREF(int index) {
+		return Lisp.type_error(this, LispSymbols.ARRAY).AREF(index);
+	}
+
+	public SubLObject AREF(SubLObject index) {
+		return this.AREF(index.intValue());
+	}
+
+	public long aref_long(int index) {
+		return this.AREF(index).longValue();
+	}
+
+	public void aset(int index, int n)
+
+	{
+		this.aset(index, LispObjectFactory.makeInteger(n));
+	}
+
+	public void aset(int index, SubLObject newValue)
+
+	{
+		Lisp.type_error(this, LispSymbols.ARRAY).aset(index, newValue);
+	}
+
+	public void aset(SubLObject index, SubLObject newValue)
+
+	{
+		this.aset(index.intValue(), newValue);
+	}
+
+	public SubLObject ash(int shift) {
+		return this.ash(LispObjectFactory.makeInteger(shift));
+	}
+
+	public SubLObject ash(SubLObject obj) {
+		return Lisp.checkInteger(this).ash(obj);
+	}
+
+	public SubLObject ATOM() {
+		return this.isAtom() ? Lisp.T : Lisp.NIL;
+	}
+
+	// SubLObject
+	public BigInteger bigIntegerValue() {
+		return Lisp.type_error(this, LispSymbols.BIGNUM).bigIntegerValue();
+	}
+
+	// final static public Object getValue() throws Throwable {
+	// Thread.dumpStack();
+	// return null;
+	// }
+	// public Object getValue(LispObject a) throws Throwable {
+	// Thread.dumpStack();
+	// return null;
+	// }
+	public SubLObject car() {
+		return this.first();
+	}
+
+	public SubLObject cddr() {
+		return this.toList().cddr();
+	}
+
+	public SubLObject cdr() {
+		return this.rest();
+	}
+
+	public SubLObject CHAR(int index) {
+		return Lisp.type_error(this, LispSymbols.STRING);
+	}
+
+	public SubLObject CHARACTERP() {
+		return this.isCharacter() ? Lisp.T : Lisp.NIL;
+	}
+
+	public char[] charsOld() {
+		return Lisp.checkString(this).charsOld();
+	}
+
+	public char charValue() {
+		Lisp.type_error(this, LispSymbols.CHARACTER);
+		return 0;
+	}
+
+	public int cl_length() {
+		if (this instanceof SubLSequence)
+			return this.size();
+		return this.toSeq().cl_length();
+	}
+
+	public SubLObject classOf() {
+		return BuiltInClass.CLASS_T;
+	}
+
+	public SubLObject COMPLEXP() {
+		return Lisp.NIL;
+	}
+
+	public boolean constantp() {
+		return true;
+	}
+
+	public SubLObject CONSTANTP() {
+		return this.constantp() ? Lisp.T : Lisp.NIL;
+	}
+
+	public SubLObject[] copyToArray() {
+		return this.toList().copyToArray();
+	}
+
+	public SubLObject dec() {
+		return this.toNumber().dec();
+	}
+
+	public SubLObject DENOMINATOR() {
+		return Lisp.type_error(this, LispSymbols.RATIONAL).DENOMINATOR();
+	}
+
+	// Used by COMPILE-MULTIPLE-VALUE-CALL.
+	public SubLObject dispatch(SubLObject[] args) {
+		switch (args.length) {
+		case 0:
+			return this.execute();
+		case 1:
+			return this.execute(args[0]);
+		case 2:
+			return this.execute(args[0], args[1]);
+		case 3:
+			return this.execute(args[0], args[1], args[2]);
+		case 4:
+			return this.execute(args[0], args[1], args[2], args[3]);
+		case 5:
+			return this.execute(args[0], args[1], args[2], args[3], args[4]);
+		case 6:
+			return this.execute(args[0], args[1], args[2], args[3], args[4], args[5]);
+		case 7:
+			return this.execute(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+		case 8:
+			return this.execute(args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
+		default:
+			return this.execute(args);
+		}
+	}
+
+	public SubLObject divideBy(SubLObject obj) {
+		return this.toNumber().divideBy(obj);
+	}
+
+	public double doubleValue() {
+		return Lisp.type_error(this, LispSymbols.DOUBLE_FLOAT).doubleValue();
+	}
+
+	public SubLObject elt(int index) {
+		return this.toSeq().elt(index);
+	}
+
+	public boolean endp() {
+		return this.toList().endp();
+	}
+
+	public SubLObject ENDP() {
+		return this.endp() ? Lisp.T : Lisp.NIL;
+	}
+
+	public SubLObject EQ(SubLObject obj) {
+		return this == obj ? Lisp.T : Lisp.NIL;
+	}
+
+	public boolean eql(char c) {
+		return false;
+	}
+
+	public boolean eql(int n) {
+		return false;
+	}
+
+	public boolean eql(SubLObject obj) {
+		return this == obj;
+	}
+
+	public SubLObject EQL(SubLObject obj) {
+		return this.eql(obj) ? Lisp.T : Lisp.NIL;
+	}
+
+	public boolean equal(int n) {
+		return false;
+	}
+
+	public boolean equal(SubLObject obj) {
+		return this == obj;
+	}
+
+	public SubLObject EQUAL(SubLObject obj) {
+		return this.equal(obj) ? Lisp.T : Lisp.NIL;
+	}
+
+	public boolean equalp(int n) {
+		return false;
+	}
+
+	public boolean equalp(SubLObject obj) {
+		return this == obj;
+	}
+
+	public SubLObject EQUALP(SubLObject obj) {
+		return this.equalp(obj) ? Lisp.T : Lisp.NIL;
+	}
+
+	public SubLObject EVENP() {
+		return this.isEven() ? Lisp.T : Lisp.NIL;
+	}
+
+	public SubLObject execute() {
+		return this.toSubLFunction().execute();
+	}
+
+	public SubLObject execute(SubLObject arg) {
+		return this.toSubLFunction().execute(arg);
+	}
+
+	// Special operator
+	public SubLObject execute(SubLObject args, Environment env)
+
+	{
+		return Lisp.error(new LispError("not an Operator " + this.writeToString()));
+	}
+
+	public SubLObject execute(SubLObject first, SubLObject second)
+
+	{
+		return this.toSubLFunction().execute(first, second);
+	}
+
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third)
+
+	{
+		return this.toSubLFunction().execute(first, second, third);
+	}
+
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth)
+
+	{
+		return this.toSubLFunction().execute(first, second, third, fourth);
+	}
+
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
+			SubLObject fifth)
+
+	{
+		return this.toSubLFunction().execute(first, second, third, fourth, fifth);
+	}
+
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
+			SubLObject fifth, SubLObject sixth)
+
+	{
+		return this.toSubLFunction().execute(first, second, third, fourth, fifth, sixth);
+	}
+
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
+			SubLObject fifth, SubLObject sixth, SubLObject seventh)
+
+	{
+		return this.toSubLFunction().execute(first, second, third, fourth, fifth, sixth, seventh);
+	}
+
+	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
+			SubLObject fifth, SubLObject sixth, SubLObject seventh, SubLObject eighth)
+
+	{
+		return this.toSubLFunction().execute(first, second, third, fourth, fifth, sixth, seventh, eighth);
+	}
+
+	public SubLObject execute(SubLObject[] args) {
+		return this.toSubLFunction().execute(args);
+	}
+
+	public SubLObject first() {
+		// if (this instanceof Nil) {
+		// return NIL;
+		// }
+		return this.toList().first();
+	}
+
+	public SubLObject FLOATP() {
+		return this.isDouble() ? Lisp.T : Lisp.NIL;
+	}
+
+	public float floatValue() {
+		return Lisp.type_error(this, LispSymbols.SINGLE_FLOAT).floatValue();
+	}
+
+	public SubLObject get(int index) {
+		// TODO Auto-generated method stub
+		return this.elt(index);
+	}
+
+	public boolean getBooleanValue() {
+		return true;
+	}
+
+	// Profiling.
+	public SubLObject getCallCount() {
+		return Lisp.NIL;
+	}
+
+	public SubLObject getDescription() {
+		StringBuilder sb = new StringBuilder("An object of type ");
+		sb.append(this.typeOf().writeToString());
+		sb.append(" at #x");
+		sb.append(Integer.toHexString(System.identityHashCode(this)).toUpperCase());
+		return LispObjectFactory.makeString(sb);
+	}
+
+	public SubLObject getDocumentation(SubLObject docType)
+
+	{
+		SubLObject alist;
+		synchronized (LispObject.documentationHashTable) {
+			alist = LispObject.documentationHashTable.get(this);
+		}
+		if (alist != null) {
+			SubLObject entry = Lisp.assq(docType, alist);
+			if (entry instanceof SubLCons)
+				return ((SubLCons) entry).rest();
+		}
+		return Lisp.NIL;
+	}
+
+	public int getFixnumSlotValue(int index) {
+		return this.getSlotValue(index).intValue();
+	}
+
+	public int getHotCount() {
+		return 0;
+	}
+
+	/**
+	 * Implementing the getParts() protocol will allow INSPECT to return
+	 * information about the substructure of a descendent of LispObject.
+	 *
+	 * The protocol is to return a List of Cons pairs, where the car of each
+	 * pair contains a decriptive string, and the cdr returns a subobject for
+	 * inspection.
+	 */
+	public SubLObject getParts() {
+		return Lisp.NIL;
+	}
+
+	public SubLObject getPropertyList() {
+		// Thread.dumpStack();
+		// Debug.trace("getPropertyList " + writeToString());
+		return null;
+	}
+
+	public SubLObject getSlotValue(int index) {
+		return Lisp.type_error(this, LispSymbols.STRUCTURE_OBJECT);
+	}
+
+	public SubLObject getSlotValue_0() {
+		return this.getSlotValue(0);
+	}
+
+	public SubLObject getSlotValue_1() {
+		return this.getSlotValue(1);
+	}
+
+	public SubLObject getSlotValue_2() {
+		return this.getSlotValue(2);
+	}
+
+	public SubLObject getSlotValue_3() {
+		return this.getSlotValue(3);
+	}
+
+	public boolean getSlotValueAsBoolean(int index) {
+		return this.getSlotValue(index).getBooleanValue();
+	}
+
+	/**
+	 * Returns a string representing the value of a 'string designator', if the
+	 * instance is one.
+	 *
+	 * Throws an error if the instance isn't a string designator.
+	 */
+	public String getString() {
+		return Lisp.checkString(this).getString();
+	}
+
+	public char[] getStringChars() {
+		return Lisp.checkString(this).getStringChars();
+	}
+
+	public SubLObject getSymbolFunction() {
+		return this.toSymbol().getSymbolFunction();
+	}
+
+	public SubLObject getSymbolFunctionOrDie() {
+		return this.toSymbol().getSymbolFunctionOrDie();
+	}
+
+	public SubLObject getSymbolValue() {
+		return this.toSymbol().getSymbolValue();
+	}
+
+	public int hashCode() {
+		return this.hashCodeLisp();
+	}
+
+	public int hashCode(int currentDepth) {
+		return this.psxhash(currentDepth);
+	}
+
+	public int hashCodeLisp() {
+		return this.superHash();
+	}
+
+	public SubLObject inc() {
+		return this.toNumber().inc();
+	}
+
+	public void incrementCallCount(int n) {
+	}
+
+	public void incrementHotCount() {
+	}
+
+	public SubLObject INTEGERP() {
+		return this.isInteger() ? Lisp.T : Lisp.NIL;
+	}
+
+	public int intValue() {
+		return Lisp.checkInteger(this).intValue();
+	}
+
+	public SubLObject IS_E(SubLObject obj) {
+		return this.numE(obj) ? Lisp.T : Lisp.NIL;
+	}
+
+	public SubLObject IS_GE(SubLObject obj) {
+		return this.numGE(obj) ? Lisp.T : Lisp.NIL;
+	}
+
+	public SubLObject IS_GT(SubLObject obj) {
+		return this.numG(obj) ? Lisp.T : Lisp.NIL;
+	}
+
+	public SubLObject IS_LE(SubLObject obj) {
+		return this.numLE(obj) ? Lisp.T : Lisp.NIL;
+	}
+
+	public SubLObject IS_LT(SubLObject obj) {
+		return this.numL(obj) ? Lisp.T : Lisp.NIL;
+	}
+
+	public SubLObject IS_NE(SubLObject obj) {
+		return this.isNotEqualTo(obj) ? Lisp.T : Lisp.NIL;
+	}
+
+	public boolean isAtom() {
+		return true;
+	}
+
+	public boolean isCharacter() {
+		return false;
+	}
+
+	public boolean isCons() {
+		return false;
+	}
+
+	public boolean isDouble() {
+		return false;
+	}
+
+	public boolean isEqualTo(int n) {
+		return this.numE(LispObjectFactory.makeInteger(n));
+	}
+
+	public boolean isEven() {
+		return Lisp.checkInteger(this).isEven();
+	}
+
+	public boolean isGreaterThan(int n) {
+		return this.numG(LispObjectFactory.makeInteger(n));
+	}
+
+	public boolean isGreaterThanOrEqualTo(int n) {
+		return this.numGE(LispObjectFactory.makeInteger(n));
+	}
+
+	public boolean isInteger() {
+		return false;
+	}
+
+	public boolean isKeyword() {
+		return false;
+	}
+
+	public boolean isLessThan(int n) {
+		return this.numL(LispObjectFactory.makeInteger(n));
+	}
+
+	public boolean isLessThanOrEqualTo(int n) {
+		return this.numLE(LispObjectFactory.makeInteger(n));
+	}
+
+	public boolean isList() {
+		return false;
+	}
+
+	public boolean isNegative() {
+		Lisp.type_error(this, LispSymbols.REAL);
+		// Not reached.
+		return false;
+	}
+
+	public boolean isNotEqualTo(int n) {
+		return this.isNotEqualTo(LispObjectFactory.makeInteger(n));
+	}
+
+	public boolean isNotEqualTo(SubLObject obj) {
+		return this.toNumber().isNotEqualTo(obj);
+	}
+
+	public boolean isNumber() {
+		return false;
+	}
+
+	public boolean isOdd() {
+		return Lisp.checkInteger(this).isOdd();
+	}
+
+	public boolean isPositive() {
+		Lisp.type_error(this, LispSymbols.REAL);
+		// Not reached.
+		return false;
+	}
+
+	public boolean isSpecialOperator() {
+		return this.toSymbol().isSpecialOperator();
+	}
+
+	public boolean isSpecialVariable() {
+		return false;
+	}
+
+	public boolean isString() {
+		return false;
+	}
+
+	public boolean isSymbol() {
+		return false;
+	}
+
+	public boolean isVector() {
+		return false;
+	}
+
+	public boolean isZero() {
+		return this.toNumber().isZero();
+	}
+
+	public Object javaInstance() {
+		return this;
+	}
+
+	public <T> Object javaInstance(Class<T> c) {
+		if (c.isAssignableFrom(this.getClass()))
+			return this;
+		return Lisp.error(new LispError("The value " + this.writeToString() + " is not of class " + c.getName()));
+	}
+
+	public SubLObject LDB(int size, int position) {
+		return Lisp.checkInteger(this).LDB(size, position);
+	}
+
+	public SubLObject LENGTH() {
+		return LispObjectFactory.makeInteger(this.cl_length());
+	}
+
+	public SubLObject LISTP() {
+		return this.isList() ? Lisp.T : Lisp.NIL;
+	}
+
+	/**
+	 * This method returns 'this' by default, but allows objects to return
+	 * different values to increase Java interoperability
+	 *
+	 * @return An object to be used with synchronized, wait, notify, etc
+	 */
+	public Object lockableInstance() {
+		return this;
+	}
+
+	public SubLObject LOGAND(int n) {
+		return this.LOGAND(LispObjectFactory.makeInteger(n));
+	}
+
+	public SubLObject LOGAND(SubLObject obj) {
+		return Lisp.checkInteger(this).LOGAND(obj);
+	}
+
+	public SubLObject LOGIOR(int n) {
+		return this.LOGIOR(LispObjectFactory.makeInteger(n));
+	}
+
+	public SubLObject LOGIOR(SubLObject obj) {
+		return Lisp.checkInteger(this);
+	}
+
+	public SubLObject LOGNOT() {
+		return Lisp.checkInteger(this).LOGNOT();
+	}
+
+	public SubLObject LOGXOR(int n) {
+		return this.LOGXOR(LispObjectFactory.makeInteger(n));
+	}
+
+	public SubLObject LOGXOR(SubLObject obj) {
+		return Lisp.checkInteger(this).LOGXOR(obj);
+	}
+
+	public long longValue() {
+		return Lisp.checkInteger(this).longValue();
+	}
+
+	public SubLObject MINUSP() {
+		return this.isNegative() ? Lisp.T : Lisp.NIL;
+	}
+
+	public SubLObject MOD(int divisor) {
+		return this.MOD(LispObjectFactory.makeInteger(divisor));
+	}
+
+	public SubLObject MOD(SubLObject divisor) {
+		this.truncate(divisor);
+		LispThread thread = LispThread.currentThread();
+		SubLObject remainder = thread._values[1];
+		thread.clearValues();
+		if (!remainder.isZero())
+			if (divisor.isNegative()) {
+				if (this.isPositive())
+					return remainder.add(divisor);
+			} else if (this.isNegative())
+				return remainder.add(divisor);
+		return remainder;
+	}
+
+	public SubLObject mult(SubLObject obj) {
+		return this.toNumber().mult(obj);
+	}
+
+	public SubLObject multiplyBy(int n) {
+		return this.mult(LispObjectFactory.makeInteger(n));
+	}
+
+	public SubLObject negate() {
+		return Fixnum.ZERO.sub(this);
+	}
+
+	public SubLObject noFillPointer() {
+		return Lisp
+				.type_error(this,
+						Lisp.list(LispSymbols.AND, LispSymbols.VECTOR,
+								Lisp.list(LispSymbols.SATISFIES, LispSymbols.ARRAY_HAS_FILL_POINTER_P)))
+				.noFillPointer();
+	}
+
+	public SubLObject NOT() {
+		return Lisp.NIL;
+	}
+
+	public SubLObject nreverse() {
+		return this.toSeq().nreverse();
+	}
+
+	public SubLObject NTH(int index) {
+		return this.toList().NTH(index);
+	}
+
+	public SubLObject NTH(SubLObject arg) {
+		return this.toList().NTH(arg);
+	}
+
+	public SubLObject nthCdr(int n) {
+		if (n < 0)
+			n = Lisp.type_error(LispObjectFactory.makeInteger(n), Lisp.list(LispSymbols.INTEGER, Fixnum.ZERO))
+					.intValue();
+		return this.toList().nthCdr(n);
+	}
+
+	public SubLObject NUMBERP() {
+		return this.isNumber() ? Lisp.T : Lisp.NIL;
+	}
+
+	public boolean numE(SubLObject obj) {
+		return this.toNumber().numE(obj);
+	}
+
+	public SubLObject NUMERATOR() {
+		return Lisp.type_error(this, LispSymbols.RATIONAL).NUMERATOR();
+	}
+
+	public boolean numG(SubLObject obj) {
+		Lisp.type_error(this, LispSymbols.REAL);
+		// Not reached.
+		return false;
+	}
+
+	public boolean numGE(SubLObject obj) {
+		Lisp.type_error(this, LispSymbols.REAL);
+		// Not reached.
+		return false;
+	}
+
+	public boolean numL(SubLObject obj) {
+		Lisp.type_error(this, LispSymbols.REAL);
+		// Not reached.
+		return false;
+	}
+
+	public boolean numLE(SubLObject obj) {
+		Lisp.type_error(this, LispSymbols.REAL);
+		// Not reached.
+		return false;
+	}
+
+	public SubLObject ODDP() {
+		return this.isOdd() ? Lisp.T : Lisp.NIL;
+	}
+
+	public SubLObject PLUSP() {
+		return this.isPositive() ? Lisp.T : Lisp.NIL;
+	}
+
+	// For EQUALP hash tables.
+	public int psxhash() {
+		return this.sxhash();
+	}
+
+	public int psxhash(int depth) {
+		return this.psxhash();
+	}
+
+	public SubLCons push(SubLObject obj) {
+		if (this instanceof SubLCons)
+			return LispObjectFactory.makeCons(obj, this);
+		else if (this instanceof Nil)
+			return LispObjectFactory.makeCons(obj);
+		return this.toList().push(obj);
+	}
+
+	public boolean rationalp() {
+		return false;
+	}
+
+	public SubLObject RATIONALP() {
+		return this.rationalp() ? Lisp.T : Lisp.NIL;
+	}
+
+	public boolean realp() {
+		return false;
+	}
+
+	public SubLObject REALP() {
+		return this.realp() ? Lisp.T : Lisp.NIL;
+	}
+
+	/**
+	 * Function to allow objects to return the value "they stand for". Used by
+	 * AutoloadedFunctionProxy to return the function it is proxying.
+	 */
+	public SubLObject resolve() {
+		return this;
+	}
+
+	public SubLObject rest() {
+		// if (this instanceof Nil) {
+		// return this;
+		// }
+		return this.toList().rest();
+	}
+
+	public SubLObject reverse() {
+		return this.toSeq().reverse();
+	}
+
+	public SubLObject SCHAR(int index) {
+		return Lisp.type_error(this, LispSymbols.SIMPLE_STRING);
+	}
+
+	public SubLObject second() {
+		return this.toList().get(1);
+	}
+
+	public void setCallCount(int n) {
+	}
+
+	public void setCar(SubLObject obj) {
+		if (this instanceof SubLCons) {
+			((SubLCons) this).setFirst(obj);
+			return;
+		}
+		Lisp.type_error(this, LispSymbols.CONS);
+	}
+
+	public void setCdr(SubLObject obj) {
+		Lisp.type_error(this, LispSymbols.CONS).setCdr(obj);
+	}
+
+	public void setDocumentation(SubLObject docType, SubLObject documentation)
+
+	{
+		synchronized (LispObject.documentationHashTable) {
+			SubLObject alist = LispObject.documentationHashTable.get(this);
+			if (alist == null)
+				alist = Lisp.NIL;
+			SubLObject entry = Lisp.assq(docType, alist);
+			if (entry instanceof SubLCons)
+				((SubLCons) entry).setCdr(documentation);
+			else {
+				alist = alist.push(LispObjectFactory.makeCons(docType, documentation));
+				LispObject.documentationHashTable.put(this, alist);
+			}
+		}
+	}
+
+	public SubLCons setFirst(SubLObject obj) {
+		return Lisp.type_error(this, LispSymbols.CONS).setFirst(obj);
+	}
+
+	public void setHotCount(int n) {
+	}
+
+	public void setPropertyList(SubLObject obj) {
+	}
+
+	public SubLCons setRest(SubLObject obj) {
+		return Lisp.type_error(this, LispSymbols.CONS).setRest(obj);
+	}
+
+	public void setSlotValue(int index, SubLObject value)
+
+	{
+		Lisp.type_error(this, LispSymbols.STRUCTURE_OBJECT);
+	}
+
+	public void setSlotValue(SubLObject slotName, SubLObject newValue)
+
+	{
+		Lisp.type_error(this, LispSymbols.STANDARD_OBJECT);
+	}
+
+	public void setSlotValue_0(SubLObject value)
+
+	{
+		this.setSlotValue(0, value);
+	}
+
+	public void setSlotValue_1(SubLObject value)
+
+	{
+		this.setSlotValue(1, value);
+	}
+
+	public void setSlotValue_2(SubLObject value)
+
+	{
+		this.setSlotValue(2, value);
+	}
+
+	public void setSlotValue_3(SubLObject value)
+
+	{
+		this.setSlotValue(3, value);
+	}
+
+	public SubLObject SIMPLE_STRING_P() {
+		return Lisp.NIL;
+	}
+
+	public SubLObject SLOT_VALUE(SubLObject slotName) {
+		return Lisp.type_error(this, LispSymbols.STANDARD_OBJECT);
+	}
+
+	public SubLObject STRING() {
+		return Lisp.error(new TypeError(this.writeToString() + " cannot be coerced to a string."));
+	}
+
+	public SubLObject STRINGP() {
+		return this.isString() ? Lisp.T : Lisp.NIL;
+	}
+
+	public SubLObject sub(SubLObject obj) {
+		return this.toNumber().sub(obj);
+	}
+
+	public SubLObject subtract(int n) {
+		return this.sub(LispObjectFactory.makeInteger(n));
+	}
+
+	public int superHash() {
+		return super.hashCode();
+	}
+
+	public SubLObject SVREF(int index) {
+		return Lisp.type_error(this, LispSymbols.SIMPLE_VECTOR).SVREF(index);
+	}
+
+	public void svset(int index, SubLObject newValue) {
+		Lisp.type_error(this, LispSymbols.SIMPLE_VECTOR).svset(index, newValue);
+	}
+
+	public int sxhash() {
+		return this.hashCodeLisp() & 0x7fffffff;
+	}
+
+	public SubLObject SYMBOLP() {
+		return Lisp.NIL;
+	}
+
+	public SubLObject third() {
+		return this.toList().get(2);
+	}
+
+	public SubLCharacter toChar() {
+		if (this instanceof SubLCharacter)
+			return (SubLCharacter) this;
+		return Lisp.type_error(this, LispSymbols.CHAR).toChar();
+	}
+
+	public SubLList toList() {
+		if (this instanceof SubLList)
+			return (SubLList) this;
+		return Lisp.type_error(this, LispSymbols.LIST).toList();
+	}
+
+	public SubLNumber toNumber() {
+		return (SubLNumber) Lisp.type_error(this, LispSymbols.NUMBER);
+	}
+	
+
+	public SubLPackageIterator toPackageIterator() {
+		Errors.error(this + " is not of type: PACKAGE.");
+		return null;
+	}
+
+	public SubLProcess toProcess() {
+		return (SubLProcess) Lisp.type_error(this, CommonSymbols.PROCESSP);
+	}
+
+	public SubLSequence toSeq() {
+		return Lisp.type_error(this, LispSymbols.SEQUENCE).toSeq();
+	}
+
 	public String toString() {
 		return super.toString();
 	}
 
-	//SubLObject
-	public BigInteger bigIntegerValue() {
-		return type_error(this,LispSymbols.BIGNUM).bigIntegerValue();
-	}
-	
-	public int hashCode() {
-		return hashCodeLisp();
-	}
-	
-	public int hashCodeLisp() {
-		return superHash();
+	public SubLObject toSubLFunction() {
+		return Lisp.type_error(this, LispSymbols.FUNCTION).toSubLFunction();
 	}
 
-  public int superHash() {
-		return super.hashCode();
+	public SubLSymbol toSymbol() {
+		if (this instanceof SubLSymbol)
+			return (SubLSymbol) this;
+		return Lisp.type_error(this, LispSymbols.SYMBOL).toSymbol();
 	}
 
-	//	final static  public Object getValue() throws Throwable {
-//		Thread.dumpStack();
-//		return null;
-//}
-//	 final public Object getValue(LispObject a) throws Throwable {
-//		Thread.dumpStack();
-//		return null;
-//}
-	public SubLObject car() {
-		return first();
+	public SubLObject truncate(SubLObject obj) {
+		return Lisp.type_error(this, LispSymbols.REAL);
 	}
-	public SubLObject cdr() {
-		return rest();
+
+	public SubLObject typeOf() {
+		return Lisp.T;
 	}
-	
-	public boolean isKeyword() {
-		return false;
+
+	public SubLObject typep(SubLObject typeSpecifier) {
+		if (typeSpecifier == Lisp.T)
+			return Lisp.T;
+		if (typeSpecifier == BuiltInClass.CLASS_T)
+			return Lisp.T;
+		if (typeSpecifier == LispSymbols.ATOM)
+			return Lisp.T;
+		return Lisp.NIL;
 	}
-	public boolean isSymbol() {
-		return false;
+
+	public String unreadableString(String s) {
+		return this.unreadableString(s, true);
 	}
-	
-  public AbstractLispObject() {
-  }
 
-  /** Function to allow objects to return the value
-   * "they stand for". Used by AutoloadedFunctionProxy to return
-   * the function it is proxying.
-   */
-  public SubLObject resolve()
-  {
-    return this;
-  }
-
-  public SubLObject typeOf()
-  {
-    return T;
-  }
-
-  public SubLObject classOf()
-  {
-    return BuiltInClass.CLASS_T;
-  }
-
-  public SubLObject getDescription()
-  {
-    StringBuilder sb = new StringBuilder("An object of type ");
-    sb.append(typeOf().writeToString());
-    sb.append(" at #x");
-    sb.append(Integer.toHexString(System.identityHashCode(this)).toUpperCase());
-    return makeString(sb);
-  }
-
-  /** 
-   *  Implementing the getParts() protocol will allow INSPECT to
-   *  return information about the substructure of a descendent of
-   *  LispObject.
-   *  
-   *  The protocol is to return a List of Cons pairs, where the car of
-   *  each pair contains a decriptive string, and the cdr returns a
-   *  subobject for inspection.
-   */
-  public SubLObject getParts()
-  {
-    return NIL;
-  }
-
-  public boolean getBooleanValue()
-  {
-    return true;
-  }
-
-  public SubLObject typep(SubLObject typeSpecifier)
-  {
-    if (typeSpecifier == T)
-      return T;
-    if (typeSpecifier == BuiltInClass.CLASS_T)
-      return T;
-    if (typeSpecifier == LispSymbols.ATOM)
-      return T;
-    return NIL;
-  }
-
-  public boolean constantp()
-  {
-    return true;
-  }
-
-  public final SubLObject CONSTANTP()
-  {
-    return constantp() ? T : NIL;
-  }
-
-  public final SubLObject ATOM()
-  {
-    return isAtom() ? T : NIL;
-  }
-
-  public boolean isAtom()
-  {
-    return true;
-  }
-
-  public Object javaInstance()
-  {
-        return this;
-  }
-
-  public <T> Object javaInstance(Class<T> c)
-  {
-      if (c.isAssignableFrom(getClass()))
-	  return this;
-      return error(new LispError("The value " + writeToString() +
-				 " is not of class " + c.getName()));
-  }
-
-  /** This method returns 'this' by default, but allows
-   * objects to return different values to increase Java
-   * interoperability
-   * 
-   * @return An object to be used with synchronized, wait, notify, etc
-   */
-  public Object lockableInstance()
-  {
-      return this;
-  }
-
-
-  public SubLObject first()
-  {
-//  	if (this instanceof Nil) {
-//      return NIL;
-//    }
-    return toList().first();
-  }
-
-  public void setCar(SubLObject obj)
-  {
-      if (this instanceof SubLCons) {
-          ((SubLCons)this).setFirst(obj);
-          return;
-      }
-    type_error(this, LispSymbols.CONS);
-  }
-
-  public SubLCons setFirst(SubLObject obj)
-  {
-    return type_error(this, LispSymbols.CONS).setFirst(obj);
-  }
-
-  public SubLObject rest()
-  {
-//  	if (this instanceof Nil) {
-//      return this;
-//    }
-    return toList().rest();
-  }
-
-  public void setCdr(SubLObject obj)
-  {
-    type_error(this, LispSymbols.CONS).setCdr(obj);
-  }
-
-  public SubLCons setRest(SubLObject obj)
-  {
-    return type_error(this, LispSymbols.CONS).setRest(obj);
-  }
-
-  public SubLObject second()
-  {
-    return toList().get(1);
-  }
-
-  public SubLObject cddr()
-  {
-    return toList().cddr();
-  }
-
-  public SubLObject third()
-  {
-    return toList().get(2);
-  }
-
-  public SubLObject nthCdr(int n)
-  {
-    if (n < 0)
-      n = type_error(LispObjectFactory.makeInteger(n),
-                             list(LispSymbols.INTEGER, Fixnum.ZERO)).intValue();
-    return toList().nthCdr(n);
-  }
-
-  public SubLCons push(SubLObject obj)
-  {
-    if (this instanceof SubLCons) {
-      return makeCons(obj, this);
-    } else if (this instanceof Nil) {
-      return makeCons(obj);
-    }
-    return toList().push(obj);
-  }
-
-  final public SubLObject EQ(SubLObject obj)
-  {
-    return this == obj ? T : NIL;
-  }
-
-  public boolean eql(char c)
-  {
-    return false;
-  }
-
-  public boolean eql(int n)
-  {
-    return false;
-  }
-
-  public boolean eql(SubLObject obj)
-  {
-    return this == obj;
-  }
-
-  public final SubLObject EQL(SubLObject obj)
-  {
-    return eql(obj) ? T : NIL;
-  }
-
-  public final SubLObject EQUAL(SubLObject obj)
-  {
-    return equal(obj) ? T : NIL;
-  }
-
-  public final SubLObject EQUALP(SubLObject obj)
-  {
-    return equalp(obj) ? T : NIL;
-  }
-
-  public boolean equal(int n)
-  {
-    return false;
-  }
-
-  public boolean equal(SubLObject obj)
-  {
-    return this == obj;
-  }
-
-  public boolean equalp(int n)
-  {
-    return false;
-  }
-
-  public boolean equalp(SubLObject obj)
-  {
-    return this == obj;
-  }
-
-  public SubLObject ABS()
-  {
-    return toNumber().ABS();
-  }
-
-  public SubLObject NUMERATOR()
-  {
-    return type_error(this, LispSymbols.RATIONAL).NUMERATOR();
-  }
-
-  public SubLObject DENOMINATOR()
-  {
-    return type_error(this, LispSymbols.RATIONAL).DENOMINATOR();
-  }
-
-  public final SubLObject EVENP()
-  {
-    return isEven() ? T : NIL;
-  }
-
-  public boolean isEven()
-  {
-    return checkInteger(this).isEven();
-  }
-
-  public final SubLObject ODDP()
-  {
-    return isOdd() ? T : NIL;
-  }
-
-  public boolean isOdd()
-  {
-    return checkInteger(this).isOdd();
-  }
-
-  public final SubLObject PLUSP()
-  {
-    return isPositive() ? T : NIL;
-  }
-
-  public boolean isPositive()
-  {
-    type_error(this, LispSymbols.REAL);
-    // Not reached.
-    return false;
-  }
-
-  public final SubLObject MINUSP()
-  {
-    return isNegative() ? T : NIL;
-  }
-
-  public boolean isNegative()
-  {
-    type_error(this, LispSymbols.REAL);
-    // Not reached.
-    return false;
-  }
-
-  public final SubLObject NUMBERP()
-  {
-    return isNumber() ? T : NIL;
-  }
-
-  public boolean isNumber()
-  {
-    return false;
-  }
-
-  public final SubLObject ZEROP()
-  {
-    return isZero() ? T : NIL;
-  }
-
-  public boolean isZero()
-  {
-    return toNumber().isZero();
-  }
-
-  public SubLObject COMPLEXP()
-  {
-    return NIL;
-  }
-
-  public final SubLObject FLOATP()
-  {
-    return isDouble() ? T : NIL;
-  }
-
-  public boolean isDouble()
-  {
-    return false;
-  }
-
-  public final SubLObject INTEGERP()
-  {
-    return isInteger() ? T : NIL;
-  }
-
-  public boolean isInteger()
-  {
-    return false;
-  }
-
-  public final SubLObject RATIONALP()
-  {
-    return rationalp() ? T : NIL;
-  }
-
-  public boolean rationalp()
-  {
-    return false;
-  }
-
-  public final SubLObject REALP()
-  {
-    return realp() ? T : NIL;
-  }
-
-  public boolean realp()
-  {
-    return false;
-  }
-
-  public final SubLObject STRINGP()
-  {
-    return isString() ? T : NIL;
-  }
-
-  public boolean isString()
-  {
-    return false;
-  }
-
-  public SubLObject SIMPLE_STRING_P()
-  {
-    return NIL;
-  }
-
-  public final SubLObject VECTORP()
-  {
-    return isVector() ? T : NIL;
-  }
-
-  public boolean isVector()
-  {
-    return false;
-  }
-
-  public final SubLObject CHARACTERP()
-  {
-    return isCharacter() ? T : NIL;
-  }
-
-  public char charValue() {
-  	type_error(this, LispSymbols.CHARACTER);
-		return 0;
+	public String unreadableString(String s, boolean identity) {
+		StringBuilder sb = new StringBuilder("#<");
+		sb.append(s);
+		if (identity) {
+			sb.append(" {");
+			sb.append(Integer.toHexString(System.identityHashCode(this)).toUpperCase());
+			sb.append("}");
+		}
+		sb.append(">");
+		return sb.toString();
 	}
-  
-  public boolean isCharacter()
-  {
-    return false;
-  }
-  
-  @Override
-  public SubLObject get(int index) {
-  	// TODO Auto-generated method stub
-  	return elt(index);
-  }
 
-  public int cl_length()
-  {
-  	if (this instanceof SubLSequence) return size();
-    return toSeq().cl_length();
-  }
-
-	public final SubLObject LENGTH()
-  {
-    return LispObjectFactory.makeInteger(cl_length());
-  }
-
-  public SubLObject CHAR(int index)
-  {
-    return type_error(this, LispSymbols.STRING);
-  }
-
-  public SubLObject SCHAR(int index)
-  {
-    return type_error(this, LispSymbols.SIMPLE_STRING);
-  }
-
-  public SubLObject NTH(int index)
-  {
-    return toList().NTH(index);
-  }
-
-  public SubLObject NTH(SubLObject arg)
-  {
-    return toList().NTH(arg);
-  }
-
-  public SubLObject elt(int index)
-  {
-    return toSeq().elt(index);
-  }
-
-  public SubLObject reverse()
-  {
-    return toSeq().reverse();
-  }
-
-  public SubLObject nreverse()
-  {
-    return toSeq().nreverse();
-  }
-
-  public SubLSequence toSeq() {
-		return (LispSequence) type_error(this, LispSymbols.SEQUENCE).toSeq();
+	public String unreadableString(SubLSymbol sym) {
+		return this.unreadableString(sym, true);
 	}
-  
-  public long aref_long(int index)
-  {
-    return AREF(index).longValue();
-  }
 
-  public int aref(int index)
-  {
-    return AREF(index).intValue();
-  }
+	public String unreadableString(SubLSymbol symbol, boolean identity)
 
-  public SubLObject AREF(int index)
-  {
-    return type_error(this, LispSymbols.ARRAY).AREF(index);
-  }
+	{
+		return this.unreadableString(symbol.writeToString(), identity);
+	}
 
-  public SubLObject AREF(SubLObject index)
-  {
-      return AREF(index.intValue());
-  }
+	public SubLObject VECTOR_PUSH_EXTEND(SubLObject element)
 
-  public void aset(int index, int n)
+	{
+		return this.noFillPointer().VECTOR_PUSH_EXTEND(element);
+	}
 
-  {    
-          aset(index, LispObjectFactory.makeInteger(n));
-  }
+	public SubLObject VECTOR_PUSH_EXTEND(SubLObject element, SubLObject extension)
 
-  public void aset(int index, SubLObject newValue)
+	{
+		return this.noFillPointer().VECTOR_PUSH_EXTEND(element, extension);
+	}
 
-  {
-    type_error(this, LispSymbols.ARRAY).aset(index, newValue);
-  }
+	public SubLObject VECTORP() {
+		return this.isVector() ? Lisp.T : Lisp.NIL;
+	}
 
-  public void aset(SubLObject index, SubLObject newValue)
+	public void vectorPushExtend(SubLObject element)
 
-  {
-      aset(index.intValue(), newValue);
-  }
-
-  public SubLObject SVREF(int index)
-  {
-    return type_error(this, LispSymbols.SIMPLE_VECTOR).SVREF(index);
-  }
-
-  public void svset(int index, SubLObject newValue)
-  {
-    type_error(this, LispSymbols.SIMPLE_VECTOR).svset(index, newValue);
-  }
-
-  public void vectorPushExtend(SubLObject element)
-
-  {
-    noFillPointer().vectorPushExtend(element);
-  }
-
-  public SubLObject VECTOR_PUSH_EXTEND(SubLObject element)
-
-  {
-    return noFillPointer().VECTOR_PUSH_EXTEND(element);
-  }
-
-  public SubLObject VECTOR_PUSH_EXTEND(SubLObject element, SubLObject extension)
-
-  {
-    return noFillPointer().VECTOR_PUSH_EXTEND(element,extension);
-  }
-
-  public final SubLObject noFillPointer()
-  {
-    return type_error(this, list(LispSymbols.AND, LispSymbols.VECTOR,
-                                       list(LispSymbols.SATISFIES,
-                                             LispSymbols.ARRAY_HAS_FILL_POINTER_P))).noFillPointer();
-  }
-
-  public SubLObject[] copyToArray()
-  {
-    return toList().copyToArray();
-  }
-
-  public SubLObject SYMBOLP()
-  {
-    return NIL;
-  }
-
-  public boolean isList()
-  {
-    return false;
-  }
-
-  public final SubLObject LISTP()
-  {
-    return isList() ? T : NIL;
-  }
-
-  public boolean endp()
-  {
-    return toList().endp();
-  }
-
-	public final SubLObject ENDP()
-  {
-    return endp() ? T : NIL;
-  }
-
-  public SubLObject NOT()
-  {
-    return NIL;
-  }
-
-  public boolean isSpecialOperator()
-  {
-    return toSymbol().isSpecialOperator();
-  }
-
-  public boolean isSpecialVariable()
-  {
-    return false;
-  }
-
-  public SubLObject getDocumentation(SubLObject docType)
-
-  {
-    SubLObject alist;
-    synchronized (documentationHashTable) {
-      alist = documentationHashTable.get(this);
-    }
-    if (alist != null)
-      {
-        SubLObject entry = assq(docType, alist);
-        if (entry instanceof SubLCons)
-          return ((SubLCons)entry).rest();
-      }
-    return NIL;
-  }
-
-  public void setDocumentation(SubLObject docType, SubLObject documentation)
-
-  {
-    synchronized (documentationHashTable) {
-      SubLObject alist = documentationHashTable.get(this);
-      if (alist == null)
-        alist = NIL;
-      SubLObject entry = assq(docType, alist);
-      if (entry instanceof SubLCons)
-        {
-          ((SubLCons)entry).setCdr(documentation);
-        }
-      else
-        {
-          alist = alist.push(makeCons(docType, documentation));
-          documentationHashTable.put(this, alist);
-        }
-    }
-  }
-
-  public SubLObject getPropertyList()
-  {
-  //	Thread.dumpStack();
-  	//Debug.trace("getPropertyList " + writeToString());
-    return null;
-  }
-
-  public void setPropertyList(SubLObject obj)
-  {
-  }
-
-  public SubLObject getSymbolValue()
-  {
-    return toSymbol().getSymbolValue();
-  }
-
-  public SubLObject getSymbolFunction()
-  {
-    return toSymbol().getSymbolFunction();
-  }
-
-  public SubLObject getSymbolFunctionOrDie()
-  {
-    return toSymbol().getSymbolFunctionOrDie();
-  }
+	{
+		this.noFillPointer().vectorPushExtend(element);
+	}
 
 	public abstract String writeToString();
 
-  public String unreadableString(String s) {
-     return unreadableString(s, true);
-  }
-  public String unreadableString(SubLSymbol sym) {
-     return unreadableString(sym, true);
-  }
-
-  public String unreadableString(String s, boolean identity)
-  {
-    StringBuilder sb = new StringBuilder("#<");
-    sb.append(s);
-    if (identity) {
-      sb.append(" {");
-      sb.append(Integer.toHexString(System.identityHashCode(this)).toUpperCase());
-      sb.append("}");
-    }
-    sb.append(">");
-    return sb.toString();
-  }
-
-  public String unreadableString(SubLSymbol symbol, boolean identity) 
-
-  {
-    return unreadableString(symbol.writeToString(), identity);
-  }
-
-  // Special operator
-  public SubLObject execute(SubLObject args, Environment env)
-
-  {
-    return error(new LispError("not an Operator " + writeToString()));
-  }
-
-  
-  
-  public SubLObject execute()
-  {
-    return toSubLFunction().execute();
-  }
-
-  public SubLObject toSubLFunction() {
-		return type_error(this, LispSymbols.FUNCTION).toSubLFunction();
+	public SubLObject ZEROP() {
+		return this.isZero() ? Lisp.T : Lisp.NIL;
 	}
 
-	public SubLObject execute(SubLObject arg)
-  {
-    return toSubLFunction().execute(arg);
-  }
-
-  public SubLObject execute(SubLObject first, SubLObject second)
-
-  {
-    return toSubLFunction().execute(first, second);
-  }
-
-  public SubLObject execute(SubLObject first, SubLObject second,
-                            SubLObject third)
-
-  {
-    return toSubLFunction().execute(first, second, third);
-  }
-
-  public SubLObject execute(SubLObject first, SubLObject second,
-                            SubLObject third, SubLObject fourth)
-
-  {
-    return toSubLFunction().execute(first, second, third, fourth);
-  }
-
-  public SubLObject execute(SubLObject first, SubLObject second,
-                            SubLObject third, SubLObject fourth,
-                            SubLObject fifth)
-
-  {
-    return toSubLFunction().execute(first, second, third, fourth,
-        fifth);
-  }
-
-  public SubLObject execute(SubLObject first, SubLObject second,
-                            SubLObject third, SubLObject fourth,
-                            SubLObject fifth, SubLObject sixth)
-
-  {
-    return toSubLFunction().execute(first, second, third, fourth,
-        fifth, sixth);
-  }
-
-  public SubLObject execute(SubLObject first, SubLObject second,
-                            SubLObject third, SubLObject fourth,
-                            SubLObject fifth, SubLObject sixth,
-                            SubLObject seventh)
-
-  {
-    return toSubLFunction().execute(first, second, third, fourth,
-        fifth, sixth, seventh);
-  }
-
-  public SubLObject execute(SubLObject first, SubLObject second,
-                            SubLObject third, SubLObject fourth,
-                            SubLObject fifth, SubLObject sixth,
-                            SubLObject seventh, SubLObject eighth)
-
-  {
-    return toSubLFunction().execute(first, second, third, fourth,
-        fifth, sixth, seventh, eighth);
-  }
-
-  public SubLObject execute(SubLObject[] args)
-  {
-    return toSubLFunction().execute(args);
-  }
-
-  // Used by COMPILE-MULTIPLE-VALUE-CALL.
-  public SubLObject dispatch(SubLObject[] args)
-  {
-    switch (args.length)
-      {
-      case 0:
-        return execute();
-      case 1:
-        return execute(args[0]);
-      case 2:
-        return execute(args[0], args[1]);
-      case 3:
-        return execute(args[0], args[1], args[2]);
-      case 4:
-        return execute(args[0], args[1], args[2], args[3]);
-      case 5:
-        return execute(args[0], args[1], args[2], args[3], args[4]);
-      case 6:
-        return execute(args[0], args[1], args[2], args[3], args[4],
-                       args[5]);
-      case 7:
-        return execute(args[0], args[1], args[2], args[3], args[4],
-                       args[5], args[6]);
-      case 8:
-        return execute(args[0], args[1], args[2], args[3], args[4],
-                       args[5], args[6], args[7]);
-      default:
-        return execute(args);
-      }
-  }
-
-  public int intValue()
-  {
-    return checkInteger(this).intValue();
-  }
-
-  public long longValue()
-  {
-    return checkInteger(this).longValue();
-  }
-
-  public float floatValue()
-  {
-    return type_error(this, LispSymbols.SINGLE_FLOAT).floatValue();
-  }
-
-  public double doubleValue()
-  {
-    return type_error(this, LispSymbols.DOUBLE_FLOAT).doubleValue();
-  }
-
-  public SubLObject inc()
-  {
-    return toNumber().inc();
-  }
-
-  public SubLObject dec()
-  {
-    return toNumber().dec();
-  }
-
-  public SubLObject negate()
-  {
-    return Fixnum.ZERO.sub(this);
-  }
-
-  public SubLObject add(int n)
-  {
-    return add(LispObjectFactory.makeInteger(n));
-  }
-
-  public SubLObject add(SubLObject obj)
-  {
-    return toNumber().add(obj);
-  }
-
-  public SubLObject subtract(int n)
-  {
-    return sub(LispObjectFactory.makeInteger(n));
-  }
-
-  public SubLObject sub(SubLObject obj)
-  {
-    return toNumber().sub(obj);
-  }
-
-  public SubLObject multiplyBy(int n)
-  {
-    return mult(LispObjectFactory.makeInteger(n));
-  }
-
-  public SubLObject mult(SubLObject obj)
-  {
-    return toNumber().mult(obj);
-  }
-
-  public SubLObject divideBy(SubLObject obj)
-  {
-    return toNumber().divideBy(obj);
-  }
-
-  public boolean isEqualTo(int n)
-  {
-    return numE(LispObjectFactory.makeInteger(n));
-  }
-
-  public boolean numE(SubLObject obj)
-  {
-    return toNumber().numE(obj);
-  }
-
-  public final SubLObject IS_E(SubLObject obj)
-  {
-    return numE(obj) ? T : NIL;
-  }
-
-  public boolean isNotEqualTo(int n)
-  {
-    return isNotEqualTo(LispObjectFactory.makeInteger(n));
-  }
-
-  public boolean isNotEqualTo(SubLObject obj)
-  {
-    return toNumber().isNotEqualTo(obj);
-  }
-
-  public SubLNumber toNumber() {
-		 return (SubLNumber)(Object)type_error(this, LispSymbols.NUMBER);		
+	public int size(int max) {
+		Errors.error(this + " is not of type: SEQUENCE.");
+		return -1;
 	}
 
-	public final SubLObject IS_NE(SubLObject obj)
-  {
-    return isNotEqualTo(obj) ? T : NIL;
-  }
-
-  public boolean isLessThan(int n)
-  {
-    return numL(LispObjectFactory.makeInteger(n));
-  }
-
-  public boolean numL(SubLObject obj)
-  {
-    type_error(this, LispSymbols.REAL);
-    // Not reached.
-    return false;
-  }
-
-  public final SubLObject IS_LT(SubLObject obj)
-  {
-    return numL(obj) ? T : NIL;
-  }
-
-  public boolean isGreaterThan(int n)
-  {
-    return numG(LispObjectFactory.makeInteger(n));
-  }
-
-  public boolean numG(SubLObject obj)
-  {
-    type_error(this, LispSymbols.REAL);
-    // Not reached.
-    return false;
-  }
-
-  public final SubLObject IS_GT(SubLObject obj)
-  {
-    return numG(obj) ? T : NIL;
-  }
-
-  public boolean isLessThanOrEqualTo(int n)
-  {
-    return numLE(LispObjectFactory.makeInteger(n));
-  }
-
-  public boolean numLE(SubLObject obj)
-  {
-    type_error(this, LispSymbols.REAL);
-    // Not reached.
-    return false;
-  }
-
-  public final SubLObject IS_LE(SubLObject obj)
-  {
-    return numLE(obj) ? T : NIL;
-  }
-
-  public boolean isGreaterThanOrEqualTo(int n)
-  {
-    return numGE(LispObjectFactory.makeInteger(n));
-  }
-
-  public boolean numGE(SubLObject obj)
-  {
-    type_error(this, LispSymbols.REAL);
-    // Not reached.
-    return false;
-  }
-
-  public final SubLObject IS_GE(SubLObject obj)
-  {
-    return numGE(obj) ? T : NIL;
-  }
-
-  public SubLObject truncate(SubLObject obj)
-  {
-    return type_error(this, LispSymbols.REAL);
-  }
-
-  public SubLObject MOD(SubLObject divisor)
-  {
-    truncate(divisor);
-    final LispThread thread = LispThread.currentThread();
-    SubLObject remainder = thread._values[1];
-    thread.clearValues();
-    if (!remainder.isZero())
-      {
-        if (divisor.isNegative())
-          {
-            if (isPositive())
-              return remainder.add(divisor);
-          }
-        else
-          {
-            if (isNegative())
-              return remainder.add(divisor);
-          }
-      }
-    return remainder;
-  }
-
-  public SubLObject MOD(int divisor)
-  {
-    return MOD(LispObjectFactory.makeInteger(divisor));
-  }
-
-  public SubLObject ash(int shift)
-  {
-    return ash(LispObjectFactory.makeInteger(shift));
-  }
-
-  public SubLObject ash(SubLObject obj)
-  {
-    return checkInteger(this).ash(obj);
-  }
-
-  public SubLObject LOGNOT()
-  {
-    return checkInteger(this).LOGNOT();
-  }
-
-  public SubLObject LOGAND(int n)
-  {
-    return LOGAND(LispObjectFactory.makeInteger(n));
-  }
-
-  public SubLObject LOGAND(SubLObject obj)
-  {
-    return checkInteger(this).LOGAND(obj);
-  }
-
-  public SubLObject LOGIOR(int n)
-  {
-    return LOGIOR(LispObjectFactory.makeInteger(n));
-  }
-
-  public SubLObject LOGIOR(SubLObject obj)
-  {
-    return Lisp.checkInteger(this);
-  }
-
-  public SubLObject LOGXOR(int n)
-  {
-    return LOGXOR(LispObjectFactory.makeInteger(n));
-  }
-
-  public SubLObject LOGXOR(SubLObject obj)
-  {
-    return checkInteger(this).LOGXOR(obj);
-  }
-
-  public SubLObject LDB(int size, int position)
-  {
-    return checkInteger(this).LDB(size, position);
-  }
-
-  public int sxhash()
-  {
-    return hashCodeLisp() & 0x7fffffff;
-  }
-
-  // For EQUALP hash tables.
-  public int psxhash()
-  {
-    return sxhash();
-  }
-
-  public int psxhash(int depth)
-  {
-    return psxhash();
-  }
-
-  public SubLObject STRING()
-  {
-    return error(new TypeError(writeToString() + " cannot be coerced to a string."));
-  }
-
-  public char[] charsOld()
-  {
-    return checkString(this).charsOld();
-  }
-
-  public char[] getStringChars()
-  {
-    return checkString(this).getStringChars();
-  }
-
-  /** Returns a string representing the value
-   * of a 'string designator', if the instance is one.
-   *
-   * Throws an error if the instance isn't a string designator.
-   */
-  public String getString()
-  {
-    return checkString(this).getString();
-  }
-
-  public SubLObject getSlotValue_0()
-  {
-    return getSlotValue(0);
-  }
-
-  public SubLObject getSlotValue_1()
-  {
-    return getSlotValue(1);
-  }
-
-  public SubLObject getSlotValue_2()
-  {
-    return getSlotValue(2);
-  }
-
-  public SubLObject getSlotValue_3()
-  {
-    return getSlotValue(3);
-  }
-
-  public SubLObject getSlotValue(int index)
-  {
-    return type_error(this, LispSymbols.STRUCTURE_OBJECT);
-  }
-
-  public int getFixnumSlotValue(int index)
-  {
-    return getSlotValue(index).intValue();
-  }
-
-  public boolean getSlotValueAsBoolean(int index)
-  {
-    return getSlotValue(index).getBooleanValue();
-  }
-
-  public void setSlotValue_0(SubLObject value)
-
-  {
-    setSlotValue(0, value);
-  }
-
-  public void setSlotValue_1(SubLObject value)
-
-  {
-    setSlotValue(1, value);
-  }
-
-  public void setSlotValue_2(SubLObject value)
-
-  {
-    setSlotValue(2, value);
-  }
-
-  public void setSlotValue_3(SubLObject value)
-
-  {
-    setSlotValue(3, value);
-  }
-
-  public void setSlotValue(int index, SubLObject value)
-
-  {
-    type_error(this, LispSymbols.STRUCTURE_OBJECT);
-  }
-
-  public SubLObject SLOT_VALUE(SubLObject slotName)
-  {
-    return type_error(this, LispSymbols.STANDARD_OBJECT);
-  }
-
-  public void setSlotValue(SubLObject slotName, SubLObject newValue)
-
-  {
-    type_error(this, LispSymbols.STANDARD_OBJECT);
-  }
-  
-  public SubLSymbol toSymbol() {
-  	if (this instanceof SubLSymbol) return (SubLSymbol)this;  
-		return type_error(this, LispSymbols.SYMBOL).toSymbol();
+	public boolean isAlien() {
+		return false;
 	}
 
-  public SubLList toList() {
-  	if (this instanceof SubLList) return (SubLList)this;  
-		return type_error(this, LispSymbols.LIST).toList();
-	}
-
-
-  // Profiling.
-  public SubLObject getCallCount()
-  {
-    return NIL;
-  }
-
-  public void setCallCount(int n)
-  {
-  }
-
-  public void incrementCallCount(int n)
-  {
-  }
-
-  public int getHotCount()
-  {
-      return 0;
-  }
-
-  public void setHotCount(int n)
-  {
-  }
-
-  public void incrementHotCount()
-  {
-  }
-
-	public SubLProcess toProcess() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	public int hashCode(int currentDepth) {
-		return psxhash(currentDepth);
+	public boolean isPackageIterator() {
+		return false;
 	}
 	
-	@Override
-	public SubLCharacter toChar() {
-		if (this instanceof SubLCharacter) return (SubLCharacter)this;
-		return type_error(this, LispSymbols.CHAR).toChar();
-	}
 }
-

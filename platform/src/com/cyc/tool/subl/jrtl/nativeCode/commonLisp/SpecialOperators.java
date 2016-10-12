@@ -33,515 +33,483 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-public final class SpecialOperators {
-    // ### quote
-    private static final SpecialOperator QUOTE = new sf_quote();
-    private static final class sf_quote extends SpecialOperator {
-        sf_quote() {
-            super(LispSymbols.QUOTE, "thing");
-        }
 
-        @Override
-        public SubLObject execute(SubLObject args, Environment env)
+public class SpecialOperators {
+	private static class sf_declare extends SpecialOperator {
+		sf_declare() {
+			super(LispSymbols.DECLARE, "&rest declaration-specifiers");
+		}
 
-        {
-            if (args.rest() != NIL)
-                return error(new WrongNumberOfArgumentsException(this));
-            return args.first();
-        }
-    };
+		public SubLObject execute(SubLObject args, Environment env)
 
-    // ### if
-    private static final SpecialOperator IF = new sf_if();
-    private static final class sf_if extends SpecialOperator {
-        sf_if() {
-            super(LispSymbols.IF, "test then &optional else");
-        }
+		{
+			return Lisp.NIL;
+		}
+	}
 
-        @Override
-        public SubLObject execute(SubLObject args, Environment env)
+	private static class sf_flet extends SpecialOperator {
+		sf_flet() {
+			super(LispSymbols.FLET, "definitions &body body");
+		}
 
-        {
-            final LispThread thread = LispThread.currentThread();
-            switch (args.cl_length()) {
-            case 2: {
-                if (Lisp.eval(((SubLCons)args).first(), env, thread) != NIL)
-                    return Lisp.eval(args.second(), env, thread);
-                thread.clearValues();
-                return NIL;
-            }
-            case 3: {
-                if (Lisp.eval(((SubLCons)args).first(), env, thread) != NIL)
-                    return Lisp.eval(args.second(), env, thread);
-                return Lisp.eval((((SubLCons)args).rest()).second(), env, thread);
-            }
-            default:
-                return error(new WrongNumberOfArgumentsException(this));
-            }
-        }
-    };
+		public SubLObject execute(SubLObject args, Environment env)
 
-    // ### let
-    private static final SpecialOperator LET = new sf_let();
-    private static final class sf_let extends SpecialOperator {
-        sf_let() {
-            super(LispSymbols.LET, "bindings &body body");
-        }
+		{
+			return SpecialOperators._flet(args, env, false);
+		}
+	};
 
-        @Override
-        public SubLObject execute(SubLObject args, Environment env)
+	private static class sf_function extends SpecialOperator {
+		sf_function() {
+			super(LispSymbols.FUNCTION, "thing");
+		}
 
-        {
-            if (args == NIL)
-                return error(new WrongNumberOfArgumentsException(this));
-            return _let(args, env, false);
-        }
-    };
+		public SubLObject execute(SubLObject args, Environment env)
 
-    // ### let*
-    private static final SpecialOperator LET_STAR = new sf_let_star();
-    private static final class sf_let_star extends SpecialOperator {
-        sf_let_star() {
-            super(LispSymbols.LET_STAR, "bindings &body body");
-        }
+		{
+			return function_info.coerce_function(args, env, false);
+		}
 
-        @Override
-        public SubLObject execute(SubLObject args, Environment env)
+	}
 
-        {
-            if (args == NIL)
-                return error(new WrongNumberOfArgumentsException(this));
-            return _let(args, env, true);
-        }
-    };
+	private static class sf_if extends SpecialOperator {
+		sf_if() {
+			super(LispSymbols.IF, "test then &optional else");
+		}
 
-    static final SubLObject _let(SubLObject args, Environment env,
-                                         boolean sequential)
+		public SubLObject execute(SubLObject args, Environment env)
 
-    {
-        final LispThread thread = LispThread.currentThread();
-        final SpecialBindingsMark mark = thread.markSpecialBindings();
-        try {
-            SubLObject varList = checkList(args.first());
-            SubLObject bodyAndDecls = parseBody(args.rest(), false);
-            SubLObject specials = parseSpecials(bodyAndDecls.NTH(1));
-            SubLObject body = bodyAndDecls.first();
+		{
+			LispThread thread = LispThread.currentThread();
+			switch (args.cl_length()) {
+			case 2: {
+				if (Lisp.eval(((SubLCons) args).first(), env, thread) != Lisp.NIL)
+					return Lisp.eval(args.second(), env, thread);
+				thread.clearValues();
+				return Lisp.NIL;
+			}
+			case 3: {
+				if (Lisp.eval(((SubLCons) args).first(), env, thread) != Lisp.NIL)
+					return Lisp.eval(args.second(), env, thread);
+				return Lisp.eval(((SubLCons) args).rest().second(), env, thread);
+			}
+			default:
+				return Lisp.error(new WrongNumberOfArgumentsException(this));
+			}
+		}
+	};
 
-            Environment ext = new Environment(env);
-            LinkedList<SubLCons> nonSequentialVars = new LinkedList<SubLCons>();
-            while (varList != NIL) {
-                final SubLSymbol symbol;
-                SubLObject value;
-                SubLObject obj = varList.first();
-                if (obj instanceof SubLCons) {
-                    if (obj.cl_length() > 2)
-                        return error(new LispError("The " + (sequential ? "LET*" : "LET")
-                                                   + " binding specification " +
-                                                   obj.writeToString() + " is invalid."));
-                    symbol = checkSymbol(((SubLCons)obj).first());
-                    value = eval(obj.second(), sequential ? ext : env, thread);
-                } else {
-                    symbol = checkSymbol(obj);
-                    value = NIL;
-                }
-                if (sequential) {
-                    ext = new Environment(ext);
-                    bindArg(specials, symbol, value, ext, thread);
-                } else
-                    nonSequentialVars.add(makeCons(symbol, value));
-                varList = ((SubLCons)varList).rest();
-            }
-            if (!sequential)
-for (SubLCons x : nonSequentialVars)
-                    bindArg(specials, (SubLSymbol)x.first(), x.rest(), ext, thread);
+	private static class sf_labels extends SpecialOperator {
+		sf_labels() {
+			super(LispSymbols.LABELS, "definitions &body body");
+		}
 
-            // Make sure free special declarations are visible in the body.
-            // "The scope of free declarations specifically does not include
-            // initialization forms for bindings established by the form
-            // containing the declarations." (3.3.4)
-            for (; specials != NIL; specials = specials.rest())
-                ext.declareSpecial((SubLSymbol)specials.first());
+		public SubLObject execute(SubLObject args, Environment env)
 
-            return progn(body, ext, thread);
-        }
-        finally {
-            thread.resetSpecialBindings(mark);
-        }
-    }
+		{
+			return SpecialOperators._flet(args, env, true);
+		}
+	}
 
-    // ### symbol-macrolet
-    private static final SpecialOperator SYMBOL_MACROLET = new sf_symbol_macrolet();
-    private static final class sf_symbol_macrolet extends SpecialOperator {
-        sf_symbol_macrolet() {
-            super(LispSymbols.SYMBOL_MACROLET, "macrobindings &body body");
-        }
+	private static class sf_let extends SpecialOperator {
+		sf_let() {
+			super(LispSymbols.LET, "bindings &body body");
+		}
 
-        @Override
-        public SubLObject execute(SubLObject args, Environment env)
+		public SubLObject execute(SubLObject args, Environment env)
 
-        {
-            SubLObject varList = checkList(args.first());
-            final LispThread thread = LispThread.currentThread();
-            final SpecialBindingsMark mark = thread.markSpecialBindings();
-            Environment ext = new Environment(env);
-            try {
-                // Declare our free specials, this will correctly raise
-                SubLObject body = ext.processDeclarations(args.rest());
+		{
+			if (args == Lisp.NIL)
+				return Lisp.error(new WrongNumberOfArgumentsException(this));
+			return SpecialOperators._let(args, env, false);
+		}
+	};
 
-                for (int i = varList.cl_length(); i-- > 0;) {
-                    SubLObject obj = varList.first();
-                    varList = varList.rest();
-                    if (obj instanceof SubLCons && obj.cl_length() == 2) {
-                        SubLSymbol symbol = checkSymbol(obj.first());
-                        if (symbol.isSpecialVariable()
-                                || ext.isDeclaredSpecial(symbol)) {
-                            return error(new ProgramError(
-                                             "Attempt to bind the special variable " +
-                                             symbol.writeToString() +
-                                             " with SYMBOL-MACROLET."));
-                        }
-                        bindArg(null, symbol, new SymbolMacro(obj.second()), ext, thread);
-                    } else {
-                        return error(new ProgramError(
-                                         "Malformed symbol-expansion pair in SYMBOL-MACROLET: " +
-                                         obj.writeToString()));
-                    }
-                }
-                return progn(body, ext, thread);
-            }
-            finally {
-                thread.resetSpecialBindings(mark);
-            }
-        }
-    };
+	private static class sf_let_star extends SpecialOperator {
+		sf_let_star() {
+			super(LispSymbols.LET_STAR, "bindings &body body");
+		}
 
-    // ### load-time-value form &optional read-only-p => object
-    private static final SpecialOperator LOAD_TIME_VALUE = new sf_load_time_value();
-    private static final class sf_load_time_value extends SpecialOperator {
-        sf_load_time_value() {
-            super(LispSymbols.LOAD_TIME_VALUE,
-                  "form &optional read-only-p");
-        }
+		public SubLObject execute(SubLObject args, Environment env)
 
-        @Override
-        public SubLObject execute(SubLObject args, Environment env)
+		{
+			if (args == Lisp.NIL)
+				return Lisp.error(new WrongNumberOfArgumentsException(this));
+			return SpecialOperators._let(args, env, true);
+		}
+	}
 
-        {
-            switch (args.cl_length()) {
-            case 1:
-            case 2:
-                return Lisp.eval(args.first(), new Environment(),
-                            LispThread.currentThread());
-            default:
-                return error(new WrongNumberOfArgumentsException(this));
-            }
-        }
-    };
+	private static class sf_load_time_value extends SpecialOperator {
+		sf_load_time_value() {
+			super(LispSymbols.LOAD_TIME_VALUE, "form &optional read-only-p");
+		}
 
-    // ### locally
-    private static final SpecialOperator LOCALLY = new sf_locally();
-    private static final class sf_locally extends SpecialOperator {
-        sf_locally() {
-            super(LispSymbols.LOCALLY, "&body body");
-        }
+		public SubLObject execute(SubLObject args, Environment env)
 
-        @Override
-        public SubLObject execute(SubLObject args, Environment env)
+		{
+			switch (args.cl_length()) {
+			case 1:
+			case 2:
+				return Lisp.eval(args.first(), new Environment(), LispThread.currentThread());
+			default:
+				return Lisp.error(new WrongNumberOfArgumentsException(this));
+			}
+		}
+	};
 
-        {
-            final LispThread thread = LispThread.currentThread();
-            final Environment ext = new Environment(env);
-            args = ext.processDeclarations(args);
-            return progn(args, ext, thread);
-        }
-    };
+	private static class sf_locally extends SpecialOperator {
+		sf_locally() {
+			super(LispSymbols.LOCALLY, "&body body");
+		}
 
-    // ### progn
-    private static final SpecialOperator PROGN = new sf_progn();
-    private static final class sf_progn extends SpecialOperator {
-        sf_progn() {
-            super(LispSymbols.PROGN, "&rest forms");
-        }
+		public SubLObject execute(SubLObject args, Environment env)
 
-        @Override
-        public SubLObject execute(SubLObject args, Environment env)
+		{
+			LispThread thread = LispThread.currentThread();
+			Environment ext = new Environment(env);
+			args = ext.processDeclarations(args);
+			return Lisp.progn(args, ext, thread);
+		}
+	}
 
-        {
-            LispThread thread = LispThread.currentThread();
-            return progn(args, env, thread);
-        }
-    };
+	private static class sf_progn extends SpecialOperator {
+		sf_progn() {
+			super(LispSymbols.PROGN, "&rest forms");
+		}
 
-    // ### flet
-    private static final SpecialOperator FLET = new sf_flet();
-    private static final class sf_flet extends SpecialOperator {
-        sf_flet() {
-            super(LispSymbols.FLET, "definitions &body body");
-        }
+		public SubLObject execute(SubLObject args, Environment env)
 
-        @Override
-        public SubLObject execute(SubLObject args, Environment env)
+		{
+			LispThread thread = LispThread.currentThread();
+			return Lisp.progn(args, env, thread);
+		}
+	}
 
-        {
-            return _flet(args, env, false);
-        }
-    };
+	private static class sf_progv extends SpecialOperator {
+		sf_progv() {
+			super(LispSymbols.PROGV, "symbols values &body body");
+		}
 
-    // ### labels
-    private static final SpecialOperator LABELS = new sf_labels();
-    private static final class sf_labels extends SpecialOperator {
-        sf_labels() {
-            super(LispSymbols.LABELS, "definitions &body body");
-        }
+		public SubLObject execute(SubLObject args, Environment env)
 
-        @Override
-        public SubLObject execute(SubLObject args, Environment env)
+		{
+			if (args.cl_length() < 2)
+				return Lisp.error(new WrongNumberOfArgumentsException(this));
+			LispThread thread = LispThread.currentThread();
+			SubLObject symbols = Lisp.checkList(Lisp.eval(args.first(), env, thread));
+			SubLObject values = Lisp.checkList(Lisp.eval(args.second(), env, thread));
+			SpecialBindingsMark mark = thread.markSpecialBindings();
+			try {
+				// Set up the new bindings.
+				Lisp.progvBindVars(symbols, values, thread);
+				// Implicit PROGN.
+				return Lisp.progn(args.rest().rest(), env, thread);
+			} finally {
+				thread.resetSpecialBindings(mark);
+			}
+		}
+	};
 
-        {
-            return _flet(args, env, true);
-        }
-    };
+	private static class sf_quote extends SpecialOperator {
+		sf_quote() {
+			super(LispSymbols.QUOTE, "thing");
+		}
 
-    static final SubLObject _flet(SubLObject args, Environment env,
-                                          boolean recursive)
+		public SubLObject execute(SubLObject args, Environment env)
 
-    {
-        // First argument is a list of local function definitions.
-        SubLObject defs = checkList(args.first());
-        final LispThread thread = LispThread.currentThread();
-        final SpecialBindingsMark mark = thread.markSpecialBindings();
-        final Environment funEnv = new Environment(env);
-        while (defs != NIL) {
-            final SubLObject def = checkList(defs.first());
-            final SubLObject name = def.first();
-            final SubLSymbol symbol;
-            if (name instanceof SubLSymbol) {
-                symbol = checkSymbol(name);
-                if (symbol.getSymbolFunction() instanceof SpecialOperator) {
-                    String message =
-                        symbol.getJavaSymbolName() + " is a special operator and may not be redefined";
-                    return error(new ProgramError(message));
-                }
-            } else if (isValidSetfFunctionName(name))
-                symbol = checkSymbol(name.second());
-            else
-                return type_error(name, FUNCTION_NAME);
-            SubLObject rest = def.rest();
-            SubLObject parameters = rest.first();
-            SubLObject body = rest.rest();
-            SubLObject decls = NIL;
-            while (body.first() instanceof SubLCons && body.first().first() == LispSymbols.DECLARE) {
-                decls = makeCons(body.first(), decls);
-                body = body.rest();
-            }
-            body = makeCons(symbol, body);
-            body = makeCons(LispSymbols.BLOCK, body);
-            body = makeCons(body, NIL);
-            while (decls != NIL) {
-                body = makeCons(decls.first(), body);
-                decls = decls.rest();
-            }
-            SubLObject lambda_expression =
-                makeCons(LispSymbols.LAMBDA, makeCons(parameters, body));
-            SubLObject lambda_name =
-                list(recursive ? LispSymbols.LABELS : LispSymbols.FLET, name);
-            Closure closure =
-                new Closure(lambda_name, lambda_expression,
-                            recursive ? funEnv : env);
-            funEnv.addFunctionBinding(name, closure);
-            defs = defs.rest();
-        }
-        try {
-            final Environment ext = new Environment(funEnv);
-            SubLObject body = args.rest();
-            body = ext.processDeclarations(body);
-            return progn(body, ext, thread);
-        }
-        finally {
-            thread.resetSpecialBindings(mark);
-        }
-    }
+		{
+			if (args.rest() != Lisp.NIL)
+				return Lisp.error(new WrongNumberOfArgumentsException(this));
+			return args.first();
+		}
+	}
 
-    // ### the value-type form => result*
-    private static final SpecialOperator THE = new sf_the();
-    private static final class sf_the extends SpecialOperator {
-        sf_the() {
-            super(LispSymbols.THE, "type value");
-        }
+	private static class sf_setq extends SpecialOperator {
+		sf_setq() {
+			super(LispSymbols.SETQ, "&rest vars-and-values");
+		}
 
-        @Override
-        public SubLObject execute(SubLObject args, Environment env)
+		public SubLObject execute(SubLObject args, Environment env)
 
-        {
-            if (args.cl_length() != 2)
-                return error(new WrongNumberOfArgumentsException(this));
-            SubLObject rv = Lisp.eval(args.second(), env, LispThread.currentThread());
+		{
+			SubLObject value = Nil.NIL;
+			LispThread thread = LispThread.currentThread();
+			while (args != Lisp.NIL) {
+				SubLSymbol symbol = Lisp.checkSymbol(args.first());
+				if (symbol.isConstant())
+					return Lisp
+							.error(new ProgramError(symbol.writeToString() + " is a constant and thus cannot be set."));
+				args = args.rest();
+				if (symbol.isSpecialVariable() || env.isDeclaredSpecial(symbol)) {
+					SpecialBinding binding = thread.getSpecialBinding(symbol);
+					if (binding != null) {
+						if (binding.value instanceof SymbolMacro) {
+							SubLObject expansion = ((SymbolMacro) binding.value).getExpansion();
+							SubLObject form = Lisp.list(LispSymbols.SETF, expansion, args.first());
+							value = Lisp.eval(form, env, thread);
+						} else {
+							value = Lisp.eval(args.first(), env, thread);
+							binding.value = value;
+						}
+					} else if (symbol.getSymbolValue() instanceof SymbolMacro) {
+						SubLObject expansion = ((SymbolMacro) symbol.getSymbolValue()).getExpansion();
+						SubLObject form = Lisp.list(LispSymbols.SETF, expansion, args.first());
+						value = Lisp.eval(form, env, thread);
+					} else {
+						value = Lisp.eval(args.first(), env, thread);
+						symbol.setSymbolValue(value);
+					}
+				} else {
+					// Not special.
+					Binding binding = env.getBinding(symbol);
+					if (binding != null) {
+						if (binding.value instanceof SymbolMacro) {
+							SubLObject expansion = ((SymbolMacro) binding.value).getExpansion();
+							SubLObject form = Lisp.list(LispSymbols.SETF, expansion, args.first());
+							value = Lisp.eval(form, env, thread);
+						} else {
+							value = Lisp.eval(args.first(), env, thread);
+							binding.value = value;
+						}
+					} else if (symbol.getSymbolValue() instanceof SymbolMacro) {
+						SubLObject expansion = ((SymbolMacro) symbol.getSymbolValue()).getExpansion();
+						SubLObject form = Lisp.list(LispSymbols.SETF, expansion, args.first());
+						value = Lisp.eval(form, env, thread);
+					} else {
+						value = Lisp.eval(args.first(), env, thread);
+						symbol.setSymbolValue(value);
+					}
+				}
+				args = args.rest();
+			}
+			// Return primary value only!
+			thread._values = null;
+			return value;
+		}
+	};
 
-            // check only the most simple types: single symbols
-            // (class type specifiers/primitive types)
-            // DEFTYPE-d types need expansion;
-            // doing so would slow down our execution too much
+	private static class sf_symbol_macrolet extends SpecialOperator {
+		sf_symbol_macrolet() {
+			super(LispSymbols.SYMBOL_MACROLET, "macrobindings &body body");
+		}
 
-            // An implementation is allowed not to check the type,
-            // the fact that we do so here is mainly driven by the
-            // requirement to verify argument types in structure-slot
-            // accessors (defstruct.lisp)
+		public SubLObject execute(SubLObject args, Environment env)
 
-            // The policy below is in line with the level of verification
-            // in the compiler at *safety* levels below 3
-            SubLObject type = args.first();
-            if ((type instanceof SubLSymbol
-                    && Lisp.get(type, LispSymbols.DEFTYPE_DEFINITION) == NIL)
-                    || type instanceof BuiltInClass)
-                if (rv.typep(type) == NIL)
-                    type_error(rv, type);
+		{
+			SubLObject varList = Lisp.checkList(args.first());
+			LispThread thread = LispThread.currentThread();
+			SpecialBindingsMark mark = thread.markSpecialBindings();
+			Environment ext = new Environment(env);
+			try {
+				// Declare our free specials, this will correctly raise
+				SubLObject body = ext.processDeclarations(args.rest());
 
-            return rv;
-        }
-    };
+				for (int i = varList.cl_length(); i-- > 0;) {
+					SubLObject obj = varList.first();
+					varList = varList.rest();
+					if (obj instanceof SubLCons && obj.cl_length() == 2) {
+						SubLSymbol symbol = Lisp.checkSymbol(obj.first());
+						if (symbol.isSpecialVariable() || ext.isDeclaredSpecial(symbol))
+							return Lisp.error(new ProgramError("Attempt to bind the special variable "
+									+ symbol.writeToString() + " with SYMBOL-MACROLET."));
+						Lisp.bindArg(null, symbol, new SymbolMacro(obj.second()), ext, thread);
+					} else
+						return Lisp.error(new ProgramError(
+								"Malformed symbol-expansion pair in SYMBOL-MACROLET: " + obj.writeToString()));
+				}
+				return Lisp.progn(body, ext, thread);
+			} finally {
+				thread.resetSpecialBindings(mark);
+			}
+		}
+	}
 
-    // ### progv
-    private static final SpecialOperator PROGV = new sf_progv();
-    private static final class sf_progv extends SpecialOperator {
-        sf_progv() {
-            super(LispSymbols.PROGV, "symbols values &body body");
-        }
+	private static class sf_the extends SpecialOperator {
+		sf_the() {
+			super(LispSymbols.THE, "type value");
+		}
 
-        @Override
-        public SubLObject execute(SubLObject args, Environment env)
+		public SubLObject execute(SubLObject args, Environment env)
 
-        {
-            if (args.cl_length() < 2)
-                return error(new WrongNumberOfArgumentsException(this));
-            final LispThread thread = LispThread.currentThread();
-            final SubLObject symbols = checkList(Lisp.eval(args.first(), env, thread));
-            SubLObject values = checkList(Lisp.eval(args.second(), env, thread));
-            final SpecialBindingsMark mark = thread.markSpecialBindings();
-            try {
-                // Set up the new bindings.
-                progvBindVars(symbols, values, thread);
-                // Implicit PROGN.
-                return progn(args.rest().rest(), env, thread);
-            }
-            finally {
-                thread.resetSpecialBindings(mark);
-            }
-        }
-    };
+		{
+			if (args.cl_length() != 2)
+				return Lisp.error(new WrongNumberOfArgumentsException(this));
+			SubLObject rv = Lisp.eval(args.second(), env, LispThread.currentThread());
 
-    // ### declare
-    private static final SpecialOperator DECLARE = new sf_declare();
-    private static final class sf_declare extends SpecialOperator {
-        sf_declare() {
-            super(LispSymbols.DECLARE, "&rest declaration-specifiers");
-        }
+			// check only the most simple types: single symbols
+			// (class type specifiers/primitive types)
+			// DEFTYPE-d types need expansion;
+			// doing so would slow down our execution too much
 
-        @Override
-        public SubLObject execute(SubLObject args, Environment env)
+			// An implementation is allowed not to check the type,
+			// the fact that we do so here is mainly driven by the
+			// requirement to verify argument types in structure-slot
+			// accessors (defstruct.lisp)
 
-        {
-            return NIL;
-        }
-    };
+			// The policy below is in line with the level of verification
+			// in the compiler at *safety* levels below 3
+			SubLObject type = args.first();
+			if (type instanceof SubLSymbol && Lisp.get(type, LispSymbols.DEFTYPE_DEFINITION) == Lisp.NIL
+					|| type instanceof BuiltInClass)
+				if (rv.typep(type) == Lisp.NIL)
+					Lisp.type_error(rv, type);
 
-    // ### function
-    private static final SpecialOperator FUNCTION = new sf_function();
-    private static final class sf_function extends SpecialOperator {
-        sf_function() {
-            super(LispSymbols.FUNCTION, "thing");
-        }
+			return rv;
+		}
+	};
 
-        @Override
-        public SubLObject execute(SubLObject args, Environment env)
+	// ### quote
+	private static SpecialOperator QUOTE = new sf_quote();
 
-        {
-            return function_info.coerce_function(args, env, false);
-        }
+	// ### if
+	private static SpecialOperator IF = new sf_if();;
 
-    };
+	// ### let
+	private static SpecialOperator LET = new sf_let();
 
-		// ### setq
-    private static final SpecialOperator SETQ = new sf_setq();
-    private static final class sf_setq extends SpecialOperator {
-        sf_setq() {
-            super(LispSymbols.SETQ, "&rest vars-and-values");
-        }
+	// ### let*
+	private static SpecialOperator LET_STAR = new sf_let_star();;
 
-        @Override
-        public SubLObject execute(SubLObject args, Environment env)
+	// ### symbol-macrolet
+	private static SpecialOperator SYMBOL_MACROLET = new sf_symbol_macrolet();
 
-        {
-            SubLObject value = Nil.NIL;
-            final LispThread thread = LispThread.currentThread();
-            while (args != NIL) {
-                SubLSymbol symbol = checkSymbol(args.first());
-                if (symbol.isConstant()) {
-                    return error(new ProgramError(symbol.writeToString() +
-                                                  " is a constant and thus cannot be set."));
-                }
-                args = args.rest();
-                if (symbol.isSpecialVariable() || env.isDeclaredSpecial(symbol)) {
-                    SpecialBinding binding = thread.getSpecialBinding(symbol);
-                    if (binding != null) {
-                        if (binding.value instanceof SymbolMacro) {
-                            SubLObject expansion =
-                                ((SymbolMacro)binding.value).getExpansion();
-                            SubLObject form = list(LispSymbols.SETF, expansion, args.first());
-                            value = Lisp.eval(form, env, thread);
-                        } else {
-                            value = Lisp.eval(args.first(), env, thread);
-                            binding.value = value;
-                        }
-                    } else {
-                        if (symbol.getSymbolValue() instanceof SymbolMacro) {
-                            SubLObject expansion =
-                                ((SymbolMacro)symbol.getSymbolValue()).getExpansion();
-                            SubLObject form = list(LispSymbols.SETF, expansion, args.first());
-                            value = Lisp.eval(form, env, thread);
-                        } else {
-                            value = Lisp.eval(args.first(), env, thread);
-                            symbol.setSymbolValue(value);
-                        }
-                    }
-                } else {
-                    // Not special.
-                    Binding binding = env.getBinding(symbol);
-                    if (binding != null) {
-                        if (binding.value instanceof SymbolMacro) {
-                            SubLObject expansion =
-                                ((SymbolMacro)binding.value).getExpansion();
-                            SubLObject form = list(LispSymbols.SETF, expansion, args.first());
-                            value = Lisp.eval(form, env, thread);
-                        } else {
-                            value = Lisp.eval(args.first(), env, thread);
-                            binding.value = value;
-                        }
-                    } else {
-                        if (symbol.getSymbolValue() instanceof SymbolMacro) {
-                            SubLObject expansion =
-                                ((SymbolMacro)symbol.getSymbolValue()).getExpansion();
-                            SubLObject form = list(LispSymbols.SETF, expansion, args.first());
-                            value = Lisp.eval(form, env, thread);
-                        } else {
-                            value = Lisp.eval(args.first(), env, thread);
-                            symbol.setSymbolValue(value);
-                        }
-                    }
-                }
-                args = args.rest();
-            }
-            // Return primary value only!
-            thread._values = null;
-            return value;
-        }
-    };
-    }
+	// ### load-time-value form &optional read-only-p => object
+	private static SpecialOperator LOAD_TIME_VALUE = new sf_load_time_value();;
+
+	// ### locally
+	private static SpecialOperator LOCALLY = new sf_locally();
+
+	// ### progn
+	private static SpecialOperator PROGN = new sf_progn();
+
+	// ### flet
+	private static SpecialOperator FLET = new sf_flet();;
+
+	// ### labels
+	private static SpecialOperator LABELS = new sf_labels();
+
+	// ### the value-type form => result*
+	private static SpecialOperator THE = new sf_the();;
+
+	// ### progv
+	private static SpecialOperator PROGV = new sf_progv();
+
+	// ### declare
+	private static SpecialOperator DECLARE = new sf_declare();;
+
+	// ### function
+	private static SpecialOperator FUNCTION = new sf_function();
+
+	// ### setq
+	private static SpecialOperator SETQ = new sf_setq();;
+
+	static SubLObject _flet(SubLObject args, Environment env, boolean recursive)
+
+	{
+		// First argument is a list of local function definitions.
+		SubLObject defs = Lisp.checkList(args.first());
+		LispThread thread = LispThread.currentThread();
+		SpecialBindingsMark mark = thread.markSpecialBindings();
+		Environment funEnv = new Environment(env);
+		while (defs != Lisp.NIL) {
+			SubLObject def = Lisp.checkList(defs.first());
+			SubLObject name = def.first();
+			SubLSymbol symbol;
+			if (name instanceof SubLSymbol) {
+				symbol = Lisp.checkSymbol(name);
+				if (symbol.getSymbolFunction() instanceof SpecialOperator) {
+					String message = symbol.getJavaSymbolName() + " is a special operator and may not be redefined";
+					return Lisp.error(new ProgramError(message));
+				}
+			} else if (Lisp.isValidSetfFunctionName(name))
+				symbol = Lisp.checkSymbol(name.second());
+			else
+				return Lisp.type_error(name, Lisp.FUNCTION_NAME);
+			SubLObject rest = def.rest();
+			SubLObject parameters = rest.first();
+			SubLObject body = rest.rest();
+			SubLObject decls = Lisp.NIL;
+			while (body.first() instanceof SubLCons && body.first().first() == LispSymbols.DECLARE) {
+				decls = LispObjectFactory.makeCons(body.first(), decls);
+				body = body.rest();
+			}
+			body = LispObjectFactory.makeCons(symbol, body);
+			body = LispObjectFactory.makeCons(LispSymbols.BLOCK, body);
+			body = LispObjectFactory.makeCons(body, Lisp.NIL);
+			while (decls != Lisp.NIL) {
+				body = LispObjectFactory.makeCons(decls.first(), body);
+				decls = decls.rest();
+			}
+			SubLObject lambda_expression = LispObjectFactory.makeCons(LispSymbols.LAMBDA,
+					LispObjectFactory.makeCons(parameters, body));
+			SubLObject lambda_name = Lisp.list(recursive ? LispSymbols.LABELS : LispSymbols.FLET, name);
+			Closure closure = new Closure(lambda_name, lambda_expression, recursive ? funEnv : env);
+			funEnv.addFunctionBinding(name, closure);
+			defs = defs.rest();
+		}
+		try {
+			Environment ext = new Environment(funEnv);
+			SubLObject body = args.rest();
+			body = ext.processDeclarations(body);
+			return Lisp.progn(body, ext, thread);
+		} finally {
+			thread.resetSpecialBindings(mark);
+		}
+	}
+
+	static SubLObject _let(SubLObject args, Environment env, boolean sequential)
+
+	{
+		LispThread thread = LispThread.currentThread();
+		SpecialBindingsMark mark = thread.markSpecialBindings();
+		try {
+			SubLObject varList = Lisp.checkList(args.first());
+			SubLObject bodyAndDecls = Lisp.parseBody(args.rest(), false);
+			SubLObject specials = Lisp.parseSpecials(bodyAndDecls.NTH(1));
+			SubLObject body = bodyAndDecls.first();
+
+			Environment ext = new Environment(env);
+			LinkedList<SubLCons> nonSequentialVars = new LinkedList<SubLCons>();
+			while (varList != Lisp.NIL) {
+				SubLSymbol symbol;
+				SubLObject value;
+				SubLObject obj = varList.first();
+				if (obj instanceof SubLCons) {
+					if (obj.cl_length() > 2)
+						return Lisp.error(new LispError("The " + (sequential ? "LET*" : "LET")
+								+ " binding specification " + obj.writeToString() + " is invalid."));
+					symbol = Lisp.checkSymbol(((SubLCons) obj).first());
+					value = Lisp.eval(obj.second(), sequential ? ext : env, thread);
+				} else {
+					symbol = Lisp.checkSymbol(obj);
+					value = Lisp.NIL;
+				}
+				if (sequential) {
+					ext = new Environment(ext);
+					Lisp.bindArg(specials, symbol, value, ext, thread);
+				} else
+					nonSequentialVars.add(LispObjectFactory.makeCons(symbol, value));
+				varList = ((SubLCons) varList).rest();
+			}
+			if (!sequential)
+				for (SubLCons x : nonSequentialVars)
+					Lisp.bindArg(specials, (SubLSymbol) x.first(), x.rest(), ext, thread);
+
+			// Make sure free special declarations are visible in the body.
+			// "The scope of free declarations specifically does not include
+			// initialization forms for bindings established by the form
+			// containing the declarations." (3.3.4)
+			for (; specials != Lisp.NIL; specials = specials.rest())
+				ext.declareSpecial((SubLSymbol) specials.first());
+
+			return Lisp.progn(body, ext, thread);
+		} finally {
+			thread.resetSpecialBindings(mark);
+		}
+	};
+}

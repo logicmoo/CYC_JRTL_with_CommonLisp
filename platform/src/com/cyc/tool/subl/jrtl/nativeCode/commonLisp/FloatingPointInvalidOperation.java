@@ -33,39 +33,29 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public final class FloatingPointInvalidOperation extends ArithmeticError
-{
-    public FloatingPointInvalidOperation(SubLObject initArgs)
+public class FloatingPointInvalidOperation extends ArithmeticError {
+	public FloatingPointInvalidOperation(SubLObject initArgs)
 
-    {
-        super(StandardClass.FLOATING_POINT_INVALID_OPERATION);
-        initialize(initArgs);
-    }
+	{
+		super(StandardClass.FLOATING_POINT_INVALID_OPERATION);
+		this.initialize(initArgs);
+	}
 
-    @Override
-    public SubLObject typeOf()
-    {
-        return LispSymbols.FLOATING_POINT_INVALID_OPERATION;
-    }
+	public SubLObject classOf() {
+		return StandardClass.FLOATING_POINT_INVALID_OPERATION;
+	}
 
-    @Override
-    public SubLObject classOf()
-    {
-        return StandardClass.FLOATING_POINT_INVALID_OPERATION;
-    }
+	public SubLObject typeOf() {
+		return LispSymbols.FLOATING_POINT_INVALID_OPERATION;
+	}
 
-    @Override
-    public SubLObject typep(SubLObject type)
-    {
-        if (type == LispSymbols.FLOATING_POINT_INVALID_OPERATION)
-            return T;
-        if (type == StandardClass.FLOATING_POINT_INVALID_OPERATION)
-            return T;
-        return super.typep(type);
-    }
+	public SubLObject typep(SubLObject type) {
+		if (type == LispSymbols.FLOATING_POINT_INVALID_OPERATION)
+			return Lisp.T;
+		if (type == StandardClass.FLOATING_POINT_INVALID_OPERATION)
+			return Lisp.T;
+		return super.typep(type);
+	}
 }

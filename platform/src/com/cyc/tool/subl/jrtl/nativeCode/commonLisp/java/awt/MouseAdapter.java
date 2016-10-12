@@ -20,46 +20,39 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp.java.awt;
 
-
 import java.awt.Component;
 import java.awt.event.MouseEvent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.JHandler;
 
-public class MouseAdapter extends java.awt.event.MouseAdapter 
-{
-    public static synchronized void addTo(Component component) {
-        component.addMouseListener(new MouseAdapter());
-    }
+public class MouseAdapter extends java.awt.event.MouseAdapter {
+	public static synchronized void addTo(Component component) {
+		component.addMouseListener(new MouseAdapter());
+	}
 
-    private void call(String s, MouseEvent mouseevent) {
-        int ai[] = {
-            mouseevent.getModifiers(), 
-	    mouseevent.isPopupTrigger() ? 1 : 0, 
-	    mouseevent.getClickCount(), 
-	    mouseevent.getX(), 
-	    mouseevent.getY()
-        };
-        JHandler.callLisp(s, mouseevent.getComponent(), mouseevent.paramString(), ai);
-    }
+	private void call(String s, MouseEvent mouseevent) {
+		int ai[] = { mouseevent.getModifiers(), mouseevent.isPopupTrigger() ? 1 : 0, mouseevent.getClickCount(),
+				mouseevent.getX(), mouseevent.getY() };
+		JHandler.callLisp(s, mouseevent.getComponent(), mouseevent.paramString(), ai);
+	}
 
-    public void mouseClicked(MouseEvent mouseevent) {
-        call("MOUSECLICKED", mouseevent);
-    }
+	public void mouseClicked(MouseEvent mouseevent) {
+		this.call("MOUSECLICKED", mouseevent);
+	}
 
-    public void mousePressed(MouseEvent mouseevent) {
-        call("MOUSEPRESSED", mouseevent);
-    }
+	public void mouseEntered(MouseEvent mouseevent) {
+		this.call("MOUSEENTERED", mouseevent);
+	}
 
-    public void mouseReleased(MouseEvent mouseevent) {
-        call("MOUSERELEASED", mouseevent);
-    }
+	public void mouseExited(MouseEvent mouseevent) {
+		this.call("MOUSEEXITED", mouseevent);
+	}
 
-    public void mouseEntered(MouseEvent mouseevent) {
-        call("MOUSEENTERED", mouseevent);
-    }
+	public void mousePressed(MouseEvent mouseevent) {
+		this.call("MOUSEPRESSED", mouseevent);
+	}
 
-    public void mouseExited(MouseEvent mouseevent) {
-        call("MOUSEEXITED", mouseevent);
-    }
+	public void mouseReleased(MouseEvent mouseevent) {
+		this.call("MOUSERELEASED", mouseevent);
+	}
 }

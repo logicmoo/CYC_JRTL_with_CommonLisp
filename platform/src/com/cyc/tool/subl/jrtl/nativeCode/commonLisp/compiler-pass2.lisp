@@ -2095,7 +2095,7 @@ representation, based on the derived type of the LispObject."
   (write-u2 (field-descriptor-index field) stream)
   (write-u2 0 stream)) ; attributes count
 
-(defconst +field-flag-final+       #x10) ;; final field
+(defconst +field-flag-final+       #x10) ;; field
 (defconst +field-flag-static+      #x08) ;; static field
 (defconst +field-access-protected+ #x04) ;; subclass accessible
 (defconst +field-access-private+   #x02) ;; class-only accessible
@@ -2105,7 +2105,7 @@ representation, based on the derived type of the LispObject."
 (defknown declare-field (t t t) t)
 (defun declare-field (name descriptor access-flags)
   (let ((field (make-field name descriptor)))
-    ;; final static <access-flags>
+    ;; static <access-flags>
     (setf (field-access-flags field)
           (logior +field-flag-final+ +field-flag-static+ access-flags))
     (setf (field-name-index field) (pool-name (field-name field)))

@@ -33,355 +33,299 @@
 
 package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
 
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispObjectFactory.*;
-
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public final class PackageFunctions
-{
-    // ### packagep
-    // packagep object => generalized-boolean
-    private static final Primitive PACKAGEP = new JavaPrimitive("packagep", "object")
-    {
-        @Override
-        public SubLObject execute(SubLObject arg)
-        {
-            return arg instanceof SubLPackage ? T : NIL;
-        }
-    };
+public class PackageFunctions {
+	// ### packagep
+	// packagep object => generalized-boolean
+	private static Primitive PACKAGEP = new JavaPrimitive("packagep", "object") {
 
-    // ### package-name
-    // package-name package => nicknames
-    private static final Primitive PACKAGE_NAME =
-        new JavaPrimitive("package-name", "package")
-    {
-        @Override
-        public SubLObject execute(SubLObject arg)
-        {
-            return coerceToPackage(arg).NAME();
-        }
-    };
+		public SubLObject execute(SubLObject arg) {
+			return arg instanceof SubLPackage ? Lisp.T : Lisp.NIL;
+		}
+	};
 
-    // ### package-nicknames
-    // package-nicknames package => nicknames
-    private static final Primitive PACKAGE_NICKNAMES =
-        new JavaPrimitive("package-nicknames", "package")
-    {
-        @Override
-        public SubLObject execute(SubLObject arg)
-        {
-            return coerceToPackage(arg).packageNicknames();
-        }
-    };
+	// ### package-name
+	// package-name package => nicknames
+	private static Primitive PACKAGE_NAME = new JavaPrimitive("package-name", "package") {
 
-    // ### package-use-list
-    // package-use-list package => use-list
-    private static final Primitive PACKAGE_USE_LIST =
-        new JavaPrimitive("package-use-list", "package")
-    {
-        @Override
-        public SubLObject execute(SubLObject arg)
-        {
-            return coerceToPackage(arg).getUseList();
-        }
-    };
+		public SubLObject execute(SubLObject arg) {
+			return Lisp.coerceToPackage(arg).NAME();
+		}
+	};
 
-    // ### package-used-by-list
-    // package-used-by-list package => used-by-list
-    private static final Primitive PACKAGE_USED_BY_LIST =
-        new JavaPrimitive("package-used-by-list", "package")
-    {
-        @Override
-        public SubLObject execute(SubLObject arg)
-        {
-            return coerceToPackage(arg).getUsedByList();
-        }
-    };
+	// ### package-nicknames
+	// package-nicknames package => nicknames
+	private static Primitive PACKAGE_NICKNAMES = new JavaPrimitive("package-nicknames", "package") {
 
-    // ### %import
-    // %import symbols &optional package => t
-    private static final Primitive _IMPORT =
-        new JavaPrimitive("%import", PACKAGE_SYS, false)
-    {
-        @Override
-        public SubLObject execute(SubLObject[] args)
-        {
-            if (args.length == 0 || args.length > 2)
-                return error(new WrongNumberOfArgumentsException(this));
-            SubLObject symbols = args[0];
-            SubLPackage pkg =
-                args.length == 2 ? coerceToPackage(args[1]) : getCurrentPackage();
-            if (symbols.isList()) {
-                while (symbols != NIL) {
-                    pkg.importSymbol(checkSymbol(symbols.first()));
-                    symbols = symbols.rest();
-                }
-            } else
-                pkg.importSymbol(checkSymbol(symbols));
-            return T;
-        }
-    };
+		public SubLObject execute(SubLObject arg) {
+			return Lisp.coerceToPackage(arg).packageNicknames();
+		}
+	};
 
-    // ### unexport
-    // unexport symbols &optional package => t
-    private static final Primitive UNEXPORT =
-        new JavaPrimitive("unexport", "symbols &optional package")
-    {
-        @Override
-        public SubLObject execute(SubLObject[] args)
-        {
-            if (args.length == 0 || args.length > 2)
-                return error(new WrongNumberOfArgumentsException(this));
-            SubLObject symbols = args[0];
-            SubLPackage pkg =
-                args.length == 2 ? coerceToPackage(args[1]) : getCurrentPackage();
-            if (symbols.isList()) {
-                while (symbols != NIL) {
-                    pkg.unexport(checkSymbol(symbols.first()));
-                    symbols = symbols.rest();
-                }
-            } else
-                pkg.unexport(checkSymbol(symbols));
-            return T;
-        }
-    };
+	// ### package-use-list
+	// package-use-list package => use-list
+	private static Primitive PACKAGE_USE_LIST = new JavaPrimitive("package-use-list", "package") {
 
-    // ### shadow
-    // shadow symbol-names &optional package => t
-    private static final Primitive SHADOW =
-        new JavaPrimitive("shadow", "symbol-names &optional package")
-    {
-        @Override
-        public SubLObject execute(SubLObject[] args)
-        {
-            if (args.length == 0 || args.length > 2)
-                return error(new WrongNumberOfArgumentsException(this));
-            SubLObject symbols = args[0];
-            SubLPackage pkg =
-                args.length == 2 ? coerceToPackage(args[1]) : getCurrentPackage();
-            if (symbols.isList()) {
-                while (symbols != NIL) {
-                    pkg.shadow(javaString(symbols.first()));
-                    symbols = symbols.rest();
-                }
-            } else
-                pkg.shadow(javaString(symbols));
-            return T;
-        }
-    };
+		public SubLObject execute(SubLObject arg) {
+			return Lisp.coerceToPackage(arg).getUseList();
+		}
+	};
 
-    // ### shadowing-import
-    // shadowing-import symbols &optional package => t
-    private static final Primitive SHADOWING_IMPORT =
-        new JavaPrimitive("shadowing-import", "symbols &optional package")
-    {
-        @Override
-        public SubLObject execute(SubLObject[] args)
-        {
-            if (args.length == 0 || args.length > 2)
-                return error(new WrongNumberOfArgumentsException(this));
-            SubLObject symbols = args[0];
-            SubLPackage pkg =
-                args.length == 2 ? coerceToPackage(args[1]) : getCurrentPackage();
-            if (symbols.isList()) {
-                while (symbols != NIL) {
-                    pkg.shadowingImport(checkSymbol(symbols.first()));
-                    symbols = symbols.rest();
-                }
-            } else
-                pkg.shadowingImport(checkSymbol(symbols));
-            return T;
-        }
-    };
+	// ### package-used-by-list
+	// package-used-by-list package => used-by-list
+	private static Primitive PACKAGE_USED_BY_LIST = new JavaPrimitive("package-used-by-list", "package") {
 
-    // ### package-shadowing-symbols
-    // package-shadowing-symbols package => used-by-list
-    private static final Primitive PACKAGE_SHADOWING_SYMBOLS =
-        new JavaPrimitive("package-shadowing-symbols", "package")
-    {
-        @Override
-        public SubLObject execute(SubLObject arg)
-        {
-            return coerceToPackage(arg).getShadowingSymbols();
-        }
-    };
+		public SubLObject execute(SubLObject arg) {
+			return Lisp.coerceToPackage(arg).getUsedByList();
+		}
+	};
 
-    // ### delete-package
-    private static final Primitive DELETE_PACKAGE =
-        new JavaPrimitive("delete-package", "package")
-    {
-        @Override
-        public SubLObject execute(SubLObject arg)
-        {
-            return coerceToPackage(arg).delete() ? T : NIL;
-        }
-    };
+	// ### %import
+	// %import symbols &optional package => t
+	private static Primitive _IMPORT = new JavaPrimitive("%import", Lisp.PACKAGE_SYS, false) {
 
-    // ### unuse-package
-    // unuse-package packages-to-unuse &optional package => t
-    private static final Primitive USE_PACKAGE =
-        new JavaPrimitive("unuse-package", "packages-to-unuse &optional package")
-    {
-        @Override
-        public SubLObject execute(SubLObject[] args)
-        {
-            if (args.length < 1 || args.length > 2)
-                return error(new WrongNumberOfArgumentsException(this));
-            SubLPackage pkg;
-            if (args.length == 2)
-                pkg = coerceToPackage(args[1]);
-            else
-                pkg = getCurrentPackage();
-            if (args[0] instanceof SubLCons) {
-                SubLObject list = args[0];
-                while (list != NIL) {
-                    pkg.unusePackage(coerceToPackage(list.first()));
-                    list = list.rest();
-                }
-            } else
-                pkg.unusePackage(coerceToPackage(args[0]));
-            return T;
-        }
-    };
+		public SubLObject execute(SubLObject[] args) {
+			if (args.length == 0 || args.length > 2)
+				return Lisp.error(new WrongNumberOfArgumentsException(this));
+			SubLObject symbols = args[0];
+			SubLPackage pkg = args.length == 2 ? Lisp.coerceToPackage(args[1]) : Lisp.getCurrentPackage();
+			if (symbols.isList())
+				while (symbols != Lisp.NIL) {
+					pkg.importSymbol(Lisp.checkSymbol(symbols.first()));
+					symbols = symbols.rest();
+				}
+			else
+				pkg.importSymbol(Lisp.checkSymbol(symbols));
+			return Lisp.T;
+		}
+	};
 
-    // ### rename-package
-    // rename-package package new-name &optional new-nicknames => package-object
-    private static final Primitive RENAME_PACKAGE =
-        new JavaPrimitive("rename-package", "package new-name &optional new-nicknames")
-    {
-        @Override
-        public SubLObject execute(SubLObject[] args)
-        {
-            if (args.length < 2 || args.length > 3)
-                return error(new WrongNumberOfArgumentsException(this));
-            SubLPackage pkg = coerceToPackage(args[0]);
-            String newName = javaString(args[1]);
-            SubLObject nicknames = args.length == 3 ? checkList(args[2]) : NIL;
-            pkg.rename(newName, nicknames);
-            return pkg;
-        }
-    };
+	// ### unexport
+	// unexport symbols &optional package => t
+	private static Primitive UNEXPORT = new JavaPrimitive("unexport", "symbols &optional package") {
 
-    private static final Primitive LIST_ALL_PACKAGES =
-        new JavaPrimitive("list-all-packages", "")
-    {
-        @Override
-        public SubLObject execute()
-        {
-            return LispPackages.listAllPackages();
-        }
-    };
+		public SubLObject execute(SubLObject[] args) {
+			if (args.length == 0 || args.length > 2)
+				return Lisp.error(new WrongNumberOfArgumentsException(this));
+			SubLObject symbols = args[0];
+			SubLPackage pkg = args.length == 2 ? Lisp.coerceToPackage(args[1]) : Lisp.getCurrentPackage();
+			if (symbols.isList())
+				while (symbols != Lisp.NIL) {
+					pkg.unexport(Lisp.checkSymbol(symbols.first()));
+					symbols = symbols.rest();
+				}
+			else
+				pkg.unexport(Lisp.checkSymbol(symbols));
+			return Lisp.T;
+		}
+	};
 
-    // ### %defpackage name nicknames size shadows shadowing-imports use
-    // imports interns exports doc-string => package
-    private static final Primitive _DEFPACKAGE =
-        new JavaPrimitive("%defpackage", PACKAGE_SYS, false)
-    {
-        @Override
-        public SubLObject execute(SubLObject[] args)
-        {
-            if (args.length != 10)
-                return error(new WrongNumberOfArgumentsException(this));
-            final String packageName = args[0].getString();
-            SubLObject nicknames = checkList(args[1]);
-            // FIXME size is ignored
-            // LispObject size = args[2];
-            SubLObject shadows = checkList(args[3]);
-            SubLObject shadowingImports = checkList(args[4]);
-            SubLObject use = checkList(args[5]);
-            SubLObject imports = checkList(args[6]);
-            SubLObject interns = checkList(args[7]);
-            SubLObject exports = checkList(args[8]);
-            // FIXME docString is ignored
-            // LispObject docString = args[9];
-            SubLPackage pkg = LispPackages.findPackage(packageName);
-            if (pkg != null)
-                return pkg;
-            if (nicknames != NIL) {
-                SubLObject list = nicknames;
-                while (list != NIL) {
-                    String nick = javaString(list.first());
-                    if (LispPackages.findPackage(nick) != null) {
-                        return error(new PackageError("A package named " + nick +
-                                                       " already exists."));
-                    }
-                    list = list.rest();
-                }
-            }
-            pkg = LispPackages.createPackage(packageName);
-            while (nicknames != NIL) {
-                SubLObject string = nicknames.first().STRING();
-                pkg.addNickname(string.getString());
-                nicknames = nicknames.rest();
-            }
-            while (shadows != NIL) {
-                String symbolName = shadows.first().getString();
-                pkg.shadow(symbolName);
-                shadows = shadows.rest();
-            }
-            while (shadowingImports != NIL) {
-                SubLObject si = shadowingImports.first();
-                SubLPackage otherPkg = coerceToPackage(si.first());
-                SubLObject symbolNames = si.rest();
-                while (symbolNames != NIL) {
-                    String symbolName = symbolNames.first().getString();
-                    SubLSymbol sym = otherPkg.findAccessibleSymbol(symbolName);
-                    if (sym != null)
-                        pkg.shadowingImport(sym);
-                    else
-                        return error(new LispError(symbolName +
-                                                    " not found in package " +
-                                                    otherPkg.getJavaName() + "."));
-                    symbolNames = symbolNames.rest();
-                }
-                shadowingImports = shadowingImports.rest();
-            }
-            while (use != NIL) {
-                SubLObject obj = use.first();
-                if (obj instanceof SubLPackage)
-                    pkg.usePackage((SubLPackage)obj);
-                else {
-                    SubLObject string = obj.STRING();
-                    SubLPackage p = LispPackages.findPackage(string.getString());
-                    if (p == null)
-                        return error(new LispError(obj.writeToString() +
-                                                    " is not the name of a package."));
-                    pkg.usePackage(p);
-                }
-                use = use.rest();
-            }
-            while (imports != NIL) {
-                SubLObject si = imports.first();
-                SubLPackage otherPkg = coerceToPackage(si.first());
-                SubLObject symbolNames = si.rest();
-                while (symbolNames != NIL) {
-                    String symbolName = symbolNames.first().getString();
-                    SubLSymbol sym = otherPkg.findAccessibleSymbol(symbolName);
-                    if (sym != null)
-                        pkg.importSymbol(sym);
-                    else
-                        return error(new LispError(symbolName +
-                                                    " not found in package " +
-                                                    otherPkg.getJavaName() + "."));
-                    symbolNames = symbolNames.rest();
-                }
-                imports = imports.rest();
-            }
-            while (interns != NIL) {
-                String symbolName = interns.first().getString();
-                pkg.intern(symbolName);
-                interns = interns.rest();
-            }
-            while (exports != NIL) {
-                String symbolName = exports.first().getString();
-                pkg.export(pkg.intern(symbolName));
-                exports = exports.rest();
-            }
-            return pkg;
-        }
-    };
+	// ### shadow
+	// shadow symbol-names &optional package => t
+	private static Primitive SHADOW = new JavaPrimitive("shadow", "symbol-names &optional package") {
+
+		public SubLObject execute(SubLObject[] args) {
+			if (args.length == 0 || args.length > 2)
+				return Lisp.error(new WrongNumberOfArgumentsException(this));
+			SubLObject symbols = args[0];
+			SubLPackage pkg = args.length == 2 ? Lisp.coerceToPackage(args[1]) : Lisp.getCurrentPackage();
+			if (symbols.isList())
+				while (symbols != Lisp.NIL) {
+					pkg.shadow(Lisp.javaString(symbols.first()));
+					symbols = symbols.rest();
+				}
+			else
+				pkg.shadow(Lisp.javaString(symbols));
+			return Lisp.T;
+		}
+	};
+
+	// ### shadowing-import
+	// shadowing-import symbols &optional package => t
+	private static Primitive SHADOWING_IMPORT = new JavaPrimitive("shadowing-import", "symbols &optional package") {
+
+		public SubLObject execute(SubLObject[] args) {
+			if (args.length == 0 || args.length > 2)
+				return Lisp.error(new WrongNumberOfArgumentsException(this));
+			SubLObject symbols = args[0];
+			SubLPackage pkg = args.length == 2 ? Lisp.coerceToPackage(args[1]) : Lisp.getCurrentPackage();
+			if (symbols.isList())
+				while (symbols != Lisp.NIL) {
+					pkg.shadowingImport(Lisp.checkSymbol(symbols.first()));
+					symbols = symbols.rest();
+				}
+			else
+				pkg.shadowingImport(Lisp.checkSymbol(symbols));
+			return Lisp.T;
+		}
+	};
+
+	// ### package-shadowing-symbols
+	// package-shadowing-symbols package => used-by-list
+	private static Primitive PACKAGE_SHADOWING_SYMBOLS = new JavaPrimitive("package-shadowing-symbols", "package") {
+
+		public SubLObject execute(SubLObject arg) {
+			return Lisp.coerceToPackage(arg).getShadowingSymbols();
+		}
+	};
+
+	// ### delete-package
+	private static Primitive DELETE_PACKAGE = new JavaPrimitive("delete-package", "package") {
+
+		public SubLObject execute(SubLObject arg) {
+			return Lisp.coerceToPackage(arg).delete() ? Lisp.T : Lisp.NIL;
+		}
+	};
+
+	// ### unuse-package
+	// unuse-package packages-to-unuse &optional package => t
+	private static Primitive USE_PACKAGE = new JavaPrimitive("unuse-package", "packages-to-unuse &optional package") {
+
+		public SubLObject execute(SubLObject[] args) {
+			if (args.length < 1 || args.length > 2)
+				return Lisp.error(new WrongNumberOfArgumentsException(this));
+			SubLPackage pkg;
+			if (args.length == 2)
+				pkg = Lisp.coerceToPackage(args[1]);
+			else
+				pkg = Lisp.getCurrentPackage();
+			if (args[0] instanceof SubLCons) {
+				SubLObject list = args[0];
+				while (list != Lisp.NIL) {
+					pkg.unusePackage(Lisp.coerceToPackage(list.first()));
+					list = list.rest();
+				}
+			} else
+				pkg.unusePackage(Lisp.coerceToPackage(args[0]));
+			return Lisp.T;
+		}
+	};
+
+	// ### rename-package
+	// rename-package package new-name &optional new-nicknames => package-object
+	private static Primitive RENAME_PACKAGE = new JavaPrimitive("rename-package",
+			"package new-name &optional new-nicknames") {
+
+		public SubLObject execute(SubLObject[] args) {
+			if (args.length < 2 || args.length > 3)
+				return Lisp.error(new WrongNumberOfArgumentsException(this));
+			SubLPackage pkg = Lisp.coerceToPackage(args[0]);
+			String newName = Lisp.javaString(args[1]);
+			SubLObject nicknames = args.length == 3 ? Lisp.checkList(args[2]) : Lisp.NIL;
+			pkg.rename(newName, nicknames);
+			return pkg;
+		}
+	};
+
+	private static Primitive LIST_ALL_PACKAGES = new JavaPrimitive("list-all-packages", "") {
+
+		public SubLObject execute() {
+			return LispPackages.listAllPackages();
+		}
+	};
+
+	// ### %defpackage name nicknames size shadows shadowing-imports use
+	// imports interns exports doc-string => package
+	private static Primitive _DEFPACKAGE = new JavaPrimitive("%defpackage", Lisp.PACKAGE_SYS, false) {
+
+		public SubLObject execute(SubLObject[] args) {
+			if (args.length != 10)
+				return Lisp.error(new WrongNumberOfArgumentsException(this));
+			String packageName = args[0].getString();
+			SubLObject nicknames = Lisp.checkList(args[1]);
+			// FIXME size is ignored
+			// LispObject size = args[2];
+			SubLObject shadows = Lisp.checkList(args[3]);
+			SubLObject shadowingImports = Lisp.checkList(args[4]);
+			SubLObject use = Lisp.checkList(args[5]);
+			SubLObject imports = Lisp.checkList(args[6]);
+			SubLObject interns = Lisp.checkList(args[7]);
+			SubLObject exports = Lisp.checkList(args[8]);
+			// FIXME docString is ignored
+			// LispObject docString = args[9];
+			SubLPackage pkg = LispPackages.findPackage(packageName);
+			if (pkg != null)
+				return pkg;
+			if (nicknames != Lisp.NIL) {
+				SubLObject list = nicknames;
+				while (list != Lisp.NIL) {
+					String nick = Lisp.javaString(list.first());
+					if (LispPackages.findPackage(nick) != null)
+						return Lisp.error(new PackageError("A package named " + nick + " already exists."));
+					list = list.rest();
+				}
+			}
+			pkg = LispPackages.createPackage(packageName);
+			while (nicknames != Lisp.NIL) {
+				SubLObject string = nicknames.first().STRING();
+				pkg.addNickname(string.getString());
+				nicknames = nicknames.rest();
+			}
+			while (shadows != Lisp.NIL) {
+				String symbolName = shadows.first().getString();
+				pkg.shadow(symbolName);
+				shadows = shadows.rest();
+			}
+			while (shadowingImports != Lisp.NIL) {
+				SubLObject si = shadowingImports.first();
+				SubLPackage otherPkg = Lisp.coerceToPackage(si.first());
+				SubLObject symbolNames = si.rest();
+				while (symbolNames != Lisp.NIL) {
+					String symbolName = symbolNames.first().getString();
+					SubLSymbol sym = otherPkg.findAccessibleSymbol(symbolName);
+					if (sym != null)
+						pkg.shadowingImport(sym);
+					else
+						return Lisp.error(
+								new LispError(symbolName + " not found in package " + otherPkg.getJavaName() + "."));
+					symbolNames = symbolNames.rest();
+				}
+				shadowingImports = shadowingImports.rest();
+			}
+			while (use != Lisp.NIL) {
+				SubLObject obj = use.first();
+				if (obj instanceof SubLPackage)
+					pkg.usePackage((SubLPackage) obj);
+				else {
+					SubLObject string = obj.STRING();
+					SubLPackage p = LispPackages.findPackage(string.getString());
+					if (p == null)
+						return Lisp.error(new LispError(obj.writeToString() + " is not the name of a package."));
+					pkg.usePackage(p);
+				}
+				use = use.rest();
+			}
+			while (imports != Lisp.NIL) {
+				SubLObject si = imports.first();
+				SubLPackage otherPkg = Lisp.coerceToPackage(si.first());
+				SubLObject symbolNames = si.rest();
+				while (symbolNames != Lisp.NIL) {
+					String symbolName = symbolNames.first().getString();
+					SubLSymbol sym = otherPkg.findAccessibleSymbol(symbolName);
+					if (sym != null)
+						pkg.importSymbol(sym);
+					else
+						return Lisp.error(
+								new LispError(symbolName + " not found in package " + otherPkg.getJavaName() + "."));
+					symbolNames = symbolNames.rest();
+				}
+				imports = imports.rest();
+			}
+			while (interns != Lisp.NIL) {
+				String symbolName = interns.first().getString();
+				pkg.intern(symbolName);
+				interns = interns.rest();
+			}
+			while (exports != Lisp.NIL) {
+				String symbolName = exports.first().getString();
+				pkg.export(pkg.intern(symbolName));
+				exports = exports.rest();
+			}
+			return pkg;
+		}
+	};
 }
