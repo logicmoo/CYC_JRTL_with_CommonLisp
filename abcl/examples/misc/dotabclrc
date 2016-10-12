@@ -1,0 +1,123 @@
+;;; -*- Mode: Lisp -*-
+
+;;; Possible code for inclusion in the Armed Bear startup file
+;;; #p"~/.abclrc"
+
+
+;;; Some commonly useful customizations to ABCL output
+(setf 
+ ;; Truncate the output of java.lang.String object after this many
+ ;; characters, outputing "...." afterwards.  
+ ;; The default is 32.  Is this too small?
+ *java-object-to-string-length* 8192 
+
+ ;; Show what is being loaded and the loading time.  
+ ;; Helpful on slower systems to figure out what is taking the time.
+ *load-verbose* t
+
+ ;; Emit warnings from debug code
+ sys:*debug-warn* t
+
+ ;; Bring some order to the forms output by the REPL
+ ;; Not currently the default, but it probably should be after we
+ ;; rework the pretty printer and/or streams to properly work with
+ ;; GRAY-STREAMS:
+ *print-pretty* t)
+
+#-quicklisp
+(let ((quicklisp-local  #P"~/quicklisp/setup.lisp")
+      (quicklisp-remote #p"http://beta.quicklisp.org/quicklisp.lisp"))
+  (unless (probe-file quicklisp-local)
+    (when (probe-file quicklisp-remote)     ;;; XXX possibly search for a proxy÷
+      (load quicklisp-remote)
+      (funcall (intern (symbol-name 'install) :quicklisp-quickstart))))
+  (when (probe-file quicklisp-local)
+    (load quicklisp-local)))
+
+;; 
+(require :asdf)
+(require :abcl-contrib)
+(require :abcl-asdf)
+(setf abcl-asdf::*maven-http-proxy* "http://localhost:3128/")
+
+;;; Customize the procedure used by CL:DISASSEMBLE
+(setf *disassembler*       
+      (let ((strategies (list (lambda (p)
+                                (let ((class (make-pathname :name (pathname-name p)))
+                                      (path (directory-namestring p)))
+                                  (format nil "javap -c -l -verbose -classpath ~A ~A" path class)))
+                              "/Users/evenson/bin/jad -a -p"
+                              (lambda (p)
+                                (format nil "java -jar ~
+/Users/evenson/work/classfileanalyzer/classfileanalyzer.jar ~A"
+                                        p)))))
+          (first strategies)))
+
+(defparameter *ansi-tests-directory*
+  #-(or windows mswindows win32)
+  #p"/home/peter/xcl/x/ansi-tests/"
+  #+(or windows mswindows win32)
+  #p"c:\\msys\\1.0\\home\\peter\\xcl\\x\ansi-tests\\")
+
+(defun run-ansi-tests (&optional (compile-tests t))
+  (format t "COMPILE-TESTS is ~A~%" compile-tests)
+  (let ((*default-pathname-defaults* *ansi-tests-directory*))
+    #+(and abcl unix)
+    (run-shell-command "make clean" :directory *default-pathname-defaults*)
+    (time (load (if compile-tests "compileit.lsp" "doit.lsp")))))
+
+(defun run-random-tests (size nvars count)
+  (let ((*default-pathname-defaults* *ansi-tests-directory*))
+    (load "gclload1.lsp")
+    (load "random-int-form.lsp")
+    (let ((f (find-symbol "TEST-RANDOM-INTEGER-FORMS" "CL-TEST")))
+      (when f
+        (let (#+abcl (*suppress-compiler-warnings* t)
+              (*random-state* (make-random-state t)))
+          (time (funcall f size nvars count)))))))
+
+#+(or abcl sbcl clisp)
+(defun test-cl-ppcre ()
+  #+abcl (require "JVM")
+  (let ((*default-pathname-defaults* #-(or windows mswindows win32)
+                                     #p"/home/peter/cl-ppcre-1.2.19/"
+                                     #+(or windows mswindows win32)
+                                     #p"c:\\cygwin\\home\\peter\\cl-ppcre-1.2.19\\"))
+    #+abcl
+    (map nil #'delete-file (directory "*.abcl"))
+    #+sbcl
+    (map nil #'delete-file (directory "*.fasl"))
+    (load "load.lisp")
+    (let ((f (find-symbol "TEST" "CL-PPCRE-TEST")))
+      (when f
+        #+abcl (gc)
+        (time (funcall f))
+        #+abcl (gc)
+        (time (funcall f))))))
+
+#+abcl
+(defun run-other-tests ()
+  (test-cl-ppcre)
+  (let ((*default-pathname-defaults* "/home/peter/salza-0.7.2/"))
+    (map nil #'delete-file (directory "*.abcl"))
+    (load "/home/peter/test-salza.lisp")
+    (gc)
+    (test-salza)
+    (gc)
+    (test-salza)))
+
+#+abcl
+(autoload 'do-tests "rt.lisp")
+
+#+allegro
+(top-level:alias "ap" (arg) (apropos arg nil nil t))
+#+allegro
+(top-level:alias "de" (arg) (describe (eval arg)))
+
+#+cmu
+(setf *gc-verbose* nil)
+
+;; #+sbcl
+;; (require '#:asdf)
+;; #+sbcl
+;; (require '#:sb-aclrepl)

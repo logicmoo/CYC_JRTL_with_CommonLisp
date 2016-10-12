@@ -1,0 +1,105 @@
+<project default="compile">
+  <!-- 
+       'sdk.dir' contains the location of the Google AppEngine for Java SDK
+       http://googleappengine.googlecode.com/files/appengine-java-sdk-1.4.3.zip
+  -->
+  <property name="sdk.dir" 
+            location="${user.home}/work/appengine-java-sdk-1.4.3/" />
+  <import file="${sdk.dir}/config/user/ant-macros.xml" />
+
+  <path id="project.classpath">
+    <pathelement path="war/WEB-INF/classes" />
+    <fileset dir="war/WEB-INF/lib">
+      <include name="**/*.jar" />
+    </fileset>
+    <fileset dir="${sdk.dir}/lib">
+      <include name="shared/**/*.jar" />
+    </fileset>
+  </path>
+
+  <property name="abcl.dir"
+            location="${basedir}/../.."/>
+
+  <target name="resources.copy"
+          depends="compile.lisp,abcl.jar"
+	  description="Copies the necessary resources to the WAR.">
+    <copy
+        todir="war/WEB-INF/lib"
+        flatten="true">
+      <!--
+      <fileset dir="${sdk.dir}/lib/user">
+        <include name="**/*.jar" />
+      </fileset>
+      -->
+      <fileset dir="${abcl.dir}">
+        <include name="dist/*.jar" />
+      </fileset>
+    </copy>
+    <copy
+        todir="war/fasls">
+      <fileset dir="src">
+        <include name="*.abcl" />
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile"
+          depends="compile.java,compile.lisp"/>
+
+  <target name="compile.java" depends="resources.copy,abcl.jar"
+	  description="Compiles Java source and copies other source files to the WAR.">
+    <mkdir dir="war/WEB-INF/classes" />
+    <copy todir="war/WEB-INF/classes">
+      <fileset dir="src">
+        <exclude name="**/*.java" />
+      </fileset>
+    </copy>
+    <javac srcdir="src"
+           destdir="war/WEB-INF/classes"
+           classpathref="project.classpath"
+           includeantruntime="false"
+           debug="on" />
+  </target>
+  
+  <property name="abcl.jar" value="${abcl.dir}/dist/abcl.jar"/>
+  <target name="compile.lisp" depends="abcl.jar">
+    <java fork="true"
+          classpath="${abcl.jar}"
+          classname="org.armedbear.lisp.Main"
+          inputstring="(compile-file &quot;${basedir}/src/first-servlet.lisp&quot;)">
+      <arg value="--noinit"/>
+    </java>
+  </target>
+
+  <available file="${abcl.jar}" property="abcl.jar.p"/>
+  <target name="abcl.jar" unless="abcl.jar.p">
+    <ant dir="${abcl.dir}" target="abcl.jar"/>
+  </target>
+
+  <target name="clean" description="Cleans all the jars, classes, and FASLs.">
+    <delete>
+      <fileset dir="${basedir}">
+        <include name="**/*.jar" />
+        <include name="**/*.class" />
+        <include name="**/*.abcl" />
+      </fileset>
+    </delete>
+  </target>
+
+  <target name="runserver" 
+          depends="compile,resources.copy"
+	  description="Starts the development server.">
+    <dev_appserver war="war" />
+  </target>
+
+  <target name="runserver-debug" depends="compile"
+	  description="Starts the development server.">
+    <dev_appserver war="war" port="8888"/>
+  </target>
+  
+  <target name="update" depends="compile"
+          description="Uploads the application to App Engine.">
+    <appcfg action="update" war="war" />
+  </target>
+   
+</project>

@@ -1,0 +1,1712 @@
+Version 1.4.0-dev
+=================
+http://abcl.org/svn/trunk/
+Unreleased.
+
+
+Version 1.3.3
+=============
+http://abcl.org/svn/tags/1.3.3/
+18-SEP-2015
+
+Enhancements
+------------
+
+*  [r14802,r14813] Add character name for non-breaking space
+
+   Use a human readable name for character 160, #\No-break_space,
+   following sbcl, ccl and clisp. This permits the Quicklisp system
+   spinneret to load.  The #\No-break_space name is a valid
+   CHAR-NAME/NAME-CHAR pair, but is not emitted as a glyph under the
+   current output encoding under the CL:FORMAT "~:c" directive as
+   these implementations do by default.
+
+   Thanks to Javier Olaechea.
+
+Fixes
+-----
+
+* [r14808] CL:FILE-WRITE-DATE fixed for logical pathnames
+
+* ANSI-TEST
+
+** Update references to new git repository at
+   <git+https://gitlab.common-lisp.net/ansi-test/ansi-test.git>
+
+** ABCL now runs the git master consolidated ANSI-TEST suite which
+   features subdirectories and distinquished value for
+   *DEFAULT-PATHNAME-DEFAULTS*.
+
+** ABCL.TEST.ANSI:CLEAN-TESTS now acts recursively via appropiate
+   Pathname wildcards to match new directory structure.
+
+* ASDF
+
+  Fix COMPILE-SYSTEM to offer full ANSI environment for ASDF and
+  ABCL-CONTRIB. 
+
+* ABCL-ASDF
+
+** Use of Maven has been robustified.
+
+*** [r14803] Fix usage with all known versions through maven-3.3.3
+
+   Addresses <http://abcl.org/trac/ticket/390>.
+
+*** [r14806] Fix usage with specifying local Maven repository
+
+** More complete attempt at re-initialization via
+
+        (ABCL-ASDF:INIT :force t)
+
+
+Version 1.3.2
+=============
+http://abcl.org/svn/tags/1.3.2/
+19-APR-2015
+
+Enhancements
+------------
+
+* Make result of DEFINE-MODIFY-MACRO available at compilation time
+  [r14727]
+
+
+Fixes
+-----
+* Fix failed AVER [#289] [r14763]
+
+* Fix incorrect dead code elimination
+
+  Additionally, don't recurse into flet/labels upon elimination of a
+  single labels function; simply continue by changing the applicable
+  set.  Reported by Vibhu Mohindra. [r14754][r14756]
+
+* Numeric tower repairs on promoting floats across representation
+  boundaries [r14749-50] (Massimiliano Ghilardi).
+
+* Return SIMPLE-ERROR for invalid external-format arguments.[r14735]
+
+* Lisp stack frame representation now formatted as unreadable. [r14738-9]
+
+Contrib
+-------
+
+* JSS
+
+** Fix GET-JAVA-FIELD and SET-JAVA-FIELD [r14718]
+
+** no longer error on NO-SUCH-JAVA-FIELD, by setting fields as
+   accessible where necessary [r14715] [r14725]
+
+* ABCL-ASDF
+
+** Update to current Maven support (keep up with changing APIs through
+   the Maven 3.2.3-3.2.5 hysteresis) [r14742-7] (Cyrus Hamon).
+
+** Special-case JNA artifacts with alternate network location [r14733]
+
+** Further work on ABCL-ASDF:RESOLVE [r14732] (Cyrus Hamon)
+
+** Find Maven under FreeBSD ports [r14723], under OS X Homebrew [r14776]
+
+
+* ABCL-JAR
+
+** Fix ASDF-JAR:PACKAGE [#376] [r14717][r14720][r14736] (Eduardo Bellani)
+
+*  ASDF
+
+** Updated to version 3.1.4.
+
+
+Version 1.3.1
+=============
+http://abcl.org/svn/tags/1.3.1/
+30-APR-2014
+
+## Fixed
+
+*  The underlying Java Function Interface (JFI) now converts CL:T and
+   CL:NIL to JAVA:+TRUE+ and JAVA:+FALSE+.  Users who wish to
+   reference a JAVA:+NULL+ should do so explicitly.
+   <http://abcl.org/trac/changeset/14694>
+
+*  Make JCALL work in more places.  Thanks to Olof-Joachim Frahm.
+   <http://abcl.org/trac/changeset/14683>
+
+*  Interpolate CL:SLEEP and THREADS:OBJECT-WAIT for timeouts below the
+   Planck timer ("1ns") to a nanosecond.
+   <http://abcl.org/trac/changeset/14679>
+
+*  Update to ASDF 3.1.0.103.
+   <http://abcl.org/trac/changeset/14661>
+
+   Fixes loading of Ironclad and other Quicklisp systems.
+
+*  Fix Uniform Naming Convention (aka "UNC" or "network") paths under Windows.
+   <http://abcl.org/trac/changeset/14659>
+
+   DIRECTORY now works again on UNC paths.
+
+   UNC paths may be either specified with either back slash (#\\) or
+   forward slash (#\/) doubled as the first character in a Pathname
+   namestring.
+
+   The patterns in
+
+        //<server>/<share>/[directories-and-files]
+
+   are parsed as
+
+    <server> is stored as HOST.
+
+    <share> is stored as DEVICE.
+
+    [directories-and-files] gets parsed as per the normal rules under
+    Windows.
+
+   Mixing namestrings with both backslash and slash characters can
+   lead to unpredictable results.  It is recommended not to use
+   backslash characters in namestrings if it can be avoided.  The
+   pathname printed representation is always normalized to using
+   forward slash delimiters.
+
+
+*  Find contrib based on system jar name.
+   <http://abcl.org/trac/changeset/14657>
+
+   From Olof-Joachim Frahm.
+
+
+Version 1.3.0
+=============
+http://abcl.org/svn/tags/1.3.0/
+15-MAR-2014
+
+## Features
+
+*  Make LispStackFrame.UNAVAILABLE_ARG a singleton object,
+   and lazily create the little used portions of the Lisp stack.
+
+    Aggressively cache and control the use of memory by the underlying
+    Lisp stack frame representation by introducing the private
+    LispThread.StackFrame and LispThread.StackSegments classes.
+
+    Contributed by Dmitry Nadezhin.
+
+    LispStackFrame object are allocated on every
+    LispThread.execute(...) .  However, they are seldom [accessed]
+    ([... verify via] inspect[tion of the] stack trace). This patch
+    delays allocation of LispStackFrame? objects until they are
+    requested.  Raw information about stack frames is stored in
+    stack. Stack is an Object[] array (more precisely a list of [...]4
+    [Mib] Object[] arrays).
+
+    ME: We are going to need a way to try to less agressively grab 4Mib
+    chunks in low memory situations.
+
+    Memory profiling of ABCL shows that the classes with largest
+    allocation count are org.armedbear.lisp.LispStackFrame and
+    org.armedbear.lisp.LispStackFrame.UnavailableArgument.
+
+    Contributed by Dmitry Nadezhin.
+
+    [r14572]: http://abcl.org/trac/changeset/14572
+    [r14579]: http://abcl.org/trac/changeset/14579
+
+*  ASDF 3.0.1.94 shipped with the implementation
+
+*  per function call stack and memory exception handler in CL:COMPILE
+
+   Inline calls to jrun-exception-protected (used by handler-bind to
+   catch out of memory conditions).  This commit saves generation
+   roughly 50 cls files.
+
+   [r14552]: http://abcl.org/trac/changeset/14552
+
+*  SYS:SHA256 audited
+
+    The functionality if the SYS:SHA256 algorithim has been audited for
+    use on inputs of single for files with recently shipping ORCL Java 7
+    implementations (through jdk-1.7.0_51).
+
+    [r14582]:  http://abcl.org/trac/changeset/14582
+
+* Connect to NetBeans controlled JDWP via SLIME
+
+    The Netbeans IDE configuration now includes a way to connect to
+    the running-under-jdb ABCL via SLIME.  One needs a version of
+    SLIME able to be loaded from its 'swank.asd' definition.  
+
+* Install 'abcl.jar' and 'abcl-contrib.jar' locally as Maven artifacts
+
+    The Ant `abcl.mvn.install` target now installs build artifacts
+    into the local Maven repository (Olof-Joachim Frahm)
+
+    [r14579]: http://abcl.org/trac/changeset/14606
+
+## Compatibility
+
+*  CL:DIRECTORY 
+
+   The implementation specific :RESOLVE-SYMLINKS argument to the ANSI
+   DIRECTORY function has been changed to nil.  This implements
+   behavior closer to SBCL and guarantees that a DIRECTORY operation
+   will not signal a file error.
+
+   [r14619]: http://abcl.org/trac/changeset/14619
+   [ticket-340]: http://abcl.org/trac/ticket/340
+
+## Fixes
+
+*  Fix CL:SLEEP for intervals less than a millisecond.  
+
+   For intervals less than or equal to a nanosecond, including an
+   interval of zero, the current thread merely yields execution to
+   other threads.
+
+   [r14632]: http://abcl.org/trac/changeset/14632
+
+
+## Tested
+
+### "Java_HotSpot(TM)_64-Bit_Server_VM-Oracle_Corporation-1.7.0_51-b13" "x86_64-Mac_OS_X-10.9.1"
+
+### "Java_HotSpot(TM)_64-Bit_Server_VM-Oracle_Corporation-1.8.0-b129" "x86_64-Mac_OS_X-10.9.2"
+
+## Contrib
+
+#### abcl-asdf
+
+*  Now working with both Maven 3.0.x and 3.1.x.  Thanks to Anton for
+   the help!
+
+   [ticket-328]: http://abcl.org/trac/ticket/328
+
+*  cache Maven dependency resolution to avoid repeated lookups.
+
+   Instead of calling ABCL-ASDF:RESOLVE in both the ASDF COMPILE-OP
+   and LOAD-OP, we now cache the result of invocation in COMPILE-OP
+   and add this value in the LOAD-OP phase. Contributed by Cyrus
+   Harmon.
+
+   [r14631]: http://abcl.org/trac/changeset/14631
+
+#### jna
+  
+   Now references jna-4.0.0.  Some incompatibility with CFFI ([in
+   progress with fixing upstream][cffi-easye]).
+
+[cffi-easye]: http://github.com/easye/cffi/
+
+
+Version 1.2.1
+=============
+http//abcl.org/svn/tags/1.2.1/abcl/CHANGES
+27 June 2013
+http://abcl.org/releases/1.2.1
+
+*  Tested:  orcl-jdk-1.7.0_25 orcl-jdk-1.6.0_43
+
+** ansi tests rc-2 failing 11-13 of 21708 total.  
+   Some regressions since 1.1.1
+
+*  Stablility fixes; additional Quicklisp compatibility
+
+** Fix (make-instance 'standard-generic-function)
+
+
+Version 1.2.0
+=============
+svn.uri=:"http//abcl.org/svn/tags/1.2.0/"
+http//abcl.org/svn/tags/1.2.0/abcl/CHANGES
+released at ECLM 2013 Madrid, ES // 01 June 2013 
+
+   * Package local nicknames to behave like SBCL
+
+   * ASDF 3.0.1 is now shipped with the implementation
+
+   * a more robust MOP implementation
+
+   * Common cases of creating purely synthetic JAVA:JNEW-RUNTIME-CLASS
+     now (mostly) work.  Please report corner cases for fixing.
+
+   * the system autoloader has been extended to cover functions bound to
+     symbol properties
+
+
+
+Version 1.1.1
+=============
+svn.uri=:"http://abcl.org/svn/tags/abcl/1.1.1/CHANGES"
+(14 Feburary 2013)
+
+  * All reported errors with the MOP implementation have been addressed.
+
+  * An autoloader for SETF expansion functions has been implemented,
+    eliminating the errors associated with not being able to use (SETF
+    SYMBOL) without first invoking SYMBOL as a function. [#266
+
+  * All outstanding regressions in the ANSI test suite with respect to
+    abcl-1.0.1 have been fixed.
+  
+  * The ability to resolve Maven components in ASDF system definitions has been restored.
+
+Issues Resolved
+---------------
+
+[#266] 	PSETF.47 ANSI regression 	
+[#284] 	checks in ensure-generic-function-using-class should occur later
+[#296] 	SLIME fails to initialize with (SETF DOCUMENTATION) undefined 	
+[#198] 	Hunchentoot run failure 	
+[#228] 	Need to implement autoloader facility for SETF functions
+[#288] 	Control character names 	
+[#290] 	Compiling (defvar *foo* '(quote . x)) throws an error 
+[#293] 	Loop and default value for of-type problem 	
+[#294] 	Reader doesn't recognize terminating characters in some cases
+[#299] 	ABCL-ASDF:MVN components not loading 
+
+Version 1.1.0
+=============
+svn.uri=:"http://abcl.org/svn/tags/1.1.0/abcl/"
+(07 December 2012)
+
+Features
+--------
+
+  *  A functioning (A)MOP implementation through the hard work of Rudi
+     Schlatte (@rudi)
+
+  *  The implementation can be used across many more Quicklisp systems
+     through a process of extensive testing.  Thanks @xach!
+
+     Nota bene: all of the following systems need patches to work as
+     of the 2012-10-13 Quicklisp.  All patches have been accepted in
+     at least an initial form by the upstream maintainers.
+
+     ** CLOSER-MOP 
+        Quite possible with local patches 
+     ** CFFI 
+       Needs patches to 2012-10-13 Quicklisp.  [!!?]
+       *** Dynamic interfaces idempotent across process -- no more reloading
+     ** HUNCHENTOOT 
+       *** some bugs with underlying streams to be fixed in abcl-1.2-dev
+     ** CXML
+        Basic XML parsing works.  XPath still borked. [???]     
+  *  Java 5 bytecode Compiler 
+
+     The internal Lisp-to-Java bytecode compiler has been hardened by
+     regression testing across Quicklisp libraries.  
+
+     **  Extensive interpreter/compiler bug fixes due to access to cl-test-suite [???] @antov
+     ** large objects (?!?)
+
+  *  The facility to construct runtime classes via JNEW-RUNTIME-CLASS (@astalla)
+
+    Pretty close to full coverage of primtives for creating synthethic
+    java classes at runtime.  Easy to extend with your needs; sensible
+    defaults.
+  
+    ** Fields
+    *** getter/setters 
+    ** Annotations
+
+
+  * ASDF
+
+     ** Stock ASDF-2.26.6 which includes #+abcl conditional patches
+        for the URL-PATHAME and JAR-PATHNAME implementation extensions
+        to ANSI.
+
+  *  ABCL-CONTRIB
+
+     ** ABCL-ASDF 
+
+        Network installation of binary artifacts named by Maven POM uris.
+
+        *** checks at runtime if a given class is present in the
+            accessible classloaders
+
+        *** If the check for the presence of a class fails, find a
+            maven-3.0.4 binary locally, execute its Aether connector
+            to retrieve its transitive dependencies from the network.
+
+      ** JSS 
+         
+         Java Syntax Sucks.  q.v [lsw2]
+    
+         Extensive bugfixing wrt. method resolution [#229]
+
+      ** JFLI
+
+         A "captured from the wild" version of what @rich.hickey did before Clojure.
+        
+Changes
+-------
+
+  * [#249] PATHNAME merge semantics DWIMs on an inferred type
+
+  Extends ANSI PATHNAME in a non-conforming manner, which was probably
+  already the case.
+
+  * [r13695] Reimplementation of global symbol macros to avoid using
+    the symbol's value slot.
+
+  * [r13696] DEFMACRO now supports documentation strings as per the
+    ANSI specification.
+
+  * [r13700] ABCL loads under the Weblogic 10.3 application server.
+
+  * [r13768] [#193] Allow zero-length symbols
+  
+  * [r13785] JNEW-RUNTIME-CLASS gets fields and annotations
+  
+  * [r13790] JNEW-RUNTIME-CLASS getters/setters for fields
+
+  * [r13796] [r13797] N3 DOAP description for ABCL
+
+  * [r13803] Build target 'abcl-contrib.jar' packages ABCL-CONTRIB
+
+Fixes
+-----
+
+  * ANSI [#241]
+ 
+     ** &AUX parameters fixes RESTAS 
+
+    
+  * [#221] Stack exhaustsion on funcall in non-existing package
+
+  * [#113] DEFSTRUCT concurrency 
+
+  * [#216][#211] Compiler 
+
+    ** stack inconsistency
+
+  * [#187] Better SORT and STABLE-SORT via Jorge Tavares [???]
+
+Issues Resolved
+---------------
+
+    * [#234]    ABCL-ASDF mvn errors with VERSION slot unbound  
+    * [#237]    JNA fails to load blocking CFFI 
+    * [#249]    Problems under Ubuntu   
+    * [#250]    SYS:SHA256 does not compile     
+    * [#265]    COMPILE-FILE.2 COMPILE-FILE.2A ANSI regression  
+    * [#268]    ABCL-ASDF working with maven-3.0.3      
+    * [#269]    SLIME cannot browse systems with November Quicklisp     
+    * [#270]    Is BUGS.DEFEGENERIC.1 a valid test?     
+    * [#271]    ASDF-2.26 changes synced upstream
+    * [#272]    DESCRIBE.[14] ANSI regression   rschlatte       
+    * [#275]    ABCL-CONTRIB still provided if abcl-contrib.jar cannot be located       
+    * [#276]    defmethod doesn't call add-method       
+    * [#277]    reinitialize-instance on class metaobjects incorrect
+    * [#113]    DEFSTRUCT redefinition can crash ABCL on MAKE-STRUCT
+    * [#199]    CL:DEFMETHOD fails for &AUX arguments that reference other arguments    
+    * [#213]    ABCL-ASDF breakage on trunk     
+    * [#215]    ABCL-ASDF:RESOLVE should work in more (some?) cases     
+    * [#229]    JSS method resolution failure   
+    * [#246]    CFFI: dynamically generated classes referred from .fasl can not be found after ABCL restart
+    * [#168]    Compilation fails for quicklisp let-plus        
+    * [#187]    Stack Overflow for Worst-case Vector Sort       
+    * [#202]    ENSURE-GENERIC-FUNCTION assumes LAMBDA-LIST is NIL
+    * [#204]    abcl-asdf maybe-parse-mvn ignores version information
+    * [#205]    JSS logic for resolving methods a little wonky (could use better diagnostics on why resolution has failed)      
+    * [#207]    DECLARE should signal conditions when type declarations are violated
+    * [#210]    Add JFLI to contrib     
+    * [#217]    ANSI tests wont run on Revision 14011: /trunk/abcl      
+    * [#219]    Keyword argument checking for lambda lists is too lenient for ANSI      
+    * [#220]    Lambda list checking too lenient        
+    * [#224]    Autoloader fails when *read-XXXX* variables bound to non-standard values        
+    * [#225]    One of the paths in STD-COMPUTE-DISCRIMINATING function not working     
+    * [#235]    Compiled cl+ssl sources not reloadable  
+    * [#241]    &rest and &aux can't coexist anymore in lambda lists    
+    * [#243]    ClassCastException in MAKE-PATHNAME     
+    * [#245]    Slots of a class with a custom meta-class are reported as unbound.      
+    * [#247]    CFFI: $Proxy3 is not assignable to com.sun.jna.Pointer  
+    * [#252]    MOP rework broke profiler?      
+    * [#254]    Cannot load ASDF systems in jar archives with ASDF-BINARY-LOCATIONS-COMPATIBILTY enabled
+    * [#255]    ASDF file encoding specification doesn't work   
+    * [#263]    loading systems from abcl-contrib fails if CLASSPATH has a component with wildcard
+    * [#264]    abcl-asdf.asd broken since revision 14233
+    * [#60      ]Implement USE-FAST-CALLS properly
+    * [#130]    "SLIME under Windows has ""extra"" CRLF"        
+    * [#172]    DOCUMENTATION does not work for generic functions       
+    * [#174]    Conformance bug in time implementation when using SLIME 
+    * [#175]    abcl.release target fails occasionally  unassigned      
+    * [#189]    Compiler fails for 'unsigned-byte type declaration      
+    * [#201]    &WHOLE broken in DEFINE-METHOD-COMBINATION      
+    * [#206]    COMPILER-UNSUPPORTED-FEATURE-ERROR is derived from CONDITION, rather than from ERROR    
+    * [#208]    "Files loaded via ""--load <FILE>"" on the command line have no pathname defaults"      
+    * [#211]    closure-common fails to load correctly after compilation        
+    * [#214]    Stack overflow when compiler macro with fallback is triggered   
+    * [#232]    Allow wrapper script to reference install directory instead of build directory
+    * [#192]    ASDF::IMPLEMENTATION-IDENTIFIER contains ABCL build environment identifier
+    * [#195]    prompt is displayed twice when evaluating NIL at the REPL
+
+Version 1.0.1
+==============
+svn.uri=:"http://abcl.org/svn/tags/1.0.1/abcl/"
+(09 January 2012)
+
+Changes
+-------
+
+  * Updated ASDF to 2.019
+
+  * User Manual now contains more polished formating from docstring
+    groveling, an index of symbols, and additional enhancements.
+
+  * 'abcl.properties.in' now contains examples of optimizing the ABCL
+    wrapper script for 64bit instances for Java7 and for Java6.  
+
+  * [r13720] Randomize string hash computation to guard against
+    exploits.
+
+  * [r13723] New internal API in Package.java for looking up internal
+    vs. external symbols.
+
+Fixes
+-----
+
+  * [#181][r13718] The implementation now correctly loads ASDF definitions
+    from jar archives.  This had prevented the ABCL-CONTRIB loading
+    mechanism from working.
+
+  * [#177] Made the mechanism for locating the abcl-contrib archive
+    more robust
+
+  * [#177] LIST-DIRECTORY no longer ignores :RESOLVE-SYMLINKS
+
+  * [r13706] Fix Streadm.readToken() bug reported by Blake McBride.
+
+  * [#183][r13703] Move threads-jss.lisp out of system source to
+    restore conditional recompilation logic.
+
+
+Version 1.0.0
+==============
+svn.uri=:"http://abcl.org/svn/tags/1.0.0/abcl/"
+released at the European Common Lisp Meeting Amsterdam 2011
+(22 October 2011)
+
+
+Features
+--------
+
+ * (Draft) manual
+
+ * Much better Quicklisp system capabilities (trivial-garbage,
+ bordeaux-threads, parenscript, cxml, et. al.)
+
+Changes
+-------
+
+ * Updated ASDF to 2.017.22
+
+Fixes
+-----
+
+ * CLOSURE-HTML now compiles
+
+ * DEFINE-METHOD-COMBINATION long form implemented
+
+
+Version 0.27.0
+==============
+svn.uri="http://abcl.org/svn/tags/0.27.0/"
+
+
+Features
+--------
+
+ * ABCL works as an SBCL build host
+
+ * Huge (> 64k) literal object support (fixes CL-UNICODE support)
+
+ * The ABCL-ASDF contrib allows the specification of JAR-FILE or
+   JAR-DIRECTORY components that can be resolved via a PATHNAME.  The
+   MVN component bootstraps a Maven3 Aether connector to locally
+   replicate a versioned jar artifact for dynamic inclusion in the
+   CLASSPATH.
+
+Changes
+-------
+
+ * Renamed LispObject.writeToString() method to (more Lispy) printObject()
+
+ * New LispObject.princToString() for user readable output
+
+ * Changed behaviour of LispObject.unreadableString() to signal
+   errors when *PRINT-READABLY* is non-NIL
+
+ * Static initializers moved to <clinit>() (java: static { }) to
+   prevent repeated execution when invoking the constructor multiple times
+
+ * Compiler clean-ups
+
+ * Changed implementation of LABELS to eliminate the need
+   to *always* create a closure
+
+ * File compiler (COMPILE-FILE) clean-ups
+
+ * When calling a function with the wrong number of arguments,
+   report the expected (range) of arguments
+
+ * Upgraded ASDF to 2.017
+
+ * JSS:JLIST-TO-LIST now converts any java.list.List to a Lisp list.
+
+ * The ASDF extensions from JSS for the "jar-directory", "jar-file",
+   and "class-file-directory" types have been refactored into the
+   ABCL-ASDF contrib as well as the *ADDED-TO-CLASSPATH* variable
+   which records dynamically added dependencies.  Use the
+   JSS:ENSURE-COMPATIBILITY function to have JSS include these
+   dependencies.  
+
+*  As long as ABCL-ASDF:ENSURE-MVN-VERSION can dynamically introspect
+   and then load Maven 3 libraries at runtime, ASDF components of type
+   MVN can now be used to specify versioned JVM artifacts.
+
+ * Threads spawned by THREADS:MAKE-THREAD can terminate the Lisp image
+   via the EXT:QUIT and EXT:EXIT functions.
+
+
+Fixes
+-----
+
+ * MULTIPLE-VALUE-PROG1.10 (ansi test) fixed
+
+ * [ticket #148] READTABLE-CASE :INVERT doesn't work for uninterned symbols
+
+ * [ticket #161] READTABLE-CASE of current readtable affects FASL content
+
+ * [ticket #162] Non-symbol in variable position of SETQ form causes
+   class verification failure
+
+ * [ticket #163] Local functions shadow global macro and function bindings
+   (fixes PARENSCRIPT support)
+
+ * [ticket 158] Readable printing of the string "#<abc>" does not signal
+   a PRINT-NOT-READABLE error anymore
+
+ * Fixed SYNTAX.SHARP-BACKSLASH.6 and SYNTAX.SHARP-BACKSLASH.7
+
+ * Fixed many PPRINT.* test suite failures
+
+ * [ticket #151] LOAD fails for whitespace in JAR-PATHNAME
+
+
+Version 0.26.2
+==============
+http://abcl.org/svn/tags/0.26.2/abcl
+(14 August 2011)
+
+Features
+--------
+  * Enable compilation with Java 7
+
+Fixes
+-----
+  * Fix loading from fasls under Windows with whitespace in pathname.
+
+  * Fix #131: Don't include ':' in the version string.
+
+  * Fix #141: SETF of APPLY not working with arbitrary function.
+
+  * Include filename in the error string being reported.
+
+  * Include the test source in the release.
+
+  * Include ASDF definition in source release.
+  
+
+Version 0.26.1
+==============
+http://abcl.org/svn/tags/0.26.1/abcl
+(27 July 2011)
+
+Features
+--------
+
+ * Upgrade ASDF to 2.017.
+
+Fixes
+-----
+
+ * Fix compilation problems by including the
+   org.armedbear.lisp.protocol source in the build process
+
+ * Printing of conditions defined with DEFINE-CONDITION
+
+ * Regression with failing SYNTAX.SHARP-BACKSLASH.6
+   and SYNTAX.SHARP-BACKSLASH.7 ANSI test suite failures
+
+ * Multiple failures in PPRINT.* ANSI test suite failures
+
+ * String interop with Java for strings with fill pointer
+
+ * Made #\Uxxxx a synonym for character codes with values greater than
+   255 on input, but never output as the character name by the
+   implementation.
+
+Version 0.26.0
+==============
+http://abcl.org/svn/tags/0.26.0/abcl
+(10 July 2011)
+
+Features
+--------
+
+ * Add support for weak reference objects
+
+ * Add support for finalizers on LispObject derived classes
+
+ * Upgrade ASDF to 2.0.16.1
+
+ * #\ reader macro now understands #\uNNNN as unicode codepoints
+
+ * JAVA:JRESOLVE-METHOD returns same method as would have been
+   called by JAVA:JCALL with the same arguments
+
+ * Ant 'update' target to upload application to Google App Engine
+
+ * Simple RUN-PROGRAM implementation
+
+ * Support for custom slot definitions according to AMOP
+
+ * New JAVA:*JAVA-OBJECT-TO-STRING-LENGTH* variable to control pretty
+   printing of Java objects
+
+ * JSS - more dynamic Lisp/Java FFI - (http://lsw2.googlecode.com/svn/trunk)
+   imported
+
+ * (REQUIRE :ABCL-CONTRIB) adds 'abcl-contrib.jar' to the ASDF search path
+
+ * Support for weak references in hash tables through a :WEAKNESS keyword
+   argument to MAKE-HASH-TABLE; with SYS:HASH-TABLE-WEAKNESS for inspection
+
+ * Support for loading ASDF systems from JAR archives
+
+ * Fast SHA1, SHA256 and SHA512 cryptographic hashes for files
+
+ * Beginnings of a manual
+
+ * ABCL/ASDF integration with Maven provided systems
+
+ * ASDF-JAR:PACKAGE function to package ASDF systems into JARs
+
+Changes
+=======
+
+ * Reduced code size in the compiler by changing COMPILE-TEST-FORM
+
+ * Enhanced SLIME inspector for JAVA:JAVA-OBJECT
+
+ * Reimplemented MERGE-PATHNAMES
+
+ * TRANSLATE-PATHNAME aligned with SBCL's behaviour if version is wild
+
+ * Removed PRINT-OBJECT methods duplicating Java side code
+
+ * Refactored code in SYSTEM:ZIP function
+
+ * Allow JCOERCE to convert any number to java.lang.Byte (using
+   its two's complement)
+
+ * Replace MAKE-IMMEDIATE-OBJECT with +NULL+, +TRUE+ and +FALSE+ constants
+   (the only supported ones)
+
+ * Better separation between java-collections package and Java FFI
+
+ * JAVA:ADD-TO-CLASSPATH is now a generic function
+
+Fixes
+=====
+
+ * Google App Engine example fixed
+
+ * MAKE-PATHNAME erroneously merges directories as in MERGE-PATHNAME
+
+ * Pretty printer routines using SYS:OUTPUT-OBJECT with GRAY-STREAM
+
+ * Value of *PRINT-CASE* affects file (to FASL) compilation
+
+ * MAKE-PATHNAME ignores version in :DEFAULTS
+
+ * URI decoding algorithm in Pathname.java
+
+ * JNEW-ARRAY-FROM-ARRAY should create byte[] arrays
+
+Version 0.25.0
+==============
+http://abcl.org/svn/tags/0.25.0/abcl
+(10 March 2011)
+
+Features
+--------
+
+* Add :resolve-symlinks keyword argument for DIRECTORY.
+
+* Support -- as a command line parameter for the REPL.
+
+* Preliminary support for Maven deployment.
+
+* Add an initargs cache for speedups in check-initargs. This should
+  make the initarg checking in CLOS quite a bit faster.
+
+* Incorporate output of 'svnversion' into LISP-IMPLEMENTATION-VERSION.
+
+* Ant target for generating Javadoc.
+
+Fixes
+-----
+
+* [svn r13229] Remove non-existing THREAD-LOCK and THREAD-UNLOCK from autoloads.
+
+* [svn 13228] Fix incorrect elimination of named local functions
+  declared inline when they're actually reified in the flet/labels body.
+
+* [svn r13217] Forward-referenced classes work properly now.
+
+* [svn r13209] Add initarg checking to REINITIALIZE-INSTANCE.
+
+* [svn r13204] FINALIZE-INHERITANCE is (more) AMOP compatible.
+
+* [svn r13203] Create ATOMIC-DEFGENERIC macro, in order to eliminate
+  FMAKUNBOUND calls and the resulting windows where no function is bound to
+  symbols which are the most essential building blocks in CLOS/AMOP.
+
+* [svn r13200] Atomically swap generic functions into place of temporary
+  DEFUNs for all standard-class slot accessors.
+  Note: This addresses the recursive requirement to be able
+  to allocate objects and classes while changing the functions
+  used to create them.
+
+* [svn r13196] Provide more context regarding the reason of autoloading.
+  Note: This change *hugely* helps debugging.
+
+* [svn r13189] Fix MACROEXPAND-ALL autoloader which should be
+  loaded from 'format.lisp'.
+
+* [svn r13188] Fix DEFSTRUCT trying to generate accessors named NIL
+
+* [svn r13187] Fix #125: FASL reader should not convert symbol
+  case [Qi FASL loading issues].
+
+* [svn r13185] Fix #119: Incorrect dynamic environment for
+  evaluation of :CLASS allocation slot initforms.
+
+* [svn r13182-r13184] Fix error printing issues.
+
+* [svn r13181] Increase autoload verbosity: include FASLs too
+  (not only Java classes).
+
+Changes
+-------
+
+* Merge 'unsafe-p-removal' branch.
+
+Version 0.24.0
+==============
+http://abcl.org/svn/tags/0.24.0/abcl
+(22 January 2011)
+
+Features
+--------
+
+* [svn r130103-r13107] Implemented JNULL_REF_P to distinguish a
+  JAVA-OBJECT which contains a Java "null" from the Lisp NIL.
+
+* [svn r13102] More type-conversion helpers in JAVA package:
+  LIST-FROM-JARRAY, VECTOR-FROM-JARRAY, and LIST-FROM-JENUMERATION.
+
+* [svn r13078] JVM::MAKE-CLASS-INTERFACE-FILE provides an interface
+  for the creation of Java interfaces as serialized by the new
+  classwriter code.  An example of use can be found in
+  "examples/misc/dynamic-interfaces.lisp".
+
+* [svn r13087] Upgraded to ASDF-2.012
+
+
+Fixes
+-----
+
+* [svn r13135] Fix the problem that FASLs can contain
+  a limited number of functions.
+
+* [svn r13117][ticket #117] Fix stack inconsistency error.
+
+* [svn r13018][ticket #114] Fix strange backtrace growth.
+
+* [svn r13105] Fix Pathname.java failing to find boot.lisp in an
+  "unpacked JAR" situation found by running ABCL in the Glassfish v3
+  servlet container.
+
+* [svn r13096] For arrays, add initialization with the default value
+  of the element type if neither INITIAL-ELEMENT nor INITIAL-CONTENT
+  have been specified.  Found by: dmalves_ (freenode irc nick).
+
+* [svn r13094] Eliminate flushes after every character in
+  javax.scripting support.
+
+* [svn r13090] Make --batch exit, use Lisp.exit() in places where
+  applicable so that the streams are flushed, hence allowing --eval
+  output to be flushed.
+
+* [svn r13088] Fix algorithim error in writing byte sequences via
+  RandomAccessCharacterFile.  Found and fixed by David Kirkman.
+
+
+Changes
+-------
+
+* [svn r13141-13146,13156] Make ABCL a well behaving library to better
+  support embedding: NEVER call System.exit() again.  Instead, ABCL now
+  throws org.armedbear.lisp.ProcessingTerminated and
+  org.armedbear.lisp.IntegrityError.
+
+* [svn r13111] Added a "tools" directory available in SVN repository
+  to contain tools for developing ABCL in various states.  The first
+  inhabitant is 'code-grapher.lisp' that provides a prototype to
+  diagram a JVM instruction sequence via graphviz.
+
+* [svn r13101] Reduced verbosity of the AbclScriptEngine.
+
+* [svn r13097-13100] Slight refactoring of PATHNAME code, further
+  specifying URI escaping rules.
+
+* [svn r13091-2] Better error reporting for UnhandledCondition thrown
+  from the Interpreter, storing the originating Java error in the
+  "cause" field if the cause is a subclass of JAVA_EXCEPTION.
+
+
+Version 0.23.1
+==============
+http://abcl.org/svn/tags/0.23.1/abcl
+(01 December 2010)
+
+Fixes
+-----
+
+* [svn r13509-10] Allow JSR-223 clients to query ABCL metadata without
+  incurring the entire interpreter startup time.
+
+* [svn r13506] Fix probles with loading FASLs in directories
+  containing whitespace characters.
+  
+  We now require all PATHNAME objects constructed via a namestring
+  containing the "file" scheme to be URI encoded according to
+  RFC3986.  
+
+
+Version 0.23
+============
+http://abcl.org/svn/tags/0.23.0/abcl
+(25 November, 2010)
+
+Features
+--------
+
+* [svn r12986] Update to ASDF 2.010.1
+
+* [svn r12982] Experimental support for the long form
+     of DEFINE-METHOD-COMBINATION
+
+* [svn r12994] New java-interop macros: CHAIN and JMETHOD-LET
+
+* [svn r13030-31,r13034] ASDF-INSTALL improvements: Ensure that the
+     ASDF registry contains the ASDF-INSTALL locations.  Better
+     resolution mechanism for 'gpg' binary.
+
+Fixes
+-----
+
+* [svn r13039] Restore the Lisp-based build
+
+* [ticket #108][svn r13027] Fix download problems with ASDF-INSTALL
+
+* [svn r12995-12997] Changes to generated byte code to prevent JRockit JVM
+     from crashing when optimizing it
+
+* Various fixes in order to complete the Maxima test suite without failures
+
+* [ticket #98] THREAD type specifier not exported from the THREADS package
+
+* [svn r12946] Fix CLOS thread-safety
+
+* [svn r12930] Fix non-constantness of constant symbols when using SET
+
+* [svn r12929] Don't throw conditions on floating point underflow
+    (fixes Maxima failures)
+
+* [svn r12928] Fix for Java-collections-as-lisp-sequences support
+
+* [svn r12927] Fix for regression to moved threads related symbols
+
+* [ticket #104] SET changes value of symbols defined with DEFCONSTANT
+
+* [ticket #88] Need a predicate to indicate source of compiled version
+      ie Java vs Lisp
+
+* [ticket #106] DEFSTRUCT :include with :conc-name creating overwriting
+      inherited slot accessors
+
+* [ticket #97] Symbol imported in multiple packages reported multiple
+      times by APROPOS
+
+* [ticket #107] Incorrect compilation of (SETF STRUCTURE-REF) expansion
+
+* [ticket #105] DIRECTORY ignores :WILD-INFERIORS
+
+Other
+-----
+
+* [svn r12918] Compiler byte code generator cleanup: introduction
+      of generic class file writer, elimination of special purpose code
+      in the compiler.
+
+* Number of hashtable implementations reduced to 1 (from 5)
+
+* Reduced use of 'synchronized' global hash table access by using
+      the java.util.concurrent package
+
+Version 0.22
+============
+http://abcl.org/svn/tags/0.22.0/abcl
+(September 24, 2010)
+
+Fixes
+-----
+
+* [svn r12902] Fix reading data with scandinavian latin1 characters
+
+* [svn r12906] Respect the CLASSPATH environment variable in the
+  abcl wrapper scripts
+
+* [ticket #103] DOCUMENTATION not autoloaded
+
+Other
+-----
+
+* [svn r12819] Until-0.22-compatibility hacks (in threads support) removed
+
+
+
+Version 0.21
+============
+http://abcl.org/svn/tags/0.21.0/abcl
+(July 24, 2010)
+
+
+Features
+--------
+
+* [svn r12818] Update to ASDF 2.004
+
+* [svn r12738-805] Support for custom CLOS slot definitions and
+  custom class options.
+
+* [svn r12756] slot-* functions work on structures too.
+
+* [svn r12774] Improved Java integration: jmake-proxy can implement
+  more than one interface.
+
+* [svn r12773] Improved Java integration: functions to dynamically
+  manipulate the classpath.
+
+* [svn r12755] Improved Java integration: CL:STRING can convert Java
+  strings to Lisp strings.
+
+Fixes
+-----
+
+* [svn 12809-10-20] Various printing fixes.
+
+* [svn 12804] Fixed elimination of unused local functions shadowed by macrolet.
+
+* [svn r12798-803] Fixed pathname serialization across OSes.
+  On Windows pathnames are always printed with forward slashes,
+  but can still be read with backslashes.
+
+* [svn r12740] Make JSR-223 classes compilable with Java 1.5
+
+Other
+-----
+
+* [svn r12754] Changed class file generation and FASL loading
+  to minimize reflection.
+
+* [svn r12734] A minimal Swing GUI Console with a REPL
+  is now included with ABCL.
+
+Version 0.20
+============
+http://abcl.org/svn/tags/0.20.0/abcl
+(24 May, 2010)
+
+
+Features
+--------
+
+* [svn r12576] Support for CLOS METACLASS feature.
+
+* [svn r12591-602] Consolidation of copy/paste code in the readers.
+
+* [svn r12619] Update to ASDF2 (specifically to ASDF 1.719).
+
+* [svn r12620] Use interpreted function in FASL when compilation fails.
+
+* [ticket #95] PATHNAME-JAR and PATHNAME-URL subtypes now handle jar
+  and URL references working for OPEN, LOAD, PROBE-FILE,
+  FILE-WRITE-DATE, DIRECTORY, et. al.
+
+* Many small speed improvements (by marking functions 'final').
+
+* [ticket #91] Threads started through MAKE-THREAD now have a
+    thread-termination restart available in their debugger.
+
+* [svn r12663] JCLASS supports an optional class-loader argument.
+
+* [svn r12634] THREADS:THREAD-JOIN implemented.
+
+* [svn r12671] Site specific initialization code can be included in
+  builds via the 'abcl.startup.file' Ant property.
+
+Fixes
+-----
+
+* [ticket #89] Inlining of READ-LINE broken when the return value
+    is unused.
+
+* [svn r12636] Java class verification error when compiling PROGV
+    in a context wanting an unboxed return value (typically a
+    logical expression).
+
+* [svn r12635] ABCL loads stale fasls instead of updated source
+    even when LOAD is called with a file name without extension.
+
+* [ticket #92] Codepoints between #xD800 and #xDFFF are incorrectly
+    returned as characters from CODE-CHAR.
+
+* [ticket #93] Reader doesn't handle zero returned values from
+    macro functions correctly.
+
+* [ticket #79] Different, yet similarly named, uninterned symbols
+    are incorrectly coalesced into the same object in a fasl.
+
+* [ticket #86] No restarts available to kill a thread, if none
+    bound by user code.
+
+* [svn r12586] Increased function dispatch speed by eliminating
+    FIND-CLASS calls (replacing them by constant references).
+
+* [svn r12656] PATHNAME-JAR now properly uses HTTP/1.1 HEAD requests
+  to detect if remote resource has been changed.
+
+* [svn r12643] PATHNAME-JAR now properly references Windows drive
+    letters on DEVICE other than the default.
+
+* [svn r12621] Missing 'build-from-lisp.sh' referenced in README now
+    included in source release.
+
+Other
+-----
+
+* [svn r12581] LispCharacter() constructors made private, in favor
+    of getInstance() for better re-use of pre-constructed characters.
+
+* [svn r12583] JAVA-CLASS reimplemented in Lisp.
+
+* [svn r12673] Load 'system.lisp' moved later in boot sequence so
+    unhandled conditions drop to debugger.
+
+* [svn r12675] '--nosystem' commandline option inhibits loading of
+    'system.lisp'.
+
+* [svn r12642] Under Windows, pathname TYPE components can now contain
+    embedded periods iff they end in '.lnk' to support shortcuts.
+
+
+Version 0.19
+============
+http://abcl.org/svn/trunk/abcl
+(14 Mar, 2010)
+
+Features
+--------
+
+* [svn r12518] *DISASSEMBLER* may now contain a hook which returns the
+  command to disassemble compiled functions.
+
+* [svn r12516] An implementation of user-extensible sequences as
+  proposed in Christopher Rhodes, "User-extensible sequences in Common
+  Lisp", Proc. of the 2007 International Lisp Conference.
+
+* [svn r12513] Implement SYS:SRC and SYS:JAVA logical pathname
+  translations for system Lisp source and the root of the Java package
+  structure, respectively.
+
+* [svn r12505] All calls to anonymous functions and local functions that have
+  been declared inline are now converted to LET* forms, reducing stack usage
+  and the number of generated classes.
+
+* [svn r12487] An initial port ASDF-INSTALL now forms the first ABCL
+  contrib.  Such contribs are optionally built by the Ant target
+  'abcl.contrib'.  ASDF-INSTALL is not expected to work very well
+  under Windows in its present state.
+
+* [svn r12447] [ticket:80] REQUIRE now searches for ASDF systems.
+
+* [svn r12422] Jar pathname support extensively re-worked and tested
+  so that LOAD, PROBE-FILE, TRUENAME, DIRECTORY, and WRITE-FILE-DATE
+  all work both for local and remote jar pathnames of the form
+  "jar:URL!/JAR-ENTRY".
+
+  The loading ASDF systems from jar files is now possible.
+
+  SYS:PATHNAME-JAR-P predicate signals whether a pathname references a
+  jar.
+
+  NB: jar pathnames do *not* currently work as an argument to OPEN.
+
+  SYS:UNZIP implemented to unpack ZIP files.
+
+  SYS:ZIP now has a three argument version for creating zip files with
+  hierarchical entries.
+
+* [svn r12450] Collect unprocessed command-line arguments in
+  EXT:*COMMAND-LINE-ARGUMENT-LIST* (Dennis Lambe Jr.)
+
+* [svn r12414] SYS::%GET-OUTPUT-STREAM-ARRAY returns a Lisp byte array
+  from a Java byte array stream.
+
+* [svn 12402] ABCL.TEST.LISP:RUN-MATCHING will now execute that subset
+  of tests which match a string.
+
+
+Fixes/Optimizations
+-------------------
+
+* [svn r12526] Unbinding of PROGV bound variables on local transfer
+  of control (within-java-function jump targets)
+
+* [svn r12510] The new ansi-test WITH-STANDARD-IO-SYNTAX.23 passes.
+  Our with-standard-io-syntax implementation now correctly resets all necessary
+  pprint variables. Patch by Douglas R. Miles, thanks for the contribution!
+
+* [svn r12485] Pathnames starting with "." can now have TYPE.
+
+* [svn r12484] FASLs containing "." characters not used to indicate
+  type (i.e. ".foo.bar.baz.abcl") can now be loaded.
+
+* [svn r12422] Pathname.java URL contructor under Windows now properly
+  interprets the drive letter.
+
+* [svn r12449] The 'abcl.jar' produced by Netbeans now contains a valid
+  manifest (found by Paul Griffionen).
+
+* [svn r12441] ZipCache now caches all references to ZipFiles based on
+  the last-modified time for local files.  Remote files are always
+  retrieved due to problems in the underlying JVM code.
+
+  SYS:REMOVE-ZIP-CACHE implements a way to invalidate an entry given a
+  pathname.
+
+* [svn r12439] Remove duplication of java options in Windows
+  'abcl.bat' script.
+
+* [svn r12437] CHAR-CODE-LIMIT is the upper execlusive limit (found by
+  Paul Griffionen).
+
+* [svn r12436] Describe formatting was missing a newline (reported by
+  Blake McBride).
+
+* [svn 12469] Ensure that FILE-ERROR always has a value (possibly NIL)
+  for its PATHNAME member.
+
+* [svn r14222] MERGE-PATHNAMES no longer potentially shares structure
+  between its result and *DEFAULT-PATHNAME-DEFAULTS*.
+
+* [svn r12416] Fixed ANSI LAMBDA.nn test failures caused by errors in
+  lambda inlining.
+
+* [svn r12417] [ticket:83] Fix TRANSLATE-LOGICAL-PATHNAME regression.
+  (Alan Ruttenberg).
+
+* [svn r12412] Optimize memory efficiency of FORMAT by use of a
+  hashtable rather than a CHAR-CODE-LIMIT array.
+
+* [svn r12408] FIND-SYMBOL requires a  string argument.
+
+* [svn r12400] Make NIL (as symbol) available to the compiler.
+
+* [svn r12398] Move lambda list analysis to compile time where possible.
+
+* [svn r12397] BROADCAST-STREAM obeys default external format fixing
+  ANSI MAKE-BROADCAST-STREAM.8.
+
+* [svn r12395] Improve arglist display for SLIME (Matthias Hölzl).
+
+* [svn r12394] Optimize array utilization in closures.
+
+* [svn r12393] Optimize array functions in compiler which don't
+  require clearing the VALUES array.
+
+* [svn r12392] Optimize/normalize aspects of boot.lisp
+
+* [svn r12391] Prevent duplicated subclasses form occuring.
+
+
+Other
+-----
+
+* [svn r12447] SYS::*MODULE-PROVIDER-FUNCTION* now provides a mechanism
+  to extend the REQUIRE resolver mechanism at runtime.
+
+* [svn r12430] Ant based build no longer writes temporary files to
+  contain the Lisp build instructions.
+
+* [svn r12481] STANDARD-CLASS now has slots to be inherited by
+  deriving metaclasses in support of the (in progress) work on
+  metaclass.
+
+* [svn r12425] No longer ignore the METACLASS defclass option in
+  support of the (in progress) work on metaclass
+
+* [svn r12422] SYS::*LOAD-TRUENAME-FASL* now contains the TRUENAME of
+  the Java "*.cls" component when loading a packed FASL.
+
+* [svn r12461] Human readable Java representations for class cast
+  exceptions for NULL and UNBOUND values.
+
+* [svn r12453 et. ff.] Large numbers of the implementation of Java
+  primitives have been declared in a way so that a stack trace
+  provides a much more readable indication of what has been invoked.
+  Primitives which extend Primitive are prefixed with "pf_"; those
+  which extend SpecialOperator are prefixed with "sf_".
+
+* [svn r12422] The internal structure of a jar pathname has changed.
+  Previously a pathname with a DEVICE that was itself a pathname
+  referenced a jar.  This convention was not able to simultaneously
+  represent both jar entries that were themselves jar files (as occurs
+  with packed FASLs within JARs) and devices which refer to drive
+  letters under Windows.  Now, a pathname which refers to a jar has a
+  DEVICE which is a proper list of at most two entries.  The first
+  entry always references the "outer jar", and the second entry (if it
+  exists) references the "inner jar".
+
+* [svn r12419] Ant 'abcl.release' target centralizes the build steps
+  necessary for creating releases.
+
+* [svn r12409] Compiler now rewrites function calls with (LAMBDA …) as
+  the operator to LET* forms.
+
+* [svn r12415] CLASS-FILE renamed to ABCL-CLASS-FILE to prepare for
+  (in progress) reworking of Stream inheritance.
+
+* [svn r123406] 'test/lisp/abcl/bugs.lisp' forms a default location to
+  add unit tests for current bug testing.  The intention is to move
+  these tests into the proper location elsewhere in the test suite
+  once they have been fixed.
+
+* [svn r124040] Java tests upgraded to use junit-4.8.1.  Netbeans
+  project runtime classpath now uses compilation results before source
+  directory, allowing the invocation of ABCL in interpreted mode if
+  the Ant 'abcl.compile.lisp.skip' property is set.  Java unit tests
+  for some aspects of jar pathname work added.
+
+*  New toplevel 'doc' directory now contains:
+
+   + [svn r12410] Design for the (in progress) reworking of the Stream
+     inheritance.
+
+   + [svn r12433] Design and current status for the re-implementation
+     of jar pathnames.
+
+* [svn r12402] Change ABCL unit tests to use the ABCL-TEST-LISP definition
+  contained in 'abcl.asd'.  Fixed and renabled math-tests.  Added new
+  tests for work related to handling jar pathnames.
+
+* [svn r12401] The REFERENCES-NEEDED-P field of the LOCAL-FUNCTION structure now
+  tracks whether local functions need the capture of an actual
+  function object.
+
+
+Version 0.18.1
+==============
+http://abcl.org/svn/tags/0.18.1/abcl
+(17 Jan, 2010)
+
+Features:
+
+ * Support for printing java objects with print-object
+ * Support for disassembling proxied functions
+
+Bugs fixed:
+
+ * maxima works again
+
+Version 0.18.0
+==============
+http://abcl.org/svn/tags/0.18.0/abcl
+(12 Jan, 2010)
+
+
+Features:
+
+ * Programmable handling of out-of-memory and stack-overflow conditions
+ * Faster initial startup (to support Google App Engine)
+ * Faster special variable lookup
+ * New interface for binding/unwinding special variables
+ * Implement (SETF (STREAM-EXTERNAL-FORMAT <stream>) <format>)
+ * Implement (SETF (JAVA:JFIELD <object>) <value>)
+ * Constant FORMAT strings get compiled for performance
+
+
+Bugs fixed:
+
+ * FASLs are system default encoding dependent (ticket 77)
+ * I/O of charset-unsupported characters causes infinite loop (ticket 76)
+ * Memory leak where on unused functions with documentation
+ * ANSI PRINT-LEVEL.* tests
+ * Continued execution after failing to handle Throwable exceptions
+ * Line numbers in generated java classes incorrect
+ * JCALL, JNEW doesn't select best match when multiple applicable methods
+ * STREAM-EXTERNAL-FORMAT always returns :DEFAULT, instead of actual format
+ * REPL no longer hangs in Netbeans 6.[578] output window
+ * Lambda-list variables replaced by surrounding SYMBOL-MACROLET
+
+
+Other changes
+
+ * LispObject does not inherit from Lisp anymore
+ * Many functions declared 'final' for performance improvement
+ * SYSTEM:*SOURCE* FASLs for system files no longer refer to intermediate build location
+
+
+Version 0.17.0
+==============
+http://abcl.org/svn/tags/0.17.0/abcl
+(07 Nov, 2009)
+
+
+Features:
+
+  * Google App Engine example project "Hello world"
+  * Support for loading FASLs from JAR files
+  * Checking of init-arguments for MAKE-INSTANCE (CLOS)
+  * Support for *INVOKE-DEBUGGER-HOOK* (to support SLIME)
+  * Reduced abcl.jar size (bytes and number of objects)
+  * Faster access to locally bound specials (compiler efficiency)
+  * Java property to print autoloading information: abcl.autoload.verbose
+  * Experimental: binary fasls
+  * Default Ant build target now "abcl.clean abcl.wrapper" (from abcl.help)
+  * ConditionThrowable class renamed to ControlTransfer,
+      parent class changed to RuntimeException (to make it unchecked)
+  * API no longer throws ConditionThrowable/ControlTransfer
+
+
+Bugs fixed:
+
+  * Better fix for #63: Prevent exceptions from happening (GO and RETURN-FROM)
+  * Restore ability for ABCL to be build host for SBCL
+  * CLOS performance improvements through looser COMPILE dependency
+  * Compilation fix for highest SPEED setting (triggered by CL-BENCH)
+  * COMPILE's use of temp files eliminated
+  * OpenJDK on Darwin now correctly identified
+  * Incorrect block names for SETF functions defined by LABELS
+  * Fixed MULTIPLE-VALUE-CALL with more than 8 arguments
+  * Incorrect identification of lexical scope on recursive TAGBODY/GO
+    and BLOCK/RETURN-FROM blocks (compiler and interpreter)
+  * Correctly return 65k in char-code-limit (was 256, incorrectly)
+  * Fixes to be able to run the BEYOND-ANSI tests (part of ANSI test suite)
+  * Compiler typo fix
+  * Implementation of mutex functionality moved to lisp from Java
+  * Functions handling #n= and #n# are now compiled
+  * Autoload cleanups
+  * System package creation cleaned up
+  * CHAR-CODE-LIMIT correctly reflects CHAR-CODE maximum return value
+  * Precompiler macroexpansion failure for macros expanding into
+      special operators
+
+
+Version 0.16.1
+==============
+http://abcl.org/svn/tags/0.16.1/abcl
+(17 Oct, 2009)
+
+Bugs fixed:
+
+  * More careful checking for null args in LispStackFrame
+  * Honor appearance of &allow-other-keys in CLOS MAKE-INSTANCE
+  * Fix #63: GO forms to non-existent TAGBODY labels would exit ABCL
+  * Don't leak temp files during compilation
+
+Version 0.16.0
+==============
+(06 SEP 2009)
+http://abcl.org/svn/tags/0.16.0/abcl
+
+  Summary of changes:
+  ------------------
+  * Fixed generated wrapper for path names with spaces (Windows)
+  * Fixed ticket #58: Inspection of Java objects in Lisp code
+  * Restored functionality of the built-in profiler
+  * Profiler extended with hot-spot counting (as opposed to call counting)
+  * Stack sampling in the profiler moved to scheduler thread to
+    reduce impact on the program execution thread
+  * THE type-checking for the interpreter
+    (for simple-enough type specifications)
+  * Added structure argument type checking in structure slot
+    accessor functions
+  * Make GENSYM thread-safe
+  * Various performance fixes found by running the raytracer
+    from http://www.ffconsultancy.com/languages/ray_tracer/benchmark.html
+  * Better initarg checking for make-instance and change-class
+    Fixes ansi-test errors CHANGE-CLASS.1.11, MAKE-INSTANCE.ERROR.3,
+    MAKE-INSTANCE.ERROR.4, CHANGE-CLASS.ERROR.4 and SHARED-INITIALIZE.ERROR.4
+  * Improve performance of StackFrames (Erik Huelsmann, Ville Voutilainen,
+    with input from Peter Graves and Douglas Miles)
+  * Improve performance of CLOS eql-specializers via cache (Anton Vodonosov)
+  * 'build-from-lisp.sh' shell script (Tobias Rittweiler)
+  * New threading primitives aligned with Java/JVM constructs (Erik Huelsmann)
+
+      SYNCHRONIZED-ON
+      OBJECT-NOTIFY
+      OBJECT-NOTIFY-ALL
+  * THREADS package created to hold threads related primitives:
+
+      THREADP THREAD-UNLOCK THREAD-LOCK THREAD-NAME THREAD-ALIVE-P
+      CURRENT-THREAD DESTROY-THREAD INTERRUPT-THREAD WITH-THREAD-LOCK
+      MAKE-THREAD-LOCK MAKE-THREAD INTERRUPT-THREAD
+
+      MAPCAR-THREADS
+
+      GET-MUTEX MAKE-MUTEX WITH-MUTEX RELEASE-MUTEX
+
+    These primitives are still part of the EXTENSIONS package but are
+    now to be considered as deprecated, marked to be removed with
+    0.22
+  * Stacktraces now contain calls through Java code relevant to
+    debugging (Tobias Rittweiler)
+
+    Backtrace functionality been moved from EXT:BACKTRACE-AS-LIST to
+    SYS:BACKTRACE to mark this changes.  The methods SYS:FRAME-TO-STRING
+    and SYS:FRAME-TO-LIST can be used to inspect the new
+    LISP_STACK_FRAME and JAVA_STACK_FRAME objects
+  * Various stream input performance optimizations
+  * Fixed breakage when combining Gray streams and the pretty printer
+  * Performance improvements for resolution of non-recursive #=n and #n#
+
+
+Version 0.15.0
+==============
+http://abcl.org/svn/tags/0.15.0/abcl
+(07 Jun, 2009)
+
+ Summary of changes:
+ -------------------
+  * 2 more MOP exported symbols to support Cells port
+  * Updated FASL version
+  * Support (pre)compilation of functions with a non-null lexical environment
+  * Compiler and precompiler cleanups
+  * 'rt.lisp' copy from ANSI test suite removed
+  * Many documentation additions for the (pre)compiler
+  * JSR-233 support improvements
+  * Refactoring of classes:
+   - deleted: CompiledFunction, ClosureTemplateFunction, CompiledClosure,
+              Primitive0R, Primitive1R, Primitive2R
+   - renamed: CompiledClosure [from ClosureTemplateFunction]
+  * Compiler support for non-constant &key and &optional initforms
+  * Fixed ticket #21: JVM stack inconsistency [due to use of RET/JSR]
+  * Numerous special bindings handling fixes, especially with respect
+    to (local) transfer of control with GO/RETURN-FROM
+  * Paths retrieved using URL.getPath() require decoding (r11815)
+  * Build doesn't work inside paths with spaces (r11813)
+  * Compilation of export of a symbol not in *package* (r11808)
+  * Moved compiler-related rewriting of forms from precompiler to compiler
+  * Removed chained closures ('XEPs') in case of &optional arguments only
+  * Loading of SLIME fails under specific conditions (r11791)
+  * Binding of *FASL-ANONYMOUS-PACKAGE* breaks specials handling (r11783)
+  * Fixed ANSI tests: DO-ALL-SYMBOLS.{6,9,12}, DEFINE-SETF-EXPANDER.{1,6,?},
+      MULTIPLE-VALUE-SETQ.{5,8}, SYMBOL-MACROLET.8, COMPILE-FILE.{17,18}
+  * COMPILE and COMPILE-FILE second and third values after a failed
+      invocation inside the same compilation-unit (r11769)
+  * JCLASS on non-existing classes should signal an error (r11762)
+  * Dotted lambda lists break interpretation (r11760)
+  * Implementation of MACROEXPAND-ALL and COMPILER-LET (r11755)
+  * Switch from casting to 'instanceof' for performance (r11754)
+  * Google App Engine support: don't die if 'os.arch' isn't set (r11750)
+  * Excessive stack use while resolving #n= and #n# (r11474)
+
+
+Version 0.14.1
+==============
+(5 Apr, 2009)
+http://abcl.org/svn/tags/0.14.1/abcl
+
+ Summary of changes:
+ -------------------
+  * Include this CHANGES file and scripting files in the tar and zip files
+
+
+Version 0.14.0
+==============
+(5 Apr, 2009)
+http://abcl.org/svn/tags/0.14.0/abcl
+
+ Summary of changes:
+ -------------------
+  * Increased clarity on licensing (Classpath exception
+     mentioned in COPYING, removed LICENSE)
+  * Resolved infinite recursion on TRACEing the compiler
+  * Changes on the lisp based build system for parity with Ant
+  * Fixed interpreter creation in Java Scripting
+  * libabcl.so no longer created; it was solely about installing
+     a SIGINT handler. Libraries should not do that.
+  * boxing of LispObject descendants in JCALL/JCALL-RAW fixed
+  * OpenBSD and NetBSD platform detection
+  * fixed special bindings restores in compiled code for
+     MULTIPLE-VALUE-BIND/LET/LET*/PROGV and function bodies
+  * introduced variadic list() function to replace list1() ... list9()
+  * fix return value type of ACOS with complex argument
+  * fixed precision of multiplication of complex values
+  * fixed use of COMPILE inside file compilation (i.e. COMPILE-FILE)
+  * fix expansion of macros inside RESTART-CASE
+     (fixes RESTART-CASE ANSI failures)
+  * fix macroexpansion in the precompiler
+  * Fixnum and Bignum now use a static factory method;
+      constructors are now private -> increases chances of numbers
+      being EQ
+  * Code cleanup in EXPT to fix (EXPT <any-number> <Bignum>)
+
+
+Version 0.13.0
+==============
+(28 Feb, 2009)
+http://abcl.org/svn/tags/0.13.0/abcl
+
+ Summary of changes:
+ -------------------
+  * Separated J and ABCL into two trees
+  * Many many compiler code cleanups
+  * NetBeans project files
+  * Support for CDR6 (See http://cdr.eurolisp.org/document/6/)
+  * More efficient code emission in the compiler
+  * Ant build targets for testing (abcl.test)
+  * Use ConcurrentHashMap to store the lisp threads for increased performance
+  * Fix adjustability of expressly adjustable arrays (ticket #28)
+  * Fix calculation of upperbound on ASH in the compiler
+     (don't calculate numbers too big, instead, return '*')
+  * Introduce LispInteger as the super type of Bignum and Fixnum
+  * Boxing/unboxing for SingleFloat and DoubleFloat values,
+      inclusive of unboxed calculations
+  * Fixed URL decoding bug in loadCompiledFunction (use java.net.URLDecoder)
+  * Fixed line number counting
+  * Inlining of simple calculations (+/-/*)
+  * All static fields declared 'final'
+  * Add support for java.lang.Long based on Bignum to our FFI
+
+
