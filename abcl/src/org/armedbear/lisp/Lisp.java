@@ -2,7 +2,7 @@
  * Lisp.java
  *
  * Copyright (C) 2002-2007 Peter Graves <peter@armedbear.org>
- * $Id$
+ * $Id: Lisp.java 14552 2013-06-18 19:20:51Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -44,14 +44,22 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Hashtable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.WeakHashMap;
 
-public final class Lisp
+abstract public class Lisp extends ABCLStatic
 {
   public static final boolean debug = true;
 
   public static boolean cold = true;
 
   public static boolean initialized;
+
+  public static boolean NO_STACK_FRAMES = true;
+  
+  final public static boolean LISP_NOT_JAVA = true;
+
+  static final WeakHashMap<LispObject, LispObject>
+      documentationHashTable = new WeakHashMap<LispObject, LispObject>();
 
   // Packages.
   public static final Package PACKAGE_CL =
@@ -345,6 +353,7 @@ public final class Lisp
 
   private static final void pushJavaStackFrames()
   {
+	  if(NO_STACK_FRAMES) return;
       final LispThread thread = LispThread.currentThread();
       final StackTraceElement[] frames = thread.getJavaStackTrace();
 

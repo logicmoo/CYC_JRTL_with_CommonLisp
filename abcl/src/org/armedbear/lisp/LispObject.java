@@ -641,8 +641,6 @@ public class LispObject //extends Lisp
     return false;
   }
 
-  private static final WeakHashMap<LispObject, LispObject>
-      documentationHashTable = new WeakHashMap<LispObject, LispObject>();
 
   public LispObject getDocumentation(LispObject docType)
 
