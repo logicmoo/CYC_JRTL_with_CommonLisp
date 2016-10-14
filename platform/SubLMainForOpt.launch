@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/phase02-jrtl/src/com/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLMain.java"/>
+<listEntry value="/phase02-jrtl/platform/src/com/cyc/tool/subl/jrtl/nativeCode/subLisp/SubLMain.java"/>
 </listAttribute>
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>
@@ -15,4 +15,5 @@
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-f &quot;(progn (load \&quot;init/jrtl-release-init.lisp\&quot;)  (load \&quot;init/port-init.lisp\&quot;))&quot;"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="phase02-jrtl"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-Xmx12g -Djava.util.Arrays.useLegacyMergeSort=true"/>
+<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:phase02-jrtl/rcyc}"/>
 </launchConfiguration>

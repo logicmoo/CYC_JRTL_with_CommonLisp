@@ -155,22 +155,22 @@ public class RuntimeClass
 
     public static final Fixnum makeLispObject(byte i)
     {
-        return Fixnum.getInstance(i);
+        return Fixnum.makeFixnum(i);
     }
 
     public static final Fixnum makeLispObject(short i)
     {
-        return Fixnum.getInstance(i);
+        return Fixnum.makeFixnum(i);
     }
 
     public static final Fixnum makeLispObject(int i)
     {
-        return Fixnum.getInstance(i);
+        return Fixnum.makeFixnum(i);
     }
 
     public static final LispInteger makeLispObject(long i)
     {
-        return Bignum.getInstance(i);
+        return Bignum.makeBignum(i);
     }
 
     public static final SingleFloat makeLispObject(float i)
@@ -185,7 +185,7 @@ public class RuntimeClass
 
     public static final LispCharacter makeLispObject(char i)
     {
-        return LispCharacter.getInstance(i);
+        return LispCharacter.makeCharacter(i);
     }
 
     public static final LispObject makeLispObject(boolean i)

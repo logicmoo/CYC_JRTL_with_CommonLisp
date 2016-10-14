@@ -35,7 +35,7 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
 
-public class StructureObject extends LispObject
+public class StructureObject extends ALispObject
 {
   private final StructureClass structureClass;
   final LispObject[] slots;
@@ -421,7 +421,7 @@ public class StructureObject extends LispObject
   private LispObject badIndex(int n)
   {
     StringBuilder sb = new StringBuilder("Invalid slot index ");
-    sb.append(Fixnum.getInstance(n).princToString());
+    sb.append(Fixnum.makeFixnum(n).princToString());
     sb.append(" for ");
     sb.append(princToString());
     return error(new LispError(sb.toString()));
@@ -555,7 +555,7 @@ public class StructureObject extends LispObject
     public LispObject execute(LispObject arg)
     {
       if (arg instanceof StructureObject)
-        return Fixnum.getInstance(((StructureObject)arg).slots.length);
+        return Fixnum.makeFixnum(((StructureObject)arg).slots.length);
       return type_error(arg, Symbol.STRUCTURE_OBJECT);
     }
   };

@@ -201,7 +201,7 @@ public final class StringFunctions {
                 stringIndicesAndChars(string1, string2, start1, end1,
                                       start2, end2);
             int tmp = notEqual(indicesAndChars);
-            return (tmp >= 0) ? Fixnum.getInstance(tmp) : NIL;
+            return (tmp >= 0) ? Fixnum.makeFixnum(tmp) : NIL;
         }
     };
 
@@ -243,7 +243,7 @@ public final class StringFunctions {
                                       start2, end2);
             indicesAndChars.convertCase = true;
             int tmp = notEqual(indicesAndChars);
-            return (tmp >= 0) ? Fixnum.getInstance(tmp) : NIL;
+            return (tmp >= 0) ? Fixnum.makeFixnum(tmp) : NIL;
         }
     };
 
@@ -293,7 +293,7 @@ public final class StringFunctions {
                 stringIndicesAndChars(string1, string2, 
                                       start1, end1, start2, end2);
             int retVal = lessThan(indicesAndChars);
-            return (retVal >= 0) ? Fixnum.getInstance(retVal) : NIL;
+            return (retVal >= 0) ? Fixnum.makeFixnum(retVal) : NIL;
         }
     };
 
@@ -305,7 +305,7 @@ public final class StringFunctions {
         }
         int delta = original - indicesAndChars.start1;
         int retVal = indicesAndChars.start2 + delta;
-        return Fixnum.getInstance(retVal);
+        return Fixnum.makeFixnum(retVal);
     }
 
     // ### %string>
@@ -374,7 +374,7 @@ public final class StringFunctions {
                 stringIndicesAndChars(string1, string2, 
                                       start1, end1, start2, end2);
             int retVal = lessThanOrEqual(indicesAndChars);
-            return (retVal >= 0) ? Fixnum.getInstance(retVal) : NIL;
+            return (retVal >= 0) ? Fixnum.makeFixnum(retVal) : NIL;
         }
     };
 
@@ -418,7 +418,7 @@ public final class StringFunctions {
                                       start1, end1, start2, end2);
             indicesAndChars.convertCase = true;
             int retVal = lessThan(indicesAndChars);
-            return (retVal >= 0) ? Fixnum.getInstance(retVal) : NIL;
+            return (retVal >= 0) ? Fixnum.makeFixnum(retVal) : NIL;
         }
     };
 
@@ -485,7 +485,7 @@ public final class StringFunctions {
                                       start2, end2);
             indicesAndChars.convertCase = true;
             int tmp = lessThanOrEqual(indicesAndChars);
-            return (tmp >= 0) ? Fixnum.getInstance(tmp) : NIL;
+            return (tmp >= 0) ? Fixnum.makeFixnum(tmp) : NIL;
         }
     };
 
@@ -864,7 +864,7 @@ public final class StringFunctions {
         {
             // FIXME Don't call getStringValue() here! (Just look at the chars.)
             int index = second.getStringValue().indexOf(first.getStringValue());
-            return index >= 0 ? Fixnum.getInstance(index) : NIL;
+            return index >= 0 ? Fixnum.makeFixnum(index) : NIL;
         }
     };
 

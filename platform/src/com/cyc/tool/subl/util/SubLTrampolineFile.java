@@ -37,6 +37,8 @@ public abstract class SubLTrampolineFile implements SubLFile, CommonSymbols {
 
 	//// Constructors
 
+	public static final boolean assertionsDisabledInClass = true;
+
 	// @note This method violate the expectation that all functions return a
 	// value.
 	// This is purposefully done for efficiency.

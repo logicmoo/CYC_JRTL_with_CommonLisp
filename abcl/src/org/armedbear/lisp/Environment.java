@@ -35,7 +35,7 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
 
-public final class Environment extends LispObject
+public final class Environment extends ALispObject
 {
   Binding vars;
   FunctionBinding lastFunctionBinding;

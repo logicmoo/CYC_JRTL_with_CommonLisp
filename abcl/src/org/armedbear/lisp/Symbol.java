@@ -35,7 +35,7 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
 
-public class Symbol extends LispObject implements java.io.Serializable
+public class Symbol extends ALispObject implements java.io.Serializable
 {
   // Bit flags.
   private static final int FLAG_SPECIAL           = 0x0001;
@@ -159,8 +159,8 @@ public class Symbol extends LispObject implements java.io.Serializable
     parts = parts.push(new Cons("value", value));
     parts = parts.push(new Cons("function", function));
     parts = parts.push(new Cons("plist", propertyList));
-    parts = parts.push(new Cons("flags", Fixnum.getInstance(flags)));
-    parts = parts.push(new Cons("hash", Fixnum.getInstance(hash)));
+    parts = parts.push(new Cons("flags", Fixnum.makeFixnum(flags)));
+    parts = parts.push(new Cons("hash", Fixnum.makeFixnum(hash)));
     return parts.nreverse();
   }
 

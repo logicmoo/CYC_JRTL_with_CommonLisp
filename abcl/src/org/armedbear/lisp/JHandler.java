@@ -74,7 +74,7 @@ public final class JHandler
                 final Fixnum count = entry.getCount();
                 final Fixnum[] lispAi = new Fixnum[ai.length];
                 for (int i = 0; i < ai.length; i++) {
-                    lispAi[i] = Fixnum.getInstance(ai[i]);
+                    lispAi[i] = Fixnum.makeFixnum(ai[i]);
                 }
                 final LispObject lispAiVector = new SimpleVector(lispAi);
                 final SimpleString[] lispAs = new SimpleString[as.length];
@@ -162,7 +162,7 @@ public final class JHandler
         {
             if (count == 0)
                 entryTable.remove(event);
-            return (Fixnum.getInstance (count--));
+            return (Fixnum.makeFixnum (count--));
         }
     }
 }

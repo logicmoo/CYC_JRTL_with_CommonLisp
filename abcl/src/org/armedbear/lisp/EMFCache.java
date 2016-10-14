@@ -36,7 +36,7 @@ import static org.armedbear.lisp.Lisp.*;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-public final class EMFCache extends LispObject
+public final class EMFCache extends ALispObject
 {
   ConcurrentHashMap<CacheEntry,LispObject> cache
     = new ConcurrentHashMap<CacheEntry,LispObject>();;
@@ -61,13 +61,19 @@ public final class EMFCache extends LispObject
       type_error(obj, Symbol.STANDARD_GENERIC_FUNCTION);
   }
 
-  private static class EqlSpecialization extends LispObject
+  private static class EqlSpecialization extends SLispObject
   {
     public LispObject eqlTo;
 
     public EqlSpecialization(LispObject eqlTo)
     {
         this.eqlTo = eqlTo;
+    }
+
+    @Override
+    public String printObject()
+    {
+    	return unreadableString("EqlSpecialization", false);
     }
   }
 

@@ -42,7 +42,7 @@ import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.util.Random;
 
-public final class RandomState extends LispObject
+public final class RandomState extends ALispObject
 {
     private Random random;
 
@@ -102,7 +102,7 @@ public final class RandomState extends LispObject
             int limit = ((Fixnum)arg).value;
             if (limit > 0) {
                 int n = random.nextInt((int)limit);
-                return Fixnum.getInstance(n);
+                return Fixnum.makeFixnum(n);
             }
         } else if (arg instanceof Bignum) {
             BigInteger limit = ((Bignum)arg).value;

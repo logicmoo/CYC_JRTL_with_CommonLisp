@@ -1,0 +1,59 @@
+Google App Engine
+=================
+
+Alex Muscar
+
+Running ABCL in a Google App Engine container.
+
+This example shows how to run your Java servlet off ABCL in general
+and in Google App Engine (GAE) in particular.
+
+When uploading your code to the server, be sure to put abcl.jar
+in war/WEB-INF/lib.
+
+
+Running Locally
+---------------
+
+1.  Download the [Google App Engine SDK for Java][1], unzipping the
+    distribution somewhere on your filesystem
+    (e.g. "~/work/appengine-java-sdk-1.4.3").
+
+[1]: http://googleappengine.googlecode.com/files/appengine-java-sdk-1.4.3.zip
+
+2.  Simply invoke Ant on the `build.xml' in this directory with the
+    `runserver' target, setting the `sdk.dir' JVM property to specify
+    the location of the SDK.
+
+        unix$ ant -Dsdk.dir=$HOME/work/appengine-java-sdk-1.4.3/ runserver
+
+3.  Visit `http://localhost:8080/hello' in a web browser to see the example run.
+
+
+Deploying to GAE
+----------------
+
+1.  To deploy the included example to GAE, you need to first obtain a
+    GAE account, and pick a GAE application id to use with the
+    application.
+
+2.  Then you need to edit 'war/WEB-INF/appengine-web.xml' to specify
+    this application.  Just replace the contents of the <applciation>
+    tag (initially 'GAE-APPLICATION-ID-GOES-HERE') in the file with
+    your GAE ID. 
+
+3.  Then the Ant task 'update' should upload your application to GAE:
+
+        unix$ ant update
+
+    You will be prompted for the Google Account credentials associated
+    with the application ID.
+
+    
+
+         
+
+
+
+
+

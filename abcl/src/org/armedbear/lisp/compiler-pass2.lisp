@@ -1154,24 +1154,24 @@ extend the class any further."
         (emit 'aaload))
        ((<= most-negative-fixnum n most-positive-fixnum)
         (emit-push-constant-int n)
-        (emit-invokestatic +lisp-fixnum+ "getInstance"
+        (emit-invokestatic +lisp-fixnum+ "makeFixnum"
                            '(:int) +lisp-fixnum+))
        ((<= most-negative-java-long n most-positive-java-long)
         (emit-push-constant-long n)
-        (emit-invokestatic +lisp-bignum+ "getInstance"
+        (emit-invokestatic +lisp-bignum+ "makeBignum"
                            '(:long) +lisp-integer+))
        (t
         (let* ((*print-base* 10)
                (s (with-output-to-string (stream) (dump-form n stream))))
           (emit 'ldc (pool-string s))
           (emit-push-constant-int 10)
-          (emit-invokestatic +lisp-bignum+ "getInstance"
+          (emit-invokestatic +lisp-bignum+ "makeBignum"
                              (list +java-string+ :int) +lisp-integer+)))))
 
 (defun serialize-character (c)
   "Generates code to restore a serialized character."
   (emit-push-constant-int (char-code c))
-  (emit-invokestatic +lisp-character+ "getInstance" '(:char)
+  (emit-invokestatic +lisp-character+ "makeCharacter" '(:char)
                      +lisp-character+))
 
 (defun serialize-float (s)
@@ -3651,9 +3651,9 @@ given a specific common representation.")
     (when (tagbody-id-variable block)
       ;; we have a block variable; that should be a closure variable
       (assert (not (null (variable-closure-index (tagbody-id-variable block)))))
-      (emit-new +lisp-object+)
+      (emit-new +block-lisp-object+)
       (emit 'dup)
-      (emit-invokespecial-init +lisp-object+ '())
+      (emit-invokespecial-init +block-lisp-object+ '())
       (emit-new-closure-binding (tagbody-id-variable block)))
     (when (tagbody-non-local-go-p block)
       (save-dynamic-environment specials-register))
@@ -3848,9 +3848,9 @@ given a specific common representation.")
     (when (block-id-variable block)
       ;; we have a block variable; that should be a closure variable
       (assert (not (null (variable-closure-index (block-id-variable block)))))
-      (emit-new +lisp-object+)
+      (emit-new +block-lisp-object+)
       (emit 'dup)
-      (emit-invokespecial-init +lisp-object+ '())
+      (emit-invokespecial-init +block-lisp-object+ '())
       (emit-new-closure-binding (block-id-variable block)))
     (dformat t "*all-variables* = ~S~%"
              (mapcar #'variable-name *all-variables*))
@@ -5505,18 +5505,18 @@ We need more thought here.
            (if list-star-p
                (compile-form (first (last args)) 'stack nil)
                (progn
-                 (emit-invokespecial-init 
+                 (emit-invokespecial-init
                   +lisp-cons+ (lisp-object-arg-types 1))
                  (pop cons-heads))) ; we've handled one of the args, so remove it
            (dolist (cons-head cons-heads)
              (declare (ignore cons-head))
-             (emit-invokespecial-init 
+             (emit-invokespecial-init
               +lisp-cons+ (lisp-object-arg-types 2)))
            (if list-star-p
                (progn
                  (apply #'maybe-emit-clear-values args)
                  (emit-move-from-stack target representation))
-               (progn 
+               (progn
                  (unless (every 'single-valued-p args)
                    (emit-clear-values))
                  (emit-move-from-stack target))))

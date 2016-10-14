@@ -35,18 +35,19 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
 
-public class LispStackFrame 
+public class LispStackFrame
   extends StackFrame
 {
   public final LispObject operator;
   private final LispObject[] args;
 
-  private final static class UnavailableArgument extends LispObject 
+  private final static class UnavailableArgument extends SLispObject
   {
     public UnavailableArgument () { }
     @Override
-    public String printObject() { 
-      return unreadableString("unavailable arg", false); 
+    public String printObject()
+    {
+      return unreadableString("unavailable arg", false);
     }
   }
 
@@ -56,25 +57,25 @@ public class LispStackFrame
   {
     operator = (LispObject) stack[framePos];
     args = new LispObject[numArgs];
-    for (int i = 0; i < numArgs; i++) 
+    for (int i = 0; i < numArgs; i++)
     {
       args[i] = (LispObject) stack[framePos + 1 + i];
     }
   }
 
    @Override
-   public LispObject typeOf() { 
-     return Symbol.LISP_STACK_FRAME; 
-   }
-  
-   @Override
-   public LispObject classOf() { 
-     return BuiltInClass.LISP_STACK_FRAME; 
+   public LispObject typeOf() {
+     return Symbol.LISP_STACK_FRAME;
    }
 
    @Override
-   public String printObject() 
-   { 
+   public LispObject classOf() {
+     return BuiltInClass.LISP_STACK_FRAME;
+   }
+
+   @Override
+   public String printObject()
+   {
      String result = "";
      final String LISP_STACK_FRAME = "LISP-STACK-FRAME";
      try {
@@ -88,7 +89,7 @@ public class LispStackFrame
    }
 
   @Override
-  public LispObject typep(LispObject typeSpecifier) 
+  public LispObject typep(LispObject typeSpecifier)
 
   {
     if (typeSpecifier == Symbol.LISP_STACK_FRAME)
@@ -98,7 +99,7 @@ public class LispStackFrame
     return super.typep(typeSpecifier);
    }
 
-  public LispObject toLispList() 
+  public LispObject toLispList()
 
   {
     LispObject result = argsToLispList();
@@ -127,7 +128,7 @@ public class LispStackFrame
     return result.nreverse();
   }
 
-  public SimpleString toLispString() 
+  public SimpleString toLispString()
 
   {
     String result;
@@ -150,8 +151,8 @@ public class LispStackFrame
     return operator;
   }
 
-  @Override 
-  public LispObject getParts() 
+  @Override
+  public LispObject getParts()
 
   {
     LispObject result = NIL;
@@ -160,7 +161,7 @@ public class LispStackFrame
     if (args != NIL) {
       result = result.push(new Cons("ARGS", args));
     }
-			 
+
     return result.nreverse();
   }
 }

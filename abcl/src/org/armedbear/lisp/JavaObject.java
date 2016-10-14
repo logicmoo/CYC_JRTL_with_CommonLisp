@@ -40,7 +40,7 @@ import java.lang.reflect.Field;
 import java.math.BigInteger;
 import java.util.*;
 
-public final class JavaObject extends LispObject {
+public final class JavaObject extends ALispObject {
     final Object obj;
     private final Class<?> intendedClass;
 
@@ -221,7 +221,7 @@ public final class JavaObject extends LispObject {
             // estimated chances of occurrance
 
             if (obj instanceof Integer)
-                return Fixnum.getInstance(((Integer)obj).intValue());
+                return Fixnum.makeFixnum(((Integer)obj).intValue());
 
             if (obj instanceof Float)
                 return new SingleFloat((Float)obj);
@@ -236,10 +236,10 @@ public final class JavaObject extends LispObject {
                 return Bignum.getInstance((BigInteger)obj);
 
             if (obj instanceof Short)
-                return Fixnum.getInstance(((Short)obj).shortValue());
+                return Fixnum.makeFixnum(((Short)obj).shortValue());
 
             if (obj instanceof Byte)
-                return Fixnum.getInstance(((Byte)obj).byteValue());
+                return Fixnum.makeFixnum(((Byte)obj).byteValue());
             // We don't handle BigDecimal: it doesn't map to a Lisp type
         }
 
@@ -247,7 +247,7 @@ public final class JavaObject extends LispObject {
             return ((Boolean)obj).booleanValue() ? T : NIL;
 
         if (obj instanceof Character)
-            return LispCharacter.getInstance((Character)obj);
+            return LispCharacter.makeCharacter((Character)obj);
 
         if (obj instanceof Object[]) {
             Object[] array = (Object[]) obj;

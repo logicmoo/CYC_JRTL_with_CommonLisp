@@ -21,7 +21,7 @@
 
 import org.armedbear.lisp.*;
 
-public class Main
+public class Main 
 {
     /**
      * This example loads a lisp file and gets two function symbols

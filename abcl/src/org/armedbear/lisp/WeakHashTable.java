@@ -56,7 +56,7 @@ import java.util.concurrent.locks.ReentrantLock;
 // to simplify/beautify things here, but I couldn't get the
 // WeakHashTable type to be parameterized on an enclosed type.
 public class WeakHashTable
-    extends LispObject
+    extends ALispObject
     implements org.armedbear.lisp.protocol.Hashtable
 {
     protected static final float loadFactor = 0.75f;

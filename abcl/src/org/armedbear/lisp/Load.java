@@ -394,7 +394,7 @@ public final class Load
     // ### *fasl-version*
     // internal symbol
     static final Symbol _FASL_VERSION_ =
-        exportConstant("*FASL-VERSION*", PACKAGE_SYS, Fixnum.getInstance(42));
+        exportConstant("*FASL-VERSION*", PACKAGE_SYS, Fixnum.makeFixnum(42));
 
     // ### *fasl-external-format*
     // internal symbol
@@ -502,9 +502,9 @@ public final class Load
         for (Symbol special : savedSpecials)
             thread.bindSpecialToCurrentValue(special);
 
-        thread.bindSpecial(_BACKQUOTE_COUNT_, Fixnum.getInstance(0));
+        thread.bindSpecial(_BACKQUOTE_COUNT_, Fixnum.makeFixnum(0));
         int loadDepth = Fixnum.getValue(_LOAD_DEPTH_.symbolValue(thread));
-        thread.bindSpecial(_LOAD_DEPTH_, Fixnum.getInstance(++loadDepth));
+        thread.bindSpecial(_LOAD_DEPTH_, Fixnum.makeFixnum(++loadDepth));
         final String prefix = getLoadVerbosePrefix(loadDepth);
         try {
             thread.bindSpecial(Symbol.LOAD_PATHNAME, pathname);
@@ -621,7 +621,7 @@ public final class Load
             final Environment env = new Environment();
             LispObject result = NIL;
             while (true) {
-                sourcePositionBinding.value = Fixnum.getInstance(in.getOffset());
+                sourcePositionBinding.value = Fixnum.makeFixnum(in.getOffset());
                 LispObject obj = in.read(false, EOF, false,
                                          thread, Stream.currentReadtable);
                 if (obj == EOF)

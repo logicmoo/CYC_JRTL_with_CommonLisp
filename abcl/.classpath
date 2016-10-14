@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="examples/gui"/>
+	<classpathentry kind="src" path="examples/java-exception"/>
+	<classpathentry kind="src" path="examples/jsr-223"/>
+	<classpathentry kind="src" path="examples/misc"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="test/src"/>
+	<classpathentry kind="src" path="contrib/jank/java"/>
+	<classpathentry kind="lib" path="dist/abcl-contrib.jar"/>
+	<classpathentry kind="lib" path="dist/abcl.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="src" path="/javassist"/>
+	<classpathentry kind="output" path="bin-eclipse"/>
+</classpath>

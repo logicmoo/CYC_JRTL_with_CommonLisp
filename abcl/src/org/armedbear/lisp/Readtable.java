@@ -36,7 +36,7 @@ package org.armedbear.lisp;
 import static org.armedbear.lisp.Lisp.*;
 import java.util.Iterator;
 
-public class Readtable extends LispObject
+public class Readtable extends ALispObject
 {
   public static final byte SYNTAX_TYPE_CONSTITUENT           = 0;
   public static final byte SYNTAX_TYPE_WHITESPACE            = 1;
@@ -284,7 +284,7 @@ public class Readtable extends LispObject
     DispatchTable dispatchTable = dispatchTables.get(dispChar);
     if (dispatchTable == null)
       {
-        LispCharacter c = LispCharacter.getInstance(dispChar);
+        LispCharacter c = LispCharacter.makeCharacter(dispChar);
         return error(new LispError(c.princToString() +
                                     " is not a dispatch character."));
       }
@@ -300,7 +300,7 @@ public class Readtable extends LispObject
     DispatchTable dispatchTable = dispatchTables.get(dispChar);
     if (dispatchTable == null)
       {
-        LispCharacter c = LispCharacter.getInstance(dispChar);
+        LispCharacter c = LispCharacter.makeCharacter(dispChar);
         error(new LispError(c.princToString() +
                              " is not a dispatch character."));
       }

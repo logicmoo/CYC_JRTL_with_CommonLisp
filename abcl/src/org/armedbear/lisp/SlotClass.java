@@ -171,7 +171,7 @@ public class SlotClass extends LispClass
         while (tail != NIL) {
             SlotDefinition slotDefinition = (SlotDefinition) tail.car();
             slotDefinition.setInstanceSlotValue(Symbol.LOCATION,
-                                                Fixnum.getInstance(i));
+                                                Fixnum.makeFixnum(i));
             instanceSlotNames[i++] =
               slotDefinition.getInstanceSlotValue(Symbol.NAME);
             tail = tail.cdr();

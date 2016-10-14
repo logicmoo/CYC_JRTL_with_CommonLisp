@@ -39,6 +39,8 @@ public class SubLFiles {
 
 	//// Constructors
 
+	public static final boolean assertionsDisabledInClass = true;
+
 	public static abstract class VariableAccessMode {
 		public static VariableAccessMode CONSTANT = new VariableAccessMode() {
 			public SubLSymbol toSymbol() {
@@ -307,7 +309,7 @@ public class SubLFiles {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Errors.cerror("Continue.", "Error initializing SubL file: " + className, e);
-		}		
+		}
 	}
 
 	/**

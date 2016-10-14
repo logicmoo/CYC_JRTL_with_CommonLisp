@@ -35,7 +35,7 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
 
-public final class Cons extends LispObject implements java.io.Serializable
+public final class Cons extends ALispObject implements java.io.Serializable
 {
   public LispObject car;
   public LispObject cdr;
@@ -246,7 +246,7 @@ public final class Cons extends LispObject implements java.io.Serializable
   public LispObject NTH(int index)
   {
     if (index < 0)
-      type_error(Fixnum.getInstance(index), Symbol.UNSIGNED_BYTE);
+      type_error(Fixnum.makeFixnum(index), Symbol.UNSIGNED_BYTE);
     int i = 0;
     LispObject obj = this;
     while (true)
@@ -264,7 +264,7 @@ public final class Cons extends LispObject implements java.io.Serializable
   public LispObject elt(int index)
   {
     if (index < 0)
-      type_error(Fixnum.getInstance(index), Symbol.UNSIGNED_BYTE);
+      type_error(Fixnum.makeFixnum(index), Symbol.UNSIGNED_BYTE);
     int i = 0;
     Cons cons = this;
     while (true)
@@ -281,9 +281,9 @@ public final class Cons extends LispObject implements java.io.Serializable
             if (conscdr == NIL)
               {
                 // Index too large.
-                type_error(Fixnum.getInstance(index),
+                type_error(Fixnum.makeFixnum(index),
                                 list(Symbol.INTEGER, Fixnum.ZERO,
-                                      Fixnum.getInstance(length() - 1)));
+                                      Fixnum.makeFixnum(length() - 1)));
               }
             else
               {

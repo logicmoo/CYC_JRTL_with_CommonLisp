@@ -44,6 +44,7 @@ public final class Packages
 {
   private static final ArrayList<Package> packages = new ArrayList<Package>();
   private static final HashMap<String,Package> map = new HashMap<String,Package>();
+  private static final Object packagesLock = packages;
 
   public static final synchronized Package createPackage(String name)
   {
@@ -92,21 +93,22 @@ public final class Packages
       Intended to be used from Java code manipulating an Interpreter
       instance.
   */
-  public static final synchronized Package findPackage(String name) {
+  public static final Package findPackage(String name) {
     return getCurrentPackage().findPackage(name);
   }
     
   // Finds package named `name'.  Returns null if package doesn't exist.
   // Called by Package.findPackage after checking package-local package
   // nicknames.
-  static final synchronized Package findPackageGlobally(String name)
+  static final Package findPackageGlobally(String name)
   {
-    return (Package) map.get(name);
+	  synchronized(Packages.packagesLock) { return (Package) map.get(name); }
   }
 
-  public static final synchronized Package makePackage(String name)
+  public static final Package makePackage(String name)
 
   {
+	  synchronized(Packages.packagesLock) {
     if (map.get(name) != null)
       {
         error(new LispError("A package named " + name + " already exists."));
@@ -116,24 +118,28 @@ public final class Packages
     Package pkg = new Package(name);
     packages.add(pkg);
     map.put(name, pkg);
+	  
     return pkg;
+	  }
   }
 
-  public static final synchronized void addNickname(Package pkg, String nickname)
-
+  public static final void addNickname(Package pkg, String nickname)
   {
+	  synchronized(Packages.packagesLock) {
     Object obj = map.get(nickname);
     if (obj != null && obj != pkg)
       {
-        error(new PackageError("A package named " + nickname + " already exists."));
+        error(new PackageError("A package named " + nickname + " already exists. " + obj));
         return;
       }
     map.put(nickname, pkg);
+	  }
   }
 
   // Removes name and nicknames from map, removes pkg from packages.
-  public static final synchronized boolean deletePackage(Package pkg)
+  public static final boolean deletePackage(Package pkg)
   {
+	  synchronized(Packages.packagesLock) {
     String name = pkg.getName();
     if (name != null)
       {
@@ -150,23 +156,25 @@ public final class Packages
         packages.remove(pkg);
         return true;
       }
+	  }
     return false;
   }
 
-  public static final synchronized LispObject listAllPackages()
+  public static final LispObject listAllPackages()
   {
     LispObject result = NIL;
-    for (Package pkg : packages) {
+    synchronized(Packages.packagesLock) {for (Package pkg : packages) {
       result = new Cons(pkg, result);
-    }
+    }}
     return result;
   }
 
   public static final synchronized Package[] getAllPackages()
   {
-    Package[] array = new Package[packages.size()];
+	  synchronized(Packages.packagesLock) {Package[] array = new Package[packages.size()];
     packages.toArray(array);
     return array;
+	  }
   }
 
   public static final synchronized LispObject getPackagesNicknamingPackage(Package thePackage)

@@ -35,7 +35,7 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
 
-public class StandardObject extends LispObject
+public class StandardObject extends ALispObject
 {
   protected Layout layout;
   protected LispObject[] slots;
@@ -461,7 +461,7 @@ public class StandardObject extends LispObject
         if (instance.slots.length > 0)
           return type_error(second,
                             list(Symbol.INTEGER, Fixnum.ZERO,
-                                 Fixnum.getInstance(instance.slots.length - 1)));
+                                 Fixnum.makeFixnum(instance.slots.length - 1)));
         else
           return program_error("The object " + instance.princToString()
                                + " has no slots.");
@@ -507,7 +507,7 @@ public class StandardObject extends LispObject
         if (instance.slots.length > 0)
           return type_error(second,
                             list(Symbol.INTEGER, Fixnum.ZERO,
-                                 Fixnum.getInstance(instance.slots.length - 1)));
+                                 Fixnum.makeFixnum(instance.slots.length - 1)));
         else
           return program_error("The object " + instance.princToString()
                                + " has no slots.");

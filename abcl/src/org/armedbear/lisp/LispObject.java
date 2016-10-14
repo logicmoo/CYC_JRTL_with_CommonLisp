@@ -36,40 +36,27 @@ package org.armedbear.lisp;
 import static org.armedbear.lisp.Lisp.*;
 import java.util.WeakHashMap;
 
-public class LispObject //extends Lisp
+public abstract class LispObject // extends Number
 {
 
+	protected LispObject() {
+		
+	}
   /** Function to allow objects to return the value
    * "they stand for". Used by AutoloadedFunctionProxy to return
    * the function it is proxying.
    */
-  public LispObject resolve()
-  {
-    return this;
-  }
+  public abstract LispObject resolve();
 
-  public LispObject typeOf()
-  {
-    return T;
-  }
+  public abstract LispObject typeOf();
 
   static public LispObject getInstance(boolean b) {
       return b ? T : NIL;
   }
 
-  public LispObject classOf()
-  {
-    return BuiltInClass.CLASS_T;
-  }
+  public abstract LispObject classOf();
 
-  public LispObject getDescription()
-  {
-    StringBuilder sb = new StringBuilder("An object of type ");
-    sb.append(typeOf().princToString());
-    sb.append(" at #x");
-    sb.append(Integer.toHexString(System.identityHashCode(this)).toUpperCase());
-    return new SimpleString(sb);
-  }
+  public abstract LispObject getDescription();
 
   /** 
    *  Implementing the getParts() protocol will allow INSPECT to
@@ -80,59 +67,23 @@ public class LispObject //extends Lisp
    *  each pair contains a decriptive string, and the cdr returns a
    *  subobject for inspection.
    */
-  public LispObject getParts()
-  {
-    return NIL;
-  }
+  public abstract LispObject getParts();
 
-  public boolean getBooleanValue()
-  {
-    return true;
-  }
+  public abstract boolean getBooleanValue();
 
-  public LispObject typep(LispObject typeSpecifier)
-  {
-    if (typeSpecifier == T)
-      return T;
-    if (typeSpecifier == BuiltInClass.CLASS_T)
-      return T;
-    if (typeSpecifier == Symbol.ATOM)
-      return T;
-    return NIL;
-  }
+  public abstract LispObject typep(LispObject typeSpecifier);
 
-  public boolean constantp()
-  {
-    return true;
-  }
+  public abstract boolean constantp();
 
-  public final LispObject CONSTANTP()
-  {
-    return constantp() ? T : NIL;
-  }
+  public abstract LispObject CONSTANTP();
 
-  public final LispObject ATOM()
-  {
-    return atom() ? T : NIL;
-  }
+  public abstract LispObject ATOM();
 
-  public boolean atom()
-  {
-    return true;
-  }
+  public abstract boolean atom();
 
-  public Object javaInstance()
-  {
-        return this;
-  }
+  public abstract Object javaInstance();
 
-  public Object javaInstance(Class<?> c)
-  {
-      if (c.isAssignableFrom(getClass()))
-	  return this;
-      return error(new LispError("The value " + princToString() +
-				 " is not of class " + c.getName()));
-  }
+  public abstract Object javaInstance(Class<?> c);
 
   /** This method returns 'this' by default, but allows
    * objects to return different values to increase Java
@@ -140,619 +91,201 @@ public class LispObject //extends Lisp
    * 
    * @return An object to be used with synchronized, wait, notify, etc
    */
-  public Object lockableInstance()
-  {
-      return this;
-  }
-
-
-  public final LispObject car()
-  {
-    if (this instanceof Cons) {
-      return ((Cons)this).car;
-    } else if (this instanceof Nil) {
-      return NIL;
-    }
-    return type_error(this, Symbol.LIST);
-  }
-
-  public final void setCar(LispObject obj)
-  {
-      if (this instanceof Cons) {
-          ((Cons)this).car = obj;
-          return;
-      }
-    type_error(this, Symbol.CONS);
-  }
-
-  public LispObject RPLACA(LispObject obj)
-  {
-    return type_error(this, Symbol.CONS);
-  }
-
-  public final LispObject cdr()
-  {
-    if (this instanceof Cons) {
-      return ((Cons)this).cdr;
-    } else if (this instanceof Nil) {
-      return NIL;
-    }
-    return type_error(this, Symbol.LIST);
-  }
-
-  public final void setCdr(LispObject obj)
-  {
-      if (this instanceof Cons) {
-          ((Cons)this).cdr = obj;
-          return;
-      }
-
-    type_error(this, Symbol.CONS);
-  }
-
-  public LispObject RPLACD(LispObject obj)
-  {
-    return type_error(this, Symbol.CONS);
-  }
-
-  public final LispObject cadr()
-  {
-    LispObject tail = cdr();
-    if (!(tail instanceof Nil)) {
-        return tail.car();
-    } else 
-        return NIL;
-  }
-
-  public final LispObject cddr()
-  {
-    LispObject tail = cdr();
-    if (!(tail instanceof Nil)) {
-        return tail.cdr();
-    } else 
-        return NIL;
-  }
-
-  public final LispObject caddr()
-  {
-    LispObject tail = cddr();
-    if (!(tail instanceof Nil)) {
-        return tail.car();
-    } else 
-        return NIL;
-  }
-
-  public final LispObject nthcdr(int n)
-  {
-    if (n < 0)
-      return type_error(Fixnum.getInstance(n),
-                             list(Symbol.INTEGER, Fixnum.ZERO));
-    if (this instanceof Cons) {
-      LispObject result = this;
-      for (int i = n; i-- > 0;) {
-          result = result.cdr();
-          if (result == NIL)
-              break;
-      }
-      return result;
-    } else if (this instanceof Nil) {
-      return NIL;
-    }
-    return type_error(this, Symbol.LIST);
-  }
-
-  public final LispObject push(LispObject obj)
-  {
-    if (this instanceof Cons) {
-      return new Cons(obj, this);
-    } else if (this instanceof Nil) {
-      return new Cons(obj);
-    }
-    return type_error(this, Symbol.LIST);
-  }
-
-  final public LispObject EQ(LispObject obj)
-  {
-    return this == obj ? T : NIL;
-  }
-
-  public boolean eql(char c)
-  {
-    return false;
-  }
-
-  public boolean eql(int n)
-  {
-    return false;
-  }
-
-  public boolean eql(LispObject obj)
-  {
-    return this == obj;
-  }
-
-  public final LispObject EQL(LispObject obj)
-  {
-    return eql(obj) ? T : NIL;
-  }
-
-  public final LispObject EQUAL(LispObject obj)
-  {
-    return equal(obj) ? T : NIL;
-  }
-
-  public boolean equal(int n)
-  {
-    return false;
-  }
-
-  public boolean equal(LispObject obj)
-  {
-    return this == obj;
-  }
-
-  public boolean equalp(int n)
-  {
-    return false;
-  }
-
-  public boolean equalp(LispObject obj)
-  {
-    return this == obj;
-  }
-
-  public LispObject ABS()
-  {
-    return type_error(this, Symbol.NUMBER);
-  }
-
-  public LispObject NUMERATOR()
-  {
-    return type_error(this, Symbol.RATIONAL);
-  }
-
-  public LispObject DENOMINATOR()
-  {
-    return type_error(this, Symbol.RATIONAL);
-  }
-
-  public final LispObject EVENP()
-  {
-    return evenp() ? T : NIL;
-  }
-
-  public boolean evenp()
-  {
-    type_error(this, Symbol.INTEGER);
-    // Not reached.
-    return false;
-  }
-
-  public final LispObject ODDP()
-  {
-    return oddp() ? T : NIL;
-  }
-
-  public boolean oddp()
-  {
-    type_error(this, Symbol.INTEGER);
-    // Not reached.
-    return false;
-  }
-
-  public final LispObject PLUSP()
-  {
-    return plusp() ? T : NIL;
-  }
-
-  public boolean plusp()
-  {
-    type_error(this, Symbol.REAL);
-    // Not reached.
-    return false;
-  }
-
-  public final LispObject MINUSP()
-  {
-    return minusp() ? T : NIL;
-  }
-
-  public boolean minusp()
-  {
-    type_error(this, Symbol.REAL);
-    // Not reached.
-    return false;
-  }
-
-  public final LispObject NUMBERP()
-  {
-    return numberp() ? T : NIL;
-  }
-
-  public boolean numberp()
-  {
-    return false;
-  }
-
-  public final LispObject ZEROP()
-  {
-    return zerop() ? T : NIL;
-  }
-
-  public boolean zerop()
-  {
-    type_error(this, Symbol.NUMBER);
-    // Not reached.
-    return false;
-  }
-
-  public LispObject COMPLEXP()
-  {
-    return NIL;
-  }
-
-  public final LispObject FLOATP()
-  {
-    return floatp() ? T : NIL;
-  }
-
-  public boolean floatp()
-  {
-    return false;
-  }
-
-  public final LispObject INTEGERP()
-  {
-    return integerp() ? T : NIL;
-  }
-
-  public boolean integerp()
-  {
-    return false;
-  }
-
-  public final LispObject RATIONALP()
-  {
-    return rationalp() ? T : NIL;
-  }
-
-  public boolean rationalp()
-  {
-    return false;
-  }
-
-  public final LispObject REALP()
-  {
-    return realp() ? T : NIL;
-  }
-
-  public boolean realp()
-  {
-    return false;
-  }
-
-  public final LispObject STRINGP()
-  {
-    return stringp() ? T : NIL;
-  }
-
-  public boolean stringp()
-  {
-    return false;
-  }
-
-  public LispObject SIMPLE_STRING_P()
-  {
-    return NIL;
-  }
-
-  public final LispObject VECTORP()
-  {
-    return vectorp() ? T : NIL;
-  }
-
-  public boolean vectorp()
-  {
-    return false;
-  }
-
-  public final LispObject CHARACTERP()
-  {
-    return characterp() ? T : NIL;
-  }
-
-  public boolean characterp()
-  {
-    return false;
-  }
-
-  public int length()
-  {
-    type_error(this, Symbol.SEQUENCE);
-    // Not reached.
-    return 0;
-  }
-
-  public final LispObject LENGTH()
-  {
-    return Fixnum.getInstance(length());
-  }
-
-  public LispObject CHAR(int index)
-  {
-    return type_error(this, Symbol.STRING);
-  }
-
-  public LispObject SCHAR(int index)
-  {
-    return type_error(this, Symbol.SIMPLE_STRING);
-  }
-
-  public LispObject NTH(int index)
-  {
-    return type_error(this, Symbol.LIST);
-  }
-
-  public final LispObject NTH(LispObject arg)
-  {
-    return NTH(Fixnum.getValue(arg));
-  }
-
-  public LispObject elt(int index)
-  {
-    return type_error(this, Symbol.SEQUENCE);
-  }
-
-  public LispObject reverse()
-  {
-    return type_error(this, Symbol.SEQUENCE);
-  }
-
-  public LispObject nreverse()
-  {
-    return type_error(this, Symbol.SEQUENCE);
-  }
-
-  public long aref_long(int index)
-  {
-    return AREF(index).longValue();
-  }
-
-  public int aref(int index)
-  {
-    return AREF(index).intValue();
-  }
-
-  public LispObject AREF(int index)
-  {
-    return type_error(this, Symbol.ARRAY);
-  }
-
-  public final LispObject AREF(LispObject index)
-  {
-      return AREF(Fixnum.getValue(index));
-  }
-
-  public void aset(int index, int n)
-
-  {    
-          aset(index, Fixnum.getInstance(n));
-  }
-
-  public void aset(int index, LispObject newValue)
-
-  {
-    type_error(this, Symbol.ARRAY);
-  }
-
-  public final void aset(LispObject index, LispObject newValue)
-
-  {
-      aset(Fixnum.getValue(index), newValue);
-  }
-
-  public LispObject SVREF(int index)
-  {
-    return type_error(this, Symbol.SIMPLE_VECTOR);
-  }
-
-  public void svset(int index, LispObject newValue)
-  {
-    type_error(this, Symbol.SIMPLE_VECTOR);
-  }
-
-  public void vectorPushExtend(LispObject element)
-
-  {
-    noFillPointer();
-  }
-
-  public LispObject VECTOR_PUSH_EXTEND(LispObject element)
-
-  {
-    return noFillPointer();
-  }
-
-  public LispObject VECTOR_PUSH_EXTEND(LispObject element, LispObject extension)
-
-  {
-    return noFillPointer();
-  }
-
-  public final LispObject noFillPointer()
-  {
-    return type_error(this, list(Symbol.AND, Symbol.VECTOR,
-                                       list(Symbol.SATISFIES,
-                                             Symbol.ARRAY_HAS_FILL_POINTER_P)));
-  }
-
-  public LispObject[] copyToArray()
-  {
-    type_error(this, Symbol.LIST);
-    // Not reached.
-    return null;
-  }
-
-  public final LispObject SYMBOLP()
-  {
-    return (this instanceof Symbol) ? T : NIL;
-  }
-
-  public final boolean listp()
-  {
-    return (this instanceof Cons) || (this instanceof Nil);
-  }
-
-  public final LispObject LISTP()
-  {
-    return listp() ? T : NIL;
-  }
-
-  public final boolean endp()
-  {
-    if (this instanceof Cons)
-        return false;
-    else if (this instanceof Nil)
-        return true;
-    type_error(this, Symbol.LIST);
-    // Not reached.
-    return false;
-  }
-
-  public final LispObject ENDP()
-  {
-    return endp() ? T : NIL;
-  }
-
-  public LispObject NOT()
-  {
-    return NIL;
-  }
-
-  public boolean isSpecialOperator()
-  {
-    type_error(this, Symbol.SYMBOL);
-    // Not reached.
-    return false;
-  }
-
-  public boolean isSpecialVariable()
-  {
-    return false;
-  }
-
-
-  public LispObject getDocumentation(LispObject docType)
-
-  {
-    LispObject alist;
-    synchronized (documentationHashTable) {
-      alist = documentationHashTable.get(this);
-    }
-    if (alist != null)
-      {
-        LispObject entry = assq(docType, alist);
-        if (entry instanceof Cons)
-          return ((Cons)entry).cdr;
-      }
-    if(docType == Symbol.FUNCTION && this instanceof Symbol) {
-        LispObject fn = ((Symbol)this).getSymbolFunction();
-        if(fn instanceof Function) {
-            DocString ds = fn.getClass().getAnnotation(DocString.class);
-            if(ds != null) {
-                String arglist = ds.args();
-                String docstring = ds.doc();
-                if(arglist.length() != 0)
-                    ((Function)fn).setLambdaList(new SimpleString(arglist));
-                if(docstring.length() != 0) {
-                    SimpleString doc = new SimpleString(docstring);
-                    ((Symbol)this).setDocumentation(Symbol.FUNCTION, doc);
-                    return doc;
-                } else if (fn.typep(Symbol.STANDARD_GENERIC_FUNCTION) != NIL) {
-                    return Symbol.SLOT_VALUE.execute(fn, Symbol._DOCUMENTATION);
-                }
-            }
-        }
-    }
-    return NIL;
-  }
-
-  public void setDocumentation(LispObject docType, LispObject documentation)
-
-  {
-    synchronized (documentationHashTable) {
-      LispObject alist = documentationHashTable.get(this);
-      if (alist == null)
-        alist = NIL;
-      LispObject entry = assq(docType, alist);
-      if (entry instanceof Cons)
-        {
-          ((Cons)entry).cdr = documentation;
-        }
-      else
-        {
-          alist = alist.push(new Cons(docType, documentation));
-          documentationHashTable.put(this, alist);
-        }
-    }
-  }
-
-  public LispObject getPropertyList()
-  {
-    return null;
-  }
-
-  public void setPropertyList(LispObject obj)
-  {
-  }
-
-  public LispObject getSymbolValue()
-  {
-    return type_error(this, Symbol.SYMBOL);
-  }
-
-  public LispObject getSymbolFunction()
-  {
-    return type_error(this, Symbol.SYMBOL);
-  }
-
-  public LispObject getSymbolFunctionOrDie()
-  {
-    return type_error(this, Symbol.SYMBOL);
-  }
-
-  public LispObject getSymbolSetfFunction()
-  {
-    return type_error(this, Symbol.SYMBOL);
-  }
-
-  public LispObject getSymbolSetfFunctionOrDie()
-  {
-    return type_error(this, Symbol.SYMBOL);
-  }
+  public abstract Object lockableInstance();
+
+
+  public abstract LispObject car();
+
+  public abstract void setCar(LispObject obj);
+
+  public abstract LispObject RPLACA(LispObject obj);
+
+  public abstract LispObject cdr();
+
+  public abstract void setCdr(LispObject obj);
+
+  public abstract LispObject RPLACD(LispObject obj);
+
+  public abstract LispObject cadr();
+
+  public abstract LispObject cddr();
+
+  public abstract LispObject caddr();
+
+  public abstract LispObject nthcdr(int n);
+
+  public abstract LispObject push(LispObject obj);
+
+  public abstract LispObject EQ(LispObject obj);
+
+  public abstract boolean eql(char c);
+
+  public abstract boolean eql(int n);
+
+  public abstract boolean eql(LispObject obj);
+
+  public abstract LispObject EQL(LispObject obj);
+
+  public abstract LispObject EQUAL(LispObject obj);
+
+  public abstract boolean equal(int n);
+
+  public abstract boolean equal(LispObject obj);
+
+  public abstract boolean equalp(int n);
+
+  public abstract boolean equalp(LispObject obj);
+
+  public abstract LispObject ABS();
+
+  public abstract LispObject NUMERATOR();
+
+  public abstract LispObject DENOMINATOR();
+
+  public abstract LispObject EVENP();
+
+  public abstract boolean evenp();
+
+  public abstract LispObject ODDP();
+
+  public abstract boolean oddp();
+
+  public abstract LispObject PLUSP();
+
+  public abstract boolean plusp();
+
+  public abstract LispObject MINUSP();
+
+  public abstract boolean minusp();
+
+  public abstract LispObject NUMBERP();
+
+  public abstract boolean numberp();
+
+  public abstract LispObject ZEROP();
+
+  public abstract boolean zerop();
+
+  public abstract LispObject COMPLEXP();
+
+  public abstract LispObject FLOATP();
+
+  public abstract boolean floatp();
+
+  public abstract LispObject INTEGERP();
+
+  public abstract boolean integerp();
+
+  public abstract LispObject RATIONALP();
+
+  public abstract boolean rationalp();
+
+  public abstract LispObject REALP();
+
+  public abstract boolean realp();
+
+  public abstract LispObject STRINGP();
+
+  public abstract boolean stringp();
+
+  public abstract LispObject SIMPLE_STRING_P();
+
+  public abstract LispObject VECTORP();
+
+  public abstract boolean vectorp();
+
+  public abstract LispObject CHARACTERP();
+
+  public abstract boolean characterp();
+
+  public abstract int length();
+
+  public abstract LispObject LENGTH();
+
+  public abstract LispObject CHAR(int index);
+
+  public abstract LispObject SCHAR(int index);
+
+  public abstract LispObject NTH(int index);
+
+  public abstract LispObject NTH(LispObject arg);
+
+  public abstract LispObject elt(int index);
+
+  public abstract LispObject reverse();
+
+  public abstract LispObject nreverse();
+
+  public abstract long aref_long(int index);
+
+  public abstract int aref(int index);
+
+  public abstract LispObject AREF(int index);
+
+  public abstract LispObject AREF(LispObject index);
+
+  public abstract void aset(int index, int n);
+
+  public abstract void aset(int index, LispObject newValue);
+
+  public abstract void aset(LispObject index, LispObject newValue);
+
+  public abstract LispObject SVREF(int index);
+
+  public abstract void svset(int index, LispObject newValue);
+
+  public abstract void vectorPushExtend(LispObject element);
+
+  public abstract LispObject VECTOR_PUSH_EXTEND(LispObject element);
+
+  public abstract LispObject VECTOR_PUSH_EXTEND(LispObject element, LispObject extension);
+
+  public abstract LispObject noFillPointer();
+
+  public abstract LispObject[] copyToArray();
+
+  public abstract LispObject SYMBOLP();
+
+  public abstract boolean listp();
+
+  public abstract LispObject LISTP();
+
+  public abstract boolean endp();
+
+  public abstract LispObject ENDP();
+
+  public abstract LispObject NOT();
+
+  public abstract boolean isSpecialOperator();
+
+  public abstract boolean isSpecialVariable();
+
+
+  public abstract LispObject getDocumentation(LispObject docType);
+
+  public abstract void setDocumentation(LispObject docType, LispObject documentation);
+
+  public abstract LispObject getPropertyList();
+
+  public abstract void setPropertyList(LispObject obj);
+
+  public abstract LispObject getSymbolValue();
+
+  public abstract LispObject getSymbolFunction();
+
+  public abstract LispObject getSymbolFunctionOrDie();
+
+  public abstract LispObject getSymbolSetfFunction();
+
+  public abstract LispObject getSymbolSetfFunctionOrDie();
 
   /** PRINC-TO-STRING function to be used with Java objects
    * 
    * @return A string in human-readable format, as per PRINC definition
    */
-  public String princToString()
-  {
-      LispThread thread = LispThread.currentThread();
-      SpecialBindingsMark mark = thread.markSpecialBindings();
-      try {
-          thread.bindSpecial(Symbol.PRINT_READABLY, NIL);
-          thread.bindSpecial(Symbol.PRINT_ESCAPE, NIL);
-          return printObject();
-      }
-      finally {
-          thread.resetSpecialBindings(mark);
-      }
-  }
+  public abstract String princToString();
 
-  public String printObject()
-  {
-      return unreadableString(toString(), false);
-  }
+  public abstract String printObject();
 
   /** Calls unreadableString(String s, boolean identity) with a default
    * identity value of 'true'.
@@ -762,9 +295,7 @@ public class LispObject //extends Lisp
    * @param s String representation of this object.
    * @return String enclosed in the non-readable #< ... > markers
    */
-  public final String unreadableString(String s) {
-     return unreadableString(s, true);
-  }
+  public abstract String unreadableString(String s);
 
   /** Creates a non-readably (as per CLHS terminology) representation
    * of the 'this' object, using string 's'.
@@ -779,543 +310,194 @@ public class LispObject //extends Lisp
    *            in the output.
    * @return a non reabable string (i.e. one enclosed in the #< > markers)
    */
-  public final String unreadableString(String s, boolean identity)
-  {
-    if (Symbol.PRINT_READABLY.symbolValue() != NIL) {
-        error(new PrintNotReadable(list(Keyword.OBJECT, this)));
-        return null; // not reached
-    }
-    StringBuilder sb = new StringBuilder("#<");
-    sb.append(s);
-    if (identity) {
-      sb.append(" {");
-      sb.append(Integer.toHexString(System.identityHashCode(this)).toUpperCase());
-      sb.append("}");
-    }
-    sb.append(">");
-    return sb.toString();
-  }
+  public abstract String unreadableString(String s, boolean identity);
 
   // Special operator
-  public LispObject execute(LispObject args, Environment env)
+  public abstract LispObject execute(LispObject args, Environment env);
 
-  {
-    return error(new LispError());
-  }
+  public abstract LispObject execute();
 
-  public LispObject execute()
-  {
-    return type_error(this, Symbol.FUNCTION);
-  }
+  public abstract LispObject execute(LispObject arg);
 
-  public LispObject execute(LispObject arg)
-  {
-    return type_error(this, Symbol.FUNCTION);
-  }
+  public abstract LispObject execute(LispObject first, LispObject second);
 
-  public LispObject execute(LispObject first, LispObject second)
+  public abstract LispObject execute(LispObject first, LispObject second,
+                            LispObject third);
 
-  {
-    return type_error(this, Symbol.FUNCTION);
-  }
+  public abstract LispObject execute(LispObject first, LispObject second,
+                            LispObject third, LispObject fourth);
 
-  public LispObject execute(LispObject first, LispObject second,
-                            LispObject third)
-
-  {
-    return type_error(this, Symbol.FUNCTION);
-  }
-
-  public LispObject execute(LispObject first, LispObject second,
-                            LispObject third, LispObject fourth)
-
-  {
-    return type_error(this, Symbol.FUNCTION);
-  }
-
-  public LispObject execute(LispObject first, LispObject second,
+  public abstract LispObject execute(LispObject first, LispObject second,
                             LispObject third, LispObject fourth,
-                            LispObject fifth)
+                            LispObject fifth);
 
-  {
-    return type_error(this, Symbol.FUNCTION);
-  }
-
-  public LispObject execute(LispObject first, LispObject second,
+  public abstract LispObject execute(LispObject first, LispObject second,
                             LispObject third, LispObject fourth,
-                            LispObject fifth, LispObject sixth)
+                            LispObject fifth, LispObject sixth);
 
-  {
-    return type_error(this, Symbol.FUNCTION);
-  }
-
-  public LispObject execute(LispObject first, LispObject second,
+  public abstract LispObject execute(LispObject first, LispObject second,
                             LispObject third, LispObject fourth,
                             LispObject fifth, LispObject sixth,
-                            LispObject seventh)
+                            LispObject seventh);
 
-  {
-    return type_error(this, Symbol.FUNCTION);
-  }
-
-  public LispObject execute(LispObject first, LispObject second,
+  public abstract LispObject execute(LispObject first, LispObject second,
                             LispObject third, LispObject fourth,
                             LispObject fifth, LispObject sixth,
-                            LispObject seventh, LispObject eighth)
+                            LispObject seventh, LispObject eighth);
 
-  {
-    return type_error(this, Symbol.FUNCTION);
-  }
-
-  public LispObject execute(LispObject[] args)
-  {
-    return type_error(this, Symbol.FUNCTION);
-  }
+  public abstract LispObject execute(LispObject[] args);
 
   // Used by COMPILE-MULTIPLE-VALUE-CALL.
-  public LispObject dispatch(LispObject[] args)
-  {
-    switch (args.length)
-      {
-      case 0:
-        return execute();
-      case 1:
-        return execute(args[0]);
-      case 2:
-        return execute(args[0], args[1]);
-      case 3:
-        return execute(args[0], args[1], args[2]);
-      case 4:
-        return execute(args[0], args[1], args[2], args[3]);
-      case 5:
-        return execute(args[0], args[1], args[2], args[3], args[4]);
-      case 6:
-        return execute(args[0], args[1], args[2], args[3], args[4],
-                       args[5]);
-      case 7:
-        return execute(args[0], args[1], args[2], args[3], args[4],
-                       args[5], args[6]);
-      case 8:
-        return execute(args[0], args[1], args[2], args[3], args[4],
-                       args[5], args[6], args[7]);
-      default:
-        return execute(args);
-      }
-  }
+  public abstract LispObject dispatch(LispObject[] args);
 
-  public int intValue()
-  {
-    type_error(this, Symbol.INTEGER);
-    // Not reached.
-    return 0;
-  }
+  public abstract int intValue();
 
-  public long longValue()
-  {
-    type_error(this, Symbol.INTEGER);
-    // Not reached.
-    return 0;
-  }
+  public abstract long longValue();
 
-  public float floatValue()
-  {
-    type_error(this, Symbol.SINGLE_FLOAT);
-    // Not reached
-    return 0;
-  }
+  public abstract float floatValue();
 
-  public double doubleValue()
-  {
-    type_error(this, Symbol.DOUBLE_FLOAT);
-    // Not reached
-    return 0;
-  }
+  public abstract double doubleValue();
 
-  public LispObject incr()
-  {
-    return type_error(this, Symbol.NUMBER);
-  }
+  public abstract LispObject incr();
 
-  public LispObject decr()
-  {
-    return type_error(this, Symbol.NUMBER);
-  }
+  public abstract LispObject decr();
 
-  public LispObject negate()
-  {
-    return Fixnum.ZERO.subtract(this);
-  }
+  public abstract LispObject negate();
 
-  public LispObject add(int n)
-  {
-    return add(Fixnum.getInstance(n));
-  }
+  public abstract LispObject add(int n);
 
-  public LispObject add(LispObject obj)
-  {
-    return type_error(this, Symbol.NUMBER);
-  }
+  public abstract LispObject add(LispObject obj);
 
-  public LispObject subtract(int n)
-  {
-    return subtract(Fixnum.getInstance(n));
-  }
+  public abstract LispObject subtract(int n);
 
-  public LispObject subtract(LispObject obj)
-  {
-    return type_error(this, Symbol.NUMBER);
-  }
+  public abstract LispObject subtract(LispObject obj);
 
-  public LispObject multiplyBy(int n)
-  {
-    return multiplyBy(Fixnum.getInstance(n));
-  }
+  public abstract LispObject multiplyBy(int n);
 
-  public LispObject multiplyBy(LispObject obj)
-  {
-    return type_error(this, Symbol.NUMBER);
-  }
+  public abstract LispObject multiplyBy(LispObject obj);
 
-  public LispObject divideBy(LispObject obj)
-  {
-    return type_error(this, Symbol.NUMBER);
-  }
+  public abstract LispObject divideBy(LispObject obj);
 
-  public boolean isEqualTo(int n)
-  {
-    return isEqualTo(Fixnum.getInstance(n));
-  }
+  public abstract boolean isEqualTo(int n);
 
-  public boolean isEqualTo(LispObject obj)
-  {
-    type_error(this, Symbol.NUMBER);
-    // Not reached.
-    return false;
-  }
+  public abstract boolean isEqualTo(LispObject obj);
 
-  public final LispObject IS_E(LispObject obj)
-  {
-    return isEqualTo(obj) ? T : NIL;
-  }
+  public abstract LispObject IS_E(LispObject obj);
 
-  public boolean isNotEqualTo(int n)
-  {
-    return isNotEqualTo(Fixnum.getInstance(n));
-  }
+  public abstract boolean isNotEqualTo(int n);
 
-  public boolean isNotEqualTo(LispObject obj)
-  {
-    type_error(this, Symbol.NUMBER);
-    // Not reached.
-    return false;
-  }
+  public abstract boolean isNotEqualTo(LispObject obj);
 
-  public final LispObject IS_NE(LispObject obj)
-  {
-    return isNotEqualTo(obj) ? T : NIL;
-  }
+  public abstract LispObject IS_NE(LispObject obj);
 
-  public boolean isLessThan(int n)
-  {
-    return isLessThan(Fixnum.getInstance(n));
-  }
+  public abstract boolean isLessThan(int n);
 
-  public boolean isLessThan(LispObject obj)
-  {
-    type_error(this, Symbol.REAL);
-    // Not reached.
-    return false;
-  }
+  public abstract boolean isLessThan(LispObject obj);
 
-  public final LispObject IS_LT(LispObject obj)
-  {
-    return isLessThan(obj) ? T : NIL;
-  }
+  public abstract LispObject IS_LT(LispObject obj);
 
-  public boolean isGreaterThan(int n)
-  {
-    return isGreaterThan(Fixnum.getInstance(n));
-  }
+  public abstract boolean isGreaterThan(int n);
 
-  public boolean isGreaterThan(LispObject obj)
-  {
-    type_error(this, Symbol.REAL);
-    // Not reached.
-    return false;
-  }
+  public abstract boolean isGreaterThan(LispObject obj);
 
-  public final LispObject IS_GT(LispObject obj)
-  {
-    return isGreaterThan(obj) ? T : NIL;
-  }
+  public abstract LispObject IS_GT(LispObject obj);
 
-  public boolean isLessThanOrEqualTo(int n)
-  {
-    return isLessThanOrEqualTo(Fixnum.getInstance(n));
-  }
+  public abstract boolean isLessThanOrEqualTo(int n);
 
-  public boolean isLessThanOrEqualTo(LispObject obj)
-  {
-    type_error(this, Symbol.REAL);
-    // Not reached.
-    return false;
-  }
+  public abstract boolean isLessThanOrEqualTo(LispObject obj);
 
-  public final LispObject IS_LE(LispObject obj)
-  {
-    return isLessThanOrEqualTo(obj) ? T : NIL;
-  }
+  public abstract LispObject IS_LE(LispObject obj);
 
-  public boolean isGreaterThanOrEqualTo(int n)
-  {
-    return isGreaterThanOrEqualTo(Fixnum.getInstance(n));
-  }
+  public abstract boolean isGreaterThanOrEqualTo(int n);
 
-  public boolean isGreaterThanOrEqualTo(LispObject obj)
-  {
-    type_error(this, Symbol.REAL);
-    // Not reached.
-    return false;
-  }
+  public abstract boolean isGreaterThanOrEqualTo(LispObject obj);
 
-  public final LispObject IS_GE(LispObject obj)
-  {
-    return isGreaterThanOrEqualTo(obj) ? T : NIL;
-  }
+  public abstract LispObject IS_GE(LispObject obj);
 
-  public LispObject truncate(LispObject obj)
-  {
-    return type_error(this, Symbol.REAL);
-  }
+  public abstract LispObject truncate(LispObject obj);
 
-  public LispObject MOD(LispObject divisor)
-  {
-    truncate(divisor);
-    final LispThread thread = LispThread.currentThread();
-    LispObject remainder = thread._values[1];
-    thread.clearValues();
-    if (!remainder.zerop())
-      {
-        if (divisor.minusp())
-          {
-            if (plusp())
-              return remainder.add(divisor);
-          }
-        else
-          {
-            if (minusp())
-              return remainder.add(divisor);
-          }
-      }
-    return remainder;
-  }
+  public abstract LispObject MOD(LispObject divisor);
 
-  public LispObject MOD(int divisor)
-  {
-    return MOD(Fixnum.getInstance(divisor));
-  }
+  public abstract LispObject MOD(int divisor);
 
-  public LispObject ash(int shift)
-  {
-    return ash(Fixnum.getInstance(shift));
-  }
+  public abstract LispObject ash(int shift);
 
-  public LispObject ash(LispObject obj)
-  {
-    return type_error(this, Symbol.INTEGER);
-  }
+  public abstract LispObject ash(LispObject obj);
 
-  public LispObject LOGNOT()
-  {
-    return type_error(this, Symbol.INTEGER);
-  }
+  public abstract LispObject LOGNOT();
 
-  public LispObject LOGAND(int n)
-  {
-    return LOGAND(Fixnum.getInstance(n));
-  }
+  public abstract LispObject LOGAND(int n);
 
-  public LispObject LOGAND(LispObject obj)
-  {
-    return type_error(this, Symbol.INTEGER);
-  }
+  public abstract LispObject LOGAND(LispObject obj);
 
-  public LispObject LOGIOR(int n)
-  {
-    return LOGIOR(Fixnum.getInstance(n));
-  }
+  public abstract LispObject LOGIOR(int n);
 
-  public LispObject LOGIOR(LispObject obj)
-  {
-    return type_error(this, Symbol.INTEGER);
-  }
+  public abstract LispObject LOGIOR(LispObject obj);
 
-  public LispObject LOGXOR(int n)
-  {
-    return LOGXOR(Fixnum.getInstance(n));
-  }
+  public abstract LispObject LOGXOR(int n);
 
-  public LispObject LOGXOR(LispObject obj)
-  {
-    return type_error(this, Symbol.INTEGER);
-  }
+  public abstract LispObject LOGXOR(LispObject obj);
 
-  public LispObject LDB(int size, int position)
-  {
-    return type_error(this, Symbol.INTEGER);
-  }
+  public abstract LispObject LDB(int size, int position);
 
-  public int sxhash()
-  {
-    return hashCode() & 0x7fffffff;
-  }
+  public abstract int sxhash();
 
   // For EQUALP hash tables.
-  public int psxhash()
-  {
-    return sxhash();
-  }
+  public abstract int psxhash();
 
-  public int psxhash(int depth)
-  {
-    return psxhash();
-  }
+  public abstract int psxhash(int depth);
 
-  public LispObject STRING()
-  {
-    return error(new TypeError(princToString() + " cannot be coerced to a string."));
-  }
+  public abstract LispObject STRING();
 
-  public char[] chars()
-  {
-    type_error(this, Symbol.STRING);
-    // Not reached.
-    return null;
-  }
+  public abstract char[] chars();
 
-  public char[] getStringChars()
-  {
-    type_error(this, Symbol.STRING);
-    // Not reached.
-    return null;
-  }
+  public abstract char[] getStringChars();
 
   /** Returns a string representing the value
    * of a 'string designator', if the instance is one.
    *
    * Throws an error if the instance isn't a string designator.
    */
-  public String getStringValue()
-  {
-    type_error(this, Symbol.STRING);
-    // Not reached.
-    return null;
-  }
+  public abstract String getStringValue();
 
-  public LispObject getSlotValue_0()
-  {
-    return type_error(this, Symbol.STRUCTURE_OBJECT);
-  }
+  public abstract LispObject getSlotValue_0();
 
-  public LispObject getSlotValue_1()
-  {
-    return type_error(this, Symbol.STRUCTURE_OBJECT);
-  }
+  public abstract LispObject getSlotValue_1();
 
-  public LispObject getSlotValue_2()
-  {
-    return type_error(this, Symbol.STRUCTURE_OBJECT);
-  }
+  public abstract LispObject getSlotValue_2();
 
-  public LispObject getSlotValue_3()
-  {
-    return type_error(this, Symbol.STRUCTURE_OBJECT);
-  }
+  public abstract LispObject getSlotValue_3();
 
-  public LispObject getSlotValue(int index)
-  {
-    return type_error(this, Symbol.STRUCTURE_OBJECT);
-  }
+  public abstract LispObject getSlotValue(int index);
 
-  public int getFixnumSlotValue(int index)
-  {
-    type_error(this, Symbol.STRUCTURE_OBJECT);
-    // Not reached.
-    return 0;
-  }
+  public abstract int getFixnumSlotValue(int index);
 
-  public boolean getSlotValueAsBoolean(int index)
-  {
-    type_error(this, Symbol.STRUCTURE_OBJECT);
-    // Not reached.
-    return false;
-  }
+  public abstract boolean getSlotValueAsBoolean(int index);
 
-  public void setSlotValue_0(LispObject value)
+  public abstract void setSlotValue_0(LispObject value);
 
-  {
-    type_error(this, Symbol.STRUCTURE_OBJECT);
-  }
+  public abstract void setSlotValue_1(LispObject value);
 
-  public void setSlotValue_1(LispObject value)
+  public abstract void setSlotValue_2(LispObject value);
 
-  {
-    type_error(this, Symbol.STRUCTURE_OBJECT);
-  }
+  public abstract void setSlotValue_3(LispObject value);
 
-  public void setSlotValue_2(LispObject value)
+  public abstract void setSlotValue(int index, LispObject value);
 
-  {
-    type_error(this, Symbol.STRUCTURE_OBJECT);
-  }
+  public abstract LispObject SLOT_VALUE(LispObject slotName);
 
-  public void setSlotValue_3(LispObject value)
-
-  {
-    type_error(this, Symbol.STRUCTURE_OBJECT);
-  }
-
-  public void setSlotValue(int index, LispObject value)
-
-  {
-    type_error(this, Symbol.STRUCTURE_OBJECT);
-  }
-
-  public LispObject SLOT_VALUE(LispObject slotName)
-  {
-    return type_error(this, Symbol.STANDARD_OBJECT);
-  }
-
-  public void setSlotValue(LispObject slotName, LispObject newValue)
-
-  {
-    type_error(this, Symbol.STANDARD_OBJECT);
-  }
+  public abstract void setSlotValue(LispObject slotName, LispObject newValue);
 
   // Profiling.
-  public int getCallCount()
-  {
-    return 0;
-  }
+  public abstract int getCallCount();
 
-  public void setCallCount(int n)
-  {
-  }
+  public abstract void setCallCount(int n);
 
-  public void incrementCallCount()
-  {
-  }
+  public abstract void incrementCallCount();
 
-  public int getHotCount()
-  {
-      return 0;
-  }
+  public abstract int getHotCount();
 
-  public void setHotCount(int n)
-  {
-  }
+  public abstract void setHotCount(int n);
 
-  public void incrementHotCount()
-  {
-  }
+  public abstract void incrementHotCount();
 }

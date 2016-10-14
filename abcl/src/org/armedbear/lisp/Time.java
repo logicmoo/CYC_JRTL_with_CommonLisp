@@ -128,7 +128,7 @@ public final class Time
         // "Time zone values increase with motion to the west..."
         // Convert milliseconds to hours.
         return LispThread.currentThread().setValues(
-          Fixnum.getInstance(- rawOffset).divideBy(Fixnum.getInstance(3600000)),
+          Fixnum.makeFixnum(- rawOffset).divideBy(Fixnum.makeFixnum(3600000)),
           inDaylightTime ? T : NIL);
       }
     };

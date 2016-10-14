@@ -46,7 +46,7 @@ public final class Bignum extends LispInteger
   private static BigInteger MOST_POSITIVE_FIXNUM =
           BigInteger.valueOf(Integer.MAX_VALUE);
 
-  public static LispInteger getInstance(long l) {
+  public static LispInteger makeBignum(long l) {
       if (Integer.MIN_VALUE <= l && l <= Integer.MAX_VALUE)
           return Fixnum.getInstance(l);
       else
@@ -58,10 +58,10 @@ public final class Bignum extends LispInteger
               MOST_POSITIVE_FIXNUM.compareTo(n) > 0)
           return new Bignum(n);
       else
-          return Fixnum.getInstance(n.intValue());
+          return Fixnum.makeFixnum(n.intValue());
   }
 
-  public static LispInteger getInstance(String s, int radix) {
+  public static LispInteger makeBignum(String s, int radix) {
       BigInteger value = new BigInteger(s, radix);
 
       return Bignum.getInstance(value);
@@ -669,7 +669,7 @@ public final class Bignum extends LispInteger
   public LispObject LOGAND(int n)
   {
     if (n >= 0)
-      return Fixnum.getInstance(value.intValue() & n);
+      return Fixnum.makeFixnum(value.intValue() & n);
     else
       return number(value.and(BigInteger.valueOf(n)));
   }
@@ -681,7 +681,7 @@ public final class Bignum extends LispInteger
       {
         int n = ((Fixnum)obj).value;
         if (n >= 0)
-          return Fixnum.getInstance(value.intValue() & n);
+          return Fixnum.makeFixnum(value.intValue() & n);
         else
           return number(value.and(BigInteger.valueOf(n)));
       }

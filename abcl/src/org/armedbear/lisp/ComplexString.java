@@ -135,7 +135,7 @@ public final class ComplexString extends AbstractString
     if (array != null)
       {
         value1 = array;
-        value2 = Fixnum.getInstance(displacement);
+        value2 = Fixnum.makeFixnum(displacement);
       }
     else
       {
@@ -385,7 +385,7 @@ public final class ComplexString extends AbstractString
           }
       }
     else
-      array.aset(index + displacement, LispCharacter.getInstance(c));
+      array.aset(index + displacement, LispCharacter.makeCharacter(c));
   }
 
   @Override
@@ -394,21 +394,21 @@ public final class ComplexString extends AbstractString
     final int limit = length();
     if (index < 0 || index >= limit)
       badIndex(index, limit);
-    return LispCharacter.getInstance(charAt(index));
+    return LispCharacter.makeCharacter(charAt(index));
   }
 
   // Ignores fill pointer.
   @Override
   public LispObject CHAR(int index)
   {
-    return LispCharacter.getInstance(charAt(index));
+    return LispCharacter.makeCharacter(charAt(index));
   }
 
   // Ignores fill pointer.
   @Override
   public LispObject AREF(int index)
   {
-    return LispCharacter.getInstance(charAt(index));
+    return LispCharacter.makeCharacter(charAt(index));
   }
 
   @Override
@@ -442,7 +442,7 @@ public final class ComplexString extends AbstractString
 
   {
     vectorPushExtend(element);
-    return Fixnum.getInstance(fillPointer - 1);
+    return Fixnum.makeFixnum(fillPointer - 1);
   }
 
   @Override
@@ -464,7 +464,7 @@ public final class ComplexString extends AbstractString
       }
     else
       array.aset(fillPointer + displacement, element);
-    return Fixnum.getInstance(fillPointer++);
+    return Fixnum.makeFixnum(fillPointer++);
   }
 
   public final void ensureCapacity(int minCapacity)

@@ -31,6 +31,8 @@ import javax.script.*;
 
 import org.armedbear.lisp.*;
 
+//import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+
 
 public class AbclScriptEngine extends AbstractScriptEngine implements Invocable, Compilable {
 
@@ -210,7 +212,7 @@ public class AbclScriptEngine extends AbstractScriptEngine implements Invocable,
 		return (Function) interpreter.eval("#'" + name);
 	}
 
-	@Override
+	//@Override
 	public Bindings createBindings() {
 		return new SimpleBindings();
 	}
@@ -239,7 +241,7 @@ public class AbclScriptEngine extends AbstractScriptEngine implements Invocable,
 	    return retVal.javaInstance();
     }
 	
-	@Override
+	//@Override
 	public Object eval(String code, ScriptContext ctx) throws ScriptException {
 		return eval(evalScript, new SimpleString(code), ctx);
 	}
@@ -255,7 +257,7 @@ public class AbclScriptEngine extends AbstractScriptEngine implements Invocable,
 		return w.toString();
 	}
 	
-	@Override
+	//@Override
 	public Object eval(Reader code, ScriptContext ctx) throws ScriptException {
 		try {
 			return eval(toString(code), ctx);
@@ -264,7 +266,7 @@ public class AbclScriptEngine extends AbstractScriptEngine implements Invocable,
 		}
 	}
 
-	@Override
+	//@Override
 	public ScriptEngineFactory getFactory() {
 		return new AbclScriptEngineFactory();
 	}
@@ -333,7 +335,7 @@ public class AbclScriptEngine extends AbstractScriptEngine implements Invocable,
     }
 
 	
-	@Override
+	
 	public CompiledScript compile(String script) throws ScriptException {
 		try {
 		    Function f = (Function) compileScript.execute(new SimpleString(script));
@@ -343,13 +345,25 @@ public class AbclScriptEngine extends AbstractScriptEngine implements Invocable,
 		}
 	}
 
-	@Override
+	
 	public CompiledScript compile(Reader script) throws ScriptException {
 		try {
 			return compile(toString(script));
 		} catch (IOException e) {
 			throw new ScriptException(e);
 		}
+	}
+
+	public Object invoke(Object thiz, String name, Object... args) throws ScriptException, NoSuchMethodException {
+		// TODO Auto-generated method stub
+//		if(true) Errors.unimplementedMethod("Auto-generated method stub:  Invocable.invoke");
+		return null;
+	}
+
+	public Object invoke(String name, Object... args) throws ScriptException, NoSuchMethodException {
+//		// TODO Auto-generated method stub
+//		if(true) Errors.unimplementedMethod("Auto-generated method stub:  Invocable.invoke");
+		return null;
 	}
 
 }

@@ -1,0 +1,1 @@
+(in-package :cl-test) (defun LOAD-TEST-FUN-3 () :foo)

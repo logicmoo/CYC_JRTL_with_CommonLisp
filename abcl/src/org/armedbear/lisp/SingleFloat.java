@@ -37,7 +37,7 @@ import static org.armedbear.lisp.Lisp.*;
 
 import java.math.BigInteger;
 
-public final class SingleFloat extends LispObject
+public final class SingleFloat extends NLispObject
 {
     public static final SingleFloat ZERO       = new SingleFloat(0);
     public static final SingleFloat MINUS_ZERO = new SingleFloat(-0.0f);
@@ -478,7 +478,7 @@ public final class SingleFloat extends LispObject
                 MathFunctions.OverUnderFlowCheck(quotient);
             if (quotient >= Integer.MIN_VALUE && quotient <= Integer.MAX_VALUE) {
                 int q = (int) quotient;
-                return thread.setValues(Fixnum.getInstance(q),
+                return thread.setValues(Fixnum.makeFixnum(q),
                                         new SingleFloat(value - q * divisor));
             }
             // We need to convert the quotient to a bignum.
@@ -491,8 +491,8 @@ public final class SingleFloat extends LispObject
             else
                 m = (bits & 0x7fffff) | 0x800000;
             LispObject significand = number(m);
-            Fixnum exponent = Fixnum.getInstance(e - 150);
-            Fixnum sign = Fixnum.getInstance(s);
+            Fixnum exponent = Fixnum.makeFixnum(e - 150);
+            Fixnum sign = Fixnum.makeFixnum(s);
             LispObject result = significand;
             result =
                 result.multiplyBy(MathFunctions.EXPT.execute(Fixnum.TWO, exponent));
@@ -510,7 +510,7 @@ public final class SingleFloat extends LispObject
                 MathFunctions.OverUnderFlowCheck(quotient);
             if (quotient >= Integer.MIN_VALUE && quotient <= Integer.MAX_VALUE) {
                 int q = (int) quotient;
-                return thread.setValues(Fixnum.getInstance(q),
+                return thread.setValues(Fixnum.makeFixnum(q),
                                         new DoubleFloat(value - q * divisor));
             }
             // We need to convert the quotient to a bignum.
@@ -523,8 +523,8 @@ public final class SingleFloat extends LispObject
             else
                 m = (bits & 0xfffffffffffffL) | 0x10000000000000L;
             LispObject significand = number(m);
-            Fixnum exponent = Fixnum.getInstance(e - 1075);
-            Fixnum sign = Fixnum.getInstance(s);
+            Fixnum exponent = Fixnum.makeFixnum(e - 1075);
+            Fixnum sign = Fixnum.makeFixnum(s);
             LispObject result = significand;
             result =
                 result.multiplyBy(MathFunctions.EXPT.execute(Fixnum.TWO, exponent));

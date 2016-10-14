@@ -37,7 +37,7 @@ import static org.armedbear.lisp.Lisp.*;
 
 import java.math.BigInteger;
 
-public final class DoubleFloat extends LispObject
+public final class DoubleFloat extends NLispObject
 {
     public static final DoubleFloat ZERO       = new DoubleFloat(0);
     public static final DoubleFloat MINUS_ZERO = new DoubleFloat(-0.0d);
@@ -210,7 +210,7 @@ public final class DoubleFloat extends LispObject
 
     public static double getValue(LispObject obj)
     {
-        if (obj instanceof DoubleFloat) 
+        if (obj instanceof DoubleFloat)
             return ((DoubleFloat)obj).value;
             type_error(obj, Symbol.FLOAT);
             // Not reached.
@@ -473,7 +473,7 @@ public final class DoubleFloat extends LispObject
                 MathFunctions.OverUnderFlowCheck(quotient);
             if (quotient >= Integer.MIN_VALUE && quotient <= Integer.MAX_VALUE) {
                 int q = (int) quotient;
-                return thread.setValues(Fixnum.getInstance(q),
+                return thread.setValues(Fixnum.makeFixnum(q),
                                         new DoubleFloat(value - q * divisor));
             }
             // We need to convert the quotient to a bignum.
@@ -486,8 +486,8 @@ public final class DoubleFloat extends LispObject
             else
                 m = (bits & 0xfffffffffffffL) | 0x10000000000000L;
             LispObject significand = number(m);
-            Fixnum exponent = Fixnum.getInstance(e - 1075);
-            Fixnum sign = Fixnum.getInstance(s);
+            Fixnum exponent = Fixnum.makeFixnum(e - 1075);
+            Fixnum sign = Fixnum.makeFixnum(s);
             LispObject result = significand;
             result =
                 result.multiplyBy(MathFunctions.EXPT.execute(Fixnum.TWO, exponent));
@@ -508,7 +508,7 @@ public final class DoubleFloat extends LispObject
 //             Debug.trace("quotient = " + quotient);
             if (quotient >= Integer.MIN_VALUE && quotient <= Integer.MAX_VALUE) {
                 int q = (int) quotient;
-                return thread.setValues(Fixnum.getInstance(q),
+                return thread.setValues(Fixnum.makeFixnum(q),
                                         new DoubleFloat(value - q * divisor));
             }
             // We need to convert the quotient to a bignum.
@@ -522,9 +522,9 @@ public final class DoubleFloat extends LispObject
                 m = (bits & 0xfffffffffffffL) | 0x10000000000000L;
             LispObject significand = number(m);
 //             Debug.trace("significand = " + significand.printObject());
-            Fixnum exponent = Fixnum.getInstance(e - 1075);
+            Fixnum exponent = Fixnum.makeFixnum(e - 1075);
 //             Debug.trace("exponent = " + exponent.printObject());
-            Fixnum sign = Fixnum.getInstance(s);
+            Fixnum sign = Fixnum.makeFixnum(s);
 //             Debug.trace("sign = " + sign.printObject());
             LispObject result = significand;
 //             Debug.trace("result = " + result.printObject());

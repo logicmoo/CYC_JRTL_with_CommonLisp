@@ -48,14 +48,14 @@ import java.util.WeakHashMap;
 
 abstract public class Lisp extends ABCLStatic
 {
-  public static final boolean debug = true;
+  public static final boolean debug = false;
 
   public static boolean cold = true;
 
   public static boolean initialized;
 
-  public static boolean NO_STACK_FRAMES = true;
-  
+  public static boolean NO_STACK_FRAMES = !debug;
+
   final public static boolean LISP_NOT_JAVA = true;
 
   static final WeakHashMap<LispObject, LispObject>
@@ -147,7 +147,9 @@ abstract public class Lisp extends ABCLStatic
   }
 
   // End-of-file marker.
-  public static final LispObject EOF = new LispObject();
+  public static final LispObject EOF = new SLispObject() {
+	  public String printObject() { return unreadableString("eof", false); }
+  };
 
   // String hash randomization base
   // Sets a base offset hashing value per JVM session, as an antidote to
@@ -155,7 +157,7 @@ abstract public class Lisp extends ABCLStatic
   //    (Denial of Service through hash table multi-collisions)
   public static final int randomStringHashBase =
           (int)(new java.util.Date().getTime());
-  
+
   public static boolean profiling;
 
   public static boolean sampling;
@@ -1092,13 +1094,13 @@ abstract public class Lisp extends ABCLStatic
   }
 
   public static Symbol checkSymbol(LispObject obj)
-  {             
-          if (obj instanceof Symbol)      
-                  return (Symbol) obj;         
-          return (Symbol)// Not reached.       
+  {
+          if (obj instanceof Symbol)
+                  return (Symbol) obj;
+          return (Symbol)// Not reached.
               type_error(obj, Symbol.SYMBOL);
   }
-  
+
   public static final LispObject checkList(LispObject obj)
 
   {
@@ -1110,18 +1112,18 @@ abstract public class Lisp extends ABCLStatic
   public static final AbstractArray checkArray(LispObject obj)
 
   {
-          if (obj instanceof AbstractArray)       
-                  return (AbstractArray) obj;         
-          return (AbstractArray)// Not reached.       
+          if (obj instanceof AbstractArray)
+                  return (AbstractArray) obj;
+          return (AbstractArray)// Not reached.
         type_error(obj, Symbol.ARRAY);
   }
 
   public static final AbstractVector checkVector(LispObject obj)
 
   {
-          if (obj instanceof AbstractVector)      
-                  return (AbstractVector) obj;         
-          return (AbstractVector)// Not reached.       
+          if (obj instanceof AbstractVector)
+                  return (AbstractVector) obj;
+          return (AbstractVector)// Not reached.
         type_error(obj, Symbol.VECTOR);
   }
 
@@ -1146,9 +1148,9 @@ abstract public class Lisp extends ABCLStatic
   public static final StackFrame checkStackFrame(LispObject obj)
 
   {
-          if (obj instanceof StackFrame)      
-                  return (StackFrame) obj;         
-          return (StackFrame)// Not reached.       
+          if (obj instanceof StackFrame)
+                  return (StackFrame) obj;
+          return (StackFrame)// Not reached.
             type_error(obj, Symbol.STACK_FRAME);
   }
 
@@ -1195,7 +1197,7 @@ abstract public class Lisp extends ABCLStatic
             }
         }
     }
-      
+
     // Decimal representation.
     if (oldValue instanceof Fixnum)
       sb.append(((Fixnum)oldValue).value);
@@ -1223,9 +1225,9 @@ abstract public class Lisp extends ABCLStatic
   public static final LispObject number(long n)
   {
     if (n >= Integer.MIN_VALUE && n <= Integer.MAX_VALUE)
-      return Fixnum.getInstance((int)n);
+      return Fixnum.makeFixnum((int)n);
     else
-      return Bignum.getInstance(n);
+      return Bignum.makeBignum(n);
   }
 
   private static final BigInteger INT_MIN = BigInteger.valueOf(Integer.MIN_VALUE);
@@ -1257,7 +1259,7 @@ abstract public class Lisp extends ABCLStatic
   public static final LispObject number(BigInteger n)
   {
     if (n.compareTo(INT_MIN) >= 0 && n.compareTo(INT_MAX) <= 0)
-      return Fixnum.getInstance(n.intValue());
+      return Fixnum.makeFixnum(n.intValue());
     else
       return Bignum.getInstance(n);
   }
@@ -1303,13 +1305,13 @@ abstract public class Lisp extends ABCLStatic
   {
       return readObjectFromReader(new StringReader(s));
   }
-  
+
   final static Charset UTF8CHARSET = Charset.forName("UTF-8");
   public static LispObject readObjectFromStream(InputStream s)
   {
       return readObjectFromReader(new InputStreamReader(s));
   }
-  
+
   public static LispObject readObjectFromReader(Reader r)
   {
     LispThread thread = LispThread.currentThread();
@@ -1332,7 +1334,7 @@ abstract public class Lisp extends ABCLStatic
         thread.resetSpecialBindings(mark);
     }
   }
-  
+
   @Deprecated
   public static final LispObject loadCompiledFunction(final String namestring)
   {
@@ -1363,7 +1365,7 @@ abstract public class Lisp extends ABCLStatic
       InputStream input = null;
       if (load != null) {
           input = load.getInputStream();
-      } else { 
+      } else {
           // Make a last-ditch attempt to load from the boot classpath XXX OSGi hack
           URL url = null;
           try {
@@ -1546,7 +1548,7 @@ abstract public class Lisp extends ABCLStatic
     list(Symbol.UNSIGNED_BYTE, Fixnum.constants[32]);
 
   public static final LispObject UNSIGNED_BYTE_32_MAX_VALUE =
-    Bignum.getInstance(4294967296L);
+    Bignum.makeBignum(4294967296L);
 
   public static final LispObject getUpgradedArrayElementType(LispObject type)
 
@@ -1665,35 +1667,35 @@ abstract public class Lisp extends ABCLStatic
   public static final LispCharacter checkCharacter(LispObject obj)
 
   {
-          if (obj instanceof LispCharacter) 
-                  return (LispCharacter) obj;         
-          return (LispCharacter) // Not reached.       
+          if (obj instanceof LispCharacter)
+                  return (LispCharacter) obj;
+          return (LispCharacter) // Not reached.
         type_error(obj, Symbol.CHARACTER);
   }
 
   public static final Package checkPackage(LispObject obj)
 
   {
-          if (obj instanceof Package)     
-                  return (Package) obj;         
-          return (Package) // Not reached.       
+          if (obj instanceof Package)
+                  return (Package) obj;
+          return (Package) // Not reached.
         type_error(obj, Symbol.PACKAGE);
   }
 
   public static Pathname checkPathname(LispObject obj)
   {
-          if (obj instanceof Pathname)     
-                  return (Pathname) obj;         
-          return (Pathname) // Not reached.       
+          if (obj instanceof Pathname)
+                  return (Pathname) obj;
+          return (Pathname) // Not reached.
         type_error(obj, Symbol.PATHNAME);
   }
 
   public static final Function checkFunction(LispObject obj)
 
   {
-          if (obj instanceof Function)    
-                  return (Function) obj;         
-          return (Function) // Not reached.       
+          if (obj instanceof Function)
+                  return (Function) obj;
+          return (Function) // Not reached.
         type_error(obj, Symbol.FUNCTION);
   }
 
@@ -1710,9 +1712,9 @@ abstract public class Lisp extends ABCLStatic
 
   {
           final Stream stream = checkStream(obj);
-          if (stream.isCharacterInputStream())      
-                  return stream;                        
-          return (Stream) // Not reached.                      
+          if (stream.isCharacterInputStream())
+                  return stream;
+          return (Stream) // Not reached.
           error(new TypeError("The value " + obj.princToString() +
                         " is not a character input stream."));
   }
@@ -1721,8 +1723,8 @@ abstract public class Lisp extends ABCLStatic
 
   {
           final Stream stream = checkStream(obj);
-          if (stream.isCharacterOutputStream())      
-                  return stream;                        
+          if (stream.isCharacterOutputStream())
+                  return stream;
         return (Stream) // Not reached.
         error(new TypeError("The value " + obj.princToString() +
                             " is not a character output stream."));
@@ -1732,16 +1734,16 @@ abstract public class Lisp extends ABCLStatic
 
   {
           final Stream stream = checkStream(obj);
-          if (stream.isBinaryInputStream())      
-                  return stream;                        
+          if (stream.isBinaryInputStream())
+                  return stream;
         return (Stream) // Not reached.
         error(new TypeError("The value " + obj.princToString() +
                              " is not a binary input stream."));
   }
-  
+
   public static final Stream outSynonymOf(LispObject obj)
 
-  {       
+  {
           if (obj instanceof Stream)
             return (Stream) obj;
           if (obj == T)
@@ -1769,34 +1771,34 @@ abstract public class Lisp extends ABCLStatic
 
   {
     if (n < 0 || n > 255)
-      type_error(Fixnum.getInstance(n), UNSIGNED_BYTE_8);
+      type_error(Fixnum.makeFixnum(n), UNSIGNED_BYTE_8);
     checkStream(obj)._writeByte(n);
   }
 
   public static final Readtable checkReadtable(LispObject obj)
 
   {
-          if (obj instanceof Readtable)   
-                  return (Readtable) obj;         
-          return (Readtable)// Not reached.       
+          if (obj instanceof Readtable)
+                  return (Readtable) obj;
+          return (Readtable)// Not reached.
           type_error(obj, Symbol.READTABLE);
   }
-  
-  public final static AbstractString checkString(LispObject obj) 
+
+  public final static AbstractString checkString(LispObject obj)
 
   {
-          if (obj instanceof AbstractString)            
-                  return (AbstractString) obj;                    
-          return (AbstractString)// Not reached.               
+          if (obj instanceof AbstractString)
+                  return (AbstractString) obj;
+          return (AbstractString)// Not reached.
               type_error(obj, Symbol.STRING);
   }
-  
-  public final static Layout checkLayout(LispObject obj) 
+
+  public final static Layout checkLayout(LispObject obj)
 
   {
-          if (obj instanceof Layout)            
-                  return (Layout) obj;                    
-          return (Layout)// Not reached.               
+          if (obj instanceof Layout)
+                  return (Layout) obj;
+          return (Layout)// Not reached.
                 type_error(obj, Symbol.LAYOUT);
   }
 
@@ -1813,9 +1815,9 @@ abstract public class Lisp extends ABCLStatic
   public static final Environment checkEnvironment(LispObject obj)
 
   {
-          if (obj instanceof Environment)         
-                  return (Environment) obj;         
-          return (Environment)// Not reached.       
+          if (obj instanceof Environment)
+                  return (Environment) obj;
+          return (Environment)// Not reached.
         type_error(obj, Symbol.ENVIRONMENT);
   }
 
@@ -2334,10 +2336,10 @@ abstract public class Lisp extends ABCLStatic
 
   static
   {
-    Symbol.MOST_POSITIVE_FIXNUM.initializeConstant(Fixnum.getInstance(Integer.MAX_VALUE));
-    Symbol.MOST_NEGATIVE_FIXNUM.initializeConstant(Fixnum.getInstance(Integer.MIN_VALUE));
-    Symbol.MOST_POSITIVE_JAVA_LONG.initializeConstant(Bignum.getInstance(Long.MAX_VALUE));
-    Symbol.MOST_NEGATIVE_JAVA_LONG.initializeConstant(Bignum.getInstance(Long.MIN_VALUE));
+    Symbol.MOST_POSITIVE_FIXNUM.initializeConstant(Fixnum.makeFixnum(Integer.MAX_VALUE));
+    Symbol.MOST_NEGATIVE_FIXNUM.initializeConstant(Fixnum.makeFixnum(Integer.MIN_VALUE));
+    Symbol.MOST_POSITIVE_JAVA_LONG.initializeConstant(Bignum.makeBignum(Long.MAX_VALUE));
+    Symbol.MOST_NEGATIVE_JAVA_LONG.initializeConstant(Bignum.makeBignum(Long.MIN_VALUE));
   }
 
   public static void exit(int status)
@@ -2476,11 +2478,11 @@ abstract public class Lisp extends ABCLStatic
 
   // ### *compile-file-type*
   public static final Symbol _COMPILE_FILE_TYPE_ =
-   exportSpecial("*COMPILE-FILE-TYPE*", PACKAGE_SYS, new SimpleString("abcl"));    
-  
+   exportSpecial("*COMPILE-FILE-TYPE*", PACKAGE_SYS, new SimpleString("abcl"));
+
   // ### *compile-file-class-extension*
   public static final Symbol _COMPILE_FILE_CLASS_EXTENSION_ =
-   exportSpecial("*COMPILE-FILE-CLASS-EXTENSION*", PACKAGE_SYS, new SimpleString("cls"));
+   exportSpecial("*COMPILE-FILE-CLASS-EXTENSION*", PACKAGE_SYS, new SimpleString("class")); // cls
 
   // ### *compile-file-zip*
   public static final Symbol _COMPILE_FILE_ZIP_ =
@@ -2495,7 +2497,7 @@ abstract public class Lisp extends ABCLStatic
   static
   {
     // ### array-dimension-limit
-    Symbol.ARRAY_DIMENSION_LIMIT.initializeConstant(Fixnum.getInstance(ARRAY_DIMENSION_MAX));
+    Symbol.ARRAY_DIMENSION_LIMIT.initializeConstant(Fixnum.makeFixnum(ARRAY_DIMENSION_MAX));
   }
 
   // ### char-code-limit
@@ -2503,7 +2505,7 @@ abstract public class Lisp extends ABCLStatic
   public static final int CHAR_MAX = Character.MAX_VALUE;
   static
   {
-    Symbol.CHAR_CODE_LIMIT.initializeConstant(Fixnum.getInstance(CHAR_MAX + 1));
+    Symbol.CHAR_CODE_LIMIT.initializeConstant(Fixnum.makeFixnum(CHAR_MAX + 1));
   }
 
   static
@@ -2648,7 +2650,7 @@ abstract public class Lisp extends ABCLStatic
   static
   {
     // ### internal-time-units-per-second
-    Symbol.INTERNAL_TIME_UNITS_PER_SECOND.initializeConstant(Fixnum.getInstance(1000));
+    Symbol.INTERNAL_TIME_UNITS_PER_SECOND.initializeConstant(Fixnum.makeFixnum(1000));
   }
 
   static
@@ -2731,7 +2733,7 @@ abstract public class Lisp extends ABCLStatic
     exportSpecial("*COMPILE-FILE-ENVIRONMENT*", PACKAGE_SYS, NIL);
 
   public static final LispObject UNBOUND_VALUE = new unboundValue();
-  static class unboundValue extends LispObject
+  static class unboundValue extends SLispObject
   {
     @Override
     public String printObject()
@@ -2741,12 +2743,12 @@ abstract public class Lisp extends ABCLStatic
   }
 
   public static final LispObject NULL_VALUE = new nullValue();
-  static class nullValue extends LispObject
+  static class nullValue extends SLispObject
   {
     @Override
     public String printObject()
     {
-      return unreadableString("null", false);
+    	return unreadableString("null", false);
     }
   }
 

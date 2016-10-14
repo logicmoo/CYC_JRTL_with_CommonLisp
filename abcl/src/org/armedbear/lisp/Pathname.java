@@ -50,7 +50,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-public class Pathname extends LispObject {
+public class Pathname extends ALispObject {
 
     /** The path component separator used by internally generated
      * path namestrings.

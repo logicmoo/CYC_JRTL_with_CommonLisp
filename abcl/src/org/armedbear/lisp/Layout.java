@@ -36,7 +36,7 @@ package org.armedbear.lisp;
 import java.util.concurrent.ConcurrentHashMap;
 import static org.armedbear.lisp.Lisp.*;
 
-public class Layout extends LispObject
+public class Layout extends ALispObject
 {
   private final LispObject lispClass;
   public final ConcurrentHashMap<LispObject, LispObject> slotTable;
@@ -87,7 +87,7 @@ public class Layout extends LispObject
   {
     ConcurrentHashMap ht = new ConcurrentHashMap(slotNames.length);
     for (int i = slotNames.length; i-- > 0;)
-      ht.put(slotNames[i], Fixnum.getInstance(i));
+      ht.put(slotNames[i], Fixnum.makeFixnum(i));
     return ht;
   }
 
@@ -183,7 +183,7 @@ public class Layout extends LispObject
       @Override
       public LispObject execute(LispObject arg)
       {
-          return Fixnum.getInstance(checkLayout(arg).slotNames.length);
+          return Fixnum.makeFixnum(checkLayout(arg).slotNames.length);
       }
     };
 
@@ -221,7 +221,7 @@ public class Layout extends LispObject
           for (int i = slotNames.length; i-- > 0;)
             {
               if (slotNames[i] == second)
-                return Fixnum.getInstance(i);
+                return Fixnum.makeFixnum(i);
             }
           return NIL;
       }
@@ -241,7 +241,7 @@ public class Layout extends LispObject
             for (int i = 0; i < limit; i++)
               {
                 if (slotNames[i] == second)
-                  return Fixnum.getInstance(i);
+                  return Fixnum.makeFixnum(i);
               }
             // Reaching here, it's not an instance slot.
             LispObject rest = layOutFirst.sharedSlots;

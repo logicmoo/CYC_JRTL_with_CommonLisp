@@ -38,8 +38,15 @@ import static org.armedbear.lisp.Lisp.*;
 // ### peek-char
 public final class peek_char extends Primitive
 {
-    private static LispObject internalEOF = new LispObject();
-    
+    private static LispObject internalEOF = new SLispObject() {
+
+        @Override
+        public String printObject()
+        {
+        	return unreadableString("internalEOF", false);
+        }
+	};
+
     private peek_char()
     {
         super("peek-char",
@@ -86,7 +93,7 @@ public final class peek_char extends Primitive
                 LispObject result = stream.readChar(eofError, internalEOF);
                 if (result == internalEOF)
                     return eofValue;
-                
+
                 if (result instanceof LispCharacter) {
                     char c = ((LispCharacter)result).value;
                     if (!rt.isWhitespace(c)) {
@@ -106,7 +113,7 @@ public final class peek_char extends Primitive
                 LispObject result = stream.readChar(eofError, internalEOF);
                 if (result == internalEOF)
                     return eofValue;
-                
+
                 if (result instanceof LispCharacter) {
                     if (((LispCharacter)result).value == c) {
                         stream.unreadChar((LispCharacter)result);

@@ -162,6 +162,7 @@ initialized from the `java-dotted-name'."
 (define-class-name +java-out-of-memory+ "java.lang.OutOfMemoryError")
 (define-class-name +java-io-input-stream+ "java.io.InputStream")
 (define-class-name +java-util-collection+ "java.util.Collection")
+(define-class-name +block-lisp-object+ "org.armedbear.lisp.BlockLispObject")
 (define-class-name +lisp-object+ "org.armedbear.lisp.LispObject")
 (defconstant +lisp-object-array+ (class-array +lisp-object+))
 (define-class-name +lisp-simple-string+ "org.armedbear.lisp.SimpleString")
@@ -262,7 +263,7 @@ in JVM-internal representation."
       (princ #\) s)
       (princ ret-string s))
     str)
-;;  (format nil "(~{~A~})~A" 
+;;  (format nil "(~{~A~})~A"
 ;;          (internal-field-ref return-type))
   )
 
@@ -798,7 +799,7 @@ modfies the interfaces members with a list of the references to the
 corresponding pool indices."
   (let ((interface-refs nil))
     (dolist (interface (class-file-interfaces class))
-      (push 
+      (push
        (pool-add-class (class-file-constants class)
                        interface)
        interface-refs))
@@ -1729,7 +1730,7 @@ be able to
 - find the method's code attribute
 - add code to the code attribute
 - finalize the code attribute contents (blocking it for further addition)
-- 
+-
 
 
 |#

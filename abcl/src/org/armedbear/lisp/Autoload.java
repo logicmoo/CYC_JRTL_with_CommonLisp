@@ -137,7 +137,7 @@ public class Autoload extends Function
         final LispThread thread = LispThread.currentThread();
         final SpecialBindingsMark mark = thread.markSpecialBindings();
         int loadDepth = Fixnum.getValue(_LOAD_DEPTH_.symbolValue());
-        thread.bindSpecial(_LOAD_DEPTH_, Fixnum.getInstance(++loadDepth));
+        thread.bindSpecial(_LOAD_DEPTH_, Fixnum.makeFixnum(++loadDepth));
         try {
             if (_AUTOLOAD_VERBOSE_.symbolValue(thread) != NIL
                 || "Y".equals(System.getProperty("abcl.autoload.verbose")))

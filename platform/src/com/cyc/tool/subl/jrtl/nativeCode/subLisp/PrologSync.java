@@ -9,6 +9,7 @@ import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -227,8 +228,8 @@ public class PrologSync extends SubLTrampolineFile {
 
 	}
 
-	private static void sync_println(String string) {
-		System.out.println(string);
+	private static void sync_println(String... string) {
+		System.out.println(Arrays.toString(string));
 
 	}
 
@@ -252,7 +253,7 @@ public class PrologSync extends SubLTrampolineFile {
 	public static void bp() {
 		// TODO Auto-generated method stub
 		if(true) Errors.unimplementedMethod("Auto-generated method stub:  PrologSync.bp");
-		
+
 	}
 
 

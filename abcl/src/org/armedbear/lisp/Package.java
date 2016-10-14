@@ -43,7 +43,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-public final class Package extends LispObject implements java.io.Serializable
+public final class Package extends ALispObject implements java.io.Serializable
 {
     private String name;
     private transient SimpleString lispName;

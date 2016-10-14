@@ -1,7 +1,8 @@
 <!DOCTYPE Workspace SYSTEM "http://www.slickedit.com/dtd/vse/10.0/vpw.dtd">
 <Workspace Version="10.0" VendorName="SlickEdit">
 	<Projects>
-		<Project File="new-platform/new-new-platfom.vpj"/>
+		<Project File="ABCLVErsion.vpj"/>
 		<Project File="platform/new-platform.vpj"/>
+		<Project File="powerloom-4.0.9.beta/powerloom-4.0.9.beta.vpj"/>
 	</Projects>
 </Workspace>

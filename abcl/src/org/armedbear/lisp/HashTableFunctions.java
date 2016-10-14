@@ -244,9 +244,9 @@ public final class HashTableFunctions
       public LispObject execute(LispObject arg)
       {
           if (arg instanceof WeakHashTable) {
-              return Fixnum.getInstance(((WeakHashTable)arg).getCount());
+              return Fixnum.makeFixnum(((WeakHashTable)arg).getCount());
           }
-          return Fixnum.getInstance(checkHashTable(arg).getCount());
+          return Fixnum.makeFixnum(checkHashTable(arg).getCount());
       }
     };
 
@@ -261,7 +261,7 @@ public final class HashTableFunctions
       @Override
       public LispObject execute(LispObject arg)
       {
-        return Fixnum.getInstance(arg.sxhash());
+        return Fixnum.makeFixnum(arg.sxhash());
       }
     };
 
@@ -277,7 +277,7 @@ public final class HashTableFunctions
       @Override
       public LispObject execute(LispObject arg)
       {
-        return Fixnum.getInstance(arg.psxhash());
+        return Fixnum.makeFixnum(arg.psxhash());
       }
     };
 
@@ -348,9 +348,9 @@ public final class HashTableFunctions
       public LispObject execute(LispObject arg)
       {
           if (arg instanceof WeakHashTable) {
-              return Fixnum.getInstance(((WeakHashTable)arg).getSize());
+              return Fixnum.makeFixnum(((WeakHashTable)arg).getSize());
           }
-          return Fixnum.getInstance(checkHashTable(arg).getSize());
+          return Fixnum.makeFixnum(checkHashTable(arg).getSize());
       }
     };
 

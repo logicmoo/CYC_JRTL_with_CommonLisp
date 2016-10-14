@@ -33,7 +33,7 @@
 
 package org.armedbear.lisp;
 
-public final class SymbolMacro extends LispObject
+public final class SymbolMacro extends ALispObject
 {
     private LispObject expansion;
 

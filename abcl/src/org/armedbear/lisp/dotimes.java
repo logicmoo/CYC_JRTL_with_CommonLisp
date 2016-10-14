@@ -58,7 +58,7 @@ public final class dotimes extends SpecialOperator
     LispObject specials = parseSpecials(bodyAndDecls.NTH(1));
     bodyForm = bodyAndDecls.car();
 
-    LispObject blockId = new LispObject();
+    BlockLispObject blockId = new BlockLispObject();
     final Environment ext = new Environment(env);
     try
       {
@@ -98,9 +98,9 @@ public final class dotimes extends SpecialOperator
             for (i = 0; i < count; i++)
               {
                 if (binding instanceof SpecialBinding)
-                  ((SpecialBinding)binding).value = Fixnum.getInstance(i);
+                  ((SpecialBinding)binding).value = Fixnum.makeFixnum(i);
                 else
-                  ((Binding)binding).value = Fixnum.getInstance(i);
+                  ((Binding)binding).value = Fixnum.makeFixnum(i);
 
                 processTagBody(bodyForm, localTags, ext);
 
@@ -108,9 +108,9 @@ public final class dotimes extends SpecialOperator
                   handleInterrupt();
               }
             if (binding instanceof SpecialBinding)
-              ((SpecialBinding)binding).value = Fixnum.getInstance(i);
+              ((SpecialBinding)binding).value = Fixnum.makeFixnum(i);
             else
-              ((Binding)binding).value = Fixnum.getInstance(i);
+              ((Binding)binding).value = Fixnum.makeFixnum(i);
             result = eval(resultForm, ext, thread);
           }
         else if (limit instanceof Bignum)

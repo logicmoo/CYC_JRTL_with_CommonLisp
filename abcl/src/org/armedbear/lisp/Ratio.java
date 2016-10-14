@@ -37,7 +37,7 @@ import static org.armedbear.lisp.Lisp.*;
 
 import java.math.BigInteger;
 
-public final class Ratio extends LispObject
+public final class Ratio extends NLispObject
 {
     private BigInteger numerator;
     private BigInteger denominator;

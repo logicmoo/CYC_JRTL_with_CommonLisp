@@ -94,7 +94,7 @@ public class JavaStackFrame
     result = result.push(FILE);
     result = result.push(new SimpleString(javaFrame.getFileName()));
     result = result.push(LINE);
-    result = result.push(Fixnum.getInstance(javaFrame.getLineNumber()));
+    result = result.push(Fixnum.makeFixnum(javaFrame.getLineNumber()));
     if (javaFrame.isNativeMethod()) {
       result = result.push(NATIVE_METHOD);
       result = result.push(Symbol.T);
@@ -122,7 +122,7 @@ public class JavaStackFrame
     result = result.push(new Cons("FILE", 
 				  new SimpleString(javaFrame.getFileName())));
     result = result.push(new Cons("LINE",
-				  Fixnum.getInstance(javaFrame.getLineNumber())));
+				  Fixnum.makeFixnum(javaFrame.getLineNumber())));
     result = result.push(new Cons("NATIVE-METHOD",
 				  LispObject.getInstance(javaFrame.isNativeMethod())));
     return result.nreverse();

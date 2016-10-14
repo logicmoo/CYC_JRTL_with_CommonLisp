@@ -37,8 +37,9 @@ import static org.armedbear.lisp.Lisp.*;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class LispCharacter extends LispObject
+public final class LispCharacter extends NLispObject
 {
+
   public static final LispCharacter[] constants;
   public static final CharHashMap<LispCharacter> lispChars;
 
@@ -61,7 +62,7 @@ public final class LispCharacter extends LispObject
 
   public final char value;
   private String name;
-  public static LispCharacter getInstance(char c)
+  public static LispCharacter makeCharacter(char c)
   {
     return lispChars.get(c);
   }
@@ -302,7 +303,7 @@ public final class LispCharacter extends LispObject
           {
             String name = ((Symbol)arg).getName();
             if (name.length() == 1)
-              return LispCharacter.getInstance(name.charAt(0));
+              return LispCharacter.makeCharacter(name.charAt(0));
           }
         return type_error(arg, Symbol.CHARACTER_DESIGNATOR);
       }
@@ -327,7 +328,7 @@ public final class LispCharacter extends LispObject
       public LispObject execute(LispObject arg)
       {
           int n = LispCharacter.getValue(arg);
-          return Fixnum.getInstance(n);
+          return Fixnum.makeFixnum(n);
       }
     };
 
@@ -339,7 +340,7 @@ public final class LispCharacter extends LispObject
       public LispObject execute(LispObject arg)
       {
           int n = LispCharacter.getValue(arg);
-          return Fixnum.getInstance(n);
+          return Fixnum.makeFixnum(n);
       }
     };
 
@@ -352,7 +353,7 @@ public final class LispCharacter extends LispObject
       {
         int n = Fixnum.getValue(arg);
         if (Character.isValidCodePoint(n))
-          return LispCharacter.getInstance((char)n);
+          return LispCharacter.makeCharacter((char)n);
         return NIL;
       }
     };
@@ -418,7 +419,7 @@ public final class LispCharacter extends LispObject
 				LispCharacter value = downcases.get(c);
 				return value != null ? value : arg;
 			}
-        return LispCharacter.getInstance(toLowerCase(c));
+        return LispCharacter.makeCharacter(toLowerCase(c));
       }
     };
 
@@ -437,7 +438,7 @@ public final class LispCharacter extends LispObject
 				LispCharacter value = upcases.get(c);
 				return value != null ? value : arg;
 			}
-        return LispCharacter.getInstance(toUpperCase(c));
+        return LispCharacter.makeCharacter(toUpperCase(c));
       }
     };
 
@@ -465,7 +466,7 @@ public final class LispCharacter extends LispObject
             radix = ((Fixnum)second).value;
         else
             radix = -1;
-        
+
         if (radix < 2 || radix > 36)
           return type_error(second,
                                  list(Symbol.INTEGER, Fixnum.TWO,
@@ -489,7 +490,7 @@ public final class LispCharacter extends LispObject
       public LispObject execute(LispObject arg)
       {
           final int n = Character.digit(LispCharacter.getValue(arg), 10);
-          return n < 0 ? NIL : Fixnum.getInstance(n);
+          return n < 0 ? NIL : Fixnum.makeFixnum(n);
       }
       @Override
       public LispObject execute(LispObject first, LispObject second)
@@ -579,7 +580,7 @@ public final class LispCharacter extends LispObject
       return '\b';
     if (lower.equals("ht"))
       return '\t';
-    if (lower.equals("linefeed") || lower.equals("lf")) 
+    if (lower.equals("linefeed") || lower.equals("lf"))
       return '\n';
     if (lower.equals("ff"))
       return '\f';
@@ -617,7 +618,7 @@ public final class LispCharacter extends LispObject
       {
         String s = arg.STRING().getStringValue();
         int n = nameToChar(s);
-        return n >= 0 ? LispCharacter.getInstance((char)n) : NIL;
+        return n >= 0 ? LispCharacter.makeCharacter((char)n) : NIL;
       }
     };
 
@@ -678,40 +679,40 @@ public final class LispCharacter extends LispObject
     return Character.toUpperCase(c);
   }
 
-  static int maxNamedChar = 0; 
-  static Map<String, LispCharacter> namedToChar = new HashMap<String, LispCharacter>(); 
+  static int maxNamedChar = 0;
+  static Map<String, LispCharacter> namedToChar = new HashMap<String, LispCharacter>();
 	private static Map<Integer, LispCharacter> downcases = new HashMap<Integer, LispCharacter>();
 	private static Map<Integer, LispCharacter> upcases = new HashMap<Integer, LispCharacter>();
-  
-  static void setCharNames(int i, String[] string) { 
-    int settingChar = i; 
-    int index = 0; 
-    int stringLen = string.length; 
-    while(stringLen-->0) { 
-      setCharName(settingChar,string[index]); 
-      index++; 
-      settingChar++; 
-    } 
+
+  static void setCharNames(int i, String[] string) {
+    int settingChar = i;
+    int index = 0;
+    int stringLen = string.length;
+    while(stringLen-->0) {
+      setCharName(settingChar,string[index]);
+      index++;
+      settingChar++;
+    }
 		if (maxNamedChar < settingChar)
 			maxNamedChar = settingChar;
-  } 
-  
-  static void setCharName(int settingChar, String string) { 
-    LispCharacter c = lispChars.get((char)settingChar); 
-    c.name = string; 
-    namedToChar.put(string.toLowerCase(), c); 
-  } 
-   
-  static { 
-   new CharNameMaker0(); 
-  } 
-   
-  static class CharNameMaker0{ 
-    { 
-      setCharNames(0,new String[]{"Null", "Soh", "Stx", "Etx", "Eot", "Enq", "Ack", "Bell", "Backspace", "Tab", "Newline", "Vt", "Page", "Return", "So", "Si", "Dle", "Dc1", "Dc2", "Dc3", "Dc4", "Nak", "Syn", "Etb", "Can", "Em", "Sub", "Escape", "Fs", "Gs", "Rs", "Us"}); 
-      setCharNames(128,new String[]{"U0080", "U0081", "U0082", "U0083", "U0084", "U0085", "U0086", "U0087", "U0088", "U0089", "U008a", "U008b", "U008c", "U008d", "U008e", "U008f", "U0090", "U0091", "U0092", "U0093", "U0094", "U0095", "U0096", "U0097", "U0098", "U0099", "U009a", "U009b", "U009c", "U009d", "U009e", "U009f"}); 
-    } 
-  }  
+  }
+
+  static void setCharName(int settingChar, String string) {
+    LispCharacter c = lispChars.get((char)settingChar);
+    c.name = string;
+    namedToChar.put(string.toLowerCase(), c);
+  }
+
+  static {
+   new CharNameMaker0();
+  }
+
+  static class CharNameMaker0{
+    {
+      setCharNames(0,new String[]{"Null", "Soh", "Stx", "Etx", "Eot", "Enq", "Ack", "Bell", "Backspace", "Tab", "Newline", "Vt", "Page", "Return", "So", "Si", "Dle", "Dc1", "Dc2", "Dc3", "Dc4", "Nak", "Syn", "Etb", "Can", "Em", "Sub", "Escape", "Fs", "Gs", "Rs", "Us"});
+      setCharNames(128,new String[]{"U0080", "U0081", "U0082", "U0083", "U0084", "U0085", "U0086", "U0087", "U0088", "U0089", "U008a", "U008b", "U008c", "U008d", "U008e", "U008f", "U0090", "U0091", "U0092", "U0093", "U0094", "U0095", "U0096", "U0097", "U0098", "U0099", "U009a", "U009b", "U009c", "U009d", "U009e", "U009f"});
+    }
+  }
 
   static final char[] UPPER_CASE_CHARS = new char[128];
 
@@ -744,33 +745,33 @@ public final class LispCharacter extends LispObject
 	 * [1]> (defun eqlt (u x ) (when (not (eql u x)) (progn (format t "~A ~A~%"
 	 * u x ) (return-from 'eqlt ()))) t) EQLT [2]> (loop for i from 0 below (min
 	 * 65536 char-code-limit) for x = (code-char i) always
-	 * 
+	 *
 	 * (let ((u (char-code (char-upcase x)))(d (char-code (char-downcase x))))
 	 * (if (equal i u) () (format t "putUpcase(~A,~A);~%" i u)) (if (equal i d)
 	 * () (format t "putDowncase(~A,~A);~%" i d)) t))
-	 * 
+	 *
 	 * (if (equal i (char-code (char-downcase x))) () (format t
 	 * "downcasing.put(~A,~A);~%")) (equal i (char-code (char-downcase x)))) t
 	 * (progn (format t " {~A,~A,~A},~%" i (char-code (char-upcase x))
 	 * (char-code (char-downcase x))) (or (not x)
-	 * 
+	 *
 	 * (and (or (lower-case-p x) (eqlt u x))))))))
-	 * 
+	 *
 	 */
 
 	static {
 		/*
-		 * 
-		 * 
-		 * 
+		 *
+		 *
+		 *
 		 * (loop for i from 0 below (min 65536 char-code-limit) for x =
 		 * (code-char i) always (let ((u (char-code (char-upcase x)))(d
 		 * (char-code (char-downcase x)))) (if (equal i u) () (format t
 		 * "putUpcase(~A,~A);~%" i u)) (if (equal i d) () (format t
 		 * "putDowncase(~A,~A);~%" i d)) t))
-		 * 
+		 *
 		 * from CLISP 2.49 (2010-07-07) <http://clisp.cons.org/>
-		 * 
+		 *
 		 */
 		putDowncase(65, 97);
 		putDowncase(66, 98);
@@ -2180,11 +2181,11 @@ public final class LispCharacter extends LispObject
 	}
 
 	private static void putDowncase(int i, int j) {
-		downcases.put((Integer) i, LispCharacter.getInstance((char) j));
+		downcases.put((Integer) i, LispCharacter.makeCharacter((char) j));
 	}
 
 	private static void putUpcase(int i, int j) {
-		upcases.put((Integer) i, LispCharacter.getInstance((char) j));
+		upcases.put((Integer) i, LispCharacter.makeCharacter((char) j));
 	}
 
 	public static boolean isUpperCase(char c) {

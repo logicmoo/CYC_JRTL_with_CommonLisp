@@ -119,8 +119,8 @@ public final class FloatFunctions
                 else
                     m = (bits & 0x7fffff) | 0x800000;
                 LispObject significand = number(m);
-                Fixnum exponent = Fixnum.getInstance(e - 150);
-                Fixnum sign = Fixnum.getInstance(s);
+                Fixnum exponent = Fixnum.makeFixnum(e - 150);
+                Fixnum sign = Fixnum.makeFixnum(s);
                 return LispThread.currentThread().setValues(significand,
                                                             exponent,
                                                             sign);
@@ -136,8 +136,8 @@ public final class FloatFunctions
                 else
                     m = (bits & 0xfffffffffffffL) | 0x10000000000000L;
                 LispObject significand = number(m);
-                Fixnum exponent = Fixnum.getInstance(e - 1075);
-                Fixnum sign = Fixnum.getInstance(s);
+                Fixnum exponent = Fixnum.makeFixnum(e - 1075);
+                Fixnum sign = Fixnum.makeFixnum(s);
                 return LispThread.currentThread().setValues(significand,
                                                             exponent,
                                                             sign);
@@ -198,8 +198,8 @@ public final class FloatFunctions
         }
     };
 
-    static final Fixnum FIXNUM_24 = Fixnum.getInstance(24);
-    static final Fixnum FIXNUM_53 = Fixnum.getInstance(53);
+    static final Fixnum FIXNUM_24 = Fixnum.makeFixnum(24);
+    static final Fixnum FIXNUM_53 = Fixnum.makeFixnum(53);
 
     // ### float-digits
     // float-digits float => float-digits
@@ -309,7 +309,7 @@ public final class FloatFunctions
         {
             if (arg instanceof SingleFloat) {
                 SingleFloat f = (SingleFloat) arg;
-                return Fixnum.getInstance(Float.floatToIntBits(f.value));
+                return Fixnum.makeFixnum(Float.floatToIntBits(f.value));
             }
             return type_error(arg, Symbol.FLOAT);
         }

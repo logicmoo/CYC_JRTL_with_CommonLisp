@@ -99,7 +99,7 @@ public final class SimpleString extends AbstractString
     @Override
     public LispObject typeOf()
     {
-        return list(Symbol.SIMPLE_BASE_STRING, Fixnum.getInstance(capacity));
+        return list(Symbol.SIMPLE_BASE_STRING, Fixnum.makeFixnum(capacity));
     }
 
     @Override
@@ -357,7 +357,7 @@ public final class SimpleString extends AbstractString
     public LispObject elt(int index)
     {
         try {
-            return LispCharacter.getInstance(chars[index]);
+            return LispCharacter.makeCharacter(chars[index]);
         }
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(index, capacity);
@@ -369,7 +369,7 @@ public final class SimpleString extends AbstractString
     public LispObject CHAR(int index)
     {
         try {
-            return LispCharacter.getInstance(chars[index]);
+            return LispCharacter.makeCharacter(chars[index]);
         }
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(index, capacity);
@@ -381,7 +381,7 @@ public final class SimpleString extends AbstractString
     public LispObject SCHAR(int index)
     {
         try {
-            return LispCharacter.getInstance(chars[index]);
+            return LispCharacter.makeCharacter(chars[index]);
         }
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(index, capacity);
@@ -393,7 +393,7 @@ public final class SimpleString extends AbstractString
     public LispObject AREF(int index)
     {
         try {
-            return LispCharacter.getInstance(chars[index]);
+            return LispCharacter.makeCharacter(chars[index]);
         }
         catch (ArrayIndexOutOfBoundsException e) {
             badIndex(index, capacity);
@@ -416,6 +416,7 @@ public final class SimpleString extends AbstractString
     @Override
     public int sxhash()
     {
+    	if(capacity==0) { return 0; }
         int hashCode = randomStringHashBase;
         for (int i = 0; i < capacity; i++) {
             hashCode += chars[i];
@@ -432,6 +433,7 @@ public final class SimpleString extends AbstractString
     @Override
     public int psxhash()
     {
+    	if(capacity==0) { return 0; }
         int hashCode = randomStringHashBase;
         for (int i = 0; i < capacity; i++) {
             hashCode += Character.toUpperCase(chars[i]);

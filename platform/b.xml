@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="phase02-jrtl">
+    <property environment="env"/>
+    <property name="JRE_LIB" value="C:/pf/java/jdk1.8.0_102/jre/lib/rt.jar"/>
+    <property name="virtstoryteller.location" value="../virtstoryteller"/>
+    <property name="ECLIPSE_HOME" value="../../eclipse/"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.8"/>
+    <property name="source" value="1.8"/>
+    <path id="JUnit 3.libraryclasspath">
+        <pathelement location="${ECLIPSE_HOME}plugins/org.junit_4.12.0.v201504281640/junit.jar"/>
+    </path>
+    <path id="phase02-jrtl.classpath">
+        <pathelement location="build/eclipse-classes"/>
+        <pathelement location="${JRE_LIB}"/>
+        <pathelement location="extra-classes"/>
+        <pathelement location="BeanShell/lib/bsf-all-3.1.jar"/>
+        <pathelement location="BeanShell/lib/bsf.jar"/>
+        <pathelement location="BeanShell/lib/bsf-utils-3.1.jar"/>
+        <pathelement location="BeanShell/lib/bsf-api-3.1.jar"/>
+        <pathelement location="lib/ext/servlet.jar"/>
+        <path refid="JUnit 3.libraryclasspath"/>
+        <pathelement location="lib/ant-1.6.5.jar"/>
+        <pathelement location="lib/asm-all-3.1.jar"/>
+        <pathelement location="lib/commons-math-3.0-SNAPSHOT.jar"/>
+        <pathelement location="lib/customSysParam.jar"/>
+        <pathelement location="lib/cycSparqlEndpoint.jar"/>
+        <pathelement location="lib/ecj-3.5.1.jar"/>
+        <pathelement location="lib/jetty-continuation-8.0.4.v20111024.jar"/>
+        <pathelement location="lib/jetty-http-8.0.4.v20111024.jar"/>
+        <pathelement location="lib/jetty-io-8.0.4.v20111024.jar"/>
+        <pathelement location="lib/jetty-security-8.0.4.v20111024.jar"/>
+        <pathelement location="lib/jetty-server-8.0.4.v20111024.jar"/>
+        <pathelement location="lib/jetty-servlet-8.0.4.v20111024.jar"/>
+        <pathelement location="lib/jetty-util-8.0.4.v20111024.jar"/>
+        <pathelement location="lib/jetty-webapp-8.0.4.v20111024.jar"/>
+        <pathelement location="lib/jetty-xml-8.0.4.v20111024.jar"/>
+        <pathelement location="lib/jsp-2.1-glassfish-2.1.v20100127.jar"/>
+        <pathelement location="lib/jsp-api-2.1-glassfish-2.1.v20100127.jar"/>
+        <pathelement location="lib/junit.jar"/>
+        <pathelement location="lib/kaon2.jar"/>
+        <pathelement location="lib/servlet-api-3.0.20100224.jar"/>
+        <pathelement location="${virtstoryteller.location}/lib/ng4j-0.8/axis.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/axis/axis/1.4/axis-1.4.jar"/>
+        <pathelement location="C:/Users/Administrator/.m2/repository/org/apache/axis/axis-jaxrpc/1.4/axis-jaxrpc-1.4.jar"/>
+    </path>
+    <path id="run.AWTConsole.classpath">
+        <pathelement location="${JRE_LIB}"/>
+        <path refid="phase02-jrtl.classpath"/>
+    </path>
+    <path id="run.AWTConsole.bootclasspath"/>
+    <path id="run.AWTDemoApplet.classpath">
+        <pathelement location="${JRE_LIB}"/>
+        <path refid="phase02-jrtl.classpath"/>
+    </path>
+    <path id="run.AWTDemoApplet.bootclasspath"/>
+    <path id="run.AWTRemoteApplet.classpath">
+        <pathelement location="${JRE_LIB}"/>
+        <path refid="phase02-jrtl.classpath"/>
+    </path>
+    <path id="run.AWTRemoteApplet.bootclasspath"/>
+    <path id="run.BshClassPath.classpath">
+        <pathelement location="${JRE_LIB}"/>
+        <path refid="phase02-jrtl.classpath"/>
+    </path>
+    <path id="run.BshClassPath.bootclasspath"/>
+    <path id="run.ClassBrowser.classpath">
+        <pathelement location="${JRE_LIB}"/>
+        <path refid="phase02-jrtl.classpath"/>
+    </path>
+    <path id="run.ClassBrowser.bootclasspath"/>
+    <path id="run.Console.classpath">
+        <pathelement location="${JRE_LIB}"/>
+        <path refid="phase02-jrtl.classpath"/>
+    </path>
+    <path id="run.Console.bootclasspath"/>
+    <path id="run.JDemoApplet (1).classpath">
+        <pathelement location="${JRE_LIB}"/>
+        <path refid="phase02-jrtl.classpath"/>
+    </path>
+    <path id="run.JDemoApplet (1).bootclasspath"/>
+    <path id="run.JDemoApplet.classpath">
+        <pathelement location="${JRE_LIB}"/>
+        <path refid="phase02-jrtl.classpath"/>
+    </path>
+    <path id="run.JDemoApplet.bootclasspath"/>
+    <path id="run.JDemoFrame.classpath">
+        <pathelement location="${JRE_LIB}"/>
+        <path refid="phase02-jrtl.classpath"/>
+    </path>
+    <path id="run.JDemoFrame.bootclasspath"/>
+    <path id="run.SubLMainForOpt.classpath">
+        <pathelement location="${JRE_LIB}"/>
+        <path refid="phase02-jrtl.classpath"/>
+    </path>
+    <path id="run.SubLMainForOpt.bootclasspath"/>
+    <target name="init">
+        <mkdir dir="build/eclipse-classes"/>
+        <copy includeemptydirs="false" todir="build/eclipse-classes">
+            <fileset dir="src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+                <exclude name="org/jpl7/test/"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="build/eclipse-classes">
+            <fileset dir="BeanShell/asm/src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="build/eclipse-classes">
+            <fileset dir="BeanShell/bsf/src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="build/eclipse-classes">
+            <fileset dir="BeanShell/engine/src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="build/eclipse-classes">
+            <fileset dir="BeanShell/engine/javax-src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="build/eclipse-classes">
+            <fileset dir="BeanShell">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+                <exclude name="asm/src/"/>
+                <exclude name="bsf/src/"/>
+                <exclude name="engine/src/"/>
+                <exclude name="src/"/>
+                <exclude name="engine/javax-src/"/>
+                <exclude name="tests/src/"/>
+                <exclude name="tests/test-scripts/"/>
+                <exclude name="tests/test-scripts/"/>
+                <exclude name="engine/"/>
+                <exclude name="tests/test-scripts/Data/"/>
+                <exclude name="src/"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="build/eclipse-classes">
+            <fileset dir="BeanShell/tests/src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="build/eclipse-classes">
+            <fileset dir="BeanShell/tests/test-scripts">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+                <exclude name="Data/"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="build/eclipse-classes">
+            <fileset dir="BeanShell/engine">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+                <exclude name="src/"/>
+                <exclude name="javax-src/"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="build/eclipse-classes">
+            <fileset dir="BeanShell/tests/test-scripts/Data">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="build/eclipse-classes">
+            <fileset dir="BeanShell/src">
+                <exclude name="**/*.launch"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="build/eclipse-classes"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="build/eclipse-classes" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <src path="BeanShell/asm/src"/>
+            <src path="BeanShell/bsf/src"/>
+            <src path="BeanShell/engine/src"/>
+            <src path="BeanShell/engine/javax-src"/>
+            <src path="BeanShell"/>
+            <src path="BeanShell/tests/src"/>
+            <src path="BeanShell/tests/test-scripts"/>
+            <src path="BeanShell/engine"/>
+            <src path="BeanShell/tests/test-scripts/Data"/>
+            <src path="BeanShell/src"/>
+            <exclude name="org/jpl7/test/"/>
+            <exclude name="asm/src/"/>
+            <exclude name="bsf/src/"/>
+            <exclude name="engine/src/"/>
+            <exclude name="src/"/>
+            <exclude name="engine/javax-src/"/>
+            <exclude name="tests/src/"/>
+            <exclude name="tests/test-scripts/"/>
+            <exclude name="tests/test-scripts/"/>
+            <exclude name="engine/"/>
+            <exclude name="tests/test-scripts/Data/"/>
+            <exclude name="src/"/>
+            <exclude name="Data/"/>
+            <exclude name="src/"/>
+            <exclude name="javax-src/"/>
+            <classpath refid="phase02-jrtl.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="AWTConsole">
+        <java classname="bsh.util.AWTConsole" failonerror="true" fork="yes">
+            <classpath refid="run.AWTConsole.classpath"/>
+            <bootclasspath>
+                <path refid="run.AWTConsole.bootclasspath"/>
+            </bootclasspath>
+        </java>
+    </target>
+    <target name="AWTDemoApplet">
+        <java classname="sun.applet.AppletViewer" dir="." failonerror="true" fork="yes">
+            <arg line="AWTDemoApplet.html"/>
+            <classpath refid="run.AWTDemoApplet.classpath"/>
+            <bootclasspath>
+                <path refid="run.AWTDemoApplet.bootclasspath"/>
+            </bootclasspath>
+        </java>
+    </target>
+    <target name="AWTRemoteApplet">
+        <java classname="sun.applet.AppletViewer" dir="." failonerror="true" fork="yes">
+            <arg line="AWTRemoteApplet.html"/>
+            <classpath refid="run.AWTRemoteApplet.classpath"/>
+            <bootclasspath>
+                <path refid="run.AWTRemoteApplet.bootclasspath"/>
+            </bootclasspath>
+        </java>
+    </target>
+    <target name="BshClassPath">
+        <java classname="bsh.classpath.BshClassPath" failonerror="true" fork="yes">
+            <classpath refid="run.BshClassPath.classpath"/>
+            <bootclasspath>
+                <path refid="run.BshClassPath.bootclasspath"/>
+            </bootclasspath>
+        </java>
+    </target>
+    <target name="ClassBrowser">
+        <java classname="bsh.util.ClassBrowser" failonerror="true" fork="yes">
+            <classpath refid="run.ClassBrowser.classpath"/>
+            <bootclasspath>
+                <path refid="run.ClassBrowser.bootclasspath"/>
+            </bootclasspath>
+        </java>
+    </target>
+    <target name="Console">
+        <java classname="bsh.Console" failonerror="true" fork="yes">
+            <classpath refid="run.Console.classpath"/>
+            <bootclasspath>
+                <path refid="run.Console.bootclasspath"/>
+            </bootclasspath>
+        </java>
+    </target>
+    <target name="JDemoApplet (1)">
+        <java classname="bsh.util.JDemoApplet" failonerror="true" fork="yes">
+            <classpath refid="run.JDemoApplet (1).classpath"/>
+            <bootclasspath>
+                <path refid="run.JDemoApplet (1).bootclasspath"/>
+            </bootclasspath>
+        </java>
+    </target>
+    <target name="JDemoApplet">
+        <java classname="sun.applet.AppletViewer" dir="." failonerror="true" fork="yes">
+            <arg line="JDemoApplet.html"/>
+            <classpath refid="run.JDemoApplet.classpath"/>
+            <bootclasspath>
+                <path refid="run.JDemoApplet.bootclasspath"/>
+            </bootclasspath>
+        </java>
+    </target>
+    <target name="JDemoFrame">
+        <java classname="bsh.util.JDemoFrame" failonerror="true" fork="yes">
+            <classpath refid="run.JDemoFrame.classpath"/>
+            <bootclasspath>
+                <path refid="run.JDemoFrame.bootclasspath"/>
+            </bootclasspath>
+        </java>
+    </target>
+    <target name="SubLMainForOpt">
+        <java classname="com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain" failonerror="true" fork="yes">
+            <jvmarg line="-Xmx12g -Djava.util.Arrays.useLegacyMergeSort=true -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC"/>
+            <arg line="-f &quot;(progn (load \&quot;init/jrtl-release-init.lisp\&quot;)  (load \&quot;init/port-init.lisp\&quot;))&quot;"/>
+            <classpath refid="run.SubLMainForOpt.classpath"/>
+            <bootclasspath>
+                <path refid="run.SubLMainForOpt.bootclasspath"/>
+            </bootclasspath>
+        </java>
+    </target>
+</project>

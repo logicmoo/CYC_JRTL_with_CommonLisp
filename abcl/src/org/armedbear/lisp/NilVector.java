@@ -71,7 +71,7 @@ public final class NilVector extends AbstractString
     @Override
     public LispObject typeOf()
     {
-        return list(Symbol.NIL_VECTOR, Fixnum.getInstance(capacity));
+        return list(Symbol.NIL_VECTOR, Fixnum.makeFixnum(capacity));
     }
 
     @Override
@@ -192,7 +192,7 @@ public final class NilVector extends AbstractString
     @Override
     public void setCharAt(int index, char c)
     {
-        storeError(LispCharacter.getInstance(c));
+        storeError(LispCharacter.makeCharacter(c));
     }
 
     @Override
@@ -212,7 +212,7 @@ public final class NilVector extends AbstractString
     @Override
     public void fill(char c)
     {
-        storeError(LispCharacter.getInstance(c));
+        storeError(LispCharacter.makeCharacter(c));
     }
 
     @Override

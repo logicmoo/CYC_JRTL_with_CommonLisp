@@ -43,7 +43,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import java.text.MessageFormat;
 
-public final class LispThread extends LispObject
+public final class LispThread extends ALispObject
 {
     // use a concurrent hashmap: we may want to add threads
     // while at the same time iterating the hash

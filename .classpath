@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry exported="true" kind="lib" path="powerloom-4.0.9.beta/native/java/lib/castor-core.jar"/>
+	<classpathentry exported="true" kind="lib" path="powerloom-4.0.9.beta/native/java/lib/castor.jar"/>
+	<classpathentry exported="true" kind="lib" path="powerloom-4.0.9.beta/native/java/lib/commons-logging.jar"/>
+	<classpathentry kind="src" path="BeanShell/asm/src"/>
+	<classpathentry kind="src" path="BeanShell/bsf/src"/>
+	<classpathentry kind="src" path="BeanShell/engine/src"/>
+	<classpathentry kind="src" path="BeanShell/engine/javax-src"/>
+	<classpathentry excluding="asm/src/|bsf/src/|engine/src/|src/|engine/javax-src/|tests/src/|tests/test-scripts/|tests/test-scripts/|engine/|tests/test-scripts/Data/|src/" kind="src" path="BeanShell"/>
+	<classpathentry kind="src" path="BeanShell/tests/src"/>
+	<classpathentry excluding="Data/" kind="src" path="BeanShell/tests/test-scripts"/>
+	<classpathentry excluding="javax-src/|src/" kind="src" path="BeanShell/engine"/>
+	<classpathentry kind="src" path="BeanShell/tests/test-scripts/Data"/>
+	<classpathentry kind="src" path="BeanShell/src"/>
+	<classpathentry excluding="com/cyc/cycjava/cycl/" kind="src" path="platform/src"/>
+	<classpathentry kind="src" path="rcyc/cycjava-src"/>
+	<classpathentry excluding="edu/isi/webtools/examples/addressexample/" kind="src" path="powerloom-4.0.9.beta/native/java"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="platform/ext/javagat/commons-logging-1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="platform/ext/javagat/GAT-API.jar"/>
+	<classpathentry exported="true" kind="lib" path="platform/ext/javagat/GAT-engine.jar"/>
+	<classpathentry exported="true" kind="lib" path="platform/ext/javagat/log4j-1.2.13.jar"/>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Administrator/.m2/repository/axis/axis/1.4/axis-1.4.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="axis"/>
+			<attribute name="maven.artifactId" value="axis"/>
+			<attribute name="maven.version" value="1.4"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="C:/Users/Administrator/.m2/repository/org/apache/axis/axis-jaxrpc/1.4/axis-jaxrpc-1.4.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="org.apache.axis"/>
+			<attribute name="maven.artifactId" value="axis-jaxrpc"/>
+			<attribute name="maven.version" value="1.4"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="platform/lib/junit-4.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="platform/lib/openrdf-sesame-2.2.4-onejar.jar"/>
+	<classpathentry exported="true" kind="lib" path="platform/lib/ordi-model-0.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="platform/lib/ordi-trree-adapter-3.1.a6.jar"/>
+	<classpathentry exported="true" kind="lib" path="platform/lib/owlim-big-3.1.a7.jar"/>
+	<classpathentry exported="true" kind="lib" path="platform/ext/javagat/castor-1.1.1-xml.jar"/>
+	<classpathentry exported="true" kind="lib" path="BeanShell/lib/bsf-all-3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="BeanShell/lib/bsf.jar"/>
+	<classpathentry exported="true" kind="lib" path="BeanShell/lib/bsf-utils-3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="BeanShell/lib/bsf-api-3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="platform/lib/asm-all-3.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="platform/lib/concurrent.jar"/>
+	<classpathentry exported="true" kind="lib" path="platform/lib/iri.jar"/>
+	<classpathentry exported="true" kind="lib" path="rcyc/lib/ant-1.6.5.jar"/>
+	<classpathentry exported="true" kind="lib" path="rcyc/lib/commons-math-3.0-SNAPSHOT.jar"/>
+	<classpathentry exported="true" kind="lib" path="rcyc/lib/customSysParam.jar"/>
+	<classpathentry exported="true" kind="lib" path="rcyc/lib/cycSparqlEndpoint.jar"/>
+	<classpathentry exported="true" kind="lib" path="rcyc/lib/ecj-3.5.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="rcyc/lib/jetty-continuation-8.0.4.v20111024.jar"/>
+	<classpathentry exported="true" kind="lib" path="rcyc/lib/jetty-http-8.0.4.v20111024.jar"/>
+	<classpathentry exported="true" kind="lib" path="rcyc/lib/jetty-io-8.0.4.v20111024.jar"/>
+	<classpathentry exported="true" kind="lib" path="rcyc/lib/jetty-security-8.0.4.v20111024.jar"/>
+	<classpathentry exported="true" kind="lib" path="rcyc/lib/jetty-server-8.0.4.v20111024.jar"/>
+	<classpathentry exported="true" kind="lib" path="rcyc/lib/jetty-servlet-8.0.4.v20111024.jar"/>
+	<classpathentry exported="true" kind="lib" path="rcyc/lib/jetty-util-8.0.4.v20111024.jar"/>
+	<classpathentry exported="true" kind="lib" path="rcyc/lib/jetty-webapp-8.0.4.v20111024.jar"/>
+	<classpathentry exported="true" kind="lib" path="rcyc/lib/jetty-xml-8.0.4.v20111024.jar"/>
+	<classpathentry exported="true" kind="lib" path="rcyc/lib/jsp-2.1-glassfish-2.1.v20100127.jar"/>
+	<classpathentry exported="true" kind="lib" path="rcyc/lib/jsp-api-2.1-glassfish-2.1.v20100127.jar"/>
+	<classpathentry exported="true" kind="lib" path="rcyc/lib/junit.jar"/>
+	<classpathentry exported="true" kind="lib" path="rcyc/lib/servlet-api-3.0.20100224.jar"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
+	<classpathentry kind="output" path="rcyc/build/eclipse-classes"/>
+</classpath>

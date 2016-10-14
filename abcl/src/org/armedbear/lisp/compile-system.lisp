@@ -198,7 +198,7 @@
                          combos
                          :key #'first)))
            (filter-setf-combos (combos)
-             (filter-combos 
+             (filter-combos
               (remove-multi-combo-symbols
                (remove-if (lambda (x) (member x '("clos") :test #'string=)) combos :key #'first))))
            (symbols-pathspec (filespec)
@@ -317,6 +317,8 @@
       (load (do-compile "concatenate.lisp"))
       (load (do-compile "ldb.lisp"))
       (load (do-compile "destructuring-bind.lisp"))
+      (load (do-compile "featurep.lisp"))
+
       ;; But not for these.
       (mapc #'do-compile '("adjoin.lisp"
                            "and.lisp"
@@ -368,7 +370,6 @@
                            "error.lisp"
                            "extensible-sequences.lisp"
                            "fasl-concat.lisp"
-                           "featurep.lisp"
                            "fdefinition.lisp"
                            "fill.lisp"
                            "find-all-symbols.lisp"
@@ -513,10 +514,10 @@
          (home (pathname *lisp-home*))
          (src (format nil "~A**/*.*" home))
          (java (format nil "~A../../../**/*.*" home)))
-    (with-open-file (s system :direction :output 
+    (with-open-file (s system :direction :output
                        :if-exists :supersede)
       (pprint `(setf (logical-pathname-translations "sys")
                     '(("SYS:SRC;**;*.*" ,src)
                       ("SYS:JAVA;**;*.*" ,java)))
        s))))
-      
+

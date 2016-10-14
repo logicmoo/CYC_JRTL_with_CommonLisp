@@ -37,7 +37,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import static org.armedbear.lisp.Lisp.*;
 
 public class HashTable 
-    extends LispObject
+    extends ALispObject
     implements org.armedbear.lisp.protocol.Hashtable
 {
 
