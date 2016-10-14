@@ -1,8 +1,5 @@
 # CYC_JRTL_with_CommonLisp
 
-# CYC_JRTL_with_CommonLisp
-
-
 Most Worked-on Feature set * Full compatibility with LarKC Platform http://larkc.eu * This library is a drop-in replacement to the subl.jar of OpenCyc
 
 Un-Armed Bear Common Lisp for Java - LispSharp
