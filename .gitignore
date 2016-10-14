@@ -59,3 +59,15 @@ xcl
 *.xcl
 xcl_home.h
 xcl.nm
+AWTRemoteApplet.html
+JDemoApplet.html
+LarKC_CommonLisp_Extensions.vpwhist
+SVN/
+abcl-saved/
+ansi-test/
+cl-bench/
+cl-test-grid/
+cusp/
+easye/
+ste-bench/
+uabcl/

@@ -1,0 +1,828 @@
+<!DOCTYPE Project SYSTEM "http://www.slickedit.com/dtd/vse/10.0/vpj.dtd">
+<Project
+	Version="10.0"
+	VendorName="SlickEdit"
+	WorkingDir=".">
+	<Config
+		Name="Release"
+		OutputFile=""
+		CompilerConfigName="Latest Version">
+		<Menu>
+			<Target
+				Name="Compile"
+				MenuCaption="&amp;Compile"
+				CaptureOutputWith="ProcessBuffer"
+				SaveOption="SaveCurrent"
+				RunFromDir="%rw">
+				<Exec/>
+			</Target>
+			<Target
+				Name="Build"
+				MenuCaption="&amp;Build"
+				CaptureOutputWith="ProcessBuffer"
+				SaveOption="SaveWorkspaceFiles"
+				RunFromDir="%rw">
+				<Exec/>
+			</Target>
+			<Target
+				Name="Rebuild"
+				MenuCaption="&amp;Rebuild"
+				CaptureOutputWith="ProcessBuffer"
+				SaveOption="SaveWorkspaceFiles"
+				RunFromDir="%rw">
+				<Exec/>
+			</Target>
+			<Target
+				Name="Debug"
+				MenuCaption="&amp;Debug"
+				SaveOption="SaveNone"
+				RunFromDir="%rw">
+				<Exec/>
+			</Target>
+			<Target
+				Name="Execute"
+				MenuCaption="E&amp;xecute"
+				SaveOption="SaveNone"
+				RunFromDir="%rw">
+				<Exec CmdLine='"ABCLVErsion.exe"'/>
+			</Target>
+		</Menu>
+	</Config>
+	<CustomFolders>
+		<Folder
+			Name="Source Files"
+			Filters="*.c;*.C;*.cc;*.cpp;*.cp;*.cxx;*.prg;*.pas;*.dpr;*.asm;*.s;*.bas;*.java;*.cs;*.sc;*.e;*.cob;*.html;*.rc;*.tcl;*.py;*.pl"/>
+		<Folder
+			Name="Header Files"
+			Filters="*.h;*.H;*.hh;*.hpp;*.hxx;*.inc;*.sh;*.cpy;*.if"/>
+		<Folder
+			Name="Resource Files"
+			Filters="*.ico;*.cur;*.dlg"/>
+		<Folder
+			Name="Bitmaps"
+			Filters="*.bmp"/>
+		<Folder
+			Name="Other Files"
+			Filters="">
+		</Folder>
+	</CustomFolders>
+	<Files AutoFolders="PackageView">
+		<Folder Name=".svn">
+			<F N=".svn/entries"/>
+			<F N=".svn/format"/>
+		</Folder>
+		<Folder
+			Name="abcl"
+			Type="Package">
+			<F N="examples/gui/abcl/DialogPromptStream.java"/>
+		</Folder>
+		<Folder
+			Name="abcl_ae"
+			Type="Package">
+			<F N="examples/google-app-engine/src/abcl_ae/AbclInit.java"/>
+			<F N="examples/google-app-engine/src/abcl_ae/HelloWorldServlet.java"/>
+		</Folder>
+		<Folder
+			Name="awt"
+			Type="Package">
+			<F N="examples/gui/awt/ActionListener.java"/>
+			<F N="examples/gui/awt/AwtDialogPromptStream.java"/>
+			<F N="examples/gui/awt/ComponentAdapter.java"/>
+			<F N="examples/gui/awt/ItemListener.java"/>
+			<F N="examples/gui/awt/KeyAdapter.java"/>
+			<F N="examples/gui/awt/MouseAdapter.java"/>
+			<F N="examples/gui/awt/MouseMotionAdapter.java"/>
+			<F N="examples/gui/awt/WindowAdapter.java"/>
+		</Folder>
+		<Folder Name="build/classes/org/armedbear/lisp">
+			<F N="build/classes/org/armedbear/lisp/autoloads-gen.lisp"/>
+			<F N="build/classes/org/armedbear/lisp/boot.lisp"/>
+			<F N="build/classes/org/armedbear/lisp/build"/>
+			<F N="build/classes/org/armedbear/lisp/system.lisp"/>
+			<F N="build/classes/org/armedbear/lisp/version"/>
+		</Folder>
+		<Folder Name="build/classes/org/armedbear/lisp/scripting/lisp">
+			<F N="build/classes/org/armedbear/lisp/scripting/lisp/abcl-script.lisp"/>
+			<F N="build/classes/org/armedbear/lisp/scripting/lisp/config.lisp"/>
+			<F N="build/classes/org/armedbear/lisp/scripting/lisp/packages.lisp"/>
+		</Folder>
+		<Folder Name="contrib">
+			<F N="contrib/pom.xml"/>
+		</Folder>
+		<Folder Name="contrib/abcl-asdf">
+			<F N="contrib/abcl-asdf/asdf-jar.lisp"/>
+			<F N="contrib/abcl-asdf/maven-embedder.lisp"/>
+			<F N="contrib/abcl-asdf/packages.lisp"/>
+			<F N="contrib/abcl-asdf/abcl-asdf.lisp"/>
+		</Folder>
+		<Folder Name="contrib/abcl-asdf/tests">
+			<F N="contrib/abcl-asdf/tests/example.lisp"/>
+			<F N="contrib/abcl-asdf/tests/maven.lisp"/>
+			<F N="contrib/abcl-asdf/tests/test.lisp"/>
+		</Folder>
+		<Folder Name="contrib/asdf-install">
+			<F N="contrib/asdf-install/conditions.lisp"/>
+			<F N="contrib/asdf-install/COPYRIGHT"/>
+			<F N="contrib/asdf-install/dead-letter.lisp"/>
+			<F N="contrib/asdf-install/defpackage.lisp"/>
+			<F N="contrib/asdf-install/deprecated.lisp"/>
+			<F N="contrib/asdf-install/digitool.lisp"/>
+			<F N="contrib/asdf-install/installer.lisp"/>
+			<F N="contrib/asdf-install/load-asdf-install.lisp"/>
+			<F N="contrib/asdf-install/loader.lisp"/>
+			<F
+				N="contrib/asdf-install/Makefile"
+				Type="Makefile"/>
+			<F N="contrib/asdf-install/port.lisp"/>
+			<F N="contrib/asdf-install/README"/>
+			<F N="contrib/asdf-install/RELNOTES"/>
+			<F N="contrib/asdf-install/split-sequence.lisp"/>
+			<F N="contrib/asdf-install/variables.lisp"/>
+		</Folder>
+		<Folder Name="contrib/asdf-jar">
+			<F N="contrib/asdf-jar/asdf-jar.lisp"/>
+		</Folder>
+		<Folder Name="contrib/jfli">
+			<F N="contrib/jfli/jfli.lisp"/>
+			<F N="contrib/jfli/README"/>
+		</Folder>
+		<Folder Name="contrib/jfli/examples/swing">
+			<F N="contrib/jfli/examples/swing/README"/>
+		</Folder>
+		<Folder Name="contrib/jfli/examples/swt">
+			<F N="contrib/jfli/examples/swt/README"/>
+		</Folder>
+		<Folder Name="contrib/jfli/test">
+			<F N="contrib/jfli/test/yanking.lisp"/>
+		</Folder>
+		<Folder Name="contrib/jss">
+			<F N="contrib/jss/classpath.lisp"/>
+			<F N="contrib/jss/compat.lisp"/>
+			<F N="contrib/jss/invoke.lisp"/>
+			<F N="contrib/jss/packages.lisp"/>
+			<F N="contrib/jss/tests.lisp"/>
+		</Folder>
+		<Folder Name="doc/design/amop">
+			<F N="doc/design/amop/d-m-c-notes"/>
+		</Folder>
+		<Folder Name="doc/design/streams">
+			<F N="doc/design/streams/README"/>
+		</Folder>
+		<Folder Name="doc/manual">
+			<F N="doc/manual/grovel.lisp"/>
+			<F N="doc/manual/index.lisp"/>
+			<F N="doc/manual/package.lisp"/>
+			<F
+				N="doc/manual/Makefile"
+				Type="Makefile"/>
+		</Folder>
+		<Folder Name="examples">
+			<F N="examples/README"/>
+		</Folder>
+		<Folder Name="examples/google-app-engine">
+			<F
+				N="examples/google-app-engine/build.xml"
+				Type="Ant"/>
+			<F N="examples/google-app-engine/README"/>
+		</Folder>
+		<Folder Name="examples/google-app-engine/src">
+			<F N="examples/google-app-engine/src/first-servlet.lisp"/>
+		</Folder>
+		<Folder Name="examples/google-app-engine/war/WEB-INF">
+			<F N="examples/google-app-engine/war/WEB-INF/appengine-web.xml"/>
+			<F N="examples/google-app-engine/war/WEB-INF/web.xml"/>
+		</Folder>
+		<Folder Name="examples/gui">
+			<F
+				N="examples/gui/build.xml"
+				Type="Ant"/>
+			<F N="examples/gui/README"/>
+		</Folder>
+		<Folder Name="examples/java-exception">
+			<F N="examples/java-exception/lispfunctions.lisp"/>
+			<F N="examples/java-exception/Main.java"/>
+			<F N="examples/java-exception/README"/>
+		</Folder>
+		<Folder Name="examples/java-interface">
+			<F N="examples/java-interface/bank-account.lisp"/>
+			<F N="examples/java-interface/BankAccount.java"/>
+			<F N="examples/java-interface/BankExampleMain.java"/>
+			<F N="examples/java-interface/interface_implementation.lisp"/>
+			<F N="examples/java-interface/Main.java"/>
+			<F N="examples/java-interface/MyInterface.java"/>
+			<F
+				N="examples/java-interface/build.xml"
+				Type="Ant"/>
+			<F N="examples/java-interface/README"/>
+		</Folder>
+		<Folder Name="examples/java-to-lisp-1">
+			<F N="examples/java-to-lisp-1/lispfunction.lisp"/>
+			<F N="examples/java-to-lisp-1/Main.java"/>
+			<F N="examples/java-to-lisp-1/MainAlternative.java"/>
+			<F N="examples/java-to-lisp-1/README"/>
+		</Folder>
+		<Folder Name="examples/java-to-lisp-2">
+			<F N="examples/java-to-lisp-2/lispfunctions.lisp"/>
+			<F N="examples/java-to-lisp-2/Main.java"/>
+			<F N="examples/java-to-lisp-2/README"/>
+		</Folder>
+		<Folder Name="examples/jsr-223">
+			<F N="examples/jsr-223/JSR223Example.java"/>
+			<F N="examples/jsr-223/README"/>
+		</Folder>
+		<Folder Name="examples/lisp-to-java">
+			<F N="examples/lisp-to-java/lispfunctions.lisp"/>
+			<F N="examples/lisp-to-java/Main.java"/>
+			<F N="examples/lisp-to-java/README"/>
+		</Folder>
+		<Folder Name="examples/misc">
+			<F N="examples/misc/dynamic-interfaces.lisp"/>
+			<F N="examples/misc/hello.java"/>
+			<F N="examples/misc/update-check-enabled.lisp"/>
+			<F N="examples/misc/dotabclrc"/>
+		</Folder>
+		<Folder Name="examples/pure-lisp-to-java">
+			<F N="examples/pure-lisp-to-java/lispfunctions.lisp"/>
+			<F N="examples/pure-lisp-to-java/Main.java"/>
+			<F N="examples/pure-lisp-to-java/README"/>
+		</Folder>
+		<Folder Name="nbproject">
+			<F
+				N="nbproject/build-impl.xml"
+				Type="Ant"/>
+			<F N="nbproject/project.xml"/>
+			<F N="nbproject/genfiles.properties"/>
+			<F N="nbproject/project.properties"/>
+		</Folder>
+		<Folder Name="nbproject/configs">
+			<F N="nbproject/configs/slime.properties"/>
+		</Folder>
+		<Folder Name="nbproject/private/configs">
+			<F N="nbproject/private/configs/slime.properties"/>
+		</Folder>
+		<Folder
+			Name="org.armedbear.lisp"
+			Type="Package">
+			<F N="src/org/armedbear/lisp/abcl-contrib.lisp"/>
+			<F N="src/org/armedbear/lisp/AbstractArray.java"/>
+			<F N="src/org/armedbear/lisp/AbstractBitVector.java"/>
+			<F N="src/org/armedbear/lisp/AbstractString.java"/>
+			<F N="src/org/armedbear/lisp/AbstractVector.java"/>
+			<F N="src/org/armedbear/lisp/adjoin.lisp"/>
+			<F N="src/org/armedbear/lisp/adjust_array.java"/>
+			<F N="src/org/armedbear/lisp/and.lisp"/>
+			<F N="src/org/armedbear/lisp/apropos.lisp"/>
+			<F N="src/org/armedbear/lisp/arglist.java"/>
+			<F N="src/org/armedbear/lisp/ArgumentListProcessor.java"/>
+			<F N="src/org/armedbear/lisp/ArithmeticError.java"/>
+			<F N="src/org/armedbear/lisp/arrays.lisp"/>
+			<F N="src/org/armedbear/lisp/asdf.lisp"/>
+			<F N="src/org/armedbear/lisp/ash.java"/>
+			<F N="src/org/armedbear/lisp/assert.lisp"/>
+			<F N="src/org/armedbear/lisp/assoc.lisp"/>
+			<F N="src/org/armedbear/lisp/assq.java"/>
+			<F N="src/org/armedbear/lisp/assql.java"/>
+			<F N="src/org/armedbear/lisp/Autoload.java"/>
+			<F N="src/org/armedbear/lisp/AutoloadGeneralizedReference.java"/>
+			<F N="src/org/armedbear/lisp/AutoloadMacro.java"/>
+			<F N="src/org/armedbear/lisp/autoloads-gen.lisp"/>
+			<F N="src/org/armedbear/lisp/autoloads.lisp"/>
+			<F N="src/org/armedbear/lisp/aver.lisp"/>
+			<F N="src/org/armedbear/lisp/backquote.lisp"/>
+			<F N="src/org/armedbear/lisp/BasicVector_UnsignedByte16.java"/>
+			<F N="src/org/armedbear/lisp/BasicVector_UnsignedByte32.java"/>
+			<F N="src/org/armedbear/lisp/BasicVector_UnsignedByte8.java"/>
+			<F N="src/org/armedbear/lisp/Bignum.java"/>
+			<F N="src/org/armedbear/lisp/Binding.java"/>
+			<F N="src/org/armedbear/lisp/bit-array-ops.lisp"/>
+			<F N="src/org/armedbear/lisp/boole.lisp"/>
+			<F N="src/org/armedbear/lisp/boot.lisp"/>
+			<F N="src/org/armedbear/lisp/BroadcastStream.java"/>
+			<F N="src/org/armedbear/lisp/BuiltInClass.java"/>
+			<F N="src/org/armedbear/lisp/butlast.lisp"/>
+			<F N="src/org/armedbear/lisp/byte-io.lisp"/>
+			<F N="src/org/armedbear/lisp/ByteArrayInputStream.java"/>
+			<F N="src/org/armedbear/lisp/ByteArrayOutputStream.java"/>
+			<F N="src/org/armedbear/lisp/CapitalizeFirstStream.java"/>
+			<F N="src/org/armedbear/lisp/CapitalizeStream.java"/>
+			<F N="src/org/armedbear/lisp/case.lisp"/>
+			<F N="src/org/armedbear/lisp/CaseFrobStream.java"/>
+			<F N="src/org/armedbear/lisp/ceiling.java"/>
+			<F N="src/org/armedbear/lisp/cell_error_name.java"/>
+			<F N="src/org/armedbear/lisp/CellError.java"/>
+			<F N="src/org/armedbear/lisp/CharacterFunctions.java"/>
+			<F N="src/org/armedbear/lisp/CharHashMap.java"/>
+			<F N="src/org/armedbear/lisp/chars.lisp"/>
+			<F N="src/org/armedbear/lisp/check-type.lisp"/>
+			<F N="src/org/armedbear/lisp/clos.lisp"/>
+			<F N="src/org/armedbear/lisp/Closure.java"/>
+			<F N="src/org/armedbear/lisp/ClosureBinding.java"/>
+			<F N="src/org/armedbear/lisp/coerce.lisp"/>
+			<F N="src/org/armedbear/lisp/collect.lisp"/>
+			<F N="src/org/armedbear/lisp/compile-file-pathname.lisp"/>
+			<F N="src/org/armedbear/lisp/compile-file.lisp"/>
+			<F N="src/org/armedbear/lisp/compile-system.lisp"/>
+			<F N="src/org/armedbear/lisp/CompiledClosure.java"/>
+			<F N="src/org/armedbear/lisp/CompiledPrimitive.java"/>
+			<F N="src/org/armedbear/lisp/compiler-error.lisp"/>
+			<F N="src/org/armedbear/lisp/compiler-macro.lisp"/>
+			<F N="src/org/armedbear/lisp/compiler-pass1.lisp"/>
+			<F N="src/org/armedbear/lisp/compiler-pass2.lisp"/>
+			<F N="src/org/armedbear/lisp/compiler-types.lisp"/>
+			<F N="src/org/armedbear/lisp/Complex.java"/>
+			<F N="src/org/armedbear/lisp/ComplexArray.java"/>
+			<F N="src/org/armedbear/lisp/ComplexArray_UnsignedByte32.java"/>
+			<F N="src/org/armedbear/lisp/ComplexArray_UnsignedByte8.java"/>
+			<F N="src/org/armedbear/lisp/ComplexBitVector.java"/>
+			<F N="src/org/armedbear/lisp/ComplexString.java"/>
+			<F N="src/org/armedbear/lisp/ComplexVector.java"/>
+			<F N="src/org/armedbear/lisp/ComplexVector_UnsignedByte32.java"/>
+			<F N="src/org/armedbear/lisp/ComplexVector_UnsignedByte8.java"/>
+			<F N="src/org/armedbear/lisp/concatenate.lisp"/>
+			<F N="src/org/armedbear/lisp/ConcatenatedStream.java"/>
+			<F N="src/org/armedbear/lisp/cond.lisp"/>
+			<F N="src/org/armedbear/lisp/Condition.java"/>
+			<F N="src/org/armedbear/lisp/Cons.java"/>
+			<F N="src/org/armedbear/lisp/ControlError.java"/>
+			<F N="src/org/armedbear/lisp/ControlTransfer.java"/>
+			<F N="src/org/armedbear/lisp/copy-seq.lisp"/>
+			<F N="src/org/armedbear/lisp/copy-symbol.lisp"/>
+			<F N="src/org/armedbear/lisp/copy_list.java"/>
+			<F N="src/org/armedbear/lisp/count.lisp"/>
+			<F N="src/org/armedbear/lisp/create_new_file.java"/>
+			<F N="src/org/armedbear/lisp/cxr.java"/>
+			<F N="src/org/armedbear/lisp/Debug.java"/>
+			<F N="src/org/armedbear/lisp/debug.lisp"/>
+			<F N="src/org/armedbear/lisp/define-modify-macro.lisp"/>
+			<F N="src/org/armedbear/lisp/define-symbol-macro.lisp"/>
+			<F N="src/org/armedbear/lisp/defmacro.lisp"/>
+			<F N="src/org/armedbear/lisp/defpackage.lisp"/>
+			<F N="src/org/armedbear/lisp/defsetf.lisp"/>
+			<F N="src/org/armedbear/lisp/defstruct.lisp"/>
+			<F N="src/org/armedbear/lisp/deftype.lisp"/>
+			<F N="src/org/armedbear/lisp/delete-duplicates.lisp"/>
+			<F N="src/org/armedbear/lisp/delete.lisp"/>
+			<F N="src/org/armedbear/lisp/delete_file.java"/>
+			<F N="src/org/armedbear/lisp/deposit-field.lisp"/>
+			<F N="src/org/armedbear/lisp/describe-compiler-policy.lisp"/>
+			<F N="src/org/armedbear/lisp/describe.lisp"/>
+			<F N="src/org/armedbear/lisp/destructuring-bind.lisp"/>
+			<F N="src/org/armedbear/lisp/digest.lisp"/>
+			<F N="src/org/armedbear/lisp/directory.lisp"/>
+			<F N="src/org/armedbear/lisp/disassemble.lisp"/>
+			<F N="src/org/armedbear/lisp/disassemble_class_bytes.java"/>
+			<F N="src/org/armedbear/lisp/DispatchMacroFunction.java"/>
+			<F N="src/org/armedbear/lisp/DivisionByZero.java"/>
+			<F N="src/org/armedbear/lisp/do-all-symbols.lisp"/>
+			<F N="src/org/armedbear/lisp/do-external-symbols.lisp"/>
+			<F N="src/org/armedbear/lisp/do-symbols.lisp"/>
+			<F N="src/org/armedbear/lisp/Do.java"/>
+			<F N="src/org/armedbear/lisp/do.lisp"/>
+			<F N="src/org/armedbear/lisp/DocString.java"/>
+			<F N="src/org/armedbear/lisp/documentation.lisp"/>
+			<F N="src/org/armedbear/lisp/dolist.java"/>
+			<F N="src/org/armedbear/lisp/dolist.lisp"/>
+			<F N="src/org/armedbear/lisp/dotimes.java"/>
+			<F N="src/org/armedbear/lisp/dotimes.lisp"/>
+			<F N="src/org/armedbear/lisp/DoubleFloat.java"/>
+			<F N="src/org/armedbear/lisp/DowncaseStream.java"/>
+			<F N="src/org/armedbear/lisp/dribble.lisp"/>
+			<F N="src/org/armedbear/lisp/dump-class.lisp"/>
+			<F N="src/org/armedbear/lisp/dump-form.lisp"/>
+			<F N="src/org/armedbear/lisp/early-defuns.lisp"/>
+			<F N="src/org/armedbear/lisp/EchoStream.java"/>
+			<F N="src/org/armedbear/lisp/ed.lisp"/>
+			<F N="src/org/armedbear/lisp/EMFCache.java"/>
+			<F N="src/org/armedbear/lisp/EndOfFile.java"/>
+			<F N="src/org/armedbear/lisp/enough-namestring.lisp"/>
+			<F N="src/org/armedbear/lisp/ensure-directories-exist.lisp"/>
+			<F N="src/org/armedbear/lisp/Environment.java"/>
+			<F N="src/org/armedbear/lisp/error.lisp"/>
+			<F N="src/org/armedbear/lisp/extensible-sequences-base.lisp"/>
+			<F N="src/org/armedbear/lisp/extensible-sequences.lisp"/>
+			<F N="src/org/armedbear/lisp/Extensions.java"/>
+			<F N="src/org/armedbear/lisp/fasl-concat.lisp"/>
+			<F N="src/org/armedbear/lisp/FaslClassLoader.java"/>
+			<F N="src/org/armedbear/lisp/FaslReader.java"/>
+			<F N="src/org/armedbear/lisp/FaslReadtable.java"/>
+			<F N="src/org/armedbear/lisp/fdefinition.lisp"/>
+			<F N="src/org/armedbear/lisp/featurep.lisp"/>
+			<F N="src/org/armedbear/lisp/file_author.java"/>
+			<F N="src/org/armedbear/lisp/file_error_pathname.java"/>
+			<F N="src/org/armedbear/lisp/file_length.java"/>
+			<F N="src/org/armedbear/lisp/file_string_length.java"/>
+			<F N="src/org/armedbear/lisp/file_write_date.java"/>
+			<F N="src/org/armedbear/lisp/FileError.java"/>
+			<F N="src/org/armedbear/lisp/FileStream.java"/>
+			<F N="src/org/armedbear/lisp/fill.lisp"/>
+			<F N="src/org/armedbear/lisp/FillPointerOutputStream.java"/>
+			<F N="src/org/armedbear/lisp/find-all-symbols.lisp"/>
+			<F N="src/org/armedbear/lisp/find.lisp"/>
+			<F N="src/org/armedbear/lisp/Fixnum.java"/>
+			<F N="src/org/armedbear/lisp/float_sign.java"/>
+			<F N="src/org/armedbear/lisp/FloatFunctions.java"/>
+			<F N="src/org/armedbear/lisp/FloatingPointInexact.java"/>
+			<F N="src/org/armedbear/lisp/FloatingPointInvalidOperation.java"/>
+			<F N="src/org/armedbear/lisp/FloatingPointOverflow.java"/>
+			<F N="src/org/armedbear/lisp/FloatingPointUnderflow.java"/>
+			<F N="src/org/armedbear/lisp/floor.java"/>
+			<F N="src/org/armedbear/lisp/format.lisp"/>
+			<F N="src/org/armedbear/lisp/ftruncate.java"/>
+			<F N="src/org/armedbear/lisp/FuncallableStandardClass.java"/>
+			<F N="src/org/armedbear/lisp/FuncallableStandardObject.java"/>
+			<F N="src/org/armedbear/lisp/Function.java"/>
+			<F N="src/org/armedbear/lisp/function_info.java"/>
+			<F N="src/org/armedbear/lisp/FunctionBinding.java"/>
+			<F N="src/org/armedbear/lisp/gc.java"/>
+			<F N="src/org/armedbear/lisp/gentemp.lisp"/>
+			<F N="src/org/armedbear/lisp/get_properties.java"/>
+			<F N="src/org/armedbear/lisp/Go.java"/>
+			<F N="src/org/armedbear/lisp/gray-streams.lisp"/>
+			<F N="src/org/armedbear/lisp/gui.lisp"/>
+			<F N="src/org/armedbear/lisp/HashTable.java"/>
+			<F N="src/org/armedbear/lisp/HashTableFunctions.java"/>
+			<F N="src/org/armedbear/lisp/IllegalMonitorState.java"/>
+			<F N="src/org/armedbear/lisp/inline.lisp"/>
+			<F N="src/org/armedbear/lisp/input_stream_p.java"/>
+			<F N="src/org/armedbear/lisp/inspect.lisp"/>
+			<F N="src/org/armedbear/lisp/IntegrityError.java"/>
+			<F N="src/org/armedbear/lisp/interactive_stream_p.java"/>
+			<F N="src/org/armedbear/lisp/Interpreter.java"/>
+			<F N="src/org/armedbear/lisp/JarStream.java"/>
+			<F N="src/org/armedbear/lisp/java-collections.lisp"/>
+			<F N="src/org/armedbear/lisp/Java.java"/>
+			<F N="src/org/armedbear/lisp/java.lisp"/>
+			<F N="src/org/armedbear/lisp/JavaBeans.java"/>
+			<F N="src/org/armedbear/lisp/JavaClassLoader.java"/>
+			<F N="src/org/armedbear/lisp/JavaException.java"/>
+			<F N="src/org/armedbear/lisp/JavaObject.java"/>
+			<F N="src/org/armedbear/lisp/JavaStackFrame.java"/>
+			<F N="src/org/armedbear/lisp/jclass_name.java"/>
+			<F N="src/org/armedbear/lisp/jclass_of.java"/>
+			<F N="src/org/armedbear/lisp/JHandler.java"/>
+			<F N="src/org/armedbear/lisp/jmethod_return_type.java"/>
+			<F N="src/org/armedbear/lisp/JProxy.java"/>
+			<F N="src/org/armedbear/lisp/jvm-class-file.lisp"/>
+			<F N="src/org/armedbear/lisp/jvm-instructions.lisp"/>
+			<F N="src/org/armedbear/lisp/jvm.lisp"/>
+			<F N="src/org/armedbear/lisp/Keyword.java"/>
+			<F N="src/org/armedbear/lisp/known-functions.lisp"/>
+			<F N="src/org/armedbear/lisp/known-symbols.lisp"/>
+			<F N="src/org/armedbear/lisp/last.java"/>
+			<F N="src/org/armedbear/lisp/late-setf.lisp"/>
+			<F N="src/org/armedbear/lisp/Layout.java"/>
+			<F N="src/org/armedbear/lisp/lcm.lisp"/>
+			<F N="src/org/armedbear/lisp/ldb.lisp"/>
+			<F N="src/org/armedbear/lisp/ldiff.lisp"/>
+			<F N="src/org/armedbear/lisp/LICENSE"/>
+			<F N="src/org/armedbear/lisp/Lisp.java"/>
+			<F N="src/org/armedbear/lisp/lisp_implementation_type.java"/>
+			<F N="src/org/armedbear/lisp/lisp_implementation_version.java"/>
+			<F N="src/org/armedbear/lisp/LispCharacter.java"/>
+			<F N="src/org/armedbear/lisp/LispClass.java"/>
+			<F N="src/org/armedbear/lisp/LispError.java"/>
+			<F N="src/org/armedbear/lisp/LispInteger.java"/>
+			<F N="src/org/armedbear/lisp/LispObject.java"/>
+			<F N="src/org/armedbear/lisp/LispReader.java"/>
+			<F N="src/org/armedbear/lisp/LispStackFrame.java"/>
+			<F N="src/org/armedbear/lisp/LispThread.java"/>
+			<F N="src/org/armedbear/lisp/list-length.lisp"/>
+			<F N="src/org/armedbear/lisp/list.lisp"/>
+			<F N="src/org/armedbear/lisp/listen.java"/>
+			<F N="src/org/armedbear/lisp/Load.java"/>
+			<F N="src/org/armedbear/lisp/load.lisp"/>
+			<F N="src/org/armedbear/lisp/logand.java"/>
+			<F N="src/org/armedbear/lisp/logandc1.java"/>
+			<F N="src/org/armedbear/lisp/logandc2.java"/>
+			<F N="src/org/armedbear/lisp/logbitp.java"/>
+			<F N="src/org/armedbear/lisp/logcount.java"/>
+			<F N="src/org/armedbear/lisp/logeqv.java"/>
+			<F N="src/org/armedbear/lisp/LogicalPathname.java"/>
+			<F N="src/org/armedbear/lisp/logior.java"/>
+			<F N="src/org/armedbear/lisp/lognand.java"/>
+			<F N="src/org/armedbear/lisp/lognor.java"/>
+			<F N="src/org/armedbear/lisp/lognot.java"/>
+			<F N="src/org/armedbear/lisp/logorc1.java"/>
+			<F N="src/org/armedbear/lisp/logorc2.java"/>
+			<F N="src/org/armedbear/lisp/logtest.java"/>
+			<F N="src/org/armedbear/lisp/logxor.java"/>
+			<F N="src/org/armedbear/lisp/loop.lisp"/>
+			<F N="src/org/armedbear/lisp/machine_type.java"/>
+			<F N="src/org/armedbear/lisp/machine_version.java"/>
+			<F N="src/org/armedbear/lisp/MacroObject.java"/>
+			<F N="src/org/armedbear/lisp/macros.lisp"/>
+			<F N="src/org/armedbear/lisp/Main.java"/>
+			<F N="src/org/armedbear/lisp/make-hash-table.lisp"/>
+			<F N="src/org/armedbear/lisp/make-load-form-saving-slots.lisp"/>
+			<F N="src/org/armedbear/lisp/make-sequence.lisp"/>
+			<F N="src/org/armedbear/lisp/make-string-output-stream.lisp"/>
+			<F N="src/org/armedbear/lisp/make-string.lisp"/>
+			<F N="src/org/armedbear/lisp/make_array.java"/>
+			<F N="src/org/armedbear/lisp/make_condition.java"/>
+			<F N="src/org/armedbear/lisp/make_server_socket.java"/>
+			<F N="src/org/armedbear/lisp/make_socket.java"/>
+			<F N="src/org/armedbear/lisp/map-into.lisp"/>
+			<F N="src/org/armedbear/lisp/map.lisp"/>
+			<F N="src/org/armedbear/lisp/map1.lisp"/>
+			<F N="src/org/armedbear/lisp/mask-field.lisp"/>
+			<F N="src/org/armedbear/lisp/MathFunctions.java"/>
+			<F N="src/org/armedbear/lisp/member-if.lisp"/>
+			<F N="src/org/armedbear/lisp/MemoryClassLoader.java"/>
+			<F N="src/org/armedbear/lisp/mismatch.lisp"/>
+			<F N="src/org/armedbear/lisp/mod.java"/>
+			<F N="src/org/armedbear/lisp/mop.lisp"/>
+			<F N="src/org/armedbear/lisp/multiple-value-bind.lisp"/>
+			<F N="src/org/armedbear/lisp/multiple-value-list.lisp"/>
+			<F N="src/org/armedbear/lisp/multiple-value-setq.lisp"/>
+			<F N="src/org/armedbear/lisp/Nil.java"/>
+			<F N="src/org/armedbear/lisp/NilVector.java"/>
+			<F N="src/org/armedbear/lisp/nsubstitute.lisp"/>
+			<F N="src/org/armedbear/lisp/nth-value.lisp"/>
+			<F N="src/org/armedbear/lisp/numbers.lisp"/>
+			<F N="src/org/armedbear/lisp/open.lisp"/>
+			<F N="src/org/armedbear/lisp/open_stream_p.java"/>
+			<F N="src/org/armedbear/lisp/Operator.java"/>
+			<F N="src/org/armedbear/lisp/or.lisp"/>
+			<F N="src/org/armedbear/lisp/output_stream_p.java"/>
+			<F N="src/org/armedbear/lisp/Package.java"/>
+			<F N="src/org/armedbear/lisp/package.lisp"/>
+			<F N="src/org/armedbear/lisp/package_error_package.java"/>
+			<F N="src/org/armedbear/lisp/PackageError.java"/>
+			<F N="src/org/armedbear/lisp/PackageFunctions.java"/>
+			<F N="src/org/armedbear/lisp/Packages.java"/>
+			<F N="src/org/armedbear/lisp/parse-integer.lisp"/>
+			<F N="src/org/armedbear/lisp/parse-lambda-list.lisp"/>
+			<F N="src/org/armedbear/lisp/ParseError.java"/>
+			<F N="src/org/armedbear/lisp/Pathname.java"/>
+			<F N="src/org/armedbear/lisp/pathnames.lisp"/>
+			<F N="test/src/org/armedbear/lisp/PathnameTest.java"/>
+			<F N="src/org/armedbear/lisp/peek_char.java"/>
+			<F N="src/org/armedbear/lisp/pprint-dispatch.lisp"/>
+			<F N="src/org/armedbear/lisp/pprint.lisp"/>
+			<F N="src/org/armedbear/lisp/precompiler.lisp"/>
+			<F N="src/org/armedbear/lisp/Primitive.java"/>
+			<F N="src/org/armedbear/lisp/Primitives.java"/>
+			<F N="src/org/armedbear/lisp/print-object.lisp"/>
+			<F N="src/org/armedbear/lisp/print-unreadable-object.lisp"/>
+			<F N="src/org/armedbear/lisp/print.lisp"/>
+			<F N="src/org/armedbear/lisp/PrintNotReadable.java"/>
+			<F N="src/org/armedbear/lisp/probe_file.java"/>
+			<F N="src/org/armedbear/lisp/ProcessingTerminated.java"/>
+			<F N="src/org/armedbear/lisp/proclaim.lisp"/>
+			<F N="src/org/armedbear/lisp/Profiler.java"/>
+			<F N="src/org/armedbear/lisp/profiler.lisp"/>
+			<F N="src/org/armedbear/lisp/prog.lisp"/>
+			<F N="src/org/armedbear/lisp/ProgramError.java"/>
+			<F N="src/org/armedbear/lisp/psetf.lisp"/>
+			<F N="src/org/armedbear/lisp/query.lisp"/>
+			<F N="src/org/armedbear/lisp/RandomState.java"/>
+			<F N="src/org/armedbear/lisp/Ratio.java"/>
+			<F N="src/org/armedbear/lisp/read-circle.lisp"/>
+			<F N="src/org/armedbear/lisp/read-conditional.lisp"/>
+			<F N="src/org/armedbear/lisp/read-from-string.lisp"/>
+			<F N="src/org/armedbear/lisp/read-sequence.lisp"/>
+			<F N="src/org/armedbear/lisp/ReaderError.java"/>
+			<F N="src/org/armedbear/lisp/ReaderMacroFunction.java"/>
+			<F N="src/org/armedbear/lisp/Readtable.java"/>
+			<F N="src/org/armedbear/lisp/reduce.lisp"/>
+			<F N="src/org/armedbear/lisp/rem.java"/>
+			<F N="src/org/armedbear/lisp/remf.lisp"/>
+			<F N="src/org/armedbear/lisp/remove-duplicates.lisp"/>
+			<F N="src/org/armedbear/lisp/remove.lisp"/>
+			<F N="src/org/armedbear/lisp/replace.lisp"/>
+			<F N="src/org/armedbear/lisp/require.lisp"/>
+			<F N="src/org/armedbear/lisp/restart.lisp"/>
+			<F N="src/org/armedbear/lisp/Return.java"/>
+			<F N="src/org/armedbear/lisp/revappend.lisp"/>
+			<F N="src/org/armedbear/lisp/room.java"/>
+			<F N="src/org/armedbear/lisp/rotatef.lisp"/>
+			<F N="src/org/armedbear/lisp/run-benchmarks.lisp"/>
+			<F N="src/org/armedbear/lisp/run-program.lisp"/>
+			<F N="src/org/armedbear/lisp/run-shell-command.lisp"/>
+			<F N="src/org/armedbear/lisp/runtime-class.lisp"/>
+			<F N="src/org/armedbear/lisp/RuntimeClass.java"/>
+			<F N="src/org/armedbear/lisp/search.lisp"/>
+			<F N="src/org/armedbear/lisp/sequences.lisp"/>
+			<F N="src/org/armedbear/lisp/SeriousCondition.java"/>
+			<F N="src/org/armedbear/lisp/server_socket_close.java"/>
+			<F N="src/org/armedbear/lisp/setf.lisp"/>
+			<F N="src/org/armedbear/lisp/sets.lisp"/>
+			<F N="src/org/armedbear/lisp/ShellCommand.java"/>
+			<F N="src/org/armedbear/lisp/shiftf.lisp"/>
+			<F N="src/org/armedbear/lisp/signal.lisp"/>
+			<F N="src/org/armedbear/lisp/simple_list_remove_duplicates.java"/>
+			<F N="src/org/armedbear/lisp/SimpleArray_T.java"/>
+			<F N="src/org/armedbear/lisp/SimpleArray_UnsignedByte16.java"/>
+			<F N="src/org/armedbear/lisp/SimpleArray_UnsignedByte32.java"/>
+			<F N="src/org/armedbear/lisp/SimpleArray_UnsignedByte8.java"/>
+			<F N="src/org/armedbear/lisp/SimpleBitVector.java"/>
+			<F N="src/org/armedbear/lisp/SimpleCondition.java"/>
+			<F N="src/org/armedbear/lisp/SimpleError.java"/>
+			<F N="src/org/armedbear/lisp/SimpleString.java"/>
+			<F N="src/org/armedbear/lisp/SimpleTypeError.java"/>
+			<F N="src/org/armedbear/lisp/SimpleVector.java"/>
+			<F N="src/org/armedbear/lisp/SimpleWarning.java"/>
+			<F N="src/org/armedbear/lisp/SingleFloat.java"/>
+			<F N="src/org/armedbear/lisp/Site.java"/>
+			<F N="src/org/armedbear/lisp/SiteName.java"/>
+			<F N="src/org/armedbear/lisp/SlimeInputStream.java"/>
+			<F N="src/org/armedbear/lisp/SlimeOutputStream.java"/>
+			<F N="src/org/armedbear/lisp/SlotClass.java"/>
+			<F N="src/org/armedbear/lisp/SlotDefinition.java"/>
+			<F N="src/org/armedbear/lisp/SlotDefinitionClass.java"/>
+			<F N="src/org/armedbear/lisp/socket.lisp"/>
+			<F N="src/org/armedbear/lisp/socket_accept.java"/>
+			<F N="src/org/armedbear/lisp/socket_close.java"/>
+			<F N="src/org/armedbear/lisp/socket_stream.java"/>
+			<F N="src/org/armedbear/lisp/SocketStream.java"/>
+			<F N="src/org/armedbear/lisp/software_type.java"/>
+			<F N="src/org/armedbear/lisp/software_version.java"/>
+			<F N="src/org/armedbear/lisp/sort.lisp"/>
+			<F N="src/org/armedbear/lisp/source-transform.lisp"/>
+			<F N="src/org/armedbear/lisp/SpecialBinding.java"/>
+			<F N="src/org/armedbear/lisp/SpecialBindingsMark.java"/>
+			<F N="src/org/armedbear/lisp/SpecialOperator.java"/>
+			<F N="src/org/armedbear/lisp/SpecialOperators.java"/>
+			<F N="src/org/armedbear/lisp/StackFrame.java"/>
+			<F N="src/org/armedbear/lisp/StandardClass.java"/>
+			<F N="src/org/armedbear/lisp/StandardObject.java"/>
+			<F N="src/org/armedbear/lisp/step.lisp"/>
+			<F N="src/org/armedbear/lisp/StorageCondition.java"/>
+			<F N="src/org/armedbear/lisp/Stream.java"/>
+			<F N="src/org/armedbear/lisp/stream_element_type.java"/>
+			<F N="src/org/armedbear/lisp/StreamError.java"/>
+			<F N="test/src/org/armedbear/lisp/StreamTest.java"/>
+			<F N="src/org/armedbear/lisp/StringFunctions.java"/>
+			<F N="src/org/armedbear/lisp/StringInputStream.java"/>
+			<F N="src/org/armedbear/lisp/StringOutputStream.java"/>
+			<F N="src/org/armedbear/lisp/strings.lisp"/>
+			<F N="src/org/armedbear/lisp/StructureClass.java"/>
+			<F N="src/org/armedbear/lisp/StructureObject.java"/>
+			<F N="src/org/armedbear/lisp/StyleWarning.java"/>
+			<F N="src/org/armedbear/lisp/sublis.lisp"/>
+			<F N="src/org/armedbear/lisp/subst.lisp"/>
+			<F N="src/org/armedbear/lisp/substitute.lisp"/>
+			<F N="src/org/armedbear/lisp/subtypep.lisp"/>
+			<F N="src/org/armedbear/lisp/Symbol.java"/>
+			<F N="src/org/armedbear/lisp/SymbolMacro.java"/>
+			<F N="src/org/armedbear/lisp/SynonymStream.java"/>
+			<F N="src/org/armedbear/lisp/tailp.lisp"/>
+			<F N="src/org/armedbear/lisp/ThreadDestroyed.java"/>
+			<F N="src/org/armedbear/lisp/threads.lisp"/>
+			<F N="src/org/armedbear/lisp/Throw.java"/>
+			<F N="src/org/armedbear/lisp/Time.java"/>
+			<F N="src/org/armedbear/lisp/time.lisp"/>
+			<F N="src/org/armedbear/lisp/top-level.lisp"/>
+			<F N="src/org/armedbear/lisp/trace.lisp"/>
+			<F N="src/org/armedbear/lisp/tree-equal.lisp"/>
+			<F N="src/org/armedbear/lisp/truncate.java"/>
+			<F N="src/org/armedbear/lisp/TwoWayStream.java"/>
+			<F N="src/org/armedbear/lisp/TypeError.java"/>
+			<F N="src/org/armedbear/lisp/typep.lisp"/>
+			<F N="src/org/armedbear/lisp/unbound_slot_instance.java"/>
+			<F N="src/org/armedbear/lisp/UnboundSlot.java"/>
+			<F N="src/org/armedbear/lisp/UnboundVariable.java"/>
+			<F N="src/org/armedbear/lisp/UndefinedFunction.java"/>
+			<F N="src/org/armedbear/lisp/unzip.java"/>
+			<F N="src/org/armedbear/lisp/UpcaseStream.java"/>
+			<F N="src/org/armedbear/lisp/upgraded-complex-part-type.lisp"/>
+			<F N="src/org/armedbear/lisp/URLStream.java"/>
+			<F N="src/org/armedbear/lisp/Utilities.java"/>
+			<F N="test/src/org/armedbear/lisp/UtilitiesTest.java"/>
+			<F N="src/org/armedbear/lisp/Version.java"/>
+			<F N="src/org/armedbear/lisp/Warning.java"/>
+			<F N="src/org/armedbear/lisp/WeakHashTable.java"/>
+			<F N="src/org/armedbear/lisp/WeakReference.java"/>
+			<F N="src/org/armedbear/lisp/with-accessors.lisp"/>
+			<F N="src/org/armedbear/lisp/with-hash-table-iterator.lisp"/>
+			<F N="src/org/armedbear/lisp/with-input-from-string.lisp"/>
+			<F N="src/org/armedbear/lisp/with-open-file.lisp"/>
+			<F N="src/org/armedbear/lisp/with-output-to-string.lisp"/>
+			<F N="src/org/armedbear/lisp/with-package-iterator.lisp"/>
+			<F N="src/org/armedbear/lisp/with-slots.lisp"/>
+			<F N="src/org/armedbear/lisp/with-standard-io-syntax.lisp"/>
+			<F N="src/org/armedbear/lisp/write-sequence.lisp"/>
+			<F N="src/org/armedbear/lisp/WrongNumberOfArgumentsException.java"/>
+			<F N="src/org/armedbear/lisp/ZeroRankArray.java"/>
+			<F N="src/org/armedbear/lisp/zip.java"/>
+			<F N="src/org/armedbear/lisp/ZipCache.java"/>
+		</Folder>
+		<Folder
+			Name="org.armedbear.lisp.java.swing"
+			Type="Package">
+			<F N="src/org/armedbear/lisp/java/swing/REPLConsole.java"/>
+		</Folder>
+		<Folder
+			Name="org.armedbear.lisp.protocol"
+			Type="Package">
+			<F N="src/org/armedbear/lisp/protocol/Hashtable.java"/>
+			<F N="src/org/armedbear/lisp/protocol/Inspectable.java"/>
+			<F N="src/org/armedbear/lisp/protocol/LispObject.java"/>
+			<F N="src/org/armedbear/lisp/protocol/Pathname.java"/>
+		</Folder>
+		<Folder
+			Name="org.armedbear.lisp.scripting"
+			Type="Package">
+			<F N="src/org/armedbear/lisp/scripting/AbclScriptEngine.java"/>
+			<F N="src/org/armedbear/lisp/scripting/AbclScriptEngineFactory.java"/>
+		</Folder>
+		<Folder
+			Name="org.armedbear.lisp.util"
+			Type="Package">
+			<F N="src/org/armedbear/lisp/util/DecodingReader.java"/>
+			<F N="src/org/armedbear/lisp/util/Finalizer.java"/>
+			<F N="src/org/armedbear/lisp/util/HttpHead.java"/>
+			<F N="test/src/org/armedbear/lisp/util/HttpHeadTest.java"/>
+			<F N="src/org/armedbear/lisp/util/RACFMalformedInputException.java"/>
+			<F N="src/org/armedbear/lisp/util/RACFUnmappableCharacterException.java"/>
+			<F N="src/org/armedbear/lisp/util/RandomAccessCharacterFile.java"/>
+		</Folder>
+		<Folder Name="src">
+			<F N="src/manifest-abcl"/>
+		</Folder>
+		<Folder Name="src/org/armedbear/lisp/scripting/lisp">
+			<F N="src/org/armedbear/lisp/scripting/lisp/abcl-script.lisp"/>
+			<F N="src/org/armedbear/lisp/scripting/lisp/config.lisp"/>
+			<F N="src/org/armedbear/lisp/scripting/lisp/packages.lisp"/>
+		</Folder>
+		<Folder
+			Name="swing"
+			Type="Package">
+			<F N="examples/gui/swing/SwingDialogPromptStream.java"/>
+		</Folder>
+		<Folder Name="test/lisp/abcl">
+			<F N="test/lisp/abcl/abcl-test.lisp"/>
+			<F N="test/lisp/abcl/bugs.lisp"/>
+			<F N="test/lisp/abcl/class-file.lisp"/>
+			<F N="test/lisp/abcl/clos-tests.lisp"/>
+			<F N="test/lisp/abcl/compiler-tests.lisp"/>
+			<F N="test/lisp/abcl/condition-tests.lisp"/>
+			<F N="test/lisp/abcl/file-system-tests.lisp"/>
+			<F N="test/lisp/abcl/jar-pathname.lisp"/>
+			<F N="test/lisp/abcl/java-tests.lisp"/>
+			<F N="test/lisp/abcl/java.lisp"/>
+			<F N="test/lisp/abcl/latin1-tests.lisp"/>
+			<F N="test/lisp/abcl/math-tests.lisp"/>
+			<F N="test/lisp/abcl/metaclass.lisp"/>
+			<F N="test/lisp/abcl/misc-tests.lisp"/>
+			<F N="test/lisp/abcl/mop-tests-setup.lisp"/>
+			<F N="test/lisp/abcl/mop-tests.lisp"/>
+			<F N="test/lisp/abcl/package-local-nicknames-tests.lisp"/>
+			<F N="test/lisp/abcl/package.lisp"/>
+			<F N="test/lisp/abcl/pathname-tests.lisp"/>
+			<F N="test/lisp/abcl/rt-package.lisp"/>
+			<F N="test/lisp/abcl/rt.lisp"/>
+			<F N="test/lisp/abcl/runtime-class.lisp"/>
+			<F N="test/lisp/abcl/test-utilities.lisp"/>
+			<F N="test/lisp/abcl/url-pathname.lisp"/>
+			<F N="test/lisp/abcl/utilities.lisp"/>
+			<F N="test/lisp/abcl/weak-hash-tables.lisp"/>
+			<F N="test/lisp/abcl/wild-pathnames.lisp"/>
+			<F N="test/lisp/abcl/zip.lisp"/>
+		</Folder>
+		<Folder Name="test/lisp/ansi">
+			<F N="test/lisp/ansi/abcl-ansi.lisp"/>
+			<F N="test/lisp/ansi/packages.lisp"/>
+			<F N="test/lisp/ansi/parse-ansi-errors.lisp"/>
+			<F N="test/lisp/ansi/ansi-test-failures"/>
+		</Folder>
+		<Folder Name="test/lisp/cl-bench">
+			<F N="test/lisp/cl-bench/wrapper.lisp"/>
+		</Folder>
+		<Folder Name="tools">
+			<F N="tools/check.lisp"/>
+			<F N="tools/clos-benchmarks.lisp"/>
+			<F N="tools/code-grapher.lisp"/>
+			<F N="tools/digest.lisp"/>
+			<F N="tools/fasl.lisp"/>
+			<F N="tools/threads-jss.lisp"/>
+		</Folder>
+		<Folder Name="tools/jar-size">
+			<F N="tools/jar-size/build-metrics.lisp"/>
+		</Folder>
+		<F
+			N="*.java;*.lisp;*.prop*;*.;*.lsp"
+			Recurse="1"/>
+		<F N="abcl"/>
+		<F N="abcl.properties.in"/>
+		<F N="build-abcl.lisp"/>
+		<F
+			N="build-maven.xml"
+			Type="Ant"/>
+		<F
+			N="build-snapshot.xml"
+			Type="Ant"/>
+		<F
+			N="build.xml"
+			Type="Ant"/>
+		<F N="CHANGES"/>
+		<F N="COPYING"/>
+		<F N="install-sh"/>
+		<F N="MANUAL"/>
+		<F
+			N="netbeans-build.xml"
+			Type="Ant"/>
+		<F N="pom.xml"/>
+		<F N="README"/>
+	</Files>
+</Project>
