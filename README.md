@@ -18,3 +18,12 @@ Project Information
 
 Labels: 
 lisp java ikvm .net LispSharp lisp.net
+
+
+Understanding Source Directories:
+
+./abcl/    Close to normal ABCL in order to make merging easier
+./platform/src/org/armedbar/  Abnormal ABCL merged with LarKC
+./platform/src/com/cyc/tool/  CYC JRTL initially from LarKC with CommonLisp
+./platform/src/com/cyc/cycjava/  LarKC stripped down cyc.jar
+
