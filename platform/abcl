@@ -20,9 +20,8 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 exec /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java \
-   -server -cp  /mnt/gggg/PrologMUD/pack/larkc_cl/jrtl-clabcl/dist/abcl.jar:/mnt/gggg/PrologMUD/pack/larkc_cl/jrtl-cl/target/classes:"$CLASSPATH" \
-   -d64 -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC \
-   -agentlib:jdwp=transport=dt_socket,server=y,address=3619,suspend=n \
+  -cp  /mnt/gggg/PrologMUD/pack/workspace/CYC_JRTL_with_CommonLisp/platformabcl/dist/abcl.jar:/mnt/gggg/PrologMUD/pack/workspace/CYC_JRTL_with_CommonLisp/platform/bin-eclipse:"$CLASSPATH" \
+  -server -d64 -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC \
   org.armedbear.lisp.Main \
   "$@"
 

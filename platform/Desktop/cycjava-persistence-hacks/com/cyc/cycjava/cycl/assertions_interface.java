@@ -132,7 +132,7 @@ public final class assertions_interface extends SubLTranslatedFile
     private static final SubLSymbol $sym108$KB_ASSERTION_DEPENDENTS;
     private static final SubLString $str109$Return_the_dependents_of_ASSERTIO;
     private static final SubLList $list110;
-    static boolean $assertionsDisabled = true;
+    static boolean assertionsDisabled = true;
     
     @SubLTranslatedFile.SubL(source = "cycl/assertions-interface.lisp", position = 1630L)
     public static SubLObject kb_create_assertion(final SubLObject cnf, final SubLObject mt, final SubLObject variable_names, final SubLObject direction, final SubLObject truth, final SubLObject strength, final SubLObject asserted_argument) {
@@ -667,7 +667,7 @@ public final class assertions_interface extends SubLTranslatedFile
         assert assertions_interface.NIL != enumeration_types.truth_p(new_truth) : new_truth;
         assert assertions_interface.NIL != enumeration_types.el_strength_p(new_strength) : new_strength;
         final SubLObject old_asserted_argument = assertions_high.get_asserted_argument(assertion);
-        if (assertions_interface.NIL != enforce_existence_of_old_asserted_argumentP && !assertions_interface.$assertionsDisabled && assertions_interface.NIL == arguments.asserted_argument_p(old_asserted_argument)) {
+        if (assertions_interface.NIL != enforce_existence_of_old_asserted_argumentP && !assertions_interface.assertionsDisabled && assertions_interface.NIL == arguments.asserted_argument_p(old_asserted_argument)) {
             throw new AssertionError(old_asserted_argument);
         }
         final SubLObject old_who = assertions_high.asserted_by(assertion);

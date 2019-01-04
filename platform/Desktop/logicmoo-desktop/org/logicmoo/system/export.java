@@ -1499,7 +1499,7 @@ public final class export extends SubLTranslatedFile {
 		return NIL;
 	}
 
-	static HashMap<String, SubLSymbol> foundSymbols = new HashMap<>();
+	static HashMap<String, SubLSymbol> foundSymbols = new HashMap();
 
 	//// Internal Constants
 

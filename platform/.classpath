@@ -5,7 +5,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry excluding="*.*" including="**/*.abcl|**/*.cls" kind="src" path="build/classes"/>
+	<classpathentry excluding="**/*.java|*.*|*.java" including="**/*.abcl|**/*.cls" kind="src" path="build/classes"/>
 	<classpathentry kind="src" path="Desktop/cycjava-persistence-hacks"/>
 	<classpathentry kind="src" path="Desktop/objectweb-asm-src"/>
 	<classpathentry kind="src" path="Desktop/armedbear-j-src"/>
@@ -38,7 +38,6 @@
 	<classpathentry kind="lib" path="lib/2p.jar"/>
 	<classpathentry kind="lib" path="lib/activation.jar"/>
 	<classpathentry kind="lib" path="lib/addressing-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/ant-1.6.5.jar"/>
 	<classpathentry kind="lib" path="lib/antlr-2.7.5.jar"/>
 	<classpathentry kind="lib" path="lib/axis-1.4.jar"/>
 	<classpathentry kind="lib" path="lib/axis-jaxrpc-1.4.jar"/>
@@ -293,11 +292,13 @@
 	<classpathentry kind="lib" path="lib/ext/GAT-API.jar"/>
 	<classpathentry kind="lib" path="lib/ext/GAT-engine.jar"/>
 	<classpathentry kind="lib" path="lib/ext/iri.jar"/>
-	<classpathentry kind="lib" path="lib/ext/openrdf-sesame-2.2.4-onejar.jar"/>
-	<classpathentry kind="lib" path="lib/ext/ordi-model-0.5.jar"/>
-	<classpathentry kind="lib" path="lib/ext/ordi-trree-adapter-3.1.a6.jar"/>
-	<classpathentry kind="lib" path="lib/ext/owlim-big-3.1.a7.jar"/>
 	<classpathentry kind="lib" path="lib/ext/servlet.jar"/>
 	<classpathentry kind="lib" path="lib/ext/xmlParserAPIs.jar"/>
+	<classpathentry kind="lib" path="lib/concurrent.jar"/>
+	<classpathentry kind="lib" path="lib/iri.jar"/>
+	<classpathentry kind="lib" path="lib/openrdf-sesame-2.2.4-onejar.jar"/>
+	<classpathentry kind="lib" path="lib/ordi-model-0.5.jar"/>
+	<classpathentry kind="lib" path="lib/ordi-trree-adapter-3.1.a6.jar"/>
+	<classpathentry kind="lib" path="lib/owlim-big-3.1.a7.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
