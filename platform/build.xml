@@ -37,7 +37,7 @@ For help on the automatic tests available, use the Ant target 'help.test'.
     <property name="src.dir"
               value="${basedir}/src"/>
     <property name="dist.dir"
-              value="${basedir}/dist"/>
+              value="${basedir}abcl/dist"/>
     <property name="abcl.jar.path"
               value="${dist.dir}/abcl.jar"/>
     <property name="abcl-aio.jar.path"
@@ -222,7 +222,14 @@ For help on the automatic tests available, use the Ant target 'help.test'.
 	     classpath="bin-eclipse/:${env.CLASSPATH}"
              includeantruntime="false"
              failonerror="true">
-        <src path="${src.dir}"/>
+      	<src path="${src.dir}"/>
+      	<src path="jsrc-jpl7"/>
+      	<src path="../AppdapterGUI/src"/>
+      	<src path="../phase09-cycjava-4q/cycjava-src"/>
+      	
+      	<src path="jsrc-armedbear-j"/>   
+      	<src path="jsrc-objectweb-asm"/>
+      	<src path="jsrc-logicmoo-desktop"/>      	
         <compilerarg value="-XDignore.symbol.file"/>
         <patternset refid="abcl.source.java"/>
       </javac>
@@ -697,7 +704,6 @@ will compile (if necessary) and load JSS.
       </java>
       <echo>JPDA listening on localhost:6789</echo>
     </target>
-
     <target name="abcl.run" depends="abcl.jar">
       <java fork="true"
             classpathref="abcl.classpath.dist"

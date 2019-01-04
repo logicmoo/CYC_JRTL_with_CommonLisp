@@ -19,9 +19,10 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-exec /usr/lib/jvm/java-8-oracle/jre/bin/java \
-  -cp  /mnt/dddd/workspace/phase02-jrtl/platform/dist/abcl.jar:/mnt/dddd/workspace/phase02-jrtl/platform/bin-eclipse:"$CLASSPATH" \
-  -d64 -XX:+UseG1GC -XshowSettings:vm -Xmx8g -Xss4g -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=1g \
+exec /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java \
+   -server -cp  /mnt/gggg/PrologMUD/pack/larkc_cl/jrtl-clabcl/dist/abcl.jar:/mnt/gggg/PrologMUD/pack/larkc_cl/jrtl-cl/target/classes:"$CLASSPATH" \
+   -d64 -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC \
+   -agentlib:jdwp=transport=dt_socket,server=y,address=3619,suspend=n \
   org.armedbear.lisp.Main \
   "$@"
 
