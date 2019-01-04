@@ -5,7 +5,7 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="src" path="build/classes"/>
+	<classpathentry excluding="*.*" including="**/*.abcl|**/*.cls" kind="src" path="build/classes"/>
 	<classpathentry kind="src" path="Desktop/cycjava-persistence-hacks"/>
 	<classpathentry kind="src" path="Desktop/objectweb-asm-src"/>
 	<classpathentry kind="src" path="Desktop/armedbear-j-src"/>
