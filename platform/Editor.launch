@@ -13,6 +13,6 @@
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.armedbear.j.Editor"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="-d"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="platform"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-XX:PermSize=1g -XX:MaxPermSize=4g -Xmx12g  -Djava.util.Arrays.useLegacyMergeSort=true  -Dsun.java2d.d3d=false"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-server -d64 -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC"/>
 <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:platform}"/>
 </launchConfiguration>

@@ -12,8 +12,8 @@
     </listAttribute>
     <stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk-11"/>
     <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.armedbear.lisp.java.swing.REPLConsole"/>
-    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--load d"/>
-    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="platform"/>
-    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-XX:PermSize=1g -XX:MaxPermSize=4g -Xmx12g -Djava.util.Arrays.useLegacyMergeSort=true -Dfile.encoding=Cp1252"/>
-    <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="g:\PrologMUD\pack\runtime"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--load e2c/d"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="platform"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-server -d64 -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC"/>
+<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:platform}"/>
 </launchConfiguration>
