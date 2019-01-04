@@ -2,7 +2,7 @@
  * SimpleError.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SimpleError.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,47 +31,53 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class SimpleError extends LispError {
-	public SimpleError(String message) {
-		super(StandardClass.SIMPLE_ERROR);
-		this.setFormatControl(message);
-		this.setFormatArguments(Lisp.NIL);
-	}
+public final class SimpleError extends LispError
+{
+    public SimpleError(LispObject formatControl, LispObject formatArguments)
 
-	public SimpleError(SubLObject initArgs) {
-		super(StandardClass.SIMPLE_ERROR);
-		this.initialize(initArgs);
-	}
+    {
+        super(StandardClass.SIMPLE_ERROR);
+        setFormatControl(formatControl);
+        setFormatArguments(formatArguments);
+    }
 
-	public SimpleError(SubLObject formatControl, SubLObject formatArguments)
+    public SimpleError(LispObject initArgs)
+    {
+        super(StandardClass.SIMPLE_ERROR);
+        initialize(initArgs);
+    }
 
-	{
-		super(StandardClass.SIMPLE_ERROR);
-		this.setFormatControl(formatControl);
-		this.setFormatArguments(formatArguments);
-	}
+    public SimpleError(String message)
+    {
+        super(StandardClass.SIMPLE_ERROR);
+        setFormatControl(message);
+        setFormatArguments(NIL);
+    }
 
-	public SubLObject classOf() {
-		return StandardClass.SIMPLE_ERROR;
-	}
+    public LispObject typeOf()
+    {
+        return Symbol.SIMPLE_ERROR;
+    }
 
-	public SubLObject typeOf() {
-		return LispSymbols.SIMPLE_ERROR;
-	}
+    public LispObject classOf()
+    {
+        return StandardClass.SIMPLE_ERROR;
+    }
 
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.SIMPLE_ERROR)
-			return Lisp.T;
-		if (type == StandardClass.SIMPLE_ERROR)
-			return Lisp.T;
-		if (type == LispSymbols.SIMPLE_CONDITION)
-			return Lisp.T;
-		if (type == StandardClass.SIMPLE_CONDITION)
-			return Lisp.T;
-		return super.typep(type);
-	}
+    public LispObject typep(LispObject type)
+    {
+        if (type == Symbol.SIMPLE_ERROR)
+            return T;
+        if (type == StandardClass.SIMPLE_ERROR)
+            return T;
+        if (type == Symbol.SIMPLE_CONDITION)
+            return T;
+        if (type == StandardClass.SIMPLE_CONDITION)
+            return T;
+        return super.typep(type);
+    }
 }

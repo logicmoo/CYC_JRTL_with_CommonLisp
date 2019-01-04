@@ -2,7 +2,7 @@
  * Condition.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id: Condition.java 12512 2010-02-28 15:54:17Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,163 +31,205 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 
-public class Condition extends StandardObject {
-	protected String message;
+public class Condition extends StandardObject
+{
+  protected String message;
 
-	public Condition() {
-		super(StandardClass.CONDITION);
-		Debug.assertTrue(this.slots.length == 2);
-		this.setFormatArguments(Lisp.NIL);
+  protected void assertSlotsLength(int i) {
+	  if(slots!=null) {
+		  if(slots.length==i) return;
+		  Debug.assertViolation("Slots!="+i + " on " + this);
+	  } else {
+		  Debug.assertViolation("Slots null on" + this);
+		  slots = new LispObject[i];
+	  }
 	}
 
-	protected Condition(LispClass cls) {
-		super(cls);
-		Debug.assertTrue(this.slots.length >= 2);
-		this.setFormatArguments(Lisp.NIL);
-	}
+  public Condition()
+  {
+    super(StandardClass.CONDITION);
+    assertSlotsLength( 2);
+    setFormatArguments(NIL);
+    marKCondition();
+  }
 
-	public Condition(LispClass cls, int length) {
-		super(cls, length);
-	}
+  protected Condition(LispClass cls)
+  {
+    super(cls);
+    //Debug.assertTrue(slots.length >= 2);
+    setFormatArguments(NIL);
+    marKCondition();
+  }
 
-	public Condition(String message) {
-		super(StandardClass.CONDITION);
-		Debug.assertTrue(this.slots.length == 2);
-		this.setFormatControl(message);
-		this.setFormatArguments(Lisp.NIL);
-	}
+  public Condition(LispClass cls, int length)
+  {
+    super(cls, length);
+    marKCondition();
+  }
 
-	public Condition(SubLObject initArgs) {
-		super(StandardClass.CONDITION);
-		Debug.assertTrue(this.slots.length == 2);
-		this.initialize(initArgs);
-	}
+  public Condition(LispObject initArgs)
+  {
+    super(StandardClass.CONDITION);
+   // Debug.assertTrue(slots.length == 2);
+    initialize(initArgs);
+    marKCondition();
+  }
 
-	public SubLObject classOf() {
-		LispClass c = this.getLispClass();
-		if (c != null)
-			return c;
-		return StandardClass.CONDITION;
-	}
+  private void marKCondition() {
+	  // maybe save a java stack trace here someday?
+  }
 
-	public String getConditionReport() {
-		String s = this.getMessage();
-		if (s != null)
-			return s;
-		SubLObject formatControl = this.getFormatControl();
-		if (formatControl != Lisp.NIL)
-			return Lisp.format(formatControl, this.getFormatArguments());
-		return this.unreadableString(this.typeOf().writeToString());
-	}
+protected void initialize(LispObject initArgs)
+  {
+    LispObject control = null;
+    LispObject arguments = null;
+    LispObject first, second;
+    while (initArgs instanceof Cons)
+      {
+        first = initArgs.car();
+        initArgs = initArgs.cdr();
+        second = initArgs.car();
+        initArgs = initArgs.cdr();
+        if (first == Keyword.FORMAT_CONTROL)
+          {
+            if (control == null)
+              control = second;
+          }
+        else if (first == Keyword.FORMAT_ARGUMENTS)
+          {
+            if (arguments == null)
+              arguments = second;
+          }
+      }
+    if (control != null)
+      setFormatControl(control);
+    if (arguments == null)
+      arguments = NIL;
+    setFormatArguments(arguments);
+  }
 
-	public SubLObject getFormatArguments() {
-		return this.getInstanceSlotValue(LispSymbols.FORMAT_ARGUMENTS);
-	}
+  public Condition(String message)
+  {
+    super(StandardClass.CONDITION);
+    assertSlotsLength( 2);
+    setFormatControl(message);
+    setFormatArguments(NIL);
+  }
 
-	public SubLObject getFormatControl() {
-		return this.getInstanceSlotValue(LispSymbols.FORMAT_CONTROL);
-	}
+  public final LispObject getFormatControl()
+  {
+      return getInstanceSlotValue(Symbol.FORMAT_CONTROL);
+  }
 
-	/**
-	 * Extending classes should override this method if they want to customize
-	 * how they will be printed.
-	 */
-	public String getMessage() {
-		SubLObject o = this.getFormatControl();
-		if (o instanceof SubLString)
-			return o.getString();
-		return o.writeToString();
-	}
+  public final void setFormatControl(LispObject formatControl)
 
-	protected void initialize(SubLObject initArgs) {
-		SubLObject control = null;
-		SubLObject arguments = null;
-		SubLObject first, second;
-		while (initArgs instanceof SubLCons) {
-			first = initArgs.first();
-			initArgs = initArgs.rest();
-			second = initArgs.first();
-			initArgs = initArgs.rest();
-			if (first == Keyword.FORMAT_CONTROL) {
-				if (control == null)
-					control = second;
-			} else if (first == Keyword.FORMAT_ARGUMENTS)
-				if (arguments == null)
-					arguments = second;
-		}
-		if (control != null)
-			this.setFormatControl(control);
-		if (arguments == null)
-			arguments = Lisp.NIL;
-		this.setFormatArguments(arguments);
-	}
+  {
+    setInstanceSlotValue(Symbol.FORMAT_CONTROL, formatControl);
+  }
 
-	public void setFormatArguments(SubLObject formatArguments)
+  public final void setFormatControl(String s)
+  {
+    setFormatControl(new SimpleString(s));
+  }
 
-	{
-		this.setInstanceSlotValue(LispSymbols.FORMAT_ARGUMENTS, formatArguments);
-	}
+  public final LispObject getFormatArguments()
+  {
+    return getInstanceSlotValue(Symbol.FORMAT_ARGUMENTS);
+  }
 
-	public void setFormatControl(String s) {
-		this.setFormatControl(LispObjectFactory.makeString(s));
-	}
+  public final void setFormatArguments(LispObject formatArguments)
 
-	public void setFormatControl(SubLObject formatControl)
+  {
+    setInstanceSlotValue(Symbol.FORMAT_ARGUMENTS, formatArguments);
+  }
 
-	{
-		this.setInstanceSlotValue(LispSymbols.FORMAT_CONTROL, formatControl);
-	}
+  /**
+   * Extending classes should override this method if they want to
+   * customize how they will be printed.
+   */
+  public String getMessage()
+  {
+    return null;
+  }
 
-	public SubLObject typeOf() {
-		LispClass c = this.getLispClass();
-		if (c != null)
-			return c.getLispClassName();
-		return LispSymbols.CONDITION;
-	}
+  public LispObject typeOf()
+  {
+    LispObject c = getLispClass();
+    if (c instanceof LispClass)
+        return ((LispClass)c).getLispClassName();
+    else if (c != null)
+      return Symbol.CLASS_NAME.execute(c);
+    return Symbol.CONDITION;
+  }
 
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.CONDITION)
-			return Lisp.T;
-		if (type == StandardClass.CONDITION)
-			return Lisp.T;
-		return super.typep(type);
-	}
+  public LispObject classOf()
+  {
+    LispObject c = getLispClass();
+    if (c != null)
+      return c;
+    return StandardClass.CONDITION;
+  }
 
-	public String writeToString() {
-		LispThread thread = LispThread.currentThread();
-		if (LispSymbols.PRINT_ESCAPE.symbolValue(thread) == Lisp.NIL) {
-			String s = this.getMessage();
-			if (s != null)
-				return s;
-			SubLObject formatControl = this.getFormatControl();
-			if (formatControl instanceof Function) {
-				StringOutputStream stream = new StringOutputStream();
-				LispSymbols.APPLY.execute(formatControl, stream, this.getFormatArguments());
-				return stream.getOutputString().getString();
-			}
-			if (formatControl instanceof SubLString) {
-				SubLObject f = LispSymbols.FORMAT.getSymbolFunction();
-				if (f == null || f instanceof Autoload)
-					return Lisp.format(formatControl, this.getFormatArguments());
-				return LispSymbols.APPLY.execute(f, Lisp.NIL, formatControl, this.getFormatArguments()).getString();
-			}
-		}
-		int maxLevel;
-		SubLObject printLevel = LispSymbols.PRINT_LEVEL.symbolValue(thread);
-		if (printLevel instanceof Fixnum)
-			maxLevel = ((Fixnum) printLevel).value;
-		else
-			maxLevel = Integer.MAX_VALUE;
-		SubLObject currentPrintLevel = Lisp._CURRENT_PRINT_LEVEL_.symbolValue(thread);
-		int currentLevel = ((Fixnum) currentPrintLevel).value;
-		if (currentLevel >= maxLevel)
-			return "#";
-		return this.unreadableString(this.typeOf().writeToString());
-	}
+  public LispObject typep(LispObject type)
+  {
+    if (type == Symbol.CONDITION)
+      return T;
+    if (type == StandardClass.CONDITION)
+      return T;
+    return super.typep(type);
+  }
+
+  public String getConditionReport()
+  {
+    String s = getMessage();
+    if (s != null)
+      return s;
+    LispObject formatControl = getFormatControl();
+    if (formatControl != NIL)
+      {
+        return format(formatControl, getFormatArguments());
+      }
+    return unreadableString(typeOf().princToString());
+  }
+
+  public final String printObjectImpl()
+  {
+    final LispThread thread = LispThread.currentThread();
+    if (Symbol.PRINT_ESCAPE.symbolValue(thread) == NIL)
+      {
+        String s = getMessage();
+        if (s != null)
+          return s;
+        LispObject formatControl = getFormatControl();
+        if ((Object)formatControl instanceof Function)
+          {
+            StringOutputStream stream = new StringOutputStream();
+            Symbol.APPLY.execute(formatControl, stream, getFormatArguments());
+            return stream.getBufferString().getStringValue();
+          }
+        if (formatControl instanceof AbstractString)
+          {
+            LispObject f = Symbol.FORMAT.getSymbolFunction();
+            if (f == null || (Object)f instanceof Autoload)
+              return format(formatControl, getFormatArguments());
+            return Symbol.APPLY.execute(f, NIL, formatControl, getFormatArguments()).getStringValue();
+          }
+      }
+    final int maxLevel;
+    LispObject printLevel = Symbol.PRINT_LEVEL.symbolValue(thread);
+    if (printLevel instanceof Fixnum)
+      maxLevel = ((Fixnum)printLevel).value;
+    else
+      maxLevel = Integer.MAX_VALUE;
+    LispObject currentPrintLevel =
+      _CURRENT_PRINT_LEVEL_.symbolValue(thread);
+    int currentLevel = ((Fixnum)currentPrintLevel).value;
+    if (currentLevel >= maxLevel)
+      return "#";
+    return unreadableString(typeOf().princToString());
+  }
 }

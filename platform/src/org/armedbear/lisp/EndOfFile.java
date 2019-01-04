@@ -2,7 +2,7 @@
  * EndOfFile.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: EndOfFile.java 12512 2010-02-28 15:54:17Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,38 +31,40 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class EndOfFile extends StreamError {
-	public EndOfFile(LispStream stream) {
-		super(StandardClass.END_OF_FILE);
-		this.setStream(stream);
-	}
+public final class EndOfFile extends StreamError
+{
+    public EndOfFile(Stream stream)
+    {
+        super(StandardClass.END_OF_FILE);
+        setStream(stream);
+    }
 
-	public EndOfFile(SubLObject initArgs) {
-		super(StandardClass.END_OF_FILE);
-		this.initialize(initArgs);
-	}
+    public EndOfFile(LispObject initArgs)
+    {
+        super(StandardClass.END_OF_FILE);
+        initialize(initArgs);
+    }
 
-	public SubLObject classOf() {
-		return StandardClass.END_OF_FILE;
-	}
+    public LispObject typeOf()
+    {
+        return Symbol.END_OF_FILE;
+    }
 
-	public String getMessage() {
-		return this.unreadableString(LispSymbols.END_OF_FILE);
-	}
+    public LispObject classOf()
+    {
+        return StandardClass.END_OF_FILE;
+    }
 
-	public SubLObject typeOf() {
-		return LispSymbols.END_OF_FILE;
-	}
-
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.END_OF_FILE)
-			return Lisp.T;
-		if (type == StandardClass.END_OF_FILE)
-			return Lisp.T;
-		return super.typep(type);
-	}
+    public LispObject typep(LispObject type)
+    {
+        if (type == Symbol.END_OF_FILE)
+            return T;
+        if (type == StandardClass.END_OF_FILE)
+            return T;
+        return super.typep(type);
+    }
 }

@@ -1,124 +1,133 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.List;
+
+import org.armedbear.lisp.Condition;
+import org.armedbear.lisp.Fixnum;
+import org.armedbear.lisp.GenericFunction;
+import org.armedbear.lisp.LispObject;
+import org.armedbear.lisp.Stream;
+import org.jpl7.Term;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
-//import com.cyc.tool.subl.jrtl.nativeCode.subLisp.DiskDumper;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sxhash;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
 
-public abstract class AbstractSubLStruct extends AbstractSubLObject implements SubLStruct {
+public abstract class AbstractSubLStruct extends LispObject implements SubLStruct {
+	//public org.jpl7.Term termRef;
+	public AbstractSubLStruct() {
+		Object thiz = this;
+		if(thiz instanceof Condition) return;
+		if(thiz instanceof Stream) return;
+		if(thiz instanceof GenericFunction) return;
 
+	  if(false) PrologSync.addThis(this);
+  }
 	public static String STRUCT_TYPE_NAME = "STRUCT";
 
-	//// Constructors
+	  @Override
+		public SubLObject getField0()
+		{
+			return Fixnum.getInstance(getFieldCount());
+		}
+	  @Override
+		public SubLObject getField1()
+		{
+		  return getName();
+		}
 
-	/** Creates a new instance of SubLStruct. */
-	AbstractSubLStruct() {
-		// TODO = DiskDumper.addThis(this);
-	}
-
-	//// Public Area
-
-	/** Two structs are equalp iff all their fields are equalp. */
-	public boolean equalp(SubLObject obj) {
+    abstract public boolean equalp(SubLObject obj) ;
+    public boolean equalpS(SubLObject obj) {
+    	return super.equalp(obj);
+    }
+    public boolean equalpA(SubLObject obj) {
 		if (obj == this)
 			return true;
-		if (this.getStructDecl().isInterned)
-			return false;
 		if (obj == null)
 			return false;
 		if (!obj.isStructure())
 			return false;
+
 		SubLStruct otherStuct = obj.toStruct();
-		if (this.getStructDecl() != otherStuct.getStructDecl())
+		SubLStructDecl decl = getStructDecl();
+		SubLStructDecl otherDecl = otherStuct.getStructDecl();
+
+		if (decl != null && otherDecl != null) {
+			if (decl.isInterned || decl != otherDecl)
+				return false;
+		} else if (!getField0().equalp(otherStuct.getField0()) || !getField1().equalp(otherStuct.getField1()))
 			return false;
-		int fieldCount = this.getFieldCount();
+
+		int fieldCount = getFieldCount();
 		switch (fieldCount) {
 		case 19:
-			if (!this.getField20().equalp(otherStuct.getField20()))
+			if (!getField20().equalp(otherStuct.getField20()))
 				return false;
 		case 18:
-			if (!this.getField19().equalp(otherStuct.getField19()))
+			if (!getField19().equalp(otherStuct.getField19()))
 				return false;
 		case 17:
-			if (!this.getField18().equalp(otherStuct.getField18()))
+			if (!getField18().equalp(otherStuct.getField18()))
 				return false;
 		case 16:
-			if (!this.getField17().equalp(otherStuct.getField17()))
+			if (!getField17().equalp(otherStuct.getField17()))
 				return false;
 		case 15:
-			if (!this.getField16().equalp(otherStuct.getField16()))
+			if (!getField16().equalp(otherStuct.getField16()))
 				return false;
 		case 14:
-			if (!this.getField15().equalp(otherStuct.getField15()))
+			if (!getField15().equalp(otherStuct.getField15()))
 				return false;
 		case 13:
-			if (!this.getField14().equalp(otherStuct.getField14()))
+			if (!getField14().equalp(otherStuct.getField14()))
 				return false;
 		case 12:
-			if (!this.getField13().equalp(otherStuct.getField13()))
+			if (!getField13().equalp(otherStuct.getField13()))
 				return false;
 		case 11:
-			if (!this.getField12().equalp(otherStuct.getField12()))
+			if (!getField12().equalp(otherStuct.getField12()))
 				return false;
 		case 10:
-			if (!this.getField11().equalp(otherStuct.getField11()))
+			if (!getField11().equalp(otherStuct.getField11()))
 				return false;
 		case 9:
-			if (!this.getField10().equalp(otherStuct.getField10()))
+			if (!getField10().equalp(otherStuct.getField10()))
 				return false;
 		case 8:
-			if (!this.getField9().equalp(otherStuct.getField9()))
+			if (!getField9().equalp(otherStuct.getField9()))
 				return false;
 		case 7:
-			if (!this.getField8().equalp(otherStuct.getField8()))
+			if (!getField8().equalp(otherStuct.getField8()))
 				return false;
 		case 6:
-			if (!this.getField7().equalp(otherStuct.getField7()))
+			if (!getField7().equalp(otherStuct.getField7()))
 				return false;
 		case 5:
-			if (!this.getField6().equalp(otherStuct.getField6()))
+			if (!getField6().equalp(otherStuct.getField6()))
 				return false;
 		case 4:
-			if (!this.getField5().equalp(otherStuct.getField5()))
+			if (!getField5().equalp(otherStuct.getField5()))
 				return false;
 		case 3:
-			if (!this.getField4().equalp(otherStuct.getField4()))
+			if (!getField4().equalp(otherStuct.getField4()))
 				return false;
 		case 2:
-			if (!this.getField3().equalp(otherStuct.getField3()))
+			if (!getField3().equalp(otherStuct.getField3()))
 				return false;
 		case 1:
-			if (!this.getField2().equalp(otherStuct.getField2()))
+			if (!getField2().equalp(otherStuct.getField2()))
 				return false;
+			break;
 		}
 		if (fieldCount >= 20)
-			for (int i = 19; i < fieldCount; i++) {
+			for (int i = 19; i < fieldCount; ++i) {
 				int index = i + 1;
 				if (!this.getField(index).equalp(otherStuct.getField(index)))
 					return false;
@@ -126,7 +135,12 @@ public abstract class AbstractSubLStruct extends AbstractSubLObject implements S
 		return true;
 	}
 
-	public boolean equals(Object obj) {
+    public boolean equalsS(Object obj) {
+    	return super.equals(obj);
+    }
+	@Override
+    abstract public boolean equals(Object obj);
+	public boolean equalsA(Object obj) {
 		if (obj == this)
 			return true;
 		if (obj == null)
@@ -137,99 +151,159 @@ public abstract class AbstractSubLStruct extends AbstractSubLObject implements S
 		if (!sublObj.isStructure())
 			return false;
 		SubLStruct other = sublObj.toStruct();
-		if (this.getName() != other.getName())
+		if (getName() != other.getName())
 			return false;
-		if (this.getFieldCount() != other.getFieldCount())
+		if (getFieldCount() != other.getFieldCount())
 			return false;
-		for (int i = 0, size = this.getFieldCount(); i < size; i++) {
+		for (int i = 0, size = getFieldCount(); i < size; ++i) {
 			int index = i + 2;
-			Object io = this.getField(index);
-			if (io == null)
+			if (!this.getField(index).equals(other.getField(index)))
 				return false;
-			Object oo = other.getField(index);
-			if (oo == null)
-				return false;
-			if (!io.equals(oo))
-				return false;
-
 		}
 		return true;
 	}
 
+	@Override
 	public SubLObject getField(SubLSymbol fieldName) {
-		int fieldNum = this.getStructDecl().getFieldNumForSymbol(fieldName);
+		int fieldNum = getStructDecl().getFieldNumForSymbol(fieldName);
 		return this.getField(fieldNum);
 	}
 
-	// @note make this once StructDecls start getting set properly
+	@Override
 	public int getFieldCount() {
-		SubLStructDecl decl = this.getStructDecl();
+		SubLStructDecl decl = getStructDecl();
 		if (decl == null)
 			return 0;
 		return decl.getFieldCount();
 	}
 
+	@Override
 	public SubLSymbol getName() {
-		return this.getStructDecl().getStructName();
+		return getStructDecl().getStructName();
 	}
 
+	@Override
 	public SubLSymbol getType() {
-		return this.getName();
+		return getName();
 	}
 
+	@Override
 	public SubLFixnum getTypeCode() {
 		return CommonSymbols.TWO_HUNDRED_FIFTY_FOUR_INTEGER;
 	}
 
+	@Override
 	public int hashCode(int currentDepth) {
+		try {
 		return Sxhash.sxhash(this).intValue();
+		} catch(Throwable t) {
+			t.printStackTrace();
+			return super.superHash();
+		}
 	}
 
-	/*
-	 * public SubLObject eval(SubLEnvironment env) throws
-	 * InvalidSubLExpressionException { throw new
-	 * InvalidSubLExpressionException("Error: Attempt to take the " +
-	 * "value of a structure '" + this + "'."); }
-	 */
-
+	@Override
 	public int id() {
-		return this.getStructDecl().getId();
+		return getStructDecl().getId();
 	}
 
 	public void init(int size) {
 	}
 
+	@Override
 	public void setField(SubLSymbol fieldName, SubLObject value) {
-		int fieldNum = this.getStructDecl().getFieldNumForSymbol(fieldName);
+		int fieldNum = getStructDecl().getFieldNumForSymbol(fieldName);
 		this.setField(fieldNum, value);
 	}
 
-	public String toString() {
-		try {
-			return print_high.princ_to_string(this).getString();
-		} catch (Exception e) {
-			return "#<" + this.toTypeName() + " " + this.getName() + " @ " + this.hashCode() + ">";
-		}
+
+	public int getStructFieldNumForSymbol(SubLSymbol fieldName) {
+		return getStructDecl().getFieldNumForSymbol(fieldName);
+	}
+	/**
+	 * @param slotName
+	 * @return
+	 */
+	public int getInstanceSlotIndex(LispObject slotName) {
+
+		return getStructFieldNumForSymbol((SubLSymbol) slotName)-2;
 	}
 
-	/** Method created to avoid casting */
-	public SubLStruct toStruct() { // SubLStruct
+	public abstract class LispSharedSlot extends LispObject {
+		@Override
+		abstract public void setCdr(LispObject rest);
+	}
+
+	//@Override
+	public LispObject getSharedSlotLocation(LispObject slotName) {
+		final int iPlus2 = getStructFieldNumForSymbol((SubLSymbol) slotName);
+		if (iPlus2 < 0)
+			return null;
+		return new LispSharedSlot() {
+			@Override
+			public void setCdr(LispObject obj) {
+				setField(iPlus2, obj);
+			}
+
+			@Override
+			public LispObject cdr() {
+				return (LispObject) getField(iPlus2);
+			}
+		};
+	}
+
+	@Override
+	abstract public String printObjectImpl();
+
+	@Override
+	public SubLStruct toStruct() {
 		return this;
 	}
 
+	@Override
 	public String toTypeName() {
-		return AbstractSubLStruct.STRUCT_TYPE_NAME;
+		return "STRUCT";
 	}
 
-	public String writeToString() {
-		// TODO Auto-generated method stub
-		return this.toString();
+
+	//@Override
+	public LispObject getLispClass() {
+		return classOf();
 	}
 
-	//// Protected Area
 
-	//// Private Area
 
-	//// Internal Rep
+//	@Override
+	public LispObject setSlotArray(int index, LispObject newValue) {
+		setField(index+2, newValue);
+		return newValue;
+	}
+
+	//@Override
+	public LispObject getSlotArrayElement(int index) {
+		return (LispObject) getField(index+2);
+	}
+
+	public Term toProlog(List s)
+	{
+		return PrologSync.toProlog(getType().getName(), this,s);
+	}
+
+
+	@Override
+	public boolean isAlien() {
+		return false;
+	}
+
+	@Override
+	public boolean isAtom() {
+		return true;
+	}
+
+	@Override
+	public boolean isStructure() {
+		return true;
+	}
+	
 
 }

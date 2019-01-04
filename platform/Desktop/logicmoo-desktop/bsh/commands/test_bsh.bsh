@@ -1,0 +1,7 @@
+// hello??
+void molStat() {
+    int i = 9091;
+
+    print("Hello, " + i);
+}
+

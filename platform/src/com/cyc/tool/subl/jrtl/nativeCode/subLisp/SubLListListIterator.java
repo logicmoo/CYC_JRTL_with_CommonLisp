@@ -1,13 +1,6 @@
-/*
- * SubLListIterator.java
- *
- * Created on January 15, 2006, 12:36 AM
- *
- * To change this template, choose Tools | Options and locate the template under
- * the Source Creation and Management node. Right-click the template and choose
- * Open. You can then make changes to the template in the Source Editor.
- */
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import java.util.ListIterator;
@@ -15,43 +8,28 @@ import java.util.ListIterator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-/**
- * @author Tony Brusseau
- */
 public interface SubLListListIterator extends ListIterator {
-
 	public static int ITERATE_TO_END = -1;
 
-	/* this may or may not share structure with the list being iterated over */
-	public SubLObject currentSubSeq();
+	SubLObject currentSubSeq();
 
-	/**
-	 * this method may throw an exception if the iterator isn't at the end of
-	 * the list
-	 */
-	public SubLObject getDottedElement();
+	SubLObject getDottedElement();
 
-	public void init(SubLList list);
+	void init(SubLList p0);
 
-	public void init(SubLList list, int start);
+	void init(SubLList p0, int p1);
 
-	public void init(SubLList list, int start, int end);
+	void init(SubLList p0, int p1, int p2);
 
-	public boolean isArrayBased();
+	boolean isArrayBased();
 
-	/**
-	 * this method will throw an exception if the iterator isn't at the end of
-	 * the list
-	 */
-	public boolean isNextImproperElement();
+	boolean isNextImproperElement();
 
-	public int itemsRemaining();
+	int itemsRemaining();
 
-	public SubLObject nextSubLObject();
+	SubLObject nextSubLObject();
 
-	/* this may or may not share structure with the list being iterated over */
-	public SubLObject previousSubSeq();
+	SubLObject previousSubSeq();
 
-	public void reset();
-
+	void reset();
 }

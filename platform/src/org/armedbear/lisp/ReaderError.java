@@ -2,7 +2,7 @@
  * ReaderError.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: ReaderError.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,50 +31,62 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class ReaderError extends StreamError {
-	public ReaderError(String message) {
-		super(StandardClass.READER_ERROR);
-		this.setFormatControl(message);
-		this.setFormatArguments(Lisp.NIL);
-	}
+public final class ReaderError extends StreamError
+{
+    public ReaderError(String message)
+    {
+        super(StandardClass.READER_ERROR);
+        setFormatControl(message);
+        setFormatArguments(NIL);
+    }
 
-	public ReaderError(String message, LispStream stream) {
-		super(StandardClass.READER_ERROR);
-		this.setFormatControl(message);
-		this.setFormatArguments(Lisp.NIL);
-		this.setStream(stream);
-	}
+    public ReaderError(String message, Stream stream)
+    {
+        super(StandardClass.READER_ERROR);
+        setFormatControl(message);
+        setFormatArguments(NIL);
+        setStream(stream);
+    }
 
-	public ReaderError(SubLObject initArgs) {
-		super(StandardClass.READER_ERROR);
-		this.initialize(initArgs);
-	}
+    public ReaderError(LispObject initArgs)
+    {
+        super(StandardClass.READER_ERROR);
+        initialize(initArgs);
+    }
 
-	public SubLObject classOf() {
-		return StandardClass.READER_ERROR;
-	}
+    @Override
+    public LispObject typeOf()
+    {
+        return Symbol.READER_ERROR;
+    }
 
-	public String getMessage() {
-		return this.message;
-	}
+    @Override
+    public LispObject classOf()
+    {
+        return StandardClass.READER_ERROR;
+    }
 
-	public SubLObject typeOf() {
-		return LispSymbols.READER_ERROR;
-	}
+    @Override
+    public LispObject typep(LispObject type)
+    {
+        if (type == Symbol.READER_ERROR)
+            return T;
+        if (type == StandardClass.READER_ERROR)
+            return T;
+        if (type == Symbol.PARSE_ERROR)
+            return T;
+        if (type == StandardClass.PARSE_ERROR)
+            return T;
+        return super.typep(type);
+    }
 
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.READER_ERROR)
-			return Lisp.T;
-		if (type == StandardClass.READER_ERROR)
-			return Lisp.T;
-		if (type == LispSymbols.PARSE_ERROR)
-			return Lisp.T;
-		if (type == StandardClass.PARSE_ERROR)
-			return Lisp.T;
-		return super.typep(type);
-	}
+    @Override
+    public String getMessage()
+    {
+        return message;
+    }
 }

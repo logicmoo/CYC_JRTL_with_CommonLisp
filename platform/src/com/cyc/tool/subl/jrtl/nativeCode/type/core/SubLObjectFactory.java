@@ -1,22 +1,6 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
 import java.io.InputStream;
@@ -24,7 +8,6 @@ import java.io.OutputStream;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
 import java.net.Socket;
-//// External Imports
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -32,7 +15,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.SimpleString;
+import org.armedbear.lisp.Cons;
+import org.armedbear.lisp.Java;
+import org.armedbear.lisp.JavaObject;
+import org.armedbear.lisp.Lisp;
+import org.armedbear.lisp.SimpleString;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions;
@@ -40,7 +28,6 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Resourcer;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLListListIterator;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThreadPool;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.ExceptionFactory;
@@ -76,98 +63,27 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLT;
 import com.cyc.tool.subl.util.SafeRunnable;
 
 public class SubLObjectFactory {
-
-	//// Constructors
-
-	public static SubLObjectFactory me = new SubLObjectFactory();
-
-	private static Random random = new Random();
-
-	//// Public Area
-
-	private static int MAX_FP_PARSING_CACHE_SIZE = 10000;
-
-	// @note if this cache is to be used in multiple threads then a synchronized
-	// version must be made -APB
-	private static Map<String, SubLDoubleFloat> fpParsingCache = new LinkedHashMap<String, SubLDoubleFloat>(
-			SubLObjectFactory.MAX_FP_PARSING_CACHE_SIZE + 1, .75F, true) {
-		// This method is called just after a new entry has been added
-		public boolean removeEldestEntry(Map.Entry eldest) {
-			return this.size() > SubLObjectFactory.MAX_FP_PARSING_CACHE_SIZE;
-		}
-	};
-
-	private static int MAX_INTEGER_CACHE_SIZE = 4000;
-
-	// @note if this cache is to be used in multiple threads then a synchronized
-	// version must be made -APB
-	private static Map<String, SubLInteger> integerParsingCache = new LinkedHashMap<String, SubLInteger>(
-			SubLObjectFactory.MAX_INTEGER_CACHE_SIZE + 1, .75F, true) {
-		// This method is called just after a new entry has been added
-		public boolean removeEldestEntry(Map.Entry eldest) {
-			return this.size() > SubLObjectFactory.MAX_INTEGER_CACHE_SIZE;
-		}
-	};
-
-	// @note if this cache is to be used in multiple threads then a synchronized
-	// version must be made -APB
-	private static Map charCache = new HashMap();
-
-	private static int MAX_CHAR_PARSING_CACHE_SIZE = 1000;
-
-	// @note if this cache is to be used in multiple threads then a synchronized
-	// version must be made -APB
-	private static Map<String, SubLCharacter> charParsingCache = new LinkedHashMap<String, SubLCharacter>(
-			SubLObjectFactory.MAX_FP_PARSING_CACHE_SIZE + 1, .75F, true) {
-		// This method is called just after a new entry has been added
-		public boolean removeEldestEntry(Map.Entry eldest) {
-			return this.size() > SubLObjectFactory.MAX_CHAR_PARSING_CACHE_SIZE;
-		}
-	};
-
-	private static long uniquifier = 0;
-
-	private static int MAX_POSITIVE_INTEGER_LENGTH = ("" + Integer.MAX_VALUE).toString().length();
-
-	private static int MAX_NEGATIVE_INTEGER_LENGTH = ("" + Integer.MIN_VALUE).toString().length();
-
-	private static int MAX_POSITIVE_LONG_LENGTH = ("" + Long.MAX_VALUE).toString().length();
-
-	private static int MAX_NEGATIVE_LONG_LENGTH = ("" + Long.MIN_VALUE).toString().length();
-
-	public static boolean USE_ARRAY_LISTS = false;
-
-	/* WARNING: never use this without putting something in it */
 	public static SubLCons makeArrayList() {
-		/*
-		 * if (USE_ARRAY_LISTS) { return wrapList(new SubLArrayList()).toCons();
-		 * } else {
-		 */
 		Errors.error("Array lists are disabled.");
 		return null;
-		/* } */
 	}
 
-	/**
-	 * @note string must be an integer that begins with a hash like #22R23AJDLS
-	 *       or #O712
-	 */
 	public static SubLNumber makeBasedIntegralNumber(String str) {
 		char secondChar = str.charAt(1);
 		char thirdChar = str.charAt(2);
 		if (Character.isDigit(secondChar)) {
 			if (Character.isDigit(thirdChar))
-				return SubLObjectFactory.makeIntegralNumber(str.substring(4),
-						Integer.parseInt("" + secondChar + "" + thirdChar));
-			else
-				return SubLObjectFactory.makeIntegralNumber(str.substring(3), Integer.parseInt("" + secondChar));
-		} else if (secondChar == 'b' || secondChar == 'B')
-			return SubLObjectFactory.makeIntegralNumber(str.substring(2), 2);
-		else if (secondChar == 'o' || secondChar == 'O')
-			return SubLObjectFactory.makeIntegralNumber(str.substring(2), 8);
-		else if (secondChar == 'x' || secondChar == 'X')
-			return SubLObjectFactory.makeIntegralNumber(str.substring(2), 16);
-		throw new InvalidSubLExpressionException("Got invalid number: " + str);
+				return makeIntegralNumber(str.substring(4), Integer.parseInt("" + secondChar + "" + thirdChar));
+			return makeIntegralNumber(str.substring(3), Integer.parseInt("" + secondChar));
+		} else {
+			if (secondChar == 'b' || secondChar == 'B')
+				return makeIntegralNumber(str.substring(2), 2);
+			if (secondChar == 'o' || secondChar == 'O')
+				return makeIntegralNumber(str.substring(2), 8);
+			if (secondChar == 'x' || secondChar == 'X')
+				return makeIntegralNumber(str.substring(2), 16);
+			throw new InvalidSubLExpressionException("Got invalid number: " + str);
+		}
 	}
 
 	public static SubLBoolean makeBoolean(boolean theBoolean) {
@@ -179,12 +95,6 @@ public class SubLObjectFactory {
 	public static SubLBoolean makeBoolean(Boolean theBoolean) {
 		return theBoolean ? SubLT.T : SubLNil.NIL;
 	}
-
-	/*
-	 * public static SubLSymbol makeSymbol(SubLString symbolName, SubLString
-	 * packageName) { return SubLSymbolFactory.makeSymbol(symbolName,
-	 * packageName); }
-	 */
 
 	public static SubLBroadcastStream makeBroadcastStream() {
 		return SubLStreamFactory.makeBroadcastStream();
@@ -199,7 +109,7 @@ public class SubLObjectFactory {
 	}
 
 	public static SubLCharacter makeChar(Character theChar) {
-		return SubLObjectFactory.makeChar(theChar.charValue());
+		return makeChar((char) theChar);
 	}
 
 	public static SubLCharacter makeChar(int theChar) {
@@ -213,15 +123,15 @@ public class SubLObjectFactory {
 		String curCharStr = theCharStr.substring(1);
 		if (!curCharStr.startsWith("\\"))
 			throw new InvalidSubLExpressionException("Got invalid character format: " + theCharStr);
-			curCharStr = curCharStr.substring(1);
+		curCharStr = curCharStr.substring(1);
 		if (curCharStr.length() == 0)
 			throw new InvalidSubLExpressionException("Got bad character: " + theCharStr);
 		if (curCharStr.length() == 1) {
-			result = SubLObjectFactory.makeChar(curCharStr.charAt(0));
+			result = makeChar(curCharStr.charAt(0));
 			SubLObjectFactory.charParsingCache.put(theCharStr, result);
 			return result;
 		}
-		SubLCharacter theChar = SubLCharacter.getCharFromName(SubLObjectFactory.makeString(curCharStr));
+		SubLCharacter theChar = SubLCharacter.getCharFromName(makeString(curCharStr));
 		if (theChar != null) {
 			SubLObjectFactory.charParsingCache.put(theCharStr, theChar);
 			return theChar;
@@ -242,30 +152,17 @@ public class SubLObjectFactory {
 				functionSymbol, requiredArgCount, optionalArgCount, allowsRest);
 	}
 
-	/* WARNING: never use this without putting something in it */
 	public static SubLCons makeCons() {
-		/*
-		 * if (USE_ARRAY_LISTS) { return wrapList(new SubLArrayList()).toCons();
-		 * } else {
-		 */
-		return new SubLConsPair(SubLNil.NIL, SubLNil.NIL);
-		/* } */
+		return new Cons(SubLNil.NIL, SubLNil.NIL);
 	}
 
-	/* WARNING: never use this without putting something in it */
 	public static SubLCons makeCons(SubLObject first, SubLObject rest) {
 		Threads.possiblyHandleInterrupts(true);
-		/*
-		 * if (USE_ARRAY_LISTS) { if ((!rest.isList()) ||
-		 * (!rest.isArrayBased())) { return new SubLConsPair(first, rest); }
-		 * return wrapList(new SubLArrayList(first, rest)).toCons(); } else {
-		 */
-		return new SubLConsPair(first, rest);
-		/* } */
+		return new Cons(first, rest);
 	}
 
 	public static SubLSymbol makeCycSymbol(String symbolName) {
-		return SubLObjectFactory.makeSymbol(symbolName, SubLPackage.CYC_PACKAGE);
+		return makeSymbol(symbolName, SubLPackage.CYC_PACKAGE);
 	}
 
 	public static SubLDoubleFloat makeDouble(double theDouble) {
@@ -289,11 +186,6 @@ public class SubLObjectFactory {
 	public static SubLException makeException(String str, Throwable t) {
 		return ExceptionFactory.makeException(str, t);
 	}
-
-	/*
-	 * public static SubLDoubleFloat makeDouble(Double theDouble) { return
-	 * SubLNumberFactory.makeDouble(theDouble); }
-	 */
 
 	public static SubLException makeException(SubLString str) {
 		return ExceptionFactory.makeException(str);
@@ -361,6 +253,7 @@ public class SubLObjectFactory {
 	}
 
 	public static SubLInputBinaryStream makeInputBinaryStream(InputStream stream) {
+
 		return SubLStreamFactory.makeInputBinaryStream(stream);
 	}
 
@@ -413,7 +306,7 @@ public class SubLObjectFactory {
 		} catch (Exception e) {
 			throw new InvalidSubLExpressionException(e.getMessage());
 		}
-		num = SubLObjectFactory.makeInteger(bigInt);
+		num = makeInteger(bigInt);
 		SubLObjectFactory.integerParsingCache.put(id, num);
 		return num;
 	}
@@ -447,41 +340,46 @@ public class SubLObjectFactory {
 		return SubLSymbolFactory.makeKeyword(symbolName);
 	}
 
-	public static SubLList makeList(List<? extends SubLObject> theList) {
+	public static SubLList makeList(ArrayList<? extends SubLObject> theList) {
 		Threads.possiblyHandleInterrupts(true);
 		if (theList.size() <= 0)
 			return SubLNil.NIL;
-		/*
-		 * if (USE_ARRAY_LISTS) { return wrapList(new SubLArrayList(theList,
-		 * false)); } else {
-		 */
 		SubLList result = SubLNil.NIL;
-		for (int i = theList.size() - 1; i >= 0; i--)
-			result = new SubLConsPair(theList.get(i), result);
+		for (int i = theList.size() - 1; i >= 0; --i)
+			result = new Cons(theList.get(i), result);
 		return result;
-		/* } */
+	}
+
+	public static SubLList makeCons(List theList) {
+		Threads.possiblyHandleInterrupts(true);
+		if (theList.size() <= 0)
+			return SubLNil.NIL;
+		SubLList result = SubLNil.NIL;
+		for (int i = theList.size() - 1; i >= 0; --i)
+			result = new Cons(asSubLisp(theList.get(i)), result);
+		return result;
+	}
+
+	private static SubLObject asSubLisp(Object object) {
+		if(object instanceof SubLObject) return (SubLObject) object;
+		if(object==null) return Lisp.NULL_VALUE;
+		return JavaObject.getInstance(object,true,null);
 	}
 
 	public static SubLList makeList(boolean isEmpty) {
 		if (isEmpty)
 			return SubLNil.NIL;
-		else
-			return SubLObjectFactory.makeCons();
+		return makeCons();
 	}
 
 	public static SubLList makeList(int size, SubLObject defaultValue) {
 		Threads.possiblyHandleInterrupts(true);
 		if (size <= 0)
 			return SubLNil.NIL;
-		/*
-		 * if (USE_ARRAY_LISTS) { return wrapList(new SubLArrayList(size,
-		 * defaultValue)); } else {
-		 */
 		SubLList result = SubLNil.NIL;
-		for (int i = size - 1; i >= 0; i--)
-			result = new SubLConsPair(defaultValue, result);
+		for (int i = size - 1; i >= 0; --i)
+			result = new Cons(defaultValue, result);
 		return result;
-		/* } */
 	}
 
 	public static SubLList makeList(Object[] theList) {
@@ -489,16 +387,20 @@ public class SubLObjectFactory {
 		int size = theList.length;
 		if (size <= 0)
 			return SubLNil.NIL;
-		SubLList result;
-		/*
-		 * if (USE_ARRAY_LISTS) { result = wrapList(new SubLArrayList(size));
-		 * for (int i = 0; i < size; ) { result.add((SubLObject)theList[i++]); }
-		 * } else {
-		 */
-		result = SubLNil.NIL;
-		for (int i = size - 1; i >= 0;)
-			result = new SubLConsPair((SubLObject) theList[i--], result);
-		/* } */
+		SubLList result = SubLNil.NIL;
+		for (int i = size - 1; i >= 0; result = new Cons(asSubLisp(theList[i--]), result)) {
+		}
+		return result;
+	}
+
+	public static SubLList makeConsList(Object... theList) {
+		Threads.possiblyHandleInterrupts(true);
+		int size = theList.length;
+		if (size <= 0)
+			return SubLNil.NIL;
+		SubLList result = SubLNil.NIL;
+		for (int i = size - 1; i >= 0; result = new Cons(asSubLisp(theList[i--]), result)) {
+		}
 		return result;
 	}
 
@@ -506,27 +408,20 @@ public class SubLObjectFactory {
 		Threads.possiblyHandleInterrupts(true);
 		if (theList.size() <= 0)
 			return SubLNil.NIL;
-		/*
-		 * if (USE_ARRAY_LISTS) { return wrapList(new SubLArrayList(theList,
-		 * true)); } else {
-		 */
 		SubLList result = SubLNil.NIL;
-		for (int i = theList.size() - 1; i >= 0; i--)
-			result = new SubLConsPair((SubLObject) theList.get(i), result);
+		for (int i = theList.size() - 1; i >= 0; --i)
+			result = new Cons((SubLObject) theList.get(i), result);
 		return result;
-		/* } */
 	}
 
 	public static SubLObject makeListS(SubLObject finalCdr) {
-		return SubLObjectFactory.makeListS(finalCdr, Resourcer.EMPTY_SUBL_OBJECT_ARRAY);
+		return makeListS(finalCdr, Resourcer.EMPTY_SUBL_OBJECT_ARRAY);
 	}
-
-	// helpers (syntactic sugar)
 
 	public static SubLCons makeListS(SubLObject arg1, SubLObject finalCdr) {
 		SubLObject[] args = SubLProcess.currentSubLThread().sublArraySize1;
 		args[0] = finalCdr;
-		return SubLObjectFactory.makeListS(arg1, args).toCons();
+		return makeListS(arg1, args).toCons();
 	}
 
 	public static SubLCons makeListS(SubLObject arg, SubLObject arg1, SubLListListIterator finalCdr) {
@@ -536,7 +431,7 @@ public class SubLObjectFactory {
 		listInternals.add(arg1);
 		while (finalCdr.hasNext() && !finalCdr.isNextImproperElement())
 			listInternals.add((SubLObject) finalCdr.next());
-		SubLList result = SubLObjectFactory.makeList_Dangerous(listInternals);
+		SubLList result = makeList_Dangerous(listInternals);
 		if (finalCdr.isNextImproperElement())
 			result.setDottedElement(finalCdr.getDottedElement());
 		return result.toCons();
@@ -546,7 +441,7 @@ public class SubLObjectFactory {
 		SubLObject[] args = SubLProcess.currentSubLThread().sublArraySize2;
 		args[0] = arg2;
 		args[1] = finalCdr;
-		return SubLObjectFactory.makeListS(arg1, args).toCons();
+		return makeListS(arg1, args).toCons();
 	}
 
 	public static SubLCons makeListS(SubLObject arg, SubLObject arg1, SubLObject arg2, SubLListListIterator finalCdr) {
@@ -557,39 +452,39 @@ public class SubLObjectFactory {
 		listInternals.add(arg2);
 		while (finalCdr.hasNext() && !finalCdr.isNextImproperElement())
 			listInternals.add((SubLObject) finalCdr.next());
-		SubLList result = SubLObjectFactory.makeList_Dangerous(listInternals);
+		SubLList result = makeList_Dangerous(listInternals);
 		if (finalCdr.isNextImproperElement())
 			result.setDottedElement(finalCdr.getDottedElement());
 		return result.toCons();
 	}
 
 	public static SubLCons makeListS(SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject finalCdr) {
-		SubLObject[] args = ((SubLThread) Thread.currentThread()).sublArraySize3;
+		SubLObject[] args = SubLProcess.currentSubLThread().sublArraySize3;
 		args[0] = arg2;
 		args[1] = arg3;
 		args[2] = finalCdr;
-		return SubLObjectFactory.makeListS(arg1, args).toCons();
+		return makeListS(arg1, args).toCons();
 	}
 
 	public static SubLCons makeListS(SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4,
 			SubLObject finalCdr) {
-		SubLObject[] args = ((SubLThread) Thread.currentThread()).sublArraySize4;
+		SubLObject[] args = SubLProcess.currentSubLThread().sublArraySize4;
 		args[0] = arg2;
 		args[1] = arg3;
 		args[2] = arg4;
 		args[3] = finalCdr;
-		return SubLObjectFactory.makeListS(arg1, args).toCons();
+		return makeListS(arg1, args).toCons();
 	}
 
 	public static SubLCons makeListS(SubLObject arg1, SubLObject arg2, SubLObject arg3, SubLObject arg4,
 			SubLObject arg5, SubLObject finalCdr) {
-		SubLObject[] args = ((SubLThread) Thread.currentThread()).sublArraySize5;
+		SubLObject[] args = SubLProcess.currentSubLThread().sublArraySize5;
 		args[0] = arg2;
 		args[1] = arg3;
 		args[2] = arg4;
 		args[3] = arg5;
 		args[4] = finalCdr;
-		return SubLObjectFactory.makeListS(arg1, args).toCons();
+		return makeListS(arg1, args).toCons();
 	}
 
 	public static SubLList makeListS(SubLObject arg, SubLObject[] objects) {
@@ -597,48 +492,29 @@ public class SubLObjectFactory {
 		if (objectCount == 0)
 			return (SubLList) arg;
 		if (objectCount == 1)
-			return SubLObjectFactory.makeCons(arg, objects[0]);
-		/*
-		 * if (USE_ARRAY_LISTS) { ArrayList listInternals = new
-		 * ArrayList(objectCount + 1); listInternals.add(arg); for (int i = 0,
-		 * size = objectCount - 1; i < size; i++) {
-		 * listInternals.add(objects[i]); } SubLList result =
-		 * makeList_Dangerous(listInternals);
-		 * result.setDottedElement(objects[objectCount - 1]); return result; }
-		 * else {
-		 */
+			return makeCons(arg, objects[0]);
 		SubLObject result = objects[objectCount - 1];
-		for (int i = objectCount - 2; i >= 0; i--)
-			result = SubLObjectFactory.makeCons(objects[i], result);
-		result = SubLObjectFactory.makeCons(arg, result);
+		for (int i = objectCount - 2; i >= 0; --i)
+			result = makeCons(objects[i], result);
+		result = makeCons(arg, result);
 		return (SubLList) result;
-		/* } */
 	}
 
 	public static SubLList makeListStar(Object[] theList) {
+		Threads.possiblyHandleInterrupts(true);
 		int size = theList.length;
 		if (size <= 0)
 			return SubLNil.NIL;
-		size = size - 1;
-		/*
-		 * if (USE_ARRAY_LISTS) { SubLList result = wrapList(new
-		 * SubLArrayList(size)); for (int i = 0; i < size; i++) {
-		 * result.add((SubLObject)theList[i++]); } if (size >= 0) {
-		 * result.setDottedElement((SubLObject)theList[size]); } return result;
-		 * } else {
-		 */
+		--size;
 		SubLObject result = (SubLObject) theList[size];
-		for (int i = size - 1; i >= 0;)
-			result = new SubLConsPair((SubLObject) theList[i--], result);
+		for (int i = size - 1; i >= 0; result = new Cons((SubLObject) theList[i--], result)) {
+		}
 		return result.toList();
-		/* } */
 	}
 
 	public static SubLLock makeLock(SubLString name) {
 		return new SubLLock(name);
 	}
-
-	//// STREAM CONSTRUCTORS
 
 	public static SubLMacro makeMacro(SubLFunction macroExpander) {
 		return SubLOperatorFactory.makeMacro(macroExpander);
@@ -672,17 +548,17 @@ public class SubLObjectFactory {
 
 	public static SubLProcess makeProcess(SubLString symbolName, final Runnable runnable) {
 		SafeRunnable safeRunnable = new SafeRunnable() {
+			@Override
 			public void safeRun() {
 				runnable.run();
 			}
 		};
-		return SubLObjectFactory.makeProcess(symbolName, safeRunnable);
+		return makeProcess(symbolName, safeRunnable);
 	}
 
 	public static SubLProcess makeProcess(SubLString symbolName, final SafeRunnable runnable) {
-		// @todo we should make a version of SubLProcess that
-		// can take a SafeRunnable in the constructor --APB
 		SubLProcess process = new SubLProcess(symbolName) {
+			@Override
 			public void safeRun() {
 				runnable.safeRun();
 			}
@@ -697,15 +573,16 @@ public class SubLObjectFactory {
 
 	public static SubLProcess makeProcess(SubLString symbolName, final SubLFunction func) {
 		SafeRunnable safeRunnable = new SafeRunnable() {
+			@Override
 			public void safeRun() {
 				SubLObject result = Functions.funcall(func);
 			}
 		};
-		return SubLObjectFactory.makeProcess(symbolName, safeRunnable);
+		return makeProcess(symbolName, safeRunnable);
 	}
 
 	public static SubLReadWriteLock makeReadWriteLock(String name) {
-		return new SubLReadWriteLock(new SimpleString(name));
+		return new SubLReadWriteLock(makeString(name));
 	}
 
 	public static SubLReadWriteLock makeReadWriteLock(SubLString name) {
@@ -717,7 +594,7 @@ public class SubLObjectFactory {
 	}
 
 	public static SubLSemaphore makeSemaphore(SubLString name) {
-		return SubLObjectFactory.makeSemaphore(name, 0);
+		return makeSemaphore(name, 0);
 	}
 
 	public static SubLSemaphore makeSemaphore(SubLString name, int count) {
@@ -732,17 +609,21 @@ public class SubLObjectFactory {
 		return SubLStreamFactory.makeSocketStream(host, port, timeout);
 	}
 
-	public static SubLSocketStream makeSocketStream(String host, int port) {
-		return SubLStreamFactory.makeSocketStream(host, port);
+	public static SubLString makeString(char[] charArray, int trimCount, int size) {
+		Threads.possiblyHandleInterrupts(true);
+		return new SimpleString(charArray,trimCount,size);
 	}
-
+	public static SubLString makeString(char[] charArray) {
+		Threads.possiblyHandleInterrupts(true);
+		return new SimpleString(charArray);
+	}
 	public static SubLString makeString(int size, char defaultChar) {
 		Threads.possiblyHandleInterrupts(true);
 		return new SimpleString(size, defaultChar);
 	}
 
 	public static SubLString makeString(String str) {
-		Threads.possiblyHandleInterrupts(true);
+		//Threads.possiblyHandleInterrupts(true);
 		return new SimpleString(str);
 	}
 
@@ -762,11 +643,9 @@ public class SubLObjectFactory {
 		return SubLStreamFactory.makeStringOutputStream(initialSize);
 	}
 
-	//// GUID FACTORY METHODS
-
 	public static SubLStruct makeStructInterpreted(int size) {
 		Threads.possiblyHandleInterrupts(true);
-		return new SubLStructInterpreted(size);
+		return new SubLStructInterpreted.SubLStructInterpretedImpl(size);
 	}
 
 	public static SubLStruct makeStructNative(SubLStructDeclNative structDecl) {
@@ -775,20 +654,17 @@ public class SubLObjectFactory {
 	}
 
 	public static SubLSymbol makeSublispSymbol(String symbolName) {
-		return SubLObjectFactory.makeSymbol(symbolName, SubLPackage.SUBLISP_PACKAGE);
+		return makeSymbol(symbolName, SubLPackage.SUBLISP_PACKAGE.toPackage());
 	}
 
-	//// SEMAPHORE FACTORY METHODS
-
 	public static SubLSymbol makeSymbol(String symbolName) {
-		return SubLSymbolFactory.makeSymbol(symbolName, (SubLPackage) Packages.$package$.getDynamicValue());
+		SubLPackage currentPackage = Packages.$package$.getDynamicValue().toPackage();
+		return SubLSymbolFactory.makeSymbol(symbolName, currentPackage);
 	}
 
 	public static SubLSymbol makeSymbol(String symbolName, String packageName) {
 		return SubLSymbolFactory.makeSymbol(symbolName, packageName);
 	}
-
-	//// READ-WRITE-LOCK FACTORY METHODS
 
 	public static SubLSymbol makeSymbol(String symbolName, SubLPackage thePackage) {
 		return SubLSymbolFactory.makeSymbol(symbolName, thePackage);
@@ -798,15 +674,9 @@ public class SubLObjectFactory {
 		return SubLSymbolFactory.makeSymbol(symbolName, (SubLPackage) Packages.$package$.getDynamicValue());
 	}
 
-	//// Protected Area
-
-	//// Private Area
-
 	public static SubLSymbol makeSymbol(SubLString symbolName, SubLPackage thePackage) {
 		return SubLSymbolFactory.makeSymbol(symbolName, thePackage);
 	}
-
-	//// Internal Rep
 
 	public static SubLSynonymStream makeSynonymStream(SubLSymbol streamSymbol) {
 		return SubLStreamFactory.makeSynonymStream(streamSymbol);
@@ -820,15 +690,13 @@ public class SubLObjectFactory {
 		return SubLSymbolFactory.makeUninternedSymbol(symbolName);
 	}
 
-	// @ToDo investigate how this is done in our other systems. -APB
 	public static SubLSymbol makeUniqueKeyword() {
-		return SubLObjectFactory.makeKeyword("&UNIQUE-KEYWORD-" + System.currentTimeMillis() + "-"
-				+ SubLObjectFactory.random.nextInt() + "-" + SubLObjectFactory.uniquifier++ + "&");
+		return makeKeyword("&UNIQUE-KEYWORD-" + System.currentTimeMillis() + "-" + SubLObjectFactory.random.nextInt()
+				+ "-" + SubLObjectFactory.uniquifier++ + "&");
 	}
 
-	// @ToDo investigate how this is done in our other systems. -APB
 	public static SubLSymbol makeUniqueSymbol() {
-		return SubLObjectFactory.makeSublispSymbol("&UNIQUE-SYMBOL-" + System.currentTimeMillis() + "-"
+		return makeSublispSymbol("&UNIQUE-SYMBOL-" + System.currentTimeMillis() + "-"
 				+ SubLObjectFactory.random.nextInt() + "-" + SubLObjectFactory.uniquifier++ + "&");
 	}
 
@@ -838,11 +706,9 @@ public class SubLObjectFactory {
 			try {
 				return new SubLVector(length);
 			} catch (OutOfMemoryError oome) {
-				// we really do have enough memory to continue
 				return Errors.error("Not enough memory to allocate vector of size: " + length).toVect();
 			}
-		else
-			return new SubLVector(length);
+		return new SubLVector(length);
 	}
 
 	public static SubLVector makeVector(int length, SubLObject value) {
@@ -851,11 +717,9 @@ public class SubLObjectFactory {
 			try {
 				return new SubLVector(length, value);
 			} catch (OutOfMemoryError oome) {
-				// we really do have enough memory to continue
 				return Errors.error("Not enough memory to allocate vector of size: " + length).toVect();
 			}
-		else
-			return new SubLVector(length, value);
+		return new SubLVector(length, value);
 	}
 
 	public static SubLVector makeVector(List<SubLObject> list) {
@@ -865,7 +729,7 @@ public class SubLObjectFactory {
 	public static SubLVector makeVector(Object[] items) {
 		Threads.possiblyHandleInterrupts(true);
 		SubLVector result = new SubLVector(items.length);
-		for (int i = 0, size = items.length; i < size; i++)
+		for (int i = 0, size = items.length; i < size; ++i)
 			result.set(i, (SubLObject) items[i]);
 		return result;
 	}
@@ -878,23 +742,54 @@ public class SubLObjectFactory {
 	}
 
 	public static SubLList wrapList(SubLList theList) {
-		/*
-		 * if (USE_ARRAY_LISTS) { if (theList.isArrayBased()) { return new
-		 * SubLConsFacade(theList);} }
-		 */
 		return theList;
 	}
 
 	public static SubLObject wrapList(SubLObject theList) {
-		/*
-		 * if (USE_ARRAY_LISTS) { if (theList.isArrayBased()) { return new
-		 * SubLConsFacade(theList.toList()); } }
-		 */
 		return theList;
 	}
 
-	/** There should only ever be one instance of this */
-	private SubLObjectFactory() {
+	public static SubLObjectFactory me;
+	private static Random random;
+	private static int MAX_FP_PARSING_CACHE_SIZE = 10000;
+	private static Map<String, SubLDoubleFloat> fpParsingCache;
+	private static int MAX_INTEGER_CACHE_SIZE = 4000;
+	private static Map<String, SubLInteger> integerParsingCache;
+	private static Map charCache;
+	private static int MAX_CHAR_PARSING_CACHE_SIZE = 1000;
+	private static Map<String, SubLCharacter> charParsingCache;
+	private static long uniquifier;
+	private static int MAX_POSITIVE_INTEGER_LENGTH;
+	private static int MAX_NEGATIVE_INTEGER_LENGTH;
+	private static int MAX_POSITIVE_LONG_LENGTH;
+	private static int MAX_NEGATIVE_LONG_LENGTH;
+	public static boolean USE_ARRAY_LISTS = false;
+	static {
+		me = new SubLObjectFactory();
+		random = new Random();
+		SubLObjectFactory.fpParsingCache = new LinkedHashMap<String, SubLDoubleFloat>(10001, 0.75f, true) {
+			@Override
+			public boolean removeEldestEntry(Map.Entry eldest) {
+				return size() > 10000;
+			}
+		};
+		integerParsingCache = new LinkedHashMap<String, SubLInteger>(4001, 0.75f, true) {
+			@Override
+			public boolean removeEldestEntry(Map.Entry eldest) {
+				return size() > 4000;
+			}
+		};
+		charCache = new HashMap();
+		charParsingCache = new LinkedHashMap<String, SubLCharacter>(10001, 0.75f, true) {
+			@Override
+			public boolean removeEldestEntry(Map.Entry eldest) {
+				return size() > 1000;
+			}
+		};
+		SubLObjectFactory.uniquifier = 0L;
+		MAX_POSITIVE_INTEGER_LENGTH = "2147483647".toString().length();
+		MAX_NEGATIVE_INTEGER_LENGTH = "-2147483648".toString().length();
+		MAX_POSITIVE_LONG_LENGTH = "9223372036854775807".toString().length();
+		MAX_NEGATIVE_LONG_LENGTH = "-9223372036854775808".toString().length();
 	}
-
 }

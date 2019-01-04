@@ -2,7 +2,7 @@
  * LispInteger.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id: LispInteger.java 12429 2010-02-08 07:43:38Z mevenson $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,11 +31,26 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-/**
- * This class merely serves as the super class for Fixnum and Bignum
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.AbstractSubLNumber;
+
+/** This class merely serves as the super class for
+ * Fixnum and Bignum
  */
-abstract public class LispInteger extends NumericLispObject {
+abstract public class LispInteger extends AbstractSubLNumber implements java.io.Serializable
+{
+
+  public static LispInteger getInstance(long l) {
+      if (Integer.MIN_VALUE <= l && l <= Integer.MAX_VALUE)
+          return (LispInteger)(Object)Fixnum.getInstance((int)l);
+      else
+      return Bignum.getInstance(l);
+  }
+
+  public static LispInteger getInstance(int i) {
+      return (LispInteger)(Object)Fixnum.getInstance(i);
+  }
+
 
 }

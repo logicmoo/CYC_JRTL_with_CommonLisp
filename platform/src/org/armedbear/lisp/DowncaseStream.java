@@ -2,7 +2,7 @@
  * DowncaseStream.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: DowncaseStream.java 12254 2009-11-06 20:07:54Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,22 +31,27 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-public class DowncaseStream extends CaseFrobStream {
-	public DowncaseStream(LispStream target) {
-		super(target);
-	}
+public final class DowncaseStream extends CaseFrobStream
+{
+    public DowncaseStream(Stream target)
+    {
+        super(target);
+    }
 
-	public void _writeChar(char c) {
-		this.target._writeChar(CharacterFunctions.toLowerCase(c));
-	}
+    public void _writeChar(char c)
+    {
+        target._writeChar(LispCharacter.toLowerCase(c));
+    }
 
-	public void _writeLine(String s) {
-		this.target._writeLine(s.toLowerCase());
-	}
+    public void _writeString(String s)
+    {
+        target._writeString(s.toLowerCase());
+    }
 
-	public void _writeString(String s) {
-		this.target._writeString(s.toLowerCase());
-	}
+    public void _writeLine(String s)
+    {
+        target._writeLine(s.toLowerCase());
+    }
 }

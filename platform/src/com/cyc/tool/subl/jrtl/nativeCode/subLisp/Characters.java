@@ -1,198 +1,36 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCharacter;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 
-//// Internal Imports
-
-//// External Imports
-
 public class Characters extends SubLTrampolineFile {
-
-	//// Constructors
-
-	public static SubLCharacter CHAR_0;
-
-	public static SubLCharacter CHAR_1;
-
-	//// Public Area
-
-	public static SubLCharacter CHAR_2;
-
-	public static SubLCharacter CHAR_3;
-
-	public static SubLCharacter CHAR_4;
-
-	public static SubLCharacter CHAR_5;
-
-	public static SubLCharacter CHAR_6;
-
-	public static SubLCharacter CHAR_7;
-
-	public static SubLCharacter CHAR_8;
-
-	public static SubLCharacter CHAR_9;
-
-	public static SubLCharacter CHAR_a;
-
-	public static SubLCharacter CHAR_A;
-
-	public static SubLCharacter CHAR_ampersand;
-
-	public static SubLCharacter CHAR_asterisk;
-
-	// Case insensitive comparisons
-
-	public static SubLCharacter CHAR_at;
-
-	public static SubLCharacter CHAR_b;
-
-	public static SubLCharacter CHAR_B;
-
-	public static SubLCharacter CHAR_backquote;
-
-	public static SubLCharacter CHAR_backslash;
-
-	public static SubLCharacter CHAR_backspace;
-
-	// Case sensitive comparisons
-
-	public static SubLCharacter CHAR_c;
-
-	public static SubLCharacter CHAR_C;
-
-	public static SubLCharacter CHAR_caret;
-
-	public static SubLCharacter CHAR_colon;
-
-	public static SubLCharacter CHAR_comma;
-
-	public static SubLCharacter CHAR_d;
-
-	public static SubLCharacter CHAR_D;
-	public static SubLCharacter CHAR_dollar;
-	public static SubLCharacter CHAR_e;
-	public static SubLCharacter CHAR_E;
-	public static SubLCharacter CHAR_equal;
-	public static SubLCharacter CHAR_escape;
-	public static SubLCharacter CHAR_exclamation;
-	public static SubLCharacter CHAR_f;
-	public static SubLCharacter CHAR_F;
-	public static SubLCharacter CHAR_g;
-	public static SubLCharacter CHAR_G;
-	public static SubLCharacter CHAR_greater;
-	public static SubLCharacter CHAR_h;
-	public static SubLCharacter CHAR_H;
-	public static SubLCharacter CHAR_hash;
-	public static SubLCharacter CHAR_hyphen;
-	public static SubLCharacter CHAR_i;
-	public static SubLCharacter CHAR_I;
-	public static SubLCharacter CHAR_j;
-	public static SubLCharacter CHAR_J;
-	public static SubLCharacter CHAR_k;
-	public static SubLCharacter CHAR_K;
-	public static SubLCharacter CHAR_l;
-	public static SubLCharacter CHAR_L;
-	public static SubLCharacter CHAR_lbrace;
-	public static SubLCharacter CHAR_lbracket;
-	public static SubLCharacter CHAR_less;
-	public static SubLCharacter CHAR_lparen;
-	public static SubLCharacter CHAR_m;
-	public static SubLCharacter CHAR_M;
-	public static SubLCharacter CHAR_n;
-	public static SubLCharacter CHAR_N;
-	public static SubLCharacter CHAR_newline;
-	public static SubLCharacter CHAR_null;
-	public static SubLCharacter CHAR_o;
-	public static SubLCharacter CHAR_O;
-	public static SubLCharacter CHAR_p;
-	public static SubLCharacter CHAR_P;
-	public static SubLCharacter CHAR_page;
-	public static SubLCharacter CHAR_percent;
-	public static SubLCharacter CHAR_period;
-	public static SubLCharacter CHAR_plus;
-	public static SubLCharacter CHAR_q;
-	public static SubLCharacter CHAR_Q;
-	public static SubLCharacter CHAR_question;
-	public static SubLCharacter CHAR_quotation;
-	public static SubLCharacter CHAR_quote;
-	public static SubLCharacter CHAR_r;
-	public static SubLCharacter CHAR_R;
-	public static SubLCharacter CHAR_rbrace;
-	public static SubLCharacter CHAR_rbracket;
-	public static SubLCharacter CHAR_return;
-	public static SubLCharacter CHAR_rparen;
-	public static SubLCharacter CHAR_rubout;
-	public static SubLCharacter CHAR_s;
-	public static SubLCharacter CHAR_S;
-	public static SubLCharacter CHAR_semicolon;
-	public static SubLCharacter CHAR_slash;
-	public static SubLCharacter CHAR_space;
-	public static SubLCharacter CHAR_t;
-	public static SubLCharacter CHAR_T;
-	public static SubLCharacter CHAR_tab;
-	public static SubLCharacter CHAR_tilde;
-	public static SubLCharacter CHAR_u;
-	public static SubLCharacter CHAR_U;
-	public static SubLCharacter CHAR_underbar;
-	public static SubLCharacter CHAR_v;
-	public static SubLCharacter CHAR_V;
-	public static SubLCharacter CHAR_vertical;
-	public static SubLCharacter CHAR_w;
-	public static SubLCharacter CHAR_W;
-	public static SubLCharacter CHAR_x;
-	public static SubLCharacter CHAR_X;
-	public static SubLCharacter CHAR_y;
-	public static SubLCharacter CHAR_Y;
-	public static SubLCharacter CHAR_z;
-	public static SubLCharacter CHAR_Z;
-	public static SubLFile me = new Characters();
-
 	public static SubLObject alpha_char_p(SubLObject c) {
 		if (c.toChar().isAlphaChar())
 			return CommonSymbols.T;
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
 	public static SubLObject alphanumericp(SubLObject c) {
 		if (c.toChar().isAlphNumeric())
 			return CommonSymbols.T;
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
 	public static SubLObject both_case_p(SubLObject c) {
-		return Characters.alpha_char_p(c);
+		return alpha_char_p(c);
 	}
 
 	public static SubLObject char_code(SubLObject c) {
-		return SubLObjectFactory.makeInteger(c.charValue()); // @todo consider
-																// storing the
-																// code as a
-																// number
+		return SubLObjectFactory.makeInteger(c.charValue());
 	}
 
 	public static SubLObject char_downcase(SubLObject c) {
@@ -202,37 +40,37 @@ public class Characters extends SubLTrampolineFile {
 	public static SubLObject char_equal(SubLObject char1, SubLObject char2) {
 		if (char1.toChar().equalsIgnoringCase(char2.toChar()))
 			return CommonSymbols.T;
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
 	public static SubLObject char_greaterp(SubLObject char1, SubLObject char2) {
 		if (char1.toChar().greaterThanIgnoringCase(char2.toChar()))
 			return CommonSymbols.T;
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
 	public static SubLObject char_lessp(SubLObject char1, SubLObject char2) {
 		if (char1.toChar().lessThanIgnoringCase(char2.toChar()))
 			return CommonSymbols.T;
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
 	public static SubLObject char_not_equal(SubLObject char1, SubLObject char2) {
 		if (char1.toChar().equalsIgnoringCase(char2.toChar()))
-			return CommonSymbols.NIL;
+			return SubLNil.NIL;
 		return CommonSymbols.T;
 	}
 
 	public static SubLObject char_not_greaterp(SubLObject char1, SubLObject char2) {
 		if (char1.toChar().lessThanOrEqualIgnoringCase(char2.toChar()))
 			return CommonSymbols.T;
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
 	public static SubLObject char_not_lessp(SubLObject char1, SubLObject char2) {
 		if (char1.toChar().greaterThanOrEqualIgnoringCase(char2.toChar()))
 			return CommonSymbols.T;
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
 	public static SubLObject char_upcase(SubLObject c) {
@@ -240,50 +78,40 @@ public class Characters extends SubLTrampolineFile {
 	}
 
 	public static SubLObject charE(SubLObject char1, SubLObject char2) {
-		return char1 == char2 ? CommonSymbols.T : CommonSymbols.NIL; // @hack
-																		// should
-																		// be
-																		// .toChar()
-																		// calls
-		// here
+		return char1 == char2 ? CommonSymbols.T : SubLNil.NIL;
 	}
 
 	public static SubLObject charG(SubLObject char1, SubLObject char2) {
-		return char1.toChar().greaterThan(char2.toChar()) ? CommonSymbols.T : CommonSymbols.NIL;
+		return char1.toChar().greaterThan(char2.toChar()) ? CommonSymbols.T : SubLNil.NIL;
 	}
 
 	public static SubLObject charGE(SubLObject char1, SubLObject char2) {
-		return char1.toChar().greaterThanOrEqual(char2.toChar()) ? CommonSymbols.T : CommonSymbols.NIL;
+		return char1.toChar().greaterThanOrEqual(char2.toChar()) ? CommonSymbols.T : SubLNil.NIL;
 	}
 
 	public static SubLObject charL(SubLObject char1, SubLObject char2) {
-		return char1.toChar().lessThan(char2.toChar()) ? CommonSymbols.T : CommonSymbols.NIL;
+		return char1.toChar().lessThan(char2.toChar()) ? CommonSymbols.T : SubLNil.NIL;
 	}
 
 	public static SubLObject charLE(SubLObject char1, SubLObject char2) {
-		return char1.toChar().lessThanOrEqual(char2.toChar()) ? CommonSymbols.T : CommonSymbols.NIL;
+		return char1.toChar().lessThanOrEqual(char2.toChar()) ? CommonSymbols.T : SubLNil.NIL;
 	}
 
 	public static SubLObject charNE(SubLObject char1, SubLObject char2) {
-		return char1 == char2 ? CommonSymbols.NIL : CommonSymbols.T; // @hack
-																		// should
-																		// be
-																		// .toChar()
-																		// calls
-		// here
+		return char1 == char2 ? SubLNil.NIL : CommonSymbols.T;
 	}
 
 	public static SubLObject code_char(SubLObject code) {
 		int val = code.intValue();
-		if (val < 0 || val > SubLCharacter.MAX_CHAR_CODE)
-			return CommonSymbols.NIL;
+		if (val < 0 || val > 255)
+			return SubLNil.NIL;
 		return SubLCharacter.makeChar(val);
 	}
 
 	public static SubLObject digit_char(SubLObject digit) {
-		char val = Character.toUpperCase(Character.forDigit(digit.intValue(), Character.MAX_RADIX));
-		if (val == 0)
-			return CommonSymbols.NIL;
+		char val = Character.toUpperCase(Character.forDigit(digit.intValue(), 36));
+		if (val == '\0')
+			return SubLNil.NIL;
 		return SubLObjectFactory.makeChar(val);
 	}
 
@@ -293,14 +121,13 @@ public class Characters extends SubLTrampolineFile {
 		int result = c.toChar().charInDigitNumber(radix.intValue());
 		if (result >= 0)
 			return SubLNumberFactory.makeInteger(result);
-		else
-			return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
 	public static SubLObject lower_case_p(SubLObject c) {
 		if (c.toChar().isLowerCase())
 			return CommonSymbols.T;
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
 	public static SubLObject name_character(SubLObject namestring) {
@@ -310,15 +137,118 @@ public class Characters extends SubLTrampolineFile {
 	public static SubLObject upper_case_p(SubLObject c) {
 		if (c.toChar().isUpperCase())
 			return CommonSymbols.T;
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
-	/** Creates a new instance of Characters. */
-	public Characters() {
+	public static SubLFile me;
+	public static SubLCharacter CHAR_null;
+	public static SubLCharacter CHAR_backspace;
+	public static SubLCharacter CHAR_tab;
+	public static SubLCharacter CHAR_newline;
+	public static SubLCharacter CHAR_return;
+	public static SubLCharacter CHAR_page;
+	public static SubLCharacter CHAR_escape;
+	public static SubLCharacter CHAR_space;
+	public static SubLCharacter CHAR_exclamation;
+	public static SubLCharacter CHAR_quotation;
+	public static SubLCharacter CHAR_hash;
+	public static SubLCharacter CHAR_dollar;
+	public static SubLCharacter CHAR_percent;
+	public static SubLCharacter CHAR_ampersand;
+	public static SubLCharacter CHAR_quote;
+	public static SubLCharacter CHAR_lparen;
+	public static SubLCharacter CHAR_rparen;
+	public static SubLCharacter CHAR_asterisk;
+	public static SubLCharacter CHAR_plus;
+	public static SubLCharacter CHAR_comma;
+	public static SubLCharacter CHAR_hyphen;
+	public static SubLCharacter CHAR_period;
+	public static SubLCharacter CHAR_slash;
+	public static SubLCharacter CHAR_0;
+	public static SubLCharacter CHAR_1;
+	public static SubLCharacter CHAR_2;
+	public static SubLCharacter CHAR_3;
+	public static SubLCharacter CHAR_4;
+	public static SubLCharacter CHAR_5;
+	public static SubLCharacter CHAR_6;
+	public static SubLCharacter CHAR_7;
+	public static SubLCharacter CHAR_8;
+	public static SubLCharacter CHAR_9;
+	public static SubLCharacter CHAR_colon;
+	public static SubLCharacter CHAR_semicolon;
+	public static SubLCharacter CHAR_less;
+	public static SubLCharacter CHAR_equal;
+	public static SubLCharacter CHAR_greater;
+	public static SubLCharacter CHAR_question;
+	public static SubLCharacter CHAR_at;
+	public static SubLCharacter CHAR_A;
+	public static SubLCharacter CHAR_B;
+	public static SubLCharacter CHAR_C;
+	public static SubLCharacter CHAR_D;
+	public static SubLCharacter CHAR_E;
+	public static SubLCharacter CHAR_F;
+	public static SubLCharacter CHAR_G;
+	public static SubLCharacter CHAR_H;
+	public static SubLCharacter CHAR_I;
+	public static SubLCharacter CHAR_J;
+	public static SubLCharacter CHAR_K;
+	public static SubLCharacter CHAR_L;
+	public static SubLCharacter CHAR_M;
+	public static SubLCharacter CHAR_N;
+	public static SubLCharacter CHAR_O;
+	public static SubLCharacter CHAR_P;
+	public static SubLCharacter CHAR_Q;
+	public static SubLCharacter CHAR_R;
+	public static SubLCharacter CHAR_S;
+	public static SubLCharacter CHAR_T;
+	public static SubLCharacter CHAR_U;
+	public static SubLCharacter CHAR_V;
+	public static SubLCharacter CHAR_W;
+	public static SubLCharacter CHAR_X;
+	public static SubLCharacter CHAR_Y;
+	public static SubLCharacter CHAR_Z;
+	public static SubLCharacter CHAR_lbracket;
+	public static SubLCharacter CHAR_backslash;
+	public static SubLCharacter CHAR_rbracket;
+	public static SubLCharacter CHAR_caret;
+	public static SubLCharacter CHAR_underbar;
+	public static SubLCharacter CHAR_backquote;
+	public static SubLCharacter CHAR_a;
+	public static SubLCharacter CHAR_b;
+	public static SubLCharacter CHAR_c;
+	public static SubLCharacter CHAR_d;
+	public static SubLCharacter CHAR_e;
+	public static SubLCharacter CHAR_f;
+	public static SubLCharacter CHAR_g;
+	public static SubLCharacter CHAR_h;
+	public static SubLCharacter CHAR_i;
+	public static SubLCharacter CHAR_j;
+	public static SubLCharacter CHAR_k;
+	public static SubLCharacter CHAR_l;
+	public static SubLCharacter CHAR_m;
+	public static SubLCharacter CHAR_n;
+	public static SubLCharacter CHAR_o;
+	public static SubLCharacter CHAR_p;
+	public static SubLCharacter CHAR_q;
+	public static SubLCharacter CHAR_r;
+	public static SubLCharacter CHAR_s;
+	public static SubLCharacter CHAR_t;
+	public static SubLCharacter CHAR_u;
+	public static SubLCharacter CHAR_v;
+	public static SubLCharacter CHAR_w;
+	public static SubLCharacter CHAR_x;
+	public static SubLCharacter CHAR_y;
+	public static SubLCharacter CHAR_z;
+	public static SubLCharacter CHAR_lbrace;
+	public static SubLCharacter CHAR_vertical;
+	public static SubLCharacter CHAR_rbrace;
+	public static SubLCharacter CHAR_tilde;
+	public static SubLCharacter CHAR_rubout;
+	static {
+		me = new Characters();
 	}
 
-	//// Initializers
-
+	@Override
 	public void declareFunctions() {
 		SubLFiles.declareFunction(Characters.me, "alpha_char_p", "ALPHA-CHAR-P", 1, 0, false);
 		SubLFiles.declareFunction(Characters.me, "alphanumericp", "ALPHANUMERICP", 1, 0, false);
@@ -346,17 +276,18 @@ public class Characters extends SubLTrampolineFile {
 		SubLFiles.declareFunction(Characters.me, "name_character", "NAME-CHARACTER", 1, 0, false);
 	}
 
+	@Override
 	public void initializeVariables() {
-		Characters.CHAR_null = SubLObjectFactory.makeChar((char) 0);
+		Characters.CHAR_null = SubLObjectFactory.makeChar('\0');
 		Characters.CHAR_backspace = SubLObjectFactory.makeChar('\b');
 		Characters.CHAR_tab = SubLObjectFactory.makeChar('\t');
 		Characters.CHAR_newline = SubLObjectFactory.makeChar('\n');
 		Characters.CHAR_return = SubLObjectFactory.makeChar('\r');
 		Characters.CHAR_page = SubLObjectFactory.makeChar('\f');
-		Characters.CHAR_escape = SubLObjectFactory.makeChar((char) 27);
+		Characters.CHAR_escape = SubLObjectFactory.makeChar('\u001b');
 		Characters.CHAR_space = SubLObjectFactory.makeChar(' ');
 		Characters.CHAR_exclamation = SubLObjectFactory.makeChar('!');
-		Characters.CHAR_quotation = SubLObjectFactory.makeChar('"');
+		Characters.CHAR_quotation = SubLObjectFactory.makeChar('\"');
 		Characters.CHAR_hash = SubLObjectFactory.makeChar('#');
 		Characters.CHAR_dollar = SubLObjectFactory.makeChar('$');
 		Characters.CHAR_percent = SubLObjectFactory.makeChar('%');
@@ -449,20 +380,10 @@ public class Characters extends SubLTrampolineFile {
 		Characters.CHAR_vertical = SubLObjectFactory.makeChar('|');
 		Characters.CHAR_rbrace = SubLObjectFactory.makeChar('}');
 		Characters.CHAR_tilde = SubLObjectFactory.makeChar('~');
-		Characters.CHAR_rubout = SubLObjectFactory.makeChar('\u007F');
-		// charNameToSubLCharacterMap.put("Null", CHAR_null);
-		// charNameToSubLCharacterMap.put("NUL", CHAR_null);
+		Characters.CHAR_rubout = SubLObjectFactory.makeChar('\u007f');
 	}
 
+	@Override
 	public void runTopLevelForms() {
 	}
-
-	//// Protected Area
-
-	//// Private Area
-
-	//// Internal Rep
-
-	//// Main
-
 }

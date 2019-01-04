@@ -1,23 +1,9 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
+
+import org.armedbear.lisp.Main;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
@@ -27,25 +13,24 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLT;
 
-/**
- *
- * @author Tony Brusseau
- */
 public interface CommonSymbols {
 
-	// Booleans
+	public static final Object commonSymbolsCheck = new Object() {
+		{
+			if (!SubLMain.commonSymbolsOK) {
+				throw new Error("!commonSymbolsOK!");
+			}
+		}
+	};
+
 	public static SubLT T = SubLT.T;
 	public static SubLObject RET_T = CommonSymbols.T;
 	public static SubLNil NIL = SubLNil.NIL;
-	public static SubLObject RET_NIL = CommonSymbols.NIL;
-
-	// Equality
+	public static SubLObject RET_NIL = SubLNil.NIL;
 	public static SubLSymbol EQ = SubLObjectFactory.makeSublispSymbol("EQ");
 	public static SubLSymbol EQL = SubLObjectFactory.makeSublispSymbol("EQL");
 	public static SubLSymbol EQUAL = SubLObjectFactory.makeSublispSymbol("EQUAL");
 	public static SubLSymbol EQUALP = SubLObjectFactory.makeSublispSymbol("EQUALP");
-
-	// Numbers
 	public static SubLFixnum MINUS_ONE_INTEGER = (SubLFixnum) SubLObjectFactory.makeInteger(-1);
 	public static SubLDoubleFloat ZERO_DOUBLE = SubLObjectFactory.makeDouble(0.0);
 	public static SubLFixnum ZERO_INTEGER = (SubLFixnum) SubLObjectFactory.makeInteger(0);
@@ -69,7 +54,6 @@ public interface CommonSymbols {
 	public static SubLFixnum EIGHTEEN_INTEGER = (SubLFixnum) SubLObjectFactory.makeInteger(18);
 	public static SubLFixnum NINETEEN_INTEGER = (SubLFixnum) SubLObjectFactory.makeInteger(19);
 	public static SubLFixnum TWENTY_INTEGER = (SubLFixnum) SubLObjectFactory.makeInteger(20);
-
 	public static SubLFixnum THIRTY_TWO_INTEGER = (SubLFixnum) SubLObjectFactory.makeInteger(32);
 	public static SubLFixnum THIRTY_THREE_INTEGER = (SubLFixnum) SubLObjectFactory.makeInteger(33);
 	public static SubLFixnum THIRTY_FOUR_INTEGER = (SubLFixnum) SubLObjectFactory.makeInteger(34);
@@ -78,10 +62,7 @@ public interface CommonSymbols {
 	public static SubLFixnum ONE_HUNDRED_THIRTY_SEVEN_INTEGER = (SubLFixnum) SubLObjectFactory.makeInteger(137);
 	public static SubLFixnum TWO_HUNDRED_FORTY_FOUR_INTEGER = (SubLFixnum) SubLObjectFactory.makeInteger(244);
 	public static SubLFixnum TWO_HUNDRED_FIFTY_FOUR_INTEGER = (SubLFixnum) SubLObjectFactory.makeInteger(254);
-
 	public static SubLFixnum ONE_THOUSAND_INTEGER = (SubLFixnum) SubLObjectFactory.makeInteger(1000);
-
-	//// Misc
 	public static SubLSymbol BINDING_TYPE = SubLObjectFactory.makeKeyword("BINDING-TYPE");
 	public static SubLSymbol LEXICAL = SubLObjectFactory.makeKeyword("LEXICAL");
 	public static SubLSymbol CONSTANT = SubLObjectFactory.makeKeyword("CONSTANT");
@@ -100,7 +81,6 @@ public interface CommonSymbols {
 	public static SubLSymbol CDESTRUCTURING_BIND = SubLObjectFactory.makeSublispSymbol("CDESTRUCTURING-BIND");
 	public static SubLSymbol MACRO_FORM = SubLObjectFactory.makeSublispSymbol("%MACRO-FORM");
 	public static SubLSymbol MACRO_ENV = SubLObjectFactory.makeSublispSymbol("%ENV");
-	public static SubLSymbol SHOW_STACK_TRACES = SubLObjectFactory.makeSublispSymbol("*SHOW-STACK-TRACES?*");
 	public static SubLSymbol APPEND_STACK_TRACES_TO_ERROR_MESSAGES = SubLObjectFactory
 			.makeSublispSymbol("*APPEND-STACK-TRACES-TO-ERROR-MESSAGES?*");
 	public static SubLSymbol FORCE_ERROR_MESSAGE_OUTPUT = SubLObjectFactory
@@ -117,11 +97,7 @@ public interface CommonSymbols {
 	public static SubLSymbol KILL_KEYWORD = SubLObjectFactory.makeKeyword("KILL");
 	public static SubLSymbol LIST = SubLObjectFactory.makeSublispSymbol("LIST");
 	public static SubLSymbol LISTS = SubLObjectFactory.makeSublispSymbol("LIST*");
-
-	//// Reader Symbol
 	public static SubLSymbol SSS = SubLObjectFactory.makeSublispSymbol("***");
-
-	//// Operator Symbols
 	public static SubLSymbol IDENTITY = SubLObjectFactory.makeSublispSymbol("IDENTITY");
 	public static SubLSymbol MEMBER = SubLObjectFactory.makeSublispSymbol("MEMBER");
 	public static SubLSymbol SYMBOL_FUNCTION = SubLObjectFactory.makeSublispSymbol("SYMBOL-FUNCTION");
@@ -177,9 +153,6 @@ public interface CommonSymbols {
 	public static SubLSymbol ASSEMBLE_FIXNUMS_TO_INTEGER = SubLObjectFactory
 			.makeSublispSymbol("ASSEMBLE-FIXNUMS-TO-INTEGER");
 	public static SubLSymbol SORT = SubLObjectFactory.makeSublispSymbol("SORT");
-
-	// Special operators
-
 	public static SubLSymbol DEFINE = SubLObjectFactory.makeSublispSymbol("DEFINE");
 	public static SubLSymbol DEFMACRO = SubLObjectFactory.makeSublispSymbol("DEFMACRO");
 	public static SubLSymbol DEFCONSTANT = SubLObjectFactory.makeSublispSymbol("DEFCONSTANT");
@@ -238,21 +211,8 @@ public interface CommonSymbols {
 	public static SubLSymbol WITH_THREAD_PRIVATE_AREA = SubLObjectFactory.makeSublispSymbol("WITH-THREAD-PRIVATE-AREA");
 	public static SubLSymbol WITH_WORKING_AREA = SubLObjectFactory.makeSublispSymbol("WITH-WORKING-AREA");
 	public static SubLSymbol QUIT = SubLObjectFactory.makeSublispSymbol("QUIT");
-
-	// @todo go through and explicitly put all SubL functions/macros/special
-	// forms as symbols here -APB
-
-	//// Predicates
 	public static SubLSymbol NULL = SubLObjectFactory.makeSublispSymbol("NULL");
-	public static SubLSymbol BOOLEANP = SubLObjectFactory.makeCycSymbol("BOOLEANP"); // @hack
-																						// Cyc
-																						// package
-																						// hack
-																						// to
-																						// be
-																						// consistent
-																						// with
-																						// Allegro/C
+	public static SubLSymbol BOOLEANP = SubLObjectFactory.makeCycSymbol("BOOLEANP");
 	public static SubLSymbol SYMBOLP = SubLObjectFactory.makeSublispSymbol("SYMBOLP");
 	public static SubLSymbol ATOM = SubLObjectFactory.makeSublispSymbol("ATOM");
 	public static SubLSymbol CONSP = SubLObjectFactory.makeSublispSymbol("CONSP");
@@ -285,20 +245,14 @@ public interface CommonSymbols {
 	public static SubLSymbol OUTPUT_STREAM_P = SubLObjectFactory.makeSublispSymbol("OUTPUT-STREAM-P");
 	public static SubLSymbol KEYWORDP = SubLObjectFactory.makeSublispSymbol("KEYWORDP");
 	public static SubLSymbol NON_NEGATIVE_NUMBER_P = SubLObjectFactory.makeCycSymbol("NON-NEGATIVE-NUMBER-P");
-
-	// Stream IO Types
 	public static SubLSymbol ELEMENT_TYPE_KEYWORD = SubLObjectFactory.makeKeyword("ELEMENT-TYPE");
 	public static SubLSymbol TEXT_KEYWORD = SubLObjectFactory.makeKeyword("TEXT");
 	public static SubLSymbol BINARY_KEYWORD = SubLObjectFactory.makeKeyword("BINARY");
-
-	// Stream Direction
 	public static SubLSymbol DIRECTION_KEYWORD = SubLObjectFactory.makeKeyword("DIRECTION");
 	public static SubLSymbol INPUT_KEYWORD = SubLObjectFactory.makeKeyword("INPUT");
 	public static SubLSymbol OUTPUT_KEYWORD = SubLObjectFactory.makeKeyword("OUTPUT");
 	public static SubLSymbol IO_KEYWORD = SubLObjectFactory.makeKeyword("IO");
 	public static SubLSymbol PROBE_KEYWORD = SubLObjectFactory.makeKeyword("PROBE");
-
-	// Stream existentials
 	public static SubLSymbol IF_EXISTS_KEYWORD = SubLObjectFactory.makeKeyword("IF-EXISTS");
 	public static SubLSymbol IF_DOES_NOT_EXIST_KEYWORD = SubLObjectFactory.makeKeyword("IF-DOES-NOT-EXIST");
 	public static SubLSymbol ERROR_KEYWORD = SubLObjectFactory.makeKeyword("ERROR");
@@ -308,14 +262,9 @@ public interface CommonSymbols {
 	public static SubLSymbol APPEND_KEYWORD = SubLObjectFactory.makeKeyword("APPEND");
 	public static SubLSymbol SUPERSEDE_KEYWORD = SubLObjectFactory.makeKeyword("SUPERSEDE");
 	public static SubLSymbol CREATE_KEYWORD = SubLObjectFactory.makeKeyword("CREATE");
-
 	public static SubLSymbol EXTERNAL_FORMAT_KEYWORD = SubLObjectFactory.makeKeyword("EXTERNAL-FORMAT");
-
-	// File Positions
 	public static SubLSymbol START_KEYWORD = SubLObjectFactory.makeKeyword("START");
 	public static SubLSymbol END_KEYWORD = SubLObjectFactory.makeKeyword("END");
-
-	// IO
 	public static SubLSymbol TERMINAL_IO = SubLObjectFactory.makeSublispSymbol("*TERMINAL-IO*");
 	public static SubLSymbol STANDARD_INPUT = SubLObjectFactory.makeSublispSymbol("*STANDARD-INPUT*");
 	public static SubLSymbol STANDARD_OUTPUT = SubLObjectFactory.makeSublispSymbol("*STANDARD-OUTPUT*");
@@ -325,8 +274,5 @@ public interface CommonSymbols {
 	public static SubLSymbol NULL_OUTPUT = SubLObjectFactory.makeSublispSymbol("*NULL-OUTPUT*");
 	public static SubLSymbol QUERY_IO = SubLObjectFactory.makeSublispSymbol("*QUERY-IO*");
 	public static SubLSymbol TRACE_OUTPUT = SubLObjectFactory.makeSublispSymbol("*TRACE-OUTPUT*");
-
-	//// NON SYMBOLS
-
 	public static int PROCESS_TO_END = Integer.MAX_VALUE;
 }

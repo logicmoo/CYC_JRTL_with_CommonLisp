@@ -2,7 +2,7 @@
  * SlimeInputStream.java
  *
  * Copyright (C) 2004 Andras Simon, Peter Graves
- * $Id: SlimeInputStream.java 12362 2010-01-11 20:03:29Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,93 +31,132 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class SlimeInputStream extends Stream {
-	String s;
-	int length;
-	Function f;
-	LispStream ostream;
+public class SlimeInputStream extends Stream
+{
+    String s;
+    int length;
+    final Function f;
+    final Stream ostream;
 
-	public SlimeInputStream(Function f, LispStream ostream) {
-		super(LispSymbols.SLIME_INPUT_STREAM);
-		this.elementType = LispSymbols.CHARACTER;
-		this.isInputStream = true;
-		this.isOutputStream = false;
-		this.isCharacterStream = true;
-		this.isBinaryStream = false;
-		this.f = f;
-		this.ostream = ostream;
-	}
+    public SlimeInputStream(Function f, Stream ostream)
+    {
+        super(Symbol.SLIME_INPUT_STREAM, Keyword.INPUT_KEYWORD);
+        setStreamElementType(Symbol.CHARACTER);
+        isInputStream = true;
+        isOutputStream = false;
+        isCharacterStream = true;
+        isBinaryStream = false;
+        eolStyle = EolStyle.LF;
+        this.f = f;
+        this.ostream = ostream;
+    }
 
-	public boolean _charReady() {
-		return this.offset < this.length ? true : false;
-	}
+    @Override
+    public LispObject typeOf()
+    {
+        return Symbol.SLIME_INPUT_STREAM;
+    }
 
-	public void _clearInput() {
-		super._clearInput();
-		this.s = "";
-		this.offset = 0;
-		this.length = 0;
-		this.lineNumber = 0;
-	}
+    @Override
+    public LispObject classOf()
+    {
+        return BuiltInClass.SLIME_INPUT_STREAM;
+    }
 
-	public int _readChar() {
-		if (this.offset >= this.length) {
-			this.ostream.finishOutput();
-			this.s = LispThread.currentThread().execute(this.f).getString();
-			if (this.s.length() == 0)
-				return -1;
-			this.offset = 0;
-			this.length = this.s.length();
-		}
-		int n = this.s.charAt(this.offset);
-		++this.offset;
-		if (n == '\n')
-			++this.lineNumber;
-		return n;
-	}
+    @Override
+    public LispObject typep(LispObject type)
+    {
+        if (type == Symbol.SLIME_INPUT_STREAM)
+            return T;
+        if (type == Symbol.STRING_STREAM)
+            return T;
+        if (type == BuiltInClass.SLIME_INPUT_STREAM)
+            return T;
+        if (type == BuiltInClass.STRING_STREAM)
+            return T;
+        return super.typep(type);
+    }
 
-	public void _unreadChar(int n) {
-		if (this.offset > 0) {
-			--this.offset;
-			if (n == '\n')
-				--this.lineNumber;
-		}
-	}
+    @Override
+    public LispObject close(LispObject abort)
+    {
+        setOpen(false);
+        return T;
+    }
 
-	public SubLObject classOf() {
-		return BuiltInClass.SLIME_INPUT_STREAM;
-	}
+    @Override
+    public LispObject listen()
+    {
+        return offset < length ? T : NIL;
+    }
 
-	public SubLObject close(SubLObject abort) {
-		this.setOpen(false);
-		return Lisp.T;
-	}
+    @Override
+    protected int _readChar()
+    {
+        if (offset >= length) {
+            ostream.finishOutput();
+            s = LispThread.currentThread().execute(f).getStringValue();
+            if (s.length() == 0)
+                return -1;
+            offset = 0;
+            length = s.length();
+        }
+        int n = s.charAt(offset);
+        ++offset;
+        if (n == '\n')
+            ++lineNumber;
+        return n;
+    }
 
-	public SubLObject listen() {
-		return this.offset < this.length ? Lisp.T : Lisp.NIL;
-	}
+    @Override
+    protected void _unreadChar(int n)
+    {
+        if (offset > 0) {
+            --offset;
+            if (n == '\n')
+                --lineNumber;
+        }
+    }
 
-	public String toString() {
-		return this.unreadableString("SLIME-INPUT-STREAM");
-	}
+    @Override
+    protected boolean _charReady()
+    {
+        return offset < length ? true : false;
+    }
 
-	public SubLObject typeOf() {
-		return LispSymbols.SLIME_INPUT_STREAM;
-	}
 
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.SLIME_INPUT_STREAM)
-			return Lisp.T;
-		if (type == LispSymbols.STRING_STREAM)
-			return Lisp.T;
-		if (type == BuiltInClass.SLIME_INPUT_STREAM)
-			return Lisp.T;
-		if (type == BuiltInClass.STRING_STREAM)
-			return Lisp.T;
-		return super.typep(type);
-	}
+    @Override
+    public void _clearInput()
+    {
+        super._clearInput();
+        s = "";
+        offset = 0;
+        length = 0;
+        lineNumber = 0;
+    }
+
+    // ### make-slime-input-stream
+    // make-slime-input-stream function output-stream => slime-input-stream
+    private static final Primitive MAKE_SLIME_INPUT_STREAM =
+        new Primitive("make-slime-input-stream", PACKAGE_EXT, true,
+                      "function output-stream")
+    {
+        @Override
+        public LispObject execute(LispObject first, LispObject second)
+
+        {
+            final Function fun;
+            final Stream os;
+            if (first instanceof Symbol)
+                fun = (Function)first.getSymbolFunction();
+            else
+                fun = (Function)first;
+            os = checkCharacterOutputStream(second);
+            return new SlimeInputStream(fun, os);
+        }
+    };
 }

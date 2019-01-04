@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="lib3">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/JPrologCafe/prova-1.8.0/lib/log4j-1.2.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/JPrologCafe/prova-1.8.0/lib/log4j.jar!/" />
+      <root url="jar://$PROJECT_DIR$/JPrologCafe/prova-1.8.0/lib/commons-collections-2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/JPrologCafe/prova-1.8.0/lib/mysql-connector.jar!/" />
+      <root url="jar://$PROJECT_DIR$/JPrologCafe/prova-1.8.0/lib/junit-3.8.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/JPrologCafe/prova-1.8.0/lib/commons-httpclient-2.0-rc2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/JPrologCafe/prova-1.8.0/lib/hsqldb-1.7.2RC1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/JPrologCafe/prova-1.8.0/lib/commons-logging.jar!/" />
+      <root url="jar://$PROJECT_DIR$/JPrologCafe/prova-1.8.0/lib/jdom.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

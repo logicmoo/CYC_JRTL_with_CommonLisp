@@ -1,7 +1,7 @@
 ;;; pathnames.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves
-;;; $Id: pathnames.lisp 12552 2010-03-16 21:02:54Z mevenson $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -134,9 +134,24 @@
         wildcard (pathname wildcard))
   (unless (component-match-p (pathname-host pathname) (pathname-host wildcard) nil)
     (return-from pathname-match-p nil))
+  (when (and (pathname-jar-p pathname) 
+             (pathname-jar-p wildcard))
+    (unless 
+        (every (lambda (value) (not (null value)))
+               (mapcar #'pathname-match-p 
+                       (pathname-device pathname)  
+                       (pathname-device wildcard)))
+      (return-from pathname-match-p nil)))
+  (when (or (and (pathname-jar-p pathname)
+                 (not (pathname-jar-p wildcard)))
+            (and (not (pathname-jar-p pathname))
+                 (pathname-jar-p wildcard)))
+    (return-from pathname-match-p nil))
   (let* ((windows-p (featurep :windows))
          (ignore-case (or windows-p (typep pathname 'logical-pathname))))
     (cond ((and windows-p
+                (not (pathname-jar-p pathname))
+                (not (pathname-jar-p wildcard))
                 (not (component-match-p (pathname-device pathname)
                                         (pathname-device wildcard)
                                         ignore-case)))
@@ -195,6 +210,16 @@
          ;; FIXME
          (error "Unsupported wildcard pattern: ~S" to))))
 
+(defun translate-jar-device (source from to &optional case)
+  (declare (ignore case)) ; FIXME
+  (unless to
+    (return-from translate-jar-device nil))
+  (when (not (= (length source) 
+                (length from)
+                (length to)))
+    (error "Unsupported pathname translation for unequal jar ~
+  references: ~S != ~S != ~S" source from to))
+  (mapcar #'translate-pathname source from to))
 
 (defun translate-directory-components-aux (src from to case)
   (cond
@@ -268,9 +293,13 @@
          (to     (pathname to-wildcard))
          (device (if (typep 'to 'logical-pathname)
                      :unspecific
-                     (translate-component (pathname-device source)
-                                          (pathname-device from)
-                                          (pathname-device to))))
+                     (if (pathname-jar-p source)
+                         (translate-jar-device (pathname-device source)
+                                               (pathname-device from)
+                                               (pathname-device to))
+                         (translate-component (pathname-device source)
+                                              (pathname-device from)
+                                              (pathname-device to)))))
          (case   (and (typep source 'logical-pathname)
                       (or (featurep :unix) (featurep :windows))
                       :downcase)))
@@ -294,8 +323,9 @@
                                                    (pathname-type to)
                                                    case)
                    :version   (if (null (pathname-host from))
-                                  (if (eq (pathname-version to) :wild)
-                                      (pathname-version from)
+                                  (if (or (eq (pathname-version to) :wild)
+                                          (eq (pathname-version to) nil))
+                                      (pathname-version source)
                                       (pathname-version to))
                                   (translate-component (pathname-version source)
                                                        (pathname-version from)
@@ -388,6 +418,7 @@
   (declare (ignore junk-allowed)) ; FIXME
   (cond ((eq host :unspecific)
          (setf host nil))
+        ((consp host)) ;; A URL 
         (host
          (setf host (canonicalize-logical-host host))))
   (typecase thing
@@ -403,3 +434,70 @@
      (error 'type-error
             :format-control "~S cannot be converted to a pathname."
             :format-arguments (list thing)))))
+
+
+;;; Functions for dealing with URL Pathnames
+
+(in-package :extensions)
+
+(defun url-pathname-scheme (p)
+  (unless (pathname-url-p p)
+    (error "~A is not a URL pathname." p))
+  (getf (pathname-host p) :scheme))
+
+(defun set-url-pathname-scheme (p v)
+  (unless (pathname-url-p p)
+    (error "~A is not a URL pathname." p))
+  (let ((host (pathname-host p)))
+    (setf (getf host :scheme) v))
+  (%invalidate-namestring p))
+
+(defsetf url-pathname-scheme set-url-pathname-scheme)
+
+(defun url-pathname-authority (p)
+  (unless (pathname-url-p p)
+    (error "~A is not a URL pathname." p))
+  (getf (pathname-host p) :authority))
+
+(defun set-url-pathname-authority (p v)
+  (unless (pathname-url-p p)
+    (error "~A is not a URL pathname." p))
+  (let ((host (pathname-host p)))
+    (setf (getf host :authority) v))
+  (%invalidate-namestring p))
+
+(defsetf url-pathname-authority set-url-pathname-authority)
+
+(defun url-pathname-query (p)
+  (unless (pathname-url-p p)
+    (error "~A is not a URL pathname." p))
+  (getf (pathname-host p) :query))
+
+(defun set-url-pathname-query (p v)
+  (unless (pathname-url-p p)
+    (error "~A is not a URL pathname." p))
+  (let ((host (pathname-host p)))
+    (setf (getf host :query) v))
+  (%invalidate-namestring p))
+
+(defsetf url-pathname-query set-url-pathname-query)
+
+(defun url-pathname-fragment (p)
+  (unless (pathname-url-p p)
+    (error "~A is not a URL pathname." p))
+  (getf (pathname-host p) :fragment))
+
+(defun set-url-pathname-fragment (p v)
+  (unless (pathname-url-p p)
+    (error "~A is not a URL pathname." p))
+  (let ((host (pathname-host p)))
+    (setf (getf host :fragment) v))
+  (%invalidate-namestring p))
+
+(defsetf url-pathname-query set-url-pathname-fragment)
+
+(export '(url-pathname-scheme
+          url-pathname-authority
+          url-pathname-query
+          url-pathname-fragment) 
+        'ext)

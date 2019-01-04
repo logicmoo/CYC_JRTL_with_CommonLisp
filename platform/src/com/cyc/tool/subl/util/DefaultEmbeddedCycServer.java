@@ -1,5 +1,5 @@
 //
-//
+// For LarKC
 //
 package com.cyc.tool.subl.util;
 
@@ -22,6 +22,11 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbolFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLT;
 
 public class DefaultEmbeddedCycServer implements EmbeddedCycServer {
+	public DefaultEmbeddedCycServer() {
+		isInitialized = false;
+		isShutdown = false;
+	}
+
 	public static void evalInApi(String clientUUIDStr, InputStream requestStream, OutputStream response)
 			throws SubLException {
 		SubLInputStream inStream = SubLObjectFactory.makeInputTextStream(requestStream);
@@ -40,7 +45,7 @@ public class DefaultEmbeddedCycServer implements EmbeddedCycServer {
 			final ArrayList<SubLException> resultException = new ArrayList<SubLException>(1);
 			final CountDownLatch cdl = new CountDownLatch(1);
 			SubLObjectFactory.makeProcess(SubLObjectFactory.makeString("Eval Process"), new Runnable() {
-
+				@Override
 				public void run() {
 					Throwable ex = null;
 					boolean isEmpty = true;
@@ -86,44 +91,41 @@ public class DefaultEmbeddedCycServer implements EmbeddedCycServer {
 					throw new RuntimeException("Internal error: no result found from worker thread.");
 			}
 		} else
-			DefaultEmbeddedCycServer.evalInApi(clientUUIDStr, request, response);
+			evalInApi(clientUUIDStr, request, response);
 	}
 
 	private volatile boolean isInitialized;
-
 	private volatile boolean isShutdown;
 
-	public DefaultEmbeddedCycServer() {
-		this.isInitialized = false;
-		this.isShutdown = false;
-	}
-
+	@Override
 	public synchronized void initialize(String cycBaseDir, String[] args) {
-		if (this.isInitialized || this.isShutdown)
+		if (isInitialized || isShutdown)
 			return;
 		SubLMain.embeddedMain(args);
 		while (!SubLMain.isFullyInitialized())
 			Thread.yield();
 		Eval.eval("(csetq *avoid-api-quit?* t)");
 		Eval.eval("(csetq *cyc-home-directory* \"" + cycBaseDir + "\")");
-		this.isInitialized = true;
+		isInitialized = true;
 	}
 
+	@Override
 	public void processRequest(String clientUUIDStr, InputStream request, OutputStream response) throws SubLException {
-		if (!this.isInitialized || this.isShutdown)
+		if (!isInitialized || isShutdown)
 			throw new IllegalStateException(
 					"Attempt to call processRequest() on and unitialitized or closed embedded Cyc server.");
-		DefaultEmbeddedCycServer.evalInApiInSubLThread(clientUUIDStr, request, response);
+		evalInApiInSubLThread(clientUUIDStr, request, response);
 	}
 
+	@Override
 	public synchronized void shutdown() {
-		if (!this.isInitialized || this.isShutdown)
+		if (!isInitialized || isShutdown)
 			return;
 		try {
 			SubLMain.me.doSystemCleanupAndExit(0);
 		} catch (Exception e) {
 		} finally {
-			this.isShutdown = true;
+			isShutdown = true;
 		}
 	}
 }

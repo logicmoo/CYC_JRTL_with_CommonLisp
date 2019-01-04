@@ -1,96 +1,76 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.type.number;
+
+import org.armedbear.lisp.Fixnum;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-//// External Imports
+public class SubLFixnum extends Fixnum implements SubLBignum, SubLInteger, SubLNumber, SubLObject {
+	public SubLFixnum(int theInteger) {
+		super(theInteger);
+	}
 
-public class SubLFixnum extends AbstractSubLIntegerBignum implements SubLBignum, SubLInteger, SubLNumber, SubLObject {
-
-	//// Constructors
+	public SubLFixnum(Integer theInteger) {
+		super(theInteger);
+	}
 
 	public static String FIXNUM_TYPE_NAME = "FIXNUM";
 
-	SubLFixnum(int theInteger) {
-		super(theInteger);
-	}
-
-	//// Public Area
-
-	/** Creates a new instance of SubLInteger. */
-	SubLFixnum(Integer theInteger) {
-		super(theInteger);
-	}
-
+	@Override
 	public SubLObject add(SubLObject num) {
-		if (num.isFixnum())
-			return SubLNumberFactory.makeInteger(this.value + num.intValue());
+		if(num==Fixnum.ONE) return inc();
+		if (num.isFixnum()) {
+			int other = num.intValue();
+			return add(other);
+			//return SubLNumberFactory.makeInteger(value + other);
+
+		}
 		return num.add(this);
 	}
 
+	@Override
 	public boolean eql(SubLObject obj) {
 		return this == obj;
 	}
 
+	@Override
 	public boolean equal(SubLObject obj) {
-		return this == obj;
+		return obj.isInteger() && this.longValue() == obj.longValue();
 	}
 
-	public boolean equalp(SubLObject obj) {
-		return this == obj;
-	}
-
+	@Override
 	public int getNumSize() {
-		return SubLNumber.FOUR_BYTE_INTEGER;
+		return 0;
 	}
 
+	@Override
 	public SubLSymbol getType() {
 		return Types.$dtp_fixnum$;
 	}
 
+	@Override
 	public SubLFixnum getTypeCode() {
 		return CommonSymbols.SIX_INTEGER;
 	}
 
-	/**
-	 * use this version only if the arg is of same numerical type or smaller
-	 * type than 'this'
-	 */
+	@Override
 	public boolean greaterThanInternal(SubLObject num) {
-		return this.value > num.intValue();
+		return value > num.intValue();
 	}
 
-	/**
-	 * use this version only if the arg is of same numerical type or smaller
-	 * type than 'this'
-	 */
+	@Override
 	public boolean greaterThanOrEqualInternal(SubLObject num) {
-		return this.value >= num.intValue();
+		return value >= num.intValue();
 	}
 
+	@Override
 	public int hashCode(int currentDepth) {
-		return this.value;
+		return value;
 	}
 
 	@Override
@@ -98,110 +78,137 @@ public class SubLFixnum extends AbstractSubLIntegerBignum implements SubLBignum,
 		return false;
 	}
 
+	@Override
 	public boolean isAtom() {
 		return true;
 	}
 
+	@Override
 	public boolean isBigIntegerBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isBoolean() {
 		return false;
 	}
 
+	@Override
 	public boolean isChar() {
 		return false;
 	}
 
+	@Override
 	public boolean isCons() {
 		return false;
 	}
 
+	@Override
 	public boolean isDouble() {
 		return false;
 	}
 
+	@Override
 	public boolean isEnvironment() {
 		return false;
 	}
 
+	@Override
 	public boolean isError() {
 		return false;
 	}
 
+	@Override
 	public boolean isFixnum() {
 		return true;
 	}
 
+	@Override
 	public boolean isFunction() {
 		return false;
 	}
 
+	@Override
 	public boolean isFunctionSpec() {
 		return false;
 	}
 
+	@Override
 	public boolean isGuid() {
 		return false;
 	}
 
+	@Override
 	public boolean isHashtable() {
 		return false;
 	}
 
+	@Override
 	public boolean isHashtableIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isIntBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isInteger() {
 		return true;
 	}
 
+	@Override
 	public boolean isKeyhash() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyhashIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyword() {
 		return false;
 	}
 
+	@Override
 	public boolean isList() {
 		return false;
 	}
 
+	@Override
 	public boolean isLock() {
 		return false;
 	}
 
+	@Override
 	public boolean isLongBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isMacroOperator() {
 		return false;
 	}
 
+	@Override
 	public boolean isNil() {
 		return false;
 	}
 
+	@Override
 	public boolean isNumber() {
 		return true;
 	}
 
+	@Override
 	public boolean isPackage() {
 		return false;
 	}
@@ -216,85 +223,80 @@ public class SubLFixnum extends AbstractSubLIntegerBignum implements SubLBignum,
 		return false;
 	}
 
+	@Override
 	public boolean isReadWriteLock() {
 		return false;
 	}
 
+	@Override
 	public boolean isRegexPattern() {
 		return false;
 	}
 
+	@Override
 	public boolean isSemaphore() {
 		return false;
 	}
 
+	@Override
 	public boolean isSequence() {
 		return false;
 	}
 
+	@Override
 	public boolean isStream() {
 		return false;
 	}
 
+	@Override
 	public boolean isString() {
 		return false;
 	}
 
+	@Override
 	public boolean isStructure() {
 		return false;
 	}
 
+	@Override
 	public boolean isSymbol() {
 		return false;
 	}
 
+	@Override
 	public boolean isVector() {
 		return false;
 	}
 
-	/**
-	 * use this version only if the arg is of same numerical type or smaller
-	 * type than 'this'
-	 */
+	@Override
 	public boolean lessThanInternal(SubLObject num) {
-		return this.value < num.intValue();
+		return value < num.intValue();
 	}
 
-	/**
-	 * use this version only if the arg is of same numerical type or smaller
-	 * type than 'this'
-	 */
+	@Override
 	public boolean lessThanOrEqualInternal(SubLObject num) {
-		return this.value <= num.intValue();
+		return value <= num.intValue();
 	}
 
-	/**
-	 * use this version only if the arg is of same numerical type or smaller
-	 * type than 'this'
-	 */
+	@Override
 	public boolean numericallyEqualInternal(SubLObject num) {
-		return this.value == num.intValue();
+		return value == num.intValue();
 	}
 
+	@Override
 	public SubLObject sub(SubLObject num) {
 		if (num.isFixnum())
-			return SubLNumberFactory.makeInteger(this.value - num.intValue());
+			return SubLNumberFactory.makeInteger(value - num.intValue());
 		return num.mult(CommonSymbols.MINUS_ONE_INTEGER).add(this);
 	}
 
-	/** Method created to avoid casting */
-	public SubLFixnum toFixnum() { // SubLFixnum
+	@Override
+	public SubLFixnum toFixnum() {
 		return this;
 	}
 
+	@Override
 	public String toTypeName() {
-		return SubLFixnum.FIXNUM_TYPE_NAME;
+		return "FIXNUM";
 	}
-
-	//// Protected Area
-
-	//// Private Area
-
-	//// Internal Rep
-
 }

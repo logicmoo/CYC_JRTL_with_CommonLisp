@@ -1,7 +1,7 @@
 ;;; compiler-macro.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves
-;;; $Id: compiler-macro.lisp 11391 2008-11-15 22:38:34Z vvoutilainen $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -45,13 +45,23 @@
 
 (defmacro define-compiler-macro (name lambda-list &rest body)
   (let* ((form (gensym))
-         (env (gensym)))
+         (env (gensym))
+         (block-name (fdefinition-block-name name)))
     (multiple-value-bind (body decls)
-        (parse-defmacro lambda-list form body name 'defmacro :environment env)
+        (parse-defmacro lambda-list form body name 'defmacro :environment env
+                        ;; when we encounter an error
+                        ;; parsing the arguments in the call
+                        ;; (not in the difinition!), return
+                        ;; the arguments unmodified -- ie skip the
+                        ;; transform (see also source-transform.lisp)
+                        :error-fun `(lambda (&rest ignored)
+                                      (declare (ignore ignored))
+                                      (return-from ,block-name ,form)))
       (let ((expander `(lambda (,form ,env)
                          (declare (ignorable ,env))
-                         (block ,(fdefinition-block-name name) ,body))))
+                         (block ,block-name ,body))))
         `(progn
+	   (record-source-information-for-type ',name :compiler-macro)
            (setf (compiler-macro-function ',name) (function ,expander))
            ',name)))))
 

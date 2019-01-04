@@ -1,51 +1,25 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 
-//// Internal Imports
-
-//// External Imports
-
 public class Locks implements SubLFile {
-
-	//// Constructors
-
-	public static SubLFile me = new Locks();
-
 	public static SubLObject lock_idle_p(SubLObject lock) {
 		if (lock.toLock().isIdle())
 			return CommonSymbols.T;
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
-
-	//// Public Area
 
 	public static SubLObject lock_locker(SubLObject lock) {
 		SubLObject locker = lock.toLock().getLocker();
 		if (locker == null)
-			return CommonSymbols.NIL;
+			return SubLNil.NIL;
 		return locker;
 	}
 
@@ -67,12 +41,12 @@ public class Locks implements SubLFile {
 		return lock;
 	}
 
-	/** Creates a new instance of Locks. */
-	public Locks() {
+	public static SubLFile me;
+	static {
+		me = new Locks();
 	}
 
-	//// Initializers
-
+	@Override
 	public void declareFunctions() {
 		SubLFiles.declareFunction(Locks.me, "make_lock", "MAKE-LOCK", 1, 0, false);
 		SubLFiles.declareFunction(Locks.me, "lock_name", "LOCK-NAME", 1, 0, false);
@@ -80,21 +54,17 @@ public class Locks implements SubLFile {
 		SubLFiles.declareFunction(Locks.me, "lock_idle_p", "LOCK-IDLE-P", 1, 0, false);
 		SubLFiles.declareFunction(Locks.me, "seize_lock", "SEIZE-LOCK", 1, 0, false);
 		SubLFiles.declareFunction(Locks.me, "release_lock", "RELEASE-LOCK", 1, 0, false);
-
 	}
 
+	@Override
 	public void initializeVariables() {
 	}
 
+	@Override
 	public void runTopLevelForms() {
 	}
 
-	//// Protected Area
-
-	//// Private Area
-
-	//// Internal Rep
-
-	//// Main
-
+	public Locks() {
+		PrologSync.addSingleton(this);
+	}
 }

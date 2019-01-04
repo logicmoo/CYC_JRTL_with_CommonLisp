@@ -1,25 +1,12 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
+
+import org.armedbear.lisp.LispObject;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
@@ -40,144 +27,136 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackageIterator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-//// External Imports
-
-public interface SubLObject extends Cloneable, LispObject {
-
-	// @ todo this should be a symbol and looked up dynamically??? --APB
+public interface SubLObject extends Cloneable {
 	public static boolean DO_CHECK_TYPES = false;
-
 	public static boolean DO_PARANOID_TYPE_CHECKING = false;
-
 	public static int MAX_HASH_LENGTH = 8;
-
 	public static int MAX_HASH_DEPTH = 8;
-
 	public static int DEFAULT_EXCEEDED_HASH_VALUE = 0;
 
-	SubLObject add(SubLObject num);
+	SubLObject add(SubLObject p0);
 
-	void addKey(SubLObject key); // SubLKeyhash
+	void addKey(SubLObject p0);
 
-	SubLList asArrayList(); // SubLList
+	SubLList asArrayList();
 
-	SubLList asConsList(); // SubLList
+	SubLList asConsList();
 
-	BigInteger bigIntegerValue(); // SubLNumber
+	BigInteger bigIntegerValue();
 
-	void bind(SubLObject newValue, SubLObject[] bindings);
+	void bind(SubLObject p0, SubLObject[] p1);
 
 	boolean canFastHash();
 
-	char charValue(); // SubLCharacter
+	char charValue();
 
-	void checkType(SubLSymbol predicate) throws SubLException;
+	void checkType(SubLSymbol p0) throws SubLException;
 
-	void checkTypeInternal(SubLSymbol predicate) throws SubLException;
+	void checkTypeInternal(SubLSymbol p0) throws SubLException;
 
 	Object clone();
 
-	SubLObject currentBinding(SubLObject[] bindings);
+	SubLObject currentBinding(SubLObject[] p0);
 
 	SubLObject dec();
 
-	double doubleValue(); // SubLNumber
+	double doubleValue();
 
 	SubLObject eighth();
 
-	void enforceType(SubLSymbol predicate) throws SubLException;
+	void enforceType(SubLSymbol p0) throws SubLException;
 
-	void enforceTypeInternal(SubLSymbol predicate) throws SubLException;
+	void enforceTypeInternal(SubLSymbol p0) throws SubLException;
 
-	boolean eql(SubLObject obj);
+	boolean eql(SubLObject p0);
 
-	boolean equal(SubLObject obj);
+	boolean equal(SubLObject p0);
 
-	boolean equalp(SubLObject obj);
+	boolean equalp(SubLObject p0);
 
-	SubLObject eval(SubLEnvironment env) throws InvalidSubLExpressionException;
+	SubLObject eval(SubLEnvironment p0) throws InvalidSubLExpressionException;
 
 	SubLObject fifth();
 
-	SubLObject first(); // SubLList
+	SubLObject first();
 
 	SubLObject fourth();
 
-	SubLObject get(int index); // SubLSequence
+	SubLObject get(int p0);
 
-	SubLObject get(SubLObject obj); // SubLHashTable
+	SubLObject get(SubLObject p0);
 
-	SubLCharacter getCharacter(int index); // SubLString
+	SubLCharacter getCharacter(int p0);
 
-	SubLObject getField(int fieldNum); // SubLStruct
+	SubLObject getField(int p0);
 
-	SubLObject getField0(); // struct
+	SubLObject getField0();
 
-	SubLObject getField1(); // struct
+	SubLObject getField1();
 
-	SubLObject getField10(); // struct
+	SubLObject getField10();
 
-	SubLObject getField11(); // struct
+	SubLObject getField11();
 
-	SubLObject getField12(); // struct
+	SubLObject getField12();
 
-	SubLObject getField13(); // struct
+	SubLObject getField13();
 
-	SubLObject getField14(); // struct
+	SubLObject getField14();
 
-	SubLObject getField15(); // struct
+	SubLObject getField15();
 
-	SubLObject getField16(); // struct
+	SubLObject getField16();
 
-	SubLObject getField17(); // struct
+	SubLObject getField17();
 
-	SubLObject getField18(); // struct
+	SubLObject getField18();
 
-	SubLObject getField19(); // struct
+	SubLObject getField19();
 
-	SubLObject getField2(); // struct
+	SubLObject getField2();
 
-	SubLObject getField20(); // struct
+	SubLObject getField20();
 
-	SubLObject getField3(); // struct
+	SubLObject getField3();
 
-	SubLObject getField4(); // struct
+	SubLObject getField4();
 
-	SubLObject getField5(); // struct
+	SubLObject getField5();
 
-	SubLObject getField6(); // struct
+	SubLObject getField6();
 
-	SubLObject getField7(); // struct
+	SubLObject getField7();
 
-	SubLObject getField8(); // struct
+	SubLObject getField8();
 
-	SubLObject getField9(); // struct
+	SubLObject getField9();
 
 	String getFileDesignator();
 
-	SubLFunction getFunc(); // SubLFunction
+	SubLFunction getFunc();
 
-	/** Functions created to avoid casting */
 	int getNumSize();
 
-	SubLStream getStream(boolean followSynonymStream); // SubLStream
+	SubLStream getStream(boolean p0);
 
-	String getString(); // SubLString
+	String getString();
 
 	SubLSymbol getType();
 
 	SubLFixnum getTypeCode();
 
-	int hashCode(int currentDepth);
+	int hashCode(int p0);
 
-	boolean hasKey(SubLObject obj); // SubLKeyhash
+	boolean hasKey(SubLObject p0);
 
 	SubLObject inc();
 
-	int intValue(); // SubLNumber
-	//boolean isAlien();
+	int intValue();
 
-	boolean isArrayBased(); // SubLList
+	boolean isAlien();
+
+	boolean isArrayBased();
 
 	boolean isAtom();
 
@@ -227,7 +206,7 @@ public interface SubLObject extends Cloneable, LispObject {
 
 	boolean isMacroOperator();
 
-	boolean isNegative(); // SubLNumber
+	boolean isNegative();
 
 	boolean isNil();
 
@@ -237,8 +216,8 @@ public interface SubLObject extends Cloneable, LispObject {
 
 	boolean isPackageIterator();
 
-	boolean isPositive(); // SubLNumber
-	
+	boolean isPositive();
+
 	boolean isProcess();
 
 	boolean isReadWriteLock();
@@ -259,104 +238,105 @@ public interface SubLObject extends Cloneable, LispObject {
 
 	boolean isVector();
 
-	boolean isZero(); // SubLNumber
+	boolean isZero();
 
-	SubLObject last(int i); // SubLList
+	SubLObject last(int p0);
 
-	long longValue(); // SubLNumber
+	long longValue();
 
 	SubLObject makeCopy();
 
 	SubLObject makeDeepCopy();
 
-	SubLObject mult(SubLObject num);
+	SubLObject mult(SubLObject p0);
 
 	SubLObject ninth();
 
-	SubLObject nthCdr(int index); // SubLList
+	SubLObject nthCdr(int p0);
 
-	boolean numE(SubLObject x); // SubLNumber
+	boolean numE(SubLObject p0);
 
-	boolean numG(SubLObject x); // SubLNumber
+	boolean numG(SubLObject p0);
 
-	boolean numGE(SubLObject x); // SubLNumber
+	boolean numGE(SubLObject p0);
 
-	boolean numL(SubLObject x); // SubLNumber
+	boolean numL(SubLObject p0);
 
-	boolean numLE(SubLObject x); // SubLNumber
+	boolean numLE(SubLObject p0);
 
-	SubLObject put(SubLObject key, SubLObject value); // SubLHashTable
+	SubLObject put(SubLObject p0, SubLObject p1);
 
-	void rebind(SubLObject oldValue, SubLObject[] bindings);
+	void rebind(SubLObject p0, SubLObject[] p1);
 
-	boolean remKey(SubLObject obj); // SubLKeyhash
+	boolean remKey(SubLObject p0);
 
-	SubLObject remove(SubLObject obj); // SubLHashTable
+	SubLObject remove(SubLObject p0);
 
-	SubLObject rest(); // SubLList
+	SubLObject rest();
 
-	SubLSequence reverse(boolean isDestructive); // SubLSequence
+	SubLSequence reverse(boolean p0);
 
 	SubLObject second();
 
-	void set(int index, SubLObject val); // SubLSequence
+	void set(int p0, SubLObject p1);
 
-	void setField(int fieldNum, SubLObject value); // SubLStruct
+	void setField(int p0, SubLObject p1);
 
-	SubLObject setField0(SubLObject newVal); // struct
+	SubLObject setField0(SubLObject p0);
 
-	SubLObject setField1(SubLObject newVal); // struct
+	SubLObject setField1(SubLObject p0);
 
-	SubLObject setField10(SubLObject newVal); // struct
+	SubLObject setField10(SubLObject p0);
 
-	SubLObject setField11(SubLObject newVal); // struct
+	SubLObject setField11(SubLObject p0);
 
-	SubLObject setField12(SubLObject newVal); // struct
+	SubLObject setField12(SubLObject p0);
 
-	SubLObject setField13(SubLObject newVal); // struct
+	SubLObject setField13(SubLObject p0);
 
-	SubLObject setField14(SubLObject newVal); // struct
+	SubLObject setField14(SubLObject p0);
 
-	SubLObject setField15(SubLObject newVal); // struct
+	SubLObject setField15(SubLObject p0);
 
-	SubLObject setField16(SubLObject newVal); // struct
+	SubLObject setField16(SubLObject p0);
 
-	SubLObject setField17(SubLObject newVal); // struct
+	SubLObject setField17(SubLObject p0);
 
-	SubLObject setField18(SubLObject newVal); // struct
+	SubLObject setField18(SubLObject p0);
 
-	SubLObject setField19(SubLObject newVal); // struct
+	SubLObject setField19(SubLObject p0);
 
-	SubLObject setField2(SubLObject newVal); // struct
+	SubLObject setField2(SubLObject p0);
 
-	SubLObject setField20(SubLObject newVal); // struct
+	SubLObject setField20(SubLObject p0);
 
-	SubLObject setField3(SubLObject newVal); // struct
+	SubLObject setField3(SubLObject p0);
 
-	SubLObject setField4(SubLObject newVal); // struct
+	SubLObject setField4(SubLObject p0);
 
-	SubLObject setField5(SubLObject newVal); // struct
+	SubLObject setField5(SubLObject p0);
 
-	SubLObject setField6(SubLObject newVal); // struct
+	SubLObject setField6(SubLObject p0);
 
-	SubLObject setField7(SubLObject newVal); // struct
+	SubLObject setField7(SubLObject p0);
 
-	SubLObject setField8(SubLObject newVal); // struct
+	SubLObject setField8(SubLObject p0);
 
-	SubLObject setField9(SubLObject newVal); // struct
+	SubLObject setField9(SubLObject p0);
 
-	SubLCons setFirst(SubLObject first); // SubLList
+	SubLCons setFirst(SubLObject p0);
 
-	SubLCons setRest(SubLObject rest); // SubLList
+	SubLCons setRest(SubLObject p0);
 
 	SubLObject seventh();
 
 	SubLObject sixth();
 
-	int size(); // SubLSequence
-    int size(int p0);
+	int size();
 
-	SubLObject sub(SubLObject num);
+	int size(int p0);
+
+	SubLObject sub(SubLObject p0);
 
 	int superHash();
 
@@ -364,71 +344,80 @@ public interface SubLObject extends Cloneable, LispObject {
 
 	SubLObject third();
 
-	SubLCharacter toChar(); // SubLCharacter
+	SubLCharacter toChar();
 
-	SubLCons toCons(); // SubLCons
+	SubLCons toCons();
 
-	SubLDoubleFloat toDouble(); // SubLDoubleFloat
+	SubLDoubleFloat toDouble();
 
-	SubLEnvironment toEnv(); // SubLEnvironment
+	SubLEnvironment toEnv();
 
-	SubLFixnum toFixnum(); // SubLInteger
+	SubLFixnum toFixnum();
 
-	SubLGuid toGuid(); // SubLGuid
+	SubLGuid toGuid();
 
-	SubLHashtable toHashtable(); // SubLHashtable
+	SubLHashtable toHashtable();
 
-	SubLHashtableIterator toHashtableIterator(); // SubLHashtableIterator
+	SubLHashtableIterator toHashtableIterator();
 
-	SubLInputBinaryStream toInputBinaryStream(); // SubLStream
+	SubLInputBinaryStream toInputBinaryStream();
 
-	SubLInputStream toInputStream(); // SubLStream
+	SubLInputStream toInputStream();
 
-	SubLInputTextStream toInputTextStream(); // SubLStream
+	SubLInputTextStream toInputTextStream();
 
-	SubLInteger toInteger(); // SubLInteger
+	SubLInteger toInteger();
 
-	SubLKeyhash toKeyhash(); // SubLKeyhash
+	SubLKeyhash toKeyhash();
 
-	SubLKeyhashIterator toKeyhashIterator(); // SubLKeyhashIterator
+	SubLKeyhashIterator toKeyhashIterator();
 
-	SubLList toList(); // SubLList
+	SubLList toList();
 
-	SubLLock toLock(); // SubLLock
+	SubLLock toLock();
 
-	SubLMacro toMacro(); // SubLMacro
+	SubLMacro toMacro();
 
-	SubLNumber toNumber(); // SubLNumber
+	SubLNumber toNumber();
 
-	SubLOutputBinaryStream toOutputBinaryStream(); // SubLStream
+	SubLOutputBinaryStream toOutputBinaryStream();
 
-	SubLOutputStream toOutputStream(); // SubLStream
+	SubLOutputStream toOutputStream();
 
-	SubLOutputTextStream toOutputTextStream(); // SubLStream
+	SubLOutputTextStream toOutputTextStream();
 
-	SubLPackage toPackage(); // SubLPackage
+	SubLPackage toPackage();
 
 	SubLPackageIterator toPackageIterator();
 
-    SubLProcess toProcess(); // SubLProcess
+	SubLProcess toProcess();
 
-	SubLReadWriteLock toReadWriteLock(); // SubLReadWriteLock
+	SubLReadWriteLock toReadWriteLock();
 
-	SubLRegexPattern toRegexPattern(); // SubLRegexPattern
+	SubLRegexPattern toRegexPattern();
 
-	SubLSemaphore toSemaphore(); // SubLSemaphore
+	SubLSemaphore toSemaphore();
 
-	SubLSequence toSeq(); // SubLSequence
+	SubLSequence toSeq();
 
-	SubLString toStr(); // SubLString
+	SubLString toStr();
 
-	SubLStruct toStruct(); // SubLPackage
+	SubLStruct toStruct();
 
-	SubLSymbol toSymbol(); // SubLSymbol
+	SubLSymbol toSymbol();
 
 	String toTypeName();
 
-	SubLVector toVect(); // SubLPackage
+	SubLVector toVect();
 
+	String printObject();
+
+	String getStringValue();
+
+	LispObject toLispObject();
+
+	BigDecimal bigDecimalValue();
+
+	Object javaInstance();
 
 }

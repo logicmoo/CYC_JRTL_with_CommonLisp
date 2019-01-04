@@ -2,7 +2,7 @@
  * Version.java
  *
  * Copyright (C) 2003-2008 Peter Graves
- * $Id: Version.java 12522 2010-03-10 22:10:24Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,17 +31,39 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-public class Version {
-	public static String getVersion() {
-		return "0.20.0-dev";
-	}
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
-	public static void main(String args[]) {
-		System.out.println(Version.getVersion());
-	}
+public final class Version
+{
+  private Version() {}
 
-	private Version() {
-	}
+  final static String baseVersion = "1.5.0-uabcl-dev";
+
+  static void init() {
+    try {
+      InputStream input = Version.class.getResourceAsStream("version");
+      BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+      String v = reader.readLine().trim();
+      version = v;
+    } catch (Throwable t) {
+      version = baseVersion;
+    }
+  }
+
+  public static String version = "";
+  public synchronized static String getVersion()
+  {
+    if ("".equals(version)) {
+      init();
+    }
+    return version;
+  }
+
+  public static void main(String args[]) {
+    System.out.println(Version.getVersion());
+  }
 }

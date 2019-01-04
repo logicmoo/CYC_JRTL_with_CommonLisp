@@ -1,7 +1,7 @@
 ;;; fdefinition.lisp
 ;;;
 ;;; Copyright (C) 2005-2006 Peter Graves
-;;; $Id: fdefinition.lisp 11391 2008-11-15 22:38:34Z vvoutilainen $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -35,20 +35,31 @@
 
 (defun check-redefinition (name)
   (when (and *warn-on-redefinition* (fboundp name) (not (autoloadp name)))
-    (cond ((symbolp name)
-           (let ((old-source (source-pathname name))
-                 (current-source (or *source* :top-level)))
-             (cond ((equal old-source current-source)) ; OK
-                   (t
-                    (if (eq current-source :top-level)
-                        (style-warn "redefining ~S at top level" name)
-                        (let ((*package* +cl-package+))
-                          (if (eq old-source :top-level)
-                              (style-warn "redefining ~S in ~S (previously defined at top level)"
-                                          name current-source)
-                              (style-warn "redefining ~S in ~S (previously defined in ~S)"
-                                          name current-source old-source)))))))))))
+    (when (and (symbolp name)
+               (source-pathname name))
+      ;; SOURCE-PATHNAME is badly named as it is either a PATHNAMAE
+      ;; or the symbol :TOP-LEVEL
+      (let ((old-source 
+             (if (keywordp (source-pathname name))
+                 (source-pathname name)
+                 (probe-file (source-pathname name))))
+            (current-source 
+             (if (not *source*) 
+                 :top-level
+                 (probe-file *source*))))
+        (cond ((equal old-source 
+                      current-source)) ; OK
+              (t
+               (if (eq current-source :top-level)
+                   (style-warn "redefining ~S at top level" name)
+                   (let ((*package* +cl-package+))
+                     (if (eq old-source :top-level)
+                         (style-warn "redefining ~S in ~S (previously defined at top level)"
+                                     name current-source)
+                         (style-warn "redefining ~S in ~S (previously defined in ~S)"
+                                     name current-source old-source))))))))))
 
+;;; DEPRECATED:  to be removed in abcl-1.7
 (defun record-source-information (name &optional source-pathname source-position)
   (unless source-pathname
     (setf source-pathname (or *source* :top-level)))
@@ -60,10 +71,58 @@
     (cond ((symbolp name)
            (put name '%source source)))))
 
+(defun record-source-information-for-type (name type &optional source-pathname source-position)
+  "Record source information on the SYS:SOURCE property for symbol with NAME
+
+TYPE is either a symbol or list.
+
+Source information for functions, methods, and generic functions are
+represented as lists of the following form:
+
+    (:generic-function function-name)
+    (:function function-name)
+    (:method method-name qualifiers specializers)
+
+Where FUNCTION-NAME or METHOD-NAME can be a either be of the form
+'symbol or '(setf symbol).
+
+Source information for all other forms have a symbol for TYPE which is
+one of the following:
+
+:class, :variable, :condition, :constant, :compiler-macro, :macro
+:package, :structure, :type, :setf-expander, :source-transform
+
+These values follow SBCL'S implemenation in SLIME
+c.f. <https://github.com/slime/slime/blob/bad2acf672c33b913aabc1a7facb9c3c16a4afe9/swank/sbcl.lisp#L748>
+
+"
+#|
+Modifications are in two places, one at the definitions, calling
+record-source-information-by-type and then again in the file-compiler,
+which writes forms like
+
+(put 'source name (cons (list type pathname position) (get 'source name)))
+
+In theory this can lead to redundancy if a fasl is loaded again and
+again. I'm not sure how to fix this yet. Forms in the __loader__ get
+called early in build when many of the sequence functions aren't
+present.  Will probably just filter when presenting in slime.
+
+|#  
+  (unless SYS::*LOAD-TRUENAME-FASL*
+    (unless source-pathname
+      (setf source-pathname (or *source* :top-level)))
+    (unless source-position
+      (setf source-position *source-position*))
+    (let ((source (if source-position
+		      (list source-pathname source-position)
+		      (list source-pathname))))
+      (let ((sym (if (consp name) (second name) name)))
+	(put sym 'sys::source (cons `(,type ,(if (symbolp (car source)) (car source) (namestring (car source))) ,(second source)) (get sym  'sys::source nil)))))))
+
 ;; Redefined in trace.lisp.
 (defun trace-redefined-update (&rest args)
-  (declare (ignore args))
-  )
+  (declare (ignore args)))
 
 ;; Redefined in trace.lisp.
 (defun untraced-function (name)

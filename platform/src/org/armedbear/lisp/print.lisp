@@ -1,7 +1,7 @@
 ;;; print.lisp
 ;;;
 ;;; Copyright (C) 2004-2006 Peter Graves
-;;; $Id: print.lisp 12390 2010-01-18 19:07:21Z astalla $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -314,3 +314,5 @@
         (t
          (%print-object object stream)))
   object)
+
+(provide "PRINT")

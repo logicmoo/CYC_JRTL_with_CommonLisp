@@ -1,7 +1,7 @@
 ;;; print-object.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: print-object.lisp 12379 2010-01-15 20:51:22Z astalla $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -32,7 +32,6 @@
 (in-package #:system)
 
 (require 'clos)
-(require 'java)
 
 (when (autoloadp 'print-object)
   (fmakunbound 'print-object))
@@ -40,49 +39,48 @@
 (defgeneric print-object (object stream))
 
 (defmethod print-object ((object t) stream)
-  (print-unreadable-object (object stream :type t :identity t)))
+  (print-unreadable-object (object stream :type t :identity t)
+     (write-string (%write-to-string object) stream)))
+
+(defmethod print-object ((object standard-object) stream)
+  (write-string (%write-to-string object) stream))
 
 (defmethod print-object ((object structure-object) stream)
   (write-string (%write-to-string object) stream))
 
-(defmethod print-object ((object standard-object) stream)
-  (print-unreadable-object (object stream :identity t)
-    (format stream "~S" (class-name (class-of object))))
-  object)
-
-(defmethod print-object ((obj java:java-object) stream)
-  (write-string (%write-to-string obj) stream))
-
-(defmethod print-object ((class java:java-class) stream)
-  (write-string (%write-to-string class) stream))
-
 (defmethod print-object ((class class) stream)
   (print-unreadable-object (class stream :identity t)
-    (format stream "~S ~S"
-            (class-name (class-of class))
-            (class-name class)))
+    ;; Avoid recursive errors for uninitialized class objects, e.g. when
+    ;; validate-superclass fails
+    (format stream "~S ~S" (class-name (class-of class)) (ignore-errors (class-name class))))
   class)
 
-(defmethod print-object ((gf standard-generic-function) stream)
+(defmethod print-object ((gf generic-function) stream)
   (print-unreadable-object (gf stream :identity t)
     (format stream "~S ~S"
             (class-name (class-of gf))
-            (%generic-function-name gf)))
+            (ignore-errors (mop:generic-function-name gf))))
   gf)
 
-(defmethod print-object ((method standard-method) stream)
+(defmethod print-object ((method method) stream)
   (print-unreadable-object (method stream :identity t)
     (format stream "~S ~S~{ ~S~} ~S"
             (class-name (class-of method))
-            (%generic-function-name
-             (%method-generic-function method))
+            (mop:generic-function-name
+             (mop:method-generic-function method))
             (method-qualifiers method)
             (mapcar #'(lambda (c)
-                        (if (typep c 'mop::eql-specializer)
-                            `(eql ,(mop::eql-specializer-object c))
+                        (if (typep c 'mop:eql-specializer)
+                            `(eql ,(mop:eql-specializer-object c))
                           (class-name c)))
-                    (%method-specializers method))))
+                    (mop:method-specializers method))))
   method)
+
+(defmethod print-object ((method-combination method-combination) stream)
+  (print-unreadable-object (method-combination stream :identity t)
+    (format stream "~A ~S" (class-name (class-of method-combination))
+            (ignore-errors (mop::method-combination-name method-combination))))
+  method-combination)
 
 (defmethod print-object ((restart restart) stream)
   (if *print-escape*
@@ -123,14 +121,4 @@
                 (cell-error-name x)))
       (format stream "The variable ~S is unbound." (cell-error-name x))))
 
-(defmethod print-object ((e java:java-exception) stream)
-  (if *print-escape*
-      (print-unreadable-object (e stream :type t :identity t)
-        (format stream "~A"
-                (java:jcall (java:jmethod "java.lang.Object" "toString")
-                            (java:java-exception-cause e))))
-      (format stream "Java exception '~A'."
-              (java:jcall (java:jmethod "java.lang.Object" "toString")
-                          (java:java-exception-cause e)))))
-
-(provide 'print-object)
+(provide "PRINT-OBJECT")

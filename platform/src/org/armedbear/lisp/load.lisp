@@ -1,7 +1,7 @@
 ;;; load.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: load.lisp 11856 2009-05-11 21:12:17Z astalla $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -37,11 +37,11 @@
              (print *load-print*)
              (if-does-not-exist t)
              (external-format :default))
-  (declare (ignore external-format)) ; FIXME
-  (%load (if (streamp filespec)
-             filespec
-             (merge-pathnames (pathname filespec)))
-         verbose print if-does-not-exist))
+  (let (*fasl-loader*)
+    (%load (if (streamp filespec)
+	       filespec
+	       (merge-pathnames (pathname filespec)))
+	   verbose print if-does-not-exist external-format)))
 
 (defun load-returning-last-result (filespec
              &key
@@ -49,8 +49,8 @@
              (print *load-print*)
              (if-does-not-exist t)
              (external-format :default))
-  (declare (ignore external-format)) ; FIXME
-  (%load-returning-last-result (if (streamp filespec)
-             filespec
-             (merge-pathnames (pathname filespec)))
-         verbose print if-does-not-exist))
+  (let (*fasl-loader*)
+    (%load-returning-last-result (if (streamp filespec)
+				     filespec
+				     (merge-pathnames (pathname filespec)))
+				 verbose print if-does-not-exist external-format)))

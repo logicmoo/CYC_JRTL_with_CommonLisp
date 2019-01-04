@@ -30,60 +30,281 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public interface AbstractVector extends AbstractArray {
+public abstract class AbstractVector extends AbstractArray
+{
+  @Override
+  public LispObject typep(LispObject type)
+  {
+    if (type == Symbol.VECTOR)
+      return T;
+    if (type == BuiltInClass.VECTOR)
+      return T;
+    if (type == Symbol.SEQUENCE)
+      return T;
+    if (type == BuiltInClass.SEQUENCE)
+      return T;
+    return super.typep(type);
+  }
 
-	public abstract AbstractArray adjustArray(int size, AbstractArray displacedTo, int displacement);
+  @Override
+  public final boolean vectorp()
+  {
+    return true;
+  }
 
-	public abstract AbstractArray adjustArray(int size, SubLObject initialElement, SubLObject initialContents);
+  @Override
+  public boolean equalp(LispObject obj)
+  {
+    if (obj instanceof AbstractVector)
+      {
+        if (length() != obj.length())
+          return false;
+        AbstractVector v = (AbstractVector) obj;
+        for (int i = length(); i-- > 0;)
+          if (!AREF(i).equalp(v.AREF(i)))
+            return false;
+        return true;
+      }
+    return false;
+  }
 
-	public AbstractArray adjustArray(int[] dims, AbstractArray displacedTo, int displacement);
+  @Override
+  public final int getRank()
+  {
+    return 1;
+  }
 
-	public AbstractArray adjustArray(int[] dims, SubLObject initialElement, SubLObject initialContents);
+  @Override
+  public final LispObject getDimensions()
+  {
+    return new Cons(Fixnum.getInstance(capacity()));
+  }
 
-	public abstract int capacity();
+  @Override
+  public final int getDimension(int n)
+  {
+    if (n != 0)
+      {
+        error(new TypeError("bad dimension for vector"));
+        // Not reached.
+        return 0;
+      }
+    return capacity();
+  }
 
-	public int checkIndex(int index);
+  @Override
+  public final int getTotalSize()
+  {
+    return capacity();
+  }
 
-	public SubLObject deleteEq(SubLObject item);
+  public abstract int capacity();
 
-	public SubLObject deleteEql(SubLObject item);
+  public abstract LispObject subseq(int start, int end);
 
-	public boolean equalp(SubLObject obj);
+  public LispObject deleteEq(LispObject item)
+  {
+    final int limit = length();
+    int i = 0;
+    int j = 0;
+    while (i < limit)
+      {
+        LispObject obj = AREF(i++);
+        if (obj != item)
+          aset(j++, obj);
+      }
+    final int newLength = j;
+    if (newLength < capacity())
+      shrink(newLength);
+    return this;
+  }
 
-	public abstract int getDimension(int n);
+  public LispObject deleteEql(LispObject item)
+  {
+    final int limit = length();
+    int i = 0;
+    int j = 0;
+    while (i < limit)
+      {
+        LispObject obj = AREF(i++);
+        if (!obj.eql(item))
+          aset(j++, obj);
+      }
+    final int newLength = j;
+    if (newLength < capacity())
+      shrink(newLength);
+    return this;
+  }
 
-	public abstract SubLObject getDimensions();
+  public abstract void shrink(int n);
 
-	public abstract int getRank();
+  public int checkIndex(int index)
+  {
+    if (index < 0 || index >= capacity())
+      badIndex(index, capacity());
+    return index;
+  }
 
-	public abstract int getTotalSize();
+  protected void badIndex(int index, int limit)
+  {
+    StringBuilder sb = new StringBuilder("Invalid array index ");
+    sb.append(index);
+    sb.append(" for ");
+    sb.append(princToString());
+    if (limit > 0)
+      {
+        sb.append(" (should be >= 0 and < ");
+        sb.append(limit);
+        sb.append(").");
+      }
+    error(new TypeError(sb.toString(),
+                         Fixnum.getInstance(index),
+                         list(Symbol.INTEGER,
+                               Fixnum.ZERO,
+                               Fixnum.getInstance(limit - 1))));
 
-	// abstract void badIndex(int index, int limit);
+  }
 
-	public boolean isSimpleVector();
+  public void setFillPointer(int n)
+  {
+    noFillPointer();
+  }
 
-	public abstract boolean isVector();
+  public void setFillPointer(LispObject obj)
+  {
+    noFillPointer();
+  }
 
-	public SubLObject nreverse();
+  public boolean isSimpleVector()
+  {
+    return false;
+  }
 
-	public int psxhash();
+  @Override
+  public abstract LispObject reverse();
 
-	public abstract SubLObject reverse();
+  @Override
+  public LispObject nreverse()
+  {
+    int i = 0;
+    int j = length() - 1;
+    while (i < j)
+      {
+        LispObject temp = AREF(i);
+        aset(i, AREF(j));
+        aset(j, temp);
+        ++i;
+        --j;
+      }
+    return this;
+  }
 
-	public void setFillPointer(int n);
+  @Override
+  public String printObjectImpl()
+  {
+    final LispThread thread = LispThread.currentThread();
+    if (Symbol.PRINT_READABLY.symbolValue(thread) != NIL)
+      {
+        StringBuilder sb = new StringBuilder("#(");
+        final int limit = length();
+        for (int i = 0; i < limit; i++)
+          {
+            if (i > 0)
+              sb.append(' ');
+            sb.append(AREF(i).printObject());
+          }
+        sb.append(')');
+        return sb.toString();
+      }
+    else if (Symbol.PRINT_ARRAY.symbolValue(thread) != NIL)
+      {
+        int maxLevel = Integer.MAX_VALUE;
+        final LispObject printLevel =
+          Symbol.PRINT_LEVEL.symbolValue(thread);
+        if (printLevel instanceof Fixnum)
+          maxLevel = ((Fixnum)printLevel).value;
+        LispObject currentPrintLevel =
+          _CURRENT_PRINT_LEVEL_.symbolValue(thread);
+        int currentLevel = Fixnum.getValue(currentPrintLevel);
+        if (currentLevel < maxLevel)
+          {
+            StringBuffer sb = new StringBuffer("#(");
+            int maxLength = Integer.MAX_VALUE;
+            final LispObject printLength =
+              Symbol.PRINT_LENGTH.symbolValue(thread);
+            if (printLength instanceof Fixnum)
+              maxLength = ((Fixnum)printLength).value;
+            final int length = length();
+            final int limit = Math.min(length, maxLength);
+            final SpecialBindingsMark mark = thread.markSpecialBindings();
+            thread.bindSpecial(_CURRENT_PRINT_LEVEL_, currentPrintLevel.incr());
+            try
+              {
+                for (int i = 0; i < limit; i++)
+                  {
+                    if (i > 0)
+                      sb.append(' ');
+                    sb.append(AREF(i).printObject());
+                  }
+              }
+            finally
+              {
+                thread.resetSpecialBindings(mark);
+              }
+            if (limit < length)
+              sb.append(limit > 0 ? " ..." : "...");
+            sb.append(')');
+            return sb.toString();
+          }
+        else
+          return "#";
+      }
+    else
+      {
+        StringBuffer sb = new StringBuffer();
+        sb.append(isSimpleVector() ? "SIMPLE-VECTOR " : "VECTOR ");
+        sb.append(capacity());
+        return unreadableString(sb.toString());
+      }
+  }
 
-	public void setFillPointer(SubLObject obj);
+  // For EQUALP hash tables.
+  @Override
+  public int psxhash()
+  {
+    final int length = length();
+    final int limit = length < 4 ? length : 4;
+    long result = 48920713; // Chosen at random.
+    for (int i = 0; i < limit; i++)
+      result = mix(result, AREF(i).psxhash());
+    return (int) (result & 0x7fffffff);
+  }
 
-	public abstract void shrink(int n);
+  public abstract AbstractArray adjustArray(int size,
+                                              LispObject initialElement,
+                                              LispObject initialContents)
+   ;
+  public abstract AbstractArray adjustArray(int size,
+                                              AbstractArray displacedTo,
+                                              int displacement)
+   ;
 
-	public abstract SubLObject subseq(int start, int end);
 
-	public SubLObject typep(SubLObject type);
+  public AbstractArray adjustArray(int[] dims,
+                                              LispObject initialElement,
+                                              LispObject initialContents)
+    {
+      return adjustArray(dims[0], initialElement, initialContents);
+  }
 
-	public String writeToString();
-	// For EQUALP hash tables.
+  public AbstractArray adjustArray(int[] dims,
+                                              AbstractArray displacedTo,
+                                              int displacement)
+    {
+      return adjustArray(dims[0], displacedTo, displacement);
+  }
 }

@@ -2,7 +2,7 @@
  * ConcatenatedStream.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: ConcatenatedStream.java 12513 2010-03-02 22:35:36Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,181 +31,225 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class ConcatenatedStream extends Stream {
-	SubLObject streams;
+public final class ConcatenatedStream extends Stream
+{
+    LispObject streams;
 
-	private int unreadChar = -1;
+    ConcatenatedStream(LispObject streams)
+    {
+        super(Symbol.CONCATENATED_STREAM, Keyword.INPUT);
+        this.streams = streams;
+    }
 
-	ConcatenatedStream(SubLObject streams) {
-		super(LispSymbols.CONCATENATED_STREAM);
-		this.streams = streams;
-		this.isInputStream = true;
-	}
+    public boolean isCharacterInputStream()
+    {
+        if (streams == NIL)
+            return true;
+        return ((Stream)streams.car()).isCharacterInputStream();
+    }
 
-	public boolean _charReady() throws java.io.IOException {
-		if (this.unreadChar >= 0)
-			return true;
-		if (this.streams == Lisp.NIL)
-			return false;
-		LispStream stream = (LispStream) this.streams.first();
-		if (stream._charReady())
-			return true;
-		SubLObject remainingStreams = this.streams.rest();
-		while (remainingStreams != Lisp.NIL) {
-			stream = (LispStream) remainingStreams.first();
-			if (stream._charReady())
-				return true;
-			remainingStreams = remainingStreams.rest();
+    public boolean isBinaryInputStream()
+    {
+        if (streams == NIL)
+            return true;
+        return ((Stream)streams.car()).isBinaryInputStream();
+    }
+
+    public boolean isCharacterOutputStream()
+    {
+        return false;
+    }
+
+    public boolean isBinaryOutputStream()
+    {
+        return false;
+    }
+
+    public LispObject typeOf()
+    {
+        return Symbol.CONCATENATED_STREAM;
+    }
+
+    public LispObject classOf()
+    {
+        return BuiltInClass.CONCATENATED_STREAM;
+    }
+
+    public LispObject typep(LispObject typeSpecifier)
+    {
+        if (typeSpecifier == Symbol.CONCATENATED_STREAM)
+            return T;
+        if (typeSpecifier == BuiltInClass.CONCATENATED_STREAM)
+            return T;
+        return super.typep(typeSpecifier);
+    }
+
+    public LispObject getStreamElementType()
+    {
+        if (streams == NIL)
+            return NIL;
+        return ((Stream)streams.car()).getStreamElementType();
+    }
+
+    public LispObject readCharNoHang(boolean eofError, LispObject eofValue)
+
+    {
+        if (streams == NIL) {
+            if (eofError)
+                return error(new EndOfFile(this));
+            else
+                return eofValue;
+        }
+	try
+	  {
+	    return _charReady() ? readChar(eofError, eofValue) : NIL;
+	  }
+	catch (java.io.IOException e)
+	  {
+	    return error(new StreamError(this, e));
+	  }
+    }
+
+    public LispObject listen()
+    {
+    	LispObject remainingStreams = streams;
+		while (remainingStreams != NIL) {
+			Stream stream = (Stream) remainingStreams.car();
+			LispObject retVal = stream.listen();
+			if (retVal != NIL)
+				return retVal;
+			remainingStreams = remainingStreams.cdr();
 		}
-		return false;
-	}
+		return NIL;
+    }
 
-	public void _clearInput() {
-		// FIXME
-	}
+    // Returns -1 at end of file.
+    protected int _readChar() throws java.io.IOException
+    {
+        int n;
+        if (streams == NIL)
+            return -1;
+        Stream stream = (Stream) streams.car();
+        n = stream._readChar();
+        if (n >= 0)
+            return n;
+        streams = streams.cdr();
+        return _readChar();
+    }
 
-	public void _finishOutput() {
-		this.outputStreamError();
-	}
+    protected void _unreadChar(int n) throws java.io.IOException
+    {
+      if (streams == NIL)
+            error(new StreamError(this, "UNREAD-CHAR was invoked without a stream to unread into."));
+      Stream stream = (Stream)streams.car();
 
-	// Reads an 8-bit byte.
+      stream._unreadChar(n);
+    }
 
-	public int _readByte() {
-		if (this.streams == Lisp.NIL)
-			return -1;
-		LispStream stream = (LispStream) this.streams.first();
-		int n = stream._readByte();
-		if (n >= 0)
-			return n;
-		this.streams = this.streams.rest();
-		return this._readByte();
-	}
+    protected boolean _charReady() throws java.io.IOException
+    {
+        LispObject remainingStreams = streams;
+        while (remainingStreams != NIL) {
+        	Stream stream = (Stream) remainingStreams.car();
+            if (stream._charReady())
+                return true;
+            remainingStreams = remainingStreams.cdr();
+        }
+        return false;
+    }
 
-	// Returns -1 at end of file.
+    public void _writeChar(char c)
+    {
+        outputStreamError();
+    }
 
-	public int _readChar() throws java.io.IOException {
-		int n;
-		if (this.unreadChar >= 0) {
-			n = this.unreadChar;
-			this.unreadChar = -1;
-			return n;
-		}
-		if (this.streams == Lisp.NIL)
-			return -1;
-		LispStream stream = (LispStream) this.streams.first();
-		n = stream._readChar();
-		if (n >= 0)
-			return n;
-		this.streams = this.streams.rest();
-		return this._readChar();
-	}
+    public void _writeChars(char[] chars, int start, int end)
 
-	public void _unreadChar(int n) {
-		if (this.unreadChar >= 0)
-			Lisp.error(new StreamError(this,
-					"UNREAD-CHAR was invoked twice consecutively without an intervening call to READ-CHAR."));
-		this.unreadChar = n;
-	}
+    {
+        outputStreamError();
+    }
 
-	// Writes an 8-bit byte.
+    public void _writeString(String s)
+    {
+        outputStreamError();
+    }
 
-	public void _writeByte(int n) {
-		this.outputStreamError();
-	}
+    public void _writeLine(String s)
+    {
+        outputStreamError();
+    }
 
-	public void _writeChar(char c) {
-		this.outputStreamError();
-	}
+    // Reads an 8-bit byte.
+    public int _readByte()
+    {
+        if (streams == NIL)
+            return -1;
+        Stream stream = (Stream) streams.car();
+        int n = stream._readByte();
+        if (n >= 0)
+            return n;
+        streams = streams.cdr();
+        return _readByte();
+    }
 
-	public void _writeChars(char[] chars, int start, int end)
+    // Writes an 8-bit byte.
+    public void _writeByte(int n)
+    {
+        outputStreamError();
+    }
 
-	{
-		this.outputStreamError();
-	}
+    public void _finishOutput()
+    {
+        outputStreamError();
+    }
 
-	public void _writeLine(String s) {
-		this.outputStreamError();
-	}
+    public void _clearInput()
+    {
+        // FIXME
+    }
 
-	public void _writeString(String s) {
-		this.outputStreamError();
-	}
+    private void outputStreamError()
+    {
+        error(new StreamError(this,
+                               String.valueOf(this) + " is not an output stream."));
+    }
 
-	public SubLObject classOf() {
-		return BuiltInClass.CONCATENATED_STREAM;
-	}
+    // ### make-concatenated-stream &rest streams => concatenated-stream
+    private static final Primitive MAKE_CONCATENATED_STREAM =
+        new Primitive("make-concatenated-stream", "&rest streams")
+    {
+        public LispObject execute(LispObject[] args)
+        {
+            LispObject streams = NIL;
+            for (int i = 0; i < args.length; i++) {
+                if (args[i] instanceof Stream) {
+                    Stream stream = (Stream) args[i];
+                    if (stream.isInputStream()) {
+                        //                         streams[i] = (Stream) args[i];
+                        streams = new Cons(stream, streams);
+                        continue;
+                    }
+                }
+                error(new TypeError(String.valueOf(args[i].printObject()) +
+                                     " is not an input stream."));
+            }
+            return new ConcatenatedStream(streams.nreverse());
+        }
+    };
 
-	public SubLObject getElementType() {
-		if (this.streams == Lisp.NIL)
-			return Lisp.NIL;
-		return ((LispStream) this.streams.first()).getElementType();
-	}
-
-	public boolean isBinaryInputStream() {
-		if (this.streams == Lisp.NIL)
-			return true;
-		return ((LispStream) this.streams.first()).isBinaryInputStream();
-	}
-
-	public boolean isBinaryOutputStream() {
-		return false;
-	}
-
-	public boolean isCharacterInputStream() {
-		if (this.streams == Lisp.NIL)
-			return true;
-		return ((LispStream) this.streams.first()).isCharacterInputStream();
-	}
-
-	public boolean isCharacterOutputStream() {
-		return false;
-	}
-
-	public SubLObject listen() {
-		if (this.unreadChar >= 0)
-			return Lisp.T;
-		if (this.streams == Lisp.NIL)
-			return Lisp.NIL;
-		SubLObject obj = this.readCharNoHang(false, this);
-		if (obj == this)
-			return Lisp.NIL;
-		this.unreadChar = ((LispCharacter) obj).charValue();
-		return Lisp.T;
-	}
-
-	private void outputStreamError() {
-		Lisp.error(new StreamError(this, String.valueOf(this) + " is not an output stream."));
-	}
-
-	public SubLObject readCharNoHang(boolean eofError, SubLObject eofValue)
-
-	{
-		if (this.streams == Lisp.NIL)
-			if (eofError)
-				return Lisp.error(new EndOfFile(this));
-			else
-				return eofValue;
-		try {
-			return this._charReady() ? this.readChar(eofError, eofValue) : Lisp.NIL;
-		} catch (java.io.IOException e) {
-			return Lisp.error(new StreamError(this, e));
-		}
-	}
-
-	public SubLObject typeOf() {
-		return LispSymbols.CONCATENATED_STREAM;
-	}
-
-	public SubLObject typep(SubLObject typeSpecifier) {
-		if (typeSpecifier == LispSymbols.CONCATENATED_STREAM)
-			return Lisp.T;
-		if (typeSpecifier == BuiltInClass.CONCATENATED_STREAM)
-			return Lisp.T;
-		return super.typep(typeSpecifier);
-	}
-
+    // ### concatenated-stream-streams concatenated-stream => streams
+    private static final Primitive CONCATENATED_STREAM_STREAMS =
+        new Primitive("concatenated-stream-streams", "concatenated-stream")
+    {
+        public LispObject execute(LispObject arg)
+        {
+            if (arg instanceof ConcatenatedStream)
+                return ((ConcatenatedStream)arg).streams;
+            return type_error(arg, Symbol.CONCATENATED_STREAM);
+        }
+    };
 }

@@ -2,7 +2,7 @@
  * Time.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Time.java 12431 2010-02-08 08:05:15Z mevenson $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,83 +31,144 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*;
+
+import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.TimeZone;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+public final class Time
+{
 
-public class Time {
+  // ### %time
+  private static final Primitive _TIME =
+    new Primitive("%time", PACKAGE_SYS, false)
+    {
+      public LispObject execute(LispObject arg)
+      {
+        Cons.setCount(0);
+        long realStart = System.currentTimeMillis();
+        try
+          {
+            return arg.execute();
+          }
+        finally
+          {
+            long realElapsed = System.currentTimeMillis() - realStart;
+            long count = Cons.getCount();
+            Stream out =
+              checkCharacterOutputStream(Symbol.TRACE_OUTPUT.symbolValue());
+            out.FRESH_LINE();
+            StringBuilder sb = new StringBuilder();
+            sb.append(String.valueOf((float)realElapsed / 1000));
+            sb.append(" seconds real time");
+            sb.append(System.getProperty("line.separator"));
+            sb.append(count);
+            sb.append(" cons cell");
+            if (count != 1)
+              sb.append('s');
+            sb.append(System.getProperty("line.separator"));
+            out._writeString(sb.toString());
+            out._finishOutput();
+          }
+      }
+    };
 
-	// ### %time
-	private static Primitive _TIME = new JavaPrimitive("%time", Lisp.PACKAGE_SYS, false) {
+  // ### get-internal-real-time
+  private static final Primitive GET_INTERNAL_REAL_TIME =
+    new Primitive("get-internal-real-time", "")
+    {
+      public LispObject execute()
+      {
+        return number(System.currentTimeMillis());
+      }
+    };
 
-		public SubLObject execute(SubLObject arg) {
-			LispConsPair.setCount(0);
-			long realStart = System.currentTimeMillis();
-			try {
-				return arg.execute();
-			} finally {
-				long realElapsed = System.currentTimeMillis() - realStart;
-				long count = LispConsPair.getCount();
-				LispStream out = Lisp.checkCharacterOutputStream(LispSymbols.TRACE_OUTPUT.symbolValue());
-				out.freshLine();
-				StringBuilder sb = new StringBuilder();
-				sb.append(String.valueOf((float) realElapsed / 1000));
-				sb.append(" seconds real time");
-				sb.append(System.getProperty("line.separator"));
-				sb.append(count);
-				sb.append(" cons cell");
-				if (count != 1)
-					sb.append('s');
-				sb.append(System.getProperty("line.separator"));
-				out._writeString(sb.toString());
-				out._finishOutput();
-			}
-		}
-	};
+  // ### get-internal-run-time
+  private static final Primitive GET_INTERNAL_RUN_TIME =
+    new Primitive("get-internal-run-time", "")
+    {
+      public LispObject execute()
+      {
+        return number(System.currentTimeMillis());
+      }
+    };
 
-	// ### get-internal-real-time
-	private static Primitive GET_INTERNAL_REAL_TIME = new JavaPrimitive("get-internal-real-time", "") {
+  // ### get-universal-time
+  private static final Primitive GET_UNIVERSAL_TIME =
+    new Primitive("get-universal-time", "")
+    {
+      public LispObject execute()
+      {
+        return number(System.currentTimeMillis() / 1000 + 2208988800L);
+      }
+    };
 
-		public SubLObject execute() {
-			return Lisp.number(System.currentTimeMillis());
-		}
-	};
+  // ### default-time-zone => offset daylight-p
+  private static final Primitive DEFAULT_TIME_ZONE =
+    new Primitive("default-time-zone", PACKAGE_SYS, false)
+    {
+      public LispObject execute()
+      {
+        TimeZone tz = TimeZone.getDefault();
+        //int offset = tz.getOffset(System.currentTimeMillis());
+        // Classpath hasn't implemented TimeZone.getOffset(long).
+        int rawOffset = tz.getRawOffset();
+        final boolean inDaylightTime =
+          tz.inDaylightTime(new Date(System.currentTimeMillis()));
+        if (inDaylightTime)
+          rawOffset += tz.getDSTSavings();
+        // "Time zone values increase with motion to the west..."
+        // Convert milliseconds to hours.
+        return LispThread.currentThread().setValues(
+          Fixnum.getInstance(- rawOffset).divideBy(Fixnum.getInstance(3600000)),
+          inDaylightTime ? T : NIL);
+      }
+    };
+  // ### default-time-zone => offset daylight-p
+  public static final Primitive DEFAULT_TIME_ZONE_NEW = new pf_default_time_zone_new();
+  @DocString(name="default-time-zone-new",
+             args="",
+             returns="offset daylight-p",
+             doc="Returns the OFFSET of the default time zone for this instance of the implementation, and as a second value the state of the DAYLIGHT-P predicate.")
+  public static final class pf_default_time_zone_new extends Primitive {
+    pf_default_time_zone_new() {
+      super("default-time-zone-new", PACKAGE_SYS, true);
+    }
+    public LispObject execute()
+    {
+      return GET_TIME_ZONE.execute(LispInteger.getInstance(System.currentTimeMillis()));
+    }
+  };
 
-	// ### get-internal-run-time
-	private static Primitive GET_INTERNAL_RUN_TIME = new JavaPrimitive("get-internal-run-time", "") {
+  // ### get-time-zone time-in-millis => time-zone-difference-in-hours
+  public static final Primitive GET_TIME_ZONE = new pf_get_time_zone();
+  @DocString(name="get-time-zone",
+             args="time-in-millis",
+             returns="timezone",
+             doc="Return the timezone difference in hours for TIME-IN-MILLIS via the Daylight assumptions that were in place at its occurance. i.e. implement 'time of the time semantics'." )
+  public static final class pf_get_time_zone extends Primitive {
+    pf_get_time_zone() {
+      super("get-time-zone", PACKAGE_EXT, true, "time-in-millis");
+    }
 
-		public SubLObject execute() {
-			return Lisp.number(System.currentTimeMillis());
-		}
-	};
-
-	// ### get-universal-time
-	private static Primitive GET_UNIVERSAL_TIME = new JavaPrimitive("get-universal-time", "") {
-
-		public SubLObject execute() {
-			return Lisp.number(System.currentTimeMillis() / 1000 + 2208988800L);
-		}
-	};
-
-	// ### default-time-zone => offset daylight-p
-	private static Primitive DEFAULT_TIME_ZONE = new JavaPrimitive("default-time-zone", Lisp.PACKAGE_SYS, false) {
-
-		public SubLObject execute() {
-			TimeZone tz = TimeZone.getDefault();
-			// int offset = tz.getOffset(System.currentTimeMillis());
-			// Classpath hasn't implemented TimeZone.getOffset(long).
-			int rawOffset = tz.getRawOffset();
-			boolean inDaylightTime = tz.inDaylightTime(new Date(System.currentTimeMillis()));
-			if (inDaylightTime)
-				rawOffset += tz.getDSTSavings();
-			// "Time zone values increase with motion to the west..."
-			// Convert milliseconds to hours.
-			return LispThread.currentThread().setValues(
-					LispObjectFactory.makeInteger(-rawOffset).divideBy(LispObjectFactory.makeInteger(3600000)),
-					inDaylightTime ? Lisp.T : Lisp.NIL);
-		}
-	};
+    public LispObject execute(LispObject unixTimeMillis) {
+      // should be a reference to a singleton for the lifetime of an ABCL process
+      TimeZone tz = TimeZone.getDefault();
+      // int offset = tz.getOffset(System.currentTimeMillis());
+      // Classpath hasn't implemented TimeZone.getOffset(long).
+      int rawOffset = tz.getRawOffset();
+      final boolean inDaylightTime = tz.inDaylightTime(new Date(unixTimeMillis.longValue()));
+      if (inDaylightTime)
+        rawOffset += tz.getDSTSavings();
+      // "Time zone values increase with motion to the west..."
+      // Convert milliseconds to hours.
+      return LispThread.currentThread()
+        .setValues(Fixnum
+                   .getInstance(- rawOffset).divideBy(Fixnum.getInstance(3600000)),
+                   inDaylightTime ? T : NIL);
+    }
+  };
 }

@@ -1,7 +1,7 @@
 ;;; macros.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves
-;;; $Id: macros.lisp 11391 2008-11-15 22:38:34Z vvoutilainen $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -50,10 +50,17 @@
   `(return-from nil ,result))
 
 (defmacro defconstant (name initial-value &optional docstring)
-  `(%defconstant ',name ,initial-value ,docstring))
+  `(progn
+     (record-source-information-for-type ',name :constant)
+     (%defconstant ',name ,initial-value ,docstring)))
 
 (defmacro defparameter (name initial-value &optional docstring)
-  `(%defparameter ',name ,initial-value ,docstring))
+  `(progn
+     (record-source-information-for-type ',name :variable)
+     (%defparameter ',name ,initial-value ,docstring)))
+
+(defmacro truly-the (type value)
+  `(the ,type ,value))
 
 (defmacro %car (x)
   `(car (truly-the cons ,x)))
@@ -174,6 +181,7 @@
 
 (defmacro defvar (var &optional (val nil valp) (doc nil docp))
   `(progn
+     (sys::record-source-information-for-type ',var :variable)
      (%defvar ',var)
      ,@(when valp
          `((unless (boundp ',var)

@@ -2,7 +2,7 @@
  * jclass_of.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: jclass_of.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,48 +31,50 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import static org.armedbear.lisp.Lisp.*;
 
 // ### jclass-of object &optional name
-public class jclass_of extends JavaPrimitive {
-	private static Primitive JCLASS_OF = new jclass_of();
+public final class jclass_of extends Primitive
+{
+    private jclass_of()
+    {
+        super(Symbol.JCLASS_OF, "object &optional name",
+"Returns the name of the Java class of OBJECT. If the NAME argument is\n" +
+"  supplied, verifies that OBJECT is an instance of the named class. The name\n" +
+"  of the class or nil is always returned as a second value.");
+    }
 
-	private jclass_of() {
-		super(LispSymbols.JCLASS_OF, "object &optional name",
-				"Returns the name of the Java class of OBJECT. If the NAME argument is\n"
-						+ "  supplied, verifies that OBJECT is an instance of the named class. The name\n"
-						+ "  of the class or nil is always returned as a second value.");
-	}
+    public LispObject execute(LispObject arg)
 
-	public SubLObject execute(SubLObject arg)
+    {
+        final String className;
+        if (arg instanceof AbstractString)
+            className = "java.lang.String";
+        else if (arg instanceof JavaObject)
+            className = ((JavaObject)arg).getObject().getClass().getName();
+        else
+            className = null;
+        final LispObject value =
+            (className != null) ? new SimpleString(className) : NIL;
+        return LispThread.currentThread().setValues(value, value);
+    }
 
-	{
-		String className;
-		if (arg instanceof SubLString)
-			className = "java.lang.String";
-		else if (arg instanceof JavaObject)
-			className = ((JavaObject) arg).getObject().getClass().getName();
-		else
-			className = null;
-		SubLObject value = className != null ? LispObjectFactory.makeString(className) : Lisp.NIL;
-		return LispThread.currentThread().setValues(value, value);
-	}
+    public LispObject execute(LispObject first, LispObject second)
 
-	public SubLObject execute(SubLObject first, SubLObject second)
+    {
+        final String className;
+        if (first instanceof AbstractString)
+            className = "java.lang.String";
+        else if (first instanceof JavaObject)
+            className = ((JavaObject)first).getObject().getClass().getName();
+        else
+            className = null;
+        String name = javaString(second);
+        return LispThread.currentThread().setValues(name.equals(className) ? T : NIL,
+                                                    new SimpleString(className));
+    }
 
-	{
-		String className;
-		if (first instanceof SubLString)
-			className = "java.lang.String";
-		else if (first instanceof JavaObject)
-			className = ((JavaObject) first).getObject().getClass().getName();
-		else
-			className = null;
-		String name = Lisp.javaString(second);
-		return LispThread.currentThread().setValues(name.equals(className) ? Lisp.T : Lisp.NIL,
-				LispObjectFactory.makeString(className));
-	}
+    private static final Primitive JCLASS_OF = new jclass_of();
 }

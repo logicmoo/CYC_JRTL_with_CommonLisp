@@ -1,0 +1,1238 @@
+<?xml version="1.0"?>
+
+
+<!DOCTYPE rdf:RDF [
+    <!ENTITY owl "http://www.w3.org/2002/07/owl#" >
+    <!ENTITY xsd "http://www.w3.org/2001/XMLSchema#" >
+    <!ENTITY owl2xml "http://www.w3.org/2006/12/owl2-xml#" >
+    <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema#" >
+    <!ENTITY ace_lexicon "http://attempto.ifi.uzh.ch/ace_lexicon#" >
+    <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns#" >
+    <!ENTITY snappy_bind "http://www.appdapter.org/ontologies/2010/snappy_bind.owl#" >
+]>
+
+
+<rdf:RDF xmlns="http://www.appdapter.org/ontologies/2010/snazzy.owl#"
+     xml:base="http://www.appdapter.org/ontologies/2010/snazzy.owl"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+     xmlns:owl2xml="http://www.w3.org/2006/12/owl2-xml#"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:snappy_bind="http://www.appdapter.org/ontologies/2010/snappy_bind.owl#"
+     xmlns:ace_lexicon="http://attempto.ifi.uzh.ch/ace_lexicon#">
+    <owl:Ontology rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Annotation properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <owl:AnnotationProperty rdf:about="&ace_lexicon;TV_pl"/>
+    <owl:AnnotationProperty rdf:about="&ace_lexicon;PN_sg"/>
+    <owl:AnnotationProperty rdf:about="&ace_lexicon;TV_sg"/>
+    <owl:AnnotationProperty rdf:about="&ace_lexicon;CN_sg"/>
+    <owl:AnnotationProperty rdf:about="&ace_lexicon;CN_pl"/>
+    <owl:AnnotationProperty rdf:about="&ace_lexicon;TV_vbg"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Datatypes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#beginMark -->
+
+    <owl:ObjectProperty rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#beginMark">
+        <ace_lexicon:TV_pl>beginMark</ace_lexicon:TV_pl>
+        <ace_lexicon:TV_vbg>beginMarked</ace_lexicon:TV_vbg>
+        <ace_lexicon:TV_sg>beginMarks</ace_lexicon:TV_sg>
+        <rdfs:subPropertyOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#mark"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#child -->
+
+    <owl:ObjectProperty rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#child">
+        <ace_lexicon:TV_vbg>childed</ace_lexicon:TV_vbg>
+        <ace_lexicon:TV_pl>child</ace_lexicon:TV_pl>
+        <ace_lexicon:TV_sg>childs</ace_lexicon:TV_sg>
+        <rdfs:subPropertyOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#link"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#condition -->
+
+    <owl:ObjectProperty rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#condition">
+        <ace_lexicon:TV_vbg>conditioned</ace_lexicon:TV_vbg>
+        <ace_lexicon:TV_pl>condition</ace_lexicon:TV_pl>
+        <ace_lexicon:TV_sg>conditions</ace_lexicon:TV_sg>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#endMark -->
+
+    <owl:ObjectProperty rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#endMark">
+        <ace_lexicon:TV_pl>endMark</ace_lexicon:TV_pl>
+        <ace_lexicon:TV_vbg>endMarked</ace_lexicon:TV_vbg>
+        <ace_lexicon:TV_sg>endMarks</ace_lexicon:TV_sg>
+        <rdfs:subPropertyOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#mark"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#firstChild -->
+
+    <owl:ObjectProperty rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#firstChild">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <ace_lexicon:TV_sg>firstChilds</ace_lexicon:TV_sg>
+        <ace_lexicon:TV_vbg>firstChilded</ace_lexicon:TV_vbg>
+        <rdfs:comment>firstChild has no prevSibling</rdfs:comment>
+        <ace_lexicon:TV_pl>firstChild</ace_lexicon:TV_pl>
+        <rdfs:subPropertyOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#child"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#host -->
+
+    <owl:ObjectProperty rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#host">
+        <ace_lexicon:TV_sg>hosts</ace_lexicon:TV_sg>
+        <ace_lexicon:TV_pl>host</ace_lexicon:TV_pl>
+        <ace_lexicon:TV_vbg>hosted</ace_lexicon:TV_vbg>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#lastChild -->
+
+    <owl:ObjectProperty rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#lastChild">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <ace_lexicon:TV_sg>lastChilds</ace_lexicon:TV_sg>
+        <ace_lexicon:TV_pl>lastChild</ace_lexicon:TV_pl>
+        <ace_lexicon:TV_vbg>lastChilded</ace_lexicon:TV_vbg>
+        <rdfs:comment>lastChild has no nextSibling</rdfs:comment>
+        <rdfs:subPropertyOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#child"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#link -->
+
+    <owl:ObjectProperty rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#link">
+        <ace_lexicon:TV_sg>links</ace_lexicon:TV_sg>
+        <ace_lexicon:TV_pl>link</ace_lexicon:TV_pl>
+        <rdfs:comment>Updates to related links (e.g. child and sibling) must happen transactionally for correct graph semantics</rdfs:comment>
+        <ace_lexicon:TV_vbg>linked</ace_lexicon:TV_vbg>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#mark -->
+
+    <owl:ObjectProperty rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#mark">
+        <ace_lexicon:TV_vbg>marked</ace_lexicon:TV_vbg>
+        <ace_lexicon:TV_pl>mark</ace_lexicon:TV_pl>
+        <ace_lexicon:TV_sg>marks</ace_lexicon:TV_sg>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#nextSibling -->
+
+    <owl:ObjectProperty rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#nextSibling">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <ace_lexicon:TV_vbg>nextSiblinged</ace_lexicon:TV_vbg>
+        <ace_lexicon:TV_sg>nextSiblings</ace_lexicon:TV_sg>
+        <ace_lexicon:TV_pl>nextSibling</ace_lexicon:TV_pl>
+        <owl:inverseOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#prevSibling"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#sibling"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#postCond -->
+
+    <owl:ObjectProperty rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#postCond">
+        <ace_lexicon:TV_sg>postConds</ace_lexicon:TV_sg>
+        <ace_lexicon:TV_pl>postCond</ace_lexicon:TV_pl>
+        <ace_lexicon:TV_vbg>postConded</ace_lexicon:TV_vbg>
+        <rdfs:subPropertyOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#condition"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#preCond -->
+
+    <owl:ObjectProperty rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#preCond">
+        <ace_lexicon:TV_pl>preCond</ace_lexicon:TV_pl>
+        <ace_lexicon:TV_sg>preConds</ace_lexicon:TV_sg>
+        <ace_lexicon:TV_vbg>preConded</ace_lexicon:TV_vbg>
+        <rdfs:comment>often points to a policy</rdfs:comment>
+        <rdfs:subPropertyOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#condition"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#prevSibling -->
+
+    <owl:ObjectProperty rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#prevSibling">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <ace_lexicon:TV_sg>prevSiblings</ace_lexicon:TV_sg>
+        <ace_lexicon:TV_pl>prevSibling</ace_lexicon:TV_pl>
+        <ace_lexicon:TV_vbg>prevSiblinged</ace_lexicon:TV_vbg>
+        <rdfs:subPropertyOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#sibling"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#result -->
+
+    <owl:ObjectProperty rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#result">
+        <ace_lexicon:TV_pl>result</ace_lexicon:TV_pl>
+        <ace_lexicon:TV_sg>results</ace_lexicon:TV_sg>
+        <ace_lexicon:TV_vbg>resulted</ace_lexicon:TV_vbg>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#sibling -->
+
+    <owl:ObjectProperty rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#sibling">
+        <ace_lexicon:TV_sg>siblings</ace_lexicon:TV_sg>
+        <ace_lexicon:TV_vbg>siblinged</ace_lexicon:TV_vbg>
+        <ace_lexicon:TV_pl>sibling</ace_lexicon:TV_pl>
+        <rdfs:subPropertyOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#link"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#spec -->
+
+    <owl:ObjectProperty rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#spec">
+        <ace_lexicon:TV_pl>spec</ace_lexicon:TV_pl>
+        <rdfs:comment>often includes a task</rdfs:comment>
+        <ace_lexicon:TV_vbg>speced</ace_lexicon:TV_vbg>
+        <ace_lexicon:TV_sg>specs</ace_lexicon:TV_sg>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#occurrenceTime -->
+
+    <owl:DatatypeProperty rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#occurrenceTime">
+        <rdf:type rdf:resource="&owl;FunctionalProperty"/>
+        <ace_lexicon:TV_pl>occurrenceTime</ace_lexicon:TV_pl>
+        <ace_lexicon:TV_vbg>occurrenceTimed</ace_lexicon:TV_vbg>
+        <ace_lexicon:TV_sg>occurrenceTimes</ace_lexicon:TV_sg>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snappy_bind.owl#JenaAssembly -->
+
+    <owl:Class rdf:about="&snappy_bind;JenaAssembly">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Assembly"/>
+        <ace_lexicon:CN_sg>JenaAssembly</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>JenaAssemblies</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Abs -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Abs">
+        <rdfs:label>Abstraction</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Thingy"/>
+        <ace_lexicon:CN_pl>Abses</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg>Abs</ace_lexicon:CN_sg>
+        <rdfs:comment>Abs is short for abstraction.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Act -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Act">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#PhysicalAbs"/>
+        <ace_lexicon:CN_sg>Act</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>Acts</ace_lexicon:CN_pl>
+        <rdfs:comment>A computational action which is atomic for modeling purposes, and which may produce events.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#App -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#App">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Task"/>
+        <ace_lexicon:CN_sg>App</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>Apps</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Assembly -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Assembly">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Record"/>
+        <ace_lexicon:CN_sg>Assembly</ace_lexicon:CN_sg>
+        <rdfs:comment></rdfs:comment>
+        <ace_lexicon:CN_pl>Assemblies</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Category -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Category">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#LogicalAbs"/>
+        <ace_lexicon:CN_pl>Categories</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg>Category</ace_lexicon:CN_sg>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Complete -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Complete">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#TaskStateCategory"/>
+        <ace_lexicon:CN_sg>Complete</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>Completes</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Deed -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Deed">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Task"/>
+        <rdfs:comment>Deed tasks have a chance of being implemented directly by a job.  The postcondition is that the doable is (done | failed | killed), the precondition is that the doable is well specified.</rdfs:comment>
+        <ace_lexicon:CN_sg>Deed</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>Deeds</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Event -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Event">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Record"/>
+        <ace_lexicon:CN_sg>Event</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>Events</ace_lexicon:CN_pl>
+        <rdfs:comment>Model of an actual recorded occurrence in time, usually produced by an Act.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#ExecutingJob -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#ExecutingJob">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Job"/>
+        <ace_lexicon:CN_sg>ExecutingJob</ace_lexicon:CN_sg>
+        <rdfs:comment>ExecJob is an unsafe operation, included for the convenience of those
+who build test scripts or plugins for appdapter. 
+
+ExecJobs may invoke acts, and manually produce additional result events.
+ExecJob is not logically integrated into the model system of proper acts, machines, tasks, states, etc.
+so it is intended only as a jumping off point, for either 
+1) a serious orthogonal effort to integrate
+with appdapter, or as 
+2) a fallback quick extension point for the quick hack to cook your dang fish already.
+
+If you mark a triple URI from your namespace with the ExecJob class,
+this is interpreted as an instruction to fetch parameters from your
+model instance and execute a piece of code implementing the ExecJob interface.</rdfs:comment>
+        <ace_lexicon:CN_pl>ExecutingJobs</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Failed -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Failed">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#TaskStateCategory"/>
+        <ace_lexicon:CN_sg>Failed</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>Faileds</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Find -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Find">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Deed"/>
+        <ace_lexicon:CN_pl>Finds</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg>Find</ace_lexicon:CN_sg>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#ImmutableModelResult -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#ImmutableModelResult">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#ModelResult"/>
+        <rdfs:comment>Model for query only, can be retained after supplying job completes/fails.</rdfs:comment>
+        <ace_lexicon:CN_sg>ImmutableModelResult</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>ImmutableModelResults</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#JdbcStore -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#JdbcStore">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Store"/>
+        <ace_lexicon:CN_sg>JdbcStore</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>JdbcStores</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Job -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Job">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#PhysicalAbs"/>
+        <ace_lexicon:CN_pl>Jobs</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg>Job</ace_lexicon:CN_sg>
+        <rdfs:comment>Jobs are attempted multistep computations, which decompose into strictly sequential acts.  The explicit record of a job is the record of its spec, and its acts with their events.  The ResultEvents produced by its acts are the ordered results of the job.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Label -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Label">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Deed"/>
+        <ace_lexicon:CN_sg>Label</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>Labels</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#LarkcStore -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#LarkcStore">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Store"/>
+        <ace_lexicon:CN_sg>LarkcStore</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>LarkcStores</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#LearningJob -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#LearningJob">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Job"/>
+        <ace_lexicon:CN_sg>LearningJob</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>LearningJobs</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#LogicalAbs -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#LogicalAbs">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Abs"/>
+        <ace_lexicon:CN_pl>LogicalAbses</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg>LogicalAbs</ace_lexicon:CN_sg>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Machine -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Machine">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#PhysicalAbs"/>
+        <rdfs:comment>Model of execution capacity and utilization, serving as a target for Acts.</rdfs:comment>
+        <ace_lexicon:CN_pl>Machines</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg>Machine</ace_lexicon:CN_sg>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Make -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Make">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Deed"/>
+        <rdfs:comment>App tasks interact with appdapter using the LogicalAbs layer,
+and are logically resolved into other tasks (apps &amp; deeds).</rdfs:comment>
+        <ace_lexicon:CN_pl>Makes</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg>Make</ace_lexicon:CN_sg>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#MakePreTasks -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#MakePreTasks">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Make"/>
+        <ace_lexicon:CN_sg>MakePreTasks</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>MakePreTaskses</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#MatrixResult -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#MatrixResult">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Result"/>
+        <ace_lexicon:CN_pl>MatrixResuices</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg>MatrixResult</ace_lexicon:CN_sg>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#ModelResult -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#ModelResult">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Result"/>
+        <rdfs:comment>A model instantiated for query and update (if mutable).</rdfs:comment>
+        <ace_lexicon:CN_sg>ModelResult</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>ModelResults</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Move -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Move">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Deed"/>
+        <ace_lexicon:CN_sg>Move</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>Moves</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#MutableModelResult -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#MutableModelResult">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#ModelResult"/>
+        <ace_lexicon:CN_sg>MutableModelResult</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>MutableModelResults</ace_lexicon:CN_pl>
+        <rdfs:comment>Mutable model to work with and update as needed.   Must be closed before the producing job can complete or fail.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Pending -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Pending">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#TaskStateCategory"/>
+        <ace_lexicon:CN_sg>Pending</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>Pendings</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#PhysicalAbs -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#PhysicalAbs">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Abs"/>
+        <ace_lexicon:CN_pl>PhysicalAbses</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg>PhysicalAbs</ace_lexicon:CN_sg>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Policy -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Policy">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#LogicalAbs"/>
+        <ace_lexicon:CN_sg>Policy</ace_lexicon:CN_sg>
+        <rdfs:comment>Policies are kinda funny.  Everyone knows we have them, but nobody knows what they are!</rdfs:comment>
+        <ace_lexicon:CN_pl>Policies</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#PresentationJob -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#PresentationJob">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Job"/>
+        <ace_lexicon:CN_pl>PresentationJobs</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg>PresentationJob</ace_lexicon:CN_sg>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Purge -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Purge">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Deed"/>
+        <ace_lexicon:CN_pl>Purges</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg>Purge</ace_lexicon:CN_sg>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Query -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Query">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Find"/>
+        <ace_lexicon:CN_sg>Query</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>Queries</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#QueryJob -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#QueryJob">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Job"/>
+        <ace_lexicon:CN_sg>QueryJob</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>QueryJobs</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Record -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Record">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#PhysicalAbs"/>
+        <ace_lexicon:CN_sg>Record</ace_lexicon:CN_sg>
+        <rdfs:comment>Model of a coherent(-ly viewed) piece of storable and transmittable information.</rdfs:comment>
+        <ace_lexicon:CN_pl>Records</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#RequestAct -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#RequestAct">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Act"/>
+        <ace_lexicon:CN_pl>RequestActs</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg>RequestAct</ace_lexicon:CN_sg>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Result -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Result">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Event"/>
+        <ace_lexicon:CN_pl>Results</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg>Result</ace_lexicon:CN_sg>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#RowResult -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#RowResult">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#MatrixResult"/>
+        <ace_lexicon:CN_pl>RowResults</ace_lexicon:CN_pl>
+        <rdfs:comment>RowResult is typically from a JDBC (SQL), CSV, ARFF kind of data source.</rdfs:comment>
+        <ace_lexicon:CN_sg>RowResult</ace_lexicon:CN_sg>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Running -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Running">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#TaskStateCategory"/>
+        <ace_lexicon:CN_pl>Runnings</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg>Running</ace_lexicon:CN_sg>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#ScoringJob -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#ScoringJob">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Job"/>
+        <ace_lexicon:CN_pl>ScoringJobs</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg>ScoringJob</ace_lexicon:CN_sg>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#SdbStore -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#SdbStore">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Store"/>
+        <ace_lexicon:CN_pl>SdbStores</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg>SdbStore</ace_lexicon:CN_sg>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Solve -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Solve">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Find"/>
+        <ace_lexicon:CN_sg>Solve</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>Solves</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#SparqlAskResult -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#SparqlAskResult">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#SparqlResult"/>
+        <ace_lexicon:CN_pl>SparqlAskResults</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg>SparqlAskResult</ace_lexicon:CN_sg>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#SparqlDescribeResult -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#SparqlDescribeResult">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#SparqlResult"/>
+        <ace_lexicon:CN_pl>SparqlDescribeResults</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg>SparqlDescribeResult</ace_lexicon:CN_sg>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#SparqlGraphResult -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#SparqlGraphResult">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#ImmutableModelResult"/>
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#SparqlResult"/>
+        <ace_lexicon:CN_pl>SparqlGraphResults</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg>SparqlGraphResult</ace_lexicon:CN_sg>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#SparqlRequest -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#SparqlRequest">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#RequestAct"/>
+        <ace_lexicon:CN_pl>SparqlRequests</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg>SparqlRequest</ace_lexicon:CN_sg>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#SparqlResult -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#SparqlResult">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Result"/>
+        <ace_lexicon:CN_sg>SparqlResult</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>SparqlResults</ace_lexicon:CN_pl>
+        <rdfs:comment>Result from SPARQL query on some friendly Store or Machine.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#SparqlSelectResult -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#SparqlSelectResult">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#RowResult"/>
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#SparqlResult"/>
+        <ace_lexicon:CN_sg>SparqlSelectResult</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>SparqlSelectResults</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#SparqlUpdateResult -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#SparqlUpdateResult">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#SparqlResult"/>
+        <ace_lexicon:CN_sg>SparqlUpdateResult</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>SparqlUpdateResults</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Store -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Store">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#PhysicalAbs"/>
+        <ace_lexicon:CN_pl>Stores</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg>Store</ace_lexicon:CN_sg>
+        <rdfs:comment>Model of facility for information storage and retrieval.</rdfs:comment>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Task -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Task">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#LogicalAbs"/>
+        <rdfs:comment>Task snapshots may be asserted or proved to be in a TaskStateCategory.   Tasks are resolved into other tasks and jobs.</rdfs:comment>
+        <ace_lexicon:CN_sg>Task</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>Tasks</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#TaskStateCategory -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#TaskStateCategory">
+        <owl:equivalentClass>
+            <owl:Class>
+                <owl:unionOf rdf:parseType="Collection">
+                    <rdf:Description rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Complete"/>
+                    <rdf:Description rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Failed"/>
+                    <rdf:Description rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Pending"/>
+                    <rdf:Description rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Running"/>
+                </owl:unionOf>
+            </owl:Class>
+        </owl:equivalentClass>
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Category"/>
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Task"/>
+        <ace_lexicon:CN_pl>TaskStateCategories</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg>TaskStateCategory</ace_lexicon:CN_sg>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#TestMachine -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#TestMachine">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Machine"/>
+        <ace_lexicon:CN_sg>TestMachine</ace_lexicon:CN_sg>
+        <ace_lexicon:CN_pl>TestMachines</ace_lexicon:CN_pl>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#Thingy -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Thingy">
+        <ace_lexicon:CN_pl>Thingies</ace_lexicon:CN_pl>
+        <rdfs:comment>Thingy is used as an artificial root class in many appdapter models.  It can sometimes simplify GUI rendering/manipulation of a model.</rdfs:comment>
+        <ace_lexicon:CN_sg>Thingy</ace_lexicon:CN_sg>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#UpdateJob -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#UpdateJob">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#Job"/>
+        <ace_lexicon:CN_pl>UpdateJobs</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg>UpdateJob</ace_lexicon:CN_sg>
+    </owl:Class>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#WekaRowResult -->
+
+    <owl:Class rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#WekaRowResult">
+        <rdfs:subClassOf rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#RowResult"/>
+        <ace_lexicon:CN_pl>WekaRowResults</ace_lexicon:CN_pl>
+        <ace_lexicon:CN_sg>WekaRowResult</ace_lexicon:CN_sg>
+    </owl:Class>
+    
+
+
+    <!-- http://www.w3.org/2002/07/owl#Thing -->
+
+    <owl:Class rdf:about="&owl;Thing"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Individuals
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_best_action -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_best_action">
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>app_bux_best_action</ace_lexicon:PN_sg>
+        <preCond rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_best_strategy"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_best_strategy -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_best_strategy">
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>app_bux_best_strategy</ace_lexicon:PN_sg>
+        <preCond rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_likely_outcomes"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_eval_outcome_for_strategy_1 -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_eval_outcome_for_strategy_1">
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>app_bux_eval_outcome_for_strategy_1</ace_lexicon:PN_sg>
+        <rdfs:comment>Dynamically asserted pre-task for app_bux_eval_outcomes.</rdfs:comment>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_eval_outcome_for_strategy_2 -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_eval_outcome_for_strategy_2">
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>app_bux_eval_outcome_for_strategy_2</ace_lexicon:PN_sg>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_eval_outcomes -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_eval_outcomes">
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>app_bux_eval_outcomes</ace_lexicon:PN_sg>
+        <rdfs:comment>Precondition tasks are dynamically added, so that we have one for each strategy to be evaluated.  This adding is done in accordance with a spec which calls for a deed to make the tasks and set them as preconditions of this individual.</rdfs:comment>
+        <preCond rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_eval_outcome_for_strategy_1"/>
+        <preCond rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_eval_outcome_for_strategy_2"/>
+        <spec rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#deed_gen_eval_outcome_pretasks"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_likely_outcomes -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_likely_outcomes">
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>app_bux_likely_outcomes</ace_lexicon:PN_sg>
+        <rdfs:comment>after potential_strategies are ready, we may pursue eval_outcomes.</rdfs:comment>
+        <postCond rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_eval_outcomes"/>
+        <preCond rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_potential_strategies"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_measure_present -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_measure_present">
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>app_bux_measure_present</ace_lexicon:PN_sg>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_potential_strategies -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_potential_strategies">
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>app_bux_potential_strategies</ace_lexicon:PN_sg>
+        <preCond rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_predict_future"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_predict_future -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_predict_future">
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>app_bux_predict_future</ace_lexicon:PN_sg>
+        <preCond rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_measure_present"/>
+        <preCond rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_study_past"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_study_past -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_study_past">
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>app_bux_study_past</ace_lexicon:PN_sg>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#app_finan_decide -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#app_finan_decide">
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>app_finan_decide</ace_lexicon:PN_sg>
+        <rdfs:comment>Goal is to find a risk-appropriate, max-profit tradeset for a given 
+future timespan, given a multigrain history up till present moment.  
+
+This is done by backchaining goals of the form 
+    task 
+      postcond: expressed goal of task (like prolog horn clause)
+      precond:  pretask1 hasType TSC1 (e.g Complete, Failed) and/or pretask2 hasType TSC2, ... 
+
+If the goal of the task is trivially producable from data trvially findable in the pretasks, then it may &quot;execute&quot; transparently, simply by logical
+implication (e.g. OWL classification or prolog unification).
+
+However, if the goal requires real work against stores or other machines, it must ultimately be resolved down into deeds which 
+are bound to jobs.
+
+Thus the design goal of an appdapter app is generally to try
+to minimize the amount of job dependence, and maximize
+the potential for logical inference of task &quot;completion&quot;.</rdfs:comment>
+        <preCond rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#app_bux_best_action"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#deed_gen_eval_outcome_pretasks -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#deed_gen_eval_outcome_pretasks">
+        <rdf:type rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#MakePreTasks"/>
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>deed_gen_eval_outcome_pretasks</ace_lexicon:PN_sg>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_act_001a -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_act_001a">
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>pretend_act_001a</ace_lexicon:PN_sg>
+        <endMark rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_end_event_001a"/>
+        <host rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_machine_AAA"/>
+        <mark rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_problem_event_001a"/>
+        <mark rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_progress_event_001a"/>
+        <beginMark rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_start_event_001a"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_act_001b -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_act_001b">
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>pretend_act_001b</ace_lexicon:PN_sg>
+        <prevSibling rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_act_001a"/>
+        <endMark rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_end_event_001b"/>
+        <host rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_machine_BBB"/>
+        <beginMark rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_start_event_001b"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_doable_task_001 -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_doable_task_001">
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>pretend_doable_task_001</ace_lexicon:PN_sg>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_end_event_001a -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_end_event_001a">
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <occurrenceTime rdf:datatype="&xsd;dateTime">2001-10-26T19:32:52Z</occurrenceTime>
+        <ace_lexicon:PN_sg>pretend_end_event_001a</ace_lexicon:PN_sg>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_end_event_001b -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_end_event_001b">
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>pretend_end_event_001b</ace_lexicon:PN_sg>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_job_001 -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_job_001">
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>pretend_job_001</ace_lexicon:PN_sg>
+        <firstChild rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_act_001a"/>
+        <lastChild rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_act_001b"/>
+        <spec rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_doable_task_001"/>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_machine_AAA -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_machine_AAA">
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>pretend_machine_AAA</ace_lexicon:PN_sg>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_machine_BBB -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_machine_BBB">
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>pretend_machine_BBB</ace_lexicon:PN_sg>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_postcondition_001 -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_postcondition_001">
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>pretend_postcondition_001</ace_lexicon:PN_sg>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_problem_event_001a -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_problem_event_001a">
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <occurrenceTime rdf:datatype="&xsd;dateTime">2001-10-26T19:31:59Z</occurrenceTime>
+        <ace_lexicon:PN_sg>pretend_problem_event_001a</ace_lexicon:PN_sg>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_progress_event_001a -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_progress_event_001a">
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <occurrenceTime rdf:datatype="&xsd;dateTime">2001-10-26T19:31:41Z</occurrenceTime>
+        <ace_lexicon:PN_sg>pretend_progress_event_001a</ace_lexicon:PN_sg>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_start_event_001a -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_start_event_001a">
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <occurrenceTime rdf:datatype="&xsd;dateTime">2001-10-26T19:31:14Z</occurrenceTime>
+        <ace_lexicon:PN_sg>pretend_start_event_001a</ace_lexicon:PN_sg>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_start_event_001b -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#pretend_start_event_001b">
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>pretend_start_event_001b</ace_lexicon:PN_sg>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#store_bux_daily_data -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#store_bux_daily_data">
+        <rdf:type rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#JdbcStore"/>
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>store_bux_daily_data</ace_lexicon:PN_sg>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#store_bux_meta_data -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#store_bux_meta_data">
+        <rdf:type rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#SdbStore"/>
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>store_bux_meta_data</ace_lexicon:PN_sg>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#store_bux_minute_data -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#store_bux_minute_data">
+        <rdf:type rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#JdbcStore"/>
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>store_bux_minute_data</ace_lexicon:PN_sg>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#store_bux_parameter_estimates -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#store_bux_parameter_estimates">
+        <rdf:type rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#JdbcStore"/>
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>store_bux_parameter_estimates</ace_lexicon:PN_sg>
+        <rdfs:comment>Contains parameter estimates for particular time ranges, in terms denominated by bux_statistical_models.</rdfs:comment>
+    </owl:Thing>
+    
+
+
+    <!-- http://www.appdapter.org/ontologies/2010/snazzy.owl#store_bux_statistical_models -->
+
+    <owl:Thing rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#store_bux_statistical_models">
+        <rdf:type rdf:resource="http://www.appdapter.org/ontologies/2010/snazzy.owl#SdbStore"/>
+        <rdf:type rdf:resource="&owl;NamedIndividual"/>
+        <ace_lexicon:PN_sg>store_bux_statistical_models</ace_lexicon:PN_sg>
+    </owl:Thing>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // General axioms
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <rdf:Description>
+        <rdf:type rdf:resource="&owl;AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Complete"/>
+            <rdf:Description rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Failed"/>
+            <rdf:Description rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Pending"/>
+            <rdf:Description rdf:about="http://www.appdapter.org/ontologies/2010/snazzy.owl#Running"/>
+        </owl:members>
+    </rdf:Description>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 3.2.3.1824) http://owlapi.sourceforge.net -->
+

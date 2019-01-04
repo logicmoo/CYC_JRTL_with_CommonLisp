@@ -2,7 +2,7 @@
  * StandardClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StandardClass.java 12481 2010-02-14 21:29:58Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,571 +31,750 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
-
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-
-public class StandardClass extends SlotClass {
-
-	private static SubLSymbol symName = Lisp.PACKAGE_MOP.intern("NAME");
-	private static SubLSymbol symLayout = Lisp.PACKAGE_MOP.intern("LAYOUT");
-	private static SubLSymbol symDirectSuperclasses = Lisp.PACKAGE_MOP.intern("DIRECT-SUPERCLASSES");
-	private static SubLSymbol symDirectSubclasses = Lisp.PACKAGE_MOP.intern("DIRECT-SUBCLASSES");
-	private static SubLSymbol symClassPrecedenceList = Lisp.PACKAGE_MOP.intern("CLASS-PRECEDENCE-LIST");
-	private static SubLSymbol symDirectMethods = Lisp.PACKAGE_MOP.intern("DIRECT-METHODS");
-	private static SubLSymbol symDocumentation = Lisp.PACKAGE_MOP.intern("DOCUMENTATION");
-	private static SubLSymbol symDirectSlots = Lisp.PACKAGE_MOP.intern("DIRECT-SLOTS");
-	private static SubLSymbol symSlots = Lisp.PACKAGE_MOP.intern("SLOTS");
-	private static SubLSymbol symDirectDefaultInitargs = Lisp.PACKAGE_MOP.intern("DIRECT-DEFAULT-INITARGS");
-	private static SubLSymbol symDefaultInitargs = Lisp.PACKAGE_MOP.intern("DEFAULT-INITARGS");
-
-	static Layout layoutStandardClass = new Layout(null,
-			Lisp.list(StandardClass.symName, StandardClass.symLayout, StandardClass.symDirectSuperclasses,
-					StandardClass.symDirectSubclasses, StandardClass.symClassPrecedenceList,
-					StandardClass.symDirectMethods, StandardClass.symDocumentation, StandardClass.symDirectSlots,
-					StandardClass.symSlots, StandardClass.symDirectDefaultInitargs, StandardClass.symDefaultInitargs),
-			Lisp.NIL) {
-
-		public LispClass getLispClass() {
-			return StandardClass.STANDARD_CLASS;
-		}
-	};
-
-	// At this point, BuiltInClass.java has not been completely loaded yet, and
-	// BuiltInClass.CLASS_T is null. So we need to call setDirectSuperclass()
-	// for STANDARD_CLASS and STANDARD_OBJECT in initializeStandardClasses()
-	// below.
-	public static StandardClass STANDARD_CLASS = StandardClass.addStandardClass(LispSymbols.STANDARD_CLASS,
-			Lisp.list(BuiltInClass.CLASS_T));
-
-	public static StandardClass STANDARD_OBJECT = StandardClass.addStandardClass(LispSymbols.STANDARD_OBJECT,
-			Lisp.list(BuiltInClass.CLASS_T));
-
-	public static StandardClass SLOT_DEFINITION = new SlotDefinitionClass();
-
-	static {
-		LispClass.addClass(LispSymbols.SLOT_DEFINITION, StandardClass.SLOT_DEFINITION);
-
-		StandardClass.STANDARD_CLASS.setClassLayout(StandardClass.layoutStandardClass);
-		StandardClass.STANDARD_CLASS
-				.setDirectSlotDefinitions(StandardClass.STANDARD_CLASS.getClassLayout().generateSlotDefinitions());
-	}
-
-	// BuiltInClass.FUNCTION is also null here (see previous comment).
-	public static StandardClass GENERIC_FUNCTION = StandardClass.addStandardClass(LispSymbols.GENERIC_FUNCTION,
-			Lisp.list(BuiltInClass.FUNCTION, StandardClass.STANDARD_OBJECT));
-
-	public static StandardClass CLASS = StandardClass.addStandardClass(LispSymbols.CLASS,
-			Lisp.list(StandardClass.STANDARD_OBJECT));
-
-	public static StandardClass BUILT_IN_CLASS = StandardClass.addStandardClass(LispSymbols.BUILT_IN_CLASS,
-			Lisp.list(StandardClass.CLASS));
-
-	public static StandardClass JAVA_CLASS = StandardClass.addStandardClass(LispSymbols.JAVA_CLASS,
-			Lisp.list(StandardClass.CLASS));
-
-	public static StandardClass FORWARD_REFERENCED_CLASS = StandardClass
-			.addStandardClass(LispSymbols.FORWARD_REFERENCED_CLASS, Lisp.list(StandardClass.CLASS));
-
-	public static StandardClass STRUCTURE_CLASS = StandardClass.addStandardClass(LispSymbols.STRUCTURE_CLASS,
-			Lisp.list(StandardClass.CLASS));
-
-	public static StandardClass CONDITION = StandardClass.addStandardClass(LispSymbols.CONDITION,
-			Lisp.list(StandardClass.STANDARD_OBJECT));
-
-	public static StandardClass SIMPLE_CONDITION = StandardClass.addStandardClass(LispSymbols.SIMPLE_CONDITION,
-			Lisp.list(StandardClass.CONDITION));
-
-	public static StandardClass WARNING = StandardClass.addStandardClass(LispSymbols.WARNING,
-			Lisp.list(StandardClass.CONDITION));
-
-	public static StandardClass SIMPLE_WARNING = StandardClass.addStandardClass(LispSymbols.SIMPLE_WARNING,
-			Lisp.list(StandardClass.SIMPLE_CONDITION, StandardClass.WARNING));
-
-	public static StandardClass STYLE_WARNING = StandardClass.addStandardClass(LispSymbols.STYLE_WARNING,
-			Lisp.list(StandardClass.WARNING));
-
-	public static StandardClass SERIOUS_CONDITION = StandardClass.addStandardClass(LispSymbols.SERIOUS_CONDITION,
-			Lisp.list(StandardClass.CONDITION));
-
-	public static StandardClass STORAGE_CONDITION = StandardClass.addStandardClass(LispSymbols.STORAGE_CONDITION,
-			Lisp.list(StandardClass.SERIOUS_CONDITION));
-
-	public static StandardClass ERROR = StandardClass.addStandardClass(LispSymbols.ERROR,
-			Lisp.list(StandardClass.SERIOUS_CONDITION));
-
-	public static StandardClass ARITHMETIC_ERROR = StandardClass.addStandardClass(LispSymbols.ARITHMETIC_ERROR,
-			Lisp.list(StandardClass.ERROR));
-
-	public static StandardClass CELL_ERROR = StandardClass.addStandardClass(LispSymbols.CELL_ERROR,
-			Lisp.list(StandardClass.ERROR));
-
-	public static StandardClass CONTROL_ERROR = StandardClass.addStandardClass(LispSymbols.CONTROL_ERROR,
-			Lisp.list(StandardClass.ERROR));
-
-	public static StandardClass FILE_ERROR = StandardClass.addStandardClass(LispSymbols.FILE_ERROR,
-			Lisp.list(StandardClass.ERROR));
-
-	public static StandardClass DIVISION_BY_ZERO = StandardClass.addStandardClass(LispSymbols.DIVISION_BY_ZERO,
-			Lisp.list(StandardClass.ARITHMETIC_ERROR));
-
-	public static StandardClass FLOATING_POINT_INEXACT = StandardClass
-			.addStandardClass(LispSymbols.FLOATING_POINT_INEXACT, Lisp.list(StandardClass.ARITHMETIC_ERROR));
-
-	public static StandardClass FLOATING_POINT_INVALID_OPERATION = StandardClass
-			.addStandardClass(LispSymbols.FLOATING_POINT_INVALID_OPERATION, Lisp.list(StandardClass.ARITHMETIC_ERROR));
-
-	public static StandardClass FLOATING_POINT_OVERFLOW = StandardClass
-			.addStandardClass(LispSymbols.FLOATING_POINT_OVERFLOW, Lisp.list(StandardClass.ARITHMETIC_ERROR));
-
-	public static StandardClass FLOATING_POINT_UNDERFLOW = StandardClass
-			.addStandardClass(LispSymbols.FLOATING_POINT_UNDERFLOW, Lisp.list(StandardClass.ARITHMETIC_ERROR));
-
-	public static StandardClass PROGRAM_ERROR = StandardClass.addStandardClass(LispSymbols.PROGRAM_ERROR,
-			Lisp.list(StandardClass.ERROR));
-
-	public static StandardClass PACKAGE_ERROR = StandardClass.addStandardClass(LispSymbols.PACKAGE_ERROR,
-			Lisp.list(StandardClass.ERROR));
-
-	public static StandardClass STREAM_ERROR = StandardClass.addStandardClass(LispSymbols.STREAM_ERROR,
-			Lisp.list(StandardClass.ERROR));
-	public static StandardClass PARSE_ERROR = StandardClass.addStandardClass(LispSymbols.PARSE_ERROR,
-			Lisp.list(StandardClass.ERROR));
-
-	public static StandardClass PRINT_NOT_READABLE = StandardClass.addStandardClass(LispSymbols.PRINT_NOT_READABLE,
-			Lisp.list(StandardClass.ERROR));
-	public static StandardClass READER_ERROR = StandardClass.addStandardClass(LispSymbols.READER_ERROR,
-			Lisp.list(StandardClass.PARSE_ERROR, StandardClass.STREAM_ERROR));
-
-	public static StandardClass END_OF_FILE = StandardClass.addStandardClass(LispSymbols.END_OF_FILE,
-			Lisp.list(StandardClass.STREAM_ERROR));
-
-	public static StandardClass SIMPLE_ERROR = StandardClass.addStandardClass(LispSymbols.SIMPLE_ERROR,
-			Lisp.list(StandardClass.SIMPLE_CONDITION, StandardClass.ERROR));
-
-	public static StandardClass TYPE_ERROR = StandardClass.addStandardClass(LispSymbols.TYPE_ERROR,
-			Lisp.list(StandardClass.ERROR));
-
-	public static StandardClass SIMPLE_TYPE_ERROR = StandardClass.addStandardClass(LispSymbols.SIMPLE_TYPE_ERROR,
-			Lisp.list(StandardClass.SIMPLE_CONDITION, StandardClass.TYPE_ERROR));
-
-	public static StandardClass UNBOUND_SLOT = StandardClass.addStandardClass(LispSymbols.UNBOUND_SLOT,
-			Lisp.list(StandardClass.CELL_ERROR));
-
-	public static StandardClass UNBOUND_VARIABLE = StandardClass.addStandardClass(LispSymbols.UNBOUND_VARIABLE,
-			Lisp.list(StandardClass.CELL_ERROR));
-
-	public static StandardClass UNDEFINED_FUNCTION = StandardClass.addStandardClass(LispSymbols.UNDEFINED_FUNCTION,
-			Lisp.list(StandardClass.CELL_ERROR));
-
-	public static StandardClass COMPILER_ERROR = StandardClass.addStandardClass(LispSymbols.COMPILER_ERROR,
-			Lisp.list(StandardClass.CONDITION));
-
-	public static StandardClass COMPILER_UNSUPPORTED_FEATURE_ERROR = StandardClass
-			.addStandardClass(LispSymbols.COMPILER_UNSUPPORTED_FEATURE_ERROR, Lisp.list(StandardClass.CONDITION));
-
-	public static StandardClass JAVA_EXCEPTION = StandardClass.addStandardClass(LispSymbols.JAVA_EXCEPTION,
-			Lisp.list(StandardClass.ERROR));
-
-	public static StandardClass METHOD = StandardClass.addStandardClass(LispSymbols.METHOD,
-			Lisp.list(StandardClass.STANDARD_OBJECT));
-
-	public static StandardClass STANDARD_METHOD = new StandardMethodClass();
-
-	static {
-		LispClass.addClass(LispSymbols.STANDARD_METHOD, StandardClass.STANDARD_METHOD);
-	}
-
-	public static StandardClass STANDARD_READER_METHOD = new StandardReaderMethodClass();
-
-	static {
-		LispClass.addClass(LispSymbols.STANDARD_READER_METHOD, StandardClass.STANDARD_READER_METHOD);
-	}
-
-	public static StandardClass STANDARD_GENERIC_FUNCTION = new StandardGenericFunctionClass();
-
-	static {
-		LispClass.addClass(LispSymbols.STANDARD_GENERIC_FUNCTION, StandardClass.STANDARD_GENERIC_FUNCTION);
-	}
-
-	private static StandardClass addStandardClass(SubLSymbol name, SubLObject directSuperclasses) {
-		StandardClass c = new StandardClass(name, directSuperclasses);
-		LispClass.addClass(name, c);
-		return c;
-	}
-
-	public static void initializeStandardClasses() {
-		// We need to call setDirectSuperclass() here for classes that have a
-		// BuiltInClass as a superclass. See comment above (at first mention of
-		// STANDARD_OBJECT).
-		StandardClass.STANDARD_CLASS.setDirectSuperclass(StandardClass.CLASS);
-		StandardClass.STANDARD_OBJECT.setDirectSuperclass(BuiltInClass.CLASS_T);
-		StandardClass.GENERIC_FUNCTION
-				.setDirectSuperclasses(Lisp.list(BuiltInClass.FUNCTION, StandardClass.STANDARD_OBJECT));
-
-		StandardClass.ARITHMETIC_ERROR.setCPL(StandardClass.ARITHMETIC_ERROR, StandardClass.ERROR,
-				StandardClass.SERIOUS_CONDITION, StandardClass.CONDITION, StandardClass.STANDARD_OBJECT,
-				BuiltInClass.CLASS_T);
-		StandardClass.ARITHMETIC_ERROR.setDirectSlotDefinitions(Lisp.list(
-				new SlotDefinitionObject(LispSymbols.OPERATION,
-						Lisp.list(Lisp.PACKAGE_CL.intern("ARITHMETIC-ERROR-OPERATION"))),
-				new SlotDefinitionObject(LispSymbols.OPERANDS,
-						Lisp.list(Lisp.PACKAGE_CL.intern("ARITHMETIC-ERROR-OPERANDS")))));
-		StandardClass.BUILT_IN_CLASS.setCPL(StandardClass.BUILT_IN_CLASS, StandardClass.CLASS,
-				StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.JAVA_CLASS.setCPL(StandardClass.JAVA_CLASS, StandardClass.CLASS, StandardClass.STANDARD_OBJECT,
-				BuiltInClass.CLASS_T);
-		StandardClass.CELL_ERROR.setCPL(StandardClass.CELL_ERROR, StandardClass.ERROR, StandardClass.SERIOUS_CONDITION,
-				StandardClass.CONDITION, StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.CELL_ERROR.setDirectSlotDefinitions(
-				Lisp.list(new SlotDefinitionObject(LispSymbols.NAME, Lisp.list(LispSymbols.CELL_ERROR_NAME))));
-		StandardClass.CLASS.setCPL(StandardClass.CLASS, StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.COMPILER_ERROR.setCPL(StandardClass.COMPILER_ERROR, StandardClass.CONDITION,
-				StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.COMPILER_UNSUPPORTED_FEATURE_ERROR.setCPL(StandardClass.COMPILER_UNSUPPORTED_FEATURE_ERROR,
-				StandardClass.CONDITION, StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.CONDITION.setCPL(StandardClass.CONDITION, StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.CONDITION.setDirectSlotDefinitions(Lisp.list(
-				new SlotDefinitionObject(LispSymbols.FORMAT_CONTROL,
-						Lisp.list(LispSymbols.SIMPLE_CONDITION_FORMAT_CONTROL)),
-				new SlotDefinitionObject(LispSymbols.FORMAT_ARGUMENTS,
-						Lisp.list(LispSymbols.SIMPLE_CONDITION_FORMAT_ARGUMENTS), Lisp.NIL)));
-		StandardClass.CONDITION.setDirectDefaultInitargs(Lisp.list(Keyword.FORMAT_ARGUMENTS,
-				// FIXME
-				new Closure(Lisp.list(LispSymbols.LAMBDA, Lisp.NIL, Lisp.NIL), new Environment())));
-		StandardClass.CONTROL_ERROR.setCPL(StandardClass.CONTROL_ERROR, StandardClass.ERROR,
-				StandardClass.SERIOUS_CONDITION, StandardClass.CONDITION, StandardClass.STANDARD_OBJECT,
-				BuiltInClass.CLASS_T);
-		StandardClass.DIVISION_BY_ZERO.setCPL(StandardClass.DIVISION_BY_ZERO, StandardClass.ARITHMETIC_ERROR,
-				StandardClass.ERROR, StandardClass.SERIOUS_CONDITION, StandardClass.CONDITION,
-				StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.END_OF_FILE.setCPL(StandardClass.END_OF_FILE, StandardClass.STREAM_ERROR, StandardClass.ERROR,
-				StandardClass.SERIOUS_CONDITION, StandardClass.CONDITION, StandardClass.STANDARD_OBJECT,
-				BuiltInClass.CLASS_T);
-		StandardClass.ERROR.setCPL(StandardClass.ERROR, StandardClass.SERIOUS_CONDITION, StandardClass.CONDITION,
-				StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.FILE_ERROR.setCPL(StandardClass.FILE_ERROR, StandardClass.ERROR, StandardClass.SERIOUS_CONDITION,
-				StandardClass.CONDITION, StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.FILE_ERROR.setDirectSlotDefinitions(Lisp.list(new SlotDefinitionObject(LispSymbols.PATHNAME,
-				Lisp.list(Lisp.PACKAGE_CL.intern("FILE-ERROR-PATHNAME")))));
-		StandardClass.FLOATING_POINT_INEXACT.setCPL(StandardClass.FLOATING_POINT_INEXACT,
-				StandardClass.ARITHMETIC_ERROR, StandardClass.ERROR, StandardClass.SERIOUS_CONDITION,
-				StandardClass.CONDITION, StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.FLOATING_POINT_INVALID_OPERATION.setCPL(StandardClass.FLOATING_POINT_INVALID_OPERATION,
-				StandardClass.ARITHMETIC_ERROR, StandardClass.ERROR, StandardClass.SERIOUS_CONDITION,
-				StandardClass.CONDITION, StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.FLOATING_POINT_OVERFLOW.setCPL(StandardClass.FLOATING_POINT_OVERFLOW,
-				StandardClass.ARITHMETIC_ERROR, StandardClass.ERROR, StandardClass.SERIOUS_CONDITION,
-				StandardClass.CONDITION, StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.FLOATING_POINT_UNDERFLOW.setCPL(StandardClass.FLOATING_POINT_UNDERFLOW,
-				StandardClass.ARITHMETIC_ERROR, StandardClass.ERROR, StandardClass.SERIOUS_CONDITION,
-				StandardClass.CONDITION, StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.FORWARD_REFERENCED_CLASS.setCPL(StandardClass.FORWARD_REFERENCED_CLASS, StandardClass.CLASS,
-				BuiltInClass.CLASS_T);
-		StandardClass.GENERIC_FUNCTION.setCPL(StandardClass.GENERIC_FUNCTION, StandardClass.STANDARD_OBJECT,
-				BuiltInClass.FUNCTION, BuiltInClass.CLASS_T);
-		StandardClass.JAVA_EXCEPTION.setCPL(StandardClass.JAVA_EXCEPTION, StandardClass.ERROR,
-				StandardClass.SERIOUS_CONDITION, StandardClass.CONDITION, StandardClass.STANDARD_OBJECT,
-				BuiltInClass.CLASS_T);
-		StandardClass.JAVA_EXCEPTION.setDirectSlotDefinitions(
-				Lisp.list(new SlotDefinitionObject(LispSymbols.CAUSE, Lisp.list(LispSymbols.JAVA_EXCEPTION_CAUSE))));
-		StandardClass.METHOD.setCPL(StandardClass.METHOD, StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.PACKAGE_ERROR.setCPL(StandardClass.PACKAGE_ERROR, StandardClass.ERROR,
-				StandardClass.SERIOUS_CONDITION, StandardClass.CONDITION, StandardClass.STANDARD_OBJECT,
-				BuiltInClass.CLASS_T);
-		StandardClass.PACKAGE_ERROR.setDirectSlotDefinitions(Lisp.list(new SlotDefinitionObject(LispSymbols.PACKAGE,
-				Lisp.list(Lisp.PACKAGE_CL.intern("PACKAGE-ERROR-PACKAGE")))));
-		StandardClass.PARSE_ERROR.setCPL(StandardClass.PARSE_ERROR, StandardClass.ERROR,
-				StandardClass.SERIOUS_CONDITION, StandardClass.CONDITION, StandardClass.STANDARD_OBJECT,
-				BuiltInClass.CLASS_T);
-		StandardClass.PRINT_NOT_READABLE.setCPL(StandardClass.PRINT_NOT_READABLE, StandardClass.ERROR,
-				StandardClass.SERIOUS_CONDITION, StandardClass.CONDITION, StandardClass.STANDARD_OBJECT,
-				BuiltInClass.CLASS_T);
-		StandardClass.PRINT_NOT_READABLE.setDirectSlotDefinitions(Lisp.list(new SlotDefinitionObject(LispSymbols.OBJECT,
-				Lisp.list(Lisp.PACKAGE_CL.intern("PRINT-NOT-READABLE-OBJECT")))));
-		StandardClass.PROGRAM_ERROR.setCPL(StandardClass.PROGRAM_ERROR, StandardClass.ERROR,
-				StandardClass.SERIOUS_CONDITION, StandardClass.CONDITION, StandardClass.STANDARD_OBJECT,
-				BuiltInClass.CLASS_T);
-		StandardClass.READER_ERROR.setCPL(StandardClass.READER_ERROR, StandardClass.PARSE_ERROR,
-				StandardClass.STREAM_ERROR, StandardClass.ERROR, StandardClass.SERIOUS_CONDITION,
-				StandardClass.CONDITION, StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.SERIOUS_CONDITION.setCPL(StandardClass.SERIOUS_CONDITION, StandardClass.CONDITION,
-				StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.SIMPLE_CONDITION.setCPL(StandardClass.SIMPLE_CONDITION, StandardClass.CONDITION,
-				StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.SIMPLE_ERROR.setCPL(StandardClass.SIMPLE_ERROR, StandardClass.SIMPLE_CONDITION,
-				StandardClass.ERROR, StandardClass.SERIOUS_CONDITION, StandardClass.CONDITION,
-				StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.SIMPLE_TYPE_ERROR
-				.setDirectSuperclasses(Lisp.list(StandardClass.SIMPLE_CONDITION, StandardClass.TYPE_ERROR));
-		StandardClass.SIMPLE_TYPE_ERROR.setCPL(StandardClass.SIMPLE_TYPE_ERROR, StandardClass.SIMPLE_CONDITION,
-				StandardClass.TYPE_ERROR, StandardClass.ERROR, StandardClass.SERIOUS_CONDITION, StandardClass.CONDITION,
-				StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.SIMPLE_WARNING
-				.setDirectSuperclasses(Lisp.list(StandardClass.SIMPLE_CONDITION, StandardClass.WARNING));
-		StandardClass.SIMPLE_WARNING.setCPL(StandardClass.SIMPLE_WARNING, StandardClass.SIMPLE_CONDITION,
-				StandardClass.WARNING, StandardClass.CONDITION, StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.STANDARD_CLASS.setCPL(StandardClass.STANDARD_CLASS, StandardClass.CLASS,
-				StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.STANDARD_OBJECT.setCPL(StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.STORAGE_CONDITION.setCPL(StandardClass.STORAGE_CONDITION, StandardClass.SERIOUS_CONDITION,
-				StandardClass.CONDITION, StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.STREAM_ERROR.setCPL(StandardClass.STREAM_ERROR, StandardClass.ERROR,
-				StandardClass.SERIOUS_CONDITION, StandardClass.CONDITION, StandardClass.STANDARD_OBJECT,
-				BuiltInClass.CLASS_T);
-		StandardClass.STREAM_ERROR.setDirectSlotDefinitions(Lisp.list(new SlotDefinitionObject(LispSymbols.STREAM,
-				Lisp.list(Lisp.PACKAGE_CL.intern("STREAM-ERROR-STREAM")))));
-		StandardClass.STRUCTURE_CLASS.setCPL(StandardClass.STRUCTURE_CLASS, StandardClass.CLASS,
-				StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.STYLE_WARNING.setCPL(StandardClass.STYLE_WARNING, StandardClass.WARNING, StandardClass.CONDITION,
-				StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.TYPE_ERROR.setCPL(StandardClass.TYPE_ERROR, StandardClass.ERROR, StandardClass.SERIOUS_CONDITION,
-				StandardClass.CONDITION, StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.TYPE_ERROR.setDirectSlotDefinitions(Lisp.list(
-				new SlotDefinitionObject(LispSymbols.DATUM, Lisp.list(Lisp.PACKAGE_CL.intern("TYPE-ERROR-DATUM"))),
-				new SlotDefinitionObject(LispSymbols.EXPECTED_TYPE,
-						Lisp.list(Lisp.PACKAGE_CL.intern("TYPE-ERROR-EXPECTED-TYPE")))));
-		StandardClass.UNBOUND_SLOT.setCPL(StandardClass.UNBOUND_SLOT, StandardClass.CELL_ERROR, StandardClass.ERROR,
-				StandardClass.SERIOUS_CONDITION, StandardClass.CONDITION, StandardClass.STANDARD_OBJECT,
-				BuiltInClass.CLASS_T);
-		StandardClass.UNBOUND_SLOT.setDirectSlotDefinitions(Lisp.list(new SlotDefinitionObject(LispSymbols.INSTANCE,
-				Lisp.list(Lisp.PACKAGE_CL.intern("UNBOUND-SLOT-INSTANCE")))));
-		StandardClass.UNBOUND_VARIABLE.setCPL(StandardClass.UNBOUND_VARIABLE, StandardClass.CELL_ERROR,
-				StandardClass.ERROR, StandardClass.SERIOUS_CONDITION, StandardClass.CONDITION,
-				StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.UNDEFINED_FUNCTION.setCPL(StandardClass.UNDEFINED_FUNCTION, StandardClass.CELL_ERROR,
-				StandardClass.ERROR, StandardClass.SERIOUS_CONDITION, StandardClass.CONDITION,
-				StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.WARNING.setCPL(StandardClass.WARNING, StandardClass.CONDITION, StandardClass.STANDARD_OBJECT,
-				BuiltInClass.CLASS_T);
-
-		// Condition classes.
-		StandardClass.ARITHMETIC_ERROR.finalizeClass();
-		StandardClass.CELL_ERROR.finalizeClass();
-		StandardClass.COMPILER_ERROR.finalizeClass();
-		StandardClass.COMPILER_UNSUPPORTED_FEATURE_ERROR.finalizeClass();
-		StandardClass.CONDITION.finalizeClass();
-		StandardClass.CONTROL_ERROR.finalizeClass();
-		StandardClass.DIVISION_BY_ZERO.finalizeClass();
-		StandardClass.END_OF_FILE.finalizeClass();
-		StandardClass.ERROR.finalizeClass();
-		StandardClass.FILE_ERROR.finalizeClass();
-		StandardClass.FLOATING_POINT_INEXACT.finalizeClass();
-		StandardClass.FLOATING_POINT_INVALID_OPERATION.finalizeClass();
-		StandardClass.FLOATING_POINT_OVERFLOW.finalizeClass();
-		StandardClass.FLOATING_POINT_UNDERFLOW.finalizeClass();
-		StandardClass.JAVA_EXCEPTION.finalizeClass();
-		StandardClass.PACKAGE_ERROR.finalizeClass();
-		StandardClass.PARSE_ERROR.finalizeClass();
-		StandardClass.PRINT_NOT_READABLE.finalizeClass();
-		StandardClass.PROGRAM_ERROR.finalizeClass();
-		StandardClass.READER_ERROR.finalizeClass();
-		StandardClass.SERIOUS_CONDITION.finalizeClass();
-		StandardClass.SIMPLE_CONDITION.finalizeClass();
-		StandardClass.SIMPLE_ERROR.finalizeClass();
-		StandardClass.SIMPLE_TYPE_ERROR.finalizeClass();
-		StandardClass.SIMPLE_WARNING.finalizeClass();
-		StandardClass.STORAGE_CONDITION.finalizeClass();
-		StandardClass.STREAM_ERROR.finalizeClass();
-		StandardClass.STYLE_WARNING.finalizeClass();
-		StandardClass.TYPE_ERROR.finalizeClass();
-		StandardClass.UNBOUND_SLOT.finalizeClass();
-		StandardClass.UNBOUND_VARIABLE.finalizeClass();
-		StandardClass.UNDEFINED_FUNCTION.finalizeClass();
-		StandardClass.WARNING.finalizeClass();
-
-		// SYS:SLOT-DEFINITION is constructed and finalized in
-		// SlotDefinitionClass.java, but we need to fill in a few things here.
-		Debug.assertTrue(StandardClass.SLOT_DEFINITION.isFinalized());
-		StandardClass.SLOT_DEFINITION.setCPL(StandardClass.SLOT_DEFINITION, StandardClass.STANDARD_OBJECT,
-				BuiltInClass.CLASS_T);
-		StandardClass.SLOT_DEFINITION
-				.setDirectSlotDefinitions(StandardClass.SLOT_DEFINITION.getClassLayout().generateSlotDefinitions());
-		// There are no inherited slots.
-		StandardClass.SLOT_DEFINITION.setSlotDefinitions(StandardClass.SLOT_DEFINITION.getDirectSlotDefinitions());
-
-		// STANDARD-METHOD
-		Debug.assertTrue(StandardClass.STANDARD_METHOD.isFinalized());
-		StandardClass.STANDARD_METHOD.setCPL(StandardClass.STANDARD_METHOD, StandardClass.METHOD,
-				StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.STANDARD_METHOD
-				.setDirectSlotDefinitions(StandardClass.STANDARD_METHOD.getClassLayout().generateSlotDefinitions());
-		// There are no inherited slots.
-		StandardClass.STANDARD_METHOD.setSlotDefinitions(StandardClass.STANDARD_METHOD.getDirectSlotDefinitions());
-
-		// STANDARD-READER-METHOD
-		Debug.assertTrue(StandardClass.STANDARD_READER_METHOD.isFinalized());
-		StandardClass.STANDARD_READER_METHOD.setCPL(StandardClass.STANDARD_READER_METHOD, StandardClass.STANDARD_METHOD,
-				StandardClass.METHOD, StandardClass.STANDARD_OBJECT, BuiltInClass.CLASS_T);
-		StandardClass.STANDARD_READER_METHOD
-				.setSlotDefinitions(StandardClass.STANDARD_READER_METHOD.getClassLayout().generateSlotDefinitions());
-		// All but the last slot are inherited.
-		StandardClass.STANDARD_READER_METHOD.setDirectSlotDefinitions(
-				Lisp.list(StandardClass.STANDARD_READER_METHOD.getSlotDefinitions().reverse().first()));
-
-		// STANDARD-GENERIC-FUNCTION
-		Debug.assertTrue(StandardClass.STANDARD_GENERIC_FUNCTION.isFinalized());
-		StandardClass.STANDARD_GENERIC_FUNCTION.setCPL(StandardClass.STANDARD_GENERIC_FUNCTION,
-				StandardClass.GENERIC_FUNCTION, StandardClass.STANDARD_OBJECT, BuiltInClass.FUNCTION,
-				BuiltInClass.CLASS_T);
-		StandardClass.STANDARD_GENERIC_FUNCTION.setDirectSlotDefinitions(
-				StandardClass.STANDARD_GENERIC_FUNCTION.getClassLayout().generateSlotDefinitions());
-		// There are no inherited slots.
-		StandardClass.STANDARD_GENERIC_FUNCTION
-				.setSlotDefinitions(StandardClass.STANDARD_GENERIC_FUNCTION.getDirectSlotDefinitions());
-	}
-
-	public StandardClass() {
-		super(StandardClass.layoutStandardClass);
-		this.setDirectSuperclasses(Lisp.NIL);
-		this.setDirectSubclasses(Lisp.NIL);
-		this.setCPL(Lisp.NIL);
-		this.setDirectMethods(Lisp.NIL);
-		this.setDocumentation(Lisp.NIL);
-		this.setDirectSlotDefinitions(Lisp.NIL);
-		this.setSlotDefinitions(Lisp.NIL);
-		this.setDirectDefaultInitargs(Lisp.NIL);
-		this.setDefaultInitargs(Lisp.NIL);
-	}
-
-	public StandardClass(SubLSymbol symbol, SubLObject directSuperclasses) {
-		super(StandardClass.layoutStandardClass, symbol, directSuperclasses);
-		this.setDirectSubclasses(Lisp.NIL);
-		this.setCPL(Lisp.NIL);
-		this.setDirectMethods(Lisp.NIL);
-		this.setDocumentation(Lisp.NIL);
-		this.setDirectSlotDefinitions(Lisp.NIL);
-		this.setSlotDefinitions(Lisp.NIL);
-		this.setDirectDefaultInitargs(Lisp.NIL);
-		this.setDefaultInitargs(Lisp.NIL);
-	}
-
-	public SubLObject allocateInstance() {
-		Layout layout = this.getClassLayout();
-		if (layout == null)
-			LispSymbols.ERROR.execute(LispSymbols.SIMPLE_ERROR, Keyword.FORMAT_CONTROL,
-					LispObjectFactory.makeString("No layout for class ~S."), Keyword.FORMAT_ARGUMENTS, Lisp.list(this));
-		return new StandardObject(this, layout.getLength());
-	}
-
-	public SubLObject classOf() {
-		return StandardClass.STANDARD_CLASS;
-	}
-
-	public Layout getClassLayout() {
-		SubLObject layout = this.getInstanceSlotValue(StandardClass.symLayout);
-		return layout == Lisp.UNBOUND_VALUE ? super.getClassLayout() : (Layout) layout;
-	}
-
-	public SubLObject getCPL() {
-		return this.getInstanceSlotValue(StandardClass.symClassPrecedenceList);
-	}
-
-	public SubLObject getDefaultInitargs() {
-		return this.getInstanceSlotValue(StandardClass.symDefaultInitargs);
-	}
-
-	public SubLObject getDirectDefaultInitargs() {
-		return this.getInstanceSlotValue(StandardClass.symDirectDefaultInitargs);
-	}
-
-	public SubLObject getDirectMethods() {
-		return this.getInstanceSlotValue(StandardClass.symDirectMethods);
-	}
-
-	public SubLObject getDirectSlotDefinitions() {
-		return this.getInstanceSlotValue(StandardClass.symDirectSlots);
-	}
-
-	public SubLObject getDirectSubclasses() {
-		return this.getInstanceSlotValue(StandardClass.symDirectSubclasses);
-	}
-
-	public SubLObject getDirectSuperclasses() {
-		return this.getInstanceSlotValue(StandardClass.symDirectSuperclasses);
-	}
-
-	public SubLObject getDocumentation() {
-		return this.getInstanceSlotValue(StandardClass.symDocumentation);
-	}
-
-	public SubLObject getLispClassName() {
-		return this.getInstanceSlotValue(StandardClass.symName);
-	}
-
-	public SubLObject getSlotDefinitions() {
-		return this.getInstanceSlotValue(StandardClass.symSlots);
-	}
-
-	public void setClassLayout(Layout newLayout) {
-		super.setClassLayout(newLayout);
-		this.setInstanceSlotValue(StandardClass.symLayout, newLayout);
-	}
-
-	public void setCPL(SubLObject... cpl) {
-		SubLObject obj1 = cpl[0];
-		if (obj1.isList() && cpl.length == 1)
-			this.setInstanceSlotValue(StandardClass.symClassPrecedenceList, obj1);
-		else {
-			Debug.assertTrue(obj1 == this);
-			SubLObject l = Lisp.NIL;
-			for (int i = cpl.length; i-- > 0;)
-				l = LispObjectFactory.makeCons(cpl[i], l);
-			this.setInstanceSlotValue(StandardClass.symClassPrecedenceList, l);
-		}
-	}
-
-	public void setDefaultInitargs(SubLObject defaultInitargs) {
-		this.setInstanceSlotValue(StandardClass.symDefaultInitargs, defaultInitargs);
-	}
-
-	public void setDirectDefaultInitargs(SubLObject directDefaultInitargs) {
-		this.setInstanceSlotValue(StandardClass.symDirectDefaultInitargs, directDefaultInitargs);
-	}
-
-	public void setDirectMethods(SubLObject methods) {
-		this.setInstanceSlotValue(StandardClass.symDirectMethods, methods);
-	}
-
-	public void setDirectSlotDefinitions(SubLObject directSlotDefinitions) {
-		this.setInstanceSlotValue(StandardClass.symDirectSlots, directSlotDefinitions);
-	}
-
-	public void setDirectSubclasses(SubLObject directSubclasses) {
-		this.setInstanceSlotValue(StandardClass.symDirectSubclasses, directSubclasses);
-	}
-
-	public void setDirectSuperclasses(SubLObject directSuperclasses) {
-		this.setInstanceSlotValue(StandardClass.symDirectSuperclasses, directSuperclasses);
-	}
-
-	public void setDocumentation(SubLObject doc) {
-		this.setInstanceSlotValue(StandardClass.symDocumentation, doc);
-	}
-
-	public void setLispClassName(SubLObject newName) {
-		this.setInstanceSlotValue(StandardClass.symName, newName);
-	}
-
-	public void setSlotDefinitions(SubLObject slotDefinitions) {
-		this.setInstanceSlotValue(StandardClass.symSlots, slotDefinitions);
-	}
-
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.STANDARD_CLASS)
-			return Lisp.T;
-		if (type == StandardClass.STANDARD_CLASS)
-			return Lisp.T;
-		return super.typep(type);
-	}
-
-	public String writeToString() {
-		StringBuilder sb = new StringBuilder(LispSymbols.STANDARD_CLASS.writeToString());
-		if (this.getLispClassName() != null) {
-			sb.append(' ');
-			sb.append(this.getLispClassName().writeToString());
-		}
-		return this.unreadableString(sb.toString());
-	}
+package org.armedbear.lisp;
+
+import static org.armedbear.lisp.Lisp.*;
+
+public class StandardClass extends SlotClass
+{
+  // Slot names for standard-class.  Must agree with
+  // redefine-class-forwarder calls in clos.lisp.
+  public static Symbol symName = Symbol.NAME;
+  public static Symbol symLayout = Symbol.LAYOUT;
+  public static Symbol symDirectSuperclasses = Symbol.DIRECT_SUPERCLASSES;
+  public static Symbol symDirectSubclasses = Symbol.DIRECT_SUBCLASSES;
+  public static Symbol symPrecedenceList = Symbol.PRECEDENCE_LIST;
+  public static Symbol symDirectMethods = Symbol.DIRECT_METHODS;
+  public static Symbol symDirectSlots = Symbol.DIRECT_SLOTS;
+  public static Symbol symSlots = Symbol.SLOTS;
+  public static Symbol symDirectDefaultInitargs
+    = Symbol.DIRECT_DEFAULT_INITARGS;
+  public static Symbol symDefaultInitargs = Symbol.DEFAULT_INITARGS;
+  public static Symbol symFinalizedP = Symbol.FINALIZED_P;
+
+  // used as init-function for slots in this file.
+  static Function constantlyNil = new Function() {
+    public LispObject execute()
+    {
+      return NIL;
+    }
+  };
+
+
+
+  static Layout layoutStandardClass =
+      new Layout(null,
+                 list(symName,
+                      symLayout,
+                      symDirectSuperclasses,
+                      symDirectSubclasses,
+                      symPrecedenceList,
+                      symDirectMethods,
+                      symDirectSlots,
+                      symSlots,
+                      symDirectDefaultInitargs,
+                      symDefaultInitargs,
+                      symFinalizedP,
+                      Symbol._DOCUMENTATION),
+                 NIL)
+      {
+        public LispClass getLispClass()
+        {
+          return STANDARD_CLASS;
+        }
+      };
+
+  static Layout layoutFuncallableStandardClass =
+      new Layout(null,
+                 list(symName,
+                      symLayout,
+                      symDirectSuperclasses,
+                      symDirectSubclasses,
+                      symPrecedenceList,
+                      symDirectMethods,
+                      symDirectSlots,
+                      symSlots,
+                      symDirectDefaultInitargs,
+                      symDefaultInitargs,
+                      symFinalizedP,
+                      Symbol._DOCUMENTATION),
+                 NIL)
+      {
+        public LispClass getLispClass()
+        {
+          return FUNCALLABLE_STANDARD_CLASS;
+        }
+      };
+
+  public StandardClass()
+  {
+      super(layoutStandardClass);
+      setDirectSuperclasses(NIL);
+      setDirectSubclasses(NIL);
+      setClassLayout(layoutStandardClass);
+      setCPL(NIL);
+      setDirectMethods(NIL);
+      setDocumentation(NIL);
+      setDirectSlotDefinitions(NIL);
+      setSlotDefinitions(NIL);
+      setDirectDefaultInitargs(NIL);
+      setDefaultInitargs(NIL);
+      setFinalized(false);
+  }
+
+  public StandardClass(Symbol symbol, LispObject directSuperclasses)
+  {
+      super(layoutStandardClass,
+            symbol, directSuperclasses);
+      setDirectSubclasses(NIL);
+      setClassLayout(layoutStandardClass);
+      setCPL(NIL);
+      setDirectMethods(NIL);
+      setDocumentation(NIL);
+      setDirectSlotDefinitions(NIL);
+      setSlotDefinitions(NIL);
+      setDirectDefaultInitargs(NIL);
+      setDefaultInitargs(NIL);
+      setFinalized(false);
+  }
+
+  public StandardClass(Layout layout)
+  {
+    super(layout);
+    setDirectSuperclasses(NIL);
+    setDirectSubclasses(NIL);
+    setClassLayout(layout);
+    setCPL(NIL);
+    setDirectMethods(NIL);
+    setDocumentation(NIL);
+    setDirectSlotDefinitions(NIL);
+    setSlotDefinitions(NIL);
+    setDirectDefaultInitargs(NIL);
+    setDefaultInitargs(NIL);
+    setFinalized(false);
+  }
+
+  public StandardClass(Layout layout, Symbol symbol, LispObject directSuperclasses)
+  {
+    super(layout, symbol, directSuperclasses);
+    setDirectSubclasses(NIL);
+    setClassLayout(layout);
+    setCPL(NIL);
+    setDirectMethods(NIL);
+    setDocumentation(NIL);
+    setDirectSlotDefinitions(NIL);
+    setSlotDefinitions(NIL);
+    setDirectDefaultInitargs(NIL);
+    setDefaultInitargs(NIL);
+    setFinalized(false);
+
+  }
+
+//
+//
+//  public LispObject getName()
+//  {
+//    return getInstanceSlotValue(symName);
+//  }
+
+  public void setName(LispObject newName)
+  {
+    setInstanceSlotValue(symName, newName);
+  }
+
+  public LispObject getLispClassName()
+  {
+    return getInstanceSlotValue(symName);
+  }
+
+  public void setLispClassName(LispObject newName)
+  {
+    setInstanceSlotValue(symName, newName);
+  }
+
+  public Layout getClassLayout()
+  {
+    LispObject layout = getInstanceSlotValue(symLayout);
+    if (layout == UNBOUND_VALUE)
+      return null;
+
+    if (! (layout instanceof Layout)) {
+      // (new Error()).printStackTrace();
+      // LispThread.currentThread().printBacktrace();
+      // System.err.println("Class: " + this.princToString());
+      return (Layout)Lisp.error(Symbol.TYPE_ERROR,
+              new SimpleString("The value " + layout.princToString()
+                               + " is not of expected type "
+                               + Symbol.LAYOUT.princToString()
+                               + " in class " + this.princToString() + "."));
+    }
+
+    return (layout == UNBOUND_VALUE) ? null : (Layout)layout;
+  }
+
+  public void setClassLayout(LispObject newLayout)
+  {
+    setInstanceSlotValue(symLayout, newLayout);
+  }
+
+  public LispObject getDirectSuperclasses()
+  {
+    return getInstanceSlotValue(symDirectSuperclasses);
+  }
+
+  public void setDirectSuperclasses(LispObject directSuperclasses)
+  {
+    setInstanceSlotValue(symDirectSuperclasses, directSuperclasses);
+  }
+
+  public final boolean isFinalized()
+  {
+    return getInstanceSlotValue(symFinalizedP) != NIL;
+  }
+
+  public final void setFinalized(boolean b)
+  {
+    setInstanceSlotValue(symFinalizedP, b ? T : NIL);
+  }
+
+  public LispObject getDirectSubclasses()
+  {
+    return getInstanceSlotValue(symDirectSubclasses);
+  }
+
+  public void setDirectSubclasses(LispObject directSubclasses)
+  {
+    setInstanceSlotValue(symDirectSubclasses, directSubclasses);
+  }
+
+  public LispObject getCPL()
+  {
+    return getInstanceSlotValue(symPrecedenceList);
+  }
+
+  public void setCPL(LispObject... cpl)
+  {
+    LispObject obj1 = cpl[0];
+    if (obj1.listp() && cpl.length == 1)
+      setInstanceSlotValue(symPrecedenceList, obj1);
+    else
+      {
+        Debug.assertTrue(obj1 == this);
+        LispObject l = NIL;
+        for (int i = cpl.length; i-- > 0;)
+            l = new Cons(cpl[i], l);
+        setInstanceSlotValue(symPrecedenceList, l);
+      }
+  }
+
+  public LispObject getDirectMethods()
+  {
+    return getInstanceSlotValue(symDirectMethods);
+  }
+
+  public void setDirectMethods(LispObject methods)
+  {
+    setInstanceSlotValue(symDirectMethods, methods);
+  }
+
+  public LispObject getDocumentation()
+  {
+    return getInstanceSlotValue(Symbol._DOCUMENTATION);
+  }
+
+  public void setDocumentation(LispObject doc)
+  {
+    setInstanceSlotValue(Symbol._DOCUMENTATION, doc);
+  }
+
+  public LispObject getDirectSlotDefinitions()
+  {
+    return getInstanceSlotValue(symDirectSlots);
+  }
+
+  public void setDirectSlotDefinitions(LispObject directSlotDefinitions)
+  {
+    setInstanceSlotValue(symDirectSlots, directSlotDefinitions);
+  }
+
+  public LispObject getSlotDefinitions()
+  {
+    return getInstanceSlotValue(symSlots);
+  }
+
+  public void setSlotDefinitions(LispObject slotDefinitions)
+  {
+     setInstanceSlotValue(symSlots, slotDefinitions);
+  }
+
+  public LispObject getDirectDefaultInitargs()
+  {
+    return getInstanceSlotValue(symDirectDefaultInitargs);
+  }
+
+  public void setDirectDefaultInitargs(LispObject directDefaultInitargs)
+  {
+    setInstanceSlotValue(symDirectDefaultInitargs, directDefaultInitargs);
+  }
+
+  public LispObject getDefaultInitargs()
+  {
+    return getInstanceSlotValue(symDefaultInitargs);
+  }
+
+  public void setDefaultInitargs(LispObject defaultInitargs)
+  {
+    setInstanceSlotValue(symDefaultInitargs, defaultInitargs);
+  }
+
+  public LispObject typeOf()
+  {
+    return Symbol.STANDARD_CLASS;
+  }
+
+  public LispObject classOf()
+  {
+    return STANDARD_CLASS;
+  }
+
+  public LispObject typep(LispObject type)
+  {
+    if (type == Symbol.STANDARD_CLASS)
+      return T;
+    if (type == STANDARD_CLASS)
+      return T;
+    return super.typep(type);
+  }
+
+  public String printObjectImpl()
+  {
+    StringBuilder sb =
+      new StringBuilder(Symbol.STANDARD_CLASS.printObject());
+    if (getLispClassName() != null)
+      {
+        sb.append(' ');
+        sb.append(getLispClassName().printObject());
+      }
+    return unreadableString(sb.toString());
+  }
+
+  private static final LispObject standardClassSlotDefinitions()
+  {
+    return
+      list(new SlotDefinition(symName, list(Symbol.CLASS_NAME), constantlyNil),
+           new SlotDefinition(symLayout, list(Symbol.CLASS_LAYOUT), constantlyNil),
+           new SlotDefinition(symDirectSuperclasses, list(Symbol.CLASS_DIRECT_SUPERCLASSES), constantlyNil),
+           new SlotDefinition(symDirectSubclasses, list(Symbol.CLASS_DIRECT_SUBCLASSES), constantlyNil),
+           new SlotDefinition(symPrecedenceList, list(Symbol.CLASS_PRECEDENCE_LIST), constantlyNil),
+           new SlotDefinition(symDirectMethods, list(Symbol.CLASS_DIRECT_METHODS), constantlyNil),
+           new SlotDefinition(symDirectSlots, list(Symbol.CLASS_DIRECT_SLOTS), constantlyNil),
+           new SlotDefinition(symSlots, list(Symbol.CLASS_SLOTS), constantlyNil),
+           new SlotDefinition(symDirectDefaultInitargs, list(Symbol.CLASS_DIRECT_DEFAULT_INITARGS), constantlyNil),
+           new SlotDefinition(symDefaultInitargs, list(Symbol.CLASS_DEFAULT_INITARGS), constantlyNil),
+           new SlotDefinition(symFinalizedP, list(Symbol.CLASS_FINALIZED_P), constantlyNil),
+           new SlotDefinition(Symbol._DOCUMENTATION,
+                              list(Symbol.CLASS_DOCUMENTATION),
+                              constantlyNil, list(internKeyword("DOCUMENTATION"))));
+  }
+
+  private static final StandardClass addStandardClass(Symbol name,
+                                                      LispObject directSuperclasses)
+  {
+    StandardClass c = new StandardClass(name, directSuperclasses);
+    addClass(name, c);
+    return c;
+  }
+
+  private static final FuncallableStandardClass addFuncallableStandardClass
+    (Symbol name, LispObject directSuperclasses)
+  {
+    FuncallableStandardClass c = new FuncallableStandardClass(name, directSuperclasses);
+    addClass(name, c);
+    return c;
+  }
+
+  // At this point, BuiltInClass.java has not been completely loaded yet, and
+  // BuiltInClass.CLASS_T is null. So we need to call setDirectSuperclass()
+  // for STANDARD_CLASS and STANDARD_OBJECT in initializeStandardClasses()
+  // below.
+  public static final StandardClass STANDARD_CLASS =
+    addStandardClass(Symbol.STANDARD_CLASS, list(BuiltInClass.CLASS_T));
+  public static final StandardClass STANDARD_OBJECT =
+    addStandardClass(Symbol.STANDARD_OBJECT, list(BuiltInClass.CLASS_T));
+  public static final StandardClass METAOBJECT =
+    addStandardClass(Symbol.METAOBJECT, list(STANDARD_OBJECT));
+  public static final StandardClass SPECIALIZER =
+    addStandardClass(Symbol.SPECIALIZER, list(METAOBJECT));
+
+    public static final StandardClass SLOT_DEFINITION =
+        addStandardClass(Symbol.SLOT_DEFINITION, list(METAOBJECT));
+    public static final StandardClass STANDARD_SLOT_DEFINITION =
+        addClass(Symbol.STANDARD_SLOT_DEFINITION, new SlotDefinitionClass(Symbol.STANDARD_SLOT_DEFINITION, list(SLOT_DEFINITION)));
+
+  static
+  {
+      SLOT_DEFINITION.finalizeClass();
+
+    STANDARD_CLASS.setClassLayout(layoutStandardClass);
+    STANDARD_CLASS.setDirectSlotDefinitions(standardClassSlotDefinitions());
+  }
+
+    public static final StandardClass DIRECT_SLOT_DEFINITION =
+      addStandardClass(Symbol.DIRECT_SLOT_DEFINITION, list(SLOT_DEFINITION));
+    public static final StandardClass EFFECTIVE_SLOT_DEFINITION =
+        addStandardClass(Symbol.EFFECTIVE_SLOT_DEFINITION, list(SLOT_DEFINITION));
+    //      addStandardClass(Symbol.STANDARD_SLOT_DEFINITION, list(SLOT_DEFINITION));
+    public static final StandardClass STANDARD_DIRECT_SLOT_DEFINITION =
+        addClass(Symbol.STANDARD_DIRECT_SLOT_DEFINITION,
+                 new SlotDefinitionClass(Symbol.STANDARD_DIRECT_SLOT_DEFINITION,
+                                         list(STANDARD_SLOT_DEFINITION, DIRECT_SLOT_DEFINITION)));
+    public static final StandardClass STANDARD_EFFECTIVE_SLOT_DEFINITION =
+        addClass(Symbol.STANDARD_EFFECTIVE_SLOT_DEFINITION,
+                 new SlotDefinitionClass(Symbol.STANDARD_EFFECTIVE_SLOT_DEFINITION,
+                                         list(STANDARD_SLOT_DEFINITION, EFFECTIVE_SLOT_DEFINITION)));
+
+
+  // BuiltInClass.FUNCTION is also null here (see previous comment).
+  // Following SBCL's lead, we make funcallable-standard-object a
+  // funcallable-standard-class.
+  public static final StandardClass FUNCALLABLE_STANDARD_OBJECT =
+      addFuncallableStandardClass(Symbol.FUNCALLABLE_STANDARD_OBJECT,
+                       list(STANDARD_OBJECT, BuiltInClass.FUNCTION));
+
+  public static final StandardClass CLASS =
+    addStandardClass(Symbol.CLASS, list(SPECIALIZER));
+
+  public static final StandardClass BUILT_IN_CLASS =
+    addStandardClass(Symbol.BUILT_IN_CLASS, list(CLASS));
+
+  public static final StandardClass FUNCALLABLE_STANDARD_CLASS =
+    addStandardClass(Symbol.FUNCALLABLE_STANDARD_CLASS, list(CLASS));
+
+  public static final StandardClass CONDITION =
+    addStandardClass(Symbol.CONDITION, list(STANDARD_OBJECT));
+
+  public static final StandardClass SIMPLE_CONDITION =
+    addStandardClass(Symbol.SIMPLE_CONDITION, list(CONDITION));
+
+  public static final StandardClass WARNING =
+    addStandardClass(Symbol.WARNING, list(CONDITION));
+
+  public static final StandardClass SIMPLE_WARNING =
+    addStandardClass(Symbol.SIMPLE_WARNING, list(SIMPLE_CONDITION, WARNING));
+
+  public static final StandardClass STYLE_WARNING =
+    addStandardClass(Symbol.STYLE_WARNING, list(WARNING));
+
+  public static final StandardClass SERIOUS_CONDITION =
+    addStandardClass(Symbol.SERIOUS_CONDITION, list(CONDITION));
+
+  public static final StandardClass STORAGE_CONDITION =
+    addStandardClass(Symbol.STORAGE_CONDITION, list(SERIOUS_CONDITION));
+
+  public static final StandardClass ERROR =
+    addStandardClass(Symbol.ERROR, list(SERIOUS_CONDITION));
+
+  public static final StandardClass ARITHMETIC_ERROR =
+    addStandardClass(Symbol.ARITHMETIC_ERROR, list(ERROR));
+
+  public static final StandardClass CELL_ERROR =
+    addStandardClass(Symbol.CELL_ERROR, list(ERROR));
+
+  public static final StandardClass CONTROL_ERROR =
+    addStandardClass(Symbol.CONTROL_ERROR, list(ERROR));
+
+  public static final StandardClass FILE_ERROR =
+    addStandardClass(Symbol.FILE_ERROR, list(ERROR));
+
+  public static final StandardClass DIVISION_BY_ZERO =
+    addStandardClass(Symbol.DIVISION_BY_ZERO, list(ARITHMETIC_ERROR));
+
+  public static final StandardClass FLOATING_POINT_INEXACT =
+    addStandardClass(Symbol.FLOATING_POINT_INEXACT, list(ARITHMETIC_ERROR));
+
+  public static final StandardClass FLOATING_POINT_INVALID_OPERATION =
+    addStandardClass(Symbol.FLOATING_POINT_INVALID_OPERATION, list(ARITHMETIC_ERROR));
+
+  public static final StandardClass FLOATING_POINT_OVERFLOW =
+    addStandardClass(Symbol.FLOATING_POINT_OVERFLOW, list(ARITHMETIC_ERROR));
+
+  public static final StandardClass FLOATING_POINT_UNDERFLOW =
+    addStandardClass(Symbol.FLOATING_POINT_UNDERFLOW, list(ARITHMETIC_ERROR));
+
+  public static final StandardClass PROGRAM_ERROR =
+    addStandardClass(Symbol.PROGRAM_ERROR, list(ERROR));
+
+  public static final StandardClass PACKAGE_ERROR =
+    addStandardClass(Symbol.PACKAGE_ERROR, list(ERROR));
+
+  public static final StandardClass STREAM_ERROR =
+    addStandardClass(Symbol.STREAM_ERROR, list(ERROR));
+
+  public static final StandardClass PARSE_ERROR =
+    addStandardClass(Symbol.PARSE_ERROR, list(ERROR));
+
+  public static final StandardClass PRINT_NOT_READABLE =
+    addStandardClass(Symbol.PRINT_NOT_READABLE, list(ERROR));
+
+  public static final StandardClass READER_ERROR =
+    addStandardClass(Symbol.READER_ERROR, list(PARSE_ERROR, STREAM_ERROR));
+
+  public static final StandardClass END_OF_FILE =
+    addStandardClass(Symbol.END_OF_FILE, list(STREAM_ERROR));
+
+  public static final StandardClass SIMPLE_ERROR =
+    addStandardClass(Symbol.SIMPLE_ERROR, list(SIMPLE_CONDITION, ERROR));
+
+  public static final StandardClass TYPE_ERROR =
+    addStandardClass(Symbol.TYPE_ERROR, list(ERROR));
+
+  public static final StandardClass SIMPLE_TYPE_ERROR =
+    addStandardClass(Symbol.SIMPLE_TYPE_ERROR, list(SIMPLE_CONDITION,
+                                                     TYPE_ERROR));
+
+  public static final StandardClass UNBOUND_SLOT =
+    addStandardClass(Symbol.UNBOUND_SLOT, list(CELL_ERROR));
+
+  public static final StandardClass UNBOUND_VARIABLE =
+    addStandardClass(Symbol.UNBOUND_VARIABLE, list(CELL_ERROR));
+
+  public static final StandardClass UNDEFINED_FUNCTION =
+    addStandardClass(Symbol.UNDEFINED_FUNCTION, list(CELL_ERROR));
+
+  public static final StandardClass JAVA_EXCEPTION =
+    addStandardClass(Symbol.JAVA_EXCEPTION, list(ERROR));
+
+  public static final StandardClass METHOD =
+    addStandardClass(Symbol.METHOD, list(METAOBJECT));
+
+  public static final StandardClass STANDARD_METHOD =
+    addStandardClass(Symbol.STANDARD_METHOD, list(METHOD));
+
+  public static void initializeStandardClasses()
+  {
+    // We need to call setDirectSuperclass() here for classes that have a
+    // BuiltInClass as a superclass. See comment above (at first mention of
+    // STANDARD_OBJECT).
+    STANDARD_CLASS.setDirectSuperclass(CLASS);
+    STANDARD_OBJECT.setDirectSuperclass(BuiltInClass.CLASS_T);
+    FUNCALLABLE_STANDARD_OBJECT.setDirectSuperclasses(list(STANDARD_OBJECT, BuiltInClass.FUNCTION));
+    ARITHMETIC_ERROR.setCPL(ARITHMETIC_ERROR, ERROR, SERIOUS_CONDITION,
+                            CONDITION, STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    ARITHMETIC_ERROR.setDirectSlotDefinitions(
+      list(new SlotDefinition(Symbol.OPERATION,
+                               list(Symbol.ARITHMETIC_ERROR_OPERATION)),
+            new SlotDefinition(Symbol.OPERANDS,
+                               list(Symbol.ARITHMETIC_ERROR_OPERANDS))));
+    BUILT_IN_CLASS.setCPL(BUILT_IN_CLASS, CLASS, SPECIALIZER, METAOBJECT, STANDARD_OBJECT,
+                          BuiltInClass.CLASS_T);
+    CELL_ERROR.setCPL(CELL_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
+                      STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    CELL_ERROR.setDirectSlotDefinitions(
+      list(new SlotDefinition(Symbol.NAME,
+                               list(Symbol.CELL_ERROR_NAME))));
+    CLASS.setCPL(CLASS, SPECIALIZER, METAOBJECT, STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    CONDITION.setCPL(CONDITION, STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    CONDITION.setDirectSlotDefinitions(
+      list(new SlotDefinition(Symbol.FORMAT_CONTROL,
+                               list(Symbol.SIMPLE_CONDITION_FORMAT_CONTROL)),
+            new SlotDefinition(Symbol.FORMAT_ARGUMENTS,
+                               list(Symbol.SIMPLE_CONDITION_FORMAT_ARGUMENTS),
+                               NIL)));
+    CONDITION.setDirectDefaultInitargs(list(list(Keyword.FORMAT_ARGUMENTS,
+                                                 NIL,
+                                                 constantlyNil)));
+    CONTROL_ERROR.setCPL(CONTROL_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
+                         STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    DIVISION_BY_ZERO.setCPL(DIVISION_BY_ZERO, ARITHMETIC_ERROR, ERROR,
+                            SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
+                            BuiltInClass.CLASS_T);
+    END_OF_FILE.setCPL(END_OF_FILE, STREAM_ERROR, ERROR, SERIOUS_CONDITION,
+                       CONDITION, STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    ERROR.setCPL(ERROR, SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
+                 BuiltInClass.CLASS_T);
+    FILE_ERROR.setCPL(FILE_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
+                      STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    FILE_ERROR.setDirectSlotDefinitions(
+      list(new SlotDefinition(Symbol.PATHNAME,
+                               list(Symbol.FILE_ERROR_PATHNAME))));
+    FLOATING_POINT_INEXACT.setCPL(FLOATING_POINT_INEXACT, ARITHMETIC_ERROR,
+                                  ERROR, SERIOUS_CONDITION, CONDITION,
+                                  STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    FLOATING_POINT_INVALID_OPERATION.setCPL(FLOATING_POINT_INVALID_OPERATION,
+                                            ARITHMETIC_ERROR, ERROR,
+                                            SERIOUS_CONDITION, CONDITION,
+                                            STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    FLOATING_POINT_OVERFLOW.setCPL(FLOATING_POINT_OVERFLOW, ARITHMETIC_ERROR,
+                                   ERROR, SERIOUS_CONDITION, CONDITION,
+                                   STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    FLOATING_POINT_UNDERFLOW.setCPL(FLOATING_POINT_UNDERFLOW, ARITHMETIC_ERROR,
+                                    ERROR, SERIOUS_CONDITION, CONDITION,
+                                    STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    FUNCALLABLE_STANDARD_OBJECT.setCPL(FUNCALLABLE_STANDARD_OBJECT,
+                                       STANDARD_OBJECT, BuiltInClass.FUNCTION,
+                                       BuiltInClass.CLASS_T);
+    JAVA_EXCEPTION.setCPL(JAVA_EXCEPTION, ERROR, SERIOUS_CONDITION, CONDITION,
+                          STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    JAVA_EXCEPTION.setDirectSlotDefinitions(
+      list(new SlotDefinition(Symbol.CAUSE, list(Symbol.JAVA_EXCEPTION_CAUSE))));
+    METAOBJECT.setCPL(METAOBJECT, STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    SPECIALIZER.setCPL(SPECIALIZER, METAOBJECT, STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    METHOD.setCPL(METHOD, METAOBJECT, STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    STANDARD_METHOD.setCPL(STANDARD_METHOD, METHOD, METAOBJECT, STANDARD_OBJECT,
+                           BuiltInClass.CLASS_T);
+    STANDARD_METHOD.setDirectSlotDefinitions(
+      list(new SlotDefinition(Symbol._GENERIC_FUNCTION, NIL, constantlyNil,
+                              list(internKeyword("GENERIC-FUNCTION"))),
+           new SlotDefinition(Symbol.LAMBDA_LIST, NIL, constantlyNil),
+           new SlotDefinition(Symbol.KEYWORDS, NIL, constantlyNil),
+           new SlotDefinition(Symbol.OTHER_KEYWORDS_P, NIL, constantlyNil),
+           new SlotDefinition(Symbol.SPECIALIZERS, NIL, constantlyNil),
+           new SlotDefinition(Symbol.QUALIFIERS, NIL, constantlyNil),
+           new SlotDefinition(Symbol._FUNCTION, NIL, constantlyNil,
+                              list(internKeyword("FUNCTION"))),
+           new SlotDefinition(Symbol.FAST_FUNCTION, NIL, constantlyNil),
+           new SlotDefinition(Symbol._DOCUMENTATION, NIL, constantlyNil,
+                              list(internKeyword("DOCUMENTATION")))));
+    PACKAGE_ERROR.setCPL(PACKAGE_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
+                         STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    PACKAGE_ERROR.setDirectSlotDefinitions(
+      list(new SlotDefinition(Symbol.PACKAGE,
+                               list(Symbol.PACKAGE_ERROR_PACKAGE))));
+    PARSE_ERROR.setCPL(PARSE_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
+                       STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    PRINT_NOT_READABLE.setCPL(PRINT_NOT_READABLE, ERROR, SERIOUS_CONDITION,
+                              CONDITION, STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    PRINT_NOT_READABLE.setDirectSlotDefinitions(
+      list(new SlotDefinition(Symbol.OBJECT,
+                               list(Symbol.PRINT_NOT_READABLE_OBJECT))));
+    PROGRAM_ERROR.setCPL(PROGRAM_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
+                         STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    READER_ERROR.setCPL(READER_ERROR, PARSE_ERROR, STREAM_ERROR, ERROR,
+                        SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
+                        BuiltInClass.CLASS_T);
+    SERIOUS_CONDITION.setCPL(SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
+                             BuiltInClass.CLASS_T);
+    SIMPLE_CONDITION.setCPL(SIMPLE_CONDITION, CONDITION, STANDARD_OBJECT,
+                            BuiltInClass.CLASS_T);
+    SIMPLE_ERROR.setCPL(SIMPLE_ERROR, SIMPLE_CONDITION, ERROR,
+                        SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
+                        BuiltInClass.CLASS_T);
+    SIMPLE_TYPE_ERROR.setDirectSuperclasses(list(SIMPLE_CONDITION,
+                                                  TYPE_ERROR));
+    SIMPLE_TYPE_ERROR.setCPL(SIMPLE_TYPE_ERROR, SIMPLE_CONDITION,
+                             TYPE_ERROR, ERROR, SERIOUS_CONDITION,
+                             CONDITION, STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    SIMPLE_WARNING.setDirectSuperclasses(list(SIMPLE_CONDITION, WARNING));
+    SIMPLE_WARNING.setCPL(SIMPLE_WARNING, SIMPLE_CONDITION, WARNING,
+                          CONDITION, STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    STANDARD_CLASS.setCPL(STANDARD_CLASS, CLASS, SPECIALIZER, METAOBJECT,
+                          STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    FUNCALLABLE_STANDARD_CLASS.setCPL(FUNCALLABLE_STANDARD_CLASS, CLASS,
+                                      SPECIALIZER, METAOBJECT, STANDARD_OBJECT,
+                                      BuiltInClass.CLASS_T);
+    // funcallable-standard-class has the same interface as
+    // standard-class.
+    FUNCALLABLE_STANDARD_CLASS.setClassLayout(layoutStandardClass);
+    FUNCALLABLE_STANDARD_CLASS.setDirectSlotDefinitions(standardClassSlotDefinitions());
+    STANDARD_OBJECT.setCPL(STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    STORAGE_CONDITION.setCPL(STORAGE_CONDITION, SERIOUS_CONDITION, CONDITION,
+                             STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    STREAM_ERROR.setCPL(STREAM_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
+                        STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    STREAM_ERROR.setDirectSlotDefinitions(
+      list(new SlotDefinition(Symbol.STREAM,
+                               list(Symbol.STREAM_ERROR_STREAM))));
+    STYLE_WARNING.setCPL(STYLE_WARNING, WARNING, CONDITION, STANDARD_OBJECT,
+                         BuiltInClass.CLASS_T);
+    TYPE_ERROR.setCPL(TYPE_ERROR, ERROR, SERIOUS_CONDITION, CONDITION,
+                      STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    TYPE_ERROR.setDirectSlotDefinitions(
+      list(new SlotDefinition(Symbol.DATUM,
+                               list(Symbol.TYPE_ERROR_DATUM)),
+            new SlotDefinition(Symbol.EXPECTED_TYPE,
+                               list(Symbol.TYPE_ERROR_EXPECTED_TYPE))));
+    UNBOUND_SLOT.setCPL(UNBOUND_SLOT, CELL_ERROR, ERROR, SERIOUS_CONDITION,
+                        CONDITION, STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    UNBOUND_SLOT.setDirectSlotDefinitions(
+      list(new SlotDefinition(Symbol.INSTANCE,
+                               list(Symbol.UNBOUND_SLOT_INSTANCE))));
+    UNBOUND_VARIABLE.setCPL(UNBOUND_VARIABLE, CELL_ERROR, ERROR,
+                            SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
+                            BuiltInClass.CLASS_T);
+    UNDEFINED_FUNCTION.setCPL(UNDEFINED_FUNCTION, CELL_ERROR, ERROR,
+                              SERIOUS_CONDITION, CONDITION, STANDARD_OBJECT,
+                              BuiltInClass.CLASS_T);
+    WARNING.setCPL(WARNING, CONDITION, STANDARD_OBJECT, BuiltInClass.CLASS_T);
+
+    // Condition classes.
+    STANDARD_CLASS.finalizeClass();
+    STANDARD_OBJECT.finalizeClass();
+    FUNCALLABLE_STANDARD_OBJECT.finalizeClass();
+    FUNCALLABLE_STANDARD_CLASS.finalizeClass();
+    ARITHMETIC_ERROR.finalizeClass();
+    CELL_ERROR.finalizeClass();
+    CONDITION.finalizeClass();
+    CONTROL_ERROR.finalizeClass();
+    DIVISION_BY_ZERO.finalizeClass();
+    END_OF_FILE.finalizeClass();
+    ERROR.finalizeClass();
+    FILE_ERROR.finalizeClass();
+    FLOATING_POINT_INEXACT.finalizeClass();
+    FLOATING_POINT_INVALID_OPERATION.finalizeClass();
+    FLOATING_POINT_OVERFLOW.finalizeClass();
+    FLOATING_POINT_UNDERFLOW.finalizeClass();
+    JAVA_EXCEPTION.finalizeClass();
+    METAOBJECT.finalizeClass();
+    METHOD.finalizeClass();
+    STANDARD_METHOD.finalizeClass();
+    SPECIALIZER.finalizeClass();
+    CLASS.finalizeClass();
+    BUILT_IN_CLASS.finalizeClass();
+    PACKAGE_ERROR.finalizeClass();
+    PARSE_ERROR.finalizeClass();
+    PRINT_NOT_READABLE.finalizeClass();
+    PROGRAM_ERROR.finalizeClass();
+    READER_ERROR.finalizeClass();
+    SERIOUS_CONDITION.finalizeClass();
+    SIMPLE_CONDITION.finalizeClass();
+    SIMPLE_ERROR.finalizeClass();
+    SIMPLE_TYPE_ERROR.finalizeClass();
+    SIMPLE_WARNING.finalizeClass();
+    STORAGE_CONDITION.finalizeClass();
+    STREAM_ERROR.finalizeClass();
+    STYLE_WARNING.finalizeClass();
+    TYPE_ERROR.finalizeClass();
+    UNBOUND_SLOT.finalizeClass();
+    UNBOUND_VARIABLE.finalizeClass();
+    UNDEFINED_FUNCTION.finalizeClass();
+    WARNING.finalizeClass();
+
+    // SYS:SLOT-DEFINITION is constructed and finalized in
+    // SlotDefinitionClass.java, but we need to fill in a few things here.
+    Debug.assertTrue(SLOT_DEFINITION.isFinalized());
+    SLOT_DEFINITION.setCPL(SLOT_DEFINITION, METAOBJECT, STANDARD_OBJECT,
+                           BuiltInClass.CLASS_T);
+    SLOT_DEFINITION.setDirectSlotDefinitions(SLOT_DEFINITION.getClassLayout().generateSlotDefinitions());
+    // There are no inherited slots.
+    SLOT_DEFINITION.setSlotDefinitions(SLOT_DEFINITION.getDirectSlotDefinitions());
+
+    DIRECT_SLOT_DEFINITION.setCPL(DIRECT_SLOT_DEFINITION, SLOT_DEFINITION,
+                                  METAOBJECT, STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    DIRECT_SLOT_DEFINITION.finalizeClass();
+    EFFECTIVE_SLOT_DEFINITION.setCPL(EFFECTIVE_SLOT_DEFINITION, SLOT_DEFINITION,
+                                     METAOBJECT, STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    EFFECTIVE_SLOT_DEFINITION.finalizeClass();
+    STANDARD_SLOT_DEFINITION.setCPL(STANDARD_SLOT_DEFINITION, SLOT_DEFINITION,
+                                    METAOBJECT, STANDARD_OBJECT, BuiltInClass.CLASS_T);
+    STANDARD_SLOT_DEFINITION.finalizeClass();
+    STANDARD_DIRECT_SLOT_DEFINITION.setCPL(STANDARD_DIRECT_SLOT_DEFINITION, STANDARD_SLOT_DEFINITION,
+                                           DIRECT_SLOT_DEFINITION, SLOT_DEFINITION, METAOBJECT, STANDARD_OBJECT,
+                                           BuiltInClass.CLASS_T);
+    STANDARD_DIRECT_SLOT_DEFINITION.finalizeClass();
+    STANDARD_EFFECTIVE_SLOT_DEFINITION.setCPL(STANDARD_EFFECTIVE_SLOT_DEFINITION, STANDARD_SLOT_DEFINITION,
+                                              EFFECTIVE_SLOT_DEFINITION, SLOT_DEFINITION, METAOBJECT, STANDARD_OBJECT,
+                                              BuiltInClass.CLASS_T);
+    STANDARD_EFFECTIVE_SLOT_DEFINITION.finalizeClass();
+
+  }
 }

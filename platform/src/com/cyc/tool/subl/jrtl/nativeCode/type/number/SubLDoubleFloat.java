@@ -1,359 +1,373 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.type.number;
 
+import org.armedbear.lisp.Lisp;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-//// External Imports
+abstract public class SubLDoubleFloat extends AbstractSubLFloat implements SubLFloat, SubLNumber, SubLObject {
+//	protected SubLDoubleFloat(double value) {
+//		this.dblvalue = value;
+//	}
+//
+	protected SubLDoubleFloat(Number theDouble) {
+		theNumber = theDouble;
+		value = theDouble.doubleValue();
+	}
 
-public class SubLDoubleFloat extends AbstractSubLFloat implements SubLFloat, SubLNumber, SubLObject {
-
-	//// Constructors
-
-	public static String NUMBER_TYPE_NAME = "LONG-FLOAT";
-
+	private Number theNumber;
+	///public double value;
+	public final double value;
+	public static String NUMBER_TYPE_NAME;
 	private static int SXHASH_TYPE_FLOAT = 89;
-
-	//// Public Area
-
-	private Double doubleValue;
-
-	private double value;
-
-	SubLDoubleFloat(double value) {
-		this.value = value;
+	static {
+		SubLDoubleFloat.NUMBER_TYPE_NAME = "LONG-FLOAT";
 	}
 
-	/** Creates a new instance of SubLFloat. */
-	SubLDoubleFloat(Double theDouble) {
-		this.doubleValue = theDouble;
-		this.value = theDouble.doubleValue();
-	}
-
+	@Override
 	public SubLObject add(SubLObject num) {
-		return SubLNumberFactory.makeDouble(this.value + num.doubleValue());
+		return SubLNumberFactory.makeDouble(value + num.doubleValue());
 	}
 
+	@Override
 	public SubLObject dec() {
-		return SubLNumberFactory.makeDouble(this.value - 1.0);
+		return SubLNumberFactory.makeDouble(value - 1.0);
 	}
 
+	@Override
 	public double doubleValue() {
-		return this.value;
+		return value;
 	}
 
+	@Override
 	public boolean eql(SubLObject obj) {
-		if (!obj.isDouble())
-			return false;
-		return this.value == obj.doubleValue();
+		return obj.isDouble() && value == obj.doubleValue();
 	}
 
+	@Override
 	public boolean equal(SubLObject obj) {
-		if (!obj.isDouble())
-			return false;
-		return this.value == obj.doubleValue();
+		return obj.isDouble() && value == obj.doubleValue();
 	}
 
-	public boolean equalp(SubLObject obj) {
-		if (!obj.isDouble())
-			return false;
-		return this.value == obj.doubleValue();
-	}
-
+	@Override
 	public float floatValue() {
-		return (float) this.value;
+		return (float) value;
 	}
 
 	public Double getDouble() {
-		return (Double) this.getNativeNumber();
+		return (Double) getNativeNumber();
 	}
 
+	@Override
 	public Number getNativeNumber() {
-		if (this.doubleValue == null)
-			this.doubleValue = new Double(this.value);
-		return this.doubleValue;
+		if (theNumber == null)
+			theNumber = new Double(value);
+		return theNumber;
 	}
 
+	@Override
 	public int getNumSize() {
-		return SubLNumber.FLOATING_POINT;
+		return 3;
 	}
 
+	@Override
 	public SubLSymbol getType() {
 		return Types.$dtp_float$;
 	}
 
+	@Override
 	public SubLFixnum getTypeCode() {
 		return CommonSymbols.SEVEN_INTEGER;
 	}
 
-	/**
-	 * use this version only if the arg is of same numerical type or smaller
-	 * type than 'this'
-	 */
+	@Override
 	public boolean greaterThanInternal(SubLObject num) {
-		return this.value > num.doubleValue();
+		return value > num.doubleValue();
 	}
 
-	/**
-	 * use this version only if the arg is of same numerical type or smaller
-	 * type than 'this'
-	 */
+	@Override
 	public boolean greaterThanOrEqualInternal(SubLObject num) {
-		return this.value >= num.doubleValue();
+		return value >= num.doubleValue();
 	}
 
+	@Override
 	public SubLObject inc() {
-		return SubLNumberFactory.makeDouble(this.value + 1.0);
+		return SubLNumberFactory.makeDouble(value + 1.0);
 	}
 
+	@Override
 	public int intValue() {
-		return (int) this.value;
+		return (int) value;
 	}
 
+	@Override
+	public boolean isAlien() {
+		return false;
+	}
+
+	@Override
 	public boolean isAtom() {
 		return true;
 	}
 
+	@Override
 	public boolean isBigIntegerBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isBoolean() {
 		return false;
 	}
 
+	@Override
 	public boolean isChar() {
 		return false;
 	}
 
+	@Override
 	public boolean isCons() {
 		return false;
 	}
 
+	@Override
 	public boolean isDouble() {
 		return true;
 	}
 
+	@Override
 	public boolean isEnvironment() {
 		return false;
 	}
 
+	@Override
 	public boolean isError() {
 		return false;
 	}
 
+	@Override
 	public boolean isFixnum() {
 		return false;
 	}
 
+	@Override
 	public boolean isFunction() {
 		return false;
 	}
 
+	@Override
 	public boolean isFunctionSpec() {
 		return false;
 	}
 
+	@Override
 	public boolean isGuid() {
 		return false;
 	}
 
+	@Override
 	public boolean isHashtable() {
 		return false;
 	}
 
+	@Override
 	public boolean isHashtableIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isIntBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isInteger() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyhash() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyhashIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyword() {
 		return false;
 	}
 
+	@Override
 	public boolean isList() {
 		return false;
 	}
 
+	@Override
 	public boolean isLock() {
 		return false;
 	}
 
+	@Override
 	public boolean isLongBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isMacroOperator() {
 		return false;
 	}
 
+	@Override
 	public boolean isNegative() {
-		return this.value < 0.0;
+		return value < 0.0;
 	}
 
+	@Override
 	public boolean isNil() {
 		return false;
 	}
 
+	@Override
 	public boolean isNumber() {
 		return true;
 	}
 
+	@Override
 	public boolean isPackage() {
 		return false;
 	}
 
-	public boolean isPositive() { // SubLNumber
-		return this.value > 0.0;
+	@Override
+	public boolean isPackageIterator() {
+		return false;
 	}
 
+	@Override
+	public boolean isPositive() {
+		return value > 0.0;
+	}
+
+	@Override
 	public boolean isProcess() {
 		return false;
 	}
 
+	@Override
 	public boolean isReadWriteLock() {
 		return false;
 	}
 
+	@Override
 	public boolean isRegexPattern() {
 		return false;
 	}
 
+	@Override
 	public boolean isSemaphore() {
 		return false;
 	}
 
+	@Override
 	public boolean isSequence() {
 		return false;
 	}
 
+	@Override
 	public boolean isStream() {
 		return false;
 	}
 
+	@Override
 	public boolean isString() {
 		return false;
 	}
 
+	@Override
 	public boolean isStructure() {
 		return false;
 	}
 
+	@Override
 	public boolean isSymbol() {
 		return false;
 	}
 
+	@Override
 	public boolean isVector() {
 		return false;
 	}
 
+	@Override
 	public boolean isZero() {
-		return this.value == 0.0;
+		return value == 0.0;
 	}
 
-	/**
-	 * use this version only if the arg is of same numerical type or smaller
-	 * type than 'this'
-	 */
+	@Override
 	public boolean lessThanInternal(SubLObject num) {
-		return this.value < num.doubleValue();
+		return value < num.doubleValue();
 	}
 
-	/**
-	 * use this version only if the arg is of same numerical type or smaller
-	 * type than 'this'
-	 */
+	@Override
 	public boolean lessThanOrEqualInternal(SubLObject num) {
-		return this.value <= num.doubleValue();
+		return value <= num.doubleValue();
 	}
 
+	@Override
 	public long longValue() {
-		return (long) this.value;
+		return (long) value;
 	}
 
+	@Override
 	public SubLObject mult(SubLObject num) {
-		return SubLNumberFactory.makeDouble(this.value * num.doubleValue());
+		return SubLNumberFactory.makeDouble(value * num.doubleValue());
 	}
 
-	/**
-	 * use this version only if the arg is of same numerical type or smaller
-	 * type than 'this'
-	 */
+	@Override
 	public boolean numericallyEqualInternal(SubLObject num) {
-		return this.value == num.doubleValue();
+		return value == num.doubleValue();
 	}
 
+	@Override
 	public SubLObject sub(SubLObject num) {
-		return SubLNumberFactory.makeDouble(this.value - num.doubleValue());
+		return SubLNumberFactory.makeDouble(value - num.doubleValue());
 	}
 
-	public int sxhash() {
-		return this.doubleValue.hashCode();// + SXHASH_TYPE_FLOAT;
-	}
-
-	/** Method created to avoid casting */
-	public SubLDoubleFloat toDouble() { // SubLDoubleFloat
+	@Override
+	public SubLDoubleFloat toDouble() {
 		return this;
 	}
 
-	/** Method created to avoid casting */
-	public SubLFixnum toFixnum() { // SubLFixnum
-		Errors.error(this + " is not of type: FIXNUM.");
+	@Override
+	public SubLFixnum toFixnum() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"FIXNUM");
 		return null;
 	}
 
-	//// Protected Area
-
-	//// Private Area
-
-	//// Internal Rep
-
-	public String toString() {
-		return "" + this.value;
+	@Override
+	public String printObjectImpl() {
+		return "" + value;
 	}
 
+	@Override
 	public String toTypeName() {
 		return SubLDoubleFloat.NUMBER_TYPE_NAME;
 	}
 
+	@Override
+	public int hashCode() {
+		return getNativeNumber().hashCode();
+	}
 }

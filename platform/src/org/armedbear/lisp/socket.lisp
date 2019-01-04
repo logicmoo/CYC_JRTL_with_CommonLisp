@@ -1,7 +1,7 @@
 ;;; socket.lisp
 ;;;
 ;;; Copyright (C) 2004-2006 Peter Graves
-;;; $Id: socket.lisp 11434 2008-12-07 23:24:31Z ehuelsmann $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -29,55 +29,84 @@
 ;;; obligated to do so.  If you do not wish to do so, delete this
 ;;; exception statement from your version.
 
-(in-package "SYSTEM")
+(in-package "EXTENSIONS")
+
+(export '(make-socket make-server-socket server-socket-close socket-accept
+          socket-close get-socket-stream socket-peer-port socket-local-port
+          socket-local-address socket-peer-address
+          read-timeout write-timeout))
+
 
 (defun get-socket-stream (socket &key (element-type 'character) (external-format :default))
   ":ELEMENT-TYPE must be CHARACTER or (UNSIGNED-BYTE 8); the default is CHARACTER.
 EXTERNAL-FORMAT must be of the same format as specified for OPEN."
   (cond ((eq element-type 'character))
-        ((equal element-type '(unsigned-byte 8)))
+        ((reduce #'equal
+                (mapcar #'sys::normalize-type 
+                        (list element-type '(unsigned-byte 8)))))
         (t
          (error 'simple-type-error
                 :format-control
                 ":ELEMENT-TYPE must be CHARACTER or (UNSIGNED-BYTE 8).")))
-  (%socket-stream socket element-type external-format))
+  (sys::%socket-stream socket element-type external-format))
 
 (defun make-socket (host port)
-  (%make-socket host port))
+  "Create a TCP socket for client communication to HOST on PORT."
+  (sys::%make-socket host port))
 
 (defun make-server-socket (port)
-  (%make-server-socket port))
+  "Create a TCP server socket listening for clients on PORT."
+  (sys::%make-server-socket port))
 
 (defun socket-accept (socket)
-  (%socket-accept socket))
+  "Block until able to return a new socket for handling a incoming request to the specified server SOCKET."
+  (sys::%socket-accept socket))
 
 (defun socket-close (socket)
-  (%socket-close socket))
+  "Close the client SOCKET."
+  (sys::%socket-close socket))
 
 (defun server-socket-close (socket)
-  (%server-socket-close socket))
+  "Close the server SOCKET."
+  (sys::%server-socket-close socket))
 
 (declaim (inline %socket-address %socket-port))
-(defun %socket-address (socket addressName)
-   (java:jcall "getHostAddress" (java:jcall-raw addressName socket)))
+(defun %socket-address (socket address-name)
+  "Return the underlying ADDRESS-NAME for SOCKET."
+   (java:jcall "getHostAddress" (java:jcall-raw address-name socket)))
 
-(defun %socket-port (socket portName)
-   (java:jcall portName socket))
+(defun %socket-port (socket port-name)
+  "Return the PORT-NAME of SOCKET."
+   (java:jcall port-name socket))
 
 (defun socket-local-address (socket)
-   "Returns the local address of the given socket as a dotted quad string."
+   "Returns the local address of the SOCKET as a dotted quad string."
    (%socket-address socket "getLocalAddress"))
 
 (defun socket-peer-address (socket)
-   "Returns the peer address of the given socket as a dotted quad string."
+   "Returns the peer address of the SOCKET as a dotted quad string."
    (%socket-address socket "getInetAddress"))
 
 (defun socket-local-port (socket)
-   "Returns the local port number of the given socket."
+   "Returns the local port number of the SOCKET."
    (%socket-port socket "getLocalPort"))
 
 (defun socket-peer-port (socket)
-   "Returns the peer port number of the given socket."
+   "Returns the peer port number of the given SOCKET."
    (%socket-port socket "getPort"))
+
+(defun read-timeout (socket seconds)
+  "Time in SECONDS to set local implementation of 'SO_RCVTIMEO' on SOCKET."
+  (java:jcall (java:jmethod "java.net.Socket" "setSoTimeout"  "int")
+              socket
+              (* seconds 1000))) ;; underlying API in ms.
+
+(defun write-timeout (socket seconds)
+  "No-op setting of write timeout to SECONDS on SOCKET."
+  (declare (ignore socket seconds))
+  (warn "Unimplemented.
+
+Timeouts for writes should be implemented by spawning a guardian
+to the thread perfoming the socket write"))
 
 (provide '#:socket)

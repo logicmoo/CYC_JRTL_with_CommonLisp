@@ -2,7 +2,7 @@
  * FloatingPointInexact.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: FloatingPointInexact.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,29 +31,34 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class FloatingPointInexact extends ArithmeticError {
-	public FloatingPointInexact(SubLObject initArgs) {
-		super(StandardClass.FLOATING_POINT_INEXACT);
-		this.initialize(initArgs);
-	}
+public final class FloatingPointInexact extends ArithmeticError
+{
+    public FloatingPointInexact(LispObject initArgs)
+    {
+        super(StandardClass.FLOATING_POINT_INEXACT);
+        initialize(initArgs);
+    }
 
-	public SubLObject classOf() {
-		return StandardClass.FLOATING_POINT_INEXACT;
-	}
+    public LispObject typeOf()
+    {
+        return Symbol.FLOATING_POINT_INEXACT;
+    }
 
-	public SubLObject typeOf() {
-		return LispSymbols.FLOATING_POINT_INEXACT;
-	}
+    public LispObject classOf()
+    {
+        return StandardClass.FLOATING_POINT_INEXACT;
+    }
 
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.FLOATING_POINT_INEXACT)
-			return Lisp.T;
-		if (type == StandardClass.FLOATING_POINT_INEXACT)
-			return Lisp.T;
-		return super.typep(type);
-	}
+    public LispObject typep(LispObject type)
+    {
+        if (type == Symbol.FLOATING_POINT_INEXACT)
+            return T;
+        if (type == StandardClass.FLOATING_POINT_INEXACT)
+            return T;
+        return super.typep(type);
+    }
 }

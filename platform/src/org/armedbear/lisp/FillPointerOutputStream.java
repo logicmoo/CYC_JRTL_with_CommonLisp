@@ -2,7 +2,7 @@
  * FillPointerOutputStream.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: FillPointerOutputStream.java 12513 2010-03-02 22:35:36Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,41 +31,65 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-public class FillPointerOutputStream extends Stream {
-	class Writer extends java.io.Writer {
+import static org.armedbear.lisp.Lisp.*;
 
-		public void close() {
-		}
+public final class FillPointerOutputStream extends Stream
+{
+    ComplexString string;
 
-		public void flush() {
-		}
+    FillPointerOutputStream(ComplexString string)
+    {
+        super(Symbol.SYSTEM_STREAM);
+        setStreamElementType(Symbol.CHARACTER);
+        isOutputStream = true;
+        isInputStream = false;
+        isCharacterStream = true;
+        isBinaryStream = false;
+        this.string = string;
+        setWriter(new Writer());
+    }
 
-		public void write(char cbuf[], int off, int len) {
-			int fp = FillPointerOutputStream.this.string.getFillPointer();
-			if (fp >= 0) {
-				int limit = Math.min(cbuf.length, off + len);
-				FillPointerOutputStream.this.string.ensureCapacity(fp + limit);
-				for (int i = off; i < limit; i++) {
-					FillPointerOutputStream.this.string.setChar(fp, cbuf[i]);
-					++fp;
-				}
-			}
-			FillPointerOutputStream.this.string.setFillPointer(fp);
-		}
-	}
+    // ### make-fill-pointer-output-stream string => string-stream
+    private static final Primitive MAKE_FILL_POINTER_OUTPUT_STREAM =
+        new Primitive("make-fill-pointer-output-stream", PACKAGE_SYS, true)
+    {
+        public LispObject execute(LispObject arg)
+        {
+            if (arg instanceof ComplexString) {
+                ComplexString string = (ComplexString) arg;
+                if (string.getFillPointer() >= 0)
+                    return new FillPointerOutputStream(string);
+            }
+            return type_error(arg, list(Symbol.AND, Symbol.STRING,
+                                              list(Symbol.SATISFIES,
+                                                    Symbol.ARRAY_HAS_FILL_POINTER_P)));
+        }
+    };
 
-	ComplexString string;
+    class Writer extends java.io.Writer
+    {
+        public void write(char cbuf[], int off, int len)
+        {
+            int fp = string.getFillPointer();
+            if (fp >= 0) {
+                final int limit = Math.min(cbuf.length, off + len);
+                string.ensureCapacity(fp + limit);
+                for (int i = off; i < limit; i++) {
+                    string.setCharAt(fp, cbuf[i]);
+                    ++fp;
+                }
+            }
+            string.setFillPointer(fp);
+        }
 
-	FillPointerOutputStream(ComplexString string) {
-		super(LispSymbols.SYSTEM_STREAM);
-		this.elementType = LispSymbols.CHARACTER;
-		this.isOutputStream = true;
-		this.isInputStream = false;
-		this.isCharacterStream = true;
-		this.isBinaryStream = false;
-		this.string = string;
-		this.setWriter(new Writer());
-	}
+        public void flush()
+        {
+        }
+
+        public void close()
+        {
+        }
+    }
 }

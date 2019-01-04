@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="ext.bundle.apache_httpclient-1.2.4-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/AppdapterGUI/maven/ext.bundle.apache_httpclient/target/ext.bundle.apache_httpclient-1.2.4-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

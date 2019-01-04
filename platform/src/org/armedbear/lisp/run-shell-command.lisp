@@ -1,7 +1,7 @@
 ;;; run-shell-command.lisp
 ;;;
 ;;; Copyright (C) 2004 Peter Graves
-;;; $Id: run-shell-command.lisp 11391 2008-11-15 22:38:34Z vvoutilainen $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -29,7 +29,11 @@
 ;;; obligated to do so.  If you do not wish to do so, delete this
 ;;; exception statement from your version.
 
-(in-package "SYSTEM")
+(in-package "EXTENSIONS")
 
+(export '(run-shell-command))
+
+;; Deprecated:  use SYS:RUN-PROGRAM ;; XXX
 (defun run-shell-command (command &key directory (output *standard-output*))
-  (%run-shell-command command directory output))
+  "Deprecated.  Use SYS:RUN-PROGRAM."
+  (sys::%run-shell-command command directory output))

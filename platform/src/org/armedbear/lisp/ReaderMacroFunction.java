@@ -2,7 +2,7 @@
  * ReaderMacroFunction.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: ReaderMacroFunction.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,44 +31,47 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
+import static org.armedbear.lisp.Lisp.*;
 
-public abstract class ReaderMacroFunction extends Function {
+public abstract class ReaderMacroFunction extends Function
+{
+    public ReaderMacroFunction(String name)
+    {
+        super(name);
+    }
 
-	public ReaderMacroFunction(String name) {
-		super(name);
-	}
+    public ReaderMacroFunction(String name, String arglist)
+    {
+        super(name, arglist);
+    }
 
-	public ReaderMacroFunction(String name, String arglist) {
-		super(name, arglist);
-	}
+    public ReaderMacroFunction(String name, Package pkg)
+    {
+        super(name, pkg);
+    }
 
-	public ReaderMacroFunction(String name, SubLPackage pkg) {
-		super(name, pkg);
-	}
+    public ReaderMacroFunction(String name, Package pkg, boolean exported)
+    {
+        super(name, pkg, exported);
+    }
 
-	public ReaderMacroFunction(String name, SubLPackage pkg, boolean exported) {
-		super(name, pkg, exported);
-	}
+    public ReaderMacroFunction(String name, Package pkg, boolean exported,
+                      String arglist)
+    {
+        super(name, pkg, exported, arglist);
+    }
 
-	public ReaderMacroFunction(String name, SubLPackage pkg, boolean exported, String arglist) {
-		super(name, pkg, exported, arglist);
-	}
+    @Override
+    public LispObject execute(LispObject first, LispObject second)
 
-	public abstract SubLObject execute(LispStream stream, char c);
+    {
+        Stream stream = inSynonymOf(first);
+        char c = LispCharacter.getValue(second);
+        return execute(stream, c);
+    }
 
-	public SubLObject execute(SubLObject first, SubLObject second)
-
-	{
-		LispStream stream = Lisp.inSynonymOf(first);
-		char c = second.charValue();
-		return this.execute(stream, c);
-	}
-
-	public void incrementCallCount(int arity) {
-		super.incrementCallCount(arity);
-	}
+    public abstract LispObject execute(Stream stream, char c)
+       ;
 }

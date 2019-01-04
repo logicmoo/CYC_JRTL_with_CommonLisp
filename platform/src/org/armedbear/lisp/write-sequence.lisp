@@ -1,7 +1,7 @@
 ;;; write-sequence.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: write-sequence.lisp 11391 2008-11-15 22:38:34Z vvoutilainen $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -45,7 +45,7 @@
                :expected-type '(integer 0)))
       (setf end (length sequence)))
   (let ((end (the fixnum end))
-        (stream-element-type (stream-element-type stream)))
+        (stream-element-type (expand-deftype (stream-element-type stream))))
     (cond ((eq stream-element-type 'character)
            (if (stringp sequence)
                (%write-string sequence stream start end)

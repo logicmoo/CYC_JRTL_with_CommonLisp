@@ -1,7 +1,7 @@
 ;;; typep.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: typep.lisp 11391 2008-11-15 22:38:34Z vvoutilainen $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -177,6 +177,11 @@
        (and (simple-typep object 'nil-vector)
             (or (endp i)
                 (eql (%car i) (length object)))))
+      (MOD
+       (and (integerp object)
+            (or (zerop object)
+                (and (plusp object)
+                     (< object (second type))))))
       ((FUNCTION VALUES)
        (error 'simple-error
               :format-control "~S types are not a legal argument to TYPEP: ~S"

@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="windows-data">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/rcyc/data/pos-tagging/windows-data.zip!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

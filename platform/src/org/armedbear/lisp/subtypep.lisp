@@ -1,7 +1,7 @@
 ;;; subtypep.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: subtypep.lisp 11586 2009-01-24 20:36:52Z ehuelsmann $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -477,16 +477,25 @@
         (t
          (values nil nil))))
 
-(defun %subtypep (type1 type2)
+(defun properly-named-class-p (thing environment)
+  (and (classp thing) (class-name thing)
+       (eq thing (find-class (class-name thing) nil environment))))
+
+(defconstant +the-T-class+ (find-class 'T))
+(defun %subtypep (type1 type2 &optional environment)
   (when (or (eq type1 type2)
             (null type1)
             (eq type2 t)
-            (and (classp type2) (eq (%class-name type2) t)))
+            (eq type2 +the-T-class+)
+            (and (classp type2)
+                 (let ((tape1 (if (consp type1) (car type1) type1)))
+                    (and (symbolp tape1) (eq type2 (find-class tape1 nil))))))
     (return-from %subtypep (values t t)))
-  (when (classp type1)
-    (setf type1 (%class-name type1)))
-  (when (classp type2)
-    (setf type2 (%class-name type2)))
+
+  (when (properly-named-class-p type1 environment)
+    (setf type1 (class-name type1)))
+  (when (properly-named-class-p type2 environment)
+    (setf type2 (class-name type2)))
   (let ((ct1 (ctype type1))
         (ct2 (ctype type2)))
     (multiple-value-bind (subtype-p valid-p)
@@ -505,8 +514,8 @@
                                   (and (symbolp type2) (find-class type2 nil)))))
         (return-from %subtypep (values (subclassp class1 class2) t)))
       (when (or classp-1 classp-2)
-        (let ((t1 (if classp-1 (%class-name type1) type1))
-              (t2 (if classp-2 (%class-name type2) type2)))
+        (let ((t1 (if classp-1 (class-name type1) type1))
+              (t2 (if classp-2 (class-name type2) type2)))
           (return-from %subtypep (values (simple-subtypep t1 t2) t))))))
   (setf type1 (normalize-type type1)
         type2 (normalize-type type2))
@@ -590,7 +599,7 @@
            (cond ((memq t2 '(integer rational real number))
                   (values (sub-interval-p i1 i2) t))
                  ((or (eq t2 'bignum)
-                      (and (classp t2) (eq (%class-name t2) 'bignum)))
+                      (and (classp t2) (eq (class-name t2) 'bignum)))
                   (values
                    (or (sub-interval-p i1 (list '* (list most-negative-fixnum)))
                        (sub-interval-p i1 (list (list most-positive-fixnum) '*)))
@@ -628,7 +637,7 @@
                         (t
                          (values (subtypep (car i1) (car i2)) t))))))
           ((and (classp t1)
-                (eq (%class-name t1) 'array)
+                (eq (class-name t1) 'array)
                 (eq t2 'array))
            (values (equal i2 '(* *)) t))
           ((and (memq t1 '(array simple-array)) (eq t2 'array))
@@ -738,7 +747,7 @@
                (t
                 (values nil t)))))
           ((classp t2)
-           (let ((class-name (%class-name t2)))
+           (let ((class-name (class-name t2)))
              (cond ((eq class-name t1)
                     (values t t))
                    ((and (eq class-name 'array)
@@ -776,5 +785,4 @@
            (values nil nil)))))
 
 (defun subtypep (type1 type2 &optional environment)
-  (declare (ignore environment))
-  (%subtypep type1 type2))
+  (%subtypep type1 type2 environment))

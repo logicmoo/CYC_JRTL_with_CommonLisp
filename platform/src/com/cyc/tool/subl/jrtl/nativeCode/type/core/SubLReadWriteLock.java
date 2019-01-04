@@ -1,26 +1,12 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
 import java.util.Collection;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import org.armedbear.lisp.Cons;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -32,60 +18,50 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbolFactory;
 
-//// Internal Imports
-
-//// External Imports
-
-public class SubLReadWriteLock extends AbstractSubLObject implements SubLObject {
-
-
+public class SubLReadWriteLock extends FromSubLisp implements SubLObject {
 	private class MyReentrantReadWriteLock extends ReentrantReadWriteLock {
 		protected Thread myGetOwner() {
-			return this.getOwner();
+			return getOwner();
 		}
 
 		protected Collection<Thread> myGetQueuedThreads() {
-			return this.getQueuedThreads();
+			return getQueuedThreads();
 		}
 	}
 
-	public static String READ_WRITE_LOCK_TYPE_NAME = "READ-WRITE-LOCK";
-
-	//// Constructors
-
-	public static SubLSymbol READ_WRITE_LOCK_TYPE_SYMBOL = SubLSymbolFactory
-			.makeSymbol(SubLReadWriteLock.READ_WRITE_LOCK_TYPE_NAME, SubLPackage.SUBLISP_PACKAGE);
-
-	//// Public Area
-
-	private SubLString name;
-
-	private MyReentrantReadWriteLock nativeReadWriteLock = new MyReentrantReadWriteLock();
-
-	/** Creates a new instance of SubLLock. */
 	SubLReadWriteLock(SubLString name) {
-		this.nativeReadWriteLock = new MyReentrantReadWriteLock();
+		nativeReadWriteLock = new MyReentrantReadWriteLock();
 		this.name = name;
 	}
 
+	private SubLString name;
+	private MyReentrantReadWriteLock nativeReadWriteLock;
+	public static String READ_WRITE_LOCK_TYPE_NAME = "READ-WRITE-LOCK";
+	public static SubLSymbol READ_WRITE_LOCK_TYPE_SYMBOL;
+	static {
+		READ_WRITE_LOCK_TYPE_SYMBOL = SubLSymbolFactory.makeSymbol("READ-WRITE-LOCK", SubLPackage.SUBLISP_PACKAGE);
+	}
+
+	@Override
 	public boolean canFastHash() {
 		return true;
 	}
 
 	public SubLString getName() {
-		return this.name.toStr();
+		return name.toStr();
 	}
 
 	public SubLString getSubLName() {
-		return this.name;
+		return name;
 	}
 
+	@Override
 	public SubLSymbol getType() {
 		return SubLReadWriteLock.READ_WRITE_LOCK_TYPE_SYMBOL;
 	}
 
+	@Override
 	public SubLFixnum getTypeCode() {
-		// @todo we need to define a *DTP* number for these objects
 		Errors.unimplementedMethod("SubLReadWriteLock.getTypeCode()");
 		return CommonSymbols.ZERO_INTEGER;
 	}
@@ -93,9 +69,9 @@ public class SubLReadWriteLock extends AbstractSubLObject implements SubLObject 
 	public SubLObject getWaiters() {
 		SubLObject result = SubLNil.NIL;
 		try {
-			Collection<Thread> threads = this.nativeReadWriteLock.myGetQueuedThreads();
+			Collection<Thread> threads = nativeReadWriteLock.myGetQueuedThreads();
 			for (Thread thread : threads)
-				result = new SubLConsPair(((SubLThread) thread).getSubLProcess(), result);
+				result = new Cons(((SubLThread) thread).getSubLProcess(), result);
 		} catch (Exception ex) {
 		}
 		return result;
@@ -104,228 +80,259 @@ public class SubLReadWriteLock extends AbstractSubLObject implements SubLObject 
 	public SubLObject getWriter() {
 		SubLObject result = SubLNil.NIL;
 		try {
-			Thread thread = this.nativeReadWriteLock.myGetOwner();
+			Thread thread = nativeReadWriteLock.myGetOwner();
 			result = ((SubLThread) thread).getSubLProcess();
 		} catch (Exception ex) {
 		}
 		return result;
 	}
 
+	@Override
 	public int hashCode(int currentDepth) {
-		if (currentDepth < SubLObject.MAX_HASH_DEPTH)
-			return this.superHash();
-		else
-			return SubLObject.DEFAULT_EXCEEDED_HASH_VALUE;
+		if (currentDepth < 8)
+			return superHash();
+		return 0;
 	}
 
+	@Override
 	public boolean isAlien() {
 		return false;
 	}
 
+	@Override
 	public boolean isAtom() {
 		return true;
 	}
 
+	@Override
 	public boolean isBigIntegerBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isBoolean() {
 		return false;
 	}
 
+	@Override
 	public boolean isChar() {
 		return false;
 	}
 
+	@Override
 	public boolean isCons() {
 		return false;
 	}
 
+	@Override
 	public boolean isDouble() {
 		return false;
 	}
 
+	@Override
 	public boolean isEnvironment() {
 		return false;
 	}
 
+	@Override
 	public boolean isError() {
 		return false;
 	}
 
+	@Override
 	public boolean isFixnum() {
 		return false;
 	}
 
+	@Override
 	public boolean isFunction() {
 		return false;
 	}
 
+	@Override
 	public boolean isFunctionSpec() {
 		return false;
 	}
 
+	@Override
 	public boolean isGuid() {
 		return false;
 	}
 
+	@Override
 	public boolean isHashtable() {
 		return false;
 	}
 
+	@Override
 	public boolean isHashtableIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isIntBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isInteger() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyhash() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyhashIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyword() {
 		return false;
 	}
 
+	@Override
 	public boolean isList() {
 		return false;
 	}
 
+	@Override
 	public boolean isLock() {
 		return false;
 	}
 
+	@Override
 	public boolean isLongBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isMacroOperator() {
 		return false;
 	}
 
+	@Override
 	public boolean isNil() {
 		return false;
 	}
 
+	@Override
 	public boolean isNumber() {
 		return false;
 	}
 
+	@Override
 	public boolean isPackage() {
 		return false;
 	}
 
+	@Override
 	public boolean isPackageIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isProcess() {
 		return false;
 	}
 
+	@Override
 	public boolean isReadWriteLock() {
 		return true;
 	}
 
+	@Override
 	public boolean isRegexPattern() {
 		return false;
 	}
 
+	@Override
 	public boolean isSemaphore() {
 		return false;
 	}
 
+	@Override
 	public boolean isSequence() {
 		return false;
 	}
 
+	@Override
 	public boolean isStream() {
 		return false;
 	}
 
+	@Override
 	public boolean isString() {
 		return false;
 	}
 
+	@Override
 	public boolean isStructure() {
 		return false;
 	}
 
+	@Override
 	public boolean isSymbol() {
 		return false;
 	}
 
+	@Override
 	public boolean isVector() {
 		return false;
 	}
 
 	public void releaseReadLock() {
-		this.nativeReadWriteLock.readLock().unlock();
+		nativeReadWriteLock.readLock().unlock();
 	}
 
 	public void releaseWriteLock() {
-		this.nativeReadWriteLock.writeLock().unlock();
+		nativeReadWriteLock.writeLock().unlock();
 	}
 
 	public void seizeReadLock() {
-		while (true)
+		while (true) {
 			try {
-				this.nativeReadWriteLock.readLock().lockInterruptibly();
-				break;
+				nativeReadWriteLock.readLock().lockInterruptibly();
 			} catch (InterruptedException ie) {
 				Threads.possiblyHandleInterrupts(false);
+				continue;
 			}
+			break;
+		}
 	}
 
 	public void seizeWriteLock() {
-		while (true)
+		while (true) {
 			try {
-				this.nativeReadWriteLock.writeLock().lockInterruptibly();
-				break;
+				nativeReadWriteLock.writeLock().lockInterruptibly();
 			} catch (InterruptedException ie) {
 				Threads.possiblyHandleInterrupts(false);
+				continue;
 			}
+			break;
+		}
 	}
 
-	/** Method created to avoid casting */
-	public SubLReadWriteLock toReadWriteLock() { // SubLReadWriteLock
+	@Override
+	public SubLReadWriteLock toReadWriteLock() {
 		return this;
 	}
 
-	public String toString() {
-		return "#<" + this.toTypeName() + " " + this.getName() + " @ " + this.hashCode(0) + ">";
+	@Override
+	public String printObjectImpl() {
+		return "#<" + toTypeName() + " " + getName() + " @ " + this.hashCode(0) + ">";
 	}
 
-	//// Protected Area
-
-	//// Private Area
-
-	//// Internal Rep
-
+	@Override
 	public String toTypeName() {
-		return SubLReadWriteLock.READ_WRITE_LOCK_TYPE_NAME;
+		return "READ-WRITE-LOCK";
 	}
-
-	// common lisp additions
-
-	public String writeToString() {
-		// TODO Auto-generated method stub
-		return this.toString();
-	}
-
 }

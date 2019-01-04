@@ -1,0 +1,498 @@
+
+% In my experience (I created one for an employer once) it is quite easy to implement a many valued logic system in prolog . First the key is recognizing you are using prolog as your programming language and your database/blackboard management tool. This is to take advantage of Prolog’s high rate of inference while not getting locked into the “negation by failure” myths that people seem to think are a required part of prolog. 
+
+First let's define some “truth values”.
+
+asserted_t = something or someone made an logical assertion
+true_t = something we might wish to say "yes" to
+assumed_t = temproarily assumed to be true
+proven_false_t = something we feel we have done due dillignce at disproving 
+possible_t = something possible (realize its only worth checking when not unknowable .. most unknowables are possibles)
+unknowable_t = something that is impossible to ever really know
+answerable_t = something that is possible to know
+askable_t = something that is possible to ask
+
+% for every contradiction i see in logicmoo.. i require the system to prove why it mistakening thought there was a contradiction..    "I thought trunks meant the same thing for cars and elephants"  "i had seen it go both ways before and i didnt separate teh context to  the temporal experinces" .. in order to be able to constuct such proofs is why modal operators such as: unknowable_t, assumed_t, observed_t, observed_mutliple_ways_t had to be created
+
+monotonically(logicmoo_kb_blackboard,
+         ((
+
+          % Any Idea that has been "asserted" into a blackboard context is "true"
+          (( asserted_t(Ctx,Idea) => true_t(Ctx,Idea) )),
+
+	  % Any Idea that is "true" in a context must be "assumed"
+          (( true_t(Ctx,Idea) => assumed_t(Ctx,Idea) )),
+
+	  % "Assumed" Ideas must be "not proven false" and "not fallacies"
+          (( assumed_t(Ctx,Idea) => ~proven_false_t(Ctx,Idea) & ~fallacy_t(Ctx,Idea)  )),
+
+	  % "Possible" Ideas that must be "not proven false" and "not fallacies"
+          (( possible_t(Ctx,Idea) => ~proven_false_t(Ctx,Idea) & ~fallacy_t(Ctx,Idea)  )),           
+
+	  % Ideas thought to be "true" and are yet "proven false" (in context Ctx) must be a "fallacies" (at least in this context)
+          (( true_t(Ctx,Idea) & proven_false_t(Ctx,Idea) => fallacy_t(Ctx,Idea) )),
+	          
+	  % "true" ideas must not be "proven false" and must be "possible" and at least "not uknowable"
+          (( true_t(Ctx,Idea) =>  ~proven_false_t(Ctx,Idea) & possible_t(Ctx,Idea) & ~unknowable_t(Ctx,Idea) )),
+
+          % "proven false" ideas are equivalent to being "not true" and "not possible" and "not unknowable (indeed knowable)"
+          (( proven_false_t(Ctx,Idea) <=> ~true_t(Ctx,Idea) & ~possible_t(Ctx,Idea) & ~unknowable_t(Ctx,Idea) )),
+
+          (( askable_t(Ctx,Idea) => true_t(Ctx,Idea) v unknowable_t(Ctx,Idea) v  proven_false_t(Ctx,Idea)  )),
+
+          (( answerable_t(Ctx,Idea) <=> askable_t(Ctx,Idea) & ~unknowable_t(Ctx,Idea) )),
+
+          (( askable_t(Ctx,Idea) <=> ~fallacy_t(Ctx,Idea) )),
+
+          (( answerable_t(Ctx,Idea) => true_t(Ctx,Idea) v proven_false_t(Ctx,Idea)  )),
+
+          (( true_t(Ctx,Idea) v unknowable_t(Ctx,Idea) v proven_false_t(Ctx,Idea)  ))
+
+
+STILL EDITING
+
+
+          
+/*
+        (( fallacy_t(Ctx,Idea) => proven_false_t(Ctx,Idea) & true_t(Ctx,Idea) & ~unknowable_t(Ctx,Idea) & ~possible_t(Ctx,Idea) )),  
+       
+          (( unknowable_t(Ctx,Idea) =>  proven_false_t(Ctx,Idea) & possible_t(Ctx,Idea) & ~asserted_t(Ctx,Idea) & ~proven_false_t(Ctx,Idea) )),
+       
+           (( ~unknowable_t(Ctx,Idea) => true_t(Ctx,Idea) v proven_false_t(Ctx,Idea)  )),
+           (( ~asserted_t(Ctx,Idea) => possible_t(Ctx,Idea) v proven_false_t(Ctx,Idea) v fallacy_t(Ctx,Idea) )),
+           (( proven_false_t(Ctx,Idea) =>  proven_false_t(Ctx,Idea) v fallacy_t(Ctx,Idea) v possible_t(Ctx,Idea) )),
+           (( ~possible_t(Ctx,Idea) => proven_false_t(Ctx,Idea) v fallacy_t(Ctx,Idea) )),
+           (( ~proven_false_t(Ctx,Idea) => fallacy_t(Ctx,Idea) v unknowable_t(Ctx,Idea) v true_t(Ctx,Idea) )),
+           (( ~fallacy_t(Ctx,Idea) =>  unknowable_t(Ctx,Idea) v proven_false_t(Ctx,Idea) v true_t(Ctx,Idea) ))
+
+           */
+
+         %  (( askable_t(Ctx,Idea) v fallacy_t(Ctx,Idea) )),
+
+      ))).
+
+monotonically(logicmoo_kb_blackboard_between_mts,
+         ((
+
+          
+          (( asserted_t(MT1,Idea) & true_t(MT1,genlMt,MT1,MT2) => true_t(MT2,Idea)) ),
+          (( true_t(Ctx,Idea) => assumed_t(Ctx,Idea) )),
+          (( assumed_t(Ctx,Idea) => ~proven_false_t(Ctx,Idea) & ~fallacy_t(Ctx,Idea)  )),
+          (( possible_t(Ctx,Idea) => ~proven_false_t(Ctx,Idea) & ~fallacy_t(Ctx,Idea)  )),           
+
+          (( true_t(Ctx,Idea) & proven_false_t(Ctx,Idea) => fallacy_t(Ctx,Idea) )),
+         
+          (( true_t(Ctx,Idea) =>  ~proven_false_t(Ctx,Idea) & possible_t(Ctx,Idea) & ~unknowable_t(Ctx,Idea) )),
+          (( proven_false_t(Ctx,Idea) <=> proven_false_t(Ctx,Idea) & ~possible_t(Ctx,Idea) & ~unknowable_t(Ctx,Idea) )),
+          (( ist(MT1,askable_t(Ctx,Idea)) & genlMt(MT1,MT2)  =>  ist(MT1, (true_t(Ctx,Idea) v unknowable_t(Ctx,Idea) v proven_false_t(Ctx,Idea)  )))),
+          (( answerable_t(Ctx,Idea) <=> askable_t(Ctx,Idea) & ~unknowable_t(Ctx,Idea) )),
+          (( askable_t(Ctx,Idea) <=> ~fallacy_t(Ctx,Idea) )),
+          (( answerable_t(Ctx,Idea) => true_t(Ctx,Idea) v proven_false_t(Ctx,Idea)  )),
+          (( true_t(Ctx,Idea) v unknowable_t(Ctx,Idea) v proven_false_t(Ctx,Idea)  ))
+
+
+
+
+          
+/*
+        (( fallacy_t(Ctx,Idea) => proven_false_t(Ctx,Idea) & true_t(Ctx,Idea) & ~unknowable_t(Ctx,Idea) & ~possible_t(Ctx,Idea) )),  
+       
+          (( unknowable_t(Ctx,Idea) =>  proven_false_t(Ctx,Idea) & possible_t(Ctx,Idea) & ~asserted_t(Ctx,Idea) & ~proven_false_t(Ctx,Idea) )),
+       
+           (( ~unknowable_t(Ctx,Idea) => true_t(Ctx,Idea) v proven_false_t(Ctx,Idea)  )),
+           (( ~asserted_t(Ctx,Idea) => possible_t(Ctx,Idea) v proven_false_t(Ctx,Idea) v fallacy_t(Ctx,Idea) )),
+           (( proven_false_t(Ctx,Idea) =>  proven_false_t(Ctx,Idea) v fallacy_t(Ctx,Idea) v possible_t(Ctx,Idea) )),
+           (( ~possible_t(Ctx,Idea) => proven_false_t(Ctx,Idea) v fallacy_t(Ctx,Idea) )),
+           (( ~proven_false_t(Ctx,Idea) => fallacy_t(Ctx,Idea) v unknowable_t(Ctx,Idea) v true_t(Ctx,Idea) )),
+           (( ~fallacy_t(Ctx,Idea) =>  unknowable_t(Ctx,Idea) v proven_false_t(Ctx,Idea) v true_t(Ctx,Idea) ))
+
+           */
+
+         %  (( askable_t(Ctx,Idea) v fallacy_t(Ctx,Idea) )),
+
+      ))).
+
+
+
+monotonically(logicmoo_kb_logic,
+         ((
+          uses_logic(logicmoo_kb_blackboard),
+
+         (( true_t(Ctx,genls,TypeClass1,TypeClass2)  & isa_t(Ctx,TypeClass1,Rel) => isa_t(Ctx,TypeClass2,Rel) )),
+
+
+         (( true_t(Ctx,disjointWith,TypeClass1,TypeClass2) =>  isa_t(Ctx,TypeClass1,Rel) v isa_t(Ctx,TypeClass2,Rel) )),
+
+
+         (( true_t(Ctx,genlPreds,Rel,PSuper) & true_t(Ctx,Idea) => true_t(Ctx,PSuper,Args,Env) )),
+         (( true_t(Ctx,genlPreds,Rel,PSuper) & proven_false_t(Ctx,PSuper,Args,Env) => proven_false_t(Ctx,Idea) )),
+         (( true_t(Ctx,genlInverse,Rel,PSuper) & true_t(Ctx,Idea) => true_t(Ctx,PSuper,Env,Args) )),
+         (( true_t(Ctx,negationPreds,Rel,PSuper) & true_t(Ctx,Idea) => proven_false_t(Ctx,PSuper,Args,Env) )),
+         (( true_t(Ctx,negationInverse,Rel,PSuper) & true_t(Ctx,Idea) => proven_false_t(Ctx,PSuper,Env,Args) )),
+
+     %    (( isa_t(Ctx,predTransitive,Rel) & true_t(Ctx,Idea) & true_t(Ctx,Rel,Env,C) => true_t(Ctx,Rel,Args,C) )),
+     %    (( isa_t(Ctx,predReflexive,Rel) & true_t(Ctx,Idea) => true_t(Ctx,Rel,Args,Args) & true_t(Ctx,Rel,Env,Env) )),
+     %    (( isa_t(Ctx,predSymmetric,Rel) & true_t(Ctx,Idea) => true_t(Ctx,Rel,Env,Args)  ))
+         (( isa_t(Ctx,predIrreflexive,Rel) &  true_t(Ctx,Idea) => proven_false_t(Ctx,Rel,Env,Args) ))
+      %   (( isa_t(Ctx,predIrreflexive,PSuper) & true_t(Ctx,genlInverse,PSuper,Rel) => isa_t(Ctx,predIrreflexive,Rel) )),
+      %   (( isa_t(Ctx,predIrreflexive,PSuper) & true_t(Ctx,genlPreds,Rel,PSuper) => isa_t(Ctx,predIrreflexive,Rel) ))
+      ))).
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   logicmoo_kb_blackboard:0
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% pttp_in: asserted_t(Ctx,M29, N29, O29)=>true_t(Ctx,M29, N29, O29).
+
+~asserted_t(Ctx,Args, Env, C) :~
+       ~proven_t(Ctx,Args, Env, C).
+
+true_t(Ctx,Args, Env, C) :~
+       asserted_t(Ctx,Args, Env, C).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   logicmoo_kb_blackboard:1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% pttp_in: possible_t(Ctx,M29, N29, O29)=> ~proven_false_t(Ctx,M29, N29, O29)& ~fallacy_t(Ctx,M29, N29, O29).
+
+~possible_t(Ctx,_, _, _).
+
+poss_t(Ctx,Args, Env, C) :~
+       possible_t(Ctx,Args, Env, C).
+
+~fallacy_t(Ctx,Args, Env, C) :~
+       possible_t(Ctx,Args, Env, C).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   logicmoo_kb_blackboard:2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% pttp_in: true_t(Ctx,M29, N29, O29)&proven_false_t(Ctx,M29, N29, O29)=>fallacy_t(Ctx,M29, N29, O29).
+
+~both_t(Ctx,true_t(Ctx,Args, Env, C), proven_false_t(Ctx,_, _, _)) :~
+       ~fallacy_t(Ctx,Args, Env, C).
+
+fallacy_t(Ctx,Args, Env, C) :~
+       true_t(Ctx,Args, Env, C),
+       proven_false_t(Ctx,Args, Env, C).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   logicmoo_kb_blackboard:3
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% pttp_in: true_t(Ctx,M29, N29, O29)=> ~proven_false_t(Ctx,M29, N29, O29)& (possible_t(Ctx,M29, N29, O29)& ~unknowable_t(Ctx,M29, N29, O29)).
+
+~proven_t(Ctx,_, _, _).
+
+poss_t(Ctx,Args, Env, C) :~
+       true_t(Ctx,Args, Env, C).
+
+possible_t(Ctx,Args, Env, C) :~
+       true_t(Ctx,Args, Env, C).
+
+~unknowable_t(Ctx,Args, Env, C) :~
+       true_t(Ctx,Args, Env, C).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   logicmoo_kb_blackboard:4
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% pttp_in: proven_false_t(Ctx,M29, N29, O29)=> proven_false_t(Ctx,M29, N29, O29)& (~possible_t(Ctx,M29, N29, O29)& ~unknowable_t(Ctx,M29, N29, O29)).
+
+poss_t(Ctx,_, _, _).
+
+~proven_t(Ctx,Args, Env, C) :~
+       proven_false_t(Ctx,Args, Env, C).
+
+~possible_t(Ctx,Args, Env, C) :~
+       proven_false_t(Ctx,Args, Env, C).
+
+~unknowable_t(Ctx,Args, Env, C) :~
+       proven_false_t(Ctx,Args, Env, C).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   logicmoo_kb_blackboard:5
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% pttp_in: askable_t(Ctx,M29, N29, O29)v fallacy_t(Ctx,M29, N29, O29).
+
+askable_t(Ctx,Args, Env, C) :~
+       ~fallacy_t(Ctx,Args, Env, C).
+
+fallacy_t(Ctx,Args, Env, C) :~
+       ~askable_t(Ctx,Args, Env, C).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   logicmoo_kb_blackboard:6
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% pttp_in: askable_t(Ctx,M29, N29, O29)=>true_t(Ctx,M29, N29, O29)v (unknowable_t(Ctx,M29, N29, O29)v proven_false_t(Ctx,M29, N29, O29)).
+
+~askable_t(Ctx,Args, Env, C) :~
+       ~proven_t(Ctx,Args, Env, C),
+       ~unknowable_t(Ctx,Args, Env, C),
+       poss_t(Ctx,Args, Env, C).
+
+true_t(Ctx,Args, Env, C) :~
+       askable_t(Ctx,Args, Env, C),
+       ~unknowable_t(Ctx,Args, Env, C),
+       poss_t(Ctx,Args, Env, C).
+
+unknowable_t(Ctx,Args, Env, C) :~
+       askable_t(Ctx,Args, Env, C),
+       ~proven_t(Ctx,Args, Env, C),
+       poss_t(Ctx,Args, Env, C).
+
+proven_false_t(Ctx,Args, Env, C) :~
+       askable_t(Ctx,Args, Env, C),
+       ~proven_t(Ctx,Args, Env, C),
+       ~unknowable_t(Ctx,Args, Env, C).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   logicmoo_kb_blackboard:7
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% pttp_in: answerable_t(Ctx,M29, N29, O29)<=> ~unknowable_t(Ctx,M29, N29, O29).
+
+answerable_t(Ctx,Args, Env, C) :~
+       ~unknowable_t(Ctx,Args, Env, C).
+
+~unknowable_t(Ctx,Args, Env, C) :~
+       answerable_t(Ctx,Args, Env, C).
+
+~answerable_t(Ctx,Args, Env, C) :~
+       unknowable_t(Ctx,Args, Env, C).
+
+unknowable_t(Ctx,Args, Env, C) :~
+       ~answerable_t(Ctx,Args, Env, C).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   logicmoo_kb_blackboard:8
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% pttp_in: askable_t(Ctx,M29, N29, O29)<=> ~fallacy_t(Ctx,M29, N29, O29).
+
+askable_t(Ctx,Args, Env, C) :~
+       ~fallacy_t(Ctx,Args, Env, C).
+
+~fallacy_t(Ctx,Args, Env, C) :~
+       askable_t(Ctx,Args, Env, C).
+
+~askable_t(Ctx,Args, Env, C) :~
+       fallacy_t(Ctx,Args, Env, C).
+
+fallacy_t(Ctx,Args, Env, C) :~
+       ~askable_t(Ctx,Args, Env, C).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   logicmoo_kb_blackboard:9
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% pttp_in: answerable_t(Ctx,M29, N29, O29)=>true_t(Ctx,M29, N29, O29)v proven_false_t(Ctx,M29, N29, O29).
+
+~answerable_t(Ctx,Args, Env, C) :~
+       ~proven_t(Ctx,Args, Env, C),
+       poss_t(Ctx,Args, Env, C).
+
+true_t(Ctx,Args, Env, C) :~
+       answerable_t(Ctx,Args, Env, C),
+       poss_t(Ctx,Args, Env, C).
+
+proven_false_t(Ctx,Args, Env, C) :~
+       answerable_t(Ctx,Args, Env, C),
+       ~proven_t(Ctx,Args, Env, C).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   logicmoo_kb_blackboard:10
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% pttp_in: true_t(Ctx,M29, N29, O29)v (unknowable_t(Ctx,M29, N29, O29)v proven_false_t(Ctx,M29, N29, O29)).
+
+true_t(Ctx,Args, Env, C) :~
+       ~unknowable_t(Ctx,Args, Env, C),
+       poss_t(Ctx,Args, Env, C).
+
+unknowable_t(Ctx,Args, Env, C) :~
+       ~proven_t(Ctx,Args, Env, C),
+       poss_t(Ctx,Args, Env, C).
+
+proven_false_t(Ctx,Args, Env, C) :~
+       ~proven_t(Ctx,Args, Env, C),
+       ~unknowable_t(Ctx,Args, Env, C).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   logicmoo_kb_logic:1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% pttp_in: true_t(Ctx,typeSubclass, M29, N29)&isa_t(Ctx,M29, O29)=>isa_t(Ctx,N29, O29).
+
+~both_t(Ctx,true_t(Ctx,typeSubclass, _, Args), isa_t(Ctx,_, Env)) :~
+       ~isa_t(Ctx,Args, Env).
+
+isa_t(Ctx,Args, C) :~
+       true_t(Ctx,typeSubclass, Env, Args),
+       isa_t(Ctx,Env, C).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   logicmoo_kb_logic:2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% pttp_in: true_t(Ctx,typeSubclass, M29, N29)&isa(O29, M29)=>isa(O29, N29).
+
+~both_t(Ctx,true_t(Ctx,typeSubclass, _, Env), isa(Args, _)) :~
+       ~mudIsa(Args, Env).
+
+isa(Env, Args) :~
+       true_t(Ctx,typeSubclass, C, Args),
+       isa(Env, C).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   logicmoo_kb_logic:3
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% pttp_in: true_t(Ctx,disjointWith, M29, N29)=>isa_t(Ctx,M29, O29)v isa_t(Ctx,N29, O29).
+
+proven_false_t(Ctx,disjointWith, Args, Env) :~
+       ~isa_t(Ctx,Args, C),
+       ~isa_t(Ctx,Env, C).
+
+isa_t(Ctx,Args, C) :~
+       true_t(Ctx,disjointWith, Args, Env),
+       ~isa_t(Ctx,Env, C).
+
+isa_t(Ctx,Args, C) :~
+       true_t(Ctx,disjointWith, Env, Args),
+       ~isa_t(Ctx,Env, C).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   logicmoo_kb_logic:4
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% pttp_in: true_t(Ctx,disjointWith, M29, N29)=>isa(O29, M29)v isa(O29, N29).
+
+proven_false_t(Ctx,disjointWith, Args, C) :~
+       ~mudIsa(Env, Args),
+       ~mudIsa(Env, C).
+
+isa(Env, Args) :~
+       true_t(Ctx,disjointWith, Args, C),
+       ~mudIsa(Env, C).
+
+isa(Env, Args) :~
+       true_t(Ctx,disjointWith, C, Args),
+       ~mudIsa(Env, C).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   logicmoo_kb_logic:5
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% pttp_in: true_t(Ctx,genlPreds, M29, N29)&true_t(Ctx,M29, O29, P29)=>true_t(Ctx,N29, O29, P29).
+
+~both_t(Ctx,true_t(Ctx,genlPreds, _, Args), true_t(Ctx,_, Env, C)) :~
+       ~proven_t(Ctx,Args, Env, C).
+
+true_t(Ctx,Args, C, D) :~
+       true_t(Ctx,genlPreds, Env, Args),
+       true_t(Ctx,Env, C, D).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   logicmoo_kb_logic:6
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% pttp_in: true_t(Ctx,genlInverse, M29, N29)&true_t(Ctx,M29, O29, P29)=>true_t(Ctx,N29, P29, O29).
+
+~both_t(Ctx,true_t(Ctx,genlInverse, _, Args), true_t(Ctx,_, C, Env)) :~
+       ~proven_t(Ctx,Args, Env, C).
+
+true_t(Ctx,Args, D, C) :~
+       true_t(Ctx,genlInverse, Env, Args),
+       true_t(Ctx,Env, C, D).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   logicmoo_kb_logic:7
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% pttp_in: true_t(Ctx,negationPreds, M29, N29)&true_t(Ctx,M29, O29, P29)=>proven_false_t(Ctx,N29, O29, P29).
+
+~both_t(Ctx,true_t(Ctx,negationPreds, _, Args), true_t(Ctx,_, Env, C)) :~
+       poss_t(Ctx,Args, Env, C).
+
+proven_false_t(Ctx,Args, C, D) :~
+       true_t(Ctx,negationPreds, Env, Args),
+       true_t(Ctx,Env, C, D).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   logicmoo_kb_logic:8
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% pttp_in: true_t(Ctx,negationInverse, M29, N29)&true_t(Ctx,M29, O29, P29)=>proven_false_t(Ctx,N29, P29, O29).
+
+~both_t(Ctx,true_t(Ctx,negationInverse, _, Args), true_t(Ctx,_, C, Env)) :~
+       poss_t(Ctx,Args, Env, C).
+
+proven_false_t(Ctx,Args, D, C) :~
+       true_t(Ctx,negationInverse, Env, Args),
+       true_t(Ctx,Env, C, D).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   logicmoo_kb_logic:9
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% pttp_in: isa_t(Ctx,predIrreflexive, M29)&true_t(Ctx,M29, N29, O29)=>proven_false_t(Ctx,M29, O29, N29).
+
+~both_t(Ctx,isa_t(Ctx,predIrreflexive, Args), true_t(Ctx,_, C, Env)) :~
+       poss_t(Ctx,Args, Env, C).
+
+proven_false_t(Ctx,Args, C, Env) :~
+       isa_t(Ctx,predIrreflexive, Args),
+       true_t(Ctx,Args, Env, C).
+
+true.
+
+?~
+
+
+
+
+

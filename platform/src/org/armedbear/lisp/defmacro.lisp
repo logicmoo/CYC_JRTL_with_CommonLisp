@@ -1,7 +1,7 @@
 ;;; defmacro.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: defmacro.lisp 11391 2008-11-15 22:38:34Z vvoutilainen $
+;;; $Id: defmacro.lisp 13696 2011-11-15 22:34:19Z astalla $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -37,14 +37,17 @@
 (defmacro defmacro (name lambda-list &rest body)
   (let* ((whole (gensym "WHOLE-"))
          (env   (gensym "ENVIRONMENT-")))
-    (multiple-value-bind (body decls)
+    (multiple-value-bind (body decls documentation)
         (parse-defmacro lambda-list whole body name 'defmacro :environment env)
       (let ((expander `(lambda (,whole ,env) ,@decls ,body)))
         `(progn
+	   (sys::record-source-information-for-type ',name :macro)
            (let ((macro (make-macro ',name
                                     (or (precompile nil ,expander) ,expander))))
              ,@(if (special-operator-p name)
                    `((put ',name 'macroexpand-macro macro))
                    `((fset ',name macro)))
              (%set-arglist macro ',lambda-list)
+             ,@(when documentation
+                     `((%set-documentation ',name 'cl:function ,documentation)))
              ',name))))))

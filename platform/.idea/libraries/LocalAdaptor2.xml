@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="LocalAdaptor2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/platform/ext/GAT/Adaptors/LocalAdaptor/LocalAdaptor.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

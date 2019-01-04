@@ -1,382 +1,388 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.type.number;
 
 import java.math.BigInteger;
 
+import org.armedbear.lisp.Bignum;
+import org.armedbear.lisp.Lisp;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-//// External Imports
-
-public class SubLLongBignum extends AbstractSubLInteger implements SubLBignum, SubLInteger, SubLNumber, SubLObject {
-
-	//// Constructors
-
-	public static String LONG_TYPE_NAME = "SOMEWHAT-BIG-BIGNUM";
-
-	private long value;
-
-	//// Public Area
-
-	private Long longValue;
-
-	SubLLongBignum(long theLong) {
-		this.value = theLong;
+final public class SubLLongBignum extends Bignum implements SubLBignum, SubLInteger, SubLNumber, SubLObject {
+/* this fits into CL as a Bignum (haskish but it needs a 'long' type)*/
+	protected SubLLongBignum(long l) {
+		super(BigInteger.valueOf(l));
+		longValue = l;
 	}
 
-	/** Creates a new instance of SubLInteger. */
-	SubLLongBignum(Long theLong) {
-		this.longValue = theLong;
-		this.value = theLong.longValue();
+	protected SubLLongBignum(Long theLong) {
+		super(BigInteger.valueOf(theLong));
+		nativeObject = theLong;
+		longValue = theLong;
 	}
 
+	private long longValue;
+	private Long nativeObject;
+	public static String LONG_TYPE_NAME;
+	static {
+		SubLLongBignum.LONG_TYPE_NAME = "SOMEWHAT-BIG-BIGNUM";
+	}
+
+	@Override
 	public SubLNumber abs() {
-		if (this.value == Long.MIN_VALUE)
-			return SubLObjectFactory.makeInteger(new BigInteger("" + Long.MIN_VALUE).abs());
-		long result = Math.abs(this.value);
+		if (longValue == Long.MIN_VALUE)
+			return SubLObjectFactory.makeInteger(new BigInteger("-9223372036854775808").abs());
+		long result = Math.abs(longValue);
 		return SubLObjectFactory.makeInteger(result);
 	}
 
+	@Override
 	public SubLObject add(SubLObject num) {
-		if (num.getNumSize() > SubLNumber.EIGHT_BYTE_INTEGER)
+		if (num.getNumSize() > 1)
 			return num.add(this);
-		BigInteger a = this.bigIntegerValue();
+		BigInteger a = bigIntegerValue();
 		BigInteger b = num.bigIntegerValue();
 		return SubLNumberFactory.makeInteger(a.add(b));
 	}
 
+	@Override
 	public SubLObject dec() {
-		if (this.value == Long.MIN_VALUE)
-			return SubLNumberFactory.makeInteger(new BigInteger(this.value + "").subtract(BigInteger.ONE));
-		return SubLNumberFactory.makeInteger(this.value - 1);
+		if (longValue == Long.MIN_VALUE)
+			return SubLNumberFactory.makeInteger(new BigInteger(longValue + "").subtract(BigInteger.ONE));
+		return SubLNumberFactory.makeInteger(longValue - 1L);
 	}
 
+	@Override
 	public double doubleValue() {
-		return this.value;
+		return longValue;
 	}
 
+	@Override
 	public boolean eql(SubLObject obj) {
-		if (!obj.isLongBignum())
-			return false;
-		return this.value == obj.longValue();
+		return obj.isLongBignum() && longValue == obj.longValue();
 	}
 
+	@Override
 	public boolean equal(SubLObject obj) {
-		if (!obj.isLongBignum())
-			return false;
-		return this.value == obj.longValue();
+		return obj.isLongBignum() && longValue == obj.longValue();
 	}
 
-	public boolean equalp(SubLObject obj) {
-		if (!obj.isLongBignum())
-			return false;
-		return this.value == obj.longValue();
-	}
-
+	@Override
 	public float floatValue() {
-		return this.value;
+		return longValue;
 	}
 
 	public synchronized Long getLong() {
-		if (this.longValue == null)
-			this.longValue = new Long(this.value);
-		return this.longValue;
+		if (nativeObject == null)
+			nativeObject = new Long(longValue);
+		return nativeObject;
 	}
 
+	@Override
 	public Number getNativeNumber() {
-		return this.getLong();
+		return getLong();
 	}
 
+	@Override
 	public int getNumSize() {
-		return SubLNumber.EIGHT_BYTE_INTEGER;
+		return 1;
 	}
 
+	@Override
 	public SubLSymbol getType() {
 		return Types.$dtp_bignum$;
 	}
 
+	@Override
 	public SubLFixnum getTypeCode() {
 		return CommonSymbols.THIRTY_FOUR_INTEGER;
 	}
 
-	/**
-	 * use this version only if the arg is of same numerical type or smaller
-	 * type than 'this'
-	 */
+	@Override
 	public boolean greaterThanInternal(SubLObject num) {
-		return this.value > num.longValue();
+		return longValue > num.longValue();
 	}
 
-	/**
-	 * use this version only if the arg is of same numerical type or smaller
-	 * type than 'this'
-	 */
+	@Override
 	public boolean greaterThanOrEqualInternal(SubLObject num) {
-		return this.value >= num.longValue();
+		return longValue >= num.longValue();
 	}
 
+	@Override
 	public SubLObject inc() {
-		if (this.value == Long.MAX_VALUE)
-			return SubLNumberFactory.makeInteger(new BigInteger(this.value + "").add(BigInteger.ONE));
-		return SubLNumberFactory.makeInteger(this.value + 1);
+		if (longValue == Long.MAX_VALUE)
+			return SubLNumberFactory.makeInteger(new BigInteger(longValue + "").add(BigInteger.ONE));
+		return SubLNumberFactory.makeInteger(longValue + 1L);
 	}
 
+	@Override
 	public int intValue() {
-		return (int) this.value;
+		return (int) longValue;
 	}
 
+	@Override
 	public boolean isAlien() {
 		return false;
 	}
 
+	@Override
 	public boolean isAtom() {
 		return true;
 	}
 
+	@Override
 	public boolean isBigIntegerBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isBignum() {
 		return true;
 	}
 
+	@Override
 	public boolean isBoolean() {
 		return false;
 	}
 
+	@Override
 	public boolean isChar() {
 		return false;
 	}
 
+	@Override
 	public boolean isCons() {
 		return false;
 	}
 
+	@Override
 	public boolean isDouble() {
 		return false;
 	}
 
+	@Override
 	public boolean isEnvironment() {
 		return false;
 	}
 
+	@Override
 	public boolean isError() {
 		return false;
 	}
 
+	@Override
 	public boolean isFixnum() {
 		return false;
 	}
 
+	@Override
 	public boolean isFunction() {
 		return false;
 	}
 
+	@Override
 	public boolean isFunctionSpec() {
 		return false;
 	}
 
+	@Override
 	public boolean isGuid() {
 		return false;
 	}
 
+	@Override
 	public boolean isHashtable() {
 		return false;
 	}
 
+	@Override
 	public boolean isHashtableIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isIntBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isInteger() {
 		return true;
 	}
 
+	@Override
 	public boolean isKeyhash() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyhashIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyword() {
 		return false;
 	}
 
+	@Override
 	public boolean isList() {
 		return false;
 	}
 
+	@Override
 	public boolean isLock() {
 		return false;
 	}
 
+	@Override
 	public boolean isLongBignum() {
 		return true;
 	}
 
+	@Override
 	public boolean isMacroOperator() {
 		return false;
 	}
 
+	@Override
 	public boolean isNegative() {
-		return this.value < 0;
+		return longValue < 0L;
 	}
 
+	@Override
 	public boolean isNil() {
 		return false;
 	}
 
+	@Override
 	public boolean isNumber() {
 		return true;
 	}
 
+	@Override
 	public boolean isPackage() {
 		return false;
 	}
 
+	@Override
 	public boolean isPackageIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isPositive() {
-		return this.value > 0L;
+		return longValue > 0L;
 	}
 
+	@Override
 	public boolean isProcess() {
 		return false;
 	}
 
+	@Override
 	public boolean isReadWriteLock() {
 		return false;
 	}
 
+	@Override
 	public boolean isRegexPattern() {
 		return false;
 	}
 
+	@Override
 	public boolean isSemaphore() {
 		return false;
 	}
 
+	@Override
 	public boolean isSequence() {
 		return false;
 	}
 
+	@Override
 	public boolean isStream() {
 		return false;
 	}
 
+	@Override
 	public boolean isString() {
 		return false;
 	}
 
+	@Override
 	public boolean isStructure() {
 		return false;
 	}
 
+	@Override
 	public boolean isSymbol() {
 		return false;
 	}
 
+	@Override
 	public boolean isVector() {
 		return false;
 	}
 
+	@Override
 	public boolean isZero() {
-		return this.value == 0;
+		return longValue == 0L;
 	}
 
-	/**
-	 * use this version only if the arg is of same numerical type or smaller
-	 * type than 'this'
-	 */
+	@Override
 	public boolean lessThanInternal(SubLObject num) {
-		return this.value < num.longValue();
+		return longValue < num.longValue();
 	}
 
-	/**
-	 * use this version only if the arg is of same numerical type or smaller
-	 * type than 'this'
-	 */
+	@Override
 	public boolean lessThanOrEqualInternal(SubLObject num) {
-		return this.value <= num.longValue();
+		return longValue <= num.longValue();
 	}
 
+	@Override
 	public long longValue() {
-		return this.value;
+		return longValue;
 	}
 
+	@Override
 	public SubLObject mult(SubLObject num) {
-		if (num.getNumSize() > SubLNumber.EIGHT_BYTE_INTEGER)
+		if (num.getNumSize() > 1)
 			return num.mult(this);
-		BigInteger a = this.bigIntegerValue();
+		BigInteger a = bigIntegerValue();
 		BigInteger b = num.bigIntegerValue();
 		return SubLNumberFactory.makeInteger(a.multiply(b));
 	}
 
-	/**
-	 * use this version only if the arg is of same numerical type or smaller
-	 * type than 'this'
-	 */
+	@Override
 	public boolean numericallyEqualInternal(SubLObject num) {
-		return this.value == num.longValue();
+		return longValue == num.longValue();
 	}
 
+	@Override
 	public SubLObject sub(SubLObject num) {
-		if (num.getNumSize() > SubLNumber.EIGHT_BYTE_INTEGER)
+		if (num.getNumSize() > 1)
 			return num.mult(CommonSymbols.MINUS_ONE_INTEGER).add(this);
-		BigInteger a = this.bigIntegerValue();
+		BigInteger a = bigIntegerValue();
 		BigInteger b = num.bigIntegerValue();
 		return SubLNumberFactory.makeInteger(a.subtract(b));
 	}
 
-	/** Method created to avoid casting */
-	public SubLFixnum toFixnum() { // SubLFixnum
-		Errors.error(this + " is not of type: FIXNUM.");
+	@Override
+	public SubLFixnum toFixnum() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"FIXNUM");
 		return null;
 	}
 
-	//// Protected Area
 
-	//// Private Area
-
-	//// Internal Rep
-
-	public String toString() {
-		return "" + this.value;
-	}
-
+	@Override
 	public String toTypeName() {
 		return SubLLongBignum.LONG_TYPE_NAME;
 	}
-
 }

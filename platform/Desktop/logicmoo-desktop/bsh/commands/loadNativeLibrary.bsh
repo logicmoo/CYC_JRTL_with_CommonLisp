@@ -1,0 +1,10 @@
+/**
+ * loadNativeLibrary() - creates an instance of ArrayList class
+ *
+ * @author  V.Ganesh
+ * @version 2.0 (Part of MeTA v2.0)
+ */
+
+loadNativeLibrary(String libraryName, Class javaClass) {
+    return com.sun.jna.Native.loadLibrary(libraryName, javaClass);
+}

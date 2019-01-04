@@ -1,0 +1,41 @@
+import org.meta.math.*;
+import org.meta.math.event.*;
+
+cg = new CombinationGenerator(5);
+cg.addCombinationGeneratorListener(new CombinationGeneratorListener() {
+         public boolean newCombination(CombinationGeneratorEvent cge) {
+                 int [] a = cge.getCombinations();
+                 for(i=0; i<=cge.getNoOfTerms(); i++) {
+                    System.out.print(a[i] + " ");
+                 } 
+                 System.out.println(""); 
+                 return true;
+         }});
+print("lexicographical combinator");
+cg.startGenerator(); 
+
+cg = new CombinationGenerator(5, 2);
+cg.addCombinationGeneratorListener(new CombinationGeneratorListener() {
+         public boolean newCombination(CombinationGeneratorEvent cge) {
+                 int [] a = cge.getCombinations();
+                 for(i=0; i<=cge.getNoOfTerms(); i++) {
+                    System.out.print(a[i] + " ");
+                 } 
+                 System.out.println(""); 
+                 return true;
+         }});
+print("simple combinator");
+cg.startGenerator();
+
+ce = new CardinalityExpressionGenerator(5);
+ce.addCardinalityExpressionGeneratorListener(new CardinalityExpressionGeneratorListener() {
+         public boolean newExpressionTerm(CardinalityExpressionGeneratorEvent ceg) {
+                 int [] a = ceg.getCombinations();
+                 for(i=0; i<=ceg.getNoOfTerms(); i++) {
+                    System.out.print(a[i] + " ");
+                 } 
+                 System.out.println(" ( " + ceg.getSign() + " ) "); 
+                 return true;
+         }});
+print("cardinality expression");
+ce.startGenerator(); 

@@ -2,7 +2,7 @@
  * WrongNumberOfArgumentsException.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: WrongNumberOfArgumentsException.java 12431 2010-02-08 08:05:15Z mevenson $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,53 +31,91 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class WrongNumberOfArgumentsException extends ProgramError {
-	private Operator operator;
-	private int expectedArgs;
-	// private String message;
+public final class WrongNumberOfArgumentsException extends ProgramError
+{
+    private Operator operator;
+    private int expectedMinArgs;
+    private int expectedMaxArgs;
+    private LispObject actualArgs;
+    private String message;
 
-	public WrongNumberOfArgumentsException(Operator operator) {
-		this(operator, -1);
+    public WrongNumberOfArgumentsException(Operator operator) {
+        this(operator, -1);
+    }
+
+    public WrongNumberOfArgumentsException(Operator operator, LispObject args,
+            int expectedMin, int expectedMax) {
+        // This is really just an ordinary PROGRAM-ERROR, broken out into its
+        // own Java class as a convenience for the implementation.
+        super(StandardClass.PROGRAM_ERROR);
+        this.operator = operator;
+	this.expectedMinArgs = expectedMin;
+	this.expectedMaxArgs = expectedMax;
+        this.actualArgs = args;
+        setFormatControl(getMessage());
+        setFormatArguments(NIL);
+    }
+
+    public WrongNumberOfArgumentsException(Operator operator,
+            int expectedMin, int expectedMax) {
+        this(operator, null, expectedMin, expectedMax);
+    }
+        
+    public WrongNumberOfArgumentsException(Operator operator, int expectedArgs) {
+        this(operator, expectedArgs, expectedArgs);
+    }
+
+    public WrongNumberOfArgumentsException(Operator operator, LispObject args,
+            int expectedArgs) {
+        this(operator, args, expectedArgs, expectedArgs);
+    }
+    
+    public WrongNumberOfArgumentsException(String message) {
+        super(StandardClass.PROGRAM_ERROR);
+	if(message == null) {
+	    throw new NullPointerException("message can not be null");
 	}
+	this.message = message;
+        setFormatControl(getMessage());
+        setFormatArguments(NIL);
+    }
 
-	public WrongNumberOfArgumentsException(Operator operator, int expectedArgs) {
-		// This is really just an ordinary PROGRAM-ERROR, broken out into its
-		// own Java class as a convenience for the implementation.
-		super(StandardClass.PROGRAM_ERROR);
-		this.operator = operator;
-		this.expectedArgs = expectedArgs;
-		this.setFormatControl(this.getMessage());
-		this.setFormatArguments(Lisp.NIL);
+    @Override
+    public String getMessage()
+    {
+	if(message != null) {
+	    return message;
 	}
-
-	public WrongNumberOfArgumentsException(String message) {
-		super(StandardClass.PROGRAM_ERROR);
-		if (message == null)
-			throw new NullPointerException("message can not be null");
-		this.message = message;
-		this.setFormatControl(this.getMessage());
-		this.setFormatArguments(Lisp.NIL);
+        StringBuilder sb =
+            new StringBuilder("Wrong number of arguments for "
+                              + operator.princToString());
+	if(expectedMinArgs >= 0 || expectedMaxArgs >= 0) {
+	    sb.append("; ");
+            
+            if (expectedMinArgs == expectedMaxArgs) {
+                sb.append(expectedMinArgs);
+            } else if (expectedMaxArgs < 0) {
+                sb.append("at least ");
+                sb.append(expectedMinArgs);
+            } else if (expectedMinArgs < 0) {
+                sb.append("at most ");
+                sb.append(expectedMaxArgs);
+            } else {
+                sb.append("between ").append(expectedMinArgs);
+                sb.append(" and ").append(expectedMaxArgs);
+            }
+            
+	    sb.append(" expected");
 	}
-
-	public String getMessage() {
-		if (this.message != null)
-			return this.message;
-		StringBuilder sb = new StringBuilder("Wrong number of arguments");
-		SubLObject lambdaName = this.operator.getLambdaName();
-		if (lambdaName != null && lambdaName != Lisp.NIL) {
-			sb.append(" for ");
-			sb.append(this.operator.getLambdaName().writeToString());
-		}
-		if (this.expectedArgs >= 0) {
-			sb.append("; ");
-			sb.append(this.expectedArgs);
-			sb.append(" expected");
-		}
-		sb.append('.');
-		return this.message = sb.toString();
-	}
+        if (actualArgs != null) {
+            sb.append(" -- provided: ");
+            sb.append(actualArgs.princToString());
+        }
+        sb.append('.');
+        return message = sb.toString();
+    }
 }

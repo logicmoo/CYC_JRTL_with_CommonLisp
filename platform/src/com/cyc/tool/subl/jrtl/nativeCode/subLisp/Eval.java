@@ -1,5 +1,5 @@
 //
-//
+// For LarKC
 //
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
@@ -10,6 +10,8 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
+
+import org.armedbear.lisp.Keyword;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -22,6 +24,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLDigestInputTextStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputTextStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLStreamFactory;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.format;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader;
@@ -32,47 +35,16 @@ import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLPatcher;
 
 public class Eval implements SubLFile {
-	public static SubLFile me;
-
-	public static SubLSymbol $star$;
-
-	public static SubLSymbol $star_star$;
-
-	public static SubLSymbol $star_star_star$;
-
-	public static SubLSymbol $evaluator_method$;
-
-	private static SubLSymbol EOF_KEYWORD;
-
-	private static SubLString LOAD_ERROR_STRING_1;
-
-	private static SubLString LOAD_ERROR_STRING_2;
-
-	private static SubLString EVAL_ERROR_STRING;
-
-	public static String FILE_DIGEST_ALGORITHM = "SHA-1";
-
-	private static IsolatedClassLoader isolatedClassLoader;
-
-	static {
-		Eval.me = new Eval();
-		Eval.EOF_KEYWORD = SubLObjectFactory.makeKeyword("EOF");
-		Eval.LOAD_ERROR_STRING_1 = SubLObjectFactory.makeString("Read error occured at position ~S of file ~S");
-		Eval.LOAD_ERROR_STRING_2 = SubLObjectFactory.makeString("Could not load file ~S.");
-		Eval.EVAL_ERROR_STRING = SubLObjectFactory.makeString("Could not evaluate form~%  ~S~%after ~A:~A");
-		Eval.isolatedClassLoader = new IsolatedClassLoader();
-	}
-
 	public static SubLObject constantp(SubLObject object, SubLObject env) {
 		if (object.isSymbol()) {
 			SubLSymbol symbol = object.toSymbol();
 			if (symbol.isConstantSymbol())
 				return CommonSymbols.T;
-			return CommonSymbols.NIL;
+			return SubLNil.NIL;
 		} else {
 			if (!object.isCons())
 				return CommonSymbols.T;
-			return CommonSymbols.NIL;
+			return SubLNil.NIL;
 		}
 	}
 
@@ -82,7 +54,7 @@ public class Eval implements SubLFile {
 			final ArrayList<SubLException> resultException = new ArrayList<SubLException>(1);
 			final CountDownLatch cdl = new CountDownLatch(1);
 			SubLObjectFactory.makeProcess(SubLObjectFactory.makeString("Eval Process"), new Runnable() {
-
+				@Override
 				public void run() {
 					Throwable ex = null;
 					boolean isEmpty = true;
@@ -130,7 +102,7 @@ public class Eval implements SubLFile {
 				return result.get(0);
 			}
 		}
-		return Eval.eval(reader.read_from_string(SubLObjectFactory.makeString(str), CommonSymbols.UNPROVIDED,
+		return eval(reader.read_from_string(SubLObjectFactory.makeString(str), CommonSymbols.UNPROVIDED,
 				CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED,
 				CommonSymbols.UNPROVIDED));
 	}
@@ -147,29 +119,21 @@ public class Eval implements SubLFile {
 		return CommonSymbols.UNPROVIDED;
 	}
 
-	/**
-	 * #'INITIALIZE-SUBL-INTERFACE-FILE
-	 *
-	 * Initializes a class that is already in the system
-	 *
-	 * @param className
-	 *            (stringp) in the form of "com.cyc.myproject.SubLTrampolines"
-	 * @return T if successful otherwise throws a {@link SubLException}
-	 */
 	public static SubLObject initialize_subl_interface_file(SubLObject className) {
-		String stringTyped = className.getString();
+		String stringTyped = className.getStringValue();
+		Class fileClass = null;
 		try {
-			if (!SubLFile.class.isAssignableFrom(Class.forName(stringTyped, false, Eval.isolatedClassLoader)))
+			fileClass = Class.forName(stringTyped, false, Eval.isolatedClassLoader);
+			if (!SubLFile.class.isAssignableFrom(fileClass))
 				Errors.error(stringTyped + " is not a SubLFile.");
 		} catch (ClassNotFoundException e) {
 			Errors.error("Not found: " + stringTyped, e);
 		}
-		Class fileClass = null;
 		try {
 			fileClass = Class.forName(stringTyped, true, Eval.isolatedClassLoader);
 		} catch (Exception e2) {
 			Errors.error("Error loading " + stringTyped, e2);
-			return CommonSymbols.NIL;
+			return SubLNil.NIL;
 		}
 		Object file = null;
 		try {
@@ -194,18 +158,18 @@ public class Eval implements SubLFile {
 			SubLFiles.initialize((SubLFile) file);
 			return CommonSymbols.T;
 		}
-		Errors.error(stringTyped + " in not a SubLFile.");
-		return CommonSymbols.NIL;
+		Errors.error(stringTyped + " is not a SubLFile.");
+		return SubLNil.NIL;
 	}
 
 	public static SubLObject load(SubLObject filename) {
 		boolean success = false;
-		SubLObject stream = CommonSymbols.NIL;
+		SubLObject stream = SubLNil.NIL;
 		try {
-			String theFilename = filename.getString();
+			String theFilename = filename.getStringValue();
 			SubLInputTextStream fileStream = (SubLInputTextStream) (stream = SubLStreamFactory
-					.makeFileStream(theFilename, CommonSymbols.INPUT_KEYWORD, CommonSymbols.TEXT_KEYWORD,
-							CommonSymbols.NIL, CommonSymbols.ERROR_KEYWORD, CommonSymbols.NIL)
+					.makeFileStream(theFilename, CommonSymbols.INPUT_KEYWORD, Keyword.TEXT_KEYWORD_CHARACTER,
+							SubLNil.NIL, CommonSymbols.ERROR_KEYWORD, SubLNil.NIL)
 					.toInputTextStream());
 			SubLDigestInputTextStream digestStream = null;
 			try {
@@ -218,7 +182,7 @@ public class Eval implements SubLFile {
 			while (!done) {
 				Values.resetMultipleValues();
 				SubLObject pos = streams_high.file_position(stream, CommonSymbols.UNPROVIDED);
-				SubLObject form = reader.read_ignoring_errors(digestStream, CommonSymbols.NIL, Eval.EOF_KEYWORD);
+				SubLObject form = reader.read_ignoring_errors(digestStream, SubLNil.NIL, Eval.EOF_KEYWORD);
 				SubLObject error = SubLProcess.nthMultipleValue(CommonSymbols.ONE_INTEGER);
 				Values.resetMultipleValues();
 				if (error == CommonSymbols.ERROR_KEYWORD) {
@@ -230,10 +194,10 @@ public class Eval implements SubLFile {
 					done = true;
 				} else
 					try {
-						Eval.eval(form);
+						eval(form);
 					} catch (Exception xcpt) {
 						SubLObject args = SubLObjectFactory.makeList(new SubLObject[] { form, filename, pos });
-						SubLObject msg = format.really_format(CommonSymbols.NIL, Eval.EVAL_ERROR_STRING, args);
+						SubLObject msg = format.really_format(SubLNil.NIL, Eval.EVAL_ERROR_STRING, args);
 						Errors.error(msg.toStr(), xcpt);
 					}
 			}
@@ -252,43 +216,32 @@ public class Eval implements SubLFile {
 		if (success)
 			return CommonSymbols.T;
 		Errors.error(Eval.LOAD_ERROR_STRING_2, filename);
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
-	/**
-	 * #'LOAD-EXTERNAL-CODE
-	 *
-	 * Prepares a .class file for initialization. Or Adds a .jar file to the
-	 * CLASSPATH Or Adds a Directory to the CLASSPATH
-	 *
-	 * @param path
-	 *            (stringp) in the form of a java resource specifier
-	 * @return T if successful otherwise throws a {@link SubLException}
-	 *
-	 */
 	public static SubLObject load_external_code(SubLObject path) {
-		String stringTyped = path.getString();
+		String stringTyped = path.getStringValue();
 		try {
 			Eval.isolatedClassLoader.addCode(stringTyped);
 			return CommonSymbols.T;
 		} catch (Exception e) {
 			Errors.error("Error loading jar!class: " + stringTyped, e);
-			return CommonSymbols.NIL;
+			return SubLNil.NIL;
 		}
 	}
 
 	public static SubLObject loadSubLPatch(SubLObject jarOrClassFilePath, SubLObject patcherFileName) {
 		if (patcherFileName == CommonSymbols.UNPROVIDED)
 			Errors.unimplementedMethod("loadSubLPatch: Loading a patch without patcher file name.");
-		Eval.load_external_code(jarOrClassFilePath);
+		load_external_code(jarOrClassFilePath);
 		try {
-			Class patcherClass = Class.forName(patcherFileName.getString());
+			Class patcherClass = Class.forName(patcherFileName.getStringValue());
 			SubLPatcher patcher = (SubLPatcher) patcherClass.getConstructor(new Class[0]).newInstance(new Object[0]);
 			patcher.doPatch();
 		} catch (Exception e) {
 			Errors.error("Unable to load patch: jarOrClassFilePath" + e);
 		}
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
 	public static SubLObject macroexpand(SubLObject form, SubLObject env) {
@@ -296,15 +249,15 @@ public class Eval implements SubLFile {
 			env = SubLEnvironment.currentEnvironment();
 		int i = -1;
 		SubLObject expandedForm = form;
-		SubLObject expanded_p = CommonSymbols.NIL;
+		SubLObject expanded_p = SubLNil.NIL;
 		do {
 			Values.resetMultipleValues();
-			expandedForm = Eval.macroexpand_1(expandedForm, env);
+			expandedForm = macroexpand_1(expandedForm, env);
 			expanded_p = SubLProcess.nthMultipleValue(CommonSymbols.ONE_INTEGER);
 			Values.resetMultipleValues();
 			++i;
-		} while (expanded_p != CommonSymbols.NIL);
-		expanded_p = i == 0 ? CommonSymbols.NIL : CommonSymbols.T;
+		} while (expanded_p != SubLNil.NIL);
+		expanded_p = i == 0 ? SubLNil.NIL : CommonSymbols.T;
 		Values.resetMultipleValues();
 		return Values.values(expandedForm, expanded_p);
 	}
@@ -323,12 +276,10 @@ public class Eval implements SubLFile {
 				}
 			}
 		}
-		return Values.values(form, CommonSymbols.NIL);
+		return Values.values(form, SubLNil.NIL);
 	}
 
-	// @todo move this somewhere more appropriate -APB
 	public static File openFileForReading(String filename) {
-		// @todo convert filename to Java format before opening -APB
 		File file = new File(filename);
 		if (!file.exists())
 			Errors.error("File doesn't exist: " + filename);
@@ -340,8 +291,8 @@ public class Eval implements SubLFile {
 	}
 
 	public static SubLObject patchSubLFile(SubLObject fullClassName) {
-		Eval.initialize_subl_interface_file(fullClassName);
-		return CommonSymbols.NIL;
+		initialize_subl_interface_file(fullClassName);
+		return SubLNil.NIL;
 	}
 
 	public static SubLObject set_initial_continuation(SubLObject continuation) {
@@ -352,6 +303,27 @@ public class Eval implements SubLFile {
 		return Errors.unimplementedMethod("variable-information");
 	}
 
+	public static SubLFile me;
+	public static SubLSymbol $star$;
+	public static SubLSymbol $star_star$;
+	public static SubLSymbol $star_star_star$;
+	public static SubLSymbol $evaluator_method$;
+	private static SubLSymbol EOF_KEYWORD;
+	private static SubLString LOAD_ERROR_STRING_1;
+	private static SubLString LOAD_ERROR_STRING_2;
+	private static SubLString EVAL_ERROR_STRING;
+	public static String FILE_DIGEST_ALGORITHM = "SHA-1";
+	private static IsolatedClassLoader isolatedClassLoader;
+	static {
+		me = new Eval();
+		EOF_KEYWORD = SubLObjectFactory.makeKeyword("EOF");
+		LOAD_ERROR_STRING_1 = SubLObjectFactory.makeString("Read error occured at position ~S of file ~S");
+		LOAD_ERROR_STRING_2 = SubLObjectFactory.makeString("Could not load file ~S.");
+		EVAL_ERROR_STRING = SubLObjectFactory.makeString("Could not evaluate form~%  ~S~%after ~A:~A");
+		isolatedClassLoader = new IsolatedClassLoader();
+	}
+
+	@Override
 	public void declareFunctions() {
 		SubLFiles.declareFunction(Eval.me, "constantp", "CONSTANTP", 1, 1, false);
 		SubLFiles.declareFunction(Eval.me, "eval", "EVAL", 1, 0, false);
@@ -371,14 +343,19 @@ public class Eval implements SubLFile {
 		SubLFiles.declareFunction(Eval.me, "loadSubLPatch", "LOAD-SUBL-PATCH", 1, 1, false);
 	}
 
+	@Override
 	public void initializeVariables() {
-		Eval.$star$ = SubLFiles.defvar(Eval.me, "*", CommonSymbols.NIL);
-		Eval.$star_star$ = SubLFiles.defvar(Eval.me, "**", CommonSymbols.NIL);
-		Eval.$star_star_star$ = SubLFiles.defvar(Eval.me, "***", CommonSymbols.NIL);
-
-		Eval.$evaluator_method$ = SubLFiles.defvar(Eval.me, "*%EVALUATOR-METHOD*", CommonSymbols.NIL);
+		Eval.$star$ = SubLFiles.defvar(Eval.me, "*", SubLNil.NIL);
+		Eval.$star_star$ = SubLFiles.defvar(Eval.me, "**", SubLNil.NIL);
+		Eval.$star_star_star$ = SubLFiles.defvar(Eval.me, "***", SubLNil.NIL);
+		Eval.$evaluator_method$ = SubLFiles.defvar(Eval.me, "*%EVALUATOR-METHOD*", SubLNil.NIL);
 	}
 
+	@Override
 	public void runTopLevelForms() {
+	}
+
+	public Eval() {
+		PrologSync.addSingleton(this);
 	}
 }

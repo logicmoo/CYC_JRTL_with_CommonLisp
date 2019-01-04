@@ -1,7 +1,7 @@
 ;;; make-hash-table.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: make-hash-table.lisp 11391 2008-11-15 22:38:34Z vvoutilainen $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -32,9 +32,23 @@
 (in-package #:system)
 
 (defun make-hash-table (&key (test 'eql) (size 11) (rehash-size 1.5)
-			     (rehash-threshold 0.75))
+                             (rehash-threshold 0.75)
+                             (weakness nil))
   (setf test (coerce-to-function test))
   (unless (and (integerp size) (>= size 0))
     (error 'type-error :datum size :expected-type '(integer 0)))
-  (let ((size (max 11 (min size array-dimension-limit))))
-    (%make-hash-table test size rehash-size rehash-threshold)))
+  (let ((size (max 11 (min size array-dimension-limit)))
+        (weakness-types '(or (eql :key) (eql :value)
+                             (eql :key-and-value)
+                             (eql :key-or-value))))
+    (if weakness
+        (if (not (typep weakness weakness-types))
+            (error 'type-error :datum weakness 
+                   :expected-type weakness-types)
+            (%make-weak-hash-table test size rehash-size 
+                                   rehash-threshold weakness))
+	(%make-hash-table test size 
+                          rehash-size rehash-threshold))))
+
+    
+  

@@ -2,7 +2,7 @@
  * StorageCondition.java
  *
  * Copyright (C) 2004-2007 Peter Graves
- * $Id: StorageCondition.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,35 +31,42 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class StorageCondition extends SeriousCondition {
-	public StorageCondition() {
-	}
+public class StorageCondition extends SeriousCondition
+{
+  public StorageCondition()
+  {
+  }
 
-	public StorageCondition(String message) {
-		super(message);
-	}
+  public StorageCondition(LispObject initArgs)
+  {
+    super(initArgs);
+  }
 
-	public StorageCondition(SubLObject initArgs) {
-		super(initArgs);
-	}
+  public StorageCondition(String message)
+  {
+    super(message);
+  }
 
-	public SubLObject classOf() {
-		return StandardClass.STORAGE_CONDITION;
-	}
+  public LispObject typeOf()
+  {
+    return Symbol.STORAGE_CONDITION;
+  }
 
-	public SubLObject typeOf() {
-		return LispSymbols.STORAGE_CONDITION;
-	}
+  public LispObject classOf()
+  {
+    return StandardClass.STORAGE_CONDITION;
+  }
 
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.STORAGE_CONDITION)
-			return Lisp.T;
-		if (type == StandardClass.STORAGE_CONDITION)
-			return Lisp.T;
-		return super.typep(type);
-	}
+  public LispObject typep(LispObject type)
+  {
+    if (type == Symbol.STORAGE_CONDITION)
+      return T;
+    if (type == StandardClass.STORAGE_CONDITION)
+      return T;
+    return super.typep(type);
+  }
 }

@@ -2,7 +2,7 @@
  * SimpleCondition.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SimpleCondition.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,62 +31,71 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class SimpleCondition extends Condition {
-	// ### simple-condition-format-control
-	private static Primitive SIMPLE_CONDITION_FORMAT_CONTROL = new JavaPrimitive(
-			LispSymbols.SIMPLE_CONDITION_FORMAT_CONTROL, "condition") {
+public class SimpleCondition extends Condition
+{
+    public SimpleCondition()
+    {
+        setFormatControl(NIL);
+        setFormatArguments(NIL);
+    }
 
-		public SubLObject execute(SubLObject arg) {
-			return LispSymbols.STD_SLOT_VALUE.execute(arg, LispSymbols.FORMAT_CONTROL);
-		}
-	};
+    public SimpleCondition(LispObject formatControl, LispObject formatArguments)
 
-	// ### simple-condition-format-arguments
-	private static Primitive SIMPLE_CONDITION_FORMAT_ARGUMENTS = new JavaPrimitive(
-			LispSymbols.SIMPLE_CONDITION_FORMAT_ARGUMENTS, "condition") {
+    {
+        setFormatControl(formatControl);
+        setFormatArguments(formatArguments);
+    }
 
-		public SubLObject execute(SubLObject arg) {
-			return LispSymbols.STD_SLOT_VALUE.execute(arg, LispSymbols.FORMAT_ARGUMENTS);
-		}
-	};
+    public SimpleCondition(LispObject initArgs)
+    {
+        super(initArgs);
+    }
 
-	public SimpleCondition() {
-		this.setFormatControl(Lisp.NIL);
-		this.setFormatArguments(Lisp.NIL);
-	}
+    public SimpleCondition(String message)
+    {
+        super(message);
+    }
 
-	public SimpleCondition(String message) {
-		super(message);
-	}
+    public LispObject typeOf()
+    {
+        return Symbol.SIMPLE_CONDITION;
+    }
 
-	public SimpleCondition(SubLObject initArgs) {
-		super(initArgs);
-	}
+    public LispObject classOf()
+    {
+        return StandardClass.SIMPLE_CONDITION;
+    }
 
-	public SimpleCondition(SubLObject formatControl, SubLObject formatArguments)
+    public LispObject typep(LispObject type)
+    {
+        if (type == Symbol.SIMPLE_CONDITION)
+            return T;
+        if (type == StandardClass.SIMPLE_CONDITION)
+            return T;
+        return super.typep(type);
+    }
 
-	{
-		this.setFormatControl(formatControl);
-		this.setFormatArguments(formatArguments);
-	}
+    // ### simple-condition-format-control
+    private static final Primitive SIMPLE_CONDITION_FORMAT_CONTROL =
+        new Primitive(Symbol.SIMPLE_CONDITION_FORMAT_CONTROL, "condition")
+    {
+        public LispObject execute(LispObject arg)
+        {
+            return Symbol.STD_SLOT_VALUE.execute(arg, Symbol.FORMAT_CONTROL);
+        }
+    };
 
-	public SubLObject classOf() {
-		return StandardClass.SIMPLE_CONDITION;
-	}
-
-	public SubLObject typeOf() {
-		return LispSymbols.SIMPLE_CONDITION;
-	}
-
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.SIMPLE_CONDITION)
-			return Lisp.T;
-		if (type == StandardClass.SIMPLE_CONDITION)
-			return Lisp.T;
-		return super.typep(type);
-	}
+    // ### simple-condition-format-arguments
+    private static final Primitive SIMPLE_CONDITION_FORMAT_ARGUMENTS =
+        new Primitive(Symbol.SIMPLE_CONDITION_FORMAT_ARGUMENTS, "condition")
+    {
+        public LispObject execute(LispObject arg)
+        {
+            return Symbol.STD_SLOT_VALUE.execute(arg, Symbol.FORMAT_ARGUMENTS);
+        }
+    };
 }

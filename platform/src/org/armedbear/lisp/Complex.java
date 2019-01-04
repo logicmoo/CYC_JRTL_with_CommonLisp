@@ -2,7 +2,7 @@
  * Complex.java
  *
  * Copyright (C) 2003-2006 Peter Graves
- * $Id: Complex.java 12431 2010-02-08 08:05:15Z mevenson $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,225 +31,275 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class Complex extends NumericLispObject {
-	public SubLObject realpart;
-	public SubLObject imagpart;
+public final class Complex extends LispObject
+{
+  public final LispObject realpart;
+  public final LispObject imagpart;
 
-	protected Complex(SubLObject realpart, SubLObject imagpart) {
-		this.realpart = realpart;
-		this.imagpart = imagpart;
-	}
+  private Complex(LispObject realpart, LispObject imagpart)
+  {
+    this.realpart = realpart;
+    this.imagpart = imagpart;
+  }
 
-	public SubLObject ABS() {
-		if (this.realpart.isZero())
-			return this.imagpart.ABS();
-		double real = DoubleFloat.coerceToFloat(this.realpart).value;
-		double imag = DoubleFloat.coerceToFloat(this.imagpart).value;
-		double result;
-		if (IkvmSite.isIKVM())
-			result = Math.sqrt(real * real + imag * imag); // IKVM.NET hypot is
-															// broken?!
-		else
-			result = Math.hypot(real, imag);
-		if (this.realpart instanceof DoubleFloat)
-			return LispObjectFactory.makeDouble(result);
-		else
-			return LispObjectFactory.makeSingle((float) result);
-	}
+  public static LispObject getInstance(LispObject realpart,
+                                       LispObject imagpart)
 
-	public SubLObject add(SubLObject obj) {
-		if (obj instanceof Complex) {
-			Complex c = (Complex) obj;
-			return LispObjectFactory.makeComplex(this.realpart.add(c.realpart), this.imagpart.add(c.imagpart));
-		}
-		return LispObjectFactory.makeComplex(this.realpart.add(obj), this.imagpart);
-	}
+  {
+    if (!realpart.realp())
+      return type_error(realpart, Symbol.REAL);
+    if (!imagpart.realp())
+      return type_error(imagpart, Symbol.REAL);
+    if (realpart instanceof DoubleFloat)
+      imagpart = DoubleFloat.coerceToFloat(imagpart);
+    else if (imagpart instanceof DoubleFloat)
+      realpart = DoubleFloat.coerceToFloat(realpart);
+    else if (realpart instanceof SingleFloat)
+      imagpart = SingleFloat.coerceToFloat(imagpart);
+    else if (imagpart instanceof SingleFloat)
+      realpart = SingleFloat.coerceToFloat(realpart);
+    if (imagpart instanceof Fixnum)
+      {
+        if (((Fixnum)imagpart).value == 0)
+          return realpart;
+      }
+    return new Complex(realpart, imagpart);
+  }
 
-	public SubLObject classOf() {
-		return BuiltInClass.COMPLEX;
-	}
+  public LispObject getRealPart()
+  {
+    return realpart;
+  }
 
-	public SubLObject COMPLEXP() {
-		return Lisp.T;
-	}
+  public LispObject getImaginaryPart()
+  {
+    return imagpart;
+  }
 
-	public SubLObject dec() {
-		return LispObjectFactory.makeComplex(this.realpart.sub(Fixnum.ONE), this.imagpart);
-	}
+  /** Coerces the complex parts into DoubleFloats
+   *
+   * @return a new complex with double-float real and imaginary parts
+   */
+  public LispObject coerceToDoubleFloat() {
+      return getInstance(DoubleFloat.coerceToFloat(realpart),
+                         DoubleFloat.coerceToFloat(imagpart));
+  }
 
-	public SubLObject divideBy(SubLObject obj) {
-		if (obj instanceof Complex) {
-			SubLObject a = this.realpart;
-			SubLObject b = this.imagpart;
-			SubLObject c = ((Complex) obj).getRealPart();
-			SubLObject d = ((Complex) obj).getImaginaryPart();
-			SubLObject ac = a.mult(c);
-			SubLObject bd = b.mult(d);
-			SubLObject bc = b.mult(c);
-			SubLObject ad = a.mult(d);
-			SubLObject denominator = c.mult(c).add(d.mult(d));
-			return LispObjectFactory.makeComplex(ac.add(bd).divideBy(denominator), bc.sub(ad).divideBy(denominator));
-		}
-		return LispObjectFactory.makeComplex(this.realpart.divideBy(obj), this.imagpart.divideBy(obj));
-	}
+  public LispObject typeOf()
+  {
+    return Symbol.COMPLEX;
+  }
 
-	public boolean eql(SubLObject obj) {
-		if (this == obj)
-			return true;
-		if (obj instanceof Complex) {
-			Complex c = (Complex) obj;
-			return this.realpart.eql(c.realpart) && this.imagpart.eql(c.imagpart);
-		}
-		return false;
-	}
+  public LispObject classOf()
+  {
+    return BuiltInClass.COMPLEX;
+  }
+//
+//  @Override
+//  public LispObject typep(LispObject type)
+//  {
+//    if (type == Symbol.COMPLEX)
+//      return T;
+//    if (type == Symbol.NUMBER)
+//      return T;
+//    if (type == BuiltInClass.COMPLEX)
+//      return T;
+//    if (type == BuiltInClass.NUMBER)
+//      return T;
+//    return super.typep(type);
+//  }
 
-	public boolean equal(SubLObject obj) {
-		return this.eql(obj);
-	}
+  public boolean numberp()
+  {
+    return true;
+  }
 
-	public boolean equalp(SubLObject obj) {
-		if (this == obj)
-			return true;
-		if (obj instanceof Complex) {
-			Complex c = (Complex) obj;
-			return this.realpart.numE(c.realpart) && this.imagpart.numE(c.imagpart);
-		}
-		if (obj.isNumber()) {
-			// obj is a number, but not complex.
-			if (this.imagpart instanceof SingleFloat)
-				if (((SingleFloat) this.imagpart).value == 0) {
-					if (obj instanceof Fixnum)
-						return ((Fixnum) obj).value == ((SingleFloat) this.realpart).value;
-					if (obj instanceof SingleFloat)
-						return ((SingleFloat) obj).value == ((SingleFloat) this.realpart).value;
-				}
-			if (this.imagpart instanceof DoubleFloat)
-				if (((DoubleFloat) this.imagpart).value == 0) {
-					if (obj instanceof Fixnum)
-						return ((Fixnum) obj).value == ((DoubleFloat) this.realpart).value;
-					if (obj instanceof DoubleFloat)
-						return ((DoubleFloat) obj).value == ((DoubleFloat) this.realpart).value;
-				}
-		}
-		return false;
-	}
+  public boolean eql(LispObject obj)
+  {
+    if (this == obj)
+      return true;
+    if (obj instanceof Complex)
+      {
+        Complex c = (Complex) obj;
+        return realpart.eql(c.realpart) && imagpart.eql(c.imagpart);
+      }
+    return false;
+  }
 
-	public SubLObject getImaginaryPart() {
-		return this.imagpart;
-	}
+  public boolean equal(LispObject obj)
+  {
+    return eql(obj);
+  }
 
-	public SubLObject getRealPart() {
-		return this.realpart;
-	}
+  public boolean equalp(LispObject obj)
+  {
+    if (obj != null && obj.numberp())
+      return isEqualTo(obj);
+    return false;
+  }
 
-	public SubLObject inc() {
-		return LispObjectFactory.makeComplex(this.realpart.add(Fixnum.ONE), this.imagpart);
-	}
+  public final LispObject incr()
+  {
+    return new Complex(realpart.add(Fixnum.ONE), imagpart);
+  }
 
-	public boolean isNotEqualTo(SubLObject obj) {
-		return !this.numE(obj);
-	}
+  public final LispObject decr()
+  {
+    return new Complex(realpart.subtract(Fixnum.ONE), imagpart);
+  }
 
-	public boolean isNumber() {
-		return true;
-	}
+  public LispObject add(LispObject obj)
+  {
+    if (obj instanceof Complex)
+      {
+        Complex c = (Complex) obj;
+        return getInstance(realpart.add(c.realpart), imagpart.add(c.imagpart));
+      }
+    return getInstance(realpart.add(obj), imagpart);
+  }
 
-	public boolean isZero() {
-		return this.realpart.isZero() && this.imagpart.isZero();
-	}
+  public LispObject subtract(LispObject obj)
+  {
+    if (obj instanceof Complex)
+      {
+        Complex c = (Complex) obj;
+        return getInstance(realpart.subtract(c.realpart),
+                           imagpart.subtract(c.imagpart));
+      }
+    return getInstance(realpart.subtract(obj), imagpart);
+  }
 
-	public SubLObject mult(SubLObject obj) {
-		if (obj instanceof Complex) {
-			SubLObject a = this.realpart;
-			SubLObject b = this.imagpart;
-			SubLObject c = ((Complex) obj).getRealPart();
-			SubLObject d = ((Complex) obj).getImaginaryPart();
-			// xy = (ac - bd) + i(ad + bc)
-			// real part = ac - bd
-			// imag part = ad + bc
-			SubLObject ac = a.mult(c);
-			SubLObject bd = b.mult(d);
-			SubLObject ad = a.mult(d);
-			SubLObject bc = b.mult(c);
-			return LispObjectFactory.makeComplex(ac.sub(bd), ad.add(bc));
-		}
-		return LispObjectFactory.makeComplex(this.realpart.mult(obj), this.imagpart.mult(obj));
-	}
+  public LispObject multiplyBy(LispObject obj)
+  {
+    if (obj instanceof Complex)
+      {
+        LispObject a = realpart;
+        LispObject b = imagpart;
+        LispObject c = ((Complex)obj).getRealPart();
+        LispObject d = ((Complex)obj).getImaginaryPart();
+        // xy = (ac - bd) + i(ad + bc)
+        // real part = ac - bd
+        // imag part = ad + bc
+        LispObject ac = a.multiplyBy(c);
+        LispObject bd = b.multiplyBy(d);
+        LispObject ad = a.multiplyBy(d);
+        LispObject bc = b.multiplyBy(c);
+        return Complex.getInstance(ac.subtract(bd), ad.add(bc));
+      }
+    return Complex.getInstance(realpart.multiplyBy(obj),
+                               imagpart.multiplyBy(obj));
+  }
 
-	public boolean numE(SubLObject obj) {
-		if (obj instanceof Complex) {
-			Complex c = (Complex) obj;
-			return this.realpart.numE(c.realpart) && this.imagpart.numE(c.imagpart);
-		}
-		if (obj.isNumber()) {
-			// obj is a number, but not complex.
-			if (this.imagpart instanceof SingleFloat)
-				if (((SingleFloat) this.imagpart).value == 0) {
-					if (obj instanceof Fixnum)
-						return ((Fixnum) obj).value == ((SingleFloat) this.realpart).value;
-					if (obj instanceof SingleFloat)
-						return ((SingleFloat) obj).value == ((SingleFloat) this.realpart).value;
-					if (obj instanceof DoubleFloat)
-						return ((DoubleFloat) obj).value == ((SingleFloat) this.realpart).value;
-				}
-			if (this.imagpart instanceof DoubleFloat)
-				if (((DoubleFloat) this.imagpart).value == 0) {
-					if (obj instanceof Fixnum)
-						return ((Fixnum) obj).value == ((DoubleFloat) this.realpart).value;
-					if (obj instanceof SingleFloat)
-						return ((SingleFloat) obj).value == ((DoubleFloat) this.realpart).value;
-					if (obj instanceof DoubleFloat)
-						return ((DoubleFloat) obj).value == ((DoubleFloat) this.realpart).value;
-				}
-			return false;
-		}
-		Lisp.type_error(obj, LispSymbols.NUMBER);
-		// Not reached.
-		return false;
-	}
+  public LispObject divideBy(LispObject obj)
+  {
+    if (obj instanceof Complex)
+      {
+        LispObject a = realpart;
+        LispObject b = imagpart;
+        LispObject c = ((Complex)obj).getRealPart();
+        LispObject d = ((Complex)obj).getImaginaryPart();
+        LispObject ac = a.multiplyBy(c);
+        LispObject bd = b.multiplyBy(d);
+        LispObject bc = b.multiplyBy(c);
+        LispObject ad = a.multiplyBy(d);
+        LispObject denominator = c.multiplyBy(c).add(d.multiplyBy(d));
+        return Complex.getInstance(ac.add(bd).divideBy(denominator),
+                                   bc.subtract(ad).divideBy(denominator));
+      }
+    return Complex.getInstance(realpart.divideBy(obj),
+                               imagpart.divideBy(obj));
+  }
 
-	public int psxhash() {
-		return Lisp.mix(this.realpart.psxhash(), this.imagpart.psxhash()) & 0x7fffffff;
-	}
+  public boolean isEqualTo(LispObject obj)
+  {
+    if (obj instanceof Complex)
+      {
+        Complex c = (Complex) obj;
+        return (realpart.isEqualTo(c.realpart) &&
+                imagpart.isEqualTo(c.imagpart));
+      }
+    if (obj.numberp())
+      {
+        // obj is a number, but not complex.
+        if (imagpart instanceof SingleFloat)
+          {
+            if (((SingleFloat)imagpart).value == 0)
+              {
+                if (obj instanceof Fixnum)
+                  return ((Fixnum)obj).value == ((SingleFloat)realpart).value;
+                if (obj instanceof SingleFloat)
+                  return ((SingleFloat)obj).value == ((SingleFloat)realpart).value;
+                if (obj instanceof DoubleFloat)
+                  return ((DoubleFloat)obj).value == ((SingleFloat)realpart).value;
+              }
+          }
+        if (imagpart instanceof DoubleFloat)
+          {
+            if (((DoubleFloat)imagpart).value == 0)
+              {
+                if (obj instanceof Fixnum)
+                  return ((Fixnum)obj).value == ((DoubleFloat)realpart).value;
+                if (obj instanceof SingleFloat)
+                  return ((SingleFloat)obj).value == ((DoubleFloat)realpart).value;
+                if (obj instanceof DoubleFloat)
+                  return ((DoubleFloat)obj).value == ((DoubleFloat)realpart).value;
+              }
+          }
+        return false;
+      }
+    type_error(obj, Symbol.NUMBER);
+    // Not reached.
+    return false;
+  }
 
-	public SubLObject sub(SubLObject obj) {
-		if (obj instanceof Complex) {
-			Complex c = (Complex) obj;
-			return LispObjectFactory.makeComplex(this.realpart.sub(c.realpart), this.imagpart.sub(c.imagpart));
-		}
-		return LispObjectFactory.makeComplex(this.realpart.sub(obj), this.imagpart);
-	}
+  public boolean isNotEqualTo(LispObject obj)
+  {
+    return !isEqualTo(obj);
+  }
 
-	public int sxhash() {
-		return Lisp.mix(this.realpart.sxhash(), this.imagpart.sxhash()) & 0x7fffffff;
-	}
+  public LispObject ABS()
+  {
+    if (realpart.zerop())
+      return imagpart.ABS();
+    double real = DoubleFloat.coerceToFloat(realpart).value;
+    double imag = DoubleFloat.coerceToFloat(imagpart).value;
+    if (realpart instanceof DoubleFloat)
+      return new DoubleFloat(Math.hypot(real, imag));
+    else
+      return new SingleFloat((float)Math.hypot(real, imag));
+  }
 
-	public SubLObject typeOf() {
-		return LispSymbols.COMPLEX;
-	}
+  public boolean zerop()
+  {
+    return realpart.zerop() && imagpart.zerop();
+  }
 
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.COMPLEX)
-			return Lisp.T;
-		if (type == LispSymbols.NUMBER)
-			return Lisp.T;
-		if (type == BuiltInClass.COMPLEX)
-			return Lisp.T;
-		if (type == BuiltInClass.NUMBER)
-			return Lisp.T;
-		return super.typep(type);
-	}
+  public LispObject COMPLEXP()
+  {
+    return T;
+  }
 
-	public String writeToString() {
-		StringBuilder sb = new StringBuilder("#C(");
-		sb.append(this.realpart.writeToString());
-		sb.append(' ');
-		sb.append(this.imagpart.writeToString());
-		sb.append(')');
-		return sb.toString();
-	}
+  public int sxhash()
+  {
+    return (mix(realpart.sxhash(), imagpart.sxhash()) & 0x7fffffff);
+  }
+
+  public int psxhash()
+  {
+    return (mix(realpart.psxhash(), imagpart.psxhash()) & 0x7fffffff);
+  }
+
+  public String printObjectImpl()
+  {
+    StringBuilder sb = new StringBuilder("#C(");
+    sb.append(realpart.printObject());
+    sb.append(' ');
+    sb.append(imagpart.printObject());
+    sb.append(')');
+    return sb.toString();
+  }
 }

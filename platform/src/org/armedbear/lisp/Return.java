@@ -2,7 +2,7 @@
  * Return.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Return.java 12431 2010-02-08 08:05:15Z mevenson $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,43 +31,60 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CatchableThrow;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public class Return extends ControlTransfer {
-	public SubLObject tag;
-	public SubLObject block;
-	public SubLObject result;
+public final class Return extends CatchableThrow
+{
+    public final LispObject tag;
+    public final LispObject block;
+    public final LispObject result;
 
-	public Return(SubLObject tag, SubLObject result) {
-		this.tag = tag;
-		this.block = null;
-		this.result = result;
-	}
+    public Return(LispObject tag, LispObject block, LispObject result)
+    {
+        this.tag = tag;
+        this.block = block;
+        this.result = result;
+    }
 
-	public Return(SubLObject tag, SubLObject block, SubLObject result) {
-		this.tag = tag;
-		this.block = block;
-		this.result = result;
-	}
+    @Override
+    public SubLObject getTarget() {
+    	// TODO Auto-generated method stub
+    	if(true) Errors.unimplementedMethod("Auto-generated method stub:  Return.getTarget");
+    	return null;
+    }
 
-	public SubLObject getBlock() {
-		return this.block;
-	}
+    public Return(LispObject tag, LispObject result)
+    {
+        this.tag = tag;
+        this.block = null;
+        this.result = result;
+    }
 
-	public SubLObject getCondition() {
-		StringBuilder sb = new StringBuilder("No block named ");
-		sb.append(this.tag.writeToString());
-		sb.append(" is currently visible.");
-		return new ControlError(sb.toString());
-	}
+    public LispObject getTag()
+    {
+        return tag;
+    }
 
-	public SubLObject getResult() {
-		return this.result;
-	}
+    public LispObject getBlock()
+    {
+        return block;
+    }
 
-	public SubLObject getTag() {
-		return this.tag;
-	}
+    public LispObject getResult()
+    {
+        return result;
+    }
+
+    @Override
+    public LispObject getCondition()
+    {
+        StringBuilder sb = new StringBuilder("No block named ");
+        sb.append(tag.princToString());
+        sb.append(" is currently visible.");
+        return new ControlError(sb.toString());
+    }
 }

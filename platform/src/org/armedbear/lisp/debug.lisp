@@ -1,7 +1,7 @@
 ;;; debug.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves
-;;; $Id: debug.lisp 12157 2009-09-20 08:57:46Z mevenson $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -85,7 +85,8 @@
   (when condition
     (fresh-line *debug-io*)
     (with-standard-io-syntax
-      (let ((*print-structure* nil))
+      (let ((*print-structure* nil)
+	    (*print-readably* nil))
         (when (and *load-truename* (streamp *load-stream*))
           (simple-format *debug-io*
                          "Error loading ~A at line ~D (offset ~D)~%"
@@ -94,8 +95,9 @@
                          (stream-offset *load-stream*)))
         (simple-format *debug-io*
                        (if (fboundp 'tpl::repl)
-                           "Debugger invoked on condition of type ~A:~%"
-                           "Unhandled condition of type ~A:~%")
+                           "~S: Debugger invoked on condition of type ~A~%"
+                           "~S: Unhandled condition of type ~A:~%")
+                       (threads:current-thread)
                        (type-of condition))
         (simple-format *debug-io* "  ~A~%" condition)))))
 
@@ -128,7 +130,7 @@ called by BREAK. This hook is run before *DEBUGGER-HOOK*.")
               (*print-structure* nil)
               (*debug-condition* condition)
               (level *debug-level*))
-          (clear-input)
+          (clear-input *debug-io*)
           (if (> level 0)
               (with-simple-restart (abort "Return to debug level ~D." level)
                 (debug-loop))

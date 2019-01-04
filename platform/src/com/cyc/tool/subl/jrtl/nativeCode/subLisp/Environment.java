@@ -1,22 +1,6 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import java.net.InetAddress;
@@ -29,32 +13,7 @@ import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 
-//// Internal Imports
-
-//// External Imports
-
 public class Environment extends SubLTrampolineFile {
-
-	//// Constructors
-
-	public static SubLFile me = new Environment();
-
-	public static SubLSymbol $lisp_implementation_type$;
-
-	//// Public Area
-
-	public static SubLSymbol $lisp_implementation_version$;
-	public static SubLSymbol $short_site_name$;
-	public static SubLSymbol $long_site_name$;
-	public static SubLSymbol $machine_instance$;
-	public static SubLSymbol $machine_type$;
-	public static SubLSymbol $machine_version$;
-	public static SubLSymbol $software_type$;
-	public static SubLSymbol $software_version$;
-	public static SubLSymbol $user$;
-	public static SubLSymbol $process_id$;
-	public static SubLSymbol $network_name$;
-
 	public static SubLObject get_machine_name(SubLObject defaultVal) {
 		return Environment.$machine_instance$.getValue();
 	}
@@ -107,12 +66,24 @@ public class Environment extends SubLTrampolineFile {
 		return Environment.$software_version$.getValue();
 	}
 
-	/** Creates a new instance of Environment. */
-	public Environment() {
+	public static SubLFile me;
+	public static SubLSymbol $lisp_implementation_type$;
+	public static SubLSymbol $lisp_implementation_version$;
+	public static SubLSymbol $short_site_name$;
+	public static SubLSymbol $long_site_name$;
+	public static SubLSymbol $machine_instance$;
+	public static SubLSymbol $machine_type$;
+	public static SubLSymbol $machine_version$;
+	public static SubLSymbol $software_type$;
+	public static SubLSymbol $software_version$;
+	public static SubLSymbol $user$;
+	public static SubLSymbol $process_id$;
+	public static SubLSymbol $network_name$;
+	static {
+		me = new Environment();
 	}
 
-	//// Initializers
-
+	@Override
 	public void declareFunctions() {
 		SubLFiles.declareFunction(Environment.me, "get_machine_name", "GET-MACHINE-NAME", 0, 1, false);
 		SubLFiles.declareFunction(Environment.me, "get_network_name", "GET-NETWORK-NAME", 0, 1, false);
@@ -130,38 +101,19 @@ public class Environment extends SubLTrampolineFile {
 		SubLFiles.declareFunction(Environment.me, "software_version", "SOFTWARE-VERSION", 0, 0, false);
 	}
 
+	@Override
 	public void initializeVariables() {
 		Environment.$lisp_implementation_type$ = SubLFiles.defconstant(Environment.me, "*LISP-IMPLEMENTATION-TYPE*",
 				SubLObjectFactory.makeString("Cycorp Java SubL Runtime Environment"));
 		Environment.$lisp_implementation_version$ = SubLFiles.defconstant(Environment.me,
-				"*LISP-IMPLEMENTATION-VERSION*", SubLObjectFactory.makeString("Version 1.0")); // @todo
-																								// do
-																								// something
-																								// better
-																								// here
-		Environment.$machine_version$ = SubLFiles.defconstant(Environment.me, "*MACHINE-VERSION*", SubLNil.NIL); // @todo
-		// do
-		// something
-		// better
-		// here
-		Environment.$short_site_name$ = SubLFiles.defconstant(Environment.me, "*SHORT-SITE-NAME*", SubLNil.NIL); // @todo
-		// do
-		// something
-		// better
-		// here
-		Environment.$long_site_name$ = SubLFiles.defconstant(Environment.me, "*LONG-SITE-NAME*", SubLNil.NIL); // @todo
-		// do
-		// something
-		// better
-		// here
+				"*LISP-IMPLEMENTATION-VERSION*", SubLObjectFactory.makeString("Version 1.0"));
+		Environment.$machine_version$ = SubLFiles.defconstant(Environment.me, "*MACHINE-VERSION*", SubLNil.NIL);
+		Environment.$short_site_name$ = SubLFiles.defconstant(Environment.me, "*SHORT-SITE-NAME*", SubLNil.NIL);
+		Environment.$long_site_name$ = SubLFiles.defconstant(Environment.me, "*LONG-SITE-NAME*", SubLNil.NIL);
 		Environment.$machine_type$ = SubLFiles.defconstant(Environment.me, "*MACHINE-TYPE*",
 				SubLObjectFactory.makeString(System.getProperty("os.name") + " " + System.getProperty("os.version")
 						+ " " + System.getProperty("os.arch")));
-		Environment.$machine_version$ = SubLFiles.defconstant(Environment.me, "*MACHINE-VERSION*", SubLNil.NIL); // @todo
-		// do
-		// something
-		// better
-		// here
+		Environment.$machine_version$ = SubLFiles.defconstant(Environment.me, "*MACHINE-VERSION*", SubLNil.NIL);
 		Environment.$software_type$ = SubLFiles.defconstant(Environment.me, "*SOFTWARE-TYPE*", SubLObjectFactory
 				.makeString(System.getProperty("java.vm.name") + " " + System.getProperty("java.vm.vendor")));
 		Environment.$software_version$ = SubLFiles.defconstant(Environment.me, "*SOFTWARE-VERSION*",
@@ -184,15 +136,7 @@ public class Environment extends SubLTrampolineFile {
 		}
 	}
 
+	@Override
 	public void runTopLevelForms() {
 	}
-
-	//// Protected Area
-
-	//// Private Area
-
-	//// Internal Rep
-
-	//// Main
-
 }

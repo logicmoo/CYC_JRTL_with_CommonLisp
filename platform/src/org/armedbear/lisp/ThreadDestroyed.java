@@ -2,7 +2,7 @@
  * ThreadDestroyed.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: ThreadDestroyed.java 12271 2009-11-08 11:28:34Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,10 +31,12 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-public class ThreadDestroyed extends Error {
-	public ThreadDestroyed() {
-	}
+public class ThreadDestroyed extends Error
+{
+    public ThreadDestroyed()
+    {
+    }
 
 }

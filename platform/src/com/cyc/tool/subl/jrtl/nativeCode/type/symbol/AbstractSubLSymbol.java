@@ -1,33 +1,21 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.type.symbol;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispSymbolImpl;
+import org.armedbear.lisp.LispObject;
+import org.armedbear.lisp.Symbol;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.FromSubLisp;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
@@ -43,86 +31,82 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLOutputStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLOutputTextStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLStream;
 
-public abstract class AbstractSubLSymbol extends LispSymbolImpl implements SubLSymbol {
+public abstract class AbstractSubLSymbol extends FromSubLisp implements SubLSymbol {
 
-	//// Constructors
 
-	private static int MAX_CANONICALIZER_CACHE_SIZE = 5000;
+	public Symbol toLispObjeect() {
+		return (Symbol)this;
+	}
+	protected AbstractSubLSymbol() {
+		//hashCode = -1;
+		//value = SubLSymbol.UNBOUND;
+		//isSpecialSymbolName = false;
+		//hasCheckedSymbolStatus = false;
+		//plist = SubLNil.NIL;
+		//this.thePackage = thePackage1;
+		//this.symbolName = symbolName;
+		/*
+		hashCode = (thePackage == null ? 0 : thePackage.hashCode()) ^ symbolName.hashCode();
+		if (thePackage == SubLPackage.KEYWORD_PACKAGE && !this.isKeyword())
+			Errors.error("Got invalid keyword: '" + thePackage + ":" + symbolName + "'");*/
+	}
 
-	//// Public Area
+//	static LispObject nilForNull(SubLObject thePackage2) {
+//		if(thePackage2==null) return SubLNil.NIL;
+//		return thePackage2.toLispObject();
+//	}
 
-	private static SubLString GENTEMP_PREFIX = SubLObjectFactory.makeString("T");
+	private static CharSequence getSymbolStringRep(String str, boolean isSpecial) {
+		if (isSpecial)
+			new StringBuilder(124).append(str.contains("|") ? str.replaceAll("|", "\\|") : str).append('|').toString();
+		return str.contains("|") ? str.replaceAll("|", "\\|") : str;
+	}
 
-	private static SubLString GENSYM_PREFIX = SubLObjectFactory.makeString("G");
-
-	// @note if this cache is to be used in multiple threads then a synchronized
-	// version must be made -APB
-	private static Map<String, String> symbolCanonicalizerCache = new LinkedHashMap<String, String>(
-			AbstractSubLSymbol.MAX_CANONICALIZER_CACHE_SIZE + 1, .75F, true) {
-		// This method is called just after a new entry has been added
-		public boolean removeEldestEntry(Map.Entry eldest) {
-			return this.size() > AbstractSubLSymbol.MAX_CANONICALIZER_CACHE_SIZE;
-		}
-	};
-
-	private static char[] printableNonStandardSymbolChars = { '#', ':', ';', '|', '"', '\'', '`', ',', '(', ')', '\\' };
-
-	/**
-	 * this function strips symbol name quotes "|" when they are not necessary
-	 * -- assumes that the name given is a valid symbol name in all other
-	 * respects also deals with backslashes and adds "|" when necessary average
-	 * case should be 2 passes and 1 memory alloc
-	 */
 	public static String canonicalizeName(String name) {
 		String canonicalizedName = AbstractSubLSymbol.symbolCanonicalizerCache.get(name);
 		if (canonicalizedName != null)
 			return canonicalizedName;
 		canonicalizedName = name;
-		if (!AbstractSubLSymbol.doesSymbolNameNeedQuotes(canonicalizedName)) { // 1
-																				// pass
-			AbstractSubLSymbol.symbolCanonicalizerCache.put(name, canonicalizedName.toUpperCase()); // 1
-			// pass
-			// 1
-			// mem
+		if (!doesSymbolNameNeedQuotes(canonicalizedName)) {
+			AbstractSubLSymbol.symbolCanonicalizerCache.put(name, canonicalizedName.toUpperCase());
 			return canonicalizedName;
 		}
-		boolean hasExplicitQuotes = canonicalizedName.charAt(0) == SubLSymbol.SYMBOL_NAME_QUOTE;
-		boolean hasQuotes = hasExplicitQuotes;
-		if (canonicalizedName.indexOf('\\') >= 0) { // 1 pass
-			char[] origChars = canonicalizedName.toCharArray(); // 1 pass 1 mem
-			char curChar = '\uFFFF', prevChar = '\uFFFF';
+		boolean hasQuotes;
+		boolean hasExplicitQuotes = hasQuotes = canonicalizedName.charAt(0) == '|';
+		if (canonicalizedName.indexOf(92) >= 0) {
+			char[] origChars = canonicalizedName.toCharArray();
+			char curChar = '\uffff';
+			char prevChar = '\uffff';
 			int newSize = 0;
-			for (int i = 0, size = origChars.length; i < size; i++) { // 1 pass
+			for (int i = 0, size = origChars.length; i < size; ++i) {
 				curChar = origChars[i];
 				if (prevChar != '\\')
 					origChars[newSize++] = Character.toUpperCase(curChar);
 				else {
 					origChars[newSize - 1] = curChar;
-					if (!AbstractSubLSymbol.isConstituentUpperCaseChar(curChar) && !hasQuotes)
+					if (!isConstituentUpperCaseChar(curChar) && !hasQuotes)
 						hasQuotes = true;
 				}
 				prevChar = curChar;
 			}
-			canonicalizedName = new String(origChars, 0, newSize); // 1 pass 1
-																	// mem
+			canonicalizedName = new String(origChars, 0, newSize);
 		} else if (!hasExplicitQuotes)
 			canonicalizedName = canonicalizedName.toUpperCase();
 		if (hasQuotes && !hasExplicitQuotes)
-			canonicalizedName = "|" + canonicalizedName + "|"; // 2 mem
+			canonicalizedName = "|" + canonicalizedName + "|";
 		if (hasQuotes) {
 			String innerName = canonicalizedName.substring(1, canonicalizedName.length() - 1);
-			if (!AbstractSubLSymbol.doesSymbolNameNeedQuotes(innerName))
+			if (!doesSymbolNameNeedQuotes(innerName))
 				canonicalizedName = innerName;
 		}
 		AbstractSubLSymbol.symbolCanonicalizerCache.put(name, canonicalizedName);
-		return canonicalizedName; // 7 passes and 5 memory allocs
+		return canonicalizedName;
 	}
 
 	public static boolean doesSymbolNameNeedQuotes(String symbolName) {
-		char curChar;
-		for (int i = 0, size = symbolName.length(); i < size; i++) {
-			curChar = symbolName.charAt(i);
-			if (!AbstractSubLSymbol.isConstituentUpperCaseChar(curChar))
+		for (int i = 0, size = symbolName.length(); i < size; ++i) {
+			char curChar = symbolName.charAt(i);
+			if (!isConstituentUpperCaseChar(curChar))
 				return true;
 		}
 		return false;
@@ -131,19 +115,19 @@ public abstract class AbstractSubLSymbol extends LispSymbolImpl implements SubLS
 	public static SubLObject gensym(SubLObject val) {
 		StringBuilder buf = new StringBuilder();
 		if (val == SubLNil.NIL) {
-			buf.append(AbstractSubLSymbol.GENSYM_PREFIX.getString());
+			buf.append(AbstractSubLSymbol.GENSYM_PREFIX.getStringValue());
 			buf.append(Symbols.$gensym_counter$.getValue().intValue());
 			Symbols.$gensym_counter$.setValue(Numbers.inc(Symbols.$gensym_counter$.getValue()));
 		} else if (val.isString()) {
-			buf.append(val.getString());
+			buf.append(val.getStringValue());
 			buf.append(Symbols.$gensym_counter$.getValue().intValue());
 			Symbols.$gensym_counter$.setValue(Numbers.inc(Symbols.$gensym_counter$.getValue()));
 		} else if (val.isFixnum()) {
-			buf.append(AbstractSubLSymbol.GENSYM_PREFIX.getString());
+			buf.append(AbstractSubLSymbol.GENSYM_PREFIX.getStringValue());
 			buf.append(val.intValue());
 			Symbols.$gensym_counter$.setValue(val);
 		} else
-			Errors.error("Invalid argument to gensym -- exptected " + "NIL, a string or a fixnum.\n Got: " + val + ".");
+			Errors.error("Invalid argument to gensym -- exptected NIL, a string or a fixnum.\n Got: " + val + ".");
 		SubLSymbol symbol = SubLObjectFactory.makeUninternedSymbol(buf.toString());
 		return symbol;
 	}
@@ -151,222 +135,152 @@ public abstract class AbstractSubLSymbol extends LispSymbolImpl implements SubLS
 	public static synchronized SubLObject gentemp(SubLObject prefix, SubLPackage thePackage) {
 		SubLString prefixTyped = prefix == SubLNil.NIL ? AbstractSubLSymbol.GENTEMP_PREFIX : prefix.toStr();
 		int counterVal = Symbols.$gentemp_counter$.getValue().intValue();
-		String pre = prefixTyped.getString();
+		String pre = prefixTyped.getStringValue();
 		SubLSymbol symbol = null;
 		String curSymbolName;
 		do
 			curSymbolName = pre + counterVal++;
-		while (null != (symbol = thePackage.retrieveSymbol(curSymbolName)));
+		while (null != (symbol = thePackage.retrieveSymbol(SubLObjectFactory.makeString(curSymbolName))));
 		Symbols.$gentemp_counter$.setValue(SubLObjectFactory.makeInteger(counterVal));
 		return SubLObjectFactory.makeSymbol(curSymbolName, thePackage);
 	}
 
-	private static CharSequence getSymbolStringRep(String str, boolean isSpecial) {
-		if (isSpecial)
-			new StringBuilder(SubLSymbol.SYMBOL_NAME_QUOTE).append(str).append(SubLSymbol.SYMBOL_NAME_QUOTE).toString();
-		return str;
-	}
-
 	public static boolean isConstituentChar(char curChar) {
-		if (curChar <= ' ' || curChar >= '\u007F')
+		if (curChar <= ' ' || curChar >= '\u007f')
 			return false;
-		for (int j = 0, size2 = AbstractSubLSymbol.printableNonStandardSymbolChars.length; j < size2; j++)
+		for (int j = 0, size2 = AbstractSubLSymbol.printableNonStandardSymbolChars.length; j < size2; ++j)
 			if (curChar == AbstractSubLSymbol.printableNonStandardSymbolChars[j])
 				return false;
 		return true;
 	}
 
 	public static boolean isConstituentUpperCaseChar(char curChar) {
-		if (!AbstractSubLSymbol.isConstituentChar(curChar))
-			return false;
-		if (curChar >= 'a' && curChar <= 'z')
-			return false;
+		return isConstituentChar(curChar) && (curChar < 'a' || curChar > 'z');
+	}
+
+	//private int hashCode;
+	//protected volatile SubLObject value;
+	//private SubLPackage thePackage;
+	//protected SubLString symbolName;
+	private CharSequence z_escapedPrintName;
+
+	//private volatile SubLList plist;
+	private static int MAX_CANONICALIZER_CACHE_SIZE = 5000;
+	private static SubLString GENTEMP_PREFIX = SubLObjectFactory.makeString("T");
+	private static SubLString GENSYM_PREFIX = SubLObjectFactory.makeString("G");
+	private static Map<String, String> symbolCanonicalizerCache = new LinkedHashMap<String, String>(5001, 0.75f, true) {
+			@Override
+			public boolean removeEldestEntry(Map.Entry eldest) {
+				return this.size() > 5000;
+			}
+	};
+
+	static char[] printableNonStandardSymbolChars = new char[] { '#', ':', ';', '|', '\"', '\'', '`', ',', '(', ')', '\\' };
+
+	//private CharSequence getPackageName();
+
+	public abstract CharSequence getPackageNamePrecise();// {		return getPackageName();	}
+
+	private CharSequence getSymbolName() {
+		return toEscapedName(getName());
+	}
+
+	private CharSequence getSymbolNamePrecise() {
+		return toEscapedName(getName());
+	}
+
+	private CharSequence toEscapedName(CharSequence str) {
+		if (z_escapedPrintName==null) {
+		for (int i = 0, size = str.length(); i < size; ++i) {
+			final char curChar = str.charAt(i);
+		//	if (i == 0 && curChar == '?') j = 0;
+			if ((curChar == '#') || (curChar == '\"') || (curChar == '\'') || (curChar == '(') || (curChar == ')')
+					|| (curChar == ',') || (curChar == ';') || (curChar == '\\') || (curChar == '`')) {
+				return z_escapedPrintName = getSymbolStringRep(str.toString(),true);
+			}
+			if (Character.isWhitespace(curChar)) {
+				return z_escapedPrintName = getSymbolStringRep(str.toString(),true);
+			}
+			if (Character.isLetter(curChar) && Character.isLowerCase(curChar)) {
+				return z_escapedPrintName = getSymbolStringRep(str.toString(),true);
+			}
+		}
+		}
+		return z_escapedPrintName = str;
+	}
+
+	@Override
+	abstract public boolean boundp();
+
+	@Override
+	final public boolean canFastHash() {
 		return true;
 	}
 
-	private int hashCode = -1;
-
-	// @todo volatile is probably overkill here
-	// @todo definitely don't need volatile for constants!!!
-	
-
-	private SubLPackage thePackage; // this should be volatile, but in general
-									// it almost never changes so not doing so
-									// for performance reasons
-
-	private SubLString symbolName;
-
-	private boolean isSpecialSymbolName = false;
-
-	private boolean hasCheckedSymbolStatus = false;
-
-	protected SubLOperator operator; // this should be volatile, but in general
-										// it almost never changes so not doing
-										// so
-										// for performance reasons
-
-	private SubLList plist = SubLNil.NIL; // all references to this should be
-											// explicitly synchronized
-
-	/**
-	 * Creates a new instance of SubLSymbol. symbolName must already be
-	 * canonicalized before calling this constructor SubLPackage are allowed to
-	 * use this constructor.
-	 */
-	AbstractSubLSymbol(SubLString symbolName, SubLPackage thePackage) {
-		super(symbolName, thePackage);
-		this.thePackage = thePackage;
-		this.symbolName = symbolName;
-		this.hashCode = (thePackage == null ? 0 : thePackage.hashCode()) ^ symbolName.hashCode();
-		if (thePackage != null && thePackage == SubLPackage.KEYWORD_PACKAGE && !this.isKeyword())
-			// get
-			// rid
-			// of
-			// this
-			// test
-			Errors.error("Got invalid keyword: '" + thePackage + ":" + symbolName + "'");
-	}
-
-	public boolean boundp() {
-		return this.value != SubLSymbol.UNBOUND || this.thePackage == SubLPackage.KEYWORD_PACKAGE;
-	}
-
-	public boolean canFastHash() {
-		return true;
-	}
-
+	@Override
 	public Object clone() {
 		return this;
 	}
 
-	public boolean fboundp() {
-		return this.operator != SubLSymbol.UNBOUND;
-	}
+	@Override
+	abstract public void forceGlobalValue(SubLObject newValue);
 
-	public void forceGlobalValue(SubLObject newValue) {
-		this.value = newValue;
-	}
 
-	protected SubLSymbol getBindingType() {
-		return CommonSymbols.LEXICAL;
-	}
+	@Override
+	abstract public String getName();
 
-	public SubLFunction getFunc() {
-		if (this.operator == SubLSymbol.UNBOUND)
-			Errors.error(this + " is not fboundp.");
-		return this.operator.getFunc();
-	}
+	@Override
+	abstract public SubLPackage getPackage();
 
-	public SubLOperator getFunction() {
-		if (this.operator == SubLSymbol.UNBOUND)
-			Errors.error(this + " is not fboundp.");
-		return this.operator;
-	}
-
-	public String getName() {
-		return this.symbolName.getString();
-	}
-
-	public SubLPackage getPackage() {
-		return this.thePackage;
-	}
-
-	//// Protected Area
-
-	/** this version will not contain outer symbol quotes ("|") */
-	// @ToDo get rid of me --APB
-	private CharSequence getPackageName() {
-		return this.thePackage == null ? "#" : this.thePackage.getName();
-	}
-
-	//// Private Area
-
-	/** this version will include "|" around name when needed */
-	// @ToDo get rid of me --APB
-	private CharSequence getPackageNamePrecise() {
-		return this.getPackageName();
-	}
-
+	@Override
 	public SubLList getPlist() {
-		synchronized (this.plist) {
-			return this.plist;
-		}
+		return toLispObject().getPropertyList().toList();
 	}
 
+	@Override
 	public SubLObject getProperty(SubLObject indicator) {
-		synchronized (this.plist) {
-			return this.plist.getf(indicator, null);
+		SubLList thePlist = getPlist();
+		synchronized (thePlist) {
+			return thePlist.getf(indicator, null);
 		}
 	}
 
-	public SubLStream getStream(boolean followSynonymStream) { // SubLStream
-		return this.getValue().getStream(followSynonymStream);
+	@Override
+	public SubLStream getStream(boolean followSynonymStream) {
+		Errors.error("SubLSymbol " + this + " is not a stream");
+		return null;
 	}
 
-	public SubLString getSubLName() {
-		return this.symbolName;
-	}
+	@Override
+	abstract public SubLString getSubLName();
 
-	/** this version will not contain outer symbol quotes ("|") */
-	// @ToDo get rid of me --APB
-	private SubLString getSymbolName() {
-		return (SubLString) AbstractSubLSymbol.getSymbolStringRep(this.getName(), this.isSpecialSymbol(this.getName()));
-	}
-
-	/* this version will include "|" aruond name when needed */
-	// @ToDo get rid of me --APB
-	private CharSequence getSymbolNamePrecise() {
-		return AbstractSubLSymbol.getSymbolStringRep(this.getName(), this.isSpecialSymbol(this.getName()));
-	}
-
+	@Override
 	public SubLSymbol getType() {
 		return Types.$dtp_symbol$;
 	}
 
+	@Override
 	public SubLFixnum getTypeCode() {
 		return CommonSymbols.TWO_INTEGER;
 	}
 
-	public int hashCode(int currentDepth) {
-		return this.hashCode;
+	@Override
+	abstract public int hashCode(int currentDepth) ;
+
+	@Override
+	public Symbol toLispObject() {
+		return (Symbol)this;
 	}
 
-	abstract public boolean isDynamic();
+	@Override
+	public abstract boolean isDynamic();
 
-	private boolean isSpecialSymbol(CharSequence str) {
-		if (hasCheckedSymbolStatus) {
-			return isSpecialSymbolName;
-		}
-		for (int i = 0, size = str.length(); i < size; ++i) {
-			char curChar = str.charAt(i);
-			if ((i == 0) && (curChar == '?')) {
-				int j = 0;
-			}
-			if ((curChar == '#') || (curChar == '\"') || (curChar == '\'') || (curChar == '(') || (curChar == ')')
-					|| (curChar == ',') || (curChar == ';') || (curChar == '\\') || (curChar == '`')) {
-				boolean b = true;
-				hasCheckedSymbolStatus = b;
-				return isSpecialSymbolName = b;
-			}
-			if (Character.isWhitespace(curChar)) {
-				boolean b2 = true;
-				hasCheckedSymbolStatus = b2;
-				return isSpecialSymbolName = b2;
-			}
-			if (Character.isLetter(curChar) && Character.isLowerCase(curChar)) {
-				boolean b3 = true;
-				hasCheckedSymbolStatus = b3;
-				return isSpecialSymbolName = b3;
-		}
-		}
-		hasCheckedSymbolStatus = true;
-		return isSpecialSymbolName = false;
-	}
-
+	@Override
 	public SubLObject makeCopy() {
 		return this;
 	}
 
+	@Override
 	public SubLObject makeDeepCopy() {
 		return this;
 	}
@@ -378,7 +292,7 @@ public abstract class AbstractSubLSymbol extends LispSymbolImpl implements SubLS
 		boolean isInPackage = SubLPackage.getCurrentPackage() == pack;
 		boolean isExported = pack.isExported(this);
 		if (!isInPackage)
-			for (SubLList cur = SubLPackage.getCurrentPackage().getUsesPackagesList(); cur != SubLNil.NIL; cur = cur
+			for (SubLList cur = SubLPackage.getCurrentPackage().getUseList().toList(); cur != SubLNil.NIL; cur = cur
 					.rest().toList())
 				if (cur.first().toPackage().isExported(this)) {
 					isInPackage = true;
@@ -392,73 +306,260 @@ public abstract class AbstractSubLSymbol extends LispSymbolImpl implements SubLS
 		return getPackageNamePrecise() + ":" + ":" + getSymbolNamePrecise();
 	}
 
+	@Override
 	public void removeProperty(SubLObject indicator) {
-		SubLList thePlist = plist;
+		SubLList thePlist = getPlist();
 		synchronized (thePlist) {
-			plist = thePlist.remf(indicator);
+			setPropertyList(thePlist.remf(indicator).toLispObject());
 		}
 	}
 
+	@Override
 	public void setConstantValue(SubLObject value) {
 		Errors.error("Can't set the value of a constant symbol: " + this);
 	}
 
-	public void setFunction(SubLOperator func) {
-		this.operator = func;
-	}
+	@Override
+	abstract public void setPackage(SubLPackage thePackage);
 
-	public void setPackage(SubLPackage thePackage) {
-		this.thePackage = thePackage;
-	}
-
+	@Override
 	public void setProperty(SubLObject indicator, SubLObject value) {
-		synchronized (this.plist) {
-			this.plist = this.plist.putf(indicator, value);
+		SubLList thePlist = getPlist();
+		synchronized (thePlist) {
+			setPropertyList(thePlist.putf(indicator, value).toLispObject());
 		}
 	}
 
-	public String toFullString() {
-		return this.getPackageNamePrecise() + SubLSymbol.PACKAGE_SEPARATOR + this.getSymbolNamePrecise();
+	@Override
+	public SubLInputBinaryStream toInputBinaryStream() {
+		return getStream(false).toInputBinaryStream();
 	}
 
-	public SubLInputBinaryStream toInputBinaryStream() { // SubLStream
-		return this.getStream(false).toInputBinaryStream();
+	@Override
+	public SubLInputStream toInputStream() {
+		return getStream(false).toInputStream();
 	}
 
-	public SubLInputStream toInputStream() { // SubLStream
-		return this.getStream(false).toInputStream();
+	@Override
+	public SubLInputTextStream toInputTextStream() {
+		return getStream(false).toInputTextStream();
 	}
 
-	public SubLInputTextStream toInputTextStream() { // SubLStream
-		return this.getStream(false).toInputTextStream();
+	@Override
+	public SubLOutputBinaryStream toOutputBinaryStream() {
+		return getStream(false).toOutputBinaryStream();
 	}
 
-	public SubLOutputBinaryStream toOutputBinaryStream() { // SubLStream
-		return this.getStream(false).toOutputBinaryStream();
+	@Override
+	public SubLOutputStream toOutputStream() {
+		return getStream(false).toOutputStream();
 	}
 
-	public SubLOutputStream toOutputStream() { // SubLStream
-		return this.getStream(false).toOutputStream();
+	@Override
+	public SubLOutputTextStream toOutputTextStream() {
+		return getStream(false).toOutputTextStream();
 	}
 
-	public SubLOutputTextStream toOutputTextStream() { // SubLStream
-		return this.getStream(false).toOutputTextStream();
-	}
 
-	public String toString() {
+	public String toStringSubL() {
 		if (this.isKeyword())
-			return SubLSymbol.PACKAGE_SEPARATOR + this.getSymbolNamePrecise();
-		SubLPackage thePackage = null;
+			return ":" + getSymbolNamePrecise();
+		SubLPackage pack = null;
 		try {
-			thePackage = SubLPackage.getCurrentPackage();
+			pack = SubLPackage.getCurrentPackage();
 		} catch (Exception e) {
-			return this.getPackageNamePrecise() + ":" + this.getSymbolNamePrecise();
+			return getPackageNamePrecise() + ":" + ":" + getSymbolNamePrecise();
 		}
-		if (thePackage == null)
-			return "#:" + this.getSymbolNamePrecise();
-		else if (thePackage.retrieveSymbol(this.getName()) == null)
-			return this.getPackageNamePrecise() + ":" + this.getSymbolNamePrecise();
-		return this.getSymbolNamePrecise().toString();
+		if (pack == null)
+			return "#:" + getSymbolNamePrecise();
+		if (pack.retrieveSymbol(getSubLName()) == null)
+			return getPackageNamePrecise() + ":" + ":" + getSymbolNamePrecise();
+		return possiblyToFullString().toString();
+	}
+
+	protected SubLSymbol getBindingType() {
+		return CommonSymbols.LEXICAL;
+	}
+
+	@Override
+	public boolean isDouble() {
+		return false;
+	}
+
+	@Override
+	public boolean isAlien() {
+		return false;
+	}
+
+	@Override
+	public boolean isAtom() {
+		return true;
+	}
+
+	@Override
+	public boolean isBigIntegerBignum() {
+		return false;
+	}
+
+	@Override
+	public boolean isBignum() {
+		return false;
+	}
+
+	@Override
+	public boolean isBoolean() {
+		return false;
+	}
+
+	@Override
+	public boolean isChar() {
+		return false;
+	}
+
+	@Override
+	public boolean isCons() {
+		return false;
+	}
+
+	@Override
+	public boolean isEnvironment() {
+		return false;
+	}
+
+	@Override
+	public boolean isError() {
+		return false;
+	}
+
+	@Override
+	public boolean isFixnum() {
+		return false;
+	}
+
+	@Override
+	public boolean isFunction() {
+		return false;
+	}
+
+
+	@Override
+	public boolean isGuid() {
+		return false;
+	}
+
+	@Override
+	public boolean isHashtable() {
+		return false;
+	}
+
+	@Override
+	public boolean isHashtableIterator() {
+		return false;
+	}
+
+	@Override
+	public boolean isIntBignum() {
+		return false;
+	}
+
+	@Override
+	public boolean isInteger() {
+		return false;
+	}
+
+	@Override
+	public boolean isKeyhash() {
+		return false;
+	}
+
+	@Override
+	public boolean isKeyhashIterator() {
+		return false;
+	}
+
+	@Override
+	public boolean isKeyword() {
+		return false;
+	}
+
+	@Override
+	public boolean isList() {
+		return false;
+	}
+
+	@Override
+	public boolean isLock() {
+		return false;
+	}
+
+	@Override
+	public boolean isLongBignum() {
+		return false;
+	}
+
+	@Override
+	public boolean isNil() {
+		return false;
+	}
+
+	@Override
+	public boolean isNumber() {
+		return false;
+	}
+
+	@Override
+	public boolean isPackage() {
+		return false;
+	}
+
+	@Override
+	public boolean isPackageIterator() {
+		return false;
+	}
+
+	@Override
+	public boolean isProcess() {
+		return false;
+	}
+
+	@Override
+	public boolean isReadWriteLock() {
+		return false;
+	}
+
+	@Override
+	public boolean isRegexPattern() {
+		return false;
+	}
+
+	@Override
+	public boolean isSemaphore() {
+		return false;
+	}
+
+	@Override
+	public boolean isSequence() {
+		return false;
+	}
+
+	@Override
+	public boolean isStream() {
+		return false;
+	}
+
+	@Override
+	public boolean isString() {
+		return false;
+	}
+
+	@Override
+	public boolean isStructure() {
+		return false;
+	}
+
+	@Override
+	public boolean isVector() {
+		return false;
 	}
 
 }

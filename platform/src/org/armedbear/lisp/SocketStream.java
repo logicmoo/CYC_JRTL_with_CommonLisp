@@ -2,7 +2,7 @@
  * SocketStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SocketStream.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,47 +31,57 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
+
+import static org.armedbear.lisp.Lisp.*;
 
 import java.net.Socket;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+public  abstract  class SocketStream extends TwoWayStream
+{
+    ///protected final Socket socket;
 
-public class SocketStream extends TwoWayStream {
-	private Socket socket;
+    public SocketStream(Socket socket, Stream in, Stream out)
+    {
+    	super(in, out);
+        this.socket = socket;
+    }
 
-	public SocketStream(Socket socket, LispStream in, LispStream out) {
-		super(in, out);
-		this.socket = socket;
+    public SocketStream(Stream in, Stream out) {
+    	super(in, out);
 	}
 
-	public SubLObject classOf() {
-		return BuiltInClass.SOCKET_STREAM;
+	public SocketStream() {
+		this(null, null);
 	}
 
-	public SubLObject close(SubLObject abort) {
-		try {
-			this.socket.close();
-			this.setOpen(false);
-			return Lisp.T;
-		} catch (Exception e) {
-			return Lisp.error(new LispError(e.getMessage()));
-		}
-	}
+    public LispObject typeOf()
+    {
+        return Symbol.SOCKET_STREAM;
+    }
 
-	public String toString() {
-		return this.unreadableString("SOCKET-STREAM");
-	}
+    public LispObject classOf()
+    {
+        return BuiltInClass.SOCKET_STREAM;
+    }
 
-	public SubLObject typeOf() {
-		return LispSymbols.SOCKET_STREAM;
-	}
+    public LispObject typep(LispObject type)
+    {
+        if (type == Symbol.SOCKET_STREAM)
+            return T;
+        if (type == BuiltInClass.SOCKET_STREAM)
+            return T;
+        return super.typep(type);
+    }
 
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.SOCKET_STREAM)
-			return Lisp.T;
-		if (type == BuiltInClass.SOCKET_STREAM)
-			return Lisp.T;
-		return super.typep(type);
+    public LispObject close(LispObject abort)
+    {
+	try {
+	    socket.close();
+	    setOpen(false);
+	    return T;
+	} catch (Exception e) {
+	    return error(new LispError(e.getMessage()));
 	}
+    }
 }

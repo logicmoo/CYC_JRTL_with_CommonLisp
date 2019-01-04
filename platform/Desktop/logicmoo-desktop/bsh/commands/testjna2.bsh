@@ -1,0 +1,156 @@
+import com.sun.jna.Library;
+import com.sun.jna.Native;
+import com.sun.jna.Platform;
+import org.meta.config.impl.AtomInfo;
+import org.meta.shell.idebeans.MoleculeViewerFrame;
+import org.meta.shell.idebeans.viewers.impl.moleculeviewer.graphicsengine.surfaces.PropertyScene;
+
+public interface Ed extends Library {
+     void computeDensity(double minx, double miny, double minz,
+					        double incx, double incy, double incz,
+                         int nx, int ny, int nz,
+                         double [] functionValues, 
+                         int nbf, int totalpgs,
+                         double [] dm, 
+                         double [] cgnorm,
+                         int [] npgs,
+                         double [] cen,
+                         int [] lmn,
+                         double [] coeff,
+                         double [] exps,
+                         double [] norm);
+}
+
+density(mol, pij, bfs, gp) {
+  double [] fVals = new double[gp.getNumberOfGridPoints()];
+  double xmin = gp.getBoundingBox().getUpperLeft().getX(),
+         ymin = gp.getBoundingBox().getUpperLeft().getY(),
+         zmin = gp.getBoundingBox().getUpperLeft().getZ();
+  double xinc = gp.getXIncrement(),
+         yinc = gp.getYIncrement(),
+         zinc = gp.getZIncrement();
+
+  print(xinc + "," + yinc + "," + zinc);
+
+  nclosed = mol.getNumberOfElectrons() / 2;
+
+  d = pij.getMatrix();
+  bfs = bfs.getBasisFunctions();
+  nbf = bfs.size();
+
+  dm = new double[nbf*nbf];
+  for(i=0; i<nbf; i++) 
+     for(j=0; j<nbf; j++)
+         dm[i*nbf+j] = d[i][j];
+  
+  npx = gp.getNoOfPointsAlongX();
+  npy = gp.getNoOfPointsAlongX();
+  npz = gp.getNoOfPointsAlongX();
+
+  ii = 0; pgcnt = 0;
+  npgs = new int[nbf+1];
+  cgnorm = new double[nbf];
+  for(bf : bfs) { 
+    cgnorm[ii] = bf.getNormalization();
+    npgs[ii++] = pgcnt;
+    pgs = bf.getPrimitives(); 
+    pgcnt += pgs.size();   
+    print((ii-1) + " " + npgs[ii-1]);
+  } 
+  npgs[ii] = pgcnt;
+  print((ii) + " " + npgs[ii]);
+
+  cen = new double[pgcnt*3];
+  lmn = new int[pgcnt*3];
+  coeff = new double[pgcnt];
+  exps  = new double[pgcnt];
+  norm  = new double[pgcnt];
+  ii = 0;
+  for(bf : bfs) {
+     pgs = bf.getPrimitives();
+     
+     for(pg : pgs) {
+        org = pg.getOrigin();
+        cen[ii*3]   = org.getX();
+        cen[ii*3+1] = org.getY();
+        cen[ii*3+2] = org.getZ();
+ 
+        pwr = pg.getPowers();
+        lmn[ii*3]   = pwr.getL();
+        lmn[ii*3+1] = pwr.getM();
+        lmn[ii*3+2] = pwr.getN();
+
+        coeff[ii] = pg.getCoefficient();
+        exps[ii]  = pg.getExponent();
+        norm[ii]  = pg.getNormalization();
+        
+        print(ii + " " + cen[ii*3] + ", " + cen[ii*3+1] + ", " + cen[ii*3+2]);
+        ii++;
+     }
+  }
+
+  ed = Native.loadLibrary("CUDAEd", Ed.class);
+  t1 = System.currentTimeMillis();
+  ed.computeDensity(xmin, ymin, zmin, 
+                    xinc, yinc, zinc,
+                    npx, npy, npz, 
+                    fVals,
+                    nbf,
+                    pgcnt,
+                    dm,
+                    cgnorm,
+                    npgs, 
+                    cen,
+                    lmn,
+                    coeff,
+                    exps,
+                    norm);
+  t2 = System.currentTimeMillis();
+  gp.setFunctionValues(fVals);
+
+  print("Electron density calculation over.");
+  print("Time for CUDA Ed: " + (t2-t1) + " ms.");
+}
+
+scfden(mol, gp) {
+    t1 = System.currentTimeMillis();    
+    bfs = new org.meta.math.qm.BasisFunctions(mol, "sto3g");
+    onee = new org.meta.math.qm.OneElectronIntegrals(bfs, mol);
+    twoe = new org.meta.math.qm.TwoElectronIntegrals(bfs);
+    t2 = System.currentTimeMillis();
+    scfm = new org.meta.math.qm.HartreeFockSCFMethod(mol, onee, twoe);
+    scfm.scf();    
+    t3 = System.currentTimeMillis();
+    print("Time till 2E : " + (t2-t1) + " ms");
+    print("Time for SCF : " + (t3-t2) + " ms");
+      
+    print("Density Matrix: "); 
+    print(scfm.getDensity()); 
+    print("MOS : ");
+    print(scfm.getMos());
+
+    density(mol, scfm.getDensity(), bfs, gp);
+}
+
+dt = getDesktopInstance();
+fl = dt.getFrameList();
+
+mvf = null;
+for(f:fl) {
+  if (f instanceof MoleculeViewerFrame) { mvf = f; break; }
+} // end for
+
+if (mvf != null) {
+  mv = mvf.getMoleculeViewer();
+  mols = mv.getSceneList().get(0);
+  mol = mols.getMolecule();
+  gp = mv.getScreenGridProperty();
+
+  print(gp.toString());
+
+  scfden(mol, gp);
+  
+  ps = new PropertyScene(mols, gp);
+  mols.addPropertyScene(ps);
+} // end if
+

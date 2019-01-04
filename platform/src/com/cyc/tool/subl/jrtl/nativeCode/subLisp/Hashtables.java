@@ -1,25 +1,10 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLHashtable;
@@ -27,28 +12,17 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 
-//// Internal Imports
-
-//// External Imports
-
 public class Hashtables implements SubLFile {
-
-	//// Constructors
-
-	public static SubLFile me = new Hashtables();
-
 	public static SubLObject clrhash(SubLObject table) {
 		table.toHashtable().clear();
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
-	//// Public Area
-
-	public static SubLObject getEntryKey(Entry entry) {
-		// @todo handle this natively in the translator
+	public static SubLObject getEntryKey(Map.Entry entry) {
 		return (SubLObject) entry.getKey();
 	}
 
@@ -56,44 +30,41 @@ public class Hashtables implements SubLFile {
 		return table.toHashtable().getEntrySetIterator();
 	}
 
-	public static SubLObject getEntryValue(Entry entry) {
-		// @todo handle this natively in the translator
+	public static SubLObject getEntryValue(Map.Entry entry) {
 		return (SubLObject) entry.getValue();
 	}
 
 	public static SubLObject gethash(SubLObject key, SubLObject table) {
-		return Hashtables.gethash(table, key, CommonSymbols.NIL);
+		return gethash(table, key, SubLNil.NIL);
 	}
 
 	public static SubLObject gethash(SubLObject key, SubLObject table, SubLObject defaultValue) {
 		SubLObject result = table.get(key);
 		if (result == null)
-			return Values.values(defaultValue == CommonSymbols.UNPROVIDED ? CommonSymbols.NIL : defaultValue,
-					CommonSymbols.NIL);
+			return Values.values(defaultValue == CommonSymbols.UNPROVIDED ? SubLNil.NIL : defaultValue,
+					SubLNil.NIL);
 		return Values.values(result, CommonSymbols.T);
 	}
 
 	public static SubLObject gethash_bucket(SubLObject key, SubLObject table) {
 		SubLHashtable tableTyped = table.toHashtable();
-		//// Copied from HashMap.hash() /////
 		int h = key.hashCode();
 		h += ~(h << 9);
 		h ^= h >>> 14;
 		h += h << 4;
 		h ^= h >>> 10;
-		/////////////////////////////////////
 		h %= tableTyped.getCurrentCapacity();
 		return SubLObjectFactory.makeInteger(h);
 	}
 
 	public static SubLObject gethash_without_values(SubLObject key, SubLObject table) {
 		SubLObject result = table.get(key);
-		return result == null ? CommonSymbols.NIL : result;
+		return result == null ? SubLNil.NIL : result;
 	}
 
 	public static SubLObject gethash_without_values(SubLObject key, SubLObject table, SubLObject defaultValue) {
 		SubLObject result = table.get(key);
-		return result != null ? result : defaultValue == CommonSymbols.UNPROVIDED ? CommonSymbols.NIL : defaultValue;
+		return result != null ? result : defaultValue == CommonSymbols.UNPROVIDED ? SubLNil.NIL : defaultValue;
 	}
 
 	public static SubLObject hash_index_key(SubLObject table, SubLObject index) {
@@ -117,40 +88,29 @@ public class Hashtables implements SubLFile {
 	}
 
 	public static boolean iteratorHasNext(Iterator iter) {
-		// @todo handle this natively in the translator
 		return iter.hasNext();
 	}
 
-	public static Entry iteratorNextEntry(Iterator iter) {
-		// @todo handle this natively in the translator
+	public static Map.Entry iteratorNextEntry(Iterator iter) {
 		return (Entry) iter.next();
 	}
 
-	//// CDOHASH macro helpers
-
 	public static void main(String[] args) {
 		SubLHashtable table = SubLObjectFactory.makeHashtable();
-
-		// (%local iter (%CDOHASH-GET-ENTRY-SET-ITERATOR table) "Iterator")
-		Iterator iter = Hashtables.getEntrySetIterator(table);
-		// (while (%CDOHASH-ITERATOR-HAS-NEXT iter) ...)
-		while (Hashtables.iteratorHasNext(iter)) {
-			// (%local entry (%CDOHASH-ITERATOR-NEXT-ENTRY iter) "Entry")
-			Entry entry = Hashtables.iteratorNextEntry(iter);
-			// (%local key (%CDOHASH-GET-ENTRY-KEY entry))
-			SubLObject key = Hashtables.getEntryKey(entry);
-			// (%local value (%CDOHASH-GET-ENTRY-VALUE entry))
-			SubLObject value = Hashtables.getEntryValue(entry);
-			// body here
+		Iterator iter = getEntrySetIterator(table);
+		while (iteratorHasNext(iter)) {
+			Map.Entry entry = iteratorNextEntry(iter);
+			SubLObject key = getEntryKey(entry);
+			SubLObject value = getEntryValue(entry);
 		}
 	}
 
 	public static SubLObject make_hash_table(SubLObject size) {
-		return Hashtables.make_hash_table(size, CommonSymbols.EQL, CommonSymbols.NIL);
+		return make_hash_table(size, CommonSymbols.EQL, SubLNil.NIL);
 	}
 
 	public static SubLObject make_hash_table(SubLObject size, SubLObject test) {
-		return Hashtables.make_hash_table(size, test, CommonSymbols.NIL);
+		return make_hash_table(size, test, SubLNil.NIL);
 	}
 
 	public static SubLObject make_hash_table(SubLObject size, SubLObject test, SubLObject area) {
@@ -170,7 +130,6 @@ public class Hashtables implements SubLFile {
 	}
 
 	public static void releaseEntrySetIterator(Iterator iter) {
-		// @todo unstub this
 	}
 
 	public static SubLObject remhash(SubLObject key, SubLObject table) {
@@ -182,44 +141,36 @@ public class Hashtables implements SubLFile {
 		return value;
 	}
 
-	//// Initializers
-
-	/** Creates a new instance of Hashtables. */
-	private Hashtables() {
+	public static SubLFile me;
+	static {
+		me = new Hashtables();
 	}
 
+	@Override
 	public void declareFunctions() {
 		SubLFiles.declareFunction(Hashtables.me, "make_hash_table", "MAKE-HASH-TABLE", 1, 2, false);
-
 		SubLFiles.declareFunction(Hashtables.me, "hash_table_test", "HASH-TABLE-TEST", 1, 0, false);
 		SubLFiles.declareFunction(Hashtables.me, "hash_table_size", "HASH-TABLE-SIZE", 1, 0, false);
 		SubLFiles.declareFunction(Hashtables.me, "hash_table_count", "HASH-TABLE-COUNT", 1, 0, false);
-
 		SubLFiles.declareFunction(Hashtables.me, "gethash", "GETHASH", 2, 1, false);
 		SubLFiles.declareFunction(Hashtables.me, "gethash_without_values", "GETHASH-WITHOUT-VALUES", 2, 1, false);
-
 		SubLFiles.declareFunction(Hashtables.me, "sethash", "SETHASH", 3, 0, false);
 		SubLFiles.declareFunction(Hashtables.me, "remhash", "REMHASH", 2, 0, false);
 		SubLFiles.declareFunction(Hashtables.me, "clrhash", "CLRHASH", 1, 0, false);
-
 		SubLFiles.declareFunction(Hashtables.me, "maphash", "MAPHASH", 2, 0, false);
-
 		SubLFiles.declareFunction(Hashtables.me, "gethash_bucket", "GETHASH-BUCKET", 2, 0, false);
-
 	}
 
+	@Override
 	public void initializeVariables() {
 	}
 
-	//// Protected Area
-
-	//// Private Area
-
-	//// Internal Rep
-
-	//// Main
-
+	@Override
 	public void runTopLevelForms() {
 	}
 
+	public Hashtables() {
+		PrologSync.addSingleton(this);
+
+	}
 }

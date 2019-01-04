@@ -1,0 +1,45 @@
+% preamble for the Manual
+%
+% The goal is to move all the ``technical'' looking stuff here,
+% leaving the manual itself as much as a pure content to be
+% comfortably read and modified with a text editor.
+
+\usepackage{color,hyperref}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.3}
+\hypersetup{colorlinks,breaklinks,
+            linkcolor=darkblue,urlcolor=darkblue,
+            anchorcolor=darkblue,citecolor=darkblue}
+
+\usepackage{a4wide}
+
+\newcommand{\code}[1]{%
+  \texttt{#1}%
+}
+
+\usepackage{listings}
+
+
+\lstnewenvironment{listing-java}
+ {\lstset{basicstyle=\ttfamily,language=Java}}
+ {}
+
+
+\lstnewenvironment{listing-lisp}
+ {\lstset{basicstyle=\ttfamily,language=Lisp}}
+ {}
+
+\lstnewenvironment{listing-shell}
+ {\lstset{basicstyle=\ttfamily,language=sh}}
+ {}
+
+\usepackage{verbatim}
+
+%% For setting margins in docstrings
+\usepackage{changepage}
+
+\usepackage{makeidx}
+
+\makeindex
+
+\ProvidesPackage{abcl}
+

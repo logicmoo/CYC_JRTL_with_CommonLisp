@@ -1,8 +1,8 @@
 /*
- * SlotDefinitionObject.java
+ * SlotDefinition.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: SlotDefinition.java 12521 2010-03-10 22:09:13Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,213 +31,130 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class SlotDefinition {
+public final class SlotDefinition extends StandardObject
+{
+  private SlotDefinition()
+  {
+    super(StandardClass.STANDARD_SLOT_DEFINITION,
+          StandardClass.STANDARD_SLOT_DEFINITION.getClassLayout().getLength());
+    setInstanceSlotValue(Symbol.LOCATION, NIL);
+    setInstanceSlotValue(Symbol._TYPE, T);
+    setInstanceSlotValue(Symbol._DOCUMENTATION, NIL);
+  }
 
-	// ### make-slot-definition
-	private static Primitive MAKE_SLOT_DEFINITION = new JavaPrimitive("make-slot-definition", Lisp.PACKAGE_SYS, true,
-			"") {
+  private SlotDefinition(StandardClass clazz) {
+    // clazz layout needs to have SlotDefinitionClass layout as prefix
+    // or indexed slot access won't work
+    super(clazz, clazz.getClassLayout().getLength());
+    setInstanceSlotValue(Symbol.LOCATION, NIL);
+  }
 
-		public SubLObject execute() {
-			return new SlotDefinitionObject();
-		}
-	};
+  public SlotDefinition(StandardClass clazz, LispObject name) {
+    // clazz layout needs to have SlotDefinitionClass layout as prefix
+    // or indexed slot access won't work
+    super(clazz, clazz.getClassLayout().getLength());
+    Debug.assertTrue(name instanceof Symbol);
+    setInstanceSlotValue(Symbol.NAME, name);
+    setInstanceSlotValue(Symbol.INITFUNCTION, NIL);
+    setInstanceSlotValue(Symbol.INITARGS,
+                         new Cons(PACKAGE_KEYWORD.intern(((Symbol)name).getName())));
+    setInstanceSlotValue(Symbol.READERS, NIL);
+    setInstanceSlotValue(Symbol.ALLOCATION, Keyword.INSTANCE);
+    setInstanceSlotValue(Symbol.LOCATION, NIL);
+    setInstanceSlotValue(Symbol._TYPE, T);
+    setInstanceSlotValue(Symbol._DOCUMENTATION, NIL);
+  }
 
-	// ### %slot-definition-name
-	private static Primitive _SLOT_DEFINITION_NAME = new JavaPrimitive(LispSymbols._SLOT_DEFINITION_NAME,
-			"slot-definition") {
+  public SlotDefinition(LispObject name, LispObject readers)
+  {
+    this();
+    Debug.assertTrue(name instanceof Symbol);
+    setInstanceSlotValue(Symbol.NAME, name);
+    setInstanceSlotValue(Symbol.INITFUNCTION, NIL);
+    setInstanceSlotValue(Symbol.INITARGS,
+                         new Cons(PACKAGE_KEYWORD.intern(((Symbol)name).getName())));
+    setInstanceSlotValue(Symbol.READERS, readers);
+    setInstanceSlotValue(Symbol.ALLOCATION, Keyword.INSTANCE);
+  }
 
-		public SubLObject execute(SubLObject arg) {
-			return SlotDefinition.checkSlotDefinition(arg).slots[SlotDefinitionClass.SLOT_INDEX_NAME];
-		}
-	};
+  public SlotDefinition(LispObject name, LispObject readers,
+                        LispObject initForm)
+  {
+    this();
+    Debug.assertTrue(name instanceof Symbol);
+    setInstanceSlotValue(Symbol.NAME, name);
+    setInstanceSlotValue(Symbol.INITFUNCTION, NIL);
+    setInstanceSlotValue(Symbol.INITFORM, initForm);
+    setInstanceSlotValue(Symbol.INITARGS,
+                         new Cons(PACKAGE_KEYWORD.intern(((Symbol)name).getName())));
+    setInstanceSlotValue(Symbol.READERS, readers);
+    setInstanceSlotValue(Symbol.ALLOCATION, Keyword.INSTANCE);
+  }
 
-	// ### set-slot-definition-name
-	private static Primitive SET_SLOT_DEFINITION_NAME = new JavaPrimitive("set-slot-definition-name", Lisp.PACKAGE_SYS,
-			true, "slot-definition name") {
+  public SlotDefinition(LispObject name, LispObject readers,
+                        Function initFunction)
+  {
+    this();
+    Debug.assertTrue(name instanceof Symbol);
+    setInstanceSlotValue(Symbol.NAME, name);
+    setInstanceSlotValue(Symbol.INITFUNCTION, initFunction);
+    setInstanceSlotValue(Symbol.INITFORM, NIL);
+    setInstanceSlotValue(Symbol.INITARGS,
+                         new Cons(PACKAGE_KEYWORD.intern(((Symbol)name).getName())));
+    setInstanceSlotValue(Symbol.READERS, readers);
+    setInstanceSlotValue(Symbol.ALLOCATION, Keyword.INSTANCE);
+  }
 
-		public SubLObject execute(SubLObject first, SubLObject second)
+  public SlotDefinition(LispObject name, LispObject readers,
+                        Function initFunction, LispObject initargs)
+  {
+    this();
+    Debug.assertTrue(name instanceof Symbol);
+    setInstanceSlotValue(Symbol.NAME, name);
+    setInstanceSlotValue(Symbol.INITFUNCTION, initFunction);
+    setInstanceSlotValue(Symbol.INITFORM, NIL);
+    setInstanceSlotValue(Symbol.INITARGS, initargs);
+    setInstanceSlotValue(Symbol.READERS, readers);
+    setInstanceSlotValue(Symbol.ALLOCATION, Keyword.INSTANCE);
+  }
 
-		{
-			SlotDefinition.checkSlotDefinition(first).slots[SlotDefinitionClass.SLOT_INDEX_NAME] = second;
-			return second;
-		}
-	};
+  public String printObjectImpl()
+  {
+    StringBuilder sb =
+      new StringBuilder(Symbol.SLOT_DEFINITION.printObject());
+    LispObject name = getInstanceSlotValue(Symbol.NAME);
+    if (name != null && name != NIL) {
+      sb.append(' ');
+      sb.append(name.printObject());
+    }
+    return unreadableString(sb.toString());
+  }
 
-	// ### %slot-definition-initfunction
-	private static Primitive _SLOT_DEFINITION_INITFUNCTION = new JavaPrimitive(
-			LispSymbols._SLOT_DEFINITION_INITFUNCTION, "slot-definition") {
+  private static final Primitive MAKE_SLOT_DEFINITION
+    = new pf_make_slot_definition();
+  @DocString(name="%make-slot-definition",
+             args="slot-class",
+             doc="Argument must be a subclass of standard-slot-definition")
+  private static final class pf_make_slot_definition extends Primitive
+  {
+    pf_make_slot_definition()
+    {
+      super("%make-slot-definition", PACKAGE_SYS, true, "slot-class");
+    }
+    public LispObject execute(LispObject slotDefinitionClass)
+    {
+      if (!(slotDefinitionClass instanceof StandardClass))
+        return type_error(slotDefinitionClass,
+                          StandardClass.STANDARD_SLOT_DEFINITION);
+      // we could check whether slotClass is a subtype of
+      // standard-slot-definition here, but subtypep doesn't work early
+      // in the build process
+      return new SlotDefinition((StandardClass)slotDefinitionClass);
+    }
+  };
 
-		public SubLObject execute(SubLObject arg) {
-			return SlotDefinition.checkSlotDefinition(arg).slots[SlotDefinitionClass.SLOT_INDEX_INITFUNCTION];
-		}
-	};
-
-	// ### set-slot-definition-initfunction
-	private static Primitive SET_SLOT_DEFINITION_INITFUNCTION = new JavaPrimitive("set-slot-definition-initfunction",
-			Lisp.PACKAGE_SYS, true, "slot-definition initfunction") {
-
-		public SubLObject execute(SubLObject first, SubLObject second)
-
-		{
-			SlotDefinition.checkSlotDefinition(first).slots[SlotDefinitionClass.SLOT_INDEX_INITFUNCTION] = second;
-			return second;
-		}
-	};
-
-	// ### %slot-definition-initform
-	private static Primitive _SLOT_DEFINITION_INITFORM = new JavaPrimitive("%slot-definition-initform",
-			Lisp.PACKAGE_SYS, true, "slot-definition") {
-
-		public SubLObject execute(SubLObject arg) {
-			return SlotDefinition.checkSlotDefinition(arg).slots[SlotDefinitionClass.SLOT_INDEX_INITFORM];
-		}
-	};
-
-	// ### set-slot-definition-initform
-	private static Primitive SET_SLOT_DEFINITION_INITFORM = new JavaPrimitive("set-slot-definition-initform",
-			Lisp.PACKAGE_SYS, true, "slot-definition initform") {
-
-		public SubLObject execute(SubLObject first, SubLObject second)
-
-		{
-			SlotDefinition.checkSlotDefinition(first).slots[SlotDefinitionClass.SLOT_INDEX_INITFORM] = second;
-			return second;
-		}
-	};
-
-	// ### %slot-definition-initargs
-	private static Primitive _SLOT_DEFINITION_INITARGS = new JavaPrimitive(LispSymbols._SLOT_DEFINITION_INITARGS,
-			"slot-definition") {
-
-		public SubLObject execute(SubLObject arg) {
-			return SlotDefinition.checkSlotDefinition(arg).slots[SlotDefinitionClass.SLOT_INDEX_INITARGS];
-		}
-	};
-
-	// ### set-slot-definition-initargs
-	private static Primitive SET_SLOT_DEFINITION_INITARGS = new JavaPrimitive("set-slot-definition-initargs",
-			Lisp.PACKAGE_SYS, true, "slot-definition initargs") {
-
-		public SubLObject execute(SubLObject first, SubLObject second)
-
-		{
-			SlotDefinition.checkSlotDefinition(first).slots[SlotDefinitionClass.SLOT_INDEX_INITARGS] = second;
-			return second;
-		}
-	};
-
-	// ### %slot-definition-readers
-	private static Primitive _SLOT_DEFINITION_READERS = new JavaPrimitive("%slot-definition-readers", Lisp.PACKAGE_SYS,
-			true, "slot-definition") {
-
-		public SubLObject execute(SubLObject arg) {
-			return SlotDefinition.checkSlotDefinition(arg).slots[SlotDefinitionClass.SLOT_INDEX_READERS];
-		}
-	};
-
-	// ### set-slot-definition-readers
-	private static Primitive SET_SLOT_DEFINITION_READERS = new JavaPrimitive("set-slot-definition-readers",
-			Lisp.PACKAGE_SYS, true, "slot-definition readers") {
-
-		public SubLObject execute(SubLObject first, SubLObject second)
-
-		{
-			SlotDefinition.checkSlotDefinition(first).slots[SlotDefinitionClass.SLOT_INDEX_READERS] = second;
-			return second;
-		}
-	};
-
-	// ### %slot-definition-writers
-	private static Primitive _SLOT_DEFINITION_WRITERS = new JavaPrimitive("%slot-definition-writers", Lisp.PACKAGE_SYS,
-			true, "slot-definition") {
-
-		public SubLObject execute(SubLObject arg) {
-			return SlotDefinition.checkSlotDefinition(arg).slots[SlotDefinitionClass.SLOT_INDEX_WRITERS];
-		}
-	};
-
-	// ### set-slot-definition-writers
-	private static Primitive SET_SLOT_DEFINITION_WRITERS = new JavaPrimitive("set-slot-definition-writers",
-			Lisp.PACKAGE_SYS, true, "slot-definition writers") {
-
-		public SubLObject execute(SubLObject first, SubLObject second)
-
-		{
-			SlotDefinition.checkSlotDefinition(first).slots[SlotDefinitionClass.SLOT_INDEX_WRITERS] = second;
-			return second;
-		}
-	};
-
-	// ### %slot-definition-allocation
-	private static Primitive _SLOT_DEFINITION_ALLOCATION = new JavaPrimitive("%slot-definition-allocation",
-			Lisp.PACKAGE_SYS, true, "slot-definition") {
-
-		public SubLObject execute(SubLObject arg) {
-			return SlotDefinition.checkSlotDefinition(arg).slots[SlotDefinitionClass.SLOT_INDEX_ALLOCATION];
-		}
-	};
-
-	// ### set-slot-definition-allocation
-	private static Primitive SET_SLOT_DEFINITION_ALLOCATION = new JavaPrimitive("set-slot-definition-allocation",
-			Lisp.PACKAGE_SYS, true, "slot-definition allocation") {
-
-		public SubLObject execute(SubLObject first, SubLObject second)
-
-		{
-			SlotDefinition.checkSlotDefinition(first).slots[SlotDefinitionClass.SLOT_INDEX_ALLOCATION] = second;
-			return second;
-		}
-	};
-
-	// ### %slot-definition-allocation-class
-	private static Primitive _SLOT_DEFINITION_ALLOCATION_CLASS = new JavaPrimitive("%slot-definition-allocation-class",
-			Lisp.PACKAGE_SYS, true, "slot-definition") {
-
-		public SubLObject execute(SubLObject arg) {
-			return SlotDefinition.checkSlotDefinition(arg).slots[SlotDefinitionClass.SLOT_INDEX_ALLOCATION_CLASS];
-		}
-	};
-
-	// ### set-slot-definition-allocation-class
-	private static Primitive SET_SLOT_DEFINITION_ALLOCATION_CLASS = new JavaPrimitive(
-			"set-slot-definition-allocation-class", Lisp.PACKAGE_SYS, true, "slot-definition allocation-class") {
-
-		public SubLObject execute(SubLObject first, SubLObject second)
-
-		{
-			SlotDefinition.checkSlotDefinition(first).slots[SlotDefinitionClass.SLOT_INDEX_ALLOCATION_CLASS] = second;
-			return second;
-		}
-	};
-
-	// ### %slot-definition-location
-	private static Primitive _SLOT_DEFINITION_LOCATION = new JavaPrimitive("%slot-definition-location",
-			Lisp.PACKAGE_SYS, true, "slot-definition") {
-
-		public SubLObject execute(SubLObject arg) {
-			return SlotDefinition.checkSlotDefinition(arg).slots[SlotDefinitionClass.SLOT_INDEX_LOCATION];
-		}
-	};
-
-	// ### set-slot-definition-location
-	private static Primitive SET_SLOT_DEFINITION_LOCATION = new JavaPrimitive("set-slot-definition-location",
-			Lisp.PACKAGE_SYS, true, "slot-definition location") {
-
-		public SubLObject execute(SubLObject first, SubLObject second)
-
-		{
-			SlotDefinition.checkSlotDefinition(first).slots[SlotDefinitionClass.SLOT_INDEX_LOCATION] = second;
-			return second;
-		}
-	};
-
-	public static SlotDefinitionObject checkSlotDefinition(SubLObject obj) {
-		if (obj instanceof SlotDefinitionObject)
-			return (SlotDefinitionObject) obj;
-		return (SlotDefinitionObject) Lisp.type_error(obj, LispSymbols.SLOT_DEFINITION);
-	}
 }

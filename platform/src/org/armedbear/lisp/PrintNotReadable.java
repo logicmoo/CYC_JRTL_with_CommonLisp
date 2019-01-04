@@ -2,7 +2,7 @@
  * PrintNotReadable.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: PrintNotReadable.java 12431 2010-02-08 08:05:15Z mevenson $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,73 +31,77 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class PrintNotReadable extends LispError {
-	// ### print-not-readable-object
-	private static Primitive PRINT_NOT_READABLE_OBJECT = new JavaPrimitive("print-not-readable-object", "condition") {
+public class PrintNotReadable extends LispError
+{
+    public PrintNotReadable(LispObject initArgs)
+    {
+        super(StandardClass.PRINT_NOT_READABLE);
+        super.initialize(initArgs);
+        LispObject object = null;
+        while (initArgs != NIL) {
+            LispObject first = initArgs.car();
+            initArgs = initArgs.cdr();
+            LispObject second = initArgs.car();
+            initArgs = initArgs.cdr();
+            if (first == Keyword.OBJECT) {
+                object = second;
+                break;
+            }
+        }
+        if (object != null)
+            setInstanceSlotValue(Symbol.OBJECT, object);
+    }
 
-		public SubLObject execute(SubLObject arg) {
-			if (arg instanceof PrintNotReadable)
-				return ((PrintNotReadable) arg).getInstanceSlotValue(LispSymbols.OBJECT);
-			return Lisp.type_error(arg, LispSymbols.PRINT_NOT_READABLE);
+    @Override
+    public LispObject typeOf()
+    {
+        return Symbol.PRINT_NOT_READABLE;
+    }
 
-		}
-	};
+    @Override
+    public LispObject classOf()
+    {
+        return StandardClass.PRINT_NOT_READABLE;
+    }
 
-	public PrintNotReadable(SubLObject initArgs) {
-		super(StandardClass.PRINT_NOT_READABLE);
-		super.initialize(initArgs);
-		SubLObject object = null;
-		while (initArgs != Lisp.NIL) {
-			SubLObject first = initArgs.first();
-			initArgs = initArgs.rest();
-			SubLObject second = initArgs.first();
-			initArgs = initArgs.rest();
-			if (first == Keyword.OBJECT) {
-				object = second;
-				break;
-			}
-		}
-		if (object != null)
-			this.setInstanceSlotValue(LispSymbols.OBJECT, object);
-	}
+    @Override
+    public LispObject typep(LispObject type)
+    {
+        if (type == Symbol.PRINT_NOT_READABLE)
+            return T;
+        if (type == StandardClass.PRINT_NOT_READABLE)
+            return T;
+        return super.typep(type);
+    }
 
-	public SubLObject classOf() {
-		return StandardClass.PRINT_NOT_READABLE;
-	}
+    @Override
+    public String getMessage()
+    {
+        StringBuilder sb = new StringBuilder();
+        LispObject object = UNBOUND_VALUE;
+        object = getInstanceSlotValue(Symbol.OBJECT);
+        if (object != UNBOUND_VALUE) {
+            sb.append(object.princToString());
+        } else
+            sb.append("Object");
+        sb.append(" cannot be printed readably.");
+        return sb.toString();
+    }
 
-	public String getMessage() {
-		StringBuilder sb = new StringBuilder();
-		SubLObject object = Lisp.UNBOUND_VALUE;
-		object = this.getInstanceSlotValue(LispSymbols.OBJECT);
-		if (object != Lisp.UNBOUND_VALUE) {
-			LispThread thread = LispThread.currentThread();
-			SpecialBindingsMark mark = thread.markSpecialBindings();
-			thread.bindSpecial(LispSymbols.PRINT_READABLY, Lisp.NIL);
-			thread.bindSpecial(LispSymbols.PRINT_ARRAY, Lisp.NIL);
-			try {
-				sb.append(object.writeToString());
-			} finally {
-				thread.resetSpecialBindings(mark);
-			}
-		} else
-			sb.append("Object");
-		sb.append(" cannot be printed readably.");
-		return sb.toString();
-	}
+    // ### print-not-readable-object
+    private static final Primitive PRINT_NOT_READABLE_OBJECT =
+        new Primitive("print-not-readable-object", "condition")
+    {
+        @Override
+        public LispObject execute(LispObject arg)
+        {
+                if (arg instanceof PrintNotReadable) return ((PrintNotReadable)arg).getInstanceSlotValue(Symbol.OBJECT);
+                return type_error(arg, Symbol.PRINT_NOT_READABLE);
 
-	public SubLObject typeOf() {
-		return LispSymbols.PRINT_NOT_READABLE;
-	}
-
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.PRINT_NOT_READABLE)
-			return Lisp.T;
-		if (type == StandardClass.PRINT_NOT_READABLE)
-			return Lisp.T;
-		return super.typep(type);
-	}
+        }
+    };
 }

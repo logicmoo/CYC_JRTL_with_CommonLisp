@@ -1,7 +1,7 @@
 ;;; late-setf.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: late-setf.lisp 11775 2009-04-21 20:00:59Z ehuelsmann $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -42,13 +42,15 @@
 					 'define-setf-expander
 					 :environment environment)
       `(progn
+	 (record-source-information-for-type ',access-fn :setf-expander)
+	 (eval-when (:compile-toplevel :load-toplevel :execute)
          ,@(when doc
              `((%set-documentation ',access-fn 'setf ,doc)))
          (setf (get ',access-fn 'setf-expander)
              #'(lambda (,whole ,environment)
                 ,@local-decs
                 (block ,access-fn ,body)))
-         ',access-fn))))
+	   ',access-fn)))))
 
 (define-setf-expander values (&rest places &environment env)
   (let ((setters ())
@@ -88,11 +90,6 @@
               `(getf ,get ,ptemp ,@(if default `(,def-temp)))))))
 
 (define-setf-expander apply (functionoid &rest args)
-  (unless (and (listp functionoid)
-               (= (length functionoid) 2)
-               (eq (first functionoid) 'function)
-               (memq (second functionoid) '(aref bit sbit)))
-    (error "SETF of APPLY is only defined for #'AREF, #'BIT and #'SBIT."))
   (let ((function (second functionoid))
         (new-var (gensym))
         (vars (make-gensym-list (length args))))

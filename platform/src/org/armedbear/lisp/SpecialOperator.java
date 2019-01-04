@@ -2,7 +2,7 @@
  * SpecialOperator.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: SpecialOperator.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,128 +31,213 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
+import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLCompiledFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLSpecialOperator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public class SpecialOperator extends Operator {
-	private int[] callCount = new int[12];
-	private int hotCount;
+abstract public class SpecialOperator extends SubLSpecialOperator
+{
 
-	public SpecialOperator(String name, SubLPackage pkg, boolean exported, String arglist) {
-		SubLSymbol symbol;
-		if (exported)
-			symbol = pkg.internAndExport(name.toUpperCase());
-		else
-			symbol = pkg.intern(name.toUpperCase());
-		symbol.setSymbolFunction(this);
-		this.setLambdaName(symbol);
-		this.setLambdaList(LispObjectFactory.makeString(arglist));
+	@Override
+	public boolean isInterpreted() {
+		return false;
 	}
 
-	public SpecialOperator(SubLSymbol symbol) {
-		symbol.setSymbolFunction(this);
-		this.setLambdaName(symbol);
+	@Override
+	public boolean isSpecial() {
+		return true;
 	}
 
-	public SpecialOperator(SubLSymbol symbol, String arglist) {
-		symbol.setSymbolFunction(this);
-		this.setLambdaName(symbol);
-		this.setLambdaList(LispObjectFactory.makeString(arglist));
+	@Override
+	public boolean isFunction() {
+		return false;
 	}
 
-	public SubLObject execute() {
-		return Lisp.error(new UndefinedFunction(this.getLambdaName()));
+	@Override
+	public boolean isFunctionSpec() {
+		return false;
 	}
 
-	public SubLObject execute(SubLObject arg) {
-		return Lisp.error(new UndefinedFunction(this.getLambdaName()));
+
+	@Override
+	public SubLObject evalViaApply(SubLCons form, SubLEnvironment env) {
+		return apply(form, env);
 	}
 
-	public SubLObject execute(SubLObject first, SubLObject second)
 
-	{
-		return Lisp.error(new UndefinedFunction(this.getLambdaName()));
+	@Override
+	public SubLObject apply(SubLCons arg1, SubLEnvironment env) {
+		BinaryFunction binFunc = getBinaryFunction();
+		if (binFunc != null)
+			return binFunc.processItem(arg1, env);
+		return funcallCL((LispObject)arg1,env);
 	}
 
-	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third)
-
-	{
-		return Lisp.error(new UndefinedFunction(this.getLambdaName()));
+	@Override
+	public LispObject funcallCL(LispObject... args) {
+		return (LispObject) getEvaluationFunction().funcall(args);
 	}
 
-	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth)
-
-	{
-		return Lisp.error(new UndefinedFunction(this.getLambdaName()));
+	@Override
+	public SubLSymbol getFunctionSymbol() {
+		return super.getLambdaName().toSymbol();
 	}
 
-	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
-			SubLObject fifth)
+	@Override
+	public SubLObject apply(Object[] p0) {
+		LispObject[] args = (LispObject[]) p0[1];
 
-	{
-		return Lisp.error(new UndefinedFunction(this.getLambdaName()));
+		LispThread thread = LispThread.currentThread();
+		LispObject ef = (LispObject) getEvaluationFunction();
+		thread._values = null;
+		//  (in-package :cl)(in-package :cyc)
+		// 26-07-2009: For some reason we cannot "just" call the array version;
+		// it causes an error (Wrong number of arguments for LOOP-FOR-IN)
+		// which is probably a sign of an issue in our design?
+		switch (args.length) {
+		case 0:
+			return thread.execute(ef);
+		case 1:
+			return thread.execute(ef, args[0]);
+		case 2:
+			return thread.execute(ef, args[0], args[1]);
+		case 3:
+			return thread.execute(ef, args[0], args[1], args[2]);
+		case 4:
+			return thread.execute(ef, args[0], args[1], args[2], args[3]);
+		case 5:
+			return thread.execute(ef, args[0], args[1], args[2], args[3], args[4]);
+		case 6:
+			return thread.execute(ef, args[0], args[1], args[2], args[3], args[4], args[5]);
+		case 7:
+			return thread.execute(ef, args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
+		case 8:
+			return thread.execute(ef, args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7]);
+		default:
+			return thread.execute(ef, args);
+		}
 	}
 
-	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
-			SubLObject fifth, SubLObject sixth)
 
-	{
-		return Lisp.error(new UndefinedFunction(this.getLambdaName()));
+	public SubLFunction getEvaluationFunction() {
+		return (SubLFunction) this;
 	}
 
-	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
-			SubLObject fifth, SubLObject sixth, SubLObject seventh)
+	// Special operator
+    abstract public LispObject execute(LispObject args, Environment env);
+//    return error(new LispError("Special operator"));
 
-	{
-		return Lisp.error(new UndefinedFunction(this.getLambdaName()));
+	@Override
+    public LispObject arrayify(LispObject... args)
+    {
+          if(true)return error(new UndefinedFunction(getLambdaName()));
+     	 Cons cons = list(this,args);
+     	 return execute(cons, Environment.currentLispEnvironment());
+    }
+
+    public LispObject execute(LispObject[] args)
+    {
+  	  if(Lisp.loopCheck != this)
+  	  {
+  		Lisp.loopCheck = this;
+  		if (args.length < 10)
+  			return dispatch(args);
+  	  }
+      if(true)return error(new UndefinedFunction(getLambdaName()));
+ 	 Cons cons = list(this,args);
+ 	 return execute(cons, null);
 	}
 
-	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
-			SubLObject fifth, SubLObject sixth, SubLObject seventh, SubLObject eighth)
+    public int callCount;
+    public int hotCount;
 
-	{
-		return Lisp.error(new UndefinedFunction(this.getLambdaName()));
+    public SpecialOperator(Symbol symbol)
+    {
+    	super(symbol);
+    	if(symbol!=null){symbol.setSymbolFunction(this);
+        setLambdaName(symbol);}
+    }
+
+    public SpecialOperator(Symbol symbol, String arglist)
+    {
+    	super(symbol);
+        setLambdaList(new SimpleString(arglist));
+    }
+
+    public SpecialOperator(String name, Package pkg, boolean exported,
+                           String arglist)
+    {
+    	super(null);
+        Symbol symbol;
+        if (exported)
+           symbol = pkg.internAndExport(name.toUpperCase());
+        else
+           symbol = pkg.intern(name.toUpperCase());
+        symbol.setSymbolFunction(this);
+        setLambdaName(symbol);
+        setLambdaList(new SimpleString(arglist));
+    }
+
+
+
+//      @Override
+//    public String printObjectImpl()
+//    {
+//		StringBuilder sb = new StringBuilder("SPECIAL-OPERATOR ");
+//		if (lambdaName != null) {
+//			sb.append(lambdaName.princToString());
+//		} else {
+//			sb.append("<null>");
+//		}
+//        return unreadableString(sb.toString(), false);
+//      }
+
+    // Profiling.
+    @Override
+    public final int getCallCount()
+    {
+        return callCount;
+    }
+
+    @Override
+    public final void setCallCount(int n)
+    {
+        callCount = n;
+    }
+
+    @Override
+    public final void incrementCallCount()
+    {
+        ++callCount;
+    }
+
+    @Override
+    public final int getHotCount()
+    {
+        return hotCount;
+    }
+
+    @Override
+    public final void setHotCount(int n)
+    {
+        callCount = n;
+    }
+
+    @Override
+    public final void incrementHotCount()
+    {
+        ++hotCount;
+    }
+
+	public boolean isSpecialRestOnly() {
+		return true;
 	}
 
-	public SubLObject execute(SubLObject[] args) {
-		return Lisp.error(new UndefinedFunction(this.getLambdaName()));
-	}
-
-	// Profiling.
-
-	public SubLObject getCallCount() {
-		return Profiler.makeCallCounts(this.callCount);
-	}
-
-	public int getHotCount() {
-		return this.hotCount;
-	}
-
-	public void incrementCallCount(int arity) {
-		if (arity > 10)
-			arity = -1;
-		++this.callCount[arity + 1];
-	}
-
-	public void incrementHotCount() {
-		++this.hotCount;
-	}
-
-	public void setCallCount(int n) {
-		this.callCount[0] = n;
-	}
-
-	public void setHotCount(int n) {
-		this.hotCount = n;
-	}
-
-	public String writeToString() {
-		StringBuffer sb = new StringBuffer("#<SPECIAL-OPERATOR ");
-		sb.append(this.lambdaName.writeToString());
-		sb.append(">");
-		return sb.toString();
-	}
 }

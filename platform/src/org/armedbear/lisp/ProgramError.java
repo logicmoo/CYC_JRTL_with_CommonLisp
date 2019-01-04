@@ -2,7 +2,7 @@
  * ProgramError.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: ProgramError.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,45 +31,55 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class ProgramError extends LispError {
-	protected ProgramError(LispClass cls) {
-		super(cls);
+public class ProgramError extends LispError
+{
+    protected ProgramError(LispClass cls)
+    {
+        super(cls);
+    }
+
+    public ProgramError(LispObject initArgs)
+    {
+        super(StandardClass.PROGRAM_ERROR);
+        initialize(initArgs);
+
+        if (initArgs.listp() && initArgs.car().stringp()) {
+           setFormatControl(initArgs.car().getStringValue());
+           setFormatArguments(initArgs.cdr());
 	}
 
-	public ProgramError(String message) {
-		super(StandardClass.PROGRAM_ERROR);
-		this.setFormatControl(message);
-		this.setFormatArguments(Lisp.NIL);
-	}
+    }
 
-	public ProgramError(SubLObject initArgs) {
-		super(StandardClass.PROGRAM_ERROR);
-		this.initialize(initArgs);
+    public ProgramError(String message)
+    {
+        super(StandardClass.PROGRAM_ERROR);
+        setFormatControl(message);
+        setFormatArguments(NIL);
+    }
 
-		if (initArgs.isList() && initArgs.first().isString()) {
-			this.setFormatControl(initArgs.first().getString());
-			this.setFormatArguments(initArgs.rest());
-		}
+    @Override
+    public LispObject typeOf()
+    {
+        return Symbol.PROGRAM_ERROR;
+    }
 
-	}
+    @Override
+    public LispObject classOf()
+    {
+        return StandardClass.PROGRAM_ERROR;
+    }
 
-	public SubLObject classOf() {
-		return StandardClass.PROGRAM_ERROR;
-	}
-
-	public SubLObject typeOf() {
-		return LispSymbols.PROGRAM_ERROR;
-	}
-
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.PROGRAM_ERROR)
-			return Lisp.T;
-		if (type == StandardClass.PROGRAM_ERROR)
-			return Lisp.T;
-		return super.typep(type);
-	}
+    @Override
+    public LispObject typep(LispObject type)
+    {
+        if (type == Symbol.PROGRAM_ERROR)
+            return T;
+        if (type == StandardClass.PROGRAM_ERROR)
+            return T;
+        return super.typep(type);
+    }
 }

@@ -2,7 +2,7 @@
  * Go.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Go.java 12298 2009-12-18 21:50:54Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,31 +31,52 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CatchableThrow;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-public class Go extends ControlTransfer {
-	public SubLObject tagbody;
-	public SubLObject tag;
+public final class Go extends CatchableThrow
+{
+    public final LispObject tagbody;
+    public final LispObject tag;
 
-	public Go(SubLObject tagbody, SubLObject tag) {
-		this.tagbody = tagbody;
-		this.tag = tag;
+    public Go(LispObject tagbody, LispObject tag)
+    {
+        this.tagbody = tagbody;
+        this.tag = tag;
+    }
+
+    public LispObject getTagBody()
+    {
+        return tagbody;
+    }
+
+    public LispObject getTag()
+    {
+        return tag;
+    }
+
+    public LispObject getCondition()
+    {
+        StringBuffer sb = new StringBuffer("No tag named ");
+        sb.append(tag.princToString());
+        sb.append(" is currently visible");
+        return new ControlError(sb.toString());
+    }
+
+	@Override
+	public SubLObject getResult() {
+		// TODO Auto-generated method stub
+		if(true) Errors.unimplementedMethod("Auto-generated method stub:  CatchableThrow.getResult");
+		return null;
 	}
 
-	public SubLObject getCondition() {
-		StringBuffer sb = new StringBuffer("No tag named ");
-		sb.append(this.tag.writeToString());
-		sb.append(" is currently visible");
-		return new ControlError(sb.toString());
-	}
-
-	public SubLObject getTag() {
-		return this.tag;
-	}
-
-	public SubLObject getTagBody() {
-		return this.tagbody;
+	@Override
+	public SubLObject getTarget() {
+		// TODO Auto-generated method stub
+		if(true) Errors.unimplementedMethod("Auto-generated method stub:  CatchableThrow.getTarget");
+		return null;
 	}
 }

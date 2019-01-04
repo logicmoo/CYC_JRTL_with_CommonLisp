@@ -2,7 +2,7 @@
  * Extensions.java
  *
  * Copyright (C) 2002-2007 Peter Graves
- * $Id: Extensions.java 12440 2010-02-10 16:14:22Z mevenson $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,276 +31,390 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
+
+import static org.armedbear.lisp.Lisp.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.*;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+public final class Extensions
+{
+  // ### *ed-functions*
+  public static final Symbol _ED_FUNCTIONS_ =
+    exportSpecial("*ED-FUNCTIONS*", PACKAGE_EXT,
+                  list(intern("DEFAULT-ED-FUNCTION", PACKAGE_SYS)));
 
-public class Extensions {
-	private static class adjoin_eql extends JavaPrimitive {
-		adjoin_eql() {
-			super(LispSymbols.ADJOIN_EQL, "item list");
-		}
+  // ### truly-the value-type form => result*
+  private static final SpecialOperator TRULY_THE = new truly_the();
+  private static class truly_the extends SpecialOperator {
+    truly_the() {
+      super("truly-the", PACKAGE_EXT, true, "type value");
+    }
+    @Override
+    public LispObject execute(LispObject args, Environment env)
+    {
+      if (args.length() != 2)
+        return error(new WrongNumberOfArgumentsException(this, 2));
+      return eval(args.cadr(), env, LispThread.currentThread());
+    }
+  }
 
-		public SubLObject execute(SubLObject item, SubLObject list) {
-			return Lisp.memql(item, list) ? list : LispObjectFactory.makeCons(item, list);
-		}
-	}
+  // ### neq
+  private static final Primitive NEQ = new neq();
+  private static class neq extends Primitive 
+  {
+    neq() 
+    {
+      super(Symbol.NEQ, "obj1 obj2");
+    }
+    @Override
+    public LispObject execute(LispObject first, LispObject second)
+    {
+        return first != second ? T : NIL;
+    }
+  }
 
-	private static class dump_java_stack extends JavaPrimitive {
-		dump_java_stack() {
-			super("dump-java-stack", Lisp.PACKAGE_EXT, true);
-		}
+  // ### memq item list => tail
+  private static final Primitive MEMQ = new memq();
+  private static class memq extends Primitive 
+  {
+    memq() 
+    {
+      super(Symbol.MEMQ, "item list");
+    }
+    @Override
+    public LispObject execute(LispObject item, LispObject list)
+    {
+      while (list instanceof Cons)
+        {
+          if (item == ((Cons)list).car)
+            return list;
+          list = ((Cons)list).cdr;
+        }
+      if (list != NIL)
+        type_error(list, Symbol.LIST);
+      return NIL;
+    }
+  }
 
-		public SubLObject execute() {
-			Thread.dumpStack();
-			return LispThread.currentThread().nothing();
-		}
-	}
+  // ### memql item list => tail
+  private static final Primitive MEMQL = new memql();
+  private static class memql extends Primitive
+  {
+    memql() {
+      super(Symbol.MEMQL, "item list");
+    }
+    @Override
+    public LispObject execute(LispObject item, LispObject list)
+    {
+      while (list instanceof Cons)
+        {
+          if (item.eql(((Cons)list).car))
+            return list;
+          list = ((Cons)list).cdr;
+        }
+      if (list != NIL)
+        type_error(list, Symbol.LIST);
+      return NIL;
+    }
+  }
 
-	private static class exit extends JavaPrimitive {
-		exit() {
-			super("exit", Lisp.PACKAGE_EXT, true, "&key status");
-		}
+  // ### adjoin-eql item list => new-list
+  private static final Primitive ADJOIN_EQL = new adjoin_eql();
+  private static class adjoin_eql extends Primitive {
+    adjoin_eql() {
+      super(Symbol.ADJOIN_EQL, "item list");
+    }
+    @Override
+    public LispObject execute(LispObject item, LispObject list)
+    {
+      return memql(item, list) ? list : new Cons(item, list);
+    }
+  }
 
-		public SubLObject execute() {
-			Lisp.exit(0);
-			return LispThread.currentThread().nothing();
-		}
+  // ### special-variable-p
+  private static final Primitive SPECIAL_VARIABLE_P = new special_variable_p();
+  private static class special_variable_p extends Primitive {
+    special_variable_p() {
+      super("special-variable-p", PACKAGE_EXT, true);
+    }
+    @Override
+    public LispObject execute(LispObject arg)
+    {
+      return arg.isSpecialVariable() ? T : NIL;
+    }
+  }
 
-		public SubLObject execute(SubLObject first, SubLObject second)
+  // ### source symbol 
+  private static final Primitive SOURCE = new source();
+  private static class source extends Primitive {
+    source() {
+      super("source", PACKAGE_EXT, true);
+    }
+    @Override
+    public LispObject execute(LispObject arg)
+    {
+      return get(arg, Symbol._SOURCE, NIL);
+    }
+  }
 
-		{
-			int status = 0;
-			if (first == Keyword.STATUS)
-				if (second instanceof Fixnum)
-					status = ((Fixnum) second).value;
-			Lisp.exit(status);
-			return LispThread.currentThread().nothing();
-		}
-	}
+  // ### source-file-position symbol
+  private static final Primitive SOURCE_FILE_POSITION = new source_file_position();
+  private static class source_file_position extends Primitive {
+    source_file_position() {
+      super("source-file-position", PACKAGE_EXT, true);
+    }
+    @Override
+    public LispObject execute(LispObject arg)
+    {
+      LispObject obj = get(arg, Symbol._SOURCE, NIL);
+      if (obj instanceof Cons)
+        return obj.cdr();
+      return NIL;
+    }
+  }
 
-	private static class getenv extends JavaPrimitive {
-		getenv() {
-			super("getenv", Lisp.PACKAGE_EXT, true, "variable",
-					"Return the value of the environment VARIABLE if it exists, otherwise return NIL.");
-		}
+  // XXX rename to something else as it doesn't always refer to a pathname.
+  public static final Primitive SOURCE_PATHNAME = new pf_source_pathname();
+  @DocString(
+    name="source-pathname",
+    args="symbol",
+    doc="Returns either the pathname corresponding to the file from which this symbol was compiled,"
+    + "or the keyword :TOP-LEVEL."
+  )
+  private static class pf_source_pathname extends Primitive {
+    pf_source_pathname() {
+      super("source-pathname", PACKAGE_EXT, true);
+    }
+    @Override
+    public LispObject execute(LispObject arg)
+    {
+      LispObject obj = get(arg, Symbol._SOURCE, NIL);
+      if (obj instanceof Cons)
+        return obj.car();
+      return obj;
+    }
+  }
 
-		public SubLObject execute(SubLObject arg) {
-			SubLString string;
-			if (arg instanceof SubLString)
-				string = (SubLString) arg;
-			else
-				return Lisp.type_error(arg, LispSymbols.STRING);
-			String result = System.getenv(string.getString());
-			if (result != null)
-				return LispObjectFactory.makeString(result);
-			else
-				return Lisp.NIL;
-		}
-	}
+  // ### exit
+  private static final Primitive EXIT = new exit();
+  private static class exit extends Primitive {
+    exit() {
+      super("exit", PACKAGE_EXT, true, "&key status");
+    }
+    @Override
+    public LispObject execute()
+    {
+      throw new ProcessingTerminated();
+    }
+    @Override
+    public LispObject execute(LispObject first, LispObject second)
+      
+    {
+      int status = 0;
+      if (first == Keyword.STATUS)
+        {
+          if (second instanceof Fixnum)
+            status = ((Fixnum)second).value;
+        }
+      throw new ProcessingTerminated(status);
+    }
+  }
 
-	private static class interrupt_lisp extends JavaPrimitive {
-		interrupt_lisp() {
-			super("interrupt-lisp", Lisp.PACKAGE_EXT, true, "");
-		}
+  // ### quit
+  private static final Primitive QUIT = new quit();
+  private static class quit extends Primitive {
+    quit() {
+      super("quit", PACKAGE_EXT, true, "&key status");
+    }
+    @Override
+    public LispObject execute()
+    {
+      ((Stream)Symbol.STANDARD_OUTPUT.getSymbolValue())._finishOutput();
+      ((Stream)Symbol.ERROR_OUTPUT.getSymbolValue())._finishOutput();
+      throw new ProcessingTerminated();
+    }
+    @Override
+    public LispObject execute(LispObject first, LispObject second)
+    {
+      int status = 0;
+      if (first == Keyword.STATUS)
+        {
+          if (second instanceof Fixnum)
+            status = ((Fixnum)second).value;
+        }
+      throw new ProcessingTerminated(status);
+    }
+  }
 
-		public SubLObject execute() {
-			Lisp.setInterrupted(true);
-			return Lisp.T;
-		}
-	}
+  // ### dump-java-stack
+  private static final Primitive DUMP_JAVA_STACK = new dump_java_stack();
+  private static class dump_java_stack extends Primitive {
+    dump_java_stack() {
+      super("dump-java-stack", PACKAGE_EXT, true);
+    }
+    @Override
+    public LispObject execute()
+    {
+      Thread.dumpStack();
+      return LispThread.currentThread().nothing();
+    }
+  }
 
-	private static class make_temp_file extends JavaPrimitive {
-		make_temp_file() {
-			super("make-temp-file", Lisp.PACKAGE_EXT, true, "");
-		}
+  public static final Primitive MAKE_TEMP_FILE = new make_temp_file();
+  @DocString(name="make-temp-file",
+             doc="Create and return the pathname of a previously non-existent file.",
+             args="&key prefix suffix")
+  private static class make_temp_file extends Primitive { 
+    make_temp_file() {
+      super("make-temp-file", PACKAGE_EXT, true, "&key prefix suffix");
+    }
+    @Override
+    public LispObject execute(LispObject[] args)
+    {
+      String prefix = "abcl";
+      String suffix = null; 
+      if ( args.length % 2 != 0) {
+        error(new WrongNumberOfArgumentsException("Expecting an even number of arguments including keywords."));
+      }
 
-		public SubLObject execute() {
-			try {
-				File file = File.createTempFile("abcl", null, null);
-				if (file != null)
-					return new Pathname(file.getPath());
-			} catch (IOException e) {
-				Debug.trace(e);
-			}
-			return Lisp.NIL;
-		}
-	}
+      for (int i = 0; i < args.length; i++ ) {
+        if (args[i].SYMBOLP() != NIL) {
+          if (args[i].equals(Keyword.PREFIX)) {
+            String specifiedPrefix = args[i + 1].getStringValue();
+            if (specifiedPrefix != null) {
+              if (specifiedPrefix.equals(NIL.getStringValue())) {
+                error (new TypeError("Cannot create temporary file with NIL prefix."));
+              }
+              prefix = specifiedPrefix;
+              i += 1;
+            }
+          } else if (args[i].equals(Keyword.SUFFIX)) {
+            String specifiedSuffix = args[i + 1].getStringValue();
+            if (specifiedSuffix != null) {
+              if (specifiedSuffix.equals(NIL.getStringValue())) {
+                suffix =null;
+              } else {
+                suffix = specifiedSuffix;
+              }
+              i += 1;
+            }
+          }
+        } else {
+          error(new TypeError("Expected matching keyword argument.", args[i], Keyword.PREFIX.classOf()));
+        }
+      }
+      return createTempFile(prefix, suffix);
+    }
 
-	private static class memq extends JavaPrimitive {
-		memq() {
-			super(LispSymbols.MEMQ, "item list");
-		}
+    @Override
+    public LispObject execute() {
+      return createTempFile("abcl", null);
+    }
 
-		public SubLObject execute(SubLObject item, SubLObject list) {
-			while (list instanceof SubLCons) {
-				if (item == ((SubLCons) list).first())
-					return list;
-				list = ((SubLCons) list).rest();
-			}
-			if (list != Lisp.NIL)
-				Lisp.type_error(list, LispSymbols.LIST);
-			return Lisp.NIL;
-		}
-	}
+    private LispObject createTempFile(String prefix, String suffix) {
+      try {
+        File file = File.createTempFile(prefix, suffix, null);
+        if (file != null)
+          return new Pathname(file.getPath());
+      } catch (IllegalArgumentException e) {
+        // "Failed to create temporary file due to argument problems."
+        error(new JavaException(e));
+      } catch (SecurityException e) {
+        //"Failed to create problem due to problems with JVM SecurityManager."
+        error(new JavaException(e));
+      } catch (IOException e) {
+        // "Failed to create temporary file."
+        error(new JavaException(e));
+      }
+      return NIL;
+    }
+  }
 
-	private static class memql extends JavaPrimitive {
-		memql() {
-			super(LispSymbols.MEMQL, "item list");
-		}
+  public static final Primitive MAKE_TEMP_DIRECTORY = new make_temp_directory();
+  @DocString(name="make-temp-directory",
+             doc="Create and return the pathname of a previously non-existent directory.")
+  private static class make_temp_directory extends Primitive { 
+    make_temp_directory() {
+      super("make-temp-directory", PACKAGE_EXT, true, "");
+    }
+    @Override
+    public LispObject execute()
+    {
+      try {
+        File dir = File.createTempFile("abcl", null);
+        dir.delete();
+        if (dir.mkdirs()) {
+          return new Pathname(dir + "/");
+        }
+      } catch (Throwable t) {
+        Debug.trace(t);
+      }
+      return NIL;
+    }
+  }
 
-		public SubLObject execute(SubLObject item, SubLObject list) {
-			while (list instanceof SubLCons) {
-				if (item.eql(((SubLCons) list).first()))
-					return list;
-				list = ((SubLCons) list).rest();
-			}
-			if (list != Lisp.NIL)
-				Lisp.type_error(list, LispSymbols.LIST);
-			return Lisp.NIL;
-		}
-	}
+  // ### interrupt-lisp
+  private static final Primitive INTERRUPT_LISP = new interrupt_lisp();
+  private static class interrupt_lisp extends Primitive {
+    interrupt_lisp() {
+      super("interrupt-lisp", PACKAGE_EXT, true, "");
+    }
+    @Override
+    public LispObject execute()
+    {
+      setInterrupted(true);
+      return T;
+    }
+  }
 
-	private static class neq extends JavaPrimitive {
-		neq() {
-			super(LispSymbols.NEQ, "obj1 obj2");
-		}
+  // ### getenv variable => string
+  private static final Primitive GETENV = new getenv();
+  private static class getenv extends Primitive 
+  {
+    getenv() 
+    {
+      super("getenv", PACKAGE_EXT, true, "variable",
+             "Return the value of the environment VARIABLE if it exists, otherwise return NIL.");
+    }
+    @Override
+    public LispObject execute(LispObject arg)
+    {
+      AbstractString string;
+      if (arg instanceof AbstractString) {
+        string = (AbstractString) arg;
+      } else
+        return type_error(arg, Symbol.STRING);
+      String result = System.getenv(string.getStringValue());
+      if (result != null)
+        return new SimpleString(result);
+      else
+        return NIL;
+    }
+  }
 
-		public SubLObject execute(SubLObject first, SubLObject second) {
-			return first != second ? Lisp.T : Lisp.NIL;
-		}
-	}
-
-	private static class quit extends JavaPrimitive {
-		quit() {
-			super("quit", Lisp.PACKAGE_EXT, true, "&key status");
-		}
-
-		public SubLObject execute() {
-			Lisp.exit(0);
-			return LispThread.currentThread().nothing();
-		}
-
-		public SubLObject execute(SubLObject first, SubLObject second) {
-			int status = 0;
-			if (first == Keyword.STATUS)
-				if (second instanceof Fixnum)
-					status = ((Fixnum) second).value;
-			Lisp.exit(status);
-			return LispThread.currentThread().nothing();
-		}
-	}
-
-	private static class source extends JavaPrimitive {
-		source() {
-			super("source", Lisp.PACKAGE_EXT, true);
-		}
-
-		public SubLObject execute(SubLObject arg) {
-			return Lisp.get(arg, LispSymbols._SOURCE, Lisp.NIL);
-		}
-	}
-
-	private static class source_file_position extends JavaPrimitive {
-		source_file_position() {
-			super("source-file-position", Lisp.PACKAGE_EXT, true);
-		}
-
-		public SubLObject execute(SubLObject arg) {
-			SubLObject obj = Lisp.get(arg, LispSymbols._SOURCE, Lisp.NIL);
-			if (obj instanceof SubLCons)
-				return obj.rest();
-			return Lisp.NIL;
-		}
-	}
-
-	private static class source_pathname extends JavaPrimitive {
-		source_pathname() {
-			super("source-pathname", Lisp.PACKAGE_EXT, true);
-		}
-
-		public SubLObject execute(SubLObject arg) {
-			SubLObject obj = Lisp.get(arg, LispSymbols._SOURCE, Lisp.NIL);
-			if (obj instanceof SubLCons)
-				return obj.first();
-			return obj;
-		}
-	}
-
-	private static class special_variable_p extends JavaPrimitive {
-		special_variable_p() {
-			super("special-variable-p", Lisp.PACKAGE_EXT, true);
-		}
-
-		public SubLObject execute(SubLObject arg) {
-			return arg.isSpecialVariable() ? Lisp.T : Lisp.NIL;
-		}
-	}
-
-	private static class truly_the extends SpecialOperator {
-		truly_the() {
-			super("truly-the", Lisp.PACKAGE_EXT, true, "type value");
-		}
-
-		public SubLObject execute(SubLObject args, Environment env) {
-			if (args.cl_length() != 2)
-				return Lisp.error(new WrongNumberOfArgumentsException(this));
-			return Lisp.eval(args.second(), env, LispThread.currentThread());
-		}
-	}
-
-	// ### *ed-functions*
-	public static SubLSymbol _ED_FUNCTIONS_ = Lisp.exportSpecial("*ED-FUNCTIONS*", Lisp.PACKAGE_EXT,
-			Lisp.list(Lisp.intern("DEFAULT-ED-FUNCTION", Lisp.PACKAGE_SYS)));
-
-	// ### truly-the value-type form => result*
-	private static SpecialOperator TRULY_THE = new truly_the();
-
-	// ### neq
-	private static Primitive NEQ = new neq();
-
-	// ### memq item list => tail
-	private static Primitive MEMQ = new memq();
-
-	// ### memql item list => tail
-	private static Primitive MEMQL = new memql();
-
-	// ### adjoin-eql item list => new-list
-	private static Primitive ADJOIN_EQL = new adjoin_eql();
-
-	// ### special-variable-p
-	private static Primitive SPECIAL_VARIABLE_P = new special_variable_p();
-
-	// ### source symbol
-	private static Primitive SOURCE = new source();
-
-	// ### source-file-position symbol
-	private static Primitive SOURCE_FILE_POSITION = new source_file_position();
-
-	// ### source-pathname
-	public static Primitive SOURCE_PATHNAME = new source_pathname();
-
-	// ### exit
-	private static Primitive EXIT = new exit();
-
-	// ### quit
-	private static Primitive QUIT = new quit();
-
-	// ### dump-java-stack
-	private static Primitive DUMP_JAVA_STACK = new dump_java_stack();
-
-	// ### make-temp-file => pathname
-	private static Primitive MAKE_TEMP_FILE = new make_temp_file();
-
-	// ### interrupt-lisp
-	private static Primitive INTERRUPT_LISP = new interrupt_lisp();
-
-	// ### getenv variable => string
-	private static Primitive GETENV = new getenv();
+  // ### getenv-all variable => string
+  private static final Primitive GETENV_ALL = new getenv_all();
+  private static class getenv_all extends Primitive 
+  {
+    getenv_all() 
+    {
+      super("getenv-all", PACKAGE_EXT, true, "variable",
+             "Returns all environment variables as an alist containing (name . value)");
+    }
+    @Override
+    public LispObject execute()
+    {
+      Cons result = new Cons(NIL);
+      Map<String, String> env = System.getenv();
+      for (Map.Entry<String, String> entry : env.entrySet()) {
+          Cons entryPair = new Cons(new SimpleString(entry.getKey()), 
+                                    new SimpleString(entry.getValue()));
+          result = new Cons(entryPair, result);
+      }
+      return result;
+    }
+  }
 }

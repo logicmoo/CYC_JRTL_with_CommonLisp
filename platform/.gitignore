@@ -57,3 +57,4 @@ xcl
 *.xcl
 xcl_home.h
 xcl.nm
+/target/

@@ -2,7 +2,7 @@
  * SynonymStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: SynonymStream.java 12513 2010-03-02 22:35:36Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,141 +31,202 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLStream;
+import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLSynonymStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public class SynonymStream extends Stream {
-	SubLSymbol symbol;
+public class SynonymStream extends Stream
+{
 
-	SynonymStream(SubLSymbol symbol) {
-		super(LispSymbols.SYNONYM_STREAM);
-		this.symbol = symbol;
+
+
+
+    public Symbol streamSymbol;
+
+    SynonymStream(Symbol symbol)
+    {
+    	super(Symbol.SYNONYM_STREAM, checkStream(symbol.symbolValue()).getDirection());
+        this.streamSymbol = symbol;
+    }
+
+    public SynonymStream(SubLSymbol textKeyword, SubLSymbol direction, SubLSymbol errorKeyword,
+			SubLSymbol errorKeyword2) {
+    	super(Symbol.SYNONYM_STREAM, direction);
+		//super(textKeyword,direction,errorKeyword,errorKeyword2);
+
 	}
 
-	public boolean _charReady() throws java.io.IOException {
-		return Lisp.checkStream(this.symbol.symbolValue())._charReady();
-	}
+    public boolean isInputStream()
+    {
+        return checkStream(streamSymbol.symbolValue()).isInputStream();
+    }
 
-	public void _clearInput() {
-		Lisp.checkStream(this.symbol.symbolValue())._clearInput();
-	}
+    public boolean isOutputStream()
+    {
+        return checkStream(streamSymbol.symbolValue()).isOutputStream();
+    }
 
-	public void _close() {
-		Lisp.checkStream(this.symbol.symbolValue())._close();
-	}
+    public boolean isCharacterInputStream()
+    {
+        return checkStream(streamSymbol.symbolValue()).isCharacterInputStream();
+    }
 
-	public void _finishOutput() {
-		Lisp.checkStream(this.symbol.symbolValue())._finishOutput();
-	}
+    public boolean isBinaryInputStream()
+    {
+        return checkStream(streamSymbol.symbolValue()).isBinaryInputStream();
+    }
 
-	public long _getFilePosition() {
-		return Lisp.checkStream(this.symbol.symbolValue())._getFilePosition();
-	}
+    public boolean isCharacterOutputStream()
+    {
+        return checkStream(streamSymbol.symbolValue()).isCharacterOutputStream();
+    }
 
-	// Reads an 8-bit byte.
+    public boolean isBinaryOutputStream()
+    {
+        return checkStream(streamSymbol.symbolValue()).isBinaryOutputStream();
+    }
 
-	public int _readByte() {
-		return Lisp.checkStream(this.symbol.symbolValue())._readByte();
-	}
+    public LispObject typeOf()
+    {
+        return Symbol.SYNONYM_STREAM;
+    }
 
-	public int _readChar() throws java.io.IOException {
-		return Lisp.checkStream(this.symbol.symbolValue())._readChar();
-	}
+    public LispObject classOf()
+    {
+        return BuiltInClass.SYNONYM_STREAM;
+    }
 
-	public boolean _setFilePosition(SubLObject arg) {
-		return Lisp.checkStream(this.symbol.symbolValue())._setFilePosition(arg);
-	}
+    public LispObject typep(LispObject typeSpecifier)
+    {
+        if (typeSpecifier == Symbol.SYNONYM_STREAM)
+            return T;
+        if (typeSpecifier == BuiltInClass.SYNONYM_STREAM)
+            return T;
+        return super.typep(typeSpecifier);
+    }
 
-	public void _unreadChar(int n) throws java.io.IOException {
-		Lisp.checkStream(this.symbol.symbolValue())._unreadChar(n);
-	}
+    public LispObject getStreamElementType()
+    {
+        return checkStream(streamSymbol.symbolValue()).getStreamElementType();
+    }
 
-	// Writes an 8-bit byte.
+    public LispObject listen()
+    {
+        return checkStream(streamSymbol.symbolValue()).listen();
+    }
 
-	public void _writeByte(int n) {
-		Lisp.checkStream(this.symbol.symbolValue())._writeByte(n);
-	}
+    public LispObject fileLength()
+    {
+        return checkStream(streamSymbol.symbolValue()).fileLength();
+    }
 
-	public void _writeChar(char c) {
-		Lisp.checkStream(this.symbol.symbolValue())._writeChar(c);
-	}
+    public LispObject fileStringLength(LispObject arg)
+    {
+        return checkStream(streamSymbol.symbolValue()).fileStringLength(arg);
+    }
 
-	public void _writeChars(char[] chars, int start, int end)
+    protected int _readChar() throws java.io.IOException
+    {
+        return checkStream(streamSymbol.symbolValue())._readChar();
+    }
 
-	{
-		Lisp.checkStream(this.symbol.symbolValue())._writeChars(chars, start, end);
-	}
+    protected void _unreadChar(int n) throws java.io.IOException
+    {
+        checkStream(streamSymbol.symbolValue())._unreadChar(n);
+    }
 
-	public void _writeLine(String s) {
-		Lisp.checkStream(this.symbol.symbolValue())._writeLine(s);
-	}
+    protected boolean _charReady() throws java.io.IOException
+    {
+        return checkStream(streamSymbol.symbolValue())._charReady();
+    }
 
-	public void _writeString(String s) {
-		Lisp.checkStream(this.symbol.symbolValue())._writeString(s);
-	}
+    public void _writeChar(char c)
+    {
+        checkStream(streamSymbol.symbolValue())._writeChar(c);
+    }
 
-	public SubLObject classOf() {
-		return BuiltInClass.SYNONYM_STREAM;
-	}
+    public void _writeChars(char[] chars, int start, int end)
 
-	public SubLObject fileLength() {
-		return Lisp.checkStream(this.symbol.symbolValue()).fileLength();
-	}
+    {
+        checkStream(streamSymbol.symbolValue())._writeChars(chars, start, end);
+    }
 
-	public SubLObject fileStringLength(SubLObject arg) {
-		return Lisp.checkStream(this.symbol.symbolValue()).fileStringLength(arg);
-	}
+    public void _writeString(String s)
+    {
+        checkStream(streamSymbol.symbolValue())._writeString(s);
+    }
 
-	public SubLObject getElementType() {
-		return Lisp.checkStream(this.symbol.symbolValue()).getElementType();
-	}
+    public void _writeLine(String s)
+    {
+        checkStream(streamSymbol.symbolValue())._writeLine(s);
+    }
 
-	public boolean isBinaryInputStream() {
-		return Lisp.checkStream(this.symbol.symbolValue()).isBinaryInputStream();
-	}
+    // Reads an 8-bit byte.
+    public int _readByte()
+    {
+        return checkStream(streamSymbol.symbolValue())._readByte();
+    }
 
-	public boolean isBinaryOutputStream() {
-		return Lisp.checkStream(this.symbol.symbolValue()).isBinaryOutputStream();
-	}
+    // Writes an 8-bit byte.
+    public void _writeByte(int n)
+    {
+        checkStream(streamSymbol.symbolValue())._writeByte(n);
+    }
 
-	public boolean isCharacterInputStream() {
-		return Lisp.checkStream(this.symbol.symbolValue()).isCharacterInputStream();
-	}
+    public void _finishOutput()
+    {
+        checkStream(streamSymbol.symbolValue())._finishOutput();
+    }
 
-	public boolean isCharacterOutputStream() {
-		return Lisp.checkStream(this.symbol.symbolValue()).isCharacterOutputStream();
-	}
+    public void _clearInput()
+    {
+        checkStream(streamSymbol.symbolValue())._clearInput();
+    }
 
-	public boolean isInputStream() {
-		return Lisp.checkStream(this.symbol.symbolValue()).isInputStream();
-	}
+    protected long _getFilePosition()
+    {
+        return checkStream(streamSymbol.symbolValue())._getFilePosition();
+    }
 
-	public boolean isOutputStream() {
-		return Lisp.checkStream(this.symbol.symbolValue()).isOutputStream();
-	}
+    protected boolean _setFilePosition(LispObject arg)
+    {
+        return checkStream(streamSymbol.symbolValue())._setFilePosition(arg);
+    }
 
-	public SubLObject listen() {
-		return Lisp.checkStream(this.symbol.symbolValue()).listen();
-	}
+    public void _close()
+    {
+        checkStream(streamSymbol.symbolValue())._close();
+    }
 
-	public SubLObject typeOf() {
-		return LispSymbols.SYNONYM_STREAM;
-	}
+    public String printObjectImpl()
+    {
+        StringBuffer sb = new StringBuffer("SYNONYM-STREAM ");
+        sb.append(streamSymbol.printObject());
+        return unreadableString(sb.toString());
+    }
 
-	public SubLObject typep(SubLObject typeSpecifier) {
-		if (typeSpecifier == LispSymbols.SYNONYM_STREAM)
-			return Lisp.T;
-		if (typeSpecifier == BuiltInClass.SYNONYM_STREAM)
-			return Lisp.T;
-		return super.typep(typeSpecifier);
-	}
+    // ### make-synonym-stream symbol => synonym-stream
+    private static final Primitive MAKE_SYNONYM_STREAM =
+        new Primitive("make-synonym-stream", "symbol")
+    {
+        public LispObject execute(LispObject arg)
+        {
+            return new SynonymStream(checkSymbol(arg));
+        }
+    };
 
-	public String writeToString() {
-		StringBuffer sb = new StringBuffer("SYNONYM-STREAM ");
-		sb.append(this.symbol.writeToString());
-		return this.unreadableString(sb.toString());
-	}
-
+    // ### synonym-stream-symbol synonym-stream => symbol
+    private static final Primitive SYNONYM_STREAM_STREAMS =
+        new Primitive("synonym-stream-symbol", "synonym-stream")
+    {
+        public LispObject execute(LispObject arg)
+        {
+            if (arg instanceof SynonymStream)
+                return ((SynonymStream)arg).streamSymbol;
+            return type_error(arg, Symbol.SYNONYM_STREAM);
+        }
+    };
 }

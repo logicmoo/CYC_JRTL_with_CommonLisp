@@ -2,7 +2,7 @@
  * SymbolMacro.java
  *
  * Copyright (C) 2003 Peter Graves
- * $Id: SymbolMacro.java 11441 2008-12-14 12:07:52Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,22 +31,20 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+public final class SymbolMacro extends LispObject
+{
+    private LispObject expansion;
 
-public class SymbolMacro extends AbstractLispObject {
-	private SubLObject expansion;
+    public SymbolMacro(LispObject expansion)
+    {
+        this.expansion = expansion;
+    }
 
-	public SymbolMacro(SubLObject expansion) {
-		this.expansion = expansion;
-	}
+    public LispObject getExpansion()
+    {
+        return expansion;
+    }
 
-	public SubLObject getExpansion() {
-		return this.expansion;
-	}
-
-	public String writeToString() {
-		return this.unreadableString(this.getClass().getSimpleName());
-	}
 }

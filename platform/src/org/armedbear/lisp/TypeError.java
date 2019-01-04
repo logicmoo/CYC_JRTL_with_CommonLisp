@@ -2,7 +2,7 @@
  * TypeError.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: TypeError.java 12431 2010-02-08 08:05:15Z mevenson $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,163 +31,185 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class TypeError extends LispError {
-	// ### type-error-datum
-	private static Primitive TYPE_ERROR_DATUM = new JavaPrimitive(LispSymbols.TYPE_ERROR_DATUM, "condition") {
+public class TypeError extends LispError
+{
+    public TypeError()
+    {
+        super(StandardClass.TYPE_ERROR);
+    }
 
-		public SubLObject execute(SubLObject arg) {
-			StandardObject obj;
-			if (arg instanceof StandardObject)
-				obj = (StandardObject) arg;
-			else
-				return Lisp.type_error(arg, LispSymbols.STANDARD_OBJECT);
-			return obj.getInstanceSlotValue(LispSymbols.DATUM);
-		}
-	};
+    protected TypeError(LispClass cls)
+    {
+        super(cls);
+    }
 
-	// ### type-error-expected-type
-	private static Primitive TYPE_ERROR_EXPECTED_TYPE = new JavaPrimitive(LispSymbols.TYPE_ERROR_EXPECTED_TYPE,
-			"condition") {
+    public TypeError(LispObject datum, LispObject expectedType)
 
-		public SubLObject execute(SubLObject arg) {
-			StandardObject obj;
-			if (arg instanceof StandardObject)
-				obj = (StandardObject) arg;
-			else
-				return Lisp.type_error(arg, LispSymbols.STANDARD_OBJECT);
-			return obj.getInstanceSlotValue(LispSymbols.EXPECTED_TYPE);
-		}
-	};
+    {
+        super(StandardClass.TYPE_ERROR);
+        setDatum(datum);
+        setExpectedType(expectedType);
+    }
 
-	public TypeError() {
-		super(StandardClass.TYPE_ERROR);
-	}
+    public TypeError(LispObject initArgs)
+    {
+        super(StandardClass.TYPE_ERROR);
+        initialize(initArgs);
+    }
 
-	protected TypeError(LispClass cls) {
-		super(cls);
-	}
+    protected void initialize(LispObject initArgs)
+    {
+        super.initialize(initArgs);
+        LispObject datum = null;
+        LispObject expectedType = null;
+        LispObject first, second;
+        while (initArgs != NIL) {
+            first = initArgs.car();
+            initArgs = initArgs.cdr();
+            second = initArgs.car();
+            initArgs = initArgs.cdr();
+            if (first == Keyword.DATUM) {
+                if (datum == null)
+                    datum = second;
+            } else if (first == Keyword.EXPECTED_TYPE) {
+                if (expectedType == null)
+                    expectedType = second;
+            }
+        }
+        if (datum != null)
+            setDatum(datum);
+        if (expectedType != null)
+            setExpectedType(expectedType);
+    }
 
-	public TypeError(String message) {
-		super(StandardClass.TYPE_ERROR);
-		this.setFormatControl(message);
-		this.setDatum(Lisp.NIL);
-		this.setExpectedType(Lisp.NIL);
-	}
+    public TypeError(String message)
+    {
+        super(StandardClass.TYPE_ERROR);
+        setFormatControl(message);
+        setDatum(NIL);
+        setExpectedType(NIL);
+    }
 
-	public TypeError(String message, SubLObject datum, SubLObject expectedType)
+    public TypeError(String message, LispObject datum, LispObject expectedType)
 
-	{
-		super(StandardClass.TYPE_ERROR);
-		this.setFormatControl(message);
-		this.setDatum(datum);
-		this.setExpectedType(expectedType);
-	}
+    {
+        super(StandardClass.TYPE_ERROR);
+        setFormatControl(message);
+        setDatum(datum);
+        setExpectedType(expectedType);
+    }
 
-	public TypeError(SubLObject initArgs) {
-		super(StandardClass.TYPE_ERROR);
-		this.initialize(initArgs);
-	}
+    public LispObject typeOf()
+    {
+        return Symbol.TYPE_ERROR;
+    }
 
-	public TypeError(SubLObject datum, SubLObject expectedType)
+    public LispObject classOf()
+    {
+        return StandardClass.TYPE_ERROR;
+    }
 
-	{
-		super(StandardClass.TYPE_ERROR);
-		this.setDatum(datum);
-		this.setExpectedType(expectedType);
-	}
+    public LispObject typep(LispObject type)
+    {
+        if (type == Symbol.TYPE_ERROR)
+            return T;
+        if (type == StandardClass.TYPE_ERROR)
+            return T;
+        return super.typep(type);
+    }
 
-	public SubLObject classOf() {
-		return StandardClass.TYPE_ERROR;
-	}
+    public String getMessage()
+    {
+        final LispThread thread = LispThread.currentThread();
+        final SpecialBindingsMark mark = thread.markSpecialBindings();
+        thread.bindSpecial(Symbol.PRINT_ESCAPE, T);
+        try {
+            String s = super.getMessage();
+            if (s != null)
+                return s;
+            final LispObject datum = getDatum();
+            final LispObject expectedType = getExpectedType();
+            StringBuilder sb = new StringBuilder();
+            String name = datum != null ? datum.princToString() : null;
+            String type = null;
+            if (expectedType != null)
+                type = expectedType.princToString();
+            if (type != null) {
+                if (name != null) {
+                    sb.append("The value ");
+                    sb.append(name);
+                } else
+                    sb.append("Value");
+                sb.append(" is not of type ");
+                sb.append(type);
+            } else if (name != null) {
+                sb.append("Wrong type: ");
+                sb.append(name);
+            }
+            sb.append('.');
+            return sb.toString();
+        }
+        finally {
+            thread.resetSpecialBindings(mark);
+        }
+    }
 
-	public SubLObject getDatum() {
-		return this.getInstanceSlotValue(LispSymbols.DATUM);
-	}
+    public final LispObject getDatum()
+    {
+        return getInstanceSlotValue(Symbol.DATUM);
+    }
 
-	public SubLObject getExpectedType() {
-		return this.getInstanceSlotValue(LispSymbols.EXPECTED_TYPE);
-	}
+    private final void setDatum(LispObject datum)
+    {
+        setInstanceSlotValue(Symbol.DATUM, datum);
+    }
 
-	public String getMessage() {
-		LispThread thread = LispThread.currentThread();
-		SpecialBindingsMark mark = thread.markSpecialBindings();
-		thread.bindSpecial(LispSymbols.PRINT_ESCAPE, Lisp.T);
-		try {
-			String s = super.getMessage();
-			if (s != null)
-				return s;
-			SubLObject datum = this.getDatum();
-			SubLObject expectedType = this.getExpectedType();
-			StringBuilder sb = new StringBuilder();
-			String name = datum != null ? datum.writeToString() : null;
-			String type = null;
-			if (expectedType != null)
-				type = expectedType.writeToString();
-			if (type != null) {
-				if (name != null) {
-					sb.append("The value ");
-					sb.append(name);
-				} else
-					sb.append("Value");
-				sb.append(" is not of type ");
-				sb.append(type);
-			} else if (name != null) {
-				sb.append("Wrong type: ");
-				sb.append(name);
-			}
-			sb.append('.');
-			return sb.toString();
-		} finally {
-			thread.resetSpecialBindings(mark);
-		}
-	}
+    public final LispObject getExpectedType()
+    {
+        return getInstanceSlotValue(Symbol.EXPECTED_TYPE);
+    }
 
-	protected void initialize(SubLObject initArgs) {
-		super.initialize(initArgs);
-		SubLObject datum = null;
-		SubLObject expectedType = null;
-		SubLObject first, second;
-		while (initArgs != Lisp.NIL) {
-			first = initArgs.first();
-			initArgs = initArgs.rest();
-			second = initArgs.first();
-			initArgs = initArgs.rest();
-			if (first == Keyword.DATUM) {
-				if (datum == null)
-					datum = second;
-			} else if (first == Keyword.EXPECTED_TYPE)
-				if (expectedType == null)
-					expectedType = second;
-		}
-		if (datum != null)
-			this.setDatum(datum);
-		if (expectedType != null)
-			this.setExpectedType(expectedType);
-	}
+    private final void setExpectedType(LispObject expectedType)
 
-	private void setDatum(SubLObject datum) {
-		this.setInstanceSlotValue(LispSymbols.DATUM, datum);
-	}
+    {
+        setInstanceSlotValue(Symbol.EXPECTED_TYPE, expectedType);
+    }
 
-	private void setExpectedType(SubLObject expectedType)
+    // ### type-error-datum
+    private static final Primitive TYPE_ERROR_DATUM =
+        new Primitive(Symbol.TYPE_ERROR_DATUM, "condition")
+    {
+        public LispObject execute(LispObject arg)
+        {
+            final StandardObject obj;
+            if (arg instanceof StandardObject) {
+                obj = (StandardObject) arg;
+            }
+            else {
+                return type_error(arg, Symbol.STANDARD_OBJECT);
+            }
+            return obj.getInstanceSlotValue(Symbol.DATUM);
+        }
+    };
 
-	{
-		this.setInstanceSlotValue(LispSymbols.EXPECTED_TYPE, expectedType);
-	}
-
-	public SubLObject typeOf() {
-		return LispSymbols.TYPE_ERROR;
-	}
-
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.TYPE_ERROR)
-			return Lisp.T;
-		if (type == StandardClass.TYPE_ERROR)
-			return Lisp.T;
-		return super.typep(type);
-	}
+    // ### type-error-expected-type
+    private static final Primitive TYPE_ERROR_EXPECTED_TYPE =
+        new Primitive(Symbol.TYPE_ERROR_EXPECTED_TYPE, "condition")
+    {
+        public LispObject execute(LispObject arg)
+        {
+            final StandardObject obj;
+            if (arg instanceof StandardObject) {
+                obj = (StandardObject) arg;
+            }
+            else {
+                return type_error(arg, Symbol.STANDARD_OBJECT);
+            }
+            return obj.getInstanceSlotValue(Symbol.EXPECTED_TYPE);
+        }
+    };
 }

@@ -2,7 +2,7 @@
  * room.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: room.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,40 +31,44 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
 // ### room
-public class room extends JavaPrimitive {
-	private static Primitive ROOM = new room();
+public final class room extends Primitive
+{
+    private room()
+    {
+        super("room", "&optional x");
+    }
 
-	private room() {
-		super("room", "&optional x");
-	}
+    @Override
+    public LispObject execute(LispObject[] args)
+    {
+        if (args.length > 1)
+            return error(new WrongNumberOfArgumentsException(this, -1, 1));
+        Runtime runtime = Runtime.getRuntime();
+        long total = runtime.totalMemory();
+        long free = runtime.freeMemory();
 
-	public SubLObject execute(SubLObject[] args) {
-		if (args.length > 1)
-			return Lisp.error(new WrongNumberOfArgumentsException(this));
-		Runtime runtime = Runtime.getRuntime();
-		long total = runtime.totalMemory();
-		long free = runtime.freeMemory();
+        long used = total - free;
+        Stream out = getStandardOutput();
+        StringBuffer sb = new StringBuffer("Total memory ");
+        sb.append(total);
+        sb.append(" bytes");
+        sb.append(System.getProperty("line.separator"));
+        sb.append(used);
+        sb.append(" bytes used");
+        sb.append(System.getProperty("line.separator"));
+        sb.append(free);
+        sb.append(" bytes free");
+        sb.append(System.getProperty("line.separator"));
+        out._writeString(sb.toString());
+        out._finishOutput();
+        return LispThread.currentThread().setValues(number(used),
+                number(total),number(runtime.maxMemory()));
+    }
 
-		long used = total - free;
-		LispStream out = Lisp.getStandardOutput();
-		StringBuffer sb = new StringBuffer("Total memory ");
-		sb.append(total);
-		sb.append(" bytes");
-		sb.append(System.getProperty("line.separator"));
-		sb.append(used);
-		sb.append(" bytes used");
-		sb.append(System.getProperty("line.separator"));
-		sb.append(free);
-		sb.append(" bytes free");
-		sb.append(System.getProperty("line.separator"));
-		out._writeString(sb.toString());
-		out._finishOutput();
-		return LispThread.currentThread().setValues(Lisp.number(used), Lisp.number(total),
-				Lisp.number(runtime.maxMemory()));
-	}
+    private static final Primitive ROOM = new room();
 }

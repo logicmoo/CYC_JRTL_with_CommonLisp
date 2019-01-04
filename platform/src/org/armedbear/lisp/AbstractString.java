@@ -2,7 +2,7 @@
  * AbstractString.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: AbstractString.java 12431 2010-02-08 08:05:15Z mevenson $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,103 +31,101 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLArraySequence;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import static org.armedbear.lisp.Lisp.*;
 
-public abstract class AbstractString extends AbstractSubLArraySequence implements LispSequence {
+public abstract class AbstractString extends AbstractVector
+{
+    @Override
+    public LispObject typep(LispObject type)
+    {
+        if (type instanceof Symbol) {
+            if (type == Symbol.STRING)
+                return T;
+            if (type == Symbol.BASE_STRING)
+                return T;
+        }
+        if (type == BuiltInClass.STRING)
+            return T;
+        if (type == BuiltInClass.BASE_STRING)
+            return T;
+        return super.typep(type);
+    }
 
-	public SubLObject AREF(int index) {
-		return this.CHAR(index);
-	}
+    @Override
+    public final boolean stringp()
+    {
+        return true;
+    }
 
-	public abstract char charAt(int index);
+    @Override
+    public LispObject getElementType()
+    {
+        return Symbol.CHARACTER;
+    }
 
-	public abstract void fill(char c);
+    @Override
+    public final boolean isSimpleVector()
+    {
+        return false;
+    }
 
-	// TODO
-	public SubLObject getElementType() {
-		return LispSymbols.CHARACTER;
-	}
+    @Override
+    public final LispObject STRING()
+    {
+        return this;
+    }
 
-	// TODO
-	public boolean isSimpleVector() {
-		return false;
-	}
+    public abstract void fill(char c);
 
-	public boolean isString() {
-		return true;
-	}
+    public abstract char charAt(int index);
 
-	public boolean isVector() {
-		// TODO Auto-generated method stub
-		return super.isVector();
-	}
+    public abstract void setCharAt(int index, char c);
 
-	public abstract void setChar(int index, char c);
+    public final String printObject(int beginIndex, int endIndex)
 
-	public SubLObject STRING() {
-		return this;
-	}
+    {
+        if (beginIndex < 0)
+            beginIndex = 0;
+        final int limit;
+        limit = length();
+        if (endIndex > limit)
+            endIndex = limit;
+        final LispThread thread = LispThread.currentThread();
+        if (Symbol.PRINT_ESCAPE.symbolValue(thread) != NIL ||
+            Symbol.PRINT_READABLY.symbolValue(thread) != NIL)
+        {
+            StringBuilder sb = new StringBuilder("\"");
+            for (int i = beginIndex; i < endIndex; i++) {
+                char c = charAt(i);
+                if (c == '\"' || c == '\\')
+                    sb.append('\\');
+                sb.append(c);
+            }
+            sb.append('"');
+            return sb.toString();
+        } else
+            return getStringValue().substring(beginIndex, endIndex);
+    }
 
-	public String toString() {
-		int length = this.cl_length();
-		if (length > 256)
-			length = 256;
-		String s = this.writeToString(0, length);
-		Thread.dumpStack();
-		Debug.trace("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!toString called on a string!: " + s);
-		return s;
-		// StringBuilder sb = new StringBuilder(length);
-		// for(int i = 0; i < length; ++i) {
-		// sb.append(charAt(i));
-		// }
-		// return sb.toString();
-	}
+    @Override
+    public String printObjectImpl()
+    {
+        return printObject(0, length());
+    }
 
-	public SubLObject typep(SubLObject type) {
-		if (type instanceof SubLSymbol) {
-			if (type == LispSymbols.STRING)
-				return Lisp.T;
-			if (type == LispSymbols.BASE_STRING)
-				return Lisp.T;
+    public String toString() {
+    	int length = length();
+	    StringBuilder sb = new StringBuilder(length);
+	    for(int i = 0; i < length; ++i) {
+			sb.append(charAt(i));
+	    }
+	    String string = sb.toString();
+		if (Lisp.insideToString == 0) {
+			Debug.assertViolation("calling toString in a STR " + string + ".. use getStringValue() instead");
 		}
-		if (type == BuiltInClass.STRING)
-			return Lisp.T;
-		if (type == BuiltInClass.BASE_STRING)
-			return Lisp.T;
-		return super.typep(type);
-	}
-
-	public String writeToString() {
-		return this.writeToString(0, this.cl_length());
-	}
-
-	public String writeToString(int beginIndex, int endIndex)
-
-	{
-		if (beginIndex < 0)
-			beginIndex = 0;
-		int limit;
-		limit = this.cl_length();
-		if (endIndex > limit)
-			endIndex = limit;
-		LispThread thread = LispThread.currentThread();
-		if (LispSymbols.PRINT_ESCAPE.symbolValue(thread) != Lisp.NIL
-				|| LispSymbols.PRINT_READABLY.symbolValue(thread) != Lisp.NIL) {
-			StringBuilder sb = new StringBuilder("\"");
-			for (int i = beginIndex; i < endIndex; i++) {
-				char c = this.charAt(i);
-				if (c == '\"' || c == '\\')
-					sb.append('\\');
-				sb.append(c);
-			}
-			sb.append('"');
-			return sb.toString();
-		} else
-			return this.getString().substring(beginIndex, endIndex);
-	}
+		return string;
+    }
 
 }

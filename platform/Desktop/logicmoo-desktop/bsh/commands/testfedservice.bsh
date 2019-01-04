@@ -1,0 +1,25 @@
+import java.net.*;
+
+import org.meta.common.*;
+import org.meta.net.*;
+import org.meta.net.impl.service.*;
+import org.meta.net.impl.consumer.*;
+import org.meta.common.resource.*;
+
+System.out.println(isHandler());
+
+if (isHandler()) {
+   req = getFederationRequest();
+   print("user send: " + req.receiveString());
+
+   fileName = req.receiveString();
+   print("req file name: " + fileName);
+  
+   fil = new File(fileName.replace("\\", "/"));
+   requestFile(fileName, getRemoteAppDir() + File.separatorChar + fil.getName(), req);
+} else {
+   ser = getFederationRequest();
+   ser.sendString("hi");
+
+   ser.sendString("c:\\Users\\Ganesh\\Documents\\hess_mike.pdf");
+} // end if

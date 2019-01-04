@@ -1,7 +1,7 @@
 ;;; setf.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: setf.lisp 12516 2010-03-03 21:05:41Z astalla $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -58,9 +58,6 @@
                                  t))))
 
 (defun get-setf-expansion (form &optional environment)
-  (when (and (consp form)
-             (autoloadp (%car form)))
-    (resolve (%car form)))
   (let (temp)
     (cond ((symbolp form)
            (multiple-value-bind (expansion expanded)
@@ -86,8 +83,6 @@
         (if (atom place)
             `(setq ,place ,value-form)
             (progn
-              (when (symbolp (%car place))
-                (resolve (%car place)))
               (multiple-value-bind (dummies vals store-vars setter getter)
                   (get-setf-expansion place environment)
                 (let ((inverse (get (car place) 'setf-inverse)))
@@ -241,3 +236,5 @@
 (defsetf function-info %set-function-info)
 
 (defsetf stream-external-format %set-stream-external-format)
+
+(defsetf structure-ref structure-set)

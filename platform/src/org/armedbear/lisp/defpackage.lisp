@@ -1,7 +1,7 @@
 ;;; defpackage.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves
-;;; $Id: defpackage.lisp 11391 2008-11-15 22:38:34Z vvoutilainen $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -64,75 +64,101 @@
 
 (defmacro defpackage (package &rest options)
   (let ((nicknames nil)
-	(size nil)
-	(shadows nil)
-	(shadowing-imports nil)
-	(use nil)
-	(use-p nil)
-	(imports nil)
-	(interns nil)
-	(exports nil)
-	(doc nil))
+        (size nil)
+        (shadows nil)
+        (shadowing-imports nil)
+        (use nil)
+        (use-p nil)
+        (imports nil)
+        (interns nil)
+        (exports nil)
+        (local-nicknames nil)
+        (doc nil))
     (dolist (option options)
       (unless (consp option)
-	(error 'program-error "bad DEFPACKAGE option: ~S" option))
+        (error 'program-error "bad DEFPACKAGE option: ~S" option))
       (case (car option)
-	(:nicknames
-	 (setq nicknames (stringify-names (cdr option))))
-	(:size
-	 (cond (size
-		(error 'program-error "can't specify :SIZE twice"))
-	       ((and (consp (cdr option))
-		     (typep (second option) 'unsigned-byte))
-		(setq size (second option)))
-	       (t
-		(error 'program-error
-		 "bad :SIZE, must be a positive integer: ~S"
-		 (second option)))))
-	(:shadow
-	 (let ((new (stringify-names (cdr option))))
-	   (setq shadows (append shadows new))))
-	(:shadowing-import-from
-	 (let ((package-name (designated-package-name (cadr option)))
-	       (symbol-names (stringify-names (cddr option))))
-	   (let ((assoc (assoc package-name shadowing-imports
-			       :test #'string=)))
-	     (if assoc
-		 (setf (cdr assoc) (append (cdr assoc) symbol-names))
-		 (setq shadowing-imports
-		       (acons package-name symbol-names shadowing-imports))))))
-	(:use
-	 (let ((new (mapcar #'designated-package-name (cdr option))))
-	   (setq use (delete-duplicates (nconc use new) :test #'string=))
-	   (setq use-p t)))
-	(:import-from
-	 (let ((package-name (designated-package-name (cadr option)))
-	       (symbol-names (stringify-names (cddr option))))
-	   (let ((assoc (assoc package-name imports
-			       :test #'string=)))
-	     (if assoc
-		 (setf (cdr assoc) (append (cdr assoc) symbol-names))
-		 (setq imports (acons package-name symbol-names imports))))))
-	(:intern
-	 (let ((new (stringify-names (cdr option))))
-	   (setq interns (append interns new))))
-	(:export
-	 (let ((new (stringify-names (cdr option))))
-	   (setq exports (append exports new))))
-	(:documentation
-	 (when doc
-	   (error 'program-error "can't specify :DOCUMENTATION twice"))
-	 (setq doc (coerce (cadr option) 'simple-string)))
-	(t
-	 (error 'program-error "bad DEFPACKAGE option: ~S" option))))
+        (:nicknames
+         (setq nicknames (stringify-names (cdr option))))
+        (:size
+         (cond (size
+                (error 'program-error "can't specify :SIZE twice"))
+               ((and (consp (cdr option))
+                     (typep (second option) 'unsigned-byte))
+                (setq size (second option)))
+               (t
+                (error 'program-error
+                       "bad :SIZE, must be a positive integer: ~S"
+                       (second option)))))
+        (:shadow
+         (let ((new (stringify-names (cdr option))))
+           (setq shadows (append shadows new))))
+        (:shadowing-import-from
+         (let ((package-name (designated-package-name (cadr option)))
+               (symbol-names (stringify-names (cddr option))))
+           (let ((assoc (assoc package-name shadowing-imports
+                               :test #'string=)))
+             (if assoc
+                 (setf (cdr assoc) (append (cdr assoc) symbol-names))
+                 (setq shadowing-imports
+                       (acons package-name symbol-names shadowing-imports))))))
+        (:use
+         (let ((new (mapcar #'designated-package-name (cdr option))))
+           (setq use (delete-duplicates (nconc use new) :test #'string=))
+           (setq use-p t)))
+        (:import-from
+         (let ((package-name (designated-package-name (cadr option)))
+               (symbol-names (stringify-names (cddr option))))
+           (let ((assoc (assoc package-name imports
+                               :test #'string=)))
+             (if assoc
+                 (setf (cdr assoc) (append (cdr assoc) symbol-names))
+                 (setq imports (acons package-name symbol-names imports))))))
+        (:intern
+         (let ((new (stringify-names (cdr option))))
+           (setq interns (append interns new))))
+        (:export
+         (let ((new (stringify-names (cdr option))))
+           (setq exports (append exports new))))
+        (:documentation
+         (when doc
+           (error 'program-error "can't specify :DOCUMENTATION twice"))
+         (setq doc (coerce (cadr option) 'simple-string)))
+        (:local-nicknames
+         (dolist (nickdecl (cdr option))
+           (unless (= (length nickdecl) 2)
+             (error 'program-error "Malformed local nickname declaration ~A"
+                    nickdecl))
+           (let ((local-nickname (string (first nickdecl)))
+                 (package-name (designated-package-name (second nickdecl))))
+             (when (member local-nickname '("CL" "COMMON-LISP" "KEYWORD")
+                           :test #'string=)
+               (cerror "Continue anyway"
+                       (format nil "Trying to define a local nickname for package ~A"
+                               local-nickname)))
+             (when (member local-nickname (list* package nicknames)
+                           :test #'string=)
+               (cerror "Continue anyway"
+                       "Trying to override the name or a nickname (~A) ~
+                        with a local nickname for another package ~A"
+                       local-nickname package-name))
+             (push (list local-nickname package-name) local-nicknames))))
+        (t
+         (error 'program-error "bad DEFPACKAGE option: ~S" option))))
     (check-disjoint `(:intern ,@interns) `(:export  ,@exports))
     (check-disjoint `(:intern ,@interns)
-		    `(:import-from
-		      ,@(apply #'append (mapcar #'rest imports)))
-		    `(:shadow ,@shadows)
-		    `(:shadowing-import-from
-		      ,@(apply #'append (mapcar #'rest shadowing-imports))))
-    `(%defpackage ,(string package) ',nicknames ',size
+                    `(:import-from
+                      ,@(apply #'append (mapcar #'rest imports)))
+                    `(:shadow ,@shadows)
+                    `(:shadowing-import-from
+                      ,@(apply #'append (mapcar #'rest shadowing-imports))))
+    `(prog1
+       (%defpackage ,(string package) ',nicknames ',size
                   ',shadows (ensure-available-symbols ',shadowing-imports)
                   ',(if use-p use nil)
-                  (ensure-available-symbols ',imports) ',interns ',exports ',doc)))
+                  (ensure-available-symbols ',imports) ',interns ',exports
+		    ',local-nicknames ',doc)
+       ,(when (and (symbolp package) (not (keywordp package)))
+	  `(record-source-information-for-type ',package :package))
+       (record-source-information-for-type ,(intern (string package) :keyword) :package)
+       )))

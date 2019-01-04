@@ -2,7 +2,7 @@
  * LispError.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: LispError.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,41 +31,49 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class LispError extends SeriousCondition {
-	public LispError() {
-	}
+public class LispError extends SeriousCondition
+{
+  public LispError()
+  {
+  }
 
-	protected LispError(LispClass cls) {
-		super(cls);
-	}
+  protected LispError(LispClass cls)
+  {
+    super(cls);
+  }
 
-	public LispError(String message) {
-		super(StandardClass.ERROR);
-		this.setFormatControl(message);
-	}
+  public LispError(LispObject initArgs)
+  {
+    super(StandardClass.ERROR);
+    initialize(initArgs);
+  }
 
-	public LispError(SubLObject initArgs) {
-		super(StandardClass.ERROR);
-		this.initialize(initArgs);
-	}
+  public LispError(String message)
+  {
+    super(StandardClass.ERROR);
+    setFormatControl(message);
+  }
 
-	public SubLObject classOf() {
-		return StandardClass.ERROR;
-	}
+  public LispObject typeOf()
+  {
+    return Symbol.ERROR;
+  }
 
-	public SubLObject typeOf() {
-		return LispSymbols.ERROR;
-	}
+  public LispObject classOf()
+  {
+    return StandardClass.ERROR;
+  }
 
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.ERROR)
-			return Lisp.T;
-		if (type == StandardClass.ERROR)
-			return Lisp.T;
-		return super.typep(type);
-	}
+  public LispObject typep(LispObject type)
+  {
+    if (type == Symbol.ERROR)
+      return T;
+    if (type == StandardClass.ERROR)
+      return T;
+    return super.typep(type);
+  }
 }

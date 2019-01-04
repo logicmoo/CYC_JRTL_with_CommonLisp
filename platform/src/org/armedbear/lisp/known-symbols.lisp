@@ -1,7 +1,7 @@
 ;;; known-symbols.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: known-symbols.lisp 12400 2010-01-25 06:58:48Z ehuelsmann $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -31,13 +31,16 @@
 
 (in-package #:system)
 
+(require "JVM-CLASS-FILE")
+(require "JAVA")
+
 (export '(lookup-known-symbol))
 
 (let ((symbols (make-hash-table :test 'eq :size 2048)))
   (defun initialize-known-symbols (source ht)
     (let* ((source-class (java:jclass source))
-           (class-designator (substitute #\/ #\. source))
-           (symbol-class (java:jclass "com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol"))
+           (class-designator (jvm::make-jvm-class-name source))
+           (symbol-class (java:jclass "org.armedbear.lisp.Symbol"))
            (fields (java:jclass-fields source-class :declared t :public t)))
       (dotimes (i (length fields))
         (let* ((field (aref fields i))
@@ -48,10 +51,10 @@
               (puthash symbol ht (list name class-designator)))))))
     (hash-table-count ht))
 
-  (initialize-known-symbols "com.cyc.tool.subl.jrtl.nativeCode.commonLisp.LispSymbols" symbols)
-  (initialize-known-symbols "com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Keyword" symbols)
-  (initialize-known-symbols "com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp" symbols)
-  (initialize-known-symbols "com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Nil" symbols)
+  (initialize-known-symbols "org.armedbear.lisp.Symbol" symbols)
+  (initialize-known-symbols "org.armedbear.lisp.Keyword" symbols)
+  (initialize-known-symbols "org.armedbear.lisp.Lisp" symbols)
+  (initialize-known-symbols "org.armedbear.lisp.Nil" symbols)
 
   (defun lookup-known-symbol (symbol)
     "Returns the name of the field and its class designator

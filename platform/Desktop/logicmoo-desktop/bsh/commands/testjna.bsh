@@ -1,0 +1,11 @@
+import com.sun.jna.Library;
+import com.sun.jna.Native;
+import com.sun.jna.Platform;
+
+public interface CLibrary extends Library {
+        double sqrt(double c);
+}
+  
+CLibrary clib = Native.loadLibrary((Platform.isWindows() ? "msvcrt" : "m"),
+                                   CLibrary.class);
+print(clib.sqrt(2));

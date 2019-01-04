@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="stanford-ner">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/rcyc/data/stanford-ner-cyc-2006-09-18/stanford-ner.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -2,7 +2,7 @@
  * GenericFunction.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: GenericFunction.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id: GenericFunction.java,v 1.25 2005/08/16 18:19:48 piso Exp $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -17,38 +17,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
- *
- * As a special exception, the copyright holders of this library give you
- * permission to link this library with independent modules to produce an
- * executable, regardless of the license terms of these independent
- * modules, and to copy and distribute the resulting executable under
- * terms of your choice, provided that you also meet, for each linked
- * independent module, the terms and conditions of the license of that
- * module.  An independent module is a module which is not derived from
- * or based on this library.  If you modify this library, you may extend
- * this exception to your version of the library, but you are not
- * obligated to do so.  If you do not wish to do so, delete this
- * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+public abstract class GenericFunction extends StandardObject
+{
+    protected GenericFunction(LispClass cls, int length)
+    {
+        super(cls, length);
+    }
 
-public abstract class GenericFunction extends StandardObject {
-	protected GenericFunction(LispClass cls, int length) {
-		super(cls, length);
-	}
-
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.GENERIC_FUNCTION)
-			return Lisp.T;
-		if (type == StandardClass.GENERIC_FUNCTION)
-			return Lisp.T;
-		if (type == LispSymbols.FUNCTION)
-			return Lisp.T;
-		if (type == BuiltInClass.FUNCTION)
-			return Lisp.T;
-		return super.typep(type);
-	}
+    public LispObject typep(LispObject type) throws ConditionThrowable
+    {
+        if (type == Symbol.GENERIC_FUNCTION)
+            return T;
+        //if (type == StandardClass.GENERIC_FUNCTION)
+          //  return T;
+        if (type == Symbol.FUNCTION)
+            return T;
+        if (type == BuiltInClass.FUNCTION)
+            return T;
+        return super.typep(type);
+    }
 }

@@ -1,57 +1,93 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.type.stream;
+
+import java.io.InputStream;
+
+import org.armedbear.lisp.Keyword;
+import org.armedbear.lisp.Lisp;
+import org.armedbear.lisp.Stream;
+import org.armedbear.lisp.Symbol;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-//// Internal Imports
-
-//// External Imports
-
-public abstract class AbstractSubLTextStream extends AbstractRandomAccessSubLStream {
-
-	//// Constructors
-
+public abstract class AbstractSubLTextStream extends Stream {
 	AbstractSubLTextStream(String fileName, SubLSymbol elementType, SubLSymbol direction, SubLSymbol ifExists,
 			SubLSymbol ifNotExists) {
 		super(fileName, elementType, direction, ifExists, ifNotExists);
-		if (elementType != CommonSymbols.TEXT_KEYWORD)
+		if (!Lisp.isText(elementType))
 			Errors.error("Got bad stream element type: " + elementType);
 	}
 
 	AbstractSubLTextStream(SubLSymbol elementType, SubLSymbol direction, SubLSymbol ifExists, SubLSymbol ifNotExists) {
+		//super(Symbol.SYSTEM_STREAM,(InputStream) null, Symbol.CHARACTER, true);
 		super(elementType, direction, ifExists, ifNotExists);
-		if (elementType != CommonSymbols.TEXT_KEYWORD)
+		if (!Lisp.isText(elementType))
 			Errors.error("Got bad stream element type: " + elementType);
 	}
 
-	//// Public Area
+	public AbstractSubLTextStream(Symbol twoWayStream) {
+		super(twoWayStream);
+		setElementType(Keyword.TEXT_KEYWORD_CHARACTER);
 
-	//// Protected Area
+	}
+//
+//	@Override
+//	public SubLSymbol getName() {
+//		return getType();
+//	}
 
-	//// Private Area
+	@Override
+	public SubLOutputTextStream toOutputTextStream() {
+		if(this instanceof SubLOutputTextStream) return (SubLOutputTextStream) this;
+		type_error_str(this, "OUTPUT-TEXT-STREAM");
+		return null;
+	}
 
-	//// Internal Rep
+	@Override
+	public SubLOutputBinaryStream toOutputBinaryStream() {
+		//if(this instanceof SubLOutputBinaryStream) return (SubLOutputBinaryStream) this;
+		type_error_str(this, "OUTPUT-BINARY-STREAM");
+		return null;
+	}
 
-	//// Main
+	@Override
+	public SubLOutputStream toOutputStream() {
+		if(this instanceof SubLOutputStream) return (SubLOutputStream) this;
+		type_error_str(this, "OUTPUT-STREAM");
+		return null;
+	}
 
+
+
+	@Override
+	public SubLInputTextStream toInputTextStream() {
+		if(this instanceof SubLInputTextStream) return (SubLInputTextStream) this;
+		type_error_str(this, "OUTPUT-TEXT-STREAM");
+		return null;
+	}
+
+	@Override
+	public SubLInputBinaryStream toInputBinaryStream() {
+		//if(this instanceof SubLInputBinaryStream) return (SubLInputBinaryStream) this;
+		type_error_str(this, "OUTPUT-BINARY-STREAM");
+		return null;
+	}
+
+	@Override
+	public SubLInputStream toInputStream() {
+		if(this instanceof SubLInputStream) return (SubLInputStream) this;
+		type_error_str(this, "OUTPUT-STREAM");
+		return null;
+	}
+
+//
+//	public AbstractSubLTextStream(SubLSymbol binaryKeyword, SubLSymbol inputKeyword, SubLSymbol inputKeyword2,
+//			SubLSymbol errorKeyword, SubLSymbol errorKeyword2) {
+//		super( binaryKeyword, inputKeyword, inputKeyword2, errorKeyword, errorKeyword2);
+//
+//	}
 }

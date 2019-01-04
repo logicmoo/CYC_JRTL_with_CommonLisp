@@ -2,7 +2,7 @@
  * FileError.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: FileError.java 12469 2010-02-14 09:07:54Z mevenson $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,73 +31,81 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class FileError extends LispError {
-	public FileError(String message) {
-		super(StandardClass.FILE_ERROR);
-		this.setFormatControl(message);
-		this.setFormatArguments(Lisp.NIL);
-		this.setPathname(Lisp.NIL);
-	}
+public final class FileError extends LispError
+{
+    // initArgs is either a normal initArgs list or a pathname.
+    public FileError(LispObject initArgs)
+    {
+        super(StandardClass.FILE_ERROR);
+        if (initArgs instanceof Cons)
+            initialize(initArgs);
+        else
+            setPathname(initArgs);
+    }
 
-	public FileError(String message, SubLObject pathname)
+    protected void initialize(LispObject initArgs)
+    {
+        super.initialize(initArgs);
+        LispObject pathname = NIL;
+        while (initArgs != NIL) {
+            LispObject first = initArgs.car();
+            initArgs = initArgs.cdr();
+            if (first == Keyword.PATHNAME) {
+                pathname = initArgs.car();
+                break;
+            }
+            initArgs = initArgs.cdr();
+        }
+        setPathname(pathname);
+    }
 
-	{
-		super(StandardClass.FILE_ERROR);
-		this.setFormatControl(message);
-		this.setFormatArguments(Lisp.NIL);
-		this.setPathname(pathname);
-	}
+    public FileError(String message)
+    {
+        super(StandardClass.FILE_ERROR);
+        setFormatControl(message);
+        setFormatArguments(NIL);
+        setPathname(NIL);
+    }
 
-	// initArgs is either a normal initArgs list or a pathname.
-	public FileError(SubLObject initArgs) {
-		super(StandardClass.FILE_ERROR);
-		if (initArgs instanceof SubLCons)
-			this.initialize(initArgs);
-		else
-			this.setPathname(initArgs);
-	}
+    public FileError(String message, LispObject pathname)
 
-	public SubLObject classOf() {
-		return StandardClass.FILE_ERROR;
-	}
+    {
+        super(StandardClass.FILE_ERROR);
+        setFormatControl(message);
+        setFormatArguments(NIL);
+        setPathname(pathname);
+    }
 
-	public SubLObject getPathname() {
-		return this.getInstanceSlotValue(LispSymbols.PATHNAME);
-	}
+    public LispObject getPathname()
+    {
+        return getInstanceSlotValue(Symbol.PATHNAME);
+    }
 
-	protected void initialize(SubLObject initArgs) {
-		super.initialize(initArgs);
-		SubLObject pathname = Lisp.NIL;
-		while (initArgs != Lisp.NIL) {
-			SubLObject first = initArgs.first();
-			initArgs = initArgs.rest();
-			if (first == Keyword.PATHNAME) {
-				pathname = initArgs.first();
-				break;
-			}
-			initArgs = initArgs.rest();
-		}
-		this.setPathname(pathname);
-	}
+    private void setPathname(LispObject pathname)
+    {
+        setInstanceSlotValue(Symbol.PATHNAME, pathname);
+    }
 
-	private void setPathname(SubLObject pathname) {
-		this.setInstanceSlotValue(LispSymbols.PATHNAME, pathname);
-	}
+    public LispObject typeOf()
+    {
+        return Symbol.FILE_ERROR;
+    }
 
-	public SubLObject typeOf() {
-		return LispSymbols.FILE_ERROR;
-	}
+    public LispObject classOf()
+    {
+        return StandardClass.FILE_ERROR;
+    }
 
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.FILE_ERROR)
-			return Lisp.T;
-		if (type == StandardClass.FILE_ERROR)
-			return Lisp.T;
-		return super.typep(type);
-	}
+    public LispObject typep(LispObject type)
+    {
+        if (type == Symbol.FILE_ERROR)
+            return T;
+        if (type == StandardClass.FILE_ERROR)
+            return T;
+        return super.typep(type);
+    }
 }

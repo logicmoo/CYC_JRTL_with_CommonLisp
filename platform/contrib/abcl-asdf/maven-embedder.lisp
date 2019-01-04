@@ -33,9 +33,12 @@ that the Maven specific "~/.m2/settings.xml" file is NOT parsed for settings.
 
 #| 
 Test:
-(resolve-dependencies "org.slf4j" "slf4j-api" "1.6.1")
+(abcl-asdf:resolve "org.slf4j:slf4j-api:1.6.1")
 
-(resolve-dependencies "org.apache.maven" "maven-aether-provider" "3.0.4")
+(abcl-asdf:resolve "org.apache.maven:maven-aether-provider:3.0.4")
+
+(abcl-asdf:resolve "com.google.gwt:gwt-user")
+
 |#
 
 (defparameter *maven-verbose* t
@@ -111,10 +114,13 @@ Emits warnings if not able to find a suitable executable."
     (warn "Failed to find Maven executable to determine Aether library location."))
   (some 
    (lambda (d)
-     (when (directory (merge-pathnames "maven-core-*.jar" d))
+     (when (directory (merge-pathnames "maven-core*.jar" d))
        (truename d)))
    (list (make-pathname :defaults (merge-pathnames "../lib/" (find-mvn))
                         :name nil :type nil)
+         (ignore-errors
+           (make-pathname :defaults (merge-pathnames "lib/" (mvn-home))
+                          :name nil :type nil))
          ;; library location for homebrew maven package on OS X
          (make-pathname :defaults (merge-pathnames "../libexec/lib/" (find-mvn))
                         :name nil :type nil)
@@ -159,6 +165,30 @@ Signals a simple-error with additional information if this attempt fails."
     (t (e) 
       (error "Failed to determine Maven version: ~A." e))))
 
+(defun mvn-home ()
+  "If the Maven executable can be invoked, introspect the value
+  reported as Maven home."
+  (handler-case 
+      (multiple-value-bind (output error-output status)
+          (uiop/run-program:run-program
+           (format nil "~a --version" (truename (find-mvn)))
+           :output :string
+           :error-output :string)
+        (unless (zerop status)
+          (error "Failed to invoke Maven executable to introspect library locations: ~a." error-output))
+        (let ((pattern (#"compile"
+                        'regex.Pattern
+                        "Maven home: (.+)$")))
+          (with-input-from-string (s output)
+            (do ((line (read-line s nil :eof) 
+                       (read-line s nil :eof)))
+                ((or (not line) (eq line :eof)) nil)
+              (let ((matcher (#"matcher" pattern line)))
+                (when (#"find" matcher)
+                  (return-from mvn-home (uiop/pathname:ensure-directory-pathname (#"group" matcher 1)))))))))
+    (subprocess-error (e)
+          (error "Failed to invoke Maven executable to introspect library locations: ~a." e))))
+                        
 (defun ensure-mvn-version ()
   "Return t if Maven version is 3.0.3 or greater."
   (let* ((version (mvn-version))
@@ -175,7 +205,7 @@ Signals a simple-error with additional information if this attempt fails."
      (list major minor patch))))
 
 (defparameter *init* nil)
-
+  
 (defun init (&optional &key (force nil))
   "Run the initialization strategy to bootstrap a Maven dependency node.
 
@@ -333,8 +363,8 @@ hint."
     (warn "No proxy specified in *MAVEN-HTTP-PROXY*")
     (return-from make-proxy nil))
   (let* ((p (pathname *maven-http-proxy*))
-         (scheme (sys::url-pathname-scheme p))
-         (authority (sys::url-pathname-authority p))
+         (scheme (ext:url-pathname-scheme p))
+         (authority (ext:url-pathname-authority p))
          (host (if (search ":" authority)
                    (subseq authority 0 (search ":" authority))
                    authority))

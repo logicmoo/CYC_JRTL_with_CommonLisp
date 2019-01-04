@@ -2,7 +2,7 @@
  * gc.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: gc.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,38 +31,41 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
 // ### gc
-public class gc extends JavaPrimitive {
-	private static Primitive GC = new gc();
+public final class gc extends Primitive
+{
+    private gc()
+    {
+        super("gc", PACKAGE_EXT);
+    }
 
-	private gc() {
-		super("gc", Lisp.PACKAGE_EXT);
-	}
+    public LispObject execute()
+    {
+        Runtime runtime = Runtime.getRuntime();
+        long free = 0;
+        long maxFree = 0;
+        while (true) {
+            try {
+                runtime.gc();
+                Thread.sleep(100);
+                runtime.runFinalization();
+                Thread.sleep(100);
+                runtime.gc();
+                Thread.sleep(100);
+            }
+            catch (InterruptedException e) {}
+            free = runtime.freeMemory();
+            if (free > maxFree)
+                maxFree = free;
+            else
+                break;
+        }
+        return number(free);
+    }
 
-	public SubLObject execute() {
-		Runtime runtime = Runtime.getRuntime();
-		long free = 0;
-		long maxFree = 0;
-		while (true) {
-			try {
-				runtime.gc();
-				Thread.sleep(100);
-				runtime.runFinalization();
-				Thread.sleep(100);
-				runtime.gc();
-				Thread.sleep(100);
-			} catch (InterruptedException e) {
-			}
-			free = runtime.freeMemory();
-			if (free > maxFree)
-				maxFree = free;
-			else
-				break;
-		}
-		return Lisp.number(free);
-	}
+    private static final Primitive GC = new gc();
 }

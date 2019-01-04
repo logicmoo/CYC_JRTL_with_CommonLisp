@@ -2,7 +2,7 @@
  * MacroObject.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: MacroObject.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,86 +31,58 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public class MacroObject extends Function {
-	protected SubLObject name;
-	public SubLObject expander;
 
-	public MacroObject(SubLObject name, SubLObject expander) {
-		this.name = name;
-		this.expander = expander;
-		if (name instanceof SubLSymbol && name != Lisp.NIL && expander instanceof Function)
-			((Function) expander).setLambdaName(Lisp.list(LispSymbols.MACRO_FUNCTION, name));
+public class MacroObject extends Function  {
+	//protected LispObject lambdaName;
+	//protected LispObject expander;
+	protected LispObject macroExpander;
+	public LispObject getExpander()
+{
+		return (LispObject) macroExpander;
+	}
+	public SubLSymbol getFunctionSymbol() {
+		return (SubLSymbol)lambdaName;
 	}
 
-	public SubLObject execute() {
-		return Lisp.error(new UndefinedFunction(this.name));
+    protected MacroObject(){}
+	public MacroObject(LispObject name, LispObject expander)
+  {
+    this.lambdaName = name;
+    this.macroExpander =  expander;
+    if (name instanceof Symbol && name != NIL && expander instanceof Function)
+      ((Function)expander).setLambdaName(list(Symbol.MACRO_FUNCTION,
+                                               name));
+  }
+
+  public LispObject execute(LispObject[] args)
+  {
+  	if(args.length<10) return dispatch(args);
+		LispObject lo =  getExpander().execute(args);
+		return lo;
+
+//    return error(new UndefinedFunction(name));
+  }
+
+
+	public LispObject arrayify(LispObject... args) {
+		if(true)return error(new UndefinedFunction(lambdaName));
+		LispObject fun = getExpander();
+		LispObject toEval = fun.execute(args);
+		//.execute(args);
+		return Lisp.eval(toEval);
+
+		//return execute(args);
 	}
 
-	public SubLObject execute(SubLObject arg) {
-		return Lisp.error(new UndefinedFunction(this.name));
-	}
+  protected void extraInfo(StringBuilder sb)
+  {
+    sb.append(" "+ macroExpander);
+  }
 
-	public SubLObject execute(SubLObject first, SubLObject second)
-
-	{
-		return Lisp.error(new UndefinedFunction(this.name));
-	}
-
-	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third)
-
-	{
-		return Lisp.error(new UndefinedFunction(this.name));
-	}
-
-	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth)
-
-	{
-		return Lisp.error(new UndefinedFunction(this.name));
-	}
-
-	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
-			SubLObject fifth)
-
-	{
-		return Lisp.error(new UndefinedFunction(this.name));
-	}
-
-	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
-			SubLObject fifth, SubLObject sixth)
-
-	{
-		return Lisp.error(new UndefinedFunction(this.name));
-	}
-
-	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
-			SubLObject fifth, SubLObject sixth, SubLObject seventh)
-
-	{
-		return Lisp.error(new UndefinedFunction(this.name));
-	}
-
-	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
-			SubLObject fifth, SubLObject sixth, SubLObject seventh, SubLObject eighth)
-
-	{
-		return Lisp.error(new UndefinedFunction(this.name));
-	}
-
-	public SubLObject execute(SubLObject[] args) {
-		return Lisp.error(new UndefinedFunction(this.name));
-	}
-
-	public void incrementCallCount(int arity) {
-		this.expander.incrementCallCount(arity);
-		super.incrementCallCount(arity);
-	}
-
-	public String writeToString() {
-		return this.unreadableString("MACRO-OBJECT");
-	}
 }

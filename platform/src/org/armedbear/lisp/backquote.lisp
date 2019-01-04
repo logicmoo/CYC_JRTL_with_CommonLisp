@@ -1,7 +1,7 @@
 ;;; backquote.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: backquote.lisp 11391 2008-11-15 22:38:34Z vvoutilainen $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -72,11 +72,11 @@
 ;;;<hair> involves starting over again pretending you had read ".,a)" instead
 ;;; of ",@a)"
 
-;; (%defvar '*backquote-count* 0)
+;; (%defvar '*backquote-count* 0) ; defined in Java, q.v. Lisp.java:2754
 (%defvar '*bq-comma-flag* '(|,|))
 (%defvar '*bq-at-flag* '(|,@|))
 (%defvar '*bq-dot-flag* '(|,.|))
-;; (%defvar '*bq-vector-flag* '(|bqv|))
+;; (%defvar '*bq-vector-flag* '(|bqv|)) ; defined in Java, q.v. Lisp.java:2757
 
 ;;; the actual character macro
 (defun backquote-macro (stream ignore)

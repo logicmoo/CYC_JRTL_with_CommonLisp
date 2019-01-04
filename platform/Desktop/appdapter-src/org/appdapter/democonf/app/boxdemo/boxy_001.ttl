@@ -1,0 +1,59 @@
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dc:         <http://purl.org/dc/elements/1.1/> .
+
+@prefix mf:     <http://www.w3.org/2001/sw/DataAccess/tests/test-manifest#> .
+@prefix qt:     <http://www.w3.org/2001/sw/DataAccess/tests/test-query#> .
+
+@prefix apsb:	<http://www.appdapter.org/schema/box#> .
+@prefix apt:	<http://www.appdapter.org/test#> .
+
+@prefix ja: 	<http://jena.hpl.hp.com/2005/11/Assembler#> .
+
+<>  rdfs:comment     "Test building boxes and triggers" ;
+    dc:creator       "Stu B. <www.texpedient.com>" ;
+    dc:subject       "Appdapter Tests" ;
+    dc:publisher     "appdapter.org" ;
+    dc:title         "(title) Appdapter box assembly test" ;
+    dc:description   "(desc) Appdapter box assembly test" ;
+    dc:date          "2010-11-06" ;
+
+    dc:format        "RDF" ;
+    dc:identifier    "huh"
+    .
+    
+apsb:BuildableBox		
+		a 					rdfs:Class;
+		rdfs:subClassOf 	ja:Object;
+		ja:assembler		"org.appdapter.gui.assembly.BoxAssembler" 
+		.
+
+apsb:BuildableTrigger		
+		a 					rdfs:Class;
+		rdfs:subClassOf 	ja:Object;
+		ja:assembler		"org.appdapter.gui.assembly.TriggerAssembler" 
+		.		
+
+apt:box_001 	rdf:type			apsb:BuildableBox;
+				apsb:javaFQCN		"org.appdapter.gui.repo.DefaultMutableRepoBoxImpl";
+				apsb:label			"box 001 apsb label";
+				rdfs:label 			"box 001 rdfs label";
+				apsb:trigger		apt:trig_001a
+				.
+				
+apt:trig_001a	rdf:type			apsb:BuildableTrigger;
+				apsb:label			"trig 001-a (dump)";
+				apsb:javaFQCN		"org.appdapter.gui.trigger.SysTriggers$DumpTrigger"
+				.
+	
+apt:box_002 	rdf:type			apsb:BuildableBox;
+				apsb:javaFQCN		"org.appdapter.gui.repo.DefaultMutableRepoBoxImpl";
+				apsb:label			"box 002 apsb label";
+				rdfs:label 			"box 002 rdfs label";
+				apsb:trigger		apt:trig_001a;
+
+				apsb:extraThing		[
+					apsb:ballotCount		22;
+					apsb:secretNumber		3.14
+				]
+				.

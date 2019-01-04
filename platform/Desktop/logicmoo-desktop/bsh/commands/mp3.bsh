@@ -1,0 +1,4 @@
+import java.io.*;
+fis=new FileInputStream("/home/ganesh/music/suprabhatam.mp3");
+pl=new javazoom.jl.player.Player(fis);
+pl.play();

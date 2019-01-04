@@ -2,7 +2,7 @@
  * BroadcastStream.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: BroadcastStream.java 12513 2010-03-02 22:35:36Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,154 +31,230 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class BroadcastStream extends Stream {
-	LispStream[] streams;
+import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLBroadcastStream;
+import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLOutputStream;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-	BroadcastStream(LispStream[] streams) {
-		super(LispSymbols.BROADCAST_STREAM);
-		this.streams = streams;
-		this.isOutputStream = true;
-		if (streams.length == 0) {
-			this.elementType = Lisp.T;
-			this.isBinaryStream = true;
-			this.isCharacterStream = true;
-		} else {
-			this.elementType = streams[streams.length - 1].getElementType();
-			if (this.elementType == LispSymbols.CHARACTER || this.elementType == LispSymbols.BASE_CHAR)
-				this.isCharacterStream = true;
-			else
-				this.isBinaryStream = true;
-		}
-	}
+public abstract class BroadcastStream extends Stream
+{
+    protected Stream[] streams;
 
-	public boolean _charReady() {
-		this.notSupported();
-		// Not reached.
-		return false;
-	}
+    protected BroadcastStream(Stream[] streams)
+    {
+        super(Symbol.BROADCAST_STREAM);
+        this.streams = streams;
+        isOutputStream = true;
+        if (streams.length == 0) {
+            setStreamElementType(T);
+            isBinaryStream = true;
+            isCharacterStream = true;
+        } else {
+            setStreamElementType(streams[streams.length-1].getStreamElementType());
+            if (Lisp.isText(getStreamElementType()))
+                isCharacterStream = true;
+            else
+                isBinaryStream = true;
+        }
+    }
 
-	public void _clearInput() {
-		this.notSupported();
-	}
-
-	public void _close() {
-		this.setOpen(false);
-	}
-
-	public void _finishOutput() {
-		for (int i = 0; i < this.streams.length; i++)
-			this.streams[i]._finishOutput();
-	}
-
-	public long _getFilePosition() {
-		if (this.streams.length == 0)
-			return 0;
-		else
-			return this.streams[this.streams.length - 1]._getFilePosition();
-	}
-
-	// Reads an 8-bit byte.
-
-	public int _readByte() {
-		this.notSupported();
-		// Not reached.
-		return -1;
-	}
-
-	// Returns -1 at end of file.
-
-	public int _readChar() {
-		this.notSupported();
-		// Not reached.
-		return -1;
-	}
-
-	public boolean _setFilePosition(SubLObject arg) {
-		return false;
-	}
-
-	public void _unreadChar(int n) {
-		this.notSupported();
-	}
-
-	// Writes an 8-bit byte.
-
-	public void _writeByte(int n) {
-		for (int i = 0; i < this.streams.length; i++)
-			this.streams[i]._writeByte(n);
-	}
-
-	public void _writeChar(char c) {
-		for (int i = 0; i < this.streams.length; i++)
-			this.streams[i]._writeChar(c);
-	}
-
-	public void _writeChars(char[] chars, int start, int end)
-
+	public BroadcastStream(String fileName, SubLSymbol elementType, SubLSymbol direction, SubLSymbol ifExists,
+			SubLSymbol ifNotExists)
 	{
-		for (int i = 0; i < this.streams.length; i++)
-			this.streams[i]._writeChars(chars, start, end);
+		super(fileName,elementType,direction,ifExists,ifNotExists);
 	}
 
-	public void _writeLine(String s) {
-		for (int i = 0; i < this.streams.length; i++)
-			this.streams[i]._writeLine(s);
-	}
+	public Stream[] GET_STREAMS()
+    {
+        return streams;
+    }
 
-	public void _writeString(String s) {
-		for (int i = 0; i < this.streams.length; i++)
-			this.streams[i]._writeString(s);
-	}
+    public LispObject typeOf()
+    {
+        return Symbol.BROADCAST_STREAM;
+    }
 
-	public SubLObject classOf() {
-		return BuiltInClass.BROADCAST_STREAM;
-	}
+    public LispObject classOf()
+    {
+        return BuiltInClass.BROADCAST_STREAM;
+    }
 
-	public SubLObject fileLength() {
-		if (this.streams.length > 0)
-			return this.streams[this.streams.length - 1].fileLength();
-		else
-			return Fixnum.ZERO;
-	}
+    public LispObject typep(LispObject typeSpecifier)
+    {
+        if (typeSpecifier == Symbol.BROADCAST_STREAM)
+            return T;
+        if (typeSpecifier == BuiltInClass.BROADCAST_STREAM)
+            return T;
+        return super.typep(typeSpecifier);
+    }
 
-	public SubLObject fileStringLength(SubLObject arg) {
-		if (this.streams.length > 0)
-			return this.streams[this.streams.length - 1].fileStringLength(arg);
-		else
-			return Fixnum.ONE;
-	}
+    public LispObject listen()
+    {
+        notSupported();
+        // Not reached.
+        return NIL;
+    }
 
-	public LispStream[] getStreams() {
-		return this.streams;
-	}
+    public LispObject fileLength()
+    {
+        if (streams.length > 0)
+            return streams[streams.length - 1].fileLength();
+        else
+            return Fixnum.ZERO;
+    }
 
-	public SubLObject listen() {
-		this.notSupported();
-		// Not reached.
-		return Lisp.NIL;
-	}
+    public LispObject fileStringLength(LispObject arg)
+    {
+        if (streams.length > 0)
+            return streams[streams.length - 1].fileStringLength(arg);
+        else
+            return Fixnum.ONE;
+    }
 
-	private void notSupported() {
-		Lisp.error(new TypeError("Operation is not supported for streams of type BROADCAST-STREAM."));
-	}
+    // Returns -1 at end of file.
+    protected int _readChar()
+    {
+        notSupported();
+        // Not reached.
+        return -1;
+    }
 
-	public SubLObject typeOf() {
-		return LispSymbols.BROADCAST_STREAM;
-	}
+    protected void _unreadChar(int n)
+    {
+        notSupported();
+    }
 
-	public SubLObject typep(SubLObject typeSpecifier) {
-		if (typeSpecifier == LispSymbols.BROADCAST_STREAM)
-			return Lisp.T;
-		if (typeSpecifier == BuiltInClass.BROADCAST_STREAM)
-			return Lisp.T;
-		return super.typep(typeSpecifier);
-	}
+    protected boolean _charReady()
+    {
+        notSupported();
+        // Not reached.
+        return false;
+    }
 
-	public String writeToString() {
-		return this.unreadableString("BROADCAST-STREAM");
-	}
+    public void _writeChar(char c)
+    {
+        for (int i = 0; i < streams.length; i++)
+            streams[i]._writeChar(c);
+    }
+
+    public void _writeChars(char[] chars, int start, int end)
+
+    {
+        for (int i = 0; i < streams.length; i++)
+            streams[i]._writeChars(chars, start, end);
+    }
+
+    public void _writeString(String s)
+    {
+        for (int i = 0; i < streams.length; i++)
+            streams[i]._writeString(s);
+    }
+
+    public void _writeLine(String s)
+    {
+        for (int i = 0; i < streams.length; i++)
+            streams[i]._writeLine(s);
+    }
+
+    // Reads an 8-bit byte.
+    public int _readByte()
+    {
+        notSupported();
+        // Not reached.
+        return -1;
+    }
+
+    // Writes an 8-bit byte.
+    public void _writeByte(int n)
+    {
+        for (int i = 0; i < streams.length; i++)
+            streams[i]._writeByte(n);
+    }
+
+    public void _finishOutput()
+    {
+        for (int i = 0; i < streams.length; i++)
+            streams[i]._finishOutput();
+    }
+
+    public void _clearInput()
+    {
+        notSupported();
+    }
+
+    protected long _getFilePosition()
+    {
+        if (streams.length == 0)
+            return 0;
+        else
+            return streams[streams.length-1]._getFilePosition();
+    }
+
+    protected boolean _setFilePosition(LispObject arg)
+    {
+        return false;
+    }
+
+    public void _close()
+    {
+        setOpen(false);
+    }
+
+    private void notSupported()
+    {
+        error(new TypeError("Operation is not supported for streams of type BROADCAST-STREAM."));
+    }
+
+    public String printObjectImpl()
+    {
+        return unreadableString("BROADCAST-STREAM");
+    }
+
+    // ### make-broadcast-stream &rest streams => broadcast-stream
+    private static final Primitive MAKE_BROADCAST_STREAM =
+        new Primitive("make-broadcast-stream", "&rest streams")
+    {
+        public LispObject execute()
+        {
+            return new SubLBroadcastStream(new Stream[0]);
+        }
+        public LispObject execute(LispObject[] args)
+        {
+            Stream[] streams = new Stream[args.length];
+            for (int i = 0; i < args.length; i++) {
+                if (args[i] instanceof Stream) {
+                    if (((Stream)args[i]).isOutputStream()) {
+                        streams[i] = (Stream) args[i];
+                        continue;
+                    } else
+                        return type_error(args[i],
+                                          list(Symbol.SATISFIES, Symbol.OUTPUT_STREAM_P));
+                } else
+                    return type_error(args[i], Symbol.STREAM);
+            }
+            // All is well.
+            return new SubLBroadcastStream((SubLOutputStream[]) streams);
+        }
+    };
+
+    // ### broadcast-stream-streams broadcast-stream => streams
+    private static final Primitive BROADCAST_STREAM_STREAMS =
+        new Primitive("broadcast-stream-streams", "broadcast-stream")
+    {
+        public LispObject execute(LispObject arg)
+        {
+            if (arg instanceof BroadcastStream) {
+                BroadcastStream stream = (BroadcastStream) arg;
+                Stream[] streams = stream.streams;
+                LispObject result = NIL;
+                for (int i = streams.length; i-- > 0;)
+                    result = new Cons(streams[i], result);
+                return result;
+            }
+            return type_error(arg, Symbol.BROADCAST_STREAM);
+        }
+    };
 }

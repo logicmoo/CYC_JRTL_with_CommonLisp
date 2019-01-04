@@ -1,0 +1,150 @@
+import javax.media.opengl.GLJPanel;
+import javax.media.opengl.GL;
+ import javax.media.opengl.GLEventListener;
+ import javax.media.opengl.GLAutoDrawable;
+ import javax.media.opengl.glu.GLU;
+ import java.awt.event.KeyEvent;
+ import java.awt.event.KeyListener;
+ 
+import javax.media.opengl.GLCanvas;
+ import java.awt.Frame;
+ import java.awt.event.WindowAdapter;
+ import java.awt.event.WindowEvent;
+import javax.swing.JInternalFrame;
+import javax.swing.event.*;
+
+ public class JavaRenderer 
+ implements GLEventListener, KeyListener {
+    private float rotateT = 0.0f;
+    private static final GLU glu = new GLU();
+ 
+    public void display(GLAutoDrawable gLDrawable) {
+        final GL gl = gLDrawable.getGL();
+        gl.glClear(GL.GL_COLOR_BUFFER_BIT);
+        gl.glClear(GL.GL_DEPTH_BUFFER_BIT);
+        gl.glLoadIdentity();
+        gl.glTranslatef(0.0f, 0.0f, -5.0f);
+ 
+        gl.glRotatef(rotateT, 1.0f, 0.0f, 0.0f);
+        gl.glRotatef(rotateT, 0.0f, 1.0f, 0.0f);
+        gl.glRotatef(rotateT, 0.0f, 0.0f, 1.0f);
+        gl.glRotatef(rotateT, 0.0f, 1.0f, 0.0f);
+ 
+        gl.glBegin(GL.GL_TRIANGLES);
+ 
+        // Front
+        gl.glColor3f(0.0f, 1.0f, 1.0f); 
+        gl.glVertex3f(0.0f, 1.0f, 0.0f);
+        gl.glColor3f(0.0f, 0.0f, 1.0f); 
+        gl.glVertex3f(-1.0f, -1.0f, 1.0f);
+        gl.glColor3f(0.0f, 0.0f, 0.0f); 
+        gl.glVertex3f(1.0f, -1.0f, 1.0f);
+ 
+        // Right Side Facing Front
+        gl.glColor3f(0.0f, 1.0f, 1.0f); 
+        gl.glVertex3f(0.0f, 1.0f, 0.0f);
+        gl.glColor3f(0.0f, 0.0f, 1.0f); 
+        gl.glVertex3f(1.0f, -1.0f, 1.0f);
+        gl.glColor3f(0.0f, 0.0f, 0.0f); 
+        gl.glVertex3f(0.0f, -1.0f, -1.0f);
+ 
+        // Left Side Facing Front
+        gl.glColor3f(0.0f, 1.0f, 1.0f); 
+        gl.glVertex3f(0.0f, 1.0f, 0.0f);
+        gl.glColor3f(0.0f, 0.0f, 1.0f); 
+        gl.glVertex3f(0.0f, -1.0f, -1.0f);
+        gl.glColor3f(0.0f, 0.0f, 0.0f); 
+        gl.glVertex3f(-1.0f, -1.0f, 1.0f);
+ 
+        // Bottom
+        gl.glColor3f(0.0f, 0.0f, 0.0f); 
+        gl.glVertex3f(-1.0f, -1.0f, 1.0f);
+        gl.glColor3f(0.1f, 0.1f, 0.1f); 
+        gl.glVertex3f(1.0f, -1.0f, 1.0f);
+        gl.glColor3f(0.2f, 0.2f, 0.2f); 
+        gl.glVertex3f(0.0f, -1.0f, -1.0f);
+ 
+        gl.glEnd();
+ 
+        rotateT += 0.2f;
+    }
+ 
+    public void displayChanged(GLAutoDrawable gLDrawable, 
+      boolean modeChanged, boolean deviceChanged) {
+    }
+ 
+    public void init(GLAutoDrawable gLDrawable) {
+        final GL gl = gLDrawable.getGL();
+        gl.glShadeModel(GL.GL_SMOOTH);
+        gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        gl.glClearDepth(1.0f);
+        gl.glEnable(GL.GL_DEPTH_TEST);
+        gl.glDepthFunc(GL.GL_LEQUAL);
+        gl.glHint(GL.GL_PERSPECTIVE_CORRECTION_HINT, 
+        GL.GL_NICEST);
+        gLDrawable.addKeyListener(this);
+    }
+ 
+    public void reshape(GLAutoDrawable gLDrawable, int x, 
+    int y, int width, int height) {
+        final GL gl = gLDrawable.getGL();
+        if(height <= 0) {
+            height = 1;
+        }
+        final float h = (float)width / (float)height;
+        gl.glMatrixMode(GL.GL_PROJECTION);
+        gl.glLoadIdentity();
+        glu.gluPerspective(50.0f, h, 1.0, 1000.0);
+        gl.glMatrixMode(GL.GL_MODELVIEW);
+        gl.glLoadIdentity();
+    }
+ 
+    public void keyPressed(KeyEvent e) {        
+    }
+ 
+    public void keyReleased(KeyEvent e) {
+    }
+ 
+    public void keyTyped(KeyEvent e) {
+    }
+ }
+
+public class JavaDia implements Runnable {
+     //static Thread displayT = new Thread(new JavaDia());
+     static boolean bQuit = false;
+ 
+     public static void main(String[] args) {
+         (new Thread(new JavaDia())).start();
+     }
+ 
+     public void run() {
+         JInternalFrame frame = new JInternalFrame("Jogl 3D Shape/Rotation",
+                                          true ,true, true, true);
+         GLJPanel canvas = new GLJPanel();
+         canvas.addGLEventListener(new JavaRenderer());
+         frame.add(canvas);
+         frame.setSize(640, 480);
+         //frame.setUndecorated(true);
+         //int size = frame.getExtendedState();
+         //size |= Frame.MAXIMIZED_BOTH;
+         //frame.setExtendedState(size);
+ 
+         frame.addInternalFrameListener(new InternalFrameAdapter() {
+             public void internalFrameClosing(InternalFrameEvent e) {
+                 bQuit = true;
+             }
+         });
+
+         getIDEInstance().getWorkspaceDesktop().addInternalFrame(frame);
+
+         frame.setVisible(true);
+ //      frame.show();
+         canvas.requestFocus();
+         while( !bQuit ) {
+             canvas.display();                
+         }
+         frame.dispose();
+     }
+ }
+
+JavaDia.main(null);

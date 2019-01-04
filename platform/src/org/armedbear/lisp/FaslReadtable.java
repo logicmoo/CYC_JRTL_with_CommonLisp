@@ -2,7 +2,7 @@
  * FaslReadtable.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: FaslReadtable.java 12192 2009-10-13 19:32:46Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,81 +31,89 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+public final class FaslReadtable extends Readtable
+{
+    public FaslReadtable()
+    {
+        super();
+    }
 
-public class FaslReadtable extends Readtable {
-	private static FaslReadtable instance = new FaslReadtable();
+    protected void initialize()
+    {
+    	Byte[] syntax = this.syntax.constants;
+        syntax[9]    = SYNTAX_TYPE_WHITESPACE; // tab
+        syntax[10]   = SYNTAX_TYPE_WHITESPACE; // linefeed
+        syntax[12]   = SYNTAX_TYPE_WHITESPACE; // form feed
+        syntax[13]   = SYNTAX_TYPE_WHITESPACE; // return
+        syntax[' ']  = SYNTAX_TYPE_WHITESPACE;
 
-	public static FaslReadtable getInstance() {
-		return FaslReadtable.instance;
-	}
+        syntax['"']  = SYNTAX_TYPE_TERMINATING_MACRO;
+        syntax['\''] = SYNTAX_TYPE_TERMINATING_MACRO;
+        syntax['(']  = SYNTAX_TYPE_TERMINATING_MACRO;
+        syntax[')']  = SYNTAX_TYPE_TERMINATING_MACRO;
+        syntax[',']  = SYNTAX_TYPE_TERMINATING_MACRO;
+        syntax[';']  = SYNTAX_TYPE_TERMINATING_MACRO;
+        syntax['`']  = SYNTAX_TYPE_TERMINATING_MACRO;
 
-	public FaslReadtable() {
-		super();
-	}
+        syntax['#']  = SYNTAX_TYPE_NON_TERMINATING_MACRO;
 
-	protected void initialize() {
-		Byte[] syntax = this.syntax.constants;
-		syntax[9] = Readtable.SYNTAX_TYPE_WHITESPACE; // tab
-		syntax[10] = Readtable.SYNTAX_TYPE_WHITESPACE; // linefeed
-		syntax[12] = Readtable.SYNTAX_TYPE_WHITESPACE; // form feed
-		syntax[13] = Readtable.SYNTAX_TYPE_WHITESPACE; // return
-		syntax[' '] = Readtable.SYNTAX_TYPE_WHITESPACE;
+        syntax['\\'] = SYNTAX_TYPE_SINGLE_ESCAPE;
+        syntax['|']  = SYNTAX_TYPE_MULTIPLE_ESCAPE;
 
-		syntax['"'] = Readtable.SYNTAX_TYPE_TERMINATING_MACRO;
-		syntax['\''] = Readtable.SYNTAX_TYPE_TERMINATING_MACRO;
-		syntax['('] = Readtable.SYNTAX_TYPE_TERMINATING_MACRO;
-		syntax[')'] = Readtable.SYNTAX_TYPE_TERMINATING_MACRO;
-		syntax[','] = Readtable.SYNTAX_TYPE_TERMINATING_MACRO;
-		syntax[';'] = Readtable.SYNTAX_TYPE_TERMINATING_MACRO;
-		syntax['`'] = Readtable.SYNTAX_TYPE_TERMINATING_MACRO;
+        LispObject[] readerMacroFunctions = this.readerMacroFunctions.constants;
+        readerMacroFunctions[';']  = LispReader.READ_COMMENT;
+        readerMacroFunctions['"']  = FaslReader.FASL_READ_STRING;
+        readerMacroFunctions['(']  = FaslReader.FASL_READ_LIST;
+        readerMacroFunctions[')']  = LispReader.READ_RIGHT_PAREN;
+        readerMacroFunctions['\''] = FaslReader.FASL_READ_QUOTE;
+        readerMacroFunctions['#']  = FaslReader.FASL_READ_DISPATCH_CHAR;
 
-		syntax['#'] = Readtable.SYNTAX_TYPE_NON_TERMINATING_MACRO;
+        // BACKQUOTE-MACRO and COMMA-MACRO are defined in backquote.lisp.
+        readerMacroFunctions['`']  = Symbol.BACKQUOTE_MACRO;
+        readerMacroFunctions[',']  = Symbol.COMMA_MACRO;
 
-		syntax['\\'] = Readtable.SYNTAX_TYPE_SINGLE_ESCAPE;
-		syntax['|'] = Readtable.SYNTAX_TYPE_MULTIPLE_ESCAPE;
+        DispatchTable dt = new DispatchTable();
+        LispObject[] dtfunctions = dt.functions.constants;
+        dtfunctions['(']  = FaslReader.FASL_SHARP_LEFT_PAREN;
+        dtfunctions['*']  = FaslReader.FASL_SHARP_STAR;
+        dtfunctions['.']  = FaslReader.FASL_SHARP_DOT;
+        dtfunctions[':']  = FaslReader.FASL_SHARP_COLON;
+        dtfunctions['A']  = FaslReader.FASL_SHARP_A;
+        dtfunctions['B']  = FaslReader.FASL_SHARP_B;
+        dtfunctions['C']  = FaslReader.FASL_SHARP_C;
+        dtfunctions['O']  = FaslReader.FASL_SHARP_O;
+        dtfunctions['P']  = FaslReader.FASL_SHARP_P;
+        dtfunctions['R']  = FaslReader.FASL_SHARP_R;
+        dtfunctions['S']  = FaslReader.FASL_SHARP_S;
+        dtfunctions['X']  = FaslReader.FASL_SHARP_X;
+        dtfunctions['\''] = FaslReader.FASL_SHARP_QUOTE;
+        dtfunctions['\\'] = FaslReader.FASL_SHARP_BACKSLASH;
+        dtfunctions['|']  = LispReader.SHARP_VERTICAL_BAR;
+        dtfunctions[')']  = LispReader.SHARP_ILLEGAL;
+        dtfunctions['<']  = LispReader.SHARP_ILLEGAL;
+        dtfunctions[' ']  = LispReader.SHARP_ILLEGAL;
+        dtfunctions[8]    = LispReader.SHARP_ILLEGAL; // backspace
+        dtfunctions[9]    = LispReader.SHARP_ILLEGAL; // tab
+        dtfunctions[10]   = LispReader.SHARP_ILLEGAL; // newline, linefeed
+        dtfunctions[12]   = LispReader.SHARP_ILLEGAL; // page
+        dtfunctions[13]   = LispReader.SHARP_ILLEGAL; // return
+        dtfunctions['?']  = FaslReader.FASL_SHARP_QUESTION_MARK;
+        dispatchTables.constants['#'] = dt;
 
-		SubLObject[] readerMacroFunctions = this.readerMacroFunctions.constants;
-		readerMacroFunctions[';'] = FaslReader.FASL_READ_COMMENT;
-		readerMacroFunctions['"'] = FaslReader.FASL_READ_STRING;
-		readerMacroFunctions['('] = FaslReader.FASL_READ_LIST;
-		readerMacroFunctions[')'] = FaslReader.FASL_READ_RIGHT_PAREN;
-		readerMacroFunctions['\''] = FaslReader.FASL_READ_QUOTE;
-		readerMacroFunctions['#'] = FaslReader.FASL_READ_DISPATCH_CHAR;
+        readtableCase = Keyword.PRESERVE;
+        // after all, all symbols will have been uppercased by the reader,
+        // if applicable, when reading the source file; so, any lower-case
+        // symbols are really meant to be lower case, even if printed without
+        // pipe characters, which may happen if  the READTABLE-CASE of the
+        // current readtable is :PRESERVE when printing the symbols
+    }
 
-		// BACKQUOTE-MACRO and COMMA-MACRO are defined in backquote.lisp.
-		readerMacroFunctions['`'] = LispSymbols.BACKQUOTE_MACRO;
-		readerMacroFunctions[','] = LispSymbols.COMMA_MACRO;
+    private static final FaslReadtable instance = new FaslReadtable();
 
-		DispatchTable dt = new DispatchTable();
-		SubLObject[] dtfunctions = dt.functions.constants;
-		dtfunctions['('] = FaslReader.FASL_SHARP_LEFT_PAREN;
-		dtfunctions['*'] = FaslReader.FASL_SHARP_STAR;
-		dtfunctions['.'] = FaslReader.FASL_SHARP_DOT;
-		dtfunctions[':'] = FaslReader.FASL_SHARP_COLON;
-		dtfunctions['A'] = FaslReader.FASL_SHARP_A;
-		dtfunctions['B'] = FaslReader.FASL_SHARP_B;
-		dtfunctions['C'] = FaslReader.FASL_SHARP_C;
-		dtfunctions['O'] = FaslReader.FASL_SHARP_O;
-		dtfunctions['P'] = FaslReader.FASL_SHARP_P;
-		dtfunctions['R'] = FaslReader.FASL_SHARP_R;
-		dtfunctions['S'] = FaslReader.FASL_SHARP_S;
-		dtfunctions['X'] = FaslReader.FASL_SHARP_X;
-		dtfunctions['\''] = FaslReader.FASL_SHARP_QUOTE;
-		dtfunctions['\\'] = FaslReader.FASL_SHARP_BACKSLASH;
-		dtfunctions['|'] = FaslReader.FASL_SHARP_VERTICAL_BAR;
-		dtfunctions[')'] = FaslReader.FASL_SHARP_ILLEGAL;
-		dtfunctions['<'] = FaslReader.FASL_SHARP_ILLEGAL;
-		dtfunctions[' '] = FaslReader.FASL_SHARP_ILLEGAL;
-		dtfunctions[8] = FaslReader.FASL_SHARP_ILLEGAL; // backspace
-		dtfunctions[9] = FaslReader.FASL_SHARP_ILLEGAL; // tab
-		dtfunctions[10] = FaslReader.FASL_SHARP_ILLEGAL; // newline, linefeed
-		dtfunctions[12] = FaslReader.FASL_SHARP_ILLEGAL; // page
-		dtfunctions[13] = FaslReader.FASL_SHARP_ILLEGAL; // return
-		this.dispatchTables.constants['#'] = dt;
-
-		this.readtableCase = Keyword.UPCASE;
-	}
+    public static final FaslReadtable getInstance()
+    {
+        return instance;
+    }
 }

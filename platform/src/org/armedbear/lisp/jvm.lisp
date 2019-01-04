@@ -1,7 +1,7 @@
 ;;; jvm.lisp
 ;;;
 ;;; Copyright (C) 2003-2008 Peter Graves
-;;; $Id: jvm.lisp 12421 2010-02-05 23:26:33Z astalla $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -31,27 +31,24 @@
 
 (in-package "JVM")
 
-(export '(compile-defun *catch-errors* jvm-compile-package
-          derive-compiler-type))
+(export '(compile-defun *catch-errors* derive-compiler-type))
 
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (require "LOOP")
-  (require "FORMAT")
-  (require "CLOS")
-  (require "PRINT-OBJECT")
-  (require "COMPILER-TYPES")
-  (require "COMPILER-ERROR")
-  (require "KNOWN-FUNCTIONS")
-  (require "KNOWN-SYMBOLS")
-  (require "DUMP-FORM")
-  (require "OPCODES")
-  (require "JAVA")
-  (require "COMPILER-PASS1")
-  (require "COMPILER-PASS2"))
+(require "JVM-CLASS-FILE")
 
 (defvar *closure-variables* nil)
 
 (defvar *enable-dformat* nil)
+(defvar *callbacks* nil
+  "A list of functions to be called by the compiler and code generator
+in order to generate 'compilation events'.
+
+A callback function takes five arguments:  
+CALLBACK-TYPE CLASS PARENT CONTENT EXCEPTION-HANDLERS.")
+
+(declaim (inline invoke-callbacks))
+(defun invoke-callbacks (&rest args)
+  (dolist (cb *callbacks*)
+    (apply cb args)))
 
 #+nil
 (defun dformat (destination control-string &rest args)
@@ -60,7 +57,6 @@
 
 (defmacro dformat (&rest ignored)
   (declare (ignore ignored)))
-
 
 (defmacro with-saved-compiler-policy (&body body)
   "Saves compiler policy variables, restoring them after evaluating `body'."
@@ -77,36 +73,21 @@
 (defvar *compiler-debug* nil)
 
 (defvar *pool* nil)
-(defvar *pool-count* 1)
-(defvar *pool-entries* nil)
-(defvar *fields* ())
 (defvar *static-code* ())
+(defvar *class-file* nil)
 
-(defvar *declared-symbols* nil)
+(defvar *externalized-objects* nil)
 (defvar *declared-functions* nil)
-(defvar *declared-strings* nil)
-(defvar *declared-integers* nil)
-(defvar *declared-floats* nil)
-(defvar *declared-doubles* nil)
 
-(defstruct (abcl-class-file (:constructor %make-abcl-class-file))
+(defstruct (abcl-class-file (:include class-file)
+                            (:constructor %make-abcl-class-file))
   pathname ; pathname of output file
-  lambda-name
-  class
-  superclass
-  lambda-list ; as advertised
-  pool
-  (pool-count 1)
-  (pool-entries (make-hash-table :test #'equal))
-  fields
-  methods
-  static-code
-  (symbols (make-hash-table :test 'eq))
-  (functions (make-hash-table :test 'equal))
-  (strings (make-hash-table :test 'eq))
-  (integers (make-hash-table :test 'eql))
-  (floats (make-hash-table :test 'eql))
-  (doubles (make-hash-table :test 'eql)))
+  class-name
+  static-initializer
+  constructor
+  objects ;; an alist of externalized objects and their field names
+  (functions (make-hash-table :test 'equal)) ;; because of (SETF ...) functions
+  )
 
 (defun class-name-from-filespec (filespec)
   (let* ((name (pathname-name filespec)))
@@ -114,20 +95,23 @@
     (dotimes (i (length name))
       (declare (type fixnum i))
       (when (or (char= (char name i) #\-)
-		(char= (char name i) #\Space))
+                (char= (char name i) #\Space))
         (setf (char name i) #\_)))
-    (concatenate 'string "com/cyc/tool/subl/jrtl/nativeCode/commonLisp/" name)))
+    (make-jvm-class-name
+     (concatenate 'string "org.armedbear.lisp." name))))
 
 (defun make-unique-class-name ()
   "Creates a random class name for use with a `class-file' structure's
 `class' slot."
-  (concatenate 'string "abcl_"
-          (java:jcall (java:jmethod "java.lang.String" "replace" "char" "char")
-                      (java:jcall (java:jmethod "java.util.UUID" "toString")
-                             (java:jstatic "randomUUID" "java.util.UUID"))
-                      #\- #\_)))
+  (make-jvm-class-name
+   (concatenate 'string "abcl_"
+                (substitute #\_ #\-
+                            (java:jcall (java:jmethod "java.util.UUID"
+                                                      "toString")
+                                        (java:jstatic "randomUUID"
+                                                      "java.util.UUID"))))))
 
-(defun make-class-file (&key pathname lambda-name lambda-list)
+(defun make-abcl-class-file (&key pathname)
   "Creates a `class-file' structure. If `pathname' is non-NIL, it's
 used to derive a class name. If it is NIL, a random one created
 using `make-unique-class-name'."
@@ -135,37 +119,26 @@ using `make-unique-class-name'."
                          (class-name-from-filespec  pathname)
                          (make-unique-class-name)))
          (class-file (%make-abcl-class-file :pathname pathname
-                                            :class class-name
-                                            :lambda-name lambda-name
-                                            :lambda-list lambda-list)))
+                                            :class class-name ; to be finalized
+                                            :class-name class-name
+                                            :access-flags '(:public :final))))
+    (when *file-compilation*
+      (let ((source-attribute
+             (make-source-file-attribute
+              :filename (file-namestring *compile-file-truename*))))
+        (class-add-attribute class-file source-attribute)))
     class-file))
 
 (defmacro with-class-file (class-file &body body)
   (let ((var (gensym)))
-    `(let* ((,var ,class-file)
-            (*pool*               (abcl-class-file-pool ,var))
-            (*pool-count*         (abcl-class-file-pool-count ,var))
-            (*pool-entries*       (abcl-class-file-pool-entries ,var))
-            (*fields*             (abcl-class-file-fields ,var))
-            (*static-code*        (abcl-class-file-static-code ,var))
-            (*declared-symbols*   (abcl-class-file-symbols ,var))
-            (*declared-functions* (abcl-class-file-functions ,var))
-            (*declared-strings*   (abcl-class-file-strings ,var))
-            (*declared-integers*  (abcl-class-file-integers ,var))
-            (*declared-floats*    (abcl-class-file-floats ,var))
-            (*declared-doubles*   (abcl-class-file-doubles ,var)))
+    `(let* ((,var                   ,class-file)
+            (*class-file*           ,var)
+            (*pool*                 (abcl-class-file-constants ,var))
+            (*externalized-objects* (abcl-class-file-objects ,var))
+            (*declared-functions*   (abcl-class-file-functions ,var)))
        (progn ,@body)
-       (setf (abcl-class-file-pool ,var)         *pool*
-             (abcl-class-file-pool-count ,var)   *pool-count*
-             (abcl-class-file-pool-entries ,var) *pool-entries*
-             (abcl-class-file-fields ,var)       *fields*
-             (abcl-class-file-static-code ,var)  *static-code*
-             (abcl-class-file-symbols ,var)      *declared-symbols*
-             (abcl-class-file-functions ,var)    *declared-functions*
-             (abcl-class-file-strings ,var)      *declared-strings*
-             (abcl-class-file-integers ,var)     *declared-integers*
-             (abcl-class-file-floats ,var)       *declared-floats*
-             (abcl-class-file-doubles ,var)      *declared-doubles*))))
+       (setf (abcl-class-file-objects ,var)      *externalized-objects*
+             (abcl-class-file-functions ,var)    *declared-functions*))))
 
 (defstruct compiland
   name
@@ -175,9 +148,10 @@ using `make-unique-class-name'."
   arity             ; number of args, or NIL if the number of args can vary.
   p1-result         ; the parse tree as created in pass 1
   parent            ; the parent for compilands which defined within another
-  (children 0       ; Number of local functions
-            :type fixnum) ; defined with FLET, LABELS or LAMBDA
+  children          ; List of local functions
+                    ; defined with FLET, LABELS or LAMBDA
   blocks            ; TAGBODY, PROGV, BLOCK, etc. blocks
+  (next-resource 0)
   argument-register
   closure-register
   environment-register
@@ -210,8 +184,6 @@ using `make-unique-class-name'."
 
 (defvar *this-class* nil)
 
-(defvar *code* ())
-
 ;; All tags visible at the current point of compilation, some of which may not
 ;; be in the current compiland.
 (defvar *visible-tags* ())
@@ -221,16 +193,6 @@ using `make-unique-class-name'."
 
 ;; Total number of registers allocated.
 (defvar *registers-allocated* 0)
-
-(defvar *handlers* ())
-
-(defstruct handler
-  from       ;; label indicating the start of the protected block
-  to         ;; label indicating the end of the protected block
-  code       ;; label to jump to if the specified exception occurs
-  catch-type ;; pool index of the class name of the exception, or 0 (zero)
-             ;; for 'all'
-  )
 
 ;; Variables visible at the current point of compilation.
 (defvar *visible-variables* nil
@@ -275,14 +237,29 @@ of the compilands being processed (p1: so far; p2: in total).")
   ignorable-p
   representation
   special-p     ; indicates whether a variable is special
+
+;; A variable can be stored in a number of locations.
+;;  1. if it's passed as a normal argument, it'll be in a register (max 8)
+;;     the same is true if the variable is a local variable (at any index)
+;;  2. if it's passed in the argument array, it'll be in the array in
+;;     register 1 (register 0 contains the function object)
+;;  3. if the variable is part of a closure, it'll be in the closure array
+;;  4. if the variable is part of the outer scope of a function with a
+;;     non-null lexical environment, the variable is to be looked up
+;;     from a lexical environment object
+;;  5. the variable is a special variable and its binding has been looked
+;;     up and cached in a local register (binding-register)
+
+;; a variable can be either special-p *or* have a register *or*
+;; have an index *or* a closure-index *or* an environment
+
   register      ; register number for a local variable
   binding-register ; register number containing the binding reference
   index         ; index number for a variable in the argument array
   closure-index ; index number for a variable in the closure context array
   environment   ; the environment for the variable, if we're compiling in
                 ; a non-null lexical environment with variables
-    ;; a variable can be either special-p *or* have a register *or*
-    ;; have an index *or* a closure-index *or* an environment
+
   (reads 0 :type fixnum)
   (writes 0 :type fixnum)
   references
@@ -292,6 +269,15 @@ of the compilands being processed (p1: so far; p2: in total).")
   (compiland *current-compiland*)
   block)
 
+
+(defmethod print-object ((object jvm::variable-info) stream)
+  (print-unreadable-object (object stream :type t :identity t)
+    (princ (jvm::variable-name object) stream)
+    (princ " in " stream)
+    (princ (jvm::compiland-name (jvm::variable-compiland object)) stream)))
+
+
+
 (defstruct (var-ref (:constructor make-var-ref (variable)))
   ;; The variable this reference refers to. Will be NIL if the VAR-REF has been
   ;; rewritten to reference a constant value.
@@ -300,6 +286,11 @@ of the compilands being processed (p1: so far; p2: in total).")
   constant-p
   ;; The constant value of this VAR-REF.
   constant-value)
+
+(defmethod print-object ((object jvm::var-ref) stream)
+  (print-unreadable-object (object stream :type t :identity t)
+    (princ "ref ")
+    (print-object (jvm::var-ref-variable object) stream)))
 
 ;; obj can be a symbol or variable
 ;; returns variable or nil
@@ -333,41 +324,33 @@ of the compilands being processed (p1: so far; p2: in total).")
     (when (eq name (variable-name variable))
       (return variable))))
 
-(defknown allocate-register () (integer 0 65535))
-(defun allocate-register ()
-  (let* ((register *register*)
-         (next-register (1+ register)))
-    (declare (type (unsigned-byte 16) register next-register))
-    (setf *register* next-register)
-    (when (< *registers-allocated* next-register)
-      (setf *registers-allocated* next-register))
+(defknown representation-size (t) (integer 0 65535))
+(defun representation-size (representation)
+  (ecase representation
+    ((NIL :int :boolean :float :char) 1)
+    ((:long :double) 2)))
+
+(defknown allocate-register (t) (integer 0 65535))
+(defun allocate-register (representation)
+  (let ((register *register*))
+    (incf *register* (representation-size representation))
+    (setf *registers-allocated*
+          (max *registers-allocated* *register*))
     register))
 
-(defknown allocate-register-pair () (integer 0 65535))
-(defun allocate-register-pair ()
-  (let* ((register *register*)
-         (next-register (+ register 2)))
-    (declare (type (unsigned-byte 16) register next-register))
-    (setf *register* next-register)
-    (when (< *registers-allocated* next-register)
-      (setf *registers-allocated* next-register))
-    register))
 
 (defstruct local-function
   name
   definition
   compiland
+  field
   inline-expansion
-  function    ;; the function loaded through load-compiled-function
-  class-file  ;; the class file structure for this function
-  variable    ;; the variable which contains the loaded compiled function
-              ;; or compiled closure
   environment ;; the environment in which the function is stored in
               ;; case of a function from an enclosing lexical environment
               ;; which itself isn't being compiled
   (references-allowed-p t) ;;whether a reference to the function CAN be captured
   (references-needed-p nil) ;;whether a reference to the function NEEDS to be
-			    ;;captured, because the function name is used in a
+                            ;;captured, because the function name is used in a
                             ;;(function ...) form. Obviously implies
                             ;;references-allowed-p.
   )
@@ -383,11 +366,31 @@ of the compilands being processed (p1: so far; p2: in total).")
 (defvar *using-arg-array* nil)
 (defvar *hairy-arglist-p* nil)
 
+
+(defvar *block* nil
+  "The innermost block applicable to the current lexical environment.")
+(defvar *blocks* ()
+  "The list of blocks in effect in the current lexical environment.
+
+The top node does not need to be equal to the value of `*block*`. E.g.
+when processing the bindings of a LET form, `*block*` is bound to the node
+of that LET, while the block is not considered 'in effect': that only happens
+until the body is being processed.")
+
 (defstruct node
   form
+  children
   (compiland *current-compiland*))
 ;; No need for a special constructor: nobody instantiates
 ;; nodes directly
+
+(declaim (inline add-node-child))
+(defun add-node-child (parent child)
+  "Add a child node to the `children` list of a parent node,
+if that parent belongs to the same compiland."
+  (when parent
+    (when (eq (node-compiland parent) *current-compiland*)
+      (push child (node-children parent)))))
 
 ;; control-transferring blocks: TAGBODY, CATCH, to do: BLOCK
 
@@ -402,7 +405,7 @@ of the compilands being processed (p1: so far; p2: in total).")
 
 (defstruct (tagbody-node (:conc-name tagbody-)
                          (:include control-transferring-node)
-			 (:constructor %make-tagbody-node ()))
+                         (:constructor %make-tagbody-node ()))
   ;; True if a tag in this tagbody is the target of a non-local GO.
   non-local-go-p
   ;; Tags in the tagbody form; a list of tag structures
@@ -414,11 +417,12 @@ of the compilands being processed (p1: so far; p2: in total).")
 (defun make-tagbody-node ()
   (let ((block (%make-tagbody-node)))
     (push block (compiland-blocks *current-compiland*))
+    (add-node-child *block* block)
     block))
 
 (defstruct (catch-node (:conc-name catch-)
                        (:include control-transferring-node)
-		       (:constructor %make-catch-node ()))
+                       (:constructor %make-catch-node ()))
   ;; The catch tag-form is evaluated, meaning we
   ;; have no predefined value to store here
   )
@@ -426,6 +430,7 @@ of the compilands being processed (p1: so far; p2: in total).")
 (defun make-catch-node ()
   (let ((block (%make-catch-node)))
     (push block (compiland-blocks *current-compiland*))
+    (add-node-child *block* block)
     block))
 
 (defstruct (block-node (:conc-name block-)
@@ -438,12 +443,31 @@ of the compilands being processed (p1: so far; p2: in total).")
   non-local-return-p
   ;; Contains a variable whose value uniquely identifies the
   ;; lexical scope from this block, to be used by RETURN-FROM
-  id-variable)
+  id-variable
+  ;; A list of all RETURN-FROM value forms associated with this block
+  return-value-forms)
+
 (defknown make-block-node (t) t)
 (defun make-block-node (name)
   (let ((block (%make-block-node name)))
     (push block (compiland-blocks *current-compiland*))
+    (add-node-child *block* block)
     block))
+
+(defstruct (jump-node (:conc-name jump-)
+                      (:include node)
+                      (:constructor
+                       %make-jump-node (non-local-p target-block target-tag)))
+  non-local-p
+  target-block
+  target-tag)
+(defun make-jump-node (form non-local-p target-block &optional target-tag)
+  (let ((node (%make-jump-node non-local-p target-block target-tag)))
+    ;; Don't push into compiland blocks, as this as a node rather than a block
+    (setf (node-form node) form)
+    (add-node-child *block* node)
+    node))
+
 
 ;; binding blocks: LET, LET*, FLET, LABELS, M-V-B, PROGV, LOCALLY
 ;;
@@ -461,43 +485,47 @@ of the compilands being processed (p1: so far; p2: in total).")
 
 (defstruct (let/let*-node (:conc-name let-)
                           (:include binding-node)
-			  (:constructor %make-let/let*-node ())))
+                          (:constructor %make-let/let*-node ())))
 (defknown make-let/let*-node () t)
 (defun make-let/let*-node ()
   (let ((block (%make-let/let*-node)))
     (push block (compiland-blocks *current-compiland*))
+    (add-node-child *block* block)
     block))
 
 (defstruct (flet-node (:conc-name flet-)
                       (:include binding-node)
-		      (:constructor %make-flet-node ())))
+                      (:constructor %make-flet-node ())))
 (defknown make-flet-node () t)
 (defun make-flet-node ()
   (let ((block (%make-flet-node)))
     (push block (compiland-blocks *current-compiland*))
+    (add-node-child *block* block)
     block))
 
 (defstruct (labels-node (:conc-name labels-)
                         (:include binding-node)
-			(:constructor %make-labels-node ())))
+                        (:constructor %make-labels-node ())))
 (defknown make-labels-node () t)
 (defun make-labels-node ()
   (let ((block (%make-labels-node)))
     (push block (compiland-blocks *current-compiland*))
+    (add-node-child *block* block)
     block))
 
 (defstruct (m-v-b-node (:conc-name m-v-b-)
                        (:include binding-node)
-		       (:constructor %make-m-v-b-node ())))
+                       (:constructor %make-m-v-b-node ())))
 (defknown make-m-v-b-node () t)
 (defun make-m-v-b-node ()
   (let ((block (%make-m-v-b-node)))
     (push block (compiland-blocks *current-compiland*))
+    (add-node-child *block* block)
     block))
 
 (defstruct (progv-node (:conc-name progv-)
                        (:include binding-node)
-		       (:constructor %make-progv-node ())))
+                       (:constructor %make-progv-node ())))
 (defknown make-progv-node () t)
 (defun make-progv-node ()
   (let ((block (%make-progv-node)))
@@ -506,49 +534,118 @@ of the compilands being processed (p1: so far; p2: in total).")
 
 (defstruct (locally-node (:conc-name locally-)
                          (:include binding-node)
-			 (:constructor %make-locally-node ())))
+                         (:constructor %make-locally-node ())))
 (defknown make-locally-node () t)
 (defun make-locally-node ()
   (let ((block (%make-locally-node)))
     (push block (compiland-blocks *current-compiland*))
+    (add-node-child *block* block)
     block))
 
 ;; blocks requiring non-local exits: UNWIND-PROTECT, SYS:SYNCHRONIZED-ON
 
 (defstruct (protected-node (:include node)
-			   (:constructor %make-protected-node ())))
+                           (:constructor %make-protected-node ())))
 (defknown make-protected-node () t)
 (defun make-protected-node ()
   (let ((block (%make-protected-node)))
     (push block (compiland-blocks *current-compiland*))
+    (add-node-child *block* block)
     block))
 
 (defstruct (unwind-protect-node (:conc-name unwind-protect-)
                                 (:include protected-node)
-				(:constructor %make-unwind-protect-node ())))
+                                (:constructor %make-unwind-protect-node ())))
 (defknown make-unwind-protect-node () t)
 (defun make-unwind-protect-node ()
   (let ((block (%make-unwind-protect-node)))
     (push block (compiland-blocks *current-compiland*))
+    (add-node-child *block* block)
     block))
 
 (defstruct (synchronized-node (:conc-name synchronized-)
                               (:include protected-node)
-			      (:constructor %make-synchronized-node ())))
+                              (:constructor %make-synchronized-node ())))
 (defknown make-synchronized-node () t)
 (defun make-synchronized-node ()
   (let ((block (%make-synchronized-node)))
     (push block (compiland-blocks *current-compiland*))
+    (add-node-child *block* block)
     block))
 
 
-(defvar *blocks* ())
+(defstruct (exception-protected-node
+             (:conc-name exception-protected-)
+             (:include protected-node)
+             (:constructor %make-exception-protected-node ())))
+(defknown make-exception-protected-node () t)
+(defun make-exception-protected-node ()
+  (let ((block (%make-exception-protected-node)))
+    (push block (compiland-blocks *current-compiland*))
+    (add-node-child *block* block)
+    block))
+
 
 (defun find-block (name)
   (dolist (block *blocks*)
     (when (and (block-node-p block)
                (eq name (block-name block)))
       (return block))))
+
+(defun %find-enclosed-blocks (form traversed-blocks)
+  "Helper function for `find-enclosed-blocks`, implementing the actual
+algorithm specified there.
+`traversed-blocks' prevents traversal of recursive structures."
+  (cond
+   ((node-p form) (list form))
+   ((atom form) nil)
+   (t
+    ;; We can't use MAPCAN or DOLIST here: they'll choke on dotted lists
+    (do* ((tail form (cdr tail))
+          (current-block (if (consp tail)
+                             (car tail) tail)
+                         (if (consp tail)
+                             (car tail) tail))
+          blocks)
+         ((null tail) blocks)
+      (unless (gethash current-block traversed-blocks)
+        (setf (gethash current-block traversed-blocks) t)
+        (setf blocks
+              (nconc (%find-enclosed-blocks current-block
+                                            traversed-blocks)
+                     blocks)))
+      (when (not (listp tail))
+        (return blocks))))))
+
+(defun find-enclosed-blocks (form)
+  "Returns the immediate enclosed blocks by searching the form's subforms.
+
+More deeply nested blocks can be reached through the `node-children`
+field of the immediate enclosed blocks."
+  (when *blocks*
+    ;; when the innermost enclosing block doesn't have node-children,
+    ;;  there's really nothing to search for.
+    (let ((first-enclosing-block (car *blocks*)))
+      (when (and (eq *current-compiland*
+                     (node-compiland first-enclosing-block))
+                 (null (node-children first-enclosing-block)))
+        (return-from find-enclosed-blocks))))
+
+  (%find-enclosed-blocks form (make-hash-table :test 'eq)))
+
+
+(defun some-nested-block (predicate blocks)
+  "Applies `predicate` recursively to the `blocks` and its children,
+until predicate returns non-NIL, returning that value.
+
+`blocks` may be a single block or a list of blocks."
+  (when blocks
+    (some #'(lambda (b)
+              (or (funcall predicate b)
+                  (some-nested-block predicate (node-children b))))
+          (if (listp blocks)
+              blocks
+            (list blocks)))))
 
 (defknown node-constant-p (t) boolean)
 (defun node-constant-p (object)
@@ -572,6 +669,15 @@ than just restore the lastSpecialBinding (= dynamic environment).
   (or (unwind-protect-node-p object)
       (catch-node-p object)
       (synchronized-node-p object)))
+
+(defun node-opstack-unsafe-p (node)
+  (or (when (jump-node-p node)
+        (let ((target-block (jump-target-block node)))
+          (and (null (jump-non-local-p node))
+               (member target-block *blocks*))))
+      (when (tagbody-node-p node) (tagbody-non-local-go-p node))
+      (when (block-node-p node) (block-non-local-return-p node))
+      (catch-node-p node)))
 
 (defknown block-creates-runtime-bindings-p (t) boolean)
 (defun block-creates-runtime-bindings-p (block)
@@ -664,9 +770,9 @@ That's the one which contains the environment used in the outermost block."
                  initialize-instance
                  shared-initialize))
     (let ((gf (and (fboundp sym) (fdefinition sym))))
-      (when (typep gf 'generic-function)
+      (when (typep gf 'standard-generic-function)
         (unless (compiled-function-p gf)
-          (mop::finalize-generic-function gf))))))
+          (mop::finalize-standard-generic-function gf))))))
 
 (finalize-generic-functions)
 

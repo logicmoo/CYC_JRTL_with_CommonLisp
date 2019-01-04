@@ -1,26 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" output="bin" path="src"/>
-	<classpathentry kind="src" path="conf"/>
-	<classpathentry kind="src" path="test"/>
-	<classpathentry kind="lib" path="lib/asm-all-3.1.jar"/>
-	<classpathentry kind="lib" path="lib/concurrent.jar"/>
-	<classpathentry kind="lib" path="lib/iri.jar"/>
-	<classpathentry kind="lib" path="lib/junit-4.5.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/openrdf-sesame-2.2.4-onejar.jar"/>
-	<classpathentry kind="lib" path="lib/ordi-model-0.5.jar"/>
-	<classpathentry kind="lib" path="lib/ordi-trree-adapter-3.1.a6.jar"/>
-	<classpathentry kind="lib" path="lib/owlim-big-3.1.a7.jar"/>
-	<classpathentry kind="lib" path="lib/servlet.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/javagat/log4j-1.2.13.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j/slf4j-api-1.5.3.jar"/>
-	<classpathentry kind="lib" path="lib/slf4j/slf4j-log4j12-1.5.3.jar"/>
-	<classpathentry kind="lib" path="lib/ublsupport/ublsupport.jar"/>
+	<classpathentry including="**/*.*" kind="src" output="target/classes" path="src">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path="jsrc-objectweb-asm"/>
+	<classpathentry excluding="dmiles/transform/sublisp/LangWiddeningType.java|dmiles/transform/sublisp/SubLispScheme.java|dmiles/transform/sublisp/SubScheme.java" kind="src" path="jsrc-larkc-eu"/>
+	<classpathentry kind="src" path="jsrc-armedbear-j"/>
+	<classpathentry kind="src" path="jsrc-jpl7"/>
+	<classpathentry kind="src" path="jsrc-logicmoo-desktop"/>
+	<classpathentry kind="src" path="jsrc-opencyc"/>
+	<classpathentry kind="src" path="jsrc-cycjava-persistence-hacks"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/AppdapterGUI"/>
+	<classpathentry combineaccessrules="false" exported="true" kind="src" path="/phase09-cycjava-4q"/>
+	<classpathentry exported="true" kind="src" path="/platform-deps"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
+	<classpathentry excluding="bsh/commands/|com/cyc/tool/subl/|org/armedbear/j/|org/logicmoo/" including="org/armedbear/lisp/*.abcl|org/armedbear/lisp/*.cls" kind="src" output="target/classes" path="build/classes">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="lib/javagat/castor-1.1.1-xml.jar"/>
-	<classpathentry kind="lib" path="lib/javagat/commons-logging-1.1.jar"/>
-	<classpathentry kind="lib" path="lib/javagat/GAT-API.jar"/>
-	<classpathentry kind="lib" path="lib/javagat/GAT-engine.jar"/>
-	<classpathentry kind="lib" path="lib/javagat/xmlParserAPIs.jar"/>
-	<classpathentry kind="output" path="bin"/>
+	<classpathentry kind="output" path="target/classes"/>
 </classpath>

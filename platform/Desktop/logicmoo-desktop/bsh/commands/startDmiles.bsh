@@ -1,0 +1,32 @@
+/**
+	Print the BeanShell banner (version and author line) - GUI or non GUI.
+
+	@author Daniel Leuck
+*/
+
+import javax.swing.ImageIcon;
+import java.awt.*;
+import bsh.Interpreter;
+import bsh.Capabilities;
+import bsh.util.JConsole;
+import com.netbreeze.bbowl.gui.*;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
+import org.logicmoo.system.*;
+
+/*
+	Note: any errors thrown in here will be caught by interpreter and
+	ignored... printing the default message.
+*/
+static int instanceCount = 0;
+
+startDmiles()
+{
+	    if(BeanShellCntrl.calledStartDmiles) return;
+	    BeanShellCntrl.calledStartDmiles = true;
+        instanceCount++;
+        //org.apache.log4j.Category.class.getName();
+        BeanShellCntrl.addObject("startDmilesBSH", this);
+        //BeanBowlGUI.addClass(SubLMain.class);
+        BeanShellCntrl.startEmbedded();
+
+}

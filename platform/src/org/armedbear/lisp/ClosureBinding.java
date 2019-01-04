@@ -2,7 +2,7 @@
  * ClosureBinding.java
  *
  * Copyright (C) 2009 Erik Huelsmann
- * $Id: ClosureBinding.java 11866 2009-05-15 09:30:10Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,26 +31,20 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-
-/**
- * This class serves merely to store a reference to an object, used in the
- * closure array.
+/** This class serves merely to store a reference to an
+ * object, used in the closure array.
  *
- * Objects of this type are used to model the fact that closures close over
- * bindings and not over values.
+ * Objects of this type are used to model the fact that
+ * closures close over bindings and not over values.
  *
  */
-public class ClosureBinding {
-	public SubLObject value;
+public class ClosureBinding
+{
+    public LispObject value;
 
-	public ClosureBinding(SubLObject value) {
-		this.value = value;
-	}
-
-	public String toString() {
-		return "ClosureBinding" + System.identityHashCode(this) + "=" + this.value;
-	}
+    public ClosureBinding(LispObject value) {
+        this.value = value;
+    }
 }

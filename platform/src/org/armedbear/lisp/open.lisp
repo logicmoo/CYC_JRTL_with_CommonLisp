@@ -1,7 +1,7 @@
 ;;; open.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: open.lisp 11434 2008-12-07 23:24:31Z ehuelsmann $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -118,6 +118,10 @@
          (namestring (namestring (if (typep pathname 'logical-pathname)
                                      (translate-logical-pathname pathname)
                                      pathname))))
+    (when (wild-pathname-p pathname)
+      (error 'file-error
+	     :pathname pathname
+	     :format-control "Bad place for a wild pathname."))
     (when (memq direction '(:output :io))
       (unless if-exists-given
         (setf if-exists
@@ -142,7 +146,12 @@
             (error 'file-error
                    :pathname pathname
                    :format-control "The file ~S does not exist."
-                   :format-arguments (list namestring)))))
+                   :format-arguments (list namestring))))
+         (:create
+          ;; CREATE-NEW-FILE "atomically creates a new, empty file named by
+          ;; this abstract pathname if and only if a file with this name does
+          ;; not yet exist." See java.io.File.createNewFile().
+          (create-new-file namestring)))
        (make-file-stream pathname namestring element-type :input nil external-format))
       (:probe
        (case if-does-not-exist

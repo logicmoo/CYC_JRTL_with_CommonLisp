@@ -1,0 +1,23 @@
+<component name="libraryTable">
+  <library name="lib2">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/AppdapterGUI/maven/ext.bundle.swoop/lib/rdfapi.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AppdapterGUI/maven/ext.bundle.swoop/lib/qtag.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AppdapterGUI/maven/ext.bundle.swoop/lib/xercesImpl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AppdapterGUI/maven/ext.bundle.swoop/lib/openrdf-util.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AppdapterGUI/maven/ext.bundle.swoop/lib/xngr.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AppdapterGUI/maven/ext.bundle.swoop/lib/openrdf-model.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AppdapterGUI/maven/ext.bundle.swoop/lib/GraphLayout.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AppdapterGUI/maven/ext.bundle.swoop/lib/rio.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AppdapterGUI/maven/ext.bundle.swoop/lib/pellet-debug.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AppdapterGUI/maven/ext.bundle.swoop/lib/dig.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AppdapterGUI/maven/ext.bundle.swoop/lib/jpl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AppdapterGUI/maven/ext.bundle.swoop/lib/xml-apis.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AppdapterGUI/maven/ext.bundle.swoop/lib/log4j.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AppdapterGUI/maven/ext.bundle.swoop/lib/getopt.jar!/" />
+      <root url="jar://$PROJECT_DIR$/AppdapterGUI/maven/ext.bundle.swoop/lib/xngr-browser.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

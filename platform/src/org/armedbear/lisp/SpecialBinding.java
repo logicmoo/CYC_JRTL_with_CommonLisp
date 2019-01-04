@@ -2,7 +2,7 @@
  * SpecialBinding.java
  *
  * Copyright (C) 2002-2008 Peter Graves
- * $Id: SpecialBinding.java 12275 2009-11-10 19:45:37Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,45 +31,46 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+final public class SpecialBinding
+{
+    /** The index in the specials array of the symbol
+     *  to which this value belongs.
+     */
+    final int idx;
 
-final public class SpecialBinding {
-	/**
-	 * The index in the specials array of the symbol to which this value
-	 * belongs.
-	 */
-	int idx;
+    /** The value bound */
+    public LispObject value;
 
-	/** The value bound */
-	public SubLObject value;
+    SpecialBinding(int idx, LispObject value)
+    {
+        this.idx = idx;
+        this.value = value;
+    }
 
-	SpecialBinding(int idx, SubLObject value) {
-		this.idx = idx;
-		this.value = value;
-	}
+    /** Return the value of the binding,
+     * checking a valid binding.
+     *
+     * If the binding is invalid, an unbound variable error
+     * is raised.
+     */
+    final public LispObject getValue()
+    {
+        if (value == null)
+            // return or not: error doesn't return anyway
+            Lisp.error(new UnboundVariable(LispThread.specialNames.get(new Integer(idx)).get()));
 
-	/**
-	 * Return the value of the binding, checking a valid binding.
-	 *
-	 * If the binding is invalid, an unbound variable error is raised.
-	 */
-	public SubLObject getValue() {
-		if (this.value == null)
-			// return or not: error doesn't return anyway
-			Lisp.error(new UnboundVariable(LispThread.specialNames[this.idx]));
+        return value;
+    }
 
-		return this.value;
-	}
-
-	/**
-	 * Sets the value of the binding.
-	 *
-	 * Note: this method can only be called when the binding is the one which is
-	 * currently visible.
-	 */
-	public void setValue(SubLObject value) {
-		this.value = value;
-	}
+    /** Sets the value of the binding.
+     *
+     * Note: this method can only be called when the
+     *    binding is the one which is currently visible.
+     */
+    final public void setValue(LispObject value)
+    {
+        this.value = value;
+    }
 }

@@ -1,0 +1,33 @@
+import java.awt.dnd.*;
+import org.meta.shell.idebeans.eventhandlers.*;
+
+ide=MainMenuEventHandlers.getInstance(null).getIdeInstance();
+
+d=new DropTarget(ide, 
+          new DropTargetAdapter() { 
+              public void drop(DropTargetDropEvent de) { 
+                  de.acceptDrop(DnDConstants.ACTION_COPY); 
+                  
+                  int i = 0;
+                  for(l : de.getCurrentDataFlavorsAsList()) {
+                      print(i + ":>" + l + " : " + l.isFlavorTextType()
+                            + l.isMimeTypeEqual("text/plain"));
+                      print(l.getRepresentationClass());
+                      i++;
+                      if (l.isMimeTypeEqual("text/plain")
+                          && l.isFlavorTextType()
+                          && l.getRepresentationClass()
+                               .isAssignableFrom(java.lang.String.class)
+                         ) break;
+                  } // end for
+
+                  s = (de.getTransferable().getTransferData(
+                           de.getCurrentDataFlavorsAsList().get(i))).toString();
+                  print(s);
+                  s = s.substring(s.indexOf(':')+1, s.length());
+                  print(s);
+                  showMolecule(s);
+              }
+          }
+);
+

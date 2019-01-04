@@ -1,7 +1,7 @@
 ;;; format.lisp
 ;;;
 ;;; Copyright (C) 2004-2007 Peter Graves
-;;; $Id: format.lisp 12412 2010-02-01 22:14:07Z ehuelsmann $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -32,6 +32,18 @@
 ;;; Adapted from CMUCL/SBCL.
 
 (in-package "SYSTEM")
+
+;; If we're here due to an autoloader,
+;; we should prevent a circular dependency:
+;; when the debugger tries to print an error,
+;; it autoloads us, but if that autoloading causes
+;; another error, it circularly starts autoloading us.
+;;
+;; So, we replace whatever is in the function slot until
+;; we can reliably call FORMAT
+(setf (symbol-function 'format) #'sys::%format)
+
+(require "PRINT-OBJECT")
 
 ;;; From primordial-extensions.lisp.
 
@@ -772,6 +784,7 @@
 	(t
 	 `(prin1 ,(expand-next-arg) stream))))
 
+
 (def-format-directive #\C (colonp atsignp params)
   (expand-bind-defaults () params
                         (if colonp
@@ -1073,7 +1086,9 @@
 	   (after (nthcdr (1+ posn) directives)))
       (values
        (expand-bind-defaults () params
-                             `(let ((stream (sys::make-case-frob-stream stream
+                             `(let ((stream (sys::make-case-frob-stream (if (typep stream 'xp::xp-structure)
+                                                                             (xp::base-stream stream)
+                                                                             stream)
                                                                         ,(if colonp
                                                                              (if atsignp
                                                                                  :upcase
@@ -1913,12 +1928,28 @@
                                    (prin1 (next-arg) stream)
                                    (write-char (next-arg) stream)))))
 
+#|
 (defun format-print-named-character (char stream)
   (let* ((name (char-name char)))
-    (cond (name
+    (cond ((and name
+                ;;; Fixes ANSI-TEST FORMATTER.C.2A and FORMAT.C.2A
+                (not (eq 160 (char-code char))))
 	   (write-string (string-capitalize name) stream))
 	  (t
 	   (write-char char stream)))))
+|#
+
+;;; "printing" as defined in the ANSI CL glossary, which is normative.
+(defun char-printing-p (char)
+  (and (not (eql char #\Space))
+       (graphic-char-p char)))
+
+(defun format-print-named-character (char stream)
+  (cond ((not (char-printing-p char))
+         (write-string (string-capitalize (char-name char)) stream))
+        (t
+         (write-char char stream))))
+
 
 (def-format-interpreter #\W (colonp atsignp params)
   (interpret-bind-defaults () params
@@ -2578,14 +2609,17 @@
                              (let* ((posn (position close directives))
                                     (before (subseq directives 0 posn))
                                     (after (nthcdr (1+ posn) directives))
-                                    (stream (sys::make-case-frob-stream stream
-                                                                        (if colonp
-                                                                            (if atsignp
-                                                                                :upcase
-                                                                                :capitalize)
-                                                                            (if atsignp
-                                                                                :capitalize-first
-                                                                                :downcase)))))
+                                    (stream (sys::make-case-frob-stream
+                                             (if (typep stream 'xp::xp-structure)
+                                                 (xp::base-stream stream)
+                                                 stream)
+                                             (if colonp
+                                                 (if atsignp
+                                                     :upcase
+                                                     :capitalize)
+                                                 (if atsignp
+                                                     :capitalize-first
+                                                     :downcase)))))
                                (setf args (interpret-directive-list stream before orig-args args))
                                after))))
 
@@ -2866,7 +2900,7 @@
                    (t (args param)))))
              (apply (fdefinition symbol) stream (next-arg) colonp atsignp (args)))))
 
-(setf sys::*simple-format-function* #'format)
+(setf (symbol-function 'sys::simple-format) #'format)
 
 
 (provide 'format)

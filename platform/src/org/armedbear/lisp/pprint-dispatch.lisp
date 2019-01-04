@@ -1,7 +1,7 @@
 ;;; pprint-dispatch.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: pprint-dispatch.lisp 11391 2008-11-15 22:38:34Z vvoutilainen $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -56,6 +56,8 @@
 ;------------------------------------------------------------------------
 
 (in-package #:xp)
+
+(require "PPRINT")
 
 (defvar *ipd* nil ;see initialization at end of file.
   "initial print dispatch table.")
@@ -333,3 +335,5 @@
 (set-pprint-dispatch+ 'pprint-dispatch-table #'pprint-dispatch-print '(0) *ipd*)
 
 (setf *print-pprint-dispatch* (copy-pprint-dispatch nil))
+
+(provide "PPRINT-DISPATCH")

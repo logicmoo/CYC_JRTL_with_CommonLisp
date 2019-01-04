@@ -1,22 +1,6 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
 import java.util.List;
@@ -26,209 +10,202 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public interface SubLSequence extends SubLObject, Cloneable {
-
 	public static int ALL_OCCURRENCES = Integer.MAX_VALUE;
 	public static int NOT_FOUND = -2;
 	public static int MATCH_EVERYWHERE = -3;
 	public static SubLSymbol NO_INIT_VALUE = SubLObjectFactory.makeKeyword("%NONE%");
 
-	SubLSequence concatenate(SubLObject[] sequences);
+	SubLSequence concatenate(SubLObject[] p0);
 
-	SubLSequence concatenate(SubLSequence seq1);
+	SubLSequence concatenate(SubLSequence p0);
 
-	int count(SubLObject item);
+	int count(SubLObject p0);
 
-	int count(SubLObject item, BinaryFunction test);
+	int count(SubLObject p0, BinaryFunction p1);
 
-	int count(SubLObject item, BinaryFunction test, UnaryFunction key);
+	int count(SubLObject p0, BinaryFunction p1, UnaryFunction p2);
 
-	int count(SubLObject item, BinaryFunction test, UnaryFunction key, int start);
+	int count(SubLObject p0, BinaryFunction p1, UnaryFunction p2, int p3);
 
-	int count(SubLObject item, BinaryFunction test, UnaryFunction key, int start, int end);
+	int count(SubLObject p0, BinaryFunction p1, UnaryFunction p2, int p3, int p4);
 
-	int countIf(UnaryFunction test);
+	int countIf(UnaryFunction p0);
 
-	int countIf(UnaryFunction test, UnaryFunction key);
+	int countIf(UnaryFunction p0, UnaryFunction p1);
 
-	int countIf(UnaryFunction test, UnaryFunction key, int start);
+	int countIf(UnaryFunction p0, UnaryFunction p1, int p2);
 
-	int countIf(UnaryFunction test, UnaryFunction key, int start, int end);
+	int countIf(UnaryFunction p0, UnaryFunction p1, int p2, int p3);
 
-	SubLSequence delete(int startIndex, int endIndexExclusive);
+	SubLSequence delete(int p0, int p1);
 
-	SubLSequence deleteItems(boolean[] itemsToDelete, int count);
+	SubLSequence deleteItems(boolean[] p0, int p1);
 
-	SubLSequence fill(SubLObject item);
+	SubLSequence fill(SubLObject p0);
 
-	SubLSequence fill(SubLObject item, int start);
+	SubLSequence fill(SubLObject p0, int p1);
 
-	SubLSequence fill(SubLObject item, int start, int end);
+	SubLSequence fill(SubLObject p0, int p1, int p2);
 
-	SubLObject find(SubLObject item);
+	SubLObject find(SubLObject p0);
 
-	SubLObject find(SubLObject item, BinaryFunction test);
+	SubLObject find(SubLObject p0, BinaryFunction p1);
 
-	SubLObject find(SubLObject item, BinaryFunction test, UnaryFunction key);
+	SubLObject find(SubLObject p0, BinaryFunction p1, UnaryFunction p2);
 
-	SubLObject find(SubLObject item, BinaryFunction test, UnaryFunction key, int start);
+	SubLObject find(SubLObject p0, BinaryFunction p1, UnaryFunction p2, int p3);
 
-	SubLObject find(SubLObject item, BinaryFunction test, UnaryFunction key, int start, int end);
+	SubLObject find(SubLObject p0, BinaryFunction p1, UnaryFunction p2, int p3, int p4);
 
-	SubLObject findIf(UnaryFunction test);
+	SubLObject findIf(UnaryFunction p0);
 
-	SubLObject findIf(UnaryFunction test, UnaryFunction key);
+	SubLObject findIf(UnaryFunction p0, UnaryFunction p1);
 
-	SubLObject findIf(UnaryFunction test, UnaryFunction key, int start);
+	SubLObject findIf(UnaryFunction p0, UnaryFunction p1, int p2);
 
-	SubLObject findIf(UnaryFunction test, UnaryFunction key, int start, int end);
+	SubLObject findIf(UnaryFunction p0, UnaryFunction p1, int p2, int p3);
 
-	SubLObject get(int index);
+	@Override
+	SubLObject get(int p0);
 
-	int indexOfMismatch(SubLSequence otherSeq);
+	int indexOfMismatch(SubLSequence p0);
 
-	int indexOfMismatch(SubLSequence otherSeq, BinaryFunction test);
+	int indexOfMismatch(SubLSequence p0, BinaryFunction p1);
 
-	int indexOfMismatch(SubLSequence otherSeq, BinaryFunction test, UnaryFunction key);
+	int indexOfMismatch(SubLSequence p0, BinaryFunction p1, UnaryFunction p2);
 
-	int indexOfMismatch(SubLSequence otherSeq, BinaryFunction test, UnaryFunction key, int start1);
+	int indexOfMismatch(SubLSequence p0, BinaryFunction p1, UnaryFunction p2, int p3);
 
-	int indexOfMismatch(SubLSequence otherSeq, BinaryFunction test, UnaryFunction key, int start1, int end1);
+	int indexOfMismatch(SubLSequence p0, BinaryFunction p1, UnaryFunction p2, int p3, int p4);
 
-	int indexOfMismatch(SubLSequence otherSeq, BinaryFunction test, UnaryFunction key, int start1, int end1,
-			int start2);
+	int indexOfMismatch(SubLSequence p0, BinaryFunction p1, UnaryFunction p2, int p3, int p4, int p5);
 
-	int indexOfMismatch(SubLSequence otherSeq, BinaryFunction test, UnaryFunction key, int start1, int end1, int start2,
-			int end2);
+	int indexOfMismatch(SubLSequence p0, BinaryFunction p1, UnaryFunction p2, int p3, int p4, int p5, int p6);
 
-	SubLSequence makeSequenceFromJavaList(List<SubLObject> newBuf);
+	SubLSequence makeSequenceFromJavaList(List<SubLObject> p0);
 
-	SubLSequence merge(SubLSequence otherSeq, BinaryFunction test);
+	SubLSequence merge(SubLSequence p0, BinaryFunction p1);
 
-	SubLSequence merge(SubLSequence otherSeq, BinaryFunction test, UnaryFunction key);
+	SubLSequence merge(SubLSequence p0, BinaryFunction p1, UnaryFunction p2);
 
-	int positionOf(SubLObject item);
+	int positionOf(SubLObject p0);
 
-	int positionOf(SubLObject item, BinaryFunction test);
+	int positionOf(SubLObject p0, BinaryFunction p1);
 
-	int positionOf(SubLObject item, BinaryFunction test, UnaryFunction key);
+	int positionOf(SubLObject p0, BinaryFunction p1, UnaryFunction p2);
 
-	int positionOf(SubLObject item, BinaryFunction test, UnaryFunction key, int start);
+	int positionOf(SubLObject p0, BinaryFunction p1, UnaryFunction p2, int p3);
 
-	int positionOf(SubLObject item, BinaryFunction test, UnaryFunction key, int start, int end);
+	int positionOf(SubLObject p0, BinaryFunction p1, UnaryFunction p2, int p3, int p4);
 
-	int positionOfIf(UnaryFunction test);
+	int positionOfIf(UnaryFunction p0);
 
-	int positionOfIf(UnaryFunction test, UnaryFunction key);
+	int positionOfIf(UnaryFunction p0, UnaryFunction p1);
 
-	int positionOfIf(UnaryFunction test, UnaryFunction key, int start);
+	int positionOfIf(UnaryFunction p0, UnaryFunction p1, int p2);
 
-	int positionOfIf(UnaryFunction test, UnaryFunction key, int start, int end);
+	int positionOfIf(UnaryFunction p0, UnaryFunction p1, int p2, int p3);
 
-	SubLObject reduce(BinaryFunction func);
+	SubLObject reduce(BinaryFunction p0);
 
-	SubLObject reduce(BinaryFunction func, int start);
+	SubLObject reduce(BinaryFunction p0, int p1);
 
-	SubLObject reduce(BinaryFunction func, int start, int end);
+	SubLObject reduce(BinaryFunction p0, int p1, int p2);
 
-	SubLObject reduce(BinaryFunction func, int start, int end, SubLObject initialValue);
+	SubLObject reduce(BinaryFunction p0, int p1, int p2, SubLObject p3);
 
-	SubLSequence remove(SubLObject item, boolean isDestructive);
+	SubLSequence remove(SubLObject p0, boolean p1);
 
-	SubLSequence remove(SubLObject item, boolean isDestructive, BinaryFunction test);
+	SubLSequence remove(SubLObject p0, boolean p1, BinaryFunction p2);
 
-	SubLSequence remove(SubLObject item, boolean isDestructive, BinaryFunction test, UnaryFunction key);
+	SubLSequence remove(SubLObject p0, boolean p1, BinaryFunction p2, UnaryFunction p3);
 
-	SubLSequence remove(SubLObject item, boolean isDestructive, BinaryFunction test, UnaryFunction key, int start);
+	SubLSequence remove(SubLObject p0, boolean p1, BinaryFunction p2, UnaryFunction p3, int p4);
 
-	SubLSequence remove(SubLObject item, boolean isDestructive, BinaryFunction test, UnaryFunction key, int start,
-			int end);
+	SubLSequence remove(SubLObject p0, boolean p1, BinaryFunction p2, UnaryFunction p3, int p4, int p5);
 
-	SubLSequence remove(SubLObject item, boolean isDestructive, BinaryFunction test, UnaryFunction key, int start,
-			int end, int count);
+	SubLSequence remove(SubLObject p0, boolean p1, BinaryFunction p2, UnaryFunction p3, int p4, int p5, int p6);
 
-	SubLSequence removeDuplicates(boolean isDestructive);
+	SubLSequence removeDuplicates(boolean p0);
 
-	SubLSequence removeDuplicates(boolean isDestructive, BinaryFunction test);
+	SubLSequence removeDuplicates(boolean p0, BinaryFunction p1);
 
-	SubLSequence removeDuplicates(boolean isDestructive, BinaryFunction test, UnaryFunction key);
+	SubLSequence removeDuplicates(boolean p0, BinaryFunction p1, UnaryFunction p2);
 
-	SubLSequence removeDuplicates(boolean isDestructive, BinaryFunction test, UnaryFunction key, int start);
+	SubLSequence removeDuplicates(boolean p0, BinaryFunction p1, UnaryFunction p2, int p3);
 
-	SubLSequence removeDuplicates(boolean isDestructive, BinaryFunction test, UnaryFunction key, int start, int end);
+	SubLSequence removeDuplicates(boolean p0, BinaryFunction p1, UnaryFunction p2, int p3, int p4);
 
-	SubLSequence removeIf(UnaryFunction test, boolean isDestructive);
+	SubLSequence removeIf(UnaryFunction p0, boolean p1);
 
-	SubLSequence removeIf(UnaryFunction test, boolean isDestructive, UnaryFunction key);
+	SubLSequence removeIf(UnaryFunction p0, boolean p1, UnaryFunction p2);
 
-	SubLSequence removeIf(UnaryFunction test, boolean isDestructive, UnaryFunction key, int start);
+	SubLSequence removeIf(UnaryFunction p0, boolean p1, UnaryFunction p2, int p3);
 
-	SubLSequence removeIf(UnaryFunction test, boolean isDestructive, UnaryFunction key, int start, int end, int count);
+	SubLSequence removeIf(UnaryFunction p0, boolean p1, UnaryFunction p2, int p3, int p4, int p5);
 
-	SubLSequence replace(SubLSequence seq);
+	SubLSequence replace(SubLSequence p0);
 
-	SubLSequence replace(SubLSequence seq, int start1);
+	SubLSequence replace(SubLSequence p0, int p1);
 
-	SubLSequence replace(SubLSequence seq, int start1, int end1);
+	SubLSequence replace(SubLSequence p0, int p1, int p2);
 
-	SubLSequence replace(SubLSequence seq, int start1, int end1, int start2);
+	SubLSequence replace(SubLSequence p0, int p1, int p2, int p3);
 
-	SubLSequence replace(SubLSequence seq, int start1, int end1, int start2, int end2);
+	SubLSequence replace(SubLSequence p0, int p1, int p2, int p3, int p4);
 
-	SubLSequence reverse(boolean isDestructive);
+	@Override
+	SubLSequence reverse(boolean p0);
 
-	int search(SubLSequence otherSeq);
+	int search(SubLSequence p0);
 
-	int search(SubLSequence otherSeq, BinaryFunction test);
+	int search(SubLSequence p0, BinaryFunction p1);
 
-	int search(SubLSequence otherSeq, BinaryFunction test, UnaryFunction key);
+	int search(SubLSequence p0, BinaryFunction p1, UnaryFunction p2);
 
-	int search(SubLSequence otherSeq, BinaryFunction test, UnaryFunction key, int start1);
+	int search(SubLSequence p0, BinaryFunction p1, UnaryFunction p2, int p3);
 
-	int search(SubLSequence otherSeq, BinaryFunction test, UnaryFunction key, int start1, int end1);
+	int search(SubLSequence p0, BinaryFunction p1, UnaryFunction p2, int p3, int p4);
 
-	int search(SubLSequence otherSeq, BinaryFunction test, UnaryFunction key, int start1, int end1, int start2);
+	int search(SubLSequence p0, BinaryFunction p1, UnaryFunction p2, int p3, int p4, int p5);
 
-	int search(SubLSequence otherSeq, BinaryFunction test, UnaryFunction key, int start1, int end1, int start2,
-			int end2);
+	int search(SubLSequence p0, BinaryFunction p1, UnaryFunction p2, int p3, int p4, int p5, int p6);
 
-	void set(int index, SubLObject newVal);
+	@Override
+	void set(int p0, SubLObject p1);
 
+	@Override
 	int size();
 
-	SubLSequence sort(boolean isDestructive, BinaryFunction pred);
+	SubLSequence sort(boolean p0, BinaryFunction p1);
 
-	SubLSequence sort(boolean isDestructive, BinaryFunction pred, UnaryFunction key);
+	SubLSequence sort(boolean p0, BinaryFunction p1, UnaryFunction p2);
 
-	SubLSequence subSeq(int start);
+	SubLSequence subSeq(int p0);
 
-	SubLSequence subSeq(int start, int end);
+	SubLSequence subSeq(int p0, int p1);
 
-	SubLSequence substitute(SubLObject newItem, SubLObject oldItem, boolean isDestructive);
+	SubLSequence substitute(SubLObject p0, SubLObject p1, boolean p2);
 
-	SubLSequence substitute(SubLObject newItem, SubLObject oldItem, boolean isDestructive, BinaryFunction test);
+	SubLSequence substitute(SubLObject p0, SubLObject p1, boolean p2, BinaryFunction p3);
 
-	SubLSequence substitute(SubLObject newItem, SubLObject oldItem, boolean isDestructive, BinaryFunction test,
-			UnaryFunction key);
+	SubLSequence substitute(SubLObject p0, SubLObject p1, boolean p2, BinaryFunction p3, UnaryFunction p4);
 
-	SubLSequence substitute(SubLObject newItem, SubLObject oldItem, boolean isDestructive, BinaryFunction test,
-			UnaryFunction key, int start);
+	SubLSequence substitute(SubLObject p0, SubLObject p1, boolean p2, BinaryFunction p3, UnaryFunction p4, int p5);
 
-	SubLSequence substitute(SubLObject newItem, SubLObject oldItem, boolean isDestructive, BinaryFunction test,
-			UnaryFunction key, int start, int end);
+	SubLSequence substitute(SubLObject p0, SubLObject p1, boolean p2, BinaryFunction p3, UnaryFunction p4, int p5,
+			int p6);
 
-	SubLSequence substitute(SubLObject newItem, SubLObject oldItem, boolean isDestructive, BinaryFunction test,
-			UnaryFunction key, int start, int end, int count);
+	SubLSequence substitute(SubLObject p0, SubLObject p1, boolean p2, BinaryFunction p3, UnaryFunction p4, int p5,
+			int p6, int p7);
 
-	SubLSequence substituteIf(SubLObject newItem, UnaryFunction test, boolean isDestructive);
+	SubLSequence substituteIf(SubLObject p0, UnaryFunction p1, boolean p2);
 
-	SubLSequence substituteIf(SubLObject newItem, UnaryFunction test, boolean isDestructive, UnaryFunction key);
+	SubLSequence substituteIf(SubLObject p0, UnaryFunction p1, boolean p2, UnaryFunction p3);
 
-	SubLSequence substituteIf(SubLObject newItem, UnaryFunction test, boolean isDestructive, UnaryFunction key,
-			int start);
+	SubLSequence substituteIf(SubLObject p0, UnaryFunction p1, boolean p2, UnaryFunction p3, int p4);
 
-	SubLSequence substituteIf(SubLObject newItem, UnaryFunction test, boolean isDestructive, UnaryFunction key,
-			int start, int end);
+	SubLSequence substituteIf(SubLObject p0, UnaryFunction p1, boolean p2, UnaryFunction p3, int p4, int p5);
 
-	SubLSequence substituteIf(SubLObject newItem, UnaryFunction test, boolean isDestructive, UnaryFunction key,
-			int start, int end, int count);
+	SubLSequence substituteIf(SubLObject p0, UnaryFunction p1, boolean p2, UnaryFunction p3, int p4, int p5, int p6);
 }

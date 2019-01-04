@@ -1,22 +1,6 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import java.util.ArrayList;
@@ -26,147 +10,120 @@ import java.util.Comparator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLVector;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLCompiledFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 
-//// Internal Imports
-
-//// External Imports
-
 public class Functions extends SubLTrampolineFile {
-
-	//// Constructors
-
 	public static class SubLFuncallCountComaprator implements Comparator<SubLCompiledFunction.FuncallCounts> {
-		private int arity = 0;
-
 		public SubLFuncallCountComaprator(int arity) {
+			this.arity = 0;
 			this.arity = arity;
 		}
 
+		private int arity;
+
+		@Override
 		public int compare(SubLCompiledFunction.FuncallCounts o1, SubLCompiledFunction.FuncallCounts o2) {
-			if (o1.counts[this.arity] == o2.counts[this.arity])
+			if (o1.counts[arity] == o2.counts[arity])
 				return 0;
-			return o1.counts[this.arity] < o2.counts[this.arity] ? 1 : -1;
+			return o1.counts[arity] < o2.counts[arity] ? 1 : -1;
 		}
 
+		@Override
 		public boolean equals(Object obj) {
 			return obj == this;
 		}
 	}
 
-	public static SubLFile me = new Functions();
-
-	//// Public Area
-
-	public static SubLSymbol $call_arguments_limit$;
-
-	public static SubLVector hackVectorCache = null; // @hack
-
-	public static SubLObject hackVectorList = null; // @hack
-
 	public static SubLObject apply(SubLObject function, SubLObject arg) {
-		if (function == CommonSymbols.VECTOR.getFunction()) { // @hack
-			if (arg == CommonSymbols.NIL)
-				return SubLVector.EMPTY_VECTOR;
-			if (arg.toList().equal(Functions.hackVectorList))
-				return Functions.hackVectorCache;
-			Functions.hackVectorList = arg;
-			return Functions.hackVectorCache = SubLObjectFactory.makeVector(arg.toList());
-		}
-		SubLObject arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8;
-		SubLObject loopVar = arg;
-		if (loopVar == CommonSymbols.NIL)
-			return Functions.funcall(function);
-		arg0 = loopVar.first();
+		if (arg == SubLNil.NIL)
+			return funcall(function);
+		SubLObject arg2 = arg.first();
+		SubLObject loopVar = arg.rest();
+		if (loopVar == SubLNil.NIL)
+			return funcall(function, arg2);
+		SubLObject arg3 = loopVar.first();
 		loopVar = loopVar.rest();
-		if (loopVar == CommonSymbols.NIL)
-			return Functions.funcall(function, arg0);
-		arg1 = loopVar.first();
+		if (loopVar == SubLNil.NIL)
+			return funcall(function, arg2, arg3);
+		SubLObject arg4 = loopVar.first();
 		loopVar = loopVar.rest();
-		if (loopVar == CommonSymbols.NIL)
-			return Functions.funcall(function, arg0, arg1);
-		arg2 = loopVar.first();
+		if (loopVar == SubLNil.NIL)
+			return funcall(function, arg2, arg3, arg4);
+		SubLObject arg5 = loopVar.first();
 		loopVar = loopVar.rest();
-		if (loopVar == CommonSymbols.NIL)
-			return Functions.funcall(function, arg0, arg1, arg2);
-		arg3 = loopVar.first();
+		if (loopVar == SubLNil.NIL)
+			return funcall(function, arg2, arg3, arg4, arg5);
+		SubLObject arg6 = loopVar.first();
 		loopVar = loopVar.rest();
-		if (loopVar == CommonSymbols.NIL)
-			return Functions.funcall(function, arg0, arg1, arg2, arg3);
-		arg4 = loopVar.first();
+		if (loopVar == SubLNil.NIL)
+			return funcall(function, arg2, arg3, arg4, arg5, arg6);
+		SubLObject arg7 = loopVar.first();
 		loopVar = loopVar.rest();
-		if (loopVar == CommonSymbols.NIL)
-			return Functions.funcall(function, arg0, arg1, arg2, arg3, arg4);
-		arg5 = loopVar.first();
+		if (loopVar == SubLNil.NIL)
+			return funcall(function, arg2, arg3, arg4, arg5, arg6, arg7);
+		SubLObject arg8 = loopVar.first();
 		loopVar = loopVar.rest();
-		if (loopVar == CommonSymbols.NIL)
-			return Functions.funcall(function, arg0, arg1, arg2, arg3, arg4, arg5);
-		arg6 = loopVar.first();
+		if (loopVar == SubLNil.NIL)
+			return funcall(function, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+		SubLObject arg9 = loopVar.first();
 		loopVar = loopVar.rest();
-		if (loopVar == CommonSymbols.NIL)
-			return Functions.funcall(function, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
-		arg7 = loopVar.first();
+		if (loopVar == SubLNil.NIL)
+			return funcall(function, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+		SubLObject arg10 = loopVar.first();
 		loopVar = loopVar.rest();
-		if (loopVar == CommonSymbols.NIL)
-			return Functions.funcall(function, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
-		arg8 = loopVar.first();
-		loopVar = loopVar.rest();
-		if (loopVar == CommonSymbols.NIL)
-			return Functions.funcall(function, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
-		return Functions.apply(function, arg, Resourcer.EMPTY_SUBL_OBJECT_ARRAY);
+		if (loopVar == SubLNil.NIL)
+			return funcall(function, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+		return apply(function, arg, Resourcer.EMPTY_SUBL_OBJECT_ARRAY);
 	}
 
 	public static SubLObject apply(SubLObject function, SubLObject arg, SubLObject otherArgs) {
-		SubLObject arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8;
-		SubLObject loopVar = otherArgs;
-		arg0 = arg;
-		if (loopVar == CommonSymbols.NIL)
-			return Functions.funcall(function, arg0);
-		arg1 = loopVar.first();
+		if (otherArgs == SubLNil.NIL)
+			return funcall(function, arg);
+		SubLObject arg2 = otherArgs.first();
+		SubLObject loopVar = otherArgs.rest();
+		if (loopVar == SubLNil.NIL)
+			return funcall(function, arg, arg2);
+		SubLObject arg3 = loopVar.first();
 		loopVar = loopVar.rest();
-		if (loopVar == CommonSymbols.NIL)
-			return Functions.funcall(function, arg0, arg1);
-		arg2 = loopVar.first();
+		if (loopVar == SubLNil.NIL)
+			return funcall(function, arg, arg2, arg3);
+		SubLObject arg4 = loopVar.first();
 		loopVar = loopVar.rest();
-		if (loopVar == CommonSymbols.NIL)
-			return Functions.funcall(function, arg0, arg1, arg2);
-		arg3 = loopVar.first();
+		if (loopVar == SubLNil.NIL)
+			return funcall(function, arg, arg2, arg3, arg4);
+		SubLObject arg5 = loopVar.first();
 		loopVar = loopVar.rest();
-		if (loopVar == CommonSymbols.NIL)
-			return Functions.funcall(function, arg0, arg1, arg2, arg3);
-		arg4 = loopVar.first();
+		if (loopVar == SubLNil.NIL)
+			return funcall(function, arg, arg2, arg3, arg4, arg5);
+		SubLObject arg6 = loopVar.first();
 		loopVar = loopVar.rest();
-		if (loopVar == CommonSymbols.NIL)
-			return Functions.funcall(function, arg0, arg1, arg2, arg3, arg4);
-		arg5 = loopVar.first();
+		if (loopVar == SubLNil.NIL)
+			return funcall(function, arg, arg2, arg3, arg4, arg5, arg6);
+		SubLObject arg7 = loopVar.first();
 		loopVar = loopVar.rest();
-		if (loopVar == CommonSymbols.NIL)
-			return Functions.funcall(function, arg0, arg1, arg2, arg3, arg4, arg5);
-		arg6 = loopVar.first();
+		if (loopVar == SubLNil.NIL)
+			return funcall(function, arg, arg2, arg3, arg4, arg5, arg6, arg7);
+		SubLObject arg8 = loopVar.first();
 		loopVar = loopVar.rest();
-		if (loopVar == CommonSymbols.NIL)
-			return Functions.funcall(function, arg0, arg1, arg2, arg3, arg4, arg5, arg6);
-		arg7 = loopVar.first();
+		if (loopVar == SubLNil.NIL)
+			return funcall(function, arg, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+		SubLObject arg9 = loopVar.first();
 		loopVar = loopVar.rest();
-		if (loopVar == CommonSymbols.NIL)
-			return Functions.funcall(function, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
-		arg8 = loopVar.first();
-		loopVar = loopVar.rest();
-		if (loopVar == CommonSymbols.NIL)
-			return Functions.funcall(function, arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+		if (loopVar == SubLNil.NIL)
+			return funcall(function, arg, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
 		Resourcer resourcer = Resourcer.getInstance();
 		SubLObject[] args = null;
 		try {
 			args = resourcer.acquireSubLObjectArray(1);
 			args[0] = otherArgs;
-			return Functions.apply(function, arg, args);
+			return apply(function, arg, args);
 		} finally {
 			resourcer.releaseSubLObjectArray(args);
 		}
@@ -174,20 +131,18 @@ public class Functions extends SubLTrampolineFile {
 
 	public static SubLObject apply(SubLObject function, SubLObject arg, SubLObject[] restArgs) {
 		int restLength = restArgs.length;
-		// @note this is somewhat inefficient we should investigate better ways
-		// of implementing this -APB
 		ArrayList<SubLObject> list = new ArrayList<SubLObject>(1 + restLength + 16);
 		SubLObject lastList = arg;
 		if (restLength > 0) {
 			list.add(arg);
-			for (int i = 0; i < restLength - 1; i++)
+			for (int i = 0; i < restLength - 1; ++i)
 				list.add(restArgs[i]);
 			lastList = restArgs[restLength - 1];
 		}
 		if (!lastList.isList())
 			Errors.error("Invalid argument supplied to APPLY: " + arg + ".");
 		Resourcer resourcer = Resourcer.getInstance();
-		if (lastList != CommonSymbols.NIL) {
+		if (lastList != SubLNil.NIL) {
 			SubLListListIterator iter = null;
 			try {
 				iter = resourcer.acquireSubLListListIterator(lastList.toList());
@@ -201,7 +156,7 @@ public class Functions extends SubLTrampolineFile {
 		try {
 			args = resourcer.acquireSubLObjectArray(list.size());
 			list.toArray(args);
-			SubLObject result = Functions.funcall(function, args);
+			SubLObject result = funcall(function, args);
 			return result;
 		} finally {
 			resourcer.releaseSubLObjectArray(args);
@@ -209,7 +164,7 @@ public class Functions extends SubLTrampolineFile {
 	}
 
 	public static SubLList arglist(SubLObject function) {
-		SubLFunction functionTyped = function.getFunc();
+		SubLOperator functionTyped = function.toSymbol().getFunction();
 		return functionTyped.getArglist();
 	}
 
@@ -255,7 +210,7 @@ public class Functions extends SubLTrampolineFile {
 			args[3] = arg4;
 			args[4] = arg5;
 			args[5] = arg6;
-			return Functions.funcall(function, args);
+			return funcall(function, args);
 		} finally {
 			resourcer.releaseSubLObjectArray(args);
 		}
@@ -274,7 +229,7 @@ public class Functions extends SubLTrampolineFile {
 			args[4] = arg5;
 			args[5] = arg6;
 			args[6] = arg7;
-			return Functions.funcall(function, args);
+			return funcall(function, args);
 		} finally {
 			resourcer.releaseSubLObjectArray(args);
 		}
@@ -294,7 +249,7 @@ public class Functions extends SubLTrampolineFile {
 			args[5] = arg6;
 			args[6] = arg7;
 			args[7] = arg8;
-			return Functions.funcall(function, args);
+			return funcall(function, args);
 		} finally {
 			resourcer.releaseSubLObjectArray(args);
 		}
@@ -315,45 +270,41 @@ public class Functions extends SubLTrampolineFile {
 			args[6] = arg7;
 			args[7] = arg8;
 			args[8] = arg9;
-			return Functions.funcall(function, args);
+			return funcall(function, args);
 		} finally {
 			resourcer.releaseSubLObjectArray(args);
 		}
 	}
 
 	public static SubLObject funcall(SubLObject function, SubLObject[] args) {
-		if (args.length < 6)
+		if (args.length < 6 && false)
 			switch (args.length) {
 			case 0:
-				return Functions.funcall(function);
+				return funcall(function);
 			case 1:
-				return Functions.funcall(function, args[0]);
+				return funcall(function, args[0]);
 			case 2:
-				return Functions.funcall(function, args[0], args[1]);
+				return funcall(function, args[0], args[1]);
 			case 3:
-				return Functions.funcall(function, args[0], args[1], args[2]);
+				return funcall(function, args[0], args[1], args[2]);
 			case 4:
-				return Functions.funcall(function, args[0], args[1], args[2], args[3]);
+				return funcall(function, args[0], args[1], args[2], args[3]);
 			case 5:
-				return Functions.funcall(function, args[0], args[1], args[2], args[3], args[4]);
+				return funcall(function, args[0], args[1], args[2], args[3], args[4]);
 			}
 		return function.getFunc().funcall(args);
 	}
 
 	public static SubLObject funcall_stats(SubLObject minNumOfCalls) {
 		if (minNumOfCalls == CommonSymbols.UNPROVIDED)
-			minNumOfCalls = SubLNumberFactory.makeInteger(SubLCompiledFunction.MIN_FUNCALL_COUNTS_TO_CARE_ABOUT);
-		if (!SubLCompiledFunction.SHOULD_MAINTAIN_FUNCALL_COUNTS) {
-			System.out.println("Funcall stats are currently not being maintained.");
-			return CommonSymbols.NIL;
-		}
+			minNumOfCalls = SubLNumberFactory.makeInteger(100);
 		ArrayList<SubLCompiledFunction.FuncallCounts> list = SubLCompiledFunction.funcallCountsArray;
-		for (int i = 0, size = SubLCompiledFunction.MAX_ARITY_TO_MAINTAIN_COUNTS_FOR + 1; i < size; i++) {
+		for (int i = 0, size = 51; i < size; ++i) {
 			SubLCompiledFunction.FuncallCounts[] results = list
 					.toArray(new SubLCompiledFunction.FuncallCounts[list.size()]);
 			Arrays.sort(results, new SubLFuncallCountComaprator(i));
 			boolean hasPrintHeader = false;
-			for (int j = 0, size2 = results.length; j < size2; j++) {
+			for (int j = 0, size2 = results.length; j < size2; ++j) {
 				SubLCompiledFunction.FuncallCounts obj1 = results[j];
 				if (obj1.counts[i] < minNumOfCalls.intValue())
 					break;
@@ -365,7 +316,7 @@ public class Functions extends SubLTrampolineFile {
 				System.out.println(obj1.getMethodName() + " " + obj1.counts[i]);
 			}
 		}
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
 	public static SubLObject print_function(SubLObject function, SubLObject stream) {
@@ -373,12 +324,13 @@ public class Functions extends SubLTrampolineFile {
 		return function;
 	}
 
-	/** Creates a new instance of Functions. */
-	public Functions() {
+	public static SubLFile me;
+	public static SubLSymbol $call_arguments_limit$;
+	static {
+		me = new Functions();
 	}
 
-	//// Initializers
-
+	@Override
 	public void declareFunctions() {
 		SubLFiles.declareFunction(Functions.me, "funcall", "FUNCALL", 1, 0, true);
 		SubLFiles.declareFunction(Functions.me, "apply", "APPLY", 2, 0, true);
@@ -387,20 +339,13 @@ public class Functions extends SubLTrampolineFile {
 		SubLFiles.declareFunction(Functions.me, "clear_funcall_stats", "CLEAR_FUNCALL-STATS", 0, 0, false);
 	}
 
+	@Override
 	public void initializeVariables() {
 		Functions.$call_arguments_limit$ = SubLFiles.defconstant(Functions.me, "CALL-ARGUMENTS-LIMIT",
 				SubLObjectFactory.makeInteger(16384));
 	}
 
+	@Override
 	public void runTopLevelForms() {
 	}
-
-	//// Protected Area
-
-	//// Private Area
-
-	//// Internal Rep
-
-	//// Main
-
 }

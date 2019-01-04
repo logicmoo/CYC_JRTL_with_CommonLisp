@@ -1,6 +1,9 @@
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.parser;
 
+import java.io.Reader;
 import java.io.StringReader;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
@@ -15,7 +18,6 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLVector;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLDoubleFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-//// External Imports
 import junit.framework.Assert;
 import junit.framework.AssertionFailedError;
 import junit.framework.Test;
@@ -24,33 +26,17 @@ import junit.framework.TestSuite;
 import junit.textui.TestRunner;
 
 public class UnitTest extends TestCase {
-
-	//// Constructors
-
-	private static SubLParser parser;
-
-	//// Public Area
-
-	static {
-		try {
-			UnitTest.parser = new SubLParser(new StringReader(""));
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
+	public UnitTest(String name) {
+		super(name);
 	}
 
-	/**
-	 * @param args
-	 *            the command line arguments
-	 */
-	// @todo refactor to share more code with readloop
-	public static void main(String[] args) {
-		final String[] arguments = args; // to pass this down to the inner class
+	public static void main(final String[] args) {
 		SubLProcess subLProcess = new SubLProcess("Unit Tester") {
+			@Override
 			public void safeRun() {
 				SubLEnvironment env = SubLEnvironment.currentEnvironment();
-				SubLMain.initializeSubL(arguments);
+				SubLMain me = SubLMain.me;
+				SubLMain.initializeSubL(args);
 				try {
 					TestRunner.run(UnitTest.suite());
 					System.exit(0);
@@ -62,22 +48,12 @@ public class UnitTest extends TestCase {
 		try {
 			SubLThreadPool.getDefaultPool().execute(subLProcess);
 		} catch (Exception e) {
-			// getting interrupted while starting up the initial thread is a
-			// horrible death-worthy error.
 			e.printStackTrace();
 		}
 	}
 
-	/**
-	 * Runs the unit tests
-	 */
 	public static Test suite() {
 		TestSuite testSuite = new TestSuite();
-		// testSuite.addTest(new UnitTest("testCharacters"));
-		// testSuite.addTest(new UnitTest("testIntegers"));
-		// testSuite.addTest(new UnitTest("testFloats"));
-		// testSuite.addTest(new UnitTest("testStrings"));
-		// testSuite.addTest(new UnitTest("testSymbols"));
 		testSuite.addTest(new UnitTest("testAtoms"));
 		testSuite.addTest(new UnitTest("testForms"));
 		testSuite.addTest(new UnitTest("testTerms"));
@@ -90,9 +66,14 @@ public class UnitTest extends TestCase {
 		return testSuite;
 	}
 
-	/** Creates a new instance of UnitTest. */
-	public UnitTest(String name) {
-		super(name);
+	private static SubLParser parser;
+	static {
+		try {
+			UnitTest.parser = new SubLParser(new StringReader(""));
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.exit(-1);
+		}
 	}
 
 	public void testAtoms() {
@@ -112,20 +93,20 @@ public class UnitTest extends TestCase {
 				"+32354235.1234523e+123", "9876543210.1234522", "1123.234234", "3.1d123", "-3.1d-123", "+3.1d+123",
 				"-3.1d+123", "+3.1d1123", "+32354235.1234523d+123" };
 		String[] testsThatShouldFail = { "()", "(adsf arm 23.34 \"asdf\")", "\"", "'", "#" };
-		java.io.Reader reader = null;
+		Reader reader = null;
 		try {
-			for (int j = 0; j < 2; j++) {
+			for (int j = 0; j < 2; ++j) {
 				if (j == 0)
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should succeed. !!!!!!!!!!!!!!!!!");
 				else {
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should fail. !!!!!!!!!!!!!!!!!");
 					testStrings = testsThatShouldFail;
 				}
-				for (int i = 0; i < testStrings.length; i++)
+				for (int i = 0; i < testStrings.length; ++i)
 					try {
 						String curTest = testStrings[i];
 						System.out.println("Input: " + curTest);
-						reader = new java.io.StringReader(curTest);
+						reader = new StringReader(curTest);
 						UnitTest.parser.ReInit(reader);
 						Object result = UnitTest.parser.atom(true, true);
 						if (result == null)
@@ -144,7 +125,7 @@ public class UnitTest extends TestCase {
 					} catch (Throwable e) {
 						if (j == 0) {
 							e.printStackTrace(System.out);
-							Assert.assertNotNull(null);
+							Assert.assertNotNull((Object) null);
 						} else {
 							System.out.println("Output: ");
 							e.printStackTrace(System.out);
@@ -153,9 +134,8 @@ public class UnitTest extends TestCase {
 						System.out.println();
 					}
 			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception e2) {
+			e2.printStackTrace();
 		}
 	}
 
@@ -165,20 +145,20 @@ public class UnitTest extends TestCase {
 				"#\\(", "#\\c-m-a", "#\\control-meta-a", "#\\Space" };
 		String[] testsThatShouldFail = { "", "#\\", "#", "a", "'a'", "#\\ab", "d234", ".e234", "asdf", "#$AR", ":SDF",
 				"?SDF", "??SDF" };
-		java.io.Reader reader = null;
+		Reader reader = null;
 		try {
-			for (int j = 0; j < 2; j++) {
+			for (int j = 0; j < 2; ++j) {
 				if (j == 0)
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should succeed. !!!!!!!!!!!!!!!!!");
 				else {
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should fail. !!!!!!!!!!!!!!!!!");
 					testStrings = testsThatShouldFail;
 				}
-				for (int i = 0; i < testStrings.length; i++)
+				for (int i = 0; i < testStrings.length; ++i)
 					try {
 						String curTest = testStrings[i];
 						System.out.println("Input: '" + curTest + "'.");
-						reader = new java.io.StringReader(curTest);
+						reader = new StringReader(curTest);
 						UnitTest.parser.ReInit(reader);
 						Object result = UnitTest.parser.character(true, true);
 						if (result == null)
@@ -196,7 +176,7 @@ public class UnitTest extends TestCase {
 					} catch (Throwable e) {
 						if (j == 0) {
 							e.printStackTrace(System.out);
-							Assert.assertNotNull(null);
+							Assert.assertNotNull((Object) null);
 						} else {
 							System.out.println("Output: ");
 							e.printStackTrace(System.out);
@@ -205,9 +185,8 @@ public class UnitTest extends TestCase {
 						System.out.println();
 					}
 			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception e2) {
+			e2.printStackTrace();
 		}
 	}
 
@@ -215,20 +194,20 @@ public class UnitTest extends TestCase {
 		System.out.println();
 		String[] testStrings = { "a ; (\n", "a #| ( |#" };
 		String[] testsThatShouldFail = { "|#", "|#" };
-		java.io.Reader reader = null;
+		Reader reader = null;
 		try {
-			for (int j = 0; j < 2; j++) {
+			for (int j = 0; j < 2; ++j) {
 				if (j == 0)
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should succeed. !!!!!!!!!!!!!!!!!");
 				else {
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should fail. !!!!!!!!!!!!!!!!!");
 					testStrings = testsThatShouldFail;
 				}
-				for (int i = 0; i < testStrings.length; i++)
+				for (int i = 0; i < testStrings.length; ++i)
 					try {
 						String curTest = testStrings[i];
 						System.out.println("Input: '" + curTest + "'.");
-						reader = new java.io.StringReader(curTest);
+						reader = new StringReader(curTest);
 						UnitTest.parser.ReInit(reader);
 						Object result = UnitTest.parser.term(true, true);
 						if (result == null)
@@ -245,7 +224,7 @@ public class UnitTest extends TestCase {
 					} catch (Throwable e) {
 						if (j == 0) {
 							e.printStackTrace(System.out);
-							Assert.assertNotNull(null);
+							Assert.assertNotNull((Object) null);
 						} else {
 							System.out.println("Output: ");
 							e.printStackTrace(System.out);
@@ -254,9 +233,8 @@ public class UnitTest extends TestCase {
 						System.out.println();
 					}
 			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception e2) {
+			e2.printStackTrace();
 		}
 	}
 
@@ -266,20 +244,20 @@ public class UnitTest extends TestCase {
 				"+3.1e1123", "+32354235.1234523e+123", "9876543210.1234522", "1123.234234", "3.1d123", "-3.1d-123",
 				"+3.1d+123", "-3.1d+123", "+3.1d1123", "+32354235.1234523d+123" };
 		String[] testsThatShouldFail = { "d234", ".e234", "asdf", "#$AR", ":SDF", "?SDF", "??SDF" };
-		java.io.Reader reader = null;
+		Reader reader = null;
 		try {
-			for (int j = 0; j < 2; j++) {
+			for (int j = 0; j < 2; ++j) {
 				if (j == 0)
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should succeed. !!!!!!!!!!!!!!!!!");
 				else {
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should fail. !!!!!!!!!!!!!!!!!");
 					testStrings = testsThatShouldFail;
 				}
-				for (int i = 0; i < testStrings.length; i++)
+				for (int i = 0; i < testStrings.length; ++i)
 					try {
 						String curTest = testStrings[i];
 						System.out.println("Input: '" + curTest + "'.");
-						reader = new java.io.StringReader(curTest);
+						reader = new StringReader(curTest);
 						UnitTest.parser.ReInit(reader);
 						Object result = UnitTest.parser.number(true, true);
 						if (result == null)
@@ -297,7 +275,7 @@ public class UnitTest extends TestCase {
 					} catch (Throwable e) {
 						if (j == 0) {
 							e.printStackTrace(System.out);
-							Assert.assertNotNull(null);
+							Assert.assertNotNull((Object) null);
 						} else {
 							System.out.println("Output: ");
 							e.printStackTrace(System.out);
@@ -306,9 +284,8 @@ public class UnitTest extends TestCase {
 						System.out.println();
 					}
 			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception e2) {
+			e2.printStackTrace();
 		}
 	}
 
@@ -324,20 +301,20 @@ public class UnitTest extends TestCase {
 				"(not (isa ?X Dog))", "(not (not (?Y ?X Dog)))", "((SomeFn Predicate) \"adsf\" Dog)",
 				"(isa //asdf asdf jasdf 89234 2lajf02 \n\"/*\" \";\" \"//\"\n?X ;asdfas 230n90 ?.las fqw  \n/*asdf82 ?. aa */Dog)" };
 		String[] testsThatShouldFail = { "", "(", ")", "45.023d23", "23", "Dog Cat", "(isa ?X Dog)1234" };
-		java.io.Reader reader = null;
+		Reader reader = null;
 		try {
-			for (int j = 0; j < 2; j++) {
+			for (int j = 0; j < 2; ++j) {
 				if (j == 0)
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should succeed. !!!!!!!!!!!!!!!!!");
 				else {
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should fail. !!!!!!!!!!!!!!!!!");
 					testStrings = testsThatShouldFail;
 				}
-				for (int i = 0; i < testStrings.length; i++)
+				for (int i = 0; i < testStrings.length; ++i)
 					try {
 						String curTest = testStrings[i];
 						System.out.println("Input: '" + curTest + "'.");
-						reader = new java.io.StringReader(curTest);
+						reader = new StringReader(curTest);
 						UnitTest.parser.ReInit(reader);
 						Object result = UnitTest.parser.form(true, true);
 						if (result == null)
@@ -355,7 +332,7 @@ public class UnitTest extends TestCase {
 					} catch (Throwable e) {
 						if (j == 0) {
 							e.printStackTrace(System.out);
-							Assert.assertNotNull(null);
+							Assert.assertNotNull((Object) null);
 						} else {
 							System.out.println("Output: ");
 							e.printStackTrace(System.out);
@@ -364,16 +341,15 @@ public class UnitTest extends TestCase {
 						System.out.println();
 					}
 			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception e2) {
+			e2.printStackTrace();
 		}
 	}
 
 	public void testIntegers() {
 		System.out.println();
 		String[] testStrings = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
-				"99999999999999999999999999999999999999999999999999", Long.MAX_VALUE / 20 + "", "#22R0101", "#3R0101",
+				"99999999999999999999999999999999999999999999999999", "461168601842738790", "#22R0101", "#3R0101",
 				"#4R0101", "#5R0101", "#6R0101", "#7R0101", "#8R0101", "#9R0101", "#10R0101", "#5R0101", "#11R0101",
 				"#12R0101", "#13R0101", "#14R0101", "#15R0101", "#16R0101", "#17R0101", "#18R0101", "#19R0101",
 				"#20R0101", "#21R0101", "#22R0101", "#23R0101", "#24R0101", "#25R0101", "#26R0101", "#27R0101",
@@ -381,21 +357,21 @@ public class UnitTest extends TestCase {
 				"#36r0101", "#o1334567", "#XDEADBEEF", "#b0100101111111111111111111111111111111111111111111111111111",
 				"001", "1123", "-2123", "-03", "+41234", "54444444", "-9876543210", "+0123456789" };
 		String[] testsThatShouldFail = { "", ".", "e323", "3e3e3", "asdf", "#$AR", ":SDF", "?SDF", "??SDF", "#0r0101",
-				"#ar0101", "#0101", "#37r0101", "#2r0201", "#16r0101V", };
-		java.io.Reader reader = null;
+				"#ar0101", "#0101", "#37r0101", "#2r0201", "#16r0101V" };
+		Reader reader = null;
 		try {
-			for (int j = 0; j < 2; j++) {
+			for (int j = 0; j < 2; ++j) {
 				if (j == 0)
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should succeed. !!!!!!!!!!!!!!!!!");
 				else {
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should fail. !!!!!!!!!!!!!!!!!");
 					testStrings = testsThatShouldFail;
 				}
-				for (int i = 0; i < testStrings.length; i++)
+				for (int i = 0; i < testStrings.length; ++i)
 					try {
 						String curTest = testStrings[i];
 						System.out.println("Input: '" + curTest + "'.");
-						reader = new java.io.StringReader(curTest);
+						reader = new StringReader(curTest);
 						UnitTest.parser.ReInit(reader);
 						Object result = UnitTest.parser.number(true, true);
 						if (result == null)
@@ -413,7 +389,7 @@ public class UnitTest extends TestCase {
 					} catch (Throwable e) {
 						if (j == 0) {
 							e.printStackTrace(System.out);
-							Assert.assertNotNull(null);
+							Assert.assertNotNull((Object) null);
 						} else {
 							System.out.println("Output: ");
 							e.printStackTrace(System.out);
@@ -422,9 +398,8 @@ public class UnitTest extends TestCase {
 						System.out.println();
 					}
 			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception e2) {
+			e2.printStackTrace();
 		}
 	}
 
@@ -433,22 +408,22 @@ public class UnitTest extends TestCase {
 		String[] testStrings = { "'a", "'?a34", "'123", "'\"1\"", "'(a b c)", "'a", "'1.34e10", "`a", "`?a34", "`123",
 				"`\"1\"", "`(a b c)", "`a", "`1.34e10", "''a", "''?a34", "''123", "''\"1\"", "''(a b c)", "'''a",
 				"'1.34e10", "'`a", "'`?a34", "'`123", "'`\"1\"", "'`(a b c)", "'`a", "'`1.34e10", ",a", ",?a34", ",123",
-				",\"1\"", ",(a b c)", ",a", ",1.34e10", "#'a", };
+				",\"1\"", ",(a b c)", ",a", ",1.34e10", "#'a" };
 		String[] testsThatShouldFail = { "#'123", "#'\"1\"", "#'(a b c)", "#'#$a", "#'1.34e10" };
-		java.io.Reader reader = null;
+		Reader reader = null;
 		try {
-			for (int j = 0; j < 2; j++) {
+			for (int j = 0; j < 2; ++j) {
 				if (j == 0)
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should succeed. !!!!!!!!!!!!!!!!!");
 				else {
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should fail. !!!!!!!!!!!!!!!!!");
 					testStrings = testsThatShouldFail;
 				}
-				for (int i = 0; i < testStrings.length; i++)
+				for (int i = 0; i < testStrings.length; ++i)
 					try {
 						String curTest = testStrings[i];
 						System.out.println("Input: '" + curTest + "'.");
-						reader = new java.io.StringReader(curTest);
+						reader = new StringReader(curTest);
 						UnitTest.parser.ReInit(reader);
 						Object result = UnitTest.parser.term(true, true);
 						if (result == null)
@@ -465,7 +440,7 @@ public class UnitTest extends TestCase {
 					} catch (Throwable e) {
 						if (j == 0) {
 							e.printStackTrace(System.out);
-							Assert.assertNotNull(null);
+							Assert.assertNotNull((Object) null);
 						} else {
 							System.out.println("Output: ");
 							e.printStackTrace(System.out);
@@ -474,30 +449,29 @@ public class UnitTest extends TestCase {
 						System.out.println();
 					}
 			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception e2) {
+			e2.printStackTrace();
 		}
 	}
 
 	public void testReadTimeEvaluation() {
 		System.out.println();
 		String[] testStrings = { "#.(+ 1 3)" };
-		String[] testsThatShouldFail = {};
-		java.io.Reader reader = null;
+		String[] testsThatShouldFail = new String[0];
+		Reader reader = null;
 		try {
-			for (int j = 0; j < 2; j++) {
+			for (int j = 0; j < 2; ++j) {
 				if (j == 0)
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should succeed. !!!!!!!!!!!!!!!!!");
 				else {
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should fail. !!!!!!!!!!!!!!!!!");
 					testStrings = testsThatShouldFail;
 				}
-				for (int i = 0; i < testStrings.length; i++)
+				for (int i = 0; i < testStrings.length; ++i)
 					try {
 						String curTest = testStrings[i];
 						System.out.println("Input: '" + curTest + "'.");
-						reader = new java.io.StringReader(curTest);
+						reader = new StringReader(curTest);
 						UnitTest.parser.ReInit(reader);
 						Object result = UnitTest.parser.term(true, true);
 						if (result == null)
@@ -514,7 +488,7 @@ public class UnitTest extends TestCase {
 					} catch (Throwable e) {
 						if (j == 0) {
 							e.printStackTrace(System.out);
-							Assert.assertNotNull(null);
+							Assert.assertNotNull((Object) null);
 						} else {
 							System.out.println("Output: ");
 							e.printStackTrace(System.out);
@@ -523,35 +497,34 @@ public class UnitTest extends TestCase {
 						System.out.println();
 					}
 			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception e2) {
+			e2.printStackTrace();
 		}
 	}
 
 	public void testRegressions() {
-		this.testUnusualSpaceRegression();
+		testUnusualSpaceRegression();
 	}
 
 	public void testStrings() {
 		System.out.println();
 		String[] testStrings = { "\"\"", "\"hi\"", "\"HI\"", "\"1\"", "\"\n\"", "\"\\n\"", "\"\nhi\n\"", "\"\\\"\"",
 				"\"\t\"" };
-		String[] testsThatShouldFail = { "", "\"", "00\"", "\"pp", "asdf", "asdf\"sdf\"", };
-		java.io.Reader reader = null;
+		String[] testsThatShouldFail = { "", "\"", "00\"", "\"pp", "asdf", "asdf\"sdf\"" };
+		Reader reader = null;
 		try {
-			for (int j = 0; j < 2; j++) {
+			for (int j = 0; j < 2; ++j) {
 				if (j == 0)
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should succeed. !!!!!!!!!!!!!!!!!");
 				else {
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should fail. !!!!!!!!!!!!!!!!!");
 					testStrings = testsThatShouldFail;
 				}
-				for (int i = 0; i < testStrings.length; i++)
+				for (int i = 0; i < testStrings.length; ++i)
 					try {
 						String curTest = testStrings[i];
 						System.out.println("Input: '" + curTest + "'.");
-						reader = new java.io.StringReader(curTest);
+						reader = new StringReader(curTest);
 						UnitTest.parser.ReInit(reader);
 						Object result = UnitTest.parser.string(true, true);
 						if (result == null)
@@ -569,7 +542,7 @@ public class UnitTest extends TestCase {
 					} catch (Throwable e) {
 						if (j == 0) {
 							e.printStackTrace(System.out);
-							Assert.assertNotNull(null);
+							Assert.assertNotNull((Object) null);
 						} else {
 							System.out.println("Output: ");
 							e.printStackTrace(System.out);
@@ -578,9 +551,8 @@ public class UnitTest extends TestCase {
 						System.out.println();
 					}
 			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception e2) {
+			e2.printStackTrace();
 		}
 	}
 
@@ -592,20 +564,20 @@ public class UnitTest extends TestCase {
 				"qawerpiouasdf", "SL:+", "+", "-", "/", "*", ":BLAH", "|SUBLISP|:|NIL|", "|NIL|",
 				"|Case Sensitive Name|", "SL:|N i L|", "|a\\|a|", "|a\\\\\\|a|" };
 		String[] constantsThatShouldFail = { "", "#$Dog", "3", ".", ";", "#", "#$", "#'", "|", "|\\\\\\\\||" };
-		java.io.Reader reader = null;
+		Reader reader = null;
 		try {
-			for (int j = 0; j < 2; j++) {
+			for (int j = 0; j < 2; ++j) {
 				if (j == 0)
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should succeed. !!!!!!!!!!!!!!!!!");
 				else {
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should fail. !!!!!!!!!!!!!!!!!");
 					constantsToTest = constantsThatShouldFail;
 				}
-				for (int i = 0; i < constantsToTest.length; i++)
+				for (int i = 0; i < constantsToTest.length; ++i)
 					try {
 						String curTest = constantsToTest[i];
 						System.out.println("Input: '" + curTest + "'.");
-						reader = new java.io.StringReader(curTest);
+						reader = new StringReader(curTest);
 						UnitTest.parser.ReInit(reader);
 						Object result = UnitTest.parser.symbol(true, true);
 						if (result == null)
@@ -616,14 +588,14 @@ public class UnitTest extends TestCase {
 							Assert.assertNotNull(result);
 							Assert.assertTrue(result instanceof SubLSymbol);
 						} else
-							Assert.fail(null);
+							Assert.fail((String) null);
 					} catch (AssertionFailedError afe) {
 						afe.printStackTrace(System.out);
 						throw afe;
 					} catch (Throwable e) {
 						if (j == 0) {
 							e.printStackTrace(System.out);
-							Assert.assertNotNull(null);
+							Assert.assertNotNull((Object) null);
 						} else {
 							System.out.println("Output: ");
 							e.printStackTrace(System.out);
@@ -632,9 +604,8 @@ public class UnitTest extends TestCase {
 						System.out.println();
 					}
 			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception e2) {
+			e2.printStackTrace();
 		}
 	}
 
@@ -644,20 +615,20 @@ public class UnitTest extends TestCase {
 				"a b (c d e) 123 456.34 654.34d543 \"asdf\" ?asdf", "()", "nil", "t", "() nil t",
 				"(a) (b c) (d (e f (g)))" };
 		String[] testsThatShouldFail = { "(", ")", "\"", ",", "#" };
-		java.io.Reader reader = null;
+		Reader reader = null;
 		try {
-			for (int j = 0; j < 2; j++) {
+			for (int j = 0; j < 2; ++j) {
 				if (j == 0)
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should succeed. !!!!!!!!!!!!!!!!!");
 				else {
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should fail. !!!!!!!!!!!!!!!!!");
 					testStrings = testsThatShouldFail;
 				}
-				for (int i = 0; i < testStrings.length; i++)
+				for (int i = 0; i < testStrings.length; ++i)
 					try {
 						String curTest = testStrings[i];
 						System.out.println("Input: '" + curTest + "'.");
-						reader = new java.io.StringReader(curTest);
+						reader = new StringReader(curTest);
 						UnitTest.parser.ReInit(reader);
 						Object result = UnitTest.parser.termList(true, true);
 						if (result == null)
@@ -674,7 +645,7 @@ public class UnitTest extends TestCase {
 					} catch (Throwable e) {
 						if (j == 0) {
 							e.printStackTrace(System.out);
-							Assert.assertNotNull(null);
+							Assert.assertNotNull((Object) null);
 						} else {
 							System.out.println("Output: ");
 							e.printStackTrace(System.out);
@@ -683,17 +654,10 @@ public class UnitTest extends TestCase {
 						System.out.println();
 					}
 			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception e2) {
+			e2.printStackTrace();
 		}
 	}
-
-	//// Protected Area
-
-	//// Private Area
-
-	//// Internal Rep
 
 	public void testTerms() {
 		System.out.println();
@@ -713,30 +677,27 @@ public class UnitTest extends TestCase {
 				"(and Dog . ?X)", "(and Cat Dog . ?X)", "(blah)", "(blah)", "(blah . ?X)", "(blah . :X)",
 				"(blah Dog . ?X)", "(blah Cat Dog . ?X)", "(hasName Tony \"\\)\")",
 				"(predTrivialForJustificationParaphrase ?PRED)",
-				"(implies (and (predTrivialForJustificationParaphrase ?PRED) "
-						+ "(argN ?PREDICATE 0 ?SENTENCE)) (sentenceTrivialForJustificationParaphrase ?SENTENCE))",
+				"(implies (and (predTrivialForJustificationParaphrase ?PRED) (argN ?PREDICATE 0 ?SENTENCE)) (sentenceTrivialForJustificationParaphrase ?SENTENCE))",
 				"(forAll ?X (isa ?X Dog))",
-				"(implies (isa? ?INSTANCE Dog) "
-						+ "(thereExists ?TYPE (and (isa ?TYPE ?COLLECTION-TYPE) (isa ?INSTANCE ?TYPE))))",
+				"(implies (isa? ?INSTANCE Dog) (thereExists ?TYPE (and (isa ?TYPE ?COLLECTION-TYPE) (isa ?INSTANCE ?TYPE))))",
 				"(isa ?X Dog)", "(isa \"adsf\" Dog)", "(isa 3.24e34 Dog)", "(not True)", "(not ?X)", "(:X :X :X)",
 				"(not (isa ?X Dog))", "(not (not (?Y ?X Dog)))", "((SomeFn Predicate) \"adsf\" Dog)",
-				"(isa //asdf asdf jasdf 89234 2lajf02 \n\"/*\" \";\" \"//\"\n?X ;asdfas 230n90 "
-						+ "?.las fqw  \n/*asdf82 ?. aa */Dog)" };
+				"(isa //asdf asdf jasdf 89234 2lajf02 \n\"/*\" \";\" \"//\"\n?X ;asdfas 230n90 ?.las fqw  \n/*asdf82 ?. aa */Dog)" };
 		String[] testsThatShouldFail = { "\"", "'", "#" };
-		java.io.Reader reader = null;
+		Reader reader = null;
 		try {
-			for (int j = 0; j < 2; j++) {
+			for (int j = 0; j < 2; ++j) {
 				if (j == 0)
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should succeed. !!!!!!!!!!!!!!!!!");
 				else {
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should fail. !!!!!!!!!!!!!!!!!");
 					testStrings = testsThatShouldFail;
 				}
-				for (int i = 0; i < testStrings.length; i++)
+				for (int i = 0; i < testStrings.length; ++i)
 					try {
 						String curTest = testStrings[i];
 						System.out.println("Input: " + curTest);
-						reader = new java.io.StringReader(curTest);
+						reader = new StringReader(curTest);
 						UnitTest.parser.ReInit(reader);
 						Object result = UnitTest.parser.term(true, true);
 						if (result == null)
@@ -754,7 +715,7 @@ public class UnitTest extends TestCase {
 					} catch (Throwable e) {
 						if (j == 0) {
 							e.printStackTrace(System.out);
-							Assert.assertNotNull(null);
+							Assert.assertNotNull((Object) null);
 						} else {
 							System.out.println("Output: ");
 							e.printStackTrace(System.out);
@@ -763,9 +724,8 @@ public class UnitTest extends TestCase {
 						System.out.println();
 					}
 			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception e2) {
+			e2.printStackTrace();
 		}
 	}
 
@@ -783,8 +743,6 @@ public class UnitTest extends TestCase {
 		com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnitTest.testEvalEquals("'  a", "   '   a");
 	}
 
-	//// Main
-
 	public void testVectors() {
 		System.out.println();
 		String[] testStrings = { "#()", "    #(    )   ", "#(1 2 3)", "    #(    1     2    3    )    ", "#(and)",
@@ -797,20 +755,20 @@ public class UnitTest extends TestCase {
 				"#(not #(isa ?X Dog))", "#(not #(not (?Y ?X Dog)))", "#(#(SomeFn Predicate) \"adsf\" Dog)",
 				"#(isa //asdf asdf jasdf 89234 2lajf02 \n\"/*\" \";\" \"//\"\n?X ;asdfas 230n90 ?.las fqw  \n/*asdf82 ?. aa */Dog)" };
 		String[] testsThatShouldFail = { "", "#(", "#)", "45.023d23", "23", "Dog Cat", "(isa ?X Dog)" };
-		java.io.Reader reader = null;
+		Reader reader = null;
 		try {
-			for (int j = 0; j < 2; j++) {
+			for (int j = 0; j < 2; ++j) {
 				if (j == 0)
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should succeed. !!!!!!!!!!!!!!!!!");
 				else {
 					System.out.println("!!!!!!!!!!!!!!!!! These tests should fail. !!!!!!!!!!!!!!!!!");
 					testStrings = testsThatShouldFail;
 				}
-				for (int i = 0; i < testStrings.length; i++)
+				for (int i = 0; i < testStrings.length; ++i)
 					try {
 						String curTest = testStrings[i];
 						System.out.println("Input: '" + curTest + "'.");
-						reader = new java.io.StringReader(curTest);
+						reader = new StringReader(curTest);
 						UnitTest.parser.ReInit(reader);
 						Object result = UnitTest.parser.vector(true, true);
 						if (result == null)
@@ -828,7 +786,7 @@ public class UnitTest extends TestCase {
 					} catch (Throwable e) {
 						if (j == 0) {
 							e.printStackTrace(System.out);
-							Assert.assertNotNull(null);
+							Assert.assertNotNull((Object) null);
 						} else {
 							System.out.println("Output: ");
 							e.printStackTrace(System.out);
@@ -837,10 +795,8 @@ public class UnitTest extends TestCase {
 						System.out.println();
 					}
 			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception e2) {
+			e2.printStackTrace();
 		}
 	}
-
 }

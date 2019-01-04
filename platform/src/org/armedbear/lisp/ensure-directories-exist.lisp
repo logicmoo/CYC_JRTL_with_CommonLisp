@@ -1,7 +1,7 @@
 ;;; ensure-directories-exist.lisp
 ;;;
 ;;; Copyright (C) 2004-2007 Peter Graves
-;;; $Id: ensure-directories-exist.lisp 11391 2008-11-15 22:38:34Z vvoutilainen $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -33,31 +33,37 @@
 
 (in-package "SYSTEM")
 
-(defun ensure-directories-exist (pathspec &key verbose)
+(defun ensure-directories-exist (pathspec &key (verbose nil)) 
   (let ((pathname (pathname pathspec))
 	(created-p nil))
-    (when (wild-pathname-p pathname)
+;;; CLHS: Function ENSURE-DIRECTORIES-EXIST "An error of type
+;;; file-error is signaled if the host, device, or directory part of
+;;; pathspec is wild."
+    (when (or (wild-pathname-p pathname :host)
+              (wild-pathname-p pathname :device)
+              (wild-pathname-p pathname :directory))
       (error 'file-error
-	     :format-control "Bad place for a wild pathname."
+	     :format-control "Bad place for a wild HOST, DEVICE, or DIRECTORY component."
 	     :pathname pathname))
     (let ((dir (pathname-directory pathname)))
-      (loop for i from 1 upto (length dir)
-        do (let ((newpath (make-pathname
-                           :host (pathname-host pathname)
-                           :device (pathname-device pathname)
-                           :directory (subseq dir 0 i))))
-             (unless (probe-file newpath)
-               (let ((namestring (namestring newpath)))
-                 (when verbose
-                   (fresh-line)
-                   (format *standard-output*
-                           "Creating directory: ~A~%"
-                           namestring))
-                 (mkdir namestring)
-                 (unless (probe-file namestring)
-                   (error 'file-error
-                          :pathname pathspec
-                          :format-control "Can't create directory ~A."
-                          :format-arguments (list namestring)))
+      (loop :for i :from 1 :upto (length dir)
+         :doing (let ((newpath (make-pathname
+                                :host (pathname-host pathname)
+                                :device (if (pathname-device pathname)
+                                            (pathname-device pathname)
+                                            :unspecific)
+                                :directory (subseq dir 0 i))))
+                  (unless (probe-directory newpath)
+                    (when verbose
+                      (fresh-line)
+                      (format *standard-output*
+                              "Creating directory of pathname ~A.~&" 
+                              newpath))
+                    (mkdir newpath)
+                    (unless (probe-directory newpath)
+                      (error 'file-error
+                             :pathname newpath
+                             :format-control "Can't ensure directory~& ~S ~&ancestor of~&  ~S."
+                             :format-arguments (list newpath pathname)))
                  (setq created-p t)))))
-      (values pathname created-p))))
+      (values pathname created-p)))

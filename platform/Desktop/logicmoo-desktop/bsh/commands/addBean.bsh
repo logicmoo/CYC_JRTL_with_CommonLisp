@@ -1,0 +1,18 @@
+
+
+bsh.help.addBean= "usage: addBean( [named ,] object )";
+
+import java.net.URL;
+import bsh.BshClassManager;
+import org.logicmoo.system.*;
+
+addBean( obj ) {
+
+	BeanShellCntrl.gui.addObject(obj);
+}
+
+addBean( name , obj ) {
+
+	BeanShellCntrl.gui.addObject(name , obj);
+}
+

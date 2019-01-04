@@ -1,0 +1,18 @@
+// test HF gradients
+import org.meta.math.qm.*;
+
+mol = readMoleculeFile(showFileDialog());
+bfs = new BasisFunctions(mol, "sto3g");
+oneEI = new OneElectronIntegrals(bfs, mol);
+twoEI = new TwoElectronIntegrals(bfs);
+scfm =  SCFMethodFactory.getInstance().getSCFMethod(mol, oneEI, twoEI,
+                                                   SCFType.HARTREE_FOCK);;
+scfm.scf();
+print("energy = " + scfm.getEnergy());
+
+der = scfm.getDerivatives();
+nat = mol.getNumberOfAtoms();
+
+for(i=0; i<nat; i++) {
+  print(mol.getAtom(i).getSymbol() + " " + der[i*3] + " " + der[(i*3)+1] + " " + der[(i*3)+2]);
+}

@@ -1,7 +1,7 @@
 ;;; make-sequence.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: make-sequence.lisp 12516 2010-03-03 21:05:41Z astalla $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -39,6 +39,10 @@
          :format-arguments (list size type)))
 
 (defun make-sequence (type size	&key (initial-element nil iesp))
+  "Returns a sequence of SIZE elements, of type TYPE.
+Each element is set to INITIAL-ELEMENT.
+TYPE must be equivalent to either LIST or some sort of ARRAY.
+If the value is a list, it is completely cdr-coded."
   (let (element-type sequence class)
     (setf type (normalize-type type))
     (cond ((atom type)

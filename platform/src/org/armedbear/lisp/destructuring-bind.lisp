@@ -1,7 +1,7 @@
 ;;; destructuring-bind.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: destructuring-bind.lisp 11391 2008-11-15 22:38:34Z vvoutilainen $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -299,20 +299,22 @@
                       ,@(unless restp `(:maximum ,maximum)))))
             *arg-tests*))
     (if keys
-	(let ((problem (gensym "KEY-PROBLEM-"))
-	      (info (gensym "INFO-")))
-	  (push `(multiple-value-bind (,problem ,info)
-		     (verify-keywords ,rest-name ',keys ',allow-other-keys-p)
-		   (when ,problem
-;; 		     (,error-fun
-;; 		      'defmacro-lambda-list-broken-key-list-error
-;; 		      :kind ',error-kind
-;; 		      ,@(when name `(:name ',name))
-;; 		      :problem ,problem
-;; 		      :info ,info)
-                     (error 'program-error "Unrecognized keyword argument ~S" (car ,info)))
-                     )
-		*arg-tests*)))
+        (let ((problem (gensym "KEY-PROBLEM-"))
+              (info (gensym "INFO-")))
+          (push `(multiple-value-bind (,problem ,info)
+                     (verify-keywords ,rest-name ',keys ',allow-other-keys-p)
+                   (when ,problem
+                     ,(if (eq error-fun 'error)
+                          `(error 'program-error
+                                  "Unrecognized keyword argument ~S"
+                                  (car ,info))
+                          `(,error-fun
+                           'defmacro-lambda-list-broken-key-list-error
+                           :kind ',error-kind
+                           ,@(when name `(:name ',name))
+                           :problem ,problem
+                           :info ,info))))
+                *arg-tests*)))
     (values env-arg-used minimum (if (null restp) maximum nil))))
 
 
@@ -366,8 +368,8 @@
 	 ,@local-decls
 	 ,body))))
 
-;; Redefine SYS:MAKE-EXPANDER-FOR-MACROLET to use PARSE-DEFMACRO.
-(defun make-expander-for-macrolet (definition)
+;; Redefine SYS:MAKE-MACRO-EXPANDER to use PARSE-DEFMACRO.
+(defun make-macro-expander (definition)
   (let* ((name (car definition))
          (lambda-list (cadr definition))
          (form (gensym "WHOLE-"))

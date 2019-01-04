@@ -1,7 +1,7 @@
 ;;; collect.lisp
 ;;;
 ;;; Copyright (C) 2003 Peter Graves
-;;; $Id: collect.lisp 11391 2008-11-15 22:38:34Z vvoutilainen $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -79,7 +79,7 @@
   name of the collection is used to define a local macro, a la MACROLET.
   Within the body, this macro will evaluate each of its arguments and collect
   the result, returning the current value after the collection is done.  The
-  body is evaluated as a PROGN; to get the values when you are done, just
+  body is evaluated as a PROGN; to get the final values when you are done, just
   call the collection macro with no arguments.
 
   Initial-Value is the value that the collection starts out with, which

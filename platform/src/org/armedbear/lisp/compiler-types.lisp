@@ -1,7 +1,7 @@
 ;;; compiler-types.lisp
 ;;;
 ;;; Copyright (C) 2005-2006 Peter Graves
-;;; $Id: compiler-types.lisp 11591 2009-01-26 19:29:53Z ehuelsmann $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -226,7 +226,7 @@
          (values (subtypep compiler-type typespec)))))
 
 (declaim (type hash-table *function-result-types*))
-(defconst *function-result-types* (make-hash-table :test 'equal))
+(defvar *function-result-types* (make-hash-table :test 'equal))
 
 (declaim (ftype (function (t) t) function-result-type))
 (defun function-result-type (name)

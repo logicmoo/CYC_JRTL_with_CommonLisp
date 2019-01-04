@@ -2,7 +2,7 @@
  * FloatingPointInvalidOperation.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: FloatingPointInvalidOperation.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,31 +31,35 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class FloatingPointInvalidOperation extends ArithmeticError {
-	public FloatingPointInvalidOperation(SubLObject initArgs)
+public final class FloatingPointInvalidOperation extends ArithmeticError
+{
+    public FloatingPointInvalidOperation(LispObject initArgs)
 
-	{
-		super(StandardClass.FLOATING_POINT_INVALID_OPERATION);
-		this.initialize(initArgs);
-	}
+    {
+        super(StandardClass.FLOATING_POINT_INVALID_OPERATION);
+        initialize(initArgs);
+    }
 
-	public SubLObject classOf() {
-		return StandardClass.FLOATING_POINT_INVALID_OPERATION;
-	}
+    public LispObject typeOf()
+    {
+        return Symbol.FLOATING_POINT_INVALID_OPERATION;
+    }
 
-	public SubLObject typeOf() {
-		return LispSymbols.FLOATING_POINT_INVALID_OPERATION;
-	}
+    public LispObject classOf()
+    {
+        return StandardClass.FLOATING_POINT_INVALID_OPERATION;
+    }
 
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.FLOATING_POINT_INVALID_OPERATION)
-			return Lisp.T;
-		if (type == StandardClass.FLOATING_POINT_INVALID_OPERATION)
-			return Lisp.T;
-		return super.typep(type);
-	}
+    public LispObject typep(LispObject type)
+    {
+        if (type == Symbol.FLOATING_POINT_INVALID_OPERATION)
+            return T;
+        if (type == StandardClass.FLOATING_POINT_INVALID_OPERATION)
+            return T;
+        return super.typep(type);
+    }
 }

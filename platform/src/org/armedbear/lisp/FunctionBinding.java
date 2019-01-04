@@ -2,7 +2,7 @@
  * FunctionBinding.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: FunctionBinding.java 11391 2008-11-15 22:38:34Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,23 +31,24 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
-
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+package org.armedbear.lisp;
 
 // Package accessibility.
-final class FunctionBinding {
-	SubLObject name;
-	SubLObject value;
-	FunctionBinding next;
+final class FunctionBinding
+{
+    LispObject name;
+    LispObject value;
+    final FunctionBinding next;
 
-	FunctionBinding() {
-		this.next = null;
-	}
+    FunctionBinding()
+    {
+        next = null;
+    }
 
-	FunctionBinding(SubLObject name, SubLObject value, FunctionBinding next) {
-		this.name = name;
-		this.value = value;
-		this.next = next;
-	}
+    FunctionBinding(LispObject name, LispObject value, FunctionBinding next)
+    {
+        this.name = name;
+        this.value = value;
+        this.next = next;
+    }
 }

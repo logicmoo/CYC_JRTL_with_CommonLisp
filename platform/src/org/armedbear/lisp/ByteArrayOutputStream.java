@@ -2,7 +2,7 @@
  * ByteArrayOutputStream.java
  *
  * Copyright (C) 2009 Alessio Stalla
- * $Id: ByteArrayOutputStream.java 12513 2010-03-02 22:35:36Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,56 +31,106 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class ByteArrayOutputStream extends Stream {
-	private java.io.ByteArrayOutputStream byteArrayOutputStream;
+public final class ByteArrayOutputStream extends Stream
+{
+    private final java.io.ByteArrayOutputStream byteArrayOutputStream;
 
-	public ByteArrayOutputStream() {
-		this(Lisp.UNSIGNED_BYTE_8); // Declared in Stream.java
+    public ByteArrayOutputStream()
+    {
+        this(UNSIGNED_BYTE_8); //Declared in Stream.java
+    }
+
+    ByteArrayOutputStream(LispObject elementType)
+    {
+        super(Symbol.SYSTEM_STREAM,Keyword.OUTPUT);
+        this.setStreamElementType(elementType);
+        initAsBinaryOutputStream(byteArrayOutputStream = new java.io.ByteArrayOutputStream(2048));
+        // based on statistics of ABCL's own .cls files
+        // as per 20100111, 2048 is the 70th percentile,
+        // meaning that only 30% of all .cls files is bigger
+
+        // However, *every* .cls file is bigger than 32 bytes;
+        // we want to prevent buffer resizing
+    }
+
+    public LispObject typeOf()
+    {
+        return Symbol.STREAM; //TODO
+    }
+
+    public LispObject classOf()
+    {
+        return BuiltInClass.STREAM; //TODO
+    }
+
+    public LispObject typep(LispObject type)
+    {
+        return super.typep(type); //TODO
+    }
+
+    protected long _getFilePosition()
+    {
+        if (getStreamElementType() == NIL)
+            return 0;
+        return byteArrayOutputStream.size();
+    }
+
+    public byte[] getByteArray()
+    {
+        if (getStreamElementType() == NIL) {
+            return new byte[0];
+	} else {
+	    return byteArrayOutputStream.toByteArray();
 	}
+    }
 
-	ByteArrayOutputStream(SubLObject elementType) {
-		super(LispSymbols.SYSTEM_STREAM);
-		this.elementType = elementType;
-		this.initAsBinaryOutputStream(this.byteArrayOutputStream = new java.io.ByteArrayOutputStream(2048));
-		// based on statistics of ABCL's own .cls files
-		// as per 20100111, 2048 is the 70th percentile,
-		// meaning that only 30% of all .cls files is bigger
+    // ### %make-byte-array-output-stream
+    // %make-byte-array-output-stream &optional element-type => byte-array-output-stream
+    private static final Primitive MAKE_BYTE_ARRAY_OUTPUT_STREAM =
+        new Primitive("%make-byte-array-output-stream", PACKAGE_SYS, false,
+                       "&optional element-type")
+    {
 
-		// However, *every* .cls file is bigger than 32 bytes;
-		// we want to prevent buffer resizing
-	}
+        public LispObject execute() {
+            return new ByteArrayOutputStream();
+        }
 
-	public long _getFilePosition() {
-		if (this.elementType == Lisp.NIL)
-			return 0;
-		return this.byteArrayOutputStream.size();
-	}
+        public LispObject execute(LispObject arg)
+        {
+            return new ByteArrayOutputStream(arg);
+        }
+    };
 
-	public SubLObject classOf() {
-		return BuiltInClass.STREAM; // TODO
-	}
+    // ### %get-output-stream-bytes
+    // %get-output-stream-bytes byte-array-output-stream => java-byte-array
+    private static final Primitive GET_OUTPUT_STREAM_STRING =
+        new Primitive("%get-output-stream-bytes", PACKAGE_SYS, false,
+                       "byte-array-output-stream")
+    {
+        public LispObject execute(LispObject arg)
+        {
+            if (arg instanceof ByteArrayOutputStream) {
+                return JavaObject.getInstance(((ByteArrayOutputStream)arg).getByteArray());
+            }
+            return type_error(this, Symbol.STREAM); //TODO
+        }
+    };
 
-	public byte[] getByteArray() {
-		if (this.elementType == Lisp.NIL)
-			return new byte[0];
-		else
-			return this.byteArrayOutputStream.toByteArray();
-	}
+    private static final Primitive GET_OUTPUT_STREAM_ARRAY =
+        new Primitive("%get-output-stream-array", PACKAGE_SYS, false,
+                      "byte-array-output-stream")
+    {
+        public LispObject execute(LispObject arg)
+        {
+            if (arg instanceof ByteArrayOutputStream)
+                return new BasicVector_UnsignedByte8(((ByteArrayOutputStream)arg).getByteArray());
 
-	public String toString() {
-		return this.unreadableString("BYTE-ARRAY-OUTPUT-STREAM");
-	}
-
-	public SubLObject typeOf() {
-		return LispSymbols.STREAM; // TODO
-	}
-
-	public SubLObject typep(SubLObject type) {
-		return super.typep(type); // TODO
-	}
+            return type_error(this, Symbol.STREAM); // TODO
+        }
+    };
 
 }

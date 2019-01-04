@@ -1,8 +1,8 @@
 ;;; threads.lisp
 ;;;
-;;; Copyright (C) 2009 Erik Huelsmann <ehuelsmann@common-lisp.net>
+;;; Copyright (C) 2009-2010 Erik Huelsmann <ehuelsmann@common-lisp.net>
 ;;;
-;;; $Id: threads.lisp 12213 2009-10-23 20:03:55Z ehuelsmann $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -32,6 +32,19 @@
 
 (in-package #:threads)
 
+(export '(make-mailbox mailbox-send mailbox-empty-p
+          mailbox-read mailbox-peek
+          make-thread-lock with-thread-lock
+          current-thread yield
+          make-mutex get-mutex release-mutex with-mutex))
+;;
+;; MAKE-THREAD helper to establish restarts
+;;
+
+(defun thread-function-wrapper (fun)
+  (restart-case
+      (funcall fun)
+    (abort () :report "Abort thread.")))
 
 ;;
 ;; Mailbox implementation
@@ -47,7 +60,7 @@
   "Sends an item into the mailbox, notifying 1 waiter
 to wake up for retrieval of that object."
   (threads:synchronized-on mailbox
-     (push (mailbox-queue mailbox) item)
+     (push item (mailbox-queue mailbox))
      (threads:object-notify mailbox)))
 
 (defun mailbox-empty-p (mailbox)
@@ -69,8 +82,7 @@ When an item is available, it is returned."
 
 (defun mailbox-peek (mailbox)
   "Returns two values. The second returns non-NIL when the mailbox
-is empty. The first is the next item to be read from the mailbox
-if the first is NIL.
+is empty. The first is the next item to be read from the mailbox.
 
 Note that due to multi-threading, the first value returned upon
 peek, may be different from the one returned upon next read in the
@@ -133,9 +145,8 @@ and releases the lock."
        (synchronized-on ,glock
           ,@body))))
 
-(defun thread-lock (lock)
-  "Deprecated; due for removal in 0.22"
-  (declare (ignore lock)))
-(defun thread-unlock (lock)
-  "Deprecated; due for removal in 0.22"
-  (declare (ignore lock)))
+(defun yield ()
+  "A hint to the scheduler that the current thread is willing to yield its current use of a processor. The scheduler is free to ignore this hint. 
+
+See java.lang.Thread.yield()."
+  (java:jcall "yield" (JAVA:jstatic "currentThread" "java.lang.Thread")))

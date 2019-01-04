@@ -1,0 +1,10 @@
+created(1482340932.5924428).
+assert(user(admin,[realname('Administrator'),password('$1$vUXiHMJy$ydGuYaaFD4QIt2/ivviML0'),allow([read(_,_),write(_,_),admin(_)])])).
+assert(user(anonymous,[realname('Define rights for not-logged in users'),allow([read(_,_)])])).
+assert(user('http://accurator.nl/user#admin',[realname('Douglas R Miles'),password('$1$vUXiHMJy$ydGuYaaFD4QIt2/ivviML0'),allow([read(_,_),write(_,annotate)])])).
+retractall(user('http://accurator.nl/user#admin',_),1).
+assert(user('http://accurator.nl/user#admin',[domain(generic),realname('Douglas R Miles'),password('$1$vUXiHMJy$ydGuYaaFD4QIt2/ivviML0'),allow([read(_,_),write(_,annotate)])])).
+retractall(user('http://accurator.nl/user#admin',_),1).
+assert(user('http://accurator.nl/user#admin',[locale(en),domain(generic),realname('Douglas R Miles'),password('$1$vUXiHMJy$ydGuYaaFD4QIt2/ivviML0'),allow([read(_,_),write(_,annotate)])])).
+retractall(user('http://accurator.nl/user#admin',_),1).
+assert(user('http://accurator.nl/user#admin',[allow([read(_,_),write(_,_),admin(_)]),locale(en),domain(generic),realname('Douglas R Miles'),password('$1$vUXiHMJy$ydGuYaaFD4QIt2/ivviML0')])).

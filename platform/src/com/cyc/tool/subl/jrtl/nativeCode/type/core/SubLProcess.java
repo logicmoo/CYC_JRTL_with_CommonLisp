@@ -1,30 +1,18 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.armedbear.lisp.Lisp;
+import org.armedbear.lisp.LispObject;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -59,25 +47,13 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackageIterator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SafeRunnable;
 
-public abstract class SubLProcess extends SafeRunnable implements Runnable, SubLObject, CommonSymbols {
+public abstract class SubLProcess extends SafeRunnable implements Runnable, SubLObject {
 
-	//// Constructors
-
-	static public class DefaultThunk implements Thunk {
-		static public Thunk requestTaskTermination() {
-			return new InterruptReadLoopThunk();
-		}
-
-		static public Thunk requestTermination() {
-			return new DefaultThunk(CommonSymbols.KILL_KEYWORD);
-		}
-
-		private SubLObject function;
-
-		private SubLObject[] arguments;
-
-		private Thread sender;
-
+	@Override
+	public LispObject toLispObject() {
+		return this;
+	}
+	public static class DefaultThunk implements Thunk {
 		public DefaultThunk(SubLObject function) {
 			this(function, Resourcer.EMPTY_SUBL_OBJECT_ARRAY);
 		}
@@ -85,126 +61,141 @@ public abstract class SubLProcess extends SafeRunnable implements Runnable, SubL
 		public DefaultThunk(SubLObject function, SubLObject[] arguments) {
 			this.function = function;
 			this.arguments = arguments;
-			this.sender = Thread.currentThread();
+			sender = Thread.currentThread();
 		}
+
+		public static Thunk requestTaskTermination() {
+			return new InterruptReadLoopThunk();
+		}
+
+		public static Thunk requestTermination() {
+			return new DefaultThunk(CommonSymbols.KILL_KEYWORD);
+		}
+
+		private SubLObject function;
+		private SubLObject[] arguments;
+		private Thread sender;
 
 		public Thread getSender() {
-			return this.sender;
+			return sender;
 		}
 
+		@Override
 		public SubLObject invoke() {
-			SubLFunction func = this.function.getFunc();
-			SubLObject result = Functions.funcall(func, this.arguments);
+			SubLFunction func = function.getFunc();
+			SubLObject result = Functions.funcall(func, arguments);
 			return result;
 		}
 
+		@Override
 		public boolean isTerminationRequest() {
-			return this.function.eql(CommonSymbols.KILL_KEYWORD);
+			return function.eql(CommonSymbols.KILL_KEYWORD);
 		}
 	}
 
 	public static class InterruptReadLoopThunk implements Thunk {
-
+		@Override
 		public SubLObject invoke() {
 			throw new ResumeException();
 		}
 
+		@Override
 		public boolean isTerminationRequest() {
 			return false;
 		}
 	}
 
-	//// Public Area
-
 	public static class NeverTimesOut implements TimeOut {
-		public static TimeOut NO_TIMEOUT = new NeverTimesOut();
-
-		private NeverTimesOut() {
+		public static TimeOut NO_TIMEOUT;
+		static {
+			NO_TIMEOUT = new NeverTimesOut();
 		}
 
+		@Override
 		public boolean hasTimeoutArrived() {
 			return false;
 		}
 	}
 
 	public static class SubLProcessState {
-		public SubLString state;
-
-		public SubLSymbol stateSymbol;
-
 		private SubLProcessState(String name) {
-			this.state = SubLObjectFactory.makeString(name);
+			state = SubLObjectFactory.makeString(name);
 		}
 
+		public SubLString state;
+		public SubLSymbol stateSymbol;
+
+		@Override
 		public String toString() {
-			return this.state.toString();
+			return state.toString();
 		}
 
 		public SubLString toSubLString() {
-			return this.state;
+			return state;
 		}
 
 		public SubLSymbol toSymbol() {
-			if (this.stateSymbol == null)
-				this.stateSymbol = SubLObjectFactory.makeSublispSymbol(this.toString());
-			return this.stateSymbol;
+			if (stateSymbol == null)
+				stateSymbol = SubLObjectFactory.makeSublispSymbol(toString());
+			return stateSymbol;
 		}
 	}
 
-	static public class TerminationRequest extends Unhandleable {
+	public static class TerminationRequest extends Unhandleable {
 	}
 
-	static public interface Thunk {
+	public interface Thunk {
 		SubLObject invoke();
 
 		boolean isTerminationRequest();
 	}
 
 	public interface TimeOut {
-		public boolean hasTimeoutArrived();
+		boolean hasTimeoutArrived();
 	}
 
 	public static class TimesOutAfter implements TimeOut {
-		private SubLNumber endTime;
-
-		private boolean timeHasArrived;
-
 		public TimesOutAfter(SubLNumber microseconds) {
-			this.endTime = Numbers.add(Time.get_internal_real_time(), microseconds).toNumber();
-			this.timeHasArrived = false;
+			endTime = Numbers.add(Time.get_internal_real_time(), microseconds).toNumber();
+			timeHasArrived = false;
 		}
 
+		private SubLNumber endTime;
+		private boolean timeHasArrived;
+
+		@Override
 		public boolean hasTimeoutArrived() {
-			if (this.timeHasArrived)
+			if (timeHasArrived)
 				return true;
-			SubLObject result = Numbers.numL(this.endTime, Time.get_internal_real_time());
-			this.timeHasArrived = result != CommonSymbols.NIL;
-			return this.timeHasArrived;
+			SubLObject result = Numbers.numL(endTime, Time.get_internal_real_time());
+			return timeHasArrived = result != SubLNil.NIL;
 		}
 	}
 
-	public static String PROCESS_TYPE_NAME = "PROCESS";
+	public SubLProcess(String name) {
+		this(SubLObjectFactory.makeString(name));
+	}
 
-	public static Thunk READ_LOOP_INTERRUPT_THUNK = new InterruptReadLoopThunk();
+	public SubLProcess(SubLString name) {
+		isPossiblyStillborn = false;
+		runThread = null;
+		priority = SubLProcess.DEFAULT_PRIORITY;
+		whoState = Threads.UNSET_STRING;
+		state = SubLProcess.DEAD_STATE;
+		interrupts = Collections.synchronizedList(new ArrayList<Thunk>());
+		isRunning = false;
+		setState(SubLProcess.INITIALIZING_STATE);
+		setWhoState(Threads.INITIALIZING_STRING);
+		priority = SubLProcess.DEFAULT_PRIORITY;
+		this.name = name;
+	}
 
-	public static SubLProcessState INITIALIZING_STATE = new SubLProcessState("INITIALIZING");
-
-	public static SubLProcessState RUN_STATE = new SubLProcessState("RUN");
-
-	public static SubLProcessState WAIT_STATE = new SubLProcessState("WAIT");
-
-	public static SubLProcessState DEAD_STATE = new SubLProcessState("DEAD");
-
-	public static SubLProcessState BLOCKED_STATE = new SubLProcessState("BLOCKED");
-
-	private static SubLFixnum DEFAULT_PRIORITY = (SubLFixnum) SubLObjectFactory.makeInteger(5);// (SubLFixnum)FIVE_INTEGER;
-
-	private static Set<SubLProcess> currentProcesses = new HashSet<SubLProcess>(128);
-
-	private static SubLThread ALLEGRO_SINGLE_THREADED_THREAD;
+	private static void sleep(long msecs, int nanos) throws InterruptedException {
+		Thread.sleep(msecs, nanos);
+	}
 
 	public static SubLProcess currentProcess() {
-		return SubLProcess.currentSubLThread().getSubLProcess();
+		return currentSubLThread().getSubLProcess();
 	}
 
 	public static SubLProcess[] currentProcesses() {
@@ -214,32 +205,79 @@ public abstract class SubLProcess extends SafeRunnable implements Runnable, SubL
 		}
 	}
 
+    final static HashMap<Thread,SubLThread> map = new HashMap<Thread,SubLThread>();
+    	    private static ThreadLocal<SubLThread> threads = new ThreadLocal<SubLThread>(){
+    	        @Override
+    	        public SubLThread initialValue() {
+
+    	            Thread thisThread = Thread.currentThread();
+    	            SubLThread thread = map.get(thisThread);
+    	            if (thread == null) {
+    	                thread = new SubLThread(new Runnable() {
+
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								if (true)
+									Errors.unimplementedMethod("Auto-generated method stub:  Type1477805356591.run");
+
+							}
+						}, "From "+thisThread);
+    					oneOnlyJT=thisThread;
+    					oneOnlyLT=thread;
+    	                map.put(thisThread,thread);
+    	            }
+    	            return thread;
+    	        }
+    	    };
+
+	static Thread oneOnlyJT;
+	static SubLThread oneOnlyLT;
 	public static SubLThread currentSubLThread() {
-		return SubLProcess.ALLEGRO_SINGLE_THREADED_THREAD == null ? (SubLThread) Thread.currentThread()
-				: SubLProcess.ALLEGRO_SINGLE_THREADED_THREAD;
+		Thread t = Thread.currentThread();
+		if (t instanceof SubLThread)
+			return (SubLThread) t;
+		if (SubLProcess.ALLEGRO_SINGLE_THREADED_THREAD != null)
+			return SubLProcess.ALLEGRO_SINGLE_THREADED_THREAD;
+		synchronized(map) {
+		if (t== oneOnlyJT)
+			return oneOnlyLT;
+		}
+		return threads.get();
+
+	}
+	public static SubLThread currentSubLThreadOrNull() {
+		Thread t = Thread.currentThread();
+		if (t instanceof SubLThread)
+			return (SubLThread) t;
+		if (SubLProcess.ALLEGRO_SINGLE_THREADED_THREAD != null)
+			return SubLProcess.ALLEGRO_SINGLE_THREADED_THREAD;
+		synchronized(map) {
+		if (t== oneOnlyJT)
+			return oneOnlyLT;
+		}
+		return map.get(t);
+
 	}
 
 	public static void currentThrowStackPop() {
-		SubLProcess.currentThrowStackPop(null);
+		currentThrowStackPop(null);
 	}
 
 	public static void currentThrowStackPop(SubLObject object) {
-		SubLObject top = SubLProcess.currentSubLThread().throwStack.pop();
+		SubLObject top = currentSubLThread().throwStack.pop();
 		if (object != null && object != top)
-			Errors.error("Throw-Stack for " + SubLProcess.currentSubLThread() + " out of sync; expected " + object
-					+ ", but got " + top);
+			Errors.error(
+					"Throw-Stack for " + currentSubLThread() + " out of sync; expected " + object + ", but got " + top);
 	}
 
 	public static void currentThrowStackPush(SubLObject object) {
-		SubLProcess.currentSubLThread().throwStack.push(object);
+		currentSubLThread().throwStack.push(object);
 	}
 
-	/**
-	 * @todo remove me...use Values.nthMultipleValue instead
-	 */
 	public static SubLObject nthMultipleValue(SubLObject nth) {
 		int n = nth.intValue();
-		SubLThread thread = SubLProcess.currentSubLThread();
+		SubLThread thread = currentSubLThread();
 		switch (n) {
 		case 0:
 			return thread.value1;
@@ -259,7 +297,7 @@ public abstract class SubLProcess extends SafeRunnable implements Runnable, SubL
 			return thread.value8;
 		default:
 			if (n >= thread.valuesCount)
-				return CommonSymbols.NIL;
+				return SubLNil.NIL;
 			return thread.valuesArray.get(n - 8);
 		}
 	}
@@ -268,54 +306,55 @@ public abstract class SubLProcess extends SafeRunnable implements Runnable, SubL
 		SubLProcess.ALLEGRO_SINGLE_THREADED_THREAD = thread;
 	}
 
-	private static void sleep(long msecs, int nanos) throws InterruptedException {
-		Thread.sleep(msecs, nanos);
-	}
-
 	public static void sleepForNanoSeconds(long nanoSecs) {
 		SubLSemaphore.sleepSem.acquireWithTimeoutNanoSecs(1, nanoSecs);
 	}
 
-	private static void sleep(long msecs) throws InterruptedException {
-		Thread currentThread = Thread.currentThread();
-		Thread.sleep(msecs);
-	}
-
-	static protected int subLPriorityToJavaPriority(SubLFixnum priority) {
-		// @stub
+	protected static int subLPriorityToJavaPriority(SubLFixnum priority) {
 		return priority.intValue();
 	}
 
-	private volatile boolean isPossiblyStillborn = false;
-
-	private volatile SubLThread runThread = null;
-
+	private volatile boolean isPossiblyStillborn;
+	private volatile SubLThread runThread;
 	private SubLString name;
-
-	// @todo use this instead : $process_normal_priority$.getValue();
-	private SubLFixnum priority = SubLProcess.DEFAULT_PRIORITY;
-
-	private volatile SubLString whoState = Threads.UNSET_STRING;
-
-	private volatile SubLProcessState state = SubLProcess.DEAD_STATE;
-
-	private List<Thunk> interrupts = Collections.synchronizedList(new ArrayList<Thunk>());
-
-	private boolean isRunning = false;
-
-	public SubLProcess(String name) {
-		this(SubLObjectFactory.makeString(name));
+	private SubLFixnum priority;
+	private volatile SubLString whoState;
+	private volatile SubLProcessState state;
+	private List<Thunk> interrupts;
+	private boolean isRunning;
+	public static String PROCESS_TYPE_NAME;
+	public static Thunk READ_LOOP_INTERRUPT_THUNK;
+	public static SubLProcessState INITIALIZING_STATE;
+	public static SubLProcessState RUN_STATE;
+	public static SubLProcessState WAIT_STATE;
+	public static SubLProcessState DEAD_STATE;
+	public static SubLProcessState BLOCKED_STATE;
+	private static SubLThread ALLEGRO_SINGLE_THREADED_THREAD;
+	private static SubLFixnum DEFAULT_PRIORITY;
+	private static Set<SubLProcess> currentProcesses;
+	static {
+		SubLProcess.PROCESS_TYPE_NAME = "PROCESS";
+		SubLProcess.READ_LOOP_INTERRUPT_THUNK = new InterruptReadLoopThunk();
+		INITIALIZING_STATE = new SubLProcessState("INITIALIZING");
+		RUN_STATE = new SubLProcessState("RUN");
+		WAIT_STATE = new SubLProcessState("WAIT");
+		DEAD_STATE = new SubLProcessState("DEAD");
+		BLOCKED_STATE = new SubLProcessState("BLOCKED");
+		SubLProcess.ALLEGRO_SINGLE_THREADED_THREAD = null;
+		DEFAULT_PRIORITY = (SubLFixnum) SubLObjectFactory.makeInteger(5);
+		currentProcesses = new HashSet<SubLProcess>(128);
 	}
 
-	/** Creates a new instance of SubLProcess. */
-	public SubLProcess(SubLString name) {
-		this.setState(SubLProcess.INITIALIZING_STATE);
-		this.setWhoState(Threads.INITIALIZING_STRING);
-		this.priority = SubLProcess.DEFAULT_PRIORITY;
-		this.name = name;
+	private SubLObject structFieldError(int fieldNum) {
+		if (!(this instanceof SubLStruct))
+			Errors.error(this + " is not of type STRUCTURE.");
+		else
+			Errors.error(this + " does not have a slot: " + fieldNum + ".");
+		return SubLNil.NIL;
 	}
 
-	public SubLObject add(SubLObject num) { // SubLNumber
+	@Override
+	public SubLObject add(SubLObject num) {
 		return Errors.error("Not a number: " + this + ".");
 	}
 
@@ -324,590 +363,632 @@ public abstract class SubLProcess extends SafeRunnable implements Runnable, SubL
 	}
 
 	public void addInterrupt(Thunk thunk) {
-		this.interrupts.add(thunk);
-		this.interrupt();
+		interrupts.add(thunk);
+		interrupt();
 	}
 
-	/** Method created to avoid casting */
-	public void addKey(SubLObject key) { // SubLKeyhash
-		Errors.error(this + " is not of type: KEYHASH.");
+	@Override
+	public void addKey(SubLObject key) {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"KEYHASH");
 	}
 
-	public SubLList asArrayList() { // SubLList
-		Errors.error(this + " is not of type: LIST.");
+	@Override
+	public SubLList asArrayList() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"LIST");
 		return null;
 	}
 
-	public SubLList asConsList() { // SubLList
-		Errors.error(this + " is not of type: LIST.");
+	@Override
+	public SubLList asConsList() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"LIST");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public BigInteger bigIntegerValue() { // SubLNumber
-		Errors.error(this + " is not of type: NUMBER.");
+	@Override
+	public BigInteger bigIntegerValue() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"NUMBER");
 		return BigInteger.ZERO;
 	}
 
-	public void bind(SubLObject newValue, SubLObject[] bindings) { // SubLSymbol
+	@Override
+	public void bind(SubLObject newValue, SubLObject[] bindings) {
 		Errors.error("Illegal attempt to bind non symbol: " + this + ".");
 	}
 
 	public synchronized void block() {
-		this.waitUntilInitializationHasFinished();
-		SubLProcessState prevState = this.getState();
-		SubLString prevWhoState = this.getWhoState();
+		waitUntilInitializationHasFinished();
+		SubLProcessState prevState = getState();
+		SubLString prevWhoState = getWhoState();
 		try {
-			this.setState(SubLProcess.BLOCKED_STATE);
-			this.setWhoState(Threads.BLOCKED_STRING);
+			setState(SubLProcess.BLOCKED_STATE);
+			setWhoState(Threads.BLOCKED_STRING);
 			boolean waitFinished = false;
 			while (!waitFinished)
 				try {
 					this.wait();
 					waitFinished = true;
 				} catch (InterruptedException xcpt) {
-					this.processInterrupts();
+					processInterrupts();
 				}
 		} finally {
-			this.setState(prevState);
-			this.setWhoState(prevWhoState);
+			setState(prevState);
+			setWhoState(prevWhoState);
 		}
 	}
 
+	@Override
 	public boolean canFastHash() {
 		return true;
 	}
 
-	/** Method created to avoid casting */
-	public char charValue() { // SubLCharacter
-		Errors.error(this + " is not of type: CHAR.");
-		return 0;
+	@Override
+	public char charValue() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"CHAR");
+		return '\0';
 	}
 
-	// @todo get rid of duplication with AbstractSubLObject -APB
+	@Override
 	public void checkType(SubLSymbol predicate) throws SubLException {
-		// @todo make this the same as SubL -- problably should look up a symbol
-		// value -APB
-		if (SubLObject.DO_CHECK_TYPES)
-			this.enforceType(predicate);
 	}
 
+	@Override
 	public void checkTypeInternal(SubLSymbol predicate) throws SubLException {
-		if (SubLObject.DO_PARANOID_TYPE_CHECKING && SubLObject.DO_CHECK_TYPES)
-			this.enforceType(predicate);
 	}
 
+	@Override
 	public Object clone() {
 		return this;
 	}
 
-	/** Method created to avoid casting */
-	public SubLObject currentBinding(SubLObject[] bindings) { // SubLSymbol
+	@Override
+	public SubLObject currentBinding(SubLObject[] bindings) {
 		Errors.error("Illegal attempt to get binding for non symbol: " + this + ".");
 		return SubLNil.NIL;
 	}
 
-	public SubLObject dec() { // SubLNumber
+	@Override
+	public SubLObject dec() {
 		return Errors.error("Not a number: " + this + ".");
 	}
 
-	/** Method created to avoid casting */
-	public double doubleValue() { // SubLNumber
-		Errors.error(this + " is not of type: NUMBER.");
+	@Override
+	public double doubleValue() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"NUMBER");
 		return Double.MIN_VALUE;
 	}
 
+	@Override
 	public SubLObject eighth() {
 		return this.get(7);
 	}
 
-	// @todo get rid of duplication with AbstractSubLObject -APB
+	@Override
 	public void enforceType(SubLSymbol predicate) throws SubLException {
-		// @todo make special case unary filter functions for SubL predicates
-		// They should be created and initialized in UnaryFunction -APB
 		UnaryFunction Function = UnaryFunction.makeInstance(predicate);
 		if (SubLNil.NIL == Function.processItem(this))
-			Errors.error("Got invalid type for object: " + this + "." + "\nWanted: " + predicate + "\nGot: "
-					+ this.toTypeName());
+			Errors.error(
+					"Got invalid type for object: " + this + "." + "\nWanted: " + predicate + "\nGot: " + toTypeName());
 	}
 
+	@Override
 	public void enforceTypeInternal(SubLSymbol predicate) throws SubLException {
-		if (SubLObject.DO_PARANOID_TYPE_CHECKING) {
-			UnaryFunction Function = UnaryFunction.makeInstance(predicate);
-			if (SubLNil.NIL == Function.processItem(this))
-				Errors.error("Got invalid type for object: " + this + "." + "\nWanted: " + predicate + "\nGot: "
-						+ this.toTypeName());
-		}
 	}
 
+	@Override
 	public boolean eql(SubLObject obj) {
-		return this.equals(obj);
+		return equals(obj);
 	}
 
+	@Override
 	public boolean equal(SubLObject obj) {
-		return this.eql(obj);
+		return eql(obj);
 	}
 
+	@Override
 	public boolean equalp(SubLObject obj) {
-		return this.equal(obj);
+		return equal(obj);
 	}
 
-	// This class doesn't extend AbstractSubLObject, so it needs to implement
-	// all the SubLObject methods explicitly.
+	@Override
 	public boolean equals(Object obj) {
 		return this == obj;
 	}
 
+	@Override
 	public SubLObject eval(SubLEnvironment env) throws InvalidSubLExpressionException {
-		return this; // process objects are self-evaluating
+		return this;
 	}
 
+	@Override
 	public SubLObject fifth() {
 		return this.get(4);
 	}
 
-	/** Method created to avoid casting */
-	public SubLObject first() { // SubLList
-		Errors.error(this + " is not of type: LIST.");
+	@Override
+	public SubLObject first() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"LIST");
 		return SubLNil.NIL;
 	}
 
+	@Override
 	public SubLObject fourth() {
 		return this.get(3);
 	}
 
-	/** Method created to avoid casting */
-	public SubLObject get(int index) { // SubLSequence
-		Errors.error(this + " is not of type: SEQUENCE.");
+	@Override
+	public SubLObject get(int index) {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"SEQUENCE");
 		return SubLNil.NIL;
 	}
 
-	public SubLObject get(SubLObject obj) { // SubLHashTable
-		Errors.error(this + " is not of type: HASHTABLE.");
+	@Override
+	public SubLObject get(SubLObject obj) {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"HASHTABLE");
 		return SubLNil.NIL;
 	}
 
-	/** Method created to avoid casting */
-	public SubLCharacter getCharacter(int index) { // SubLString
-		Errors.error(this + " is not of type: STRING.");
+	@Override
+	public SubLCharacter getCharacter(int index) {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"STRING");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLObject getField(int fieldNum) { // SubLStruct
-		Errors.error(this + " is not of type: STRUCT.");
+	@Override
+	public SubLObject getField(int fieldNum) {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"STRUCT");
 		return SubLNil.NIL;
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject getField0() {
-		this.structFieldError(0);
+		structFieldError(0);
 		return null;
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject getField1() {
-		this.structFieldError(1);
+		structFieldError(1);
 		return null;
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject getField10() {
-		this.structFieldError(10);
+		structFieldError(10);
 		return null;
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject getField11() {
-		this.structFieldError(11);
+		structFieldError(11);
 		return null;
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject getField12() {
-		this.structFieldError(12);
+		structFieldError(12);
 		return null;
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject getField13() {
-		this.structFieldError(13);
+		structFieldError(13);
 		return null;
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject getField14() {
-		this.structFieldError(14);
+		structFieldError(14);
 		return null;
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject getField15() {
-		this.structFieldError(15);
+		structFieldError(15);
 		return null;
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject getField16() {
-		this.structFieldError(16);
+		structFieldError(16);
 		return null;
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject getField17() {
-		this.structFieldError(17);
+		structFieldError(17);
 		return null;
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject getField18() {
-		this.structFieldError(18);
+		structFieldError(18);
 		return null;
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject getField19() {
-		this.structFieldError(19);
+		structFieldError(19);
 		return null;
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject getField2() {
-		this.structFieldError(2);
+		structFieldError(2);
 		return null;
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject getField20() {
-		this.structFieldError(20);
+		structFieldError(20);
 		return null;
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject getField3() {
-		this.structFieldError(3);
+		structFieldError(3);
 		return null;
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject getField4() {
-		this.structFieldError(4);
+		structFieldError(4);
 		return null;
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject getField5() {
-		this.structFieldError(5);
+		structFieldError(5);
 		return null;
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject getField6() {
-		this.structFieldError(6);
+		structFieldError(6);
 		return null;
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject getField7() {
-		this.structFieldError(7);
+		structFieldError(7);
 		return null;
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject getField8() {
-		this.structFieldError(8);
+		structFieldError(8);
 		return null;
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject getField9() {
-		this.structFieldError(9);
+		structFieldError(9);
 		return null;
 	}
 
-	/** Method created to avoid instanceof tests */
+	@Override
 	public String getFileDesignator() {
 		Errors.error(this + " is not a file name designator.");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLFunction getFunc() { // SubLFunction
-		Errors.error(this + " is not of type: FUNCTION.");
+	@Override
+	public SubLFunction getFunc() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"FUNCTION");
 		return null;
 	}
 
 	public SubLString getName() {
-		return this.name;
+		return name;
 	}
 
-	/** Method created to avoid casting */
-	public int getNumSize() { // SubLNumber
+	@Override
+	public int getNumSize() {
 		Errors.error("Not a number: " + this + ".");
 		return -1;
 	}
 
 	public SubLFixnum getPriority() {
-		return this.priority;
+		return priority;
 	}
 
 	public synchronized SubLProcessState getState() {
-		return this.state;
+		return state;
 	}
 
 	public synchronized SubLSymbol getStateSymbol() {
-		return this.state.toSymbol();
+		return state.toSymbol();
 	}
 
-	/** Method created to avoid casting */
-	public SubLStream getStream(boolean followSynonymStream) { // SubLStream
-		Errors.error(this + " is not of type: STREAM.");
+	@Override
+	public SubLStream getStream(boolean followSynonymStream) {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"STREAM");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public String getString() { // SubLString
-		Errors.error(this + " is not of type: STRING.");
+	@Override
+	public String getStringValue() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"STRING");
 		return "";
 	}
 
+	@Override
 	public SubLSymbol getType() {
 		return Types.$dtp_process$;
 	}
 
+	@Override
 	public SubLFixnum getTypeCode() {
 		return CommonSymbols.FOURTEEN_INTEGER;
 	}
 
 	public synchronized SubLString getWhoState() {
-		return this.whoState;
+		return whoState;
 	}
 
+	@Override
 	public int hashCode(int currentDepth) {
-		if (currentDepth < SubLObject.MAX_HASH_DEPTH)
-			return this.superHash();
-		else
-			return SubLObject.DEFAULT_EXCEEDED_HASH_VALUE;
+		if (currentDepth < 8)
+			return superHash();
+		return 0;
 	}
 
-	public boolean hasKey(SubLObject obj) { // SubLKeyhash
-		Errors.error(this + " is not of type: KEYHASH.");
+	@Override
+	public boolean hasKey(SubLObject obj) {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"KEYHASH");
 		return false;
 	}
 
 	public boolean hasWatingInterrupts() {
-		return !this.interrupts.isEmpty();
+		return !interrupts.isEmpty();
 	}
 
-	public SubLObject inc() { // SubLNumber
+	@Override
+	public SubLObject inc() {
 		return Errors.error("Not a number: " + this + ".");
 	}
 
 	public void interrupt() {
-		this.waitUntilInitializationHasFinished();
+		waitUntilInitializationHasFinished();
 		try {
 			synchronized (SubLThread.getInterruptLock()) {
-				this.runThread.interrupt();
+				runThread.interrupt();
 			}
-		} catch (NullPointerException npe) {
-		} // ignore
+		} catch (NullPointerException ex) {
+		}
 	}
 
-	/** Method created to avoid casting */
-	public int intValue() { // SubLNumber
-		Errors.error(this + " is not of type: NUMBER.");
+	@Override
+	public int intValue() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"NUMBER");
 		return Integer.MIN_VALUE;
 	}
 
 	public boolean isActive() {
-		return this.state == SubLProcess.RUN_STATE;
+		return state == SubLProcess.RUN_STATE;
 	}
 
+	@Override
 	public boolean isAlien() {
 		return false;
 	}
 
-	public boolean isArrayBased() { // SubLList
-		Errors.error(this + " is not of type: LIST.");
+	@Override
+	public boolean isArrayBased() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"LIST");
 		return true;
 	}
 
+	@Override
 	public boolean isAtom() {
 		return true;
 	}
 
+	@Override
 	public boolean isBigIntegerBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isBoolean() {
 		return false;
 	}
 
+	@Override
 	public boolean isChar() {
 		return false;
 	}
 
+	@Override
 	public boolean isCons() {
 		return false;
 	}
 
+	@Override
 	public boolean isDouble() {
 		return false;
 	}
 
+	@Override
 	public boolean isEnvironment() {
 		return false;
 	}
 
+	@Override
 	public boolean isError() {
 		return false;
 	}
 
+	@Override
 	public boolean isFixnum() {
 		return false;
 	}
 
+	@Override
 	public boolean isFunction() {
 		return false;
 	}
 
+	@Override
 	public boolean isFunctionSpec() {
 		return false;
 	}
 
+	@Override
 	public boolean isGuid() {
 		return false;
 	}
 
+	@Override
 	public boolean isHashtable() {
 		return false;
 	}
 
+	@Override
 	public boolean isHashtableIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isIntBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isInteger() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyhash() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyhashIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyword() {
 		return false;
 	}
 
+	@Override
 	public boolean isList() {
 		return false;
 	}
 
+	@Override
 	public boolean isLock() {
 		return false;
 	}
 
+	@Override
 	public boolean isLongBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isMacroOperator() {
 		return false;
 	}
 
-	/** Method created to avoid casting */
-	public boolean isNegative() { // SubLNumber
-		Errors.error(this + " is not of type: NUMBER.");
+	@Override
+	public boolean isNegative() {
 		return false;
 	}
 
+	@Override
 	public boolean isNil() {
 		return false;
 	}
 
 	public boolean isNotInterruptible() {
 		return Threads.$is_thread_performing_cleanupP$ == null
-				|| Threads.$is_thread_performing_cleanupP$.getDynamicValue() != CommonSymbols.NIL;
+				|| Threads.$is_thread_performing_cleanupP$.getDynamicValue() != SubLNil.NIL;
 	}
 
+	@Override
 	public boolean isNumber() {
 		return false;
 	}
 
+	@Override
 	public boolean isPackage() {
 		return false;
 	}
 
+	@Override
 	public boolean isPackageIterator() {
 		return false;
 	}
 
-	/** Method created to avoid casting */
-	public boolean isPositive() { // SubLNumber
-		Errors.error(this + " is not of type: NUMBER.");
+	@Override
+	public boolean isPositive() {
 		return false;
 	}
 
+	@Override
 	public boolean isProcess() {
 		return true;
 	}
 
+	@Override
 	public boolean isReadWriteLock() {
 		return false;
 	}
 
+	@Override
 	public boolean isRegexPattern() {
 		return false;
 	}
 
 	public boolean isRunning() {
-		return this.isRunning;
+		return isRunning;
 	}
 
+	@Override
 	public boolean isSemaphore() {
 		return false;
 	}
 
+	@Override
 	public boolean isSequence() {
 		return false;
 	}
 
+	@Override
 	public boolean isStream() {
 		return false;
 	}
 
+	@Override
 	public boolean isString() {
 		return false;
 	}
 
+	@Override
 	public boolean isStructure() {
 		return false;
 	}
 
+	@Override
 	public boolean isSymbol() {
 		return false;
 	}
 
+	@Override
 	public boolean isVector() {
 		return false;
 	}
 
-	/** Method created to avoid casting */
-	public boolean isZero() { // SubLNumber
-		Errors.error(this + " is not of type: NUMBER.");
+	@Override
+	public boolean isZero() {
 		return false;
 	}
 
@@ -915,610 +996,603 @@ public abstract class SubLProcess extends SafeRunnable implements Runnable, SubL
 		this.addInterrupt(DefaultThunk.requestTermination());
 	}
 
-	public SubLObject last(int i) { // SubLList
-		Errors.error(this + " is not of type: LIST.");
+	@Override
+	public SubLObject last(int i) {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"LIST");
 		return this;
 	}
 
-	/** Method created to avoid casting */
-	public long longValue() { // SubLNumber
-		Errors.error(this + " is not of type: NUMBER.");
+	@Override
+	public long longValue() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"NUMBER");
 		return Long.MIN_VALUE;
 	}
 
+	@Override
 	public SubLObject makeCopy() {
 		return this;
 	}
 
+	@Override
 	public SubLObject makeDeepCopy() {
 		return this;
 	}
 
-	public SubLObject mult(SubLObject num) { // SubLNumber
+	@Override
+	public SubLObject mult(SubLObject num) {
 		return Errors.error("Not a number: " + this + ".");
 	}
 
 	public Thunk nextInterrupt() {
 		Thunk interruptRequest = null;
-		if (!this.interrupts.isEmpty())
-			interruptRequest = this.interrupts.remove(0);
+		if (!interrupts.isEmpty())
+			interruptRequest = interrupts.remove(0);
 		return interruptRequest;
 	}
 
+	@Override
 	public SubLObject ninth() {
 		return this.get(8);
 	}
 
-	public SubLObject nthCdr(int index) { // SubLList
-		Errors.error(this + " is not of type: LIST.");
+	@Override
+	public SubLObject nthCdr(int index) {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"LIST");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public boolean numE(SubLObject x) { // SubLNumber
-		Errors.error(this + " is not of type: NUMBER.");
+	@Override
+	public boolean numE(SubLObject x) {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"NUMBER");
 		return false;
 	}
 
-	/** Method created to avoid casting */
-	public boolean numG(SubLObject x) { // SubLNumber
-		Errors.error(this + " is not of type: NUMBER.");
+	@Override
+	public boolean numG(SubLObject x) {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"NUMBER");
 		return false;
 	}
 
-	/** Method created to avoid casting */
-	public boolean numGE(SubLObject x) { // SubLNumber
-		Errors.error(this + " is not of type: NUMBER.");
+	@Override
+	public boolean numGE(SubLObject x) {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"NUMBER");
 		return false;
 	}
 
-	/** Method created to avoid casting */
-	public boolean numL(SubLObject x) { // SubLNumber
-		Errors.error(this + " is not of type: NUMBER.");
+	@Override
+	public boolean numL(SubLObject x) {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"NUMBER");
 		return false;
 	}
 
-	/** Method created to avoid casting */
-	public boolean numLE(SubLObject x) { // SubLNumber
-		Errors.error(this + " is not of type: NUMBER.");
+	@Override
+	public boolean numLE(SubLObject x) {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"NUMBER");
 		return false;
 	}
 
 	public void processInterrupts() {
-		if (this.runThread != null)
-			Thread.interrupted(); // clear interrupts by side-effect
-		if (this.isNotInterruptible())
+		if (runThread != null)
+			Thread.interrupted();
+		if (isNotInterruptible())
 			return;
-		while (this.hasWatingInterrupts()) {
-			Thunk current = this.nextInterrupt();
-			if (current != null)
+		while (hasWatingInterrupts()) {
+			Thunk current = nextInterrupt();
+			if (current != null) {
 				if (current.isTerminationRequest())
 					throw new TerminationRequest();
-				else
-					current.invoke();
+				current.invoke();
+			}
 		}
 	}
 
 	public SubLObject processWait(SubLObject whostate, SubLObject predicate, TimeOut timeOut) {
-		this.waitUntilInitializationHasFinished();
+		waitUntilInitializationHasFinished();
 		SubLString whoStateTyped = whostate.toStr();
 		SubLFunction pred = predicate.getFunc();
 		SubLNumber waitTimeRaw = Threads.$process_wait_sleep_time$.getValue().toNumber();
 		long waitTimeMicroSecs = waitTimeRaw.longValue();
-		boolean done = Functions.funcall(pred) != CommonSymbols.NIL;
+		boolean done = Functions.funcall(pred) != SubLNil.NIL;
 		if (!done) {
-			SubLProcessState oldState = this.setState(SubLProcess.WAIT_STATE);
-			SubLString oldWhoState = this.setWhoState(whoStateTyped);
+			SubLProcessState oldState = setState(SubLProcess.WAIT_STATE);
+			SubLString oldWhoState = setWhoState(whoStateTyped);
 			try {
 				do {
-					SubLProcess.sleepForNanoSeconds(waitTimeMicroSecs * 1000L);
-					done = Functions.funcall(pred) != CommonSymbols.NIL;
+					sleepForNanoSeconds(waitTimeMicroSecs * 1000L);
+					done = Functions.funcall(pred) != SubLNil.NIL;
 				} while (!done && !timeOut.hasTimeoutArrived());
 			} finally {
-				this.setState(oldState);
-				this.setWhoState(oldWhoState);
+				setState(oldState);
+				setWhoState(oldWhoState);
 			}
 		}
 		return CommonSymbols.T;
 	}
 
-	/** Method created to avoid casting */
-	public SubLObject put(SubLObject key, SubLObject value) { // SubLHashTable
-		Errors.error(this + " is not of type: HASHTABLE.");
+	@Override
+	public SubLObject put(SubLObject key, SubLObject value) {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"HASHTABLE");
 		return SubLNil.NIL;
 	}
 
-	public void rebind(SubLObject oldValue, SubLObject[] bindings) { // SubLSymbol
+	@Override
+	public void rebind(SubLObject oldValue, SubLObject[] bindings) {
 		Errors.error("Illegal attempt to rebind non symbol: " + this + ".");
 	}
 
-	/** Method created to avoid casting */
-	public boolean remKey(SubLObject obj) { // SubLKeyhash
-		Errors.error(this + " is not of type: HASHTABLE.");
+	@Override
+	public boolean remKey(SubLObject obj) {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"HASHTABLE");
 		return false;
 	}
 
-	/** Method created to avoid casting */
-	public SubLObject remove(SubLObject obj) { // SubLHashTable
-		Errors.error(this + " is not of type: HASHTABLE.");
+	@Override
+	public SubLObject remove(SubLObject obj) {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"HASHTABLE");
 		return SubLNil.NIL;
 	}
 
-	/** Method created to avoid casting */
-	public SubLObject rest() { // SubLList
-		Errors.error(this + " is not of type: LIST.");
+	@Override
+	public SubLObject rest() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"LIST");
 		return SubLNil.NIL;
 	}
 
-	/** Method created to avoid casting */
-	public SubLSequence reverse(boolean isDestructive) { // SubLSequence
-		Errors.error(this + " is not of type: SEQUENCE.");
+	@Override
+	public SubLSequence reverse(boolean isDestructive) {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"SEQUENCE");
 		return SubLNil.NIL;
 	}
 
+	@Override
 	public void run() {
 		try {
-			this.runThread = (SubLThread) Thread.currentThread();
-			this.runThread.clearBindings();
+			(runThread = currentSubLThread()).clearBindings();
 			synchronized (SubLProcess.currentProcesses) {
 				SubLProcess.currentProcesses.add(this);
 			}
-			this.runThread.setSubLProcess(this);
-			this.setPriority(this.getPriority());
-			this.setState(SubLProcess.RUN_STATE);
-			this.setWhoState(Threads.RUN_STRING);
+			runThread.setSubLProcess(this);
+			setPriority(getPriority());
+			setState(SubLProcess.RUN_STATE);
+			setWhoState(Threads.RUN_STRING);
 			Threads.possiblyHandleInterrupts(false);
-			this.safeRun();
+			safeRun();
 		} catch (TerminationRequest terminate) {
-			// this is a legal request to stop
 		} catch (Exception e) {
 			try {
+				e.printStackTrace();
 				Errors.handleError(e);
 			} catch (Throwable t) {
-				// t.printStackTrace(); // @note is this the correct thing to
-				// do?
+				t.printStackTrace();
 			}
 		} finally {
-			this.setState(SubLProcess.DEAD_STATE);
-			this.setWhoState(Threads.DEAD_STRING);
-			this.runThread.setSubLProcess(null);
-			Thread.interrupted(); // clear interrupted status
-			this.runThread.reset();
-			this.runThread = null;
+			setState(SubLProcess.DEAD_STATE);
+			setWhoState(Threads.DEAD_STRING);
+			runThread.setSubLProcess(null);
+			Thread.interrupted();
+			runThread.reset();
+			runThread = null;
 			synchronized (SubLProcess.currentProcesses) {
 				SubLProcess.currentProcesses.remove(this);
 			}
 		}
 	}
 
-	abstract public void safeRun();
+	@Override
+	public abstract void safeRun();
 
+	@Override
 	public SubLObject second() {
 		return this.get(1);
 	}
 
-	/** Method created to avoid casting */
-	public void set(int index, SubLObject val) { // SubLSequence
-		Errors.error(this + " is not of type: SEQUENCE.");
+	@Override
+	public void set(int index, SubLObject val) {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"SEQUENCE");
 	}
 
-	/** Method created to avoid casting */
-	public void setField(int fieldNum, SubLObject value) { // SubLStruct
-		Errors.error(this + " is not of type: STRUCT.");
+	@Override
+	public void setField(int fieldNum, SubLObject value) {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"STRUCT");
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject setField0(SubLObject newVal) {
-		return this.structFieldError(0);
+		return structFieldError(0);
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject setField1(SubLObject newVal) {
-		return this.structFieldError(1);
+		return structFieldError(1);
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject setField10(SubLObject newVal) {
-		return this.structFieldError(10);
+		return structFieldError(10);
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject setField11(SubLObject newVal) {
-		return this.structFieldError(11);
+		return structFieldError(11);
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject setField12(SubLObject newVal) {
-		return this.structFieldError(12);
+		return structFieldError(12);
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject setField13(SubLObject newVal) {
-		return this.structFieldError(13);
+		return structFieldError(13);
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject setField14(SubLObject newVal) {
-		return this.structFieldError(14);
+		return structFieldError(14);
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject setField15(SubLObject newVal) {
-		return this.structFieldError(15);
+		return structFieldError(15);
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject setField16(SubLObject newVal) {
-		return this.structFieldError(16);
+		return structFieldError(16);
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject setField17(SubLObject newVal) {
-		return this.structFieldError(17);
+		return structFieldError(17);
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject setField18(SubLObject newVal) {
-		return this.structFieldError(18);
+		return structFieldError(18);
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject setField19(SubLObject newVal) {
-		return this.structFieldError(19);
+		return structFieldError(19);
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject setField2(SubLObject newVal) {
-		return this.structFieldError(2);
+		return structFieldError(2);
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject setField20(SubLObject newVal) {
-		return this.structFieldError(20);
+		return structFieldError(20);
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject setField3(SubLObject newVal) {
-		return this.structFieldError(3);
+		return structFieldError(3);
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject setField4(SubLObject newVal) {
-		return this.structFieldError(4);
+		return structFieldError(4);
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject setField5(SubLObject newVal) {
-		return this.structFieldError(5);
+		return structFieldError(5);
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject setField6(SubLObject newVal) {
-		return this.structFieldError(6);
+		return structFieldError(6);
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject setField7(SubLObject newVal) {
-		return this.structFieldError(7);
+		return structFieldError(7);
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject setField8(SubLObject newVal) {
-		return this.structFieldError(8);
+		return structFieldError(8);
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLObject setField9(SubLObject newVal) {
-		return this.structFieldError(9);
+		return structFieldError(9);
 	}
 
-	/** Method created to avoid casting */
-	public SubLCons setFirst(SubLObject first) { // SubLList
-		Errors.error(this + " is not of type: LIST.");
+	@Override
+	public SubLCons setFirst(SubLObject first) {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"LIST");
 		return null;
 	}
 
 	public void setIsRunning(boolean newVal) {
-		this.isRunning = newVal;
+		isRunning = newVal;
 	}
 
 	public synchronized SubLFixnum setPriority(SubLFixnum newPriority) {
-		SubLFixnum oldPriority = this.priority;
-		this.priority = newPriority;
-		if (this.runThread != null)
+		SubLFixnum oldPriority = priority;
+		priority = newPriority;
+		if (runThread != null)
 			try {
-				this.runThread.setPriority(SubLProcess.subLPriorityToJavaPriority(newPriority));
-			} catch (NullPointerException npe) {
-			} // ignore
+				runThread.setPriority(subLPriorityToJavaPriority(newPriority));
+			} catch (NullPointerException ex) {
+			}
 		return oldPriority;
 	}
 
-	/** Method created to avoid casting */
-	public SubLCons setRest(SubLObject rest) { // SubLList
-		Errors.error(this + " is not of type: LIST.");
+	@Override
+	public SubLCons setRest(SubLObject rest) {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"LIST");
 		return null;
 	}
 
 	public synchronized SubLProcessState setState(SubLProcessState newState) {
-		if (this.state == null)
+		if (state == null)
 			Errors.error("Invalid null state attempted to be assigned to process: " + this);
-		SubLProcessState oldState = this.state;
-		this.state = newState;
+		SubLProcessState oldState = state;
+		state = newState;
 		return oldState;
 	}
 
 	public synchronized SubLString setWhoState(SubLString newState) {
-		SubLString oldState = this.whoState;
-		this.whoState = newState;
+		SubLString oldState = whoState;
+		whoState = newState;
 		return oldState;
 	}
 
+	@Override
 	public SubLObject seventh() {
 		return this.get(6);
 	}
 
+	@Override
 	public SubLObject sixth() {
 		return this.get(5);
 	}
 
-	/** Method created to avoid casting */
-	public int size() { // SubLSequence
-		Errors.error(this + " is not of type: SEQUENCE.");
+	@Override
+	public int size() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"SEQUENCE");
 		return -1;
 	}
 
+	@Override
 	public int size(int max) {
-		Errors.error(this + " is not of type: SEQUENCE.");
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"SEQUENCE");
 		return -1;
 	}
 
-	public void sleepForMicroSeconds(long usecs) {
-		long msecs = usecs / 1000L;
-		// @todo loop until done sleeping
-		try {
-			SubLProcess.sleep(msecs);
-		} catch (InterruptedException ie) {
-			this.processInterrupts();
-		}
-	}
-
-	private SubLObject structFieldError(int fieldNum) {
-		if (!(this instanceof SubLStruct))
-			Errors.error(this + " is not of type STRUCTURE.");
-		else
-			Errors.error(this + " does not have a slot: " + fieldNum + ".");
-		return CommonSymbols.NIL;
-	}
-
-	public SubLObject sub(SubLObject num) { // SubLNumber
+	@Override
+	public SubLObject sub(SubLObject num) {
 		return Errors.error("Not a number: " + this + ".");
 	}
 
-	public int superHash() {
-		return super.superHash();
-	}
+//	@Override
+//	public int superHash() {
+//		return super.hashCode();
+//	}
 
+	@Override
 	public SubLObject tenth() {
 		return this.get(9);
 	}
 
+	@Override
 	public SubLObject third() {
 		return this.get(2);
 	}
 
-	/** Method created to avoid casting */
-	public SubLCharacter toChar() { // SubLCharacter
-		Errors.error(this + " is not of type: CHAR.");
+	@Override
+	public SubLCharacter toChar() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"CHAR");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLCons toCons() { // SubLCons
-		Errors.error(this + " is not of type: CONS.");
+	@Override
+	public SubLCons toCons() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"CONS");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLDoubleFloat toDouble() { // SubLDoubleFloat
-		Errors.error(this + " is not of type: FLOAT.");
+	@Override
+	public SubLDoubleFloat toDouble() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"FLOAT");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLEnvironment toEnv() { // SubLEnvironment
-		Errors.error(this + " is not of type: ENVIRONMENT.");
+	@Override
+	public SubLEnvironment toEnv() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"ENVIRONMENT");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLFixnum toFixnum() { // SubLFixnum
-		Errors.error(this + " is not of type: FIXNUM.");
+	@Override
+	public SubLFixnum toFixnum() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"FIXNUM");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLGuid toGuid() { // SubLGuid
-		Errors.error(this + " is not of type: GUID.");
+	@Override
+	public SubLGuid toGuid() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"GUID");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLHashtable toHashtable() { // SubLHashtable
-		Errors.error(this + " is not of type: HASHTABLE.");
+	@Override
+	public SubLHashtable toHashtable() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"HASHTABLE");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLHashtableIterator toHashtableIterator() { // SubLHashtableIterator
-		Errors.error(this + " is not of type: HASHTABLE-ITERATOR.");
+	@Override
+	public SubLHashtableIterator toHashtableIterator() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"HASHTABLE-ITERATOR");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLInputBinaryStream toInputBinaryStream() { // SubLStream
-		Errors.error(this + " is not of type: INPUT-BINARY-STREAM.");
+	@Override
+	public SubLInputBinaryStream toInputBinaryStream() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"INPUT-BINARY-STREAM");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLInputStream toInputStream() { // SubLStream
-		Errors.error(this + " is not of type: INPUT-STREAM.");
+	@Override
+	public SubLInputStream toInputStream() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"INPUT-STREAM");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLInputTextStream toInputTextStream() { // SubLStream
-		Errors.error(this + " is not of type: INPUT-TEXT-STREAM.");
+	@Override
+	public SubLInputTextStream toInputTextStream() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"INPUT-TEXT-STREAM");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLInteger toInteger() { // SubLInteger
-		Errors.error(this + " is not of type: INTEGER.");
+	@Override
+	public SubLInteger toInteger() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"INTEGER");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLKeyhash toKeyhash() { // SubLKeyhash
-		Errors.error(this + " is not of type: KEYHASH.");
+	@Override
+	public SubLKeyhash toKeyhash() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"KEYHASH");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLKeyhashIterator toKeyhashIterator() { // SubLKeyhashIterator
-		Errors.error(this + " is not of type: KEYHASH-ITERATOR.");
+	@Override
+	public SubLKeyhashIterator toKeyhashIterator() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"KEYHASH-ITERATOR");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLList toList() { // SubLList
-		Errors.error(this + " is not of type: LIST.");
+	@Override
+	public SubLList toList() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"LIST");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLLock toLock() { // SubLLock
-		Errors.error(this + " is not of type: LOCK.");
+	@Override
+	public SubLLock toLock() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"LOCK");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLMacro toMacro() { // SubLMacro
-		Errors.error(this + " is not of type: MACRO.");
+	@Override
+	public SubLMacro toMacro() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"MACRO");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLNumber toNumber() { // SubLNumber
-		Errors.error(this + " is not of type: NUMBER.");
+	@Override
+	public SubLNumber toNumber() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"NUMBER");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLOutputBinaryStream toOutputBinaryStream() { // SubLStream
-		Errors.error(this + " is not of type: OUTPUT-BINARY-STREAM.");
+	@Override
+	public SubLOutputBinaryStream toOutputBinaryStream() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"OUTPUT-BINARY-STREAM");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLOutputStream toOutputStream() { // SubLStream
-		Errors.error(this + " is not of type: OUTPUT-STREAM.");
+	@Override
+	public SubLOutputStream toOutputStream() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"OUTPUT-STREAM");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLOutputTextStream toOutputTextStream() { // SubLStream
-		Errors.error(this + " is not of type: OUTPUT-TEXT-STREAM.");
+	@Override
+	public SubLOutputTextStream toOutputTextStream() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"OUTPUT-TEXT-STREAM");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLPackage toPackage() { // SubLPackage
-		Errors.error(this + " is not of type: PACKAGE.");
+	@Override
+	public SubLPackage toPackage() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"PACKAGE");
 		return null;
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLPackageIterator toPackageIterator() {
-		Errors.error(this + " is not of type: PACKAGE-ITERATOR.");
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"PACKAGE-ITERATOR");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLProcess toProcess() { // SubLProcess
+	@Override
+	public SubLProcess toProcess() {
 		return this;
 	}
 
-	/** Method created to avoid casting */
-	public SubLReadWriteLock toReadWriteLock() { // SubLReadWriteLock
-		Errors.error(this + " is not of type: READ-WRITE-LOCK.");
+	@Override
+	public SubLReadWriteLock toReadWriteLock() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"READ-WRITE-LOCK");
 		return null;
 	}
 
-	//// Protected Area
-
-	/** Method created to avoid casting */
-	public SubLRegexPattern toRegexPattern() { // SubLHashtableIterator
-		Errors.error(this + " is not of type: REGEX-PATTERN.");
+	@Override
+	public SubLRegexPattern toRegexPattern() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"REGEX-PATTERN");
 		return null;
 	}
 
-	//// Private Area
-
-	//// Internal Rep
-
-	/** Method created to avoid casting */
-	public SubLSemaphore toSemaphore() { // SubLSemaphore
-		Errors.error(this + " is not of type: SEMAPHORE.");
+	@Override
+	public SubLSemaphore toSemaphore() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"SEMAPHORE");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLSequence toSeq() { // SubLSequence
-		Errors.error(this + " is not of type: SEQUENCE.");
+	@Override
+	public SubLSequence toSeq() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"SEQUENCE");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLString toStr() { // SubLString
-		Errors.error(this + " is not of type: STRING.");
+	@Override
+	public SubLString toStr() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"STRING");
 		return null;
 	}
 
-	public String toString() {
-		return "#<PROCESS " + this.name + ">";
+	@Override
+	public String printObjectImpl() {
+		return "#<PROCESS " + name + " " + getState() + " " + this.easyToString() + ">";
 	}
 
-	/** Method created to avoid casting */
-	public SubLStruct toStruct() { // SubLStruct
-		Errors.error(this + " is not of type: STRUCTURE.");
+	@Override
+	public SubLStruct toStruct() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"STRUCTURE");
 		return null;
 	}
 
-	/** Method created to avoid casting */
-	public SubLSymbol toSymbol() { // SubLSymbol
-		Errors.error(this + " is not of type: SYMBOL.");
+	@Override
+	public SubLSymbol toSymbol() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"SYMBOL");
 		return null;
 	}
 
+	@Override
 	public String toTypeName() {
 		return SubLProcess.PROCESS_TYPE_NAME;
 	}
 
-	/** Method created to avoid casting */
-	public SubLVector toVect() { // SubLVector
-		Errors.error(this + " is not of type: VECTOR.");
+	@Override
+	public SubLVector toVect() {
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"VECTOR");
 		return null;
 	}
 
 	public synchronized void unblock() {
-		this.notify();
+		notify();
 	}
 
 	public void waitUntilInitializationHasFinished() {
-		if (Thread.currentThread() == this.runThread)
+		if (Thread.currentThread() == runThread)
 			return;
-		while (this.getState() == SubLProcess.INITIALIZING_STATE)
+		while (getState() == SubLProcess.INITIALIZING_STATE)
 			Thread.yield();
 	}
 }

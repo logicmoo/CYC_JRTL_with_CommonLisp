@@ -1,22 +1,6 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
@@ -25,26 +9,13 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLVector;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 
-//// Internal Imports
-
-//// External Imports
-
 public class Values extends SubLTrampolineFile {
-
-	//// Constructors
-
-	public static SubLFile me = new Values();
-
-	public static SubLSymbol $multiple_values_limit$;
-
-	//// Public Area
-
-	/* helper method for MULTIPLE-VALUE-LIST */
 	public static SubLObject arg2(SubLObject arg1, SubLObject arg2) {
 		return arg2;
 	}
@@ -105,10 +76,9 @@ public class Values extends SubLTrampolineFile {
 		SubLThread currrentThread = SubLProcess.currentSubLThread();
 		SubLVector result = currrentThread.getValuesAsVector();
 		if (result == null)
-			return CommonSymbols.NIL;
+			return SubLNil.NIL;
 		return result;
 	}
-	/* helper method for MULTIPLE-VALUE-LIST */
 
 	public static SubLList multiple_value_list(SubLObject value1) {
 		return SubLProcess.currentSubLThread().multiple_value_list(value1);
@@ -118,12 +88,10 @@ public class Values extends SubLTrampolineFile {
 		return SubLProcess.currentSubLThread().multiple_value_list_eval(form, env);
 	}
 
-	/* helper method for NTH-VALUE */
 	public static SubLObject nth_value_step_1(SubLObject num) {
 		return SubLProcess.currentSubLThread().nth_value_step_1(num);
 	}
 
-	/* helper method for NTH-VALUE */
 	public static SubLObject nth_value_step_2(SubLObject num, SubLObject form) {
 		return SubLProcess.currentSubLThread().nth_value_step_2(num, form);
 	}
@@ -146,22 +114,21 @@ public class Values extends SubLTrampolineFile {
 
 	public static SubLObject resetMultipleValues() {
 		SubLProcess.currentSubLThread().resetMultipleValues();
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
-	/* helper methods for CMULTIPLE-VALUE-BIND */
 	public static void resetMultipleValues(SubLThread thread) {
 		thread.resetMultipleValues();
 	}
 
 	public static SubLObject restoreValuesFromVector(SubLObject newValues) {
 		SubLThread currrentThread = SubLProcess.currentSubLThread();
-		if (newValues == CommonSymbols.NIL || newValues == null) {
+		if (newValues == SubLNil.NIL || newValues == null) {
 			currrentThread.resetMultipleValues();
-			return CommonSymbols.NIL;
+			return SubLNil.NIL;
 		}
 		currrentThread.restoreValuesFromVector(newValues.toVect());
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
 	public static SubLObject second_value_helper(SubLObject arg1, SubLObject result) {
@@ -256,32 +223,24 @@ public class Values extends SubLTrampolineFile {
 		return SubLProcess.currentSubLThread().values(moreValues);
 	}
 
-	/** Creates a new instance of Values. */
-	public Values() {
+	public static SubLFile me;
+	public static SubLSymbol $multiple_values_limit$;
+	static {
+		me = new Values();
 	}
 
-	//// Initializers
-
+	@Override
 	public void declareFunctions() {
 		SubLFiles.declareFunction(Values.me, "values", "VALUES", 0, 0, true);
 	}
 
+	@Override
 	public void initializeVariables() {
-		// @note this is arbitrary...number of mult values is really only
-		// limited by max arraylist size which is extremely high -APB
 		Values.$multiple_values_limit$ = SubLFiles.defconstant(Values.me, "*MULTIPLE-VALUES-LIMIT*",
 				SubLObjectFactory.makeInteger(1024));
 	}
 
+	@Override
 	public void runTopLevelForms() {
 	}
-
-	//// Protected Area
-
-	//// Private Area
-
-	//// Internal Rep
-
-	//// Main
-
 }

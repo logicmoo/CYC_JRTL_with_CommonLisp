@@ -4,7 +4,6 @@
 <> 
  abcl:is "W3C Turtle RDF serializations format" .
 
-
 @prefix doap:            <http://usefulinc.com/ns/doap#> .
 @prefix rdf:             <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs:            <http://www.w3.org/2000/01/rdf-schema#> .
@@ -17,12 +16,16 @@
 @prefix dc:              <http://purl.org/dc/elements/1.1/> .
 <> 
   abcl:branch           <http://abcl.org/svn/trunk/abcl> ;
-  dc:identifier         <urn:abcl.org/1.4.0#dev> ;           
+  dc:identifier         <urn:abcl.org/1.5.0#dev> ;           
   doap:language        "Common Lisp" ;
   dc:created           "01-JAN-2004" ;
-  dc:modified          "15-MAR-2014" ;
-  dc:version           "abcl-1.4.0" ;
+  dc:modified          "08-OCT-2016" ;
+  dc:version           "abcl-1.5.0" ;
   dc:release           "dev" ;
+  abcl:git             <https://github.com/easye/abcl/> ; # Does this overwrite?  TODO Check RDF specs.
+  abcl:git             <https://gitlab.common-lisp.net/abcl/abcl/> ;
+  abcl:svn             <http://abcl.org/trac/changeset/14886> .
+ 
 <> 
   rdfs:seeAlso <file:README> ;
   rdfs:seeAlso <file:MANUAL> ;
@@ -44,8 +47,9 @@
 
 <> <urn:abcl.org:releng:implementation:language> [ 
    a rdf:Bag;
+   rdf:_0 "Common Lisp"; 
    rdf:_1 "Java";
-   rdf:_2  "Ant"; 
+   rdf:_2 "Ant"; 
    rdf:_3 "Bourne Shell Script"; 
    rdf:_4 "Windows Batch Script" 
 ] .
@@ -53,11 +57,22 @@
 <abcl:doap> 
   dc:contributor [ 
     a rdf:Bag;
+    rdf:_1024 _:peter ;
+    rdf:_2048 _:piso ;
     rdf:_1 _:ehu ;  
     rdf:_2 _:easye ;
     rdf:_3 _:ville ;
     rdf:_4 _:astalla ;
-    rdf:_5 _:rudi 
+    rdf:_5 _:rudi ;
+    rdf:_11 _:ferada ;
+    rdf:_11 _:olof ;
+    rdf:_11 "Olof-Joachim Frahm" ;
+    rdf:_7 _:cyrus ; 
+    rdf:_8 _:dmiles ; 
+    rdf:_9 _:alanr ; 
+    rdf:_10 _:pipping ;
+    rdf:_10 "Elias Pipping" ;
+    rdf:_12 "Vibhu Mohindra" ;
 ] .
 
 <abcl:doap>  
@@ -74,7 +89,8 @@ _:user dc:identifier <http://ville.not.org/#me>  ;
      dc:license <http://usefulinc.com/doap/licenses/gplv2> ;
      dc:license <http://usefulinc.com/doap/licenses/gplv2-classpath-exception> ;
 
-     rdfs:seeAlso <urn:abcl.org/release/1.3.0> ;
+     rdfs:seeAlso <urn:abcl.org/release/1.3.3> ;
+     rdfs:seeAlso <urn:abcl.org/release/1.4.0> ;
      dc:licenseDocument <file:COPYING> ;
      dc:licenseDocument 
        <http://abcl.org/svn/trunk/abcl/src/org/armedbear/LICENSE> ;
@@ -82,18 +98,23 @@ _:user dc:identifier <http://ville.not.org/#me>  ;
 
 doap:Project rdfs:seeAlso [
   a rdf:Bag;
+  rdf:_0 <http://abcl.org/releases/1.4.0/abcl-1.4.0.jar> ;
   rdf:_1 <http://abcl.org/trac/timeline> ;
   rdf:_2 <http://abcl.org/trac/wiki> ;
-  rdf:_3 <http://code.google.com/p/abcl-dynamic-install/> ;
+  rdf:_4 <https://github.com/easye/abcl/> ;
+  rdf:_5 <https://gitlab.common-lisp.net/abcl/abcl/> ;
   dc:source   abcl:tag ;
   dc:Software [ 
      a rdf:Bag;
      rdf:_1 <urn:abcl:previousVersion> ;
      rdf:_2 <https://code.google.com/p/abcl-dynamic-install/files/abcl-1.0.1.jar> ;
      rdf:_3 <https://code.google.com/p/abcl-dynamic-install/files/abcl-1.1.0.2.jar> ;
-     rdf:_3 <https://code.google.com/p/abcl-dynamic-install/files/abcl-1.1.1.jar> ;
-     rdf:_4 <http://abcl.org/releases/1.2.1/abcl-1.2.1.jar> ;
-     rdf:_4 <http://abcl.org/releases/1.3.0/abcl-1.3.0.jar> 
+     rdf:_4 <https://code.google.com/p/abcl-dynamic-install/files/abcl-1.1.1.jar> ;
+     rdf:_5 <http://abcl.org/releases/1.2.1/abcl-1.2.1.jar> ;
+     rdf:_6 <http://abcl.org/releases/1.3.0/abcl-1.3.0.jar> ;
+    rdf:_14 <http://abcl.org/releases/1.3.2/abcl-1.3.1.jar> ;
+     rdf:_7 <http://abcl.org/releases/1.3.2/abcl-1.3.2.jar> ;
+     rdf:_8 <http://abcl.org/releases/1.3.3/abcl-1.3.3.jar> ;
   ] ;
 ] .
 
@@ -121,7 +142,6 @@ doap:Project rdfs:seeAlso
     a rdf:Alt;
     rdf:_1 abcl:abcl ;
     rdf:_2 abcl:abcl-contrib ;
-    rdf:_3 abcl:asdf-install ;
     rdf:_4 abcl:jss ;
     rdf:_5 abcl:jfli ;
     rdf:_6 abcl:abcl-asdf ;
@@ -130,22 +150,17 @@ doap:Project rdfs:seeAlso
     rdf:_9 abcl:quicklisp-abcl ;
 ] .
 
-abcl:asdf dc:version "3.1.4" .
+abcl:jna dc:version "4.2.2" .
+abcl:asdf dc:version "3.1.7.35" .
 
 abcl:abcl-contrib  
   rdfs:seeAlso <file:contrib/README.markdown> .                             
-
-abcl:asdf-install
-  rdfs:seeAlso <file:contrib/asdf-install/README> .                             
-
 abcl:abcl-asdf
   rdfs:seeAlso <file:contrib/asdf-asdf/README.markdown> .                             
 abcl:asdf-jar 
   rdfs:seeAlso <file:contrib/asdf-jar/README.markdown> .                             
-
 abcl:jfli
   rdfs:seeAlso <file:contrib/jfli/README> .                             
-
 abcl:jss
   rdfs:seeAlso <file:contrib/jss/README.markdown> .                             
 

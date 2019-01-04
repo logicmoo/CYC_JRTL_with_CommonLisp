@@ -1,76 +1,45 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.type.stream;
+
+import org.armedbear.lisp.Stream;
+import org.armedbear.lisp.Symbol;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-//// Internal Imports
+import static org.armedbear.lisp.Keyword.*;
 
-//// External Imports
-
-public abstract class AbstractSubLBinaryStream extends AbstractRandomAccessSubLStream {
-
-	//// Constructors
-
+import org.armedbear.lisp.Keyword;
+public abstract class AbstractSubLBinaryStream extends Stream {
 	AbstractSubLBinaryStream(String fileName, SubLSymbol elementType, SubLSymbol direction, SubLSymbol ifExists,
 			SubLSymbol ifNotExists) {
 		super(fileName, elementType, direction, ifExists, ifNotExists);
-		if (elementType != CommonSymbols.BINARY_KEYWORD)
+		if (elementType != BINARY_KEYWORD)
 			Errors.error("Got bad stream element type: " + elementType);
 	}
 
 	AbstractSubLBinaryStream(SubLSymbol elementType, SubLSymbol direction, SubLSymbol ifExists,
 			SubLSymbol ifNotExists) {
 		super(elementType, direction, ifExists, ifNotExists);
-		if (elementType != CommonSymbols.BINARY_KEYWORD)
+		if (elementType != BINARY_KEYWORD)
 			Errors.error("Got bad stream element type: " + elementType);
 	}
 
-	//// Public Area
+	public AbstractSubLBinaryStream(Symbol twoWayStream) {
+		super(twoWayStream);
+	}
 
-	//// Protected Area
+	public AbstractSubLBinaryStream(Symbol twoWayStream, SubLSymbol direction) {
+		super(twoWayStream, direction);
+	}
 
-	/*
-	 * protected FileChannel getFileInChannel() { if (!isRandomAccess()) {
-	 * Errors.error("Illegal operation on a non-random access stream."); }
-	 * return fileInChannel; }
-	 *
-	 * protected InputStream getInputStream() { if (!isRandomAccess()) {
-	 * Errors.error("Illegal operation on a non-random access stream."); }
-	 * return actualInStream; }
-	 *
-	 * protected FileChannel getFileOutChannel() { if (!isRandomAccess()) {
-	 * Errors.error("Illegal operation on a non-random access stream."); }
-	 * return fileOutChannel; }
-	 *
-	 * protected OutputStream getOutputStream() { if (!isRandomAccess()) {
-	 * Errors.error("Illegal operation on a non-random access stream."); }
-	 * return actualOutStream; }
-	 */
 
-	//// Private Area
-
-	//// Internal Rep
-
-	//// Main
-
+//	public AbstractSubLBinaryStream(SubLSymbol binaryKeyword, SubLSymbol inputKeyword, SubLSymbol direction,
+//			SubLSymbol errorKeyword, SubLSymbol errorKeyword2) {
+//		super( binaryKeyword, inputKeyword, direction, errorKeyword, errorKeyword2);
+//
+//	}
 }

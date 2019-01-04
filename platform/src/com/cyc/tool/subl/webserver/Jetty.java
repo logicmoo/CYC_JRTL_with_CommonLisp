@@ -1,11 +1,12 @@
 //
-//
+// For LarKC
 //
 package com.cyc.tool.subl.webserver;
 
 import java.io.File;
 import java.util.List;
 
+import org.armedbear.lisp.Lisp;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -22,39 +23,53 @@ public class Jetty {
 		}
 	}
 
-	private static Server jettyServer;
-
-	private static String webappHome = "webapps/apps/";
-
 	private static void deleteDirectory(File dir) {
 		File[] files = dir.listFiles();
 		if (files != null)
 			for (File f : files)
 				if (f.isDirectory())
-					Jetty.deleteDirectory(f);
-				else
-					f.delete();
-		dir.delete();
+					deleteDirectory(f);
+				else {
+					try {
+						f.delete();
+					} catch (Throwable t) {
+						t.printStackTrace();
+					}
+				}
+		try {
+			dir.delete();
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
+
+	}
+
+
+	private static void deleteDir(String tmpDirString) {
+		File tmpDir = tmpDirString == null ? null : new File(tmpDirString);
+		possiblyDeleteTmpDir(tmpDir);
 	}
 
 	private static void possiblyDeleteTmpDir(File tmpDir) {
 		if (tmpDir != null && tmpDir.exists()) {
-			PrintLow.format(CommonSymbols.T,
+		/*	PrintLow.format(CommonSymbols.T,
 					SubLObjectFactory.makeString("Clearing old webapp tmp directory: " + tmpDir.getAbsolutePath()));
-			streams_high.force_output(CommonSymbols.T);
-			Jetty.deleteDirectory(tmpDir);
+			streams_high.force_output(CommonSymbols.T);*/
+
+			deleteDirectory(tmpDir);
 		}
 	}
 
 	protected static synchronized void startJettyServer(int port, List<ServletContainer.WarSpec> warFiles,
 			String tmpDirString) {
 		Label_0411: {
+		 deleteDir(tmpDirString);
 			if (Jetty.jettyServer != null)
 				if (!(Jetty.jettyServer instanceof Server) || Jetty.jettyServer.isRunning())
 					break Label_0411;
 			try {
 				File tmpDir = tmpDirString != null ? new File(tmpDirString) : null;
-				Jetty.possiblyDeleteTmpDir(tmpDir);
+				possiblyDeleteTmpDir(tmpDir);
 				Jetty.jettyServer = new Server(port);
 				ContextHandlerCollection handlers = new ContextHandlerCollection();
 				for (ServletContainer.WarSpec war : warFiles) {
@@ -88,7 +103,7 @@ public class Jetty {
 			} catch (JettyStartFailureException ex) {
 				throw ex;
 			} catch (Exception ex2) {
-				throw new RuntimeException("Jetty server failed to start on port " + port, ex2);
+				throw new RuntimeException("Jetty server failed to start on port " + Lisp.valueOfString(port), ex2);
 			}
 		}
 		PrintLow.format(CommonSymbols.T, SubLObjectFactory
@@ -99,11 +114,15 @@ public class Jetty {
 		try {
 			if (Jetty.jettyServer instanceof Server && Jetty.jettyServer.isRunning()) {
 				Jetty.jettyServer.stop();
-				File tmpDir = tmpDirString == null ? null : new File(tmpDirString);
-				Jetty.possiblyDeleteTmpDir(tmpDir);
+
 			}
 		} catch (Exception e) {
 			throw new RuntimeException("Problem encountered while trying to stop Jetty server.", e);
 		}
+		deleteDir(tmpDirString);
 	}
+
+
+	private static Server jettyServer;
+	private static String webappHome = "webapps/apps/";
 }

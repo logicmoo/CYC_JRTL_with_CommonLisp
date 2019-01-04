@@ -2,7 +2,7 @@
  * UndefinedFunction.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: UndefinedFunction.java 12431 2010-02-08 08:05:15Z mevenson $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,41 +31,46 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class UndefinedFunction extends CellError {
-	// obj is either the name of the undefined function or an initArgs list.
-	public UndefinedFunction(SubLObject obj) {
-		super(StandardClass.UNDEFINED_FUNCTION);
-		if (obj instanceof SubLCons)
-			this.initialize(obj);
-		else
-			this.setCellName(obj);
-	}
+public final class UndefinedFunction extends CellError
+{
+  // obj is either the name of the undefined function or an initArgs list.
+  public UndefinedFunction(LispObject obj)
+  {
+    super(StandardClass.UNDEFINED_FUNCTION);
+    if (obj instanceof Cons)
+      initialize(obj);
+    else
+      setCellName(obj);
+  }
 
-	public SubLObject classOf() {
-		return StandardClass.UNDEFINED_FUNCTION;
-	}
+  public LispObject typeOf()
+  {
+    return Symbol.UNDEFINED_FUNCTION;
+  }
 
-	public String getMessage() {
-		StringBuilder sb = new StringBuilder("The function ");
-		sb.append(this.getCellName().writeToString());
-		sb.append(" is undefined.");
-		return sb.toString();
-	}
+  public LispObject classOf()
+  {
+    return StandardClass.UNDEFINED_FUNCTION;
+  }
 
-	public SubLObject typeOf() {
-		return LispSymbols.UNDEFINED_FUNCTION;
-	}
+  public LispObject typep(LispObject type)
+  {
+    if (type == Symbol.UNDEFINED_FUNCTION)
+      return T;
+    if (type == StandardClass.UNDEFINED_FUNCTION)
+      return T;
+    return super.typep(type);
+  }
 
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.UNDEFINED_FUNCTION)
-			return Lisp.T;
-		if (type == StandardClass.UNDEFINED_FUNCTION)
-			return Lisp.T;
-		return super.typep(type);
-	}
+  public String getMessage()
+  {
+    StringBuilder sb = new StringBuilder("The function ");
+    sb.append(getCellName().princToString());
+    sb.append(" is undefined.");
+    return sb.toString();
+  }
 }

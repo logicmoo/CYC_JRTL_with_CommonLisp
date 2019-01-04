@@ -1,0 +1,14 @@
+PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:	<http://www.w3.org/2000/01/rdf-schema#>
+
+PREFIX fj: 	<java:org.appdapter.binding.jena.>
+PREFIX fn: 	<http://www.w3.org/2005/xpath-functions#>
+ 
+
+SELECT  ?g ?s ?p ?o
+WHERE {
+			GRAPH ?g {
+		?s ?p ?o
+							}
+}
+

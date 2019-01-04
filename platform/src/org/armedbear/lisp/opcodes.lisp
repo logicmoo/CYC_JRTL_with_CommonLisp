@@ -1,7 +1,7 @@
 ;;; opcodes.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: opcodes.lisp 12185 2009-10-10 13:12:09Z ehuelsmann $
+;;; $Id: opcodes.lisp,v 1.28 2006/01/20 03:09:09 piso Exp $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -16,18 +16,6 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program; if not, write to the Free Software
 ;;; Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
-;;;
-;;; As a special exception, the copyright holders of this library give you
-;;; permission to link this library with independent modules to produce an
-;;; executable, regardless of the license terms of these independent
-;;; modules, and to copy and distribute the resulting executable under
-;;; terms of your choice, provided that you also meet, for each linked
-;;; independent module, the terms and conditions of the license of that
-;;; module.  An independent module is a module which is not derived from
-;;; or based on this library.  If you modify this library, you may extend
-;;; this exception to your version of the library, but you are not
-;;; obligated to do so.  If you do not wish to do so, delete this
-;;; exception statement from your version.
 
 (in-package #:jvm)
 
@@ -63,11 +51,11 @@
 (define-opcode iconst_5 8 1 1)
 (define-opcode lconst_0 9 1 2)
 (define-opcode lconst_1 10 1 2)
-(define-opcode fconst_0 11 1 1)
-(define-opcode fconst_1 12 1 1)
-(define-opcode fconst_2 13 1 1)
-(define-opcode dconst_0 14 1 2)
-(define-opcode dconst_1 15 1 2)
+(define-opcode fconst_0 11 1 nil)
+(define-opcode fconst_1 12 1 nil)
+(define-opcode fconst_2 13 1 nil)
+(define-opcode dconst_0 14 1 nil)
+(define-opcode dconst_1 15 1 nil)
 (define-opcode bipush 16 2 1)
 (define-opcode sipush 17 3 1)
 (define-opcode ldc 18 2 1)
@@ -98,10 +86,10 @@
 (define-opcode aload_1 43 1 1)
 (define-opcode aload_2 44 1 1)
 (define-opcode aload_3 45 1 1)
-(define-opcode iaload 46 1 -1)
-(define-opcode laload 47 1 0)
-(define-opcode faload 48 1 -1)
-(define-opcode daload 49 1 0)
+(define-opcode iaload 46 1 nil)
+(define-opcode laload 47 1 nil)
+(define-opcode faload 48 1 nil)
+(define-opcode daload 49 1 nil)
 (define-opcode aaload 50 1 -1)
 (define-opcode baload 51 1 nil)
 (define-opcode caload 52 1 nil)
@@ -131,35 +119,35 @@
 (define-opcode astore_1 76 1 -1)
 (define-opcode astore_2 77 1 -1)
 (define-opcode astore_3 78 1 -1)
-(define-opcode iastore 79 1 -3)
-(define-opcode lastore 80 1 -4)
-(define-opcode fastore 81 1 -3)
-(define-opcode dastore 82 1 -4)
+(define-opcode iastore 79 1 nil)
+(define-opcode lastore 80 1 nil)
+(define-opcode fastore 81 1 nil)
+(define-opcode dastore 82 1 nil)
 (define-opcode aastore 83 1 -3)
 (define-opcode bastore 84 1 nil)
 (define-opcode castore 85 1 nil)
 (define-opcode sastore 86 1 nil)
 (define-opcode pop 87 1 -1)
-(define-opcode pop2 88 1 -2)
+(define-opcode pop2 88 1 nil)
 (define-opcode dup 89 1 1)
 (define-opcode dup_x1 90 1 1)
 (define-opcode dup_x2 91 1 1)
 (define-opcode dup2 92 1 2)
-(define-opcode dup2_x1 93 1 2)
-(define-opcode dup2_x2 94 1 2)
+(define-opcode dup2_x1 93 1 nil)
+(define-opcode dup2_x2 94 1 nil)
 (define-opcode swap 95 1 0)
 (define-opcode iadd 96 1 -1)
 (define-opcode ladd 97 1 -2)
-(define-opcode fadd 98 1 -1)
-(define-opcode dadd 99 1 -2)
+(define-opcode fadd 98 1 nil)
+(define-opcode dadd 99 1 nil)
 (define-opcode isub 100 1 -1)
 (define-opcode lsub 101 1 -2)
-(define-opcode fsub 102 1 -1)
-(define-opcode dsub 103 1 -2)
+(define-opcode fsub 102 1 nil)
+(define-opcode dsub 103 1 nil)
 (define-opcode imul 104 1 -1)
 (define-opcode lmul 105 1 -2)
-(define-opcode fmul 106 1 -1)
-(define-opcode dmul 107 1 -2)
+(define-opcode fmul 106 1 nil)
+(define-opcode dmul 107 1 nil)
 (define-opcode idiv 108 1 nil)
 (define-opcode ldiv 109 1 nil)
 (define-opcode fdiv 110 1 nil)
@@ -170,8 +158,8 @@
 (define-opcode drem 115 1 nil)
 (define-opcode ineg 116 1 0)
 (define-opcode lneg 117 1 0)
-(define-opcode fneg 118 1 0)
-(define-opcode dneg 119 1 0)
+(define-opcode fneg 118 1 nil)
+(define-opcode dneg 119 1 nil)
 (define-opcode ishl 120 1 -1)
 (define-opcode lshl 121 1 -1)
 (define-opcode ishr 122 1 -1)
@@ -186,25 +174,25 @@
 (define-opcode lxor 131 1 -2)
 (define-opcode iinc 132 3 0)
 (define-opcode i2l 133 1 1)
-(define-opcode i2f 134 1 0)
-(define-opcode i2d 135 1 1)
+(define-opcode i2f 134 1 nil)
+(define-opcode i2d 135 1 nil)
 (define-opcode l2i 136 1 -1)
-(define-opcode l2f 137 1 -1)
-(define-opcode l2d 138 1 0)
+(define-opcode l2f 137 1 nil)
+(define-opcode l2d 138 1 nil)
 (define-opcode f2i 139 1 nil)
 (define-opcode f2l 140 1 nil)
-(define-opcode f2d 141 1 1)
+(define-opcode f2d 141 1 nil)
 (define-opcode d2i 142 1 nil)
 (define-opcode d2l 143 1 nil)
-(define-opcode d2f 144 1 -1)
+(define-opcode d2f 144 1 nil)
 (define-opcode i2b 145 1 nil)
 (define-opcode i2c 146 1 nil)
 (define-opcode i2s 147 1 nil)
 (define-opcode lcmp 148 1 -3)
-(define-opcode fcmpl 149 1 -1)
-(define-opcode fcmpg 150 1 -1)
-(define-opcode dcmpl 151 1 -3)
-(define-opcode dcmpg 152 1 -3)
+(define-opcode fcmpl 149 1 nil)
+(define-opcode fcmpg 150 1 nil)
+(define-opcode dcmpl 151 1 nil)
+(define-opcode dcmpg 152 1 nil)
 (define-opcode ifeq 153 3 -1)
 (define-opcode ifne 154 3 -1)
 (define-opcode iflt 155 3 -1)
@@ -220,8 +208,8 @@
 (define-opcode if_acmpeq 165 3 -2)
 (define-opcode if_acmpne 166 3 -2)
 (define-opcode goto 167 3 0)
-;;(define-opcode jsr 168 3 1) Don't use these 2 opcodes: deprecated
-;;(define-opcode ret 169 2 0) their use results in JVM verifier errors
+(define-opcode jsr 168 3 1)
+(define-opcode ret 169 2 0)
 (define-opcode tableswitch 170 0 nil)
 (define-opcode lookupswitch 171 0 nil)
 (define-opcode ireturn 172 1 nil)
@@ -246,8 +234,8 @@
 (define-opcode athrow 191 1 0)
 (define-opcode checkcast 192 3 0)
 (define-opcode instanceof 193 3 0)
-(define-opcode monitorenter 194 1 -1)
-(define-opcode monitorexit 195 1 -1)
+(define-opcode monitorenter 194 1 nil)
+(define-opcode monitorexit 195 1 nil)
 (define-opcode wide 196 0 nil)
 (define-opcode multianewarray 197 4 nil)
 (define-opcode ifnull 198 3 -1)
@@ -258,9 +246,10 @@
 ;; (define-opcode push-value 203 nil 1)
 ;; (define-opcode store-value 204 nil -1)
 (define-opcode clear-values 205 0 0)
-;;(define-opcode var-ref 206 0 0)
+(define-opcode var-ref 206 0 0)
+(define-opcode var-set 207 0 0)
 
-(defparameter *last-opcode* 206)
+(defparameter *last-opcode* 207)
 
 (declaim (ftype (function (t) t) opcode-name))
 (defun opcode-name (opcode-number)

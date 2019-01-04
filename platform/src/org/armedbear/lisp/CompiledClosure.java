@@ -2,7 +2,7 @@
  * CompiledClosure.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: CompiledClosure.java 12398 2010-01-24 21:59:56Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,204 +31,229 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import static org.armedbear.lisp.Lisp.*;
 
-public class CompiledClosure extends Closure implements Cloneable {
+abstract public class CompiledClosure extends Closure
+        implements Cloneable
+{
 
-	// ### load-compiled-function
-	private static Primitive LOAD_COMPILED_FUNCTION = new JavaPrimitive("load-compiled-function", Lisp.PACKAGE_SYS,
-			true, "source") {
+  public ClosureBinding[] ctx;
 
-		public SubLObject execute(SubLObject arg) {
-			String namestring = null;
-			if (arg instanceof Pathname)
-				namestring = ((Pathname) arg).getNamestring();
-			else if (arg instanceof SubLString)
-				namestring = arg.getString();
-			if (namestring != null)
-				// Debug.trace("autoloading preloaded ... " + namestring);
-				return AutoloadedFunctionProxy.loadPreloadedFunction(namestring);
-			if (arg instanceof JavaObject)
-				try {
-					return Lisp.loadClassBytes((byte[]) arg.javaInstance(byte[].class));
-				} catch (Throwable t) {
-					Debug.trace(t);
-					return Lisp.error(new LispError("Unable to load " + arg.writeToString()));
-				}
-			return Lisp.error(new LispError("Unable to load " + arg.writeToString()));
-		}
-	};
+  public CompiledClosure(ArgumentListProcessor arglist)
+  {
+      super(arglist);
+  }
 
-	// ### varlist
-	private static Primitive VARLIST = new JavaPrimitive("varlist", Lisp.PACKAGE_SYS, false) {
 
-		public SubLObject execute(SubLObject arg) {
-			if (arg instanceof Closure)
-				return ((Closure) arg).getVariableList();
-			return Lisp.type_error(arg, LispSymbols.COMPILED_FUNCTION);
-		}
-	};
+  public CompiledClosure(LispObject lambdaList)
+  {
+    super(list(Symbol.LAMBDA, lambdaList), null);
+  }
 
-	public ClosureBinding[] ctx;
+  final public CompiledClosure setContext(ClosureBinding[] context)
+  {
+    ctx = context;
+    return this;
+  }
 
-	public CompiledClosure(Parameter[] required, Parameter[] optional, Parameter[] keyword, SubLSymbol keys,
-			SubLSymbol rest, SubLSymbol moreKeys) {
-		super(required, optional, keyword, keys, rest, moreKeys);
+  final public CompiledClosure dup()
+  {
+      CompiledClosure result = null;
+      try {
+	  result = (CompiledClosure)super.clone();
+      } catch (Exception e) {
+    	  e.printStackTrace();
+      }
+      return result;
+  }
+
+	public LispObject typeOf() {
+		return Symbol.COMPILED_FUNCTION;
 	}
 
-	public CompiledClosure(SubLObject lambdaList) {
-		super(Lisp.list(LispSymbols.LAMBDA, lambdaList), null);
+//  @Override
+//  public LispObject typep(LispObject typeSpecifier)
+//  {
+//    if (typeSpecifier == Symbol.COMPILED_FUNCTION)
+//      return T;
+//    return super.typep(typeSpecifier);
+//  }
+
+  private final LispObject notImplemented()
+  {
+    return error(new WrongNumberOfArgumentsException(this));
+  }
+
+
+  // Zero args.
+  public LispObject execute()
+  {
+    LispObject[] args = new LispObject[0];
+    return execute(args);
+  }
+
+  // One arg.
+  public LispObject execute( LispObject first)
+
+  {
+    LispObject[] args = new LispObject[1];
+    args[0] = first;
+    return execute(args);
+  }
+
+  // Two args.
+  public LispObject execute( LispObject first,
+                            LispObject second)
+
+  {
+    LispObject[] args = new LispObject[2];
+    args[0] = first;
+    args[1] = second;
+    return execute(args);
+  }
+
+  // Three args.
+  public LispObject execute( LispObject first,
+                            LispObject second, LispObject third)
+
+  {
+    LispObject[] args = new LispObject[3];
+    args[0] = first;
+    args[1] = second;
+    args[2] = third;
+    return execute(args);
+  }
+
+  // Four args.
+  public LispObject execute( LispObject first,
+                            LispObject second, LispObject third,
+                            LispObject fourth)
+
+  {
+    LispObject[] args = new LispObject[4];
+    args[0] = first;
+    args[1] = second;
+    args[2] = third;
+    args[3] = fourth;
+    return execute(args);
+  }
+
+  // Five args.
+  public LispObject execute( LispObject first,
+                            LispObject second, LispObject third,
+                            LispObject fourth, LispObject fifth)
+
+  {
+    LispObject[] args = new LispObject[5];
+    args[0] = first;
+    args[1] = second;
+    args[2] = third;
+    args[3] = fourth;
+    args[4] = fifth;
+    return execute(args);
+  }
+
+  // Six args.
+  public LispObject execute( LispObject first,
+                            LispObject second, LispObject third,
+                            LispObject fourth, LispObject fifth,
+                            LispObject sixth)
+
+  {
+    LispObject[] args = new LispObject[6];
+    args[0] = first;
+    args[1] = second;
+    args[2] = third;
+    args[3] = fourth;
+    args[4] = fifth;
+    args[5] = sixth;
+    return execute(args);
+  }
+
+  // Seven args.
+  public LispObject execute( LispObject first,
+                            LispObject second, LispObject third,
+                            LispObject fourth, LispObject fifth,
+                            LispObject sixth, LispObject seventh)
+
+  {
+    LispObject[] args = new LispObject[7];
+    args[0] = first;
+    args[1] = second;
+    args[2] = third;
+    args[3] = fourth;
+    args[4] = fifth;
+    args[5] = sixth;
+    args[6] = seventh;
+    return execute(args);
+  }
+
+  // Eight args.
+  public LispObject execute( LispObject first,
+                            LispObject second, LispObject third,
+                            LispObject fourth, LispObject fifth,
+                            LispObject sixth, LispObject seventh,
+                            LispObject eighth)
+
+  {
+    LispObject[] args = new LispObject[8];
+    args[0] = first;
+    args[1] = second;
+    args[2] = third;
+    args[3] = fourth;
+    args[4] = fifth;
+    args[5] = sixth;
+    args[6] = seventh;
+    args[7] = eighth;
+    return execute(args);
+  }
+
+  // Arg array.
+  public LispObject execute(LispObject[] args)
+
+  {
+    return notImplemented();
+  }
+
+  // ### load-compiled-function
+  private static final Primitive LOAD_COMPILED_FUNCTION =
+      new Primitive("load-compiled-function", PACKAGE_SYS, true, "source")
+  {
+    public LispObject execute(LispObject arg)
+    {
+      String namestring = null;
+      if (arg instanceof Pathname)
+        namestring = ((Pathname)arg).getNamestring();
+      else if (arg instanceof AbstractString)
+        namestring = arg.getStringValue();
+      if(arg instanceof JavaObject) {
+	  try {
+	      return loadClassBytes((byte[]) arg.javaInstance(byte[].class));
+	  } catch(Throwable t) {
+	      Debug.trace(t);
+	      return error(new LispError("Unable to load " + arg.princToString()));
+	  }
+      }
+      return error(new LispError("Unable to load " + arg.princToString()));
+    }
+  };
+
+  // ### varlist
+  private static final Primitive VARLIST =
+      new Primitive("varlist", PACKAGE_SYS, false)
+  {
+    public LispObject execute(LispObject arg)
+    {
+      if (arg instanceof Closure)
+        return ((Closure)arg).getVariableList();
+      return type_error(arg, Symbol.COMPILED_FUNCTION);
+    }
+  };
+
+	public boolean isClosureSubclass() {
+		return getClass() != CompiledClosure.class;
 	}
 
-	public CompiledClosure dup() {
-		CompiledClosure result = null;
-		try {
-			result = (CompiledClosure) super.clone();
-		} catch (Error e) {
-			throw e;
-		} catch (RuntimeException e) {
-			throw e;
-		} catch (Exception e) {
-			if (e instanceof CloneNotSupportedException) {
-			} else
-				e.printStackTrace();
-		}
-		return result;
-	}
-
-	// Zero args.
-	public SubLObject execute() {
-		SubLObject[] args = LispObjectFactory.makeLispObjectArray(0);
-		return this.execute(args);
-	}
-
-	// One arg.
-	public SubLObject execute(SubLObject first)
-
-	{
-		SubLObject[] args = LispObjectFactory.makeLispObjectArray(1);
-		args[0] = first;
-		return this.execute(args);
-	}
-
-	// Two args.
-	public SubLObject execute(SubLObject first, SubLObject second)
-
-	{
-		SubLObject[] args = LispObjectFactory.makeLispObjectArray(2);
-		args[0] = first;
-		args[1] = second;
-		return this.execute(args);
-	}
-
-	// Three args.
-	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third)
-
-	{
-		SubLObject[] args = LispObjectFactory.makeLispObjectArray(3);
-		args[0] = first;
-		args[1] = second;
-		args[2] = third;
-		return this.execute(args);
-	}
-
-	// Four args.
-	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth)
-
-	{
-		SubLObject[] args = LispObjectFactory.makeLispObjectArray(4);
-		args[0] = first;
-		args[1] = second;
-		args[2] = third;
-		args[3] = fourth;
-		return this.execute(args);
-	}
-
-	// Five args.
-	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
-			SubLObject fifth)
-
-	{
-		SubLObject[] args = LispObjectFactory.makeLispObjectArray(5);
-		args[0] = first;
-		args[1] = second;
-		args[2] = third;
-		args[3] = fourth;
-		args[4] = fifth;
-		return this.execute(args);
-	}
-
-	// Six args.
-	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
-			SubLObject fifth, SubLObject sixth)
-
-	{
-		SubLObject[] args = LispObjectFactory.makeLispObjectArray(6);
-		args[0] = first;
-		args[1] = second;
-		args[2] = third;
-		args[3] = fourth;
-		args[4] = fifth;
-		args[5] = sixth;
-		return this.execute(args);
-	}
-
-	// Seven args.
-	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
-			SubLObject fifth, SubLObject sixth, SubLObject seventh)
-
-	{
-		SubLObject[] args = LispObjectFactory.makeLispObjectArray(7);
-		args[0] = first;
-		args[1] = second;
-		args[2] = third;
-		args[3] = fourth;
-		args[4] = fifth;
-		args[5] = sixth;
-		args[6] = seventh;
-		return this.execute(args);
-	}
-
-	// Eight args.
-	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth,
-			SubLObject fifth, SubLObject sixth, SubLObject seventh, SubLObject eighth)
-
-	{
-		SubLObject[] args = LispObjectFactory.makeLispObjectArray(8);
-		args[0] = first;
-		args[1] = second;
-		args[2] = third;
-		args[3] = fourth;
-		args[4] = fifth;
-		args[5] = sixth;
-		args[6] = seventh;
-		args[7] = eighth;
-		return this.execute(args);
-	}
-
-	// Arg array.
-	public SubLObject execute(SubLObject[] args)
-
-	{
-		return this.notImplemented();
-	}
-
-	private SubLObject notImplemented() {
-		return Lisp.error(new WrongNumberOfArgumentsException(this));
-	}
-
-	public CompiledClosure setContext(ClosureBinding[] context) {
-		this.ctx = context;
-		return this;
-	}
-
-	public SubLObject typep(SubLObject typeSpecifier) {
-		if (typeSpecifier == LispSymbols.COMPILED_FUNCTION)
-			return Lisp.T;
-		return super.typep(typeSpecifier);
-	}
 }

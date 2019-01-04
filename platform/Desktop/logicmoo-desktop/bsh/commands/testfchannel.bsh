@@ -1,0 +1,32 @@
+import java.io.*;
+import java.nio.*;
+import java.nio.charset.*;
+import java.nio.channels.*;
+
+int count(File file, String charSet, char ch) {
+    Charset charset = Charset.forName(charSet);
+    CharsetDecoder decoder = charset.newDecoder();
+    FileInputStream fis = new FileInputStream(file);
+    FileChannel fc = fis.getChannel();
+
+    // Get the file's size and then map it into memory
+    long size = fc.size();
+    MappedByteBuffer bb =
+        fc.map(FileChannel.MapMode.READ_ONLY, 0, size);
+    CharBuffer cb = decoder.decode(bb);
+    int count = 0;
+    for (int i = 0; i < size && i < Integer.MAX_VALUE; i++) {
+        // print(cb.charAt(i));
+        if (cb.charAt(i) == ch)
+            count++;
+    }
+    fc.close();
+    return count;
+}
+
+testfchannel() {
+    File aFile = new File(showFileDialog());
+    print(count(aFile, "US-ASCII", 'A'));
+}
+
+testfchannel();

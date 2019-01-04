@@ -2,7 +2,7 @@
  * ArithmeticError.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: ArithmeticError.java 12513 2010-03-02 22:35:36Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,102 +31,119 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class ArithmeticError extends LispError {
-	// ### arithmetic-error-operation
-	private static Primitive ARITHMETIC_ERROR_OPERATION = new JavaPrimitive("arithmetic-error-operation", "condition") {
+public class ArithmeticError extends LispError
+{
+    protected ArithmeticError(LispClass cls)
+    {
+        super(cls);
+    }
 
-		public SubLObject execute(SubLObject arg) {
-			if (arg instanceof ArithmeticError)
-				return ((ArithmeticError) arg).getOperation();
-			else
-				return Lisp.error(new TypeError(arg, LispSymbols.ARITHMETIC_ERROR));
-		}
-	};
+    public ArithmeticError(LispObject initArgs)
+    {
+        super(StandardClass.ARITHMETIC_ERROR);
+        initialize(initArgs);
+    }
 
-	// ### arithmetic-error-operands
-	private static Primitive ARITHMETIC_ERROR_OPERANDS = new JavaPrimitive("arithmetic-error-operands", "condition") {
+    protected void initialize(LispObject initArgs)
+    {
+        super.initialize(initArgs);
+        LispObject operation = NIL;
+        LispObject operands = NIL;
+        LispObject first, second;
+        while (initArgs != NIL) {
+            first = initArgs.car();
+            initArgs = initArgs.cdr();
+            second = initArgs.car();
+            initArgs = initArgs.cdr();
+            if (first == Keyword.OPERATION)
+                operation = second;
+            else if (first == Keyword.OPERANDS)
+                operands = second;
+        }
+        setOperation(operation);
+        setOperands(operands);
+    }
 
-		public SubLObject execute(SubLObject arg) {
-			if (arg instanceof ArithmeticError)
-				return ((ArithmeticError) arg).getOperands();
-			else
-				return Lisp.error(new TypeError(arg, LispSymbols.ARITHMETIC_ERROR));
-		}
-	};
+    public ArithmeticError(String message)
+    {
+        super(StandardClass.ARITHMETIC_ERROR);
+        setFormatControl(message);
+        setFormatArguments(NIL);
+        setOperation(NIL);
+        setOperands(NIL);
+    }
 
-	protected ArithmeticError(LispClass cls) {
-		super(cls);
-	}
+    public LispObject typeOf()
+    {
+        return Symbol.ARITHMETIC_ERROR;
+    }
 
-	public ArithmeticError(String message) {
-		super(StandardClass.ARITHMETIC_ERROR);
-		this.setFormatControl(message);
-		this.setFormatArguments(Lisp.NIL);
-		this.setOperation(Lisp.NIL);
-		this.setOperands(Lisp.NIL);
-	}
+    public LispObject classOf()
+    {
+        return StandardClass.ARITHMETIC_ERROR;
+    }
 
-	public ArithmeticError(SubLObject initArgs) {
-		super(StandardClass.ARITHMETIC_ERROR);
-		this.initialize(initArgs);
-	}
+    public LispObject typep(LispObject type)
+    {
+        if (type == Symbol.ARITHMETIC_ERROR)
+            return T;
+        if (type == StandardClass.ARITHMETIC_ERROR)
+            return T;
+        return super.typep(type);
+    }
 
-	public SubLObject classOf() {
-		return StandardClass.ARITHMETIC_ERROR;
-	}
+    final LispObject getOperation()
+    {
+        return getInstanceSlotValue(Symbol.OPERATION);
+    }
 
-	SubLObject getOperands() {
-		return this.getInstanceSlotValue(LispSymbols.OPERANDS);
-	}
+    private final void setOperation(LispObject operation)
 
-	SubLObject getOperation() {
-		return this.getInstanceSlotValue(LispSymbols.OPERATION);
-	}
+    {
+        setInstanceSlotValue(Symbol.OPERATION, operation);
+    }
 
-	protected void initialize(SubLObject initArgs) {
-		super.initialize(initArgs);
-		SubLObject operation = Lisp.NIL;
-		SubLObject operands = Lisp.NIL;
-		SubLObject first, second;
-		while (initArgs != Lisp.NIL) {
-			first = initArgs.first();
-			initArgs = initArgs.rest();
-			second = initArgs.first();
-			initArgs = initArgs.rest();
-			if (first == Keyword.OPERATION)
-				operation = second;
-			else if (first == Keyword.OPERANDS)
-				operands = second;
-		}
-		this.setOperation(operation);
-		this.setOperands(operands);
-	}
+    final LispObject getOperands()
+    {
+        return getInstanceSlotValue(Symbol.OPERANDS);
+    }
 
-	private void setOperands(SubLObject operands)
+    private final void setOperands(LispObject operands)
 
-	{
-		this.setInstanceSlotValue(LispSymbols.OPERANDS, operands);
-	}
+    {
+        setInstanceSlotValue(Symbol.OPERANDS, operands);
+    }
 
-	private void setOperation(SubLObject operation)
-
-	{
-		this.setInstanceSlotValue(LispSymbols.OPERATION, operation);
-	}
-
-	public SubLObject typeOf() {
-		return LispSymbols.ARITHMETIC_ERROR;
-	}
-
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.ARITHMETIC_ERROR)
-			return Lisp.T;
-		if (type == StandardClass.ARITHMETIC_ERROR)
-			return Lisp.T;
-		return super.typep(type);
-	}
+    // ### arithmetic-error-operation
+    private static final Primitive ARITHMETIC_ERROR_OPERATION =
+        new Primitive("arithmetic-error-operation", "condition")
+    {
+        public LispObject execute(LispObject arg)
+        {
+            if (arg instanceof ArithmeticError) {
+                return ((ArithmeticError)arg).getOperation();
+            }
+            else {
+                return type_error(arg, Symbol.ARITHMETIC_ERROR);
+            }
+        }
+    };
+    // ### arithmetic-error-operands
+    private static final Primitive ARITHMETIC_ERROR_OPERANDS =
+        new Primitive("arithmetic-error-operands", "condition")
+    {
+        public LispObject execute(LispObject arg)
+        {
+            if (arg instanceof ArithmeticError) {
+                return ((ArithmeticError)arg).getOperands();
+            }
+            else {
+                return type_error(arg, Symbol.ARITHMETIC_ERROR);
+            }
+        }
+    };
 }

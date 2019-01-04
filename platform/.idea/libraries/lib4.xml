@@ -1,0 +1,36 @@
+<component name="libraryTable">
+  <library name="lib4">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/servlet-api-3.0.20100224.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/ant-1.6.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/jetty-webapp-8.0.4.v20111024.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/jetty-servlet-8.0.4.v20111024.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/commons-math-3.0-SNAPSHOT.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/junit.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/jetty-io-8.0.4.v20111024.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/jsp-2.1-glassfish-2.1.v20100127.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/cycSparqlEndpoint.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/subl-4q.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/procyon-compilertools-0.5.33-enigma.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/jsp-api-2.1-glassfish-2.1.v20100127.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/org.appdapter.bundle.xload-1.2.4-20160803.212610-8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/ecj-3.5.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/jetty-server-8.0.4.v20111024.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/customSysParam.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/asm-all-3.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/cyc-4q.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/jetty-http-8.0.4.v20111024.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/jetty-xml-8.0.4.v20111024.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/jetty-util-8.0.4.v20111024.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/jetty-security-8.0.4.v20111024.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/procyon-core-0.5.33-enigma.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/kaon2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/org.appdapter.lib.bind.jena-1.2.3.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/subl2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/jetty-continuation-8.0.4.v20111024.jar!/" />
+      <root url="jar://$PROJECT_DIR$/rcyc/lib/org.appdapter.lib.remote-1.2.4-20160803.212630-10.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

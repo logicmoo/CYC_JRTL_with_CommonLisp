@@ -1,22 +1,6 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -24,27 +8,24 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.operator.FixedArityFunctor;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public abstract class TernaryFunction extends FixedArityFunctor implements CommonSymbols {
-
-	//// Constructors
-
+public abstract class TernaryFunction extends FixedArityFunctor {
 	private static class ListSTernaryFunction extends TernaryFunction {
 		public ListSTernaryFunction() {
 			super(CommonSymbols.LISTS.getFunc());
 		}
 
+		@Override
 		public SubLObject processItem(SubLObject obj1, SubLObject obj2, SubLObject obj3) {
 			return ConsesLow.listS(obj1, obj2, obj3);
 		}
 	}
-
-	//// Public Area
 
 	private static class ListTernaryFunction extends TernaryFunction {
 		public ListTernaryFunction() {
 			super(CommonSymbols.LIST.getFunc());
 		}
 
+		@Override
 		public SubLObject processItem(SubLObject obj1, SubLObject obj2, SubLObject obj3) {
 			return ConsesLow.list(obj1, obj2, obj3);
 		}
@@ -55,6 +36,7 @@ public abstract class TernaryFunction extends FixedArityFunctor implements Commo
 			super(CommonSymbols.SORT.getFunc());
 		}
 
+		@Override
 		public SubLObject processItem(SubLObject obj1, SubLObject obj2, SubLObject obj3) {
 			return Sort.stable_sort(obj1, obj2, obj3);
 		}
@@ -65,28 +47,24 @@ public abstract class TernaryFunction extends FixedArityFunctor implements Commo
 			super(CommonSymbols.VALUES.getFunc());
 		}
 
+		@Override
 		public SubLObject processItem(SubLObject obj1, SubLObject obj2, SubLObject obj3) {
 			return Values.values(obj1, obj2, obj3);
 		}
 	}
 
-	private static TernaryFunction SORT_TERNARY_FUNCTION = new SortTernaryFunction();
-
-	private static TernaryFunction VALUES_TERNARY_FUNCTION = new ValuesTernaryFunction();
-
-	//// Internal Rep
-
-	private static TernaryFunction LIST_TERNARY_FUNCTION = new ListTernaryFunction();
+	protected TernaryFunction(SubLFunction func) {
+		(this.func = func).setTernaryFunction(this);
+	}
 
 	public static void initialize() {
-	} // this is for side effects of initializing statics
+	}
 
 	public static TernaryFunction makeInstance(SubLFunction function) {
 		TernaryFunction result = function.getTernaryFunction();
 		if (result == null)
-			// System.out.println("Creating slow TernaryFunction for: " +
-			// function);
 			result = new TernaryFunction(function) {
+				@Override
 				public SubLObject processItem(SubLObject obj1, SubLObject obj2, SubLObject obj3) {
 					SubLObject[] args = null;
 					Resourcer resourcer = Resourcer.getInstance();
@@ -95,7 +73,7 @@ public abstract class TernaryFunction extends FixedArityFunctor implements Commo
 						args[0] = obj1;
 						args[1] = obj2;
 						args[2] = obj3;
-						return this.func.funcall(args);
+						return func.funcall(args);
 					} finally {
 						resourcer.releaseSubLObjectArray(args);
 					}
@@ -105,20 +83,23 @@ public abstract class TernaryFunction extends FixedArityFunctor implements Commo
 	}
 
 	public static TernaryFunction makeInstance(SubLSymbol symbol) {
-		return TernaryFunction.makeInstance(symbol.getFunc());
+		return makeInstance(symbol.getFunc());
 	}
 
-	protected SubLFunction func;;
+	protected SubLFunction func;
+	private static TernaryFunction SORT_TERNARY_FUNCTION;
+	private static TernaryFunction VALUES_TERNARY_FUNCTION;
+	private static TernaryFunction LIST_TERNARY_FUNCTION;
+	static {
+		SORT_TERNARY_FUNCTION = new SortTernaryFunction();
+		VALUES_TERNARY_FUNCTION = new ValuesTernaryFunction();
+		LIST_TERNARY_FUNCTION = new ListTernaryFunction();
+	}
 
-	protected TernaryFunction(SubLFunction func) {
-		this.func = func;
-		func.setTernaryFunction(this);
-	};
-
+	@Override
 	public SubLFunction getFunction() {
-		return this.func.getFunc();
-	};
+		return func.getFunc();
+	}
 
-	public abstract SubLObject processItem(SubLObject obj1, SubLObject obj2, SubLObject obj3);;
-
+	public abstract SubLObject processItem(SubLObject p0, SubLObject p1, SubLObject p2);
 }

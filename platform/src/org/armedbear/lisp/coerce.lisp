@@ -1,7 +1,7 @@
 ;;; coerce.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: coerce.lisp 11391 2008-11-15 22:38:34Z vvoutilainen $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -105,9 +105,14 @@
          (coerce-to-function object))
         ((and (consp result-type)
               (eq (%car result-type) 'complex))
+         (when (complexp object)
+           (return-from coerce
+             (complex (coerce (realpart object) (cadr result-type))
+                      (coerce (imagpart object) (cadr result-type)))))
          (if (memq (%cadr result-type)
                    '(float single-float double-float short-float long-float))
-             (complex object 0.0)
+             (complex (coerce object (cadr result-type))
+                      (coerce 0.0 (cadr result-type)))
              object))
         ((and (consp result-type)
               (eq (%car result-type) 'AND))

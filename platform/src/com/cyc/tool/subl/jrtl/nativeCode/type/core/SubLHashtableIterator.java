@@ -1,259 +1,266 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 
-//// Internal Imports
-
-//// External Imports
-
-public class SubLHashtableIterator extends AbstractSubLObject {
-
-	public static String HASHTABLE_ITERATOR_TYPE_NAME = "HASHTABLE-ITERATOR";
-
-	//// Constructors
-
-	private Iterator iter;
-
-	//// Public Area
-
-	private Map.Entry entry;
-
-	/** Creates a new instance of SubLHashtableIterator. */
+public class SubLHashtableIterator extends FromSubLisp {
 	SubLHashtableIterator(SubLHashtable hashTable) {
-		this.iter = hashTable.getEntrySetIterator();
-		this.next();
+		iter = hashTable.getEntrySetIterator();
+		next();
 	}
 
+	private Iterator iter;
+	private Map.Entry entry;
+	public static String HASHTABLE_ITERATOR_TYPE_NAME = "HASHTABLE-ITERATOR";
+
+	@Override
 	public boolean canFastHash() {
 		return true;
 	}
 
 	public void clear() {
-		this.iter = null;
-		this.entry = null;
+		iter = null;
+		entry = null;
 	}
 
 	public SubLObject getCurrentKey() {
-		return (SubLObject) this.entry.getKey();
+		return (SubLObject) entry.getKey();
 	}
 
 	public SubLObject getCurrentValue() {
-		return (SubLObject) this.entry.getValue();
+		return (SubLObject) entry.getValue();
 	}
 
+	@Override
 	public int hashCode(int currentDepth) {
-		if (currentDepth < SubLObject.MAX_HASH_DEPTH)
-			return this.iter.hashCode();
-		else
-			return SubLObject.DEFAULT_EXCEEDED_HASH_VALUE;
+		if (currentDepth < 8)
+			return iter.hashCode();
+		return 0;
 	}
 
 	public boolean hasNext() {
-		return this.entry != null;
+		return entry != null;
 	}
 
+	@Override
+	public boolean isAlien() {
+		return false;
+	}
+
+	@Override
 	public boolean isAtom() {
 		return true;
 	}
 
+	@Override
 	public boolean isBigIntegerBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isBoolean() {
 		return false;
 	}
 
+	@Override
 	public boolean isChar() {
 		return false;
 	}
 
+	@Override
 	public boolean isCons() {
 		return false;
 	}
 
+	@Override
 	public boolean isDouble() {
 		return false;
 	}
 
+	@Override
 	public boolean isEnvironment() {
 		return false;
 	}
 
+	@Override
 	public boolean isError() {
 		return false;
 	}
 
+	@Override
 	public boolean isFixnum() {
 		return false;
 	}
 
+	@Override
 	public boolean isFunction() {
 		return false;
 	}
 
+	@Override
 	public boolean isFunctionSpec() {
 		return false;
 	}
 
+	@Override
 	public boolean isGuid() {
 		return false;
 	}
 
+	@Override
 	public boolean isHashtable() {
 		return false;
 	}
 
+	@Override
 	public boolean isHashtableIterator() {
 		return true;
 	}
 
+	@Override
 	public boolean isIntBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isInteger() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyhash() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyhashIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyword() {
 		return false;
 	}
 
+	@Override
 	public boolean isList() {
 		return false;
 	}
 
+	@Override
 	public boolean isLock() {
 		return false;
 	}
 
+	@Override
 	public boolean isLongBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isMacroOperator() {
 		return false;
 	}
 
+	@Override
 	public boolean isNil() {
 		return false;
 	}
 
+	@Override
 	public boolean isNumber() {
 		return false;
 	}
 
+	@Override
 	public boolean isPackage() {
 		return false;
 	}
 
+	@Override
+	public boolean isPackageIterator() {
+		return false;
+	}
+
+	@Override
 	public boolean isProcess() {
 		return false;
 	}
 
+	@Override
 	public boolean isReadWriteLock() {
 		return false;
 	}
 
+	@Override
 	public boolean isRegexPattern() {
 		return false;
 	}
 
+	@Override
 	public boolean isSemaphore() {
 		return false;
 	}
 
+	@Override
 	public boolean isSequence() {
 		return false;
 	}
 
+	@Override
 	public boolean isStream() {
 		return false;
 	}
 
+	@Override
 	public boolean isString() {
 		return false;
 	}
 
+	@Override
 	public boolean isStructure() {
 		return false;
 	}
 
+	@Override
 	public boolean isSymbol() {
 		return false;
 	}
 
+	@Override
 	public boolean isVector() {
 		return false;
 	}
 
 	public Object next() {
-		if (this.iter.hasNext())
-			this.entry = (Map.Entry) this.iter.next();
+		if (iter.hasNext())
+			entry = (Entry) iter.next();
 		else
-			this.entry = null;
-		return this.entry;
+			entry = null;
+		return entry;
 	}
 
-	/** Method created to avoid casting */
-	public SubLHashtableIterator toHashtableIterator() { // SubLHashtableIterator
+	@Override
+	public SubLHashtableIterator toHashtableIterator() {
 		return this;
 	}
+//
+//	@Override
+//	public String toString() {
+//		return "#<" + toTypeName() + " @ " + super.toString() + ">";
+//	}
 
-	public String toString() {
-		return "#<" + this.toTypeName() + " @ " + super.toString() + ">";
-	}
-
-	//// Protected Area
-
-	//// Private Area
-
-	//// Internal Rep
-
+	@Override
 	public String toTypeName() {
-		return SubLHashtableIterator.HASHTABLE_ITERATOR_TYPE_NAME;
+		return "HASHTABLE-ITERATOR";
 	}
-
-	// common lisp additions
-
-	public String writeToString() {
-		// TODO Auto-generated method stub
-		return this.toString();
-	}
-
-	//// Main
-
 }

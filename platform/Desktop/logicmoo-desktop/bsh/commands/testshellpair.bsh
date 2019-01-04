@@ -1,0 +1,12 @@
+// test shell pair loops
+import org.meta.math.qm.*;
+
+mol  = readMoleculeFile(showFileDialog());
+bfs  = new BasisFunctions(mol, "sto3g");
+onee = new OneElectronIntegrals(bfs, mol);
+twoe = new TwoElectronIntegrals(bfs, mol, false);
+
+scf = new HartreeFockSCFMethod(mol, onee, twoe);
+scf.scf();
+print(scf.getEnergy());
+

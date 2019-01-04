@@ -1,0 +1,15 @@
+import org.meta.parallel.event.*;
+
+al = new AsyncTaskCompletionListener() { 
+  asyncTaskCompleted(e) { 
+       print("completed : " + e); 
+       print("returned : " + e.getReturnValue());
+  }
+}; 
+
+class Test { public String test() { print("executed test"); return "hi"; }}
+asyncTask(new Test(), "test", new Object[0]);
+asyncTask(new Test(), "test", al, new Object[0]);
+
+queueAsyncTask(new Test(), "test", new Object[0]);
+queueAsyncTask(new Test(), "test", al, new Object[0]);

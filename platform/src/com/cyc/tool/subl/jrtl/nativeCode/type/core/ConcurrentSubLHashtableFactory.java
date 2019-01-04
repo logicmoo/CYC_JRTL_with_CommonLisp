@@ -1,5 +1,5 @@
 //
-//
+// For LarKC
 //
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
@@ -10,12 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ConcurrentSubLHashtableFactory implements SubLHashtableFactory {
-	public static SubLHashtableFactory factory;
-
-	static {
-		ConcurrentSubLHashtableFactory.factory = ConcurrentSubLHashtableFactory.getHashtableFactory();
-	}
-
 	private static SubLHashtableFactory getHashtableFactory() {
 		SubLHashtableFactory result = new ConcurrentSubLHashtableFactory();
 		String hashTableFactoryClass = System.getProperty("HASH_TABLE_FACTORY_CLASS");
@@ -31,14 +25,22 @@ public class ConcurrentSubLHashtableFactory implements SubLHashtableFactory {
 		return result;
 	}
 
+	public static SubLHashtableFactory factory;
+	static {
+		factory = getHashtableFactory();
+	}
+
+	@Override
 	public Map createMap() {
 		return new ConcurrentHashMap();
 	}
 
+	@Override
 	public Map createMap(int size) {
 		return new ConcurrentHashMap(size);
 	}
 
+	@Override
 	public Map createMap(int size, float loadFactor) {
 		return new ConcurrentHashMap(size, loadFactor);
 	}

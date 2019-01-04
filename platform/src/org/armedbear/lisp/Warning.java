@@ -2,7 +2,7 @@
  * Warning.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: Warning.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,31 +31,37 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class Warning extends Condition {
-	protected Warning() {
-	}
+public class Warning extends Condition
+{
+    protected Warning()
+    {
+    }
 
-	public Warning(SubLObject initArgs) {
-		super(initArgs);
-	}
+    public Warning(LispObject initArgs)
+    {
+        super(initArgs);
+    }
 
-	public SubLObject classOf() {
-		return StandardClass.WARNING;
-	}
+    public LispObject typeOf()
+    {
+        return Symbol.WARNING;
+    }
 
-	public SubLObject typeOf() {
-		return LispSymbols.WARNING;
-	}
+    public LispObject classOf()
+    {
+        return StandardClass.WARNING;
+    }
 
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.WARNING)
-			return Lisp.T;
-		if (type == StandardClass.WARNING)
-			return Lisp.T;
-		return super.typep(type);
-	}
+    public LispObject typep(LispObject type)
+    {
+        if (type == Symbol.WARNING)
+            return T;
+        if (type == StandardClass.WARNING)
+            return T;
+        return super.typep(type);
+    }
 }

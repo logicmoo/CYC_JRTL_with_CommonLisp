@@ -1,7 +1,7 @@
 ;;; describe.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: describe.lisp 12436 2010-02-09 20:45:52Z vvoutilainen $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -80,6 +80,9 @@
        (let ((doc (documentation object 'function)))
          (when doc
            (format stream "Function documentation:~%  ~A~%" doc)))
+       (let ((doc (documentation object 'variable)))
+         (when doc
+           (format stream "Variable documentation:~%  ~A~%" doc)))
        (let ((plist (symbol-plist object)))
          (when plist
            (format stream "The symbol's property list contains these indicator/value pairs:~%")
@@ -110,19 +113,19 @@
   (format stream "  TYPE         ~S~%" (pathname-type object))
   (format stream "  VERSION      ~S~%" (pathname-version object)))
 
-(defmethod describe-object ((object standard-object) stream)
+(defun %describe-standard-object/funcallable (object stream)
   (let* ((class (class-of object))
-         (slotds (%class-slots class))
+         (slotds (mop:class-slots class))
          (max-slot-name-length 0)
          (instance-slotds ())
          (class-slotds ()))
     (format stream "~S is an instance of ~S.~%" object class)
     (dolist (slotd slotds)
-      (let* ((name (%slot-definition-name slotd))
+      (let* ((name (mop:slot-definition-name slotd))
              (length (length (symbol-name name))))
         (when (> length max-slot-name-length)
           (setf max-slot-name-length length)))
-      (case (%slot-definition-allocation slotd)
+      (case (mop:slot-definition-allocation slotd)
         (:instance (push slotd instance-slotds))
         (:class  (push slotd class-slotds))))
     (setf max-slot-name-length  (min (+ max-slot-name-length 3) 30))
@@ -138,15 +141,22 @@
         (format stream "The following slots have :INSTANCE allocation:~%")
         (dolist (slotd (nreverse instance-slotds))
           (describe-slot
-           (%slot-definition-name slotd))))
+           (mop:slot-definition-name slotd))))
         (format stream "~%")
       (when class-slotds
         (format stream "The following slots have :CLASS allocation:~%")
         (dolist (slotd (nreverse class-slotds))
           (describe-slot
-           (%slot-definition-name slotd)))
-        (format stream "~%"))))
-    (values))
+           (mop:slot-definition-name slotd)))
+        (format stream "~%")))))
+
+(defmethod describe-object ((object standard-object) stream)
+  (%describe-standard-object/funcallable object stream)
+  (values))
+
+(defmethod describe-object ((object mop:funcallable-standard-object) stream)
+  (%describe-standard-object/funcallable object stream)
+  (values))
 
 (defmethod describe-object ((object java:java-object) stream)
   (java:describe-java-object object stream))

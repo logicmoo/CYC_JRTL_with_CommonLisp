@@ -2,7 +2,7 @@
  * LispThread.java
  *
  * Copyright (C) 2003-2007 Peter Graves
- * $Id: LispThread.java 12513 2010-03-02 22:35:36Z ehuelsmann $
+ * $Id: LispThread.java 14465 2013-04-24 12:50:37Z rschlatte $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,1069 +31,1615 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import java.lang.Thread.UncaughtExceptionHandler;
-import java.util.ArrayList;
+import java.lang.ref.WeakReference;
+import java.text.MessageFormat;
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CatchableThrow;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CatchableThrowImpl;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 
-public class LispThread extends AbstractLispObject implements UncaughtExceptionHandler {
-	static ArrayList<LispThread> threads = new ArrayList<LispThread>();
-	public static LispThread firstThread = new LispThread(Thread.currentThread());
+public abstract class LispThread extends LispObject
+{
+    static public class LispThreadImpl extends LispThread {
 
-	static boolean use_fast_calls = false;
-
-	static int UNASSIGNED_SPECIAL_INDEX = 0;
+		LispThreadImpl(Function fun, LispObject name) {
+			super(fun, name);
+		}
+		LispThreadImpl(Thread javaThread) {
+			super(javaThread);
+		}
+		protected LispThreadImpl() {
+			super(Thread.currentThread());
+		}
+	}
 
 	// use a concurrent hashmap: we may want to add threads
-	// while at the same time iterating the hash
-	// static ConcurrentHashMap<Thread,LispThread> map =
-	// new ConcurrentHashMap<Thread,LispThread>();
-	//
-	// private static ThreadLocal<LispThread> threads = new
-	// ThreadLocal<LispThread>(){
-	//
-	// public LispThread initialValue() {
-	// Thread thisThread = Thread.currentThread();
-	// LispThread thread = LispThread.map.get(thisThread);
-	// if (thread == null) {
-	// thread = new LispThread(thisThread);
-	// LispThread.map.put(thisThread,thread);
-	// }
-	// return thread;
-	// }
-	// };
+    // while at the same time iterating the hash
+    final static public ConcurrentHashMap<Thread,LispThread> map =
+       new ConcurrentHashMap<Thread,LispThread>();
 
-	/**
-	 * Indicates the last special slot which has been assigned. Symbols which
-	 * don't have a special slot assigned use a slot index of 0 for efficiency
-	 * reasons: it eliminates the need to check for index validity before
-	 * accessing the specials array.
-	 *
-	 */
-	static AtomicInteger lastSpecial = new AtomicInteger(LispThread.UNASSIGNED_SPECIAL_INDEX);
+    LispObject threadValue = NIL;
+	static Thread oneOnlyJT;
+	static LispThread oneOnlyLT;
 
-	/**
-	 * This array stores the symbols associated with the special bindings slots.
-	 */
-	static SubLSymbol[] specialNames = new SubLSymbol[4097];
-	// ### make-thread
-	private static Primitive MAKE_THREAD = new JavaPrimitive("make-thread", Lisp.PACKAGE_THREADS, true,
-			"function &optional &key name") {
+    private static ThreadLocal<LispThread> threads = new ThreadLocal<LispThread>(){
+        @Override
+        public LispThread initialValue() {
+            Thread thisThread = Thread.currentThread();
+            LispThread thread = LispThread.map.get(thisThread);
+            if (thread == null) {
+                thread = new LispThreadImpl(thisThread);
+				oneOnlyJT=thisThread;
+				oneOnlyLT=thread;
+                LispThread.map.put(thisThread,thread);
+            }
+            return thread;
+        }
+    };
 
-		public SubLObject execute(SubLObject[] args) {
-			int length = args.length;
-			if (length == 0)
-				Lisp.error(new WrongNumberOfArgumentsException(this));
-			SubLObject name = Lisp.NIL;
-			if (length > 1) {
-				if ((length - 1) % 2 != 0)
-					Lisp.error(new ProgramError("Odd number of keyword arguments."));
-				if (length > 3)
-					Lisp.error(new WrongNumberOfArgumentsException(this));
-				if (args[1] == Keyword.NAME)
-					name = args[2].STRING();
-				else
-					Lisp.error(new ProgramError("Unrecognized keyword argument " + args[1].writeToString() + "."));
-			}
-			return new LispThread(Lisp.checkFunction(args[0]), name);
-		}
-	};
-	// ### threadp
-	private static Primitive THREADP = new JavaPrimitive("threadp", Lisp.PACKAGE_THREADS, true, "object",
-			"Boolean predicate as whether OBJECT is a thread.") {
+    public static final LispThread currentThread()
+    {
+    	synchronized(threads) {
+		if(Thread.currentThread()==oneOnlyJT) return oneOnlyLT;
+        return threads.get();
+    	}
+    }
 
-		public SubLObject execute(SubLObject arg) {
-			return arg instanceof LispThread ? Lisp.T : Lisp.NIL;
-		}
-	};
-	// ### thread-alive-p
-	private static Primitive THREAD_ALIVE_P = new JavaPrimitive("thread-alive-p", Lisp.PACKAGE_THREADS, true, "thread",
-			"Boolean predicate whether THREAD is alive.") {
+    final Thread javaThread;
+    private boolean destroyed;
+    final LispObject name;
+    public LispObject[] _values;
+    private boolean threadInterrupted;
+    private LispObject pending = NIL;
+    private Symbol wrapper =
+        PACKAGE_THREADS.intern("THREAD-FUNCTION-WRAPPER");
 
-		public SubLObject execute(SubLObject arg) {
-			LispThread lispThread;
-			if (arg instanceof LispThread)
-				lispThread = (LispThread) arg;
-			else
-				return Lisp.type_error(arg, LispSymbols.THREAD);
-			return lispThread.javaThread.isAlive() ? Lisp.T : Lisp.NIL;
-		}
-	};
-	// ### thread-name
-	private static Primitive THREAD_NAME = new JavaPrimitive("thread-name", Lisp.PACKAGE_THREADS, true, "thread",
-			"Return the name of THREAD if it has one.") {
+    LispThread(Thread javaThread)
+    {
+        this.javaThread = javaThread;
+        name = new SimpleString(javaThread.getName());
+    }
 
-		public SubLObject execute(SubLObject arg) {
-			if (arg instanceof LispThread)
-				return ((LispThread) arg).name;
-			return Lisp.type_error(arg, LispSymbols.THREAD);
-		}
-	};
-	// ### sleep
-	private static Primitive SLEEP = new JavaPrimitive("sleep", Lisp.PACKAGE_CL, true, "seconds",
-			"Causes the invoking thread to sleep for SECONDS seconds.\nSECONDS may be a value between 0 1and 1.") {
+    LispThread(final Function fun, LispObject name)
+    {
+        Runnable r = new Runnable() {
+            public void run()
+            {
+                try {
+                    threadValue = funcall(wrapper,
+                            new LispObject[] { fun },
+                            LispThread.this);
+                }
+                catch (ThreadDestroyed ignored) {
+                      // Might happen.
+                }
+                catch (ProcessingTerminated e) {
+                    System.exit(e.getStatus());
+                }
+                catch (Throwable t) { // any error: process thread interrupts
+                    if (isInterrupted()) {
+                        processThreadInterrupts();
+                    }
+                    String msg
+                        = MessageFormat.format("Ignoring uncaught exception {0}.",
+                                               t.toString());
+                    Debug.warn(msg);
+                }
+                finally {
+                    // make sure the thread is *always* removed from the hash again
+                    map.remove(Thread.currentThread());
+                }
+            }
+        };
+        javaThread = new Thread(r);
+        this.name = name;
+        map.put(javaThread, this);
+        if (name != NIL)
+            javaThread.setName(name.getStringValue());
+        javaThread.setDaemon(true);
+        javaThread.start();
+    }
 
-		public SubLObject execute(SubLObject arg) {
+    public StackTraceElement[] getJavaStackTrace() {
+        return javaThread.getStackTrace();
+    }
 
-			try {
-				Thread.sleep(LispThread.javaSleepInterval(arg));
-			} catch (InterruptedException e) {
-				LispThread.currentThread().processThreadInterrupts();
-			}
-			return Lisp.NIL;
-		}
-	};
+    @Override
+    public LispObject typeOf()
+    {
+        return Symbol.THREAD;
+    }
 
-	// ### mapcar-threads
-	private static Primitive MAPCAR_THREADS = new JavaPrimitive("mapcar-threads", Lisp.PACKAGE_THREADS, true,
-			"function", "Applies FUNCTION to all existing threads.") {
+    @Override
+    public LispObject classOf()
+    {
+        return BuiltInClass.THREAD;
+    }
 
-		public SubLObject execute(SubLObject arg) {
-			Function fun = Lisp.checkFunction(arg);
-			LispThread thread = LispThread.currentThread();
-			SubLObject result = Lisp.NIL;
-			Iterator it = LispThread.threads.iterator();// map.values().iterator();
-			while (it.hasNext()) {
-				SubLObject[] args = LispObjectFactory.makeLispObjectArray(1);
-				args[0] = (LispThread) it.next();
-				result = LispObjectFactory.makeCons(Lisp.funcall(fun, args, thread), result);
-			}
-			return result;
-		}
-	};
+    @Override
+    public LispObject typep(LispObject typeSpecifier)
+    {
+        if (typeSpecifier == Symbol.THREAD)
+            return T;
+        if (typeSpecifier == BuiltInClass.THREAD)
+            return T;
+        return super.typep(typeSpecifier);
+    }
 
-	// ### destroy-thread
-	private static Primitive DESTROY_THREAD = new JavaPrimitive("destroy-thread", Lisp.PACKAGE_THREADS, true, "thread",
-			"Mark THREAD as destroyed.") {
+    public final synchronized boolean isDestroyed()
+    {
+        return destroyed;
+    }
 
-		public SubLObject execute(SubLObject arg) {
-			LispThread thread;
-			if (arg instanceof LispThread)
-				thread = (LispThread) arg;
-			else
-				return Lisp.type_error(arg, LispSymbols.THREAD);
-			thread.setDestroyed(true);
-			return Lisp.T;
-		}
-	};
+    final synchronized boolean isInterrupted()
+    {
+        return threadInterrupted;
+    }
 
-	// ### interrupt-thread thread function &rest args => T
-	// Interrupts thread and forces it to apply function to args. When the
-	// function returns, the thread's original computation continues. If
-	// multiple interrupts are queued for a thread, they are all run, but the
-	// order is not guaranteed.
-	private static Primitive INTERRUPT_THREAD = new JavaPrimitive("interrupt-thread", Lisp.PACKAGE_THREADS, true,
-			"thread function &rest args",
-			"Interrupts THREAD and forces it to apply FUNCTION to ARGS.\nWhen the function returns, the thread's original computation continues. If  multiple interrupts are queued for a thread, they are all run, but the order is not guaranteed.") {
+    final synchronized void setDestroyed(boolean b)
+    {
+        destroyed = b;
+    }
 
-		public SubLObject execute(SubLObject[] args) {
-			if (args.length < 2)
-				return Lisp.error(new WrongNumberOfArgumentsException(this));
-			LispThread thread;
-			if (args[0] instanceof LispThread)
-				thread = (LispThread) args[0];
-			else
-				return Lisp.type_error(args[0], LispSymbols.THREAD);
-			SubLObject fun = args[1];
-			SubLObject funArgs = Lisp.NIL;
-			for (int i = args.length; i-- > 2;)
-				funArgs = LispObjectFactory.makeCons(args[i], funArgs);
-			thread.interrupt(fun, funArgs);
-			return Lisp.T;
-		}
-	};
+    final synchronized void interrupt(LispObject function, LispObject args)
+    {
+        pending = new Cons(args, pending);
+        pending = new Cons(function, pending);
+        threadInterrupted = true;
+        javaThread.interrupt();
+    }
 
-	// ### current-thread
-	private static Primitive CURRENT_THREAD = new JavaPrimitive("current-thread", Lisp.PACKAGE_THREADS, true, "",
-			"Returns a reference to invoking thread.") {
+    final synchronized void processThreadInterrupts()
 
-		public SubLObject execute() {
-			return LispThread.currentThread();
-		}
-	};
+    {
+        while (pending != NIL) {
+            LispObject function = pending.car();
+            LispObject args = pending.cadr();
+            pending = pending.cddr();
+            Primitives.APPLY.execute(function, args);
+        }
+        threadInterrupted = false;
+    }
 
-	// ### backtrace
-	private static Primitive BACKTRACE = new JavaPrimitive("backtrace", Lisp.PACKAGE_SYS, true, "",
-			"Returns a backtrace of the invoking thread.") {
+    public final LispObject[] getValues()
+    {
+        return _values;
+    }
 
-		public SubLObject execute(SubLObject[] args)
+    public final LispObject[] getValues(LispObject result, int count)
+    {
+        if (_values == null) {
+            LispObject[] values = new LispObject[count];
+            if (count > 0)
+                values[0] = result;
+            for (int i = 1; i < count; i++)
+                values[i] = NIL;
+            return values;
+        }
+        // If the caller doesn't want any extra values, just return the ones
+        // we've got.
+        if (count <= _values.length)
+            return _values;
+        // The caller wants more values than we have. Pad with NILs.
+        LispObject[] values = new LispObject[count];
+        for (int i = _values.length; i-- > 0;)
+            values[i] = _values[i];
+        for (int i = _values.length; i < count; i++)
+            values[i] = NIL;
+        return values;
+    }
 
-		{
-			if (args.length > 1)
-				return Lisp.error(new WrongNumberOfArgumentsException(this));
-			int limit = args.length > 0 ? args[0].intValue() : 0;
-			return LispThread.currentThread().backtrace(limit);
-		}
-	};
+    /** Used by the JVM compiler for MULTIPLE-VALUE-CALL. */
+    public final LispObject[] accumulateValues(LispObject result,
+                                               LispObject[] oldValues)
+    {
+        if (oldValues == null) {
+            if (_values != null)
+                return _values;
+            LispObject[] values = new LispObject[1];
+            values[0] = result;
+            return values;
+        }
+        if (_values != null) {
+            if (_values.length == 0)
+                return oldValues;
+            final int totalLength = oldValues.length + _values.length;
+            LispObject[] values = new LispObject[totalLength];
+            System.arraycopy(oldValues, 0,
+                             values, 0,
+                             oldValues.length);
+            System.arraycopy(_values, 0,
+                             values, oldValues.length,
+                             _values.length);
+            return values;
+        }
+        // _values is null.
+        final int totalLength = oldValues.length + 1;
+        LispObject[] values = new LispObject[totalLength];
+        System.arraycopy(oldValues, 0,
+                         values, 0,
+                         oldValues.length);
+        values[totalLength - 1] = result;
+        return values;
+    }
 
-	// ### frame-to-string
-	private static Primitive FRAME_TO_STRING = new JavaPrimitive("frame-to-string", Lisp.PACKAGE_SYS, true, "frame") {
+    public final LispObject setValues()
+    {
+        _values = new LispObject[0];
+        return NIL;
+    }
 
-		public SubLObject execute(SubLObject[] args)
+    public final LispObject setValues(LispObject value1)
+    {
+        _values = null;
+        return value1;
+    }
 
-		{
-			if (args.length != 1)
-				return Lisp.error(new WrongNumberOfArgumentsException(this));
+    public final LispObject setValues(LispObject value1, LispObject value2)
+    {
+        _values = new LispObject[2];
+        _values[0] = value1;
+        _values[1] = value2;
+        return value1;
+    }
 
-			return Lisp.checkStackFrame(args[0]).toLispString();
-		}
-	};
+    public final LispObject setValues(LispObject value1, LispObject value2,
+                                      LispObject value3)
+    {
+        _values = new LispObject[3];
+        _values[0] = value1;
+        _values[1] = value2;
+        _values[2] = value3;
+        return value1;
+    }
 
-	// ### frame-to-list
-	private static Primitive FRAME_TO_LIST = new JavaPrimitive("frame-to-list", Lisp.PACKAGE_SYS, true, "frame") {
+    public final LispObject setValues(LispObject value1, LispObject value2,
+                                      LispObject value3, LispObject value4)
+    {
+        _values = new LispObject[4];
+        _values[0] = value1;
+        _values[1] = value2;
+        _values[2] = value3;
+        _values[3] = value4;
+        return value1;
+    }
 
-		public SubLObject execute(SubLObject[] args)
+    public final LispObject setValues(LispObject[] values)
+    {
+        switch (values.length) {
+            case 0:
+                _values = values;
+                return NIL;
+            case 1:
+                _values = null;
+                return values[0];
+            default:
+                _values = values;
+                return values[0];
+        }
+    }
 
-		{
-			if (args.length != 1)
-				return Lisp.error(new WrongNumberOfArgumentsException(this));
+    public final void clearValues()
+    {
+        _values = null;
+    }
 
-			return Lisp.checkStackFrame(args[0]).toLispList();
-		}
-	};
+    public final LispObject nothing()
+    {
+        _values = new LispObject[0];
+        return NIL;
+    }
 
-	static {
-		// FIXME: this block has been added for pre-0.16 compatibility
-		// and can be removed the latest at release 0.22
-		Lisp.PACKAGE_EXT.export(Lisp.intern("MAKE-THREAD", Lisp.PACKAGE_THREADS));
-		Lisp.PACKAGE_EXT.export(Lisp.intern("THREADP", Lisp.PACKAGE_THREADS));
-		Lisp.PACKAGE_EXT.export(Lisp.intern("THREAD-ALIVE-P", Lisp.PACKAGE_THREADS));
-		Lisp.PACKAGE_EXT.export(Lisp.intern("THREAD-NAME", Lisp.PACKAGE_THREADS));
-		Lisp.PACKAGE_EXT.export(Lisp.intern("MAPCAR-THREADS", Lisp.PACKAGE_THREADS));
-		Lisp.PACKAGE_EXT.export(Lisp.intern("DESTROY-THREAD", Lisp.PACKAGE_THREADS));
-		Lisp.PACKAGE_EXT.export(Lisp.intern("INTERRUPT-THREAD", Lisp.PACKAGE_THREADS));
-		Lisp.PACKAGE_EXT.export(Lisp.intern("CURRENT-THREAD", Lisp.PACKAGE_THREADS));
-	}
+   /**
+    * Force a single value, for situations where multiple values should be
+    * ignored.
+    */
+    public final LispObject value(LispObject obj)
+    {
+        _values = null;
+        return obj;
+    }
 
-	// ### use-fast-calls
-	private static Primitive USE_FAST_CALLS = new JavaPrimitive("use-fast-calls", Lisp.PACKAGE_SYS, true) {
 
-		public SubLObject execute(SubLObject arg) {
-			LispThread.use_fast_calls = arg != Lisp.NIL;
-			return LispThread.use_fast_calls ? Lisp.T : Lisp.NIL;
-		}
-	};
 
-	// ### synchronized-on
-	private static SpecialOperator SYNCHRONIZED_ON = new SpecialOperator("synchronized-on", Lisp.PACKAGE_THREADS, true,
-			"form &body body") {
+    final static int UNASSIGNED_SPECIAL_INDEX = 0;
 
-		public SubLObject execute(SubLObject args, Environment env)
+    /** Indicates the last special slot which has been assigned.
+     * Symbols which don't have a special slot assigned use a slot
+     * index of 0 for efficiency reasons: it eliminates the need to
+     * check for index validity before accessing the specials array.
+     *
+     */
+    final static AtomicInteger lastSpecial
+        = new AtomicInteger(UNASSIGNED_SPECIAL_INDEX);
 
-		{
-			if (args == Lisp.NIL)
-				return Lisp.error(new WrongNumberOfArgumentsException(this));
+    /** A list of indices which can be (re)used for symbols to
+     * be assigned a special slot index.
+     */
+    final static ConcurrentLinkedQueue<Integer> freeSpecialIndices
+        = new ConcurrentLinkedQueue<Integer>();
 
-			LispThread thread = LispThread.currentThread();
-			synchronized (Lisp.eval(args.first(), env, thread).lockableInstance()) {
-				return Lisp.progn(args.rest(), env, thread);
-			}
-		}
-	};
+    final static int specialsInitialSize
+        = Integer.valueOf(System.getProperty("abcl.specials.initialSize","4096"));
 
-	// ### object-wait
-	private static Primitive OBJECT_WAIT = new JavaPrimitive("object-wait", Lisp.PACKAGE_THREADS, true,
-			"object &optional timeout") {
+    /** This array stores the current special binding for every symbol
+     * which has been globally or locally declared special.
+     *
+     * If the array element has a null value, this means there currently
+     * is no active binding. If the array element contains a valid
+     * SpecialBinding object, but the value field of it is null, that
+     * indicates an "UNBOUND VARIABLE" situation.
+     */
+    SpecialBinding[] specials
+        = new SpecialBinding[specialsInitialSize + 1];
 
-		public SubLObject execute(SubLObject object)
 
-		{
-			try {
-				object.lockableInstance().wait();
-			} catch (InterruptedException e) {
-				LispThread.currentThread().processThreadInterrupts();
-			} catch (IllegalMonitorStateException e) {
-				return Lisp.error(new IllegalMonitorState());
-			}
-			return Lisp.NIL;
-		}
+    public final void clearBindings()
+    {
+    	Arrays.fill(specials, null);
+    }
 
-		public SubLObject execute(SubLObject object, SubLObject timeout)
+    final static ConcurrentHashMap<Integer, WeakReference<Symbol>> specialNames
+        = new ConcurrentHashMap<Integer, WeakReference<Symbol>>();
 
-		{
-			try {
-				object.lockableInstance().wait(LispThread.javaSleepInterval(timeout));
-			} catch (InterruptedException e) {
-				LispThread.currentThread().processThreadInterrupts();
-			} catch (IllegalMonitorStateException e) {
-				return Lisp.error(new IllegalMonitorState());
-			}
-			return Lisp.NIL;
-		}
-	};
+    /** The number of slots to grow the specials table in
+     * case of insufficient storage.
+     */
+    final static int specialsDelta
+        = Integer.valueOf(System.getProperty("abcl.specials.grow.delta","1024"));
 
-	// ### object-notify
-	private static Primitive OBJECT_NOTIFY = new JavaPrimitive("object-notify", Lisp.PACKAGE_THREADS, true, "object") {
+    /** This variable points to the head of a linked list of saved
+     * special bindings. Its main purpose is to allow a mark/reset
+     * interface to special binding and unbinding.
+     */
+    private SpecialBindingsMark savedSpecials = null;
 
-		public SubLObject execute(SubLObject object)
+    /** Marks the state of the special bindings,
+     * for later rewinding by resetSpecialBindings().
+     */
+    public final SpecialBindingsMark markSpecialBindings() {
+        return savedSpecials;
+    }
 
-		{
-			try {
-				object.lockableInstance().notify();
-			} catch (IllegalMonitorStateException e) {
-				return Lisp.error(new IllegalMonitorState());
-			}
-			return Lisp.NIL;
-		}
-	};
+    /** Restores the state of the special bindings to what
+     * was captured in the marker 'mark' by a call to markSpecialBindings().
+     */
+    public final void resetSpecialBindings(SpecialBindingsMark mark) {
+        SpecialBindingsMark c = savedSpecials;
+        while (mark != c) {
+            specials[c.idx] = c.binding;
+            c = c.next;
+        }
+        savedSpecials = c;
+    }
 
-	// ### object-notify-all
-	private static Primitive OBJECT_NOTIFY_ALL = new JavaPrimitive("object-notify-all", Lisp.PACKAGE_THREADS, true,
-			"object") {
+    /** Clears out all active special bindings including any marks
+     * previously set. Invoking resetSpecialBindings() with marks
+     * set before this call results in undefined behaviour.
+     */
+    // Package level access: only for Interpreter.run()
+    final void clearSpecialBindings() {
+        resetSpecialBindings(null);
+    }
 
-		public SubLObject execute(SubLObject object)
+    /** Assigns a specials array index number to the symbol,
+     * if it doesn't already have one.
+     */
+    private void assignSpecialIndex(Symbol sym)
+    {
+        if (sym.specialIndex != UNASSIGNED_SPECIAL_INDEX)
+            return;
 
-		{
-			try {
-				object.lockableInstance().notifyAll();
-			} catch (IllegalMonitorStateException e) {
-				return Lisp.error(new IllegalMonitorState());
-			}
-			return Lisp.NIL;
-		}
-	};
+        synchronized (Symbol.class) {
+        	synchronized (sym) {
 
-	/**
-	 * Assigns a specials array index number to the symbol, if it doesn't
-	 * already have one.
-	 */
-	private static void assignSpecialIndex(SubLSymbol osym) {
-		SubLSymbol sym = osym;
-		int specialIndex = sym.getSpecialIndex();
-		if (specialIndex != 0)
+            // Don't use an atomic access: we'll be swapping values only once.
+            if (sym.specialIndex == UNASSIGNED_SPECIAL_INDEX) {
+                Integer next = freeSpecialIndices.poll();
+                if (next == null
+                        && specials.length < lastSpecial.get()
+                        && null == System.getProperty("abcl.specials.grow.slowly")) {
+                    // free slots are exhausted; in the middle and at the end.
+                    System.gc();
+                    next = freeSpecialIndices.poll();
+                }
+                if (next == null)
+                    sym.specialIndex = lastSpecial.incrementAndGet();
+                else
+                    sym.specialIndex = next.intValue();
+            }
+        	}
+
+        }
+
+    }
+
+    /** Frees up an index previously assigned to a symbol for re-assignment
+     * to another symbol. Returns without effect if the symbol has the
+     * default UNASSIGNED_SPECIAL_INDEX special index.
+     */
+    protected static void releaseSpecialIndex(Symbol sym)
+    {
+        int index = sym.specialIndex;
+        if (index != UNASSIGNED_SPECIAL_INDEX) {
+            // clear out the values in the
+            Iterator<LispThread> it = map.values().iterator();
+            while (it.hasNext()) {
+                LispThread thread = it.next();
+
+                // clear out the values in the saved specials list
+                SpecialBindingsMark savedSpecial = thread.savedSpecials;
+                while (savedSpecial != null) {
+                    if (savedSpecial.idx == index) {
+                        savedSpecial.idx = 0;
+                        savedSpecial.binding = null;
+                    }
+                    savedSpecial = savedSpecial.next;
+                }
+
+                thread.specials[index] = null;
+            }
+
+            freeSpecialIndices.add(new Integer(index));
+        }
+    }
+
+    private void growSpecials() {
+        SpecialBinding[] newSpecials
+                = new SpecialBinding[specials.length + specialsDelta];
+        System.arraycopy(specials, 0, newSpecials, 0, specials.length);
+        specials = newSpecials;
+    }
+
+    private SpecialBinding ensureSpecialBinding(int idx) {
+        SpecialBinding binding;
+        boolean assigned;
+        do {
+            try {
+                binding = specials[idx];
+                assigned = true;
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                assigned = false;
+                binding = null;  // suppresses 'unassigned' error
+                growSpecials();
+            }
+        } while (! assigned);
+        return binding;
+    }
+
+    public final SpecialBinding bindSpecial(Symbol name, LispObject value)
+    {
+        int idx;
+
+        assignSpecialIndex(name);
+        idx = name.specialIndex;
+        SpecialBinding binding = ensureSpecialBinding(idx);
+        savedSpecials = new SpecialBindingsMark(idx, binding, savedSpecials);
+        return specials[idx] = new SpecialBinding(idx, value);
+    }
+
+    public final SpecialBinding bindSpecialToCurrentValue(Symbol name)
+    {
+        int idx;
+
+        assignSpecialIndex(name);
+        SpecialBinding binding = ensureSpecialBinding(idx = name.specialIndex);
+        savedSpecials = new SpecialBindingsMark(idx, binding, savedSpecials);
+        return specials[idx]
+            = new SpecialBinding(idx,
+                                 (binding == null) ?
+                                 name.getSymbolValue() : binding.value);
+    }
+
+    /** Looks up the value of a special binding in the context of the
+     * given thread.
+     *
+     * In order to find the value of a special variable (in general),
+     * use {@link Symbol#symbolValue}.
+     *
+     * @param name The name of the special variable, normally a symbol
+     * @return The inner most binding of the special, or null if unbound
+     *
+     * @see Symbol#symbolValue
+     */
+    public final LispObject lookupSpecial(Symbol name)
+    {
+        SpecialBinding binding = ensureSpecialBinding(name.specialIndex);
+        return (binding == null) ? null : binding.value;
+    }
+
+    public final SpecialBinding getSpecialBinding(Symbol name)
+    {
+        return ensureSpecialBinding(name.specialIndex);
+    }
+
+    public final LispObject setSpecialVariable(Symbol name, LispObject value)
+    {
+        SpecialBinding binding = ensureSpecialBinding(name.specialIndex);
+        if (binding != null)
+            return binding.value = value;
+
+        name.setSymbolValue(value);
+        return value;
+    }
+
+    public final LispObject pushSpecial(Symbol name, LispObject thing)
+
+    {
+        SpecialBinding binding = ensureSpecialBinding(name.specialIndex);
+        if (binding != null)
+            return binding.value = new Cons(thing, binding.value);
+
+        LispObject value = name.getSymbolValue();
+        if (value != null) {
+            LispObject newValue = new Cons(thing, value);
+            name.setSymbolValue(newValue);
+            return newValue;
+        } else
+            return error(new UnboundVariable(name));
+    }
+
+    // Returns symbol value or NIL if unbound.
+    public final LispObject safeSymbolValue(Symbol name)
+    {
+        SpecialBinding binding = ensureSpecialBinding(name.specialIndex);
+        if (binding != null)
+            return binding.value;
+
+        LispObject value = name.getSymbolValue();
+        return value != null ? value : NIL;
+    }
+
+    public final void rebindSpecial(Symbol name, LispObject value)
+    {
+        SpecialBinding binding = getSpecialBinding(name);
+        binding.value = value;
+    }
+
+    private LispObject catchTags = NIL;
+
+    public void pushCatchTag(LispObject tag)
+    {
+        catchTags = new Cons(tag, catchTags);
+    }
+
+    public void popCatchTag()
+    {
+        if (catchTags != NIL)
+            catchTags = catchTags.cdr();
+        else
+            Debug.assertTrue(false);
+    }
+
+    public void throwToTag(LispObject tag, LispObject result)
+
+    {
+        LispObject rest = catchTags;
+        while (rest != NIL) {
+            if (rest.car() == tag)
+                throw new CatchableThrowImpl(tag, result, this);
+            rest = rest.cdr();
+        }
+        error(new ControlError("Attempt to throw to the nonexistent tag " +
+                                tag.princToString() + "."));
+    }
+
+
+    private static class StackMarker {
+
+        final int numArgs;
+
+        StackMarker(int numArgs) {
+            this.numArgs = numArgs;
+        }
+
+        int getNumArgs() {
+            return numArgs;
+        }
+    }
+
+    // markers for args
+    private final static StackMarker STACK_MARKER_0 = new StackMarker(0);
+    private final static StackMarker STACK_MARKER_1 = new StackMarker(1);
+    private final static StackMarker STACK_MARKER_2 = new StackMarker(2);
+    private final static StackMarker STACK_MARKER_3 = new StackMarker(3);
+    private final static StackMarker STACK_MARKER_4 = new StackMarker(4);
+    private final static StackMarker STACK_MARKER_5 = new StackMarker(5);
+    private final static StackMarker STACK_MARKER_6 = new StackMarker(6);
+    private final static StackMarker STACK_MARKER_7 = new StackMarker(7);
+    private final static StackMarker STACK_MARKER_8 = new StackMarker(8);
+
+    private final int STACK_FRAME_EXTRA = 2;
+    // a LispStackFrame with n arguments occupies n + STACK_FRAME_EXTRA elements
+    // in {@code stack} array.
+    // stack[framePos] == operation
+    // stack[framePos + 1 + i] == arg[i]
+    // stack[framePos + 1 + n] == initially SrackMarker(n)
+    // LispStackFrame object may be lazily allocated later.
+    // In this case it is stored in stack framePos + 1 + n]
+    //
+    // Java stack frame occupies 1 element
+    // stack[framePos] == JavaStackFrame
+    //
+    // Stack consists of a list of StackSegments.
+    // Top StackSegment is cached in variables stack and stackPtr.
+    private StackSegment topStackSegment = new StackSegment(INITIAL_SEGMENT_SIZE, null);
+    private Object[] stack = topStackSegment.stack;
+    private int stackPtr = 0;
+    private StackSegment spareStackSegment;
+
+    private static class StackSegment
+      implements org.armedbear.lisp.protocol.Inspectable
+    {
+        final Object[] stack;
+        final StackSegment next;
+        int stackPtr;
+
+        StackSegment(int size, StackSegment next) {
+            stack = new Object[size];
+            this.next = next;
+        }
+        public LispObject getParts() {
+        Cons result = new Cons(NIL);
+        return result
+          .push(new Symbol("INITIAL-SEGMENT-SIZE"))
+            .push(LispInteger.getInstance(LispThread.INITIAL_SEGMENT_SIZE))
+          .push(new Symbol("SEGMENT-SIZE"))
+            .push(LispInteger.getInstance(LispThread.SEGMENT_SIZE)).nreverse();
+        }
+    }
+
+    private void ensureStackCapacity(int itemsToPush) {
+		if (NO_STACK_FRAMES)
+			return;
+        if (stackPtr + (itemsToPush - 1) >= stack.length)
+            grow(itemsToPush);
+    }
+
+    private static final int INITIAL_SEGMENT_SIZE = 1 << 10;
+    private static final int SEGMENT_SIZE = (1 << 19) - 4; // 4 MiB page on x86_64
+
+    private void grow(int numEntries) {
+    	if(NO_STACK_FRAMES) {
+    		return;
+    	}
+        topStackSegment.stackPtr = stackPtr;
+        if (spareStackSegment != null) {
+            // Use spare segement if available
+            if (stackPtr > 0 && spareStackSegment.stack.length >= numEntries) {
+                topStackSegment = spareStackSegment;
+                stack = topStackSegment.stack;
+                spareStackSegment = null;
+                stackPtr = 0;
+                return;
+            }
+            spareStackSegment = null;
+        }
+        int newSize = stackPtr + numEntries;
+        if (topStackSegment.stack.length < SEGMENT_SIZE || stackPtr == 0) {
+            // grow initial segment from initial size to standard size
+            int newLength = Math.max(newSize, Math.min(SEGMENT_SIZE, stack.length * 2));
+            StackSegment newSegment = new StackSegment(newLength, topStackSegment.next);
+            System.arraycopy(stack, 0, newSegment.stack, 0, stackPtr);
+            topStackSegment = newSegment;
+            stack = topStackSegment.stack;
+            return;
+        }
+        // Allocate new segment
+        topStackSegment = new StackSegment(Math.max(SEGMENT_SIZE, numEntries), topStackSegment);
+        stack = topStackSegment.stack;
+        stackPtr = 0;
+    }
+
+    private StackFrame getStackTop() {
+    	if(NO_STACK_FRAMES) {
+    		return null;
+    	}
+        topStackSegment.stackPtr = stackPtr;
+        if (stackPtr == 0) {
+            assert topStackSegment.next == null;
+            return null;
+        }
+        StackFrame prev = null;
+        for (StackSegment segment = topStackSegment; segment != null; segment = segment.next) {
+            Object[] stk = segment.stack;
+            int framePos = segment.stackPtr;
+            while (framePos > 0) {
+                Object stackObj = stk[framePos - 1];
+                if (stackObj instanceof StackFrame) {
+                    if (prev != null) {
+                        prev.setNext((StackFrame) stackObj);
+                    }
+                    return (StackFrame) stack[stackPtr - 1];
+                }
+                StackMarker marker = (StackMarker) stackObj;
+                int numArgs = marker.getNumArgs();
+                LispStackFrame frame = new LispStackFrame(stk, framePos - numArgs - STACK_FRAME_EXTRA, numArgs);
+                stk[framePos - 1] = frame;
+                if (prev != null) {
+                    prev.setNext(frame);
+                }
+                prev = frame;
+                framePos -= numArgs + STACK_FRAME_EXTRA;
+            }
+        }
+        return (StackFrame) stack[stackPtr - 1];
+    }
+
+    public final void pushStackFrame(JavaStackFrame frame) {
+		if (NO_STACK_FRAMES)
 			return;
 
-		synchronized (sym) {
-			// Don't use an atomic access: we'll be swapping values only once.
-			if (specialIndex == 0) {
-				int n = LispThread.lastSpecial.incrementAndGet();
-				sym.setSpecialIndex(n);
-				LispThread.specialNames[n] = sym;
-			}
-		}
-	}
+        frame.setNext(getStackTop());
+        ensureStackCapacity(1);
+        stack[stackPtr] = frame;
+        stackPtr += 1;
+    }
 
-	public static LispThread currentThread() {
-		// if (true) return
-		return (LispThread) Thread.currentThread().getUncaughtExceptionHandler();
-		// Thread jt = Thread.currentThread();
-		// UncaughtExceptionHandler eh = jt.getUncaughtExceptionHandler();
-		// if (eh instanceof LispThread) return (LispThread)eh;
-		// Thread.dumpStack();
-		// return null;
-		// return threads.get();
-	}
+    private void popStackFrame(int numArgs) {
+    	if(NO_STACK_FRAMES) {
+    		return;
+    	}
+        // Pop off intervening JavaFrames until we get back to a LispFrame
+        Object stackObj = stack[stackPtr - 1];
+        if (stackObj instanceof StackMarker) {
+            assert numArgs == ((StackMarker) stackObj).getNumArgs();
+        } else {
+            while (stackObj instanceof JavaStackFrame) {
+                stack[--stackPtr] = null;
+                stackObj = stack[stackPtr - 1];
+            }
+            if (stackObj instanceof StackMarker) {
+                assert numArgs == ((StackMarker) stackObj).getNumArgs();
+            } else {
+                assert numArgs == ((LispStackFrame) stackObj).getNumArgs();
+            }
+        }
+        stackPtr -= numArgs + STACK_FRAME_EXTRA;
+        for (int i = 0; i < numArgs + STACK_FRAME_EXTRA; i++) {
+            stack[stackPtr + i] = null;
+        }
+        if (stackPtr == 0) {
+            popStackSegment();
+        }
+    }
 
-	public static long javaSleepInterval(SubLObject lispSleep)
-
-	{
-		double d = Lisp.checkDoubleFloat(lispSleep.mult(LispObjectFactory.makeDouble(1000))).doubleValue();
-		if (d < 0)
-			Lisp.type_error(lispSleep, Lisp.list(LispSymbols.REAL, Fixnum.ZERO));
-
-		return d < Long.MAX_VALUE ? (long) d : Long.MAX_VALUE;
-	}
-
-	private static void pprint(SubLObject obj, int indentBy, LispStream stream)
-
-	{
-		if (stream.getCharPos() == 0) {
-			StringBuffer sb = new StringBuffer();
-			for (int i = 0; i < indentBy; i++)
-				sb.append(' ');
-			stream._writeString(sb.toString());
-		}
-		String raw = obj.writeToString();
-		if (stream.getCharPos() + raw.length() < 80) {
-			// It fits.
-			stream._writeString(raw);
+    private void popStackSegment() {
+		if (NO_STACK_FRAMES) {
 			return;
-		}
-		// Object doesn't fit.
-		if (obj instanceof SubLCons) {
-			boolean newlineBefore = false;
-			SubLObject[] array = obj.copyToArray();
-			if (array.length > 0) {
-				SubLObject first = array[0];
-				if (first == LispSymbols.LET)
-					newlineBefore = true;
-			}
-			int charPos = stream.getCharPos();
-			if (newlineBefore && charPos != indentBy) {
-				stream.terpri();
-				charPos = stream.getCharPos();
-			}
-			if (charPos < indentBy) {
-				StringBuffer sb = new StringBuffer();
-				for (int i = charPos; i < indentBy; i++)
-					sb.append(' ');
-				stream._writeString(sb.toString());
-			}
-			stream.print('(');
-			for (int i = 0; i < array.length; i++) {
-				LispThread.pprint(array[i], indentBy + 2, stream);
-				if (i < array.length - 1)
-					stream.print(' ');
-			}
-			stream.print(')');
-		} else {
-			stream.terpri();
-			StringBuffer sb = new StringBuffer();
-			for (int i = 0; i < indentBy; i++)
-				sb.append(' ');
-			stream._writeString(sb.toString());
-			stream._writeString(raw);
-			return;
-		}
-	}
+        }
+        topStackSegment.stackPtr = 0;
+        if (topStackSegment.next != null) {
+            spareStackSegment = topStackSegment;
+            topStackSegment = topStackSegment.next;
+            stack = topStackSegment.stack;
+        }
+        stackPtr = topStackSegment.stackPtr;
+    }
 
-	Thread javaThread;
+    public final Environment setEnv(Environment env) {
+        StackFrame stackTop = getStackTop();
+        return (stackTop != null) ? stackTop.setEnv(env) : null;
+    }
 
-	private boolean destroyed;
+    public void resetStack()
+    {
+        if (NO_STACK_FRAMES) {return;}
+        topStackSegment = new StackSegment(INITIAL_SEGMENT_SIZE, null);
+        stack = topStackSegment.stack;
+        spareStackSegment = null;
+        stackPtr = 0;
+    }
 
-	SubLObject name;
+    @Override
+    public LispObject execute(LispObject function)
+    {
+        if (NO_STACK_FRAMES) {return function.execute();}
+        ensureStackCapacity(STACK_FRAME_EXTRA);
+        stack[stackPtr] = function;
+        stack[stackPtr + 1] = STACK_MARKER_0;
+        stackPtr += STACK_FRAME_EXTRA;
+        try {
+            return function.execute();
+        }
+        finally {
+            popStackFrame(0);
+        }
+    }
 
-	public SubLObject[] _values;
-
-	private boolean threadInterrupted;
-
-	private SubLObject pending = null;
-
-	protected UncaughtExceptionHandler bubbble;
-
-	/**
-	 * This array stores the current special binding for every symbol which has
-	 * been globally or locally declared special.
-	 *
-	 * If the array element has a null value, this means there currently is no
-	 * active binding. If the array element contains a valid SpecialBinding
-	 * object, but the value field of it is null, that indicates an "UNBOUND
-	 * VARIABLE" situation.
-	 */
-	SpecialBinding[] specials = new SpecialBinding[4097];
-
-	/**
-	 * This variable points to the head of a linked list of saved special
-	 * bindings. Its main purpose is to allow a mark/reset interface to special
-	 * binding and unbinding.
-	 */
-	private SpecialBindingsMark savedSpecials = null;
-
-	private SubLObject catchTags = null;
-
-	private StackFrame stack = null;
-
-	LispThread(final Function fun, SubLObject name) {
-		Runnable r = new Runnable() {
-			public void run() {
-				try {
-					Lisp.funcall(fun, LispObjectFactory.makeLispObjectArray(0), LispThread.this);
-				} catch (ThreadDestroyed ignored) {
-					// Might happen.
-				} catch (Throwable t) { // any error: process thread interrupts
-					if (LispThread.this.isInterrupted())
-						LispThread.this.processThreadInterrupts();
-				} finally {
-					// make sure the thread is *always* removed from the hash
-					// again
-					// map.remove(Thread.currentThread());
-					Thread.currentThread().setUncaughtExceptionHandler(LispThread.this.bubbble);
-					LispThread.threads.remove(LispThread.this);
-				}
-			}
-		};
-		this.javaThread = new Thread(r);
-		this.bubbble = this.javaThread.getUncaughtExceptionHandler();
-		if (this.bubbble instanceof LispThread)
-			System.err.println("Bubble is a lisp thread!");
-		this.javaThread.setUncaughtExceptionHandler(this);
-		this.add(this);
-		this.name = name;
-		// map.put(javaThread, this);
-		if (name != Lisp.NIL)
-			this.javaThread.setName(name.getString());
-		this.javaThread.setDaemon(true);
-		this.javaThread.start();
-	}
-
-	LispThread(Thread javaThread) {
-		this.javaThread = javaThread;
-		LispThread.threads.add(this);
-		this.bubbble = javaThread.getUncaughtExceptionHandler();
-		if (this.bubbble instanceof LispThread)
-			System.err.println("Bubble is a lisp thread!");
-		javaThread.setUncaughtExceptionHandler(this);
-		this.name = LispObjectFactory.makeString(javaThread.getName());
-	}
-
-	// Used by the JVM compiler for MULTIPLE-VALUE-CALL.
-	public SubLObject[] accumulateValues(SubLObject result, SubLObject[] oldValues) {
-		if (oldValues == null) {
-			if (this._values != null)
-				return this._values;
-			SubLObject[] values = LispObjectFactory.makeLispObjectArray(1);
-			values[0] = result;
-			return values;
-		}
-		if (this._values != null) {
-			if (this._values.length == 0)
-				return oldValues;
-			int totalLength = oldValues.length + this._values.length;
-			SubLObject[] values = LispObjectFactory.makeLispObjectArray(totalLength);
-			System.arraycopy(oldValues, 0, values, 0, oldValues.length);
-			System.arraycopy(this._values, 0, values, oldValues.length, this._values.length);
-			return values;
-		}
-		// _values is null.
-		int totalLength = oldValues.length + 1;
-		SubLObject[] values = LispObjectFactory.makeLispObjectArray(totalLength);
-		System.arraycopy(oldValues, 0, values, 0, oldValues.length);
-		values[totalLength - 1] = result;
-		return values;
-	}
-
-	public SubLObject backtrace(int limit) {
-		SubLObject result = Lisp.NIL;
-		if (this.stack != null) {
-			int count = 0;
-			StackFrame s = this.stack;
-			while (s != null) {
-				result = result.push(s);
-				if (limit > 0 && ++count == limit)
-					break;
-				s = s.getNext();
-			}
-		}
-		return result.nreverse();
-	}
-
-	public SpecialBinding bindSpecial(SubLSymbol name, SubLObject value) {
-		int idx;
-
-		LispThread.assignSpecialIndex(name);
-		SpecialBinding binding = this.specials[idx = name.getSpecialIndex()];
-		this.savedSpecials = new SpecialBindingsMark(idx, binding, this.savedSpecials);
-		return this.specials[idx] = new SpecialBinding(idx, value);
-	}
-
-	public SpecialBinding bindSpecialToCurrentValue(SubLSymbol name) {
-		int idx;
-
-		LispThread.assignSpecialIndex(name);
-		SpecialBinding binding = this.specials[idx = name.getSpecialIndex()];
-		this.savedSpecials = new SpecialBindingsMark(idx, binding, this.savedSpecials);
-		return this.specials[idx] = new SpecialBinding(idx, binding == null ? name.getSymbolValue() : binding.value);
-	}
-
-	public SubLObject classOf() {
-		return BuiltInClass.THREAD;
-	}
-
-	/**
-	 * Clears out all active special bindings including any marks previously
-	 * set. Invoking resetSpecialBindings() with marks set before this call
-	 * results in undefined behaviour.
-	 */
-	// Package level access: only for Interpreter.run()
-	void clearSpecialBindings() {
-		this.resetSpecialBindings(null);
-	}
-
-	public void clearValues() {
-		this._values = null;
-	}
-
-	public SubLObject execute(SubLObject function) {
-		if (LispThread.use_fast_calls)
-			return function.execute();
-
-		this.pushStackFrame(new LispStackFrame(function));
-		try {
-			return function.execute();
-		} finally {
-			this.popStackFrame();
-		}
-	}
-
-	public SubLObject execute(SubLObject function, SubLObject arg)
-
-	{
-		if (LispThread.use_fast_calls)
+    @Override
+    public LispObject execute(LispObject function, LispObject arg)
+    {
+		if (NO_STACK_FRAMES)
 			return function.execute(arg);
+        ensureStackCapacity(1 + STACK_FRAME_EXTRA);
+        stack[stackPtr] = function;
+        stack[stackPtr + 1] = arg;
+        stack[stackPtr + 2] = STACK_MARKER_1;
+        stackPtr += 1 + STACK_FRAME_EXTRA;
+        try {
+            return function.execute(arg);
+        }
+        finally {
+            popStackFrame(1);
+        }
+    }
 
-		this.pushStackFrame(new LispStackFrame(function, arg));
-		try {
-			return function.execute(arg);
-		} finally {
-			this.popStackFrame();
-		}
-	}
-
-	public SubLObject execute(SubLObject function, SubLObject first, SubLObject second)
-
-	{
-		if (LispThread.use_fast_calls)
+    @Override
+    public LispObject execute(LispObject function, LispObject first,
+                              LispObject second)
+    {
+		if (NO_STACK_FRAMES)
 			return function.execute(first, second);
+        ensureStackCapacity(2 + STACK_FRAME_EXTRA);
+        stack[stackPtr] = function;
+        stack[stackPtr + 1] = first;
+        stack[stackPtr + 2] = second;
+        stack[stackPtr + 3] = STACK_MARKER_2;
+        stackPtr += 2 + STACK_FRAME_EXTRA;
+        try {
+            return function.execute(first, second);
+        }
+        finally {
+            popStackFrame(2);
+        }
+    }
 
-		this.pushStackFrame(new LispStackFrame(function, first, second));
-		try {
-			return function.execute(first, second);
-		} finally {
-			this.popStackFrame();
-		}
-	}
-
-	public SubLObject execute(SubLObject function, SubLObject first, SubLObject second, SubLObject third)
-
-	{
-		if (LispThread.use_fast_calls)
+    @Override
+    public LispObject execute(LispObject function, LispObject first,
+                              LispObject second, LispObject third)
+    {
+		if (NO_STACK_FRAMES)
 			return function.execute(first, second, third);
+        ensureStackCapacity(3 + STACK_FRAME_EXTRA);
+        stack[stackPtr] = function;
+        stack[stackPtr + 1] = first;
+        stack[stackPtr + 2] = second;
+        stack[stackPtr + 3] = third;
+        stack[stackPtr + 4] = STACK_MARKER_3;
+        stackPtr += 3 + STACK_FRAME_EXTRA;
+        try {
+            return function.execute(first, second, third);
+        }
+        finally {
+            popStackFrame(3);
+        }
+    }
 
-		this.pushStackFrame(new LispStackFrame(function, first, second, third));
-		try {
-			return function.execute(first, second, third);
-		} finally {
-			this.popStackFrame();
-		}
-	}
-
-	public SubLObject execute(SubLObject function, SubLObject first, SubLObject second, SubLObject third,
-			SubLObject fourth)
-
-	{
-		if (LispThread.use_fast_calls)
+    @Override
+    public LispObject execute(LispObject function, LispObject first,
+                              LispObject second, LispObject third,
+                              LispObject fourth)
+    {
+		if (NO_STACK_FRAMES)
 			return function.execute(first, second, third, fourth);
+        ensureStackCapacity(4 + STACK_FRAME_EXTRA);
+        stack[stackPtr] = function;
+        stack[stackPtr + 1] = first;
+        stack[stackPtr + 2] = second;
+        stack[stackPtr + 3] = third;
+        stack[stackPtr + 4] = fourth;
+        stack[stackPtr + 5] = STACK_MARKER_4;
+        stackPtr += 4 + STACK_FRAME_EXTRA;
+        try {
+            return function.execute(first, second, third, fourth);
+        }
+        finally {
+            popStackFrame(4);
+        }
+    }
 
-		this.pushStackFrame(new LispStackFrame(function, first, second, third, fourth));
-		try {
-			return function.execute(first, second, third, fourth);
-		} finally {
-			this.popStackFrame();
-		}
-	}
-
-	public SubLObject execute(SubLObject function, SubLObject first, SubLObject second, SubLObject third,
-			SubLObject fourth, SubLObject fifth)
-
-	{
-		if (LispThread.use_fast_calls)
+    @Override
+    public LispObject execute(LispObject function, LispObject first,
+                              LispObject second, LispObject third,
+                              LispObject fourth, LispObject fifth)
+    {
+		if (NO_STACK_FRAMES)
 			return function.execute(first, second, third, fourth, fifth);
+        ensureStackCapacity(5 + STACK_FRAME_EXTRA);
+        stack[stackPtr] = function;
+        stack[stackPtr + 1] = first;
+        stack[stackPtr + 2] = second;
+        stack[stackPtr + 3] = third;
+        stack[stackPtr + 4] = fourth;
+        stack[stackPtr + 5] = fifth;
+        stack[stackPtr + 6] = STACK_MARKER_5;
+        stackPtr += 5 + STACK_FRAME_EXTRA;
+        try {
+            return function.execute(first, second, third, fourth, fifth);
+        }
+        finally {
+            popStackFrame(5);
+        }
+    }
 
-		this.pushStackFrame(new LispStackFrame(function, first, second, third, fourth, fifth));
-		try {
-			return function.execute(first, second, third, fourth, fifth);
-		} finally {
-			this.popStackFrame();
-		}
-	}
-
-	public SubLObject execute(SubLObject function, SubLObject first, SubLObject second, SubLObject third,
-			SubLObject fourth, SubLObject fifth, SubLObject sixth)
-
-	{
-		if (LispThread.use_fast_calls)
+    @Override
+    public LispObject execute(LispObject function, LispObject first,
+                              LispObject second, LispObject third,
+                              LispObject fourth, LispObject fifth,
+                              LispObject sixth)
+    {
+		if (NO_STACK_FRAMES)
 			return function.execute(first, second, third, fourth, fifth, sixth);
+        ensureStackCapacity(6 + STACK_FRAME_EXTRA);
+        stack[stackPtr] = function;
+        stack[stackPtr + 1] = first;
+        stack[stackPtr + 2] = second;
+        stack[stackPtr + 3] = third;
+        stack[stackPtr + 4] = fourth;
+        stack[stackPtr + 5] = fifth;
+        stack[stackPtr + 6] = sixth;
+        stack[stackPtr + 7] = STACK_MARKER_6;
+        stackPtr += 6 + STACK_FRAME_EXTRA;
+        try {
+            return function.execute(first, second, third, fourth, fifth, sixth);
+        }
+        finally {
+            popStackFrame(6);
+        }
+    }
 
-		this.pushStackFrame(new LispStackFrame(function, first, second, third, fourth, fifth, sixth));
-		try {
-			return function.execute(first, second, third, fourth, fifth, sixth);
-		} finally {
-			this.popStackFrame();
-		}
-	}
-
-	public SubLObject execute(SubLObject function, SubLObject first, SubLObject second, SubLObject third,
-			SubLObject fourth, SubLObject fifth, SubLObject sixth, SubLObject seventh)
-
-	{
-		if (LispThread.use_fast_calls)
+    @Override
+    public LispObject execute(LispObject function, LispObject first,
+                              LispObject second, LispObject third,
+                              LispObject fourth, LispObject fifth,
+                              LispObject sixth, LispObject seventh)
+    {
+		if (NO_STACK_FRAMES)
 			return function.execute(first, second, third, fourth, fifth, sixth, seventh);
+        ensureStackCapacity(7 + STACK_FRAME_EXTRA);
+        stack[stackPtr] = function;
+        stack[stackPtr + 1] = first;
+        stack[stackPtr + 2] = second;
+        stack[stackPtr + 3] = third;
+        stack[stackPtr + 4] = fourth;
+        stack[stackPtr + 5] = fifth;
+        stack[stackPtr + 6] = sixth;
+        stack[stackPtr + 7] = seventh;
+        stack[stackPtr + 8] = STACK_MARKER_7;
+        stackPtr += 7 + STACK_FRAME_EXTRA;
+        try {
+            return function.execute(first, second, third, fourth, fifth, sixth,
+                                    seventh);
+        }
+        finally {
+            popStackFrame(7);
+        }
+    }
 
-		this.pushStackFrame(new LispStackFrame(function, first, second, third, fourth, fifth, sixth, seventh));
-		try {
-			return function.execute(first, second, third, fourth, fifth, sixth, seventh);
-		} finally {
-			this.popStackFrame();
-		}
-	}
-
-	public SubLObject execute(SubLObject function, SubLObject first, SubLObject second, SubLObject third,
-			SubLObject fourth, SubLObject fifth, SubLObject sixth, SubLObject seventh, SubLObject eighth)
-
-	{
-		if (LispThread.use_fast_calls)
+    public LispObject execute(LispObject function, LispObject first,
+                              LispObject second, LispObject third,
+                              LispObject fourth, LispObject fifth,
+                              LispObject sixth, LispObject seventh,
+                              LispObject eighth)
+    {
+		if (NO_STACK_FRAMES)
 			return function.execute(first, second, third, fourth, fifth, sixth, seventh, eighth);
+        ensureStackCapacity(8 + STACK_FRAME_EXTRA);
+        stack[stackPtr] = function;
+        stack[stackPtr + 1] = first;
+        stack[stackPtr + 2] = second;
+        stack[stackPtr + 3] = third;
+        stack[stackPtr + 4] = fourth;
+        stack[stackPtr + 5] = fifth;
+        stack[stackPtr + 6] = sixth;
+        stack[stackPtr + 7] = seventh;
+        stack[stackPtr + 8] = eighth;
+        stack[stackPtr + 9] = STACK_MARKER_8;
+        stackPtr += 8 + STACK_FRAME_EXTRA;
+        try {
+            return function.execute(first, second, third, fourth, fifth, sixth,
+                                    seventh, eighth);
+        }
+        finally {
+            popStackFrame(8);
+        }
+    }
 
-		this.pushStackFrame(new LispStackFrame(function, first, second, third, fourth, fifth, sixth, seventh, eighth));
-		try {
-			return function.execute(first, second, third, fourth, fifth, sixth, seventh, eighth);
-		} finally {
-			this.popStackFrame();
-		}
-	}
-
-	public SubLObject execute(SubLObject function, SubLObject[] args)
-
-	{
-		if (LispThread.use_fast_calls)
+    public LispObject execute(LispObject function, LispObject[] args)
+    {
+		if (NO_STACK_FRAMES)
 			return function.execute(args);
+        ensureStackCapacity(args.length + STACK_FRAME_EXTRA);
+        stack[stackPtr] = function;
+        System.arraycopy(args, 0, stack, stackPtr + 1, args.length);
+        stack[stackPtr + args.length + 1] = new StackMarker(args.length);
+        stackPtr += args.length + STACK_FRAME_EXTRA;
+        try {
+            return function.execute(args);
+        }
+        finally {
+            popStackFrame(args.length);
+        }
+    }
 
-		this.pushStackFrame(new LispStackFrame(function, args));
-		try {
-			return function.execute(args);
-		} finally {
-			this.popStackFrame();
-		}
-	}
+    public void printBacktrace()
+    {
+        printBacktrace(0);
+    }
 
-	public StackTraceElement[] getJavaStackTrace() {
-		return this.javaThread.getStackTrace();
-	}
+    public void printBacktrace(int limit)
+    {
+        StackFrame stackTop = getStackTop();
+        if (stackTop != null) {
+            int count = 0;
+            Stream out =
+                checkCharacterOutputStream(Symbol.TRACE_OUTPUT.symbolValue());
+            out._writeLine("Evaluation stack:");
+            out._finishOutput();
 
-	public SpecialBinding getSpecialBinding(SubLSymbol name) {
-		return this.specials[name.getSpecialIndex()];
-	}
+            StackFrame s = stackTop;
+            while (s != null) {
+                out._writeString("  ");
+                out._writeString(String.valueOf(count));
+                out._writeString(": ");
 
-	@Deprecated
-	public SubLObject getStack() {
-		return Lisp.NIL;
-	}
+                pprint(s.toLispList(), out.getCharPos(), out);
+                out.terpri();
+                out._finishOutput();
+                if (limit > 0 && ++count == limit)
+                    break;
+                s = s.next;
+            }
+        }
+    }
 
-	public SubLObject[] getValues() {
-		return this._values;
-	}
+    public LispObject backtrace(int limit)
+    {
+		if (NO_STACK_FRAMES)
+			return NIL;
+        StackFrame stackTop = getStackTop();
+        LispObject result = NIL;
+        if (stackTop != null) {
+            int count = 0;
+            StackFrame s = stackTop;
+            while (s != null) {
+                result = result.push(s);
+                if (limit > 0 && ++count == limit)
+                    break;
+                s = s.getNext();
+            }
+        }
+        return result.nreverse();
+    }
 
-	public SubLObject[] getValues(SubLObject result, int count) {
-		if (this._values == null) {
-			SubLObject[] values = LispObjectFactory.makeLispObjectArray(count);
-			if (count > 0)
-				values[0] = result;
-			for (int i = 1; i < count; i++)
-				values[i] = Lisp.NIL;
-			return values;
-		}
-		// If the caller doesn't want any extra values, just return the ones
-		// we've got.
-		if (count <= this._values.length)
-			return this._values;
-		// The caller wants more values than we have. Pad with NILs.
-		SubLObject[] values = LispObjectFactory.makeLispObjectArray(count);
-		for (int i = this._values.length; i-- > 0;)
-			values[i] = this._values[i];
-		for (int i = this._values.length; i < count; i++)
-			values[i] = Lisp.NIL;
-		return values;
-	}
+    public void incrementCallCounts()
+    {
+	   if (NO_STACK_FRAMES)
+			return;
+        topStackSegment.stackPtr = stackPtr;
+        int depth = 0;
+        for (StackSegment segment = topStackSegment; segment != null; segment = segment.next) {
+            Object[] stk = segment.stack;
+            int framePos = segment.stackPtr;
+            while (framePos > 0) {
+                depth++;
+                Object stackObj = stk[framePos - 1];
+                int numArgs;
+                if (stackObj instanceof StackMarker) {
+                    numArgs = ((StackMarker) stackObj).getNumArgs();
+                } else if (stackObj instanceof LispStackFrame) {
+                    numArgs = ((LispStackFrame) stackObj).getNumArgs();
+                } else {
+                    assert stackObj instanceof JavaStackFrame;
+                    framePos--;
+                    continue;
+                }
+                // lisp stack frame
+                framePos -= numArgs + STACK_FRAME_EXTRA;
+                LispObject operator = (LispObject) stack[framePos];
+                if (operator != null) {
+                    if (depth <= 8) {
+                        operator.incrementHotCount();
+                    }
+                    operator.incrementCallCount();
+                }
+            }
+        }
+    }
 
-	public void incrementCallCounts() {
-		StackFrame s = this.stack;
+    private static void pprint(LispObject obj, int indentBy, Stream stream)
 
-		for (int i = 0; i < 8; i++) {
-			if (s == null)
-				break;
-			if (s instanceof LispStackFrame) {
-				LispStackFrame sf = (LispStackFrame) s;
-				SubLObject operator = sf.getOperator();
-				if (operator != null) {
-					operator.incrementHotCount();
-					operator.incrementCallCount(sf.getArity());
-				}
-				s = s.getNext();
+    {
+        if (stream.getCharPos() == 0) {
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < indentBy; i++)
+                sb.append(' ');
+            stream._writeString(sb.toString());
+        }
+        String raw = obj.printObject();
+        if (stream.getCharPos() + raw.length() < 80) {
+            // It fits.
+            stream._writeString(raw);
+            return;
+        }
+        // Object doesn't fit.
+        if (obj instanceof Cons) {
+            boolean newlineBefore = false;
+            LispObject[] array = obj.copyToArray();
+            if (array.length > 0) {
+                LispObject first = array[0];
+                if (first == Symbol.LET) {
+                    newlineBefore = true;
+                }
+            }
+            int charPos = stream.getCharPos();
+            if (newlineBefore && charPos != indentBy) {
+                stream.terpri();
+                charPos = stream.getCharPos();
+            }
+            if (charPos < indentBy) {
+                StringBuffer sb = new StringBuffer();
+                for (int i = charPos; i < indentBy; i++)
+                    sb.append(' ');
+                stream._writeString(sb.toString());
+            }
+            stream.print('(');
+            for (int i = 0; i < array.length; i++) {
+                pprint(array[i], indentBy + 2, stream);
+                if (i < array.length - 1)
+                   stream.print(' ');
+            }
+            stream.print(')');
+        } else {
+            stream.terpri();
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < indentBy; i++)
+                sb.append(' ');
+            stream._writeString(sb.toString());
+            stream._writeString(raw);
+            return;
+        }
+    }
+
+    @Override
+    public String printObjectImpl()
+    {
+        StringBuffer sb = new StringBuffer("THREAD");
+        if (name != NIL) {
+            sb.append(" \"");
+            sb.append(name.getStringValue());
+            sb.append("\"");
+        }
+        return unreadableString(sb.toString());
+    }
+
+    @DocString(name="make-thread", args="function &key name")
+    private static final Primitive MAKE_THREAD =
+        new Primitive("make-thread", PACKAGE_THREADS, true, "function &key name")
+    {
+        @Override
+        public LispObject execute(LispObject[] args)
+        {
+            final int length = args.length;
+            if (length == 0)
+                error(new WrongNumberOfArgumentsException(this, 1, -1));
+            LispObject name = NIL;
+            if (length > 1) {
+                if ((length - 1) % 2 != 0)
+                    program_error("Odd number of keyword arguments.");
+                if (length > 3)
+                    error(new WrongNumberOfArgumentsException(this, -1, 2)); // don't count the keyword itself as an argument
+                if (args[1] == Keyword.NAME)
+                    name = args[2].STRING();
+                else
+                    program_error("Unrecognized keyword argument "
+                                  + args[1].princToString() + ".");
+            }
+            return new LispThreadImpl(checkFunction(args[0]), name);
+        }
+    };
+
+    @DocString(name="threadp", args="object",
+    doc="Boolean predicate testing if OBJECT is a thread.")
+    private static final Primitive THREADP =
+        new Primitive("threadp", PACKAGE_THREADS, true)
+    {
+        @Override
+        public LispObject execute(LispObject arg)
+        {
+            return arg instanceof LispThread ? T : NIL;
+        }
+    };
+
+    @DocString(name="thread-alive-p", args="thread",
+    doc="Returns T if THREAD is alive.")
+    private static final Primitive THREAD_ALIVE_P =
+        new Primitive("thread-alive-p", PACKAGE_THREADS, true, "thread",
+              "Boolean predicate whether THREAD is alive.")
+    {
+        @Override
+        public LispObject execute(LispObject arg)
+        {
+            final LispThread lispThread;
+            if (arg instanceof LispThread) {
+                lispThread = (LispThread) arg;
+            }
+            else {
+                return type_error(arg, Symbol.THREAD);
+            }
+            return lispThread.javaThread.isAlive() ? T : NIL;
+        }
+    };
+
+    @DocString(name="thread-name", args="thread",
+    doc="Return the name of THREAD, if it has one.")
+    private static final Primitive THREAD_NAME =
+        new Primitive("thread-name", PACKAGE_THREADS, true)
+    {
+        @Override
+        public LispObject execute(LispObject arg)
+        {
+                if (arg instanceof LispThread) {
+                return ((LispThread)arg).name;
+            }
+                 return type_error(arg, Symbol.THREAD);
+        }
+    };
+
+    private static final Primitive THREAD_JOIN =
+        new Primitive("thread-join", PACKAGE_THREADS, true, "thread",
+                      "Waits for thread to finish.")
+    {
+        @Override
+        public LispObject execute(LispObject arg)
+        {
+            // join the thread, and returns it's value.  The second return
+            // value is T if the thread finishes normally, NIL if its
+            // interrupted.
+            if (arg instanceof LispThread) {
+                final LispThread joinedThread = (LispThread) arg;
+                final LispThread waitingThread = currentThread();
+                try {
+                    joinedThread.javaThread.join();
+                    return
+                        waitingThread.setValues(joinedThread.threadValue, T);
+                } catch (InterruptedException e) {
+                    waitingThread.processThreadInterrupts();
+                    return
+                        waitingThread.setValues(joinedThread.threadValue, NIL);
+                }
+            } else {
+                return type_error(arg, Symbol.THREAD);
+            }
+        }
+    };
+
+    final static DoubleFloat THOUSAND = new DoubleFloat(1000);
+
+    static final long sleepMillisPart(LispObject seconds) {
+      double d
+        = checkDoubleFloat(seconds.multiplyBy(THOUSAND)).getValue();
+      if (d < 0) {
+        type_error(seconds, list(Symbol.REAL, Fixnum.ZERO));
+      }
+      return (d < Long.MAX_VALUE ? (long) d : Long.MAX_VALUE);
+    }
+
+    static final int sleepNanosPart(LispObject seconds) {
+      double d  // d contains millis
+        = checkDoubleFloat(seconds.multiplyBy(THOUSAND)).getValue();
+      double n = d * 1000000; // sleep interval in nanoseconds
+      d = 1.0e6 * ((long)d); //  sleep interval to millisecond precision
+      n = n - d;
+
+      return (n < Integer.MAX_VALUE ? (int) n : Integer.MAX_VALUE);
+    }
+
+
+    @DocString(name="sleep", args="seconds",
+    doc="Causes the invoking thread to sleep for an interveral expressed in SECONDS.\n"
+      + "SECONDS may be specified as a fraction of a second, with intervals\n"
+      + "less than or equal to a nanosecond resulting in a yield of execution\n"
+      + "to other waiting threads rather than an actual sleep.\n"
+      + "A zero value of SECONDS *may* result in the JVM sleeping indefinitely,\n"
+      + "depending on the implementation.")
+    private static final Primitive SLEEP = new Primitive("sleep", PACKAGE_CL, true)
+    {
+        @Override
+        public LispObject execute(LispObject arg)
+        {
+          long millis = sleepMillisPart(arg);
+          int nanos = sleepNanosPart(arg);
+          boolean zeroArgP = arg.ZEROP() != NIL;
+
+          try {
+            if (millis == 0 && nanos == 0) {
+              if (zeroArgP) {
+                Thread.sleep(0, 0);
+              } else {
+                Thread.sleep(0, 1);
+              }
+            } else {
+              Thread.sleep(millis, nanos);
+            }
+          } catch (InterruptedException e) {
+            currentThread().processThreadInterrupts();
+          }
+          return NIL;
+        }
+    };
+
+    @DocString(name="mapcar-threads", args= "function",
+    doc="Applies FUNCTION to all existing threads.")
+    private static final Primitive MAPCAR_THREADS =
+        new Primitive("mapcar-threads", PACKAGE_THREADS, true)
+    {
+        @Override
+        public LispObject execute(LispObject arg)
+        {
+            Function fun = checkFunction(arg);
+            final LispThread thread = LispThread.currentThread();
+            LispObject result = NIL;
+            Iterator it = map.values().iterator();
+            while (it.hasNext()) {
+                LispObject[] args = new LispObject[1];
+                args[0] = (LispThread) it.next();
+                result = new Cons(Lisp.funcall(fun, args, thread), result);
+            }
+            return result;
+        }
+    };
+
+    @DocString(name="destroy-thread", args="thread", doc="Mark THREAD as destroyed")
+    private static final Primitive DESTROY_THREAD =
+        new Primitive("destroy-thread", PACKAGE_THREADS, true)
+    {
+        @Override
+        public LispObject execute(LispObject arg)
+        {
+            final LispThread thread;
+            if (arg instanceof LispThread) {
+                thread = (LispThread) arg;
+            }
+            else {
+                return type_error(arg, Symbol.THREAD);
+            }
+            thread.setDestroyed(true);
+            return T;
+        }
+    };
+
+    // => T
+    @DocString(name="interrupt-thread", args="thread function &rest args",
+    doc="Interrupts thread and forces it to apply function to args. When the\n"+
+        "function returns, the thread's original computation continues. If\n"+
+        "multiple interrupts are queued for a thread, they are all run, but the\n"+
+        "order is not guaranteed.")
+    private static final Primitive INTERRUPT_THREAD =
+        new Primitive("interrupt-thread", PACKAGE_THREADS, true,
+              "thread function &rest args",
+              "Interrupts THREAD and forces it to apply FUNCTION to ARGS.\nWhen the function returns, the thread's original computation continues. If  multiple interrupts are queued for a thread, they are all run, but the order is not guaranteed.")
+    {
+        @Override
+        public LispObject execute(LispObject[] args)
+        {
+            if (args.length < 2)
+                return error(new WrongNumberOfArgumentsException(this, 2, -1));
+            final LispThread thread;
+            if (args[0] instanceof LispThread) {
+                thread = (LispThread) args[0];
+            }
+            else {
+                return type_error(args[0], Symbol.THREAD);
+            }
+            LispObject fun = args[1];
+            LispObject funArgs = NIL;
+            for (int i = args.length; i-- > 2;)
+                funArgs = new Cons(args[i], funArgs);
+            thread.interrupt(fun, funArgs);
+            return T;
+        }
+    };
+
+    public static final Primitive CURRENT_THREAD
+      = new pf_current_thread();
+    @DocString(name="current-thread",
+               doc="Returns a reference to invoking thread.")
+    private static final class pf_current_thread extends Primitive {
+      pf_current_thread() {
+        super("current-thread", PACKAGE_THREADS, true);
+      }
+      @Override
+      public LispObject execute() {
+        return currentThread();
+      }
+    };
+
+    public static final Primitive BACKTRACE
+      = new pf_backtrace();
+    @DocString(name="backtrace",
+               doc="Returns a Java backtrace of the invoking thread.")
+    private static final class pf_backtrace extends Primitive {
+      pf_backtrace() {
+        super("backtrace", PACKAGE_SYS, true);
+      }
+      @Override
+      public LispObject execute(LispObject[] args) {
+        if (args.length > 1)
+          return error(new WrongNumberOfArgumentsException(this, -1, 1));
+        int limit = args.length > 0 ? Fixnum.getValue(args[0]) : 0;
+        return currentThread().backtrace(limit);
+      }
+    };
+
+    public static final Primitive FRAME_TO_STRING
+      = new pf_frame_to_string();
+    @DocString(name="frame-to-string",
+               args="frame",
+               doc="Convert stack FRAME to a (potentially) readable string.")
+    private static final class pf_frame_to_string extends Primitive {
+      pf_frame_to_string() {
+        super("frame-to-string", PACKAGE_SYS, true);
+      }
+      @Override
+      public LispObject execute(LispObject[] args) {
+        if (args.length != 1)
+          return error(new WrongNumberOfArgumentsException(this, 1));
+        return checkStackFrame(args[0]).toLispString();
+      }
+    };
+
+    public static final Primitive FRAME_TO_LIST
+      = new pf_frame_to_list();
+    @DocString(name="frame-to-list", args="frame")
+    private static final class pf_frame_to_list extends Primitive {
+      pf_frame_to_list() {
+        super("frame-to-list", PACKAGE_SYS, true);
+      }
+      @Override
+      public LispObject execute(LispObject[] args) {
+        if (args.length != 1)
+          return error(new WrongNumberOfArgumentsException(this, 1));
+
+        return checkStackFrame(args[0]).toLispList();
+      }
+    };
+
+
+    public static final SpecialOperator SYNCHRONIZED_ON
+      = new so_synchronized_on();
+    @DocString(name="synchronized-on", args="form &body body")
+    private static final class so_synchronized_on extends SpecialOperator {
+      so_synchronized_on() {
+        super("synchronized-on", PACKAGE_THREADS, true, "form &body body");
+      }
+      @Override
+      public LispObject execute(LispObject args, Environment env) {
+        if (args == NIL)
+          return error(new WrongNumberOfArgumentsException(this, 1));
+
+        LispThread thread = LispThread.currentThread();
+        synchronized (eval(args.car(), env, thread).lockableInstance()) {
+          return progn(args.cdr(), env, thread);
+        }
+      }
+    };
+
+
+    public static final Primitive OBJECT_WAIT
+      = new pf_object_wait();
+    @DocString(
+    name="object-wait", args="object &optional timeout",
+    doc="Causes the current thread to block until object-notify or object-notify-all is called on OBJECT.\n"
+       + "Optionally unblock execution after TIMEOUT seconds.  A TIMEOUT of zero\n"
+       + "means to wait indefinitely.\n"
+       + "A non-zero TIMEOUT of less than a nanosecond is interpolated as a nanosecond wait."
+       + "\n"
+       + "See the documentation of java.lang.Object.wait() for further\n"
+       + "information.\n"
+    )
+    private static final class pf_object_wait extends Primitive {
+      pf_object_wait() {
+        super("object-wait", PACKAGE_THREADS, true);
+      }
+      @Override
+      public LispObject execute(LispObject object) {
+        try {
+          object.lockableInstance().wait();
+        } catch (InterruptedException e) {
+          currentThread().processThreadInterrupts();
+        } catch (IllegalMonitorStateException e) {
+          return error(new IllegalMonitorState(e.getMessage()));
+        }
+        return NIL;
+      }
+
+      @Override
+      public LispObject execute(LispObject object, LispObject timeout) {
+        long millis = sleepMillisPart(timeout);
+        int nanos = sleepNanosPart(timeout);
+        boolean zeroArgP = timeout.ZEROP() != NIL;
+
+        try {
+          if (millis == 0 && nanos == 0) {
+            if (zeroArgP) {
+              object.lockableInstance().wait(0, 0);
+            } else {
+              object.lockableInstance().wait(0, 1);
+            }
+          } else {
+            object.lockableInstance().wait(millis, nanos);
+          }
+        } catch (InterruptedException e) {
+          currentThread().processThreadInterrupts();
+        } catch (IllegalMonitorStateException e) {
+          return error(new IllegalMonitorState(e.getMessage()));
+        }
+        return NIL;
+      }
+    };
+
+    public static final Primitive OBJECT_NOTIFY
+      = new pf_object_notify();
+    @DocString(name="object-notify",
+               args="object",
+               doc="Wakes up a single thread that is waiting on OBJECT's monitor."
++ "\nIf any threads are waiting on this object, one of them is chosen to be"
++ " awakened. The choice is arbitrary and occurs at the discretion of the"
++ " implementation. A thread waits on an object's monitor by calling one"
++ " of the wait methods.")
+    private static final class pf_object_notify extends Primitive {
+      pf_object_notify() {
+        super("object-notify", PACKAGE_THREADS, true, "object");
+      }
+      @Override
+      public LispObject execute(LispObject object) {
+        try {
+          object.lockableInstance().notify();
+        } catch (IllegalMonitorStateException e) {
+          return error(new IllegalMonitorState(e.getMessage()));
+        }
+        return NIL;
+      }
+    };
+
+    public static final Primitive OBJECT_NOTIFY_ALL
+      = new pf_object_notify_all();
+    @DocString(name="object-notify-all",
+               args="object",
+               doc="Wakes up all threads that are waiting on this OBJECT's monitor."
++ "\nA thread waits on an object's monitor by calling one of the wait methods.")
+    private static final class pf_object_notify_all extends Primitive {
+      pf_object_notify_all() {
+        super("object-notify-all", PACKAGE_THREADS, true);
+      }
+      @Override
+      public LispObject execute(LispObject object) {
+        try {
+          object.lockableInstance().notifyAll();
+        } catch (IllegalMonitorStateException e) {
+          return error(new IllegalMonitorState(e.getMessage()));
+        }
+        return NIL;
+      }
+    }
+
+    // for J
+	public static void remove(Thread currentThread) {
+		synchronized(map) {
+			LispThread lt = map.get(currentThread);
+			if(lt!=null) {
+				lt.processThreadInterrupts();
+				lt.destroyed = true;
+				map.remove(currentThread);
 			}
 		}
+	}
 
-		while (s != null) {
-			if (s instanceof LispStackFrame) {
-				LispStackFrame sf = (LispStackFrame) s;
-				SubLObject operator = sf.getOperator();
-				if (operator != null)
-					operator.incrementCallCount(sf.getArity());
-			}
-			s = s.getNext();
+	public SubLThread currentSubLThread() {
+		if(javaThread instanceof  SubLThread){
+			return (SubLThread) javaThread;
 		}
-	}
-
-	synchronized void interrupt(SubLObject function, SubLObject args) {
-		if (this.pending == null)
-			this.pending = Lisp.NIL;
-		this.pending = LispObjectFactory.makeCons(args, this.pending);
-		this.pending = LispObjectFactory.makeCons(function, this.pending);
-		this.threadInterrupted = true;
-		this.javaThread.interrupt();
-	}
-
-	public synchronized boolean isDestroyed() {
-		return this.destroyed;
-	}
-
-	synchronized boolean isInterrupted() {
-		return this.threadInterrupted;
-	}
-
-	/**
-	 * Looks up the value of a special binding in the context of the given
-	 * thread.
-	 *
-	 * In order to find the value of a special variable (in general), use
-	 * {@link SubLSymbol#symbolValue}.
-	 *
-	 * @param name
-	 *            The name of the special variable, normally a symbol
-	 * @return The inner most binding of the special, or null if unbound
-	 *
-	 * @see SubLSymbol#symbolValue
-	 */
-	public SubLObject lookupSpecial(SubLSymbol name) {
-		SpecialBinding binding = this.specials[name.getSpecialIndex()];
-		return binding == null ? null : binding.value;
-	}
-
-	/**
-	 * Marks the state of the special bindings, for later rewinding by
-	 * resetSpecialBindings().
-	 */
-	public SpecialBindingsMark markSpecialBindings() {
-		return this.savedSpecials;
-	}
-
-	public SubLObject nothing() {
-		this._values = LispObjectFactory.makeLispObjectArray(0);
-		return Lisp.NIL;
-	}
-
-	public void popCatchTag() {
-		if (this.catchTags == null)
-			this.catchTags = Lisp.NIL;
-		if (this.catchTags != Lisp.NIL)
-			this.catchTags = this.catchTags.rest();
-		else
-			Debug.assertTrue(false);
-	}
-
-	public void popStackFrame() {
-		if (this.stack != null)
-			this.stack = this.stack.getNext();
-	}
-
-	public void printBacktrace() {
-		this.printBacktrace(0);
-	}
-
-	public void printBacktrace(int limit) {
-		if (this.stack != null) {
-			int count = 0;
-			LispStream out = Lisp.checkCharacterOutputStream(LispSymbols.TRACE_OUTPUT.symbolValue());
-			out._writeLine("Evaluation stack:");
-			out._finishOutput();
-
-			StackFrame s = this.stack;
-			while (s != null) {
-				out._writeString("  ");
-				out._writeString(String.valueOf(count));
-				out._writeString(": ");
-
-				LispThread.pprint(s.toLispList(), out.getCharPos(), out);
-				out.terpri();
-				out._finishOutput();
-				if (limit > 0 && ++count == limit)
-					break;
-				s = s.next;
-			}
-		}
-	}
-
-	synchronized void processThreadInterrupts()
-
-	{
-		if (this.pending == null)
-			this.pending = Lisp.NIL;
-		while (this.pending != Nil.NIL) {
-			SubLObject function = this.pending.first();
-			SubLObject args = this.pending.second();
-			this.pending = this.pending.cddr();
-			Primitives.APPLY.execute(function, args);
-		}
-		this.threadInterrupted = false;
-	}
-
-	public void pushCatchTag(SubLObject tag) {
-		if (this.catchTags == null)
-			this.catchTags = Lisp.NIL;
-		this.catchTags = LispObjectFactory.makeCons(tag, this.catchTags);
-	}
-
-	public SubLObject pushSpecial(SubLSymbol name, SubLObject thing)
-
-	{
-		SpecialBinding binding = this.specials[name.getSpecialIndex()];
-		if (binding != null)
-			return binding.value = LispObjectFactory.makeCons(thing, binding.value);
-
-		SubLObject value = name.getSymbolValue();
-		if (value != null) {
-			SubLObject newValue = LispObjectFactory.makeCons(thing, value);
-			name.setSymbolValue(newValue);
-			return newValue;
-		} else
-			return Lisp.error(new UnboundVariable(name));
-	}
-
-	public void pushStackFrame(StackFrame frame) {
-		frame.setNext(this.stack);
-		this.stack = frame;
-		if (Lisp.profiling)
-			if (!Lisp.sampling)
-				frame.incrementCalls();
-	}
-
-	public void rebindSpecial(SubLSymbol name, SubLObject value) {
-		SpecialBinding binding = this.getSpecialBinding(name);
-		binding.value = value;
-	}
-
-	/**
-	 * Restores the state of the special bindings to what was captured in the
-	 * marker 'mark' by a call to markSpecialBindings().
-	 */
-	public void resetSpecialBindings(SpecialBindingsMark mark) {
-		SpecialBindingsMark c = this.savedSpecials;
-		while (mark != c) {
-			this.specials[c.idx] = c.binding;
-			c = c.next;
-		}
-		this.savedSpecials = c;
-	}
-
-	public void resetStack() {
-		this.stack = null;
-	}
-
-	// Returns symbol value or NIL if unbound.
-	public SubLObject safeSymbolValue(SubLSymbol name) {
-		SpecialBinding binding = this.specials[name.getSpecialIndex()];
-		if (binding != null)
-			return binding.value;
-
-		SubLObject value = name.getSymbolValue();
-		return value != null ? value : Lisp.NIL;
-	}
-
-	synchronized void setDestroyed(boolean b) {
-		this.destroyed = b;
-	}
-
-	public SubLObject setSpecialVariable(SubLSymbol name, SubLObject value) {
-		SpecialBinding binding = this.specials[name.getSpecialIndex()];
-		if (binding != null)
-			return binding.value = value;
-
-		name.setSymbolValue(value);
-		return value;
-	}
-
-	@Deprecated
-	public void setStack(SubLObject stack) {
-	}
-
-	public SubLObject setValues() {
-		this._values = LispObjectFactory.makeLispObjectArray(0);
-		return Lisp.NIL;
-	}
-
-	public SubLObject setValues(SubLObject value1) {
-		this._values = null;
-		return value1;
-	}
-
-	public SubLObject setValues(SubLObject value1, SubLObject value2) {
-		this._values = LispObjectFactory.makeLispObjectArray(2);
-		this._values[0] = value1;
-		this._values[1] = value2;
-		return value1;
-	}
-
-	public SubLObject setValues(SubLObject value1, SubLObject value2, SubLObject value3) {
-		this._values = LispObjectFactory.makeLispObjectArray(3);
-		this._values[0] = value1;
-		this._values[1] = value2;
-		this._values[2] = value3;
-		return value1;
-	}
-
-	public SubLObject setValues(SubLObject value1, SubLObject value2, SubLObject value3, SubLObject value4) {
-		this._values = LispObjectFactory.makeLispObjectArray(4);
-		this._values[0] = value1;
-		this._values[1] = value2;
-		this._values[2] = value3;
-		this._values[3] = value4;
-		return value1;
-	}
-
-	public SubLObject setValues(SubLObject[] values) {
-		switch (values.length) {
-		case 0:
-			this._values = values;
-			return Lisp.NIL;
-		case 1:
-			this._values = null;
-			return values[0];
-		default:
-			this._values = values;
-			return values[0];
-		}
-	}
-
-	public void throwToTag(SubLObject tag, SubLObject result)
-
-	{
-		if (this.catchTags == null)
-			this.catchTags = Lisp.NIL;
-		SubLObject rest = this.catchTags;
-		while (rest != Lisp.NIL) {
-			if (rest.first() == tag)
-				throw new Throw(tag, result, this);
-			rest = rest.rest();
-		}
-		Lisp.error(new ControlError("Attempt to throw to the nonexistent tag " + tag.writeToString() + "."));
-	}
-
-	public SubLObject typeOf() {
-		return LispSymbols.THREAD;
-	}
-
-	public SubLObject typep(SubLObject typeSpecifier) {
-		if (typeSpecifier == LispSymbols.THREAD)
-			return Lisp.T;
-		if (typeSpecifier == BuiltInClass.THREAD)
-			return Lisp.T;
-		return super.typep(typeSpecifier);
-	}
-
-	public void uncaughtException(Thread t, Throwable e) {
-		this.bubbble.uncaughtException(t, e);
-	}
-
-	// Forces a single value, for situations where multiple values should be
-	// ignored.
-	public SubLObject value(SubLObject obj) {
-		this._values = null;
-		return obj;
-	}
-
-	public String writeToString() {
-		StringBuffer sb = new StringBuffer("THREAD");
-		if (this.name != Lisp.NIL) {
-			sb.append(" \"");
-			sb.append(this.name.getString());
-			sb.append("\"");
-		}
-		return this.unreadableString(sb.toString());
-	}
-
+		return SubLProcess.currentSubLThread();
+	};
 }

@@ -1,7 +1,7 @@
 ;;; precompiler.lisp
 ;;;
 ;;; Copyright (C) 2003-2008 Peter Graves <peter@armedbear.org>
-;;; $Id: precompiler.lisp 12340 2010-01-06 22:10:33Z ehuelsmann $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -32,12 +32,9 @@
 (in-package "SYSTEM")
 
 
-(export '(*inline-declarations*
-          process-optimization-declarations
+(export '(process-optimization-declarations
           inline-p notinline-p inline-expansion expand-inline
           *defined-functions* *undefined-functions* note-name-defined))
-
-(defvar *inline-declarations* nil)
 
 (declaim (ftype (function (t) t) process-optimization-declarations))
 (defun process-optimization-declarations (forms)
@@ -86,7 +83,7 @@
 (declaim (ftype (function (t) t) inline-p))
 (defun inline-p (name)
   (declare (optimize speed))
-  (let ((entry (assoc name *inline-declarations*)))
+  (let ((entry (assoc name *inline-declarations* :test #'equal)))
     (if entry
         (eq (cdr entry) 'INLINE)
         (and (symbolp name) (eq (get name '%inline) 'INLINE)))))
@@ -94,7 +91,7 @@
 (declaim (ftype (function (t) t) notinline-p))
 (defun notinline-p (name)
   (declare (optimize speed))
-  (let ((entry (assoc name *inline-declarations*)))
+  (let ((entry (assoc name *inline-declarations* :test #'equal)))
     (if entry
         (eq (cdr entry) 'NOTINLINE)
         (and (symbolp name) (eq (get name '%inline) 'NOTINLINE)))))
@@ -326,6 +323,10 @@
 
 (in-package "PRECOMPILER")
 
+
+(export '(precompile-form precompile))
+
+
 ;; No source-transforms and inlining in precompile-function-call
 ;; No macro expansion in precompile-dolist and precompile-dotimes
 ;; No macro expansion in precompile-do/do*
@@ -334,12 +335,15 @@
 ;; Special precompilation in precompile-when and precompile-unless
 ;; No precompilation in precompile-nth-value
 ;; Special precompilation in precompile-return
-;; Special precompilation in expand-macro
 ;;
 ;; if *in-jvm-compile* is false
 
 (defvar *in-jvm-compile* nil)
 (defvar *precompile-env* nil)
+
+(declaim (inline expand-macro))
+(defun expand-macro (form)
+  (macroexpand-1 form *precompile-env*))
 
 
 (declaim (ftype (function (t) t) precompile1))
@@ -361,6 +365,7 @@
                     (return-from precompile1 (funcall handler form)))
                    ((macro-function op *precompile-env*)
                     (return-from precompile1 (precompile1 (expand-macro form))))
+		   ((special-method-p op) (return-from precompile1 form))
                    ((special-operator-p op)
                     (error "PRECOMPILE1: unsupported special operator ~S." op))))
            (precompile-function-call form)))))
@@ -378,8 +383,9 @@
   (let ((op (car form)))
     (when (and (consp op) (eq (%car op) 'LAMBDA))
       (return-from precompile-function-call
+	(or (precompile-function-position-lambda op (cdr form))
                    (cons (precompile-lambda op)
-                         (mapcar #'precompile1 (cdr form)))))
+		  (mapcar #'precompile1 (cdr form))))))
     (when (or (not *in-jvm-compile*) (notinline-p op))
       (return-from precompile-function-call (precompile-cons form)))
     (when (source-transform op)
@@ -394,6 +400,34 @@
               (format t ";   inlining call to ~S~%" op)))
           (return-from precompile-function-call (precompile1 (expand-inline form expansion))))))
     (cons op (mapcar #'precompile1 (cdr form)))))
+
+(defun precompile-function-position-lambda (lambda args)
+  (let* ((arglist (second lambda))
+	 (body (cddr lambda))
+	 (simple-arglist? (not (or (memq '&KEY arglist) (memq '&OPTIONAL arglist) (memq '&REST arglist)))))
+    (or
+     ;;give a chance for someone to transform single-form function bodies
+     (and (= (length body) 1) (consp (car body)) (get (caar body) 'sys::function-position-lambda-transform)
+	  (funcall (get (caar body) 'sys::function-position-lambda-transform) (caar body) (car body) (mapcar #'precompile1 args)))
+     (and simple-arglist?
+	  (let ((arglist-length (if (memq '&aux arglist) (position '&aux arglist) (length arglist))))
+	    (if (= (length args) arglist-length)
+		;; simplest case - we have a simple arglist with as many
+		;; arguments as call args. Transform to let.
+		(return-from precompile-function-position-lambda
+		  `(let* ,(append
+			    (loop for arg-name in arglist
+				  for arg in (mapcar #'precompile1 args)
+				  until (eq arg-name '&aux)
+				  collect (list arg-name arg))
+			    (subseq arglist (1+ arglist-length)))
+		      ,@body))
+		(error "Argument mismatch for lambda in function position: ~a applied to ~a" `(lambda ,arglist body) args)))))))
+
+(defmacro define-function-position-lambda-transform (body-function-name (arglist form args) &body body)
+  `(put ',body-function-name 'sys::function-position-lambda-transform 
+	#'(lambda(,arglist ,form ,args)
+	    ,@body)))
 
 (defun precompile-locally (form)
   (let ((*inline-declarations* *inline-declarations*))
@@ -446,7 +480,7 @@
 (defun precompile-do/do*-end-form (end-form)
   (let ((end-test-form (car end-form))
         (result-forms (cdr end-form)))
-    (list* end-test-form (mapcar #'precompile1 result-forms))))
+    (list* (precompile1 end-test-form) (mapcar #'precompile1 result-forms))))
 
 (defun precompile-do/do* (form)
   (if *in-jvm-compile*
@@ -495,7 +529,10 @@
 	  ((symbolp place)
            (multiple-value-bind
                  (expansion expanded)
-               (expand-macro place)
+               ;; Expand once in case the form expands
+               ;; into something that needs special
+               ;; SETF treatment
+               (macroexpand-1 place *precompile-env*)
              (if expanded
                  (precompile1 (list* 'SETF expansion
                                      (cddr form)))
@@ -514,7 +551,10 @@
                (val (%cadr args)))
           (multiple-value-bind
                 (expansion expanded)
-              (expand-macro sym)
+              ;; Expand once in case the form expands
+              ;; into something that needs special
+              ;; SETF treatment
+              (macroexpand-1 sym *precompile-env*)
             (if expanded
                 (precompile1 (list 'SETF expansion val))
                 (list 'SETQ sym (precompile1 val)))))
@@ -640,7 +680,7 @@
        (car definition)
        (make-macro (car definition)
                    (make-closure
-                    (make-expander-for-macrolet definition)
+                    (make-macro-expander definition)
                     NIL))))
     (multiple-value-bind (body decls)
         (parse-body (cddr form) nil)
@@ -788,16 +828,37 @@
              (find-use name (%cdr expression))))))
 
 (defun precompile-flet/labels (form)
-  (let ((*precompile-env* (make-environment *precompile-env*))
-        (operator (car form))
-        (locals (cadr form))
-        (body (cddr form)))
+  (let* ((*precompile-env* (make-environment *precompile-env*))
+         (operator (car form))
+         (locals (cadr form))
+         precompiled-locals
+         applicable-locals
+         body)
+    (when (eq operator 'FLET)
+       ;; FLET functions *don't* shadow within their own FLET form
+       (setf precompiled-locals
+             (precompile-local-functions locals))
+       (setf applicable-locals precompiled-locals))
+    ;; augment the environment with the newly-defined local functions
+    ;; to shadow preexisting macro definitions with the same names
     (dolist (local locals)
+      ;; we can use the non-precompiled locals, because the function body isn't used
+      (environment-add-function-definition *precompile-env*
+					   (car local) (cddr local)))
+    (when (eq operator 'LABELS)
+       ;; LABELS functions *do* shadow within their own LABELS form
+       (setf precompiled-locals
+             (precompile-local-functions locals))
+       (setf applicable-locals precompiled-locals))
+    ;; then precompile (thus macro-expand) the body before inspecting it
+    ;; for the use of our locals and eliminating dead code
+    (setq body (mapcar #'precompile1 (cddr form)))
+    (dolist (local precompiled-locals)
       (let* ((name (car local))
              (used-p (find-use name body)))
         (unless used-p
           (when (eq operator 'LABELS)
-            (dolist (local locals)
+            (dolist (local precompiled-locals)
               (when (neq name (car local))
                 (when (find-use name (cddr local))
                   (setf used-p t)
@@ -809,21 +870,17 @@
                              (cdr (memq '&optional (cadr local)))
                              (cdr (memq '&key (cadr local)))
                              (cdr (memq '&aux (cadr local))))))
-                  (when (and vars (find-use name vars)
-                             (setf used-p t)
-                             (return))))))))
+                  (when (and vars (find-use name vars))
+                    (setf used-p t)
+                    (return)))
+                ))))
         (unless used-p
           (format t "; Note: deleting unused local function ~A ~S~%"
                   operator name)
-          (let* ((new-locals (remove local locals :test 'eq))
-                 (new-form
-                  (if new-locals
-                      (list* operator new-locals body)
-                      (list* 'LOCALLY body))))
-            (return-from precompile-flet/labels (precompile1 new-form))))))
-    (list* (car form)
-           (precompile-local-functions locals)
-           (mapcar #'precompile1 body))))
+          (setf applicable-locals (remove local applicable-locals)))))
+    (if applicable-locals
+        (list* operator applicable-locals body)
+        (list* 'LOCALLY body))))
 
 (defun precompile-function (form)
   (if (and (consp (cadr form)) (eq (caadr form) 'LAMBDA))
@@ -928,24 +985,6 @@
          (precompile1 (cadr form))
          (mapcar #'precompile1 (cddr form))))
 
-;; EXPAND-MACRO is like MACROEXPAND, but EXPAND-MACRO quits if *IN-JVM-COMPILE*
-;; is false and a macro is encountered that is also implemented as a special
-;; operator, so interpreted code can use the special operator implementation.
-(defun expand-macro (form)
-  (let (exp)
-    (loop
-       (unless *in-jvm-compile*
-         (when (and (consp form)
-                    (symbolp (%car form))
-                    (special-operator-p (%car form)))
-           (return-from expand-macro (values form exp))))
-       (multiple-value-bind (result expanded)
-           (macroexpand-1 form *precompile-env*)
-         (unless expanded
-           (return-from expand-macro (values result exp)))
-         (setf form result
-               exp t)))))
-
 (declaim (ftype (function (t t) t) precompile-form))
 (defun precompile-form (form in-jvm-compile
                         &optional precompile-env)
@@ -961,7 +1000,8 @@
                                                 (symbol-name symbol))
                                   'precompiler))))
     (unless (and handler (fboundp handler))
-      (error "No handler for ~S." symbol))
+      (error "No handler for ~S." (let ((*package* (find-package :keyword)))
+				    (format nil "~S" symbol))))
     (setf (get symbol 'precompile-handler) handler)))
 
 (defun install-handlers ()
@@ -1024,7 +1064,9 @@
                   (TRULY-THE            precompile-truly-the)
 
                   (THREADS:SYNCHRONIZED-ON
-                                        precompile-threads-synchronized-on)))
+                                        precompile-threads-synchronized-on)
+		  
+		  (JVM::WITH-INLINE-CODE precompile-identity)))
     (install-handler (first pair) (second pair))))
 
 (install-handlers)
@@ -1032,10 +1074,15 @@
 (export '(precompile-form))
 
 (in-package #:ext)
+
+(export 'macroexpand-all)
+
 (defun macroexpand-all (form &optional env)
   (precompiler:precompile-form form t env))
 
 (in-package #:lisp)
+
+(export '(compiler-let))
 
 (defmacro compiler-let (bindings &body forms &environment env)
   (let ((bindings (mapcar #'(lambda (binding)
@@ -1055,7 +1102,7 @@
     (sys::%set-arglist new (sys::arglist old))
     (when (macro-function name)
       (setf new (make-macro name new)))
-    (if (typep old 'standard-generic-function)
+    (if (typep old 'mop:funcallable-standard-object)
         (mop:set-funcallable-instance-function old new)
         (setf (fdefinition name) new))))
 
@@ -1151,16 +1198,22 @@
                   ;; Both COMPILE and COMPILE-FILE bind this variable.
                   ;; This function is also triggered by MACROEXPAND, though
                   jvm::*file-compilation*)
-             `(fset ',name ,lambda-expression))
+             `(progn
+                (fset ',name ,lambda-expression)
+                ',name))
             (t
              (when (and env (empty-environment-p env))
                (setf env nil))
              (when (null env)
                (setf lambda-expression (precompiler:precompile-form lambda-expression nil)))
-             `(progn
-                (%defun ',name ,lambda-expression)
+	     (let ((sym (if (consp name) (second name) name)))
+             `(prog1
+                  (%defun ',name ,lambda-expression)
+		  (record-source-information-for-type ',sym '(:function ,name))
+;		  (%set-arglist (fdefinition ',name) ,(format nil "~{~s~^ ~}" (third lambda-expression)))
                 ,@(when doc
-                   `((%set-documentation ',name 'function ,doc)))))))))
+		      `((%set-documentation ',name 'function ,doc)))
+		  )))))))
 
 (export '(precompile))
 

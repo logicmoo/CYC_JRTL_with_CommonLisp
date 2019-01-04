@@ -1,22 +1,6 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -24,63 +8,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLSemaphore;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 
-//// Internal Imports
-
-//// External Imports
-
 public class Threads extends SubLTrampolineFile {
-
-	//// Constructors
-
-	public static SubLTrampolineFile me = new Threads();
-
-	public static SubLSymbol $process_background_priority$;
-
-	//// Public Area
-
-	public static SubLSymbol $process_critical_priority$;
-	public static SubLSymbol $process_max_priority$;
-	public static SubLSymbol $process_min_priority$;
-	public static SubLSymbol $process_normal_priority$;
-	public static SubLSymbol $is_thread_performing_cleanupP$;
-	public static SubLString DEAD_STRING;
-
-	public static SubLString RUN_STRING;
-	public static SubLString BLOCKED_STRING;
-	public static SubLString INPUT_WAIT_STRING;
-	public static SubLString OUTPUT_WAIT_STRING;
-	public static SubLString IO_WAIT_STRING;
-	public static SubLString SLEEP_STRING;
-	public static SubLString LOCK_STRING;
-	public static SubLString INITIALIZING_STRING;
-	public static SubLString UNSET_STRING;
-	public static SubLSymbol INITIALIZING_SYM;
-
-	public static SubLSymbol RUN_SYM;
-	public static SubLSymbol WAIT_SYM;
-	public static SubLSymbol DEAD_SYM;
-	public static SubLSymbol BLOCKED_SYM;
-	public static SubLSymbol $process_wait_sleep_time$;
-
-	private static SubLString SHOW_PROCESS_FORMAT_STRING;
-
-	static {
-		Threads.DEAD_STRING = SubLObjectFactory.makeString("Dead");
-		Threads.RUN_STRING = SubLObjectFactory.makeString("Run");
-		Threads.BLOCKED_STRING = SubLObjectFactory.makeString("Blocked");
-		Threads.INPUT_WAIT_STRING = SubLObjectFactory.makeString("Input Wait");
-		Threads.OUTPUT_WAIT_STRING = SubLObjectFactory.makeString("Output Wait");
-		Threads.IO_WAIT_STRING = SubLObjectFactory.makeString("I/O Wait");
-		Threads.SLEEP_STRING = SubLObjectFactory.makeString("Sleep");
-		Threads.LOCK_STRING = SubLObjectFactory.makeString("Lock wait");
-		Threads.INITIALIZING_STRING = SubLObjectFactory.makeString("Initializing");
-		Threads.UNSET_STRING = SubLObjectFactory.makeString("<<whostate not set>>");
-	}
-
 	public static SubLObject all_processes() {
 		SubLProcess[] processes = SubLProcess.currentProcesses();
 		return SubLObjectFactory.makeList(processes);
@@ -88,49 +21,46 @@ public class Threads extends SubLTrampolineFile {
 
 	public static SubLObject current_process() {
 		SubLProcess result = SubLProcess.currentProcess();
-		return result == null ? (SubLObject) CommonSymbols.NIL : result;
+		return result == null ? SubLNil.NIL : result;
 	}
 
 	public static SubLObject debug_process(SubLObject process) {
 		Errors.unimplementedMethod("debug-process");
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
-	/**
-	 * returns true if interrupt flag was cleared without handling waiting
-	 * interrupts
-	 */
 	public static boolean forciblyHandleInterrupts() {
 		SubLProcess thisProcess = SubLProcess.currentProcess();
 		if (thisProcess != null && thisProcess.hasWatingInterrupts()) {
-			Thread.currentThread();
-			Thread.interrupted(); // clear interrupt flag
+			Thread.interrupted();
 			return true;
 		}
 		return false;
 	}
 
 	public static SubLObject interrupt_process(SubLObject process, SubLObject function) {
-		if (process == SubLProcess.currentProcess())
+		SubLProcess processVal = process.toProcess();
+		processVal.waitUntilInitializationHasFinished();
+		if (processVal == SubLProcess.currentProcess())
 			Functions.funcall(function);
 		else
-			process.toProcess().addInterrupt(function);
-		return CommonSymbols.NIL;
+			processVal.addInterrupt(function);
+		return SubLNil.NIL;
 	}
 
 	public static SubLObject interruptMainReadLoop() {
 		SubLProcess process = SubLMain.getMainReader().getThread().getSubLProcess();
 		if (process == null)
-			return CommonSymbols.NIL;
+			return SubLNil.NIL;
 		process.addInterrupt(SubLProcess.READ_LOOP_INTERRUPT_THUNK);
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
 	public static SubLObject kill_process(SubLObject process) {
 		SubLProcess processVal = process.toProcess();
 		processVal.waitUntilInitializationHasFinished();
 		processVal.killProcess();
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
 	public static SubLObject make_process(SubLObject name, SubLObject function) {
@@ -148,14 +78,14 @@ public class Threads extends SubLTrampolineFile {
 	public static SubLObject process_active_p(SubLObject process) {
 		if (process.toProcess().isActive())
 			return CommonSymbols.T;
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
 	public static SubLObject process_block() {
 		SubLProcess process = SubLProcess.currentProcess();
 		process.waitUntilInitializationHasFinished();
 		process.block();
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
 	public static SubLObject process_name(SubLObject process) {
@@ -178,13 +108,13 @@ public class Threads extends SubLTrampolineFile {
 		SubLProcess processVal = process.toProcess();
 		processVal.waitUntilInitializationHasFinished();
 		processVal.unblock();
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
 	public static SubLObject process_valid_p(SubLObject process) {
 		if (!process.isProcess())
-			return CommonSymbols.NIL;
-		return process.toProcess().getState() == SubLProcess.DEAD_STATE ? CommonSymbols.NIL : CommonSymbols.T;
+			return SubLNil.NIL;
+		return process.toProcess().getState() == SubLProcess.DEAD_STATE ? SubLNil.NIL : CommonSymbols.T;
 	}
 
 	public static SubLObject process_wait(SubLObject whostate, SubLObject predicate) {
@@ -208,9 +138,8 @@ public class Threads extends SubLTrampolineFile {
 	}
 
 	public static SubLObject process_yield() {
-		Thread.currentThread();
 		Thread.yield();
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
 	public static SubLObject set_process_priority(SubLObject process, SubLObject priority) {
@@ -221,31 +150,62 @@ public class Threads extends SubLTrampolineFile {
 
 	public static SubLObject show_processes() {
 		SubLProcess[] processes = SubLProcess.currentProcesses();
-		for (int i = 0; i < processes.length; i++) {
+		for (int i = 0; i < processes.length; ++i) {
 			SubLProcess process = processes[i];
-			SubLObject[] args = { Threads.process_name(process), Threads.process_state(process),
-					Threads.process_whostate(process) };
+			SubLObject[] args = { process_name(process), process_state(process), process_whostate(process) };
 			PrintLow.format(CommonSymbols.T, Threads.SHOW_PROCESS_FORMAT_STRING, args);
 		}
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
 	public static SubLObject sleep(SubLObject seconds) {
-		long usecs = (long) (seconds.doubleValue() * 1000000.0);
-		SubLProcess.currentProcess().sleepForMicroSeconds(usecs);
-		return CommonSymbols.NIL;
+		SubLSemaphore.sleepSem.acquireWithTimeoutNanoSecs(1, (long) (seconds.doubleValue() * 1.0E9));
+		return SubLNil.NIL;
 	}
 
 	public static SubLObject valid_process_p(SubLObject process) {
-		return Threads.process_valid_p(process);
+		return process_valid_p(process);
 	}
 
-	//// Initializers
-
-	/** Creates a new instance of Threads. */
-	public Threads() {
+	public static SubLTrampolineFile me;
+	public static SubLSymbol $process_background_priority$;
+	public static SubLSymbol $process_critical_priority$;
+	public static SubLSymbol $process_max_priority$;
+	public static SubLSymbol $process_min_priority$;
+	public static SubLSymbol $process_normal_priority$;
+	public static SubLSymbol $is_thread_performing_cleanupP$;
+	public static SubLString DEAD_STRING;
+	public static SubLString RUN_STRING;
+	public static SubLString BLOCKED_STRING;
+	public static SubLString INPUT_WAIT_STRING;
+	public static SubLString OUTPUT_WAIT_STRING;
+	public static SubLString IO_WAIT_STRING;
+	public static SubLString SLEEP_STRING;
+	public static SubLString LOCK_STRING;
+	public static SubLString INITIALIZING_STRING;
+	public static SubLString UNSET_STRING;
+	public static SubLSymbol INITIALIZING_SYM;
+	public static SubLSymbol RUN_SYM;
+	public static SubLSymbol WAIT_SYM;
+	public static SubLSymbol DEAD_SYM;
+	public static SubLSymbol BLOCKED_SYM;
+	public static SubLSymbol $process_wait_sleep_time$;
+	private static SubLString SHOW_PROCESS_FORMAT_STRING;
+	static {
+		me = new Threads();
+		Threads.DEAD_STRING = SubLObjectFactory.makeString("Dead");
+		Threads.RUN_STRING = SubLObjectFactory.makeString("Run");
+		Threads.BLOCKED_STRING = SubLObjectFactory.makeString("Blocked");
+		Threads.INPUT_WAIT_STRING = SubLObjectFactory.makeString("Input Wait");
+		Threads.OUTPUT_WAIT_STRING = SubLObjectFactory.makeString("Output Wait");
+		Threads.IO_WAIT_STRING = SubLObjectFactory.makeString("I/O Wait");
+		Threads.SLEEP_STRING = SubLObjectFactory.makeString("Sleep");
+		Threads.LOCK_STRING = SubLObjectFactory.makeString("Lock wait");
+		Threads.INITIALIZING_STRING = SubLObjectFactory.makeString("Initializing");
+		Threads.UNSET_STRING = SubLObjectFactory.makeString("<<whostate not set>>");
 	}
 
+	@Override
 	public void declareFunctions() {
 		SubLFiles.declareFunction(Threads.me, "make_process", "MAKE-PROCESS", 2, 0, false);
 		SubLFiles.declareFunction(Threads.me, "process_block", "PROCESS-BLOCK", 0, 0, false);
@@ -271,6 +231,7 @@ public class Threads extends SubLTrampolineFile {
 		SubLFiles.declareFunction(Threads.me, "interruptMainReadLoop", "INTERRUPT-MAIN-READ-LOOP", 0, 0, false);
 	}
 
+	@Override
 	public void initializeVariables() {
 		Threads.$process_min_priority$ = SubLFiles.defconstant(Threads.me, "*PROCESS-MIN-PRIORITY*",
 				CommonSymbols.ONE_INTEGER);
@@ -283,13 +244,10 @@ public class Threads extends SubLTrampolineFile {
 		Threads.$process_max_priority$ = SubLFiles.defconstant(Threads.me, "*PROCESS-MAX-PRIORITY*",
 				CommonSymbols.TEN_INTEGER);
 		Threads.$is_thread_performing_cleanupP$ = SubLFiles.defparameter(Threads.me, "*IS-THREAD-PERFOMING-CLEANUP?*",
-				CommonSymbols.NIL);
-
+				SubLNil.NIL);
 		Threads.$process_wait_sleep_time$ = SubLFiles.defvar(Threads.me, "*PROCESS_WAIT_SLEEP_TIME*",
 				SubLObjectFactory.makeInteger(1000000L));
-
 		Threads.SHOW_PROCESS_FORMAT_STRING = SubLObjectFactory.makeString("~A ~A ~A~%");
-
 		Threads.INITIALIZING_SYM = SubLObjectFactory.makeSublispSymbol("INITIALIZING");
 		Threads.RUN_SYM = SubLObjectFactory.makeSublispSymbol("RUN");
 		Threads.WAIT_SYM = SubLObjectFactory.makeSublispSymbol("WAIT");
@@ -297,15 +255,7 @@ public class Threads extends SubLTrampolineFile {
 		Threads.BLOCKED_SYM = SubLObjectFactory.makeSublispSymbol("BLOCKED");
 	}
 
+	@Override
 	public void runTopLevelForms() {
 	}
-
-	//// Protected Area
-
-	//// Private Area
-
-	//// Internal Rep
-
-	//// Main
-
 }

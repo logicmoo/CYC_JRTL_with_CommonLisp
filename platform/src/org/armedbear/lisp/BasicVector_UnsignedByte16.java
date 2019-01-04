@@ -2,7 +2,7 @@
  * BasicVector_UnsignedByte16.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: BasicVector_UnsignedByte16.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,216 +31,238 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
 // A basic vector is a specialized vector that is not displaced to another
 // array, has no fill pointer, and is not expressly adjustable.
-public class BasicVector_UnsignedByte16 extends AbstractSubLVector {
-	private int capacity;
-	private int[] elements;
+public final class BasicVector_UnsignedByte16 extends AbstractVector
+{
+    private int capacity;
+    private int[] elements;
 
-	public BasicVector_UnsignedByte16(int capacity) {
-		this.elements = new int[capacity];
-		this.capacity = capacity;
-	}
+    public BasicVector_UnsignedByte16(int capacity)
+    {
+        elements = new int[capacity];
+        this.capacity = capacity;
+    }
 
-	private BasicVector_UnsignedByte16(SubLObject[] array)
+    private BasicVector_UnsignedByte16(LispObject[] array)
 
-	{
-		this.capacity = array.length;
-		this.elements = new int[this.capacity];
-		for (int i = array.length; i-- > 0;)
-			this.elements[i] = array[i].intValue();
-	}
+    {
+        capacity = array.length;
+        elements = new int[capacity];
+        for (int i = array.length; i-- > 0;)
+            elements[i] = Fixnum.getValue(array[i]);
+    }
 
-	public AbstractVector adjustArray(int newCapacity, AbstractArray displacedTo, int displacement) {
-		return new ComplexVector(newCapacity, displacedTo, displacement);
-	}
+    public LispObject typeOf()
+    {
+        return list(Symbol.SIMPLE_ARRAY, UNSIGNED_BYTE_16,
+                     new Cons(Fixnum.getInstance(capacity)));
+    }
 
-	public AbstractVector adjustArray(int newCapacity, SubLObject initialElement, SubLObject initialContents)
+    public LispObject classOf()
+    {
+        return BuiltInClass.VECTOR;
+    }
 
-	{
-		if (initialContents != null) {
-			SubLObject[] newElements = LispObjectFactory.makeLispObjectArray(newCapacity);
-			if (initialContents.isList()) {
-				SubLObject list = initialContents;
-				for (int i = 0; i < newCapacity; i++) {
-					newElements[i] = list.first();
-					list = list.rest();
-				}
-			} else if (initialContents.isVector())
-				for (int i = 0; i < newCapacity; i++)
-					newElements[i] = initialContents.elt(i);
-			else
-				Lisp.error(new TypeError(initialContents, LispSymbols.SEQUENCE));
-			return new BasicVector_UnsignedByte16(newElements);
-		}
-		if (this.capacity != newCapacity) {
-			SubLObject[] newElements = LispObjectFactory.makeLispObjectArray(newCapacity);
-			System.arraycopy(this.elements, 0, newElements, 0, Math.min(this.capacity, newCapacity));
-			if (initialElement != null)
-				for (int i = this.capacity; i < newCapacity; i++)
-					newElements[i] = initialElement;
-			return new BasicVector_UnsignedByte16(newElements);
-		}
-		// No change.
-		return this;
-	}
+    public LispObject typep(LispObject type)
+    {
+        if (type == Symbol.SIMPLE_ARRAY)
+            return T;
+        if (type == BuiltInClass.SIMPLE_ARRAY)
+            return T;
+        return super.typep(type);
+    }
 
-	// Ignores fill pointer.
+    public LispObject getElementType()
+    {
+        return UNSIGNED_BYTE_16;
+    }
 
-	public int aref(int index) {
-		try {
-			return this.elements[index];
-		} catch (ArrayIndexOutOfBoundsException e) {
-			this.badIndex(index, this.elements.length);
-			// Not reached.
-			return 0;
-		}
-	}
+    public boolean isSimpleVector()
+    {
+        return false;
+    }
 
-	// Ignores fill pointer.
+    public boolean hasFillPointer()
+    {
+        return false;
+    }
 
-	public SubLObject AREF(int index) {
-		try {
-			return LispObjectFactory.makeInteger(this.elements[index]);
-		} catch (ArrayIndexOutOfBoundsException e) {
-			this.badIndex(index, this.elements.length);
-			return Lisp.NIL; // Not reached.
-		}
-	}
+    public boolean isAdjustable()
+    {
+        return false;
+    }
 
-	// Ignores fill pointer.
+    public int capacity()
+    {
+        return capacity;
+    }
 
-	public SubLObject AREF(SubLObject index) {
-		try {
-			return LispObjectFactory.makeInteger(this.elements[index.intValue()]);
-		} catch (ArrayIndexOutOfBoundsException e) {
-			this.badIndex(index.intValue(), this.elements.length);
-			return Lisp.NIL; // Not reached.
-		}
-	}
+    public int length()
+    {
+        return capacity;
+    }
 
-	public void aset(int index, int n) {
-		try {
-			this.elements[index] = n;
-		} catch (ArrayIndexOutOfBoundsException e) {
-			this.badIndex(index, this.capacity);
-		}
-	}
+    public LispObject elt(int index)
+    {
+        try {
+            return Fixnum.getInstance(elements[index]);
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            badIndex(index, capacity);
+            return NIL; // Not reached.
+        }
+    }
 
-	public void aset(int index, SubLObject obj) {
-		if (obj instanceof Fixnum)
-			try {
-				this.elements[index] = ((Fixnum) obj).value;
-			} catch (ArrayIndexOutOfBoundsException e) {
-				this.badIndex(index, this.capacity);
-			}
-		else
-			Lisp.error(new TypeError(obj, Lisp.UNSIGNED_BYTE_16));
-	}
+    // Ignores fill pointer.
+    public int aref(int index)
+    {
+        try {
+            return elements[index];
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            badIndex(index, elements.length);
+            // Not reached.
+            return 0;
+        }
+    }
 
-	public int capacity() {
-		return this.capacity;
-	}
+    // Ignores fill pointer.
+    public LispObject AREF(int index)
+    {
+        try {
+            return Fixnum.getInstance(elements[index]);
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            badIndex(index, elements.length);
+            return NIL; // Not reached.
+        }
+    }
 
-	public int cl_length() {
-		return this.capacity;
-	}
+    public void aset(int index, int n)
+    {
+        try {
+            elements[index] = n;
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            badIndex(index, capacity);
+        }
+    }
 
-	public SubLObject classOf() {
-		return BuiltInClass.VECTOR;
-	}
+    public void aset(int index, LispObject obj)
+    {
+        if (obj instanceof Fixnum) {
+                try {
+            elements[index] = ((Fixnum)obj).value;
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            badIndex(index, capacity);
+        }
+        }
+        else {
+            type_error(obj, UNSIGNED_BYTE_16);
+        }
+    }
 
-	public SubLObject elt(int index) {
-		try {
-			return LispObjectFactory.makeInteger(this.elements[index]);
-		} catch (ArrayIndexOutOfBoundsException e) {
-			this.badIndex(index, this.capacity);
-			return Lisp.NIL; // Not reached.
-		}
-	}
+    public LispObject subseq(int start, int end)
+    {
+        BasicVector_UnsignedByte16 v = new BasicVector_UnsignedByte16(end - start);
+        int i = start, j = 0;
+        try {
+            while (i < end)
+                v.elements[j++] = elements[i++];
+            return v;
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            return error(new TypeError("Array index out of bounds: " + i + "."));
+        }
+    }
 
-	public void fillVoid(SubLObject obj) {
-		int n = obj.intValue();
-		for (int i = this.capacity; i-- > 0;)
-			this.elements[i] = n;
-	}
+    public void fill(LispObject obj)
+    {
+        int n = Fixnum.getValue(obj);
+        for (int i = capacity; i-- > 0;)
+            elements[i] = n;
+    }
 
-	public SubLObject getElementType() {
-		return Lisp.UNSIGNED_BYTE_16;
-	}
+    public void shrink(int n)
+    {
+        if (n < capacity) {
+            int[] newArray = new int[n];
+            System.arraycopy(elements, 0, newArray, 0, n);
+            elements = newArray;
+            capacity = n;
+            return;
+        }
+        if (n == capacity)
+            return;
+        error(new LispError());
+    }
 
-	public boolean hasFillPointer() {
-		return false;
-	}
+    public LispObject reverse()
+    {
+        BasicVector_UnsignedByte16 result = new BasicVector_UnsignedByte16(capacity);
+        int i, j;
+        for (i = 0, j = capacity - 1; i < capacity; i++, j--)
+            result.elements[i] = elements[j];
+        return result;
+    }
 
-	public boolean isAdjustable() {
-		return false;
-	}
+    public LispObject nreverse()
+    {
+        int i = 0;
+        int j = capacity - 1;
+        while (i < j) {
+            int temp = elements[i];
+            elements[i] = elements[j];
+            elements[j] = temp;
+            ++i;
+            --j;
+        }
+        return this;
+    }
 
-	public boolean isSimpleVector() {
-		return false;
-	}
+    public AbstractVector adjustArray(int newCapacity,
+                                       LispObject initialElement,
+                                       LispObject initialContents)
 
-	public SubLObject nreverse() {
-		int i = 0;
-		int j = this.capacity - 1;
-		while (i < j) {
-			int temp = this.elements[i];
-			this.elements[i] = this.elements[j];
-			this.elements[j] = temp;
-			++i;
-			--j;
-		}
-		return this;
-	}
+    {
+        if (initialContents != null) {
+            LispObject[] newElements = new LispObject[newCapacity];
+            if (initialContents.listp()) {
+                LispObject list = initialContents;
+                for (int i = 0; i < newCapacity; i++) {
+                    newElements[i] = list.car();
+                    list = list.cdr();
+                }
+            } else if (initialContents.vectorp()) {
+                for (int i = 0; i < newCapacity; i++)
+                    newElements[i] = initialContents.elt(i);
+            } else
+                type_error(initialContents, Symbol.SEQUENCE);
+            return new BasicVector_UnsignedByte16(newElements);
+        }
+        if (capacity != newCapacity) {
+            LispObject[] newElements = new LispObject[newCapacity];
+            System.arraycopy(elements, 0, newElements, 0,
+                             Math.min(capacity, newCapacity));
+            if (initialElement != null)
+                for (int i = capacity; i < newCapacity; i++)
+                    newElements[i] = initialElement;
+            return new BasicVector_UnsignedByte16(newElements);
+        }
+        // No change.
+        return this;
+    }
 
-	public SubLObject reverse() {
-		BasicVector_UnsignedByte16 result = new BasicVector_UnsignedByte16(this.capacity);
-		int i, j;
-		for (i = 0, j = this.capacity - 1; i < this.capacity; i++, j--)
-			result.elements[i] = this.elements[j];
-		return result;
-	}
-
-	public void shrink(int n) {
-		if (n < this.capacity) {
-			int[] newArray = new int[n];
-			System.arraycopy(this.elements, 0, newArray, 0, n);
-			this.elements = newArray;
-			this.capacity = n;
-			return;
-		}
-		if (n == this.capacity)
-			return;
-		Lisp.error(new LispError());
-	}
-
-	public SubLObject subseq(int start, int end) {
-		BasicVector_UnsignedByte16 v = new BasicVector_UnsignedByte16(end - start);
-		int i = start, j = 0;
-		try {
-			while (i < end)
-				v.elements[j++] = this.elements[i++];
-			return v;
-		} catch (ArrayIndexOutOfBoundsException e) {
-			return Lisp.error(new TypeError("Array index out of bounds: " + i + "."));
-		}
-	}
-
-	public SubLObject typeOf() {
-		return Lisp.list(LispSymbols.SIMPLE_ARRAY, Lisp.UNSIGNED_BYTE_16,
-				LispObjectFactory.makeCons(LispObjectFactory.makeInteger(this.capacity)));
-	}
-
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.SIMPLE_ARRAY)
-			return Lisp.T;
-		if (type == BuiltInClass.SIMPLE_ARRAY)
-			return Lisp.T;
-		return super.typep(type);
-	}
+    public AbstractVector adjustArray(int newCapacity,
+                                       AbstractArray displacedTo,
+                                       int displacement)
+    {
+        return new ComplexVector(newCapacity, displacedTo, displacement);
+    }
 }

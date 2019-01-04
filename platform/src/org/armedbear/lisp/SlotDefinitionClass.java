@@ -2,7 +2,7 @@
  * SlotDefinitionClass.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: SlotDefinitionClass.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,29 +31,54 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
+import static org.armedbear.lisp.Lisp.*;
 
-public class SlotDefinitionClass extends StandardClass {
-	public static int SLOT_INDEX_NAME = 0;
-	public static int SLOT_INDEX_INITFUNCTION = 1;
-	public static int SLOT_INDEX_INITFORM = 2;
-	public static int SLOT_INDEX_INITARGS = 3;
-	public static int SLOT_INDEX_READERS = 4;
-	public static int SLOT_INDEX_WRITERS = 5;
-	public static int SLOT_INDEX_ALLOCATION = 6;
-	public static int SLOT_INDEX_ALLOCATION_CLASS = 7;
-	public static int SLOT_INDEX_LOCATION = 8;
+public final class SlotDefinitionClass extends StandardClass
+{
+    public SlotDefinitionClass(Symbol symbol, LispObject cpl) {
+        super(symbol, cpl);
+        LispObject[] instanceSlotNames = {
+            Symbol.NAME,
+            Symbol.INITFUNCTION,
+            Symbol.INITFORM,
+            Symbol.INITARGS,
+            Symbol.READERS,
+            Symbol.WRITERS,
+            Symbol.ALLOCATION,
+            Symbol.ALLOCATION_CLASS,
+            Symbol.LOCATION,
+            Symbol._TYPE,
+            Symbol._DOCUMENTATION
+        };
+        setClassLayout(new Layout(this, instanceSlotNames, NIL));
+        //Set up slot definitions so that this class can be extended by users
+        LispObject slotDefinitions = NIL;
+        for(int i = instanceSlotNames.length - 1; i >= 0; i--) {
+            slotDefinitions = slotDefinitions.push(new SlotDefinition(this, instanceSlotNames[i]));
+        }
+        // The Java class SlotDefinition sets the location slot to NIL
+        // in its constructor; here we make Lisp-side subclasses of
+        // standard-*-slot-definition do the same.
+        StandardObject locationSlot =
+          checkSlotDefinition(slotDefinitions.nthcdr(8).car());
+        locationSlot.setInstanceSlotValue(Symbol.INITFORM, NIL);
+        locationSlot.setInstanceSlotValue((LispObject)Symbol.INITFUNCTION, (LispObject)StandardClass.constantlyNil);
+        // Fix initargs of TYPE, DOCUMENTATION slots.
+        StandardObject typeSlot =
+          checkSlotDefinition(slotDefinitions.nthcdr(9).car());
+        typeSlot.setInstanceSlotValue(Symbol.INITARGS, list(internKeyword("TYPE")));
+        StandardObject documentationSlot =
+          checkSlotDefinition(slotDefinitions.nthcdr(10).car());
+        documentationSlot.setInstanceSlotValue(Symbol.INITARGS, list(internKeyword("DOCUMENTATION")));
+        setDirectSlotDefinitions(slotDefinitions);
+        setSlotDefinitions(slotDefinitions);
+        setFinalized(true);
+    }
 
-	public SlotDefinitionClass() {
-		super(LispSymbols.SLOT_DEFINITION, Lisp.list(StandardClass.STANDARD_OBJECT));
-		SubLPackage pkg = Lisp.PACKAGE_SYS;
-		SubLObject[] instanceSlotNames = { pkg.intern("NAME"), pkg.intern("INITFUNCTION"), pkg.intern("INITFORM"),
-				pkg.intern("INITARGS"), pkg.intern("READERS"), pkg.intern("WRITERS"), pkg.intern("ALLOCATION"),
-				pkg.intern("ALLOCATION-CLASS"), pkg.intern("LOCATION") };
-		this.setClassLayout(new Layout(this, instanceSlotNames, Lisp.NIL));
-		this.setFinalized(true);
-	}
+  private static StandardObject checkSlotDefinition(LispObject obj) {
+    if (obj instanceof StandardObject) return (StandardObject)obj;
+    return (StandardObject)type_error(obj, Symbol.SLOT_DEFINITION);
+  }
 }

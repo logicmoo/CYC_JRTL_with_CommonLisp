@@ -1,5 +1,5 @@
 /*
- * SubLMain.java
+ * java
  *
  * Created on December 13, 2005, 1:41 PM
  */
@@ -29,13 +29,16 @@ import javax.management.Notification;
 import javax.management.NotificationEmitter;
 import javax.management.NotificationListener;
 
+// import org.armedbear.lisp.CycEval;
+import org.armedbear.lisp.Interpreter;
+import org.armedbear.lisp.Lisp;
+import org.armedbear.lisp.Main;
 import org.jpl7.JPL;
 import org.jpl7.Query;
+import org.logicmoo.system.BeanShellCntrl;
+import org.logicmoo.system.SystemCurrent;
 
 // Internal imports
-import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Interpreter;
-import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Lisp;
-import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.Main;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLSequence;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -61,17 +64,121 @@ import com.cyc.tool.subl.util.SubLFiles;
  * @author goolsbey, tbrussea
  */
 public class SubLMain {
+
+	public static final class InitialEmbeddedMain extends SubLProcess {
+		private final Runnable runnable;
+		private final String[] args;
+
+		public InitialEmbeddedMain(String name, Runnable runnable, String[] args) {
+			super(name);
+			this.runnable = runnable;
+			this.args = args;
+		}
+
+		@Override
+		public void safeRun() {
+			try {
+				Main.setSubLisp(true);
+				if (!shouldRunInBackground())
+					SystemCurrent.out.println("Starting Cyc.");
+				startTime = System.currentTimeMillis();
+
+				try {
+					preInitLisp();
+					initializeSubL(args);
+				} catch (Exception e) {
+					e.printStackTrace();
+					me.doSystemCleanupAndExit(-1);
+				}
+				SubLPackage prevPackage = SubLPackage.getCurrentPackage();
+				try {
+					SubLPackage.setCurrentPackage(Lisp.PACKAGE_SYS);
+					long startABCL = System.currentTimeMillis();
+					Interpreter.createDefaultInstance(new String[] {});
+					startTime += (System.currentTimeMillis() - startABCL);
+				} catch (Exception e) {
+					e.printStackTrace();
+					//me.doSystemCleanupAndExit(-1);
+				} finally {
+
+					SubLPackage.setCurrentPackage(prevPackage);
+				}
+				if (!noInitCyc)
+					initializeTranslatedSystems();
+
+				long endTime = System.currentTimeMillis();
+				double theTime = (endTime - startTime) / 1000.0;
+				if (!shouldRunInBackground())
+					SystemCurrent.out.println("Internal initialization time = " + theTime + " secs.");
+
+				startTime = System.currentTimeMillis();
+
+				if (!delayEvalParams)
+					handleInits();
+
+				if (!shouldRunInBackground()) {
+					endTime = System.currentTimeMillis();
+					theTime = (endTime - startTime) / 1000.0;
+					SystemCurrent.out.println("Initialization time = " + theTime + " secs.");
+					SystemCurrent.out.println();
+					writeSystemInfo();
+					Storage.room(SubLNil.NIL);
+				}
+				StreamsLow.$terminal_io$.getValue().toOutputStream().flush();
+				runnable.run();
+			} catch (RuntimeException e2) {
+				SystemCurrent.out.println("Initial Lisp Listener Exiting Now");
+				throw e2;
+			} finally {
+				SystemCurrent.out.println("Initial Lisp Listener Exiting Now");
+			}
+		}
+	}
+
+	public static final class RunnableMain implements Runnable {
+
+		@Override
+		public void run() {
+
+			boolean wasSubLisp = Main.isSubLisp();
+			try {
+
+				boolean startInSubLisp = true;
+				Object val = me.argNameToArgValueMap.get("-lisp");
+				if (val != null && (val instanceof Boolean))
+					startInSubLisp = !((Boolean) val).booleanValue();
+
+				if (startInSubLisp) {
+					SubLPackage.setCurrentPackage(SubLPackage.CYC_PACKAGE);
+					//CycEval.CYC_REPL.execute();
+                    BeanShellCntrl.cyc_repl_v2();
+				} else {
+					//SubLPackage.setCurrentPackage(Lisp.PACKAGE_CL_USER);
+					SubLPackage.setCurrentPackage(SubLPackage.CYC_PACKAGE);
+					//CycEval.LISP_REPL.execute();
+                    BeanShellCntrl.lisp_repl();
+				}
+
+			} finally
+
+			{
+				Main.setSubLisp(wasSubLisp);
+			}
+
+		}
+	}
+
 	public interface Cleanup {
 		void cleanup();
 	}
 
-	private static class MemoryListener implements NotificationListener {
-		@Override
+	private static class MemoryListener  implements NotificationListener {
+		//@Override
 		public void handleNotification(Notification notification, Object handback) {
 			String notifType = notification.getType();
 			if (notifType.equals("java.management.memory.threshold.exceeded")
 					|| notifType.equals("java.management.memory.collection.threshold.exceeded"))
-				SubLMain.lowMemorySemaphore.release();
+				lowMemorySemaphore.release();
 		}
 	}
 
@@ -99,29 +206,45 @@ public class SubLMain {
 
 	private static volatile boolean isSubLInitialized;
 
+	public static volatile boolean isSubLInitialized_part0;
+
 	public static Runnable NOTHING_TO_DO;
 
+	protected static boolean noInitLisp = false;
+	public static boolean noInitCyc = true;
+	protected static boolean delayEvalParams = true;
+	protected static boolean noInit;
+	public static boolean commonSymbolsOK;
+
+	public static long fistStartTime;
+
+	protected static long startTime;
+
+	public static boolean shouldRunInBackground;
+
+	private static boolean isInitializedTranslatedSystems;
+
 	static {
-		SubLMain.ORIGINAL_IN_STREAM = System.in;
-		SubLMain.ORIGINAL_OUT_STREAM = System.out;
-		SubLMain.ORIGINAL_ERR_STREAM = System.err;
-		SubLMain.me = new SubLMain();
-		SubLMain.cleanups = Collections.synchronizedList(new ArrayList<Cleanup>(16));
-		SubLMain.noArgCommandLineArgs = new HashSet<String>();
-		SubLMain.argRequiredCommandLineArgs = new HashSet<String>();
-		SubLMain.isInitialized = false;
-		SubLMain.isFullyInitialized = false;
-		SubLMain.lowMemoryCallbacks = new ArrayList<SubLFunction>();
-		SubLMain.lowMemorySemaphore = new Semaphore(0);
-		SubLMain.isSubLInitialized = false;
-		SubLMain.noArgCommandLineArgs.add("-gui");
-		SubLMain.noArgCommandLineArgs.add("-q");
-		SubLMain.noArgCommandLineArgs.add("-b");
-		SubLMain.noArgCommandLineArgs.add("-a");
-		SubLMain.argRequiredCommandLineArgs.add("-i");
-		SubLMain.argRequiredCommandLineArgs.add("-f");
-		SubLMain.argRequiredCommandLineArgs.add("-w");
-		SubLMain.NOTHING_TO_DO = new Runnable() {
+		captureStreams();
+		me = new SubLMain();
+		cleanups = Collections.synchronizedList(new ArrayList<Cleanup>(16));
+		noArgCommandLineArgs = new HashSet<String>();
+		argRequiredCommandLineArgs = new HashSet<String>();
+		isInitialized = false;
+		isFullyInitialized = false;
+		lowMemoryCallbacks = new ArrayList<SubLFunction>();
+		lowMemorySemaphore = new Semaphore(0);
+		isSubLInitialized = false;
+		noArgCommandLineArgs.add("-lisp");
+		noArgCommandLineArgs.add("-cyc");
+		noArgCommandLineArgs.add("-gui");
+		noArgCommandLineArgs.add("-q");
+		noArgCommandLineArgs.add("-b");
+		noArgCommandLineArgs.add("-a");
+		argRequiredCommandLineArgs.add("-i");
+		argRequiredCommandLineArgs.add("-f");
+		argRequiredCommandLineArgs.add("-w");
+		NOTHING_TO_DO = new Runnable() {
 			@Override
 			public void run() {
 			}
@@ -131,54 +254,24 @@ public class SubLMain {
 	public static void deregisterLowMemoryCallback(SubLFunction func) {
 		if (func == null)
 			Errors.error("Unable to deregister low memory callback for null function.");
-		SubLMain.lowMemoryCallbacks.remove(func);
+		lowMemoryCallbacks.remove(func);
+	}
+
+	// sometimes called when this was started from a interface like telnet
+	public static void captureStreams() {
+		ORIGINAL_IN_STREAM = System.in;
+		ORIGINAL_OUT_STREAM = SystemCurrent.out;
+		ORIGINAL_ERR_STREAM = System.err;
 	}
 
 	public static void embeddedMain(String[] args) {
-		SubLMain.embeddedMain(args, SubLMain.NOTHING_TO_DO);
+		embeddedMain(args, NOTHING_TO_DO);
 	}
 
 	public static void embeddedMain(final String[] args, final Runnable runnable) {
-		SubLMain.me.processCommandLineArgs(args);
+		me.processCommandLineArgs(args);
 		try {
-			SubLProcess subLProcess = new SubLProcess("Initial Lisp Listener") {
-				@Override
-				public void safeRun() {
-					try {
-						if (!SubLMain.shouldRunInBackground())
-							System.out.println("Starting Cyc.");
-						long startTime = System.currentTimeMillis();
-						try {
-							SubLMain.initializeSubL(args);
-							SubLMain.initializeTranslatedSystems();
-						} catch (Exception e) {
-							e.printStackTrace();
-							SubLMain.me.doSystemCleanupAndExit(-1);
-						}
-						long endTime = System.currentTimeMillis();
-						double theTime = (endTime - startTime) / 1000.0;
-						if (!SubLMain.shouldRunInBackground())
-							System.out.println("Internal initialization time = " + theTime + " secs.");
-						startTime = System.currentTimeMillis();
-						SubLMain.handleInits();
-						if (!SubLMain.shouldRunInBackground()) {
-							endTime = System.currentTimeMillis();
-							theTime = (endTime - startTime) / 1000.0;
-							System.out.println("Initialization time = " + theTime + " secs.");
-							System.out.println();
-							SubLMain.writeSystemInfo();
-							Storage.room(SubLNil.NIL);
-						}
-						StreamsLow.$terminal_io$.getValue().toOutputStream().flush();
-						runnable.run();
-					} catch (RuntimeException e2) {
-						System.out.println("Initial Lisp Listener Exiting Now");
-						throw e2;
-					} finally {
-						System.out.println("Initial Lisp Listener Exiting Now");
-					}
-				}
-			};
+			SubLProcess subLProcess = new InitialEmbeddedMain("Initial Lisp Listener", runnable, args);
 			SubLThreadPool.getDefaultPool().execute(subLProcess);
 		} catch (Exception e) {
 			Errors.handleError(e);
@@ -186,38 +279,40 @@ public class SubLMain {
 	}
 
 	public static SubLObject get_red_object() {
-		return Errors.unimplementedMethod("SubLMain.get_red_object()");
+		return Errors.unimplementedMethod("get_red_object()");
 	}
 
 	public static String getCommandLineArg(String argName) {
-		return (String) SubLMain.me.argNameToArgValueMap.get(argName);
+		return (String) me.argNameToArgValueMap.get(argName);
 	}
 
 	public static SubLString getInitializationFileName() {
-		String fileName = (String) SubLMain.me.argNameToArgValueMap.get("-i");
+		String fileName = (String) me.argNameToArgValueMap.get("-i");
 		return fileName == null ? null : SubLObjectFactory.makeString(fileName);
 	}
 
 	public static String getInitializationForm() {
-		return (String) SubLMain.me.argNameToArgValueMap.get("-f");
+		return (String) me.argNameToArgValueMap.get("-f");
 	}
 
+	static ThreadLocal<SubLReader> mainReader = new ThreadLocal<SubLReader>();
+
 	public static SubLReader getMainReader() {
-		return SubLMain.me.mainReader;
+		return mainReader.get();
 	}
 
 	public static SubLString getWorldFileName() {
-		String fileName = (String) SubLMain.me.argNameToArgValueMap.get("-w");
+		String fileName = (String) me.argNameToArgValueMap.get("-w");
 		return fileName == null ? null : SubLObjectFactory.makeString(fileName);
 	}
 
 	private static void handleAllegroCompatiblityMode() {
-		if (SubLMain.isInAllegroCompatibilityMode())
+		if (isInAllegroCompatibilityMode())
 			SubLProcess.setAllegoSingleThreadedThread(SubLProcess.currentSubLThread());
 	}
 
 	private static void handleInitFileRunning() {
-		SubLString initFile = SubLMain.getInitializationFileName();
+		SubLString initFile = getInitializationFileName();
 		if (initFile != null)
 			try {
 				Eval.load(initFile);
@@ -229,7 +324,7 @@ public class SubLMain {
 	private static void handleInitFormRunning() {
 		boolean exit_with_error = false;
 		try {
-			String initForm = SubLMain.getInitializationForm();
+			String initForm = getInitializationForm();
 			if (initForm != null)
 				try {
 					SubLString initFormString = SubLObjectFactory.makeString(initForm);
@@ -237,14 +332,14 @@ public class SubLMain {
 							CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED);
 					form.eval(SubLEnvironment.currentEnvironment());
 				} catch (ResumeException re) {
-					System.out.println("[ Resuming via jump to top level read loop... ]");
+					SystemCurrent.out.println("[ Resuming via jump to top level read loop... ]");
 				} catch (SubLProcess.TerminationRequest tr) {
 					; // ignore
 				} catch (Throwable t) {
 					try {
 						Errors.handleThrowable(t, SubLNil.NIL);
 					} catch (ResumeException re2) {
-						System.out.println("[ Resuming via jump to top level read loop... ]");
+						SystemCurrent.out.println("[ Resuming via jump to top level read loop... ]");
 					} catch (SubLProcess.TerminationRequest tr2) {
 					} catch (Throwable th) {
 						Logger.getAnonymousLogger().log(Level.SEVERE,
@@ -253,26 +348,26 @@ public class SubLMain {
 					}
 				}
 		} finally {
-			if (SubLMain.shouldQuitAfterExecutingInitializationForm())
-				if (SubLMain.me != null)
-					SubLMain.me.doSystemCleanupAndExit(exit_with_error ? 1 : 0);
+			if (shouldQuitAfterExecutingInitializationForm())
+				if (me != null)
+					me.doSystemCleanupAndExit(exit_with_error ? 1 : 0);
 				else
 					System.exit(exit_with_error ? 1 : 0);
 		}
 	}
 
-	private static synchronized void handleInits() {
-		SubLString worldFile = SubLMain.getWorldFileName();
+	public static synchronized void handleInits() {
+		SubLString worldFile = getWorldFileName();
 		// @todo do something with worldFile if not null here -APB
-		SubLMain.setIsInitialized();
+		setIsInitialized();
 		try {
-			SubLMain.handleInitFileRunning();
-			SubLMain.handleInitFormRunning();
-			SubLMain.handleAllegroCompatiblityMode();
-			if (SubLMain.shouldQuitAfterExecutingInitializationForm())
-				SubLMain.me.doSystemCleanupAndExit(0);
+			handleInitFileRunning();
+			handleInitFormRunning();
+			handleAllegroCompatiblityMode();
+			if (shouldQuitAfterExecutingInitializationForm())
+				me.doSystemCleanupAndExit(0);
 		} finally {
-			SubLMain.setIsFullyInitialized();
+			setIsFullyInitialized();
 		}
 	}
 
@@ -297,12 +392,12 @@ public class SubLMain {
 				if (threshold < percent90)
 					threshold = percent90;
 				if (pool.isCollectionUsageThresholdSupported()) {
-					System.out.println("Low memory situations will be triggered when post-gc usage exceeds "
+					SystemCurrent.out.println("Low memory situations will be triggered when post-gc usage exceeds "
 							+ (int) (threshold / 1048576.0) + "MB(" + (int) (100L * threshold / max) + "% of "
 							+ (int) (max / 1048576.0) + "MB) for " + curPoolType + " pool " + pool.getName());
 					pool.setCollectionUsageThreshold(threshold);
 				} else if (pool.isUsageThresholdSupported()) {
-					System.out.println("Low memory situations will be triggered when usage exceeds "
+					SystemCurrent.out.println("Low memory situations will be triggered when usage exceeds "
 							+ (int) (threshold / 1048576.0) + "MB(" + (int) (100L * threshold / max) + "% of "
 							+ (int) (max / 1048576.0) + "MB) for " + curPoolType + " pool " + pool.getName());
 					pool.setUsageThreshold(threshold);
@@ -310,44 +405,57 @@ public class SubLMain {
 					Errors.warn("Unable to detect low memory situations.");
 			}
 		}
-
 		SubLObjectFactory.makeProcess(SubLObjectFactory.makeString("Low Memory Scavenger"), new Runnable() {
 			@Override
 			public void run() {
 				while (true) {
-					SubLMain.lowMemorySemaphore.acquireUninterruptibly();
+					lowMemorySemaphore.acquireUninterruptibly();
 					Runtime rt = Runtime.getRuntime();
 					long totalMemory = rt.totalMemory();
 					long freeMemory = rt.freeMemory();
 					long usedMemory = totalMemory - freeMemory;
 					long eightyPercentMemory = (long) (totalMemory * 0.8);
 					if (usedMemory >= eightyPercentMemory)
-						SubLMain.lowMemorySituation();
-					SubLMain.lowMemorySemaphore.drainPermits();
+						lowMemorySituation();
+					lowMemorySemaphore.drainPermits();
 				}
 			}
 		});
 	}
 
-	public static void initializeSubL(String[] args) {
+	public static synchronized void initializeSubL(String[] argsIgnored) {
+		if(isSubLInitialized || isSubLInitialized_part0 ) return;
+		isSubLInitialized_part0 = true;
+		preInitLisp();
+
+		Object o = Lisp._AUTOLOAD_VERBOSE_;
 		try {
 			PatchFileLoader.PATCH_FILE_LOADER.loadClass("com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage");
 		} catch (Exception e) {
 			e.printStackTrace(); // @hack
 		}
 		SubLPackage.initPackages();
+
+		commonSymbolsOK = true;
+
 		try {
-			PatchFileLoader.PATCH_FILE_LOADER.loadClass("com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols",
-					true);
+			Class c = PatchFileLoader.PATCH_FILE_LOADER
+					.loadClass("com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols");
+			// , true);
 			SubLSymbol sym = CommonSymbols.EQ; // @hack to make sure this get
 												// initialized first
 		} catch (Exception e) {
 			e.printStackTrace(); // @hack
 		}
 
+		SubLPackage.setCurrentPackage("SUBLISP");
+		org.armedbear.lisp.Package p = SubLPackage.getCurrentPackage();
+
 		SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages");
-		//SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.DiskDumper");
-		SubLPackage.setCurrentPackage(SubLPackage.SUBLISP_PACKAGE);
+        SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.DiskDumper");
+        SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync");
+
+		SubLPackage.setCurrentPackage(SubLPackage.SUBLISP_PACKAGE.toPackage());
 		SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality");
 		SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations");
 		SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers");
@@ -376,12 +484,11 @@ public class SubLMain {
 		SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping");
 		SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow");
 		SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.Processes");
-		SubLPackage currentPackage = SubLPackage.getCurrentPackage();
 		try {
 			SubLPackage.setCurrentPackage(SubLPackage.CYC_PACKAGE);
 			SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.Regex");
 		} finally {
-			SubLPackage.setCurrentPackage(currentPackage);
+			SubLPackage.setCurrentPackage(SubLPackage.SUBLISP_PACKAGE.toPackage());
 		}
 		SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences");
 		SubLFiles.initialize("com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort");
@@ -416,15 +523,6 @@ public class SubLMain {
 		SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.random");
 		SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind");
 		SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.complex_special_forms");
-		currentPackage = SubLPackage.getCurrentPackage();
-		try {
-			SubLPackage.setCurrentPackage(SubLPackage.CYC_PACKAGE);
-		if (Main.isSubLisp)
-			Interpreter.initializeLisp();
-		} finally {
-			SubLPackage.setCurrentPackage(currentPackage);
-		}
-		//SubLPackage.setCurrentPackage(SubLPackage.CYC_PACKAGE);
 		SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.character_names");
 		SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.math_utilities");
 		SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility");
@@ -433,80 +531,102 @@ public class SubLMain {
 		SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.thread_macros");
 		SubLFiles.initialize("com.cyc.tool.subl.jrtl.translatedCode.sublisp.subl_benchmarks");
 
+		 Errors.isReady = true;
+
 		ZeroArityFunction.initialize(); // this must come after ConsesLow -APB
 		UnaryFunction.initialize(); // this must come after ConsesLow -APB
 
 		AbstractSubLSequence.init();
-		if (!SubLMain.shouldRunInBackground()) {
-			SubLMain.setMainReader(new SubLReader());
-			SubLMain.getMainReader().setThread(SubLProcess.currentSubLThread());
+		if (!shouldRunInBackground()) {
+			setMainReader(new SubLReader());
+			getMainReader().setThread(SubLProcess.currentSubLThread());
 		}
+		isSubLInitialized_part0 = true;
 	}
 
-	public static void initializeTranslatedSystems() {
+	public synchronized static void initializeTranslatedSystems() {
+		if(isInitializedTranslatedSystems) return;
+		initialize1TranslatedSystem("com.cyc.cycjava.cycl.cycl");
+		initialize1TranslatedSystem("org.logicmoo.system.export");
+		
+	}
+
 		// @todo make this more flexible once we translate multiple systems
 		// or want to ship it without the dependency on cyc
+	public synchronized static void initialize1TranslatedSystem(String str) {
+		SubLPackage currentPackage = SubLPackage.getCurrentPackage();
 		try {
-			// DiskDumper.initializeTypes();
 			SubLPackage.setCurrentPackage(SubLPackage.CYC_PACKAGE);
 			try {
-				Eval.initialize_subl_interface_file(SubLObjectFactory.makeString("com.cyc.cycjava.cycl.cycl"));
+				Eval.initialize_subl_interface_file(SubLObjectFactory.makeString(str));
+				isInitializedTranslatedSystems = true;
 			} catch (Exception e) {
+				e.printStackTrace();
 				// Logger.getAnonymousLogger().log(Level.SEVERE, e.getMessage(),
 				// e);
 				// ignore
 			} finally {
 				try {
-					SubLMain.initializeLowMemoryDetection();
+					initializeLowMemoryDetection();
 				} catch (Exception e2) {
 					e2.printStackTrace();
-					
 				}
-				SubLPackage.setCurrentPackage(SubLPackage.CYC_PACKAGE);
 			}
 			PrintLow.registerJRTLPrintMethods();
 		} finally {
-			SubLMain.isSubLInitialized = true;
+			SubLPackage.setCurrentPackage(currentPackage);
 		}
+		isSubLInitialized = true;
 	}
 
 	public static boolean isFullyInitialized() {
-		return SubLMain.isFullyInitialized;
+		return isFullyInitialized;
 	}
 
 	public static boolean isInAllegroCompatibilityMode() {
-		Boolean value = (Boolean) SubLMain.me.argNameToArgValueMap.get("-a");
+		Boolean value = (Boolean) me.argNameToArgValueMap.get("-a");
 		return value == Boolean.TRUE;
 	}
 
 	public static boolean isInitialized() {
-		return SubLMain.isInitialized;
+		return isInitialized;
 	}
 
 	public static boolean isInternalInitializationDone() {
-		return SubLMain.isSubLInitialized;
+		return isSubLInitialized;
 	}
 
 	public static SubLObject lowMemoryCallbacks() {
-		return SubLObjectFactory.makeList(SubLMain.lowMemoryCallbacks);
+		return SubLObjectFactory.makeList(lowMemoryCallbacks);
 	}
 
 	public static void lowMemorySituation() {
-		System.out.println("Low memory situation detected; calling registered callbacks:");
-		for (SubLFunction func : SubLMain.lowMemoryCallbacks)
+		SystemCurrent.out.println("Low memory situation detected; calling registered callbacks:");
+		for (SubLFunction func : lowMemoryCallbacks)
 			try {
-				System.out.println("  Calling: " + func);
+				SystemCurrent.out.println("  Calling: " + func);
 				Functions.funcall(func);
 			} catch (Exception e) {
 				Errors.warn("Warning: low memory callback function error for " + func);
 			}
-		System.out.println("Done calling low memory situation callbacks.");
+		SystemCurrent.out.println("Done calling low memory situation callbacks.");
 		Storage.room(CommonSymbols.UNPROVIDED);
 	}
 
 	public static void main(String[] args) {
-		args = new String[]{"--moo"};
-		
+		SubLMain me = SubLMain.me;
+		Main.setSubLisp(true);
+		Main.isSubLispBindingMode = true;
+		Interpreter.nosystem = true;
+		noInitCyc = false;
+		delayEvalParams = false;
+		commonSymbolsOK = true;
+
+		preInitLisp();
+		if(args==null||args.length==0) {
+			args = new String[]{"--moo"};
+		}
+
 		if (args.length == 0) {
 		} else if (args[0].equalsIgnoreCase("--prolog")) {
 			JPL.init();
@@ -518,117 +638,112 @@ public class SubLMain {
 			Query.oneSolution("ensure_loaded(library(jpl))");
 			///Query.oneSolution("jcall('com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain',mainFromProlog,[])");
 			Query.oneSolution("interactor");
-			subLMain(new String[]{"-f","(progn (load \"init/jrtl-release-init.lisp\")  (load \"init/port-init.lisp\"))"});
+			embeddedMain(new String[]{"-f","(progn (load \"init/jrtl-release-init.lisp\")  (load \"init/port-init.lisp\"))"});
 			return;
 		}
-		subLMain(args);
+		handlePatches();
+		// Interpreter.createInstance();
+		SubLMain.commonSymbolsOK = true;
+		embeddedMain(args, new RunnableMain());
 	}
-	public static void mainFromProlog() {
-		subLMain(new String[]{"-f","(progn (load \"init/jrtl-release-init.lisp\")  (load \"init/port-init.lisp\"))"});
-	}
-	public static void subLMain(String[] args) {
-		SubLMain me = SubLMain.me;
-		SubLMain.handlePatches();
-		SubLMain.embeddedMain(args, new Runnable() {
-			@Override
-			public void run() {
-				if (!SubLMain.shouldRunInBackground()) {
-					if (SubLMain.shouldRunReadloopInGUI())
-						SubLMain.setMainReader(SubLReaderPanel.startReadloopWindow());
-					SubLMain.getMainReader().doReadLoop();
-				}
-			}
-		});
+
+	public static void preInitLisp() {
+		boolean wasSubLisp = Main.isSubLisp();
+		Main.setSubLisp(false);
+		// Interpreter.nosystem = true;
+		Object o = Lisp._AUTOLOAD_VERBOSE_;
+		Main.setSubLisp(wasSubLisp);
 	}
 
 	public static void registerCleanup(Cleanup cleanup) {
-		SubLMain.cleanups.add(cleanup);
+		cleanups.add(cleanup);
 	}
 
 	public static void registerLowMemoryCallback(SubLFunction func) {
 		if (func == null)
 			Errors.error("Unable to register low memory callback for null function.");
-		SubLMain.lowMemoryCallbacks.add(func);
+		lowMemoryCallbacks.add(func);
 	}
 
 	public static void setIsFullyInitialized() {
-		SubLMain.isFullyInitialized = true;
+		isFullyInitialized = true;
 	}
 
 	public static void setIsInitialized() {
-		SubLMain.isInitialized = true;
+		isInitialized = true;
 	}
 
 	public static void setMainReader(SubLReader reader) {
-		SubLMain.me.mainReader = reader;
+		mainReader.set(reader);
 	}
 
 	public static boolean shouldQuitAfterExecutingInitializationForm() {
-		Boolean value = (Boolean) SubLMain.me.argNameToArgValueMap.get("-q");
+		Boolean value = (Boolean) me.argNameToArgValueMap.get("-q");
 		return value == Boolean.TRUE;
 	}
 
 	public static boolean shouldRunInBackground() {
-		Boolean value = (Boolean) SubLMain.me.argNameToArgValueMap.get("-b");
+		if (shouldRunInBackground) return true;
+		Boolean value = (Boolean) me.argNameToArgValueMap.get("-b");
 		return value == Boolean.TRUE;
 	}
 
 	public static boolean shouldRunReadloopInGUI() {
-		Boolean value = (Boolean) SubLMain.me.argNameToArgValueMap.get("-gui");
+		Boolean value = (Boolean) me.argNameToArgValueMap.get("-gui");
 		return value == Boolean.TRUE;
 	}
 
 	private static void writeSystemInfo() {
-		System.out.println("Start time: " + new Date());
-		System.out.println("Lisp implementation: " + Environment.lisp_implementation_type().getString());
-		System.out.println("JVM: " + System.getProperty("java.vm.vendor") + " " + System.getProperty("java.vm.name")
+		SystemCurrent.out.println("Start time: " + new Date());
+		SystemCurrent.out.println("Lisp implementation: " + Environment.lisp_implementation_type().getStringValue());
+		SystemCurrent.out.println("JVM: " + System.getProperty("java.vm.vendor") + " " + System.getProperty("java.vm.name")
 				+ " " + System.getProperty("java.version") + " (" + System.getProperty("java.vm.version") + ")");
 		try {
 			// use reader to avoid direct code dependency on cycl
-			System.out.println("Current KB: " + Eval.eval(reader.read_from_string(
+			SystemCurrent.out.println("Current KB: " + Eval.eval(reader.read_from_string(
 					SubLObjectFactory.makeString(
 							"(clet ((result \"<none>\")) (ignore-errors (pwhen (fboundp 'KB-VERSION-STRING) (csetq result (format nil \"~A\" (kb-version-string))))) result)"),
 					CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED,
-					CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED)).getString());
+					CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED)).getStringValue());
 		} catch (Exception e) {
-			System.out.println("KB: <none>");
+			SystemCurrent.out.println("KB: <none>");
 		}
 		try {
 			// use reader to avoid direct code dependency on cycl
-			System.out.println("Patch Level: " + Eval.eval(reader.read_from_string(
+			SystemCurrent.out.println("Patch Level: " + Eval.eval(reader.read_from_string(
 					SubLObjectFactory.makeString(
 							"(clet ((result \"<unknown>\")) (ignore-errors (pwhen (fboundp 'CYC-REVISION-STRING) (csetq result (format nil \"~A\" (cyc-revision-string))))) result)"),
 					CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED,
-					CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED)).getString());
+					CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED)).getStringValue());
 		} catch (Exception e) {
-			System.out.println("Patch level: <unknown>");
+			SystemCurrent.out.println("Patch level: <unknown>");
 		}
 		try {
-			System.out.println("Working Directory: " + Eval.eval(reader.read_from_string(
+			SystemCurrent.out.println("Working Directory: " + Eval.eval(reader.read_from_string(
 					SubLObjectFactory.makeString("(clet ((result \"" + System.getProperty("user.dir") + "\")) "
 							+ "(ignore-errors (pwhen (fboundp 'CANONICAL-CYC-WORKING-DIRECTORY) (csetq result (canonical-cyc-working-directory))) result))"),
 					CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED,
-					CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED)).getString());
+					CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED)).getStringValue());
 		} catch (Exception e) {
-			System.out.println("Working directory (Java): " + System.getProperty("user.dir"));
+			SystemCurrent.out.println("Working directory (Java): " + System.getProperty("user.dir"));
 		}
-		System.out.println("Running on: " + Environment.machine_instance().getString());
-		System.out.println("OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version") + " ("
+		SystemCurrent.out.println("Running on: " + Environment.machine_instance().getStringValue());
+		SystemCurrent.out.println("OS: " + System.getProperty("os.name") + " " + System.getProperty("os.version") + " ("
 				+ System.getProperty("os.arch") + ")");
 	}
 
-	private SubLReader mainReader;
+//	private SubLReader mainReader;
 	private Map<String, Object> argNameToArgValueMap;
 
 	private SubLMain() {
-		this.mainReader = null;
+		//this.mainReader = null;
 		this.argNameToArgValueMap = new HashMap<String, Object>();
 	}
 
 	public synchronized void doSystemCleanupAndExit(int code) {
-		for (int i = 0, size = SubLMain.cleanups.size(); i < size; ++i)
+		for (int i = 0, size = cleanups.size(); i < size; ++i)
 			try {
-				SubLMain.cleanups.get(i).cleanup();
+				cleanups.get(i).cleanup();
 			} catch (Exception ex) {
 			}
 		StreamsLow.$terminal_io$.getValue().toOutputStream().flush();
@@ -638,9 +753,9 @@ public class SubLMain {
 	public void processCommandLineArgs(String[] args) {
 		for (int i = 0, size = args.length; i < size; ++i) {
 			String arg = args[i];
-			if (SubLMain.noArgCommandLineArgs.contains(arg))
+			if (noArgCommandLineArgs.contains(arg))
 				this.argNameToArgValueMap.put(arg, Boolean.TRUE);
-			else if (SubLMain.argRequiredCommandLineArgs.contains(args[i])) {
+			else if (argRequiredCommandLineArgs.contains(args[i])) {
 				if (i == size)
 					Errors.error("Not enough command line arguments given for: " + arg);
 				this.argNameToArgValueMap.put(arg, args[++i]);

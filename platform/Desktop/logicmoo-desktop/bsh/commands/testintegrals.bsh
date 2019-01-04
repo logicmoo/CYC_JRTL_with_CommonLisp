@@ -1,0 +1,26 @@
+import org.meta.math.qm.*;
+import org.meta.math.qm.basis.*;
+import org.meta.math.qm.integral.*; 
+
+cg1 = new ContractedGaussian(point(0,0,0), new Power(1,0,0));
+cg1.addPrimitive(0.1, 1);
+cg1.normalize();
+print("norm " + cg1.getNormalization());
+cg2 = new ContractedGaussian(point(0,0,0), new Power(2,0,0));
+cg2.addPrimitive(0.1, 1);
+cg2.normalize();
+print("norm " + cg2.getNormalization());
+cg3 = new ContractedGaussian(point(0,0,0), new Power(1,0,0));
+cg3.addPrimitive(0.1, 1);
+cg3.normalize();
+print("norm " + cg3.getNormalization());
+cg4 = new ContractedGaussian(point(0,0,0), new Power(2,0,0));
+cg4.addPrimitive(0.1, 1);
+cg4.normalize();
+print("norm " + cg4.getNormalization());
+
+huz = new HuzinagaTwoElectronTerm();
+print("huzinaga: " + huz.coulomb(cg1, cg2, cg3, cg4));
+
+hgp = new HGPTwoElectronTerm();
+print("hgp: " + hgp.coulomb(cg1, cg2, cg3, cg4));

@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves <peter@armedbear.org>
-;;; $Id: defstruct.lisp 12113 2009-08-23 17:39:56Z ehuelsmann $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -49,6 +49,7 @@
 (defmacro dd-print-object (x)        `(aref ,x 11))
 (defmacro dd-direct-slots (x)        `(aref ,x 12))
 (defmacro dd-slots (x)               `(aref ,x 13))
+(defmacro dd-inherited-accessors (x) `(aref ,x 14))
 
 (defun make-defstruct-description (&key name
                                         conc-name
@@ -63,8 +64,9 @@
                                         print-function
                                         print-object
                                         direct-slots
-                                        slots)
-  (let ((dd (make-array 14)))
+                                        slots
+                                        inherited-accessors)
+  (let ((dd (make-array 15)))
     (setf (dd-name dd) name
           (dd-conc-name dd) conc-name
           (dd-default-constructor dd) default-constructor
@@ -78,7 +80,8 @@
           (dd-print-function dd) print-function
           (dd-print-object dd) print-object
           (dd-direct-slots dd) direct-slots
-          (dd-slots dd) slots)
+          (dd-slots dd) slots
+          (dd-inherited-accessors dd) inherited-accessors)
     dd))
 
 ;;; DEFSTRUCT-SLOT-DESCRIPTION
@@ -121,6 +124,8 @@
 (defvar *dd-print-object*)
 (defvar *dd-direct-slots*)
 (defvar *dd-slots*)
+(defvar *dd-inherited-accessors*)
+(defvar *dd-documentation*)
 
 (defun keywordify (symbol)
   (intern (symbol-name symbol) +keyword-package+))
@@ -325,52 +330,89 @@
              `((defun ,pred (object)
                  (simple-typep object ',*dd-name*))))))))
 
+(defun make-list-reader (index)
+  #'(lambda (instance)
+      (elt instance index)))
+
+(defun make-vector-reader (index)
+  #'(lambda (instance)
+      (aref instance index)))
+
+(defun make-structure-reader (index structure-type)
+  (declare (ignore structure-type))
+  #'(lambda (instance)
+      ;; (unless (typep instance structure-type)
+      ;;   (error 'type-error
+      ;;          :datum instance
+      ;;          :expected-type structure-type))
+      (structure-ref instance index)))
+
 (defun define-reader (slot)
-  (let ((accessor-name (if *dd-conc-name*
-                           (intern (concatenate 'string
-                                                (symbol-name *dd-conc-name*)
-                                                (symbol-name (dsd-name slot))))
-                           (dsd-name slot)))
+  (let ((accessor-name (dsd-reader slot))
         (index (dsd-index slot))
         (type (dsd-type slot)))
     (cond ((eq *dd-type* 'list)
            `((declaim (ftype (function * ,type) ,accessor-name))
-             (defun ,accessor-name (instance) (elt instance ,index))))
+	     (record-source-information-for-type ',accessor-name '(:structure-reader ,*dd-name*))
+             (setf (symbol-function ',accessor-name)
+                   (make-list-reader ,index))))
           ((or (eq *dd-type* 'vector)
                (and (consp *dd-type*) (eq (car *dd-type*) 'vector)))
            `((declaim (ftype (function * ,type) ,accessor-name))
-             (defun ,accessor-name (instance) (aref instance ,index))
+	     (record-source-information-for-type ',accessor-name '(:structure-reader ,*dd-name*))
+             (setf (symbol-function ',accessor-name)
+                   (make-vector-reader ,index))
+	     (record-source-information-for-type ',accessor-name '(:structure-reader ,*dd-name*))
              (define-source-transform ,accessor-name (instance)
                `(aref (truly-the ,',*dd-type* ,instance) ,,index))))
           (t
            `((declaim (ftype (function * ,type) ,accessor-name))
-             (defun ,accessor-name (instance)
-               (structure-ref (the ,*dd-name* instance) ,index))
+             (setf (symbol-function ',accessor-name)
+                   (make-structure-reader ,index ',*dd-name*))
+	     (record-source-information-for-type ',accessor-name '(:structure-reader ,*dd-name*))
              (define-source-transform ,accessor-name (instance)
                ,(if (eq type 't)
                     ``(structure-ref (the ,',*dd-name* ,instance) ,,index)
                     ``(the ,',type
                         (structure-ref (the ,',*dd-name* ,instance) ,,index)))))))))
 
+(defun make-list-writer (index)
+  #'(lambda (value instance)
+      (%set-elt instance index value)))
+
+(defun make-vector-writer (index)
+  #'(lambda (value instance)
+      (aset instance index value)))
+
+(defun make-structure-writer (index structure-type)
+  (declare (ignore structure-type))
+  #'(lambda (value instance)
+      ;; (unless (typep instance structure-type)
+      ;;   (error 'type-error
+      ;;          :datum instance
+      ;;          :expected-type structure-type))
+      (structure-set instance index value)))
+
+
+
 (defun define-writer (slot)
-  (let ((accessor-name (if *dd-conc-name*
-                           (intern (concatenate 'string
-                                                (symbol-name *dd-conc-name*)
-                                                (symbol-name (dsd-name slot))))
-                           (dsd-name slot)))
+  (let ((accessor-name (dsd-reader slot))
         (index (dsd-index slot)))
     (cond ((eq *dd-type* 'list)
-           `((defun (setf ,accessor-name) (value instance)
-               (%set-elt instance ,index value))))
+           `((record-source-information-for-type '(setf ,accessor-name) '(:structure-writer ,*dd-name*))
+	     (setf (get ',accessor-name 'setf-function)
+                   (make-list-writer ,index))))
           ((or (eq *dd-type* 'vector)
                (and (consp *dd-type*) (eq (car *dd-type*) 'vector)))
-           `((defun (setf ,accessor-name) (value instance)
-               (aset instance ,index value))
+           `((setf (get ',accessor-name 'setf-function)
+                   (make-vector-writer ,index))
+	     (record-source-information-for-type '(setf ,accessor-name) '(:structure-writer ,*dd-name*))
              (define-source-transform (setf ,accessor-name) (value instance)
                `(aset (truly-the ,',*dd-type* ,instance) ,,index ,value))))
           (t
-           `((defun (setf ,accessor-name) (value instance)
-               (structure-set (the ,*dd-name* instance) ,index value))
+           `((setf (get ',accessor-name 'setf-function)
+                   (make-structure-writer ,index ',*dd-name*))
+	     (record-source-information-for-type '(setf ,accessor-name) '(:structure-writer ,*dd-name*))
              (define-source-transform (setf ,accessor-name) (value instance)
                `(structure-set (the ,',*dd-name* ,instance)
                                ,,index ,value)))))))
@@ -378,9 +420,12 @@
 (defun define-access-functions ()
   (let ((result ()))
     (dolist (slot *dd-slots*)
-      (setf result (nconc result (define-reader slot)))
-      (unless (dsd-read-only slot)
-        (setf result (nconc result (define-writer slot)))))
+      (let ((accessor-name (dsd-reader slot)))
+        (unless (null accessor-name)
+          (unless (assoc accessor-name *dd-inherited-accessors*)
+            (setf result (nconc result (define-reader slot)))
+            (unless (dsd-read-only slot)
+              (setf result (nconc result (define-writer slot))))))))
     result))
 
 (defun define-copier ()
@@ -476,9 +521,11 @@
                                 print-function
                                 print-object
                                 direct-slots
-                                slots)
-  (setf (get name 'structure-definition)
-        (make-defstruct-description :name name
+                                slots
+                                inherited-accessors
+                                documentation)
+  (let ((description
+         (make-defstruct-description :name name
                                     :conc-name conc-name
                                     :default-constructor default-constructor
                                     :constructors constructors
@@ -491,9 +538,44 @@
                                     :print-function print-function
                                     :print-object print-object
                                     :direct-slots direct-slots
-                                    :slots slots))
+                                    :slots slots
+                                    :inherited-accessors inherited-accessors))
+        (old (get name 'structure-definition)))
+    (when old
+      (unless
+          ;; Assert that the structure definitions are exactly the same
+          ;; we need to support this type of redefinition during bootstrap
+          ;; building ourselves
+          (and (equalp (aref old 0) (aref description 0))
+               ;; the CONC-NAME slot is an uninterned symbol if not supplied
+               ;; thus different on each redefinition round. Check that the
+               ;; names are equal, because it produces the same end result
+               ;; when they are.
+               (string= (aref old 1) (aref description 1))
+               (equalp (aref old 5) (aref description 5))
+               (equalp (aref old 6) (aref description 6))
+               (equalp (aref old 7) (aref description 7))
+               (equalp (aref old 8) (aref description 8))
+               (every (lambda (x y)
+                        (and (equalp (dsd-name x) (dsd-name y))
+                             (equalp (dsd-index x) (dsd-index y))
+                             (equalp (dsd-type x) (dsd-type y))))
+                      (append (aref old 12) (aref old 13))
+                      (append (aref description 12)
+                              (aref description 13))))
+        (error 'program-error
+               :format-control "Structure redefinition not supported ~
+                              in DEFSTRUCT for ~A"
+               :format-arguments (list name)))
+      ;; Since they're the same, continue with the old one.
+      (setf description old))
+    (setf (get name 'structure-definition) description))
+  (%set-documentation name 'structure documentation)
   (when (or (null type) named)
-    (make-structure-class name direct-slots slots (car include)))
+    (let ((structure-class
+            (make-structure-class name direct-slots slots (car include))))
+      (%set-documentation name 'type documentation)
+      (%set-documentation structure-class t documentation)))
   (when default-constructor
     (proclaim `(ftype (function * t) ,default-constructor))))
 
@@ -512,7 +594,9 @@
         (*dd-print-function* nil)
         (*dd-print-object* nil)
         (*dd-direct-slots* ())
-        (*dd-slots* ()))
+        (*dd-slots* ())
+        (*dd-inherited-accessors* ())
+        (*dd-documentation* nil))
     (parse-name-and-options (if (atom name-and-options)
                                 (list name-and-options)
                                 name-and-options))
@@ -524,7 +608,7 @@
             (return)))
         (setf *dd-default-constructor* (default-constructor-name)))
     (when (stringp (car slots))
-      (%set-documentation *dd-name* 'structure (pop slots)))
+      (setf *dd-documentation* (pop slots)))
     (dolist (slot slots)
       (let* ((name (if (atom slot) slot (car slot)))
              (reader (if *dd-conc-name*
@@ -556,9 +640,19 @@
           (dolist (dsd (dd-slots dd))
             ;; MUST COPY SLOT DESCRIPTION!
             (setf dsd (copy-seq dsd))
-            (setf (dsd-index dsd) index)
+            (setf (dsd-index dsd) index
+                  (dsd-reader dsd)
+                  (if *dd-conc-name*
+                      (intern (concatenate 'string
+                                           (symbol-name *dd-conc-name*)
+                                           (symbol-name (dsd-name dsd))))
+                      (dsd-name dsd)))
             (push dsd *dd-slots*)
-            (incf index)))
+            (incf index))
+          (setf *dd-inherited-accessors* (dd-inherited-accessors dd))
+          (dolist (dsd (dd-direct-slots dd))
+            (push (cons (dsd-reader dsd) (dsd-name dsd))
+                  *dd-inherited-accessors*)))
         (when (cdr *dd-include*)
           (dolist (slot (cdr *dd-include*))
             (let* ((name (if (atom slot) slot (car slot)))
@@ -605,11 +699,16 @@
                              ,@(if *dd-print-function* `(:print-function ',*dd-print-function*))
                              ,@(if *dd-print-object* `(:print-object ',*dd-print-object*))
                              :direct-slots ',*dd-direct-slots*
-                             :slots ',*dd-slots*))
+                             :slots ',*dd-slots*
+                             :inherited-accessors ',*dd-inherited-accessors*
+                             :documentation ',*dd-documentation*))
+       (record-source-information-for-type ',*dd-name* :structure)
        ,@(define-constructors)
        ,@(define-predicate)
        ,@(define-access-functions)
        ,@(define-copier)
+       ,@(when (or *dd-print-function* *dd-print-object*)
+               `((require "PRINT-OBJECT")))
        ,@(define-print-function)
        ',*dd-name*)))
 

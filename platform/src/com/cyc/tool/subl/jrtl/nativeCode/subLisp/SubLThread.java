@@ -1,22 +1,6 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import java.util.ArrayDeque;
@@ -25,13 +9,14 @@ import java.util.Arrays;
 import java.util.Deque;
 import java.util.List;
 
-//// External Imports
+import org.armedbear.lisp.Lisp;
+import org.armedbear.lisp.LispThread;
+import org.armedbear.lisp.Main;
+import org.armedbear.lisp.*;
+import org.armedbear.lisp.Environment;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLHashtable.SubLEqHashtableKeyEntryImpl;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLHashtable.SubLEqlHashtableKeyEntryImpl;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLHashtable.SubLEqualHashtableKeyEntryImpl;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLHashtable.SubLEqualpHashtableKeyEntryImpl;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLHashtable.SubLHashtableKeyEntry;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLHashtable;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
@@ -43,380 +28,353 @@ import com.cyc.tool.subl.util.ComparatorGenericKey;
 import com.cyc.tool.subl.util.ComparatorIdentityKey;
 import com.cyc.tool.subl.util.PatchFileLoader;
 
-public class SubLThread extends Thread implements CommonSymbols {
+public class SubLThread extends Thread {
+	public final class OverPoppableDeque extends ArrayDeque<SubLObject> {
+		@Override
+		public SubLObject pop() {
+			try {
+			return super.pop();
+			} catch(Throwable e) {
+				//e.printStackTrace();
+				return Lisp.NIL;
+			}
+		}
+	}
 
-	//// Constructors
+	LispThread listThread;
 
-	final public byte[] byteBufferLarge = new byte[16 * 1024];
+	public LispThread getLispThread() {
 
-	public static int MAX_DYNAMIC_BINDINGS = 4096 * 2;
+		if (listThread == null) {
+			listThread = LispThread.map.get(this);
+			if(listThread==null) {
+				 listThread = LispThread.currentThread();
+			}
+		}
+		return listThread;
 
-	public static ComparatorGenericKey genericSortComparator = new ComparatorGenericKey(null, null);
+	}
 
-	public static ComparatorIdentityKey identitySortComparator = new ComparatorIdentityKey(null);
+	public SubLThread(Runnable target, String name) {
+		super(target, name);
+		init();
+	}
 
-	//// Public Area
+	public SubLThread(ThreadGroup group, Runnable target, String name) {
+		super(group, target, name);
+		init();
+	}
+
+	public SubLThread(ThreadGroup group, Runnable target, String name, long stackSize) {
+		super(group, target, name, stackSize);
+		init();
+	}
 
 	public static Object getInterruptLock() {
 		return SubLProcess.currentSubLThread().interruptLock;
 	}
 
-	/**
-	 *
-	 * @param args
-	 *            the command line arguments
-	 */
 	public static void main(String[] args) {
 	}
 
-	//// Internal Rep
-	private Exception launchContext;
+	private volatile Exception launchContext;
+	private volatile SubLProcess subLProcess;
+	private Resourcer resourcer;
+	public SubLObject[] sublArraySize1;
+	public SubLObject[] sublArraySize2;
+	public SubLObject[] sublArraySize3;
+	public SubLObject[] sublArraySize4;
+	public SubLObject[] sublArraySize5;
+	public SubLHashtable.SubLHashtableKeyEntry hashtableEqKeyEntry;
+	public SubLHashtable.SubLHashtableKeyEntry hashtableEqlKeyEntry;
+	public SubLHashtable.SubLHashtableKeyEntry hashtableEqualKeyEntry;
+	public SubLHashtable.SubLHashtableKeyEntry hashtableEqualpKeyEntry;
+	public SubLObject[] bindingsList;
+	public byte[] byteBuffer;
+	public byte[] byteBufferLarge;
+	public ArrayList<SubLObject> valuesArray;
+	public int valuesCount;
+	public SubLObject value1;
+	public SubLObject value2;
+	public SubLObject value3;
+	public SubLObject value4;
+	public SubLObject value5;
+	public SubLObject value6;
+	public SubLObject value7;
+	public SubLObject value8;
+	public org.armedbear.lisp.Environment env;
+	public Deque<SubLObject> throwStack;
+	public Object interruptLock;
+	private volatile String previousName;
+	public static int MAX_DYNAMIC_BINDINGS = 16384;
+	final public static ComparatorGenericKey genericSortComparator = new ComparatorGenericKey(null, null);
+	final public static ComparatorIdentityKey identitySortComparator = new ComparatorIdentityKey(null);
 
-	private SubLProcess subLProcess;
-
-	private Resourcer resourcer = new Resourcer();
-
-	public SubLObject[] sublArraySize1 = new SubLObject[1];
-
-	public SubLObject[] sublArraySize2 = new SubLObject[2];
-
-	public SubLObject[] sublArraySize3 = new SubLObject[3];
-
-	public SubLObject[] sublArraySize4 = new SubLObject[4];
-
-	public SubLObject[] sublArraySize5 = new SubLObject[5];
-
-	public SubLHashtableKeyEntry hashtableEqKeyEntry = new SubLEqHashtableKeyEntryImpl();
-
-	public SubLHashtableKeyEntry hashtableEqlKeyEntry = new SubLEqlHashtableKeyEntryImpl();
-
-	public SubLHashtableKeyEntry hashtableEqualKeyEntry = new SubLEqualHashtableKeyEntryImpl();
-
-	public SubLHashtableKeyEntry hashtableEqualpKeyEntry = new SubLEqualpHashtableKeyEntryImpl();
-
-	public SubLObject[] bindingsList = new SubLObject[SubLThread.MAX_DYNAMIC_BINDINGS];
-
-	public byte[] byteBuffer = new byte[256];
-
-	public ArrayList<SubLObject> valuesArray = new ArrayList<SubLObject>(128);
-
-	public int valuesCount = 0;
-
-	public SubLObject value1 = SubLNil.NIL;
-
-	public SubLObject value2 = SubLNil.NIL;
-
-	public SubLObject value3 = SubLNil.NIL;
-
-	public SubLObject value4 = SubLNil.NIL;
-
-	public SubLObject value5 = SubLNil.NIL;
-
-	public SubLObject value6 = SubLNil.NIL;
-
-	public SubLObject value7 = SubLNil.NIL;
-
-	public SubLObject value8 = SubLNil.NIL;
-
-	public SubLEnvironment env = SubLEnvironment.getDefaultEnvironment();
-	public Deque<SubLObject> throwStack = new ArrayDeque<SubLObject>();
-	public Object interruptLock = new Object();
-
-	/**
-	 * We might reuse this thread for other purposes, so we want to set the name
-	 * to be the name of the SubLProcess while it's being used to run that
-	 * SubLProcess, but when we're done, we want to reset it to the name it had
-	 * beforehand, so this is the variable where we stash that.
-	 */
-	private String previousName;
-
-	/**
-	 *
-	 * @param target
-	 * @param name
-	 */
-	public SubLThread(Runnable target, String name) {
-		super(target, name);
-		this.init();
+	private void init() {
+		setContextClassLoader(PatchFileLoader.PATCH_FILE_LOADER);
+		resourcer = new Resourcer();
+		sublArraySize1 = new SubLObject[1];
+		sublArraySize2 = new SubLObject[2];
+		sublArraySize3 = new SubLObject[3];
+		sublArraySize4 = new SubLObject[4];
+		sublArraySize5 = new SubLObject[5];
+		hashtableEqKeyEntry = new SubLHashtable.SubLEqHashtableKeyEntryImpl();
+		hashtableEqlKeyEntry = new SubLHashtable.SubLEqlHashtableKeyEntryImpl();
+		hashtableEqualKeyEntry = new SubLHashtable.SubLEqualHashtableKeyEntryImpl();
+		hashtableEqualpKeyEntry = new SubLHashtable.SubLEqualpHashtableKeyEntryImpl();
+		bindingsList = new SubLObject[MAX_DYNAMIC_BINDINGS];
+		byteBuffer = new byte[256];
+		byteBufferLarge = new byte[16384];
+		valuesArray = new ArrayList<SubLObject>(128);
+		valuesCount = 0;
+		value1 = SubLNil.NIL;
+		value2 = SubLNil.NIL;
+		value3 = SubLNil.NIL;
+		value4 = SubLNil.NIL;
+		value5 = SubLNil.NIL;
+		value6 = SubLNil.NIL;
+		value7 = SubLNil.NIL;
+		value8 = SubLNil.NIL;
+		env = (Environment) SubLEnvironment.getDefaultEnvironment();
+		throwStack = new OverPoppableDeque();
+		interruptLock = new Object();
 	}
 
-	/**
-	 *
-	 * @param group
-	 * @param target
-	 * @param name
-	 */
-	public SubLThread(ThreadGroup group, Runnable target, String name) {
-		super(group, target, name);
-		this.init();
-	}
-
-	/**
-	 *
-	 * @param group
-	 * @param target
-	 * @param name
-	 * @param stackSize
-	 */
-	public SubLThread(ThreadGroup group, Runnable target, String name, long stackSize) {
-		super(group, target, name, stackSize);
-		this.init();
-	}
-
-	/* helper method for MULTIPLE-VALUE-LIST */
 	public SubLObject arg2(SubLObject arg1, SubLObject arg2) {
 		return arg2;
 	}
 
 	public void clearBindings() {
-		Arrays.fill(this.bindingsList, null);
+	    //getLispThread().clearBindings();
+		Arrays.fill(bindingsList, null);
 	}
 
 	public SubLObject eighth_value_helper(SubLObject arg1, SubLObject result) {
-		SubLObject rslt = this.value8;
-		this.resetMultipleValues();
+		SubLObject rslt = value8;
+		resetMultipleValues();
 		return rslt;
 	}
 
 	public SubLObject eighthMultipleValue() {
-		return this.valuesCount < 8 ? CommonSymbols.NIL : this.value8;
+		return valuesCount < 8 ? SubLNil.NIL : value8;
 	}
 
 	public SubLObject fifth_value_helper(SubLObject arg1, SubLObject result) {
-		SubLObject rslt = this.value5;
-		this.resetMultipleValues();
+		SubLObject rslt = value5;
+		resetMultipleValues();
 		return rslt;
 	}
 
 	public SubLObject fifthMultipleValue() {
-		return this.valuesCount < 5 ? CommonSymbols.NIL : this.value5;
+		return valuesCount < 5 ? SubLNil.NIL : value5;
 	}
 
 	public SubLObject first_value_helper(SubLObject arg1, SubLObject result) {
-		this.resetMultipleValues();
+		resetMultipleValues();
 		return result;
 	}
 
 	public SubLObject firstMultipleValue() {
-		return this.valuesCount < 1 ? CommonSymbols.NIL : this.value1;
+		return valuesCount < 1 ? SubLNil.NIL : value1;
 	}
 
 	public SubLObject fourth_value_helper(SubLObject arg1, SubLObject result) {
-		SubLObject rslt = this.value4;
-		this.resetMultipleValues();
+		SubLObject rslt = value4;
+		resetMultipleValues();
 		return rslt;
 	}
 
 	public SubLObject fourthMultipleValue() {
-		return this.valuesCount < 4 ? CommonSymbols.NIL : this.value4;
+		return valuesCount < 4 ? SubLNil.NIL : value4;
 	}
 
-	/**
-	 *
-	 * @return
-	 */
 	public Exception getLaunchContext() {
-		return this.launchContext;
+		return launchContext;
 	}
 
 	public SubLList getMultipleValues() {
-		int size = this.valuesCount;
+		int size = valuesCount;
 		if (size == 0)
-			return CommonSymbols.NIL;
-		SubLList result = CommonSymbols.NIL;
-		List<SubLObject> valuesArray = this.valuesArray;
-		for (int i = valuesArray.size() - 1; i >= 0; i--)
-			result = result.push(valuesArray.get(i));
+			return SubLNil.NIL;
+		SubLList result = SubLNil.NIL;
+		List<SubLObject> valuesArrayInt = valuesArray;
+		for (int i = valuesArrayInt.size() - 1; i >= 0; --i)
+			result = result.push(valuesArrayInt.get(i));
 		switch (size) {
 		default:
-		case 8:
-			result = result.push(this.value8);
+			result = result.push(value8);
 		case 7:
-			result = result.push(this.value7);
+			result = result.push(value7);
 		case 6:
-			result = result.push(this.value6);
+			result = result.push(value6);
 		case 5:
-			result = result.push(this.value5);
+			result = result.push(value5);
 		case 4:
-			result = result.push(this.value4);
+			result = result.push(value4);
 		case 3:
-			result = result.push(this.value3);
+			result = result.push(value3);
 		case 2:
-			result = result.push(this.value2);
+			result = result.push(value2);
 		case 1:
-			result = result.push(this.value1);
+			result = result.push(value1);
+			resetMultipleValues();
+			return result;
 		}
-		this.resetMultipleValues();
-		return result;
 	}
 
 	public Resourcer getResourcer() {
-		return this.resourcer;
+		return resourcer;
 	}
 
 	public SubLObject[] getSubLObjectArraySize2() {
-		return this.sublArraySize2;
+		return sublArraySize2;
 	}
 
-	//// Private Area
-
-	/**
-	 *
-	 * @return
-	 */
 	public SubLProcess getSubLProcess() {
-		return this.subLProcess;
+		return subLProcess;
 	}
 
 	public List<SubLObject> getValuesAsList() {
-		if (this.valuesCount == 0)
+		if (valuesCount == 0)
 			return null;
-		ArrayList result = new ArrayList(this.valuesCount);
+		ArrayList result = new ArrayList(valuesCount);
 		int count = 0;
-		if (count++ >= this.valuesCount)
+		if (count++ >= valuesCount)
 			return result;
-		result.add(this.value1);
-		if (count++ >= this.valuesCount)
+		result.add(value1);
+		if (count++ >= valuesCount)
 			return result;
-		result.add(this.value2);
-		if (count++ >= this.valuesCount)
+		result.add(value2);
+		if (count++ >= valuesCount)
 			return result;
-		result.add(this.value3);
-		if (count++ >= this.valuesCount)
+		result.add(value3);
+		if (count++ >= valuesCount)
 			return result;
-		result.add(this.value4);
-		if (count++ >= this.valuesCount)
+		result.add(value4);
+		if (count++ >= valuesCount)
 			return result;
-		result.add(this.value5);
-		if (count++ >= this.valuesCount)
+		result.add(value5);
+		if (count++ >= valuesCount)
 			return result;
-		result.add(this.value6);
-		if (count++ >= this.valuesCount)
+		result.add(value6);
+		if (count++ >= valuesCount)
 			return result;
-		result.add(this.value7);
-		if (count++ < this.valuesCount) {
-			result.add(this.value8);
-			result.addAll(this.valuesArray);
+		result.add(value7);
+		if (count++ < valuesCount) {
+			result.add(value8);
+			result.addAll(valuesArray);
 			return result;
 		}
 		return result;
 	}
 
 	public SubLVector getValuesAsVector() {
-		if (this.valuesCount == 0)
+		if (valuesCount == 0)
 			return null;
-		SubLVector result = SubLObjectFactory.makeVector(this.valuesCount);
+		SubLVector result = SubLObjectFactory.makeVector(valuesCount);
 		int count = 0;
-		if (count >= this.valuesCount)
+		if (count >= valuesCount)
 			return result;
-		result.set(count++, this.value1);
-		if (count >= this.valuesCount)
+		result.set(count++, value1);
+		if (count >= valuesCount)
 			return result;
-		result.set(count++, this.value2);
-		if (count >= this.valuesCount)
+		result.set(count++, value2);
+		if (count >= valuesCount)
 			return result;
-		result.set(count++, this.value3);
-		if (count >= this.valuesCount)
+		result.set(count++, value3);
+		if (count >= valuesCount)
 			return result;
-		result.set(count++, this.value4);
-		if (count >= this.valuesCount)
+		result.set(count++, value4);
+		if (count >= valuesCount)
 			return result;
-		result.set(count++, this.value5);
-		if (count >= this.valuesCount)
+		result.set(count++, value5);
+		if (count >= valuesCount)
 			return result;
-		result.set(count++, this.value6);
-		if (count >= this.valuesCount)
+		result.set(count++, value6);
+		if (count >= valuesCount)
 			return result;
-		result.set(count++, this.value7);
-		if (count < this.valuesCount) {
-			result.set(count++, this.value8);
-			for (int i = 0, size = this.valuesArray.size(); i < size; ++i)
-				result.set(count++, this.valuesArray.get(i));
+		result.set(count++, value7);
+		if (count < valuesCount) {
+			result.set(count++, value8);
+			for (int i = 0, size = valuesArray.size(); i < size; ++i)
+				result.set(count++, valuesArray.get(i));
 			return result;
 		}
 		return result;
-	}
-
-	private void init() {
-		this.setContextClassLoader(PatchFileLoader.PATCH_FILE_LOADER);
 	}
 
 	public SubLList multiple_value_list(SubLObject val1) {
-		int size = this.valuesCount;
+		int size = valuesCount;
 		if (size == 0)
 			size = 1;
-		SubLList result = CommonSymbols.NIL;
+		SubLList result = SubLNil.NIL;
 		List<SubLObject> valuesArray = this.valuesArray;
-		for (int i = valuesArray.size() - 1; i >= 0; i--)
+		for (int i = valuesArray.size() - 1; i >= 0; --i)
 			result = result.push(valuesArray.get(i));
 		switch (size) {
 		default:
-		case 8:
-			result = result.push(this.value8);
+			result = result.push(value8);
 		case 7:
-			result = result.push(this.value7);
+			result = result.push(value7);
 		case 6:
-			result = result.push(this.value6);
+			result = result.push(value6);
 		case 5:
-			result = result.push(this.value5);
+			result = result.push(value5);
 		case 4:
-			result = result.push(this.value4);
+			result = result.push(value4);
 		case 3:
-			result = result.push(this.value3);
+			result = result.push(value3);
 		case 2:
-			result = result.push(this.value2);
+			result = result.push(value2);
 		case 1:
 			result = result.push(val1);
+			resetMultipleValues();
+			return result;
 		}
-		this.resetMultipleValues();
-		return result;
 	}
 
 	public SubLList multiple_value_list_eval(SubLObject form, SubLEnvironment env) {
-		SubLList result;
-		this.resetMultipleValues();
-		result = this.multiple_value_list(form.eval(env));
-		this.resetMultipleValues();
+		resetMultipleValues();
+		SubLList result = multiple_value_list(form.eval(env));
+		resetMultipleValues();
 		return result;
 	}
 
-	/* helper method for NTH-VALUE */
 	public SubLObject nth_value_step_1(SubLObject num) {
-		this.resetMultipleValues();
+		resetMultipleValues();
 		return num;
 	}
 
-	/* helper method for NTH-VALUE */
 	public SubLObject nth_value_step_2(SubLObject num, SubLObject form) {
 		SubLObject result = this.nthMultipleValue(num.intValue());
-		this.resetMultipleValues();
+		resetMultipleValues();
 		return result;
 	}
 
 	public SubLObject nthMultipleValue(int n) {
-		if (this.valuesCount < n)
-			return CommonSymbols.NIL;
+		if (valuesCount < n)
+			return SubLNil.NIL;
 		switch (n) {
 		case 0:
-			return this.value1;
+			return value1;
 		case 1:
-			return this.value2;
+			return value2;
 		case 2:
-			return this.value3;
+			return value3;
 		case 3:
-			return this.value4;
+			return value4;
 		case 4:
-			return this.value5;
+			return value5;
 		case 5:
-			return this.value6;
+			return value6;
 		case 6:
-			return this.value7;
+			return value7;
 		case 7:
-			return this.value8;
+			return value8;
 		default:
-			if (n >= this.valuesCount)
-				return CommonSymbols.NIL;
-			return this.valuesArray.get(n - 8);
+			if (n >= valuesCount)
+				return SubLNil.NIL;
+			return valuesArray.get(n - 8);
 		}
 	}
 
@@ -425,226 +383,220 @@ public class SubLThread extends Thread implements CommonSymbols {
 	}
 
 	public void reset() {
-		this.subLProcess = null;
-		this.launchContext = null;
-		this.resourcer = new Resourcer();
-		this.clearBindings();
-		Arrays.fill(this.sublArraySize1, null);
-		Arrays.fill(this.sublArraySize2, null);
-		Arrays.fill(this.sublArraySize3, null);
-		Arrays.fill(this.sublArraySize4, null);
-		Arrays.fill(this.sublArraySize5, null);
-		this.hashtableEqKeyEntry.clear();
-		this.hashtableEqlKeyEntry.clear();
-		this.hashtableEqualKeyEntry.clear();
-		this.hashtableEqualpKeyEntry.clear();
-		this.valuesArray.clear();
-		this.valuesCount = 0;
-		this.value1 = SubLNil.NIL;
-		this.value2 = SubLNil.NIL;
-		this.value3 = SubLNil.NIL;
-		this.value4 = SubLNil.NIL;
-		this.value5 = SubLNil.NIL;
-		this.value6 = SubLNil.NIL;
-		this.value7 = SubLNil.NIL;
-		this.value8 = SubLNil.NIL;
-		this.throwStack.clear();
-		this.env = SubLEnvironment.getDefaultEnvironment();
+		subLProcess = null;
+		launchContext = null;
+		resourcer = new Resourcer();
+		clearBindings();
+		Arrays.fill(sublArraySize1, null);
+		Arrays.fill(sublArraySize2, null);
+		Arrays.fill(sublArraySize3, null);
+		Arrays.fill(sublArraySize4, null);
+		Arrays.fill(sublArraySize5, null);
+		hashtableEqKeyEntry.clear();
+		hashtableEqlKeyEntry.clear();
+		hashtableEqualKeyEntry.clear();
+		hashtableEqualpKeyEntry.clear();
+		valuesArray.clear();
+		valuesCount = 0;
+		value1 = SubLNil.NIL;
+		value2 = SubLNil.NIL;
+		value3 = SubLNil.NIL;
+		value4 = SubLNil.NIL;
+		value5 = SubLNil.NIL;
+		value6 = SubLNil.NIL;
+		value7 = SubLNil.NIL;
+		value8 = SubLNil.NIL;
+		throwStack.clear();
+		env = (Environment) SubLEnvironment.getDefaultEnvironment();
 	}
 
 	public SubLObject resetMultipleValues() {
-		int size = this.valuesCount;
+		int size = valuesCount;
 		if (size == 0)
-			return CommonSymbols.NIL;
-		this.valuesCount = 0;
-		this.value1 = CommonSymbols.NIL;
-		this.value2 = CommonSymbols.NIL;
+			return SubLNil.NIL;
+		valuesCount = 0;
+		value1 = SubLNil.NIL;
+		value2 = SubLNil.NIL;
 		if (size < 3)
-			return CommonSymbols.NIL;
-		this.value3 = CommonSymbols.NIL;
-		this.value4 = CommonSymbols.NIL;
-		this.value5 = CommonSymbols.NIL;
-		this.value6 = CommonSymbols.NIL;
-		this.value7 = CommonSymbols.NIL;
-		this.value8 = CommonSymbols.NIL;
+			return SubLNil.NIL;
+		value3 = SubLNil.NIL;
+		value4 = SubLNil.NIL;
+		value5 = SubLNil.NIL;
+		value6 = SubLNil.NIL;
+		value7 = SubLNil.NIL;
+		value8 = SubLNil.NIL;
 		if (size < 9)
-			return CommonSymbols.NIL;
-		this.valuesArray.clear();
-		return CommonSymbols.NIL;
+			return SubLNil.NIL;
+		valuesArray.clear();
+		return SubLNil.NIL;
 	}
 
 	public void restoreValuesFromList(List<SubLObject> newValues) {
 		if (newValues == null) {
-			this.resetMultipleValues();
+			resetMultipleValues();
 			return;
 		}
-		this.valuesArray.clear();
-		this.valuesCount = newValues.size();
+		valuesArray.clear();
+		valuesCount = newValues.size();
 		int count = 0;
-		if (count >= this.valuesCount)
+		if (count >= valuesCount)
 			return;
-		this.value1 = newValues.get(count++);
-		if (count >= this.valuesCount)
+		value1 = newValues.get(count++);
+		if (count >= valuesCount)
 			return;
-		this.value2 = newValues.get(count++);
-		if (count >= this.valuesCount)
+		value2 = newValues.get(count++);
+		if (count >= valuesCount)
 			return;
-		this.value3 = newValues.get(count++);
-		if (count >= this.valuesCount)
+		value3 = newValues.get(count++);
+		if (count >= valuesCount)
 			return;
-		this.value4 = newValues.get(count++);
-		if (count >= this.valuesCount)
+		value4 = newValues.get(count++);
+		if (count >= valuesCount)
 			return;
-		this.value5 = newValues.get(count++);
-		if (count >= this.valuesCount)
+		value5 = newValues.get(count++);
+		if (count >= valuesCount)
 			return;
-		this.value6 = newValues.get(count++);
-		if (count >= this.valuesCount)
+		value6 = newValues.get(count++);
+		if (count >= valuesCount)
 			return;
-		this.value7 = newValues.get(count++);
-		if (count < this.valuesCount) {
-			this.value8 = newValues.get(count++);
+		value7 = newValues.get(count++);
+		if (count < valuesCount) {
+			value8 = newValues.get(count++);
 			for (int i = 8, size = newValues.size(); i < size; ++i)
-				this.valuesArray.add(newValues.get(i));
+				valuesArray.add(newValues.get(i));
 		}
 	}
 
 	public void restoreValuesFromVector(SubLVector newValues) {
 		if (newValues == null) {
-			this.resetMultipleValues();
+			resetMultipleValues();
 			return;
 		}
-		this.valuesArray.clear();
-		this.valuesCount = newValues.size();
+		valuesArray.clear();
+		valuesCount = newValues.size();
 		int count = 0;
-		if (count >= this.valuesCount)
+		if (count >= valuesCount)
 			return;
-		this.value1 = newValues.get(count++);
-		if (count >= this.valuesCount)
+		value1 = newValues.get(count++);
+		if (count >= valuesCount)
 			return;
-		this.value2 = newValues.get(count++);
-		if (count >= this.valuesCount)
+		value2 = newValues.get(count++);
+		if (count >= valuesCount)
 			return;
-		this.value3 = newValues.get(count++);
-		if (count >= this.valuesCount)
+		value3 = newValues.get(count++);
+		if (count >= valuesCount)
 			return;
-		this.value4 = newValues.get(count++);
-		if (count >= this.valuesCount)
+		value4 = newValues.get(count++);
+		if (count >= valuesCount)
 			return;
-		this.value5 = newValues.get(count++);
-		if (count >= this.valuesCount)
+		value5 = newValues.get(count++);
+		if (count >= valuesCount)
 			return;
-		this.value6 = newValues.get(count++);
-		if (count >= this.valuesCount)
+		value6 = newValues.get(count++);
+		if (count >= valuesCount)
 			return;
-		this.value7 = newValues.get(count++);
-		if (count < this.valuesCount) {
-			this.value8 = newValues.get(count++);
+		value7 = newValues.get(count++);
+		if (count < valuesCount) {
+			value8 = newValues.get(count++);
 			for (int i = 8, size = newValues.size(); i < size; ++i)
-				this.valuesArray.add(newValues.get(i));
+				valuesArray.add(newValues.get(i));
 		}
 	}
 
+	@Override
 	public void run() {
 		try {
+			// TODO? Main.setSubLisp(true);
 			super.run();
 		} finally {
-			assert this.previousName != null;
-			// cleanup
-			((SubLThread) Thread.currentThread()).setSubLProcess(null);
+			assert previousName != null;
+			SubLProcess.currentSubLThread().setSubLProcess(null);
 		}
 	}
 
 	public SubLObject second_value_helper(SubLObject arg1, SubLObject result) {
-		SubLObject rslt = this.value2;
-		this.resetMultipleValues();
+		SubLObject rslt = value2;
+		resetMultipleValues();
 		return rslt;
 	}
 
 	public SubLObject secondMultipleValue() {
-		return this.valuesCount < 2 ? CommonSymbols.NIL : this.value2;
+		return valuesCount < 2 ? SubLNil.NIL : value2;
 	}
 
 	public SubLObject setFirstMultipleValue(SubLObject value1) {
-		if (this.valuesCount <= 0)
-			this.valuesCount = 1;
+		if (valuesCount <= 0)
+			valuesCount = 1;
 		return this.value1 = value1;
 	}
 
-	//// Protected Area
-	/**
-	 *
-	 * @param subLProcess
-	 *            passing in null indicates that we're done with this
-	 *            SubLProcess
-	 */
 	public void setSubLProcess(SubLProcess subLProcess) {
 		this.subLProcess = subLProcess;
 		if (subLProcess != null) {
-			this.previousName = this.getName();
-			// also set the thread name, so it'll match up for debugging
+			previousName = getName();
 			SubLString newSubLName = subLProcess.getName();
-			String newJavaName = newSubLName.toString();
-			this.setName(newJavaName);
+			String newJavaName = newSubLName.getStringValue();
+			setName(newJavaName);
 		} else
-			this.setName(this.previousName == null ? "" : this.previousName);
+			setName(previousName == null ? "" : previousName);
 	}
 
 	public SubLObject seventh_value_helper(SubLObject arg1, SubLObject result) {
-		SubLObject rslt = this.value7;
-		this.resetMultipleValues();
+		SubLObject rslt = value7;
+		resetMultipleValues();
 		return rslt;
 	}
 
 	public SubLObject seventhMultipleValue() {
-		return this.valuesCount < 7 ? CommonSymbols.NIL : this.value7;
+		return valuesCount < 7 ? SubLNil.NIL : value7;
 	}
 
 	public SubLObject sixth_value_helper(SubLObject arg1, SubLObject result) {
-		SubLObject rslt = this.value6;
-		this.resetMultipleValues();
+		SubLObject rslt = value6;
+		resetMultipleValues();
 		return rslt;
 	}
 
 	public SubLObject sixthMultipleValue() {
-		return this.valuesCount < 6 ? CommonSymbols.NIL : this.value6;
+		return valuesCount < 6 ? SubLNil.NIL : value6;
 	}
 
+	@Override
 	public void start() {
-		this.launchContext = new Exception();
+		launchContext = new Exception();
 		super.start();
 	}
 
 	public SubLObject third_value_helper(SubLObject arg1, SubLObject result) {
-		SubLObject rslt = this.value3;
-		this.resetMultipleValues();
+		SubLObject rslt = value3;
+		resetMultipleValues();
 		return rslt;
 	}
 
 	public SubLObject thirdMultipleValue() {
-		return this.valuesCount < 3 ? CommonSymbols.NIL : this.value3;
+		return valuesCount < 3 ? SubLNil.NIL : value3;
 	}
 
 	public SubLObject values(SubLObject value1) {
-		this.valuesCount = 1;
+		valuesCount = 1;
 		return this.value1 = value1;
 	}
 
 	public SubLObject values(SubLObject value1, SubLObject value2) {
-		this.valuesCount = 2;
+		valuesCount = 2;
 		this.value2 = value2;
 		return this.value1 = value1;
 	}
 
 	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3) {
-		this.valuesCount = 3;
+		valuesCount = 3;
 		this.value3 = value3;
 		this.value2 = value2;
 		return this.value1 = value1;
 	}
 
 	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3, SubLObject value4) {
-		this.valuesCount = 4;
+		valuesCount = 4;
 		this.value4 = value4;
 		this.value3 = value3;
 		this.value2 = value2;
@@ -653,7 +605,7 @@ public class SubLThread extends Thread implements CommonSymbols {
 
 	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3, SubLObject value4,
 			SubLObject value5) {
-		this.valuesCount = 5;
+		valuesCount = 5;
 		this.value5 = value5;
 		this.value4 = value4;
 		this.value3 = value3;
@@ -663,7 +615,7 @@ public class SubLThread extends Thread implements CommonSymbols {
 
 	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3, SubLObject value4,
 			SubLObject value5, SubLObject value6) {
-		this.valuesCount = 6;
+		valuesCount = 6;
 		this.value6 = value6;
 		this.value5 = value5;
 		this.value4 = value4;
@@ -674,7 +626,7 @@ public class SubLThread extends Thread implements CommonSymbols {
 
 	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3, SubLObject value4,
 			SubLObject value5, SubLObject value6, SubLObject value7) {
-		this.valuesCount = 7;
+		valuesCount = 7;
 		this.value7 = value7;
 		this.value6 = value6;
 		this.value5 = value5;
@@ -686,7 +638,7 @@ public class SubLThread extends Thread implements CommonSymbols {
 
 	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3, SubLObject value4,
 			SubLObject value5, SubLObject value6, SubLObject value7, SubLObject value8) {
-		this.valuesCount = 8;
+		valuesCount = 8;
 		this.value8 = value8;
 		this.value7 = value7;
 		this.value6 = value6;
@@ -697,34 +649,40 @@ public class SubLThread extends Thread implements CommonSymbols {
 		return this.value1 = value1;
 	}
 
-	//// Main
-
 	public SubLObject values(SubLObject[] moreValues) {
-		int size = this.valuesCount = moreValues.length;
+		int length = moreValues.length;
+		valuesCount = length;
+		int size = length;
 		if (size == 0)
-			return CommonSymbols.NIL;
+			return SubLNil.NIL;
 		switch (size) {
 		default:
-		case 8:
-			this.value8 = moreValues[7];
+			value8 = moreValues[7];
 		case 7:
-			this.value7 = moreValues[6];
+			value7 = moreValues[6];
 		case 6:
-			this.value6 = moreValues[5];
+			value6 = moreValues[5];
 		case 5:
-			this.value5 = moreValues[4];
+			value5 = moreValues[4];
 		case 4:
-			this.value4 = moreValues[3];
+			value4 = moreValues[3];
 		case 3:
-			this.value3 = moreValues[2];
+			value3 = moreValues[2];
 		case 2:
-			this.value2 = moreValues[1];
+			value2 = moreValues[1];
 		case 1:
-			this.value1 = moreValues[0];
+			value1 = moreValues[0];
+			for (int i = 8; i < size; ++i)
+				valuesArray.add(moreValues[i]);
+			return moreValues[0];
 		}
-		for (int i = 8; i < size; i++)
-			this.valuesArray.add(moreValues[i]);
-		return moreValues[0];
 	}
 
+	public SubLObject[] getBindingsList() {
+		return bindingsList;
+	}
+
+	public void setBindingsList(SubLObject[] bindingsList) {
+		this.bindingsList = bindingsList;
+	}
 }

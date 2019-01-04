@@ -2,7 +2,7 @@
  * UpcaseStream.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: UpcaseStream.java 12254 2009-11-06 20:07:54Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,22 +31,27 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-public class UpcaseStream extends CaseFrobStream {
-	public UpcaseStream(LispStream target) {
-		super(target);
-	}
+public final class UpcaseStream extends CaseFrobStream
+{
+    public UpcaseStream(Stream target)
+    {
+        super(target);
+    }
 
-	public void _writeChar(char c) {
-		this.target._writeChar(CharacterFunctions.toUpperCase(c));
-	}
+    public void _writeChar(char c)
+    {
+        target._writeChar(LispCharacter.toUpperCase(c));
+    }
 
-	public void _writeLine(String s) {
-		this.target._writeLine(s.toUpperCase());
-	}
+    public void _writeString(String s)
+    {
+        target._writeString(s.toUpperCase());
+    }
 
-	public void _writeString(String s) {
-		this.target._writeString(s.toUpperCase());
-	}
+    public void _writeLine(String s)
+    {
+        target._writeLine(s.toUpperCase());
+    }
 }

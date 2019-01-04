@@ -1,7 +1,7 @@
 ;;; signal.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves
-;;; $Id: signal.lisp 12314 2009-12-30 22:04:55Z ehuelsmann $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -66,11 +66,12 @@
     (signal condition)
     (let ((*current-error-depth* (1+ *current-error-depth*)))
       (cond ((> *current-error-depth* *maximum-error-depth*)
-             (%format t "~%Maximum error depth exceeded (~D nested errors).~%"
-                      *current-error-depth*)
+             (%format *debug-io*
+                      "~%Maximum error depth exceeded (~D nested errors) with '~A'.~%"
+                      *current-error-depth* condition)
              (if (fboundp 'internal-debug)
                  (internal-debug)
-                 (quit)))
+                 (quit :status 89))) ;; it's a prime and a fibonacci!
             (t
              (invoke-debugger condition))))))
 

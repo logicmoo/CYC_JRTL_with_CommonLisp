@@ -1,0 +1,4 @@
+- "refresh" button in property
+- notify when auto-update is disabled
+- fix boolean component
+

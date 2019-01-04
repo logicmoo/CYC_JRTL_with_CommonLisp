@@ -1,13 +1,6 @@
-/*
- * SubLListIterator.java
- *
- * Created on January 15, 2006, 12:36 AM
- *
- * To change this template, choose Tools | Options and locate the template under
- * the Source Creation and Management node. Right-click the template and choose
- * Open. You can then make changes to the template in the Source Editor.
- */
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import java.util.ConcurrentModificationException;
@@ -17,46 +10,17 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 
-/**
- * @note this class is mostly copied from AbstractList.java, I needed to do this
- *       because the ListIterator class waas defined as private and I needed a
- *       public version...
- * @author Tony Brusseau
- */
 public class SubLConsListListIterator implements SubLListListIterator, ListIterator {
-
-	/**
-	 * Index of element to be returned by subsequent call to next.
-	 */
-	private int cursor = 0;
-
-	private SubLObject cursorCdr = null;
-
-	private int start = 0;
-
-	/**
-	 * Index of element returned by most recent call to next or previous. Reset
-	 * to -1 if this element is deleted by a call to remove.
-	 */
-	private int lastRet = -1;
-
-	private SubLObject lastRetCdr = SubLNil.NIL;
-
-	private int modCount = 0; // list.modCount; @todo remove this and use
-								// modCount from actual list -APB
-
-	/**
-	 * The modCount value that the iterator believes that the backing List
-	 * should have. If this expectation is violated, the iterator has detected
-	 * concurrent modification.
-	 */
-	private int expectedModCount = this.modCount;
-
-	private SubLList list = null;
-
-	private int end = SubLListListIterator.ITERATE_TO_END;
-
 	SubLConsListListIterator() {
+		cursor = 0;
+		cursorCdr = null;
+		start = 0;
+		lastRet = -1;
+		lastRetCdr = SubLNil.NIL;
+		modCount = 0;
+		expectedModCount = modCount;
+		list = null;
+		end = -1;
 	}
 
 	SubLConsListListIterator(SubLList list) {
@@ -68,148 +32,168 @@ public class SubLConsListListIterator implements SubLListListIterator, ListItera
 	}
 
 	SubLConsListListIterator(SubLList list, int start, int end) {
+		cursor = 0;
+		cursorCdr = null;
+		this.start = 0;
+		lastRet = -1;
+		lastRetCdr = SubLNil.NIL;
+		modCount = 0;
+		expectedModCount = modCount;
+		this.list = null;
+		this.end = -1;
 		this.init(list, start, end);
 	}
 
+	private int cursor;
+	private SubLObject cursorCdr;
+	private int start;
+	private int lastRet;
+	private SubLObject lastRetCdr;
+	private int modCount;
+	private int expectedModCount;
+	private SubLList list;
+	private int end;
+
+	@Override
 	public void add(Object o) {
 		Errors.error("Unimplemented.");
-		// checkForComodification();
-		/*
-		 * try { list.add(cursor++, o); lastRet = -1; expectedModCount =
-		 * modCount; } catch(IndexOutOfBoundsException e) { throw new
-		 * ConcurrentModificationException(); }
-		 */
 	}
 
-	void checkForComodification() {
-		if (this.modCount != this.expectedModCount)
-			throw new ConcurrentModificationException();
-	}
-
+	@Override
 	public SubLObject currentSubSeq() {
-		if (this.end == SubLListListIterator.ITERATE_TO_END)
-			return this.cursorCdr;
-		return this.list.subSeq(this.cursor, this.end);
+		if (end == -1)
+			return cursorCdr;
+		return list.subSeq(cursor, end);
 	}
 
+	@Override
 	public SubLObject getDottedElement() {
-		if (this.cursorCdr.isList())
+		if (cursorCdr.isList())
 			Errors.error("Attempt to get dotted element from an iterator that isn't at the end of the list.");
-		return this.cursorCdr;
+		return cursorCdr;
 	}
 
+	@Override
 	public boolean hasNext() {
-		if (this.end != SubLListListIterator.ITERATE_TO_END && this.cursor >= this.end)
-			return false;
-		return this.cursorCdr != SubLNil.NIL;
+		return (end == -1 || cursor < end) && cursorCdr != SubLNil.NIL;
 	}
 
+	@Override
 	public boolean hasPrevious() {
-		return this.cursor > this.start;
+		return cursor > start;
 	}
 
+	@Override
 	public void init(SubLList list) {
-		this.init(list, 0, SubLListListIterator.ITERATE_TO_END);
+		this.init(list, 0, -1);
 	}
 
+	@Override
 	public void init(SubLList list, int start) {
-		this.init(list, start, SubLListListIterator.ITERATE_TO_END);
+		this.init(list, start, -1);
 	}
 
+	@Override
 	public void init(SubLList list, int start, int end) {
-		this.setList(list);
-		this.setStart(start);
-		this.setEnd(end);
+		setList(list);
+		setStart(start);
+		setEnd(end);
 	}
 
+	@Override
 	public boolean isArrayBased() {
 		return false;
 	}
 
+	@Override
 	public boolean isNextImproperElement() {
-		return !this.cursorCdr.isList();
+		return !cursorCdr.isList();
 	}
 
+	@Override
 	public int itemsRemaining() {
-		if (this.cursorCdr.isCons())
-			return this.cursorCdr.size();
+		if (cursorCdr.isCons())
+			return cursorCdr.size();
 		return 0;
 	}
 
+	@Override
 	public Object next() {
-		// checkForComodification();
-		if (!this.cursorCdr.isList())
-			Errors.error("Got unexpected dotted list item: " + this.cursorCdr);
-		SubLObject next = this.cursorCdr.first();
-		this.lastRet = this.cursor++;
-		this.lastRetCdr = this.cursorCdr;
-		this.cursorCdr = this.cursorCdr.rest();
+		if (!cursorCdr.isList())
+			Errors.error("Got unexpected dotted list item: " + cursorCdr);
+		SubLObject next = cursorCdr.first();
+		lastRet = cursor++;
+		lastRetCdr = cursorCdr;
+		cursorCdr = cursorCdr.rest();
 		return next;
 	}
 
+	@Override
 	public int nextIndex() {
-		return this.cursor;
+		return cursor;
 	}
 
+	@Override
 	public SubLObject nextSubLObject() {
-		// checkForComodification();
-		if (!this.cursorCdr.isList())
-			Errors.error("Got unexpected dotted list item: " + this.cursorCdr);
-		SubLObject next = this.cursorCdr.first();
-		this.lastRet = this.cursor++;
-		this.lastRetCdr = this.cursorCdr;
-		this.cursorCdr = this.cursorCdr.rest();
+		if (!cursorCdr.isList())
+			Errors.error("Got unexpected dotted list item: " + cursorCdr);
+		SubLObject next = cursorCdr.first();
+		lastRet = cursor++;
+		lastRetCdr = cursorCdr;
+		cursorCdr = cursorCdr.rest();
 		return next;
 	}
 
+	@Override
 	public Object previous() {
 		return Errors.error("Can't iterate backwards on a cons list.");
 	}
 
+	@Override
 	public int previousIndex() {
-		return this.cursor - 1;
+		return cursor - 1;
 	}
 
+	@Override
 	public SubLObject previousSubSeq() {
-		if (this.end == SubLListListIterator.ITERATE_TO_END)
-			return this.lastRetCdr;
-		if (this.lastRet < 0)
+		if (end == -1)
+			return lastRetCdr;
+		if (lastRet < 0)
 			return SubLNil.NIL;
-		return this.list.subSeq(this.lastRet, this.end);
+		return list.subSeq(lastRet, end);
 	}
 
+	@Override
 	public void remove() {
 		Errors.error("Unimplemented.");
-		/*
-		 * if (lastRet == -1) { throw new IllegalStateException(); }
-		 * //checkForComodification(); try { list.remove(lastRet); if (lastRet <
-		 * cursor) { cursor--; } lastRet = -1; expectedModCount = modCount; }
-		 * catch(IndexOutOfBoundsException e) { throw new
-		 * ConcurrentModificationException(); }
-		 */
 	}
 
+	@Override
 	public void reset() {
-		this.cursor = 0;
-		this.lastRet = -1;
-		this.modCount = 0;
-		this.expectedModCount = this.modCount; // @todo this is wrong -APB
-		this.list = null;
-		this.cursorCdr = null;
-		this.lastRetCdr = SubLNil.NIL;
-		this.end = 0;
+		cursor = 0;
+		lastRet = -1;
+		modCount = 0;
+		expectedModCount = modCount;
+		list = null;
+		cursorCdr = null;
+		lastRetCdr = SubLNil.NIL;
+		end = 0;
 	}
 
+	@Override
 	public void set(Object o) {
-		if (this.lastRet == -1)
+		if (lastRet == -1)
 			throw new IllegalStateException();
-		// checkForComodification();
-		this.lastRetCdr.setFirst((SubLObject) o);
-		// expectedModCount = modCount;
+		lastRetCdr.setFirst((SubLObject) o);
+	}
+
+	void checkForComodification() {
+		if (modCount != expectedModCount)
+			throw new ConcurrentModificationException();
 	}
 
 	void setEnd(int end) {
-		if (this.list == null)
+		if (list == null)
 			end = 0;
 		else
 			this.end = end;
@@ -223,10 +207,10 @@ public class SubLConsListListIterator implements SubLListListIterator, ListItera
 
 	void setStart(int start) {
 		if (start < 0)
-			this.cursor = 0;
+			cursor = 0;
 		else
-			this.cursor = start;
+			cursor = start;
 		this.start = start;
-		this.cursorCdr = this.list.nthCdr(start);
+		cursorCdr = list.nthCdr(start);
 	}
 }

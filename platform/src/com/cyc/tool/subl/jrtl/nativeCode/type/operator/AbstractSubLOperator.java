@@ -1,87 +1,197 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+////
+//
 package com.cyc.tool.subl.jrtl.nativeCode.type.operator;
+
+import org.armedbear.lisp.LispObject;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public abstract class AbstractSubLOperator extends AbstractSubLObject implements SubLOperator {
-
-	public static String SPECIAL_OPERATOR_NAME = "SPECIAL-OPERATOR";
-
-	private SubLSymbol functionSymbol;
-
-	//// Constructors
-
-	/** Creates a new instance of AbstractSubLOperator. */
+public abstract class AbstractSubLOperator extends LispObject implements SubLOperator {
 	AbstractSubLOperator() {
 		this(null);
 	}
 
 	AbstractSubLOperator(SubLSymbol functionSymbol) {
-		this.functionSymbol = functionSymbol;
-		if (functionSymbol != null)
+		setFunctionSymbol(functionSymbol);
+		if (functionSymbol != null) {
 			functionSymbol.setFunction(this);
+		}
 	}
 
-	//// Public Area
+	public LispObject lambdaName;
+	public static String SPECIAL_OPERATOR_NAME;
+	static {
+		AbstractSubLOperator.SPECIAL_OPERATOR_NAME = "SPECIAL-OPERATOR";
+	}
 
+	@Override
 	public boolean canFastHash() {
 		return true;
 	}
 
+	@Override
 	public SubLSymbol getFunctionSymbol() {
-		return this.functionSymbol;
+		return (SubLSymbol) lambdaName;
 	}
 
+	@Override
 	public SubLSpecialOperator toSpecialOperator() {
-		Errors.error(this + " is not of type: SPECIAL-OPERATOR.");
+		if(this instanceof SubLSpecialOperator) return (SubLSpecialOperator) this;
+		org.armedbear.lisp.Lisp.lisp_type_error(this,"SPECIAL-OPERATOR");
 		return null;
 	}
 
-	// todo make abstract - prefers to be overriden
-	public String toString() {
-		if (this.functionSymbol == null)
-			return this.unreadableString(this.getClass().getSimpleName());
-		return this.unreadableString(this.getClass().getSimpleName() + " " + this.functionSymbol.writeToString());
-
-	}
-
+	@Override
 	public String toTypeName() {
 		return AbstractSubLOperator.SPECIAL_OPERATOR_NAME;
 	}
 
-	//// Protected Area
-
-	//// Private Area
-
-	//// Internal Rep
-
-	// common lisp additions
-
-	public String writeToString() {
-		// TODO Auto-generated method stub
-		return this.toString();
+	private void setFunctionSymbol(SubLSymbol functionSymbol) {
+		this.lambdaName = (LispObject) functionSymbol;
 	}
 
-	//// Main
+
+	public boolean isAlien() {
+		return false;
+	}
+
+	public boolean isBigIntegerBignum() {
+		return false;
+	}
+
+	public boolean isBignum() {
+		return false;
+	}
+
+	public boolean isBoolean() {
+		return false;
+	}
+
+	public boolean isChar() {
+		return false;
+	}
+
+	public boolean isCons() {
+		return false;
+	}
+
+	public boolean isDouble() {
+		return false;
+	}
+
+	public boolean isEnvironment() {
+		return false;
+	}
+
+	public boolean isError() {
+		return false;
+	}
+
+	public boolean isFixnum() {
+		return false;
+	}
+
+	public boolean isGuid() {
+		return false;
+	}
+
+	public boolean isHashtable() {
+		return false;
+	}
+
+	public boolean isHashtableIterator() {
+		return false;
+	}
+
+	public boolean isIntBignum() {
+		return false;
+	}
+
+	public boolean isInteger() {
+		return false;
+	}
+
+	public boolean isKeyhash() {
+		return false;
+	}
+
+	public boolean isKeyhashIterator() {
+		return false;
+	}
+
+	public boolean isKeyword() {
+		return false;
+	}
+
+	public boolean isList() {
+		return false;
+	}
+
+	public boolean isLock() {
+		return false;
+	}
+
+	public boolean isLongBignum() {
+		return false;
+	}
+
+	public boolean isNil() {
+		return false;
+	}
+
+	public boolean isNumber() {
+		return false;
+	}
+
+	public boolean isPackage() {
+		return false;
+	}
+
+	public boolean isPackageIterator() {
+		return false;
+	}
+
+	public boolean isProcess() {
+		return false;
+	}
+
+	public boolean isReadWriteLock() {
+		return false;
+	}
+
+	public boolean isRegexPattern() {
+		return false;
+	}
+
+	public boolean isSemaphore() {
+		return false;
+	}
+
+	public boolean isSequence() {
+		return false;
+	}
+
+	public boolean isStream() {
+		return false;
+	}
+
+	public boolean isString() {
+		return false;
+	}
+
+	public boolean isStructure() {
+		return false;
+	}
+
+	public boolean isSymbol() {
+		return false;
+	}
+
+	public boolean isVector() {
+		return false;
+	}
 
 }

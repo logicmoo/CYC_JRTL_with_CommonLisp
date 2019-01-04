@@ -1,7 +1,7 @@
 ;;; boot.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves <peter@armedbear.org>
-;;; $Id: boot.lisp 12516 2010-03-03 21:05:41Z astalla $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -121,7 +121,7 @@
 (in-package #:system)
 
 (defun simple-format (destination control-string &rest args)
-  (apply *simple-format-function* destination control-string args))
+  (apply #'format destination control-string args))
 
 (export 'simple-format '#:system)
 
@@ -146,6 +146,7 @@
 (defun nreverse (sequence)
   (sys::%nreverse sequence))
 
+(load-system-file "autoloads-gen")
 (load-system-file "autoloads")
 (load-system-file "early-defuns")
 (load-system-file "backquote")
@@ -178,6 +179,9 @@
 (load-system-file "signal")
 (load-system-file "list")
 (load-system-file "require")
+;; precompiler has a large performance benefit on interpreted code
+;; load as early as possible
+(load-system-file "precompiler")
 (load-system-file "extensible-sequences-base")
 (load-system-file "sequences")
 (load-system-file "error")
@@ -209,16 +213,4 @@
     (%format t "Startup completed in ~A seconds.~%"
              (float (/ (ext:uptime) 1000)))))
 
-(handler-case 
-    (require 'jvm)
-  (t ()))
-
-;;; "system.lisp" contains system installation specific information
-;;; (currently only the logical pathname definition for "SYS;SRC")
-;;; that is not currently required for ABCL to run.  Since
-;;; LOAD-SYSTEM-FILE exits the JVM if its argument cannot be found, we
-;;; use REQUIRE trapping any error.
-(handler-case 
-    (require 'system)
-  (t ()))
 

@@ -1,8 +1,8 @@
 /*
  * SpecialBindingsMark.java
  *
- * Copyright (C) 1009 Erik Huelsmann
- * $Id: SpecialBindingsMark.java 12275 2009-11-10 19:45:37Z ehuelsmann $
+ * Copyright (C) 2009 Erik Huelsmann
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,28 +31,28 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-/**
- * Class used to mark special bindings state. Returned by
- * LispThread.markSpecialBindings() and consumed by
+/** Class used to mark special bindings state.
+ * Returned by LispThread.markSpecialBindings() and consumed by
  * LispThread.resetSpecialBindings() to abstract from the implementation.
  */
 final public class SpecialBindingsMark {
 
-	/** The index in the specials array of the saved binding. */
-	int idx;
+    /** The index in the specials array of the saved binding. */
+    int idx;
 
-	/** Special binding state to be restored */
-	// package level access
-	SpecialBinding binding;
-	SpecialBindingsMark next;
+    /** Special binding state to be restored */
+    // package level access
+    SpecialBinding binding;
+    SpecialBindingsMark next;
 
-	/** Constructor to be called by LispThread.markSpecialBindings() only */
-	// package level access
-	SpecialBindingsMark(int idx, SpecialBinding binding, SpecialBindingsMark next) {
-		this.idx = idx;
-		this.binding = binding;
-		this.next = next;
-	}
+    /** Constructor to be called by LispThread.markSpecialBindings() only */
+    // package level access
+    SpecialBindingsMark(int idx, SpecialBinding binding,
+                        SpecialBindingsMark next) {
+        this.idx = idx;
+        this.binding = binding;
+        this.next = next;
+    }
 }

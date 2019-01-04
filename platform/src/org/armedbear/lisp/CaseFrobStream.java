@@ -2,7 +2,7 @@
  * CaseFrobStream.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: CaseFrobStream.java 12362 2010-01-11 20:03:29Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,144 +31,187 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public abstract class CaseFrobStream extends Stream {
-	protected LispStream target;
+public abstract class CaseFrobStream extends Stream
+{
+    protected final Stream target;
 
-	protected CaseFrobStream(LispStream target)
+    protected CaseFrobStream(Stream target)
 
-	{
-		super(LispSymbols.CASE_FROB_STREAM);
-		Debug.assertTrue(target.isCharacterOutputStream());
-		this.target = target;
-	}
+    {
+        super(Symbol.CASE_FROB_STREAM);
+        Debug.assertTrue(target.isCharacterOutputStream());
+        this.target = target;
+    }
 
-	public boolean _charReady() {
-		this.notSupported();
-		// Not reached.
-		return false;
-	}
+    public LispObject getStreamElementType()
+    {
+        return target.getStreamElementType();
+    }
 
-	public void _clearInput() {
-		this.notSupported();
-	}
+    public LispObject typeOf()
+    {
+        return Symbol.CASE_FROB_STREAM;
+    }
 
-	public void _finishOutput() {
-		this.target._finishOutput();
-	}
+    public LispObject classOf()
+    {
+        return BuiltInClass.CASE_FROB_STREAM;
+    }
 
-	// Reads an 8-bit byte.
+    public LispObject typep(LispObject type)
+    {
+        if (type == Symbol.CASE_FROB_STREAM)
+            return T;
+        if (type == BuiltInClass.CASE_FROB_STREAM)
+            return T;
+        return super.typep(type);
+    }
 
-	public int _readByte() {
-		this.notSupported();
-		// Not reached.
-		return -1;
-	}
+    public boolean isInputStream()
+    {
+        return false;
+    }
 
-	// Returns -1 at end of file.
+    public boolean isOutputStream()
+    {
+        return true;
+    }
 
-	public int _readChar() {
-		this.notSupported();
-		// Not reached.
-		return -1;
-	}
+    public boolean isCharacterInputStream()
+    {
+        return false;
+    }
 
-	public void _unreadChar(int n) {
-		this.notSupported();
-	}
+    public boolean isBinaryInputStream()
+    {
+        return false;
+    }
 
-	// Writes an 8-bit byte.
+    public boolean isCharacterOutputStream()
+    {
+        return true;
+    }
 
-	public void _writeByte(int n) {
-		this.notSupported();
-	}
+    public boolean isBinaryOutputStream()
+    {
+        return false;
+    }
 
-	public void _writeChars(char[] chars, int start, int end)
+    public int getCharPos()
+    {
+        return target.getCharPos();
+    }
 
-	{
-		this._writeString(new String(chars, start, end));
-	}
+    public void setCharPos(int n)
+    {
+        target.setCharPos(n);
+    }
 
-	public SubLObject classOf() {
-		return BuiltInClass.CASE_FROB_STREAM;
-	}
+    // Returns -1 at end of file.
+    protected int _readChar()
+    {
+        notSupported();
+        // Not reached.
+        return -1;
+    }
 
-	public SubLObject close(SubLObject abort) {
-		this.setOpen(false);
-		return Lisp.T;
-	}
+    protected void _unreadChar(int n)
+    {
+        notSupported();
+    }
 
-	public SubLObject freshLine() {
-		return this.target.freshLine();
-	}
+    protected boolean _charReady()
+    {
+        notSupported();
+        // Not reached.
+        return false;
+    }
 
-	public int getCharPos() {
-		return this.target.getCharPos();
-	}
+    public void _writeChars(char[] chars, int start, int end)
 
-	public SubLObject getElementType() {
-		return this.target.getElementType();
-	}
+    {
+        _writeString(new String(chars, start, end));
+    }
 
-	public boolean isBinaryInputStream() {
-		return false;
-	}
+    // Reads an 8-bit byte.
+    public int _readByte()
+    {
+        notSupported();
+        // Not reached.
+        return -1;
+    }
 
-	public boolean isBinaryOutputStream() {
-		return false;
-	}
+    // Writes an 8-bit byte.
+    public void _writeByte(int n)
+    {
+        notSupported();
+    }
 
-	public boolean isCharacterInputStream() {
-		return false;
-	}
+    public void _finishOutput()
+    {
+        target._finishOutput();
+    }
 
-	public boolean isCharacterOutputStream() {
-		return true;
-	}
+    public void _clearInput()
+    {
+        notSupported();
+    }
 
-	public boolean isInputStream() {
-		return false;
-	}
+    public LispObject close(LispObject abort)
+    {
+        setOpen(false);
+        return T;
+    }
 
-	public boolean isOutputStream() {
-		return true;
-	}
+    public LispObject listen()
+    {
+        notSupported();
+        // Not reached.
+        return NIL;
+    }
 
-	public SubLObject listen() {
-		this.notSupported();
-		// Not reached.
-		return Lisp.NIL;
-	}
+    public LispObject terpri()
+    {
+        return target.terpri();
+    }
 
-	private void notSupported() {
-		Lisp.error(new TypeError("Operation is not supported for streams of type CASE-FROB-STREAM."));
-	}
+    public LispObject FRESH_LINE()
+    {
+        return target.FRESH_LINE();
+    }
 
-	public void setCharPos(int n) {
-		this.target.setCharPos(n);
-	}
+    public String printObjectImpl()
+    {
+        return unreadableString("CASE-FROB-STREAM");
+    }
 
-	public SubLObject terpri() {
-		return this.target.terpri();
-	}
+    private void notSupported()
+    {
+        error(new TypeError("Operation is not supported for streams of type CASE-FROB-STREAM."));
+    }
 
-	public SubLObject typeOf() {
-		return LispSymbols.CASE_FROB_STREAM;
-	}
+    // ### make-case-frob-stream target => case-frob-stream
+    private static final Primitive MAKE_CASE_FROB_STREAM =
+        new Primitive("make-case-frob-stream", PACKAGE_SYS, false, "target kind")
+    {
+        public LispObject execute(LispObject first, LispObject second)
 
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.CASE_FROB_STREAM)
-			return Lisp.T;
-		if (type == BuiltInClass.CASE_FROB_STREAM)
-			return Lisp.T;
-		return super.typep(type);
-	}
-
-	public String writeToString() {
-		return this.unreadableString("CASE-FROB-STREAM");
-	}
-
+        {
+            Stream target = checkCharacterOutputStream(first);
+            if (second == Keyword.UPCASE)
+                return new UpcaseStream(target);
+            if (second == Keyword.DOWNCASE)
+                return new DowncaseStream(target);
+            if (second == Keyword.CAPITALIZE)
+                return new CapitalizeStream(target);
+            if (second == Keyword.CAPITALIZE_FIRST)
+                return new CapitalizeFirstStream(target);
+            return error(new TypeError(
+                "Kind must be :UPCASE, :DOWNCASE, :CAPITALIZE or :CAPITALIZE-FIRST."));
+        }
+    };
 }

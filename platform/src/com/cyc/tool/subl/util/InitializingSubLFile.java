@@ -1,26 +1,28 @@
 //
-//
+// For LarKC
 //
 package com.cyc.tool.subl.util;
 
-public abstract class InitializingSubLFile implements SubLFile {
-	protected int initSpot;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
 
+public abstract class InitializingSubLFile implements SubLFile {
+	public InitializingSubLFile() {
+		initSpot = 0;
+		lastPercentile = 0;
+		sysdclSize = 0;
+		PrologSync.addSingleton(this);
+	}
+
+	protected int initSpot;
 	protected int lastPercentile;
 	protected int sysdclSize;
 
-	public InitializingSubLFile() {
-		this.initSpot = 0;
-		this.lastPercentile = 0;
-		this.sysdclSize = 0;
-	}
-
 	protected int computePercentile() {
-		if (this.sysdclSize <= 0 || this.initSpot <= 0)
+		if (sysdclSize <= 0 || initSpot <= 0)
 			return 0;
-		if (this.initSpot >= this.sysdclSize)
+		if (initSpot >= sysdclSize)
 			return 100;
-		return Math.min(99, this.initSpot * 100 / this.sysdclSize);
+		return Math.min(99, initSpot * 100 / sysdclSize);
 	}
 
 	protected void finishPercentProgress() {
@@ -31,9 +33,9 @@ public abstract class InitializingSubLFile implements SubLFile {
 
 	protected void initializeClass(String className) {
 		SubLFiles.initialize(className);
-		++this.initSpot;
-		int percentile = this.computePercentile();
-		if (percentile != this.lastPercentile) {
+		++initSpot;
+		int percentile = computePercentile();
+		if (percentile != lastPercentile) {
 			if (percentile % 10 == 0) {
 				System.out.printf(" %d%% ", percentile);
 				if (percentile == 50) {
@@ -43,13 +45,13 @@ public abstract class InitializingSubLFile implements SubLFile {
 			} else
 				System.out.print('.');
 			System.out.flush();
-			this.lastPercentile = percentile;
+			lastPercentile = percentile;
 		}
 	}
 
 	protected void preparePercentProgress(int total) {
-		this.sysdclSize = total;
-		this.initSpot = 0;
+		sysdclSize = total;
+		initSpot = 0;
 		System.out.println(" Loading implementation classes ... ");
 		System.out.print(" ");
 		System.out.flush();

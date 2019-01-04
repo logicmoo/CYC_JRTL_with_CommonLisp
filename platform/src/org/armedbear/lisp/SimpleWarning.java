@@ -2,7 +2,7 @@
  * SimpleWarning.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SimpleWarning.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,41 +31,49 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class SimpleWarning extends Warning {
-	public SimpleWarning(SubLObject initArgs) {
-		super(StandardClass.SIMPLE_WARNING);
-		this.initialize(initArgs);
-	}
+public final class SimpleWarning extends Warning
+{
+    public SimpleWarning(LispObject initArgs)
+    {
+        super(StandardClass.SIMPLE_WARNING);
+        initialize(initArgs);
+    }
 
-	public SimpleWarning(SubLObject formatControl, SubLObject formatArguments)
+    public SimpleWarning(LispObject formatControl, LispObject formatArguments)
 
-	{
-		super(StandardClass.SIMPLE_WARNING);
-		this.setFormatControl(formatControl);
-		this.setFormatArguments(formatArguments);
-	}
+    {
+        super(StandardClass.SIMPLE_WARNING);
+        setFormatControl(formatControl);
+        setFormatArguments(formatArguments);
+    }
 
-	public SubLObject classOf() {
-		return StandardClass.SIMPLE_WARNING;
-	}
+    @Override
+    public LispObject typeOf()
+    {
+        return Symbol.SIMPLE_WARNING;
+    }
 
-	public SubLObject typeOf() {
-		return LispSymbols.SIMPLE_WARNING;
-	}
+    @Override
+    public LispObject classOf()
+    {
+        return StandardClass.SIMPLE_WARNING;
+    }
 
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.SIMPLE_WARNING)
-			return Lisp.T;
-		if (type == StandardClass.SIMPLE_WARNING)
-			return Lisp.T;
-		if (type == LispSymbols.SIMPLE_CONDITION)
-			return Lisp.T;
-		if (type == StandardClass.SIMPLE_CONDITION)
-			return Lisp.T;
-		return super.typep(type);
-	}
+    @Override
+    public LispObject typep(LispObject type)
+    {
+        if (type == Symbol.SIMPLE_WARNING)
+            return T;
+        if (type == StandardClass.SIMPLE_WARNING)
+            return T;
+        if (type == Symbol.SIMPLE_CONDITION)
+            return T;
+        if (type == StandardClass.SIMPLE_CONDITION)
+            return T;
+        return super.typep(type);
+    }
 }

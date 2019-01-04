@@ -1,125 +1,155 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.type.number;
+
+import org.armedbear.lisp.Bignum;
+import org.armedbear.lisp.Fixnum;
+import org.armedbear.lisp.LispInteger;
+import org.armedbear.lisp.LispObject;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 
-//// External Imports
-
 public abstract class AbstractSubLIntegerBignum extends AbstractSubLInteger implements SubLNumber, SubLObject {
-
-	//// Constructors
-
-	protected int value;
-
-	//// Public Area
-
-	AbstractSubLIntegerBignum(int value) {
+	 public AbstractSubLIntegerBignum(int value) {
 		this.value = value;
 	}
 
+	@Override
+	public Fixnum toLispObject() {
+		return (Fixnum) this;
+	}
+
+	final public int value;
+
+	LispInteger nextInt;
+
+	@Override
+	public LispInteger increment() {
+		if (this.nextInt == null) {
+			if(value == Integer.MAX_VALUE) {
+				nextInt = Bignum.getInstance(1 + (long) value);
+			} else {
+				nextInt = Fixnum.getInstance(1 + value);
+			}
+		}
+		return nextInt;
+	}
+
+	@Override
+	public final LispObject incr() {
+		return increment();
+	}
+
+
+	@Override
+	public LispObject add(int n) {
+		if (n == 0)
+			return this;
+		if (n == 1)
+			return increment();
+		return LispInteger.getInstance((long) value + n);
+	}
+
+	@Override
 	public SubLNumber abs() {
-		if (this.value == Integer.MIN_VALUE)
-			return SubLObjectFactory.makeInteger(-(long) Integer.MIN_VALUE);
-		int result = Math.abs(this.value);
+		if (value == Integer.MIN_VALUE)
+			return SubLObjectFactory.makeInteger(2147483648L);
+		int result = Math.abs(value);
 		return SubLObjectFactory.makeInteger(result);
 	}
 
+	@Override
 	public SubLObject dec() {
-		return SubLNumberFactory.makeInteger(this.value - (this.value == Integer.MIN_VALUE ? 1L : 1));
+		return SubLNumberFactory.makeInteger(value - (value == Integer.MIN_VALUE ? 1L : 1L));
 	}
 
+	@Override
 	public double doubleValue() {
-		return this.value;
+		return value;
 	}
 
+	@Override
 	public float floatValue() {
-		return this.value;
+		return value;
 	}
 
 	public Integer getInteger() {
-		return new Integer(this.value);
+		return new Integer(value);
 	}
 
+	@Override
 	public Number getNativeNumber() {
-		return this.getInteger();
+		return getInteger();
 	}
 
-	public SubLObject inc() {
-		return SubLNumberFactory.makeInteger(this.value + (this.value == Integer.MAX_VALUE ? 1L : 1));
+
+	@Override
+	public final LispObject inc() {
+		return increment();
 	}
+
 
 	public int integerDivide(int num) {
-		int remainder = this.value % num;
-		int quotient = (this.value - remainder) / num;
+		int remainder = value % num;
+		int quotient = (value - remainder) / num;
 		return quotient;
 	}
 
+	@Override
 	public SubLInteger integerDivide(SubLInteger num) {
 		int numTyped = num.intValue();
+		if(numTyped==1) {
+			return this;
+		}
 		return SubLNumberFactory.makeInteger(this.integerDivide(numTyped));
 	}
 
+	@Override
 	public int intValue() {
-		return this.value;
+		return value;
 	}
 
+	@Override
 	public boolean isEven() {
-		return this.value % 2 == 0;
+		return value % 2 == 0;
 	}
 
+	@Override
 	public boolean isNegative() {
-		return this.value < 0;
+		return value < 0;
 	}
 
+	@Override
 	public boolean isOdd() {
-		return this.value % 2 != 0;
+		return value % 2 != 0;
 	}
 
-	public boolean isPositive() { // SubLNumber
-		return this.value > 0;
+	@Override
+	public boolean isPositive() {
+		return value > 0;
 	}
 
+	@Override
 	public boolean isZero() {
-		return this.value == 0;
+		return value == 0;
 	}
 
+	@Override
 	public long longValue() {
-		return this.value;
+		return value;
 	}
 
+	@Override
 	public SubLObject mult(SubLObject num) {
-		if (num.getNumSize() > SubLNumber.FOUR_BYTE_INTEGER)
+		if (num.getNumSize() > 0)
 			return num.mult(this);
-		return SubLNumberFactory.makeInteger((long) this.value * (long) num.intValue());
+		return SubLNumberFactory.makeInteger((long) value * (long) num.intValue());
 	}
 
-	//// Protected Area
-
-	//// Private Area
-
-	//// Internal Rep
-
-	public String toString() {
-		return "" + this.value;
+	@Override
+	public String printObjectImpl() {
+		return "" + value;
 	}
-
 }

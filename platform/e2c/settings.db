@@ -1,0 +1,31 @@
+﻿/*  Saved settings
+    Date: Sat Jan 21 09:56:42 2017
+*/
+
+
+%	Version of jquery served by the html resource "jquery"
+setting(jquery:version, '2.1.3.min').
+
+%	Address of the fallback server
+setting(cpack:server, 'http://cliopatria.swi-prolog.org').
+
+%	Where to store blob snapshots objects
+setting(graph_version:gv_blob_store, both).
+
+%	Where to store tree snapshots objects
+setting(graph_version:gv_tree_store, both).
+
+%	Where to store commit objects
+setting(graph_version:gv_commit_store, both).
+
+%	Where to store HEAD, refs etc.
+setting(graph_version:gv_refs_store, both).
+
+%	Dashboard only for users with admin rights
+setting(annotation:dashboard_admin_only, false).
+
+%	Dashboard only for users with admin rights
+setting(annotation:dashboard_admin_only, false).
+
+%	Keep information to support source-level debugging
+setting(swish:debug_info, true).

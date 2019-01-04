@@ -1,3 +1,21 @@
+*.snap
+*.vtg
+*~
+/phase04-sublisp/build/eclipse-classes/
+*.class
+/.metadata/.plugins/org.eclipse.pde.core/Eclipse Application/
+/.metadata/.plugins/org.eclipse.pde.core/Eclipse Application/org.eclipse.osgi/
+/.metadata/.plugins/it.unibz.instasearch/searchindex/
+/.recommenders/
+/.sonarlint/
+./bin-eclipse/
+./build/
+./target/
+/runtime-extra/
+/platform/units/7166
+/platform/data/
+/platform/httpd/
+/platform/transcripts/
 powerloom-4.0.9.beta/
 rcyc/
 *.jar

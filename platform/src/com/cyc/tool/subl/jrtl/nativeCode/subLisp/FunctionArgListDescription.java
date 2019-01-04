@@ -1,25 +1,8 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
-//// External Imports
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -27,39 +10,27 @@ import java.util.Stack;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
-//// Internal Imports
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLBoolean;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public class FunctionArgListDescription implements CommonSymbols {
-
-	//// Constructors
-
+public class FunctionArgListDescription {
 	public static class OptionalArgDescription {
-
-		private SubLSymbol argName;
-
-		private SubLSymbol wasSetArgName;
-
-		private SubLObject defaultValue;
-
 		public OptionalArgDescription(SubLObject desc) {
 			if (desc.isSymbol()) {
-				this.init(desc, CommonSymbols.NIL, CommonSymbols.NIL);
+				init(desc, SubLNil.NIL, SubLNil.NIL);
 				return;
 			}
 			if (desc.isCons()) {
 				SubLCons advancedDesc = desc.toCons();
-				SubLObject name = CommonSymbols.NIL;
-				SubLObject defaultValue = CommonSymbols.NIL;
-				SubLObject wasSetArgName = CommonSymbols.NIL;
+				SubLObject name = SubLNil.NIL;
+				SubLObject defaultValue = SubLNil.NIL;
+				SubLObject wasSetArgName = SubLNil.NIL;
 				if (advancedDesc.size() >= 1)
 					name = advancedDesc.get(0);
 				if (advancedDesc.size() >= 2)
@@ -68,28 +39,32 @@ public class FunctionArgListDescription implements CommonSymbols {
 					wasSetArgName = advancedDesc.get(2);
 				if (advancedDesc.size() > 3)
 					Errors.error("Too many arguments for optional argument: " + advancedDesc);
-				this.init(name, defaultValue, wasSetArgName);
+				init(name, defaultValue, wasSetArgName);
 				return;
 			}
 			Errors.error("Got invalid type for optional argument: " + desc.toTypeName() + "\nValue: " + desc);
 		}
 
+		private SubLSymbol argName;
+		private SubLSymbol wasSetArgName;
+		private SubLObject defaultValue;
+
 		public SubLSymbol getArgName() {
-			return this.argName;
+			return argName;
 		}
 
 		public SubLObject getDefaultValue() {
-			return this.defaultValue;
+			return defaultValue;
 		}
 
 		public SubLSymbol getWasSetArgName() {
-			return this.wasSetArgName;
+			return wasSetArgName;
 		}
 
 		public void init(SubLObject argName, SubLObject defaultValue, SubLObject wasSetArgName) {
-			if (!FunctionArgListDescription.isAllowableArgSymbol(argName))
+			if (!isAllowableArgSymbol(argName))
 				Errors.error("Formal optional argument name expected type SYMBOL, got: " + argName.toTypeName());
-			if (!FunctionArgListDescription.isAllowableArgSymbol(wasSetArgName) && CommonSymbols.NIL != wasSetArgName)
+			if (!isAllowableArgSymbol(wasSetArgName) && SubLNil.NIL != wasSetArgName)
 				Errors.error("Formal optional argument name expected type SYMBOL, got: " + argName.toTypeName());
 			this.argName = (SubLSymbol) argName;
 			this.wasSetArgName = (SubLSymbol) wasSetArgName;
@@ -97,28 +72,30 @@ public class FunctionArgListDescription implements CommonSymbols {
 		}
 	}
 
-	private static boolean isAllowableArgSymbol(SubLObject obj) {
-		if (!obj.isSymbol())
-			return false;
-		if (FunctionArgListDescription.isOptionalSymbol(obj))
-			return false;
-		if (FunctionArgListDescription.isRestSymbol(obj))
-			return false;
-		if (obj.isBoolean())
-			return false;
-		if (obj.isKeyword())
-			return false;
-		return true;
+	public FunctionArgListDescription(SubLObject args) {
+		this(args, "");
 	}
 
-	//// Public Area
+	public FunctionArgListDescription(SubLObject args, String docString) {
+		this.args = new ArrayList<SubLSymbol>();
+		optionals = new ArrayList<OptionalArgDescription>();
+		rest = null;
+		this.docString = "";
+		if (docString != null)
+			this.docString = docString;
+		parseFormalArgs(args);
+	}
+
+	private static boolean isAllowableArgSymbol(SubLObject obj) {
+		return obj.isSymbol() && !isOptionalSymbol(obj) && !isRestSymbol(obj) && !obj.isBoolean() && !obj.isKeyword();
+	}
 
 	private static boolean isBody(SubLObject obj) {
 		return true;
 	}
 
 	private static boolean isOptionalDeclaration(SubLObject obj) {
-		return FunctionArgListDescription.isAllowableArgSymbol(obj) || obj.isCons();
+		return isAllowableArgSymbol(obj) || obj.isCons();
 	}
 
 	private static boolean isOptionalSymbol(SubLObject obj) {
@@ -129,73 +106,30 @@ public class FunctionArgListDescription implements CommonSymbols {
 		return obj == CommonSymbols.REST_SYMBOL;
 	}
 
-	/**
-	 * @param args
-	 *            the command line arguments
-	 */
 	public static void main(String[] args) {
 	}
 
-	private List<SubLSymbol> args = new ArrayList<SubLSymbol>();
-
-	private List<OptionalArgDescription> optionals = new ArrayList<OptionalArgDescription>();
-
-	private SubLSymbol rest = null;
-
-	//// Protected Area
-
-	//// Private Area
-
-	private String docString = "";
-
-	/**
-	 * Creates a new instance of FunctionArgListDescription.
-	 */
-	public FunctionArgListDescription(SubLObject args) {
-		this(args, "");
-	}
-
-	/**
-	 * Creates a new instance of FunctionArgListDescription.
-	 */
-	public FunctionArgListDescription(SubLObject args, String docString) {
-		if (docString != null)
-			this.docString = docString;
-		this.parseFormalArgs(args);
-	}
+	private List<SubLSymbol> args;
+	private List<OptionalArgDescription> optionals;
+	private SubLSymbol rest;
+	private String docString;
 
 	private void addOptionalArg(OptionalArgDescription desc) {
-		this.optionals.add(desc);
+		optionals.add(desc);
 	}
 
 	private void addRequiredArg(SubLObject symbol) {
-		if (!FunctionArgListDescription.isAllowableArgSymbol(symbol))
+		if (!isAllowableArgSymbol(symbol))
 			Errors.error("Formal required argument name expected type SYMBOL, got: " + symbol.getClass());
-		this.args.add(symbol.toSymbol());
-	}
-
-	public boolean allowsRest() {
-		return this.rest != null;
-	}
-
-	public ArrayList expandArgBindings(Object[] actualArgs, SubLEnvironment newEnv) {
-		Stack<Object> argsStack = new Stack<Object>();
-		for (int i = actualArgs.length - 1; i >= 0; i--)
-			argsStack.push(actualArgs[i]);
-		ArrayList oldDynamicValues = null;
-		this.expandRequired(argsStack, newEnv, oldDynamicValues);
-		this.expandOptional(argsStack, newEnv, oldDynamicValues);
-		this.expandRest(argsStack, newEnv, oldDynamicValues);
-		if (!argsStack.isEmpty())
-			throw new InvalidSubLExpressionException("Not enough arguments supplied to function.");
-		return oldDynamicValues;
+		args.add(symbol.toSymbol());
 	}
 
 	private String expandOptional(Stack argsStack) {
 		StringBuilder buf = new StringBuilder();
 		OptionalArgDescription opd = null;
 		boolean wasSet = false;
-		for (Iterator iter = this.optionals.iterator(); iter.hasNext();) {
+		Iterator iter = optionals.iterator();
+		while (iter.hasNext()) {
 			opd = (OptionalArgDescription) iter.next();
 			buf.append("(").append(SubLString.convertSubLStringToJavaString("" + opd.getArgName())).append(" ");
 			if (argsStack.isEmpty()) {
@@ -206,10 +140,10 @@ public class FunctionArgListDescription implements CommonSymbols {
 				wasSet = true;
 			}
 			buf.append(") ");
-			if (opd.getWasSetArgName() != CommonSymbols.NIL) {
+			if (opd.getWasSetArgName() != SubLNil.NIL) {
 				buf.append("(").append(SubLString.convertSubLStringToJavaString("" + opd.getWasSetArgName()))
 						.append(" ");
-				buf.append(wasSet ? (SubLBoolean) CommonSymbols.T : (SubLBoolean) CommonSymbols.NIL).append(") ");
+				buf.append(wasSet ? CommonSymbols.T : SubLNil.NIL).append(") ");
 			}
 		}
 		return buf.toString();
@@ -218,7 +152,8 @@ public class FunctionArgListDescription implements CommonSymbols {
 	private ArrayList expandOptional(Stack argsStack, SubLEnvironment env, ArrayList oldDynamicValues) {
 		OptionalArgDescription opd = null;
 		boolean wasSet = false;
-		for (Iterator iter = this.optionals.iterator(); iter.hasNext();) {
+		Iterator iter = optionals.iterator();
+		while (iter.hasNext()) {
 			opd = (OptionalArgDescription) iter.next();
 			SubLSymbol optionalVariable = opd.getArgName();
 			SubLObject actualValue = null;
@@ -239,7 +174,7 @@ public class FunctionArgListDescription implements CommonSymbols {
 			oldDynamicValues = SubLSpecialOperatorDeclarations.possiblyNoteOldDynamicValue(optionalVariable,
 					oldDynamicValue, oldDynamicValues);
 			SubLSymbol providedVariable = opd.getWasSetArgName();
-			if (providedVariable != CommonSymbols.NIL) {
+			if (providedVariable != SubLNil.NIL) {
 				oldDynamicValue = env.noteBinding(providedVariable, SubLObjectFactory.makeBoolean(wasSet));
 				oldDynamicValues = SubLSpecialOperatorDeclarations.possiblyNoteOldDynamicValue(providedVariable,
 						oldDynamicValue, oldDynamicValues);
@@ -250,7 +185,8 @@ public class FunctionArgListDescription implements CommonSymbols {
 
 	private String expandRequired(Stack argsStack) {
 		StringBuilder buf = new StringBuilder();
-		for (Iterator iter = this.args.iterator(); iter.hasNext();) {
+		Iterator iter = args.iterator();
+		while (iter.hasNext()) {
 			if (argsStack.isEmpty())
 				throw new InvalidSubLExpressionException("Function passed too few arguments.");
 			buf.append("(").append(SubLString.convertSubLStringToJavaString("" + iter.next())).append(" ")
@@ -260,7 +196,8 @@ public class FunctionArgListDescription implements CommonSymbols {
 	}
 
 	private ArrayList expandRequired(Stack argsStack, SubLEnvironment env, ArrayList oldDynamicValues) {
-		for (Iterator iter = this.args.iterator(); iter.hasNext();) {
+		Iterator iter = args.iterator();
+		while (iter.hasNext()) {
 			if (argsStack.isEmpty())
 				throw new InvalidSubLExpressionException("Function passed too few arguments.");
 			SubLSymbol requiredVariable = (SubLSymbol) iter.next();
@@ -273,92 +210,68 @@ public class FunctionArgListDescription implements CommonSymbols {
 	}
 
 	private String expandRest(Stack argsStack) {
-		if (!this.allowsRest())
+		if (!allowsRest())
 			return "";
 		StringBuilder buf = new StringBuilder();
-		Object val = CommonSymbols.NIL;
+		Object val = SubLNil.NIL;
 		if (!argsStack.isEmpty()) {
-			StringBuilder restBuf = new StringBuilder("'(");
-			val = restBuf;
+			StringBuilder restBuf = (StringBuilder) (val = new StringBuilder("'("));
 			while (!argsStack.isEmpty())
 				restBuf.append(SubLString.convertSubLStringToJavaString("" + argsStack.pop())).append(" ");
 			restBuf.append(")");
 		}
-		buf.append("(").append(SubLString.convertSubLStringToJavaString("" + this.rest)).append(" ").append(val)
+		buf.append("(").append(SubLString.convertSubLStringToJavaString("" + rest)).append(" ").append(val)
 				.append(") ");
 		return buf.toString();
 	}
 
 	private ArrayList expandRest(Stack argsStack, SubLEnvironment env, ArrayList oldDynamicValues) {
-		if (!this.allowsRest())
+		if (!allowsRest())
 			return oldDynamicValues;
 		SubLObject[] actualRestArgs = (SubLObject[]) argsStack.pop();
 		int size = actualRestArgs.length;
 		SubLList restList = SubLNil.NIL;
-		for (int i = size - 1; i >= 0; i--) {
+		for (int i = size - 1; i >= 0; --i) {
 			SubLObject actualArg = actualRestArgs[i];
-			restList = restList.push(actualArg); // @note try to get rid of
-													// consing here
+			restList = restList.push(actualArg);
 		}
-		SubLObject oldDynamicValue = env.noteBinding(this.rest, restList);
-		oldDynamicValues = SubLSpecialOperatorDeclarations.possiblyNoteOldDynamicValue(this.rest, oldDynamicValue,
+		SubLObject oldDynamicValue = env.noteBinding(rest, restList);
+		oldDynamicValues = SubLSpecialOperatorDeclarations.possiblyNoteOldDynamicValue(rest, oldDynamicValue,
 				oldDynamicValues);
 		return oldDynamicValues;
 	}
 
-	public int getOptionalArgCount() {
-		return this.optionals.size();
-	}
-
-	/* Returns a list of OptionalArgDescriptions */
-	public List getOptionalVariableSymbols() {
-		return this.optionals;
-	}
-
-	//// Internal Rep
-
-	public int getRequiredArgCount() {
-		return this.args.size();
-	}
-
-	/* Returns a list of symbols */
-	public List getRequiredVariableSymbols() {
-		return this.args;
-	}
-
-	public SubLSymbol getRestSymbol() {
-		return this.rest;
-	}
-
 	private void parseFormalArgs(SubLObject args) {
 		if (!args.isList())
-			Errors.error("Invalid formal argument list type.\n" + "Wanted type " + AbstractSubLList.LIST_TYPE_NAME
+			Errors.error("Invalid formal argument list type.\nWanted type " + AbstractSubLList.LIST_TYPE_NAME
 					+ " got type: " + args.toTypeName() + "\nValue: " + args);
-		if (args == CommonSymbols.NIL)
+		if (args == SubLNil.NIL)
 			return;
 		SubLObject[] argArray = null;
 		Resourcer resourcer = Resourcer.getInstance();
 		try {
 			argArray = resourcer.acquireSubLObjectArray(args.toList());
-			int i = 0, size = argArray.length, curArg = 0;
-			while (i < size && FunctionArgListDescription.isAllowableArgSymbol(argArray[i]))
-				this.addRequiredArg(argArray[curArg = i++]);
-			if (i < size && FunctionArgListDescription.isOptionalSymbol(argArray[i])) {
+			int i = 0;
+			int size = argArray.length;
+			int curArg = 0;
+			while (i < size && isAllowableArgSymbol(argArray[i]))
+				addRequiredArg(argArray[curArg = i++]);
+			if (i < size && isOptionalSymbol(argArray[i])) {
 				curArg = i++;
-				if (i < size && FunctionArgListDescription.isOptionalDeclaration(argArray[i])) {
+				if (i < size && isOptionalDeclaration(argArray[i])) {
 					OptionalArgDescription optionDesc = new OptionalArgDescription(argArray[curArg = i++]);
-					this.addOptionalArg(optionDesc);
+					addOptionalArg(optionDesc);
 				} else
 					Errors.error("&OPTIONAL present but no optional arguments given.\nValue: " + args);
-				while (i < size && FunctionArgListDescription.isOptionalDeclaration(argArray[i])) {
+				while (i < size && isOptionalDeclaration(argArray[i])) {
 					OptionalArgDescription optionDesc = new OptionalArgDescription(argArray[curArg = i++]);
-					this.addOptionalArg(optionDesc);
+					addOptionalArg(optionDesc);
 				}
 			}
-			if (i < size && FunctionArgListDescription.isRestSymbol(argArray[i])) {
+			if (i < size && isRestSymbol(argArray[i])) {
 				curArg = i++;
-				if (i < size && FunctionArgListDescription.isAllowableArgSymbol(argArray[i]))
-					this.setRestSymbol(argArray[curArg = i++]);
+				if (i < size && isAllowableArgSymbol(argArray[i]))
+					setRestSymbol(argArray[curArg = i++]);
 				else
 					Errors.error("&REST present but no variable given.\nValue: " + args);
 			}
@@ -370,12 +283,46 @@ public class FunctionArgListDescription implements CommonSymbols {
 		}
 	}
 
-	//// Main
-
 	private void setRestSymbol(SubLObject symbol) {
-		if (!FunctionArgListDescription.isAllowableArgSymbol(symbol))
+		if (!isAllowableArgSymbol(symbol))
 			Errors.error("Formal rest argument name expected type SYMBOL, got: " + symbol.getClass());
-		this.rest = (SubLSymbol) symbol;
+		rest = (SubLSymbol) symbol;
 	}
 
+	public boolean allowsRest() {
+		return rest != null;
+	}
+
+	public ArrayList expandArgBindings(Object[] actualArgs, SubLEnvironment newEnv) {
+		Stack<Object> argsStack = new Stack<Object>();
+		for (int i = actualArgs.length - 1; i >= 0; --i)
+			argsStack.push(actualArgs[i]);
+		ArrayList oldDynamicValues = null;
+		this.expandRequired(argsStack, newEnv, oldDynamicValues);
+		this.expandOptional(argsStack, newEnv, oldDynamicValues);
+		this.expandRest(argsStack, newEnv, oldDynamicValues);
+		if (!argsStack.isEmpty())
+			throw new InvalidSubLExpressionException("Not enough arguments supplied to function.");
+		return oldDynamicValues;
+	}
+
+	public int getOptionalArgCount() {
+		return optionals.size();
+	}
+
+	public List getOptionalVariableSymbols() {
+		return optionals;
+	}
+
+	public int getRequiredArgCount() {
+		return args.size();
+	}
+
+	public List getRequiredVariableSymbols() {
+		return args;
+	}
+
+	public SubLSymbol getRestSymbol() {
+		return rest;
+	}
 }

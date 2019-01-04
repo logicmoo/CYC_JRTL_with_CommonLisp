@@ -2,7 +2,7 @@
  * ControlTransfer.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: ControlTransfer.java 12271 2009-11-08 11:28:34Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,42 +31,44 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CatchableThrow;
 
-/**
- * This class is the parent class of all non-local transfer of control events in
- * ABCL. The classes inheriting from this class each represent a transfer of
- * control event as it is available in the standard: GO (represented by Go),
- * RETURN (by Return) and THROW (by Throw).
+/** This class is the parent class of all non-local transfer of
+ * control events in ABCL. The classes inheriting from this class each
+ * represent a transfer of control event as it is available in the
+ * standard: GO (represented by Go), RETURN (by Return) and THROW (by Throw).
  *
- * Please note that you should <b>only</b> be using these classes in case you've
- * establisched a corresponding TAGBODY, BLOCK or CATCH-like construct in your
- * code.
+ * Please note that you should <b>only</b> be using these classes in case
+ * you've establisched a corresponding TAGBODY, BLOCK or CATCH-like
+ * construct in your code.
  *
- * Otherwise, be aware that if you are mixing Lisp and Java code, Lisp code
- * being called into might throw one of the three exception types and cause
- * execution to be transferred to the nearest handler - presumably outside your
- * Java code.
+ * Otherwise, be aware that if you are mixing Lisp and Java code,
+ * Lisp code being called into might throw one of the three exception types
+ * and cause execution to be transferred to the nearest handler - presumably
+ * outside your Java code.
  *
  */
-abstract public class ControlTransfer extends java.lang.Error {
-	public ControlTransfer() {
-	}
+abstract public class ControlTransfer extends Error
+{
+    public ControlTransfer()
+    {
+    }
 
-	public ControlTransfer(String message) {
-		super(message);
-	}
+    /**
+     * Overridden in order to make ControlTransfer construct
+     * faster. This avoids gathering stack trace information.
+     */
+    public Throwable fillInStackTrace()
+    {
+        return this;
+    }
 
-	/**
-	 * Overridden in order to make ControlTransfer construct faster. This avoids
-	 * gathering stack trace information.
-	 */
+    public ControlTransfer(String message)
+    {
+        super(message);
+    }
 
-	public Throwable fillInStackTrace() {
-		return this;
-	}
-
-	public abstract SubLObject getCondition();
+    public abstract LispObject getCondition();
 }

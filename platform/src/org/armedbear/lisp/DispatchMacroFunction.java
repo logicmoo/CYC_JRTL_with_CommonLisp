@@ -2,7 +2,7 @@
  * DispatchMacroFunction.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id: DispatchMacroFunction.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,44 +31,55 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
+import static org.armedbear.lisp.Lisp.*;
 
-public abstract class DispatchMacroFunction extends Function {
-	public DispatchMacroFunction(String name) {
-		super(name);
-	}
+import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-	public DispatchMacroFunction(String name, String arglist) {
-		super(name, arglist);
-	}
+public abstract class DispatchMacroFunction extends Function
+{
+    public DispatchMacroFunction(String name)
+    {
+        super(name);
+    }
 
-	public DispatchMacroFunction(String name, SubLPackage pkg) {
-		super(name, pkg);
-	}
+    public DispatchMacroFunction(String name, String arglist)
+    {
+        super(name, arglist);
+    }
 
-	public DispatchMacroFunction(String name, SubLPackage pkg, boolean exported) {
-		super(name, pkg, exported);
-	}
+    public DispatchMacroFunction(String name, Package pkg)
+    {
+        super(name, pkg);
+    }
 
-	public DispatchMacroFunction(String name, SubLPackage pkg, boolean exported, String arglist) {
-		super(name, pkg, exported, arglist);
-	}
+    public DispatchMacroFunction(String name, Package pkg, boolean exported)
+    {
+        super(name, pkg, exported);
+    }
 
-	public abstract SubLObject execute(LispStream stream, char c, int n);
+    public DispatchMacroFunction(String name, Package pkg, boolean exported,
+                      String arglist)
+    {
+        super(name, pkg, exported, arglist);
+    }
 
-	public SubLObject execute(SubLObject first, SubLObject second, SubLObject third)
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third)
 
-	{
-		LispStream stream = Lisp.inSynonymOf(first);
-		char c = second.charValue();
-		int n;
-		if (third == Lisp.NIL)
-			n = -1;
-		else
-			n = third.intValue();
-		return this.execute(stream, c, n);
-	}
+    {
+        Stream stream = inSynonymOf(first);
+        char c = LispCharacter.getValue(second);
+        int n;
+        if (third == NIL)
+            n = -1;
+        else
+            n = Fixnum.getValue(third);
+        return execute(stream, c, n);
+    }
+
+    public abstract LispObject execute(Stream stream, char c, int n)
+       ;
 }

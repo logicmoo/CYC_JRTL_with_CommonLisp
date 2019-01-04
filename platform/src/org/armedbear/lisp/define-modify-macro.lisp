@@ -1,7 +1,7 @@
 ;;; define-modify-macro.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: define-modify-macro.lisp 11391 2008-11-15 22:38:34Z vvoutilainen $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -61,21 +61,22 @@
 	     (push (car arg) other-args))
 	    (t (error "Illegal stuff in DEFINE-MODIFY-MACRO lambda list."))))
     (setq other-args (nreverse other-args))
-    `(defmacro ,name (,reference ,@lambda-list &environment ,env)
-       ,doc-string
-       (multiple-value-bind (dummies vals newval setter getter)
-           (get-setf-expansion ,reference ,env)
-	 (do ((d dummies (cdr d))
-	      (v vals (cdr v))
-	      (let-list nil (cons (list (car d) (car v)) let-list)))
-	     ((null d)
-	      (push (list (car newval)
-                          ,(if rest-arg
-                               `(list* ',function getter ,@other-args ,rest-arg)
-                               `(list ',function getter ,@other-args)))
-                    let-list)
-	      `(let* ,(nreverse let-list)
-		 ,setter)))))))
+    `(eval-when (:compile-toplevel :load-toplevel :execute)
+      (defmacro ,name (,reference ,@lambda-list &environment ,env)
+        ,doc-string
+        (multiple-value-bind (dummies vals newval setter getter)
+            (get-setf-expansion ,reference ,env)
+          (do ((d dummies (cdr d))
+               (v vals (cdr v))
+               (let-list nil (cons (list (car d) (car v)) let-list)))
+              ((null d)
+               (push (list (car newval)
+                           ,(if rest-arg
+                                `(list* ',function getter ,@other-args ,rest-arg)
+                                `(list ',function getter ,@other-args)))
+                     let-list)
+               `(let* ,(nreverse let-list)
+                 ,setter))))))))
 
 (define-modify-macro incf-complex (&optional (delta 1)) +
   "The first argument is some location holding a number.  This number is

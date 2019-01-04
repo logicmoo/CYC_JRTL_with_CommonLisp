@@ -1,22 +1,6 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+////
+//
 package com.cyc.tool.subl.jrtl.nativeCode.type.operator;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
@@ -32,31 +16,20 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
 public interface SubLFunction extends SubLOperator {
 
-	//// Public Area
+	@Override
+	SubLList getArglist();
 
 	boolean allowsRest();
 
-	/**
-	 *
-	 * @param args
-	 *            This is an array of Object instead of SubLObject because for
-	 *            &rest functions, the argument is an array of SubLObjects,
-	 *            which is not itself a SubLObject.
-	 * @return
-	 */
-	SubLObject apply(Object[] args);
+	SubLObject apply(Object[] p0);
 
-	SubLObject apply(SubLCons arg1, SubLEnvironment arg2);
+	SubLObject apply(SubLCons p0, SubLEnvironment p1);
 
-	/** public SubLObject apply(SubLObject arg1, Object arg2); */
-	/** the arity that will be used during apply */
 	int applyArity();
 
-	SubLObject evalViaApply(SubLCons form, SubLEnvironment env);
+	SubLObject evalViaApply(SubLCons p0, SubLEnvironment p1);
 
-	SubLObject funcall(SubLObject[] incomingArgs);
-
-	com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList getArglist();
+	SubLObject funcall(SubLObject[] p0);
 
 	BinaryFunction getBinaryFunction();
 
@@ -76,15 +49,15 @@ public interface SubLFunction extends SubLOperator {
 
 	boolean isInterpreted();
 
-	void setBinaryFunction(BinaryFunction f);
+	void setBinaryFunction(BinaryFunction p0);
 
-	void setQuataryFunction(QuataryFunction f);
+	void setQuataryFunction(QuataryFunction p0);
 
-	void setQuintaryFunction(QuintaryFunction f);
+	void setQuintaryFunction(QuintaryFunction p0);
 
-	void setTernaryFunction(TernaryFunction f);
+	void setTernaryFunction(TernaryFunction p0);
 
-	void setUnaryFunction(UnaryFunction f);
+	void setUnaryFunction(UnaryFunction p0);
 
-	void setZeroArityFunction(ZeroArityFunction f);
+	void setZeroArityFunction(ZeroArityFunction p0);
 }

@@ -2,7 +2,7 @@
  * jmethod_return_type.java
  *
  * Copyright (C) 2005 Peter Graves
- * $Id: jmethod_return_type.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,29 +31,31 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
+
+import static org.armedbear.lisp.Lisp.*;
 
 import java.lang.reflect.Method;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-
 // ### jmethod-return-type method => class
-public class jmethod_return_type extends JavaPrimitive {
-	private static Primitive JMETHOD_RETURN_TYPE = new jmethod_return_type();
+public final class jmethod_return_type extends Primitive
+{
+    private jmethod_return_type()
+    {
+        super(Symbol.JMETHOD_RETURN_TYPE, "method",
+"Returns a reference to the Class object that represents the formal return type of METHOD.");
+    }
 
-	private jmethod_return_type() {
-		super(LispSymbols.JMETHOD_RETURN_TYPE, "method",
-				"Returns a reference to the Class object that represents the formal return type of METHOD.");
-	}
+    public LispObject execute(LispObject arg)
 
-	public SubLObject execute(SubLObject arg)
+    {
+        if (arg instanceof JavaObject) {
+            Object method = ((JavaObject)arg).getObject();
+            if (method instanceof Method)
+            return new JavaObject(((Method)method).getReturnType());
+        }
+        return error(new LispError(arg.princToString() + " does not designate a Java method."));
+    }
 
-	{
-		if (arg instanceof JavaObject) {
-			Object method = ((JavaObject) arg).getObject();
-			if (method instanceof Method)
-				return new ABCLJavaObject(((Method) method).getReturnType());
-		}
-		return Lisp.error(new LispError(arg.writeToString() + " does not designate a Java method."));
-	}
+    private static final Primitive JMETHOD_RETURN_TYPE = new jmethod_return_type();
 }

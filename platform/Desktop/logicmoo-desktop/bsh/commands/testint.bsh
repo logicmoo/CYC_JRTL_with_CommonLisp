@@ -1,0 +1,12 @@
+import org.meta.math.interpolater.*;
+
+m=getLoadedMoleculeScenes().get(0);
+ps=m.getAllPropertyScene().next();
+print(ps);
+gp=ps.getGridProperty();
+ip=InterpolaterFactory.getInstance().getInterpolater(InterpolaterFactory.InterpolaterType.THREE_POINT);
+ip.setSubInterpolater(InterpolaterFactory.getInstance().getInterpolater(InterpolaterFactory.InterpolaterType.COSINE));
+print(ip);
+gpnew=gp.interpolate(2.0, ip);
+
+m.addPropertyScene(new PropertyScene(m, gpnew));

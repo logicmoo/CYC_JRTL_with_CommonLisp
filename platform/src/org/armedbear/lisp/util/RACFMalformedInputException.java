@@ -2,7 +2,7 @@
  * RACFMalformedInputException.java
  *
  * Copyright (C) 2009 Erik Huelsmann
- * $Id: RACFMalformedInputException.java 12321 2010-01-01 18:26:24Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,35 +31,38 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp.util;
+package org.armedbear.lisp.util;
 
 import java.nio.charset.MalformedInputException;
 
-/**
- * Class - derived from MalformedInputException - which holds information
- * required to allow higher level systems to invoke a lisp restart function to
- * set replacement characters.
+
+/** Class - derived from MalformedInputException -
+ * which holds information required to allow higher level
+ * systems to invoke a lisp restart function to set replacement characters.
  */
-public class RACFMalformedInputException extends MalformedInputException {
+public class RACFMalformedInputException
+    extends MalformedInputException {
 
-	int position;
-	char character;
-	String charsetName;
+    final int position;
+    final char character;
+    final String charsetName;
 
-	public RACFMalformedInputException(int position, char character, String charsetName) {
-		super(1); // 1 == fake length
-		this.position = position;
-		this.character = character;
-		this.charsetName = charsetName;
-	}
+    public RACFMalformedInputException(int position, char character,
+                                       String charsetName) {
+        super(1); // 1 == fake length
+        this.position = position;
+        this.character = character;
+        this.charsetName = charsetName;
+    }
 
-	public String getMessage() {
-		return "Input value 0x" + Integer.toHexString(this.character) + " is malformed while recoding with charset "
-				+ this.charsetName;
-	}
+    @Override
+    public String getMessage() {
+        return "Input value 0x" + Integer.toHexString(character)
+            + " is malformed while recoding with charset " + charsetName;
+    }
 
-	public int getPosition() {
-		return this.position;
-	}
+    public int getPosition() {
+        return position;
+    }
 
 }

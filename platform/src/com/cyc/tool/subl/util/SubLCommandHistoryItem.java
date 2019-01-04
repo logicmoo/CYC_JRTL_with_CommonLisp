@@ -1,82 +1,64 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.util;
+
+import java.text.DecimalFormat;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
-//// External Imports
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
 
 public class SubLCommandHistoryItem {
-
-	//// Constructors
-
-	private static boolean SHOW_TIMES = true;
-
-	//// Public Area
-
-	/**
-	 * @param args
-	 *            the command line arguments
-	 */
-	public static void main(String[] args) {
-	}
-
-	private String command = "";
-
-	private String results = "";
-
-	private int historyNum;
-
-	private String packageName;
-
-	private long evalTimeMSecs;
-
-	/** Creates a new instance of SubLCommandHistoryItem. */
 	public SubLCommandHistoryItem(int historyNum, String packageName) {
+		command = "";
+		results = "";
+		evalTimeFormat = new DecimalFormat("#.###");
 		this.historyNum = historyNum;
 		this.packageName = packageName;
 	}
 
-	//// Protected Area
+	public static void main(String[] args) {
+	}
 
-	//// Private Area
-
-	//// Internal Rep
+	private String command;
+	private String results;
+	private int historyNum;
+	private String packageName;
+	private long evalTimeNanos;
+	private DecimalFormat evalTimeFormat;
+	private static boolean SHOW_TIMES = true;
 
 	public String getCommand() {
-		return this.command;
+		return command;
 	}
 
 	public String getCommandPrompt() {
-		return this.packageName + "(" + this.historyNum + "): ";
+		return packageName + "(" + historyNum + "): ";
 	}
 
 	public String getResultsString() {
 		StringBuilder buf = new StringBuilder();
-		if (this.evalTimeMSecs >= 0 && SubLCommandHistoryItem.SHOW_TIMES)
-			buf.append("[Time: ").append(this.evalTimeMSecs / 1000.0).append(" secs]\n");
-		buf.append(this.results);
+		if (evalTimeNanos >= 0L) {
+			double millis = evalTimeNanos / 1000000.0;
+			if (millis >= 1.0) {
+				String secsStr = evalTimeFormat.format(millis / 1000.0);
+				if ("1".equals(secsStr))
+					buf.append("[Time: ").append(secsStr).append(" sec]\n");
+				else
+					buf.append("[Time: ").append(secsStr).append(" secs]\n");
+			} else {
+				String µsecsStr = evalTimeFormat.format(millis * 1000.0);
+				if ("1".equals(µsecsStr))
+					buf.append("[Time: ").append(µsecsStr).append(" µsec]\n");
+				else
+					buf.append("[Time: ").append(µsecsStr).append(" µsecs]\n");
+			}
+		}
+		buf.append(results);
 		return buf.toString();
 	}
 
@@ -88,37 +70,34 @@ public class SubLCommandHistoryItem {
 		this.command = command;
 	}
 
-	public void setResults(String results, long evalTimeMSecs) {
+	public void setResults(String results, long evalTimeNanos) {
 		if (results == null)
 			results = "";
 		this.results = results;
-		this.evalTimeMSecs = evalTimeMSecs;
+		this.evalTimeNanos = evalTimeNanos;
 	}
 
-	public void setResultValues(SubLList resultValues, long evalTimeMSecs) {
+	public void setResultValues(SubLList resultValues, long evalTimeNanos) {
 		if (resultValues == null)
 			resultValues = SubLNil.NIL;
-
 		StringBuilder buf = new StringBuilder();
 		SubLObject val = SubLNil.NIL;
 		int i = 0;
-		for (val = conses_high.first(resultValues); SubLNil.NIL == Types
-				.sublisp_null(resultValues); resultValues = (SubLList) conses_high.rest(resultValues), val = conses_high
-						.first(resultValues), i++) {
+		val = conses_high.first(resultValues);
+		while (SubLNil.NIL == Types.sublisp_null(resultValues)) {
 			if (i > 0)
 				buf.append("\n");
-			buf.append(print_high.prin1_to_string(val).getString());
+			buf.append(print_high.prin1_to_string(val).getStringValue());
+			resultValues = (SubLList) conses_high.rest(resultValues);
+			val = conses_high.first(resultValues);
+			++i;
 		}
-		this.setResults(buf.toString(), evalTimeMSecs);
+		setResults(buf.toString(), evalTimeNanos);
 	}
 
-	//// Main
-
+	@Override
 	public String toString() {
-		String commandPrompt = this.getCommandPrompt();
-		String command = this.getCommand();
-		String results = this.getResultsString();
-		return commandPrompt + command + results;
+		String commandPrompt = getCommandPrompt();
+		return commandPrompt + getCommand() + getResultsString();
 	}
-
 }

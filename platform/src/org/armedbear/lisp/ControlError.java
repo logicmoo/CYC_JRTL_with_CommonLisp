@@ -2,7 +2,7 @@
  * ControlError.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: ControlError.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,35 +31,44 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class ControlError extends LispError {
-	public ControlError(String message) {
-		super(StandardClass.CONTROL_ERROR);
-		this.setFormatControl(message);
-		this.setFormatArguments(Lisp.NIL);
-	}
+public final class ControlError extends LispError
+{
+    public ControlError(LispObject initArgs)
+    {
+        super(StandardClass.CONTROL_ERROR);
+        initialize(initArgs);
+    }
 
-	public ControlError(SubLObject initArgs) {
-		super(StandardClass.CONTROL_ERROR);
-		this.initialize(initArgs);
-	}
+    public ControlError(String message)
+    {
+        super(StandardClass.CONTROL_ERROR);
+        setFormatControl(message);
+        setFormatArguments(NIL);
+    }
 
-	public SubLObject classOf() {
-		return StandardClass.CONTROL_ERROR;
-	}
+    @Override
+    public LispObject typeOf()
+    {
+        return Symbol.CONTROL_ERROR;
+    }
 
-	public SubLObject typeOf() {
-		return LispSymbols.CONTROL_ERROR;
-	}
+    @Override
+    public LispObject classOf()
+    {
+        return StandardClass.CONTROL_ERROR;
+    }
 
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.CONTROL_ERROR)
-			return Lisp.T;
-		if (type == StandardClass.CONTROL_ERROR)
-			return Lisp.T;
-		return super.typep(type);
-	}
+    @Override
+    public LispObject typep(LispObject type)
+    {
+        if (type == Symbol.CONTROL_ERROR)
+            return T;
+        if (type == StandardClass.CONTROL_ERROR)
+            return T;
+        return super.typep(type);
+    }
 }

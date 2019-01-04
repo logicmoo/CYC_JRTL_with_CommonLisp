@@ -1,0 +1,8 @@
+import org.meta.math.qm.*;
+import org.meta.math.qm.integral.*;
+
+ipf = IntegralsPackageFactory.getInstance();
+ipf.setDefaultTwoElectronIntegralPackage(IntegralPackageType.TWO_ELECTRON_HGP);
+// ipf.setDefaultTwoElectronIntegralPackage(IntegralPackageType.TWO_ELECTRON_HUZINAGA);
+
+hfscf(readMoleculeFile(showFileDialog()), "631gdp");

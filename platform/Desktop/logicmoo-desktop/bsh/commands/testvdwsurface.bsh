@@ -1,0 +1,14 @@
+
+import org.meta.config.impl.AtomInfo;
+import org.meta.math.geom.Point3D;
+import org.meta.molecule.property.electronic.GridProperty;
+import org.meta.shell.idebeans.MoleculeViewerFrame;
+import org.meta.shell.idebeans.graphics.surfaces.VdwGridPropertyGenerator;
+import org.meta.shell.idebeans.viewers.impl.moleculeviewer.graphicsengine.surfaces.PropertyScene;
+
+ms = getLoadedMoleculeScenes().get(0);
+mol = ms.getMolecule();
+gp = (new VdwGridPropertyGenerator(mol)).getGridProperty();;
+print(gp);
+ms.addPropertyScene(new PropertyScene(ms, gp));
+

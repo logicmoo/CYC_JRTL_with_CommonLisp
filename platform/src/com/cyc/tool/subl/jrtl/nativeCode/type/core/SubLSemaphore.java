@@ -1,22 +1,6 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
 import java.util.concurrent.Semaphore;
@@ -30,40 +14,23 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbolFactory;
 
-//// Internal Imports
-
-//// External Imports
-
-public class SubLSemaphore extends AbstractSubLObject implements SubLObject {
-
-	public static String SEMAPHORE_TYPE_NAME = "SEMAPHORE";
-
-	//// Constructors
-
-	public static SubLSymbol SEMAPHORE_TYPE_SYMBOL = SubLSymbolFactory.makeSymbol(SubLSemaphore.SEMAPHORE_TYPE_NAME,
-			SubLPackage.SUBLISP_PACKAGE);
-
-	//// Private Area
-	private Semaphore sem;
-
-	//// Public Area
-
-	private SubLString name;
-
-	/** Creates a new instance of SubLSemaphore. */
+public class SubLSemaphore extends FromSubLisp implements SubLObject {
 	SubLSemaphore(SubLString name) {
 		this(name, 1);
 	}
 
-	/** Creates a new instance of SubLSemaphore. */
 	SubLSemaphore(SubLString name, int count) {
-		this.sem = new Semaphore(count);
+		sem = new Semaphore(count);
 		this.name = name;
 	}
 
-
+	private Semaphore sem;
+	private SubLString name;
+	public static String SEMAPHORE_TYPE_NAME = "SEMAPHORE";
+	public static SubLSymbol SEMAPHORE_TYPE_SYMBOL;
 	public static SubLSemaphore sleepSem;
 	static {
+		SEMAPHORE_TYPE_SYMBOL = SubLSymbolFactory.makeSymbol("SEMAPHORE", SubLPackage.SUBLISP_PACKAGE.toPackage());
 		sleepSem = SubLObjectFactory.makeSemaphore(SubLObjectFactory.makeString("sleep semaphore"));
 	}
 
@@ -72,13 +39,15 @@ public class SubLSemaphore extends AbstractSubLObject implements SubLObject {
 	}
 
 	public void acquire(int count) {
-		while (true)
+		while (true) {
 			try {
-				this.sem.acquire(count);
-				break;
+				sem.acquire(count);
 			} catch (InterruptedException e) {
 				Threads.possiblyHandleInterrupts(false);
+				continue;
 			}
+			break;
+		}
 	}
 
 	public boolean acquireNonBlocking() {
@@ -86,14 +55,14 @@ public class SubLSemaphore extends AbstractSubLObject implements SubLObject {
 	}
 
 	public boolean acquireNonBlocking(int count) {
-		return this.sem.tryAcquire(count);
+		return sem.tryAcquire(count);
 	}
 
 	public boolean acquireWithTimeoutNanoSecs(int count, long nanosecs) {
 		while (true) {
 			long startNanos = System.nanoTime();
 			try {
-				return this.sem.tryAcquire(count, nanosecs, TimeUnit.NANOSECONDS);
+				return sem.tryAcquire(count, nanosecs, TimeUnit.NANOSECONDS);
 			} catch (InterruptedException e) {
 				Threads.possiblyHandleInterrupts(false);
 				long nanoSecsWaited = System.nanoTime() - startNanos;
@@ -102,199 +71,241 @@ public class SubLSemaphore extends AbstractSubLObject implements SubLObject {
 				else
 					nanosecs = 0L;
 			}
-			}
+		}
 	}
 
 	public boolean acquireWithTimeoutNanoSecs(long nanosecs) {
 		return this.acquireWithTimeoutNanoSecs(1, nanosecs);
 	}
 
+	@Override
 	public boolean canFastHash() {
 		return true;
 	}
 
 	public int drain() {
-		return this.sem.drainPermits();
+		return sem.drainPermits();
 	}
 
 	public int getCount() {
-		return this.sem.availablePermits();
+		return sem.availablePermits();
 	}
 
 	public String getName() {
-		return this.name.getString();
+		return name.getStringValue();
 	}
 
 	public SubLString getSubLName() {
-		return this.name;
+		return name;
 	}
 
+	@Override
 	public SubLSymbol getType() {
 		return SubLSemaphore.SEMAPHORE_TYPE_SYMBOL;
 	}
 
+	@Override
 	public SubLFixnum getTypeCode() {
-		// @todo we need to define a *DTP* number for these objects
 		Errors.unimplementedMethod("SubLSemaphore.getTypeCode()");
 		return CommonSymbols.ZERO_INTEGER;
 	}
 
+	@Override
 	public int hashCode(int depth) {
-		return this.sem.hashCode();
+		return sem.hashCode();
 	}
 
+	@Override
 	public boolean isAlien() {
 		return false;
 	}
 
+	@Override
 	public boolean isAtom() {
 		return true;
 	}
 
+	@Override
 	public boolean isBigIntegerBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isBoolean() {
 		return false;
 	}
 
+	@Override
 	public boolean isChar() {
 		return false;
 	}
 
+	@Override
 	public boolean isCons() {
 		return false;
 	}
 
+	@Override
 	public boolean isDouble() {
 		return false;
 	}
 
+	@Override
 	public boolean isEnvironment() {
 		return false;
 	}
 
+	@Override
 	public boolean isError() {
 		return false;
 	}
 
+	@Override
 	public boolean isFixnum() {
 		return false;
 	}
 
+	@Override
 	public boolean isFunction() {
 		return false;
 	}
 
+	@Override
 	public boolean isFunctionSpec() {
 		return false;
 	}
 
+	@Override
 	public boolean isGuid() {
 		return false;
 	}
 
+	@Override
 	public boolean isHashtable() {
 		return false;
 	}
 
+	@Override
 	public boolean isHashtableIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isIntBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isInteger() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyhash() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyhashIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyword() {
 		return false;
 	}
 
+	@Override
 	public boolean isList() {
 		return false;
 	}
 
+	@Override
 	public boolean isLock() {
 		return false;
 	}
 
+	@Override
 	public boolean isLongBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isMacroOperator() {
 		return false;
 	}
 
+	@Override
 	public boolean isNil() {
 		return false;
 	}
 
+	@Override
 	public boolean isNumber() {
 		return false;
 	}
 
+	@Override
 	public boolean isPackage() {
 		return false;
 	}
 
+	@Override
 	public boolean isPackageIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isProcess() {
 		return false;
 	}
 
+	@Override
 	public boolean isReadWriteLock() {
 		return false;
 	}
 
+	@Override
 	public boolean isRegexPattern() {
 		return false;
 	}
 
+	@Override
 	public boolean isSemaphore() {
 		return true;
 	}
 
+	@Override
 	public boolean isSequence() {
 		return false;
 	}
 
+	@Override
 	public boolean isStream() {
 		return false;
 	}
 
+	@Override
 	public boolean isString() {
 		return false;
 	}
 
+	@Override
 	public boolean isStructure() {
 		return false;
 	}
 
+	@Override
 	public boolean isSymbol() {
 		return false;
 	}
 
+	@Override
 	public boolean isVector() {
 		return false;
 	}
@@ -304,30 +315,22 @@ public class SubLSemaphore extends AbstractSubLObject implements SubLObject {
 	}
 
 	public void release(int count) {
-		this.sem.release(count);
+		sem.release(count);
 	}
 
+	@Override
 	public SubLSemaphore toSemaphore() {
 		return this;
 	}
 
-	public String toString() {
-		return "#<" + this.toTypeName() + " \"" + this.getName() + "\" Permits(" + this.sem.availablePermits() + ") @ "
+	@Override
+	public String printObjectImpl() {
+		return "#<" + toTypeName() + " \"" + getName() + "\" Permits(" + sem.availablePermits() + ") @ "
 				+ this.hashCode(0) + ">";
 	}
 
-	//// Protected Area
-
+	@Override
 	public String toTypeName() {
-		return SubLSemaphore.SEMAPHORE_TYPE_NAME;
+		return "SEMAPHORE";
 	}
-
-	// common lisp additions
-
-	public String writeToString() {
-		// TODO Auto-generated method stub
-		return this.toString();
-	}
-
-	//// Internal Rep
 }

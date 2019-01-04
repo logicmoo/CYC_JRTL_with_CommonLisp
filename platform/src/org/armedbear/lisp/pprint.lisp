@@ -1,7 +1,7 @@
 ;;; pprint.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: pprint.lisp 12230 2009-10-26 22:41:29Z ehuelsmann $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -58,6 +58,8 @@
 (in-package #:xp)
 
 ;must do the following in common lisps not supporting *print-shared*
+
+(require "PRINT")
 
 (defvar *print-shared* nil)
 (export '(*print-shared*))
@@ -607,16 +609,23 @@
   (sys:output-object object (sys:out-synonym-of stream))
   object)
 
-(defun maybe-initiate-xp-printing (fn stream &rest args)
+(defun maybe-initiate-xp-printing (object fn stream &rest args)
   (if (xp-structure-p stream)
       (apply fn stream args)
       (let ((*abbreviation-happened* nil)
-	    (sys::*circularity-hash-table*
-             (if (and *print-circle* (null sys::*circularity-hash-table*))
-                 (make-hash-table :test 'eq)
-                 sys::*circularity-hash-table*))
 	    (*result* nil))
-	(xp-print fn (sys:out-synonym-of stream) args)
+        (if (and *print-circle* (null sys::*circularity-hash-table*))
+            (let ((sys::*circularity-hash-table* (make-hash-table :test 'eq)))
+              (setf (gethash object sys::*circularity-hash-table*) t)
+              (xp-print fn (make-broadcast-stream) args)
+              (let ((sys::*circularity-counter* 0))
+                (when (eql 0 (gethash object sys::*circularity-hash-table*))
+                  (setf (gethash object sys::*circularity-hash-table*)
+                        (incf sys::*circularity-counter*))
+                  (sys::print-label (gethash object sys::*circularity-hash-table*)
+                               (sys:out-synonym-of stream)))
+                (xp-print fn (sys:out-synonym-of stream) args)))
+            (xp-print fn (sys:out-synonym-of stream) args))
 	*result*)))
 
 (defun xp-print (fn stream args)
@@ -862,17 +871,19 @@
     (setf stream-symbol '*standard-output*))
   (when (and prefix-p per-line-prefix-p)
     (error "Cannot specify values for both PREFIX and PER-LINE-PREFIX."))
-  `(maybe-initiate-xp-printing
-     #'(lambda (,stream-symbol)
-	 (let ((+l ,object)
-               (+p ,(cond (prefix-p prefix)
-                          (per-line-prefix-p per-line-prefix)
-                          (t "")))
-	       (+s ,suffix))
-	   (pprint-logical-block+
+  `(let ((+l ,object))
+     (maybe-initiate-xp-printing
+      +l
+      #'(lambda (,stream-symbol)
+          (let ((+l +l)
+                (+p ,(cond (prefix-p prefix)
+                           (per-line-prefix-p per-line-prefix)
+                           (t "")))
+                (+s ,suffix))
+            (pprint-logical-block+
 	     (,stream-symbol +l +p +s ,per-line-prefix-p t nil)
 	     ,@ body nil)))
-     (sys:out-synonym-of ,stream-symbol)))
+      (sys:out-synonym-of ,stream-symbol))))
 
 ;Assumes var and args must be variables.  Other arguments must be literals or variables.
 
@@ -1345,14 +1356,14 @@
 ;;                                      stream object))
 ;; 	(t
 ;;          (assert nil)
-;;          (sys:output-object object stream))))
+;;          (syss:output-object object stream))))
 
 (defun output-pretty-object (object stream)
 ;;   (basic-write object stream))
   (cond ((xp-structure-p stream)
          (write+ object stream))
 	(*print-pretty*
-         (maybe-initiate-xp-printing #'(lambda (s o) (write+ o s))
+         (maybe-initiate-xp-printing object #'(lambda (s o) (write+ o s))
                                      stream object))
 	(t
          (assert nil)

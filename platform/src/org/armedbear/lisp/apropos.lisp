@@ -1,7 +1,7 @@
 ;;; apropos.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: apropos.lisp 12217 2009-10-23 21:34:37Z ehuelsmann $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -33,8 +33,14 @@
 
 (in-package #:system)
 
+(defun apropos-list  (string-designator &optional package-designator &keys (external-only nil external-only-supplied-p))
+   (sys::apropos-list-eo string-designator package-designator (and external-only-supplied-p external-only)))
+(defun apropos  (string-designator &optional package-designator &keys (external-only nil external-only-supplied-p))
+   (sys::apropos-eo string-designator package-designator (and external-only-supplied-p external-only)))
 
-(defun apropos-list (string-designator &optional package-designator)
+
+(defun sys::apropos-list-eo (string-designator package-designator
+                                                 external-only)
   (if package-designator
       (let ((package (find-package package-designator))
             (string (string string-designator))
@@ -43,17 +49,21 @@
           (declare (type symbol symbol))
           (when (search string (symbol-name symbol) :test #'char-equal)
             (push symbol result)))
-        (dolist (symbol (package-internal-symbols package))
-          (declare (type symbol symbol))
-          (when (search string (symbol-name symbol) :test #'char-equal)
-            (push symbol result)))
+        (unless external-only
+          (dolist (symbol (package-internal-symbols package))
+            (declare (type symbol symbol))
+            (when (search string (symbol-name symbol) :test #'char-equal)
+              (push symbol result))))
         result)
       (mapcan (lambda (package)
-		(apropos-list string-designator package))
-	      (list-all-packages))))
+                (sys::apropos-list-eo string-designator package external-only))
+              (list-all-packages))))
 
-(defun apropos (string-designator &optional package-designator)
-  (dolist (symbol (apropos-list string-designator package-designator))
+
+(defun sys::apropos-eo (string-designator package-designator external-only)
+  (dolist (symbol (remove-duplicates (sys::apropos-list-eo string-designator
+                                                   package-designator
+                                                   external-only)))
     (fresh-line)
     (prin1 symbol)
     (when (boundp symbol)

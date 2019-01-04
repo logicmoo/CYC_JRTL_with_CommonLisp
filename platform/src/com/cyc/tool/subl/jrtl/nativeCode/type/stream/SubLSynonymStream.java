@@ -1,121 +1,129 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.type.stream;
 
 import java.io.File;
 import java.io.FileDescriptor;
 
+import org.armedbear.lisp.Keyword;
+import org.armedbear.lisp.Stream;
+import org.armedbear.lisp.Symbol;
+import org.armedbear.lisp.SynonymStream;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-//// Internal Imports
+public class SubLSynonymStream extends AbstractRandomAccessSubLStream {
+	public SubLSynonymStream(SubLSymbol streamSymbol) {
+		super(Keyword.TEXT_KEYWORD_CHARACTER, getDirection(streamSymbol),
+				Keyword.ERROR_KEYWORD, Keyword.ERROR_KEYWORD);
+		this.streamSymbol = (Symbol) streamSymbol;
+	}
 
-//// External Imports
+	/**
+	 * @param streamSymbol
+	 * @return
+	 */
+	public static SubLSymbol getDirection(SubLSymbol streamSymbol) {
+		if(streamSymbol==null) return null;
+		SubLObject o = streamSymbol.getValue();
+		if(o==null) return null;
+		SubLStream s = o.getStream(true);
+		if(s==null) {
+			return Keyword.UNDERFLOW;
+		}
+		SubLSymbol d = s.getDirection();
+		return d.toSymbol();
+	}
 
-public class SubLSynonymStream extends AbstractSubLStream {
-
-	//// Constructors
-
-	//// Internal Rep
 	private SubLSymbol streamSymbol;
 
-	//// Public Area
-
-	/** Creates a new instance of SubLSynonymStream. */
-	SubLSynonymStream(SubLSymbol streamSymbol) {
-		super(CommonSymbols.TEXT_KEYWORD, streamSymbol.getValue().getStream(true).getDirection(),
-				CommonSymbols.ERROR_KEYWORD, CommonSymbols.ERROR_KEYWORD);
-		this.streamSymbol = streamSymbol;
-	}
-
+	@Override
 	public SubLSymbol getDirection() {
-		return this.getStream(true).getDirection();
+		return getStream(true).getDirection();
 	}
 
+	@Override
 	public SubLSymbol getElementType() {
-		return this.getStream(true).getElementType();
+		return getStream(true).getElementType();
 	}
 
-	/** throws exception if isRandomAccess() returns false */
+	@Override
 	public FileDescriptor getFD() {
-		return this.getStream(true).getFD();
+		return getStream(true).getFD();
 	}
 
+	@Override
 	public File getFile() {
-		return this.getStream(true).getFile();
+		return getStream(true).getFile();
 	}
 
-	/** throws exception if isRandomAccess() returns false */
+	@Override
 	public long getFilePointer() {
-		return this.getStream(true).getFilePointer();
+		return getStream(true).getFilePointer();
 	}
 
+	@Override
 	public String getNewline() {
-		return this.getStream(true).getNewline();
+		return getStream(true).getNewline();
 	}
 
+	@Override
 	public SubLStream getStream(boolean followSynonymStream) {
 		if (!followSynonymStream)
 			return this;
 		try {
-			SubLStream result = this.streamSymbol.getValue().getStream(true);
-			while (result instanceof SubLSynonymStream)
-				result = ((SubLSynonymStream) result).getStreamSymbol().getValue().getStream(true);
+			SubLStream result;
+			for (result = streamSymbol.getValue()
+					.getStream(true); result instanceof SubLSynonymStream; result = ((SubLSynonymStream) result)
+							.getStreamSymbol().getValue().getStream(true)) {
+			}
 			return result;
 		} catch (Exception e) {
 			return this;
 		}
 	}
 
+	@Override
 	public SubLSymbol getStreamSymbol() {
-		return this.streamSymbol;
+		return streamSymbol;
 	}
 
+	@Override
 	public SubLSymbol ifExists() {
-		return this.getStream(true).ifExists();
+		return getStream(true).ifExists();
 	}
 
+	@Override
 	public SubLSymbol ifNotExists() {
-		return this.getStream(true).ifNotExists();
+		return getStream(true).ifNotExists();
 	}
 
+	@Override
 	public boolean isInteractive() {
-		return this.getStream(true).isInteractive();
+		return getStream(true).isInteractive();
 	}
 
+	@Override
 	public boolean isRandomAccess() {
-		return this.getStream(true).isRandomAccess();
+		return getStream(true).isRandomAccess();
 	}
 
 	/** throws exception if isRandomAccess() returns false */
-	public long length() {
-		return this.getStream(true).length();
+	public long file_length() {
+		return getStream(true).file_length();
 	}
 
 	/** throws exception if isRandomAccess() returns false */
 	public void seek(long pos) {
-		this.getStream(true).seek(pos);
+		getStream(true).seek(pos);
 	}
 
+	@Override
 	public void setIsInteractive(boolean newValue) {
-		this.getStream(true).setIsInteractive(newValue);
+		getStream(true).setIsInteractive(newValue);
 	}
 
 	/*
@@ -126,47 +134,40 @@ public class SubLSynonymStream extends AbstractSubLStream {
 
 	/** throws exception if isRandomAccess() returns false */
 	public void setLength(long newLength) {
-		this.getStream(true).setLength(newLength);
+		getStream(true).setLength(newLength);
 	}
 
 	public void setNewline(String newline) {
-		this.getStream(true).setNewline(newline);
+		getStream(true).setNewline(newline);
 	}
 
 	/** Method created to avoid casting */
 	public SubLInputBinaryStream toInputBinaryStream() {
-		return this.getStream(true).toInputBinaryStream();
+		return getStream(true).toInputBinaryStream();
 	}
 
 	/** Method created to avoid casting */
 	public SubLInputStream toInputStream() {
-		return this.getStream(true).toInputStream();
+		return getStream(true).toInputStream();
 	}
 
 	/** Method created to avoid casting */
 	public SubLInputTextStream toInputTextStream() {
-		return this.getStream(true).toInputTextStream();
+		return getStream(true).toInputTextStream();
 	}
 
 	/** Method created to avoid casting */
 	public SubLOutputBinaryStream toOutputBinaryStream() {
-		return this.getStream(true).toOutputBinaryStream();
+		return getStream(true).toOutputBinaryStream();
 	}
 
 	/** Method created to avoid casting */
 	public SubLOutputStream toOutputStream() {
-		return this.getStream(true).toOutputStream();
+		return getStream(true).toOutputStream();
 	}
 
-	//// Protected Area
-
-	//// Private Area
-
-	/** Method created to avoid casting */
+	@Override
 	public SubLOutputTextStream toOutputTextStream() {
-		return this.getStream(true).toOutputTextStream();
+		return getStream(true).toOutputTextStream();
 	}
-
-	//// Main
-
 }

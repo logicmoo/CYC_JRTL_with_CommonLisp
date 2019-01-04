@@ -1,22 +1,6 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
@@ -27,17 +11,55 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.UUID;
 
-//// Internal Imports
+public class SubLGuid extends FromSubLisp implements SubLObject, Comparable<SubLGuid> {
+	SubLGuid() {
+		this(UUID.randomUUID());
+	}
 
-//// External Imports
+	SubLGuid(String guidString) {
+		this(UUID.fromString(guidString), guidString);
+	}
 
-public class SubLGuid extends AbstractSubLObject implements SubLObject, Comparable<SubLGuid> {
+	SubLGuid(SubLVector data) {
+		this(new UUID(guidMSB(data), guidLSB(data)));
+	}
 
-	public static String GUID_TYPE_NAME = "GUID";
+	SubLGuid(UUID guid) {
+		this(guid, guid.toString());
+	}
 
-	//// Constructors
+	SubLGuid(UUID guid, String guidString) {
+		this.guid = guid;
+		this.guidString = guidString;
+	}
 
-	static protected int compareTimeVersionedGUIDs(UUID guid1, UUID guid2) {
+	private static long guidLSB(SubLVector data) {
+		long lsb = 0L;
+		assert data.size() == 16;
+		for (int i = 8; i < 16; ++i)
+			lsb = lsb << 8 | (byte) data.get(i).toInteger().intValue() & 0xFF;
+		return lsb;
+	}
+
+	private static long guidMSB(SubLVector data) {
+		long msb = 0L;
+		assert data.size() == 16;
+		for (int i = 0; i < 8; ++i)
+			msb = msb << 8 | (byte) data.get(i).toInteger().intValue() & 0xFF;
+		return msb;
+	}
+
+	public static boolean isGuidString(String string) {
+		boolean isValid = false;
+		try {
+			UUID testUUID = UUID.fromString(string);
+			isValid = true;
+		} catch (Exception ex) {
+		}
+		return isValid;
+	}
+
+	protected static int compareTimeVersionedGUIDs(UUID guid1, UUID guid2) {
 		int var1 = guid1.variant();
 		int var2 = guid2.variant();
 		if (var1 != var2)
@@ -57,331 +79,292 @@ public class SubLGuid extends AbstractSubLObject implements SubLObject, Comparab
 		return 0;
 	}
 
-	private static long guidLSB(SubLVector data) {
-		long lsb = 0;
-		assert data.size() == 16;
-		for (int i = 8; i < 16; i++)
-			lsb = lsb << 8 | (byte) data.get(i).toInteger().intValue() & 0xff;
-		return lsb;
-	}
-
-	private static long guidMSB(SubLVector data) {
-		long msb = 0;
-		assert data.size() == 16;
-		for (int i = 0; i < 8; i++)
-			msb = msb << 8 | (byte) data.get(i).toInteger().intValue() & 0xff;
-		return msb;
-	}
-
-	public static boolean isGuidString(String string) {
-		// @hack this is incredibly expensive ....
-		boolean isValid = false;
-		try {
-			UUID testUUID = UUID.fromString(string);
-			isValid = true;
-		} catch (Exception xcpt) {
-		}
-		return isValid;
-	}
-
 	private UUID guid;
-
-	//// Public Area
-
 	private String guidString;
+	public static String GUID_TYPE_NAME = "GUID";
 
-	/** Creates a new instance of SubLGuid. */
-
-	SubLGuid() {
-		this(UUID.randomUUID());
-	}
-
-	SubLGuid(String guidString) {
-		this(UUID.fromString(guidString), guidString);
-	}
-
-	SubLGuid(SubLVector data) {
-		this(new UUID(SubLGuid.guidMSB(data), SubLGuid.guidLSB(data)));
-	}
-
-	SubLGuid(UUID guid) {
-		this(guid, guid.toString());
-	}
-
-	SubLGuid(UUID guid, String guidString) {
-		this.guid = guid;
-		this.guidString = guidString;
-	}
-
+	@Override
 	public boolean canFastHash() {
 		return true;
 	}
 
+	@Override
 	public int compareTo(SubLGuid obj) {
 		if (obj == null)
 			throw new NullPointerException();
-		// this will throw the required class-cast exception if it fails
-		SubLGuid otherGuid = obj;
-		int thisVersion = this.guid.version();
-		int otherVersion = otherGuid.getNativeGuid().version();
-		// perform the comparison
+		int thisVersion = guid.version();
+		int otherVersion = obj.getNativeGuid().version();
 		if (thisVersion != otherVersion)
-			// they can already not be equal at this point
 			return thisVersion > otherVersion ? 1 : -1;
-		// at this point we are comparing compatible versions
-		if (this.guid.version() == 1)
-			return SubLGuid.compareTimeVersionedGUIDs(this.guid, otherGuid.getNativeGuid());
-		else if (this.guid.version() == 4)
-			return this.stringRepresentation().compareTo(otherGuid.stringRepresentation());
-		else
-			return this.guid.compareTo(otherGuid.getNativeGuid());
+		if (guid.version() == 1)
+			return compareTimeVersionedGUIDs(guid, obj.getNativeGuid());
+		if (guid.version() == 4)
+			return stringRepresentation().compareTo(obj.stringRepresentation());
+		return guid.compareTo(obj.getNativeGuid());
 	}
 
+	@Override
 	public boolean equalp(SubLObject obj) {
-		if (obj == null)
-			return false;
-		if (obj == this)
-			return true;
-		if (!obj.isGuid())
-			return false;
-		return this.compareTo(obj.toGuid()) == 0;
+		return obj != null && (obj == this || obj.isGuid() && compareTo(obj.toGuid()) == 0);
 	}
 
+	@Override
 	public boolean equals(Object obj) {
-		if (obj == null)
-			return false;
-		if (obj == this)
-			return true;
-		if (!(obj instanceof SubLGuid))
-			return false;
-		return this.compareTo((SubLGuid) obj) == 0;
+		return obj != null && (obj == this || obj instanceof SubLGuid && compareTo((SubLGuid) obj) == 0);
 	}
 
 	public void fillByteVector(SubLVector byteVector) {
 		assert byteVector.size() == 16;
-
-		// Assume the GUID layout in the GUID string is like so :
-		// M7 M6 M5 M4 M3 M2 M1 M0 L7 L6 L5 L4 L3 L2 L1 L0
-		// 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-		long msb = this.guid.getMostSignificantBits();
-		for (int i = 7; i >= 0; i--) {
-			int nextByte = (int) msb & 0xff;
+		long msb = guid.getMostSignificantBits();
+		for (int i = 7; i >= 0; --i) {
+			int nextByte = (int) msb & 0xFF;
 			SubLInteger nextSubLByte = SubLNumberFactory.makeSmallInteger(nextByte);
 			byteVector.set(i, nextSubLByte);
 			msb >>= 8;
 		}
-
-		long lsb = this.guid.getLeastSignificantBits();
-		for (int i = 15; i >= 8; i--) {
-			int nextByte = (int) lsb & 0xff;
-			SubLInteger nextSubLByte = SubLNumberFactory.makeSmallInteger(nextByte);
-			byteVector.set(i, nextSubLByte);
+		long lsb = guid.getLeastSignificantBits();
+		for (int j = 15; j >= 8; --j) {
+			int nextByte2 = (int) lsb & 0xFF;
+			SubLInteger nextSubLByte2 = SubLNumberFactory.makeSmallInteger(nextByte2);
+			byteVector.set(j, nextSubLByte2);
 			lsb >>= 8;
 		}
 	}
 
 	public SubLString getGuidString() {
-		return SubLObjectFactory.makeString(this.stringRepresentation());
+		return SubLObjectFactory.makeString(stringRepresentation());
 	}
 
-	//// Protected Area
-	protected UUID getNativeGuid() {
-		return this.guid;
+	public UUID getNativeGuid() {
+		return guid;
 	}
 
+	@Override
 	public SubLSymbol getType() {
 		return Types.$dtp_guid$;
 	}
 
+	@Override
 	public SubLFixnum getTypeCode() {
 		return CommonSymbols.ONE_HUNDRED_TWENTY_SEVEN_INTEGER;
 	}
 
+	@Override
 	public int hashCode(int depth) {
-		return this.guid.hashCode();
+		return guid.hashCode();
 	}
 
+	@Override
 	public boolean isAlien() {
 		return false;
 	}
 
+	@Override
 	public boolean isAtom() {
 		return true;
 	}
 
+	@Override
 	public boolean isBigIntegerBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isBoolean() {
 		return false;
 	}
 
+	@Override
 	public boolean isChar() {
 		return false;
 	}
 
+	@Override
 	public boolean isCons() {
 		return false;
 	}
 
+	@Override
 	public boolean isDouble() {
 		return false;
 	}
 
+	@Override
 	public boolean isEnvironment() {
 		return false;
 	}
 
+	@Override
 	public boolean isError() {
 		return false;
 	}
 
+	@Override
 	public boolean isFixnum() {
 		return false;
 	}
 
+	@Override
 	public boolean isFunction() {
 		return false;
 	}
 
+	@Override
 	public boolean isFunctionSpec() {
 		return false;
 	}
 
+	@Override
 	public boolean isGuid() {
 		return true;
 	}
 
+	@Override
 	public boolean isHashtable() {
 		return false;
 	}
 
+	@Override
 	public boolean isHashtableIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isIntBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isInteger() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyhash() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyhashIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyword() {
 		return false;
 	}
 
+	@Override
 	public boolean isList() {
 		return false;
 	}
 
+	@Override
 	public boolean isLock() {
 		return false;
 	}
 
+	@Override
 	public boolean isLongBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isMacroOperator() {
 		return false;
 	}
 
+	@Override
 	public boolean isNil() {
 		return false;
 	}
 
+	@Override
 	public boolean isNumber() {
 		return false;
 	}
 
+	@Override
 	public boolean isPackage() {
 		return false;
 	}
 
+	@Override
 	public boolean isPackageIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isProcess() {
 		return false;
 	}
 
+	@Override
 	public boolean isReadWriteLock() {
 		return false;
 	}
 
+	@Override
 	public boolean isRegexPattern() {
 		return false;
 	}
 
+	@Override
 	public boolean isSemaphore() {
 		return false;
 	}
 
+	@Override
 	public boolean isSequence() {
 		return false;
 	}
 
+	@Override
 	public boolean isStream() {
 		return false;
 	}
 
+	@Override
 	public boolean isString() {
 		return false;
 	}
 
+	@Override
 	public boolean isStructure() {
 		return false;
 	}
 
+	@Override
 	public boolean isSymbol() {
 		return false;
 	}
 
+	@Override
 	public boolean isVector() {
 		return false;
 	}
 
 	public String stringRepresentation() {
-		return this.guidString;
+		return guidString;
 	}
 
-	//// Private Area
-
-	/** Method created to avoid casting */
+	@Override
 	public SubLGuid toGuid() {
 		return this;
 	}
 
-	public String toString() {
-		return "#G\"" + this.stringRepresentation() + "\"";
+	@Override
+	public String printObjectImpl() {
+		return "#G\"" + stringRepresentation() + "\"";
 	}
 
-	//// Internal Rep
-
+	@Override
 	public String toTypeName() {
-		return SubLGuid.GUID_TYPE_NAME;
-	}
-
-	// common lisp additions
-
-	public String writeToString() {
-		// TODO Auto-generated method stub
-		return this.toString();
+		return "GUID";
 	}
 }

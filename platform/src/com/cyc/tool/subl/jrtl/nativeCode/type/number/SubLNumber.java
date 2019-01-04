@@ -1,45 +1,21 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.type.number;
 
 import java.math.BigInteger;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 
-//// Internal Imports
-
-//// External Imports
-
 public interface SubLNumber extends SubLObject, Comparable {
-
 	public static int FOUR_BYTE_INTEGER = 0;
-
 	public static int EIGHT_BYTE_INTEGER = 1;
-
 	public static int BIGINT_INTEGER = 2;
-
 	public static int FLOATING_POINT = 3;
 
 	SubLNumber abs();
 
-	SubLNumber add(SubLNumber num);
+	SubLNumber add(SubLNumber p0);
 
 	SubLNumber arcCosine();
 
@@ -47,6 +23,7 @@ public interface SubLNumber extends SubLObject, Comparable {
 
 	SubLNumber arcTangent();
 
+	@Override
 	BigInteger bigIntegerValue();
 
 	SubLInteger ceiling();
@@ -55,10 +32,11 @@ public interface SubLNumber extends SubLObject, Comparable {
 
 	SubLNumber decrement();
 
-	SubLNumber decrement(SubLNumber decrementSize);
+	SubLNumber decrement(SubLNumber p0);
 
-	SubLNumber divide(SubLNumber num);
+	SubLNumber divide(SubLNumber p0);
 
+	@Override
 	double doubleValue();
 
 	SubLFloat fceiling();
@@ -75,11 +53,12 @@ public interface SubLNumber extends SubLObject, Comparable {
 
 	Number getNativeNumber();
 
+	@Override
 	int getNumSize();
 
-	boolean greaterThanInternal(SubLObject num);
+	boolean greaterThanInternal(SubLObject p0);
 
-	boolean greaterThanOrEqualInternal(SubLObject num);
+	boolean greaterThanOrEqualInternal(SubLObject p0);
 
 	SubLNumber hyperbolicArcCosine();
 
@@ -95,49 +74,59 @@ public interface SubLNumber extends SubLObject, Comparable {
 
 	SubLNumber increment();
 
-	SubLNumber increment(SubLNumber incrementSize);
+	SubLNumber increment(SubLNumber p0);
 
+	@Override
 	int intValue();
 
+	@Override
 	boolean isNegative();
 
+	@Override
 	boolean isPositive();
 
+	@Override
 	boolean isZero();
 
-	boolean lessThanInternal(SubLObject num);
+	boolean lessThanInternal(SubLObject p0);
 
-	boolean lessThanOrEqualInternal(SubLObject num);
+	boolean lessThanOrEqualInternal(SubLObject p0);
 
 	SubLNumber log();
 
-	SubLNumber log(SubLNumber base);
+	SubLNumber log(SubLNumber p0);
 
+	@Override
 	long longValue();
 
-	SubLNumber max(SubLNumber num);
+	SubLNumber max(SubLNumber p0);
 
-	SubLNumber min(SubLNumber min);
+	SubLNumber min(SubLNumber p0);
 
-	SubLInteger mod(SubLNumber divisor);
+	SubLInteger mod(SubLNumber p0);
 
-	SubLNumber multiply(SubLNumber num);
+	SubLNumber multiply(SubLNumber p0);
 
-	boolean numE(SubLObject num);
+	@Override
+	boolean numE(SubLObject p0);
 
-	boolean numericallyEqualInternal(SubLObject num);
+	boolean numericallyEqualInternal(SubLObject p0);
 
-	boolean numG(SubLObject num);
+	@Override
+	boolean numG(SubLObject p0);
 
-	boolean numGE(SubLObject num);
+	@Override
+	boolean numGE(SubLObject p0);
 
-	boolean numL(SubLObject num);
+	@Override
+	boolean numL(SubLObject p0);
 
-	boolean numLE(SubLObject num);
+	@Override
+	boolean numLE(SubLObject p0);
 
-	SubLNumber pow(SubLNumber power);
+	SubLNumber pow(SubLNumber p0);
 
-	SubLInteger remainder(SubLNumber divisor);
+	SubLInteger remainder(SubLNumber p0);
 
 	SubLInteger round();
 
@@ -145,12 +134,11 @@ public interface SubLNumber extends SubLObject, Comparable {
 
 	SubLNumber sine();
 
-	SubLNumber sqrt(SubLNumber num);
+	SubLNumber sqrt(SubLNumber p0);
 
-	SubLNumber subtract(SubLNumber num);
+	SubLNumber subtract(SubLNumber p0);
 
 	SubLNumber tangent();
 
 	SubLInteger truncate();
-
 }

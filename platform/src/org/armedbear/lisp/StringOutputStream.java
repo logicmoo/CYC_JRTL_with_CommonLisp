@@ -2,7 +2,7 @@
  * StringOutputStream.java
  *
  * Copyright (C) 2002-2004 Peter Graves
- * $Id: StringOutputStream.java 12513 2010-03-02 22:35:36Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,64 +31,134 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*;
+
+import java.io.IOException;
 import java.io.StringWriter;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+public final class StringOutputStream extends Stream
+{
+    // for OLD-WORKS
+    private final StringWriter stringWriter;
+    // for NEW-BROKEN
+    private final SeekableStringWriter seekableStringWriter;
 
-public class StringOutputStream extends Stream {
-	private StringWriter stringWriter;
+    public StringOutputStream()
+    {
+        this(Symbol.CHARACTER);
+    }
 
-	public StringOutputStream() {
-		this(LispSymbols.CHARACTER);
-	}
+    StringOutputStream(LispObject elementType)
+    {
+        super(Symbol.STRING_OUTPUT_STREAM);
+        this.setStreamElementType(elementType);
+        this.eolStyle = EolStyle.RAW;
+        // DONT REGRESS (true = OLD-WORKS)
+        if(true) {
+            initAsCharacterOutputStream(stringWriter = new StringWriter());
+			seekableStringWriter = null;
+        } else{
+            initAsCharacterOutputStream(seekableStringWriter = new SeekableStringWriter());
+            stringWriter = null;
+        }
+    }
 
-	StringOutputStream(SubLObject elementType) {
-		super(LispSymbols.STRING_OUTPUT_STREAM);
-		this.elementType = elementType;
-		this.eolStyle = EolStyle.RAW;
-		this.initAsCharacterOutputStream(this.stringWriter = new StringWriter());
-	}
+    public LispObject typeOf()
+    {
+        return Symbol.STRING_OUTPUT_STREAM;
+    }
 
-	public long _getFilePosition() {
-		if (this.elementType == Lisp.NIL)
-			return 0;
-		return this.stringWriter.getBuffer().length();
-	}
+    public LispObject classOf()
+    {
+        return BuiltInClass.STRING_OUTPUT_STREAM;
+    }
 
-	public SubLObject classOf() {
-		return BuiltInClass.STRING_OUTPUT_STREAM;
-	}
+    public LispObject typep(LispObject type)
+    {
+        if (type == Symbol.STRING_OUTPUT_STREAM)
+            return T;
+        if (type == Symbol.STRING_STREAM)
+            return T;
+        if (type == BuiltInClass.STRING_OUTPUT_STREAM)
+            return T;
+        if (type == BuiltInClass.STRING_STREAM)
+            return T;
+        return super.typep(type);
+    }
 
-	public SubLObject getOutputString() {
-		if (this.elementType == Lisp.NIL)
-			return new NilVector(0);
-		StringBuffer sb = this.stringWriter.getBuffer();
-		SubLString s = LispObjectFactory.makeString(sb);
-		sb.setLength(0);
-		return s;
-	}
+    protected long _getFilePosition()
+    {
+        if (getStreamElementType() == NIL)
+            return 0;
+        // DONT REGRESS (true = OLD-WORKS)
+        if(true) return stringWriter.getBuffer().length();
+        return offset;
+    }
 
-	public String toString() {
-		return this.unreadableString("STRING-OUTPUT-STREAM");
-	}
+    protected boolean _setFilePosition(LispObject arg) {
+       // DONT REGRESS (true = OLD-WORKS)
+        if(true) return super._setFilePosition(arg);
 
-	public SubLObject typeOf() {
-		return LispSymbols.STRING_OUTPUT_STREAM;
-	}
+        if (getStreamElementType() == NIL)
+            return false;
 
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.STRING_OUTPUT_STREAM)
-			return Lisp.T;
-		if (type == LispSymbols.STRING_STREAM)
-			return Lisp.T;
-		if (type == BuiltInClass.STRING_OUTPUT_STREAM)
-			return Lisp.T;
-		if (type == BuiltInClass.STRING_STREAM)
-			return Lisp.T;
-		return super.typep(type);
-	}
+        try {
+            int offset;
 
+            if (arg == Keyword.START)
+                offset = 0;
+            else if (arg == Keyword.END)
+                offset = seekableStringWriter.getBuffer().length();
+            else {
+                long n = Fixnum.getValue(arg);
+                offset = (int) n; // FIXME arg might be a bignum
+            }
+
+            seekableStringWriter.seek(offset);
+
+            this.offset = offset;
+        }
+        catch (IllegalArgumentException e) {
+            error(new StreamError(this, e));
+        }
+
+        return true;
+    }
+
+    public LispObject getBufferString()
+    {
+        if (getStreamElementType() == NIL)
+            return new NilVector(0);
+        StringBuffer sb = stringWriter.getBuffer();
+        AbstractString s = new SimpleString(sb);
+        sb.setLength(0);
+        return s;
+    }
+
+    // ### %make-string-output-stream
+    // %make-string-output-stream element-type => string-stream
+    private static final Primitive MAKE_STRING_OUTPUT_STREAM =
+        new Primitive("%make-string-output-stream", PACKAGE_SYS, false,
+                       "element-type")
+    {
+        public LispObject execute(LispObject arg)
+        {
+            return new StringOutputStream(arg);
+        }
+    };
+
+    // ### get-output-stream-string
+    // get-output-stream-string string-output-stream => string
+    private static final Primitive GET_OUTPUT_STREAM_STRING =
+        new Primitive("get-output-stream-string", "string-output-stream")
+    {
+        public LispObject execute(LispObject arg)
+        {
+            if (arg instanceof StringOutputStream)
+                return ((StringOutputStream)arg).getBufferString();
+            return type_error(this, Symbol.STRING_OUTPUT_STREAM);
+        }
+    };
 }

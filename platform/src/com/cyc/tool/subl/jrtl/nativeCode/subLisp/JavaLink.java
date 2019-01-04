@@ -1,13 +1,13 @@
 //
+// For LarKC
 //
-//
-
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +26,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLVector;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.AbstractSubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.AbstractSubLIntegerBignum;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLBigDecimal;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLBigIntBignum;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLLongBignum;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
@@ -36,172 +37,6 @@ import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 
 public class JavaLink extends SubLTrampolineFile {
-	static Boolean DEBUG;
-	public static SubLFile me;
-
-	static {
-		JavaLink.DEBUG = false;
-		JavaLink.me = new JavaLink();
-	}
-
-	public static SubLObject _call(Object methodObject, Object instanceObject, Object... argObjects) {
-		if (JavaLink.DEBUG)
-			System.out.println("JavaLink._call(" + methodObject + ", " + instanceObject + ", " + argObjects);
-		methodObject = JavaLink.possiblyUnbox(methodObject);
-		instanceObject = JavaLink.possiblyUnbox(instanceObject);
-		for (int i = 0; i < argObjects.length; ++i)
-			argObjects[i] = JavaLink.possiblyUnbox(argObjects[i]);
-		try {
-			if (methodObject instanceof Method) {
-				Method method = (Method) methodObject;
-				Object[] args = null;
-				if (argObjects != null) {
-					int argsCount = Array.getLength(argObjects);
-					args = new Object[argsCount];
-					for (int j = 0; j < argsCount; ++j)
-						args[j] = JavaLink.getJavaObject(method.getParameterTypes()[j], argObjects[j]);
-				}
-				return JavaLink.box(method.invoke(instanceObject, args));
-			}
-			throw new RuntimeException("Arguments that are instanceof Method are currently supported (called with "
-					+ methodObject + ".)" + " For now, use java-method to find the method first");
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e.getCause() != null ? e.getCause() : e);
-		} catch (IllegalArgumentException e2) {
-			throw new RuntimeException(e2.getCause() != null ? e2.getCause() : e2);
-		} catch (InvocationTargetException e3) {
-			throw new RuntimeException(e3.getCause() != null ? e3.getCause() : e3);
-		}
-	}
-
-	public static SubLObject _constructor(Object classNameOrReference, Object... parameters) {
-		if (JavaLink.DEBUG)
-			System.out.println("JavaLink._constructor(" + classNameOrReference + ", " + ", " + parameters);
-		classNameOrReference = JavaLink.possiblyUnbox(classNameOrReference);
-		for (int i = 0; i < parameters.length; ++i)
-			parameters[i] = JavaLink.possiblyUnbox(parameters[i]);
-		try {
-			Class classClass = JavaLink.classForName(classNameOrReference);
-			Class[] argClasses = null;
-			if (parameters.length > 0) {
-				argClasses = new Class[parameters.length];
-				for (int j = 0; j < parameters.length; ++j)
-					argClasses[j] = JavaLink.classForName(parameters[j]);
-			}
-			return JavaLink.box(classClass.getConstructor(argClasses));
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException(e.getCause() != null ? e.getCause() : e);
-		} catch (NoSuchMethodException e2) {
-			throw new RuntimeException(e2.getCause() != null ? e2.getCause() : e2);
-		}
-	}
-
-	public static SubLObject _method(Object classNameOrReference, Object methodName, Object... parameterTypes) {
-		if (JavaLink.DEBUG)
-			System.out.println(
-					"JavaLink._method(" + classNameOrReference + ", " + methodName + ", " + parameterTypes.toString());
-		classNameOrReference = JavaLink.possiblyUnbox(classNameOrReference);
-		methodName = JavaLink.possiblyUnbox(methodName);
-		for (int i = 0; i < parameterTypes.length; ++i)
-			parameterTypes[i] = JavaLink.possiblyUnbox(parameterTypes[i]);
-		try {
-			Class classClass = JavaLink.classForName(classNameOrReference);
-			String methodString = JavaLink.subLObjectToString(methodName);
-			Class[] argClasses = null;
-			if (parameterTypes != null) {
-				argClasses = new Class[parameterTypes.length];
-				for (int j = 0; j < parameterTypes.length; ++j)
-					argClasses[j] = JavaLink.classForName(parameterTypes[j]);
-			}
-			if (methodString.isEmpty() || methodName instanceof SubLObject && ((SubLObject) methodName).isNil())
-				return JavaLink.box(classClass.getDeclaredConstructor(argClasses));
-			return JavaLink.box(classClass.getDeclaredMethod(methodString, argClasses));
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException(e.getCause() != null ? e.getCause() : e);
-		} catch (NoSuchMethodException e2) {
-			throw new RuntimeException(e2.getCause() != null ? e2.getCause() : e2);
-		}
-	}
-
-	public static SubLObject _new(Object classNameOrConstructor, Object... parameters) {
-		if (JavaLink.DEBUG)
-			System.out.println("JavaLink._new(" + classNameOrConstructor + ", " + parameters + ")");
-		classNameOrConstructor = JavaLink.possiblyUnbox(classNameOrConstructor);
-		for (int i = 0; i < parameters.length; ++i)
-			parameters[i] = JavaLink.possiblyUnbox(parameters[i]);
-		try {
-			if (classNameOrConstructor instanceof Constructor) {
-				Class[] paramTypes = ((Constructor) classNameOrConstructor).getParameterTypes();
-				for (int j = 0; j < parameters.length; ++j)
-					parameters[j] = JavaLink.getJavaObject(paramTypes[j], parameters[j]);
-				return JavaLink.box(((Constructor) classNameOrConstructor).newInstance(parameters));
-			}
-			Class resultClass = JavaLink.classForName(classNameOrConstructor);
-			if (parameters.length > 0) {
-				Class[] argClasses = new Class[parameters.length];
-				Object[] argsConverted = new Object[parameters.length];
-				for (int k = 0; k < parameters.length; ++k) {
-					if (JavaLink.DEBUG)
-						System.out.println(
-								"arg " + k + " = [" + parameters[k] + "], is of type " + parameters[k].getClass());
-					argClasses[k] = JavaLink.getJavaClass(parameters[k]);
-					argsConverted[k] = JavaLink.getJavaObject(parameters[k]);
-				}
-				return JavaLink.box(resultClass.getConstructor(argClasses).newInstance(argsConverted));
-			}
-			return JavaLink.box(resultClass.newInstance());
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException(e.getCause() != null ? e.getCause() : e);
-		} catch (InstantiationException e2) {
-			throw new RuntimeException(e2.getCause() != null ? e2.getCause() : e2);
-		} catch (IllegalAccessException e3) {
-			throw new RuntimeException(e3.getCause() != null ? e3.getCause() : e3);
-		} catch (InvocationTargetException e4) {
-			throw new RuntimeException(e4.getCause() != null ? e4.getCause() : e4);
-		} catch (NoSuchMethodException e5) {
-			throw new RuntimeException(e5.getCause() != null ? e5.getCause() : e5);
-		}
-	}
-
-	public static SubLObject _static(Object methodObject, Object classObject, Object... argObjects) {
-		if (JavaLink.DEBUG)
-			System.out.println("JavaLink._static(" + methodObject + ", " + classObject + ", " + argObjects);
-		methodObject = JavaLink.possiblyUnbox(methodObject);
-		classObject = JavaLink.possiblyUnbox(classObject);
-		for (int i = 0; i < argObjects.length; ++i)
-			argObjects[i] = JavaLink.possiblyUnbox(argObjects[i]);
-		try {
-			Method method;
-			if (methodObject instanceof Method)
-				method = (Method) methodObject;
-			else if (argObjects.length > 0) {
-				Class[] argClasses = new Class[argObjects.length];
-				for (int j = 0; j < argObjects.length; ++j) {
-					if (JavaLink.DEBUG)
-						System.out.println(
-								"arg " + j + " = [" + argObjects[j] + "], is of type " + argObjects[j].getClass());
-					argClasses[j] = JavaLink.getJavaClass(argObjects[j]);
-				}
-				method = (Method) JavaLink.unbox(JavaLink._method(classObject, methodObject, (Object[]) argClasses));
-			} else
-				method = (Method) JavaLink.unbox(JavaLink._method(classObject, methodObject, new Object[0]));
-			Object[] args = null;
-			if (argObjects != null) {
-				int argsCount = Array.getLength(argObjects);
-				args = new Object[argsCount];
-				for (int k = 0; k < argsCount; ++k)
-					args[k] = JavaLink.getJavaObject(method.getParameterTypes()[k], argObjects[k]);
-			}
-			return JavaLink.box(method.invoke((Object) null, args));
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(e.getCause() != null ? e.getCause() : e);
-		} catch (IllegalArgumentException e2) {
-			throw new RuntimeException(e2.getCause() != null ? e2.getCause() : e2);
-		} catch (InvocationTargetException e3) {
-			throw new RuntimeException(e3.getCause() != null ? e3.getCause() : e3);
-		}
-	}
-
 	private static SubLObject box(Object object) {
 		SubLObject result;
 		try {
@@ -209,13 +44,13 @@ public class JavaLink extends SubLTrampolineFile {
 				result = SubLNil.NIL;
 			else if (object instanceof SubLObject)
 				result = (SubLObject) object;
-			else if (object.getClass().equals(JavaLink.classForName("Z")) || object instanceof Boolean)
+			else if (object.getClass().equals(classForName("Z")) || object instanceof Boolean)
 				result = SubLObjectFactory.makeBoolean((boolean) (Boolean) object);
-			else if (object.getClass().equals(JavaLink.classForName("C")) || object instanceof Character)
+			else if (object.getClass().equals(classForName("C")) || object instanceof Character)
 				result = SubLObjectFactory.makeChar(object.toString());
-			else if (object.getClass().equals(JavaLink.classForName("D")) || object instanceof Double)
+			else if (object.getClass().equals(classForName("D")) || object instanceof Double)
 				result = SubLObjectFactory.makeDouble(object.toString());
-			else if (object.getClass().equals(JavaLink.classForName("I")) || object instanceof Integer)
+			else if (object.getClass().equals(classForName("I")) || object instanceof Integer)
 				result = SubLObjectFactory.makeInteger(object.toString());
 			else
 				result = new SubLAlienObject(object);
@@ -228,39 +63,12 @@ public class JavaLink extends SubLTrampolineFile {
 		return result;
 	}
 
-	public static boolean canAssign(Class cls, Class toClass) {
-		if (cls.equals(toClass))
-			return true;
-		if (!cls.isPrimitive())
-			return toClass.isAssignableFrom(cls);
-		if (!toClass.isPrimitive())
-			return false;
-		if (Integer.TYPE.equals(cls))
-			return Long.TYPE.equals(toClass) || Float.TYPE.equals(toClass) || Double.TYPE.equals(toClass);
-		if (Long.TYPE.equals(cls))
-			return Float.TYPE.equals(toClass) || Double.TYPE.equals(toClass);
-		if (Boolean.TYPE.equals(cls))
-			return false;
-		if (Double.TYPE.equals(cls))
-			return false;
-		if (Float.TYPE.equals(cls))
-			return Double.TYPE.equals(toClass);
-		if (Character.TYPE.equals(cls))
-			return Integer.TYPE.equals(toClass) || Long.TYPE.equals(toClass) || Float.TYPE.equals(toClass)
-					|| Double.TYPE.equals(toClass);
-		if (Short.TYPE.equals(cls))
-			return Integer.TYPE.equals(toClass) || Long.TYPE.equals(toClass) || Float.TYPE.equals(toClass)
-					|| Double.TYPE.equals(toClass);
-		return Byte.TYPE.equals(cls) && (Short.TYPE.equals(toClass) || Integer.TYPE.equals(toClass)
-				|| Long.TYPE.equals(toClass) || Float.TYPE.equals(toClass) || Double.TYPE.equals(toClass));
-	}
-
 	private static Class classForName(Object rawClassName) throws ClassNotFoundException {
 		if (rawClassName instanceof Class)
 			return (Class) rawClassName;
 		String className;
 		if (rawClassName instanceof SubLObject)
-			className = JavaLink.subLObjectToString(rawClassName);
+			className = subLObjectToString(rawClassName);
 		else
 			className = rawClassName.toString();
 		if ("boolean".equals(className))
@@ -308,42 +116,42 @@ public class JavaLink extends SubLTrampolineFile {
 		try {
 			if (classClass.isAssignableFrom(coercible.getClass()))
 				return coercible;
-			if (coercible instanceof SubLObject && classClass.equals(JavaLink.classForName("Z")))
+			if (coercible instanceof SubLObject && classClass.equals(classForName("Z")))
 				return !((SubLObject) coercible).isNil();
 			if (coercible instanceof SubLSymbol)
-				return JavaLink.subLObjectToString(coercible);
-			if (coercible instanceof SubLObject && classClass.equals(JavaLink.classForName("C")))
+				return subLObjectToString(coercible);
+			if (coercible instanceof SubLObject && classClass.equals(classForName("C")))
 				return ((SubLObject) coercible).charValue();
-			if (coercible instanceof SubLObject && classClass.equals(JavaLink.classForName("D")))
+			if (coercible instanceof SubLObject && classClass.equals(classForName("D")))
 				return ((SubLObject) coercible).doubleValue();
-			if (coercible instanceof SubLObject && classClass.equals(JavaLink.classForName("I")))
+			if (coercible instanceof SubLObject && classClass.equals(classForName("I")))
 				return ((SubLObject) coercible).intValue();
-			if (coercible instanceof SubLObject && classClass.equals(JavaLink.classForName("J")))
+			if (coercible instanceof SubLObject && classClass.equals(classForName("J")))
 				return ((SubLObject) coercible).longValue();
 			if (classClass.getName().startsWith("[")) {
 				if (coercible instanceof SubLList)
-					return JavaLink.coerceToClass(classClass, ((SubLList) coercible).toSubLObjectArray());
+					return coerceToClass(classClass, ((SubLList) coercible).toSubLObjectArray());
 				if (coercible instanceof SubLVector)
-					return JavaLink.coerceToClass(classClass,
+					return coerceToClass(classClass,
 							((SubLVector) coercible).toArray(new Array[((SubLVector) coercible).size()]));
 				if (coercible.getClass().isArray()) {
 					int arrayLength = Array.getLength(coercible);
-					Class elemClass = JavaLink.classForName(classClass.getName().substring(1));
+					Class elemClass = classForName(classClass.getName().substring(1));
 					Object result = Array.newInstance(elemClass, arrayLength);
 					for (int i = 0; i < arrayLength; ++i) {
 						Object coercibleElem = Array.get(coercible, i);
-						if (coercibleElem instanceof SubLObject && elemClass.equals(JavaLink.classForName("Z")))
+						if (coercibleElem instanceof SubLObject && elemClass.equals(classForName("Z")))
 							Array.setBoolean(result, i, !((SubLObject) coercibleElem).isNil());
-						else if (coercibleElem instanceof SubLObject && elemClass.equals(JavaLink.classForName("C")))
+						else if (coercibleElem instanceof SubLObject && elemClass.equals(classForName("C")))
 							Array.setChar(result, i, ((SubLObject) coercibleElem).charValue());
-						else if (coercibleElem instanceof SubLObject && elemClass.equals(JavaLink.classForName("D")))
+						else if (coercibleElem instanceof SubLObject && elemClass.equals(classForName("D")))
 							Array.setDouble(result, i, ((SubLObject) coercibleElem).doubleValue());
-						else if (coercibleElem instanceof SubLObject && elemClass.equals(JavaLink.classForName("I")))
+						else if (coercibleElem instanceof SubLObject && elemClass.equals(classForName("I")))
 							Array.setInt(result, i, ((SubLObject) coercibleElem).intValue());
-						else if (coercibleElem instanceof SubLObject && elemClass.equals(JavaLink.classForName("J")))
+						else if (coercibleElem instanceof SubLObject && elemClass.equals(classForName("J")))
 							Array.setLong(result, i, ((SubLObject) coercibleElem).longValue());
 						else {
-							Object coercedElem = JavaLink.coerceToClass(elemClass, coercibleElem);
+							Object coercedElem = coerceToClass(elemClass, coercibleElem);
 							if (elemClass.isAssignableFrom(coercedElem.getClass()))
 								Array.set(result, i, coercedElem);
 							else if (JavaLink.DEBUG)
@@ -359,10 +167,6 @@ public class JavaLink extends SubLTrampolineFile {
 		} catch (ClassNotFoundException e) {
 			throw new RuntimeException(e.getCause() != null ? e.getCause() : e);
 		}
-	}
-
-	public static SubLObject coerceToSubLObject(Object object) {
-		return JavaLink.box(object);
 	}
 
 	private static Class getJavaClass(Object subLObject) {
@@ -385,6 +189,8 @@ public class JavaLink extends SubLTrampolineFile {
 			result = Long.TYPE;
 		else if (subLObject instanceof SubLBigIntBignum)
 			result = BigInteger.class;
+		else if (subLObject instanceof SubLBigDecimal)
+			result = BigDecimal.class;
 		else if (subLObject instanceof SubLVector)
 			result = ArrayList.class;
 		else if (subLObject instanceof AbstractSubLList)
@@ -401,46 +207,46 @@ public class JavaLink extends SubLTrampolineFile {
 		Object result;
 		if (subLObject instanceof SubLT && targetClass.isAssignableFrom(Boolean.TYPE))
 			result = ((SubLT) subLObject).toBoolean();
-		else if (subLObject instanceof SubLNil && JavaLink.canAssign(List.class, targetClass))
+		else if (subLObject instanceof SubLNil && canAssign(List.class, targetClass))
 			result = new ArrayList();
-		else if (subLObject instanceof SubLNil && JavaLink.canAssign(Boolean.TYPE, targetClass))
+		else if (subLObject instanceof SubLNil && canAssign(Boolean.TYPE, targetClass))
 			result = ((SubLNil) subLObject).toBoolean();
-		else if (subLObject instanceof SubLSymbol && JavaLink.canAssign(String.class, targetClass))
-			result = JavaLink.subLObjectToString(subLObject);
-		else if (subLObject instanceof SubLString && JavaLink.canAssign(String.class, targetClass))
-			result = ((SubLString) subLObject).getString();
-		else if (subLObject instanceof SubLCharacter && JavaLink.canAssign(Character.TYPE, targetClass))
+		else if (subLObject instanceof SubLSymbol && canAssign(String.class, targetClass))
+			result = subLObjectToString(subLObject);
+		else if (subLObject instanceof SubLString && canAssign(String.class, targetClass))
+			result = ((SubLString) subLObject).getStringValue();
+		else if (subLObject instanceof SubLCharacter && canAssign(Character.TYPE, targetClass))
 			result = ((SubLCharacter) subLObject).charValue();
-		else if (subLObject instanceof AbstractSubLFloat && JavaLink.canAssign(Double.TYPE, targetClass))
+		else if (subLObject instanceof AbstractSubLFloat && canAssign(Double.TYPE, targetClass))
 			result = ((AbstractSubLFloat) subLObject).doubleValue();
-		else if (subLObject instanceof AbstractSubLIntegerBignum && JavaLink.canAssign(Integer.TYPE, targetClass))
+		else if (subLObject instanceof AbstractSubLIntegerBignum && canAssign(Integer.TYPE, targetClass))
 			result = ((AbstractSubLIntegerBignum) subLObject).intValue();
-		else if (subLObject instanceof SubLLongBignum && JavaLink.canAssign(Long.TYPE, targetClass))
+		else if (subLObject instanceof SubLLongBignum && canAssign(Long.TYPE, targetClass))
 			result = ((SubLLongBignum) subLObject).longValue();
-		else if (subLObject instanceof SubLBigIntBignum && JavaLink.canAssign(BigInteger.class, targetClass))
+		else if (subLObject instanceof SubLBigIntBignum && canAssign(BigInteger.class, targetClass))
 			result = ((SubLBigIntBignum) subLObject).bigIntegerValue();
-		else if (subLObject instanceof SubLVector && JavaLink.canAssign(List.class, targetClass)) {
+		else if (subLObject instanceof SubLVector && canAssign(List.class, targetClass)) {
 			Object[] tmp = ((SubLVector) subLObject).toArray();
 			ArrayList<Object> arr = new ArrayList<Object>(tmp.length);
 			for (Object obj : tmp)
-				arr.add(JavaLink.getJavaObject(targetClass, obj));
+				arr.add(getJavaObject(targetClass, obj));
 			result = arr;
-		} else if (subLObject instanceof AbstractSubLList && JavaLink.canAssign(List.class, targetClass)) {
+		} else if (subLObject instanceof AbstractSubLList && canAssign(List.class, targetClass)) {
 			Object[] tmp = ((AbstractSubLList) subLObject).toArray();
 			ArrayList<Object> arr = new ArrayList<Object>(tmp.length);
 			for (Object obj : tmp)
-				arr.add(JavaLink.getJavaObject(targetClass, obj));
+				arr.add(getJavaObject(targetClass, obj));
 			result = arr;
 		} else {
-			if (!(subLObject instanceof SubLHashtable) || !JavaLink.canAssign(Map.class, targetClass))
+			if (!(subLObject instanceof SubLHashtable) || !canAssign(Map.class, targetClass))
 				throw new RuntimeException(
 						"Unable to convert an instance of [" + subLObject.getClass() + "] to Java object");
 			HashMap<Object, Object> m = new HashMap<Object, Object>();
 			Iterator it = ((SubLHashtable) subLObject).getEntrySetIterator();
 			while (it.hasNext()) {
 				Map.Entry pair = (Map.Entry) it.next();
-				Object key = JavaLink.getJavaObject(targetClass, pair.getKey());
-				Object val = JavaLink.getJavaObject(targetClass, pair.getValue());
+				Object key = getJavaObject(targetClass, pair.getKey());
+				Object val = getJavaObject(targetClass, pair.getValue());
 				m.put(key, val);
 			}
 			result = m;
@@ -457,9 +263,9 @@ public class JavaLink extends SubLTrampolineFile {
 		else if (subLObject instanceof SubLNil)
 			result = new ArrayList();
 		else if (subLObject instanceof SubLSymbol)
-			result = JavaLink.subLObjectToString(subLObject);
+			result = subLObjectToString(subLObject);
 		else if (subLObject instanceof SubLString)
-			result = ((SubLString) subLObject).getString();
+			result = ((SubLString) subLObject).getStringValue();
 		else if (subLObject instanceof SubLCharacter)
 			result = ((SubLCharacter) subLObject).charValue();
 		else if (subLObject instanceof AbstractSubLFloat)
@@ -474,13 +280,13 @@ public class JavaLink extends SubLTrampolineFile {
 			Object[] tmp = ((SubLVector) subLObject).toArray();
 			ArrayList<Object> arr = new ArrayList<Object>(tmp.length);
 			for (Object obj : tmp)
-				arr.add(JavaLink.getJavaObject(obj));
+				arr.add(getJavaObject(obj));
 			result = arr;
 		} else if (subLObject instanceof AbstractSubLList) {
 			Object[] tmp = ((AbstractSubLList) subLObject).toArray();
 			ArrayList<Object> arr = new ArrayList<Object>(tmp.length);
 			for (Object obj : tmp)
-				arr.add(JavaLink.getJavaObject(obj));
+				arr.add(getJavaObject(obj));
 			result = arr;
 		} else {
 			if (!(subLObject instanceof SubLHashtable))
@@ -490,8 +296,8 @@ public class JavaLink extends SubLTrampolineFile {
 			Iterator it = ((SubLHashtable) subLObject).getEntrySetIterator();
 			while (it.hasNext()) {
 				Map.Entry pair = (Map.Entry) it.next();
-				Object key = JavaLink.getJavaObject(pair.getKey());
-				Object val = JavaLink.getJavaObject(pair.getValue());
+				Object key = getJavaObject(pair.getKey());
+				Object val = getJavaObject(pair.getValue());
 				m.put(key, val);
 			}
 			result = m;
@@ -499,68 +305,6 @@ public class JavaLink extends SubLTrampolineFile {
 		if (JavaLink.DEBUG)
 			System.out.println(result);
 		return result;
-	}
-
-	public static SubLObject java_call(SubLObject methodObject, SubLObject instanceObject, SubLObject... args) {
-		if (args.length > 0) {
-			Object[] unboxed = new Object[args.length];
-			for (int i = 0; i < args.length; ++i)
-				unboxed[i] = JavaLink.unbox(args[i]);
-			return JavaLink._call(JavaLink.unbox(methodObject), JavaLink.unbox(instanceObject), unboxed);
-		}
-		return JavaLink._call(JavaLink.unbox(methodObject), JavaLink.unbox(instanceObject), new Object[0]);
-	}
-
-	public static SubLObject java_class(SubLObject className) {
-		try {
-			return JavaLink.box(JavaLink.classForName(JavaLink.unbox(className)));
-		} catch (ClassNotFoundException e) {
-			throw new RuntimeException(e.getCause() != null ? e.getCause() : e);
-		}
-	}
-
-	public static SubLObject java_constructor(SubLObject classNameOrReference, SubLObject... parameters) {
-		if (parameters.length > 0) {
-			Object[] unboxed = new Object[parameters.length];
-			for (int i = 0; i < parameters.length; ++i)
-				unboxed[i] = JavaLink.unbox(parameters[i]);
-			return JavaLink._constructor(JavaLink.unbox(classNameOrReference), unboxed);
-		}
-		return JavaLink._constructor(JavaLink.unbox(classNameOrReference), new Object[0]);
-	}
-
-	public static SubLObject java_method(SubLObject className, SubLObject methodName, SubLObject... argClassNames) {
-		if (argClassNames.length > 0) {
-			Object[] unboxed = new Object[argClassNames.length];
-			for (int i = 0; i < argClassNames.length; ++i)
-				unboxed[i] = JavaLink.unbox(argClassNames[i]);
-			return JavaLink._method(JavaLink.unbox(className), JavaLink.unbox(methodName), unboxed);
-		}
-		return JavaLink._method(JavaLink.unbox(className), JavaLink.unbox(methodName), new Object[0]);
-	}
-
-	public static SubLObject java_new(SubLObject classNameOrConstructor, SubLObject... parameters) {
-		if (parameters.length > 0) {
-			Object[] unboxed = new Object[parameters.length];
-			for (int i = 0; i < parameters.length; ++i)
-				unboxed[i] = JavaLink.unbox(parameters[i]);
-			return JavaLink._new(JavaLink.unbox(classNameOrConstructor), unboxed);
-		}
-		return JavaLink._new(JavaLink.unbox(classNameOrConstructor), new Object[0]);
-	}
-
-	public static SubLObject java_object_p(SubLObject object) {
-		return JavaLink.box(object instanceof SubLAlienObject);
-	}
-
-	public static SubLObject java_static(SubLObject methodObject, SubLObject classObject, SubLObject... args) {
-		if (args.length > 0) {
-			Object[] unboxed = new Object[args.length];
-			for (int i = 0; i < args.length; ++i)
-				unboxed[i] = JavaLink.unbox(args[i]);
-			return JavaLink._static(JavaLink.unbox(methodObject), JavaLink.unbox(classObject), unboxed);
-		}
-		return JavaLink._static(JavaLink.unbox(methodObject), JavaLink.unbox(classObject), new Object[0]);
 	}
 
 	private static Object possiblyUnbox(Object object) {
@@ -579,7 +323,7 @@ public class JavaLink extends SubLTrampolineFile {
 		if (object instanceof String)
 			return (String) object;
 		if (object instanceof SubLString)
-			return ((SubLString) object).getString();
+			return ((SubLString) object).getStringValue();
 		return object.toString();
 	}
 
@@ -595,6 +339,265 @@ public class JavaLink extends SubLTrampolineFile {
 		return result;
 	}
 
+	public static SubLObject _call(Object methodObject, Object instanceObject, Object... argObjects) {
+		if (JavaLink.DEBUG)
+			System.out.println("JavaLink._call(" + methodObject + ", " + instanceObject + ", " + argObjects);
+		methodObject = possiblyUnbox(methodObject);
+		instanceObject = possiblyUnbox(instanceObject);
+		for (int i = 0; i < argObjects.length; ++i)
+			argObjects[i] = possiblyUnbox(argObjects[i]);
+		try {
+			if (methodObject instanceof Method) {
+				Method method = (Method) methodObject;
+				Object[] args = null;
+				if (argObjects != null) {
+					int argsCount = Array.getLength(argObjects);
+					args = new Object[argsCount];
+					for (int j = 0; j < argsCount; ++j)
+						args[j] = getJavaObject(method.getParameterTypes()[j], argObjects[j]);
+				}
+				return box(method.invoke(instanceObject, args));
+			}
+			throw new RuntimeException("Arguments that are instanceof Method are currently supported (called with "
+					+ methodObject + ".)" + " For now, use java-method to find the method first");
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e.getCause() != null ? e.getCause() : e);
+		} catch (IllegalArgumentException e2) {
+			throw new RuntimeException(e2.getCause() != null ? e2.getCause() : e2);
+		} catch (InvocationTargetException e3) {
+			throw new RuntimeException(e3.getCause() != null ? e3.getCause() : e3);
+		}
+	}
+
+	public static SubLObject _constructor(Object classNameOrReference, Object... parameters) {
+		if (JavaLink.DEBUG)
+			System.out.println("JavaLink._constructor(" + classNameOrReference + ", " + ", " + parameters);
+		classNameOrReference = possiblyUnbox(classNameOrReference);
+		for (int i = 0; i < parameters.length; ++i)
+			parameters[i] = possiblyUnbox(parameters[i]);
+		try {
+			Class classClass = classForName(classNameOrReference);
+			Class[] argClasses = null;
+			if (parameters.length > 0) {
+				argClasses = new Class[parameters.length];
+				for (int j = 0; j < parameters.length; ++j)
+					argClasses[j] = classForName(parameters[j]);
+			}
+			return box(classClass.getConstructor(argClasses));
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException(e.getCause() != null ? e.getCause() : e);
+		} catch (NoSuchMethodException e2) {
+			throw new RuntimeException(e2.getCause() != null ? e2.getCause() : e2);
+		}
+	}
+
+	public static SubLObject _method(Object classNameOrReference, Object methodName, Object... parameterTypes) {
+		if (JavaLink.DEBUG)
+			System.out.println(
+					"JavaLink._method(" + classNameOrReference + ", " + methodName + ", " + parameterTypes.toString());
+		classNameOrReference = possiblyUnbox(classNameOrReference);
+		methodName = possiblyUnbox(methodName);
+		for (int i = 0; i < parameterTypes.length; ++i)
+			parameterTypes[i] = possiblyUnbox(parameterTypes[i]);
+		try {
+			Class classClass = classForName(classNameOrReference);
+			String methodString = subLObjectToString(methodName);
+			Class[] argClasses = null;
+			if (parameterTypes != null) {
+				argClasses = new Class[parameterTypes.length];
+				for (int j = 0; j < parameterTypes.length; ++j)
+					argClasses[j] = classForName(parameterTypes[j]);
+			}
+			if (methodString.isEmpty() || methodName instanceof SubLObject && ((SubLObject) methodName).isNil())
+				return box(classClass.getDeclaredConstructor(argClasses));
+			return box(classClass.getDeclaredMethod(methodString, argClasses));
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException(e.getCause() != null ? e.getCause() : e);
+		} catch (NoSuchMethodException e2) {
+			throw new RuntimeException(e2.getCause() != null ? e2.getCause() : e2);
+		}
+	}
+
+	public static SubLObject _new(Object classNameOrConstructor, Object... parameters) {
+		if (JavaLink.DEBUG)
+			System.out.println("JavaLink._new(" + classNameOrConstructor + ", " + parameters + ")");
+		classNameOrConstructor = possiblyUnbox(classNameOrConstructor);
+		for (int i = 0; i < parameters.length; ++i)
+			parameters[i] = possiblyUnbox(parameters[i]);
+		try {
+			if (classNameOrConstructor instanceof Constructor) {
+				Class[] paramTypes = ((Constructor) classNameOrConstructor).getParameterTypes();
+				for (int j = 0; j < parameters.length; ++j)
+					parameters[j] = getJavaObject(paramTypes[j], parameters[j]);
+				return box(((Constructor) classNameOrConstructor).newInstance(parameters));
+			}
+			Class resultClass = classForName(classNameOrConstructor);
+			if (parameters.length > 0) {
+				Class[] argClasses = new Class[parameters.length];
+				Object[] argsConverted = new Object[parameters.length];
+				for (int k = 0; k < parameters.length; ++k) {
+					if (JavaLink.DEBUG)
+						System.out.println(
+								"arg " + k + " = [" + parameters[k] + "], is of type " + parameters[k].getClass());
+					argClasses[k] = getJavaClass(parameters[k]);
+					argsConverted[k] = getJavaObject(parameters[k]);
+				}
+				return box(resultClass.getConstructor(argClasses).newInstance(argsConverted));
+			}
+			return box(resultClass.newInstance());
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException(e.getCause() != null ? e.getCause() : e);
+		} catch (InstantiationException e2) {
+			throw new RuntimeException(e2.getCause() != null ? e2.getCause() : e2);
+		} catch (IllegalAccessException e3) {
+			throw new RuntimeException(e3.getCause() != null ? e3.getCause() : e3);
+		} catch (InvocationTargetException e4) {
+			throw new RuntimeException(e4.getCause() != null ? e4.getCause() : e4);
+		} catch (NoSuchMethodException e5) {
+			throw new RuntimeException(e5.getCause() != null ? e5.getCause() : e5);
+		}
+	}
+
+	public static SubLObject _static(Object methodObject, Object classObject, Object... argObjects) {
+		if (JavaLink.DEBUG)
+			System.out.println("JavaLink._static(" + methodObject + ", " + classObject + ", " + argObjects);
+		methodObject = possiblyUnbox(methodObject);
+		classObject = possiblyUnbox(classObject);
+		for (int i = 0; i < argObjects.length; ++i)
+			argObjects[i] = possiblyUnbox(argObjects[i]);
+		try {
+			Method method;
+			if (methodObject instanceof Method)
+				method = (Method) methodObject;
+			else if (argObjects.length > 0) {
+				Class[] argClasses = new Class[argObjects.length];
+				for (int j = 0; j < argObjects.length; ++j) {
+					if (JavaLink.DEBUG)
+						System.out.println(
+								"arg " + j + " = [" + argObjects[j] + "], is of type " + argObjects[j].getClass());
+					argClasses[j] = getJavaClass(argObjects[j]);
+				}
+				method = (Method) unbox(_method(classObject, methodObject, (Object[]) argClasses));
+			} else
+				method = (Method) unbox(_method(classObject, methodObject, new Object[0]));
+			Object[] args = null;
+			if (argObjects != null) {
+				int argsCount = Array.getLength(argObjects);
+				args = new Object[argsCount];
+				for (int k = 0; k < argsCount; ++k)
+					args[k] = getJavaObject(method.getParameterTypes()[k], argObjects[k]);
+			}
+			return box(method.invoke((Object) null, args));
+		} catch (IllegalAccessException e) {
+			throw new RuntimeException(e.getCause() != null ? e.getCause() : e);
+		} catch (IllegalArgumentException e2) {
+			throw new RuntimeException(e2.getCause() != null ? e2.getCause() : e2);
+		} catch (InvocationTargetException e3) {
+			throw new RuntimeException(e3.getCause() != null ? e3.getCause() : e3);
+		}
+	}
+
+	public static boolean canAssign(Class cls, Class toClass) {
+		if (cls.equals(toClass))
+			return true;
+		if (!cls.isPrimitive())
+			return toClass.isAssignableFrom(cls);
+		if (!toClass.isPrimitive())
+			return false;
+		if (Integer.TYPE.equals(cls))
+			return Long.TYPE.equals(toClass) || Float.TYPE.equals(toClass) || Double.TYPE.equals(toClass);
+		if (Long.TYPE.equals(cls))
+			return Float.TYPE.equals(toClass) || Double.TYPE.equals(toClass);
+		if (Boolean.TYPE.equals(cls))
+			return false;
+		if (Double.TYPE.equals(cls))
+			return false;
+		if (Float.TYPE.equals(cls))
+			return Double.TYPE.equals(toClass);
+		if (Character.TYPE.equals(cls))
+			return Integer.TYPE.equals(toClass) || Long.TYPE.equals(toClass) || Float.TYPE.equals(toClass)
+					|| Double.TYPE.equals(toClass);
+		if (Short.TYPE.equals(cls))
+			return Integer.TYPE.equals(toClass) || Long.TYPE.equals(toClass) || Float.TYPE.equals(toClass)
+					|| Double.TYPE.equals(toClass);
+		return Byte.TYPE.equals(cls) && (Short.TYPE.equals(toClass) || Integer.TYPE.equals(toClass)
+				|| Long.TYPE.equals(toClass) || Float.TYPE.equals(toClass) || Double.TYPE.equals(toClass));
+	}
+
+	public static SubLObject coerceToSubLObject(Object object) {
+		return box(object);
+	}
+
+	public static SubLObject java_call(SubLObject methodObject, SubLObject instanceObject, SubLObject... args) {
+		if (args.length > 0) {
+			Object[] unboxed = new Object[args.length];
+			for (int i = 0; i < args.length; ++i)
+				unboxed[i] = unbox(args[i]);
+			return _call(unbox(methodObject), unbox(instanceObject), unboxed);
+		}
+		return _call(unbox(methodObject), unbox(instanceObject), new Object[0]);
+	}
+
+	public static SubLObject java_class(SubLObject className) {
+		try {
+			return box(classForName(unbox(className)));
+		} catch (ClassNotFoundException e) {
+			throw new RuntimeException(e.getCause() != null ? e.getCause() : e);
+		}
+	}
+
+	public static SubLObject java_constructor(SubLObject classNameOrReference, SubLObject... parameters) {
+		if (parameters.length > 0) {
+			Object[] unboxed = new Object[parameters.length];
+			for (int i = 0; i < parameters.length; ++i)
+				unboxed[i] = unbox(parameters[i]);
+			return _constructor(unbox(classNameOrReference), unboxed);
+		}
+		return _constructor(unbox(classNameOrReference), new Object[0]);
+	}
+
+	public static SubLObject java_method(SubLObject className, SubLObject methodName, SubLObject... argClassNames) {
+		if (argClassNames.length > 0) {
+			Object[] unboxed = new Object[argClassNames.length];
+			for (int i = 0; i < argClassNames.length; ++i)
+				unboxed[i] = unbox(argClassNames[i]);
+			return _method(unbox(className), unbox(methodName), unboxed);
+		}
+		return _method(unbox(className), unbox(methodName), new Object[0]);
+	}
+
+	public static SubLObject java_new(SubLObject classNameOrConstructor, SubLObject... parameters) {
+		if (parameters.length > 0) {
+			Object[] unboxed = new Object[parameters.length];
+			for (int i = 0; i < parameters.length; ++i)
+				unboxed[i] = unbox(parameters[i]);
+			return _new(unbox(classNameOrConstructor), unboxed);
+		}
+		return _new(unbox(classNameOrConstructor), new Object[0]);
+	}
+
+	public static SubLObject java_object_p(SubLObject object) {
+		return box(object instanceof SubLAlienObject);
+	}
+
+	public static SubLObject java_static(SubLObject methodObject, SubLObject classObject, SubLObject... args) {
+		if (args.length > 0) {
+			Object[] unboxed = new Object[args.length];
+			for (int i = 0; i < args.length; ++i)
+				unboxed[i] = unbox(args[i]);
+			return _static(unbox(methodObject), unbox(classObject), unboxed);
+		}
+		return _static(unbox(methodObject), unbox(classObject), new Object[0]);
+	}
+
+	static Boolean DEBUG;
+	public static SubLFile me;
+	static {
+		JavaLink.DEBUG = false;
+		me = new JavaLink();
+	}
+
+	@Override
 	public void declareFunctions() {
 		SubLFiles.declareFunction(JavaLink.me, "java_call", "JAVA-CALL", 2, 0, true);
 		SubLFiles.declareFunction(JavaLink.me, "java_class", "JAVA-CLASS", 1, 0, false);
@@ -605,9 +608,11 @@ public class JavaLink extends SubLTrampolineFile {
 		SubLFiles.declareFunction(JavaLink.me, "java_static", "JAVA-STATIC", 2, 0, true);
 	}
 
+	@Override
 	public void initializeVariables() {
 	}
 
+	@Override
 	public void runTopLevelForms() {
 	}
 }

@@ -2,7 +2,7 @@
  * HashTableFunctions.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: HashTableFunctions.java 12513 2010-03-02 22:35:36Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,190 +31,391 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class HashTableFunctions {
-	static SubLObject FUNCTION_EQ = LispSymbols.EQ.getSymbolFunction();
-	static SubLObject FUNCTION_EQL = LispSymbols.EQL.getSymbolFunction();
-	static SubLObject FUNCTION_EQUAL = LispSymbols.EQUAL.getSymbolFunction();
-	static SubLObject FUNCTION_EQUALP = LispSymbols.EQUALP.getSymbolFunction();
+public final class HashTableFunctions
+{
+  static final LispObject FUNCTION_EQ =
+    Symbol.EQ.getSymbolFunction();
+  static final LispObject FUNCTION_EQL =
+    Symbol.EQL.getSymbolFunction();
+  static final LispObject FUNCTION_EQUAL =
+    Symbol.EQUAL.getSymbolFunction();
+  static final LispObject FUNCTION_EQUALP =
+    Symbol.EQUALP.getSymbolFunction();
 
-	// ### %make-hash-table
-	private static Primitive _MAKE_HASH_TABLE = new JavaPrimitive("%make-hash-table", Lisp.PACKAGE_SYS, false) {
+  private static final Primitive _MAKE_HASH_TABLE 
+      = new pf__make_hash_table();
+  @DocString(name="%make-hash-table")
+  private static final class pf__make_hash_table extends Primitive {
+      pf__make_hash_table() {
+        super("%make-hash-table", PACKAGE_SYS, false);
+      }
+        
+      public LispObject execute(LispObject test, LispObject size,
+                                LispObject rehashSize, 
+                                LispObject rehashThreshold)
+      {
+        final int n = Fixnum.getValue(size);
+        if (test == FUNCTION_EQL || test == NIL)
+          return HashTable.newEqlHashTable(n, rehashSize, rehashThreshold);
+        if (test == FUNCTION_EQ)
+          return HashTable.newEqHashTable(n, rehashSize, rehashThreshold);
+        if (test == FUNCTION_EQUAL)
+          return HashTable.newEqualHashTable(n, rehashSize, rehashThreshold);
+        if (test == FUNCTION_EQUALP)
+          return HashTable.newEqualpHashTable(n, rehashSize, rehashThreshold);
+        return error(new LispError("Unsupported test for MAKE-HASH-TABLE: " +
+                                    test.princToString()));
+      }
+    };
 
-		public SubLObject execute(SubLObject test, SubLObject size, SubLObject rehashSize, SubLObject rehashThreshold)
 
-		{
-			int n = size.intValue();
-			if (test == HashTableFunctions.FUNCTION_EQL || test == Lisp.NIL)
-				return new EqlHashTable(n, rehashSize, rehashThreshold);
-			if (test == HashTableFunctions.FUNCTION_EQ)
-				return new EqHashTable(n, rehashSize, rehashThreshold);
-			if (test == HashTableFunctions.FUNCTION_EQUAL)
-				return new EqualHashTable(n, rehashSize, rehashThreshold);
-			if (test == HashTableFunctions.FUNCTION_EQUALP)
-				return new EqualpHashTable(n, rehashSize, rehashThreshold);
-			return Lisp.error(new LispError("Unsupported test for MAKE-HASH-TABLE: " + test.writeToString()));
-		}
-	};
+  private static final Primitive _MAKE_WEAK_HASH_TABLE 
+    = new pf__make_weak_hash_table();
+  @DocString(name="%make-weak-hash-table")
+  private static final class pf__make_weak_hash_table extends Primitive {
+      pf__make_weak_hash_table() {
+        super("%make-weak-hash-table", PACKAGE_SYS, false);
+      }
+      public LispObject execute(LispObject test, 
+                                LispObject size,
+                                LispObject rehashSize, 
+                                LispObject rehashThreshold,
+				LispObject weakness)
+      {
+        final int n = Fixnum.getValue(size);
+        if (test == FUNCTION_EQL || test == NIL)
+          return WeakHashTable.newEqlHashTable(n, rehashSize, 
+					       rehashThreshold, weakness);
+        if (test == FUNCTION_EQ)
+          return WeakHashTable.newEqHashTable(n, rehashSize, 
+                                              rehashThreshold, weakness);
+        if (test == FUNCTION_EQUAL)
+          return WeakHashTable.newEqualHashTable(n, rehashSize, 
+						 rehashThreshold, weakness);
+        if (test == FUNCTION_EQUALP)
+          return WeakHashTable.newEqualpHashTable(n, rehashSize, 
+						  rehashThreshold, weakness);
+        return error(new LispError("Unsupported test for MAKE-HASH-TABLE: " +
+                                    test.princToString()));
+      }
+    };
 
-	// ### gethash key hash-table &optional default => value, present-p
-	private static Primitive GETHASH = new JavaPrimitive(LispSymbols.GETHASH, "key hash-table &optional default") {
+  private static final Primitive GETHASH 
+    = new pf_gethash();
+  @DocString(name="gethash",
+             args="key hash-table &optional default",
+             returns="value, present-p",
+             doc="Returns the value associated with KEY in HASH-TABLE.")
+  private static final class pf_gethash extends Primitive {
+      pf_gethash() {
+        super(Symbol.GETHASH, "key hash-table &optional default");
+      }
 
-		public SubLObject execute(SubLObject key, SubLObject ht)
+      public LispObject execute(LispObject key, LispObject ht)
 
-		{
-			return HashTableFunctions.checkHashTable(ht).gethash(key);
-		}
+      {
+          if (ht instanceof WeakHashTable) {
+              return ((WeakHashTable)ht).gethash(key);
+          }
+          return checkHashTable(ht).gethash(key);
+      }
+      
+      public LispObject execute(LispObject key, LispObject ht,
+                                LispObject defaultValue)
+      {
+          if (ht instanceof WeakHashTable) {
+              return ((WeakHashTable)ht).gethash(key, defaultValue);
+          }
+          return checkHashTable(ht).gethash(key, defaultValue);
+      }
+    };
 
-		public SubLObject execute(SubLObject key, SubLObject ht, SubLObject defaultValue)
+  private static final Primitive GETHASH1 
+    = new pf_gethash1();
+  @DocString(name="gethash1",
+             args="key hash-table", returns="value")
+  private static final class pf_gethash1 extends Primitive {
+      pf_gethash1() {
+        super(Symbol.GETHASH1, "key hash-table");
+      }
+      public LispObject execute(LispObject first, LispObject second) {
+        if (second instanceof WeakHashTable) {
+            final WeakHashTable ht = (WeakHashTable) second;
+            synchronized (ht) {
+                final LispObject value = ht.get(first);
+                return value != null ? value : NIL;
+            }
+        } else {
+            final HashTable ht = checkHashTable(second);
+            synchronized (ht) {
+                final LispObject value = ht.get(first);
+                return value != null ? value : NIL;
+            }
+        }
+      }
+    };
 
-		{
-			return HashTableFunctions.checkHashTable(ht).gethash(key, defaultValue);
-		}
-	};
+  private static final Primitive PUTHASH 
+    = new pf_puthash();
+  @DocString(name="puthash",
+             args="key hash-table new-value &optional default", returns="value")
+  private static final class pf_puthash extends Primitive {
+      pf_puthash() {
+        super(Symbol.PUTHASH,
+             "key hash-table new-value &optional default");
+      }
+      public LispObject execute(LispObject key, LispObject ht,
+                                LispObject value)
+      {
+        if (ht instanceof WeakHashTable) {
+            return ((WeakHashTable)ht).puthash(key, value);
+        }
+        return checkHashTable(ht).puthash(key, value);
+      }
+      public LispObject execute(LispObject key, LispObject ht,
+                                LispObject ignored, LispObject value)
+      {
+        if (ht instanceof WeakHashTable) {
+            return ((WeakHashTable)ht).puthash(key, value);
+        }
+        return checkHashTable(ht).puthash(key, value);
+      }
+    };
 
-	// ### gethash1 key hash-table => value
-	private static Primitive GETHASH1 = new JavaPrimitive(LispSymbols.GETHASH1, "key hash-table") {
+  private static final Primitive REMHASH 
+    = new pf_remhash();
+  @DocString(name="remhash",
+             args="key hash-table", returns="generalized-boolean",
+             doc="Removes the value for KEY in HASH-TABLE, if any.")
+  private static final class pf_remhash extends Primitive {
+      pf_remhash() {
+        super(Symbol.REMHASH, "key hash-table");
+      }
+      public LispObject execute(LispObject key, LispObject ht) {
+        if (ht instanceof WeakHashTable) {
+            return ((WeakHashTable)ht).remhash(key);
+        }
+        return checkHashTable(ht).remhash(key);
+      }
+    };
 
-		public SubLObject execute(SubLObject first, SubLObject second)
+  private static final Primitive CLRHASH 
+    = new pf_clrhash();
+  @DocString(name="clrhash",
+             args="hash-table", returns="hash-table")
+  private static final class pf_clrhash extends Primitive {
+      pf_clrhash() {
+        super(Symbol.CLRHASH, "hash-table");
+      }
+      public LispObject execute(LispObject ht)
+      {
+        if (ht instanceof WeakHashTable) {
+            ((WeakHashTable)ht).clear();
+            return ht;
+        }
+        checkHashTable(ht).clear();
+        return ht;
+      }
+    };
 
-		{
-			HashTable ht = HashTableFunctions.checkHashTable(second);
-			synchronized (ht) {
-				SubLObject value = ht.getHT(first);
-				return value != null ? value : Lisp.NIL;
-			}
-		}
-	};
+  private static final Primitive HASH_TABLE_COUNT 
+    = new pf_hash_table_count();
+  @DocString(name="hash-table-count",
+             args="hash-table",
+             doc="Returns the number of entries in HASH-TABLE.")
+  private static final class pf_hash_table_count extends Primitive {
+      pf_hash_table_count() {
+          super(Symbol.HASH_TABLE_COUNT, "hash-table");
+      }
+      public LispObject execute(LispObject arg)
+      {
+          if (arg instanceof WeakHashTable) {
+              return Fixnum.getInstance(((WeakHashTable)arg).getCount());
+          }
+          return Fixnum.getInstance(checkHashTable(arg).getCount());
+      }
+    };
 
-	// ### puthash key hash-table new-value &optional default => value
-	private static Primitive PUTHASH = new JavaPrimitive(LispSymbols.PUTHASH,
-			"key hash-table new-value &optional default") {
+  private static final Primitive SXHASH 
+    = new pf_sxhash();
+  @DocString(name="sxhash",
+             args="object => hash-code")
+  private static final class pf_sxhash extends Primitive {
+      pf_sxhash() {
+        super(Symbol.SXHASH, "object");
+      }
+      public LispObject execute(LispObject arg)
+      {
+        return Fixnum.getInstance(arg.sxhash());
+      }
+    };
 
-		public SubLObject execute(SubLObject key, SubLObject ht, SubLObject value)
+  // For EQUALP hash tables.
+  @DocString(name="psxhash",
+             args="object")
+  private static final Primitive PSXHASH 
+    = new pf_psxhash();
+  private static final class pf_psxhash extends Primitive  {
+      pf_psxhash() {
+        super("psxhash", PACKAGE_SYS, true, "object");
+      }
+      public LispObject execute(LispObject arg)
+      {
+        return Fixnum.getInstance(arg.psxhash());
+      }
+    };
 
-		{
-			return HashTableFunctions.checkHashTable(ht).puthash(key, value);
-		}
+  private static final Primitive HASH_TABLE_P 
+    = new pf_hash_table_p();
+  @DocString(name="hash-table-p",
+             args="object",
+             doc="Whether OBJECT is an instance of a hash-table.")
+  private static final class pf_hash_table_p extends Primitive {
+      pf_hash_table_p(){
+        super(Symbol.HASH_TABLE_P,"object");
+      }
+      public LispObject execute(LispObject arg)
+      {
+          if (arg instanceof WeakHashTable) return T;
+          return arg instanceof HashTable ? T : NIL;
+      }
+    };
 
-		public SubLObject execute(SubLObject key, SubLObject ht, SubLObject ignored, SubLObject value)
+  private static final Primitive HASH_TABLE_ENTRIES 
+    = new pf_hash_table_entries();
+  @DocString(name="hah-table-entries",
+             args="hash-table",
+             doc="Returns a list of all key/values pairs in HASH-TABLE.")
+  private static final class pf_hash_table_entries extends Primitive {
+      pf_hash_table_entries() {
+        super("hash-table-entries", PACKAGE_SYS, false);
+      }
+      public LispObject execute(LispObject arg)
+      {
+          if (arg instanceof WeakHashTable) {
+              return ((WeakHashTable)arg).ENTRIES();
+          }
+          return checkHashTable(arg).ENTRIES();
+      }
+    };
 
-		{
-			return HashTableFunctions.checkHashTable(ht).puthash(key, value);
-		}
-	};
+  private static final Primitive HASH_TABLE_TEST 
+    = new pf_hash_table_test();
+  @DocString(name="hash-table-test",
+             args="hash-table",
+             doc="Return the test used for the keys of HASH-TABLE.")
+  private static final class pf_hash_table_test extends Primitive {
+      pf_hash_table_test() {
+        super(Symbol.HASH_TABLE_TEST, "hash-table");
+      }
+      public LispObject execute(LispObject arg)
+      {
+          if (arg instanceof WeakHashTable) {
+              return ((WeakHashTable)arg).getTest();
+          }
+          return checkHashTable(arg).getTest();
+      }
+    };
 
-	// remhash key hash-table => generalized-boolean
-	private static Primitive REMHASH = new JavaPrimitive(LispSymbols.REMHASH, "key hash-table") {
+  private static final Primitive HASH_TABLE_SIZE 
+    = new pf_hash_table_size();
+  @DocString(name="hash-table-size",
+             args="hash-table",
+             doc="Returns the number of storage buckets in HASH-TABLE.")
+  private static final class pf_hash_table_size extends Primitive {
+      pf_hash_table_size() {
+        super(Symbol.HASH_TABLE_SIZE, "hash-table");
+      }
+      public LispObject execute(LispObject arg)
+      {
+          if (arg instanceof WeakHashTable) {
+              return Fixnum.getInstance(((WeakHashTable)arg).getSize());
+          }
+          return Fixnum.getInstance(checkHashTable(arg).getSize());
+      }
+    };
 
-		public SubLObject execute(SubLObject key, SubLObject ht)
+  private static final Primitive HASH_TABLE_REHASH_SIZE 
+    = new pf_hash_table_rehash_size();
+  @DocString(name="hash-table-rehash-size",
+             args="hash-table")
+  private static final class pf_hash_table_rehash_size extends Primitive {
+      pf_hash_table_rehash_size() {
+        super(Symbol.HASH_TABLE_REHASH_SIZE, "hash-table");
+      }
+      public LispObject execute(LispObject arg)
+      {
+          if (arg instanceof WeakHashTable) {
+              return ((WeakHashTable)arg).getRehashSize();
+          }
+          return checkHashTable(arg).getRehashSize();
+      }
+    };
 
-		{
-			return HashTableFunctions.checkHashTable(ht).remhash(key);
-		}
-	};
+  private static final Primitive HASH_TABLE_REHASH_THRESHOLD 
+    = new pf_hash_table_rehash_threshold();
+  @DocString(name="hash-table-rehash-threshold",
+             args="hash-table")
+  private static final class pf_hash_table_rehash_threshold extends Primitive {
+      pf_hash_table_rehash_threshold() {
+        super(Symbol.HASH_TABLE_REHASH_THRESHOLD, "hash-table");
+      }
+      public LispObject execute(LispObject arg)
+      {
+          if (arg instanceof WeakHashTable) {
+              return ((WeakHashTable)arg).getRehashThreshold();
+          }
+          return checkHashTable(arg).getRehashThreshold();
+      }
+    };
 
-	// ### clrhash hash-table => hash-table
-	private static Primitive CLRHASH = new JavaPrimitive(LispSymbols.CLRHASH, "hash-table") {
+  private static final Primitive MAPHASH 
+    = new pf_maphash();
+  @DocString(name="maphash",
+             args="function hash-table",
+             doc="Iterates over all entries in the hash-table. For each entry,"
+             + " the function is called with two arguments--the key and the"
+             + " value of that entry.")
+  private static final class pf_maphash extends Primitive {
+      pf_maphash() {
+        super(Symbol.MAPHASH, "function hash-table");
+      }
+      public LispObject execute(LispObject first, LispObject second)
+      {
+          if (second instanceof WeakHashTable) {
+              return ((WeakHashTable)second).MAPHASH(first);
+          }
+        return checkHashTable(second).MAPHASH(first);
+      }
+    };
 
-		public SubLObject execute(SubLObject ht) {
-			HashTableFunctions.checkHashTable(ht).clear();
-			return ht;
-		}
-	};
+  private static final Primitive HASH_TABLE_WEAKNESS
+    = new pf_hash_table_weakness();
+  @DocString(name="hash-table-weakness",
+             args="hash-table",
+             doc="Return weakness property of HASH-TABLE, or NIL if it has none.")
+  private static final class pf_hash_table_weakness extends Primitive {
+      pf_hash_table_weakness() {
+          super(Symbol.HASH_TABLE_WEAKNESS, "hash-table");
+      }
+      public LispObject execute(LispObject first) 
+      {
+          if (first instanceof HashTable) {
+              return NIL;
+          } else if (first instanceof WeakHashTable) {
+              return ((WeakHashTable)first).getWeakness();
+          }
+          return type_error(first, Symbol.HASH_TABLE);
+      }
+  };
 
-	// ### hash-table-count
-	private static Primitive HASH_TABLE_COUNT = new JavaPrimitive(LispSymbols.HASH_TABLE_COUNT, "hash-table") {
-
-		public SubLObject execute(SubLObject arg) {
-			return LispObjectFactory.makeInteger(HashTableFunctions.checkHashTable(arg).getCount());
-		}
-	};
-
-	// ### sxhash object => hash-code
-	private static Primitive SXHASH = new JavaPrimitive(LispSymbols.SXHASH, "object") {
-
-		public SubLObject execute(SubLObject arg) {
-			return LispObjectFactory.makeInteger(arg.sxhash());
-		}
-	};
-
-	// ### psxhash object => hash-code
-	// For EQUALP hash tables.
-	private static Primitive PSXHASH = new JavaPrimitive("psxhash", Lisp.PACKAGE_SYS, true, "object") {
-
-		public SubLObject execute(SubLObject arg) {
-			return LispObjectFactory.makeInteger(arg.psxhash());
-		}
-	};
-
-	// ### hash-table-p
-	private static Primitive HASH_TABLE_P = new JavaPrimitive(LispSymbols.HASH_TABLE_P, "object") {
-
-		public SubLObject execute(SubLObject arg) {
-			return arg instanceof HashTable ? Lisp.T : Lisp.NIL;
-		}
-	};
-
-	// ### hash-table-entries
-	private static Primitive HASH_TABLE_ENTRIES = new JavaPrimitive("hash-table-entries", Lisp.PACKAGE_SYS, false) {
-
-		public SubLObject execute(SubLObject arg) {
-			return HashTableFunctions.checkHashTable(arg).ENTRIES();
-		}
-	};
-
-	// ### hash-table-test
-	private static Primitive HASH_TABLE_TEST = new JavaPrimitive(LispSymbols.HASH_TABLE_TEST, "hash-table") {
-
-		public SubLObject execute(SubLObject arg) {
-			return HashTableFunctions.checkHashTable(arg).getTest();
-		}
-	};
-
-	// ### hash-table-size
-	private static Primitive HASH_TABLE_SIZE = new JavaPrimitive(LispSymbols.HASH_TABLE_SIZE, "hash-table") {
-
-		public SubLObject execute(SubLObject arg) {
-			return LispObjectFactory.makeInteger(HashTableFunctions.checkHashTable(arg).getSize());
-		}
-	};
-
-	// ### hash-table-rehash-size
-	private static Primitive HASH_TABLE_REHASH_SIZE = new JavaPrimitive(LispSymbols.HASH_TABLE_REHASH_SIZE,
-			"hash-table") {
-
-		public SubLObject execute(SubLObject arg) {
-			return HashTableFunctions.checkHashTable(arg).getRehashSize();
-		}
-	};
-
-	// ### hash-table-rehash-threshold
-	private static Primitive HASH_TABLE_REHASH_THRESHOLD = new JavaPrimitive(LispSymbols.HASH_TABLE_REHASH_THRESHOLD,
-			"hash-table") {
-
-		public SubLObject execute(SubLObject arg) {
-			return HashTableFunctions.checkHashTable(arg).getRehashThreshold();
-		}
-	};
-
-	// ### maphash
-	private static Primitive MAPHASH = new JavaPrimitive(LispSymbols.MAPHASH, "function hash-table") {
-
-		public SubLObject execute(SubLObject first, SubLObject second)
-
-		{
-			return HashTableFunctions.checkHashTable(second).MAPHASH(first);
-		}
-	};
-
-	protected static HashTable checkHashTable(SubLObject ht) {
-		if (ht instanceof HashTable)
-			return (HashTable) ht;
-		Lisp.type_error(ht, LispSymbols.HASH_TABLE);
-		return null;
-	}
+  protected static HashTable checkHashTable(LispObject ht) {
+    if (ht instanceof HashTable) return (HashTable)ht;
+    type_error(ht, Symbol.HASH_TABLE);    
+    return null;
+  }
 }

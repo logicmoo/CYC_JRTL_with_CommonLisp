@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2008 Peter Graves
-;;; $Id: compile-system.lisp 12516 2010-03-03 21:05:41Z astalla $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -34,6 +34,9 @@
 (require "LOOP")
 (require "COLLECT")
 (require "COMPILE-FILE")
+
+(export '(grovel-java-definitions-in-file compile-system))
+
 
 (defun check-lisp-home ()
   (loop
@@ -79,16 +82,205 @@
        (dolist (file files)
          (grovel-java-definitions-in-file file stream))))))
 
+
+;;
+;; Functions to generate autoloads.lisp
+;;
+
+(defun packages-from-combos (combos)
+  (remove-duplicates (mapcar #'symbol-package
+                             (mapcar #'sys:fdefinition-block-name
+                                     (mapcar #'second combos)))))
+
+(defun remove-multi-combo-symbols (combos)
+  (princ "; Removing multi-homed symbols")
+  (let ((sym-hash (make-hash-table :size (* 2 (length combos)))))
+    (dolist (combo combos)
+      (incf (gethash (second combo) sym-hash 0)))
+    (print (remove-if-not (lambda (x)
+                            (< 1 (gethash x sym-hash)))
+                          combos
+                          :key #'second))
+    (remove-if (lambda (x)
+                 (< 1 (gethash x sym-hash)))
+               combos
+               :key #'second)))
+
+(defun set-equal (set1 set2 &key test)
+  (or (eq set1 set2)
+      (equal set1 set2)
+      (and (subsetp set2 set1 :test test)
+           (subsetp set1 set2 :test test))))
+
+(defun combos-to-symbol-filesets (combos)
+  (let (filesets)
+    (dolist (combo combos)
+      (pushnew (list (second combo)) filesets :test #'equal :key #'first)
+      (pushnew (first combo)
+               (cdr (assoc (second combo) filesets :test #'equal))
+               :test #'string=))
+    filesets))
+
+(defun combos-to-fileset-symbols (combos)
+  (let (fileset-symbols)
+    (dolist (symbol-fileset (combos-to-symbol-filesets combos))
+      (pushnew (list (cdr symbol-fileset)) fileset-symbols
+               :test (lambda (x y) (set-equal x y :test #'string=))
+               :key #'first)
+      (pushnew (first symbol-fileset)
+               (cdr (assoc (cdr symbol-fileset) fileset-symbols
+                           :test (lambda (x y)
+                                   (set-equal x y :test #'string=))))))
+    fileset-symbols))
+
+(defun write-autoloader (stream package type fileset-symbols)
+  (when fileset-symbols
+    (write `(in-package ,package) :stream stream)
+    (terpri stream)
+    (let ((*package* (find-package package)))
+      (write `(dolist (fs ',fileset-symbols)
+                (funcall #',type (cdr fs) (car (car fs)))) :stream stream)
+      (terpri stream))))
+
+(defun write-package-filesets (stream package type filesets-symbols)
+  (let* ((filter-package (find-package package))
+         (filtered-filesets
+         (remove-if (lambda (x)
+                      (null (cdr x)))
+                    (mapcar (lambda (x)
+                               (cons (car x)
+                                    (remove-if-not (lambda (x)
+                                                      (and (symbolp x)
+                                                           (eq (symbol-package x)
+                                                               filter-package)))
+                                                   (cdr x))))
+                            filesets-symbols))))
+    (write-autoloader stream package type filtered-filesets)))
+
+(defun load-combos (path-spec)
+  (let (all-functions)
+    (dolist (functions-file (directory path-spec)
+             all-functions)
+      ;; every file has 1 form: the list of functions in it.
+      (let ((base-name (pathname-name functions-file)))
+        (unless (member base-name '("asdf" "gray-streams") :test #'string=)
+          ;; exclude ASDF and GRAY-STREAMS: they have external
+          ;; symbols we don't have until we load them, but we need
+          ;; those symbols to read the symbols files
+          (with-open-file (f functions-file
+                             :direction :input)
+            (dolist (function-name (read f))
+              (push (list base-name function-name) all-functions))))))))
+
+(defun generate-autoloads (symbol-files-pathspec)
+  (labels ((filter-combos (combos)
+             (remove-multi-combo-symbols
+              (remove-if (lambda (x)
+                           ;; exclude the symbols from the files
+                           ;; below: putting autoloaders on some of
+                           ;; the symbols conflicts with the bootstrapping
+                           ;; Primitives which have been defined Java-side
+                           (member x '( ;; function definitions to be excluded
+                                       "fdefinition" "early-defuns"
+                                       "require" "signal" "restart"
+
+                                       ;; extensible sequences override
+                                       ;; lots of default functions;
+                                       ;; java-collections implements
+                                       ;; extensible sequences
+                                       "extensible-sequences-base"
+                                       "extensible-sequences" "java-collections"
+
+                                       ;; macro definitions to be excluded
+                                       "macros" ;; "backquote"
+                                       "precompiler")
+                                   :test #'string=))
+                         combos
+                         :key #'first)))
+           (filter-setf-combos (combos)
+             (filter-combos
+              (remove-multi-combo-symbols
+               (remove-if (lambda (x) (member x '("clos") :test #'string=)) combos :key #'first))))
+           (symbols-pathspec (filespec)
+             (merge-pathnames filespec symbol-files-pathspec)))
+    (let ((funcs (filter-combos (load-combos (symbols-pathspec "*.funcs"))))
+          (macs (filter-combos (load-combos (symbols-pathspec "*.macs"))))
+          (setf-functions (filter-setf-combos (load-combos (symbols-pathspec "*.setf-functions"))))
+          (setf-expanders (filter-setf-combos (load-combos (symbols-pathspec "*.setf-expanders"))))
+          (exps (filter-combos (load-combos (symbols-pathspec "*.exps")))))
+      (with-open-file (f (symbols-pathspec "autoloads-gen.lisp")
+                         :direction :output :if-does-not-exist :create
+                         :if-exists :supersede)
+        ;; Generate the lisp file. This file will be included after compilation,
+        ;; so any comments are just for debugging purposes.
+        (terpri f)
+        (write-line ";; ---- GENERATED CONTENT BELOW" f)
+        (terpri f)
+        (dolist (package '(:format :sequence :loop :mop :xp :precompiler
+                           :profiler :java :jvm :extensions :threads
+                           :top-level :system :cl))
+          ;; Limit the set of packages:
+          ;;  During incremental compilation, the packages GRAY-STREAMS
+          ;;    and ASDF are not being created. Nor are these packages
+          ;;    vital to the correct operation of the base system.
+
+          (let* ((*package* (find-package package))
+                 (all-exported-symbols
+                  (remove-duplicates (mapcar #'second exps)))
+                 (externals (remove-if-not (lambda (sym)
+                                             (eq (symbol-package sym)
+                                                 *package*))
+                                           all-exported-symbols)))
+            (when externals
+              (write-line ";; EXPORTS" f)
+              (write `(cl:in-package ,package) :stream f)
+              (terpri f)
+              (write `(cl:export ',externals) :stream f)
+              (terpri f)))
+
+
+          (terpri f)
+          (write-line ";; FUNCTIONS" f)
+          (terpri f)
+          (write-package-filesets f package 'ext:autoload
+                                  (combos-to-fileset-symbols funcs))
+          (terpri f)
+          (write-line ";; MACROS" f)
+          (terpri f)
+          (write-package-filesets f package 'ext:autoload-macro
+                                  (combos-to-fileset-symbols macs))
+
+          (terpri f)
+
+          (write-line ";; SETF-FUNCTIONS" f)
+          (terpri f)
+          (write-package-filesets f package 'ext:autoload-setf-function
+                                    (combos-to-fileset-symbols setf-functions))
+          (terpri f)
+          (write-line ";; SETF-EXPANDERS" f)
+          (terpri f)
+          (write-package-filesets f package 'ext:autoload-setf-expander
+                                  (combos-to-fileset-symbols setf-expanders)))))))
+
+;;
+;; --- End of autoloads.lisp
+;;
+
+
 (defun %compile-system (&key output-path)
   (let ((*default-pathname-defaults* (pathname *lisp-home*))
-        (*warn-on-redefinition* nil))
+        (*warn-on-redefinition* nil)
+        (*prevent-fasl-circle-detection* t))
     (unless output-path
       (setf output-path *default-pathname-defaults*))
-    (flet ((do-compile (file)
-             (let ((out (make-pathname :type "abcl"
+    (flet ((do-compile (file &key (extract t))
+             (let ((out (make-pathname :type *compile-file-type*
                                        :defaults (merge-pathnames
                                                   file output-path))))
-               (compile-file-if-needed file :output-file out))))
+               (compile-file-if-needed file
+                                       :output-file out
+                                       :extract-toplevel-funcs-and-macros extract))))
+      (load (do-compile "defstruct.lisp"))
       (load (do-compile "coerce.lisp"))
       (load (do-compile "open.lisp"))
       (load (do-compile "dump-form.lisp"))
@@ -97,15 +289,17 @@
       (load (do-compile "precompiler.lisp"))
       (load (do-compile "compiler-pass1.lisp"))
       (load (do-compile "compiler-pass2.lisp"))
+      (load (do-compile "jvm-class-file.lisp"))
       (load (do-compile "jvm.lisp"))
       (load (do-compile "source-transform.lisp"))
       (load (do-compile "compiler-macro.lisp"))
-      (load (do-compile "opcodes.lisp"))
+      (load (do-compile "jvm-instructions.lisp"))
       (load (do-compile "setf.lisp"))
       (load (do-compile "extensible-sequences-base.lisp"))
       (load (do-compile "require.lisp"))
       (load (do-compile "substitute.lisp"))
       (load (do-compile "clos.lisp"))
+      (load (do-compile "mop.lisp"))
       ;; Order matters for these files.
       (mapc #'do-compile '("collect.lisp"
                            "macros.lisp"
@@ -123,20 +317,18 @@
       (load (do-compile "concatenate.lisp"))
       (load (do-compile "ldb.lisp"))
       (load (do-compile "destructuring-bind.lisp"))
-      (load (do-compile "asdf.lisp"))
+      (load (do-compile "featurep.lisp"))
+
       ;; But not for these.
       (mapc #'do-compile '("adjoin.lisp"
                            "and.lisp"
                            "apropos.lisp"
                            "arrays.lisp"
-                           "asdf-abcl.lisp"
                            "assert.lisp"
                            "assoc.lisp"
-                           "autoloads.lisp"
                            "aver.lisp"
                            "bit-array-ops.lisp"
                            "boole.lisp"
-                           ;;"boot.lisp"
                            "butlast.lisp"
                            "byte-io.lisp"
                            "case.lisp"
@@ -149,13 +341,13 @@
                            "copy-seq.lisp"
                            "copy-symbol.lisp"
                            "count.lisp"
+                           "digest.lisp"
                            "debug.lisp"
                            "define-modify-macro.lisp"
                            "define-symbol-macro.lisp"
                            "defmacro.lisp"
                            "defpackage.lisp"
                            "defsetf.lisp"
-                           "defstruct.lisp"
                            "deftype.lisp"
                            "delete-duplicates.lisp"
                            "deposit-field.lisp"
@@ -167,6 +359,7 @@
                            "do-external-symbols.lisp"
                            "do-symbols.lisp"
                            "do.lisp"
+                           "documentation.lisp"
                            "dolist.lisp"
                            "dotimes.lisp"
                            "dribble.lisp"
@@ -175,18 +368,18 @@
                            "enough-namestring.lisp"
                            "ensure-directories-exist.lisp"
                            "error.lisp"
-			   "extensible-sequences.lisp"
-                           "featurep.lisp"
+                           "extensible-sequences.lisp"
+                           "fasl-concat.lisp"
                            "fdefinition.lisp"
                            "fill.lisp"
                            "find-all-symbols.lisp"
                            "gentemp.lisp"
                            "gray-streams.lisp"
-			   "gui.lisp"
+                           "gui.lisp"
                            "inline.lisp"
                            "inspect.lisp"
-                           ;;"j.lisp"
                            "java.lisp"
+                           "java-collections.lisp"
                            "known-functions.lisp"
                            "known-symbols.lisp"
                            "late-setf.lisp"
@@ -236,8 +429,10 @@
                            "restart.lisp"
                            "revappend.lisp"
                            "rotatef.lisp"
-                           ;;"run-benchmarks.lisp"
+                           "run-program.lisp"
                            "run-shell-command.lisp"
+                           "runtime-class.lisp"
+                           "asm-runtime-class.lisp"
                            "search.lisp"
                            "sequences.lisp"
                            "sets.lisp"
@@ -264,13 +459,36 @@
                            "with-package-iterator.lisp"
                            "with-slots.lisp"
                            "with-standard-io-syntax.lisp"
-                           "write-sequence.lisp"
-                           ;;"runtime-class.lisp"
-                           )))
+                           "write-sequence.lisp"))
+
+      ;; Compile ASDF after the whole ANSI system has been
+      ;; constructed.
+      (load (do-compile "asdf.lisp"))
+      ;; ABCL-CONTRIB depends on ASDF
+      (load (do-compile "abcl-contrib.lisp"))
+
+
+      ;; With all files compiled, we need to use the symbols collected
+      ;; to generate and compile autoloads.lisp
+
+      ;; Generate the autoloads-gen file in the build directory in order
+      ;; not to clobber the source file - that should keep the system
+      ;; buildable
+
+      (format t "; Generating autoloads...~%")
+      (generate-autoloads output-path)
+      ;; Compile the file in the build directory instead of the one in the
+      ;; sources directory - the latter being for bootstrapping only.
+      (do-compile (merge-pathnames #p"autoloads-gen.lisp" output-path)
+        :extract nil)
+      (do-compile "autoloads.lisp"
+        :extract nil))
     t))
 
-(defun compile-system (&key quit (zip t) output-path)
-  (let ((status -1))
+(defun compile-system (&key quit (zip t) (cls-ext *compile-file-class-extension*) (abcl-ext *compile-file-type*) output-path)
+  (let ((status -1)
+	(*compile-file-class-extension* cls-ext)
+	(*compile-file-type* abcl-ext))
     (check-lisp-home)
     (time
      (with-compilation-unit ()
@@ -297,10 +515,10 @@
          (home (pathname *lisp-home*))
          (src (format nil "~A**/*.*" home))
          (java (format nil "~A../../../**/*.*" home)))
-    (with-open-file (s system :direction :output 
+    (with-open-file (s system :direction :output
                        :if-exists :supersede)
-      (write `(setf (logical-pathname-translations "sys")
+      (pprint `(setf (logical-pathname-translations "sys")
                     '(("SYS:SRC;**;*.*" ,src)
                       ("SYS:JAVA;**;*.*" ,java)))
-       :stream s))))
-      
+       s))))
+

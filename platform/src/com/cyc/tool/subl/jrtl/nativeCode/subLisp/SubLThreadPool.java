@@ -1,83 +1,20 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
-//// External Imports
-import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-/**
- * <P>
- * SubLThreadPool is designed to...
- *
- * <P>
- * Copyright (c) 2004 - 2006 Cycorp, Inc. All rights reserved. <BR>
- * This software is the proprietary information of Cycorp, Inc.
- * <P>
- * Use is subject to license terms.
- *
- * @author tbrussea
- * @date December 11, 2005, 2:19 PM
- * @version $Id: SubLThreadPool.java 127501 2009-03-30 20:35:37Z tbrussea $
- */
-final public class SubLThreadPool extends ThreadPoolExecutor {
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 
-	//// Constructors
-
-	private static int threadNum = 1;
-
-	//// Public Area
-
-	private static ThreadGroup defaultThreadGroup = new ThreadGroup("SubL Thread Group");
-
-	private static int MIN_THREADS = 70;
-
-	private static int MAX_THREADS = 70;
-
-	//// Protected Area
-
-	//// Private Area
-
-	//// Internal Rep
-
-	private static int KEEP_ALIVE_TIME = 5 * 60;
-	private static TimeUnit KEEP_ALIVE_UNITS = TimeUnit.SECONDS;
-	static ThreadFactory DEFAULT_THREAD_FACTORY = new ThreadFactory() {
-		public Thread newThread(Runnable command) {
-			return new SubLThread(SubLThreadPool.defaultThreadGroup, command,
-					"SubL Thread #" + SubLThreadPool.threadNum++);
-		}
-	};
-	private static BlockingQueue<Runnable> DEFAULT_WORK_QUEUE = new ArrayBlockingQueue<Runnable>(1024);
-	private static SubLThreadPool defaultSubLThreadPool = new SubLThreadPool();
-
-	public static SubLThreadPool getDefaultPool() {
-		return SubLThreadPool.defaultSubLThreadPool;
-	}
-
-	public static ThreadGroup getDefaultThreadGroup() {
-		return SubLThreadPool.defaultThreadGroup;
+public class SubLThreadPool extends ThreadPoolExecutor {
+	public SubLThreadPool() {
+		super(SubLThreadPool.MIN_THREADS, SubLThreadPool.MAX_THREADS, 300L, SubLThreadPool.KEEP_ALIVE_UNITS,
+				SubLThreadPool.DEFAULT_WORK_QUEUE, SubLThreadPool.DEFAULT_THREAD_FACTORY);
 	}
 
 	private static int getMaxThreads() {
@@ -112,25 +49,70 @@ final public class SubLThreadPool extends ThreadPoolExecutor {
 		return minThreads;
 	}
 
-	/**
-	 * @param args
-	 *            the command line arguments
-	 */
+	public static SubLThreadPool getDefaultPool() {
+		return SubLThreadPool.defaultSubLThreadPool;
+	}
+
+	public static ThreadGroup getDefaultThreadGroup() {
+		return SubLThreadPool.defaultThreadGroup;
+	}
+
 	public static void main(String[] args) {
 	}
 
-	/** Creates a new instance of SubLThreadPool. */
-	public SubLThreadPool() {
-		super(SubLThreadPool.MIN_THREADS, SubLThreadPool.MAX_THREADS, SubLThreadPool.KEEP_ALIVE_TIME,
-				SubLThreadPool.KEEP_ALIVE_UNITS, SubLThreadPool.DEFAULT_WORK_QUEUE,
-				SubLThreadPool.DEFAULT_THREAD_FACTORY);
+	private static int MIN_MIN_THREADS = 40;
+	private static int MAX_MIN_THREADS = Integer.MAX_VALUE;
+	private static int MIN_MAX_THREADS = 140;
+	private static int MAX_MAX_THREADS = Integer.MAX_VALUE;
+	private static volatile int threadNum;
+	private static ThreadGroup defaultThreadGroup;
+	private static int MIN_THREADS;
+	private static int MAX_THREADS;
+	private static int KEEP_ALIVE_TIME = 300;
+	private static TimeUnit KEEP_ALIVE_UNITS;
+	public static ThreadFactory DEFAULT_THREAD_FACTORY;
+	private static BlockingQueue<Runnable> DEFAULT_WORK_QUEUE;
+	private static SubLThreadPool defaultSubLThreadPool;
+	static {
+		SubLThreadPool.threadNum = 1;
+		defaultThreadGroup = new ThreadGroup("SubL Thread Group");
+		MIN_THREADS = getMinThreads();
+		MAX_THREADS = getMaxThreads();
+		KEEP_ALIVE_UNITS = TimeUnit.SECONDS;
+		DEFAULT_THREAD_FACTORY = new ThreadFactory() {
+			@Override
+			public Thread newThread(Runnable command) {
+				return makeSubLThreadReal(command);
+			}
+		};
+		DEFAULT_WORK_QUEUE = new SynchronousQueue<Runnable>();
+		defaultSubLThreadPool = new SubLThreadPool();
 	}
 
-	//// Main
-
-	/** ensure we only run the right type of runnables **/
-	public void execute(Runnable runnable) {
-		super.execute(runnable);
+	synchronized static Thread makeSubLThreadReal(Runnable command) {
+		Thread t = new SubLThread(SubLThreadPool.defaultThreadGroup, command,
+				"SubL Thread #" + SubLThreadPool.threadNum++);
+		// should not do this? t.setDaemon(true);
+		return t;
 	}
 
+	public void execute(SubLProcess runnable) {
+		try {
+			super.execute(runnable);
+		} catch (Exception e) {
+			runnable.setState(SubLProcess.DEAD_STATE);
+			Errors.warn("Unable to add thread to pool: " + runnable);
+		}
+	}
+
+	public static void runInSubLThread(Runnable runnable) {
+		if(Thread.currentThread() instanceof SubLThread) {
+			runnable.run();
+		} else {
+			getDefaultPool().execute(runnable);
+		}
+	}
+	public static Thread newSubLThread(Runnable runnable) {
+		return DEFAULT_THREAD_FACTORY.newThread(runnable);
+	}
 }

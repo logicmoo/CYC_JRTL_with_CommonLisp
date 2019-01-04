@@ -1,52 +1,36 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
 import java.util.List;
 
-//// External Imports
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
 
 public interface SubLList extends SubLSequence, SubLObject {
-
 	public static boolean ALLOW_REMOVE_DUPLICATES_FROM_END = true;
 
-	SubLList addItem(SubLObject item);
+	SubLList addItem(SubLObject p0);
 
-	SubLList adjoin(SubLObject item);
+	SubLList adjoin(SubLObject p0);
 
-	SubLList adjoin(SubLObject item, BinaryFunction test);
+	SubLList adjoin(SubLObject p0, BinaryFunction p1);
 
-	SubLList adjoin(SubLObject item, BinaryFunction test, UnaryFunction key);
+	SubLList adjoin(SubLObject p0, BinaryFunction p1, UnaryFunction p2);
 
-	SubLList allElementsButLast(int howMany, boolean isDestructive);
+	SubLList allElementsButLast(int p0, boolean p1);
 
-	SubLList append(SubLList list, boolean isReverse);
+	SubLList append(SubLList p0, boolean p1);
 
+	@Override
 	SubLList asArrayList();
 
+	@Override
 	SubLList asConsList();
 
-	SubLList assoc(SubLObject item, BinaryFunction test, UnaryFunction key);
+	SubLList assoc(SubLObject p0, BinaryFunction p1, UnaryFunction p2);
 
 	SubLObject caar();
 
@@ -64,130 +48,141 @@ public interface SubLList extends SubLSequence, SubLObject {
 
 	SubLObject cddr();
 
-	SubLList concatenate(List list, boolean isDestructive, boolean isReverse);
+	SubLList concatenate(List p0, boolean p1, boolean p2);
 
 	SubLList copyList();
 
 	SubLList copyTree();
 
+	@Override
 	SubLObject eighth();
 
+	@Override
 	SubLObject fifth();
 
-	/** car */
+	@Override
 	SubLObject first();
 
+	@Override
 	SubLObject fourth();
 
 	SubLObject getDottedElement();
 
-	SubLObject getf(SubLObject indicator, SubLObject defaultValue);
+	SubLObject getf(SubLObject p0, SubLObject p1);
 
-	SubLList intersection(SubLList item, boolean isDestructive);
+	SubLList intersection(SubLList p0, boolean p1);
 
-	SubLList intersection(SubLList item, boolean isDestructive, BinaryFunction test);
+	SubLList intersection(SubLList p0, boolean p1, BinaryFunction p2);
 
-	SubLList intersection(SubLList item, boolean isDestructive, BinaryFunction test, UnaryFunction key);
+	SubLList intersection(SubLList p0, boolean p1, BinaryFunction p2, UnaryFunction p3);
 
+	@Override
 	boolean isArrayBased();
 
 	boolean isProper();
 
-	boolean isSubList(SubLList sublist);
+	boolean isSubList(SubLList p0);
 
-	boolean isSubSet(SubLList list);
+	boolean isSubSet(SubLList p0);
 
-	SubLObject last(int n);
+	@Override
+	SubLObject last(int p0);
 
 	int listLength();
 
-	SubLList listPrefix(SubLList postFix);
+	SubLList listPrefix(SubLList p0);
 
-	SubLObject mapcar(SubLFunction functionTyped);
+	SubLObject mapcar(SubLFunction p0);
 
-	SubLObject mapcar(SubLFunction functionTyped, SubLObject[] moreLists);
+	SubLObject mapcar(SubLFunction p0, SubLObject[] p1);
 
-	SubLObject mapcar(SubLFunction functionTyped, SubLObject[] moreLists, boolean returnConsedResults);
+	SubLObject mapcar(SubLFunction p0, SubLObject[] p1, boolean p2);
 
-	// as sets
-	SubLList member(SubLObject item);
+	SubLList member(SubLObject p0);
 
-	SubLList member(SubLObject item, BinaryFunction test);
+	SubLList member(SubLObject p0, BinaryFunction p1);
 
-	SubLList member(SubLObject item, BinaryFunction test, UnaryFunction key);
+	SubLList member(SubLObject p0, BinaryFunction p1, UnaryFunction p2);
 
-	SubLList memberIf(BinaryFunction test);
+	SubLList memberIf(BinaryFunction p0);
 
-	SubLList memberIf(BinaryFunction test, UnaryFunction key);
+	SubLList memberIf(BinaryFunction p0, UnaryFunction p1);
 
+	@Override
 	SubLObject ninth();
 
-	SubLObject nthCdr(int index);
+	@Override
+	SubLObject nthCdr(int p0);
 
 	SubLObject pop();
 
-	SubLCons push(SubLObject item);
+	SubLCons push(SubLObject p0);
 
-	SubLCons pushNew(SubLObject item);
+	SubLCons pushNew(SubLObject p0);
 
-	SubLCons pushNew(SubLObject item, BinaryFunction test);
+	SubLCons pushNew(SubLObject p0, BinaryFunction p1);
 
-	SubLCons pushNew(SubLObject item, BinaryFunction test, UnaryFunction key);
+	SubLCons pushNew(SubLObject p0, BinaryFunction p1, UnaryFunction p2);
 
-	SubLList putf(SubLObject indicator, SubLObject value);
+	SubLList putf(SubLObject p0, SubLObject p1);
 
-	SubLList remf(SubLObject indicator);
+	SubLList remf(SubLObject p0);
 
-	/** cdr */
+	@Override
 	SubLObject rest();
 
+	@Override
 	SubLObject second();
 
-	SubLList setDifference(SubLList item, boolean isDestructive);
+	SubLList setDifference(SubLList p0, boolean p1);
 
-	SubLList setDifference(SubLList item, boolean isDestructive, BinaryFunction test);
+	SubLList setDifference(SubLList p0, boolean p1, BinaryFunction p2);
 
-	SubLList setDifference(SubLList item, boolean isDestructive, BinaryFunction test, UnaryFunction key);
+	SubLList setDifference(SubLList p0, boolean p1, BinaryFunction p2, UnaryFunction p3);
 
-	SubLObject setDottedElement(SubLObject dottedElement);
+	SubLObject setDottedElement(SubLObject p0);
 
-	// destructive modification primitives
-	SubLCons setFirst(SubLObject first);
+	@Override
+	SubLCons setFirst(SubLObject p0);
 
-	SubLCons setRest(SubLObject rest);
+	@Override
+	SubLCons setRest(SubLObject p0);
 
-	SubLList setXor(SubLList item, boolean isDestructive);
+	SubLList setXor(SubLList p0, boolean p1);
 
-	SubLList setXor(SubLList item, boolean isDestructive, BinaryFunction test);
+	SubLList setXor(SubLList p0, boolean p1, BinaryFunction p2);
 
-	SubLList setXor(SubLList item, boolean isDestructive, BinaryFunction test, UnaryFunction key);
+	SubLList setXor(SubLList p0, boolean p1, BinaryFunction p2, UnaryFunction p3);
 
+	@Override
 	SubLObject seventh();
 
+	@Override
 	SubLObject sixth();
 
-	// sustitutions
-	SubLList substituteFromAList(SubLList alist, boolean isDestructive);
+	SubLList substituteFromAList(SubLList p0, boolean p1);
 
-	SubLList substituteFromAList(SubLList alist, boolean isDestructive, BinaryFunction test);
+	SubLList substituteFromAList(SubLList p0, boolean p1, BinaryFunction p2);
 
-	SubLList substituteFromAList(SubLList alist, boolean isDestructive, BinaryFunction test, UnaryFunction key);
+	SubLList substituteFromAList(SubLList p0, boolean p1, BinaryFunction p2, UnaryFunction p3);
 
+	@Override
 	SubLObject tenth();
 
+	@Override
 	SubLObject third();
 
-	Object[] toArray(Object a[]);
+	Object[] toArray(Object[] p0);
 
 	SubLObject[] toSubLObjectArray();
 
-	SubLList treeEqual(SubLList tree1, SubLList tree2);
+	SubLList treeEqual(SubLList p0, SubLList p1);
 
-	SubLList treeEqual(SubLList tree1, SubLList tree2, BinaryFunction test);
+	SubLList treeEqual(SubLList p0, SubLList p1, BinaryFunction p2);
 
-	SubLList union(SubLList item, boolean isDestructive);
+	SubLList union(SubLList p0, boolean p1);
 
-	SubLList union(SubLList item, boolean isDestructive, BinaryFunction test);
+	SubLList union(SubLList p0, boolean p1, BinaryFunction p2);
 
-	SubLList union(SubLList item, boolean isDestructive, BinaryFunction test, UnaryFunction key);
+	SubLList union(SubLList p0, boolean p1, BinaryFunction p2, UnaryFunction p3);
 }

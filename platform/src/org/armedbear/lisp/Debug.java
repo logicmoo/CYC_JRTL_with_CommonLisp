@@ -2,7 +2,7 @@
  * Debug.java
  *
  * Copyright (C) 2002-2003 Peter Graves
- * $Id: Debug.java 12524 2010-03-11 15:49:05Z mevenson $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,52 +31,86 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import static org.armedbear.lisp.Lisp.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
-public class Debug {
+public final class Debug
+{
+    
+    public static final void assertTrue(boolean b)
+    {
+        if (!b) {
+            String msg = "ABCL Debug.assertTrue() assertion failed!";
+            System.err.println(msg);
+            Error e = new Error(msg);
+            e.printStackTrace(System.err);
+	    
+	    StringBuffer buffer = new StringBuffer();
+	    final String CR = "\n";
+	    buffer.append(msg).append(CR);
+	    StackTraceElement[] stack = e.getStackTrace();
+	    for (int i = 0; i < stack.length; i++) {
+		buffer.append(stack[i].toString()).append(CR);
+	    }
+            throw new Error(buffer.toString());
+        }
+    }
+    public static final void assertViolation(String msg) {
+	final String m = "Assert violation: " + msg;
+	Error e = new Error(m);
 
-	public static SubLSymbol _DEBUG_WARN_ = Lisp.exportSpecial("*DEBUG-WARN*", Lisp.PACKAGE_SYS, Lisp.NIL);
+	System.err.println(m);
+	e.printStackTrace(System.err);
 
-	public static void assertTrue(boolean b) {
-		if (!b) {
-			String msg = "ABCL Debug.assertTrue() assertion failed!";
-			System.err.println(msg);
-			Error e = new Error(msg);
-			e.printStackTrace();
-			throw e;
-		}
+	StringBuffer buffer = new StringBuffer();
+	final String CR = "\n";
+	buffer.append(msg).append(CR);
+	StackTraceElement[] stack = e.getStackTrace();
+	for (int i = 0; i < stack.length; i++) {
+	    buffer.append(stack[i].toString()).append(CR);
 	}
+	throw new Error(buffer.toString());
+    }
 
-	// Does not throw an exception.
-	public static void bug() {
-		Debug.trace(new Exception("BUG!"));
-	}
+    // Does not throw an exception.
+    public static void bug()
+    {
+        trace(new Exception("BUG!"));
+    }
 
-	public static void dumpStack(String string) {
-		Thread.dumpStack();
-		Debug.trace(string);
+    public static final void trace(String s)
+    {
+        System.err.println(s);
+    }
 
-	}
+    @SuppressWarnings("CallToThreadDumpStack")
+    public static final void trace(Throwable t)
+    {
+        t.printStackTrace();
+    }
 
-	public static void setDebugWarnings(boolean flag) {
-		if (flag)
-			Debug._DEBUG_WARN_.setSymbolValue(Lisp.T);
-		else
-			Debug._DEBUG_WARN_.setSymbolValue(Lisp.NIL);
-	}
+    public static final void trace(String message, Throwable t)
+    {
+       trace(message);
+       trace(t);
+    }
+    public static final Symbol _DEBUG_WARN_
+        = exportSpecial("*DEBUG-WARN*", PACKAGE_SYS, NIL);
 
-	public static void trace(String s) {
-		System.err.println(s);
-	}
-
-	public static void trace(Throwable t) {
-		t.printStackTrace();
-	}
-
-	public static void warn(String s) {
-		if (Debug._DEBUG_WARN_.getSymbolValue() != null)
-			Debug.trace(s);
-	}
+    public static void setDebugWarnings(boolean flag) {
+        if (flag) {
+            _DEBUG_WARN_.setSymbolValue(T);
+        } else {
+            _DEBUG_WARN_.setSymbolValue(NIL);
+        }
+    }
+    
+    public static final void warn(String s) {
+        if (_DEBUG_WARN_.getSymbolValue() != null) {
+            trace(s);
+        }
+    }
 }

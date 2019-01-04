@@ -1,7 +1,7 @@
 ;;; top-level.lisp
 ;;;
 ;;; Copyright (C) 2003-2006 Peter Graves
-;;; $Id: top-level.lisp 12147 2009-09-17 17:08:32Z vvoutilainen $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -31,19 +31,12 @@
 
 ;;; Adapted from SB-ACLREPL (originally written by Kevin Rosenberg).
 
-(in-package #:system)
-
-(defvar *inspect-break* nil)
-
-(defvar *inspected-object-stack* nil)
-
-(defvar *inspected-object* nil)
-
 (in-package #:top-level)
 
-(import '(sys::%format sys::list-traced-functions sys::trace-1 sys::untrace-1 sys::untrace-all))
+(require 'inspect)
 
 (defvar *null-cmd* (gensym))
+(defvar *handled-cmd* (gensym))
 
 (defvar *command-char* #\:)
 
@@ -60,10 +53,10 @@
 (defun repl-prompt-fun (stream)
   (fresh-line stream)
   (when (> *debug-level* 0)
-    (%format stream "[~D~A] "
+    (sys::%format stream "[~D~A] "
              *debug-level*
              (if sys::*inspect-break* "i" "")))
-  (%format stream "~A(~D): " (prompt-package-name) *cmd-number*))
+  (sys::%format stream "~A(~D): " (prompt-package-name) *cmd-number*))
 
 (defparameter *repl-prompt-fun* #'repl-prompt-fun)
 
@@ -93,13 +86,13 @@
 (defun error-command (ignored)
   (declare (ignore ignored))
   (when *debug-condition*
-    (let* ((s (%format nil "~A" *debug-condition*))
+    (let* ((s (sys::%format nil "~A" *debug-condition*))
            (len (length s)))
       (when (plusp len)
         (setf (schar s 0) (char-upcase (schar s 0)))
         (unless (eql (schar s (1- len)) #\.)
           (setf s (concatenate 'string s "."))))
-      (%format *debug-io* "~A~%" s))
+      (sys::%format *debug-io* "~A~%" s))
     (show-restarts (compute-restarts) *debug-io*)))
 
 (defun print-frame (frame stream &key prefix)
@@ -107,14 +100,14 @@
     (write-string prefix stream))
   (etypecase frame
     (sys::lisp-stack-frame
-     (pprint-logical-block (stream nil :prefix "(" :suffix ")")
-       (setq frame (sys:frame-to-list frame))
-       (ignore-errors
-         (prin1 (car frame) stream)
-         (let ((args (cdr frame)))
-           (if (listp args)
-               (format stream "~{ ~_~S~}" args)
-               (format stream " ~S" args))))))
+     (let ((frame (sys:frame-to-list frame)))
+       (pprint-logical-block (stream nil :prefix "(" :suffix ")")
+         (ignore-errors
+           (prin1 (car frame) stream)
+           (let ((args (cdr frame)))
+             (if (listp args)
+                 (format stream "~{ ~_~S~}" args)
+                 (format stream " ~S" args)))))))
     (sys::java-stack-frame
      (write-string (sys:frame-to-string frame) stream))))
 
@@ -133,7 +126,9 @@
           (print-frame frame *debug-io* :prefix (format nil "~3D: " n))
           (incf n)
           (when (>= n count)
+            (fresh-line *debug-io*)
             (return))))))
+  (fresh-line *debug-io*)
   (values))
 
 (defun frame-command (args)
@@ -169,7 +164,7 @@
 
 (defun package-command (args)
   (cond ((null args)
-         (%format *standard-output* "The ~A package is current.~%"
+         (sys::%format *standard-output* "The ~A package is current.~%"
                   (package-name *package*)))
         ((and *old-package* (string= args "-") (null (find-package "-")))
          (rotatef *old-package* *package*))
@@ -181,7 +176,7 @@
            (if pkg
                (setf *old-package* *package*
                      *package* pkg)
-               (%format *standard-output* "Unknown package ~A.~%" args))))))
+               (sys::%format *standard-output* "Unknown package ~A.~%" args))))))
 
 (defun reset-command (ignored)
   (declare (ignore ignored))
@@ -202,7 +197,7 @@
          (if *old-pwd*
              (setf args (namestring *old-pwd*))
              (progn
-               (%format t "No previous directory.")
+               (sys::%format t "No previous directory.")
                (return-from cd-command))))
         ((and (> (length args) 1) (string= (subseq args 0 2) "~/")
               (setf args (concatenate 'string
@@ -214,8 +209,8 @@
           (unless (equal dir *default-pathname-defaults*)
             (setf *old-pwd* *default-pathname-defaults*
                   *default-pathname-defaults* dir))
-          (%format t "~A" (namestring *default-pathname-defaults*)))
-        (%format t "Error: no such directory (~S).~%" args))))
+          (sys::%format t "~A" (namestring *default-pathname-defaults*)))
+        (sys::%format t "Error: no such directory (~S).~%" args))))
 
 (defun ls-command (args)
   (let ((args (if (stringp args) args ""))
@@ -262,19 +257,19 @@
 
 (defun pwd-command (ignored)
   (declare (ignore ignored))
-  (%format t "~A~%" (namestring *default-pathname-defaults*)))
+  (sys::%format t "~A~%" (namestring *default-pathname-defaults*)))
 
 (defun trace-command (args)
   (if (null args)
-    (%format t "~A~%" (list-traced-functions))
+    (sys::%format t "~A~%" (sys::list-traced-functions))
     (dolist (f (tokenize args))
-      (trace-1 (read-from-string f)))))
+      (sys::trace-1 (read-from-string f)))))
 
 (defun untrace-command (args)
   (if (null args)
-    (untrace-all)
+    (sys::untrace-all)
     (dolist (f (tokenize args))
-      (untrace-1 (read-from-string f)))))
+      (sys::untrace-1 (read-from-string f)))))
 
 (defconstant spaces (make-string 32 :initial-element #\space))
 
@@ -282,28 +277,6 @@
   (if (< (length string) width)
       (concatenate 'string string (subseq spaces 0 (- width (length string))))
       string))
-
-(defun %help-command (prefix)
-  (let ((prefix-len (length prefix)))
-    (when (and (> prefix-len 0)
-               (eql (schar prefix 0) *command-char*))
-      (setf prefix (subseq prefix 1))
-      (decf prefix-len))
-    (%format t "~%  COMMAND     ABBR DESCRIPTION~%")
-    (dolist (entry *command-table*)
-      (when (or (null prefix)
-                (and (<= prefix-len (length (entry-name entry)))
-                     (string-equal prefix (subseq (entry-name entry) 0 prefix-len))))
-        (%format t "  ~A~A~A~%"
-                 (pad (entry-name entry) 12)
-                 (pad (entry-abbreviation entry) 5)
-                 (entry-help entry))))
-    (%format t "~%Commands must be prefixed by the command character, which is '~A'~A.~%~%"
-             *command-char* (if (eql *command-char* #\:) " by default" ""))))
-
-(defun help-command (&optional ignored)
-  (declare (ignore ignored))
-  (%help-command nil))
 
 (defparameter *command-table*
   '(("apropos" "ap" apropos-command "apropos")
@@ -329,6 +302,28 @@
     ("trace" "tr" trace-command "trace function(s)")
     ("untrace" "untr" untrace-command "untrace function(s)")))
 
+(defun %help-command (prefix)
+  (let ((prefix-len (length prefix)))
+    (when (and (> prefix-len 0)
+               (eql (schar prefix 0) *command-char*))
+      (setf prefix (subseq prefix 1))
+      (decf prefix-len))
+    (sys::%format t "~%  COMMAND     ABBR DESCRIPTION~%")
+    (dolist (entry *command-table*)
+      (when (or (null prefix)
+                (and (<= prefix-len (length (entry-name entry)))
+                     (string-equal prefix (subseq (entry-name entry) 0 prefix-len))))
+        (sys::%format t "  ~A~A~A~%"
+                 (pad (entry-name entry) 12)
+                 (pad (entry-abbreviation entry) 5)
+                 (entry-help entry))))
+    (sys::%format t "~%Commands must be prefixed by the command character, which is '~A'~A.~%~%"
+             *command-char* (if (eql *command-char* #\:) " by default" ""))))
+
+(defun help-command (&optional ignored)
+  (declare (ignore ignored))
+  (%help-command nil))
+
 (defun entry-name (entry)
   (first entry))
 
@@ -348,8 +343,8 @@
       (setf string (subseq string 1)
             len (1- len)))
     (dolist (entry *command-table*)
-      (when (or (string= string (entry-abbreviation entry))
-                (string= string (entry-name entry)))
+      (when (or (string-equal string (entry-abbreviation entry))
+                (string-equal string (entry-name entry)))
         (return (entry-command entry))))))
 
 (defun process-cmd (form)
@@ -364,8 +359,8 @@
            (args (if pos (subseq form (1+ pos)) nil)))
       (let ((command (find-command command-string)))
         (cond ((null command)
-               (%format t "Unknown top-level command \"~A\".~%" command-string)
-               (%format t "Type \"~Ahelp\" for a list of available commands." *command-char*))
+               (sys::%format t "Unknown top-level command \"~A\".~%" command-string)
+               (sys::%format t "Type \"~Ahelp\" for a list of available commands." *command-char*))
               (t
                (when args
                  (setf args (string-trim (list #\space #\return) args))
@@ -377,12 +372,16 @@
 (defun read-cmd (stream)
   (let ((c (peek-char-non-whitespace stream)))
     (cond ((eql c *command-char*)
-           (read-line stream))
+           (let* ((input (read-line stream))
+		  (name (symbol-name (read-from-string input))))
+	     (if (find-command name)
+		 (progn (process-cmd input) *handled-cmd*)
+	       (read-from-string (concatenate 'string ":" name)))))
           ((eql c #\newline)
            (read-line stream)
            *null-cmd*)
           (t
-           (read stream nil)))))
+           (read stream nil *null-cmd*)))))
 
 (defun repl-read-form-fun (in out)
   (loop
@@ -392,7 +391,8 @@
       (setf (charpos out) 0)
       (unless (eq form *null-cmd*)
         (incf *cmd-number*))
-      (cond ((process-cmd form))
+      (cond ((or (eq form *null-cmd*)
+		 (eq form *handled-cmd*)))
             ((and (> *debug-level* 0)
                   (fixnump form))
              (let ((n form)
@@ -416,7 +416,7 @@
 (defun top-level-loop ()
   (fresh-line)
   (unless sys:*noinform*
-    (%format t "Type \"~Ahelp\" for a list of available commands.~%" *command-char*))
+    (sys::%format t "Type \"~Ahelp\" for a list of available commands.~%" *command-char*))
   (loop
     (setf *inspected-object* nil
           *inspected-object-stack* nil

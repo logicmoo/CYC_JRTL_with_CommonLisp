@@ -2,7 +2,7 @@
  * StructureClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: StructureClass.java 12513 2010-03-02 22:35:36Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,80 +31,92 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import static org.armedbear.lisp.Lisp.*;
 
-public class StructureClass extends SlotClass {
-	// ### make-structure-class name direct-slots slots include => class
-	private static Primitive MAKE_STRUCTURE_CLASS = new JavaPrimitive("make-structure-class", Lisp.PACKAGE_SYS, false) {
+public class StructureClass extends SlotClass
+{
+    StructureClass(Symbol symbol)
+    {
+        super(symbol, new Cons(BuiltInClass.STRUCTURE_OBJECT));
+    }
 
-		public SubLObject execute(SubLObject first, SubLObject second, SubLObject third, SubLObject fourth)
+    public StructureClass(Symbol symbol, LispObject directSuperclasses)
+    {
+        super(symbol, directSuperclasses);
+    }
 
-		{
-			SubLSymbol symbol = Lisp.checkSymbol(first);
-			LispClass existingClass = LispClass.findClass(symbol);
+    public LispObject typeOf()
+    {
+        return Symbol.STRUCTURE_CLASS;
+    }
 
-			if (existingClass instanceof StructureClass)
-				// DEFSTRUCT-REDEFINITION write-up
-				// states the effects from re-definition are undefined
-				// we punt: our compiler bootstrapping depends on
-				// the class not being redefined (remaining in the
-				// same location in the class hierarchy)
-				return existingClass;
+    public LispObject classOf()
+    {
+      return LispClass.findClass(Symbol.STRUCTURE_CLASS);
+    }
 
-			SubLObject directSlots = Lisp.checkList(second);
-			SubLObject slots = Lisp.checkList(third);
-			SubLSymbol include = Lisp.checkSymbol(fourth);
+    public LispObject typep(LispObject type)
+    {
+        if (type == Symbol.STRUCTURE_CLASS)
+            return T;
+        if (type == LispClass.findClass(Symbol.STRUCTURE_CLASS))
+            return T;
+        return super.typep(type);
+    }
 
-			StructureClass c = new StructureClass(symbol);
-			if (include != Lisp.NIL) {
-				LispClass includedClass = LispClass.findClass(include);
-				if (includedClass == null)
-					return Lisp.error(new SimpleError("Class " + include + " is undefined."));
-				c.setCPL(LispObjectFactory.makeCons(c, includedClass.getCPL()));
-			} else
-				c.setCPL(c, BuiltInClass.STRUCTURE_OBJECT, BuiltInClass.CLASS_T);
-			c.setDirectSlotDefinitions(directSlots);
-			c.setSlotDefinitions(slots);
-			LispClass.addClass(symbol, c);
-			return c;
-		}
-	};
+    public LispObject getDescription()
+    {
+        return new SimpleString(princToString());
+    }
 
-	StructureClass(SubLSymbol symbol) {
-		super(symbol, LispObjectFactory.makeCons(BuiltInClass.STRUCTURE_OBJECT));
-	}
+    public String printObjectImpl()
+    {
+        StringBuilder sb = new StringBuilder("STRUCTURE-CLASS ");
+        sb.append(getLispClassName().princToString());
+        return unreadableString(sb.toString(), false);
+    }
 
-	public StructureClass(SubLSymbol symbol, SubLObject directSuperclasses) {
-		super(symbol, directSuperclasses);
-	}
+    // ### make-structure-class name direct-slots slots include => class
+    private static final Primitive MAKE_STRUCTURE_CLASS =
+        new Primitive("make-structure-class", PACKAGE_SYS, false)
+    {
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third, LispObject fourth)
 
-	public SubLObject classOf() {
-		return StandardClass.STRUCTURE_CLASS;
-	}
+        {
+            Symbol symbol = checkSymbol(first);
+            LispClass existingClass = LispClass.findClass(symbol);
 
-	public SubLObject getDescription() {
-		return LispObjectFactory.makeString(this.writeToString());
-	}
+            if (existingClass instanceof StructureClass)
+                // DEFSTRUCT-REDEFINITION write-up
+                // states the effects from re-definition are undefined
+                // we punt: our compiler bootstrapping depends on
+                // the class not being redefined (remaining in the
+                // same location in the class hierarchy)
+                return existingClass;
 
-	public SubLObject typeOf() {
-		return LispSymbols.STRUCTURE_CLASS;
-	}
 
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.STRUCTURE_CLASS)
-			return Lisp.T;
-		if (type == StandardClass.STRUCTURE_CLASS)
-			return Lisp.T;
-		return super.typep(type);
-	}
 
-	public String writeToString() {
-		StringBuffer sb = new StringBuffer("#<STRUCTURE-CLASS ");
-		sb.append(this.getLispClassName().writeToString());
-		sb.append('>');
-		return sb.toString();
-	}
+            LispObject directSlots = checkList(second);
+            LispObject slots = checkList(third);
+            Symbol include = checkSymbol(fourth);
+
+            StructureClass c = new StructureClass(symbol);
+            if (include != NIL) {
+                LispClass includedClass = LispClass.findClass(include);
+                if (includedClass == null)
+                    return error(new SimpleError("Class " + include +
+                                                  " is undefined."));
+                c.setCPL(new Cons(c, includedClass.getCPL()));
+            } else
+                c.setCPL(c, BuiltInClass.STRUCTURE_OBJECT, BuiltInClass.CLASS_T);
+            c.setDirectSlotDefinitions(directSlots);
+            c.setSlotDefinitions(slots);
+            c.setFinalized(true);
+            addClass(symbol, c);
+            return c;
+        }
+    };
 }

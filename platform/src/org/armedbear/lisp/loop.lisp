@@ -1,7 +1,7 @@
 ;;; loop.lisp
 ;;;
 ;;; Copyright (C) 2004-2007 Peter Graves
-;;; $Id: loop.lisp 11391 2008-11-15 22:38:34Z vvoutilainen $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -517,7 +517,7 @@ code to be loaded.
 ;;; LOOP-EMIT-FINAL-VALUE, q.v.
 (defvar *loop-after-epilogue*)
 
-;;; the "culprit" responsible for supplying a value from the
+;;; the "culprit" responsible for supplying a final value from the
 ;;; loop. This is so LOOP-EMIT-FINAL-VALUE can moan about multiple
 ;;; return values being supplied.
 (defvar *loop-final-value-culprit*)
@@ -976,10 +976,23 @@ code to be loaded.
 
 (defun loop-typed-init (data-type &optional step-var-p)
   (when (and data-type (subtypep data-type 'number))
-    (if (or (subtypep data-type 'float)
-	    (subtypep data-type '(complex float)))
-	(coerce (if step-var-p 1 0) data-type)
-	(if step-var-p 1 0))))
+    ;; From SBCL
+    (let ((init (if step-var-p 1 0)))
+      (flet ((like (&rest types)
+               (coerce init (find-if (lambda (type)
+                                       (subtypep data-type type))
+                                     types))))
+        (cond ((subtypep data-type 'float)
+               (like 'single-float 'double-float
+                     'short-float 'long-float 'float))
+              ((subtypep data-type '(complex float))
+               (like '(complex single-float)
+                     '(complex double-float)
+                     '(complex short-float)
+                     '(complex long-float)
+                     '(complex float)))
+              (t
+               init))))))
 
 (defun loop-optional-type (&optional variable)
   ;; No variable specified implies that no destructuring is permissible.

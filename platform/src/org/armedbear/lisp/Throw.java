@@ -2,7 +2,7 @@
  * Throw.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Throw.java 12298 2009-12-18 21:50:54Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,29 +31,34 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CatchableThrow;
 
-public class Throw extends ControlTransfer {
-	public SubLObject tag;
-	private SubLObject result;
-	private SubLObject[] values;
+public abstract class Throw extends CatchableThrow
+{
+    public final LispObject tag;
+    protected final LispObject result;
+    private final LispObject[] values;
 
-	public Throw(SubLObject tag, SubLObject result, LispThread thread)
+    public Throw(LispObject tag, LispObject result, LispThread thread)
 
-	{
-		this.tag = tag;
-		this.result = result;
-		this.values = thread._values;
-	}
+    {
+        this.tag = tag;
+        this.result = result;
+        values = thread._values;
+    }
 
-	public SubLObject getCondition() {
-		return new ControlError("Attempt to throw to the nonexistent tag " + this.tag.writeToString() + ".");
-	}
+    public LispObject getResult(LispThread thread)
+    {
+        thread._values = values;
+        return result;
+    }
 
-	public SubLObject getResult(LispThread thread) {
-		thread._values = this.values;
-		return this.result;
-	}
+    @Override
+    public LispObject getCondition()
+    {
+        return new ControlError("Attempt to throw to the nonexistent tag " +
+                                tag.princToString() + ".");
+    }
 }

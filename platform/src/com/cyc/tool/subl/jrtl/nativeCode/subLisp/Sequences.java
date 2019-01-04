@@ -1,41 +1,17 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLSequence;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 
-//// Internal Imports
-
-//// External Imports
-
 public class Sequences extends SubLTrampolineFile {
-
-	//// Constructors
-
-	public static SubLFile me = new Sequences();
-
 	public static SubLObject cconcatenate(SubLObject sequence1, SubLObject sequence2) {
 		SubLSequence sequence1Typed = sequence1.toSeq();
 		SubLSequence sequence2Typed = sequence2.toSeq();
@@ -43,14 +19,12 @@ public class Sequences extends SubLTrampolineFile {
 		return result;
 	}
 
-	//// Public Area
-
 	public static SubLObject cconcatenate(SubLObject sequence, SubLObject[] moreSequences) {
 		SubLSequence sequenceTyped = sequence.toSeq();
 		if (moreSequences.length == 0)
 			return (SubLObject) sequenceTyped.clone();
 		if (moreSequences.length == 1)
-			return Sequences.cconcatenate(sequence, moreSequences[0]);
+			return cconcatenate(sequence, moreSequences[0]);
 		SubLObject result = sequenceTyped.concatenate(moreSequences);
 		return result;
 	}
@@ -67,8 +41,7 @@ public class Sequences extends SubLTrampolineFile {
 		int startTyped = SubLTrampolineFile.extractStart(start);
 		int endTyped = SubLTrampolineFile.extractEnd(end);
 		int result = sequenceTyped.count(item, testFunction, keyFunction, startTyped, endTyped);
-		return result == SubLSequence.NOT_FOUND ? (SubLObject) CommonSymbols.NIL
-				: SubLNumberFactory.makeInteger(result);
+		return result == -2 ? SubLNil.NIL : SubLNumberFactory.makeInteger(result);
 	}
 
 	public static SubLObject count_if(SubLObject test, SubLObject sequence, SubLObject key, SubLObject start,
@@ -79,8 +52,8 @@ public class Sequences extends SubLTrampolineFile {
 		int startTyped = SubLTrampolineFile.extractStart(start);
 		int endTyped = SubLTrampolineFile.extractEnd(end);
 		int result = sequenceTyped.countIf(testFunction, keyFunction, startTyped, endTyped);
-		if (result == SubLSequence.NOT_FOUND)
-			return CommonSymbols.NIL;
+		if (result == -2)
+			return SubLNil.NIL;
 		return SubLNumberFactory.makeInteger(result);
 	}
 
@@ -186,8 +159,8 @@ public class Sequences extends SubLTrampolineFile {
 		UnaryFunction keyFunction = SubLTrampolineFile.extractUnaryFunc(key);
 		int result = sequence1Typed.indexOfMismatch(sequence2Typed, testFunction, keyFunction, start1Typed, end1Typed,
 				start2Typed, end2Typed);
-		if (result == SubLSequence.MATCH_EVERYWHERE)
-			return CommonSymbols.NIL;
+		if (result == -3)
+			return SubLNil.NIL;
 		return SubLNumberFactory.makeInteger(result);
 	}
 
@@ -223,31 +196,31 @@ public class Sequences extends SubLTrampolineFile {
 
 	public static SubLObject position(SubLObject item, SubLObject sequence, SubLObject test, SubLObject key,
 			SubLObject start, SubLObject end) {
-		if (sequence == CommonSymbols.NIL)
-			return CommonSymbols.NIL;
+		if (sequence == SubLNil.NIL)
+			return SubLNil.NIL;
 		SubLSequence sequenceTyped = sequence.toSeq();
 		int startTyped = SubLTrampolineFile.extractStart(start);
 		int endTyped = SubLTrampolineFile.extractEnd(end);
 		BinaryFunction testBFF = SubLTrampolineFile.extractBinaryFunc(test);
 		UnaryFunction keyUF = SubLTrampolineFile.extractUnaryFunc(key);
 		int result = sequenceTyped.positionOf(item, testBFF, keyUF, startTyped, endTyped);
-		if (result == SubLSequence.NOT_FOUND)
-			return CommonSymbols.NIL;
+		if (result == -2)
+			return SubLNil.NIL;
 		return SubLNumberFactory.makeInteger(result);
 	}
 
 	public static SubLObject position_if(SubLObject test, SubLObject sequence, SubLObject key, SubLObject start,
 			SubLObject end) {
-		if (sequence == CommonSymbols.NIL)
-			return CommonSymbols.NIL;
+		if (sequence == SubLNil.NIL)
+			return SubLNil.NIL;
 		SubLSequence sequenceTyped = sequence.toSeq();
 		int startTyped = SubLTrampolineFile.extractStart(start);
 		int endTyped = SubLTrampolineFile.extractEnd(end);
 		UnaryFunction testBFF = SubLTrampolineFile.extractUnaryFunc(test);
 		UnaryFunction keyUF = SubLTrampolineFile.extractUnaryFunc(key);
 		int result = sequenceTyped.positionOfIf(testBFF, keyUF, startTyped, endTyped);
-		if (result == SubLSequence.NOT_FOUND)
-			return CommonSymbols.NIL;
+		if (result == -2)
+			return SubLNil.NIL;
 		return SubLNumberFactory.makeInteger(result);
 	}
 
@@ -314,8 +287,8 @@ public class Sequences extends SubLTrampolineFile {
 		UnaryFunction keyUF = SubLTrampolineFile.extractUnaryFunc(key);
 		int result = sequence1Typed.search(sequence2Typed, testBFF, keyUF, start1Typed, end1Typed, start2Typed,
 				end2Typed);
-		if (result == SubLSequence.NOT_FOUND)
-			return CommonSymbols.NIL;
+		if (result == -2)
+			return SubLNil.NIL;
 		return SubLNumberFactory.makeInteger(result);
 	}
 
@@ -353,12 +326,12 @@ public class Sequences extends SubLTrampolineFile {
 		return result;
 	}
 
-	/** Creates a new instance of Sequences. */
-	public Sequences() {
+	public static SubLFile me;
+	static {
+		me = new Sequences();
 	}
 
-	//// Initializers
-
+	@Override
 	public void declareFunctions() {
 		SubLFiles.declareFunction(Sequences.me, "elt", "ELT", 2, 0, false);
 		SubLFiles.declareFunction(Sequences.me, "subseq", "SUBSEQ", 2, 1, false);
@@ -367,10 +340,8 @@ public class Sequences extends SubLTrampolineFile {
 		SubLFiles.declareFunction(Sequences.me, "length_with_cutoff", "LENGTH-WITH-CUTOFF", 2, 0, false);
 		SubLFiles.declareFunction(Sequences.me, "reverse", "REVERSE", 1, 0, false);
 		SubLFiles.declareFunction(Sequences.me, "nreverse", "NREVERSE", 1, 0, false);
-
 		SubLFiles.declareFunction(Sequences.me, "cconcatenate", "CCONCATENATE", 1, 0, true);
 		SubLFiles.declareFunction(Sequences.me, "creduce", "CREDUCE", 2, 3, false);
-
 		SubLFiles.declareFunction(Sequences.me, "fill", "FILL", 2, 2, false);
 		SubLFiles.declareFunction(Sequences.me, "replace", "REPLACE", 2, 4, false);
 		SubLFiles.declareFunction(Sequences.me, "remove", "REMOVE", 2, 5, false);
@@ -383,30 +354,21 @@ public class Sequences extends SubLTrampolineFile {
 		SubLFiles.declareFunction(Sequences.me, "substitute_if", "SUBSTITUTE-IF", 3, 4, false);
 		SubLFiles.declareFunction(Sequences.me, "nsubstitute", "NSUBSTITUTE", 3, 5, false);
 		SubLFiles.declareFunction(Sequences.me, "nsubstitute_if", "NSUBSTITUTE-IF", 3, 4, false);
-
 		SubLFiles.declareFunction(Sequences.me, "position", "POSITION", 2, 4, false);
 		SubLFiles.declareFunction(Sequences.me, "position_if", "POSITION-IF", 2, 3, false);
 		SubLFiles.declareFunction(Sequences.me, "find", "FIND", 2, 4, false);
 		SubLFiles.declareFunction(Sequences.me, "find_if", "FIND-IF", 2, 3, false);
 		SubLFiles.declareFunction(Sequences.me, "count", "COUNT", 2, 4, false);
 		SubLFiles.declareFunction(Sequences.me, "count_if", "COUNT-IF", 2, 3, false);
-
 		SubLFiles.declareFunction(Sequences.me, "mismatch", "MISMATCH", 2, 6, false);
 		SubLFiles.declareFunction(Sequences.me, "search", "SEARCH", 2, 6, false);
 	}
 
+	@Override
 	public void initializeVariables() {
 	}
 
+	@Override
 	public void runTopLevelForms() {
 	}
-
-	//// Protected Area
-
-	//// Private Area
-
-	//// Internal Rep
-
-	//// Main
-
 }

@@ -1,160 +1,120 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.translatedCode.sublisp;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class bytes extends SubLTranslatedFile {
-
-	//// Constructor
-
-	public static SubLFile me = new bytes();
-
-	public static String myName = "com.cyc.tool.subl.jrtl.translatedCode.sublisp.bytes";
-	public static SubLSymbol $sym0$INTEGERP = SubLObjectFactory.makeSymbol("INTEGERP");
-
-	//// Definitions
-
-	public static SubLInteger $int1$4095 = SubLObjectFactory.makeInteger(4095);
-
-	public static SubLString $str2$Invalid_Size = SubLObjectFactory.makeString("Invalid Size");
-
-	public static SubLString $str3$Invalid_Position = SubLObjectFactory.makeString("Invalid Position");
-
-	public static SubLInteger $int4$4096 = SubLObjectFactory.makeInteger(4096);
-
-	public static SubLInteger $int5$8193 = SubLObjectFactory.makeInteger(8193);
-
-	public static SubLInteger $int6$12291 = SubLObjectFactory.makeInteger(12291);
-
-	//// Internal Constants
-
-	public static SubLInteger $int7$_3 = SubLObjectFactory.makeInteger(-3);
-	public static SubLInteger $int8$_12 = SubLObjectFactory.makeInteger(-12);
-
 	public static SubLObject declare_bytes_file() {
-		SubLFiles.declareFunction(bytes.myName, "sublisp_byte", "BYTE", 2, 0, false);
-		SubLFiles.declareFunction(bytes.myName, "ldb", "LDB", 2, 0, false);
-		SubLFiles.declareFunction(bytes.myName, "dpb", "DPB", 3, 0, false);
-		return CommonSymbols.NIL;
+		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.bytes", "sublisp_byte", "BYTE", 2, 0,
+				false);
+		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.bytes", "ldb", "LDB", 2, 0, false);
+		SubLFiles.declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.bytes", "dpb", "DPB", 3, 0, false);
+		return SubLNil.NIL;
 	}
 
-	/**
-	 * Return the integer BITS where the bits of NEWBYTE have been substituted
-	 * into BITS according the the BYTESPEC.
-	 */
-	@SubL(source = "sublisp/bytes.lisp", position = 2510)
+	@SubL(source = "sublisp/bytes.lisp", position = 2510L)
 	public static SubLObject dpb(SubLObject newbyte, SubLObject bytespec, SubLObject bits) {
-		SubLTrampolineFile.checkType(bytespec, bytes.$sym0$INTEGERP);
-		SubLTrampolineFile.checkType(newbyte, bytes.$sym0$INTEGERP);
-		SubLTrampolineFile.checkType(bits, bytes.$sym0$INTEGERP);
-		{
-			SubLObject position = Numbers.logand(bytespec, bytes.$int1$4095);
-			SubLObject size = Numbers.ash(bytespec, bytes.$int8$_12);
-			SubLObject mask = Numbers.lognot(Numbers.ash(CommonSymbols.MINUS_ONE_INTEGER, position));
-			SubLObject trimmed_newbits = CommonSymbols.NIL;
-			trimmed_newbits = Numbers.logand(Numbers.lognot(Numbers.ash(CommonSymbols.MINUS_ONE_INTEGER, size)),
-					newbyte);
-			return Numbers.logior(Numbers.logand(mask, bits), Numbers.ash(trimmed_newbits, position), Numbers
-					.ash(Numbers.ash(bits, Numbers.minus(Numbers.add(position, size))), Numbers.add(position, size)));
-		}
+		assert SubLNil.NIL != Types.integerp(bytespec) : bytespec;
+		assert SubLNil.NIL != Types.integerp(newbyte) : newbyte;
+		assert SubLNil.NIL != Types.integerp(bits) : bits;
+		SubLObject position = Numbers.logand(bytespec, bytes.$int1$4095);
+		SubLObject size = Numbers.ash(bytespec, bytes.$int8$_12);
+		SubLObject mask = Numbers.lognot(Numbers.ash(CommonSymbols.MINUS_ONE_INTEGER, position));
+		SubLObject trimmed_newbits = SubLNil.NIL;
+		trimmed_newbits = Numbers.logand(Numbers.lognot(Numbers.ash(CommonSymbols.MINUS_ONE_INTEGER, size)), newbyte);
+		return Numbers.logior(Numbers.logand(mask, bits), Numbers.ash(trimmed_newbits, position), Numbers
+				.ash(Numbers.ash(bits, Numbers.minus(Numbers.add(position, size))), Numbers.add(position, size)));
 	}
 
 	public static SubLObject init_bytes_file() {
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
-	/** Return the byte specified by BYTESPEC from the integer BITS. */
-	@SubL(source = "sublisp/bytes.lisp", position = 1703)
+	@SubL(source = "sublisp/bytes.lisp", position = 1703L)
 	public static SubLObject ldb(SubLObject bytespec, SubLObject bits) {
-		SubLTrampolineFile.checkType(bytespec, bytes.$sym0$INTEGERP);
-		SubLTrampolineFile.checkType(bits, bytes.$sym0$INTEGERP);
-		{
-			SubLObject pcase_var = bytespec;
-			if (pcase_var.eql(bytes.$int4$4096))
-				return Numbers.logand(CommonSymbols.ONE_INTEGER, bits);
-			else if (pcase_var.eql(bytes.$int5$8193))
-				return Numbers.logand(CommonSymbols.THREE_INTEGER, Numbers.ash(bits, CommonSymbols.MINUS_ONE_INTEGER));
-			else if (pcase_var.eql(bytes.$int6$12291))
-				return Numbers.logand(CommonSymbols.SEVEN_INTEGER, Numbers.ash(bits, bytes.$int7$_3));
-			else {
-				SubLObject size = Numbers.ash(bytespec, bytes.$int8$_12);
-				SubLObject position = Numbers.logand(bytespec, bytes.$int1$4095);
-				SubLObject mask = Numbers.lognot(Numbers.ash(CommonSymbols.MINUS_ONE_INTEGER, size));
-				return Numbers.logand(mask, Numbers.ash(bits, Numbers.minus(position)));
-			}
-		}
+		assert SubLNil.NIL != Types.integerp(bytespec) : bytespec;
+		assert SubLNil.NIL != Types.integerp(bits) : bits;
+		if (bytespec.eql(bytes.$int4$4096))
+			return Numbers.logand(CommonSymbols.ONE_INTEGER, bits);
+		if (bytespec.eql(bytes.$int5$8193))
+			return Numbers.logand(CommonSymbols.THREE_INTEGER, Numbers.ash(bits, CommonSymbols.MINUS_ONE_INTEGER));
+		if (bytespec.eql(bytes.$int6$12291))
+			return Numbers.logand(CommonSymbols.SEVEN_INTEGER, Numbers.ash(bits, bytes.$int7$_3));
+		SubLObject size = Numbers.ash(bytespec, bytes.$int8$_12);
+		SubLObject position = Numbers.logand(bytespec, bytes.$int1$4095);
+		SubLObject mask = Numbers.lognot(Numbers.ash(CommonSymbols.MINUS_ONE_INTEGER, size));
+		return Numbers.logand(mask, Numbers.ash(bits, Numbers.minus(position)));
 	}
 
 	public static SubLObject setup_bytes_file() {
-		// CVS_ID("Id: bytes.lisp 126640 2008-12-04 13:39:36Z builder ");
-		return CommonSymbols.NIL;
+		return SubLNil.NIL;
 	}
 
-	/**
-	 * Return a byte specification object (an integer) which can be used as an
-	 * argument to LDB and DPB functions. SIZE specifies the width in bits.
-	 * Position specifies the least significant bit of the byte, numbering 0 as
-	 * the least significant bit.
-	 */
-	@SubL(source = "sublisp/bytes.lisp", position = 1139)
+	@SubL(source = "sublisp/bytes.lisp", position = 1139L)
 	public static SubLObject sublisp_byte(SubLObject size, SubLObject position) {
-		SubLTrampolineFile.checkType(size, bytes.$sym0$INTEGERP);
-		SubLTrampolineFile.checkType(position, bytes.$sym0$INTEGERP);
+		assert SubLNil.NIL != Types.integerp(size) : size;
+		assert SubLNil.NIL != Types.integerp(position) : position;
 		if (size.isNegative() || size.numG(bytes.$int1$4095)) {
 			Errors.error(bytes.$str2$Invalid_Size);
-			return CommonSymbols.NIL;
+			return SubLNil.NIL;
 		}
 		if (position.isNegative() || size.numG(bytes.$int1$4095)) {
 			Errors.error(bytes.$str3$Invalid_Position);
-			return CommonSymbols.NIL;
+			return SubLNil.NIL;
 		}
 		return Numbers.add(Numbers.multiply(size, bytes.$int4$4096), position);
 	}
 
-	private bytes() {
+	public static SubLFile me;
+	public static String myName = "com.cyc.tool.subl.jrtl.translatedCode.sublisp.bytes";
+	private static SubLSymbol $sym0$INTEGERP;
+	private static SubLInteger $int1$4095;
+	private static SubLString $str2$Invalid_Size;
+	private static SubLString $str3$Invalid_Position;
+	private static SubLInteger $int4$4096;
+	private static SubLInteger $int5$8193;
+	private static SubLInteger $int6$12291;
+	private static SubLInteger $int7$_3;
+	private static SubLInteger $int8$_12;
+	static {
+		me = new bytes();
+		$sym0$INTEGERP = SubLObjectFactory.makeSymbol("INTEGERP");
+		$int1$4095 = SubLObjectFactory.makeInteger(4095);
+		$str2$Invalid_Size = SubLObjectFactory.makeString("Invalid Size");
+		$str3$Invalid_Position = SubLObjectFactory.makeString("Invalid Position");
+		$int4$4096 = SubLObjectFactory.makeInteger(4096);
+		$int5$8193 = SubLObjectFactory.makeInteger(8193);
+		$int6$12291 = SubLObjectFactory.makeInteger(12291);
+		$int7$_3 = SubLObjectFactory.makeInteger(-3);
+		$int8$_12 = SubLObjectFactory.makeInteger(-12);
 	}
 
-	//// Initializers
-
+	@Override
 	public void declareFunctions() {
-		bytes.declare_bytes_file();
+		declare_bytes_file();
 	}
 
+	@Override
 	public void initializeVariables() {
-		bytes.init_bytes_file();
+		init_bytes_file();
 	}
 
+	@Override
 	public void runTopLevelForms() {
-		bytes.setup_bytes_file();
+		setup_bytes_file();
 	}
-
 }

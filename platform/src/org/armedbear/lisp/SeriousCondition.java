@@ -2,7 +2,7 @@
  * SeriousCondition.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: SeriousCondition.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,43 +31,50 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class SeriousCondition extends Condition {
-	public SeriousCondition() {
-	}
+public class SeriousCondition extends Condition
+{
+    public SeriousCondition()
+    {
+    }
 
-	protected SeriousCondition(LispClass cls) {
-		super(cls);
-	}
+    protected SeriousCondition(LispClass cls)
+    {
+        super(cls);
+    }
 
-	public SeriousCondition(String message) {
-		super(message);
-	}
+    public SeriousCondition(LispObject initArgs)
+    {
+        super(initArgs);
+    }
 
-	public SeriousCondition(SubLObject initArgs) {
-		super(initArgs);
-	}
+    public SeriousCondition(String message)
+    {
+        super(message);
+    }
 
-	public SubLObject classOf() {
-		return StandardClass.SERIOUS_CONDITION;
-	}
+    @Override
+    public LispObject typeOf()
+    {
+        return Symbol.SERIOUS_CONDITION;
+    }
 
-	protected void initialize(SubLObject initArgs) {
-		super.initialize(initArgs);
-	}
+    @Override
+    public LispObject classOf()
+    {
+        return StandardClass.SERIOUS_CONDITION;
+    }
 
-	public SubLObject typeOf() {
-		return LispSymbols.SERIOUS_CONDITION;
-	}
-
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.SERIOUS_CONDITION)
-			return Lisp.T;
-		if (type == StandardClass.SERIOUS_CONDITION)
-			return Lisp.T;
-		return super.typep(type);
-	}
+    @Override
+    public LispObject typep(LispObject type)
+    {
+        if (type == Symbol.SERIOUS_CONDITION)
+            return T;
+        if (type == StandardClass.SERIOUS_CONDITION)
+            return T;
+        return super.typep(type);
+    }
 }

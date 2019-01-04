@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="ext.bundle.xml.xerces-1.2.4-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/AppdapterGUI/maven/ext.bundle.xml.xerces/target/ext.bundle.xml.xerces-1.2.4-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

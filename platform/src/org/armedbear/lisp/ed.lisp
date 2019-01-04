@@ -1,7 +1,7 @@
 ;;; ed.lisp
 ;;;
 ;;; Copyright (C) 2004-2007 Peter Graves
-;;; $Id: ed.lisp 11391 2008-11-15 22:38:34Z vvoutilainen $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -57,8 +57,8 @@ the file system."
         stream)
     (when (probe-file portfile)
       (let* ((port (with-open-file (s portfile) (read s nil nil)))
-             (socket (and (integerp port) (make-socket "127.0.0.1" port))))
-        (setf stream (and socket (get-socket-stream socket)))))
+             (socket (and (integerp port) (ext:make-socket "127.0.0.1" port))))
+        (setf stream (and socket (ext:get-socket-stream socket)))))
     (unwind-protect
      (cond ((stringp what)
             (if stream

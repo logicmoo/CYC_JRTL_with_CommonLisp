@@ -1,28 +1,17 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+////
+//
 package com.cyc.tool.subl.jrtl.nativeCode.type.operator;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import org.armedbear.lisp.Function;
+import org.armedbear.lisp.Lisp;
+import org.armedbear.lisp.LispObject;
+import org.armedbear.lisp.WrongNumberOfArgumentsException;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CatchableThrow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
@@ -35,74 +24,51 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.exception.Unhandleable;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.PatchFileLoader;
-
-public class SubLCompiledFunction extends AbstractSubLFunction implements SubLFunction {
-
-	//// Constructors
-
+import static org.armedbear.lisp.Lisp.*;
+public class SubLCompiledFunction extends Function implements SubLFunction {
 	public class FuncallCounts {
-		public int counts[] = new int[SubLCompiledFunction.MAX_ARITY_TO_MAINTAIN_COUNTS_FOR + 1];
-
 		FuncallCounts() {
-			Arrays.fill(this.counts, 0);
+			Arrays.fill(counts = new int[51], 0);
 			SubLCompiledFunction.funcallCountsArray.add(this);
 		}
 
+		public int[] counts;
+
 		public String getMethodName() {
-			return SubLCompiledFunction.this.method.getName();
+			return method.getName();
 		}
 
 		synchronized void incCount(int arity) {
-			if (arity > SubLCompiledFunction.MAX_ARITY_TO_MAINTAIN_COUNTS_FOR)
+			if (arity > 50) {
 				return;
-			this.counts[arity]++;
+			}
+			final int[] counts = this.counts;
+			++counts[arity];
 		}
 	}
 
-	public static String COMPILED_FUNCTION_TYPE_NAME = "FUNCTION";
-
-	//// Public Area
-
-	public static boolean SHOULD_MAINTAIN_FUNCALL_COUNTS = true;
-
-	public static int MAX_ARITY_TO_MAINTAIN_COUNTS_FOR = 50;
-
-	public static int MIN_FUNCALL_COUNTS_TO_CARE_ABOUT = 100;
-
-	public static ArrayList<FuncallCounts> funcallCountsArray = SubLCompiledFunction.SHOULD_MAINTAIN_FUNCALL_COUNTS
-			? new ArrayList<FuncallCounts>() : null;
-
-	public static boolean USE_DIRECT_CALLING_MECHANISM = false;
-
-	private Method method;
-
-	private Class methodClass;
-
-	private Class returnType;
-
-	private String methodClassStr;
-
-	private String methodName;
-
-	private Class[] methodParameters;
-
-	private SubLList arglist = null;
-
-	public volatile FuncallCounts funcallCounts = SubLCompiledFunction.SHOULD_MAINTAIN_FUNCALL_COUNTS
-			? new FuncallCounts() : null;
+	@Override
+	public boolean isSubLispFunction() {
+		return true;
+	}
 
 	SubLCompiledFunction(Method method, SubLSymbol functionSymbol, int requiredArgCount, int optionalArgCount,
 			boolean allowsRest) {
 		super(functionSymbol, requiredArgCount, optionalArgCount, allowsRest);
-		if (method == null)
+		//argList = null;
+		funcallCounts = new FuncallCounts();
+		if (method == null) {
 			Errors.error("Got null native method for: " + functionSymbol);
-		this.setMethod(method);
+		}
+		setMethod(method);
 		functionSymbol.setFunction(this);
 	}
 
 	SubLCompiledFunction(String methodClassStr, String methodName, Class[] methodParameters, Class returnType,
 			SubLSymbol functionSymbol, int requiredArgCount, int optionalArgCount, boolean allowsRest) {
 		super(functionSymbol, requiredArgCount, optionalArgCount, allowsRest);
+		//argList = null;
+		funcallCounts = new FuncallCounts();
 		this.methodClassStr = methodClassStr;
 		this.methodName = methodName;
 		this.methodParameters = methodParameters;
@@ -110,361 +76,371 @@ public class SubLCompiledFunction extends AbstractSubLFunction implements SubLFu
 		functionSymbol.setFunction(this);
 	}
 
+	@Override
+	protected void extraInfo(StringBuilder sb) {
+		if(methodClass==null && method!=null) {
+			methodClass = method.getDeclaringClass();
+		}
+		if(methodClass!=null) {
+			sb.append(Lisp.getDotName(methodClass));
+			return;
+		}
+	}
+
+	private Method method;
+	private Class methodClass;
+	private Class returnType;
+	private String methodClassStr;
+	private String methodName;
+	private Class[] methodParameters;
+	//private final SubLList argList;
+	public volatile FuncallCounts funcallCounts;
+	//public static String FUNCTION_TYPE_NAME;
+	public static boolean SHOULD_MAINTAIN_FUNCALL_COUNTS = true;
+	public static int MAX_ARITY_TO_MAINTAIN_COUNTS_FOR = 50;
+	public static int MIN_FUNCALL_COUNTS_TO_CARE_ABOUT = 100;
+	public static ArrayList<FuncallCounts> funcallCountsArray;
+	public static boolean USE_DIRECT_CALLING_MECHANISM = false;
+	static {
+		SubLCompiledFunction.FUNCTION_TYPE_NAME = "FUNCTION";
+		funcallCountsArray = new ArrayList<FuncallCounts>();
+	}
+
+	private void setMethod(Method method) {
+		if (method == null) {
+			Errors.error("Got null native method for: " + this);
+		}
+		methodClassStr = method.getDeclaringClass().getName();
+		methodName = method.getName();
+		methodParameters = method.getParameterTypes();
+		returnType = method.getReturnType();
+	}
+
+	@Override
+	public LispObject arrayify(LispObject... args) {
+		return (LispObject) applyObject(args);
+	}
+	public SubLObject applyObject(SubLObject... args) {
+		return funcall(args);
+	}
+	@Override
 	public SubLObject apply(Object[] args) {
-		if (SubLCompiledFunction.SHOULD_MAINTAIN_FUNCALL_COUNTS) {
-			int arity = 0;
-			for (int i = 0, size = args.length; i < size; i++)
-				if (args[i] != CommonSymbols.UNPROVIDED)
-					if (args[i] instanceof SubLObject[])
-						arity += ((SubLObject[]) args[i]).length;
-					else
-						arity++;
-			this.funcallCounts.incCount(arity);
-		}
-		SubLObject result = null;
-		try {
-			if (SubLCompiledFunction.USE_DIRECT_CALLING_MECHANISM)
-				Errors.unimplementedMethod("Direct funcalls not currently implemented.");
-			// @todo potential future optimization -- not needed atm because
-			// of better optimization elsewhere
-			// result = makeInstance().invoke(args);
-			else
-				result = (SubLObject) this.getMethod().invoke(null, args);
-			return Values.setFirstMultipleValue(result);
-		} catch (InvocationTargetException ite) {
-			Throwable e = SubLCompiledFunction.USE_DIRECT_CALLING_MECHANISM ? ite : ite.getCause();
-			if (e instanceof Unhandleable)
-				throw (Unhandleable) e;
-			if (e instanceof CatchableThrow)
-				throw (CatchableThrow) e;
-			if (e instanceof Error)
-				// e.printStackTrace();
-				throw (Error) e;
-			Errors.error("Error calling " + this.methodName + ".", e);
-		} catch (Throwable e) {
-			if (e instanceof Unhandleable)
-				throw (Unhandleable) e;
-			if (e instanceof CatchableThrow)
-				throw (CatchableThrow) e;
-			if (e instanceof Error)
-				// e.printStackTrace();
-				throw (Error) e;
-			Errors.error("Error calling " + this.methodName + ".", e);
-		}
-		return CommonSymbols.NIL; // should never get here
-	}
-
-	public int applyArity() {
-		return this.getRequiredArgCount() + this.getOptionalArgCount();
-	}
-
-	public SubLList getArglist() {
-		SubLList existing = this.arglist;
-		if (existing != null)
-			return existing;
-		else {
-			int required = this.getRequiredArgCount();
-			int optional = this.getOptionalArgCount();
-			boolean rest = this.allowsRest();
-			int size = required + (optional > 0 ? optional + 1 : 0) + (rest ? 2 : 0);
-			SubLList arglist = SubLObjectFactory.makeList(size, CommonSymbols.NIL); // variable
-			// shadowing
-			SubLObject current = arglist;
-			int i;
-			SubLPackage sublispPackage = SubLPackage.findPackageNamed("SUBLISP");
-			for (i = 0; i < required; i++, current = current.rest()) {
-				SubLSymbol sym = SubLObjectFactory.makeSymbol("REQ-" + i, sublispPackage);
-				current.setFirst(sym);
-			}
-			if (optional > 0) {
-				current.setFirst(CommonSymbols.OPTIONAL_SYMBOL);
-				current = current.rest();
-				for (; i < required + optional; i++, current = current.rest()) {
-					SubLSymbol sym = SubLObjectFactory.makeSymbol("OPT-" + i, sublispPackage);
-					current.setFirst(sym);
+		int arity = 0;
+		for (int i = 0, size = args.length; i < size; ++i) {
+			if (args[i] != CommonSymbols.UNPROVIDED) {
+				if (args[i] instanceof SubLObject[]) {
+					arity += ((SubLObject[]) args[i]).length;
+				} else {
+					++arity;
 				}
 			}
-			if (rest) {
-				current.setFirst(CommonSymbols.REST_SYMBOL);
-				current = current.rest();
-				SubLSymbol sym = SubLObjectFactory.makeSymbol("REST-LIST", sublispPackage);
+		}
+		Method m = getMethod();
+		funcallCounts.incCount(arity);
+		SubLObject result = null;
+		try {
+			result = (SubLObject) m.invoke(null, args);
+			return Values.setFirstMultipleValue(result);
+		} catch (final InvocationTargetException ite) {
+			final Throwable e = ite.getCause();
+			if (e instanceof Unhandleable) {
+				throw (Unhandleable) e;
+			}
+			if (e instanceof CatchableThrow) {
+				throw (CatchableThrow) e;
+			}
+			if (e instanceof Error) {
+				throw (Error) e;
+			}
+			try {
+				result = (SubLObject) m.invoke(null, args);
+			} catch (Throwable e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			Errors.error("Error calling " + methodName + ".", e);
+		} catch (final Throwable e2) {
+			if (e2 instanceof Unhandleable) {
+				throw (Unhandleable) e2;
+			}
+			if (e2 instanceof CatchableThrow) {
+				throw (CatchableThrow) e2;
+			}
+			if (e2 instanceof Error) {
+				throw (Error) e2;
+			}
+			Errors.error("Error calling " + methodName + ".", e2);
+		}
+		return NIL;
+	}
+
+	@Override
+	public int applyArity() {
+		return getRequiredArgCount() + getOptionalArgCount();
+	}
+
+	@Override
+	public SubLList getArglist() {
+		final SubLList existing = argList;
+		if (existing != null) {
+			return existing;
+		}
+		final int required = getRequiredArgCount();
+		final int optional = getOptionalArgCount();
+		final boolean rest = allowsRest();
+		final int size = required + (optional > 0 ? optional + 1 : 0) + (rest ? 2 : 0);
+		SubLObject current;
+		final SubLList arglist = (SubLList) (current = SubLObjectFactory.makeList(size, CommonSymbols.NIL));
+		final SubLPackage sublispPackage = SubLPackage.findPackageNamed("SUBLISP");
+		int i;
+		for (i = 0; i < required; ++i, current = current.rest()) {
+			final SubLSymbol sym = SubLObjectFactory.makeSymbol("REQ-" + i, sublispPackage);
+			current.setFirst(sym);
+		}
+		if (optional > 0) {
+			current.setFirst(CommonSymbols.OPTIONAL_SYMBOL);
+			for (current = current.rest(); i < (required + optional); ++i, current = current.rest()) {
+				final SubLSymbol sym = SubLObjectFactory.makeSymbol("OPT-" + i, sublispPackage);
 				current.setFirst(sym);
 			}
-			return arglist;
 		}
+		if (rest) {
+			current.setFirst(CommonSymbols.REST_SYMBOL);
+			current = current.rest();
+			final SubLSymbol sym = SubLObjectFactory.makeSymbol("REST-LIST", sublispPackage);
+			current.setFirst(sym);
+		}
+		this.argList = arglist;
+		return arglist;
 	}
 
 	public Method getMethod() {
-		if (this.method == null)
+		if (method == null) {
 			try {
-				this.method = PatchFileLoader.PATCH_FILE_LOADER.loadClass(this.methodClassStr, true)
-						.getMethod(this.methodName, this.methodParameters);
-			} catch (Exception e) {
-				Errors.error("Problem initializing function: " + this.methodClassStr + "." + this.methodName);
+				final Class theClass = PatchFileLoader.PATCH_FILE_LOADER.loadClass(methodClassStr);
+				method = theClass.getMethod(methodName, methodParameters);
+			} catch (final Exception e) {
+				Errors.error("Problem initializing function: " + methodClassStr + "." + methodName);
 			}
-		return this.method;
+		}
+		return method;
 	}
 
+	@Override
 	public int hashCode(int currentDepth) {
-		if (currentDepth < SubLObject.MAX_HASH_DEPTH)
-			return this.getMethod().hashCode();
-		else
-			return SubLObject.DEFAULT_EXCEEDED_HASH_VALUE;
+		if (currentDepth < 8) {
+			return getMethod().hashCode();
+		}
+		return 0;
 	}
 
+	@Override
+	public boolean isAlien() {
+		return false;
+	}
+
+	@Override
 	public boolean isAtom() {
 		return true;
 	}
 
+	@Override
 	public boolean isBigIntegerBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isBoolean() {
 		return false;
 	}
 
+	@Override
 	public boolean isChar() {
 		return false;
 	}
 
+	@Override
 	public boolean isCons() {
 		return false;
 	}
 
+	@Override
 	public boolean isDouble() {
 		return false;
 	}
 
+	@Override
 	public boolean isEnvironment() {
 		return false;
 	}
 
+	@Override
 	public boolean isError() {
 		return false;
 	}
 
+	@Override
 	public boolean isFixnum() {
 		return false;
 	}
 
+	@Override
 	public boolean isFunction() {
 		return true;
 	}
 
+	@Override
 	public boolean isFunctionSpec() {
 		return true;
 	}
 
+	@Override
 	public boolean isGuid() {
 		return false;
 	}
 
+	@Override
 	public boolean isHashtable() {
 		return false;
 	}
 
+	@Override
 	public boolean isHashtableIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isIntBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isInteger() {
 		return false;
 	}
 
+	@Override
 	public boolean isInterpreted() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyhash() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyhashIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyword() {
 		return false;
 	}
 
+	@Override
 	public boolean isList() {
 		return false;
 	}
 
+	@Override
 	public boolean isLock() {
 		return false;
 	}
 
+	@Override
 	public boolean isLongBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isMacroOperator() {
 		return false;
 	}
 
+	@Override
 	public boolean isNil() {
 		return false;
 	}
 
-	//// Protected Area
-
-	//// Private Area
-
+	@Override
 	public boolean isNumber() {
 		return false;
 	}
 
-	/*
-	 * @todo potential future optimization -- not needed atm because of better
-	 * optimization elsewhere private synchronized GenMethod makeInstance() { if
-	 * (staticMethodInstance == null) { SingleMethodClass mc = new
-	 * SingleMethodClass(); try { staticMethodInstance = mc.genGenMethod(); }
-	 * catch (Exception e) { Errors.error("Problem initializing function: " +
-	 * this.methodClassStr + "." + this.methodName, e); } catch (Throwable t) {
-	 * t.printStackTrace(); Errors.error("Problem initializing function: " +
-	 * this.methodClassStr + "." + this.methodName, new SubLException(t)); } }
-	 * return staticMethodInstance; }
-	 *
-	 * public interface GenMethod {
-	 *
-	 * SubLObject invoke(Object[] args);// throws InvocationTargetException; }
-	 *
-	 * public byte[] byteCode() {
-	 *
-	 * ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES |
-	 * ClassWriter.COMPUTE_FRAMES); MethodVisitor mv;
-	 *
-	 * cw.visit(V1_5, ACC_PUBLIC + ACC_SUPER,
-	 * "com/cyc/tool/subl/jrtl/nativeCode/type/operator/GenMethod$" + serial,
-	 * null, "java/lang/Object", new String[]{
-	 * "com/cyc/tool/subl/jrtl/nativeCode/type/operator/SubLCompiledFunction$GenMethod"
-	 * });
-	 *
-	 * cw.visitSource("SubLCompiledFunction_gen.java", null);
-	 *
-	 * cw.visitInnerClass(
-	 * "com/cyc/tool/subl/jrtl/nativeCode/type/operator/SubLCompiledFunction$GenMethod",
-	 * "com/cyc/tool/subl/jrtl/nativeCode/type/operator/SubLCompiledFunction",
-	 * "GenMethod", ACC_PUBLIC + ACC_STATIC + ACC_ABSTRACT + ACC_INTERFACE); {
-	 * mv = cw.visitMethod(ACC_PUBLIC, "<init>", "()V", null, null);
-	 * mv.visitCode(); mv.visitVarInsn(ALOAD, 0);
-	 * mv.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V");
-	 * mv.visitInsn(RETURN); mv.visitMaxs(1, 1); mv.visitEnd(); } /// Class[]
-	 * ptypes = methodParameters;// method.getParameterTypes(); { mv =
-	 * cw.visitMethod(ACC_PUBLIC, "invoke",
-	 * "([Ljava/lang/Object;)Lcom/cyc/tool/subl/jrtl/nativeCode/type/core/SubLObject;",
-	 * null, null); mv.visitCode(); Type[] ptypes = new
-	 * Type[SubLCompiledFunction.this.methodParameters == null ? 0 :
-	 * SubLCompiledFunction.this.methodParameters.length]; for (int i = 0; i <
-	 * ptypes.length; i++) { ptypes[i] = Type.getType(methodParameters[i]);
-	 * mv.visitVarInsn(ALOAD, 1); switch (i) { case 0: mv.visitInsn(ICONST_0);
-	 * break; case 1: mv.visitInsn(ICONST_1); break; case 2:
-	 * mv.visitInsn(ICONST_2); break; case 3: mv.visitInsn(ICONST_3); break;
-	 * case 4: mv.visitInsn(ICONST_4); break; case 5: mv.visitInsn(ICONST_5);
-	 * break; default: mv.visitIntInsn(BIPUSH, i); } mv.visitInsn(AALOAD);
-	 * mv.visitTypeInsn(CHECKCAST, Type.getInternalName(methodParameters[i])); }
-	 * mv.visitMethodInsn(INVOKESTATIC, methodClassStr.replace(".", "/"),
-	 * methodName, Type.getMethodDescriptor(Type.getType(returnType), ptypes));
-	 * mv.visitInsn(ARETURN); mv.visitMaxs(ptypes.length + 2, 2); mv.visitEnd();
-	 * } cw.visitEnd(); return cw.toByteArray(); }
-	 *
-	 * public Object coerce(Class t) { if (t.isInstance(this)) { return this; }
-	 * if (CharSequence.class.isAssignableFrom(t)) { return "(" +
-	 * getFunctionSymbol() + " " + this.getArglist() + ")"; // if
-	 * (Number.class.isAssignableFrom(t)) return t.cast(this.hashCode()); }
-	 * return this;//.getMethod(); }
-	 *
-	 * private class SingleMethodClass extends ClassLoader {
-	 *
-	 * public GenMethod genGenMethod() throws InstantiationException,
-	 * IllegalAccessException { byte[] data = byteCode(); Class<GenMethod>
-	 * mgenClass; mgenClass = (Class<GenMethod>) this.defineClass(data, 0,
-	 * data.length); this.resolveClass(mgenClass); staticMethodInstance =
-	 * mgenClass.newInstance(); return staticMethodInstance; }
-	 *
-	 * public synchronized Class loadClass(String name, boolean resolve) throws
-	 * ClassNotFoundException { Class c = (Class) classLoaderCache.get(name); if
-	 * (c == null) { c = this.findSystemClass(name); classLoaderCache.put(name,
-	 * c); } if (resolve) { this.resolveClass(c); } return c; // *;// } }
-	 */
-
-	//// Internal Rep
-
+	@Override
 	public boolean isPackage() {
 		return false;
 	}
 
+	@Override
+	public boolean isPackageIterator() {
+		return false;
+	}
+
+	@Override
 	public boolean isProcess() {
 		return false;
 	}
 
+	@Override
 	public boolean isReadWriteLock() {
 		return false;
 	}
 
+	@Override
 	public boolean isRegexPattern() {
 		return false;
 	}
 
+	@Override
 	public boolean isSemaphore() {
 		return false;
 	}
 
+	@Override
 	public boolean isSequence() {
 		return false;
 	}
 
+	@Override
 	public boolean isSpecial() {
 		return false;
 	}
 
+	@Override
 	public boolean isStream() {
 		return false;
 	}
 
+	@Override
 	public boolean isString() {
 		return false;
 	}
 
+	@Override
 	public boolean isStructure() {
 		return false;
 	}
 
+	@Override
 	public boolean isSymbol() {
 		return false;
 	}
 
+	@Override
 	public boolean isVector() {
 		return false;
 	}
 
-	private void setMethod(Method method) {
-		if (method == null)
-			Errors.error("Got null native method for: " + this);
-		this.methodClassStr = method.getDeclaringClass().getName();
-		this.methodName = method.getName();
-		this.methodParameters = method.getParameterTypes();
-		this.returnType = method.getReturnType();
-	}
-
+	@Override
 	public String toTypeName() {
-		return SubLCompiledFunction.COMPILED_FUNCTION_TYPE_NAME;
+		return SubLCompiledFunction.FUNCTION_TYPE_NAME;
 	}
-
-	/*
-	 * @todo potential future optimization -- not needed atm because of better
-	 * optimization elsewhere private static int serial = 0; private static Map
-	 * classLoaderCache = new HashMap(); private GenMethod staticMethodInstance;
-	 */
-
 }

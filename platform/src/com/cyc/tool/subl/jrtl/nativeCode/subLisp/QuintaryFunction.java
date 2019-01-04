@@ -1,5 +1,5 @@
 //
-//
+// For LarKC
 //
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
@@ -8,7 +8,11 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.operator.FixedArityFunctor;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public abstract class QuintaryFunction extends FixedArityFunctor implements CommonSymbols {
+public abstract class QuintaryFunction extends FixedArityFunctor {
+	protected QuintaryFunction(SubLFunction func) {
+		(this.func = func).setQuintaryFunction(this);
+	}
+
 	public static void initialize() {
 	}
 
@@ -16,7 +20,7 @@ public abstract class QuintaryFunction extends FixedArityFunctor implements Comm
 		QuintaryFunction result = function.getQuintaryFunction();
 		if (result == null)
 			result = new QuintaryFunction(function) {
-
+				@Override
 				public SubLObject processItem(SubLObject obj1, SubLObject obj2, SubLObject obj3, SubLObject obj4,
 						SubLObject obj5) {
 					SubLObject[] args = null;
@@ -28,7 +32,7 @@ public abstract class QuintaryFunction extends FixedArityFunctor implements Comm
 						args[2] = obj3;
 						args[3] = obj4;
 						args[4] = obj5;
-						return this.func.funcall(args);
+						return func.funcall(args);
 					} finally {
 						resourcer.releaseSubLObjectArray(args);
 					}
@@ -38,17 +42,14 @@ public abstract class QuintaryFunction extends FixedArityFunctor implements Comm
 	}
 
 	public static QuintaryFunction makeInstance(SubLSymbol symbol) {
-		return QuintaryFunction.makeInstance(symbol.getFunc());
+		return makeInstance(symbol.getFunc());
 	}
 
 	protected SubLFunction func;
 
-	protected QuintaryFunction(SubLFunction func) {
-		(this.func = func).setQuintaryFunction(this);
-	}
-
+	@Override
 	public SubLFunction getFunction() {
-		return this.func.getFunc();
+		return func.getFunc();
 	}
 
 	public abstract SubLObject processItem(SubLObject p0, SubLObject p1, SubLObject p2, SubLObject p3, SubLObject p4);

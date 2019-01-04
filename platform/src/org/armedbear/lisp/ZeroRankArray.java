@@ -2,7 +2,7 @@
  * ZeroRankArray.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: ZeroRankArray.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,126 +31,154 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class ZeroRankArray extends AbstractSubLArray {
-	private SubLObject elementType;
-	private boolean adjustable;
+public final class ZeroRankArray extends AbstractArray
+{
+    private final LispObject elementType;
+    private final boolean adjustable;
+    @Override
+    public Object[] toArray()
+    {
+    	return new Object[] {data};
+    }
+    private LispObject data;
 
-	private SubLObject data;
+    public ZeroRankArray(LispObject elementType, LispObject data,
+                         boolean adjustable)
+    {
+        this.elementType = elementType;
+        this.data = data;
+        this.adjustable = adjustable;
+    }
 
-	public ZeroRankArray(SubLObject elementType, SubLObject data, boolean adjustable) {
-		this.elementType = elementType;
-		this.data = data;
-		this.adjustable = adjustable;
-	}
+    public LispObject typeOf()
+    {
+        if (adjustable)
+            return list(Symbol.ARRAY, elementType, NIL);
+        else
+            return list(Symbol.SIMPLE_ARRAY, elementType, NIL);
+    }
 
-	public AbstractArray adjustArray(int[] dims, AbstractArray displacedTo, int displacement) {
-		Lisp.error(new TypeError("Displacement not supported for array of rank 0."));
-		return null;
-	}
+    public LispObject classOf()
+    {
+        return BuiltInClass.ARRAY;
+    }
 
-	public AbstractArray adjustArray(int[] dims, SubLObject initialElement, SubLObject initialContents) {
-		if (this.isAdjustable()) {
-			// initial element doesn't matter:
-			// we're not creating new elements
-			if (initialContents != null)
-				this.data = initialContents;
-			return this;
-		} else
-			return new ZeroRankArray(this.elementType,
-					initialContents != null ? initialContents : initialElement != null ? initialElement : this.data,
-					false);
-	}
+    public LispObject typep(LispObject type)
+    {
+        if (type == Symbol.SIMPLE_ARRAY)
+            return adjustable ? NIL : T;
+        return super.typep(type);
+    }
 
-	public SubLObject AREF(int index) {
-		if (index == 0)
-			return this.data;
-		else
-			return Lisp.error(new TypeError("Bad row major index " + index + "."));
-	}
+    public int getRank()
+    {
+        return 0;
+    }
 
-	public void aset(int index, SubLObject obj) {
-		if (obj.typep(this.elementType) == Lisp.NIL)
-			Lisp.error(new TypeError(obj, this.elementType));
-		if (index == 0)
-			this.data = obj;
-		else
-			Lisp.error(new TypeError("Bad row major index " + index + "."));
-	}
+    public LispObject getDimensions()
+    {
+        return NIL;
+    }
 
-	public SubLObject classOf() {
-		return BuiltInClass.ARRAY;
-	}
+    public int getDimension(int n)
+    {
+        error(new TypeError("Bad array dimension (" + n + ") for array of rank 0."));
+        // Not reached.
+        return -1;
+    }
 
-	public void fillVoid(SubLObject obj) {
-		if (obj.typep(this.elementType) == Lisp.NIL)
-			Lisp.error(new TypeError(obj, this.elementType));
-		this.data = obj;
-	}
+    public LispObject getElementType()
+    {
+        return elementType;
+    }
 
-	public int getDimension(int n) {
-		Lisp.error(new TypeError("Bad array dimension (" + n + ") for array of rank 0."));
-		// Not reached.
-		return -1;
-	}
+    public int getTotalSize()
+    {
+        return 1;
+    }
 
-	public SubLObject getDimensions() {
-		return Lisp.NIL;
-	}
+    public LispObject AREF(int index)
+    {
+        if (index == 0)
+            return data;
+        else
+            return error(new TypeError("Bad row major index " + index + "."));
+    }
 
-	public SubLObject getElementType() {
-		return this.elementType;
-	}
+    public void aset(int index, LispObject obj)
+    {
+        if (obj.typep(elementType) == NIL)
+            type_error(obj, elementType);
+        if (index == 0)
+            data = obj;
+        else
+            error(new TypeError("Bad row major index " + index + "."));
+    }
 
-	public int getRank() {
-		return 0;
-	}
+    public void fill(LispObject obj)
+    {
+        if (obj.typep(elementType) == NIL)
+            type_error(obj, elementType);
+        data = obj;
+    }
 
-	public int getTotalSize() {
-		return 1;
-	}
+    public String printObjectImpl()
+    {
+        final LispThread thread = LispThread.currentThread();
+        boolean printReadably = (Symbol.PRINT_READABLY.symbolValue(thread) != NIL);
+        if (printReadably) {
+            if (elementType != T) {
+                error(new PrintNotReadable(list(Keyword.OBJECT, this)));
+                // Not reached.
+                return null;
+            }
+        }
+        if (printReadably || Symbol.PRINT_ARRAY.symbolValue(thread) != NIL) {
+            StringBuffer sb = new StringBuffer("#0A");
+            if (data == this && Symbol.PRINT_CIRCLE.symbolValue(thread) != NIL) {
+                StringOutputStream stream = new StringOutputStream();
+                thread.execute(Symbol.OUTPUT_OBJECT.getSymbolFunction(),
+                               data, stream);
+                sb.append(stream.getBufferString().getStringValue());
+            } else
+                sb.append(data.printObject());
+            return sb.toString();
+        }
+        StringBuffer sb = new StringBuffer();
+        if (!adjustable)
+            sb.append("SIMPLE-");
+        sb.append("ARRAY ");
+        sb.append(elementType.printObject());
+        sb.append(" NIL");
+        return unreadableString(sb.toString());
+    }
 
-	public SubLObject typeOf() {
-		if (this.adjustable)
-			return Lisp.list(LispSymbols.ARRAY, this.elementType, Lisp.NIL);
-		else
-			return Lisp.list(LispSymbols.SIMPLE_ARRAY, this.elementType, Lisp.NIL);
-	}
+  public AbstractArray adjustArray(int[] dims,
+                                              LispObject initialElement,
+                                              LispObject initialContents)
+    {
+      if (isAdjustable()) {
+          // initial element doesn't matter:
+          // we're not creating new elements
+          if (initialContents != null)
+              data = initialContents;
+          return this;
+      } else {
+          return new ZeroRankArray(elementType,
+                  initialContents != null ? initialContents :
+                      initialElement != null ? initialElement : data, false);
+      }
+  }
 
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.SIMPLE_ARRAY)
-			return this.adjustable ? Lisp.NIL : Lisp.T;
-		return super.typep(type);
-	}
-
-	public String writeToString() {
-		LispThread thread = LispThread.currentThread();
-		boolean printReadably = LispSymbols.PRINT_READABLY.symbolValue(thread) != Lisp.NIL;
-		if (printReadably)
-			if (this.elementType != Lisp.T) {
-				Lisp.error(new PrintNotReadable(Lisp.list(Keyword.OBJECT, this)));
-				// Not reached.
-				return null;
-			}
-		if (printReadably || LispSymbols.PRINT_ARRAY.symbolValue(thread) != Lisp.NIL) {
-			StringBuffer sb = new StringBuffer("#0A");
-			if (this.data == this && LispSymbols.PRINT_CIRCLE.symbolValue(thread) != Lisp.NIL) {
-				StringOutputStream stream = new StringOutputStream();
-				thread.execute(LispSymbols.OUTPUT_OBJECT.getSymbolFunction(), this.data, stream);
-				sb.append(stream.getOutputString().getString());
-			} else
-				sb.append(this.data.writeToString());
-			return sb.toString();
-		}
-		StringBuffer sb = new StringBuffer();
-		if (!this.adjustable)
-			sb.append("SIMPLE-");
-		sb.append("ARRAY ");
-		sb.append(this.elementType.writeToString());
-		sb.append(" NIL");
-		return this.unreadableString(sb.toString());
-	}
+  public AbstractArray adjustArray(int[] dims,
+                                              AbstractArray displacedTo,
+                                              int displacement)
+    {
+      error(new TypeError("Displacement not supported for array of rank 0."));
+      return null;
+  }
 }

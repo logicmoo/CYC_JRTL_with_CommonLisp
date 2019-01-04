@@ -2,7 +2,7 @@
  * Nil.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Nil.java 12400 2010-01-25 06:58:48Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,174 +31,139 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLSequence;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import static org.armedbear.lisp.Lisp.*;
 
-public class Nil extends LispSymbolImpl implements LispSequence, SubLList {
-	public static SubLSymbol NIL = new Nil(Lisp.PACKAGE_CL);
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 
-	private Nil(SubLPackage pkg) {
-		super("NIL", pkg);
-		pkg.addSymbol(this);
-		this.initializeConstant(this);
-	}
+public final class Nil extends SubLNil
+{
+   // final public static Symbol NIL = new Nil(PACKAGE_CL);
 
-	public SubLObject cddr() {
-		return this;
-	}
+    public Nil(Package pkg)
+    {
+    	super();
+     //   super("NIL", pkg);
+        pkg.addSymbol(this);
+        initializeConstant(this);
+    }
 
-	public int cl_length() {
-		return 0;
-	}
+    public Object javaInstance()
+    {
+        return null;
+    }
 
-	public SubLObject classOf() {
-		return BuiltInClass.NULL;
-	}
+    public Object javaInstance(Class c)
+    {
+      String cn = c.getName();
+      if (cn != null) {
+        if (cn.equals("java.lang.Boolean") || cn.equals("boolean")) {
+          return Boolean.FALSE;
+        }
+      }
+      return javaInstance();
+    }
 
-	public boolean constantp() {
-		return true;
-	}
+    public LispObject typeOf()
+    {
+        return Symbol.NULL;
+    }
 
-	public SubLObject[] copyToArray() {
-		return LispObjectFactory.makeLispObjectArray(0);
-	}
+    public LispObject classOf()
+    {
+        return BuiltInClass.NULL;
+    }
 
-	public SubLObject elt(int index) {
-		return Lisp.error(new TypeError("ELT: invalid index " + index + " for " + this + "."));
-	}
+    public LispObject getDescription()
+    {
+        return new SimpleString("The symbol NIL");
+    }
 
-	public boolean endp() {
-		return true;
-	}
+    public boolean getBooleanValue()
+    {
+        return false;
+    }
 
-	public void fillVoid(SubLObject obj) {
-		Debug.trace("attempto to fill NIL with " + obj.writeToString());
-	}
+    public LispObject typep(LispObject typeSpecifier)
+    {
+        if (typeSpecifier == Symbol.NULL)
+            return T;
+        if (typeSpecifier == Symbol.LIST)
+            return T;
+        if (typeSpecifier == Symbol.SEQUENCE)
+            return T;
+        if (typeSpecifier == Symbol.SYMBOL)
+            return T;
+        if (typeSpecifier == Symbol.BOOLEAN)
+            return T;
+        if (typeSpecifier == BuiltInClass.NULL)
+            return T;
+        if (typeSpecifier == BuiltInClass.LIST)
+            return T;
+        if (typeSpecifier == BuiltInClass.SEQUENCE)
+            return T;
+        if (typeSpecifier == BuiltInClass.SYMBOL)
+            return T;
+        return super.typep(typeSpecifier);
+    }
 
-	public SubLObject first() {
-		return this;
-	}
+    public boolean constantp()
+    {
+        return true;
+    }
 
-	// SubLList
+    public final LispObject getSymbolValue()
+    {
+        return this;
+    }
 
-	public SubLObject get(int index) {
-		return this;
-	}
+    public int length()
+    {
+        return 0;
+    }
 
-	public boolean getBooleanValue() {
-		return false;
-	}
+    public LispObject NTH(int index)
+    {
+        if (index < 0)
+            error(new TypeError(String.valueOf(index) +
+                                 " is not of type UNSIGNED-BYTE."));
+        return NIL;
+    }
 
-	public SubLObject getDescription() {
-		return LispObjectFactory.makeString("The symbol NIL");
-	}
+    public LispObject elt(int index)
+    {
+        return error(new TypeError("ELT: invalid index " + index + " for " + this + "."));
+    }
 
-	public SubLObject getSymbolFunction() {
-		return null;
-	}
+    public LispObject reverse()
+    {
+        return this;
+    }
 
-	public SubLObject getSymbolValue() {
-		return this;
-	}
+    public LispObject nreverse()
+    {
+        return this;
+    }
 
-	public boolean isList() {
-		return true;
-	}
+    public LispObject[] copyToArray()
+    {
+        return new LispObject[0];
+    }
 
-	public SubLObject NOT() {
-		return Lisp.T;
-	}
+    public LispObject NOT()
+    {
+        return T;
+    }
 
-	public SubLObject nreverse() {
-		return this;
-	}
+//    @Override
+//    public final LispObject getSymbolFunction()
+//    {
+//        return null;
+//    }
 
-	public SubLObject NTH(int index) {
-		if (index < 0)
-			Lisp.error(new TypeError(String.valueOf(index) + " is not of type UNSIGNED-BYTE."));
-		return Nil.NIL;
-	}
+    public Object readResolve() throws java.io.ObjectStreamException {
+       return NIL;
+    }
 
-	public SubLObject NTH(SubLObject arg) {
-		int index;
-		if (arg instanceof Fixnum)
-			index = ((Fixnum) arg).value;
-		else if (arg instanceof Bignum) {
-			if (arg.isNegative())
-				return Lisp.error(new TypeError(arg, LispSymbols.UNSIGNED_BYTE));
-			return Nil.NIL;
-		} else
-			return Lisp.error(new TypeError(arg, LispSymbols.UNSIGNED_BYTE));
-		if (index < 0)
-			Lisp.error(new TypeError(arg, LispSymbols.UNSIGNED_BYTE));
-		return Nil.NIL;
-	}
-
-	public SubLObject nthCdr(int n) {
-		if (n < 0)
-			return Lisp.type_error(LispObjectFactory.makeInteger(n), Lisp.list(LispSymbols.INTEGER, Fixnum.ZERO));
-		return this;
-	}
-
-	public SubLObject rest() {
-		return this;
-	}
-
-	public SubLObject reverse() {
-		return this;
-	}
-
-	public SubLObject second() {
-		return this;
-	}
-
-	public SubLObject third() {
-		return this;
-	}
-
-	public SubLList toList() {
-		// TODO Auto-generated method stub
-		return this;
-	}
-
-	public SubLSequence toSeq() {
-		return this;
-	}
-
-	public String toString() {
-		if (LispSymbols.PRINT_READABLY.symbolValueNoThrow() != Nil.NIL)
-			return "|COMMON-LISP|::|NIL|";
-		return "NIL";
-	}
-
-	public SubLSymbol typeOf() {
-		return LispSymbols.NULL;
-	}
-
-	public SubLObject typep(SubLObject typeSpecifier) {
-		if (typeSpecifier == LispSymbols.NULL)
-			return Lisp.T;
-		if (typeSpecifier == LispSymbols.LIST)
-			return Lisp.T;
-		if (typeSpecifier == LispSymbols.SEQUENCE)
-			return Lisp.T;
-		if (typeSpecifier == LispSymbols.SYMBOL)
-			return Lisp.T;
-		if (typeSpecifier == LispSymbols.BOOLEAN)
-			return Lisp.T;
-		if (typeSpecifier == BuiltInClass.NULL)
-			return Lisp.T;
-		if (typeSpecifier == BuiltInClass.LIST)
-			return Lisp.T;
-		if (typeSpecifier == BuiltInClass.SEQUENCE)
-			return Lisp.T;
-		if (typeSpecifier == BuiltInClass.SYMBOL)
-			return Lisp.T;
-		return super.typep(typeSpecifier);
-	}
 }

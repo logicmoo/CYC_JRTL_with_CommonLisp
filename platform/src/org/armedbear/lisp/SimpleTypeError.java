@@ -2,7 +2,7 @@
  * SimpleTypeError.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: SimpleTypeError.java 12298 2009-12-18 21:50:54Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,45 +31,60 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import static org.armedbear.lisp.Lisp.*;
 
-public class SimpleTypeError extends TypeError {
-	public SimpleTypeError(SubLObject initArgs) {
-		super(StandardClass.SIMPLE_TYPE_ERROR);
-		this.initialize(initArgs);
-	}
+public final class SimpleTypeError extends TypeError
+{
+    public SimpleTypeError(LispObject initArgs)
+    {
+        super(StandardClass.SIMPLE_TYPE_ERROR);
+        initialize(initArgs);
+    }
 
-	public SubLObject classOf() {
-		return StandardClass.SIMPLE_TYPE_ERROR;
-	}
+    @Override
+    public LispObject typeOf()
+    {
+        return Symbol.SIMPLE_TYPE_ERROR;
+    }
 
-	public String getMessage() {
-		SubLObject formatControl = this.getFormatControl();
-		if (formatControl != Lisp.NIL) {
-			SubLObject formatArguments = this.getFormatArguments();
-			// (apply 'format (append '(nil format-control) format-arguments))
-			SubLObject result = Primitives.APPLY.execute(LispSymbols.FORMAT,
-					Primitives.APPEND.execute(Lisp.list(Lisp.NIL, formatControl), formatArguments));
-			return result.getString();
-		}
-		return super.getMessage();
-	}
+    @Override
+    public LispObject classOf()
+    {
+        return StandardClass.SIMPLE_TYPE_ERROR;
+    }
 
-	public SubLObject typeOf() {
-		return LispSymbols.SIMPLE_TYPE_ERROR;
-	}
+    @Override
+    public LispObject typep(LispObject type)
+    {
+    	LispObject symbol = type;
+    	if(type instanceof StandardClass) {
+    		symbol = ((StandardClass) type).getLispClassName();
+    	}
+        if (symbol == Symbol.SIMPLE_TYPE_ERROR)
+            return T;
+       // if (symbol == Symbol.SIMPLE_ERROR)
+         //   return T;
+        if (symbol == Symbol.SIMPLE_CONDITION)
+            return T;
+        return super.typep(type);
+    }
 
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.SIMPLE_TYPE_ERROR)
-			return Lisp.T;
-		if (type == StandardClass.SIMPLE_TYPE_ERROR)
-			return Lisp.T;
-		if (type == LispSymbols.SIMPLE_CONDITION)
-			return Lisp.T;
-		if (type == StandardClass.SIMPLE_CONDITION)
-			return Lisp.T;
-		return super.typep(type);
-	}
+    @Override
+    public String getMessage()
+    {
+        LispObject formatControl = getFormatControl();
+        if (formatControl != NIL) {
+            LispObject formatArguments = getFormatArguments();
+            // (apply 'format (append '(nil format-control) format-arguments))
+            LispObject result =
+                Primitives.APPLY.execute(Symbol.FORMAT,
+                                         Primitives.APPEND.execute(list(NIL,
+                                                                         formatControl),
+                                                                   formatArguments));
+            return result.getStringValue();
+        }
+        return super.getMessage();
+    }
 }

@@ -1,31 +1,20 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
-
 import java.util.Iterator;
+
+import org.armedbear.lisp.Debug;
+import org.armedbear.lisp.Lisp;
+import org.armedbear.lisp.SimpleString;
+import org.armedbear.lisp.Symbol;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCharacter;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbolFactory;
@@ -35,82 +24,38 @@ import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 
-//// Internal Imports
-
-//// External Imports
-
 public class Packages extends SubLTrampolineFile {
-
-	//// Constructors
-
-	public static SubLFile me = new Packages();
-
-	public static SubLSymbol $package$ = CommonSymbols.NIL;
-
-	//// Public Area
-
-	static {
-		Packages.$package$ = SubLFiles.defvar(Packages.me, "*PACKAGE*", SubLPackage.SUBLISP_PACKAGE,
-				SubLPackage.SUBLISP_PACKAGE);
-	}
-
 	public static SubLObject apropos(SubLObject nameSpec, SubLObject packageSpec, SubLObject externalOnly,
 			SubLObject caseInsensitive) {
 		if (externalOnly == CommonSymbols.UNPROVIDED)
-			externalOnly = CommonSymbols.NIL;
+			externalOnly = SubLNil.NIL;
 		if (caseInsensitive == CommonSymbols.UNPROVIDED)
 			caseInsensitive = CommonSymbols.T;
 		SubLString nameTyped = nameSpec.isString() ? nameSpec.toStr() : nameSpec.toSymbol().getSubLName();
-		boolean externalOnlyTyped = externalOnly != CommonSymbols.NIL;
-		boolean caseInsensitiveTyped = caseInsensitive != CommonSymbols.NIL;
+		boolean externalOnlyTyped = externalOnly != SubLNil.NIL;
+		boolean caseInsensitiveTyped = caseInsensitive != SubLNil.NIL;
 		if (packageSpec == CommonSymbols.UNPROVIDED) {
-			SubLList packages = SubLPackage.getAllPackages();
-			SubLObject result = CommonSymbols.NIL;
-			for (int i = 0, size = packages.size(); i < size; i++) {
+			SubLList packages = org.armedbear.lisp.Packages.listAllPackages().toList();
+			SubLObject result = SubLNil.NIL;
+			for (int i = 0, size = packages.size(); i < size; ++i) {
 				SubLPackage thePackage = packages.get(i).toPackage();
-				result = Packages.apropos_one_package(nameTyped, thePackage);
+				result = apropos_one_package(nameTyped, thePackage);
 			}
 			return result;
-		} else {
-			// get a valid usable package
-			if (!packageSpec.isPackage()) {
-				SubLObject realPackage = Packages.find_package(packageSpec);
-				if (!realPackage.isPackage())
-					Errors.error(SubLObjectFactory.makeString("~S does not designate a package."), packageSpec);
-				packageSpec = realPackage;
-			}
-			SubLPackage thePackage = packageSpec.toPackage();
-			return Packages.apropos_one_package(nameTyped, thePackage);
 		}
-	}
-
-	protected static SubLObject apropos_one_package(SubLString name, SubLPackage thePackage) {
-		SubLList hits = thePackage.aproposList(name);
-		SubLCharacter blank = SubLObjectFactory.makeChar(' ');
-		SubLString function = SubLObjectFactory.makeString("[FUNCTION]");
-		SubLString unbound = SubLObjectFactory.makeString("unbound");
-		for (int i = 0, size = hits.size(); i < size; i++) {
-			SubLSymbol symbol = (SubLSymbol) hits.get(i);
-			print_high.prin1(symbol, CommonSymbols.T);
-			if (symbol.fboundp()) {
-				print_high.princ(blank, CommonSymbols.T);
-				print_high.princ(function, CommonSymbols.T);
-			} else if (symbol.boundp()) {
-				SubLObject value = symbol.getValue();
-				print_high.princ(blank, CommonSymbols.T);
-				print_high.princ(value, CommonSymbols.T);
-			} else {
-				print_high.princ(blank, CommonSymbols.T);
-				print_high.princ(unbound, CommonSymbols.T);
-			}
-			streams_high.terpri(CommonSymbols.T);
+		if (!packageSpec.isPackage()) {
+			SubLObject realPackage = find_package(packageSpec);
+			if (!realPackage.isPackage())
+				Errors.error(SubLObjectFactory.makeString("~S does not designate a package."), packageSpec);
+			packageSpec = realPackage;
 		}
-		return CommonSymbols.T;
+		SubLPackage thePackage2 = packageSpec.toPackage();
+		return apropos_one_package(nameTyped, thePackage2);
 	}
 
 	public static SubLObject export(SubLObject symbols, SubLObject thePackage) {
 		if (symbols.isSymbol())
-			SubLTrampolineFile.extractPackage(thePackage).exportSymbol(symbols);
+			SubLTrampolineFile.extractPackage(thePackage).export(symbols.toSymbol().toLispObject());
 		else
 			SubLTrampolineFile.extractPackage(thePackage).exportSymbols(symbols);
 		return CommonSymbols.T;
@@ -121,21 +66,23 @@ public class Packages extends SubLTrampolineFile {
 				: Strings.string(packageName).toStr();
 		SubLPackage result = SubLPackage.findPackageNamed(packageNameTyped);
 		if (result == null)
-			return CommonSymbols.NIL;
+			return SubLNil.NIL;
 		return result;
 	}
 
 	public static SubLObject find_symbol(SubLObject name, SubLObject packageSpec) {
-		String nameTyped = name.getString();
+		SubLString nameTyped = name.toStr();
 		if (packageSpec == CommonSymbols.UNPROVIDED)
 			packageSpec = SubLPackage.getCurrentPackage();
 		SubLPackage thePackage = packageSpec.isPackage() ? packageSpec.toPackage()
-				: Packages.find_package(packageSpec).toPackage();
+				: find_package(packageSpec).toPackage();
 		SubLSymbol result = thePackage.retrieveSymbol(nameTyped);
 		if (result == null)
-			return Values.values(CommonSymbols.NIL, CommonSymbols.NIL);
-		return Values.values(result,
-				thePackage.isExported(result) ? CommonSymbols.EXTERNAL_KEYWORD : CommonSymbols.INTERNAL_KEYWORD);
+			return Values.values(SubLNil.NIL, SubLNil.NIL);
+		if (result.getPackage() == thePackage)
+			return Values.values(result,
+					thePackage.isExported(result) ? CommonSymbols.EXTERNAL_KEYWORD : CommonSymbols.INTERNAL_KEYWORD);
+		return Values.values(result, CommonSymbols.INHERITED_KEYWORD);
 	}
 
 	public static SubLObject in_package(SubLObject packageName) {
@@ -149,16 +96,19 @@ public class Packages extends SubLTrampolineFile {
 		if (packageSpec == CommonSymbols.UNPROVIDED)
 			packageSpec = SubLPackage.getCurrentPackage();
 		SubLPackage thePackage = packageSpec.isPackage() ? packageSpec.toPackage()
-				: Packages.find_package(packageSpec).toPackage();
+				: find_package(packageSpec).toPackage();
 		SubLSymbol result = SubLSymbolFactory.makeSymbol(nameTyped, thePackage);
-		return Values.values(result,
-				thePackage.isExported(result) ? CommonSymbols.EXTERNAL_KEYWORD : CommonSymbols.INTERNAL_KEYWORD);
+		if (result.getPackage() == thePackage)
+			return Values.values(result,
+					thePackage.isExported(result) ? CommonSymbols.EXTERNAL_KEYWORD : CommonSymbols.INTERNAL_KEYWORD);
+		return Values.values(result, CommonSymbols.INHERITED_KEYWORD);
 	}
 
+
 	public static SubLObject list_all_packages() {
-		SubLList result = SubLPackage.getAllPackages();
+		SubLList result = org.armedbear.lisp.Packages.listAllPackages().toList();
 		if (result == null)
-			return CommonSymbols.NIL;
+			return SubLNil.NIL;
 		return result;
 	}
 
@@ -173,13 +123,11 @@ public class Packages extends SubLTrampolineFile {
 		SubLList usedPackageListTyped = usedPackageList.toList();
 		SubLList nickNamesTyped = nickNames.toList();
 		SubLPackage thePackage = SubLObjectFactory.makePackage(nameTyped, usedPackageListTyped, nickNamesTyped);
-
 		return thePackage;
 	}
 
 	public static Iterator makeSymbolIterator(SubLObject thePackage) {
-		Errors.unimplementedMethod("makeSymbolIterator");
-		return null;
+		return SubLObjectFactory.makePackageIterator(thePackage.toPackage());
 	}
 
 	public static SubLObject package_locked_p(SubLObject thePackage) {
@@ -199,11 +147,11 @@ public class Packages extends SubLTrampolineFile {
 	}
 
 	public static SubLObject package_use_list(SubLObject thePackage) {
-		return SubLTrampolineFile.extractPackage(thePackage).getUsesPackagesList();
+		return SubLTrampolineFile.extractPackage(thePackage).getUseList();
 	}
 
 	public static SubLObject package_used_by_list(SubLObject thePackage) {
-		return SubLTrampolineFile.extractPackage(thePackage).getUsedByPackagesList();
+		return SubLTrampolineFile.extractPackage(thePackage).getUsedByList();
 	}
 
 	public static SubLObject print_package(SubLObject thePackage, SubLObject stream) {
@@ -219,20 +167,16 @@ public class Packages extends SubLTrampolineFile {
 	}
 
 	public static boolean symbolIteratorHasNext(Iterator symbolIterator) {
-		Errors.unimplementedMethod("symbolIteratorHasNext");
-		return false;
+		return symbolIterator.hasNext();
 	}
 
-	// CDO-SYMBOLS helpers
-
 	public static SubLObject symbolIteratorNext(Iterator symbolIterator) {
-		Errors.unimplementedMethod("symbolIteratorNext");
-		return null;
+		return (SubLObject) symbolIterator.next();
 	}
 
 	public static SubLObject unexport(SubLObject symbols, SubLObject thePackage) {
 		if (symbols.isSymbol())
-			SubLTrampolineFile.extractPackage(thePackage).unexportSymbol(symbols);
+			SubLTrampolineFile.extractPackage(thePackage).unexport(symbols.toSymbol().toLispObject());
 		else
 			SubLTrampolineFile.extractPackage(thePackage).unexportSymbols(symbols);
 		return CommonSymbols.T;
@@ -243,53 +187,94 @@ public class Packages extends SubLTrampolineFile {
 		if (packageSpec == CommonSymbols.UNPROVIDED)
 			packageSpec = SubLPackage.getCurrentPackage();
 		SubLPackage thePackage = packageSpec.isPackage() ? packageSpec.toPackage()
-				: Packages.find_package(packageSpec).toPackage();
-		boolean result = thePackage.unintern(symbolTyped).getBooleanValue();
-		return SubLObjectFactory.makeBoolean(result);
+				: find_package(packageSpec).toPackage();
+		return  thePackage.unintern(symbolTyped);
+		//return SubLObjectFactory.makeBoolean(result);
+	}
+	final static SubLCharacter aprops_blank = SubLObjectFactory.makeChar(' ');
+	final static SubLString aprops_function = SubLObjectFactory.makeString("[FUNCTION]");
+	final static SubLString aprops_unbound = SubLObjectFactory.makeString("unbound");
+
+	protected static SubLObject apropos_one_package(SubLString name, SubLPackage thePackage) {
+		SubLList hits = thePackage.aproposList(name);
+		while (hits.isCons()) {
+			SubLSymbol symbol = (SubLSymbol) hits.first().toSymbol();
+			apropos1Symbol(symbol);
+			hits = (SubLList) hits.rest();
+		}
+		return CommonSymbols.T;
 	}
 
-	//// Initializers
-
-	/** Creates a new instance of Package. */
-	private Packages() {
+	public static void apropos1Symbol(SubLSymbol symbol) {
+		print_high.prin1(symbol, SubLNil.NIL);
+		if (symbol.fboundp()) {
+			print_high.princ(aprops_blank, SubLNil.NIL);
+			print_high.princ(aprops_function, SubLNil.NIL);
+		}
+		if (symbol.boundp()) {
+			SubLObject value = symbol.getValue();
+			print_high.princ(aprops_blank, SubLNil.NIL);
+			print_high.princ(value, SubLNil.NIL);
+		} else {
+			print_high.princ(aprops_blank, SubLNil.NIL);
+			print_high.princ(aprops_unbound, SubLNil.NIL);
+		}
+		print_high.prin1(new SimpleString(symbol.toLispObject().toDebugString()), SubLNil.NIL);
+		streams_high.terpri(SubLNil.NIL);
 	}
 
+	public static SubLFile me;
+	public static SubLSymbol $package$;
+	static {
+		me = new Packages();
+		Packages.$package$ = SubLFiles.defvar(Packages.me, "*PACKAGE*", SubLPackage.SUBLISP_PACKAGE,
+				Lisp.PACKAGE_CL);
+		$package$.setValue(SubLPackage.SUBLISP_PACKAGE);
+	   assert SubLPackage.getCurrentPackage()==SubLPackage.SUBLISP_PACKAGE;
+/*
+		Packages.$package$ = Symbol._PACKAGE_;
+		SubLPackage p =  SubLPackage.getCurrentPackage();
+	   boolean b = p ==SubLPackage.SUBLISP_PACKAGE;
+	   if(!b) {
+		   $package$.setValue(SubLPackage.SUBLISP_PACKAGE);
+	   }
+	   b = p ==SubLPackage.SUBLISP_PACKAGE;
+	Debug.assertTrue(b);
+*/
+	}
+
+	@Override
 	public void declareFunctions() {
 		SubLFiles.declareFunction(Packages.me, "package_name", "PACKAGE-NAME", 1, 0, false);
 		SubLFiles.declareFunction(Packages.me, "package_use_list", "PACKAGE-USE-LIST", 1, 0, false);
 		SubLFiles.declareFunction(Packages.me, "package_used_by_list", "PACKAGE-USED-BY-LIST", 1, 0, false);
 		SubLFiles.declareFunction(Packages.me, "package_nicknames", "PACKAGE-NICKNAMES", 1, 0, false);
 		SubLFiles.declareFunction(Packages.me, "package_shadowing_symbols", "PACKAGE-SHADOWING-SYMBOLS", 1, 0, false);
-
 		SubLFiles.declareFunction(Packages.me, "package_locked_p", "PACKAGE-LOCKED-P", 1, 0, false);
 		SubLFiles.declareFunction(Packages.me, "lock_package", "LOCK-PACKAGE", 1, 0, false);
-
 		SubLFiles.declareFunction(Packages.me, "make_package", "MAKE-PACKAGE", 3, 0, false);
 		SubLFiles.declareFunction(Packages.me, "find_package", "FIND-PACKAGE", 1, 0, false);
 		SubLFiles.declareFunction(Packages.me, "list_all_packages", "LIST-ALL-PACKAGES", 0, 0, false);
 		SubLFiles.declareFunction(Packages.me, "in_package", "IN-PACKAGE", 1, 0, false);
 		SubLFiles.declareFunction(Packages.me, "intern", "INTERN", 1, 1, false);
+		SubLSymbol intern1 = SubLObjectFactory.makeSublispSymbol("INTERN");
+		SubLSymbol intern2 = SubLObjectFactory.makeSymbol("INTERN");
+		SubLSymbol intern3 = SubLObjectFactory.makeSublispSymbol("T");
+		Debug.assertTrue(intern1==intern2);
 		SubLFiles.declareFunction(Packages.me, "unintern", "UNINTERN", 1, 1, false);
 		SubLFiles.declareFunction(Packages.me, "find_symbol", "FIND-SYMBOL", 1, 1, false);
 		SubLFiles.declareFunction(Packages.me, "apropos", "APROPOS", 1, 3, false);
-
 		SubLFiles.declareFunction(Packages.me, "sublisp_import", "IMPORT", 1, 1, false);
 		SubLFiles.declareFunction(Packages.me, "export", "EXPORT", 1, 1, false);
 		SubLFiles.declareFunction(Packages.me, "unexport", "UNEXPORT", 1, 1, false);
-
 		SubLFiles.declareFunction(Packages.me, "print_package", "PRINT-PACKAGE", 2, 0, false);
 	}
 
+	@Override
 	public void initializeVariables() {
 	}
 
+	@Override
 	public void runTopLevelForms() {
 	}
-
-	//// Protected Area
-
-	//// Private Area
-
-	//// Internal Rep
-
 }

@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="KoalaAdaptor">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/platform/ext/GAT/Adaptors/KoalaAdaptor/log4j-1.2.13.jar!/" />
+      <root url="jar://$PROJECT_DIR$/platform/ext/GAT/Adaptors/KoalaAdaptor/KoalaAdaptor.jar!/" />
+      <root url="jar://$PROJECT_DIR$/platform/ext/GAT/Adaptors/KoalaAdaptor/mysql-connector-java-3.1.13-bin.jar!/" />
+      <root url="jar://$PROJECT_DIR$/platform/ext/GAT/Adaptors/KoalaAdaptor/cog-jglobus.jar!/" />
+      <root url="jar://$PROJECT_DIR$/platform/ext/GAT/Adaptors/KoalaAdaptor/kshared-2.0.jar!/" />
+      <root url="jar://$PROJECT_DIR$/platform/ext/GAT/Adaptors/KoalaAdaptor/runnersFramework-2.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

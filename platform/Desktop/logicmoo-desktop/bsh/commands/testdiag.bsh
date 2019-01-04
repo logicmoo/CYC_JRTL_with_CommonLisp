@@ -1,0 +1,17 @@
+import org.meta.math.*;
+import org.meta.math.la.*;
+
+diag = DiagonalizerFactory.getInstance().getDefaultDiagonalizer();
+
+t1 = System.currentTimeMillis();
+mat = new Matrix(200);
+m = mat.getMatrix();
+
+for(i=0; i<m[0].length; i++) 
+   for(j=0; j<m[0].length; j++) 
+       m[i][j] = i+j+1;
+
+diag.diagonalize(mat);
+t2 = System.currentTimeMillis();
+
+print(t2-t1);

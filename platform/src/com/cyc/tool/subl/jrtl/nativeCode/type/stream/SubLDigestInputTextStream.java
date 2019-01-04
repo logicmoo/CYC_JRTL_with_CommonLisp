@@ -1,17 +1,20 @@
 //
-//
+// For LarKC
 //
 package com.cyc.tool.subl.jrtl.nativeCode.type.stream;
 
 import java.io.File;
 import java.io.FileDescriptor;
+import java.io.PrintStream;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject;
+import org.armedbear.lisp.LispObject;
+import org.armedbear.lisp.Stream;
+
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCharacter;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
@@ -43,21 +46,35 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackageIterator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public class SubLDigestInputTextStream extends AbstractSubLObject
-		implements SubLStream, SubLInputTextStream, CommonSymbols {
-	public static int INITIAL_CAPACITY = 131072;
+public class SubLDigestInputTextStream extends LispObject implements SubLStream, SubLInputTextStream {
+	public SubLDigestInputTextStream(SubLInputTextStream outerStream, MessageDigest digest) {
+		bytes = null;
+		buffer_size = 0;
+		wrapped = outerStream;
+		this.digest = digest;
+		bytes = new byte[131072];
+		buffer = ByteBuffer.wrap(bytes);
+		buffer_size = 131072;
+	}
+
+	@Override
+	public Stream toLispObject() {
+		return wrapped.toLispObject();
+	}
 
 	public static void main(String[] args) throws NoSuchAlgorithmException {
 		MessageDigest digest = MessageDigest.getInstance("SHA-1");
-		System.out.println("--  " + SubLDigestInputTextStream.makeHexStringFromByteArray(digest.digest()));
+	final PrintStream sout = Errors.trout;
+
+		sout.println("--  " + makeHexStringFromByteArray(digest.digest()));
 		byte[] curr = { 0, 10 };
 		for (int i = 0; i < 256; ++i) {
 			curr[0] = (byte) i;
-			System.out.print(SubLDigestInputTextStream.makeHexStringFromByteArray(curr));
-			System.out.print("  ");
+			sout.print(makeHexStringFromByteArray(curr));
+			sout.print("  ");
 			digest.update(curr);
 			byte[] result = digest.digest();
-			System.out.println(SubLDigestInputTextStream.makeHexStringFromByteArray(result));
+			sout.println(makeHexStringFromByteArray(result));
 		}
 	}
 
@@ -78,614 +95,751 @@ public class SubLDigestInputTextStream extends AbstractSubLObject
 	private int buffer_size;
 	private MessageDigest digest;
 	private SubLInputTextStream wrapped;
+	public static int INITIAL_CAPACITY = 131072;
 
-	public SubLDigestInputTextStream(SubLInputTextStream outerStream, MessageDigest digest) {
-		this.bytes = null;
-		this.buffer_size = 0;
-		this.wrapped = outerStream;
-		this.digest = digest;
-		this.bytes = new byte[131072];
-		this.buffer = ByteBuffer.wrap(this.bytes);
-		this.buffer_size = 131072;
+	private void maybeResizeBuffer() {
+		if (buffer_size - 1 == buffer.position()) {
+			ByteBuffer old_buffer = buffer;
+			buffer_size *= 2;
+			bytes = new byte[buffer_size];
+			buffer = ByteBuffer.wrap(bytes);
+			old_buffer.rewind();
+			buffer.put(old_buffer);
+		}
 	}
 
+	@Override
 	public SubLObject add(SubLObject num) {
-		return this.wrapped.add(num);
+		return wrapped.add(num);
 	}
 
+	@Override
 	public void addKey(SubLObject key) {
-		this.wrapped.addKey(key);
+		wrapped.addKey(key);
 	}
 
+	@Override
 	public SubLList asArrayList() {
-		return this.wrapped.asArrayList();
+		return wrapped.asArrayList();
 	}
 
+	@Override
 	public SubLList asConsList() {
-		return this.wrapped.asConsList();
+		return wrapped.asConsList();
 	}
 
+	@Override
 	public BigInteger bigIntegerValue() {
-		return this.wrapped.bigIntegerValue();
+		return wrapped.bigIntegerValue();
 	}
 
+	@Override
 	public void bind(SubLObject newValue, SubLObject[] bindings) {
-		this.wrapped.bind(newValue, bindings);
+		wrapped.bind(newValue, bindings);
 	}
 
+	@Override
 	public boolean canFastHash() {
-		return this.wrapped.canFastHash();
+		return wrapped.canFastHash();
 	}
 
+	@Override
 	public char charValue() {
-		return this.wrapped.charValue();
+		return wrapped.charValue();
 	}
 
+	@Override
 	public void checkType(SubLSymbol predicate) throws SubLException {
-		this.wrapped.checkType(predicate);
+		wrapped.checkType(predicate);
 	}
 
+	@Override
 	public void checkTypeInternal(SubLSymbol predicate) throws SubLException {
-		this.wrapped.checkTypeInternal(predicate);
+		wrapped.checkTypeInternal(predicate);
 	}
 
+	@Override
 	public Object clone() {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public void close() {
-		this.wrapped.close();
+		wrapped.close();
 	}
 
+	@Override
 	public SubLObject currentBinding(SubLObject[] bindings) {
-		return this.wrapped.currentBinding(bindings);
+		return wrapped.currentBinding(bindings);
 	}
 
+	@Override
 	public SubLObject dec() {
-		return this.wrapped.dec();
+		return wrapped.dec();
 	}
 
+	@Override
 	public double doubleValue() {
-		return this.wrapped.doubleValue();
+		return wrapped.doubleValue();
 	}
 
+	@Override
 	public SubLObject eighth() {
-		return this.wrapped.eighth();
+		return wrapped.eighth();
 	}
 
+	@Override
 	public void enforceType(SubLSymbol predicate) throws SubLException {
-		this.wrapped.enforceType(predicate);
+		wrapped.enforceType(predicate);
 	}
 
+	@Override
 	public void enforceTypeInternal(SubLSymbol predicate) throws SubLException {
-		this.wrapped.enforceTypeInternal(predicate);
+		wrapped.enforceTypeInternal(predicate);
 	}
 
+	@Override
 	public boolean eql(SubLObject obj) {
-		return this.wrapped.eql(obj);
+		return wrapped.eql(obj);
 	}
 
+	@Override
 	public boolean equal(SubLObject obj) {
-		return this.wrapped.equal(obj);
+		return wrapped.equal(obj);
 	}
 
+	@Override
 	public boolean equalp(SubLObject obj) {
-		return this.wrapped.equalp(obj);
+		return wrapped.equalp(obj);
 	}
 
+	@Override
 	public SubLObject eval(SubLEnvironment env) throws InvalidSubLExpressionException {
-		return this.wrapped.eval(env);
+		return wrapped.eval(env);
 	}
 
+	@Override
 	public SubLObject fifth() {
-		return this.wrapped.fifth();
+		return wrapped.fifth();
 	}
 
+	@Override
 	public SubLObject first() {
-		return this.wrapped.first();
+		return wrapped.first();
 	}
 
+	@Override
 	public SubLObject fourth() {
-		return this.wrapped.fourth();
+		return wrapped.fourth();
 	}
 
+	@Override
 	public SubLObject get(int index) {
-		return this.wrapped.get(index);
+		return wrapped.get(index);
 	}
 
+	@Override
 	public SubLObject get(SubLObject obj) {
-		return this.wrapped.get(obj);
+		return wrapped.get(obj);
 	}
 
+	@Override
 	public SubLCharacter getCharacter(int index) {
-		return this.wrapped.getCharacter(index);
+		return wrapped.getCharacter(index);
 	}
 
 	public String getDigest() {
-		this.buffer.limit(this.buffer.position());
-		this.buffer.rewind();
-		this.digest.update(this.buffer);
-		byte[] result = this.digest.digest();
-		return SubLDigestInputTextStream.makeHexStringFromByteArray(result);
+		buffer.limit(buffer.position());
+		buffer.rewind();
+		digest.update(buffer);
+		byte[] result = digest.digest();
+		return makeHexStringFromByteArray(result);
 	}
 
+	@Override
 	public SubLSymbol getDirection() {
-		return this.wrapped.getDirection();
+		return wrapped.getDirection();
 	}
 
+	@Override
 	public SubLSymbol getElementType() {
-		return this.wrapped.getElementType();
+		return wrapped.getElementType();
 	}
 
+	@Override
 	public FileDescriptor getFD() {
-		return this.wrapped.getFD();
+		return wrapped.getFD();
 	}
 
+	@Override
 	public SubLObject getField(int fieldNum) {
-		return this.wrapped.getField(fieldNum);
+		return wrapped.getField(fieldNum);
 	}
 
+	@Override
 	public SubLObject getField0() {
-		return this.wrapped.getField0();
+		return wrapped.getField0();
 	}
 
+	@Override
 	public SubLObject getField1() {
-		return this.wrapped.getField1();
+		return wrapped.getField1();
 	}
 
+	@Override
 	public SubLObject getField10() {
-		return this.wrapped.getField10();
+		return wrapped.getField10();
 	}
 
+	@Override
 	public SubLObject getField11() {
-		return this.wrapped.getField11();
+		return wrapped.getField11();
 	}
 
+	@Override
 	public SubLObject getField12() {
-		return this.wrapped.getField12();
+		return wrapped.getField12();
 	}
 
+	@Override
 	public SubLObject getField13() {
-		return this.wrapped.getField13();
+		return wrapped.getField13();
 	}
 
+	@Override
 	public SubLObject getField14() {
-		return this.wrapped.getField14();
+		return wrapped.getField14();
 	}
 
+	@Override
 	public SubLObject getField15() {
-		return this.wrapped.getField15();
+		return wrapped.getField15();
 	}
 
+	@Override
 	public SubLObject getField16() {
-		return this.wrapped.getField16();
+		return wrapped.getField16();
 	}
 
+	@Override
 	public SubLObject getField17() {
-		return this.wrapped.getField17();
+		return wrapped.getField17();
 	}
 
+	@Override
 	public SubLObject getField18() {
-		return this.wrapped.getField18();
+		return wrapped.getField18();
 	}
 
+	@Override
 	public SubLObject getField19() {
-		return this.wrapped.getField19();
+		return wrapped.getField19();
 	}
 
+	@Override
 	public SubLObject getField2() {
-		return this.wrapped.getField2();
+		return wrapped.getField2();
 	}
 
+	@Override
 	public SubLObject getField20() {
-		return this.wrapped.getField20();
+		return wrapped.getField20();
 	}
 
+	@Override
 	public SubLObject getField3() {
-		return this.wrapped.getField3();
+		return wrapped.getField3();
 	}
 
+	@Override
 	public SubLObject getField4() {
-		return this.wrapped.getField4();
+		return wrapped.getField4();
 	}
 
+	@Override
 	public SubLObject getField5() {
-		return this.wrapped.getField5();
+		return wrapped.getField5();
 	}
 
+	@Override
 	public SubLObject getField6() {
-		return this.wrapped.getField6();
+		return wrapped.getField6();
 	}
 
+	@Override
 	public SubLObject getField7() {
-		return this.wrapped.getField7();
+		return wrapped.getField7();
 	}
 
+	@Override
 	public SubLObject getField8() {
-		return this.wrapped.getField8();
+		return wrapped.getField8();
 	}
 
+	@Override
 	public SubLObject getField9() {
-		return this.wrapped.getField9();
+		return wrapped.getField9();
 	}
 
+	@Override
 	public File getFile() {
-		return this.wrapped.getFile();
+		return wrapped.getFile();
 	}
 
+	@Override
 	public String getFileDesignator() {
-		return this.wrapped.getFileDesignator();
+		return wrapped.getFileDesignator();
 	}
 
+	@Override
 	public long getFilePointer() {
-		return this.wrapped.getFilePointer();
+		return wrapped.getFilePointer();
 	}
 
+	@Override
 	public long getFlushCount() {
-		return this.wrapped.getFlushCount();
+		return wrapped.getFlushCount();
 	}
 
+	@Override
 	public SubLFunction getFunc() {
-		return this.wrapped.getFunc();
+		return wrapped.getFunc();
 	}
 
+	@Override
 	public long getInputIndex() {
-		return this.wrapped.getInputIndex();
+		return wrapped.getInputIndex();
 	}
 
+	@Override
 	public String getNewline() {
-		return this.wrapped.getNewline();
+		return wrapped.getNewline();
 	}
 
+	@Override
 	public int getNumSize() {
-		return this.wrapped.getNumSize();
+		return wrapped.getNumSize();
 	}
 
+	@Override
 	public SubLStream getStream(boolean followSynonymStream) {
 		return this;
 	}
 
+	@Override
 	public SubLList getStreams() {
-		return this.wrapped.getStreams();
+		return wrapped.getStreams();
 	}
 
+	@Override
 	public SubLSymbol getStreamSymbol() {
-		return this.wrapped.getStreamSymbol();
+		return wrapped.getStreamSymbol();
 	}
 
+	@Override
 	public String getString() {
-		return this.wrapped.getString();
+		return wrapped.getString();
 	}
 
+	@Override
+	public String getStringValue() {
+		return wrapped.getString();
+	}
+
+	@Override
 	public SubLSymbol getType() {
-		return this.wrapped.getType();
+		return wrapped.getType();
 	}
 
+	@Override
 	public SubLFixnum getTypeCode() {
-		return this.wrapped.getTypeCode();
+		return wrapped.getTypeCode();
 	}
 
+	@Override
 	public int hashCode(int currentDepth) {
-		return this.wrapped.hashCode(currentDepth);
+		return wrapped.hashCode(currentDepth);
 	}
 
+	@Override
 	public boolean hasKey(SubLObject obj) {
-		return this.wrapped.hasKey(obj);
+		return wrapped.hasKey(obj);
 	}
 
+	@Override
 	public SubLSymbol ifExists() {
-		return this.wrapped.ifExists();
+		return wrapped.ifExists();
 	}
 
+	@Override
 	public SubLSymbol ifNotExists() {
-		return this.wrapped.ifNotExists();
+		return wrapped.ifNotExists();
 	}
 
+	@Override
 	public SubLObject inc() {
-		return this.wrapped.inc();
+		return wrapped.inc();
 	}
 
+	@Override
 	public int intValue() {
-		return this.wrapped.intValue();
+		return wrapped.intValue();
 	}
 
+	@Override
 	public boolean isAlien() {
-		return false;
+		return wrapped.isAlien();
 	}
 
+	@Override
 	public boolean isArrayBased() {
-		return this.wrapped.isArrayBased();
+		return wrapped.isArrayBased();
 	}
 
+	@Override
 	public boolean isAtom() {
-		return this.wrapped.isAtom();
+		return wrapped.isAtom();
 	}
 
+	@Override
 	public boolean isBigIntegerBignum() {
-		return this.wrapped.isBigIntegerBignum();
+		return wrapped.isBigIntegerBignum();
 	}
 
+	@Override
 	public boolean isBignum() {
-		return this.wrapped.isBignum();
+		return wrapped.isBignum();
 	}
 
+	@Override
 	public boolean isBoolean() {
-		return this.wrapped.isBoolean();
+		return wrapped.isBoolean();
 	}
 
+	@Override
 	public boolean isChar() {
-		return this.wrapped.isChar();
+		return wrapped.isChar();
 	}
 
+	@Override
 	public boolean isClosed() {
-		return this.wrapped.isClosed();
+		return wrapped.isClosed();
 	}
 
+	@Override
 	public boolean isCons() {
-		return this.wrapped.isCons();
+		return wrapped.isCons();
 	}
 
+	@Override
 	public boolean isDouble() {
-		return this.wrapped.isDouble();
+		return wrapped.isDouble();
 	}
 
+	@Override
 	public boolean isEnvironment() {
-		return this.wrapped.isEnvironment();
+		return wrapped.isEnvironment();
 	}
 
+	@Override
 	public boolean isError() {
-		return this.wrapped.isError();
+		return wrapped.isError();
 	}
 
+	@Override
 	public boolean isFixnum() {
-		return this.wrapped.isFixnum();
+		return wrapped.isFixnum();
 	}
 
+	@Override
 	public boolean isFunction() {
-		return this.wrapped.isFunction();
+		return wrapped.isFunction();
 	}
 
+	@Override
 	public boolean isFunctionSpec() {
-		return this.wrapped.isFunctionSpec();
+		return wrapped.isFunctionSpec();
 	}
 
+	@Override
 	public boolean isGuid() {
-		return this.wrapped.isGuid();
+		return wrapped.isGuid();
 	}
 
+	@Override
 	public boolean isHashtable() {
-		return this.wrapped.isHashtable();
+		return wrapped.isHashtable();
 	}
 
+	@Override
 	public boolean isHashtableIterator() {
-		return this.wrapped.isHashtableIterator();
+		return wrapped.isHashtableIterator();
 	}
 
+	@Override
 	public boolean isIntBignum() {
-		return this.wrapped.isIntBignum();
+		return wrapped.isIntBignum();
 	}
 
+	@Override
 	public boolean isInteger() {
-		return this.wrapped.isInteger();
+		return wrapped.isInteger();
 	}
 
+	@Override
 	public boolean isInteractive() {
-		return this.wrapped.isInteractive();
+		return wrapped.isInteractive();
 	}
 
+	@Override
 	public boolean isKeyhash() {
-		return this.wrapped.isKeyhash();
+		return wrapped.isKeyhash();
 	}
 
+	@Override
 	public boolean isKeyhashIterator() {
-		return this.wrapped.isKeyhashIterator();
+		return wrapped.isKeyhashIterator();
 	}
 
+	@Override
 	public boolean isKeyword() {
-		return this.wrapped.isKeyword();
+		return wrapped.isKeyword();
 	}
 
+	@Override
 	public boolean isList() {
-		return this.wrapped.isList();
+		return wrapped.isList();
 	}
 
+	@Override
 	public boolean isLock() {
-		return this.wrapped.isLock();
+		return wrapped.isLock();
 	}
 
+	@Override
 	public boolean isLongBignum() {
-		return this.wrapped.isLongBignum();
+		return wrapped.isLongBignum();
 	}
 
+	@Override
 	public boolean isMacroOperator() {
-		return this.wrapped.isMacroOperator();
+		return wrapped.isMacroOperator();
 	}
 
+	@Override
 	public boolean isMemoryMapped() {
-		return this.wrapped.isMemoryMapped();
+		return wrapped.isMemoryMapped();
 	}
 
+	@Override
 	public boolean isNegative() {
-		return this.wrapped.isNegative();
+		return wrapped.isNegative();
 	}
 
+	@Override
 	public boolean isNil() {
-		return this.wrapped.isNil();
+		return wrapped.isNil();
 	}
 
+	@Override
 	public boolean isNumber() {
-		return this.wrapped.isNumber();
+		return wrapped.isNumber();
 	}
 
+	@Override
 	public boolean isPackage() {
-		return this.wrapped.isPackage();
+		return wrapped.isPackage();
 	}
 
+	@Override
 	public boolean isPackageIterator() {
-		return this.wrapped.isPackageIterator();
+		return wrapped.isPackageIterator();
 	}
 
+	@Override
 	public boolean isPositive() {
-		return this.wrapped.isPositive();
+		return wrapped.isPositive();
 	}
 
+	@Override
 	public boolean isProcess() {
-		return this.wrapped.isProcess();
+		return wrapped.isProcess();
 	}
 
+	@Override
 	public boolean isRandomAccess() {
-		return this.wrapped.isRandomAccess();
+		return wrapped.isRandomAccess();
 	}
 
+	@Override
 	public boolean isReadWriteLock() {
-		return this.wrapped.isReadWriteLock();
+		return wrapped.isReadWriteLock();
 	}
 
+	@Override
 	public boolean isRegexPattern() {
-		return this.wrapped.isRegexPattern();
+		return wrapped.isRegexPattern();
 	}
 
+	@Override
 	public boolean isSemaphore() {
-		return this.wrapped.isSemaphore();
+		return wrapped.isSemaphore();
 	}
 
+	@Override
 	public boolean isSequence() {
-		return this.wrapped.isSequence();
+		return wrapped.isSequence();
 	}
 
+	@Override
 	public boolean isStream() {
 		return true;
 	}
 
+	@Override
 	public boolean isString() {
-		return this.wrapped.isString();
+		return wrapped.isString();
 	}
 
+	@Override
 	public boolean isStructure() {
-		return this.wrapped.isStructure();
+		return wrapped.isStructure();
 	}
 
+	@Override
 	public boolean isSymbol() {
-		return this.wrapped.isSymbol();
+		return wrapped.isSymbol();
 	}
 
+	@Override
 	public boolean isVector() {
-		return this.wrapped.isVector();
+		return wrapped.isVector();
 	}
 
+	@Override
 	public boolean isZero() {
-		return this.wrapped.isZero();
+		return wrapped.isZero();
 	}
 
+	@Override
 	public SubLObject last(int i) {
-		return this.wrapped.last(i);
+		return wrapped.last(i);
 	}
 
-	public long length() {
-		return this.wrapped.length();
+	@Override
+	public long file_length() {
+		return wrapped.file_length();
 	}
 
+	@Override
 	public long longValue() {
-		return this.wrapped.longValue();
+		return wrapped.longValue();
 	}
 
+	@Override
 	public SubLObject makeCopy() {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public SubLObject makeDeepCopy() {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
-	private void maybeResizeBuffer() {
-		if (this.buffer_size - 1 == this.buffer.position()) {
-			ByteBuffer old_buffer = this.buffer;
-			this.buffer_size *= 2;
-			this.bytes = new byte[this.buffer_size];
-			this.buffer = ByteBuffer.wrap(this.bytes);
-			old_buffer.rewind();
-			this.buffer.put(old_buffer);
-		}
-	}
-
+	@Override
 	public SubLObject mult(SubLObject num) {
-		return this.wrapped.mult(num);
+		return wrapped.mult(num);
 	}
 
+	@Override
 	public SubLObject ninth() {
-		return this.wrapped.ninth();
+		return wrapped.ninth();
 	}
 
+	@Override
 	public SubLObject nthCdr(int index) {
-		return this.wrapped.nthCdr(index);
+		return wrapped.nthCdr(index);
 	}
 
+	@Override
 	public long numBytesAvailable() {
-		return this.wrapped.numBytesAvailable();
+		return wrapped.numBytesAvailable();
 	}
 
+	@Override
 	public boolean numE(SubLObject x) {
-		return this.wrapped.numE(x);
+		return wrapped.numE(x);
 	}
 
+	@Override
 	public boolean numG(SubLObject x) {
-		return this.wrapped.numG(x);
+		return wrapped.numG(x);
 	}
 
+	@Override
 	public boolean numGE(SubLObject x) {
-		return this.wrapped.numGE(x);
+		return wrapped.numGE(x);
 	}
 
+	@Override
 	public boolean numL(SubLObject x) {
-		return this.wrapped.numL(x);
+		return wrapped.numL(x);
 	}
 
+	@Override
 	public boolean numLE(SubLObject x) {
-		return this.wrapped.numLE(x);
+		return wrapped.numLE(x);
 	}
 
+	@Override
 	public SubLObject put(SubLObject key, SubLObject value) {
-		return this.wrapped.put(key, value);
+		return wrapped.put(key, value);
 	}
 
+	@Override
 	public int read() {
-		int result = this.wrapped.read();
+		int result = wrapped.read();
 		if (result == -1)
 			return result;
-		this.maybeResizeBuffer();
+		maybeResizeBuffer();
 		if (result < 256)
-			this.buffer.put((byte) result);
+			buffer.put((byte) result);
 		else
-			this.buffer.putChar((char) result);
+			buffer.putChar((char) result);
 		return result;
 	}
 
+	@Override
 	public int read(byte[] b) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public int read(byte[] b, int off, int len) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public long readByteSequenceToPositiveInteger(int bytesInInteger, boolean useNetworkByteOrder) {
-		if (true)
-			throw new UnsupportedOperationException("Not supported yet.");
-		return wrapped.readByteSequenceToPositiveInteger(bytesInInteger, useNetworkByteOrder);
+		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public int readByteSequenceToString(SubLString str) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public int readChar() {
 		return this.read();
 	}
 
+	@Override
 	public int readChar(char[] cbuf) {
 		return this.readChar(cbuf, 0, cbuf.length);
 	}
 
+	@Override
 	public int readChar(char[] cbuf, int off, int len) {
 		int curChar = -1;
 		int i = off;
@@ -698,326 +852,399 @@ public class SubLDigestInputTextStream extends AbstractSubLObject
 		return i;
 	}
 
+	@Override
 	public boolean ready() {
-		return this.wrapped.ready();
+		return wrapped.ready();
 	}
 
+	@Override
 	public void rebind(SubLObject oldValue, SubLObject[] bindings) {
-		this.wrapped.rebind(oldValue, bindings);
+		wrapped.rebind(oldValue, bindings);
 	}
 
+	@Override
 	public boolean remKey(SubLObject obj) {
-		return this.wrapped.remKey(obj);
+		return wrapped.remKey(obj);
 	}
 
+	@Override
 	public SubLObject remove(SubLObject obj) {
-		return this.wrapped.remove(obj);
+		return wrapped.remove(obj);
 	}
 
+	@Override
 	public SubLObject rest() {
-		return this.wrapped.rest();
+		return wrapped.rest();
 	}
 
+	@Override
 	public SubLSequence reverse(boolean isDestructive) {
-		return this.wrapped.reverse(isDestructive);
+		return wrapped.reverse(isDestructive);
 	}
 
+	@Override
 	public SubLObject second() {
-		return this.wrapped.second();
+		return wrapped.second();
 	}
 
+	@Override
 	public void seek(long pos) {
-		this.wrapped.seek(pos);
+		wrapped.seek(pos);
 	}
 
+	@Override
 	public void set(int index, SubLObject val) {
-		this.wrapped.set(index, val);
+		wrapped.set(index, val);
 	}
 
+	@Override
 	public void setField(int fieldNum, SubLObject value) {
-		this.wrapped.setField(fieldNum, value);
+		wrapped.setField(fieldNum, value);
 	}
 
+	@Override
 	public SubLObject setField0(SubLObject newVal) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public SubLObject setField1(SubLObject newVal) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public SubLObject setField10(SubLObject newVal) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public SubLObject setField11(SubLObject newVal) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public SubLObject setField12(SubLObject newVal) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public SubLObject setField13(SubLObject newVal) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public SubLObject setField14(SubLObject newVal) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public SubLObject setField15(SubLObject newVal) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public SubLObject setField16(SubLObject newVal) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public SubLObject setField17(SubLObject newVal) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public SubLObject setField18(SubLObject newVal) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public SubLObject setField19(SubLObject newVal) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public SubLObject setField2(SubLObject newVal) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public SubLObject setField20(SubLObject newVal) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public SubLObject setField3(SubLObject newVal) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public SubLObject setField4(SubLObject newVal) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public SubLObject setField5(SubLObject newVal) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public SubLObject setField6(SubLObject newVal) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public SubLObject setField7(SubLObject newVal) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public SubLObject setField8(SubLObject newVal) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public SubLObject setField9(SubLObject newVal) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+	@Override
 	public SubLCons setFirst(SubLObject first) {
-		return this.wrapped.setFirst(first);
+		return wrapped.setFirst(first);
 	}
 
+	@Override
 	public void setIsInteractive(boolean newValue) {
-		this.wrapped.setIsInteractive(newValue);
+		wrapped.setIsInteractive(newValue);
 	}
 
+	@Override
 	public void setLength(long newLength) {
-		this.wrapped.setLength(newLength);
+		wrapped.setLength(newLength);
 	}
 
+	@Override
 	public void setNewline(String newline) {
-		this.wrapped.setNewline(newline);
+		wrapped.setNewline(newline);
 	}
 
+	@Override
 	public SubLCons setRest(SubLObject rest) {
-		return this.wrapped.setRest(rest);
+		return wrapped.setRest(rest);
 	}
 
+	@Override
 	public SubLObject seventh() {
-		return this.wrapped.seventh();
+		return wrapped.seventh();
 	}
 
+	@Override
 	public SubLObject sixth() {
-		return this.wrapped.sixth();
+		return wrapped.sixth();
 	}
 
+	@Override
 	public int size() {
-		return this.wrapped.size();
+		return wrapped.size();
 	}
 
+	@Override
 	public int size(int max) {
-		return this.wrapped.size();
+		return wrapped.size();
 	}
 
+	@Override
 	public long skip(long n) {
-		return this.wrapped.skip(n);
+		return wrapped.skip(n);
 	}
 
+	@Override
 	public SubLObject sub(SubLObject num) {
-		return this.wrapped.sub(num);
+		return wrapped.sub(num);
 	}
 
+	@Override
 	public int superHash() {
-		return this.wrapped.superHash();
+		return wrapped.superHash();
 	}
 
+	@Override
 	public SubLObject tenth() {
-		return this.wrapped.tenth();
+		return wrapped.tenth();
 	}
 
+	@Override
 	public SubLObject third() {
-		return this.wrapped.third();
+		return wrapped.third();
 	}
 
+	@Override
 	public SubLCharacter toChar() {
-		return this.wrapped.toChar();
+		return wrapped.toChar();
 	}
 
+	@Override
 	public SubLCons toCons() {
-		return this.wrapped.toCons();
+		return wrapped.toCons();
 	}
 
+	@Override
 	public SubLDoubleFloat toDouble() {
-		return this.wrapped.toDouble();
+		return wrapped.toDouble();
 	}
 
+	@Override
 	public SubLEnvironment toEnv() {
-		return this.wrapped.toEnv();
+		return wrapped.toEnv();
 	}
 
+	@Override
 	public SubLFixnum toFixnum() {
-		return this.wrapped.toFixnum();
+		return wrapped.toFixnum();
 	}
 
+	@Override
 	public SubLGuid toGuid() {
-		return this.wrapped.toGuid();
+		return wrapped.toGuid();
 	}
 
+	@Override
 	public SubLHashtable toHashtable() {
-		return this.wrapped.toHashtable();
+		return wrapped.toHashtable();
 	}
 
+	@Override
 	public SubLHashtableIterator toHashtableIterator() {
-		return this.wrapped.toHashtableIterator();
+		return wrapped.toHashtableIterator();
 	}
 
+	@Override
 	public SubLInputBinaryStream toInputBinaryStream() {
-		return this.wrapped.toInputBinaryStream();
+		return wrapped.toInputBinaryStream();
 	}
 
+	@Override
 	public SubLInputStream toInputStream() {
 		return this;
 	}
 
+	@Override
 	public SubLInputTextStream toInputTextStream() {
 		return this;
 	}
 
+	@Override
 	public SubLInteger toInteger() {
-		return this.wrapped.toInteger();
+		return wrapped.toInteger();
 	}
 
+	@Override
 	public SubLKeyhash toKeyhash() {
-		return this.wrapped.toKeyhash();
+		return wrapped.toKeyhash();
 	}
 
+	@Override
 	public SubLKeyhashIterator toKeyhashIterator() {
-		return this.wrapped.toKeyhashIterator();
+		return wrapped.toKeyhashIterator();
 	}
 
+	@Override
 	public SubLList toList() {
-		return this.wrapped.toList();
+		return wrapped.toList();
 	}
 
+	@Override
 	public SubLLock toLock() {
-		return this.wrapped.toLock();
+		return wrapped.toLock();
 	}
 
+	@Override
 	public SubLMacro toMacro() {
-		return this.wrapped.toMacro();
+		return wrapped.toMacro();
 	}
 
+	@Override
 	public SubLNumber toNumber() {
-		return this.wrapped.toNumber();
+		return wrapped.toNumber();
 	}
 
+	@Override
 	public SubLOutputBinaryStream toOutputBinaryStream() {
-		return this.wrapped.toOutputBinaryStream();
+		return wrapped.toOutputBinaryStream();
 	}
 
+	@Override
 	public SubLOutputStream toOutputStream() {
-		return this.wrapped.toOutputStream();
+		return wrapped.toOutputStream();
 	}
 
+	@Override
 	public SubLOutputTextStream toOutputTextStream() {
-		return this.wrapped.toOutputTextStream();
+		return wrapped.toOutputTextStream();
 	}
 
+	@Override
 	public SubLPackage toPackage() {
-		return this.wrapped.toPackage();
+		return wrapped.toPackage();
 	}
 
+	@Override
 	public SubLPackageIterator toPackageIterator() {
-		return this.wrapped.toPackageIterator();
+		return wrapped.toPackageIterator();
 	}
 
+	@Override
 	public SubLProcess toProcess() {
-		return this.wrapped.toProcess();
+		return wrapped.toProcess();
 	}
 
+	@Override
 	public SubLReadWriteLock toReadWriteLock() {
-		return this.wrapped.toReadWriteLock();
+		return wrapped.toReadWriteLock();
 	}
 
+	@Override
 	public SubLRegexPattern toRegexPattern() {
-		return this.wrapped.toRegexPattern();
+		return wrapped.toRegexPattern();
 	}
 
+	@Override
 	public SubLSemaphore toSemaphore() {
-		return this.wrapped.toSemaphore();
+		return wrapped.toSemaphore();
 	}
 
+	@Override
 	public SubLSequence toSeq() {
-		return this.wrapped.toSeq();
+		return wrapped.toSeq();
 	}
 
+	@Override
 	public SubLString toStr() {
-		return this.wrapped.toStr();
+		return wrapped.toStr();
 	}
 
+	@Override
 	public SubLStruct toStruct() {
-		return this.wrapped.toStruct();
+		return wrapped.toStruct();
 	}
 
+	@Override
 	public SubLSymbol toSymbol() {
-		return this.wrapped.toSymbol();
+		return wrapped.toSymbol();
 	}
 
+	@Override
 	public String toTypeName() {
-		return this.wrapped.toTypeName();
+		return wrapped.toTypeName();
 	}
 
+	@Override
 	public SubLVector toVect() {
-		return this.wrapped.toVect();
+		return wrapped.toVect();
 	}
 
+	@Override
 	public void unread(int c) {
-		this.wrapped.unread(c);
-		this.buffer.position(this.buffer.position() - 1);
+		wrapped.unread(c);
+		buffer.position(buffer.position() - 1);
 	}
-
-	public String writeToString() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

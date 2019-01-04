@@ -1,419 +1,484 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
-package com.cyc.tool.subl.jrtl.nativeCode.type.symbol;
-
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
-import com.cyc.tool.subl.util.SubLFiles.VariableAccessMode;
-
-public class SubLSymbolImpl extends AbstractSubLSymbol implements SubLSymbol {
-
-	//// Constructors
-
-	public static String SYMBOL_TYPE_NAME = "SYMBOL";
-
-	private static int idCounter = 0;
-
-	//// Public Area
-
-	private int id = SubLSymbol.INVALID_BINDING_INDEX; // this should probably
-														// be volatile
-	// -APB
-
-	private VariableAccessMode accessModeVar = VariableAccessMode.UNDECLARED; // this
-																				// should
-																				// probably
-																				// be
-																				// volatile
-																				// -APB
-
-	private SubLObject constantValue = SubLSymbol.UNBOUND;
-
-	/**
-	 * Creates a new instance of SubLSymbol. symbolName must already be
-	 * canonicalized before calling this constructor SubLPackage are allowed to
-	 * use this constructor.
-	 */
-	SubLSymbolImpl(String symbolName, SubLPackage thePackage) {
-		super(SubLObjectFactory.makeString(symbolName), thePackage);
-	}
-
-	/**
-	 * Creates a new instance of SubLSymbol. symbolName must already be
-	 * canonicalized before calling this constructor SubLPackage are allowed to
-	 * use this constructor.
-	 */
-	SubLSymbolImpl(SubLString symbolName, SubLPackage thePackage) {
-		super(symbolName, thePackage);
-	}
-
-	public void bind(SubLObject newValue, SubLObject[] bindings) {
-		bindings[this.id] = newValue;
-	}
-
-	public void bind(SubLObject newValue, SubLThread thread) {
-		thread.bindingsList[this.id] = newValue;
-	}
-
-	public SubLObject currentBinding(SubLObject[] bindings) {
-		return bindings[this.id];
-	}
-
-	public SubLObject currentBinding(SubLThread thread) {
-		return thread.bindingsList[this.id];
-	}
-
-	public SubLObject eval(SubLEnvironment env) throws InvalidSubLExpressionException {
-		return this.getValue();
-	}
-
-	public void forceGlobalValue(SubLObject newValue) {
-		if (this.isConstantSymbol())
-			this.constantValue = newValue;
-		else
-			this.value = newValue;
-	}
-
-	public int getBindingId() {
-		return this.id;
-	}
-
-	protected SubLSymbol getBindingType() {
-		return this.accessModeVar.toSymbol();
-	}
-
-	public SubLObject getDynamicValue() {
-		Thread th = Thread.currentThread();
-
-		SubLObject result = ((SubLThread) th).bindingsList[this.id];
-		if (result != SubLSymbol.UNBOUND)
-			return result;
-		result = this.value; // avoid multiple references to value since it is
-		// volatile
-		return result != SubLSymbol.UNBOUND ? result : Errors.error(this + " is not bound.");
-	}
-
-	public SubLObject getDynamicValue(SubLObject[] bindings) {
-		SubLObject result = bindings[this.id];
-		if (result != SubLSymbol.UNBOUND)
-			return result;
-		result = this.value; // avoid multiple references to value since it is
-		// volatile
-		return result != SubLSymbol.UNBOUND ? result : Errors.error(this + " is not bound.");
-	}
-
-	public SubLObject getDynamicValue(SubLThread thread) {
-		SubLObject result = thread.bindingsList[this.id];
-		if (result != SubLSymbol.UNBOUND)
-			return result;
-		result = this.value; // avoid multiple references to value since it is
-		// volatile
-		return result != SubLSymbol.UNBOUND ? result : Errors.error(this + " is not bound.");
-	}
-
-	public SubLObject getGlobalValue() {
-		SubLObject result = this.isConstantSymbol() ? this.constantValue : this.value;
-		return result != SubLSymbol.UNBOUND ? result : Errors.error(this + " is not bound.");
-	}
-
-	public SubLObject getUndeclaredValue() {
-		SubLObject result = SubLEnvironment.currentEnvironment().lookupBinding(this);
-		if (result != SubLSymbol.UNBOUND)
-			return result;
-		result = this.value; // avoid multiple references to value since it is
-		// volatile
-		return result != SubLSymbol.UNBOUND ? result : Errors.error(this + " is not bound.");
-	}
-
-	public SubLObject getValue() {
-		if (this.accessModeVar == VariableAccessMode.UNDECLARED)
-			return this.getUndeclaredValue();
-		else if (this.accessModeVar == VariableAccessMode.DYNAMIC)
-			return this.getDynamicValue();
-		else
-			return this.getGlobalValue();
-	}
-
-	public boolean isAlien() {
-		return false;
-	}
-
-	public boolean isAtom() {
-		return true;
-	}
-
-	public boolean isBigIntegerBignum() {
-		return false;
-	}
-
-	public boolean isBignum() {
-		return false;
-	}
-
-	public boolean isBoolean() {
-		return false;
-	}
-
-	public boolean isChar() {
-		return false;
-	}
-
-	public boolean isCons() {
-		return false;
-	}
-
-	public boolean isConstantSymbol() {
-		return this.accessModeVar == VariableAccessMode.CONSTANT;
-	}
-
-	public boolean isDouble() {
-		return false;
-	}
-
-	public boolean isDynamic() {
-		return this.accessModeVar == VariableAccessMode.DYNAMIC;
-	}
-
-	public boolean isEnvironment() {
-		return false;
-	}
-
-	public boolean isError() {
-		return false;
-	}
-
-	public boolean isFixnum() {
-		return false;
-	}
-
-	public boolean isFunction() {
-		return false;
-	}
-
-	public boolean isFunctionSpec() {
-		return this.operator != null && this.operator.isFunction();
-	}
-
-	public boolean isGlobal() {
-		return this.accessModeVar == VariableAccessMode.LEXICAL || this.accessModeVar == VariableAccessMode.CONSTANT;
-	}
-
-	public boolean isGuid() {
-		return false;
-	}
-
-	public boolean isHashtable() {
-		return false;
-	}
-
-	public boolean isHashtableIterator() {
-		return false;
-	}
-
-	public boolean isIntBignum() {
-		return false;
-	}
-
-	public boolean isInteger() {
-		return false;
-	}
-
-	public boolean isKeyhash() {
-		return false;
-	}
-
-	public boolean isKeyhashIterator() {
-		return false;
-	}
-
-	/*public boolean isKeyword() {
-		return false;
-	}*/
-
-	public boolean isList() {
-		return false;
-	}
-
-	public boolean isLock() {
-		return false;
-	}
-
-	public boolean isLongBignum() {
-		return false;
-	}
-
-	public boolean isMacroOperator() {
-		return this.operator != null && this.operator.isMacroOperator();
-	}
-
-	public boolean isNil() {
-		return false;
-	}
-
-	public boolean isNumber() {
-		return false;
-	}
-
-	public boolean isPackage() {
-		return false;
-	}
-
-	public boolean isPackageIterator() {
-		return false;
-	}
-
-	public boolean isProcess() {
-		return false;
-	}
-
-	public boolean isReadWriteLock() {
-		return false;
-	}
-
-	public boolean isRegexPattern() {
-		return false;
-	}
-
-	public boolean isSemaphore() {
-		return false;
-	}
-
-	public boolean isSequence() {
-		return false;
-	}
-
-	public boolean isStream() {
-		return false;
-	}
-
-	public boolean isString() {
-		return false;
-	}
-
-	public boolean isStructure() {
-		return false;
-	}
-
-	public boolean isSymbol() {
-		return true;
-	}
-
-	public boolean isUndeclared() {
-		return this.accessModeVar == VariableAccessMode.UNDECLARED;
-	}
-
-	public boolean isVector() {
-		return false;
-	}
-
-	public void rebind(SubLObject oldValue, SubLObject[] bindings) {
-		bindings[this.id] = oldValue;
-	}
-
-	public void rebind(SubLObject oldValue, SubLThread thread) {
-		thread.bindingsList[this.id] = oldValue;
-	}
-
-	public synchronized void setAccessMode(VariableAccessMode accessMode) {
-		if (accessMode == null)
-			Errors.error("Cannot set symbol access mode to null on symbol: " + this);
-		// this is to protect idCounter and to ensure that accessModeVar gets
-		// set after id
-		synchronized (SubLSymbolImpl.class) {
-			if (accessMode == VariableAccessMode.DYNAMIC) {
-				if (this.id == SubLSymbol.INVALID_BINDING_INDEX)
-					this.id = SubLSymbolImpl.idCounter++;
-			} else
-				this.id = SubLSymbol.INVALID_BINDING_INDEX;
-		}
-		this.accessModeVar = accessMode;
-	}
-
-	public void setDynamicValue(SubLObject newValue) {
-		SubLObject[] bindings = ((SubLThread) Thread.currentThread()).bindingsList;
-		if (bindings[this.id] != SubLSymbol.UNBOUND)
-			bindings[this.id] = newValue;
-		else
-			this.value = newValue;
-	}
-
-	public void setDynamicValue(SubLObject newValue, SubLObject[] bindings) {
-		if (bindings[this.id] != SubLSymbol.UNBOUND)
-			bindings[this.id] = newValue;
-		else
-			this.value = newValue;
-	}
-
-	public void setDynamicValue(SubLObject newValue, SubLThread thread) {
-		SubLObject[] bindings = thread.bindingsList;
-		if (bindings[this.id] != SubLSymbol.UNBOUND)
-			bindings[this.id] = newValue;
-		else
-			this.value = newValue;
-	}
-
-	//// Protected Area
-
-	public void setGlobalValue(SubLObject newValue) {
-		// @todo consider uncommenting the following
-		// if (isConstantSymbol()) {
-		// Errors.error("Can't set the value of constant symbol: " + this);
-		// }
-		this.value = newValue;
-	}
-
-	//// Private Area
-
-	//// Internal Rep
-
-	public void setUndeclaredValue(SubLObject newValue) {
-		SubLEnvironment env = SubLEnvironment.currentEnvironment();
-		env.setBinding(this, newValue);
-	}
-
-	public void setValue(SubLObject value) {
-		if (this.accessModeVar == VariableAccessMode.DYNAMIC)
-			this.setDynamicValue(value);
-		else if (this.accessModeVar == VariableAccessMode.LEXICAL)
-			this.setGlobalValue(value);
-		else if (this.accessModeVar == VariableAccessMode.CONSTANT)
-			Errors.error("Can't set the value of constant symbol: " + this);
-		else if (this.accessModeVar == VariableAccessMode.UNDECLARED)
-			this.setUndeclaredValue(value);
-		else
-			Errors.error("Don't know about access mode: " + this.accessModeVar);
-	}
-
-	/** Method created to avoid casting */
-	public SubLSymbol toSymbol() {
-		return this;
-	}
-
-	public String toTypeName() {
-		return SubLSymbolImpl.SYMBOL_TYPE_NAME;
-	}
-
-}
+////
+//// For LarKC
+////
+//package com.cyc.tool.subl.jrtl.nativeCode.type.symbol;
+//
+//import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+//import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+//import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
+//import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+//import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+//import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+//import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+//import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
+//import com.cyc.tool.subl.util.SubLFiles;
+//
+//abstract public class SubLSymbolImpl extends AbstractSubLSymbol implements SubLSymbol {
+//	SubLSymbolImpl(String symbolName, SubLPackage thePackage) {
+//		this.symbolName = SubLObjectFactory.makeString(symbolName);
+//		this.thePackage = thePackage;
+//		if(thePackage==SubLPackage.KEYWORD_PACKAGE) {
+//			Errors.error("Wrong Class for createing keywords");
+//		}
+//		id = Integer.MIN_VALUE;
+//		accessModeVar = SubLFiles.VariableAccessMode.UNDECLARED;
+//		constantValue = SubLSymbol.UNBOUND;
+//	}
+//
+//	SubLSymbolImpl(SubLString symbolName, SubLPackage thePackage) {
+//		this.symbolName = symbolName;
+//		this.thePackage = thePackage;
+//		id = Integer.MIN_VALUE;
+//		accessModeVar = SubLFiles.VariableAccessMode.UNDECLARED;
+//		constantValue = SubLSymbol.UNBOUND;
+//	}
+//
+//	SubLString symbolName;
+//	SubLPackage thePackage;
+//	@Override
+//	public SubLPackage getPackage() {
+//		return thePackage;
+//	}
+//
+//	private int id;
+//	private SubLFiles.VariableAccessMode accessModeVar;
+//	private SubLObject value;
+//	private SubLObject constantValue;
+//	private int hashCode = -1;
+//	final public static String SYMBOL_TYPE_NAME = "SYMBOL";
+//	private static int idCounter = 0;
+//
+//
+//	@Override
+//	public void bind(SubLObject newValue, SubLObject[] bindings) {
+//		bindings[id] = newValue;
+//	}
+//
+//	@Override
+//	public void bind(SubLObject newValue, SubLThread thread) {
+//		thread.bindingsList[id] = newValue;
+//	}
+//
+//	@Override
+//	public SubLObject currentBinding(SubLObject[] bindings) {
+//		return bindings[id];
+//	}
+//
+//	@Override
+//	public SubLObject currentBinding(SubLThread thread) {
+//		return thread.bindingsList[id];
+//	}
+//
+//	@Override
+//	public SubLObject eval(SubLEnvironment env) throws InvalidSubLExpressionException {
+//		return getValue();
+//	}
+//
+//	@Override
+//	public void forceGlobalValue(SubLObject newValue) {
+//		if (isConstantSymbol())
+//			constantValue = newValue;
+//		else
+//			value = newValue;
+//	}
+//
+//	@Override
+//	public int getBindingId() {
+//		return id;
+//	}
+//
+//	@Override
+//	public SubLObject getDynamicValue() {
+//		if(id==INVALID_BINDING_INDEX) return unboundError();
+//		SubLObject result = SubLProcess.currentSubLThread().bindingsList[id];
+//		if (result != SubLSymbol.UNBOUND)
+//			return result;
+//		result = value;
+//		return result != SubLSymbol.UNBOUND ? result : Errors.error(this + " is not bound.");
+//	}
+//
+//	private SubLObject unboundError() {
+//		// TODO Auto-generated method stub
+//		if(true) Errors.unimplementedMethod("Auto-generated method stub:  SubLSymbolImpl.unboundError");
+//		return null;
+//	}
+//
+//	@Override
+//	public SubLObject getDynamicValue(SubLObject[] bindings) {
+//		SubLObject result = bindings[id];
+//		if (result != SubLSymbol.UNBOUND)
+//			return result;
+//		result = value;
+//		return result != SubLSymbol.UNBOUND ? result : Errors.error(this + " is not bound.");
+//	}
+//
+//	@Override
+//	public SubLObject getDynamicValue(SubLThread thread) {
+//		SubLObject result = thread.bindingsList[id];
+//		if (result != SubLSymbol.UNBOUND)
+//			return result;
+//		result = value;
+//		return result != SubLSymbol.UNBOUND ? result : Errors.error(this + " is not bound.");
+//	}
+//
+//	@Override
+//	public SubLObject getGlobalValue() {
+//		SubLObject result = isConstantSymbol() ? constantValue : value;
+//		return result != SubLSymbol.UNBOUND ? result : Errors.error(this + " is not bound.");
+//	}
+//
+//	public SubLObject getUndeclaredValue() {
+//		SubLObject result = SubLEnvironment.currentEnvironment().lookupBinding(this);
+//		if (result != SubLSymbol.UNBOUND)
+//			return result;
+//		result = value;
+//		return result != SubLSymbol.UNBOUND ? result : Errors.error(this + " is not bound.");
+//	}
+//
+//	@Override
+//	public SubLObject getValue() {
+//		if (accessModeVar == SubLFiles.VariableAccessMode.UNDECLARED)
+//			return getUndeclaredValue();
+//		if (accessModeVar == SubLFiles.VariableAccessMode.DYNAMIC)
+//			return this.getDynamicValue();
+//		return getGlobalValue();
+//	}
+//
+//	@Override
+//	public boolean isAlien() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isAtom() {
+//		return true;
+//	}
+//
+//	@Override
+//	public boolean isBigIntegerBignum() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isBignum() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isBoolean() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isChar() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isCons() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isConstantSymbol() {
+//		return accessModeVar == SubLFiles.VariableAccessMode.CONSTANT;
+//	}
+//
+//	@Override
+//	public boolean isDouble() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isDynamic() {
+//		return accessModeVar == SubLFiles.VariableAccessMode.DYNAMIC;
+//	}
+//
+//	@Override
+//	public boolean isEnvironment() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isError() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isFixnum() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isFunction() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isFunctionSpec() {
+//		return operator != null && operator.isFunction();
+//	}
+//
+//	@Override
+//	public boolean isGlobal() {
+//		return accessModeVar == SubLFiles.VariableAccessMode.LEXICAL
+//				|| accessModeVar == SubLFiles.VariableAccessMode.CONSTANT;
+//	}
+//
+//	@Override
+//	public boolean isGuid() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isHashtable() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isHashtableIterator() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isIntBignum() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isInteger() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isKeyhash() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isKeyhashIterator() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isKeyword() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isList() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isLock() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isLongBignum() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isMacroOperator() {
+//		return operator != null && operator.isMacroOperator();
+//	}
+//
+//	@Override
+//	public boolean isNil() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isNumber() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isPackage() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isPackageIterator() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isProcess() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isReadWriteLock() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isRegexPattern() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isSemaphore() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isSequence() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isStream() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isString() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isStructure() {
+//		return false;
+//	}
+//
+//	@Override
+//	public boolean isSymbol() {
+//		return true;
+//	}
+//
+//	@Override
+//	public boolean isUndeclared() {
+//		return accessModeVar == SubLFiles.VariableAccessMode.UNDECLARED;
+//	}
+//
+//	@Override
+//	public boolean isVector() {
+//		return false;
+//	}
+//
+//	@Override
+//	public void rebind(SubLObject oldValue, SubLObject[] bindings) {
+//		bindings[id] = oldValue;
+//	}
+//
+//	@Override
+//	public void rebind(SubLObject oldValue, SubLThread thread) {
+//		thread.bindingsList[id] = oldValue;
+//	}
+//
+//	@Override
+//	public synchronized void setAccessMode(SubLFiles.VariableAccessMode accessMode) {
+//		if (accessMode == null)
+//			Errors.error("Cannot set symbol access mode to null on symbol: " + this);
+//		synchronized (SubLSymbolImpl.class) {
+//			if (accessMode == SubLFiles.VariableAccessMode.DYNAMIC) {
+//				if (id == Integer.MIN_VALUE)
+//					id = SubLSymbolImpl.idCounter++;
+//			} else
+//				id = Integer.MIN_VALUE;
+//		}
+//		accessModeVar = accessMode;
+//	}
+//
+//	@Override
+//	public void setDynamicValue(SubLObject newValue) {
+//		SubLObject[] bindings = SubLProcess.currentSubLThread().bindingsList;
+//		if (bindings[id] != SubLSymbol.UNBOUND)
+//			bindings[id] = newValue;
+//		else
+//			value = newValue;
+//	}
+//
+//	@Override
+//	public void setDynamicValue(SubLObject newValue, SubLObject[] bindings) {
+//		if (bindings[id] != SubLSymbol.UNBOUND)
+//			bindings[id] = newValue;
+//		else
+//			value = newValue;
+//	}
+//
+//	@Override
+//	public void setDynamicValue(SubLObject newValue, SubLThread thread) {
+//		SubLObject[] bindings = thread.bindingsList;
+//		if (bindings[id] != SubLSymbol.UNBOUND)
+//			bindings[id] = newValue;
+//		else
+//			value = newValue;
+//	}
+//
+//	@Override
+//	public void setGlobalValue(SubLObject newValue) {
+//		value = newValue;
+//	}
+//
+//	public void setUndeclaredValue(SubLObject newValue) {
+//		SubLEnvironment env = SubLEnvironment.currentEnvironment();
+//		env.setBinding(this, newValue);
+//	}
+//
+//	@Override
+//	public void setValue(SubLObject value) {
+//		if (accessModeVar == SubLFiles.VariableAccessMode.DYNAMIC)
+//			this.setDynamicValue(value);
+//		else if (accessModeVar == SubLFiles.VariableAccessMode.LEXICAL)
+//			setGlobalValue(value);
+//		else if (accessModeVar == SubLFiles.VariableAccessMode.CONSTANT)
+//			Errors.error("Can't set the value of constant symbol: " + this);
+//		else if (accessModeVar == SubLFiles.VariableAccessMode.UNDECLARED)
+//			setUndeclaredValue(value);
+//		else
+//			Errors.error("Don't know about access mode: " + accessModeVar);
+//	}
+//
+//	@Override
+//	public SubLSymbol toSymbol() {
+//		return this;
+//	}
+//
+//	@Override
+//	public String toTypeName() {
+//		return SubLSymbolImpl.SYMBOL_TYPE_NAME;
+//	}
+//
+//	@Override
+//	protected SubLSymbol getBindingType() {
+//		return accessModeVar.toSymbol();
+//	}
+//
+//	@Override
+//	public CharSequence getPackageNamePrecise() {
+//		if(thePackage==null) return "#";
+//		// using this instead of getName() since the getName might be the shortened
+//		return thePackage.getNameAsSubLString().getStringValue();
+//	}
+//
+//	@Override
+//	public boolean boundp() {
+//		return value != SubLSymbol.UNBOUND || thePackage == SubLPackage.KEYWORD_PACKAGE;
+//	}
+//
+//	@Override
+//	public int hashCode(int currentDepth) {
+//		if(this.hashCode <0) hashCode = (thePackage == null ? 0 : thePackage.hashCode()) ^ symbolName.hashCode();
+//		return hashCode;
+//	}
+//
+//	@Override
+//	public void setPackage(SubLPackage thePackage) {
+//		this.thePackage = thePackage;
+//	}
+//
+//	@Override
+//	public String getName() {
+//		return symbolName.getStringValue();
+//	}
+//
+//	@Override
+//	public SubLString getSubLName() {
+//		return symbolName;
+//	}
+//}

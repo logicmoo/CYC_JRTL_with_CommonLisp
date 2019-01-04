@@ -1,7 +1,7 @@
 ;;; compiler-error.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: compiler-error.lisp 11391 2008-11-15 22:38:34Z vvoutilainen $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -35,9 +35,14 @@
           compiler-style-warn
           compiler-warn
           compiler-error
+          internal-compiler-error
           compiler-unsupported))
 
 (defvar *compiler-error-context* nil)
+
+(define-condition compiler-error (error))
+(define-condition internal-compiler-error (compiler-error))
+(define-condition compiler-unsupported-feature-error (compiler-error))
 
 (defun compiler-style-warn (format-control &rest format-arguments)
   (warn 'style-warning
@@ -53,6 +58,12 @@
   (error 'compiler-error
          :format-control format-control
          :format-arguments format-arguments))
+
+(defun internal-compiler-error (format-control &rest format-arguments)
+  (cerror "Eventually use interpreted form instead" 
+          'internal-compiler-error
+          :format-control format-control
+          :format-arguments format-arguments))
 
 (defun compiler-unsupported (format-control &rest format-arguments)
   (error 'compiler-unsupported-feature-error

@@ -1,29 +1,17 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.type.symbol;
+
+import org.armedbear.lisp.LispObject;
+import org.armedbear.lisp.Symbol;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.FromSubLisp;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -33,41 +21,18 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionExc
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
-import com.cyc.tool.subl.util.SubLFiles.VariableAccessMode;
+import com.cyc.tool.subl.util.SubLFiles;
 
-//// External Imports
+public class SubLQuote extends FromSubLisp implements SubLObject, SubLSymbol {
 
-/**
- * <P>
- * SubLQuote is designed to to be a temporary hack until we get the JRTL
- * bootstrapped, then it should be removed.
- *
- * <P>
- * Copyright (c) 2004 - 2006 Cycorp, Inc. All rights reserved. <BR>
- * This software is the proprietary information of Cycorp, Inc.
- * <P>
- * Use is subject to license terms.
- *
- * @author tbrussea
- * @date December 10, 2005, 7:44 PM
- * @version $Id: SubLQuote.java 126764 2009-01-07 22:27:23Z tbrussea $
- */
-final public class SubLQuote extends AbstractSubLObject implements SubLObject, SubLSymbol {
-
-	public static SubLQuote QUOTE_SYMBOL = new SubLQuote("SUBLISP", "QUOTE", "'");
-
-	//// Constructors
-
-	public static SubLQuote BACK_QUOTE_SYMBOL = new SubLQuote("SUBLISP", "BACKQUOTE", "`");
-
-	//// Public Area
-
-	public static SubLQuote UNQUOTE_SYMBOL = new SubLQuote("SUBLISP", "UNQUOTE", ",");
-
-	public static SubLQuote SPLICING_UNQUOTE_SYMBOL = new SubLQuote("SUBLISP", "SPLICING-UNQUOTE", ",@");
-
-	public static SubLQuote FUNCTION_QUOTE_SYMBOL = new SubLQuote("SUBLISP", "FUNCTION", "#'");
-	public static String QUOTE_TYPE_NAME = "QUOTE";
+	@Override
+	public Symbol toLispObject() {
+		return symbol.toLispObject();
+	}
+	private SubLQuote(String packageName, String symbolName, String alternateRep) {
+		symbol = SubLObjectFactory.makeSymbol(symbolName, packageName);
+		alternateSymbol = SubLObjectFactory.makeSymbol(alternateRep, packageName);
+	}
 
 	public static String uniqueQuoteName(String packageName, String symbolName, String alternateRep) {
 		String lookupName = packageName + ":" + symbolName + " (" + alternateRep + ")";
@@ -76,391 +41,461 @@ final public class SubLQuote extends AbstractSubLObject implements SubLObject, S
 
 	private SubLSymbol symbol;
 	private SubLSymbol alternateSymbol;
+	final public static SubLQuote QUOTE_SYMBOL = new SubLQuote("SUBLISP", "QUOTE", "'");
+	final public static SubLQuote BACK_QUOTE_SYMBOL = new SubLQuote("SUBLISP", "BACKQUOTE", "`");
+	final public static SubLQuote UNQUOTE_SYMBOL = new SubLQuote("SUBLISP", "UNQUOTE", ",");
+	final public static SubLQuote SPLICING_UNQUOTE_SYMBOL = new SubLQuote("SUBLISP", "SPLICING-UNQUOTE", ",@");
+	final public static SubLQuote FUNCTION_QUOTE_SYMBOL = new SubLQuote("SUBLISP", "FUNCTION", "#'");
+	final public static String  QUOTE_TYPE_NAME = "QUOTE";
 
-	/** Creates a new instance of SubLQuote. */
-	// @todo swap packageName, symbolName arg order
-	private SubLQuote(String packageName, String symbolName, String alternateRep) {
-		this.symbol = SubLObjectFactory.makeSymbol(symbolName, packageName);
-		this.alternateSymbol = SubLObjectFactory.makeSymbol(alternateRep, packageName);
-	}
-
+	@Override
 	public void bind(SubLObject newValue, SubLObject[] bindings) {
-		this.symbol.bind(newValue, bindings);
+		symbol.bind(newValue, bindings);
 	}
 
+	@Override
 	public void bind(SubLObject newValue, SubLThread thread) {
-		this.symbol.bind(newValue, thread);
+		symbol.bind(newValue, thread);
 	}
 
+	@Override
 	public boolean boundp() {
-		return this.symbol.boundp();
+		return symbol.boundp();
 	}
 
+	@Override
 	public boolean canFastHash() {
 		return true;
 	}
 
+	@Override
 	public Object clone() {
 		return this;
 	}
 
+	@Override
 	public SubLObject currentBinding(SubLObject[] bindings) {
-		return this.symbol.currentBinding(bindings);
+		return symbol.currentBinding(bindings);
 	}
 
+	@Override
 	public SubLObject currentBinding(SubLThread thread) {
-		return this.symbol.currentBinding(thread);
+		return symbol.currentBinding(thread);
 	}
 
+	@Override
 	public boolean equals(Object obj) {
-		return this.symbol.equals(obj);
+		return symbol.equals(obj);
 	}
 
+	@Override
 	public SubLObject eval(SubLEnvironment env) throws InvalidSubLExpressionException {
 		throw new InvalidSubLExpressionException(
-				"Error: Attempt to take the " + "value of the unbound variable '" + this + "'.");
+				"Error: Attempt to take the value of the unbound variable '" + this + "'.");
 	}
 
+	@Override
 	public boolean fboundp() {
-		return this.symbol.fboundp();
+		return symbol.fboundp();
 	}
 
+	@Override
 	public void forceGlobalValue(SubLObject newValue) {
-		this.symbol.forceGlobalValue(newValue);
+		symbol.forceGlobalValue(newValue);
 	}
 
 	public SubLSymbol getAlternateSymbol() {
-		return this.alternateSymbol;
+		return alternateSymbol;
 	}
 
+	@Override
 	public int getBindingId() {
-		return this.symbol.getBindingId();
+		return symbol.getBindingId();
 	}
 
+	@Override
 	public SubLObject getDynamicValue() {
-		return this.symbol.getDynamicValue();
+		return symbol.getDynamicValue();
 	}
 
+	@Override
 	public SubLObject getDynamicValue(SubLObject[] bindings) {
-		return this.symbol.getDynamicValue(bindings);
+		return symbol.getDynamicValue(bindings);
 	}
 
+	@Override
 	public SubLObject getDynamicValue(SubLThread thread) {
-		return this.symbol.getDynamicValue(thread);
+		return symbol.getDynamicValue(thread);
 	}
 
+	@Override
 	public SubLFunction getFunc() {
-		return this.symbol.getFunc();
+		return symbol.getFunc();
 	}
 
+	@Override
 	public SubLOperator getFunction() {
-		return this.symbol.getFunction();
+		return symbol.getFunction();
 	}
 
+	@Override
 	public SubLObject getGlobalValue() {
-		return this.symbol.getGlobalValue();
+		return symbol.getGlobalValue();
 	}
 
+	@Override
 	public String getName() {
-		return this.symbol.getName();
+		return symbol.getName();
 	}
 
+	@Override
 	public SubLPackage getPackage() {
-		return this.symbol.getPackage();
+		return symbol.getPackage();
 	}
 
+	@Override
 	public SubLList getPlist() {
-		return this.symbol.getPlist();
+		return symbol.getPlist();
 	}
 
+	@Override
 	public SubLObject getProperty(SubLObject indicator) {
-		return this.symbol.getProperty(indicator);
+		return symbol.getProperty(indicator);
 	}
 
+	@Override
 	public SubLString getSubLName() {
-		return this.symbol.getSubLName();
+		return symbol.getSubLName();
 	}
 
 	public SubLSymbol getSymbol() {
-		return this.symbol;
+		return symbol;
 	}
 
+	@Override
 	public SubLSymbol getType() {
 		return Types.$dtp_symbol$;
 	}
 
+	@Override
 	public SubLFixnum getTypeCode() {
 		return CommonSymbols.TWO_INTEGER;
 	}
 
+	@Override
 	public SubLObject getValue() {
-		return this.symbol.getValue();
+		return symbol.getValue();
 	}
 
+	@Override
 	public int hashCode(int currentDepth) {
-		if (currentDepth < SubLObject.MAX_HASH_DEPTH)
-			return this.symbol.hashCode(currentDepth + 1);
-		else
-			return SubLObject.DEFAULT_EXCEEDED_HASH_VALUE;
+		if (currentDepth < 8)
+			return symbol.hashCode(currentDepth + 1);
+		return 0;
 	}
 
-
+	@Override
 	public boolean isAlien() {
 		return false;
 	}
 
+	@Override
 	public boolean isAtom() {
 		return true;
 	}
 
+	@Override
 	public boolean isBigIntegerBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isBoolean() {
 		return false;
 	}
 
+	@Override
 	public boolean isChar() {
 		return false;
 	}
 
+	@Override
 	public boolean isCons() {
 		return false;
 	}
 
+	@Override
 	public boolean isConstantSymbol() {
-		return this.symbol.isConstantSymbol();
+		return symbol.isConstantSymbol();
 	}
 
+	@Override
 	public boolean isDouble() {
 		return false;
 	}
 
+	@Override
 	public boolean isDynamic() {
-		return this.symbol.isDynamic();
+		return symbol.isDynamic();
 	}
 
+	@Override
 	public boolean isEnvironment() {
 		return false;
 	}
 
+	@Override
 	public boolean isError() {
 		return false;
 	}
 
+	@Override
 	public boolean isFixnum() {
 		return false;
 	}
 
+	@Override
 	public boolean isFunction() {
 		return false;
 	}
 
+	@Override
 	public boolean isFunctionSpec() {
 		return false;
 	}
 
+	@Override
 	public boolean isGlobal() {
-		return this.symbol.isGlobal();
+		return symbol.isGlobal();
 	}
 
+	@Override
 	public boolean isGuid() {
 		return false;
 	}
 
+	@Override
 	public boolean isHashtable() {
 		return false;
 	}
 
+	@Override
 	public boolean isHashtableIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isIntBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isInteger() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyhash() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyhashIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyword() {
 		return false;
 	}
 
+	@Override
 	public boolean isList() {
 		return false;
 	}
 
+	@Override
 	public boolean isLock() {
 		return false;
 	}
 
+	@Override
 	public boolean isLongBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isMacroOperator() {
 		return false;
 	}
 
+	@Override
 	public boolean isNil() {
 		return false;
 	}
 
+	@Override
 	public boolean isNumber() {
 		return false;
 	}
 
+	@Override
 	public boolean isPackage() {
 		return false;
 	}
 
+	@Override
 	public boolean isPackageIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isProcess() {
 		return false;
 	}
 
+	@Override
 	public boolean isReadWriteLock() {
 		return false;
 	}
 
+	@Override
 	public boolean isRegexPattern() {
 		return false;
 	}
 
+	@Override
 	public boolean isSemaphore() {
 		return false;
 	}
 
+	@Override
 	public boolean isSequence() {
 		return false;
 	}
 
+	@Override
 	public boolean isStream() {
 		return false;
 	}
 
+	@Override
 	public boolean isString() {
 		return false;
 	}
 
+	@Override
 	public boolean isStructure() {
 		return false;
 	}
 
+	@Override
 	public boolean isSymbol() {
 		return true;
 	}
 
+	@Override
 	public boolean isUndeclared() {
-		return this.symbol.isUndeclared();
+		return symbol.isUndeclared();
 	}
 
+	@Override
 	public boolean isVector() {
 		return false;
 	}
 
+	@Override
 	public SubLObject makeCopy() {
 		return this;
 	}
 
+	@Override
 	public SubLObject makeDeepCopy() {
 		return this;
 	}
 
+	@Override
 	public void rebind(SubLObject oldValue, SubLObject[] bindings) {
-		this.symbol.rebind(oldValue, bindings);
+		symbol.rebind(oldValue, bindings);
 	}
 
+	@Override
 	public void rebind(SubLObject oldValue, SubLThread thread) {
-		this.symbol.rebind(oldValue, thread);
+		symbol.rebind(oldValue, thread);
 	}
 
+	@Override
 	public void removeProperty(SubLObject indicator) {
-		this.symbol.removeProperty(indicator);
+		symbol.removeProperty(indicator);
 	}
 
-	public void setAccessMode(VariableAccessMode accessMode) {
-		this.symbol.setAccessMode(accessMode);
+	@Override
+	public void setAccessMode(SubLFiles.VariableAccessMode accessMode) {
+		symbol.setAccessMode(accessMode);
 	}
 
+	@Override
 	public void setConstantValue(SubLObject value) {
-		this.symbol.setConstantValue(value);
+		symbol.setConstantValue(value);
 	}
 
+	@Override
 	public void setDynamicValue(SubLObject value) {
-		this.symbol.setDynamicValue(value);
+		symbol.setDynamicValue(value);
 	}
 
+	@Override
 	public void setDynamicValue(SubLObject newValue, SubLObject[] bindings) {
-		this.symbol.setDynamicValue(newValue, bindings);
+		symbol.setDynamicValue(newValue, bindings);
 	}
 
+	@Override
 	public void setDynamicValue(SubLObject newValue, SubLThread thread) {
-		this.symbol.setDynamicValue(newValue, thread);
+		symbol.setDynamicValue(newValue, thread);
 	}
 
+	@Override
 	public void setFunction(SubLOperator func) {
-		this.symbol.setFunction(func);
+		symbol.setFunction(func);
 	}
 
+	@Override
 	public void setGlobalValue(SubLObject value) {
-		this.symbol.setGlobalValue(value);
+		symbol.setGlobalValue(value);
 	}
 
+	@Override
 	public void setPackage(SubLPackage thePackage) {
-		Errors.error("Can't set package on symbol: " + this.getName());
+		Errors.error("Can't set package on symbol: " + getName());
 	}
 
+	@Override
 	public void setProperty(SubLObject indicator, SubLObject value) {
-		this.symbol.setProperty(indicator, value);
+		symbol.setProperty(indicator, value);
 	}
 
+	@Override
 	public void setValue(SubLObject value) {
-		this.symbol.setValue(value);
+		symbol.setValue(value);
 	}
 
-	public String toString() {
-		return this.symbol.toString();
+	@Override
+	public String printObjectImpl() {
+		return symbol.printObject();
 	}
 
-	/** Method created to avoid casting */
+	@Override
 	public SubLSymbol toSymbol() {
-		return this.symbol;
+		return symbol;
 	}
 
-	//// Protected Area
-
-	//// Private Area
-
-	//// Internal Rep
-
+	@Override
 	public String toTypeName() {
 		return SubLQuote.QUOTE_TYPE_NAME;
 	}
-
-	// common lisp additions
-
-	public String writeToString() {
-		// TODO Auto-generated method stub
-		return this.toString();
-	}
-
 }

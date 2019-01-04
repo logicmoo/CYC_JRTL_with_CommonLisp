@@ -2,7 +2,7 @@
  * StackFrame.java
  *
  * Copyright (C) 2009 Mark Evenson
- * $Id: StackFrame.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,35 +31,45 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import static org.armedbear.lisp.Lisp.*;
 
-public abstract class StackFrame extends AbstractLispObject {
-	StackFrame next;
+public abstract class StackFrame 
+  extends LispObject
+{
+    public LispObject typep(LispObject typeSpecifier) 
 
-	StackFrame getNext() {
-		return this.next;
-	}
+   {
+     if (typeSpecifier == Symbol.STACK_FRAME)
+       return T;
+     if (typeSpecifier == BuiltInClass.STACK_FRAME)
+       return T;
+     return super.typep(typeSpecifier);
+   }
+  
+  StackFrame next;
+  Environment env = null;
 
-	public abstract void incrementCalls();
+  void setNext(StackFrame nextFrame) {
+    this.next = nextFrame;
+  }
+  StackFrame getNext() {
+    return this.next;
+  }
 
-	void setNext(StackFrame nextFrame) {
-		this.next = nextFrame;
-	}
-
-	public abstract SubLObject toLispList();
-
-	public abstract SubLString toLispString();
-
-	public SubLObject typep(SubLObject typeSpecifier)
-
-	{
-		if (typeSpecifier == LispSymbols.STACK_FRAME)
-			return Lisp.T;
-		if (typeSpecifier == BuiltInClass.STACK_FRAME)
-			return Lisp.T;
-		return super.typep(typeSpecifier);
-	}
+  /** Sets the applicable environment for this stack frame to 'env',
+   * returning the last value.
+   */
+  public Environment setEnv(Environment env) {
+    Environment e = this.env;
+    this.env = env;
+    return e;
+  }
+  /** Gets the current lexical environment of this stack frame. */
+  public Environment getEnv() {
+    return env;
+  }
+  public abstract LispObject toLispList();
+  public abstract AbstractString toLispString();
 }

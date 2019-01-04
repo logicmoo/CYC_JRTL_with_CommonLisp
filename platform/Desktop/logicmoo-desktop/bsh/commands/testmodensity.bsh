@@ -1,0 +1,63 @@
+import org.meta.math.qm.*;
+import org.meta.math.qm.property.*;
+
+import org.meta.config.impl.AtomInfo;
+import org.meta.shell.idebeans.MoleculeViewerFrame;
+import org.meta.shell.idebeans.viewers.impl.moleculeviewer.graphicsengine.surfaces.PropertyScene;
+
+scfden(mol, gp) {
+    t1 = System.currentTimeMillis();    
+    bfs = new BasisFunctions(mol, "sto3g");
+    onee = new OneElectronIntegrals(bfs, mol);
+    twoe = new TwoElectronIntegrals(bfs);
+    t2 = System.currentTimeMillis();
+    scfm = new HartreeFockSCFMethod(mol, onee, twoe);
+    scfm.scf();    
+    t3 = System.currentTimeMillis();
+    print("Time till 2E : " + (t2-t1) + " ms");
+    print("Time for SCF : " + (t3-t2) + " ms");
+      
+    ed = new MODensity(scfm, 20);
+    t1 = System.currentTimeMillis();
+    ed.compute(gp);
+    t2 = System.currentTimeMillis();
+    print("Time for API ed: " + (t2-t1) + " ms");
+
+    /**
+    fil = openFile("/Users/Ganesh/Documents/metapps/modensity/benzene-sto-meta.mos", "w");
+    moe = scfm.getMos().getOrbitalEnergies();
+    mos = scfm.getMos().getCoefficients();
+    n   = mos.length;
+    
+    fil.write(n + "\n");
+    for(i=0; i<n; i++) {
+       fil.write(moe[i] + "\n");
+       for(j=0; j<n; j++)
+           fil.write(mos[i][j] + "\n");
+    }
+
+    fil.close();
+    */
+}
+
+dt = getDesktopInstance();
+fl = dt.getFrameList();
+
+mvf = null;
+for(f:fl) {
+  if (f instanceof MoleculeViewerFrame) { mvf = f; break; }
+} // end for
+
+if (mvf != null) {
+  mv = mvf.getMoleculeViewer();
+  mols = mv.getSceneList().get(0);
+  mol = mols.getMolecule();
+  gp = mv.getScreenGridProperty();
+
+  print(gp.toString());
+
+  scfden(mol, gp);
+  
+  ps = new PropertyScene(mols, gp);
+  mols.addPropertyScene(ps);
+} // end if

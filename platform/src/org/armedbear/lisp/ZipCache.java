@@ -1,8 +1,8 @@
 /*
  * ZipCache.java
  *
- * Copyright (C) 2010 Mark Evenson
- * $Id: ZipCache.java 12531 2010-03-14 13:30:17Z mevenson $
+ * Copyright (C) 2010, 2014 Mark Evenson
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -30,7 +30,10 @@
  * obligated to do so.  If you do not wish to do so, delete this
  * exception statement from your version.
  */
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
+
+import org.armedbear.lisp.util.HttpHead;
+import static org.armedbear.lisp.Lisp.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,229 +41,268 @@ import java.net.JarURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.text.ParseException;
+import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
-import com.cyc.tool.subl.jrtl.nativeCode.commonLisp.util.HttpHead;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-
 /**
- * A cache for all zip/jar file accesses by URL that uses the last modified time
- * of the cached resource.
+ * A cache for all zip/jar file accesses by URL that uses the last
+ * modified time of the cached resource.
  *
- * This implementation is NOT thread safe, although usage without multiple
- * threads recompiling code that is then re-loaded should be fine.
+ * This implementation is synchronized on accesses via get().
+ * Usage without multiple threads recompiling code that is then
+ * re-loaded should be fine.
  *
- * If you run into problems with caching, use (SYS::DISABLE-ZIP-CACHE). Once
- * disabled, the caching cannot be re-enabled.
+ * If you run into problems with caching, use
+ * (SYS::DISABLE-ZIP-CACHE).  Once disabled, the caching cannot be
+ * re-enabled.
  *
  */
 public class ZipCache {
 
-	static class disable_zip_cache extends JavaPrimitive {
-		disable_zip_cache() {
-			super("disable-zip-cache", Lisp.PACKAGE_SYS, true, "", "Disable all caching of ABCL FASLs and ZIPs.");
-		}
+    // To make this thread safe, we should return a proxy for ZipFile
+    // that keeps track of the number of outstanding references handed
+    // out, not allowing ZipFile.close() to succeed until that count
+    // has been reduced to 1 or the finalizer is executing.
+    // Unfortunately the relatively simple strategy of extending
+    // ZipFile via a CachedZipFile does not work because there is not
+    // a null arg constructor for ZipFile.
+    static class Entry {
+        long lastModified;
+        ZipFile file;
+    }
 
-		public SubLObject execute() {
-			ZipCache.disable();
-			return Lisp.T;
-		}
-	}
+    static boolean cacheEnabled = true;
 
-	// To make this thread safe, we should return a proxy for ZipFile
-	// that keeps track of the number of outstanding references handed
-	// out, not allowing ZipFile.close() to succeed until that count
-	// has been reduced to 1 or the finalizer is executing.
-	// Unfortunately the relatively simple strategy of extending
-	// ZipFile via a CachedZipFile does not work because there is not
-	// a null arg constructor for ZipFile.
-	static class Entry {
-		long lastModified;
-		ZipFile file;
-	}
+    private final static Primitive DISABLE_ZIP_CACHE = new disable_zip_cache();
+    final static class disable_zip_cache extends Primitive {
+        disable_zip_cache() {
+            super("disable-zip-cache", PACKAGE_SYS, true, "",
+                  "Disable all caching of ABCL FASLs and ZIPs.");
+        }
+        @Override
+        public LispObject execute() {
+            ZipCache.disable();
+            return T;
+        }
+    }
 
-	private static class remove_zip_cache_entry extends JavaPrimitive {
-		remove_zip_cache_entry() {
-			super("remove-zip-cache-entry", Lisp.PACKAGE_SYS, true, "pathname");
-		}
+    static public synchronized void disable() {
+        cacheEnabled = false;
+        zipCache.clear();
+    }
 
-		public SubLObject execute(SubLObject arg) {
-			Pathname p = Lisp.coerceToPathname(arg);
-			boolean result = ZipCache.remove(p);
-			return result ? Lisp.T : Lisp.NIL;
-		}
-	}
+    static HashMap<String, Entry> zipCache = new HashMap<String, Entry>();
 
-	static boolean cacheEnabled = true;
+    synchronized public static ZipFile get(Pathname p) {
+        return get(Pathname.makeURL(p));
+    }
 
-	private static Primitive DISABLE_ZIP_CACHE = new disable_zip_cache();
+    static final SimpleDateFormat ASCTIME
+        = new SimpleDateFormat("EEE MMM d HH:mm:ss yyyy", Locale.US);
+    static final SimpleDateFormat RFC_1036
+        = new SimpleDateFormat("EEEE, dd-MMM-yy HH:mm:ss zzz", Locale.US);
+    static final SimpleDateFormat RFC_1123
+        = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US);
 
-	static HashMap<URL, Entry> zipCache = new HashMap<URL, Entry>();
 
-	static SimpleDateFormat RFC_1123 = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz");
+    synchronized public static ZipFile get(final URL url) {
+        if (!cacheEnabled) {
+            if (url.getProtocol().equals("file")) {
+                File f = new File(url.getPath());
+                try {
+                    return new ZipFile(f);
+                } catch (ZipException e) {
+                    error(new FileError("Failed to construct ZipFile"
+                                        + " because " + e,
+                                        Pathname.makePathname(f)));
+                } catch (IOException e) {
+                    error(new FileError("Failed to contruct ZipFile"
+                                        + " because " + e,
+                                        Pathname.makePathname(f)));
+                }
+            } else {
+                Entry e = fetchURL(url, false);
+                return e.file;
+            }
+        }
 
-	// ## remove-zip-cache-entry pathname => boolean
-	private static Primitive REMOVE_ZIP_CACHE_ENTRY = new remove_zip_cache_entry();
+        Entry entry = zipCache.get(url);
 
-	static public synchronized void disable() {
-		ZipCache.cacheEnabled = false;
-		ZipCache.zipCache.clear();
-	}
+        // Check that the cache entry still accesses a valid ZipFile
+        if (entry != null) {
+            // Simplest way to call private ZipFile.ensureOpen()
+            try {
+                int size = entry.file.size();
+            } catch (IllegalStateException e) {
+                zipCache.remove(url);
+                entry = null;
+            }
+        }
 
-	static private Entry fetchURL(URL url, boolean cached) {
-		Entry result = new Entry();
-		URL jarURL = null;
-		try {
-			jarURL = new URL("jar:" + url + "!/");
-		} catch (MalformedURLException e) {
-			Debug.trace(e);
-			Debug.assertTrue(false); // XXX
-		}
-		URLConnection connection;
-		try {
-			connection = jarURL.openConnection();
-		} catch (IOException ex) {
-			Debug.trace("Failed to open " + "'" + jarURL + "'");
-			return null;
-		}
-		if (!(connection instanceof JarURLConnection)) {
-			// XXX
-			Debug.trace("Could not get a URLConnection from " + jarURL);
-			return null;
-		}
-		JarURLConnection jarURLConnection = (JarURLConnection) connection;
-		jarURLConnection.setUseCaches(cached);
-		try {
-			result.file = jarURLConnection.getJarFile();
-		} catch (IOException e) {
-			Debug.trace(e);
-			Debug.assertTrue(false); // XXX
-		}
-		result.lastModified = jarURLConnection.getLastModified();
-		return result;
-	}
+        if (entry != null) {
+            if (url.getProtocol().equals("file")) {
+                File f = new File(url.getPath());
+                long current = f.lastModified();
+                if (current > entry.lastModified) {
+                    try {
+                        entry.file = new ZipFile(f);
+                        entry.lastModified = current;
+                    } catch (IOException e) {
+                        Debug.trace(e.toString()); // XXX
+                    }
+                }
+            } else if (url.getProtocol().equals("http")) {
+                // Unfortunately, the Apple JDK under OS X doesn't do
+                // HTTP HEAD requests, instead refetching the entire
+                // resource, and I assume this is the case in all
+                // Sun-derived JVMs.  So, we use a custom HEAD
+                // implementation only looking for Last-Modified
+                // headers, which if we don't find, we give up and
+                // refetch the resource.
+                String dateString = null;
+                try {
+                  dateString = HttpHead.get(url, "Last-Modified");
+                } catch (IOException ex) {
+                  Debug.trace(ex);
+                }
+                Date date = null;
+                ParsePosition pos = new ParsePosition(0);
 
-	synchronized public static ZipFile get(SubLObject arg) {
-		return ZipCache.get(Pathname.makeURL(arg));
-	}
+                if (dateString != null) {
+                    date = RFC_1123.parse(dateString, pos);
+                    if (date == null) {
+                        date = RFC_1036.parse(dateString, pos);
+                        if (date == null)
+                            date = ASCTIME.parse(dateString, pos);
+                    }
+                }
 
-	synchronized public static ZipFile get(URL url) {
-		if (!ZipCache.cacheEnabled)
-			if (url.getProtocol().equals("file")) {
-				File f = new File(url.getPath());
-				try {
-					return new ZipFile(f);
-				} catch (ZipException e) {
-					Debug.trace(e); // XXX
-					return null;
-				} catch (IOException e) {
-					Debug.trace(e); // XXX
-					return null;
-				}
-			} else {
-				Entry e = ZipCache.fetchURL(url, false);
-				return e.file;
-			}
+                if (date == null || date.getTime() > entry.lastModified) {
+                    entry = fetchURL(url, false);
+                    zipCache.put(url.toString(), entry);
+                }
+                if (date == null) {
+                    if (dateString == null)
+                        Debug.trace("Failed to retrieve request header: "
+                                    + url.toString());
+                    else
+                        Debug.trace("Failed to parse Last-Modified date: " +
+                                    dateString);
+                }
 
-		Entry entry = ZipCache.zipCache.get(url);
+           } else {
+                entry = fetchURL(url, false);
+                zipCache.put(url.toString(), entry);
+            }
+        } else {
+            if (url.getProtocol().equals("file")) {
+                entry = new Entry();
+                String path = url.getPath();
 
-		// Check that the cache entry still accesses a valid ZipFile
-		if (entry != null)
-			// Simplest way to call private ZipFile.ensureOpen()
-			try {
-			int size = entry.file.size();
-			} catch (IllegalStateException e) {
-			ZipCache.zipCache.remove(url);
-			entry = null;
-			}
+                if (Utilities.isPlatformWindows) {
+                    String authority = url.getAuthority();
+                    if (authority != null) {
+                        path = authority + path;
+                    }
+                }
+                File f = new File(path);
+                entry.lastModified = f.lastModified();
+                try {
+                    entry.file = new ZipFile(f);
+                } catch (ZipException e) {
+                    error(new FileError("Failed to get cached ZipFile"
+                                        + " because " + e,
+                                        Pathname.makePathname(f)));
+                } catch (IOException e) {
+                    error(new FileError("Failed to get cached ZipFile"
+                                        + " because " + e,
+                                        Pathname.makePathname(f)));
+                }
+            } else {
+                entry = fetchURL(url, true);
+            }
+            zipCache.put(url.toString(), entry);
+        }
+        return entry.file;
+    }
 
-		if (entry != null) {
-			if (url.getProtocol().equals("file")) {
-				File f = new File(url.getPath());
-				long current = f.lastModified();
-				if (current > entry.lastModified)
-					try {
-						entry.file = new ZipFile(f);
-						entry.lastModified = current;
-					} catch (IOException e) {
-						Debug.trace(e.toString()); // XXX
-					}
-			} else if (url.getProtocol().equals("http")) {
-				// Unfortunately, the Apple JDK under OS X doesn't do
-				// HTTP HEAD requests, instead refetching the entire
-				// resource, and I assume this is the case in all
-				// Sun-derived JVMs. So, we use a custom HEAD
-				// implementation only looking for Last-Modified
-				// headers, which if we don't find, we give up and
-				// refetch the resource.n
-				String dateString = HttpHead.get(url, "Last-Modified");
-				Date date = null;
-				try {
-					if (dateString == null)
-						throw new ParseException("Failed to get HEAD for " + url, 0);
-					date = ZipCache.RFC_1123.parse(dateString);
-					long current = date.getTime();
-					if (current > entry.lastModified) {
-						entry = ZipCache.fetchURL(url, false);
-						ZipCache.zipCache.put(url, entry);
-					}
-				} catch (ParseException e) {
-					Debug.trace("Failed to parse HTTP Last-Modified field: " + e);
-					entry = ZipCache.fetchURL(url, false);
-					ZipCache.zipCache.put(url, entry);
-				}
-			} else {
-				entry = ZipCache.fetchURL(url, false);
-				ZipCache.zipCache.put(url, entry);
-			}
-		} else {
-			if (url.getProtocol().equals("file")) {
-				entry = new Entry();
-				File f = new File(url.getPath());
-				entry.lastModified = f.lastModified();
-				try {
-					entry.file = new ZipFile(f);
-				} catch (ZipException e) {
-					Debug.trace(e); // XXX
-					return null;
-				} catch (IOException e) {
-					Debug.trace(e); // XXX
-					return null;
-				}
-			} else
-				entry = ZipCache.fetchURL(url, true);
-			ZipCache.zipCache.put(url, entry);
-		}
-		return entry.file;
-	}
+    static private Entry fetchURL(URL url, boolean cached) {
+        Entry result = new Entry();
+        URL jarURL = null;
+        try {
+            jarURL = new URL("jar:" + url + "!/");
+        } catch (MalformedURLException e) {
+            error(new LispError("Failed to form a jar: URL from "
+                                + "'" + url + "'"
+                                + " because " + e));
+        }
+        URLConnection connection = null;
+        try {
+            connection = jarURL.openConnection();
+        } catch (IOException e) {
+            error(new LispError("Failed to open "
+                                + "'" + jarURL + "'"
+                                + " with exception "
+                                + e));
+        }
+        if (!(connection instanceof JarURLConnection)) {
+            error(new LispError("Could not get a URLConnection from "
+                                + "'" + jarURL + "'"));
+        }
+        JarURLConnection jarURLConnection = (JarURLConnection) connection;
+        jarURLConnection.setUseCaches(cached);
+        try {
+            result.file = jarURLConnection.getJarFile();
+        } catch (IOException e) {
+            error(new LispError("Failed to fetch URL "
+                                 + "'" + jarURLConnection + "'"
+                                + " because " + e));
+        }
+        result.lastModified = jarURLConnection.getLastModified();
+        return result;
+    }
 
-	synchronized public static boolean remove(File f) {
-		Pathname p = Pathname.makePathname(f);
-		return ZipCache.remove(p);
-	}
+    // ## remove-zip-cache-entry pathname => boolean
+    private static final Primitive REMOVE_ZIP_CACHE_ENTRY = new remove_zip_cache_entry();
+    private static class remove_zip_cache_entry extends Primitive {
+        remove_zip_cache_entry() {
+            super("remove-zip-cache-entry", PACKAGE_SYS, true, "pathname");
+        }
+        @Override
+        public LispObject execute(LispObject arg) {
+            Pathname p = coerceToPathname(arg);
+            boolean result = ZipCache.remove(p);
+            return result ? T : NIL;
+        }
+    }
 
-	synchronized public static boolean remove(Pathname p) {
-		URL url = Pathname.makeURL(p);
-		if (url == null)
-			return false;
-		return ZipCache.remove(url);
-	}
+    synchronized public static boolean remove(URL url) {
+        Entry entry = zipCache.get(url);
+        if (entry != null) {
+            try {
+                entry.file.close();
+            } catch (IOException e) {}
+            zipCache.remove(entry);
+            return true;
+        }
+        return false;
+    }
 
-	synchronized public static boolean remove(URL url) {
-		Entry entry = ZipCache.zipCache.get(url);
-		if (entry != null) {
-			try {
-				entry.file.close();
-			} catch (IOException e) {
-			}
-			ZipCache.zipCache.remove(entry);
-			return true;
-		}
-		return false;
-	}
+    synchronized public static boolean remove(Pathname p) {
+        URL url = Pathname.makeURL(p);
+        if (url == null) {
+            return false;
+        }
+        return ZipCache.remove(url);
+    }
+
+    synchronized public static boolean remove(File f) {
+        Pathname p = Pathname.makePathname(f);
+        return ZipCache.remove(p);
+    }
 }

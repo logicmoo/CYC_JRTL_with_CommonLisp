@@ -1,7 +1,7 @@
 ;;; byte-io.lisp
 ;;;
 ;;; Copyright (C) 2004-2005 Peter Graves
-;;; $Id: byte-io.lisp 11391 2008-11-15 22:38:34Z vvoutilainen $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -33,7 +33,7 @@
 
 (defun write-byte (byte stream)
   (declare (type stream stream))
-  (let ((element-type (stream-element-type stream)))
+  (let ((element-type (expand-deftype (stream-element-type stream))))
     (require-type byte element-type)
     (let ((width (cadr element-type)))
       (if (= width 8)
@@ -48,7 +48,7 @@
 
 (defun read-byte (stream &optional (eof-error-p t) eof-value)
   (declare (type stream stream))
-  (let* ((element-type (stream-element-type stream)))
+  (let* ((element-type (expand-deftype (stream-element-type stream))))
     (unless element-type
       (if eof-error-p
           (error 'end-of-file :stream stream)

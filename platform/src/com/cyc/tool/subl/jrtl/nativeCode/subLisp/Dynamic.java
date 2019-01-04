@@ -1,22 +1,6 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+// For LarKC
+//
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import java.util.ArrayList;
@@ -24,26 +8,16 @@ import java.util.ArrayList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 
-//// Internal Imports
-
-//// External Imports
-
 public class Dynamic extends SubLTrampolineFile {
-
-	//// Constructors
-
-	public static SubLFile me = new Dynamic();
-
 	public static void bind(SubLSymbol symbol, SubLObject newValue) {
 		symbol.bind(newValue, SubLProcess.currentSubLThread().bindingsList);
 	}
-
-	//// Public Area
 
 	public static void bind_dynamic_vars(SubLObject variables, SubLObject values) {
 		SubLList variablesTyped = variables.toList();
@@ -55,9 +29,9 @@ public class Dynamic extends SubLTrampolineFile {
 			iter = resourcer.acquireSubLListListIterator(variablesTyped);
 			iter2 = resourcer.acquireSubLListListIterator(valuesTyped);
 			while (iter.hasNext() && iter2.hasNext())
-				Dynamic.bind(iter.nextSubLObject().toSymbol(), iter2.nextSubLObject());
+				bind(iter.nextSubLObject().toSymbol(), iter2.nextSubLObject());
 			while (iter.hasNext())
-				Dynamic.bind(iter.nextSubLObject().toSymbol(), SubLSymbol.UNBOUND);
+				bind(iter.nextSubLObject().toSymbol(), SubLSymbol.UNBOUND);
 		} finally {
 			resourcer.releaseSubLListListIterator(iter);
 			resourcer.releaseSubLListListIterator(iter2);
@@ -71,11 +45,13 @@ public class Dynamic extends SubLTrampolineFile {
 	public static ArrayList<SubLObject> extract_dynamic_values(SubLObject variables) {
 		SubLThread $thread = SubLProcess.currentSubLThread();
 		SubLObject[] $bindings = $thread.bindingsList;
-		ArrayList<SubLObject> oldValues = new ArrayList<SubLObject>(); // @todo
-																		// resource
-																		// this
-		for (SubLObject cur = variables; cur != CommonSymbols.NIL; cur = cur.rest())
-			oldValues.add(cur.first().toSymbol().getDynamicValue($bindings));
+		ArrayList<SubLObject> oldValues = new ArrayList<SubLObject>();
+		for (SubLObject cur = variables; cur != SubLNil.NIL; cur = cur.rest()) {
+			SubLSymbol sym = cur.first().toSymbol();
+			if (!sym.isDynamic())
+				Errors.error("Unable to get dynamic value for non-dynamic variable: " + sym + ".");
+			oldValues.add(sym.getDynamicValue($bindings));
+		}
 		return oldValues;
 	}
 
@@ -88,10 +64,14 @@ public class Dynamic extends SubLTrampolineFile {
 	}
 
 	public static SubLObject handleCatchableThrow(CatchableThrow ct, SubLObject target) {
-		if (Dynamic.getTarget(ct).eql(target))
-			return Dynamic.getResult(ct);
-		else
-			throw ct;
+		if (getTarget(ct) == target)
+			return getResult(ct);
+		throw ct;
+	}
+
+	public static SubLObject possibly_throw(SubLObject tag, SubLObject result) {
+		CatchableThrowImpl.throwToCatch(tag, result, false);
+		return null;
 	}
 
 	public static void rebind(SubLSymbol symbol, SubLObject oldValue) {
@@ -108,7 +88,7 @@ public class Dynamic extends SubLTrampolineFile {
 			SubLSymbol variable = null;
 			while (iter.hasNext()) {
 				variable = iter.nextSubLObject().toSymbol();
-				Dynamic.rebind(variable, (SubLObject) oldValues.get(oldIndex++));
+				rebind(variable, (SubLObject) oldValues.get(oldIndex++));
 			}
 		} finally {
 			resourcer.releaseSubLListListIterator(iter);
@@ -116,36 +96,26 @@ public class Dynamic extends SubLTrampolineFile {
 	}
 
 	public static SubLObject sublisp_throw(SubLObject tag, SubLObject result) {
-		// @todo we'll need to note the catches on the binding stack so that we
-		// can scan the stack first to see if TAG will be caught. If not, we
-		// should throw a SubLException "Attempt to throw to the non-existent
-		// tag"
-		CatchableThrow.throwToCatch(tag, result);
+		CatchableThrowImpl.throwToCatchLegacy(tag, result);
 		return null;
 	}
 
-	/** Creates a new instance of Dynamic. */
-	public Dynamic() {
+	public static SubLFile me;
+	static {
+		me = new Dynamic();
 	}
 
-	//// Initializers
-
+	@Override
 	public void declareFunctions() {
 		SubLFiles.declareFunction(Dynamic.me, "sublisp_throw", "THROW", 2, 0, false);
+		SubLFiles.declareFunction(Dynamic.me, "possibly_throw", "POSSIBLY-THROW", 2, 0, false);
 	}
 
+	@Override
 	public void initializeVariables() {
 	}
 
+	@Override
 	public void runTopLevelForms() {
 	}
-
-	//// Protected Area
-
-	//// Private Area
-
-	//// Internal Rep
-
-	//// Main
-
 }

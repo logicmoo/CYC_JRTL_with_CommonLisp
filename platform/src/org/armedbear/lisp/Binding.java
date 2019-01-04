@@ -2,7 +2,7 @@
  * Binding.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: Binding.java 12170 2009-10-04 12:37:29Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,61 +31,63 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-
-/**
- * Used by the environment to capture different kinds of bindings: tags, blocks,
- * functions and variables.
+/** Used by the environment to capture different kinds of bindings:
+ * tags, blocks, functions and variables.
  *
  */
 // Package accessibility.
-final class Binding {
-	/**
-	 * The symbol in case of a variable, block or non-SETF function binding, the
-	 * tag (symbol or integer) in case of a tag binding or the cons in case of a
-	 * SETF function binding
-	 */
-	SubLObject symbol;
+final class Binding
+{
+    /** The symbol in case of a variable, block, symbol-macro or
+     * non-SETF function binding, the tag (symbol or
+     * integer) in case of a tag binding or the cons
+     * in case of a SETF function binding
+     */
+    final LispObject symbol;
 
-	/**
-	 * Used only for tags and blocks. Refers to the defining environment.
-	 *
-	 */
-	Environment env = null;
+    /** Used only for tags and blocks. Refers to the
+     * defining environment.
+     *
+     */
+    Environment env = null;
 
-	/**
-	 * The value bound.
-	 *
-	 * In case of a block binding, it holds the block identifier to be used with
-	 * the Return to be thrown.
-	 *
-	 * In case of a tagbody, it holds the tail subforms of the tagbody, of which
-	 * the tag is the first subform.
-	 *
-	 * In case of a function binding, it holds the function object.
-	 *
-	 * In case of a variable binding, it holds the value associated with the
-	 * variable, unless specialp is true.
-	 */
-	SubLObject value;
+    /** The value bound.
+     *
+     * In case of a block binding, it holds the block identifier to be used
+     * with the Return to be thrown.
+     *
+     * In case of a tagbody, it holds the tail subforms of the tagbody, of
+     * which the tag is the first subform.
+     *
+     * In case of a function binding, it holds the function object.
+     *
+     * In case of a variable binding, it holds the value associated with the
+     * variable, unless specialp is true.
+     *
+     * In case of a symbol macro binding, holds the SymbolMacro instance
+     * holding the macro's expansion.
+     */
+    LispObject value;
 
-	/**
-	 * Only used for variable bindings. Indicates whether or not the value
-	 * should be retrieved from the dynamic environment or from this binding.
-	 */
-	boolean specialp;
-	Binding next;
+    /** Only used for variable bindings. Indicates whether or not the value
+     * should be retrieved from the dynamic environment or from this binding.
+     */
+    boolean specialp;
+    final Binding next;
 
-	Binding(SubLObject symbol, Environment env, SubLObject value, Binding next) {
-		this(symbol, value, next);
-		this.env = env;
-	}
+    Binding(LispObject symbol, LispObject value, Binding next)
+    {
+        this.symbol = symbol;
+        this.value = value;
+        this.next = next;
+    }
 
-	Binding(SubLObject symbol, SubLObject value, Binding next) {
-		this.symbol = symbol;
-		this.value = value;
-		this.next = next;
-	}
+    Binding(LispObject symbol, Environment env,
+            LispObject value, Binding next)
+    {
+        this(symbol, value, next);
+        this.env = env;
+    }
 }

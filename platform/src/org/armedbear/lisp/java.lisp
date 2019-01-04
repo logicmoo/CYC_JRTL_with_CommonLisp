@@ -1,7 +1,7 @@
 ;;; java.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves, Andras Simon
-;;; $Id: java.lisp 12315 2009-12-30 22:46:31Z astalla $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -32,6 +32,41 @@
 (in-package "JAVA")
 
 (require "CLOS")
+(require "PRINT-OBJECT")
+
+(defvar *classloader* (get-default-classloader))
+
+
+
+(EXPORT '(JREGISTER-HANDLER JINTERFACE-IMPLEMENTATION JMAKE-INVOCATION-HANDLER
+          JMAKE-PROXY JPROPERTY-VALUE JOBJECT-CLASS JCLASS-SUPERCLASS
+          JCLASS-INTERFACES JCLASS-INTERFACE-P JCLASS-SUPERCLASS-P
+          JCLASS-ARRAY-P JARRAY-COMPONENT-TYPE JARRAY-LENGTH
+          JNEW-ARRAY-FROM-ARRAY JNEW-ARRAY-FROM-LIST JARRAY-FROM-LIST
+          JCLASS-CONSTRUCTORS JCONSTRUCTOR-PARAMS JCLASS-FIELD JCLASS-FIELDS
+          JFIELD-TYPE JFIELD-NAME JCLASS-METHODS JMETHOD-PARAMS JMETHOD-NAME
+          JINSTANCE-OF-P JMEMBER-STATIC-P JMEMBER-PUBLIC-P JMEMBER-PROTECTED-P
+          JNEW-RUNTIME-CLASS DEFINE-JAVA-CLASS ENSURE-JAVA-CLASS CHAIN
+          JMETHOD-LET JEQUAL))
+
+
+
+
+(defun add-url-to-classpath (url &optional (classloader *classloader*))
+  (jcall "addUrl" classloader url))
+
+(defun add-urls-to-classpath (&rest urls)
+  (dolist (url urls)
+    (add-url-to-classpath url)))
+
+(defgeneric add-to-classpath (jar-or-jars &optional classloader)
+  (:documentation "Add JAR-OR-JARS to the JVM classpath optionally specifying the CLASSLOADER to add.
+
+JAR-OR-JARS is either a pathname designating a jar archive or the root
+directory to search for classes or a list of such values."))
+
+(defmethod add-to-classpath (jar-or-jars &optional (classloader (get-current-classloader)))
+  (%add-to-classpath jar-or-jars classloader))
 
 (defun jregister-handler (object event handler &key data count)
   (%jregister-handler object event handler data count))
@@ -56,8 +91,7 @@
            if (evenp i)
            do (assert (stringp m) (m) "Method names must be strings: ~s" m) and collect m
            else
-           do (assert (or (symbolp m) (functionp m)) (m) "Methods must be function designators: ~s" m)))
-        (null (make-immediate-object nil :ref)))
+           do (assert (or (symbolp m) (functionp m)) (m) "Methods must be function designators: ~s" m))))
     (loop for method across
       (jclass-methods interface :declared nil :public t)
       for method-name = (jmethod-name method)
@@ -68,7 +102,7 @@
              (def `(lambda
                      ,arglist
                      ,(when arglist '(declare (ignore ignore)))
-                     ,(if void-p '(values) null))))
+                     ,(if void-p '(values) java:+null+))))
         (warn "Implementing dummy method ~a for interface ~a"
               method-name (jclass-name interface))
         (push (coerce def 'function) method-names-and-defs)
@@ -82,15 +116,21 @@
   (fmakunbound 'jmake-proxy))
 
 (defgeneric jmake-proxy (interface implementation &optional lisp-this)
-  (:documentation "Returns a proxy Java object implementing the provided interface using methods implemented in Lisp - typically closures, but implementations are free to provide other mechanisms. You can pass an optional 'lisp-this' object that will be passed to the implementing methods as their first argument. If you don't provide this object, NIL will be used. The second argument of the Lisp methods is the name of the Java method being implemented. This has the implication that overloaded methods are merged, so you have to manually discriminate them if you want to. The remaining arguments are java-objects wrapping the method's parameters."))
+  (:documentation "Returns a proxy Java object implementing the provided interface(s) using methods implemented in Lisp - typically closures, but implementations are free to provide other mechanisms. You can pass an optional 'lisp-this' object that will be passed to the implementing methods as their first argument. If you don't provide this object, NIL will be used. The second argument of the Lisp methods is the name of the Java method being implemented. This has the implication that overloaded methods are merged, so you have to manually discriminate them if you want to. The remaining arguments are java-objects wrapping the method's parameters."))
+
+(defun canonicalize-jproxy-interfaces (ifaces)
+  (if (listp ifaces)
+      (mapcar #'jclass ifaces)
+      (list (jclass ifaces))))
+
 
 (defmethod jmake-proxy (interface invocation-handler &optional lisp-this)
   "Basic implementation that directly uses an invocation handler."
-  (%jmake-proxy (jclass interface) invocation-handler lisp-this))
+  (%jmake-proxy (canonicalize-jproxy-interfaces interface) invocation-handler lisp-this))
 
 (defmethod jmake-proxy (interface (implementation function) &optional lisp-this)
   "Implements a Java interface forwarding method calls to a Lisp function."
-  (%jmake-proxy (jclass interface) (jmake-invocation-handler implementation) lisp-this))
+  (%jmake-proxy (canonicalize-jproxy-interfaces interface) (jmake-invocation-handler implementation) lisp-this))
 
 (defmethod jmake-proxy (interface (implementation package) &optional lisp-this)
   "Implements a Java interface mapping Java method names to symbols in a given package. javaMethodName is mapped to a JAVA-METHOD-NAME symbol. An error is signaled if no such symbol exists in the package, or if the symbol exists but does not name a function."
@@ -104,7 +144,7 @@
 			    (setf last-lower-p (not upper-p))
 			    (princ (char-upcase char) str)))
 		    name)))))
-    (%jmake-proxy (jclass interface)
+    (%jmake-proxy (canonicalize-jproxy-interfaces interface)
 		  (jmake-invocation-handler 
 		   (lambda (obj method &rest args)
 		     (let ((sym (find-symbol
@@ -123,7 +163,7 @@
 
 (defmethod jmake-proxy (interface (implementation hash-table) &optional lisp-this)
   "Implements a Java interface using closures in an hash-table keyed by Java method name."
-  (%jmake-proxy (jclass interface)
+  (%jmake-proxy (canonicalize-jproxy-interfaces interface)
 		(jmake-invocation-handler 
 		 (lambda (obj method &rest args)
 		   (let ((fn (gethash method implementation)))
@@ -132,6 +172,11 @@
 			 (error "Implementation for method ~A not found in ~A"
 				method implementation)))))
 		lisp-this))
+
+(defun jequal (obj1 obj2)
+  "Compares obj1 with obj2 using java.lang.Object.equals()"
+  (jcall (jmethod "java.lang.Object" "equals" "java.lang.Object")
+	 obj1 obj2))
 
 (defun jobject-class (obj)
   "Returns the Java class that OBJ belongs to"
@@ -165,6 +210,7 @@
   (jcall (jmethod "java.lang.Class" "getComponentType") atype))
 
 (defun jarray-length (java-array)
+  "Returns the length of a Java primitive array."
   (jstatic "getLength" "java.lang.reflect.Array" java-array)  )
 
 (defun (setf jarray-ref) (new-value java-array &rest indices)
@@ -172,7 +218,7 @@
 
 (defun jnew-array-from-array (element-type array)
   "Returns a new Java array with base type ELEMENT-TYPE (a string or a class-ref)
-   initialized from ARRAY"
+   initialized from ARRAY."
   (flet
     ((row-major-to-index (dimensions n)
                          (loop for dims on dimensions
@@ -189,6 +235,44 @@
         #+maybe_one_day
         (setf (apply #'jarray-ref jarray (row-major-to-index dimensions i)) (row-major-aref array i))
         (apply #'(setf jarray-ref) (row-major-aref array i) jarray (row-major-to-index dimensions i))))))
+
+(defun jnew-array-from-list (element-type list)
+  "Returns a new Java array with base type ELEMENT-TYPE (a string or a class-ref)
+   initialized from a Lisp list."
+  (let ((jarray (jnew-array element-type (length list)))
+	(i 0))
+    (dolist (x list)
+      (setf (jarray-ref jarray i) x
+	    i (1+ i)))
+    jarray))
+
+(defun jarray-from-list (list)
+  "Return a Java array from LIST whose type is inferred from the first element.
+
+For more control over the type of the array, use JNEW-ARRAY-FROM-LIST."
+  (jnew-array-from-list
+   (jobject-class (first list))
+   list))
+
+(defun list-from-jarray (jarray)
+  "Returns a list with the elements of `jarray`."
+  (loop for i from 0 below (jarray-length jarray)
+        collect (jarray-ref jarray i)))
+
+(defun vector-from-jarray (jarray)
+  "Returns a vector with the elements of `jarray`."
+  (loop with vec = (make-array (jarray-length jarray))
+        for i from 0 below (jarray-length jarray)
+        do (setf (aref vec i) (jarray-ref jarray i))
+        finally (return vec)))
+
+(defun list-from-jenumeration (jenumeration)
+  "Returns a list with the elements returned by successive `nextElement`
+calls on the java.util.Enumeration `jenumeration`."
+  (loop while (jcall jenumeration
+                     (jmethod "java.util.Enumeration" "hasMoreElements"))
+        collect (jcall jenumeration
+                       (jmethod "java.util.Enumeration" "nextElement"))))
 
 (defun jclass-constructors (class)
   "Returns a vector of constructors for CLASS"
@@ -223,7 +307,7 @@
   (declare (ignore unused-value))
   (if instance-supplied-p
       (jfield class-ref-or-field field-or-instance instance newvalue)
-      (jfield class-ref-or-field field-or-instance newvalue)))
+      (jfield class-ref-or-field field-or-instance nil newvalue)))
 
 (defun jclass-methods (class &key declared public)
   "Return a vector of all (or just the declared/public, if DECLARED/PUBLIC is true) methods of CLASS"
@@ -302,10 +386,161 @@
      (t
       (error "Unknown load-form for ~A" class-name)))))
 
-(defun jproperty-value (obj prop)
-  (%jget-property-value obj prop))
+(defun jproperty-value (object property)
+  "setf-able access on the Java Beans notion of property named PROPETRY on OBJECT."
+  (%jget-property-value object property))
 
 (defun (setf jproperty-value) (value obj prop)
   (%jset-property-value obj prop value))
 
-(provide "JAVA-EXTENSIONS")
+;;; higher-level operators
+
+(defmacro chain (target op &rest ops)
+  "Performs chained method invocations. `target' is the receiver
+object (when the first call is a virtual method call) or a list in the
+form (:static <jclass>) when the first method call is a static method
+call. `op' and each of the `ops' are either method designators or lists
+in the form (<method designator> &rest args), where a method designator
+is either a string naming a method, or a jmethod object. `chain' will
+perform the method call specified by `op' on `target'; then, for each
+of the `ops', `chain' will perform the specified method call using the
+object returned by the previous method call as the receiver, and will
+ultimately return the result of the last method call.
+  For example, the form:
+
+  (chain (:static \"java.lang.Runtime\") \"getRuntime\" (\"exec\" \"ls\"))
+
+  is equivalent to the following Java code:
+
+  java.lang.Runtime.getRuntime().exec(\"ls\");"
+  (labels ((canonicalize-op (op) (if (listp op) op (list op)))
+	   (compose-arglist (target op) `(,(car op) ,target ,@(cdr op)))
+	   (make-binding-for (form) `(,(gensym) ,form))
+	   (make-binding (bindings next-op &aux (target (caar bindings)))
+	     (cons (make-binding-for
+		    `(jcall ,@(compose-arglist target
+					       (canonicalize-op next-op))))
+		   bindings)))
+    (let* ((first (if (and (consp target) (eq (first target) :static))
+		      `(jstatic ,@(compose-arglist (cadr target) (canonicalize-op op)))
+		      `(jcall ,@(compose-arglist target (canonicalize-op op)))))
+	   (bindings (nreverse
+		      (reduce #'make-binding ops
+			      :initial-value (list (make-binding-for first))))))
+      `(let* ,bindings
+	 (declare (ignore ,@(mapcar #'car bindings)))))))
+
+(defmacro jmethod-let (bindings &body body)
+  (let ((args (gensym)))
+    `(let ,(mapcar (lambda (binding)
+		     `(,(car binding) (jmethod ,@(cdr binding))))
+		   bindings)
+       (macrolet ,(mapcar (lambda (binding)
+			    `(,(car binding) (&rest ,args)
+			       `(jcall ,,(car binding) ,@,args)))
+			  bindings)
+	 ,@body))))
+
+;;; print-object
+
+(defmethod print-object ((obj java:java-object) stream)
+  (write-string (sys::%write-to-string obj) stream))
+
+(defmethod print-object ((e java:java-exception) stream)
+  (if *print-escape*
+      (print-unreadable-object (e stream :type t :identity t)
+        (format stream "~A"
+                (java:jcall (java:jmethod "java.lang.Object" "toString")
+                            (java:java-exception-cause e))))
+      (format stream "Java exception '~A'."
+              (java:jcall (java:jmethod "java.lang.Object" "toString")
+                          (java:java-exception-cause e)))))
+
+;;; JAVA-CLASS support
+(defconstant +java-lang-object+ (jclass "java.lang.Object"))
+
+(defclass java-class (standard-class)
+  ((jclass :initarg :java-class
+	   :initform (error "class is required")
+	   :reader java-class-jclass)))
+
+;;; FIXME (rudi 2012-05-02): consider replacing the metaclass of class
+;;; java-object to be java-class here instead of allowing this subclass
+;;; relationship.  On the other hand, abcl ran for the longest time
+;;; without an implementation of validate-superclass, so this doesn't
+;;; introduce new sources for bugs.
+(defmethod mop:validate-superclass ((class java-class) (superclass built-in-class))
+  t)
+
+;;init java.lang.Object class
+(defconstant +java-lang-object-class+
+  (%register-java-class +java-lang-object+
+			(mop::ensure-class (make-symbol "java.lang.Object")
+					   :metaclass (find-class 'java-class)
+					   :direct-superclasses (list (find-class 'java-object))
+					   :java-class +java-lang-object+)))
+
+(defun jclass-additional-superclasses (jclass)
+  "Extension point to put additional CLOS classes on the CPL of a CLOS Java class."
+  (let ((supers nil))
+    (when (jclass-interface-p jclass)
+      (push (find-class 'java-object) supers))
+    supers))
+
+(defun ensure-java-class (jclass)
+  "Attempt to ensure that the Java class referenced by JCLASS exists in the current process of the implementation."
+  (let ((class (%find-java-class jclass)))
+    (if class
+	class
+	(%register-java-class
+	 jclass (mop::ensure-class
+		 (make-symbol (jclass-name jclass))
+		 :metaclass (find-class 'java-class)
+		 :direct-superclasses
+		 (let ((supers
+			(mapcar #'ensure-java-class
+				(delete nil
+					(concatenate 'list
+						     (list (jclass-superclass jclass))
+						     (jclass-interfaces jclass))))))
+		   (append supers (jclass-additional-superclasses jclass)))
+		 :java-class jclass)))))
+
+(defmethod mop::compute-class-precedence-list ((class java-class))
+  "Sort classes this way:
+   1. Java classes (but not java.lang.Object)
+   2. Java interfaces
+   3. java.lang.Object
+   4. other classes
+   Rationale:
+   1. Concrete classes are the most specific.
+   2. Then come interfaces.
+     So if a generic function is specialized both on an interface and a concrete class,
+     the concrete class comes first.
+   3. because everything is an Object.
+   4. to handle base CLOS classes.
+   Note: Java interfaces are not sorted among themselves in any way, so if a
+   gf is specialized on two different interfaces and you apply it to an object that
+   implements both, it is unspecified which method will be called."
+  (let ((cpl (nreverse (mop::collect-superclasses* class))))
+    (flet ((score (class)
+	     (if (not (typep class 'java-class))
+		 4
+		 (cond
+		   ((jcall (jmethod "java.lang.Object" "equals" "java.lang.Object")
+			   (java-class-jclass class) +java-lang-object+) 3)
+		   ((jclass-interface-p (java-class-jclass class)) 2)
+		   (t 1)))))
+      (stable-sort cpl #'(lambda (x y)
+			   (< (score x) (score y)))))))
+	  
+(defmethod make-instance ((class java-class) &rest initargs &key &allow-other-keys)
+  (declare (ignore initargs))
+  (error "make-instance not supported for ~S" class))
+
+(defun jinput-stream (pathname)
+  "Returns a java.io.InputStream for resource denoted by PATHNAME."
+  (sys:ensure-input-stream pathname))
+
+(provide "JAVA")
+

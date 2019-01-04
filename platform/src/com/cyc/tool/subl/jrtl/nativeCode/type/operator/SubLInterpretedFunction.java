@@ -1,27 +1,14 @@
-/***
- *   Copyright (c) 1995-2009 Cycorp Inc.
- *
- *   Licensed under the Apache License, Version 2.0 (the "License");
- *   you may not use this file except in compliance with the License.
- *   You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- *   Unless required by applicable law or agreed to in writing, software
- *   distributed under the License is distributed on an "AS IS" BASIS,
- *   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *   See the License for the specific language governing permissions and
- *   limitations under the License.
- *
- *  Substantial portions of this code were developed by the Cyc project
- *  and by Cycorp Inc, whose contribution is gratefully acknowledged.
-*/
-
+//
+////
+//
 package com.cyc.tool.subl.jrtl.nativeCode.type.operator;
 
 import java.util.ArrayList;
 
-//// Internal Imports
+import org.armedbear.lisp.Function;
+import org.armedbear.lisp.LispObject;
+import org.armedbear.lisp.WrongNumberOfArgumentsException;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CatchableThrow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic;
@@ -39,88 +26,92 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public class SubLInterpretedFunction extends AbstractSubLFunction implements SubLFunction {
-
-	//// Constructors
-
-	public static String LAMBDA_FUNCTION_TYPE_NAME = "INTERPRETED-FUNCTION";
-
-	public static boolean isLambdaSymbol(SubLObject obj) {
-		return obj == CommonSymbols.LAMBDA_SYMBOL;
+public class SubLInterpretedFunction extends Function implements SubLFunction {
+	@Override
+	public boolean isSubLispFunction() {
+		return true;
 	}
-
-	//// Public Area
-
-	public static boolean isPossiblyLambdaExpression(SubLObject exp, boolean checkForLambda) {
-		if (!exp.isCons())
-			return false;
-		SubLCons cons = exp.toCons();
-		int size = cons.size();
-		if (size < 2)
-			return false;
-		if (!checkForLambda)
-			return true;
-		SubLObject possibleLamdaSymbol = cons.get(0);
-		return SubLInterpretedFunction.isLambdaSymbol(possibleLamdaSymbol);
-	}
-
-	/**
-	 * @param args
-	 *            the command line arguments
-	 */
-	public static void main(String[] args) {
-	}
-
-	private SubLList form;
-
-	private FunctionArgListDescription argDesc;
-
-	private SubLObject body;
-
-	private SubLEnvironment env;
 
 	SubLInterpretedFunction(SubLCons form, SubLEnvironment env) {
 		this(form, env, null);
 	}
 
-	/**
-	 * Creates a new instance of SubLInterpretedFunction.
-	 */
 	SubLInterpretedFunction(SubLCons form, SubLEnvironment env, SubLSymbol functionSymbol) {
 		super(functionSymbol);
 		this.form = form;
-		if (!SubLInterpretedFunction.isPossiblyLambdaExpression(form, functionSymbol == null))
+		if (!isPossiblyLambdaExpression(form, functionSymbol == null)) {
 			throw new InvalidSubLExpressionException("Got invalid interpreted function definition: " + form);
-		if (form.size() >= 2)
-			this.argDesc = new FunctionArgListDescription(form.get(1));
-		else
-			this.argDesc = new FunctionArgListDescription(CommonSymbols.NIL);
-		this.requiredArgCount = this.argDesc.getRequiredArgCount();
-		this.optionalArgCount = this.argDesc.getOptionalArgCount();
-		this.allowsRest = this.argDesc.allowsRest();
+		}
+		if (form.size() >= 2) {
+			argDesc = new FunctionArgListDescription(form.get(1));
+		} else {
+			argDesc = new FunctionArgListDescription(CommonSymbols.NIL);
+		}
+		requiredArgCount = argDesc.getRequiredArgCount();
+		optionalArgCount = argDesc.getOptionalArgCount();
+		allowsRest = argDesc.allowsRest();
 		if (form.size() >= 3) {
-			this.body = form.cddr();
-			if (!this.body.isCons())
-				throw new InvalidSubLExpressionException("Got invalid body for interpreted function: " + this.body);
-			this.body = SubLObjectFactory.makeCons(CommonSymbols.PROGN, this.body);
-		} else
-			this.body = CommonSymbols.NIL;
+			body = form.cddr();
+			if (!body.isCons()) {
+				throw new InvalidSubLExpressionException("Got invalid body for interpreted function: " + body);
+			}
+			body = SubLObjectFactory.makeCons(CommonSymbols.PROGN, body);
+		} else {
+			body = CommonSymbols.NIL;
+		}
 		this.env = env;
-		if (functionSymbol != null)
+		if (functionSymbol != null) {
 			functionSymbol.setFunction(this);
+		}
 	}
 
+	public static boolean isLambdaSymbol(SubLObject obj) {
+		return obj == CommonSymbols.LAMBDA_SYMBOL;
+	}
+
+	public static boolean isPossiblyLambdaExpression(SubLObject exp, boolean checkForLambda) {
+		if (!exp.isCons()) {
+			return false;
+		}
+		final SubLCons cons = exp.toCons();
+		final int size = cons.size();
+		if (size < 2) {
+			return false;
+		}
+		if (!checkForLambda) {
+			return true;
+		}
+		final SubLObject possibleLamdaSymbol = cons.get(0);
+		return isLambdaSymbol(possibleLamdaSymbol);
+	}
+
+	public static void main(String[] args) {
+	}
+
+	private final SubLList form;
+	private FunctionArgListDescription argDesc;
+	private SubLObject body;
+	private final SubLEnvironment env;
+	public static String LAMBDA_FUNCTION_TYPE_NAME = "INTERPRETED-FUNCTION";
+
+	@Override
+	public LispObject arrayify(LispObject... args) {
+		if(args.length==0) return (LispObject) apply(args);
+		return (LispObject) apply(args);
+	}
+
+	@Override
 	public SubLObject apply(Object[] args) {
-		SubLEnvironment oldEnv = SubLEnvironment.currentEnvironment();
-		SubLEnvironment newEnv = this.env.extend();
+		final SubLEnvironment oldEnv = SubLEnvironment.currentEnvironment();
+		final SubLEnvironment newEnv = env.extend();
 		SubLObject result = CommonSymbols.NIL;
 		ArrayList oldDynamicValues = null;
-		SubLThread thread = SubLProcess.currentSubLThread();
+		final SubLThread thread = SubLProcess.currentSubLThread();
 		thread.throwStack.push(CommonSymbols.RETURN_TAG);
 		try {
-			oldDynamicValues = this.argDesc.expandArgBindings(args, newEnv);
-			this.body.eval(newEnv);
-		} catch (CatchableThrow ct) {
+			oldDynamicValues = argDesc.expandArgBindings(args, newEnv);
+			body.eval(newEnv);
+		} catch (final CatchableThrow ct) {
 			result = Dynamic.handleCatchableThrow(ct, CommonSymbols.RETURN_TAG);
 		} finally {
 			thread.throwStack.pop();
@@ -132,209 +123,246 @@ public class SubLInterpretedFunction extends AbstractSubLFunction implements Sub
 		return result;
 	}
 
+	@Override
 	public int applyArity() {
-		return this.getRequiredArgCount() + this.getOptionalArgCount();
+		return getRequiredArgCount() + getOptionalArgCount();
 	}
 
+	@Override
 	public SubLObject eval(SubLEnvironment env) throws InvalidSubLExpressionException {
 		return this;
 	}
 
+	@Override
 	public SubLList getArglist() {
 		Errors.unimplementedMethod("SubLInterpretedFunction.getArglist()");
 		return CommonSymbols.NIL;
 	}
 
+	@Override
 	public int hashCode(int currentDepth) {
-		if (currentDepth < SubLObject.MAX_HASH_DEPTH)
-			return this.form.hashCode(currentDepth + 1);
-		else
-			return SubLObject.DEFAULT_EXCEEDED_HASH_VALUE;
+		if (currentDepth < 8) {
+			return form.hashCode(currentDepth + 1);
+		}
+		return 0;
 	}
 
+	@Override
 	public boolean isAlien() {
 		return false;
 	}
 
+	@Override
 	public boolean isAtom() {
 		return true;
 	}
 
+	@Override
 	public boolean isBigIntegerBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isBoolean() {
 		return false;
 	}
 
+	@Override
 	public boolean isChar() {
 		return false;
 	}
 
+	@Override
 	public boolean isCons() {
 		return false;
 	}
 
+	@Override
 	public boolean isDouble() {
 		return false;
 	}
 
+	@Override
 	public boolean isEnvironment() {
 		return false;
 	}
 
+	@Override
 	public boolean isError() {
 		return false;
 	}
 
+	@Override
 	public boolean isFixnum() {
 		return false;
 	}
 
+	@Override
 	public boolean isFunction() {
 		return true;
 	}
 
+	@Override
 	public boolean isFunctionSpec() {
 		return true;
 	}
 
+	@Override
 	public boolean isGuid() {
 		return false;
 	}
 
+	@Override
 	public boolean isHashtable() {
 		return false;
 	}
 
+	@Override
 	public boolean isHashtableIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isIntBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isInteger() {
 		return false;
 	}
 
+	@Override
 	public boolean isInterpreted() {
 		return true;
 	}
 
+	@Override
 	public boolean isKeyhash() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyhashIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isKeyword() {
 		return false;
 	}
 
+	@Override
 	public boolean isList() {
 		return false;
 	}
 
+	@Override
 	public boolean isLock() {
 		return false;
 	}
 
+	@Override
 	public boolean isLongBignum() {
 		return false;
 	}
 
+	@Override
 	public boolean isMacroOperator() {
 		return false;
 	}
 
+	@Override
 	public boolean isNil() {
 		return false;
 	}
 
+	@Override
 	public boolean isNumber() {
 		return false;
 	}
 
+	@Override
 	public boolean isPackage() {
 		return false;
 	}
 
+	@Override
 	public boolean isPackageIterator() {
 		return false;
 	}
 
+	@Override
 	public boolean isProcess() {
 		return false;
 	}
 
+	@Override
 	public boolean isReadWriteLock() {
 		return false;
 	}
 
+	@Override
 	public boolean isRegexPattern() {
 		return false;
 	}
 
+	@Override
 	public boolean isSemaphore() {
 		return false;
 	}
 
+	@Override
 	public boolean isSequence() {
 		return false;
 	}
 
+	@Override
 	public boolean isSpecial() {
 		return false;
 	}
 
+	@Override
 	public boolean isStream() {
 		return false;
 	}
 
-	//// Protected Area
-
-	//// Private Area
-
+	@Override
 	public boolean isString() {
 		return false;
 	}
 
-	//// Internal Rep
-
+	@Override
 	public boolean isStructure() {
 		return false;
 	}
 
+	@Override
 	public boolean isSymbol() {
 		return false;
 	}
 
+	@Override
 	public boolean isVector() {
 		return false;
 	}
 
-	public String toString() {
-		SubLSymbol functionSymbol = this.getFunctionSymbol();
+//	@Override
+//	public String toString() {
+//		final SubLSymbol functionSymbol = getFunctionSymbol();
+//		if (functionSymbol != null) {
+//			return "#<Interpreted Function " + functionSymbol + ">";
+//		}
+//		return super.toString();
+//	}
 
-		if (functionSymbol != null)
-			return "#<Interpreted Function " + functionSymbol + ">";
-		else
-			return super.toString();
-	}
-
-	//// Main
-
+	@Override
 	public String toTypeName() {
-		return SubLInterpretedFunction.LAMBDA_FUNCTION_TYPE_NAME;
+		return "INTERPRETED-FUNCTION";
 	}
-
 }

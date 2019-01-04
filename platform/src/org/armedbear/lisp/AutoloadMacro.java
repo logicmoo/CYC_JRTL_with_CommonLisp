@@ -2,7 +2,7 @@
  * AutoloadMacro.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: AutoloadMacro.java 12513 2010-03-02 22:35:36Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,80 +31,80 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import static org.armedbear.lisp.Lisp.*;
 
-public class AutoloadMacro extends Autoload {
-	// ### autoload-macro
-	private static Primitive AUTOLOAD_MACRO = new JavaPrimitive("autoload-macro", Lisp.PACKAGE_EXT, true) {
+public final class AutoloadMacro extends Autoload
+{
+    private AutoloadMacro(Symbol symbol)
+    {
+        super(symbol);
+    }
 
-		public SubLObject execute(SubLObject first) {
-			if (first instanceof SubLSymbol) {
-				SubLSymbol symbol = (SubLSymbol) first;
-				AutoloadMacro.installAutoloadMacro(symbol, null);
-				return Lisp.T;
-			}
-			if (first instanceof SubLCons) {
-				for (SubLObject list = first; list != Lisp.NIL; list = list.rest()) {
-					SubLSymbol symbol = Lisp.checkSymbol(list.first());
-					AutoloadMacro.installAutoloadMacro(symbol, null);
-				}
-				return Lisp.T;
-			}
-			return Lisp.error(new TypeError(first));
-		}
+    private AutoloadMacro(Symbol symbol, String fileName)
+    {
+        super(symbol, fileName, null);
+    }
 
-		public SubLObject execute(SubLObject first, SubLObject second)
+    static void installAutoloadMacro(Symbol symbol, String fileName)
 
-		{
-			String fileName = second.getString();
-			if (first instanceof SubLSymbol) {
-				SubLSymbol symbol = (SubLSymbol) first;
-				AutoloadMacro.installAutoloadMacro(symbol, fileName);
-				return Lisp.T;
-			}
-			if (first instanceof SubLCons) {
-				for (SubLObject list = first; list != Lisp.NIL; list = list.rest()) {
-					SubLSymbol symbol = Lisp.checkSymbol(list.first());
-					AutoloadMacro.installAutoloadMacro(symbol, fileName);
-				}
-				return Lisp.T;
-			}
-			return Lisp.error(new TypeError(first));
-		}
-	};
+    {
+        AutoloadMacro am = new AutoloadMacro(symbol, fileName);
+        if (symbol.getSymbolFunction() instanceof SpecialOperator)
+        	Lisp.put(symbol, Symbol.MACROEXPAND_MACRO, am);
+        else
+            symbol.setSymbolFunction(am);
+    }
 
-	static void installAutoloadMacro(SubLSymbol symbol, String fileName)
+    public void load()
+    {
+        Load.loadSystemFile(getFileName(), true);
+    }
 
-	{
-		AutoloadMacro am = new AutoloadMacro(symbol, fileName);
-		if (symbol.getSymbolFunction() instanceof SpecialOperator)
-			Lisp.put(symbol, LispSymbols.MACROEXPAND_MACRO, am);
-		else
-			symbol.setSymbolFunction(am);
-	}
+    protected void extraInfo(StringBuilder sb) {
+        sb.append(" \"");
+        sb.append(getFileName());
+        sb.append(" \"");
+    }
 
-	private AutoloadMacro(SubLSymbol symbol) {
-		super(symbol);
-	}
+    // ### autoload-macro
+    private static final Primitive AUTOLOAD_MACRO =
+        new Primitive("autoload-macro", PACKAGE_EXT, true)
+    {
+        public LispObject execute(LispObject first)
+        {
+            if (first instanceof Symbol) {
+                Symbol symbol = (Symbol) first;
+                installAutoloadMacro(symbol, null);
+                return T;
+            }
+            if (first instanceof Cons) {
+                for (LispObject list = first; list != NIL; list = list.cdr()) {
+                    Symbol symbol = checkSymbol(list.car());
+                    installAutoloadMacro(symbol, null);
+                }
+                return T;
+            }
+            return error(new TypeError(first));
+        }
+        public LispObject execute(LispObject first, LispObject second)
 
-	private AutoloadMacro(SubLSymbol symbol, String fileName) {
-		super(symbol, fileName, null);
-	}
-
-	public void load() {
-		Load.loadSystemFile(this.getFileName(), true);
-	}
-
-	public String writeToString() {
-		StringBuffer sb = new StringBuffer("#<AUTOLOAD-MACRO ");
-		sb.append(this.getSymbol().writeToString());
-		sb.append(" \"");
-		sb.append(this.getFileName());
-		sb.append("\">");
-		return sb.toString();
-	}
+        {
+            final String fileName = second.getStringValue();
+            if (first instanceof Symbol) {
+                Symbol symbol = (Symbol) first;
+                installAutoloadMacro(symbol, fileName);
+                return T;
+            }
+            if (first instanceof Cons) {
+                for (LispObject list = first; list != NIL; list = list.cdr()) {
+                    Symbol symbol = checkSymbol(list.car());
+                    installAutoloadMacro(symbol, fileName);
+                }
+                return T;
+            }
+            return error(new TypeError(first));
+        }
+    };
 }

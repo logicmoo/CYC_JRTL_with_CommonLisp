@@ -2,7 +2,7 @@
  * SlotClass.java
  *
  * Copyright (C) 2003-2005 Peter Graves
- * $Id: SlotClass.java 12513 2010-03-02 22:35:36Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,261 +31,311 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import static org.armedbear.lisp.Lisp.*;
 
-public class SlotClass extends LispClass {
-	// ### class-direct-slots
-	private static Primitive CLASS_DIRECT_SLOTS = new JavaPrimitive("class-direct-slots", Lisp.PACKAGE_SYS, true) {
+public class SlotClass extends LispClass
+{
+    private LispObject directSlotDefinitions = NIL;
+    private LispObject slotDefinitions = NIL;
+    private LispObject directDefaultInitargs = NIL;
+    private LispObject defaultInitargs = NIL;
 
-		public SubLObject execute(SubLObject arg)
+    public SlotClass(Layout layout)
+    {
+      super(layout);
+    }
 
-		{
-			if (arg instanceof SlotClass)
-				return ((SlotClass) arg).getDirectSlotDefinitions();
-			if (arg instanceof BuiltInClass)
-				return Lisp.NIL;
-			return Lisp.type_error(arg, LispSymbols.STANDARD_CLASS);
-		}
-	};
-	// ### %set-class-direct-slots
-	private static Primitive _SET_CLASS_DIRECT_SLOTS = new JavaPrimitive("%set-class-direct-slots", Lisp.PACKAGE_SYS,
-			true) {
+    public SlotClass(Symbol symbol, LispObject directSuperclasses)
 
-		public SubLObject execute(SubLObject first, SubLObject second)
 
-		{
-			if (first instanceof SlotClass) {
-				((SlotClass) first).setDirectSlotDefinitions(second);
-				return second;
-			} else
-				return Lisp.type_error(first, LispSymbols.STANDARD_CLASS);
-		}
-	};
-	// ### %class-slots
-	private static Primitive _CLASS_SLOTS = new JavaPrimitive(LispSymbols._CLASS_SLOTS, "class") {
+    {
+        this(null, symbol, directSuperclasses);
+    }
 
-		public SubLObject execute(SubLObject arg)
+    public SlotClass(Layout layout,
+                     Symbol symbol, LispObject directSuperclasses)
+    {
+        super(layout, symbol, directSuperclasses);
+    }
 
-		{
-			if (arg instanceof SlotClass)
-				return ((SlotClass) arg).getSlotDefinitions();
-			if (arg instanceof BuiltInClass)
-				return Lisp.NIL;
-			return Lisp.type_error(arg, LispSymbols.STANDARD_CLASS);
-		}
-	};
-	// ### set-class-slots
-	private static Primitive SET_CLASS_SLOTS = new JavaPrimitive(LispSymbols.SET_CLASS_SLOTS,
-			"class slot-definitions") {
+    public LispObject getParts()
+    {
+        LispObject result = super.getParts().nreverse();
+        result = result.push(new Cons("DIRECT-SLOTS",
+                                      getDirectSlotDefinitions()));
+        result = result.push(new Cons("SLOTS", getSlotDefinitions()));
+        result = result.push(new Cons("DIRECT-DEFAULT-INITARGS",
+                                      getDirectDefaultInitargs()));
+        result = result.push(new Cons("DEFAULT-INITARGS",
+                                      getDefaultInitargs()));
+        return result.nreverse();
+    }
 
-		public SubLObject execute(SubLObject first, SubLObject second)
+    public LispObject typep(LispObject type)
+    {
+        return super.typep(type);
+    }
 
-		{
-			if (first instanceof SlotClass) {
-				((SlotClass) first).setSlotDefinitions(second);
-				return second;
-			} else
-				return Lisp.type_error(first, LispSymbols.STANDARD_CLASS);
-		}
-	};
+    public LispObject getDirectSlotDefinitions()
+    {
+        return directSlotDefinitions;
+    }
 
-	// ### class-direct-default-initargs
-	private static Primitive CLASS_DIRECT_DEFAULT_INITARGS = new JavaPrimitive("class-direct-default-initargs",
-			Lisp.PACKAGE_SYS, true) {
+    public void setDirectSlotDefinitions(LispObject directSlotDefinitions)
+    {
+        this.directSlotDefinitions = directSlotDefinitions;
+    }
 
-		public SubLObject execute(SubLObject arg)
+    public LispObject getSlotDefinitions()
+    {
+        return slotDefinitions;
+    }
 
-		{
-			if (arg instanceof SlotClass)
-				return ((SlotClass) arg).getDirectDefaultInitargs();
-			if (arg instanceof BuiltInClass)
-				return Lisp.NIL;
-			return Lisp.type_error(arg, LispSymbols.STANDARD_CLASS);
-		}
-	};
+    public void setSlotDefinitions(LispObject slotDefinitions)
+    {
+        this.slotDefinitions = slotDefinitions;
+    }
 
-	// ### %set-class-direct-default-initargs
-	private static Primitive _SET_CLASS_DIRECT_DEFAULT_INITARGS = new JavaPrimitive(
-			"%set-class-direct-default-initargs", Lisp.PACKAGE_SYS, true) {
+    public LispObject getDirectDefaultInitargs()
+    {
+        return directDefaultInitargs;
+    }
 
-		public SubLObject execute(SubLObject first, SubLObject second)
+    public void setDirectDefaultInitargs(LispObject directDefaultInitargs)
+    {
+        this.directDefaultInitargs = directDefaultInitargs;
+    }
 
-		{
-			if (first instanceof SlotClass) {
-				((SlotClass) first).setDirectDefaultInitargs(second);
-				return second;
-			}
-			return Lisp.type_error(first, LispSymbols.STANDARD_CLASS);
-		}
-	};
+    public LispObject getDefaultInitargs()
+    {
+        return defaultInitargs;
+    }
 
-	// ### class-default-initargs
-	private static Primitive CLASS_DEFAULT_INITARGS = new JavaPrimitive("class-default-initargs", Lisp.PACKAGE_SYS,
-			true) {
+    public void setDefaultInitargs(LispObject defaultInitargs)
+    {
+        this.defaultInitargs = defaultInitargs;
+    }
 
-		public SubLObject execute(SubLObject arg)
+    LispObject computeDefaultInitargs()
+    {
+      // KLUDGE (rudi 2012-06-02): duplicate initargs are not removed
+      // here, but this does not hurt us since no Lisp class we define
+      // Java-side has non-nil direct default initargs.
+        LispObject result = NIL;
+        LispObject cpl = getCPL();
+        while (cpl != NIL) {
+            LispClass c = (LispClass) cpl.car();
+            if (c instanceof StandardClass) {
+                LispObject obj = ((StandardClass)c).getDirectDefaultInitargs();
+                if (obj != NIL)
+                    result = Symbol.APPEND.execute(result, obj);
+            }
+            cpl = cpl.cdr();
+        }
+        return result;
+    }
 
-		{
-			if (arg instanceof SlotClass)
-				return ((SlotClass) arg).getDefaultInitargs();
-			if (arg instanceof BuiltInClass)
-				return Lisp.NIL;
-			return Lisp.type_error(arg, LispSymbols.STANDARD_CLASS);
-		}
-	};
+    public void finalizeClass()
+    {
+        if (isFinalized())
+            return;
 
-	// ### %set-class-default-initargs
-	private static Primitive _SET_CLASS_DEFAULT_INITARGS = new JavaPrimitive("%set-class-default-initargs",
-			Lisp.PACKAGE_SYS, true) {
+        LispObject defs = getSlotDefinitions();
+        Debug.assertTrue(defs == NIL);
+        LispObject cpl = getCPL();
+        Debug.assertTrue(cpl != null);
+        Debug.assertTrue(cpl.listp());
+        cpl = cpl.reverse();
+        while (cpl != NIL) {
+            LispObject car = cpl.car();
+            if (car instanceof StandardClass) {
+                StandardClass cls = (StandardClass) car;
+                LispObject directDefs = cls.getDirectSlotDefinitions();
+                Debug.assertTrue(directDefs != null);
+                Debug.assertTrue(directDefs.listp());
+                while (directDefs != NIL) {
+                    defs = defs.push(directDefs.car());
+                    directDefs = directDefs.cdr();
+                }
+            }
+            cpl = cpl.cdr();
+        }
+        setSlotDefinitions(defs.nreverse());
+        LispObject[] instanceSlotNames = new LispObject[defs.length()];
+        int i = 0;
+        LispObject tail = getSlotDefinitions();
+        while (tail != NIL) {
+            SlotDefinition slotDefinition = (SlotDefinition) tail.car();
+            slotDefinition.setInstanceSlotValue(Symbol.LOCATION,
+                                                Fixnum.getInstance(i));
+            instanceSlotNames[i++] =
+              slotDefinition.getInstanceSlotValue(Symbol.NAME);
+            tail = tail.cdr();
+        }
+        setClassLayout(new Layout(this, instanceSlotNames, NIL));
+        setDefaultInitargs(computeDefaultInitargs());
+        setFinalized(true);
+    }
 
-		public SubLObject execute(SubLObject first, SubLObject second)
+    @DocString(name="%class-direct-slots")
+    private static final Primitive CLASS_DIRECT_SLOTS 
+        = new pf__class_direct_slots();
+    private static final class pf__class_direct_slots extends Primitive
+    {
+        pf__class_direct_slots() 
+        {
+            super("%class-direct-slots", PACKAGE_SYS, true);
+        }
+        public LispObject execute(LispObject arg)
 
-		{
-			if (first instanceof SlotClass) {
-				((SlotClass) first).setDefaultInitargs(second);
-				return second;
-			}
-			return Lisp.type_error(first, LispSymbols.STANDARD_CLASS);
-		}
-	};
+        {
+            if (arg instanceof SlotClass)
+                return ((SlotClass)arg).getDirectSlotDefinitions();
+            if (arg instanceof BuiltInClass)
+                return NIL;
+            return type_error(arg, Symbol.STANDARD_CLASS);
+        }
+    };
 
-	// ### compute-class-default-initargs
-	private static Primitive COMPUTE_CLASS_DEFAULT_INITARGS = new JavaPrimitive("compute-class-default-initargs",
-			Lisp.PACKAGE_SYS, true) {
+    @DocString(name="%set-class-direct-slots")
+    private static final Primitive _SET_CLASS_DIRECT_SLOT
+        = new pf__set_class_direct_slots();
+    private static final class pf__set_class_direct_slots extends Primitive
+    {
+        pf__set_class_direct_slots() 
+        {
+            super("%set-class-direct-slots", PACKAGE_SYS, true);
+        }
 
-		public SubLObject execute(SubLObject arg)
+        public LispObject execute(LispObject first, LispObject second)
+        {
+            if (second instanceof SlotClass) {
+                  ((SlotClass)second).setDirectSlotDefinitions(first);
+                return first;
+            } else {
+                return type_error(second, Symbol.STANDARD_CLASS);
+            }
+        }
+    };
 
-		{
-			SlotClass c;
-			if (arg instanceof SlotClass)
-				c = (SlotClass) arg;
-			else
-				return Lisp.type_error(arg, LispSymbols.STANDARD_CLASS);
-			return c.computeDefaultInitargs();
-		}
-	};
+    @DocString(name="%class-slots",
+               args="class")
+    private static final Primitive _CLASS_SLOTS 
+        = new pf__class_slots();
+    private static final class pf__class_slots extends Primitive
+    {
+        pf__class_slots() 
+        {
+            super(Symbol._CLASS_SLOTS, "class");
+        }
 
-	private SubLObject directSlotDefinitions = Lisp.NIL;
+        public LispObject execute(LispObject arg)
+        {
+            if (arg instanceof SlotClass)
+                return ((SlotClass)arg).getSlotDefinitions();
+            if (arg instanceof BuiltInClass)
+                return NIL;
+            return type_error(arg, Symbol.STANDARD_CLASS);
+        }
+    };
 
-	private SubLObject slotDefinitions = Lisp.NIL;
+    @DocString(name="%set-class-slots",
+               args="class slot-definitions")
+    private static final Primitive _SET_CLASS_SLOTS 
+        = new pf__set_class_slots();
+    private static final class pf__set_class_slots extends Primitive
+    {
+        pf__set_class_slots()
+        {
+            super(Symbol._SET_CLASS_SLOTS, "class slot-definitions");
+        }
+        public LispObject execute(LispObject first, LispObject second)
+        {
+            if (second instanceof SlotClass) {
+              ((SlotClass)second).setSlotDefinitions(first);
+              return first;
+            } else {
+              return type_error(second, Symbol.STANDARD_CLASS);
+            }
+        }
+    };
 
-	private SubLObject directDefaultInitargs = Lisp.NIL;
+    @DocString(name="%class-direct-default-initargs")
+    private static final Primitive CLASS_DIRECT_DEFAULT_INITARGS 
+        = new pf__class_direct_default_initargs();
+    private static final class pf__class_direct_default_initargs extends Primitive
+    {
+        pf__class_direct_default_initargs() 
+        {
+            super("%class-direct-default-initargs", PACKAGE_SYS, true);
+        }
+        public LispObject execute(LispObject arg)
+        {
+            if (arg instanceof SlotClass)
+                return ((SlotClass)arg).getDirectDefaultInitargs();
+            if (arg instanceof BuiltInClass)
+                return NIL;
+            return type_error(arg, Symbol.STANDARD_CLASS);
+        }
+    };
 
-	private SubLObject defaultInitargs = Lisp.NIL;
+    @DocString(name="%set-class-direct-default-initargs")
+    private static final Primitive _SET_CLASS_DIRECT_DEFAULT_INITARGS 
+        = new pf__set_class_direct_default_initargs();
+    private static final class pf__set_class_direct_default_initargs extends Primitive
+    {
+        pf__set_class_direct_default_initargs()
+        {
+            super("%set-class-direct-default-initargs", PACKAGE_SYS, true);
+        }
+        public LispObject execute(LispObject first, LispObject second)
+        {
+            if (second instanceof SlotClass) {
+                ((SlotClass)second).setDirectDefaultInitargs(first);
+                return first;
+            }
+            return type_error(second, Symbol.STANDARD_CLASS);
+        }
+    };
 
-	public SlotClass(Layout layout) {
-		super(layout);
-	}
+    @DocString(name="%class-default-initargs")
+    private static final Primitive CLASS_DEFAULT_INITARGS 
+        = new pf__class_default_initargs();
+    private static final class pf__class_default_initargs extends Primitive 
+    {
+        pf__class_default_initargs() 
+        {
+            super("%class-default-initargs", PACKAGE_SYS, true);
+        }
+        public LispObject execute(LispObject arg)
+        {
+            if (arg instanceof SlotClass)
+                return ((SlotClass)arg).getDefaultInitargs();
+            if (arg instanceof BuiltInClass)
+                return NIL;
+            return type_error(arg, Symbol.STANDARD_CLASS);
+        }
+    };
 
-	public SlotClass(Layout layout, SubLSymbol symbol, SubLObject directSuperclasses) {
-		super(layout, symbol, directSuperclasses);
-	}
+    @DocString(name="%set-class-default-initargs")
+    private static final Primitive _SET_CLASS_DEFAULT_INITARGS 
+        = new pf__set_class_default_initargs();
 
-	public SlotClass(SubLSymbol symbol, SubLObject directSuperclasses)
-
-	{
-		this(null, symbol, directSuperclasses);
-	}
-
-	SubLObject computeDefaultInitargs() {
-		SubLObject result = Lisp.NIL;
-		SubLObject cpl = this.getCPL();
-		while (cpl != Lisp.NIL) {
-			LispClass c = (LispClass) cpl.first();
-			if (c instanceof StandardClass) {
-				SubLObject obj = ((StandardClass) c).getDirectDefaultInitargs();
-				if (obj != Lisp.NIL)
-					result = LispSymbols.APPEND.execute(result, obj);
-			}
-			cpl = cpl.rest();
-		}
-		return result;
-	}
-
-	public void finalizeClass() {
-		if (this.isFinalized())
-			return;
-
-		SubLObject defs = this.getSlotDefinitions();
-		Debug.assertTrue(defs == Lisp.NIL);
-		SubLObject cpl = this.getCPL();
-		Debug.assertTrue(cpl != null);
-		Debug.assertTrue(cpl.isList());
-		cpl = cpl.reverse();
-		while (cpl != Lisp.NIL) {
-			SubLObject car = cpl.first();
-			if (car instanceof StandardClass) {
-				StandardClass cls = (StandardClass) car;
-				SubLObject directDefs = cls.getDirectSlotDefinitions();
-				Debug.assertTrue(directDefs != null);
-				Debug.assertTrue(directDefs.isList());
-				while (directDefs != Lisp.NIL) {
-					defs = defs.push(directDefs.first());
-					directDefs = directDefs.rest();
-				}
-			}
-			cpl = cpl.rest();
-		}
-		this.setSlotDefinitions(defs.nreverse());
-		SubLObject[] instanceSlotNames = new SubLObject[defs.cl_length()];
-		int i = 0;
-		SubLObject tail = this.getSlotDefinitions();
-		while (tail != Lisp.NIL) {
-			SlotDefinitionObject slotDefinition = (SlotDefinitionObject) tail.first();
-			slotDefinition.setLocation(i);
-			instanceSlotNames[i++] = slotDefinition.getSlotDefName();
-			tail = tail.rest();
-		}
-		this.setClassLayout(new Layout(this, instanceSlotNames, Lisp.NIL));
-		this.setDefaultInitargs(this.computeDefaultInitargs());
-		this.setFinalized(true);
-	}
-
-	public SubLObject getDefaultInitargs() {
-		return this.defaultInitargs;
-	}
-
-	public SubLObject getDirectDefaultInitargs() {
-		return this.directDefaultInitargs;
-	}
-
-	public SubLObject getDirectSlotDefinitions() {
-		return this.directSlotDefinitions;
-	}
-
-	public SubLObject getParts() {
-		SubLObject result = super.getParts().nreverse();
-		result = result.push(LispObjectFactory.makeCons("DIRECT-SLOTS", this.getDirectSlotDefinitions()));
-		result = result.push(LispObjectFactory.makeCons("SLOTS", this.getSlotDefinitions()));
-		result = result.push(LispObjectFactory.makeCons("DIRECT-DEFAULT-INITARGS", this.getDirectDefaultInitargs()));
-		result = result.push(LispObjectFactory.makeCons("DEFAULT-INITARGS", this.getDefaultInitargs()));
-		return result.nreverse();
-	}
-
-	public SubLObject getSlotDefinitions() {
-		return this.slotDefinitions;
-	}
-
-	public void setDefaultInitargs(SubLObject defaultInitargs) {
-		this.defaultInitargs = defaultInitargs;
-	}
-
-	public void setDirectDefaultInitargs(SubLObject directDefaultInitargs) {
-		this.directDefaultInitargs = directDefaultInitargs;
-	}
-
-	public void setDirectSlotDefinitions(SubLObject directSlotDefinitions) {
-		this.directSlotDefinitions = directSlotDefinitions;
-	}
-
-	public void setSlotDefinitions(SubLObject slotDefinitions) {
-		this.slotDefinitions = slotDefinitions;
-	}
-
-	public SubLObject typep(SubLObject type) {
-		return super.typep(type);
-	}
+    private static final class pf__set_class_default_initargs extends Primitive
+    {
+        pf__set_class_default_initargs()
+        {
+            super("%set-class-default-initargs", PACKAGE_SYS, true);
+        }
+        public LispObject execute(LispObject first, LispObject second)
+        {
+            if (second instanceof SlotClass) {
+                ((SlotClass)second).setDefaultInitargs(first);
+                return first;
+            }
+            return type_error(second, Symbol.STANDARD_CLASS);
+        }
+    };
 }

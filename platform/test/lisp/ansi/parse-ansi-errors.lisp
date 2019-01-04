@@ -78,10 +78,15 @@ An example on an entry:
       (return-from get-hash-table *compileit*))))
 
 (defvar *default-database-file* 
+  (asdf:system-relative-pathname
+   :abcl "test/lisp/ansi/ansi-test-failures"))
+
+#|
+(defvar *default-database-file* 
   (if (find :asdf2 *features*)
       (asdf:system-relative-pathname :ansi-compiled "test/lisp/ansi/ansi-test-failures")
       (merge-pathnames "ansi-test-failures" (directory-namestring *load-truename*))))
-
+|#
 (defun parse (&optional (file *default-database-file*))
   "Parse the ansi test database present at *DEFAULT-DATABASE-FILE*.
 

@@ -1,7 +1,7 @@
 ;;; known-functions.lisp
 ;;;
 ;;; Copyright (C) 2005-2006 Peter Graves
-;;; $Id: known-functions.lisp 12393 2010-01-23 09:27:34Z ehuelsmann $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -290,8 +290,6 @@
 
 (defknown %class-slots (class) t)
 (defknown set-class-slots (class list) t)
-(defknown %slot-definition-name * t)
-(defknown %slot-definition-initargs * t)
 (defknown %slot-definition-initfunction * t)
 (defknown std-slot-boundp * t)
 (defknown std-slot-value * t)
@@ -429,7 +427,6 @@
              ext:classp
              ext:fixnump
              ext:memql
-             sys:%generic-function-name
              sys::puthash
              precompiler::precompile1
              declare
@@ -444,7 +441,6 @@
              sys::require-type
              sys::arg-count-error
              sys:subclassp
-             sys:gf-required-args
              sys:cache-emf
              sys:get-cached-emf
              ext:autoloadp

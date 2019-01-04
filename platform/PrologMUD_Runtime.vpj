@@ -1,0 +1,402 @@
+<!DOCTYPE Project SYSTEM "http://www.slickedit.com/dtd/vse/10.0/vpj.dtd">
+<Project
+	Version="10.0"
+	VendorName="SlickEdit"
+	WorkingDir=".">
+	<Config
+		Name="Debug"
+		Type="java"
+		AppTypeList="application,applet,j2me,custom"
+		DebugCallbackName="jdwp"
+		ObjectDir="classes"
+		AppType="application"
+		Version="6"
+		OutputFile=""
+		CompilerConfigName="">
+		<Menu>
+			<Target
+				Name="Compile"
+				MenuCaption="&amp;Compile"
+				Dialog="_java_options_form Compiler"
+				EnableBuildFirst="0"
+				CaptureOutputWith="ProcessBuffer"
+				Deletable="0"
+				SaveOption="SaveCurrent"
+				RunFromDir="%rw">
+				<Exec CmdLine='javac -g %jbd %cp "%f"'/>
+			</Target>
+			<Target
+				Name="Build"
+				MenuCaption="&amp;Build"
+				Dialog="_java_options_form Compiler"
+				CaptureOutputWith="ProcessBuffer"
+				Deletable="0"
+				SaveOption="SaveWorkspaceFiles"
+				RunFromDir="%rw">
+				<Exec CmdLine="javamake"/>
+			</Target>
+			<Target
+				Name="Rebuild"
+				MenuCaption="&amp;Rebuild"
+				Dialog="_java_options_form Compiler"
+				CaptureOutputWith="ProcessBuffer"
+				Deletable="0"
+				SaveOption="SaveWorkspaceFiles"
+				RunFromDir="%rw">
+				<Exec CmdLine="javarebuild"/>
+			</Target>
+			<Target
+				Name="Debug"
+				MenuCaption="&amp;Debug"
+				Dialog="_java_options_form Debugger"
+				BuildFirst="1"
+				Deletable="0"
+				CaptureOutputWith="ProcessBuffer"
+				RunFromDir="%rw">
+				<Exec CmdLine="java -Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000 %cp ."/>
+			</Target>
+			<Target
+				Name="Execute"
+				MenuCaption="E&amp;xecute"
+				Dialog="_java_options_form Interpreter"
+				BuildFirst="1"
+				Deletable="0"
+				CaptureOutputWith="ProcessBuffer"
+				RunFromDir="%rw">
+				<Exec CmdLine="java %cp"/>
+			</Target>
+			<Target
+				Name="UnitTest"
+				MenuCaption="Unit Test"
+				ShowOnMenu="Never"
+				Dialog=""
+				BuildFirst="1"
+				Deletable="0"
+				CaptureOutputWith="ProcessBuffer"
+				PreMacro="unittest_pre_build"
+				PostMacro="unittest_post_build"
+				RunFromDir="%rw">
+				<Exec CmdLine="java %cp junit.slickedit.TestRunner"/>
+			</Target>
+			<Target
+				Name="dash"
+				MenuCaption="-">
+				<Exec/>
+			</Target>
+			<Target
+				Name="View Javadoc"
+				MenuCaption="&amp;View Javadoc"
+				ShowOnMenu="HideIfNoCmdLine"
+				Dialog="_java_options_form javadoc"
+				Deletable="0"
+				SaveOption="SaveCurrent"
+				RunFromDir="%rw">
+				<Exec
+					CmdLine="javaviewdoc"
+					Type="Slick-C"/>
+			</Target>
+			<Target
+				Name="Javadoc All"
+				MenuCaption="Javadoc All"
+				ShowOnMenu="HideIfNoCmdLine"
+				Dialog="_java_options_form javadoc"
+				CaptureOutputWith="ProcessBuffer"
+				Deletable="0"
+				SaveOption="SaveWorkspaceFiles"
+				RunFromDir="%rw">
+				<Exec CmdLine="javamakedoc javadoc -d docs %cp %{*.java}"/>
+			</Target>
+			<Target
+				Name="GUI Builder"
+				MenuCaption="&amp;Show GUI Builder"
+				Deletable="0">
+				<Exec
+					CmdLine="javagui_editor"
+					Type="Slick-C"/>
+			</Target>
+			<Target
+				Name="dash2"
+				MenuCaption="-">
+				<Exec/>
+			</Target>
+			<Target
+				Name="Make Jar"
+				MenuCaption="Make &amp;Jar"
+				ShowOnMenu="HideIfNoCmdLine"
+				Dialog="_java_options_form jar"
+				CaptureOutputWith="ProcessBuffer"
+				BuildFirst="1"
+				Deletable="0"
+				SaveOption="SaveWorkspaceFiles"
+				RunFromDir="%rw">
+				<Exec CmdLine='javamakejar jar cvf "PrologMUD_Runtime.jar" %{*}'/>
+			</Target>
+			<Target
+				Name="Java Options"
+				MenuCaption="Java &amp;Options"
+				ShowOnMenu="HideIfNoCmdLine"
+				Deletable="0">
+				<Exec
+					CmdLine="javaoptions"
+					Type="Slick-C"/>
+			</Target>
+		</Menu>
+		<AppTypeTargets Name="Debug">
+			<AppTypeTarget
+				MenuCaption="&amp;Debug"
+				Dialog="_java_options_form Appletviewer"
+				BuildFirst="1"
+				Deletable="0"
+				AppType="applet"
+				RunFromDir="%rw">
+				<Exec CmdLine="appletviewer -J-Xdebug -J-Xnoagent -J-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000 %h"/>
+			</AppTypeTarget>
+			<AppTypeTarget
+				MenuCaption="&amp;Debug"
+				BuildFirst="1"
+				Deletable="0"
+				AppType="custom"
+				RunFromDir="%rw">
+				<Exec CmdLine="jdb %cp %&lt;e"/>
+			</AppTypeTarget>
+		</AppTypeTargets>
+		<AppTypeTargets Name="Execute">
+			<AppTypeTarget
+				MenuCaption="E&amp;xecute"
+				Dialog="_java_options_form Appletviewer"
+				BuildFirst="1"
+				CaptureOutputWith="ProcessBuffer"
+				SaveOption="SaveWorkspaceFiles"
+				AppletClass="PrologMUD_Runtime"
+				Deletable="0"
+				AppType="applet"
+				RunFromDir="%rw">
+				<Exec CmdLine="appletviewer %h"/>
+			</AppTypeTarget>
+			<AppTypeTarget
+				MenuCaption="E&amp;xecute"
+				BuildFirst="1"
+				CaptureOutputWith="ProcessBuffer"
+				SaveOption="SaveWorkspaceFiles"
+				Deletable="0"
+				AppType="custom"
+				RunFromDir="%rw">
+				<Exec CmdLine="java %cp %&lt;e"/>
+			</AppTypeTarget>
+		</AppTypeTargets>
+	</Config>
+	<Config
+		Name="Release"
+		Type="java"
+		AppTypeList="application,applet,custom"
+		DebugCallbackName="jdwp"
+		ObjectDir="classes"
+		AppType="application"
+		Version="6"
+		OutputFile=""
+		CompilerConfigName="">
+		<Menu>
+			<Target
+				Name="Compile"
+				MenuCaption="&amp;Compile"
+				Dialog="_java_options_form Compiler"
+				EnableBuildFirst="0"
+				CaptureOutputWith="ProcessBuffer"
+				Deletable="0"
+				SaveOption="SaveCurrent"
+				RunFromDir="%rw">
+				<Exec CmdLine='javac %jbd %cp "%f"'/>
+			</Target>
+			<Target
+				Name="Build"
+				MenuCaption="&amp;Build"
+				Dialog="_java_options_form Compiler"
+				CaptureOutputWith="ProcessBuffer"
+				Deletable="0"
+				SaveOption="SaveWorkspaceFiles"
+				RunFromDir="%rw">
+				<Exec CmdLine="javamake"/>
+			</Target>
+			<Target
+				Name="Rebuild"
+				MenuCaption="&amp;Rebuild"
+				Dialog="_java_options_form Compiler"
+				CaptureOutputWith="ProcessBuffer"
+				Deletable="0"
+				SaveOption="SaveWorkspaceFiles"
+				RunFromDir="%rw">
+				<Exec CmdLine="javarebuild"/>
+			</Target>
+			<Target
+				Name="Debug"
+				MenuCaption="&amp;Debug"
+				Dialog="_java_options_form Debugger"
+				BuildFirst="1"
+				Deletable="0"
+				CaptureOutputWith="ProcessBuffer"
+				RunFromDir="%rw">
+				<Exec CmdLine="java -Xdebug -Xnoagent -Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000 %cp ."/>
+			</Target>
+			<Target
+				Name="Execute"
+				MenuCaption="E&amp;xecute"
+				Dialog="_java_options_form Interpreter"
+				BuildFirst="1"
+				Deletable="0"
+				CaptureOutputWith="ProcessBuffer"
+				RunFromDir="%rw">
+				<Exec CmdLine="java %cp"/>
+			</Target>
+			<Target
+				Name="UnitTest"
+				MenuCaption="Unit Test"
+				ShowOnMenu="Never"
+				Dialog=""
+				BuildFirst="1"
+				Deletable="0"
+				CaptureOutputWith="ProcessBuffer"
+				PreMacro="unittest_pre_build"
+				PostMacro="unittest_post_build"
+				RunFromDir="%rw">
+				<Exec CmdLine="java %cp junit.slickedit.TestRunner"/>
+			</Target>
+			<Target
+				Name="dash"
+				MenuCaption="-">
+				<Exec/>
+			</Target>
+			<Target
+				Name="View Javadoc"
+				MenuCaption="&amp;View Javadoc"
+				ShowOnMenu="HideIfNoCmdLine"
+				Dialog="_java_options_form javadoc"
+				Deletable="0"
+				SaveOption="SaveCurrent"
+				RunFromDir="%rw">
+				<Exec
+					CmdLine="javaviewdoc"
+					Type="Slick-C"/>
+			</Target>
+			<Target
+				Name="Javadoc All"
+				MenuCaption="Javadoc All"
+				ShowOnMenu="HideIfNoCmdLine"
+				Dialog="_java_options_form javadoc"
+				CaptureOutputWith="ProcessBuffer"
+				Deletable="0"
+				SaveOption="SaveWorkspaceFiles"
+				RunFromDir="%rw">
+				<Exec CmdLine="javamakedoc javadoc -d docs %cp %{*.java}"/>
+			</Target>
+			<Target
+				Name="GUI Builder"
+				MenuCaption="&amp;Show GUI Builder"
+				Deletable="0">
+				<Exec
+					CmdLine="javagui_editor"
+					Type="Slick-C"/>
+			</Target>
+			<Target
+				Name="dash2"
+				MenuCaption="-">
+				<Exec/>
+			</Target>
+			<Target
+				Name="Make Jar"
+				MenuCaption="Make &amp;Jar"
+				ShowOnMenu="HideIfNoCmdLine"
+				Dialog="_java_options_form jar"
+				CaptureOutputWith="ProcessBuffer"
+				BuildFirst="1"
+				Deletable="0"
+				SaveOption="SaveWorkspaceFiles"
+				RunFromDir="%rw">
+				<Exec CmdLine='javamakejar jar cvf "PrologMUD_Runtime.jar" %{*}'/>
+			</Target>
+			<Target
+				Name="Java Options"
+				MenuCaption="Java &amp;Options"
+				ShowOnMenu="HideIfNoCmdLine"
+				Deletable="0">
+				<Exec
+					CmdLine="javaoptions"
+					Type="Slick-C"/>
+			</Target>
+		</Menu>
+		<AppTypeTargets Name="Debug">
+			<AppTypeTarget
+				MenuCaption="&amp;Debug"
+				Dialog="_java_options_form Appletviewer"
+				BuildFirst="1"
+				Deletable="0"
+				AppType="applet"
+				RunFromDir="%rw">
+				<Exec CmdLine="appletviewer -J-Xdebug -J-Xnoagent -J-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=8000 %h"/>
+			</AppTypeTarget>
+			<AppTypeTarget
+				MenuCaption="&amp;Debug"
+				BuildFirst="1"
+				Deletable="0"
+				AppType="custom"
+				RunFromDir="%rw">
+				<Exec CmdLine="jdb %cp %&lt;e"/>
+			</AppTypeTarget>
+		</AppTypeTargets>
+		<AppTypeTargets Name="Execute">
+			<AppTypeTarget
+				MenuCaption="E&amp;xecute"
+				Dialog="_java_options_form Appletviewer"
+				BuildFirst="1"
+				CaptureOutputWith="ProcessBuffer"
+				SaveOption="SaveWorkspaceFiles"
+				AppletClass="PrologMUD_Runtime"
+				Deletable="0"
+				AppType="applet"
+				RunFromDir="%rw">
+				<Exec CmdLine="appletviewer %h"/>
+			</AppTypeTarget>
+			<AppTypeTarget
+				MenuCaption="E&amp;xecute"
+				BuildFirst="1"
+				CaptureOutputWith="ProcessBuffer"
+				SaveOption="SaveWorkspaceFiles"
+				Deletable="0"
+				AppType="custom"
+				RunFromDir="%rw">
+				<Exec CmdLine="java %cp %&lt;e"/>
+			</AppTypeTarget>
+		</AppTypeTargets>
+	</Config>
+	<CustomFolders>
+		<Folder
+			Name="Source Files"
+			Filters="*.java;*.c;*.cpp;*.cxx;*.hxx;*.prg;*.pas;*.dpr;*.asm;*.bas;*.sc;*.e"/>
+		<Folder
+			Name="Ant XML Build Files"
+			Filters="*.xml"/>
+		<Folder
+			Name="Bitmaps"
+			Filters="*.jpg;*.gif;*.bmp"/>
+		<Folder
+			Name="Other Files"
+			Filters=""/>
+	</CustomFolders>
+	<Files AutoFolders="DirectoryView">
+		<Folder Name="../pack">
+			<Folder Name="logicmoo_base">
+				<Folder Name="prolog">
+					<F
+						N="../pack/logicmoo_base/prolog/*.*"
+						Recurse="1"
+						Refilter="0"
+						Excludes=""/>
+				</Folder>
+			</Folder>
+		</Folder>
+		<F
+			N="*.*"
+			Recurse="0"
+			Refilter="0"
+			Excludes=""/>
+	</Files>
+</Project>

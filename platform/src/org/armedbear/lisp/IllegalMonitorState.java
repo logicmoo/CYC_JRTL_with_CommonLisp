@@ -2,7 +2,7 @@
  * IllegalMonitorState.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id: IllegalMonitorState.java 12288 2009-11-29 22:00:12Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,20 +31,38 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-public class IllegalMonitorState extends ProgramError {
-	public IllegalMonitorState()
+import static org.armedbear.lisp.Lisp.*;
 
-	{
-		// This is really just an ordinary PROGRAM-ERROR, broken out into its
-		// own Java class as a convenience for the implementation.
-		super(StandardClass.PROGRAM_ERROR);
-		this.setFormatControl(this.getMessage());
-		this.setFormatArguments(Lisp.NIL);
-	}
+public final class IllegalMonitorState extends ProgramError
+{
+    public IllegalMonitorState()
 
-	public String getMessage() {
-		return "Illegal monitor state.";
-	}
+    {
+        // This is really just an ordinary PROGRAM-ERROR, broken out into its
+        // own Java class as a convenience for the implementation.
+        super(StandardClass.PROGRAM_ERROR);
+        setFormatControl(getMessage());
+        setFormatArguments(NIL);
+    }
+
+    public IllegalMonitorState(String message)
+    {
+        // This is really just an ordinary PROGRAM-ERROR, broken out into its
+        // own Java class as a convenience for the implementation.
+        super(StandardClass.PROGRAM_ERROR);
+        if (message != null) {
+            this.message = message;
+        } 
+        setFormatControl(getMessage());
+        setFormatArguments(NIL);
+    }
+    
+    String message = "Illegal monitor state.";
+
+    public String getMessage()
+    {
+        return message;
+    }
 }

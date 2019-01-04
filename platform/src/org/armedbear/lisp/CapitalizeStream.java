@@ -2,7 +2,7 @@
  * CapitalizeStream.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id: CapitalizeStream.java 12254 2009-11-06 20:07:54Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,40 +31,49 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
-public class CapitalizeStream extends CaseFrobStream {
-	private boolean inWord;
+public final class CapitalizeStream extends CaseFrobStream
+{
+    private boolean inWord;
 
-	public CapitalizeStream(LispStream target) {
-		super(target);
-	}
+    public CapitalizeStream(Stream target)
+    {
+        super(target);
+    }
 
-	public void _writeChar(char c) {
-		if (this.inWord) {
-			if (Character.isUpperCase(c))
-				c = CharacterFunctions.toLowerCase(c);
-			else if (!Character.isLowerCase(c) && !Character.isDigit(c))
-				this.inWord = false;
-		} else // Not in a word.
-		if (Character.isUpperCase(c))
-			this.inWord = true;
-		else if (Character.isLowerCase(c)) {
-			c = CharacterFunctions.toUpperCase(c);
-			this.inWord = true;
-		} else if (Character.isDigit(c))
-			this.inWord = true;
-		this.target._writeChar(c);
-	}
+    public void _writeChar(char c)
+    {
+        if (inWord) {
+            if (Character.isUpperCase(c)) {
+                c = LispCharacter.toLowerCase(c);
+            } else if (!Character.isLowerCase(c) && !Character.isDigit(c)) {
+                inWord = false;
+            }
+        } else {
+            // Not in a word.
+            if (Character.isUpperCase(c)) {
+                inWord = true;
+            } else if (Character.isLowerCase(c)) {
+                c = LispCharacter.toUpperCase(c);
+                inWord = true;
+            } else if (Character.isDigit(c)) {
+                inWord = true;
+            }
+        }
+        target._writeChar(c);
+    }
 
-	public void _writeLine(String s) {
-		this.target._writeString(s);
-		this.target._writeChar('\n');
-	}
+    public void _writeString(String s)
+    {
+        final int limit = s.length();
+        for (int i = 0; i < limit; i++)
+            _writeChar(s.charAt(i));
+    }
 
-	public void _writeString(String s) {
-		int limit = s.length();
-		for (int i = 0; i < limit; i++)
-			this._writeChar(s.charAt(i));
-	}
+    public void _writeLine(String s)
+    {
+        target._writeString(s);
+        target._writeChar('\n');
+    }
 }

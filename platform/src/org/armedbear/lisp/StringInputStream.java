@@ -2,7 +2,7 @@
  * StringInputStream.java
  *
  * Copyright (C) 2003-2004 Peter Graves
- * $Id: StringInputStream.java 12362 2010-01-11 20:03:29Z vvoutilainen $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -31,62 +31,154 @@
  * exception statement from your version.
  */
 
-package com.cyc.tool.subl.jrtl.nativeCode.commonLisp;
+package org.armedbear.lisp;
 
+import static org.armedbear.lisp.Lisp.*;
+
+import java.io.IOException;
 import java.io.StringReader;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+public final class StringInputStream extends Stream
+{
+    private final StringReader stringReader;
+    private final int start;
+    private final String subString;
 
-public class StringInputStream extends Stream {
-	private StringReader stringReader;
-	private int start;
+    public StringInputStream(String s)
+    {
+        this(s, 0, s.length());
+    }
 
-	public StringInputStream(String s) {
-		this(s, 0, s.length());
-	}
+    public StringInputStream(String s, int start)
+    {
+        this(s, start, s.length());
+    }
 
-	public StringInputStream(String s, int start) {
-		this(s, start, s.length());
-	}
+    public StringInputStream(String s, int start, int end)
+    {
+        super(Symbol.STRING_INPUT_STREAM, Keyword.INPUT_KEYWORD);
+        setStreamElementType(Symbol.CHARACTER);
+        setExternalFormat(keywordDefault);
+        eolStyle = EolStyle.RAW;
 
-	public StringInputStream(String s, int start, int end) {
-		super(LispSymbols.STRING_INPUT_STREAM);
-		this.elementType = LispSymbols.CHARACTER;
-		this.setExternalFormat(Stream.keywordDefault);
-		this.eolStyle = EolStyle.RAW;
+        this.start = start;
+      if(true) { // DONT REGRESS (true = OLD-WORKS)
+        stringReader = new StringReader(s.substring(start, end));
+        subString = null;
+      } else {
+        // NEW-BROKEN
+        subString = s.substring(start, end);
+        stringReader = new StringReader(subString);
+      }
+        initAsCharacterInputStream(stringReader);
+    }
 
-		this.start = start;
+    public LispObject typeOf()
+    {
+        return Symbol.STRING_INPUT_STREAM;
+    }
 
-		this.stringReader = new StringReader(s.substring(start, end));
-		this.initAsCharacterInputStream(this.stringReader);
-	}
+    public LispObject classOf()
+    {
+        return BuiltInClass.STRING_INPUT_STREAM;
+    }
 
-	public SubLObject classOf() {
-		return BuiltInClass.STRING_INPUT_STREAM;
-	}
+    public LispObject typep(LispObject type)
+    {
+        if (type == Symbol.STRING_INPUT_STREAM)
+            return T;
+        if (type == Symbol.STRING_STREAM)
+            return T;
+        if (type == BuiltInClass.STRING_INPUT_STREAM)
+            return T;
+        if (type == BuiltInClass.STRING_STREAM)
+            return T;
+        return super.typep(type);
+    }
 
-	public int getOffset() {
-		return this.start + super.getOffset();
-	}
+    public int getOffset() {
+       // DONT REGRESS (true = OLD-WORKS)
+        if(true) {return start + super.getOffset();}
+        return start + offset;
+    }
 
-	public String toString() {
-		return this.unreadableString("STRING-INPUT-STREAM");
-	}
+    protected long _getFilePosition() {
+       // DONT REGRESS (true = OLD-WORKS)
+       if(true) { return super._getFilePosition(); }
+       return getOffset();
+    }
 
-	public SubLObject typeOf() {
-		return LispSymbols.STRING_INPUT_STREAM;
-	}
+    protected boolean _setFilePosition(LispObject arg) {
+        // DONT REGRESS (true = OLD-WORKS)
+        if(true) { return super._setFilePosition(arg); }
+        try {
+            int offset;
 
-	public SubLObject typep(SubLObject type) {
-		if (type == LispSymbols.STRING_INPUT_STREAM)
-			return Lisp.T;
-		if (type == LispSymbols.STRING_STREAM)
-			return Lisp.T;
-		if (type == BuiltInClass.STRING_INPUT_STREAM)
-			return Lisp.T;
-		if (type == BuiltInClass.STRING_STREAM)
-			return Lisp.T;
-		return super.typep(type);
-	}
+            if (arg == Keyword.START)
+                offset = 0;
+            else if (arg == Keyword.END)
+                offset = subString.length();
+            else {
+                long n = Fixnum.getValue(arg);
+                if (n < 0 || n > subString.length())
+                    error(new StreamError(this, "FILE-POSITION got out of bounds argument."));
+                offset = (int) n; // FIXME arg might be a bignum
+            }
 
+            stringReader.reset();
+            stringReader.skip(offset);
+            initAsCharacterInputStream(stringReader);
+
+            this.offset = offset;
+        }
+        catch (IOException e) {
+            error(new StreamError(this, e));
+        }
+
+        return true;
+    }
+
+    // ### make-string-input-stream
+    // make-string-input-stream string &optional start end => string-stream
+    private static final Primitive MAKE_STRING_INPUT_STREAM =
+        new Primitive("make-string-input-stream", "string &optional start end")
+    {
+        public LispObject execute(LispObject arg)
+        {
+            return new StringInputStream(arg.getStringValue());
+        }
+
+        public LispObject execute(LispObject first, LispObject second)
+
+        {
+            String s = first.getStringValue();
+            int start = Fixnum.getValue(second);
+            return new StringInputStream(s, start);
+        }
+
+        public LispObject execute(LispObject first, LispObject second,
+                                  LispObject third)
+
+        {
+            String s = first.getStringValue();
+            int start = Fixnum.getValue(second);
+            if (third == NIL)
+                return new StringInputStream(s, start);
+            int end = Fixnum.getValue(third);
+            return new StringInputStream(s, start, end);
+        }
+    };
+
+    // ### string-input-stream-current
+    private static final Primitive STRING_INPUT_STREAM_CURRENT =
+        new Primitive("string-input-stream-current", PACKAGE_EXT, true, "stream")
+    {
+        public LispObject execute(LispObject arg)
+        {
+            if (arg instanceof StringInputStream)
+                return Fixnum.getInstance(((StringInputStream)arg).getOffset());
+            return error(new TypeError(String.valueOf(arg) +
+                                        " is not a string input stream."));
+        }
+    };
 }

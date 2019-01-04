@@ -1,7 +1,7 @@
 ;;; require.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: require.lisp 12447 2010-02-11 12:03:56Z mevenson $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -38,8 +38,10 @@
 
 (defun module-provide-system (module) 
   (let ((*readtable* (copy-readtable nil)))
-    (handler-case 
-        (load-system-file (string-downcase (string module)))
+    (handler-case
+        (progn 
+          (load-system-file (string-downcase (string module)))
+          (provide module))
       (t (e) 
         (unless (and (typep e 'error)
                      (search "Failed to find loadable system file"
@@ -47,20 +49,30 @@
           (format *error-output* "Failed to require  ~A because '~A'~%" 
                   module e))
         nil))))
+
     
 (defvar *module-provider-functions* nil)
 
 (defun require (module-name &optional pathnames)
   (unless (member (string module-name) *modules* :test #'string=)
     (let ((saved-modules (copy-list *modules*)))
-      (cond (pathnames
-             (unless (listp pathnames) (setf pathnames (list pathnames)))
-             (dolist (x pathnames)
-               (load x)))
-            (t
-             (unless (some (lambda (p) (funcall p module-name))
+      (cond                
+;;; Since these are files packaged with the system we ensure that
+;;; PROVIDE has been called unless the module has other dependencies
+;;; that must be satisfied to be loaded, which is currently only the
+;;; case with 'abcl-contrib'.
+        (pathnames
+         (unless (listp pathnames) (setf pathnames (list pathnames)))
+         (dolist (x pathnames)
+           (load x))
+         (unless (string-equal module-name "abcl-contrib")
+           (provide module-name)))
+;;; Responsibility for actually calling PROVIDE up to module provider
+;;; function
+        (t
+         (unless (some (lambda (p) (funcall p module-name))
                            (append (list #'module-provide-system)
-                                 sys::*module-provider-functions*))
+                                   sys::*module-provider-functions*))
                (error "Don't know how to ~S ~A." 'require module-name))))
       (set-difference *modules* saved-modules))))
 
