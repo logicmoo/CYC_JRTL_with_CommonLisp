@@ -2439,10 +2439,10 @@ abstract public class ReflectUtils implements UtilClass {
 
 
 ////		@Override
-//		public java.lang.reflect.AnnotatedType[] getAnnotatedBounds() {
-//			notImplemented();
-//			return null;
-//		}
+		public java.lang.reflect.AnnotatedType[] getAnnotatedBounds() {
+			notImplemented();
+			return null;
+		}
 	}
 
 	public static TypeVariable typeAnd(final Type... allTrue) {

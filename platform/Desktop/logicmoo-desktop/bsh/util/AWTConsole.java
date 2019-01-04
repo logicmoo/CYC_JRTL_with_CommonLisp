@@ -220,8 +220,10 @@ public class AWTConsole extends TextArea
 		Great.  What a piece of crap.
 	*/
 	public void setCaretPosition( int pos ) {
+		super.setCaretPosition(pos);
+		/*
 		((java.awt.peer.TextComponentPeer)getPeer()).setCaretPosition(
-			pos + countNLs() );
+			pos + countNLs() );*/
 	}
 
 	/*
