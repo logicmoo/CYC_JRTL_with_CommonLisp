@@ -7236,7 +7236,7 @@ public final class Editor extends JPanel implements Constants,
                 if (extensionClass != null) {
                     Method method = extensionClass.getMethod("run", new Class[0]);
                     if (method != null)
-                        method.invoke(extensionClass.newInstance(), new Class[0]);
+                        method.invoke(extensionClass.newInstance()); //,(Class[]) new Class[0]);
                 } else
                     Log.error("extension " + extension + " not found");
             }

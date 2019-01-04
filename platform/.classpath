@@ -251,7 +251,6 @@
 	<classpathentry kind="lib" path="lib/srm.jar"/>
 	<classpathentry kind="lib" path="lib/SshTrileadAdaptor.jar"/>
 	<classpathentry kind="lib" path="lib/stax-api-1.0.1.jar"/>
-	<classpathentry kind="lib" path="lib/subl-4q.jar"/>
 	<classpathentry kind="lib" path="lib/swingx-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/syntax.jar"/>
 	<classpathentry kind="lib" path="lib/tcljava-1.2.6.jar"/>

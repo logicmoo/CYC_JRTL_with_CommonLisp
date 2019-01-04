@@ -46,6 +46,10 @@ public final class Version
   static void init() {
     try {
       InputStream input = Version.class.getResourceAsStream("version");
+      if(input==null) {
+    	  version =  baseVersion;
+    	  return;
+      }
       BufferedReader reader = new BufferedReader(new InputStreamReader(input));
       String v = reader.readLine().trim();
       version = v;

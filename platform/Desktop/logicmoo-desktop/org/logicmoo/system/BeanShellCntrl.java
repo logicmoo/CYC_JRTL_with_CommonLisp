@@ -1203,11 +1203,13 @@ public class BeanShellCntrl
 		if (evalArgsFirst)
 		{
 			MethodFunction cf = setMethodFunction(sym);
+			if(cf==null) return;
 			cf.setEvalArgsFirst(evalArgsFirst);
 			cf.addMethod(m);
 			return;
 		}
 		SpecialMethod cf = setSpecialMethod(sym);
+		if(cf==null) return;
 		cf.setEvalArgsFirst(evalArgsFirst);
 		cf.addMethod(m);
 	}
@@ -1311,8 +1313,10 @@ public class BeanShellCntrl
 		{
 			return (MethodFunction) sf;
 		} else
-		{
-			Lisp.program_error("Trying to overwrite a non method function");
+		{            
+            String complaint = "Trying to overwrite a non method function "; // + sf;
+			System.err.println(complaint);
+            // Lisp.program_error(complaint);
 			return (MethodFunction) null;
 		}
 
@@ -1653,11 +1657,14 @@ public class BeanShellCntrl
 		}
 	}
 
-	static
+	static public void staticInit()
 	{
 		scanForExports(BeanShellCntrl.class);
 		// swipl_init_server();
 	}
+  static {
+  	staticInit();
+  }
 
 	static class CreationInfo
 	{

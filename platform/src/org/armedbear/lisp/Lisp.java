@@ -51,6 +51,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
@@ -435,6 +436,7 @@ public class Lisp
 		  throw conditionToSubLException(condition);
 	  }
     if(Main.isSubLisp()) {
+    	if(SubLMain.commonSymbolsOK)
     	return (LispObject) Errors.error("Lisp.error", conditionToSubLException(condition));
     }
     return Symbol.ERROR.execute(condition);

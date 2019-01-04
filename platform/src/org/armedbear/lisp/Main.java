@@ -49,7 +49,7 @@ public final class Main {
 	public static ThreadLocal<Boolean> isSubLisp = new ThreadLocal<Boolean>() {
 
 	    protected Boolean initialValue() {
-	        return Boolean.TRUE;
+	        return Boolean.FALSE;
 	    }
 
 	};

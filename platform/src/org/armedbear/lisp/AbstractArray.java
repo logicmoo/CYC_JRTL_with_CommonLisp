@@ -345,7 +345,7 @@ public abstract class AbstractArray extends AbstractSubLVector implements java.i
 
     public int sxhash()
     {
-      return hashCode() & 0x7fffffff;
+      return superHash() & 0x7fffffff;
     }
 
 

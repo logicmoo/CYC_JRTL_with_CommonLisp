@@ -223,13 +223,13 @@ For help on the automatic tests available, use the Ant target 'help.test'.
              includeantruntime="false"
              failonerror="true">
       	<src path="${src.dir}"/>
-      	<src path="jsrc-jpl7"/>
-      	<src path="../AppdapterGUI/src"/>
-      	<src path="../phase09-cycjava-4q/cycjava-src"/>
-      	
-      	<src path="jsrc-armedbear-j"/>   
-      	<src path="jsrc-objectweb-asm"/>
-      	<src path="jsrc-logicmoo-desktop"/>      	
+      	<src path="Desktop/jpl7-hacked"/>
+      	<src path="Desktop/appdapter-src"/>
+      	<src path="Desktop/cycjava-persistence-hacks"/>      	
+      	<src path="Desktop/server-4q"/>      	
+      	<src path="Desktop/armedbear-j-src"/>   
+      	<src path="Desktop/objectweb-asm-src"/>
+      	<src path="Desktop/logicmoo-desktop"/>      	
         <compilerarg value="-XDignore.symbol.file"/>
         <patternset refid="abcl.source.java"/>
       </javac>

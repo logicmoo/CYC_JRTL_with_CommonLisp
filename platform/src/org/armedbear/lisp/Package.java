@@ -551,7 +551,7 @@ public class Package extends SubLPackage implements java.io.Serializable
 							sb.append(sym.getQualifiedName());
 							sb.append(" and ");
 							sb.append(s.getQualifiedName());
-							return error(new PackageError(sb.toString()));
+							return packageError((sb.toString()));
 						}
 					}
 					usedPackages = usedPackages.cdr();
@@ -583,6 +583,17 @@ public class Package extends SubLPackage implements java.io.Serializable
 	}
 
 
+	private LispObject packageError(String err)
+	{
+		LispObject ret = new PackageError(err);
+		if(!Lisp.cold && Lisp.initialized)  {
+			error(ret);
+		} else {
+		   System.err.println(err);
+		}
+		return ret;
+	}
+
 	public void importSymbol(SubLObject symbol) {
 		importSymbol((Symbol)symbol.toSymbol());
 	}
@@ -599,7 +610,9 @@ public class Package extends SubLPackage implements java.io.Serializable
 			sb.append(" is already accessible in package ");
 			sb.append(name);
 			sb.append('.');
-			error(new PackageError(sb.toString()));
+			packageError(sb.toString());
+			return;
+
 		}
 		internalSymbols.put(symbolName, symbol);
 		if (symbol.getPackageOrNil() == NIL)
@@ -619,7 +632,7 @@ public class Package extends SubLPackage implements java.io.Serializable
 				sb.append(" is not accessible in package ");
 				sb.append(name);
 				sb.append('.');
-				error(new PackageError(sb.toString()));
+				packageError(sb.toString());
 				return;
 			}
 			internalSymbols.put(symbolName, symbol);
@@ -642,7 +655,7 @@ public class Package extends SubLPackage implements java.io.Serializable
 							sb.append(pkg.getName());
 							sb.append('.');
 							if(!pkg.ALLOW_INHERIT_CONFLICTS && !Main.isSubLisp()) {
-							error(new PackageError(sb.toString()));
+								packageError(sb.toString());
 							return;
 							} else {
 
@@ -664,7 +677,7 @@ public class Package extends SubLPackage implements java.io.Serializable
 		sb.append(" is not accessible in package ");
 		sb.append(name);
 		sb.append('.');
-		error(new PackageError(sb.toString()));
+		packageError(sb.toString());
 	}
 
 	public synchronized void unexport(final Symbol symbol)
@@ -679,7 +692,7 @@ public class Package extends SubLPackage implements java.io.Serializable
 			sb.append(symbol.getQualifiedName());
 			sb.append(" is not accessible in package ");
 			sb.append(name);
-			error(new PackageError(sb.toString()));
+			packageError(sb.toString());
 		}
 	}
 
@@ -761,8 +774,8 @@ public class Package extends SubLPackage implements java.io.Serializable
 								System.err.println("External Symbol " + symbol +  " will trump "+ existing + " in pkg " + name + ".");
 							}
 						} else {
-						error(new PackageError(
-								"A symbol named " + existing +  " and wont be replaced by "+ symbol + " in pkg " + name + "."));
+							packageError(
+								"A symbol named " + existing +  " and wont be replaced by "+ symbol + " in pkg " + name + ".");
 						return;
 					}
 				}
@@ -1180,7 +1193,7 @@ public class Package extends SubLPackage implements java.io.Serializable
 		if (pkg != null) {
 			return pkg;
 		} else {
-			return error(new PackageError(name + " is not the name of a package."));
+			return packageError(name + " is not the name of a package.");
 		}
 	}
 
