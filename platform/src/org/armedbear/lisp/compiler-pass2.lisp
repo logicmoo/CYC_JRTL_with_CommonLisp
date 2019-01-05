@@ -2,7 +2,7 @@
 ;;;
 ;;; Copyright (C) 2003-2008 Peter Graves
 ;;; Copyright (C) 2008 Ville Voutilainen
-;;; $Id: compiler-pass2.lisp 15099 2017-08-18 21:52:11Z mevenson $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -30,7 +30,7 @@
 ;;; obligated to do so.  If you do not wish to do so, delete this
 ;;; exception statement from your version.
 
-(in-package :jvm)
+(in-package "JVM")
 
 (eval-when (:compile-toplevel :load-toplevel :execute)
   (require "LOOP")
@@ -230,6 +230,46 @@ the top-most value's representation being 'rep1'."
          "LispThread")
         (t
          class)))
+
+(declaim (ftype (function (t t) cons) get-descriptor-info))
+(defun get-descriptor-info (arg-types return-type)
+ (setf (gethash key ht) (make-descriptor-info arg-types return-type)))
+(declaim (ftype (function (t t) cons) make-descriptor-info))
+(defun make-descriptor-info (arg-types return-type)
+  (let ((descriptor (with-standard-io-syntax
+                      (with-output-to-string (s)
+                        (princ #\( s)
+                        (dolist (type arg-types)
+                          (princ type s))
+                        (princ #\) s)
+                        (princ (or return-type "V") s))))
+        (stack-effect (let ((result (cond ((null return-type) 0)
+                                          ((or (equal return-type "J")
+                                               (equal return-type "D")) 2)
+                                          (t 1))))
+                        (dolist (type arg-types result)
+                          (decf result (if (or (equal type "J")
+                                               (equal type "D"))
+                                           2 1))))))
+    (cons descriptor stack-effect)))
+
+;;; we may decide to convert some classes to interfaces.. thjis will replace invoke virtual in those cases
+(defknown emit-invokeinterface (t t t t) t)
+(defun emit-invokeinterface (class-name method-name arg-types return-type)
+  (let* ((info (get-descriptor-info arg-types return-type))
+         (descriptor (car info))
+         (stack-effect (cdr info))
+         (instruction (emit 'invokeinterface class-name method-name descriptor (1+ (length arg-types)))))
+    (declare (type (signed-byte 8) stack-effect))
+    (let ((explain *explain*))
+      (when (and explain (memq :java-calls explain))
+        (unless (string= method-name "execute")
+          (format t ";   call to ~A ~A.~A(~{~A~^,~})~%"
+                  (pretty-java-type return-type)
+                  (pretty-java-class class-name)
+                  method-name
+                  (mapcar 'pretty-java-type arg-types)))))
+    (setf (instruction-stack instruction) (- stack-effect 1))))
 
 (defknown emit-invokevirtual (t t t t) t)
 (defun emit-invokevirtual (class-name method-name arg-types return-type)
@@ -4843,7 +4883,7 @@ given a specific common representation.")
     (cond ((eq (derive-compiler-type arg) 'STREAM)
            (compile-forms-and-maybe-emit-clear-values arg 'stack nil)
            (emit-checkcast +lisp-stream+)
-           (emit-invokevirtual +lisp-stream+ "getElementType"
+           (emit-invokevirtual +lisp-stream+ "getStreamElementType"
                                nil +lisp-object+)
            (emit-move-from-stack target representation))
           (t
@@ -5249,7 +5289,7 @@ for use with derive-type-times.")
         one-integer-type
       (derive-compiler-types args op))))
 
-(define-int-bounds-derivation max (low1 high1 low2 high2)
+(define-int-bounds-derivation max (low1 low2 high1 high2)
   (values (or (when (and low1 low2) (max low1 low2)) low1 low2)
           ; if either maximum is unbound, their maximum is unbound
           (when (and high1 high2) (max high1 high2))))
@@ -5531,15 +5571,11 @@ We need more thought here.
 
 (define-inlined-function compile-nth (form target representation)
   ((check-arg-count form 2))
-  (let* ((index-form (second form))
-         (list-form (third form))
-         (index-type (derive-compiler-type index-form)))
-    (unless (fixnum-type-p index-type)
-      (compile-function-call form target representation)
-      (return-from compile-nth))
+  (let ((index-form (second form))
+        (list-form (third form)))
     (with-operand-accumulation
         ((compile-operand index-form :int)
-         (c`ompile-operand list-form nil)
+         (compile-operand list-form nil)
          (maybe-emit-clear-values index-form list-form))
       (emit 'swap)
       (emit-invokevirtual +lisp-object+ "NTH" '(:int) +lisp-object+))
@@ -6519,7 +6555,7 @@ We need more thought here.
     (cond ((and (eq (derive-compiler-type arg) 'SYMBOL) (< *safety* 3))
            (compile-forms-and-maybe-emit-clear-values arg 'stack nil)
            (emit-checkcast +lisp-symbol+)
-           (emit-getfield  +lisp-symbol+ "name" +lisp-simple-string+)
+           (emit-getfield  +lisp-symbol+ "name" +lisp-abstract-string+)
            (emit-move-from-stack target representation))
           (t
            (compile-function-call form target representation)))))
@@ -6531,7 +6567,7 @@ We need more thought here.
     (cond ((and (eq (derive-compiler-type arg) 'SYMBOL) (< *safety* 3))
            (compile-forms-and-maybe-emit-clear-values arg 'stack nil)
            (emit-checkcast +lisp-symbol+)
-           (emit-invokevirtual +lisp-symbol+ "getPackage"
+           (emit-invokevirtual +lisp-symbol+ "getPackageOrNil"
                                nil +lisp-object+)
            (fix-boxing representation nil)
            (emit-move-from-stack target representation))
@@ -6848,6 +6884,8 @@ We need more thought here.
   t)
 
 (defun p2-throw (form target representation)
+  ;; FIXME What if we're called with a non-NIL representation?
+  (declare (ignore representation))
   (with-operand-accumulation
       ((emit-thread-operand)
        (compile-operand (second form) nil) ; Tag.
@@ -6857,11 +6895,7 @@ We need more thought here.
 			 (lisp-object-arg-types 2) nil))
   ;; Following code will not be reached.
   (when target
-    (ecase representation
-      ((:int :boolean :char)
-       (emit 'iconst_0))
-      ((nil)
-       (emit-push-nil)))
+    (emit-push-nil)
     (emit-move-from-stack target)))
 
 (defun p2-unwind-protect-node (block target)
@@ -7380,12 +7414,9 @@ We need more thought here.
 
 (defvar *compiler-error-bailout*)
 
-(defun make-compiler-error-form (form condition)
+(defun make-compiler-error-form (form)
   `(lambda ,(cadr form)
-     (error 'program-error :format-control "Program error while compiling ~a" :format-arguments 
-	    (if ,condition 
-		(list (apply 'format nil ,(slot-value condition 'sys::format-control) ',(slot-value condition 'sys::format-arguments)))
-		(list "a form")))))
+     (error 'program-error :format-control "Execution of a form compiled with errors.")))
 
 (defun compile-defun (name form environment filespec stream *declare-inline*)
   "Compiles a lambda expression `form'. If `filespec' is NIL,
@@ -7396,9 +7427,9 @@ Returns the a abcl-class-file structure containing the description of the
 generated class."
   (aver (eq (car form) 'LAMBDA))
   (catch 'compile-defun-abort
-    (flet ((compiler-bailout (&optional condition)
+    (flet ((compiler-bailout ()
              (let ((class-file (make-abcl-class-file :pathname filespec))
-                   (error-form (make-compiler-error-form form condition)))
+                   (error-form (make-compiler-error-form form)))
                (compile-1 (make-compiland :name name
                                           :lambda-expression error-form
                                           :class-file class-file)
@@ -7433,12 +7464,7 @@ generated class."
 
 
 (defvar *resignal-compiler-warnings* nil
-  "This generalized boolean JVM:*RESIGNAL-COMPILER-WARNINGS* controls whether the compiler signals dignaostics to the condition system or merely outputs them to the standard reporting stream.
-
-The default is to not signal.
-
-Could arguably better named as *SIGNAL-COMPILE-WARNINGS-P*.")
-
+  "Bind this to t inside slime compilation")
 
 (defun handle-warning (condition)
   (cond (*resignal-compiler-warnings*
@@ -7455,7 +7481,7 @@ Could arguably better named as *SIGNAL-COMPILE-WARNINGS-P*.")
   (fresh-line *error-output*)
   (note-error-context)
   (format *error-output* "; Caught ERROR:~%;   ~A~2%" condition)
-  (throw 'compile-defun-abort (funcall *compiler-error-bailout* condition)))
+  (throw 'compile-defun-abort (funcall *compiler-error-bailout*)))
 
 (defvar *in-compilation-unit* nil)
 
@@ -7539,6 +7565,8 @@ Could arguably better named as *SIGNAL-COMPILE-WARNINGS-P*.")
     (resolve name) ;; Make sure the symbol has been resolved by the autoloader
     (setf definition (fdefinition name)))
   (when (compiled-function-p definition)
+    (return-from jvm-compile (values (or name definition) nil nil)))
+  (when (typep definition 'STANDARD-GENERIC-FUNCTION)
     (return-from jvm-compile (values (or name definition) nil nil)))
   (let ((catch-errors *catch-errors*)
         (warnings-p nil)

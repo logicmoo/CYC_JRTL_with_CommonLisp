@@ -36,7 +36,7 @@ package org.armedbear.lisp;
 import static org.armedbear.lisp.Lisp.NIL;
 import static org.armedbear.lisp.Lisp.error;
 import static org.armedbear.lisp.Lisp.getCurrentPackage;
-import org.armedbear.lisp.Package; 
+import org.armedbear.lisp.Package;
 
 import java.util.ArrayList;
 import java.util.HashMap;

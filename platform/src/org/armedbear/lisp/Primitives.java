@@ -3892,7 +3892,7 @@ public final class Primitives {
             Symbol symbol;
             symbol = checkSymbol(args.car());
 
-            return nonLocalReturn(env.getBlockBinding(symbol), symbol,
+            return Lisp.nonLocalReturn(env.getBlockBinding(symbol), symbol,
                                   (length == 2) ? eval(args.cadr(), env,
                                                        LispThread.currentThread())
                                   : NIL);

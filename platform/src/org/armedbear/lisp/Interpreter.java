@@ -647,7 +647,6 @@ public final class Interpreter implements Runnable
         globalInterpreter = null;
     }
 
-    @Override
     protected void finalize() throws Throwable
     {
         System.err.println("Interpreter.finalize");
@@ -665,7 +664,6 @@ public final class Interpreter implements Runnable
             return condition;
         }
 
-        @Override
         public String getMessage() {
             String conditionText;
             LispThread thread = LispThread.currentThread();
@@ -688,7 +686,6 @@ public final class Interpreter implements Runnable
     private static final Primitive _DEBUGGER_HOOK_FUNCTION =
         new Primitive("%debugger-hook-function", PACKAGE_SYS, false)
     {
-        @Override
         public LispObject execute(LispObject first, LispObject second)
         {
             final LispObject condition = first;

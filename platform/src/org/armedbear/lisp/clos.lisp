@@ -2,7 +2,7 @@
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves
 ;;; Copyright (C) 2010-2013 Mark Evenson
-;;; $Id: clos.lisp 15085 2017-06-15 05:38:38Z mevenson $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -2190,12 +2190,8 @@ Initialized with the true value near the end of the file.")
       (clrhash *make-instance-initargs-cache*)
       (clrhash *reinitialize-instance-initargs-cache*))
     (if gf
-	(restart-case
         (check-method-lambda-list name method-lambda-list
                                   (generic-function-lambda-list gf))
-	  (unbind-and-try-again () :report (lambda(s) (format s "Undefine generic function #'~a and continue" name))
-	    (fmakunbound name)
-	    (setf gf (ensure-generic-function name :lambda-list method-lambda-list))))
         (setf gf (ensure-generic-function name :lambda-list method-lambda-list)))
     (let ((method
            (if (eq (generic-function-method-class gf) +the-standard-method-class+)
@@ -3698,12 +3694,12 @@ or T when any keyword is acceptable due to presence of
       (multiple-value-bind (init-key init-value foundp)
           (get-properties all-keys (slot-definition-initargs slot))
         (if foundp
-            (setf (slot-value instance slot-name) init-value)
-            (unless (slot-boundp instance slot-name)
+            (setf (std-slot-value instance slot-name) init-value)
+            (unless (std-slot-boundp instance slot-name)
               (let ((initfunction (slot-definition-initfunction slot)))
                 (when (and initfunction (or (eq slot-names t)
                                             (memq slot-name slot-names)))
-                  (setf (slot-value instance slot-name)
+                  (setf (std-slot-value instance slot-name)
                         (funcall initfunction)))))))))
   instance)
 
@@ -4317,18 +4313,16 @@ or T when any keyword is acceptable due to presence of
 
 (defmethod shared-initialize :after ((instance standard-generic-function)
                                      slot-names
-                                     &key (lambda-list nil lambda-list-p)
-                                       (argument-precedence-order nil a-p-o-p)
+                                     &key lambda-list argument-precedence-order
                                        (method-combination '(standard))
                                      &allow-other-keys)
-  (when lambda-list-p
   (let* ((plist (analyze-lambda-list lambda-list))
          (required-args (getf plist ':required-args)))
     (setf (std-slot-value instance 'sys::required-args) required-args)
     (setf (std-slot-value instance 'sys::optional-args)
           (getf plist :optional-args)) 
     (setf (std-slot-value instance 'sys::argument-precedence-order)
-            (or (and a-p-o-p argument-precedence-order) required-args))))
+          (or argument-precedence-order required-args)))
   (unless (typep (generic-function-method-combination instance)
                  'method-combination)
     ;; this fixes (make-instance 'standard-generic-function) -- the
@@ -4553,10 +4547,9 @@ or T when any keyword is acceptable due to presence of
                  (eq 'setf (first function-name))
                  (autoload-ref-p (second function-name))))
         (fmakunbound function-name)
-	(progn
-	  (cerror "Redefine as generic function" "~A already names an ordinary function, macro, or special operator." function-name)
-	  (fmakunbound function-name)
-	  )))
+        (error 'program-error
+               :format-control "~A already names an ordinary function, macro, or special operator."
+               :format-arguments (list function-name))))
   (apply (if (eq generic-function-class +the-standard-generic-function-class+)
              #'make-instance-standard-generic-function
              #'make-instance)

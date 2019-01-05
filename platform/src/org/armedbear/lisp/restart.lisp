@@ -1,7 +1,7 @@
 ;;; restart.lisp
 ;;;
 ;;; Copyright (C) 2003-2005 Peter Graves
-;;; $Id: restart.lisp 14950 2017-01-16 17:38:53Z mevenson $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -62,26 +62,21 @@
      ,@forms))
 
 (defun compute-restarts (&optional condition)
-  (let ((res ()))
-    (map-restarts (lambda(restart) (push restart res)) condition t)
-    (nreverse res)))
-
-(defun map-restarts (fn condition call-test-p)
   (let ((associated ())
 	(other ()))
     (dolist (alist *condition-restarts*)
       (if (eq (car alist) condition)
 	  (setq associated (cdr alist))
 	  (setq other (append (cdr alist) other))))
+    (let ((res ()))
       (dolist (restart-cluster *restart-clusters*)
         (dolist (restart restart-cluster)
           (when (and (or (not condition)
                          (member restart associated)
                          (not (member restart other)))
-		   (or (not call-test-p)
-		       (funcall (restart-test-function restart) condition)))
-	  (funcall fn restart))))))
-
+                     (funcall (restart-test-function restart) condition))
+            (push restart res))))
+      (nreverse res))))
 
 (defun restart-report (restart stream)
   (funcall (or (restart-report-function restart)
@@ -110,16 +105,7 @@
 	     :format-arguments (list identifier))))
 
 (defun invoke-restart (restart &rest values)
-  (let ((real-restart
-	  (if (restart-p restart)
-	      (catch 'found
-		(map-restarts (lambda(r) (when (eq r restart)
-					   (throw 'found r)))
-			      nil nil)
-		(error 'control-error
-		       :format-control "Restart ~S is not active."
-		       :format-arguments (list restart)))
-	      (find-restart-or-control-error restart))))
+  (let ((real-restart (find-restart-or-control-error restart)))
     (apply (restart-function real-restart) values)))
 
 (defun interactive-restart-arguments (real-restart)
@@ -129,19 +115,10 @@
         '())))
 
 (defun invoke-restart-interactively (restart)
-  (let* ((real-restart
-	   (if (restart-p restart)
-	       (catch 'found
-		 (map-restarts (lambda(r) (when (eq r restart)
-					    (throw 'found r)))
-			       nil nil)
-		 (error 'control-error
-			:format-control "Restart ~S is not active."
-			:format-arguments (list restart)))
-	       (find-restart-or-control-error restart)))
-	 (args (interactive-restart-arguments real-restart))
-	 )
+  (let* ((real-restart (find-restart-or-control-error restart))
+         (args (interactive-restart-arguments real-restart)))
     (apply (restart-function real-restart) args)))
+
 
 (defun parse-keyword-pairs (list keys)
   (do ((l list (cddr l))

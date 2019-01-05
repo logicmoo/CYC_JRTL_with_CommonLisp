@@ -2,7 +2,7 @@
  * MathFunctions.java
  *
  * Copyright (C) 2004-2006 Peter Graves
- * $Id: MathFunctions.java 13440 2011-08-05 21:25:10Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -58,7 +58,6 @@ public final class MathFunctions
     // ### sin
     private static final Primitive SIN = new Primitive("sin", "radians")
     {
-        @Override
         public LispObject execute(LispObject arg)
         {
             return sin(arg);
@@ -85,7 +84,6 @@ public final class MathFunctions
     // ### cos
     private static final Primitive COS = new Primitive("cos", "radians")
     {
-        @Override
         public LispObject execute(LispObject arg)
         {
             return cos(arg);
@@ -111,7 +109,6 @@ public final class MathFunctions
     // ### tan
     private static final Primitive TAN = new Primitive("tan", "radians")
     {
-        @Override
         public LispObject execute(LispObject arg)
         {
             if (arg instanceof DoubleFloat)
@@ -125,7 +122,6 @@ public final class MathFunctions
     // ### asin
     private static final Primitive ASIN = new Primitive("asin", "number")
     {
-        @Override
         public LispObject execute(LispObject arg)
         {
             return asin(arg);
@@ -135,7 +131,7 @@ public final class MathFunctions
     static LispObject asin(LispObject arg)
     {
         if (arg instanceof SingleFloat) {
-            float f = ((SingleFloat)arg).value;
+            float f = ((SingleFloat)arg).floatValue();
             if (Math.abs(f) <= 1)
                 return new SingleFloat((float)Math.asin(f));
         }
@@ -160,7 +156,6 @@ public final class MathFunctions
     // ### acos
     private static final Primitive ACOS = new Primitive("acos", "number")
     {
-        @Override
         public LispObject execute(LispObject arg)
         {
             return acos(arg);
@@ -170,12 +165,12 @@ public final class MathFunctions
     static LispObject acos(LispObject arg)
     {
         if (arg instanceof DoubleFloat) {
-            double d = ((DoubleFloat)arg).value;
+            double d = ((DoubleFloat)arg).doubleValue();
             if (Math.abs(d) <= 1)
                 return new DoubleFloat(Math.acos(d));
         }
         if (arg instanceof SingleFloat) {
-            float f = ((SingleFloat)arg).value;
+            float f = ((SingleFloat)arg).floatValue();
             if (Math.abs(f) <= 1)
                 return new SingleFloat((float)Math.acos(f));
         }
@@ -197,7 +192,6 @@ public final class MathFunctions
     private static final Primitive ATAN =
         new Primitive("atan", "number1 &optional number2")
     {
-        @Override
         public LispObject execute(LispObject arg)
         {
             if (arg.numberp())
@@ -212,7 +206,6 @@ public final class MathFunctions
         // y = -0     x = +0       -0
         // y = +0     x = -0       +<PI>
         // y = -0     x = -0       -<PI>
-        @Override
         public LispObject execute(LispObject y, LispObject x)
 
         {
@@ -258,7 +251,6 @@ public final class MathFunctions
     // ### sinh
     private static final Primitive SINH = new Primitive("sinh", "number")
     {
-        @Override
         public LispObject execute(LispObject arg)
         {
             return sinh(arg);
@@ -290,7 +282,6 @@ public final class MathFunctions
     // ### cosh
     private static final Primitive COSH = new Primitive("cosh", "number")
     {
-        @Override
         public LispObject execute(LispObject arg)
         {
             return cosh(arg);
@@ -322,7 +313,6 @@ public final class MathFunctions
     // ### tanh
     private static final Primitive TANH = new Primitive("tanh", "number")
     {
-        @Override
         public LispObject execute(LispObject arg)
         {
             if (arg instanceof SingleFloat) {
@@ -339,7 +329,6 @@ public final class MathFunctions
     // ### asinh
     private static final Primitive ASINH = new Primitive("asinh", "number")
     {
-        @Override
         public LispObject execute(LispObject arg)
         {
             return asinh(arg);
@@ -366,7 +355,6 @@ public final class MathFunctions
     // ### acosh
     private static final Primitive ACOSH = new Primitive("acosh", "number")
     {
-        @Override
         public LispObject execute(LispObject arg)
         {
             return acosh(arg);
@@ -397,7 +385,6 @@ public final class MathFunctions
     // ### atanh
     private static final Primitive ATANH = new Primitive("atanh", "number")
     {
-        @Override
         public LispObject execute(LispObject arg)
         {
             return atanh(arg);
@@ -423,7 +410,6 @@ public final class MathFunctions
     // ### cis
     private static final Primitive CIS = new Primitive("cis", "radians")
     {
-        @Override
         public LispObject execute(LispObject arg)
         {
             return cis(arg);
@@ -440,7 +426,6 @@ public final class MathFunctions
     // ### exp
     private static final Primitive EXP = new Primitive("exp", "number")
     {
-        @Override
         public LispObject execute(LispObject arg)
         {
             return exp(arg);
@@ -468,7 +453,6 @@ public final class MathFunctions
     // ### sqrt
     private static final Primitive SQRT = new Primitive("sqrt", "number")
     {
-        @Override
         public LispObject execute(LispObject arg)
         {
             return sqrt(arg);
@@ -505,12 +489,10 @@ public final class MathFunctions
     private static final Primitive LOG =
         new Primitive("log", "number &optional base")
     {
-        @Override
         public LispObject execute(LispObject arg)
         {
             return log(arg);
         }
-        @Override
         public LispObject execute(LispObject number, LispObject base)
 
         {
@@ -582,7 +564,6 @@ public final class MathFunctions
     public static final Primitive EXPT =
         new Primitive("expt", "base-number power-number")
     {
-        @Override
         public LispObject execute(LispObject base, LispObject power)
 
         {
@@ -721,7 +702,7 @@ public final class MathFunctions
 
         if (TRAP_OVERFLOW) {
             if (number instanceof SingleFloat)
-                if (Float.isInfinite(((SingleFloat)number).value))
+                if (Float.isInfinite(((SingleFloat)number).floatValue()))
                     return error(new FloatingPointOverflow(NIL));
             if (number instanceof DoubleFloat)
                 if (Double.isInfinite(((DoubleFloat)number).value))

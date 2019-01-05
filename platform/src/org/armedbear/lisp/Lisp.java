@@ -878,7 +878,7 @@ private static SubLException conditionToSubLException(LispObject condition) {
    *
    * This version is used by the interpreter.
    */
-  static final LispObject nonLocalReturn(Binding binding,
+  public static final LispObject nonLocalReturn(Binding binding,
                                          Symbol block,
                                          LispObject result)
   {

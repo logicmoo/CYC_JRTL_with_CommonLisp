@@ -1,7 +1,7 @@
 ;;; describe.lisp
 ;;;
 ;;; Copyright (C) 2005 Peter Graves
-;;; $Id: describe.lisp 14956 2017-01-18 07:17:28Z mevenson $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -92,15 +92,7 @@
              (setf plist (cddr plist))))))
       (FUNCTION
        (%describe-object object stream)
-       (describe-arglist object stream)
-       (let ((function-symbol (nth-value 2 (function-lambda-expression object))))
-	 (if (and (consp function-symbol) (eq (car function-symbol) 'macro-function))
-	     (setq function-symbol (second function-symbol)))
-	 (when  function-symbol
-	   (let ((doc (documentation function-symbol 'function)))
-	     (when doc
-	       (format stream "Function documentation:~%  ~A~%" doc)))
-	   )))
+       (describe-arglist object stream))
       (INTEGER
        (%describe-object object stream)
        (format stream "~D.~%~

@@ -762,8 +762,7 @@ code to be loaded.
 			  1
 			  ;; FIXME: This tag appears not to be present
 			  ;; anywhere.
-			  ;; (throw 'duplicatable-code-p nil)))
-			  (throw 'estimate-code-size nil)))
+			  (throw 'duplicatable-code-p nil)))
 		     ((eq fn 'multiple-value-setq)
 		      (f (length (second x)) (cddr x)))
 		     ((eq fn 'return-from)

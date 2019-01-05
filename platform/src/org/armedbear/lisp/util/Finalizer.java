@@ -2,7 +2,7 @@
  * Finalizer.java
  *
  * Copyright (C) 2011 Erik Huelsmann
- * $Id: Finalizer.java 13251 2011-03-13 19:59:41Z ehuelsmann $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License

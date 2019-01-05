@@ -280,7 +280,6 @@ public final class SimpleArray_UnsignedByte32 extends AbstractArray
             data[i] = obj;
     }
 
-    @Override
     public String printObjectImpl()
     {
         if (Symbol.PRINT_READABLY.symbolValue() != NIL) {

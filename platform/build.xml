@@ -71,21 +71,22 @@ For help on the automatic tests available, use the Ant target 'help.test'.
       <include name="./../src1/**/*.*"/>
       <include name="bsh/**/*.*"/>
       <include name="org/objectweb/asm/**/*.java"/>
+      <!--
       <exclude name="**/UnitTest.java"/>
       <exclude name="**/*JUnit.java"/>
       <exclude name="org.logicmoo-kepp/**"/>
 
       <exclude name="com/cyc/tool/subl/webserver/*.java"/>
-     <!--  <include name="../../AppdatorGUI/src/**/*.java"/> -->
+    -  <include name="../../AppdatorGUI/src/**/*.java"/>
       <include name="com/cyc/tool/subl/**/*.java"/>
       <include name="org/armedbear/lisp/scripting/*.java" if="abcl.jsr-223.p"/>
       <include name="org/armedbear/lisp/scripting/util/*.java" if="abcl.jsr-223.p"/>
-      <!-- <include name="org/armedbear/Main.java"/> -->
+     - <include name="org/armedbear/Main.java"/>
       <exclude name="**/UnitTest.java"/>
       <exclude name="**/Test*.java"/>
       <exclude name="**/test/**/*.java"/>
       <include name="org/logicmoo*/**/*.java" />
-      <exclude name="com/cyc/tool/subl/webserver/*.java"/>
+      <exclude name="com/cyc/tool/subl/webserver/*.java"/> -->
     </patternset>
 
     <patternset id="abcl.source.lisp">

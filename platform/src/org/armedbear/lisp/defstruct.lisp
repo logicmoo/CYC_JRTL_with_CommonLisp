@@ -1,7 +1,7 @@
 ;;; defstruct.lisp
 ;;;
 ;;; Copyright (C) 2003-2007 Peter Graves <peter@armedbear.org>
-;;; $Id: defstruct.lisp 15030 2017-06-01 06:46:09Z mevenson $
+;;; $Id$
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -431,15 +431,12 @@
 (defun define-copier ()
   (when *dd-copier*
     (cond ((eq *dd-type* 'list)
-           `((declaim (ftype (function (list) list) ,*dd-copier*))
-             (setf (fdefinition ',*dd-copier*) #'copy-list)))
+           `((setf (fdefinition ',*dd-copier*) #'copy-list)))
           ((or (eq *dd-type* 'vector)
                (and (consp *dd-type*) (eq (car *dd-type*) 'vector)))
-           `((declaim (ftype (function (vector) vector) ,*dd-copier*))
-             (setf (fdefinition ',*dd-copier*) #'copy-seq)))
+           `((setf (fdefinition ',*dd-copier*) #'copy-seq)))
           (t
-           `((declaim (ftype (function (T) T) ,*dd-copier*))
-             (setf (fdefinition ',*dd-copier*) #'copy-structure))))))
+           `((setf (fdefinition ',*dd-copier*) #'copy-structure))))))
 
 (defun define-print-function ()
   (cond (*dd-print-function*

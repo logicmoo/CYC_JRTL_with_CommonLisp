@@ -78,8 +78,8 @@ public class REPLConsole extends DefaultStyledDocument {
 
   private Reader reader = new Reader() {
 
-      @Override
-      public void close() throws RuntimeException {}
+		public void close() throws RuntimeException {
+		}
 
       @Override
       public synchronized int read(char[] cbuf, int off, int len) throws RuntimeException {
@@ -100,11 +100,11 @@ public class REPLConsole extends DefaultStyledDocument {
 
   private Writer writer = new Writer() {
 
-      @Override
-      public void close() throws RuntimeException {}
+		public void close() throws RuntimeException {
+		}
 
-      @Override
-      public void flush() throws RuntimeException {}
+		public void flush() throws RuntimeException {
+		}
 
       @Override
       public void write(final char[] cbuf, final int off, final int len) throws RuntimeException {
@@ -168,9 +168,7 @@ public class REPLConsole extends DefaultStyledDocument {
 		return replThread;
   }
 
-  @Override
-  public void insertString(int offs, String str, AttributeSet a)
-    throws BadLocationException {
+	public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
     synchronized(reader) {
       int bufferStart = getLength() - inputBuffer.length();
       if(offs < bufferStart) {
@@ -184,8 +182,7 @@ public class REPLConsole extends DefaultStyledDocument {
     }
   }
 
-  protected void superInsertString(int offs, String str, AttributeSet a)
-    throws BadLocationException {
+	protected void superInsertString(int offs, String str, AttributeSet a) throws BadLocationException {
     super.insertString(offs, str, a);
   }
 

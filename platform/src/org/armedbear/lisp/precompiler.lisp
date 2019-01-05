@@ -875,7 +875,7 @@
                     (return)))
                 ))))
         (unless used-p
-          (compiler-style-warn "; Note: deleting unused local function ~A ~S~%"
+          (format t "; Note: deleting unused local function ~A ~S~%"
                   operator name)
           (setf applicable-locals (remove local applicable-locals)))))
     (if applicable-locals
@@ -1129,14 +1129,14 @@
       (sys::set-function-definition name result definition))
     (values (or name result) nil nil)))
 
-(defun precompile-package (pkg &key (verbose cl:*compile-verbose*))
+(defun precompile-package (pkg &key verbose)
   (dolist (sym (package-symbols pkg))
     (when (fboundp sym)
       (unless (special-operator-p sym)
         (let ((f (fdefinition sym)))
           (unless (compiled-function-p f)
             (when verbose
-              (format t "~&; precompiler; Precompiling ~S~%" sym)
+              (format t "Precompiling ~S~%" sym)
               (finish-output))
             (precompile sym))))))
   t)
@@ -1196,17 +1196,10 @@
                   ;; when JVM.lisp isn't loaded yet, this variable isn't bound
                   ;; meaning that we're not trying to compile to a file:
                   ;; Both COMPILE and COMPILE-FILE bind this variable.
-		    ;; This function is also triggered by MACROEXPAND, though.
+                  ;; This function is also triggered by MACROEXPAND, though
                   jvm::*file-compilation*)
              `(progn
                 (fset ',name ,lambda-expression)
-		  ;; the below matter, for example when loading a
-		  ;; compiled defun that is inside some other form
-		  ;; (e.g. flet)
-		  (record-source-information-for-type ',(if (consp name) (second name) name) '(:function ,name))
-		  (%set-arglist (fdefinition ',name) ',(third lambda-expression))
-		  ,@(when doc
-		      `((%set-documentation ',name 'function ,doc)))
                 ',name))
             (t
              (when (and env (empty-environment-p env))
@@ -1217,10 +1210,7 @@
              `(prog1
                   (%defun ',name ,lambda-expression)
 		  (record-source-information-for-type ',sym '(:function ,name))
-		    (%set-arglist (fdefinition ',name) ',(third lambda-expression))
-		    ;; don't do this. building abcl fails autoloading
-		    ;; stuff it shouldn't yet
-		    ;;(%set-arglist (symbol-function ',name) ,(format nil "~{~s~^ ;; ~}" (third lambda-expression)))
+;		  (%set-arglist (fdefinition ',name) ,(format nil "~{~s~^ ~}" (third lambda-expression)))
                 ,@(when doc
 		      `((%set-documentation ',name 'function ,doc)))
 		  )))))))

@@ -76,19 +76,16 @@ public final class EchoStream extends Stream
         return outStream;
     }
 
-    @Override
     public LispObject typeOf()
     {
         return Symbol.ECHO_STREAM;
     }
 
-    @Override
     public LispObject classOf()
     {
         return BuiltInClass.ECHO_STREAM;
     }
 
-    @Override
     public LispObject typep(LispObject type)
     {
         if (type == Symbol.ECHO_STREAM)
@@ -98,44 +95,37 @@ public final class EchoStream extends Stream
         return super.typep(type);
     }
 
-    @Override
     public boolean isInputStream()
     {
         return true;
     }
 
-    @Override
     public boolean isOutputStream()
     {
         return true;
     }
 
-    @Override
     public boolean isCharacterInputStream()
     {
         return inStream.isCharacterInputStream();
     }
 
-    @Override
     public boolean isBinaryInputStream()
     {
         return inStream.isBinaryInputStream();
     }
 
-    @Override
     public boolean isCharacterOutputStream()
     {
         return outStream.isCharacterOutputStream();
     }
 
-    @Override
     public boolean isBinaryOutputStream()
     {
         return outStream.isBinaryOutputStream();
     }
 
     // Returns -1 at end of file.
-    @Override
     protected int _readChar() throws java.io.IOException
     {
     	lastDirection = Direction.READ;
@@ -150,7 +140,6 @@ public final class EchoStream extends Stream
         return n;
     }
 
-    @Override
     protected void _unreadChar(int n) throws java.io.IOException
     {
     	lastDirection = Direction.READ;
@@ -158,20 +147,17 @@ public final class EchoStream extends Stream
         unreadChar = n;
     }
 
-    @Override
     protected boolean _charReady() throws java.io.IOException
     {
         return inStream._charReady();
     }
 
-    @Override
     public void _writeChar(char c)
     {
     	lastDirection = Direction.WRITE;
         outStream._writeChar(c);
     }
 
-    @Override
     public void _writeChars(char[] chars, int start, int end)
 
     {
@@ -179,14 +165,12 @@ public final class EchoStream extends Stream
         outStream._writeChars(chars, start, end);
     }
 
-    @Override
     public void _writeString(String s)
     {
     	lastDirection = Direction.WRITE;
     	outStream._writeString(s);
     }
 
-    @Override
     public void _writeLine(String s)
     {
     	lastDirection = Direction.WRITE;
@@ -194,7 +178,6 @@ public final class EchoStream extends Stream
     }
 
     // Reads an 8-bit byte.
-    @Override
     public int _readByte()
     {
         int n = inStream._readByte();
@@ -204,27 +187,23 @@ public final class EchoStream extends Stream
     }
 
     // Writes an 8-bit byte.
-    @Override
     public void _writeByte(int n)
     {
     	lastDirection = Direction.WRITE;
     	outStream._writeByte(n);
     }
 
-    @Override
     public void _finishOutput()
     {
     	lastDirection = Direction.WRITE;
     	outStream._finishOutput();
     }
 
-    @Override
     public void _clearInput()
     {
         inStream._clearInput();
     }
 
-    @Override
     public LispObject close(LispObject abort)
     {
         // "The effect of CLOSE on a constructed stream is to close the
@@ -234,7 +213,6 @@ public final class EchoStream extends Stream
         return T;
     }
 
-    @Override
     public LispObject listen()
     {
     	lastDirection = Direction.READ;
@@ -252,7 +230,6 @@ public final class EchoStream extends Stream
     private static final Primitive MAKE_ECHO_STREAM =
         new Primitive("make-echo-stream", "input-stream output-stream")
     {
-        @Override
         public LispObject execute(LispObject first, LispObject second)
 
         {
@@ -269,7 +246,6 @@ public final class EchoStream extends Stream
     private static final Primitive ECHO_STREAM_INPUT_STREAM =
         new Primitive("echo-stream-input-stream", "echo-stream")
     {
-        @Override
         public LispObject execute(LispObject arg)
         {
             if (arg instanceof EchoStream)
@@ -283,7 +259,6 @@ public final class EchoStream extends Stream
     private static final Primitive ECHO_STREAM_OUTPUT_STREAM =
         new Primitive("echo-stream-output-stream", "echo-stream")
     {
-        @Override
         public LispObject execute(LispObject arg)
         {
             if (arg instanceof EchoStream)

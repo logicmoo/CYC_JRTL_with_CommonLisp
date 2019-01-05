@@ -2,7 +2,7 @@
  * Nil.java
  *
  * Copyright (C) 2002-2006 Peter Graves
- * $Id: Nil.java 15027 2017-06-01 06:45:36Z mevenson $
+ * $Id$
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -49,17 +49,13 @@ public final class Nil extends SubLNil
         initializeConstant(this);
     }
 
-    @Override
     public Object javaInstance()
     {
         return null;
     }
 
-    @Override
     public Object javaInstance(Class c)
     {
-        if (c == Boolean.class || c == boolean.class)
-            return Boolean.FALSE;
       String cn = c.getName();
       if (cn != null) {
         if (cn.equals("java.lang.Boolean") || cn.equals("boolean")) {
@@ -69,31 +65,26 @@ public final class Nil extends SubLNil
       return javaInstance();
     }
 
-    @Override
     public LispObject typeOf()
     {
         return Symbol.NULL;
     }
 
-    @Override
     public LispObject classOf()
     {
         return BuiltInClass.NULL;
     }
 
-    @Override
     public LispObject getDescription()
     {
         return new SimpleString("The symbol NIL");
     }
 
-    @Override
     public boolean getBooleanValue()
     {
         return false;
     }
 
-    @Override
     public LispObject typep(LispObject typeSpecifier)
     {
         if (typeSpecifier == Symbol.NULL)
@@ -117,25 +108,21 @@ public final class Nil extends SubLNil
         return super.typep(typeSpecifier);
     }
 
-    @Override
     public boolean constantp()
     {
         return true;
     }
 
-    @Override
     public final LispObject getSymbolValue()
     {
         return this;
     }
 
-    @Override
     public int length()
     {
         return 0;
     }
 
-    @Override
     public LispObject NTH(int index)
     {
         if (index < 0)
@@ -144,31 +131,26 @@ public final class Nil extends SubLNil
         return NIL;
     }
 
-    @Override
     public LispObject elt(int index)
     {
         return error(new TypeError("ELT: invalid index " + index + " for " + this + "."));
     }
 
-    @Override
     public LispObject reverse()
     {
         return this;
     }
 
-    @Override
     public LispObject nreverse()
     {
         return this;
     }
 
-    @Override
     public LispObject[] copyToArray()
     {
         return new LispObject[0];
     }
 
-    @Override
     public LispObject NOT()
     {
         return T;

@@ -262,7 +262,7 @@ public class Autoload extends Function
     }
 
 	protected void extraInfo(StringBuilder sb) 
-   {
+    {
     	sb.append(" ");
         sb.append(symbol.princToString());
         sb.append(" stub to be autoloaded from \"");
@@ -276,25 +276,6 @@ public class Autoload extends Function
         } else
             sb.append(getFileName());
         sb.append("\"");
-    }
-
-    //@Override
-    public String printObjectTrunk()
-    {
-        StringBuilder sb = new StringBuilder();
-        sb.append(symbol.princToString());
-        sb.append(" stub to be autoloaded from \"");
-        if (className != null) {
-            int index = className.lastIndexOf('.');
-            if (index >= 0)
-                sb.append(className.substring(index + 1));
-            else
-                sb.append(className);
-            sb.append(".class");
-        } else
-            sb.append(getFileName());
-        sb.append("\"");
-        return unreadableString(sb.toString());
     }
 
     public static final Primitive AUTOLOAD = new pf_autoload();
@@ -540,7 +521,7 @@ public class Autoload extends Function
         autoload(PACKAGE_EXT, "file-directory-p", "probe_file", true);
         autoload(PACKAGE_EXT, "gc", "gc", true);
         autoload(PACKAGE_EXT, "get-floating-point-modes", "FloatFunctions", true);
-        autoload(PACKAGE_EXT, "get-time-zone", "Time", true);
+        //autoload(PACKAGE_EXT, "get-time-zone", "Time", true);
         autoload(PACKAGE_EXT, "make-slime-input-stream", "SlimeInputStream", true);
         autoload(PACKAGE_EXT, "make-slime-output-stream", "SlimeOutputStream", true);
         autoload(PACKAGE_EXT, "probe-directory", "probe_file", true);
