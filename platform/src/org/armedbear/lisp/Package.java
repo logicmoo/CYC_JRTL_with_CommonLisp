@@ -101,16 +101,19 @@ public class Package extends SubLPackage implements java.io.Serializable
 		lispName = new SimpleString(name);
 	}
 
+    @Override
     public LispObject typeOf()
     {
 		return Symbol.PACKAGE;
 	}
 
+    @Override
     public LispObject classOf()
     {
 		return BuiltInClass.PACKAGE;
 	}
 
+    @Override
     public LispObject getDescription()
     {
 		if (name != null) {
@@ -122,6 +125,7 @@ public class Package extends SubLPackage implements java.io.Serializable
 		return new SimpleString("PACKAGE");
 	}
 
+    @Override
     public LispObject typep(LispObject type)
     {
 		if (type == Symbol.PACKAGE)

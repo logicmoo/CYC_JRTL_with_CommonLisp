@@ -2,7 +2,7 @@
  * NilVector.java
  *
  * Copyright (C) 2004-2005 Peter Graves
- * $Id$
+ * $Id: NilVector.java 13442 2011-08-05 21:51:28Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -51,6 +51,7 @@ public final class NilVector extends AbstractString
         return new char[0];
     }
 
+    @Override
     public char[] getStringChars()
     {
         if (capacity != 0)
@@ -58,6 +59,7 @@ public final class NilVector extends AbstractString
         return new char[0];
     }
 
+    @Override
     public String getStringValue()
     {
         if (capacity != 0)
@@ -65,17 +67,20 @@ public final class NilVector extends AbstractString
         return "";
     }
 
+    @Override
     public LispObject typeOf()
     {
     	if (false) return list(Symbol.SIMPLE_ARRAY,NIL,list( Fixnum.getInstance(capacity)));
     	return list(Symbol.NIL_VECTOR, Fixnum.getInstance(capacity));
     }
 
+    @Override
     public LispObject classOf()
     {
         return BuiltInClass.NIL_VECTOR;
     }
 
+    @Override
     public LispObject typep(LispObject type)
     {
         if (type == Symbol.NIL_VECTOR)
@@ -100,11 +105,13 @@ public final class NilVector extends AbstractString
         return super.typep(type);
     }
 
+    @Override
     public LispObject SIMPLE_STRING_P()
     {
         return T;
     }
 
+    @Override
     public boolean equal(LispObject obj)
     {
         if (obj instanceof NilVector) {
@@ -139,41 +146,49 @@ public final class NilVector extends AbstractString
         return null;
     }
 
+    @Override
     public int length()
     {
         return capacity;
     }
 
+    @Override
     public int capacity()
     {
         return capacity;
     }
 
+    @Override
     public LispObject getElementType()
     {
         return NIL;
     }
 
+    @Override
     public LispObject CHAR(int index)
     {
         return accessError();
     }
 
+    @Override
     public LispObject SCHAR(int index)
     {
         return accessError();
     }
 
+    @Override
     public LispObject AREF(int index)
     {
         return accessError();
     }
 
+    @Override
     public void aset(int index, LispObject newValue)
     {
         storeError(newValue);
     }
 
+    @Override
     public char charAt(int index)
     {
         accessError();
@@ -181,11 +196,13 @@ public final class NilVector extends AbstractString
         return 0;
     }
 
+    @Override
     public void setCharAt(int index, char c)
     {
         storeError(LispCharacter.getInstance(c));
     }
 
+    @Override
     public LispObject subseq(int start, int end)
     {
         if (capacity == 0 && start == 0 && end == 0)
@@ -193,20 +210,24 @@ public final class NilVector extends AbstractString
         return accessError();
     }
 
+    @Override
     public void fill(LispObject obj)
     {
         storeError(obj);
     }
 
+    @Override
     public void fill(char c)
     {
         storeError(LispCharacter.getInstance(c));
     }
 
+    @Override
     public void shrink(int n)
     {
     }
 
+    @Override
     public LispObject reverse()
     {
         return accessError();
@@ -222,11 +243,13 @@ public final class NilVector extends AbstractString
         error(new TypeError(String.valueOf(obj) + " is not of type NIL."));
     }
 
+    @Override
     public int sxhash()
     {
         return 0;
     }
 
+    @Override
     public AbstractVector adjustArray(int newCapacity,
                                        LispObject initialElement,
                                        LispObject initialContents)
@@ -237,6 +260,7 @@ public final class NilVector extends AbstractString
         return null;
     }
 
+    @Override
     public AbstractVector adjustArray(int size, AbstractArray displacedTo,
                                        int displacement)
 

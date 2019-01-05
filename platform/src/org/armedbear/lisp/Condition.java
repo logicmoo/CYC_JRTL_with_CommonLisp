@@ -83,7 +83,7 @@ public class Condition extends StandardObject
 	  // maybe save a java stack trace here someday?
   }
 
-protected void initialize(LispObject initArgs)
+  protected void initialize(LispObject initArgs)
   {
     LispObject control = null;
     LispObject arguments = null;
@@ -156,6 +156,7 @@ protected void initialize(LispObject initArgs)
     return null;
   }
 
+  @Override
   public LispObject typeOf()
   {
     LispObject c = getLispClass();
@@ -166,14 +167,18 @@ protected void initialize(LispObject initArgs)
     return Symbol.CONDITION;
   }
 
+  @Override
   public LispObject classOf()
   {
-    LispObject c = getLispClass();
+	LispObject c = null;// super.classOf();
+    if(layout != null) c = layout.getLispClass();
+	 //LispObject c = getLispClass();
     if (c != null)
       return c;
     return StandardClass.CONDITION;
   }
 
+  @Override
   public LispObject typep(LispObject type)
   {
     if (type == Symbol.CONDITION)

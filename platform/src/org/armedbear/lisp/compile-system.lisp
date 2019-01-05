@@ -1,7 +1,7 @@
 ;;; compile-system.lisp
 ;;;
 ;;; Copyright (C) 2004-2008 Peter Graves
-;;; $Id$
+;;; $Id: compile-system.lisp 14931 2016-12-27 20:06:20Z mevenson $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -373,6 +373,7 @@
                            "fdefinition.lisp"
                            "fill.lisp"
                            "find-all-symbols.lisp"
+                           "get-pid.lisp"
                            "gentemp.lisp"
                            "gray-streams.lisp"
                            "gui.lisp"

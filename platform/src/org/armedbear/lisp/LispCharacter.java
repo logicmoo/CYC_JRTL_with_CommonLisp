@@ -621,6 +621,7 @@ abstract public class LispCharacter extends LispObject
   private static final Primitive NAME_CHAR =
     new Primitive(Symbol.NAME_CHAR, "name")
     {
+      @Override
       public LispObject execute(LispObject arg)
       {
         String s = arg.STRING().getStringValue();

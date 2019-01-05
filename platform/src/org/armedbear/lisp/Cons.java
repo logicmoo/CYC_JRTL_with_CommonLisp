@@ -2,7 +2,7 @@
  * Cons.java
  *
  * Copyright (C) 2002-2005 Peter Graves
- * $Id$
+ * $Id: Cons.java 13440 2011-08-05 21:25:10Z ehuelsmann $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -121,16 +121,19 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
 		return superHash();
 	}
 
+  @Override
   public LispObject typeOf()
   {
     return Symbol.CONS;
   }
 
+  @Override
   public LispObject classOf()
   {
     return BuiltInClass.CONS;
   }
 
+  @Override
   public LispObject typep(LispObject typeSpecifier)
   {
     if (typeSpecifier instanceof Symbol)
@@ -158,6 +161,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
     return NIL;
   }
 
+  @Override
   public final boolean constantp()
   {
     if (car == Symbol.QUOTE)
@@ -169,23 +173,27 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
     return false;
   }
 
+  @Override
   public boolean atom()
   {
     return false;
   }
 
+  @Override
   public LispObject RPLACA(LispObject obj)
   {
     car = obj;
     return this;
   }
 
+  @Override
   public LispObject RPLACD(LispObject obj)
   {
     cdr = obj;
     return this;
   }
 
+  @Override
   public final int sxhash()
   {
     return computeHash(this, 4);
@@ -213,6 +221,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
       return obj.sxhash();
   }
 
+  @Override
   public final int psxhash()
   {
     return computeEqualpHash(this, 4);
@@ -235,6 +244,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
       return obj.psxhash();
   }
 
+  @Override
   public final boolean equal(LispObject obj)
   {
     if (this == obj)
@@ -247,6 +257,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
     return false;
   }
 
+  @Override
   public final boolean equalp(LispObject obj)
   {
     if (this == obj)
@@ -259,6 +270,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
     return false;
   }
 
+  @Override
   public final int length()
   {
     int length = 1;
@@ -273,6 +285,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
     return length;
   }
 
+  @Override
   public LispObject NTH(int index)
   {
     if (index < 0)
@@ -290,6 +303,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
       }
   }
 
+  @Override
   public LispObject elt(int index)
   {
     if (index < 0)
@@ -326,6 +340,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
       }
   }
 
+  @Override
   public LispObject reverse()
   {
     Cons cons = this;
@@ -340,6 +355,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
     return result;
   }
 
+  @Override
   public final LispObject nreverse()
   {
     if (cdr instanceof Cons)
@@ -373,6 +389,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
     return this;
   }
 
+  @Override
   public final LispObject[] copyToArray()
   {
     final int length = length();
@@ -386,6 +403,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
     return array;
   }
 
+  @Override
   public LispObject execute()
   {
     if (car == Symbol.LAMBDA)
@@ -396,6 +414,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
     return signalExecutionError();
   }
 
+  @Override
   public LispObject execute(LispObject arg)
   {
     if (car == Symbol.LAMBDA)
@@ -406,6 +425,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
     return signalExecutionError();
   }
 
+  @Override
   public LispObject execute(LispObject first, LispObject second)
 
   {
@@ -417,6 +437,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
     return signalExecutionError();
   }
 
+  @Override
   public LispObject execute(LispObject first, LispObject second,
                             LispObject third)
 
@@ -429,6 +450,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
     return signalExecutionError();
   }
 
+  @Override
   public LispObject execute(LispObject first, LispObject second,
                             LispObject third, LispObject fourth)
 
@@ -441,6 +463,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
     return signalExecutionError();
   }
 
+  @Override
   public LispObject execute(LispObject first, LispObject second,
                             LispObject third, LispObject fourth,
                             LispObject fifth)
@@ -454,6 +477,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
     return signalExecutionError();
   }
 
+  @Override
   public LispObject execute(LispObject first, LispObject second,
                             LispObject third, LispObject fourth,
                             LispObject fifth, LispObject sixth)
@@ -467,6 +491,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
     return signalExecutionError();
   }
 
+  @Override
   public LispObject execute(LispObject first, LispObject second,
                             LispObject third, LispObject fourth,
                             LispObject fifth, LispObject sixth,
@@ -482,6 +507,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
     return signalExecutionError();
   }
 
+  @Override
   public LispObject execute(LispObject first, LispObject second,
                             LispObject third, LispObject fourth,
                             LispObject fifth, LispObject sixth,
@@ -497,6 +523,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
     return signalExecutionError();
   }
 
+  @Override
   public LispObject execute(LispObject[] args)
   {
     if (car == Symbol.LAMBDA)

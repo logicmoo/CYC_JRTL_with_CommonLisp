@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
-<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
-<listEntry value="/platform/src/org/armedbear/lisp/Main.java"/>
-</listAttribute>
-<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
-<listEntry value="1"/>
-</listAttribute>
-<mapAttribute key="org.eclipse.debug.core.environmentVariables">
-<mapEntry key="LD_LIBRARY_PATH" value="${cdt_pathentry_var:${env_var:JAVA_HOME}/bin/server;${env_var:JAVA_HOME}/bin;${env_var:SWI_HOME_DIR}/bin;${env_var:SWI_HOME_DIR}/lib}"/>
-<mapEntry key="LD_LIBRARY_PATH_LINUX" value="/usr/lib/jvm/java-8-oracle/jre/lib/amd64/server/:/usr/lib/jvm/java-9-oracle/lib/amd64/server/:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib:/usr/lib/swi-prolog/lib/amd64"/>
-</mapAttribute>
-<listAttribute key="org.eclipse.debug.ui.favoriteGroups">
-<listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
-<listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
-</listAttribute>
-<stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.m2e.launchconfig.classpathProvider"/>
-<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.armedbear.lisp.Main"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--load cyc.lisp"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="platform"/>
-<stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
-<booleanAttribute key="org.eclipse.jdt.launching.STOP_IN_MAIN" value="true"/>
-<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-XX:PermSize=512m  -XX:MaxPermSize=4g -Xmx26g  -Djava.util.Arrays.useLegacyMergeSort=true  -Dsun.java2d.d3d=false"/>
-<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:runtime}"/>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+        <listEntry value="/platform/src/org/armedbear/lisp/Main.java"/>
+    </listAttribute>
+    <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+        <listEntry value="1"/>
+    </listAttribute>
+    <mapAttribute key="org.eclipse.debug.core.environmentVariables">
+        <mapEntry key="LD_LIBRARY_PATH" value="${cdt_pathentry_var:${env_var:JAVA_HOME}/bin/server;${env_var:JAVA_HOME}/bin;${env_var:SWI_HOME_DIR}/bin;${env_var:SWI_HOME_DIR}/lib}"/>
+        <mapEntry key="LD_LIBRARY_PATH_LINUX" value="/usr/lib/jvm/java-8-oracle/jre/lib/amd64/server/:/usr/lib/jvm/java-9-oracle/lib/amd64/server/:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib/amd64:/usr/lib/jvm/java-8-openjdk-amd64/jre/lib:/usr/lib/swi-prolog/lib/amd64"/>
+    </mapAttribute>
+    <listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+        <listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
+        <listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
+    </listAttribute>
+    <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.eclipse.m2e.launchconfig.classpathProvider"/>
+    <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.armedbear.lisp.Main"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--load e2c/cyc.lisp"/>
+    <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="platform"/>
+    <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.eclipse.m2e.launchconfig.sourcepathProvider"/>
+    <booleanAttribute key="org.eclipse.jdt.launching.STOP_IN_MAIN" value="true"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-server -d64 -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC Djava.util.Arrays.useLegacyMergeSort=true  -Dsun.java2d.d3d=false"/>
+    <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:runtime}"/>
 </launchConfiguration>

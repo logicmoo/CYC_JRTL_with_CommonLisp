@@ -197,6 +197,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 	return -1;
     }
 
+  @Override
   public LispObject SLOT_VALUE(LispObject slotName)
   {
     LispObject value;
@@ -280,8 +281,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
     return super.typep(type);
   }
 
-
-
+  @Override
   public boolean equalp(LispObject obj)
   {
     if (this == obj)
@@ -493,7 +493,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 					LispObject slotName = slotDefinition.AREF(1);
 					Debug.assertTrue(slotName instanceof Symbol);
 					sb.append(':');
-					sb.append(((Symbol) slotName).name.getStringValue());
+                sb.append(((Symbol)slotName).name.getStringValue());
 					sb.append(' ');
 					if (printCircle)
 					{
@@ -517,28 +517,36 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
       }
   }
 
-	private static final Primitive STRUCTURE_OBJECT_P = new pf_structure_object_p();
-
-	@DocString(name = "structure-object-p", args = "object", returns = "generalized-boolean")
+  private static final Primitive STRUCTURE_OBJECT_P
+    = new pf_structure_object_p();
+  @DocString(name="structure-object-p",
+             args="object",
+             returns="generalized-boolean")
   private static final class pf_structure_object_p extends Primitive
   {
-		pf_structure_object_p() {
+    pf_structure_object_p()
+    {
       super("structure-object-p", PACKAGE_SYS, true, "object");
     }
+    @Override
     public LispObject execute(LispObject arg)
     {
       return arg instanceof StructureObject ? T : NIL;
     }
   };
 
-	private static final Primitive STRUCTURE_LENGTH = new pf_structure_length();
-
-	@DocString(name = "structure-length", args = "instance", returns = "length")
+  private static final Primitive STRUCTURE_LENGTH
+    = new pf_structure_length();
+  @DocString(name="structure-length",
+             args="instance",
+             returns="length")
   private static final class pf_structure_length extends Primitive
   {
-		pf_structure_length() {
+    pf_structure_length()
+    {
       super("structure-length", PACKAGE_SYS, true, "instance");
     }
+    @Override
     public LispObject execute(LispObject arg)
     {
       if (arg instanceof StructureObject)
@@ -547,21 +555,26 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
     }
   };
 
-	private static final Primitive STRUCTURE_REF = new pf_structure_ref();
-
-	@DocString(name = "structure-ref", args = "instance index", returns = "value")
+  private static final Primitive STRUCTURE_REF
+    = new pf_structure_ref();
+  @DocString(name="structure-ref",
+             args="instance index",
+             returns="value")
   private static final class pf_structure_ref extends Primitive
   {
-		pf_structure_ref() {
+    pf_structure_ref()
+    {
       super("structure-ref", PACKAGE_SYS, true);
     }
+    @Override
     public LispObject execute(LispObject first, LispObject second)
     {
       if (first instanceof StructureObject)
         try
           {
             return (LispObject) ((StructureObject)first).slots[Fixnum.getValue(second)];
-				} catch (ArrayIndexOutOfBoundsException e)
+          }
+        catch (ArrayIndexOutOfBoundsException e)
           {
             // Shouldn't happen.
             return error(new LispError("Internal error."));
@@ -570,23 +583,28 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
     }
   };
 
-	private static final Primitive STRUCTURE_SET = new pf_structure_set();
-
-	@DocString(name = "structure-set", args = "instance index new-value", returns = "new-value")
+  private static final Primitive STRUCTURE_SET 
+    = new pf_structure_set();
+  @DocString(name="structure-set",
+             args="instance index new-value",
+             returns="new-value")
   private static final class pf_structure_set extends Primitive
   {
-		pf_structure_set() {
+    pf_structure_set()
+    {
       super("structure-set", PACKAGE_SYS, true);
     }
-
-		public LispObject execute(LispObject first, LispObject second, LispObject third)
+    @Override
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third)
     {
       if (first instanceof StructureObject)
         try
           {
             ((StructureObject)first).slots[Fixnum.getValue(second)] = third;
             return third;
-				} catch (ArrayIndexOutOfBoundsException e)
+          }
+        catch (ArrayIndexOutOfBoundsException e)
           {
             // Shouldn't happen.
             return error(new LispError("Internal error."));
@@ -595,72 +613,91 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
     }
   };
 
-	private static final Primitive MAKE_STRUCTURE = new pf_make_structure();
-
+  private static final Primitive MAKE_STRUCTURE
+    = new pf_make_structure();
   @DocString(name="make-structure")
   private static final class pf_make_structure extends Primitive
   {
-		pf_make_structure() {
+    pf_make_structure() 
+    { 
       super("make-structure", PACKAGE_SYS, true);
     }
+    @Override
     public LispObject execute(LispObject first, LispObject second)
     {
       return new StructureObject(checkSymbol(first), second);
     }
-
-		public LispObject execute(LispObject first, LispObject second, LispObject third)
+    @Override
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third)
 
     {
       return new StructureObject(checkSymbol(first), second, third);
     }
-
-		public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth)
+    @Override
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth)
 
     {
       return new StructureObject(checkSymbol(first), second, third, fourth);
     }
-
-		public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth,
+    @Override
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
                               LispObject fifth)
     {
-			return new StructureObject(checkSymbol(first), second, third, fourth, fifth);
+      return new StructureObject(checkSymbol(first), second, third, fourth,
+                                 fifth);
     }
-
-		public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth,
+    @Override
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
                               LispObject fifth, LispObject sixth)
     {
-			return new StructureObject(checkSymbol(first), second, third, fourth, fifth, sixth);
+      return new StructureObject(checkSymbol(first), second, third, fourth,
+                                 fifth, sixth);
     }
-
-		public LispObject execute(LispObject first, LispObject second, LispObject third, LispObject fourth,
-				LispObject fifth, LispObject sixth, LispObject seventh)
+    @Override
+    public LispObject execute(LispObject first, LispObject second,
+                              LispObject third, LispObject fourth,
+                              LispObject fifth, LispObject sixth,
+                              LispObject seventh)
     {
-			return new StructureObject(checkSymbol(first), second, third, fourth, fifth, sixth, seventh);
+      return new StructureObject(checkSymbol(first), second, third, fourth,
+                                 fifth, sixth, seventh);
     }
   };
 
-	private static final Primitive _MAKE_STRUCTURE = new pf__make_structure();
-
-	@DocString(name = "%make-structure", args = "name slot-values", returns = "object")
+  private static final Primitive _MAKE_STRUCTURE
+    = new pf__make_structure();
+  @DocString(name="%make-structure",
+             args="name slot-values",
+             returns="object")
   private static final class pf__make_structure extends Primitive
   {
-		pf__make_structure() {
+    pf__make_structure()
+    {
       super("%make-structure", PACKAGE_SYS, true);
     }
+    @Override
     public LispObject execute(LispObject first, LispObject second)
     {
       return new StructureObject(checkSymbol(first), second.copyToArray());
     }
   };
 
-	private static final Primitive COPY_STRUCTURE = new pf_copy_structure();
-
-	@DocString(name = "copy-structure", args = "structure", returns = "copy")
+  private static final Primitive COPY_STRUCTURE 
+    = new pf_copy_structure();
+  @DocString(name="copy-structure",
+             args="structure",
+             returns="copy")
   private static final class pf_copy_structure extends Primitive
   {
-		pf_copy_structure() {
+    pf_copy_structure()
+    {
       super(Symbol.COPY_STRUCTURE, "structure");
     }
+    @Override
     public LispObject execute(LispObject arg)
     {
       if (arg instanceof StructureObject)

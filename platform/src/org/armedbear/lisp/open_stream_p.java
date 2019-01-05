@@ -2,7 +2,7 @@
  * open_stream_p.java
  *
  * Copyright (C) 2004 Peter Graves
- * $Id$
+ * $Id: open_stream_p.java 12288 2009-11-29 22:00:12Z vvoutilainen $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -43,6 +43,7 @@ public final class open_stream_p extends Primitive
         super("open-stream-p");
     }
 
+    @Override
     public LispObject execute(LispObject arg)
     {
         return checkStream(arg).isOpen() ? T : NIL;

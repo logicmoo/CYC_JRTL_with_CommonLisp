@@ -465,18 +465,22 @@ public class StandardObject extends SubLStructInterpreted implements SubLStruct 
 		}
 	};
 
-	private static final Primitive STD_SLOT_BOUNDP = new pf_std_slot_boundp();
-
-	@DocString(name = "std-slot-boundp")
-	private static final class pf_std_slot_boundp extends Primitive {
-		pf_std_slot_boundp() {
+  private static final Primitive STD_SLOT_BOUNDP 
+    = new pf_std_slot_boundp();
+  @DocString(name="std-slot-boundp")
+  private static final class pf_std_slot_boundp extends Primitive
+  {
+    pf_std_slot_boundp()
+    {
 			super(Symbol.STD_SLOT_BOUNDP, "instance slot-name");
 		}
-
-		public LispObject execute(LispObject first, LispObject second) {
+    @Override
+    public LispObject execute(LispObject first, LispObject second)
+    {
 			final StandardObject instance = checkStandardObject(first);
 			Layout layout = instance.layout;
-			if (layout.isInvalid()) {
+      if (layout.isInvalid())
+        {
 				// Update instance.
 				layout = instance.updateLayout();
 			}

@@ -134,21 +134,25 @@ public final class SimpleString extends com.cyc.tool.subl.jrtl.nativeCode.type.c
         return chars;
     }
 
+    @Override
     public char[] getStringChars()
     {
         return chars;
     }
 
+    @Override
     public LispObject typeOf()
     {
         return list(Symbol.SIMPLE_BASE_STRING, Fixnum.getInstance(capacity));
     }
 
+    @Override
     public LispObject classOf()
     {
         return BuiltInClass.SIMPLE_BASE_STRING;
     }
 
+    @Override
     public LispObject getDescription()
     {
         StringBuilder sb = new StringBuilder("A simple-string (");
@@ -159,6 +163,7 @@ public final class SimpleString extends com.cyc.tool.subl.jrtl.nativeCode.type.c
         return new SimpleString(sb);
     }
 
+    @Override
     public LispObject typep(LispObject type)
     {
         if (type == Symbol.SIMPLE_STRING)
@@ -176,21 +181,25 @@ public final class SimpleString extends com.cyc.tool.subl.jrtl.nativeCode.type.c
         return super.typep(type);
     }
 
+    @Override
     public LispObject SIMPLE_STRING_P()
     {
         return T;
     }
 
+    @Override
     public boolean hasFillPointer()
     {
         return false;
     }
 
+    @Override
     public boolean isAdjustable()
     {
         return false;
     }
 
+    @Override
     public boolean equal(LispObject obj)
     {
         if (this == obj)
@@ -218,6 +227,7 @@ public final class SimpleString extends com.cyc.tool.subl.jrtl.nativeCode.type.c
         return false;
     }
 
+    @Override
     public boolean equalp(LispObject obj)
     {
         if (this == obj)
@@ -275,16 +285,19 @@ public final class SimpleString extends com.cyc.tool.subl.jrtl.nativeCode.type.c
         }
     }
 
+    @Override
     public final LispObject subseq(int start, int end)
     {
         return substring(start, end);
     }
 
+    @Override
     public void fill(LispObject obj)
     {
         fill(LispCharacter.getValue(obj));
     }
 
+    @Override
     public void fill(char c)
     {
         for (int i = capacity; i-- > 0;)
@@ -292,6 +305,7 @@ public final class SimpleString extends com.cyc.tool.subl.jrtl.nativeCode.type.c
         string = null; // mutated
     }
 
+    @Override
     public void shrink(int n)
     {
         if (n < capacity) {
@@ -307,6 +321,7 @@ public final class SimpleString extends com.cyc.tool.subl.jrtl.nativeCode.type.c
         error(new LispError());
     }
 
+    @Override
     public LispObject reverse()
     {
     	SimpleString result = new SimpleString(capacity);
@@ -316,6 +331,7 @@ public final class SimpleString extends com.cyc.tool.subl.jrtl.nativeCode.type.c
         return result;
     }
 
+    @Override
     public LispObject nreverse()
     {
         int i = 0;
@@ -342,21 +358,25 @@ public final class SimpleString extends com.cyc.tool.subl.jrtl.nativeCode.type.c
         return getStringValue();
     }
 
+    @Override
     public Object javaInstance(Class c)
     {
         return javaInstance();
     }
 
+    @Override
     public final int capacity()
     {
         return capacity;
     }
 
+    @Override
     public final int length()
     {
         return capacity;
     }
 
+    @Override
     public char charAt(int index)
     {
         try {
@@ -368,6 +388,7 @@ public final class SimpleString extends com.cyc.tool.subl.jrtl.nativeCode.type.c
         }
     }
 
+    @Override
     public void setCharAt(int index, char c)
     {
         try {
@@ -379,6 +400,7 @@ public final class SimpleString extends com.cyc.tool.subl.jrtl.nativeCode.type.c
         }
     }
 
+    @Override
     public LispObject elt(int index)
     {
         try {
@@ -390,6 +412,7 @@ public final class SimpleString extends com.cyc.tool.subl.jrtl.nativeCode.type.c
         }
     }
 
+    @Override
     public LispObject CHAR(int index)
     {
         try {
@@ -401,6 +424,7 @@ public final class SimpleString extends com.cyc.tool.subl.jrtl.nativeCode.type.c
         }
     }
 
+    @Override
     public LispObject SCHAR(int index)
     {
         try {
@@ -412,6 +436,7 @@ public final class SimpleString extends com.cyc.tool.subl.jrtl.nativeCode.type.c
         }
     }
 
+    @Override
     public LispObject AREF(int index)
     {
         try {
@@ -424,6 +449,7 @@ public final class SimpleString extends com.cyc.tool.subl.jrtl.nativeCode.type.c
     }
 
 
+    @Override
     public void aset(int index, LispObject obj)
     {
         try {
@@ -451,6 +477,7 @@ public final class SimpleString extends com.cyc.tool.subl.jrtl.nativeCode.type.c
         }
 
     // For EQUALP hash tables.
+    @Override
     public int psxhash()
     {
         if(capacity == 0) return 0;
@@ -466,6 +493,7 @@ public final class SimpleString extends com.cyc.tool.subl.jrtl.nativeCode.type.c
         return (hashCode & 0x7fffffff);
     }
 
+    @Override
     public AbstractVector adjustArray(int newCapacity,
                                        LispObject initialElement,
                                        LispObject initialContents)
@@ -500,6 +528,7 @@ public final class SimpleString extends com.cyc.tool.subl.jrtl.nativeCode.type.c
         return this;
     }
 
+    @Override
     public AbstractVector adjustArray(int newCapacity,
                                        AbstractArray displacedTo,
                                        int displacement)

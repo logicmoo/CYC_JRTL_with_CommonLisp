@@ -2,7 +2,7 @@
  * ComplexVector.java
  *
  * Copyright (C) 2002-2007 Peter Graves
- * $Id$
+ * $Id: ComplexVector.java 14466 2013-04-24 12:50:40Z rschlatte $
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -66,31 +66,37 @@ public final class ComplexVector extends AbstractVector
         isDisplaced = true;
     }
 
+    @Override
     public LispObject typeOf()
     {
         return list(Symbol.VECTOR, T, Fixnum.getInstance(capacity));
     }
 
+    @Override
     public LispObject classOf()
     {
         return BuiltInClass.VECTOR;
     }
 
+    @Override
     public boolean hasFillPointer()
     {
         return fillPointer >= 0;
     }
 
+    @Override
     public int getFillPointer()
     {
         return fillPointer;
     }
 
+    @Override
     public void setFillPointer(int n)
     {
         fillPointer = n;
     }
 
+    @Override
     public void setFillPointer(LispObject obj)
     {
         if (obj == T)
@@ -114,11 +120,13 @@ public final class ComplexVector extends AbstractVector
         }
     }
 
+    @Override
     public boolean isDisplaced()
     {
         return isDisplaced;
     }
 
+    @Override
     public LispObject arrayDisplacement()
     {
         LispObject value1, value2;
@@ -132,26 +140,31 @@ public final class ComplexVector extends AbstractVector
         return LispThread.currentThread().setValues(value1, value2);
     }
 
+    @Override
     public LispObject getElementType()
     {
         return T;
     }
 
+    @Override
     public boolean isSimpleVector()
     {
         return false;
     }
 
+    @Override
     public int capacity()
     {
         return capacity;
     }
 
+    @Override
     public int length()
     {
         return fillPointer >= 0 ? fillPointer : capacity;
     }
 
+    @Override
     public LispObject elt(int index)
     {
         final int limit = length();
@@ -161,6 +174,7 @@ public final class ComplexVector extends AbstractVector
     }
 
     // Ignores fill pointer.
+    @Override
     public LispObject AREF(int index)
     {
         if (elements != null) {
@@ -179,6 +193,7 @@ public final class ComplexVector extends AbstractVector
         }
     }
 
+    @Override
     public void aset(int index, LispObject newValue)
     {
         if (elements != null) {
@@ -197,6 +212,7 @@ public final class ComplexVector extends AbstractVector
         }
     }
 
+    @Override
     public LispObject subseq(int start, int end)
     {
         SimpleVector v = new SimpleVector(end - start);
@@ -211,12 +227,14 @@ public final class ComplexVector extends AbstractVector
         }
     }
 
+    @Override
     public void fill(LispObject obj)
     {
         for (int i = capacity; i-- > 0;)
             elements[i] = obj;
     }
 
+    @Override
     public void shrink(int n)
     {
         if (elements != null) {
@@ -233,6 +251,7 @@ public final class ComplexVector extends AbstractVector
         error(new LispError());
     }
 
+    @Override
     public LispObject reverse()
     {
         int length = length();
@@ -243,6 +262,7 @@ public final class ComplexVector extends AbstractVector
         return result;
     }
 
+    @Override
     public LispObject nreverse()
     {
         if (elements != null) {
@@ -272,6 +292,7 @@ public final class ComplexVector extends AbstractVector
         return this;
     }
 
+    @Override
     public void vectorPushExtend(LispObject element)
 
     {
@@ -284,6 +305,7 @@ public final class ComplexVector extends AbstractVector
         aset(fillPointer++, element);
     }
 
+    @Override
     public LispObject VECTOR_PUSH_EXTEND(LispObject element)
 
     {
@@ -291,6 +313,7 @@ public final class ComplexVector extends AbstractVector
         return Fixnum.getInstance(fillPointer - 1);
     }
 
+    @Override
     public LispObject VECTOR_PUSH_EXTEND(LispObject element, LispObject extension)
 
     {
@@ -335,6 +358,7 @@ public final class ComplexVector extends AbstractVector
         }
     }
 
+    @Override
     public AbstractVector adjustArray(int newCapacity,
                                        LispObject initialElement,
                                        LispObject initialContents)
@@ -382,6 +406,7 @@ public final class ComplexVector extends AbstractVector
         return this;
     }
 
+    @Override
     public AbstractVector adjustArray(int newCapacity,
                                        AbstractArray displacedTo,
                                        int displacement)

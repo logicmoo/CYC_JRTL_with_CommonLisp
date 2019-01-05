@@ -128,6 +128,7 @@ public final class StringFunctions {
             super("%%string=", PACKAGE_SYS, false);
         }
 
+        @Override
         public LispObject execute(LispObject string1, LispObject string2)
 
         {
@@ -146,6 +147,7 @@ public final class StringFunctions {
             super("%string=", PACKAGE_SYS, false);
         }
 
+        @Override
         public LispObject execute(LispObject string1, LispObject string2,
                                   LispObject start1, LispObject end1,
                                   LispObject start2, LispObject end2)
@@ -191,6 +193,7 @@ public final class StringFunctions {
             super("%string/=", PACKAGE_SYS, true);
         }
 
+        @Override
         public LispObject execute(LispObject string1, LispObject string2,
                                   LispObject start1, LispObject end1,
                                   LispObject start2, LispObject end2) {
@@ -210,6 +213,7 @@ public final class StringFunctions {
             super("%string-equal", PACKAGE_SYS, true);
         }
 
+        @Override
         public LispObject execute(LispObject string1, LispObject string2,
                                   LispObject start1, LispObject end1,
                                   LispObject start2, LispObject end2)
@@ -230,6 +234,7 @@ public final class StringFunctions {
             super("%string-not-equal", PACKAGE_SYS, true);
         }
 
+        @Override
         public LispObject execute(LispObject string1, LispObject string2,
                                   LispObject start1, LispObject end1,
                                   LispObject start2, LispObject end2) {
@@ -280,6 +285,7 @@ public final class StringFunctions {
             super("%string<", PACKAGE_SYS, true);
         }
 
+        @Override
         public LispObject execute(LispObject string1, LispObject string2,
                                   LispObject start1, LispObject end1,
                                   LispObject start2, LispObject end2) {
@@ -310,6 +316,7 @@ public final class StringFunctions {
             super("%string>", PACKAGE_SYS, true);
         }
 
+        @Override
         public LispObject execute(LispObject string1, LispObject string2,
                                   LispObject start1, LispObject end1,
                                   LispObject start2, LispObject end2) {
@@ -358,6 +365,7 @@ public final class StringFunctions {
             super("%string<=", PACKAGE_SYS, true);
         }
 
+        @Override
         public LispObject execute(LispObject string1, LispObject string2,
                                   LispObject start1, LispObject end1,
                                   LispObject start2, LispObject end2) {
@@ -378,6 +386,7 @@ public final class StringFunctions {
             super("%string>=", PACKAGE_SYS, true);
         }
 
+        @Override
         public LispObject execute(LispObject string1, LispObject string2,
                                   LispObject start1, LispObject end1,
                                   LispObject start2, LispObject end2) {
@@ -400,6 +409,7 @@ public final class StringFunctions {
             super("%string-lessp", PACKAGE_SYS, true);
         }
 
+        @Override
         public LispObject execute(LispObject string1, LispObject string2,
                                   LispObject start1, LispObject end1,
                                   LispObject start2, LispObject end2) {
@@ -420,6 +430,7 @@ public final class StringFunctions {
             super("%string-greaterp", PACKAGE_SYS, true);
         }
 
+        @Override
         public LispObject execute(LispObject string1, LispObject string2,
                                   LispObject start1, LispObject end1,
                                   LispObject start2, LispObject end2) {
@@ -441,6 +452,7 @@ public final class StringFunctions {
             super("%string-not-lessp", PACKAGE_SYS, true);
         }
 
+        @Override
         public LispObject execute(LispObject string1, LispObject string2,
                                   LispObject start1, LispObject end1,
                                   LispObject start2, LispObject end2) {
@@ -463,6 +475,7 @@ public final class StringFunctions {
             super("%string-not-greaterp", PACKAGE_SYS, true);
         }
 
+        @Override
         public LispObject execute(LispObject string1, LispObject string2,
                                   LispObject start1, LispObject end1,
                                   LispObject start2, LispObject end2) {
@@ -483,6 +496,7 @@ public final class StringFunctions {
             super("%string-upcase", PACKAGE_SYS, true);
         }
 
+        @Override
         public LispObject execute(LispObject string, LispObject start,
                                   LispObject end)
 
@@ -510,6 +524,7 @@ public final class StringFunctions {
             super("%string-downcase", PACKAGE_SYS, true);
         }
 
+        @Override
         public LispObject execute(LispObject string, LispObject start,
                                   LispObject end) {
             StringIndicesAndChars indicesAndChars = 
@@ -535,6 +550,7 @@ public final class StringFunctions {
             super("%string-capitalize", PACKAGE_SYS, true);
         }
 
+        @Override
         public LispObject execute(LispObject string, LispObject start,
                                   LispObject end)
 
@@ -577,6 +593,7 @@ public final class StringFunctions {
             super("%nstring-upcase", PACKAGE_SYS, true);
         }
 
+        @Override
         public LispObject execute(LispObject string, LispObject start,
                                   LispObject end)
 
@@ -600,6 +617,7 @@ public final class StringFunctions {
             super("%nstring-downcase", PACKAGE_SYS, true);
         }
 
+        @Override
         public LispObject execute(LispObject string, LispObject start,
                                   LispObject end)
 
@@ -622,6 +640,7 @@ public final class StringFunctions {
             super("%nstring-capitalize", PACKAGE_SYS, true);
         }
 
+        @Override
         public LispObject execute(LispObject string, LispObject start,
                                   LispObject end)
 
@@ -657,6 +676,7 @@ public final class StringFunctions {
             super("stringp", "object");
         }
 
+        @Override
         public LispObject execute(LispObject arg) {
             return arg.STRINGP();
         }
@@ -669,6 +689,7 @@ public final class StringFunctions {
             super("simple-string-p", "object");
         }
 
+        @Override
         public LispObject execute(LispObject arg) {
             return arg.SIMPLE_STRING_P();
         }
@@ -683,6 +704,7 @@ public final class StringFunctions {
             super("%make-string", PACKAGE_SYS, false);
         }
 
+        @Override
         public LispObject execute(LispObject size, LispObject initialElement,
                                   LispObject elementType)
 
@@ -719,6 +741,7 @@ public final class StringFunctions {
             super(Symbol.CHAR, "string index");
         }
 
+        @Override
         public LispObject execute(LispObject first, LispObject second)
 
         {
@@ -733,6 +756,7 @@ public final class StringFunctions {
             super(Symbol.SCHAR, "string index");
         }
 
+        @Override
         public LispObject execute(LispObject first, LispObject second)
 
         {
@@ -747,6 +771,7 @@ public final class StringFunctions {
             super(Symbol.SET_CHAR, "string index character");
         }
 
+        @Override
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
 
@@ -764,6 +789,7 @@ public final class StringFunctions {
             super(Symbol.SET_SCHAR, "string index character");
         }
 
+        @Override
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
 
@@ -784,6 +810,7 @@ public final class StringFunctions {
             super("string-position", PACKAGE_EXT, true);
         }
 
+        @Override
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
 
@@ -806,6 +833,7 @@ public final class StringFunctions {
             super("string-find", PACKAGE_EXT, true, "char string");
         }
 
+        @Override
         public LispObject execute(LispObject first, LispObject second)
 
         {
@@ -830,6 +858,7 @@ public final class StringFunctions {
             super("simple-string-search", PACKAGE_EXT, true);
         }
 
+        @Override
         public LispObject execute(LispObject first, LispObject second)
 
         {
@@ -846,6 +875,7 @@ public final class StringFunctions {
             super("simple-string-fill", PACKAGE_EXT, true);
         }
 
+        @Override
         public LispObject execute(LispObject first, LispObject second)
 
         {

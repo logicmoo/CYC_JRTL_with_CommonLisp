@@ -66,14 +66,14 @@ Used to determine relative pathname to find 'abcl-contrib.jar'."
   (find-jar #'contrib-jar-p))
 
 (defvar *abcl-contrib* nil
-  "Pathname of the ABCL contrib.
+  "Pathname of the abcl-contrib artifact.
+
 Initialized via SYSTEM:FIND-CONTRIB.")
 
-(defparameter *verbose* t)
-
 ;;; FIXME: stop using the obsolete ASDF:*CENTRAL-REGISTRY*
-(defun add-contrib (abcl-contrib-jar)
-  "Introspects a abcl-contrib-jar path whose immediate sub-directories
+(defun add-contrib (abcl-contrib-jar
+                    &key (verbose cl:*load-verbose*))
+  "Introspects the ABCL-CONTRIB-JAR path for sub-directories which
   contain asdf definitions, adding those found to asdf."
   (let ((jar-path (if (ext:pathname-jar-p abcl-contrib-jar)
                       abcl-contrib-jar
@@ -83,18 +83,18 @@ Initialized via SYSTEM:FIND-CONTRIB.")
       (let ((asdf-directory (make-pathname :defaults asdf-file :name nil :type nil)))
         (unless (find asdf-directory asdf:*central-registry* :test #'equal)
           (push asdf-directory asdf:*central-registry*)
-          (format *verbose* "~&Added ~A to ASDF.~&" asdf-directory))))))
+          (format verbose "~&; abcl-contrib; Added ~A to ASDF.~&" asdf-directory))))))
 
-(defun find-and-add-contrib (&key (verbose nil))
+(defun find-and-add-contrib (&key (verbose cl:*load-verbose*))
   "Attempt to find the ABCL contrib jar and add its contents to ASDF.
-Returns the pathname of the contrib if it can be found."
+returns the pathname of the contrib if it can be found."
   (if *abcl-contrib*
-      (format verbose "~&Using already initialized value of abcl-contrib:~&'~A'.~%"
+       (format verbose "~&; abcl-contrib; Using already initialized value of SYS:*ABCL-CONTRIB* '~A'.~%"
               *abcl-contrib*)
     (progn
          (let ((contrib (find-contrib)))
            (when contrib
-      (format verbose "~&Using probed value of abcl-contrib:~&'~A'.~%"
+             (format verbose "~&; abcl-contrib; Using probed value of SYS:*ABCL-CONTRIB* '~A'.~%"
                      contrib)
              (setf *abcl-contrib* contrib)))))
    (when *abcl-contrib*  ;; For bootstrap compile there will be no contrib
@@ -165,9 +165,10 @@ Returns the pathname of the contrib if it can be found."
                       :name "abcl-contrib")))
        (java:jcall "getURLs" (boot-classloader)))))
 
-(export `(find-system
+(export '(find-system
           find-contrib
-          *abcl-contrib*))
+          *abcl-contrib*)
+        :system)
 
-(when (find-and-add-contrib :verbose t)
+(when (find-and-add-contrib :verbose cl:*load-verbose*)
   (provide :abcl-contrib))

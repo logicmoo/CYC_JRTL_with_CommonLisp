@@ -1,7 +1,7 @@
 ;;; print.lisp
 ;;;
 ;;; Copyright (C) 2004-2006 Peter Graves
-;;; $Id$
+;;; $Id: print.lisp 14933 2016-12-28 09:19:00Z mevenson $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -147,6 +147,8 @@
         ((xp::xp-structure-p stream)
          (let ((s (sys::%write-to-string object)))
            (xp::write-string++ s stream 0 (length s))))
+	((functionp object)
+	  (print-object object stream))
         (t
          (%output-object object stream))))
 

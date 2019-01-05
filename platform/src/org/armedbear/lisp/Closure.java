@@ -210,6 +210,7 @@ abstract public class Closure extends Function
 		return unreadableString(sb.toString());
   }
 
+  @Override
   public LispObject execute(LispObject[] args)
   {
     final LispThread thread = LispThread.currentThread();

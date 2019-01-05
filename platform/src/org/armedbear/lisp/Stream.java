@@ -544,14 +544,17 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
         open = b;
     }
 
+    @Override
     public LispObject typeOf() {
         return Symbol.SYSTEM_STREAM;
     }
 
+    @Override
     public LispObject classOf() {
         return BuiltInClass.SYSTEM_STREAM;
     }
 
+    @Override
     public LispObject typep(LispObject typeSpecifier) {
         if (typeSpecifier == Symbol.SYSTEM_STREAM)
             return T;
@@ -2305,6 +2308,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     private static final Primitive _WRITE_CHAR =
         new Primitive("%stream-write-char", PACKAGE_SYS, true,
     "character output-stream") {
+        @Override
         public LispObject execute(LispObject first, LispObject second)
 
         {
@@ -2317,6 +2321,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     private static final Primitive _STREAM_WRITE_CHAR =
         new Primitive("%write-char", PACKAGE_SYS, false,
     "character output-stream") {
+        @Override
         public LispObject execute(LispObject first, LispObject second)
 
         {
@@ -2335,6 +2340,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     private static final Primitive _WRITE_STRING =
         new Primitive("%write-string", PACKAGE_SYS, false,
     "string output-stream start end") {
+        @Override
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth)
 
@@ -2358,6 +2364,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     // ### %finish-output output-stream => nil
     private static final Primitive _FINISH_OUTPUT =
     new Primitive("%finish-output", PACKAGE_SYS, false, "output-stream") {
+        @Override
         public LispObject execute(LispObject arg) {
             return finishOutput(arg);
         }
@@ -2366,6 +2373,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     // ### %force-output output-stream => nil
     private static final Primitive _FORCE_OUTPUT =
     new Primitive("%force-output", PACKAGE_SYS, false, "output-stream") {
+        @Override
         public LispObject execute(LispObject arg) {
             return finishOutput(arg);
         }
@@ -2410,6 +2418,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     // ### clear-input &optional input-stream => nil
     private static final Primitive CLEAR_INPUT =
     new Primitive(Symbol.CLEAR_INPUT, "&optional input-stream") {
+        @Override
         public LispObject execute(LispObject[] args) {
             if (args.length > 1)
                 return error(new WrongNumberOfArgumentsException(this, -1, 1));
@@ -2428,6 +2437,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     // it does nothing."
     private static final Primitive _CLEAR_OUTPUT =
     new Primitive("%clear-output", PACKAGE_SYS, false, "output-stream") {
+        @Override
         public LispObject execute(LispObject arg) {
             if (arg == T) // *TERMINAL-IO*
                 return NIL;
@@ -2442,10 +2452,12 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     // ### close stream &key abort => result
     private static final Primitive CLOSE =
     new Primitive(Symbol.CLOSE, "stream &key abort") {
+        @Override
         public LispObject execute(LispObject arg) {
             return checkStream(arg).close(NIL);
         }
 
+        @Override
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
 
@@ -2461,6 +2473,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     // ### out-synonym-of stream-designator => stream
     private static final Primitive OUT_SYNONYM_OF =
     new Primitive("out-synonym-of", PACKAGE_SYS, true, "stream-designator") {
+        @Override
         public LispObject execute (LispObject arg) {
             if (arg instanceof Stream)
                 return arg;
@@ -2476,6 +2489,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     // write-8-bits byte stream => nil
     private static final Primitive WRITE_8_BITS =
     new Primitive("write-8-bits", PACKAGE_SYS, true, "byte stream") {
+        @Override
         public LispObject execute (LispObject first, LispObject second)
 
         {
@@ -2492,6 +2506,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     private static final Primitive READ_8_BITS =
         new Primitive("read-8-bits", PACKAGE_SYS, true,
     "stream &optional eof-error-p eof-value") {
+        @Override
         public LispObject execute (LispObject first, LispObject second,
                                    LispObject third)
 
@@ -2500,6 +2515,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
                     third);
         }
 
+        @Override
         public LispObject execute (LispObject[] args) {
             int length = args.length;
             if (length < 1 || length > 3)
@@ -2516,11 +2532,13 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     private static final Primitive READ_LINE =
         new Primitive(Symbol.READ_LINE,
     "&optional input-stream eof-error-p eof-value recursive-p") {
+        @Override
         public LispObject execute() {
             final LispObject obj = Symbol.STANDARD_INPUT.symbolValue();
             final Stream stream = checkStream(obj);
             return stream.readLine(true, NIL);
         }
+        @Override
         public LispObject execute(LispObject arg) {
             if (arg == T)
                 arg = Symbol.TERMINAL_IO.symbolValue();
@@ -2529,6 +2547,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
             final Stream stream = checkStream(arg);
             return stream.readLine(true, NIL);
         }
+        @Override
         public LispObject execute(LispObject first, LispObject second)
 
         {
@@ -2539,6 +2558,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
             final Stream stream = checkStream(first);
             return stream.readLine(second != NIL, NIL);
         }
+        @Override
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
 
@@ -2550,6 +2570,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
             final Stream stream = checkStream(first);
             return stream.readLine(second != NIL, third);
         }
+        @Override
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth)
 
@@ -2568,6 +2589,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     // => object, position
     private static final Primitive _READ_FROM_STRING =
     new Primitive("%read-from-string", PACKAGE_SYS, false) {
+        @Override
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth,
                                   LispObject fifth, LispObject sixth)
@@ -2603,12 +2625,14 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     private static final Primitive READ =
         new Primitive(Symbol.READ,
     "&optional input-stream eof-error-p eof-value recursive-p") {
+        @Override
         public LispObject execute() {
             final LispThread thread = LispThread.currentThread();
             final LispObject obj = Symbol.STANDARD_INPUT.symbolValue(thread);
             final Stream stream = checkStream(obj);
             return stream.read(true, NIL, false, thread, currentReadtable);
         }
+        @Override
         public LispObject execute(LispObject arg) {
             final LispThread thread = LispThread.currentThread();
             if (arg == T)
@@ -2618,6 +2642,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
             final Stream stream = checkStream(arg);
             return stream.read(true, NIL, false, thread, currentReadtable);
         }
+        @Override
         public LispObject execute(LispObject first, LispObject second)
 
         {
@@ -2629,6 +2654,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
             final Stream stream = checkStream(first);
             return stream.read(second != NIL, NIL, false, thread, currentReadtable);
         }
+        @Override
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
 
@@ -2641,6 +2667,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
             final Stream stream = checkStream(first);
             return stream.read(second != NIL, third, false, thread, currentReadtable);
         }
+        @Override
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth)
 
@@ -2661,6 +2688,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     private static final Primitive READ_PRESERVING_WHITESPACE =
         new Primitive(Symbol.READ_PRESERVING_WHITESPACE,
     "&optional input-stream eof-error-p eof-value recursive-p") {
+        @Override
         public LispObject execute(LispObject[] args) {
             int length = args.length;
             if (length > 4)
@@ -2682,23 +2710,28 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     private static final Primitive READ_CHAR =
         new Primitive(Symbol.READ_CHAR,
     "&optional input-stream eof-error-p eof-value recursive-p") {
+        @Override
         public LispObject execute() {
             return checkCharacterInputStream(Symbol.STANDARD_INPUT.symbolValue()).READ_CHAR();
         }
+        @Override
         public LispObject execute(LispObject arg) {
             return inSynonymOf(arg).READ_CHAR();
         }
+        @Override
         public LispObject execute(LispObject first, LispObject second)
 
         {
             return inSynonymOf(first).readChar(second != NIL, NIL);
         }
+        @Override
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third)
 
         {
             return inSynonymOf(first).readChar(second != NIL, third);
         }
+        @Override
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth)
 
@@ -2712,6 +2745,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     private static final Primitive READ_CHAR_NO_HANG =
     new Primitive("read-char-no-hang", "&optional input-stream eof-error-p eof-value recursive-p") {
 
+        @Override
         public LispObject execute(LispObject[] args) {
             int length = args.length;
             if (length > 4)
@@ -2730,6 +2764,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     private static final Primitive READ_DELIMITED_LIST =
     new Primitive("read-delimited-list", "char &optional input-stream recursive-p") {
 
+        @Override
         public LispObject execute(LispObject[] args) {
             int length = args.length;
             if (length < 1 || length > 3)
@@ -2745,9 +2780,11 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     // ### unread-char character &optional input-stream => nil
     private static final Primitive UNREAD_CHAR =
     new Primitive(Symbol.UNREAD_CHAR, "character &optional input-stream") {
+        @Override
         public LispObject execute(LispObject arg) {
             return getStandardInput().unreadChar(checkCharacter(arg));
         }
+        @Override
         public LispObject execute(LispObject first, LispObject second)
 
         {
@@ -2760,6 +2797,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     private static final Primitive WRITE_VECTOR_UNSIGNED_BYTE_8 =
         new Primitive("write-vector-unsigned-byte-8", PACKAGE_SYS, true,
     "vector stream start end") {
+        @Override
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth)
 
@@ -2778,6 +2816,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     private static final Primitive READ_VECTOR_UNSIGNED_BYTE_8 =
         new Primitive("read-vector-unsigned-byte-8", PACKAGE_SYS, true,
     "vector stream start end") {
+        @Override
         public LispObject execute(LispObject first, LispObject second,
                                   LispObject third, LispObject fourth)
 
@@ -2804,9 +2843,11 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     // ### file-position
     private static final Primitive FILE_POSITION =
     new Primitive("file-position", "stream &optional position-spec") {
+        @Override
         public LispObject execute(LispObject arg) {
             return checkStream(arg).getFilePosition();
         }
+        @Override
         public LispObject execute(LispObject first, LispObject second)
 
         {
@@ -2817,6 +2858,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     // ### stream-line-number
     private static final Primitive STREAM_LINE_NUMBER =
     new Primitive("stream-line-number", PACKAGE_SYS, false, "stream") {
+        @Override
         public LispObject execute(LispObject arg) {
             return Fixnum.getInstance(checkStream(arg).getLineNumber() + 1);
         }
@@ -2825,6 +2867,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     // ### stream-offset
     private static final Primitive STREAM_OFFSET =
     new Primitive("stream-offset", PACKAGE_SYS, false, "stream") {
+        @Override
         public LispObject execute(LispObject arg) {
             return number(checkStream(arg).getOffset());
         }
@@ -2833,6 +2876,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     // ### stream-charpos stream => position
     private static final Primitive STREAM_CHARPOS =
     new Primitive("stream-charpos", PACKAGE_SYS, false) {
+        @Override
         public LispObject execute(LispObject arg) {
             Stream stream = checkCharacterOutputStream(arg);
             return Fixnum.getInstance(stream.getCharPos());
@@ -2842,6 +2886,7 @@ public class Stream extends AbstractRandomAccessSubLStream implements ILispStrea
     // ### stream-%set-charpos stream newval => newval
     private static final Primitive STREAM_SET_CHARPOS =
     new Primitive("stream-%set-charpos", PACKAGE_SYS, false) {
+        @Override
         public LispObject execute(LispObject first, LispObject second)
 
         {

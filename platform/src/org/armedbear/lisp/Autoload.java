@@ -178,12 +178,14 @@ public class Autoload extends Function
         return loadSymbol().execute();
     }
 
+    @Override
     public LispObject execute(LispObject arg)
     {
 
         return loadSymbol().execute(arg);
     }
 
+    @Override
     public LispObject execute(LispObject first, LispObject second)
 
     {
@@ -191,6 +193,7 @@ public class Autoload extends Function
         return loadSymbol().execute(first, second);
     }
 
+    @Override
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third)
 
@@ -199,6 +202,7 @@ public class Autoload extends Function
         return loadSymbol().execute(first, second, third);
     }
 
+    @Override
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third, LispObject fourth)
 
@@ -207,6 +211,7 @@ public class Autoload extends Function
         return loadSymbol().execute(first, second, third, fourth);
     }
 
+    @Override
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third, LispObject fourth,
                               LispObject fifth)
@@ -216,6 +221,7 @@ public class Autoload extends Function
         return loadSymbol().execute(first, second, third, fourth, fifth);
     }
 
+    @Override
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third, LispObject fourth,
                               LispObject fifth, LispObject sixth)
@@ -236,6 +242,7 @@ public class Autoload extends Function
                               seventh);
     }
 
+    @Override
     public LispObject execute(LispObject first, LispObject second,
                               LispObject third, LispObject fourth,
                               LispObject fifth, LispObject sixth,
@@ -247,13 +254,15 @@ public class Autoload extends Function
                               seventh, eighth);
     }
 
+    @Override
     public LispObject execute(LispObject[] args)
     {
 
         return loadSymbol().execute(args);
     }
 
-	protected void extraInfo(StringBuilder sb) {
+	protected void extraInfo(StringBuilder sb) 
+   {
     	sb.append(" ");
         sb.append(symbol.princToString());
         sb.append(" stub to be autoloaded from \"");
@@ -269,6 +278,25 @@ public class Autoload extends Function
         sb.append("\"");
     }
 
+    //@Override
+    public String printObjectTrunk()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(symbol.princToString());
+        sb.append(" stub to be autoloaded from \"");
+        if (className != null) {
+            int index = className.lastIndexOf('.');
+            if (index >= 0)
+                sb.append(className.substring(index + 1));
+            else
+                sb.append(className);
+            sb.append(".class");
+        } else
+            sb.append(getFileName());
+        sb.append("\"");
+        return unreadableString(sb.toString());
+    }
+
     public static final Primitive AUTOLOAD = new pf_autoload();
     @DocString(name="autoload",
                args="symbol-or-symbols &optional filename",
@@ -277,6 +305,7 @@ public class Autoload extends Function
         pf_autoload() {
             super("autoload", PACKAGE_EXT, true);
         }
+        @Override
         public LispObject execute(LispObject first)
         {
             if (first instanceof Symbol) {
@@ -293,6 +322,7 @@ public class Autoload extends Function
             }
             return error(new TypeError(first));
         }
+        @Override
         public LispObject execute(LispObject first, LispObject second)
 
         {
@@ -322,6 +352,7 @@ public class Autoload extends Function
         pf_resolve() {
             super("resolve", PACKAGE_EXT, true, "symbol");
         }
+        @Override
         public LispObject execute(LispObject arg) {
             Symbol symbol = checkSymbol(arg);
             LispObject fun = symbol.getSymbolFunction();
@@ -343,6 +374,7 @@ public class Autoload extends Function
             super("autoloadp", PACKAGE_EXT, true, "symbol");
         }
 
+        @Override
         public LispObject execute(LispObject arg)
         {
             if (arg instanceof Symbol) {
@@ -508,7 +540,7 @@ public class Autoload extends Function
         autoload(PACKAGE_EXT, "file-directory-p", "probe_file", true);
         autoload(PACKAGE_EXT, "gc", "gc", true);
         autoload(PACKAGE_EXT, "get-floating-point-modes", "FloatFunctions", true);
-        //autoload(PACKAGE_EXT, "get-time-zone", "Time", true);
+        autoload(PACKAGE_EXT, "get-time-zone", "Time", true);
         autoload(PACKAGE_EXT, "make-slime-input-stream", "SlimeInputStream", true);
         autoload(PACKAGE_EXT, "make-slime-output-stream", "SlimeOutputStream", true);
         autoload(PACKAGE_EXT, "probe-directory", "probe_file", true);

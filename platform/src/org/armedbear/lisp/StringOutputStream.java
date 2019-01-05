@@ -65,16 +65,19 @@ public final class StringOutputStream extends Stream
         }
     }
 
+    @Override
     public LispObject typeOf()
     {
         return Symbol.STRING_OUTPUT_STREAM;
     }
 
+    @Override
     public LispObject classOf()
     {
         return BuiltInClass.STRING_OUTPUT_STREAM;
     }
 
+    @Override
     public LispObject typep(LispObject type)
     {
         if (type == Symbol.STRING_OUTPUT_STREAM)

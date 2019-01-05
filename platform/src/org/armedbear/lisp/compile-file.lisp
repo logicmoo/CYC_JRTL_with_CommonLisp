@@ -2,7 +2,7 @@
 ;;; compile-file.lisp
 ;;;
 ;;; Copyright (C) 2004-2006 Peter Graves
-;;; $Id$
+;;; $Id: compile-file.lisp 14915 2016-11-24 10:31:24Z mevenson $
 ;;;
 ;;; This program is free software; you can redistribute it and/or
 ;;; modify it under the terms of the GNU General Public License
@@ -976,7 +976,7 @@ interpreted toplevel form, non-NIL if it is 'simple enough'."
     (unless (or (and (probe-file input-file)
                      (not (file-directory-p input-file)))
                 (pathname-type input-file))
-      (let ((pathname (pathname-with-type input-file *lisp-file-type*)))
+      (let ((pathname (pathname-with-type input-file "lisp")))
         (when (probe-file pathname)
           (setf input-file pathname))))
     (setf output-file

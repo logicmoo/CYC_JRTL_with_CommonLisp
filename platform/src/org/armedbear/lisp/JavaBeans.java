@@ -54,6 +54,7 @@ public final class JavaBeans {
                   "java-object property-name");
         }
     	
+        @Override
         public LispObject execute(LispObject javaObject, LispObject propertyName) {
 			try {
 				Object obj = javaObject.javaInstance();
@@ -84,6 +85,7 @@ public final class JavaBeans {
                   "java-object property-name value");
         }
     	
+        @Override
         public LispObject execute(LispObject javaObject, LispObject propertyName, LispObject value) {
 	    Object obj = null;
 	    try {

@@ -167,6 +167,7 @@ public final class FloatFunctions
     private static final Primitive RATIONAL =
         new Primitive("rational", "number")
     {
+        @Override
         public LispObject execute(LispObject arg)
         {
             if (arg instanceof SingleFloat)
@@ -184,6 +185,7 @@ public final class FloatFunctions
     private static final Primitive FLOAT_RADIX =
         new Primitive("float-radix", "float")
     {
+        @Override
         public LispObject execute(LispObject arg)
         {
             if (arg instanceof SingleFloat || arg instanceof DoubleFloat)
@@ -200,6 +202,7 @@ public final class FloatFunctions
     private static final Primitive FLOAT_DIGITS =
         new Primitive("float-digits", "float")
     {
+        @Override
         public LispObject execute(LispObject arg)
         {
             if (arg instanceof SingleFloat)
@@ -214,6 +217,7 @@ public final class FloatFunctions
     private static final Primitive SCALE_FLOAT =
         new Primitive("scale-float", "float integer")
     {
+        @Override
         public LispObject execute(LispObject first, LispObject second)
 
         {
@@ -235,6 +239,7 @@ public final class FloatFunctions
     private static final Primitive COERCE_TO_SINGLE_FLOAT =
         new Primitive("coerce-to-single-float", PACKAGE_SYS, false)
     {
+        @Override
         public LispObject execute(LispObject arg)
         {
             return SingleFloat.coerceToFloat(arg);
@@ -245,6 +250,7 @@ public final class FloatFunctions
     private static final Primitive COERCE_TO_DOUBLE_FLOAT =
         new Primitive("coerce-to-double-float", PACKAGE_SYS, false)
     {
+        @Override
         public LispObject execute(LispObject arg)
         {
             return DoubleFloat.coerceToFloat(arg);
@@ -256,12 +262,14 @@ public final class FloatFunctions
     private static final Primitive FLOAT =
         new Primitive("float", "number &optional prototype")
     {
+        @Override
         public LispObject execute(LispObject arg)
         {
             if (arg instanceof SingleFloat || arg instanceof DoubleFloat)
                 return arg;
             return SingleFloat.coerceToFloat(arg);
         }
+        @Override
         public LispObject execute(LispObject first, LispObject second)
 
         {
@@ -277,6 +285,7 @@ public final class FloatFunctions
     // floatp object => generalized-boolean
     private static final Primitive FLOATP = new Primitive("floatp", "object")
     {
+        @Override
         public LispObject execute(LispObject arg)
         {
             if (arg instanceof SingleFloat)
@@ -305,6 +314,7 @@ public final class FloatFunctions
     private static final Primitive DOUBLE_FLOAT_HIGH_BITS =
         new Primitive("double-float-high-bits", PACKAGE_SYS, true, "float")
     {
+        @Override
         public LispObject execute(LispObject arg)
         {
             if (arg instanceof DoubleFloat) {
@@ -319,6 +329,7 @@ public final class FloatFunctions
     private static final Primitive DOUBLE_FLOAT_LOW_BITS =
         new Primitive("double-float-low-bits", PACKAGE_SYS, true, "float")
     {
+        @Override
         public LispObject execute(LispObject arg)
         {
             if (arg instanceof DoubleFloat) {
@@ -333,6 +344,7 @@ public final class FloatFunctions
     private static final Primitive MAKE_SINGLE_FLOAT =
         new Primitive("make-single-float", PACKAGE_SYS, true, "bits")
     {
+        @Override
         public LispObject execute(LispObject arg)
 
         {
@@ -352,6 +364,7 @@ public final class FloatFunctions
     private static final Primitive MAKE_DOUBLE_FLOAT =
         new Primitive("make-double-float", PACKAGE_SYS, true, "bits")
     {
+        @Override
         public LispObject execute(LispObject arg)
 
         {
@@ -371,6 +384,7 @@ public final class FloatFunctions
     private static final Primitive FLOAT_INFINITY_P =
         new Primitive("float-infinity-p", PACKAGE_SYS, true)
     {
+        @Override
         public LispObject execute(LispObject arg)
 
         {
@@ -386,6 +400,7 @@ public final class FloatFunctions
     private static final Primitive FLOAT_NAN_P =
         new Primitive("float-nan-p", PACKAGE_SYS, true)
     {
+        @Override
         public LispObject execute(LispObject arg)
 
         {
@@ -401,6 +416,7 @@ public final class FloatFunctions
     private static final Primitive FLOAT_STRING =
         new Primitive("float-string", PACKAGE_SYS, true)
     {
+        @Override
         public LispObject execute(LispObject arg)
         {
             final String s1;

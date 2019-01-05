@@ -78,9 +78,10 @@ public class REPLConsole extends DefaultStyledDocument {
 
   private Reader reader = new Reader() {
 
-		public void close() throws RuntimeException {
-		}
+      @Override
+      public void close() throws RuntimeException {}
 
+      @Override
       public synchronized int read(char[] cbuf, int off, int len) throws RuntimeException {
         try {
           int length = Math.min(inputBuffer.length(), len);
@@ -99,12 +100,13 @@ public class REPLConsole extends DefaultStyledDocument {
 
   private Writer writer = new Writer() {
 
-		public void close() throws RuntimeException {
-		}
+      @Override
+      public void close() throws RuntimeException {}
 
-		public void flush() throws RuntimeException {
-		}
+      @Override
+      public void flush() throws RuntimeException {}
 
+      @Override
       public void write(final char[] cbuf, final int off, final int len) throws RuntimeException {
         try {
           final int insertOffs;
@@ -166,7 +168,9 @@ public class REPLConsole extends DefaultStyledDocument {
 		return replThread;
   }
 
-	public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
+  @Override
+  public void insertString(int offs, String str, AttributeSet a)
+    throws BadLocationException {
     synchronized(reader) {
       int bufferStart = getLength() - inputBuffer.length();
       if(offs < bufferStart) {
@@ -180,7 +184,8 @@ public class REPLConsole extends DefaultStyledDocument {
     }
   }
 
-	protected void superInsertString(int offs, String str, AttributeSet a) throws BadLocationException {
+  protected void superInsertString(int offs, String str, AttributeSet a)
+    throws BadLocationException {
     super.insertString(offs, str, a);
   }
 
@@ -209,6 +214,7 @@ public class REPLConsole extends DefaultStyledDocument {
     return parenCount <= 0;
   }
 
+  @Override
   public void remove(int offs, int len) throws BadLocationException {
     synchronized(reader) {
       int bufferStart = getLength() - inputBuffer.length();
@@ -268,6 +274,7 @@ public class REPLConsole extends DefaultStyledDocument {
 
   private final LispObject debuggerHook = new Function() {
 
+      @Override
       public LispObject execute(LispObject condition, LispObject debuggerHook) {
         if(disposed) {
           return PACKAGE_SYS.findSymbol("%DEBUGGER-HOOK-FUNCTION").execute(condition, debuggerHook);
@@ -334,6 +341,7 @@ public class REPLConsole extends DefaultStyledDocument {
 
   public void disposeOnClose(final Window parent) {
     parent.addWindowListener(new WindowAdapter() {
+        @Override
         public void windowClosing(WindowEvent e) {
           dispose();
           parent.removeWindowListener(this);

@@ -52,16 +52,19 @@ public abstract class CaseFrobStream extends Stream
         return target.getStreamElementType();
     }
 
+    @Override
     public LispObject typeOf()
     {
         return Symbol.CASE_FROB_STREAM;
     }
 
+    @Override
     public LispObject classOf()
     {
         return BuiltInClass.CASE_FROB_STREAM;
     }
 
+    @Override
     public LispObject typep(LispObject type)
     {
         if (type == Symbol.CASE_FROB_STREAM)
@@ -71,47 +74,56 @@ public abstract class CaseFrobStream extends Stream
         return super.typep(type);
     }
 
+    @Override
     public boolean isInputStream()
     {
         return false;
     }
 
+    @Override
     public boolean isOutputStream()
     {
         return true;
     }
 
+    @Override
     public boolean isCharacterInputStream()
     {
         return false;
     }
 
+    @Override
     public boolean isBinaryInputStream()
     {
         return false;
     }
 
+    @Override
     public boolean isCharacterOutputStream()
     {
         return true;
     }
 
+    @Override
     public boolean isBinaryOutputStream()
     {
         return false;
     }
 
+    @Override
     public int getCharPos()
     {
         return target.getCharPos();
     }
 
+    @Override
     public void setCharPos(int n)
     {
         target.setCharPos(n);
     }
 
     // Returns -1 at end of file.
+    @Override
     protected int _readChar()
     {
         notSupported();
@@ -119,11 +131,13 @@ public abstract class CaseFrobStream extends Stream
         return -1;
     }
 
+    @Override
     protected void _unreadChar(int n)
     {
         notSupported();
     }
 
+    @Override
     protected boolean _charReady()
     {
         notSupported();
@@ -131,6 +145,7 @@ public abstract class CaseFrobStream extends Stream
         return false;
     }
 
+    @Override
     public void _writeChars(char[] chars, int start, int end)
 
     {
@@ -138,6 +153,7 @@ public abstract class CaseFrobStream extends Stream
     }
 
     // Reads an 8-bit byte.
+    @Override
     public int _readByte()
     {
         notSupported();
@@ -146,27 +162,32 @@ public abstract class CaseFrobStream extends Stream
     }
 
     // Writes an 8-bit byte.
+    @Override
     public void _writeByte(int n)
     {
         notSupported();
     }
 
+    @Override
     public void _finishOutput()
     {
         target._finishOutput();
     }
 
+    @Override
     public void _clearInput()
     {
         notSupported();
     }
 
+    @Override
     public LispObject close(LispObject abort)
     {
         setOpen(false);
         return T;
     }
 
+    @Override
     public LispObject listen()
     {
         notSupported();
@@ -174,6 +195,7 @@ public abstract class CaseFrobStream extends Stream
         return NIL;
     }
 
+    @Override
     public LispObject terpri()
     {
         return target.terpri();
@@ -198,6 +220,7 @@ public abstract class CaseFrobStream extends Stream
     private static final Primitive MAKE_CASE_FROB_STREAM =
         new Primitive("make-case-frob-stream", PACKAGE_SYS, false, "target kind")
     {
+        @Override
         public LispObject execute(LispObject first, LispObject second)
 
         {
