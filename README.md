@@ -308,5 +308,39 @@ Freeing constants ... DONE (0:00)
 Determining maximum unrepresented-term SUID ... DONE (0:00)
 Loading constant shells
 ...
+;;; Rebuilding computable-but-not-dumpable-yet-KB at 01/05/2019 12:31:23
+Swapping out assertion objects ... DONE (0:00)
+Swapping out deduction objects ... DONE (0:00)
+Swapping out constant-index objects ... DONE (0:00)
+Swapping out nart-index objects ... DONE (0:00)
+Swapping out nart-hl-formula objects ... DONE (0:00)
+Swapping out unrepresented-term-index objects ... DONE (0:00)
+Swapping out kb-hl-support objects ... DONE (0:00)
+Enforcing SBHL caching policies ... DONE (0:02)
+
+;;; Load of KB 7166 completed (1:42) at 01/05/2019 12:31:39
+
+;;; KB 7166 statistics
+FORTs                   :    638756
+ Constants              :    336790
+  cached indexing       :         0  (0%)
+ NARTs                  :    301966
+  cached indexing       :         0  (0%)
+  cached HL formulas    :         0  (0%)
+Assertions              :   9042563
+ KB Assertions          :   8469860
+  cached                :         0  (0%)
+ Bookkeeping Assertions :    572703
+Deductions              :  11218595
+  cached                :         0  (0%)
+KB HL supports          :   1348309
+  cached                :         0  (0%)
+Unrepresented terms     :   1100717
+  cached indexing       :         0  (0%)
+Initializing Cyc 10.152303 (ResearchCyc (custom))
+Initializing HL backing store caches from units/7166/.
+#<THREAD "Eval Process" {1694E357}>: Debugger invoked on condition of type ERROR
+  Got invalid type for object: CL:NIL. Wanted type: {SL:STREAMP -SubLCompiledFunction-} Actual type: NULL
+[1] CYC(2):
 ~~~~
 
