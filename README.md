@@ -252,6 +252,7 @@ Total time: 5 seconds
 root@gitlab:/opt/CYC_JRTL_with_CommonLisp/platform# 
 ~~~~
 
+~~~~
 root@gitlab:/opt/CYC_JRTL_with_CommonLisp/platform# ./abcl
 The symbol CYC:INIT-CYC is already accessible in package SUBLISP.
 The symbol CYC:INIT-CYC is already accessible in package CYC.
@@ -275,6 +276,10 @@ OpenJDK 64-Bit Server VM
 Low-level initialization completed in 0.663 seconds.
 Startup completed in 3.104 seconds.
 Type ":help" for a list of available commands.
+CL-USER(1): 
+~~~~
+
+~~~~
 CL-USER(1): (INIT-KB)
 Warn: Redefining {dynamic special built-in-function CL:* -pf_multiply- ====> CL:NIL}
 Warn: COMMON-LISP:* NOT redefining #<Primitive.pf_multiply CL:* "&rest numbers" {5CF8676A}> with #<SubLCompiledFunction CL:*  {388D14E}>
@@ -302,5 +307,6 @@ Freeing NARTs ... DONE (0:00)
 Freeing constants ... DONE (0:00)
 Determining maximum unrepresented-term SUID ... DONE (0:00)
 Loading constant shells
-
+...
+~~~~
 
