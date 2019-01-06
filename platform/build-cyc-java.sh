@@ -38,6 +38,9 @@ echo ""
 echo ""
 echo "Success!?"
 
+chmod +x *.sh
+
+
 
 
 
