@@ -39,7 +39,7 @@
          (load-kb units-directory)
          (system-code-initializations))))
 
-(defpackage "COMMON-LISP-USER" (:nicknames "U" "USER" "CL-USER"))
+(common-lisp:defpackage "COMMON-LISP-USER" (:nicknames "U" "USER" "CL-USER"))
 
 (cl-imports-cyc)
 
