@@ -46,7 +46,7 @@ import org.armedbear.j.Log;
 import org.armedbear.j.ReaderThread;
 import org.armedbear.lisp.Cons;
 import org.armedbear.lisp.ControlTransfer;
-import org.armedbear.lisp.CycEval;
+//import org.armedbear.lisp.CycEval;
 import org.armedbear.lisp.Environment;
 import org.armedbear.lisp.Interpreter.UnhandledCondition;
 import org.armedbear.lisp.Java;
@@ -431,7 +431,12 @@ public class BeanShellCntrl
 	@LispMethod
 	static public void cl_imports_cyc()
 	{
-		// SubLPackage.setCurrentPackage(Lisp.PACKAGE_CL_USER);
+		// if(true) return ;
+		//SubLPackage.setCurrentPackage(Lisp.PACKAGE_CL_USER);
+		Lisp.PACKAGE_SYS.ALLOW_INHERIT_CONFLICTS = true;
+		PACKAGE_EXT.ALLOW_INHERIT_CONFLICTS = true;
+		PACKAGE_CL.ALLOW_INHERIT_CONFLICTS = true;
+		PACKAGE_CL_USER.ALLOW_INHERIT_CONFLICTS = true;
 		PACKAGE_CL_USER.usePackage(PACKAGE_CYC, true);
 		PACKAGE_CL_USER.unusePackage(PACKAGE_CL);
 		PACKAGE_CL_USER.unusePackage(PACKAGE_EXT);
@@ -441,8 +446,18 @@ public class BeanShellCntrl
 		PACKAGE_CL_USER.usePackage(PACKAGE_JAVA, true);
 		PACKAGE_CL_USER.usePackage(PACKAGE_CL, true);
 		PACKAGE_CL_USER.addNickname("USER");
-		// PACKAGE_SUBLISP.usePackage(PACKAGE_CL, true);
-		// if(true) return ;
+    //  PACKAGE_SUBLISP.usePackage(PACKAGE_CL, true);
+	}
+
+	@LispMethod
+	static public void cyc_imports_cl()
+	{
+		PACKAGE_CYC.unusePackage(PACKAGE_SUBLISP);
+		PACKAGE_CYC.usePackage(PACKAGE_JAVA, true);
+		PACKAGE_CYC.usePackage(PACKAGE_EXT, true);
+		PACKAGE_CYC.usePackage(PACKAGE_CL, true);
+		PACKAGE_CYC.usePackage(PACKAGE_CL_USER, true);
+		PACKAGE_CYC.usePackage(PACKAGE_SUBLISP, true);
 	}
 
 	/**
@@ -573,34 +588,27 @@ public class BeanShellCntrl
 	}
 
 	@LispMethod
-	static public SubLObject cyc_eval_v2(SubLCons specialForm, SubLEnvironment env)
-	{
-		SubLListListIterator iter = null;
-		Resourcer resourcer = Resourcer.getInstance();
-		try
-		{
-			iter = resourcer.acquireSubLListListIterator(specialForm, 1);
-			return SubLSpecialOperatorDeclarations.list_progn(iter, env);
-		} finally
-		{
-			resourcer.releaseSubLListListIterator(iter);
+	static public SubLObject cyc_eval(SubLCons specialForm, SubLEnvironment env)
+	{		
+		boolean wasSubLisp = Main.isSubLisp();
+		Main.setSubLisp(true);
+		try {
+
+			SubLListListIterator iter = null;
+			Resourcer resourcer = Resourcer.getInstance();
+			try {
+				iter = resourcer.acquireSubLListListIterator(specialForm, 1);
+				return SubLSpecialOperatorDeclarations.list_progn(iter, env);
+			} finally {
+				resourcer.releaseSubLListListIterator(iter);
+			}
+		} finally {
+			Main.setSubLisp(wasSubLisp);
 		}
-
 	}
 
 	@LispMethod
-	static public void cyc_imports_cl()
-	{
-		PACKAGE_CYC.unusePackage(PACKAGE_SUBLISP);
-		PACKAGE_CYC.usePackage(PACKAGE_JAVA, true);
-		PACKAGE_CYC.usePackage(PACKAGE_EXT, true);
-		PACKAGE_CYC.usePackage(PACKAGE_CL, true);
-		PACKAGE_CYC.usePackage(PACKAGE_CL_USER, true);
-		PACKAGE_CYC.usePackage(PACKAGE_SUBLISP, true);
-	}
-
-	@LispMethod
-	static public LispObject cyc_repl_v2()
+	static public LispObject cyc_repl()
 	{
 		boolean wasSubLisp = Main.isSubLisp();
 		init_subl();
@@ -862,20 +870,15 @@ public class BeanShellCntrl
 			SubLPackage prevPackage = SubLPackage.getCurrentPackage();
 			try
 			{
-				init_subl();
-				Lisp.PACKAGE_SYS.ALLOW_INHERIT_CONFLICTS = true;
-				Lisp.PACKAGE_EXT.ALLOW_INHERIT_CONFLICTS = true;
-				Lisp.PACKAGE_CL.ALLOW_INHERIT_CONFLICTS = true;
-				Lisp.PACKAGE_CL_USER.ALLOW_INHERIT_CONFLICTS = true;
-				SubLPackage.setCurrentPackage(Lisp.PACKAGE_SUBLISP);
-				ensureMainReader();
-				SubLMain.initializeTranslatedSystems();
+				init_subl();				 
 				SubLMain.handleInits();
+				SubLMain.initializeTranslatedSystems();				
 				inited_cyc = true;
 				inited_cyc_complete = true;
 			} catch (Throwable e)
 			{
-				throw JVMImpl.doThrow(e);
+				inited_cyc_complete = false;
+				throw JVMImpl.doThrow(e);								
 			} finally
 			{
 
@@ -975,6 +978,7 @@ public class BeanShellCntrl
 			return;
 		}
 		boolean wasSubLisp = Main.isSubLisp();
+		boolean wasshouldRunInBackground = SubLMain.shouldRunInBackground;
 		SubLMain me = SubLMain.me;
 		SubLPackage prevPackage = SubLPackage.getCurrentPackage();
 		SubLPackage.initPackages();
@@ -983,12 +987,12 @@ public class BeanShellCntrl
 		{
 			SubLMain.shouldRunInBackground = true;
 			SubLMain.initializeSubL(new String[0]);
-			SubLPackage.setCurrentPackage("SUBLISP");
 			ensureMainReader();
 		} finally
 		{
 			SubLPackage.setCurrentPackage(prevPackage);
 			Main.setSubLisp(wasSubLisp);
+			SubLMain.shouldRunInBackground = wasshouldRunInBackground;
 		}
 		return;
 	}
@@ -1069,16 +1073,22 @@ public class BeanShellCntrl
 	@LispMethod
 	static public LispObject lisp_eval(LispObject args, Environment env)
 	{
-		LispThread thread = LispThread.currentThread();
-		if (args instanceof Cons)
-		{
-			LispObject arg = args.car();
-			if ((arg instanceof Cons))
+		boolean wasSubLisp = Main.isSubLisp();
+		Main.setSubLisp(false);
+		try {
+			LispThread thread = LispThread.currentThread();
+			if (args instanceof Cons)
 			{
-				return Lisp.progn(args, env, thread);
+				LispObject arg = args.car();
+				if ((arg instanceof Cons))
+				{
+					return Lisp.progn(args, env, thread);
+				}
 			}
+			return Lisp.eval(args, env, thread);
+		} finally {
+			Main.setSubLisp(wasSubLisp);
 		}
-		return Lisp.eval(args, env, thread);
 	}
 
 	@LispMethod

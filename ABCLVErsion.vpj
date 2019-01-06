@@ -805,13 +805,6 @@
 			Recurse="1"/>
 		<F N="abcl"/>
 		<F N="abcl.properties.in"/>
-		<F N="build-abcl.lisp"/>
-		<F
-			N="build-maven.xml"
-			Type="Ant"/>
-		<F
-			N="build-snapshot.xml"
-			Type="Ant"/>
 		<F
 			N="build.xml"
 			Type="Ant"/>
@@ -819,10 +812,6 @@
 		<F N="COPYING"/>
 		<F N="install-sh"/>
 		<F N="MANUAL"/>
-		<F
-			N="netbeans-build.xml"
-			Type="Ant"/>
-		<F N="pom.xml"/>
 		<F N="README"/>
 	</Files>
 </Project>

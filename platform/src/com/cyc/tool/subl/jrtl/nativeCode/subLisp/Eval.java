@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 
 import org.armedbear.lisp.Keyword;
+import org.armedbear.lisp.Main;
+import org.logicmoo.system.JVMImpl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -25,6 +27,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLDigestInputTextStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputTextStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLStreamFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.format;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader;
@@ -108,7 +111,20 @@ public class Eval implements SubLFile {
 	}
 
 	public static SubLObject eval(SubLObject form) {
-		return form.eval(SubLEnvironment.currentEnvironment());
+		boolean wasSubLisp = Main.isSubLisp();
+			try
+			{
+				Main.setSubLisp(true);
+				return form.eval(SubLEnvironment.currentEnvironment());
+			} catch (Throwable e)
+			{
+				throw JVMImpl.doThrow(e);
+			} finally
+			{
+				Main.setSubLisp(wasSubLisp);
+				
+			}
+	 
 	}
 
 	public static SubLObject function_information(SubLObject function, SubLObject environment) {

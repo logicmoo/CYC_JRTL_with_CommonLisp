@@ -3,6 +3,5 @@
 	<Projects>
 		<Project File="ABCLVErsion.vpj"/>
 		<Project File="platform/new-platform.vpj"/>
-		<Project File="powerloom-4.0.9.beta/powerloom-4.0.9.beta.vpj"/>
 	</Projects>
 </Workspace>

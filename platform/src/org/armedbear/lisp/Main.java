@@ -46,10 +46,13 @@ public final class Main {
     public static final long startTimeMillis = System.currentTimeMillis();
 
 
+	static public Boolean isSublispDefault = false;
+
+
 	public static ThreadLocal<Boolean> isSubLisp = new ThreadLocal<Boolean>() {
 
 	    protected Boolean initialValue() {
-	        return Boolean.FALSE;
+	        return isSublispDefault ;
 	    }
 
 	};

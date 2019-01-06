@@ -151,7 +151,7 @@ public class SubLMain {
 				if (startInSubLisp) {
 					SubLPackage.setCurrentPackage(SubLPackage.CYC_PACKAGE);
 					//CycEval.CYC_REPL.execute();
-                    BeanShellCntrl.cyc_repl_v2();
+                    BeanShellCntrl.cyc_repl();
 				} else {
 					//SubLPackage.setCurrentPackage(Lisp.PACKAGE_CL_USER);
 					SubLPackage.setCurrentPackage(SubLPackage.CYC_PACKAGE);

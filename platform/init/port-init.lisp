@@ -90,7 +90,7 @@
 
 (format t "~&Ready for services.~%")
 
-(et)
+;; (et)
 
 
 

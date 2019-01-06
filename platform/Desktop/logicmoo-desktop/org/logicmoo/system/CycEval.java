@@ -32,8 +32,9 @@
  * exception statement from your version.
  */
 
-package org.armedbear.lisp;
+package org.logicmoo.system;
 
+import org.armedbear.lisp.*;
 import static org.armedbear.lisp.Lisp.PACKAGE_CL;
 import static org.armedbear.lisp.Lisp.PACKAGE_CL_USER;
 import static org.armedbear.lisp.Lisp.PACKAGE_CYC;
@@ -57,34 +58,6 @@ import com.cyc.tool.subl.ui.SubLReaderPanel;
 
 public final class CycEval {
 
-
-	public static void cycSeesCL() {
-		PACKAGE_CYC.unusePackage(PACKAGE_SUBLISP);
-		PACKAGE_CYC.usePackage(PACKAGE_JAVA, true);
-		PACKAGE_CYC.usePackage(PACKAGE_EXT, true);
-		PACKAGE_CYC.usePackage(PACKAGE_CL, true);
-		PACKAGE_CYC.usePackage(PACKAGE_CL_USER, true);
-		PACKAGE_CYC.usePackage(PACKAGE_SUBLISP, true);
-	}
-
-	/**
-	 *
-	 */
-	public static void clSeesCyc() {
-		//SubLPackage.setCurrentPackage(Lisp.PACKAGE_CL_USER);
-		PACKAGE_CL_USER.usePackage(PACKAGE_CYC, true);
-		PACKAGE_CL_USER.unusePackage(PACKAGE_CL);
-		PACKAGE_CL_USER.unusePackage(PACKAGE_EXT);
-		PACKAGE_CL_USER.unusePackage(PACKAGE_JAVA);
-		PACKAGE_CL_USER.usePackage(PACKAGE_SUBLISP, true);
-		PACKAGE_CL_USER.usePackage(PACKAGE_EXT, true);
-		PACKAGE_CL_USER.usePackage(PACKAGE_JAVA, true);
-		PACKAGE_CL_USER.usePackage(PACKAGE_CL, true);
-		PACKAGE_CL_USER.addNickname("USER");
-    //  PACKAGE_SUBLISP.usePackage(PACKAGE_CL, true);
-	//	if(true) return ;
-	}
-
 	// ### cyc-eval
 	public static final SpecialOperator CYC_EVAL = new cyc_eval();
 
@@ -107,15 +80,7 @@ public final class CycEval {
 		}
 
 		public SubLObject apply(SubLCons specialForm, SubLEnvironment env) {
-			SubLListListIterator iter = null;
-			Resourcer resourcer = Resourcer.getInstance();
-			try {
-				iter = resourcer.acquireSubLListListIterator(specialForm, 1);
-				return SubLSpecialOperatorDeclarations.list_progn(iter, env);
-			} finally {
-				resourcer.releaseSubLListListIterator(iter);
-			}
-
+			return BeanShellCntrl.cyc_eval(specialForm, env);
 		}
 
 //
@@ -149,8 +114,7 @@ public final class CycEval {
 
 		@Override
 		public LispObject execute(LispObject args, Environment env) {
-			LispThread thread = LispThread.currentThread();
-			return Lisp.progn(args, env, thread);
+			return BeanShellCntrl.lisp_eval(args, env);
 		}
 	}
 
@@ -165,52 +129,10 @@ public final class CycEval {
 
 		@Override
 		public LispObject execute() {
-			boolean wasSubLisp = Main.isSubLisp();
-			Main.setSubLisp(true);
-			SubLMain.shouldRunInBackground = true;
-			SubLMain me = SubLMain.me;
-			SubLMain.initializeSubL(new String[0]);
-			SubLReader SLR = SubLMain.getMainReader();
-			if(SLR==null  ) {
-				SLR = new SubLReader();
-				SubLMain.setMainReader(SLR);
-			}
-			boolean  b = SubLMain.isFullyInitialized();
-			if(!b) {
-				ensureSubLReady();
-			}
-
-			boolean wasQuitOnExit = SLR.quitOnExit;
-			boolean was_shouldReadloopExit = SLR.shouldReadloopExit;
-			SLR.quitOnExit = false;
-			SLR.shouldReadloopExit = false;
-			try {
-				if (false && SubLMain.shouldRunReadloopInGUI())
-					SubLMain.setMainReader(SubLReaderPanel.startReadloopWindow());
-				SLR.setThread(SubLProcess.currentSubLThread());
-				while (!SLR.shouldReadloopExit()) {
-					SLR.doReadLoop();
-				}
-			} finally {
-				SLR.quitOnExit = wasQuitOnExit;
-				SLR.shouldReadloopExit = was_shouldReadloopExit;
-				Main.setSubLisp(wasSubLisp);
-			}
-			return Lisp.T;
+			return BeanShellCntrl.cyc_repl();
 		}
 
 	};
-	synchronized static public void ensureSubLReady() {
-		boolean  b = SubLMain.isInitialized();
-		if(b) {
-			return;
-		}
-		SubLMain.shouldRunInBackground = true;
-		SubLMain me = SubLMain.me;
-		SubLMain.initializeSubL(new String[0]);
-		if(!SubLMain.noInitCyc) SubLMain.initializeTranslatedSystems();
-		SubLMain.setIsInitialized();
-	}
 
 	// ### lisp-repl
 	public static final lisp_repl LISP_REPL = new lisp_repl();
@@ -223,17 +145,7 @@ public final class CycEval {
 
 		@Override
 		public LispObject execute() {
-			boolean wasSubLisp = Main.isSubLisp();
-			Main.setSubLisp(false);
-			if(wasSubLisp) {
-				clSeesCyc();
-		    	cycSeesCL();
-			}
-			try {
-				return Lisp.PACKAGE_TPL.findAccessibleSymbol("TOP-LEVEL-LOOP").execute();
-			} finally {
-				Main.setSubLisp(wasSubLisp);
-			}
+			return BeanShellCntrl.lisp_repl();
 		}
 
 	}
@@ -249,23 +161,7 @@ public final class CycEval {
 
 		@Override
 		public LispObject execute() {
-			boolean wasSubLisp = Main.isSubLisp();
-			Main.setSubLisp(true);
-			try {
-				SubLPackage prevPackage = SubLPackage.getCurrentPackage();
-				try {
-					SubLPackage.setCurrentPackage(Lisp.PACKAGE_SUBLISP);
-					SubLMain.handleInits();
-				} catch (Exception e) {
-					e.printStackTrace();
-					//me.doSystemCleanupAndExit(-1);
-				} finally {
-
-					SubLPackage.setCurrentPackage(prevPackage);
-				}
-			} finally {
-				Main.setSubLisp(wasSubLisp);
-			}
+			BeanShellCntrl.init_kb();
 			return T;
 		}
 	}
@@ -282,29 +178,7 @@ public final class CycEval {
 
 		@Override
 		public LispObject execute() {
-			boolean wasSubLisp = Main.isSubLisp();
-			Main.setSubLisp(true);
-			try {
-				SubLPackage.reserveSubLispSymbols();
-				SubLMain.initializeSubL(new String[0]);
-				Lisp.PACKAGE_SYS.ALLOW_INHERIT_CONFLICTS = true;
-				Lisp.PACKAGE_EXT.ALLOW_INHERIT_CONFLICTS = true;
-				Lisp.PACKAGE_CL.ALLOW_INHERIT_CONFLICTS = true;
-				Lisp.PACKAGE_CL_USER.ALLOW_INHERIT_CONFLICTS = true;
-				SubLPackage prevPackage = SubLPackage.getCurrentPackage();
-				try {
-					SubLPackage.setCurrentPackage(Lisp.PACKAGE_SUBLISP);
-					SubLMain.initializeTranslatedSystems();
-				} catch (Exception e) {
-					e.printStackTrace();
-					//me.doSystemCleanupAndExit(-1);
-				} finally {
-
-					SubLPackage.setCurrentPackage(prevPackage);
-				}
-			} finally {
-				Main.setSubLisp(wasSubLisp);
-			}
+			BeanShellCntrl.init_cyc();
 			return T;
 		}
 	}
@@ -320,22 +194,21 @@ public final class CycEval {
 
 		@Override
 		public LispObject execute() {
-			boolean wasSubLisp = Main.isSubLisp();
-			Main.setSubLisp(true);
-			try {
-				SubLPackage.reserveSubLispSymbols();
-				SubLMain.initializeSubL(new String[0]);
-			} finally {
-				Main.setSubLisp(wasSubLisp);
-			}
+			BeanShellCntrl.init_subl();
 			return T;
 		}
 	}
 
 	static public void exportInCyc(Operator cyc_eval2) {
 		Symbol symbol = cyc_eval2.getLambdaName().toSymbol().toLispObject();
-		Lisp.PACKAGE_SUBLISP.importSymbol(symbol);
+/*		Lisp.PACKAGE_SUBLISP.importSymbol(symbol);
 		Lisp.PACKAGE_CYC.importSymbol(symbol);
 		Lisp.PACKAGE_EXT.importSymbol(symbol);
-}
+	*/	
+		Lisp.PACKAGE_SUBLISP.importSymbol(symbol);
+		Lisp.PACKAGE_CYC.importSymbol(symbol);
+		Lisp.PACKAGE_CYC.export(symbol);
+		Lisp.PACKAGE_EXT.importSymbol(symbol);
+		Lisp.PACKAGE_CL_USER.importSymbol(symbol);
+	}
 }

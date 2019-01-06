@@ -246,7 +246,8 @@ public class Errors extends SubLTrampolineFile {
 	}
 
 	public static SubLObject error(String str) {
-		if(Main.isNoDebug()) {
+		final boolean noDebug = Main.isNoDebug();
+		if(noDebug) {
 			throw new SubLException(str);
 		}
 		error(str, null);

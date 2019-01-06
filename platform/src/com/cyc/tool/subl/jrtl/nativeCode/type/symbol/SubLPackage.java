@@ -414,6 +414,10 @@ abstract public class SubLPackage extends LispObject implements SubLObject {
 		SubLPackage was = getCurrentPackage();
 		if (thePackage == was)
 			return;
+		if(Symbol._PACKAGE_!=null) {
+			Symbol._PACKAGE_.setValueCL(thePackage);
+		}
+		if(Packages.$package$!=null)
 		Packages.$package$.setValue(thePackage.toPackage());
 	}
 

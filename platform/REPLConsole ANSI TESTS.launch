@@ -12,6 +12,6 @@
     <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.armedbear.lisp.Main"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROGRAM_ARGUMENTS" value="--load doit.lsp"/>
     <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="platform"/>
-    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-server -d64 -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC -Djava.util.Arrays.useLegacyMergeSort=true  -Dsun.java2d.d3d=false -Dfile.encoding=Cp1252"/>
+    <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-server -d64 -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC -Djava.util.Arrays.useLegacyMergeSort=true -Dsun.java2d.d3d=false -Dfile.encoding=Cp1252"/>
     <stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${workspace_loc:platform}/../old-ansi-tests"/>
 </launchConfiguration>

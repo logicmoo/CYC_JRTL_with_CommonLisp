@@ -37,7 +37,7 @@ For help on the automatic tests available, use the Ant target 'help.test'.
     <property name="src.dir"
               value="${basedir}/src"/>
     <property name="dist.dir"
-              value="${basedir}abcl/dist"/>
+              value="${basedir}/dist"/>
     <property name="abcl.jar.path"
               value="${dist.dir}/abcl.jar"/>
     <property name="abcl-aio.jar.path"
@@ -66,11 +66,15 @@ For help on the automatic tests available, use the Ant target 'help.test'.
       <include name="org/armedbear/lisp/protocol/*.java"/>
       <include name="org/armedbear/lisp/java/**/*.java"/>
       <include name="org/armedbear/**/*.java"/>
-      <include name="**/*.java"/>
-      <include name="./../src2/**/*.*"/>
-      <include name="./../src1/**/*.*"/>
+	  <include name="**/*.*"/>
+	  <include name="**/*.java"/>
       <include name="bsh/**/*.*"/>
       <include name="org/objectweb/asm/**/*.java"/>
+      <include name="com/cyc/tool/subl/**/*.java"/>
+      <include name="org/armedbear/lisp/scripting/*.java" if="abcl.jsr-223.p"/>
+      <include name="org/armedbear/lisp/scripting/util/*.java" if="abcl.jsr-223.p"/>
+      <include name="org/armedbear/Main.java"/>
+      <include name="org/logicmoo*/**/*.java" />
       <!--
       <exclude name="**/UnitTest.java"/>
       <exclude name="**/*JUnit.java"/>
@@ -78,14 +82,9 @@ For help on the automatic tests available, use the Ant target 'help.test'.
 
       <exclude name="com/cyc/tool/subl/webserver/*.java"/>
     -  <include name="../../AppdatorGUI/src/**/*.java"/>
-      <include name="com/cyc/tool/subl/**/*.java"/>
-      <include name="org/armedbear/lisp/scripting/*.java" if="abcl.jsr-223.p"/>
-      <include name="org/armedbear/lisp/scripting/util/*.java" if="abcl.jsr-223.p"/>
-     - <include name="org/armedbear/Main.java"/>
       <exclude name="**/UnitTest.java"/>
       <exclude name="**/Test*.java"/>
       <exclude name="**/test/**/*.java"/>
-      <include name="org/logicmoo*/**/*.java" />
       <exclude name="com/cyc/tool/subl/webserver/*.java"/> -->
     </patternset>
 
@@ -93,7 +92,7 @@ For help on the automatic tests available, use the Ant target 'help.test'.
       <include name="org/armedbear/lisp/*.lisp"/>
       <include name="org/armedbear/lisp/java/**/*.lisp"/>
       <include name="org/armedbear/lisp/tests/*.lisp"/>
-      <exclude name="org/armedbear/lisp/j.lisp"/>
+      <!--<exclude name="org/armedbear/lisp/j.lisp"/>-->
       <include name="org/armedbear/lisp/scripting/lisp/*.lisp" if="abcl.jsr-223.p"/>
     </patternset>
 
@@ -103,19 +102,22 @@ For help on the automatic tests available, use the Ant target 'help.test'.
       <include name="org/armedbear/lisp/scripting/lisp/*.lisp" if="abcl.jsr-223.p"/>
       <include name="**/*.lisp" if="abcl.compile.lisp.skip"/>
       <include name="**/*.*"/>
+	  <include name="bsh/commands/**"/>      
       <include name="./../src2/**/*.*"/>
       <include name="./../src1/**/*.*"/>
-      <exclude name="org.logicmoo-used/**"/>
     </patternset>
 
     <patternset id="abcl.objects">
-      <!-- "system.lisp" is dynamically created by COMPILE-fSYSTEM -->
+      <!-- "system.lisp" is dynamically created by COMPILE-SYSTEM -->
       <include name="org/armedbear/lisp/system.lisp"/>
       <include name="org/armedbear/lisp/**/*.class"/>
       <include name="org/armedbear/lisp/**/*.cls"/>
       <include name="org/objectweb/**/*.class"/>
       <include name="com/**/*.class"/>
       <include name="**/*.*"/>
+	  <include name="**/*"/>
+	  <include name="bsh/commands/**"/>
+	  <include name="bsh/**/*.*"/>
       <include name="./../src2/**/*.*"/>
       <include name="./../src1/**/*.*"/>
       <include name="org/armedbear/lisp/**/*.abcl"/>
@@ -224,7 +226,15 @@ For help on the automatic tests available, use the Ant target 'help.test'.
              includeantruntime="false"
              failonerror="true">
       	<src path="${src.dir}"/>
-      	<src path="Desktop/"/>
+      	<src path="Desktop/appdapter-src"/>
+		<src path="Desktop/armedbear-j-src"/>
+		<src path="Desktop/cycjava-persistence-hacks"/>
+		<src path="Desktop/jpl7-hacked"/>
+		<src path="Desktop/logicmoo-desktop"/>
+		<src path="Desktop/objectweb-asm-src"/>
+		<src path="Desktop/opencyc-jsrc"/>
+		<src path="Desktop/server-4q"/>
+		<src path="main/java/"/>
         <compilerarg value="-XDignore.symbol.file"/>
         <patternset refid="abcl.source.java"/>
       </javac>

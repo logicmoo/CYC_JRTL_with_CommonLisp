@@ -8,4 +8,4 @@
 
 (load-from-cyc-home "init/cyc-init.lisp")
 
-(print '(load-from-cyc-home "init/port-init.lisp"))
+(load-from-cyc-home "init/port-init.lisp")

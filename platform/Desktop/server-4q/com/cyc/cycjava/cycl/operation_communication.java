@@ -1614,16 +1614,21 @@ public final class operation_communication extends SubLTranslatedFile
     @SubLTranslatedFile.SubL(source = "cycl/operation-communication.lisp", position = 47373L)
     public static SubLObject load_transcript_exprs() {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        if (operation_communication.NIL != transcript_server.use_transcript_server()) {
+        final SubLObject use_transcript_server = transcript_server.use_transcript_server();
+		if (operation_communication.NIL != use_transcript_server) {
             transcript_server.read_operations_from_server();
         }
         else {
-            final SubLObject file_exists = Filesys.probe_file(transcript_utilities.read_transcript());
-            if (transcript_utilities.read_transcript().equal(transcript_utilities.master_transcript()) && operation_communication.NIL != transcript_utilities.master_transcript_already_exists() && operation_communication.NIL == file_exists) {
-                Errors.error((SubLObject)operation_communication.$str105$The_transcript_file__s_has_alread, transcript_utilities.master_transcript());
+        	final SubLObject read_transcript = transcript_utilities.read_transcript();
+            SubLObject master_transcript = transcript_utilities.master_transcript();
+			SubLObject master_transcript_already_exists = transcript_utilities.master_transcript_already_exists();
+			SubLObject file_exists = NIL;
+			if(read_transcript!=NIL) file_exists = Filesys.probe_file(read_transcript);
+			if (read_transcript.equal(master_transcript) && operation_communication.NIL != master_transcript_already_exists && operation_communication.NIL == file_exists) {
+                Errors.error((SubLObject)operation_communication.$str105$The_transcript_file__s_has_alread, master_transcript);
             }
-            else if (operation_communication.NIL != transcript_utilities.read_transcript() && operation_communication.NIL != file_exists) {
-                if (transcript_utilities.read_transcript().equal(transcript_utilities.master_transcript())) {
+            else if (operation_communication.NIL != read_transcript && operation_communication.NIL != file_exists) {
+                if (read_transcript.equal(master_transcript)) {
                     transcript_utilities.set_master_transcript_already_exists((SubLObject)operation_communication.T);
                 }
                 if (operation_communication.NIL == operation_communication.$transcript_read_attempted$.getGlobalValue()) {
@@ -1632,13 +1637,13 @@ public final class operation_communication extends SubLTranslatedFile
                         final SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
                         try {
                             stream_macros.$stream_requires_locking$.bind((SubLObject)operation_communication.NIL, thread);
-                            stream = compatibility.open_text(transcript_utilities.read_transcript(), (SubLObject)operation_communication.$kw106$INPUT);
+                            stream = compatibility.open_text(read_transcript, (SubLObject)operation_communication.$kw106$INPUT);
                         }
                         finally {
                             stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
                         }
                         if (!stream.isStream()) {
-                            Errors.error((SubLObject)operation_communication.$str93$Unable_to_open__S, transcript_utilities.read_transcript());
+                            Errors.error((SubLObject)operation_communication.$str93$Unable_to_open__S, read_transcript);
                         }
                         final SubLObject s = stream;
                         operation_communication.$initial_read_transcript_size$.setGlobalValue(streams_high.file_length(s));

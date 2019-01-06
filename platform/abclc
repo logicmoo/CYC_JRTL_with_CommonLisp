@@ -17,11 +17,13 @@
 
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
-exec /usr/lib/jvm/java-8-oracle/jre/bin/java \
-  -cp  /mnt/dddd/workspace/phase02-jrtl/platform/bin-eclipse/:/mnt/dddd/workspace/phase02-jrtl/platform/dist/abcl.jar:"$CLASSPATH" \
-  -d64 -XX:+UseG1GC -XshowSettings:vm -Xmx8g -Xss4g -XX:+CMSClassUnloadingEnabled -XX:MaxPermSize=1g \
+. set_classpath.sh
+
+java \
+  -cp "$CLASSPATH" \
+  -server -d64 -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC -XshowSettings:vm \
   org.armedbear.lisp.Main \
   "$@"
 
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
