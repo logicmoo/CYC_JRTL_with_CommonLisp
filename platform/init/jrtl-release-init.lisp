@@ -4,11 +4,11 @@
 
 (cvs-id "$Id: jrtl-release-init.lisp 129137 2009-11-05 03:40:25Z rck $")
 
-(csetq *master-license-key* "????-????-????-????-????")
-
+;;; change the values out for a valid license
+(csetq *master-license-key* "1111-2222-3333-4444-5555")
 (pwhen-feature :Cyc-ResearchCyc
   (pwhen-feature :SL2Java
-    (csetq *master-license-key* "????-????-????-????-????")))
+    (csetq *master-license-key* "1111-2222-3333-4444-5555")))
 
 #+Ignore
 (cunwind-protect
