@@ -25,10 +25,15 @@ Understanding Source Directories:
   ./abcl/    Close to normal ABCL in order to make merging easier
   ./platform/src/org/armedbar/  Abnormal ABCL merged with LarKC
   ./platform/src/com/cyc/tool/  CYC JRTL initially from LarKC with CommonLisp
-  ./platform/src/com/cyc/cycjava/  LarKC stripped down cyc.jar
 ~~~~
 
 # Building
+
+If you already have a ResearchCyc license, see ResearchCyc Releases 
+  ( http://www.cyc.com/documentation/enterprise-cyc-administrator-handbook/installation/ )
+  for information about downloading the latest release of Cyc.
+If not, apply for a License at http://www.cyc.com/researchcyc/
+
 
 Clone the git repo
 ~~~~
