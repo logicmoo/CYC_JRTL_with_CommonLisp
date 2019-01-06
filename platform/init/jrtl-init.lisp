@@ -11,6 +11,13 @@
 '(load-kb "units/7166/")
 
 
+'(clet ((units-directory "ext/cyc-tiny/"))
+  (pif (fboundp 'cyc-load-kb)
+       (cyc-load-kb units-directory)
+       (progn
+         (load-kb units-directory)
+         (system-code-initializations))))
+
 '(clet ((units-directory "units/0988/"))
   (pif (fboundp 'cyc-load-kb)
        (cyc-load-kb units-directory)

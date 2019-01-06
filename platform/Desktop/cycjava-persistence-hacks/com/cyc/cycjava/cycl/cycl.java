@@ -22,7 +22,9 @@ public class cycl extends InitializingSubLFile
             SubLFiles.initialize("eu.cyc.sparql.server.Sparql");
             SubLFiles.initialize("com.cyc.tool.subl.webserver.ServletContainer");
         }
-        catch (Exception ex) {}
+        catch (Exception ex) {
+        	ex.printStackTrace();        	
+        }
         this.preparePercentProgress(1255);
         this.initializeClass("com.cyc.cycjava.cycl.cyc_cvs_id");
         this.initializeClass("com.cyc.cycjava.cycl.meta_macros");

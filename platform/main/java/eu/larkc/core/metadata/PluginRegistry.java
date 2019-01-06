@@ -109,8 +109,9 @@ public class PluginRegistry {
 	private void initializeLarkcKb() {		
 		// read larkc ontology
 		String LARKC_RDF = "larkc.rdf";
+		LARKC_RDF = hereOrConf(LARKC_RDF);
 		
-		InputStream fstream = ClassLoader.getSystemClassLoader().getResourceAsStream(LARKC_RDF);
+		InputStream fstream = asInputStream(LARKC_RDF);
 		try {
 			if (fstream==null) {
 				logger.severe("Cannot find the "+ LARKC_RDF+ " file. PLUGIN REGISTRY MIGHT NOT WORK!!");
@@ -139,6 +140,22 @@ public class PluginRegistry {
 			+ "  (#$larkc-pluginByDataConnectsTo ?X ?Y))";
 		CycUtil.addForwardRule(forwardRuleStr, mtStr);
 	}
+
+	private InputStream asInputStream(String LARKC_RDF)  {
+		InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream(LARKC_RDF);
+		if(is!=null) return is;
+		is = PluginRegistry.class.getClassLoader().getResourceAsStream(LARKC_RDF);
+		if(is!=null) return is;
+		is = ClassLoader.getSystemResourceAsStream(LARKC_RDF);
+		if(is!=null) return is;
+		try {
+			return new FileInputStream(new File(LARKC_RDF));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
 	
 	
 	/**
@@ -146,7 +163,7 @@ public class PluginRegistry {
 	 */
 	public void loadPlugins() {
 		String PLUGINS_INI = "plugins.ini";
-		
+		PLUGINS_INI = hereOrConf(PLUGINS_INI);
 		//checks files and directories in PLATFORM/plugins
 		File pluginsDir = new File ("." +File.separatorChar+ "plugins");	
 		File[] pluginFiles = pluginsDir.listFiles();
@@ -161,7 +178,7 @@ public class PluginRegistry {
 		
 		try {
 			// Open the file where the additional plug-in list is written
-			InputStream fstream = ClassLoader.getSystemClassLoader().getResourceAsStream(PLUGINS_INI);
+			InputStream fstream = asInputStream(PLUGINS_INI);
 			DataInputStream in = new DataInputStream(fstream);
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			String strLine;
@@ -187,6 +204,17 @@ public class PluginRegistry {
 			logger.severe("Error reading the " + PLUGINS_INI + " file:" + e.getMessage());
 			Errors.handleError(e);
 		}
+	}
+
+	private String hereOrConf(String PLUGINS_INI) {
+		String was = PLUGINS_INI;
+		if(!new File(PLUGINS_INI).canRead()) {
+			PLUGINS_INI = "." +File.separatorChar+ "conf" +File.separatorChar+ PLUGINS_INI;
+		}
+		if(!new File(PLUGINS_INI).canRead()) {
+			return was;
+		}
+		return PLUGINS_INI;
 	}
 	
 	

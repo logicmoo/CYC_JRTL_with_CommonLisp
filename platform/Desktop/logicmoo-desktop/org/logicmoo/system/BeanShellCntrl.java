@@ -95,6 +95,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.ui.SubLReaderPanel;
+import com.cyc.tool.subl.util.SubLFiles;
 import com.netbreeze.bbowl.gui.BeanBowlGUI;
 import com.sun.tools.attach.AgentInitializationException;
 import com.sun.tools.attach.AgentLoadException;
@@ -112,6 +113,8 @@ import bsh.Reflect;
 import bsh.This;
 import bsh.UtilEvalError;
 import bsh.util.JConsole;
+import eu.larkc.core.orchestrator.LarkcInit;
+import eu.larkc.core.orchestrator.servers.LarKCHttpServer;
 import sun.misc.Unsafe;
 //import static org.slf4j.spi.LocationAwareLogger.log;
 public class BeanShellCntrl
@@ -949,6 +952,10 @@ public class BeanShellCntrl
 				init_cyc();
 				SubLPackage.setCurrentPackage("CYC");
 				Eval.eval("(sl:load \"init/services-init.lisp\")");
+			    SubLFiles.initialize("eu.larkc.core.orchestrator.LarkcInit");	    
+			    SubLFiles.initialize("eu.larkc.core.orchestrator.servers.LarKCHttpServer");
+			    LarkcInit.initializeLarkc();
+			    LarKCHttpServer.start_sparql_server();
 				inited_cyc_server = true;
 			} catch (Throwable e)
 			{

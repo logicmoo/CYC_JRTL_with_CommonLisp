@@ -647,7 +647,8 @@ public final class dictionary extends SubLTranslatedFile
         final SubLObject size = cfasl.cfasl_input(stream, (SubLObject)dictionary.UNPROVIDED, (SubLObject)dictionary.UNPROVIDED);
         SubLObject v_dictionary = (SubLObject)dictionary.NIL;
         SubLObject pcase_var = test;
-        if (pcase_var.eql((SubLObject)dictionary.EQ) || pcase_var.eql((SubLObject)dictionary.EQL) || pcase_var.eql((SubLObject)dictionary.EQUAL) || pcase_var.eql((SubLObject)dictionary.EQUALP)) {
+        if (pcase_var.eql((SubLObject)dictionary.EQ) || pcase_var.eql((SubLObject)dictionary.EQL) || 
+        		pcase_var.eql((SubLObject)dictionary.EQUAL) || pcase_var.eql((SubLObject)dictionary.EQUALP)) {
             test = Symbols.symbol_function(test);
         }
         v_dictionary = new_dictionary(test, size);
