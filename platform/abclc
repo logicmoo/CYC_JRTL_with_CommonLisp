@@ -25,12 +25,13 @@ unset CLASSPATH
 
 source set_classpath.sh
 
-echo $CLASSPATH
 echo ""
+echo CLASSPATH=$CLASSPATH
 echo ""
-echo "$PRJS $@"
-echo ""   
-echo ""
+echo ";"
+echo ";;;Running toplevel:  $PRJS $@"
+echo ";"  
+
 java \
   -cp build/classes:"$CLASSPATH" \
   -server -d64 -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC -XshowSettings:vm \

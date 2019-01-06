@@ -1374,8 +1374,8 @@ public class BeanShellCntrl
 			return (MethodFunction) sf;
 		} else
 		{            
-            String complaint = "Trying to overwrite a non method function "; // + sf;
-			System.err.println(complaint);
+            //String complaint = "Trying to overwrite a non method function "; // + sf;
+			//System.err.println(complaint);
             // Lisp.program_error(complaint);
 			return (MethodFunction) null;
 		}
