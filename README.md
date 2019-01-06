@@ -63,10 +63,18 @@ researchcyc-4.0q/doc/CycAdministratorHandbook.pdf
 researchcyc-4.0q/README.txt
 ~~~~
 
-Delete part of the cloned repo and the server run directory there and git checkout to overwrite some 4Q files
+Delete part of the cloned repo 
 ~~~~
 root@gitlab:/opt/CYC_JRTL_with_CommonLisp# rm -rf platform/
-root@gitlab:/opt/CYC_JRTL_with_CommonLisp# mv researchcyc-4.0q/server/cyc/run/ platform
+~~~~
+
+Move the server "run" directory there
+~~~~
+root@gitlab:/opt/CYC_JRTL_with_CommonLisp# mv researchcyc-4.0q/server/cyc/run/  platform
+~~~~
+
+Git checkout to overwrite some 4Q files
+~~~~
 root@gitlab:/opt/CYC_JRTL_with_CommonLisp# git checkout platform/ -f
 ~~~~
 
