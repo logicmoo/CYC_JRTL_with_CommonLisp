@@ -1,6 +1,7 @@
 platform/License.txt
 platform/bin/
 platform/build/
+platform/dist/
 platform/data/
 platform/go-cyc.bat
 platform/httpd/

@@ -1,6 +1,5 @@
 #!/bin/bash
 
-cls 
 # abcl.in
 
 # Copyright (C) 2004 Peter Graves
@@ -33,7 +32,7 @@ echo ";;;Running toplevel:  $PRJS $@"
 echo ";"  
 
 java \
-  -cp build/classes:"$CLASSPATH" \
+  -cp build/classes:dist/abcl-contrib.jar:"$CLASSPATH" \
   -server -d64 -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC -XshowSettings:vm \
   org.armedbear.lisp.Main \
   $@
