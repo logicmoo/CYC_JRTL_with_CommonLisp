@@ -620,23 +620,31 @@ public class BeanShellCntrl
 		boolean was_shouldReadloopExit = SLR.shouldReadloopExit;
 		SLR.quitOnExit = false;
 		SLR.shouldReadloopExit = false;
+		SubLPackage prevPackage = SubLPackage.getCurrentPackage();
 		try
 		{
-			if (false && SubLMain.shouldRunReadloopInGUI())
-				SubLMain.setMainReader(SubLReaderPanel.startReadloopWindow());
-
-			SLR.setThread(SubLProcess.currentSubLThread());
-
-			while (!SLR.shouldReadloopExit())
+			try
 			{
-				Main.setSubLisp(true);
-				SLR.doReadLoop();
+				if (false && SubLMain.shouldRunReadloopInGUI())
+					SubLMain.setMainReader(SubLReaderPanel.startReadloopWindow());
+
+				SLR.setThread(SubLProcess.currentSubLThread());
+
+				while (!SLR.shouldReadloopExit())
+				{
+					Main.setSubLisp(true);
+					SLR.doReadLoop();
+				}
+			} finally
+			{
+				SLR.quitOnExit = wasQuitOnExit;
+				SLR.shouldReadloopExit = was_shouldReadloopExit;
+				Main.setSubLisp(wasSubLisp);
 			}
 		} finally
 		{
-			SLR.quitOnExit = wasQuitOnExit;
-			SLR.shouldReadloopExit = was_shouldReadloopExit;
-			Main.setSubLisp(wasSubLisp);
+
+			SubLPackage.setCurrentPackage(prevPackage);
 		}
 		return (LispObject) SubLSpecialOperatorDeclarations.doubleStar.getValue();
 	}
