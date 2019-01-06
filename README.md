@@ -30,6 +30,7 @@ Understanding Source Directories:
 
 # Building
 
+Clone the git repo
 ~~~~
 root@gitlab:/opt# git clone https://github.com/TeamSPoon/CYC_JRTL_with_CommonLisp
 Cloning into 'CYC_JRTL_with_CommonLisp'...
@@ -40,9 +41,11 @@ remote: Total 126930 (delta 14), reused 70 (delta 2), pack-reused 126783
 Receiving objects: 100% (126930/126930), 208.24 MiB | 15.62 MiB/s, done.
 Resolving deltas: 100% (65844/65844), done.
 Checking out files: 100% (7790/7790), done.
+~~~~
 
+Go into cloned location and unzip your RCYC-4Q
+~~~~
 root@gitlab:/opt# cd CYC_JRTL_with_CommonLisp/
-
 root@gitlab:/opt/CYC_JRTL_with_CommonLisp# tar xfvz /mnt/gggg/researchcyc-4.0q.tgz
 researchcyc-4.0q/
 researchcyc-4.0q/server/
@@ -50,19 +53,21 @@ researchcyc-4.0q/server/cyc/
 researchcyc-4.0q/server/cyc/run/
 researchcyc-4.0q/server/cyc/run/plugins/
 researchcyc-4.0q/server/cyc/run/units/
-......
+...<SNIP>...
 researchcyc-4.0q/doc/CycAdministratorHandbook.pdf
 researchcyc-4.0q/README.txt
 ~~~~
 
+Delete part of the cloned repo and the server run directory there and git checkout to overwrite some 4Q files
 ~~~~
 root@gitlab:/opt/CYC_JRTL_with_CommonLisp# rm -rf platform/
 root@gitlab:/opt/CYC_JRTL_with_CommonLisp# mv researchcyc-4.0q/server/cyc/run/ platform
 root@gitlab:/opt/CYC_JRTL_with_CommonLisp# git checkout platform/ -f
-root@gitlab:/opt/CYC_JRTL_with_CommonLisp/platform#./build-cyc-java.sh
 ~~~~
 
+Build the platform
 ~~~~
+root@gitlab:/opt/CYC_JRTL_with_CommonLisp# cd platform
 root@gitlab:/opt/CYC_JRTL_with_CommonLisp/platform# ./build-cyc-java.sh
 
 
@@ -122,45 +127,7 @@ abcl.compile.lisp:
      [java] Java 1.8.0_191 Oracle Corporation
      [java] OpenJDK 64-Bit Server VM
      [java] Low-level initialization completed in 0.63 seconds.
-
 ...<SNIP>...
-
-     [java] ; (IN-PACKAGE "SYSTEM")
-     [java] ; (DEFVAR *COMPILER-MACROS* ...)
-     [java] ; (DEFUN COMPILER-MACRO-FUNCTION ...)
-     [java] ; (DEFUN (SETF COMPILER-MACRO-FUNCTION) ...)
-     [java] ; (DEFMACRO DEFINE-COMPILER-MACRO ...)
-     [java] ; (DEFUN COMPILER-MACROEXPAND-1 ...)
-     [java] ; (DEFUN COMPILER-MACROEXPAND ...)
-     [java] ; Wrote /opt/CYC_JRTL_with_CommonLisp/platform/build/classes/org/armedbear/lisp/compiler-macro.abcl (0.115 seconds)
-     [java] ; Loading /opt/CYC_JRTL_with_CommonLisp/platform/build/classes/org/armedbear/lisp/compiler-macro.abcl ...
-     [java] ; Loaded /opt/CYC_JRTL_with_CommonLisp/platform/build/classes/org/armedbear/lisp/compiler-macro.abcl (0.012 seconds)
-     [java] ; Compiling /opt/CYC_JRTL_with_CommonLisp/platform/src/org/armedbear/lisp/jvm-instructions.lisp ...
-     [java] ; (IN-PACKAGE #:JVM)
-     [java] ; (DECLAIM (INLINE U2 ...))
-     [java] ; (DEFKNOWN U2 ...)
-     [java] ; (DEFUN U2 ...)
-     [java] ; (DEFKNOWN S1 ...)
-     [java] ; (DEFUN S1 ...)
-     [java] ; (DEFKNOWN S2 ...)
-     [java] ; (DEFUN S2 ...)
-     [java] ; (DEFCONST *OPCODE-TABLE* ...)
-     [java] ; (DEFCONST *OPCODES* ...)
-     [java] ; (DEFSTRUCT JVM-OPCODE ...)
-     [java] ; (DEFUN %DEFINE-OPCODE ...)
-
-...<SNIP>...
-
-     [java] ; (IN-PACKAGE :SYSTEM)
-     [java] ; (DOLIST (FS #) ...)
-     [java] ; (IN-PACKAGE :CL)
-     [java] ; (IN-PACKAGE :CL)
-     [java] ; (DOLIST (SYSTEM::FS #) ...)
-     [java] ; (IN-PACKAGE :CL)
-     [java] ; (DOLIST (SYSTEM::FS #) ...)
-     [java] ; (IN-PACKAGE :CL)
-     [java] ; (DOLIST (SYSTEM::FS #) ...)
-     [java] ; (IN-PACKAGE :CL)
      [java] ; (DOLIST (SYSTEM::FS #) ...)
      [java] ; Wrote /opt/CYC_JRTL_with_CommonLisp/platform/build/classes/org/armedbear/lisp/autoloads-gen.abcl (0.132 seconds)
      [java] ; Compiling /opt/CYC_JRTL_with_CommonLisp/platform/src/org/armedbear/lisp/autoloads.lisp ...
@@ -237,30 +204,6 @@ abcl.compile.lisp:
      [java] ;  Loaded /opt/CYC_JRTL_with_CommonLisp/platform/src/org/armedbear/lisp/backquote.lisp (0.005 seconds)
      [java] ;  Loading /opt/CYC_JRTL_with_CommonLisp/platform/src/org/armedbear/lisp/destructuring-bind.lisp ...
      [java] ;  COMMON-LISP:CHAR= triggers autoloading of org.armedbear.lisp.CharacterFunctions ...
-     [java] ;   Autoloaded org.armedbear.lisp.CharacterFunctions (0.003 seconds)
-     [java] ;  COMMON-LISP:LAST triggers autoloading of org.armedbear.lisp.last ...
-     [java] ;   Autoloaded org.armedbear.lisp.last (0.001 seconds)
-     [java] ;  Loaded /opt/CYC_JRTL_with_CommonLisp/platform/src/org/armedbear/lisp/destructuring-bind.lisp (0.029 seconds)
-     [java] ;  Loading /opt/CYC_JRTL_with_CommonLisp/platform/src/org/armedbear/lisp/defmacro.lisp ...
-     [java] ;  Loaded /opt/CYC_JRTL_with_CommonLisp/platform/src/org/armedbear/lisp/defmacro.lisp (0.004 seconds)
-     [java] ;  Loading /opt/CYC_JRTL_with_CommonLisp/platform/src/org/armedbear/lisp/setf.lisp ...
-     [java] ;  Loaded /opt/CYC_JRTL_with_CommonLisp/platform/src/org/armedbear/lisp/setf.lisp (0.015 seconds)
-     [java] ;  Loading /opt/CYC_JRTL_with_CommonLisp/platform/src/org/armedbear/lisp/fdefinition.lisp ...
-     [java] ;  SYSTEM::%SET-ARGLIST triggers autoloading of org.armedbear.lisp.arglist ...
-     [java] ;   Autoloaded org.armedbear.lisp.arglist (0.001 seconds)
-     [java] ;  Loaded /opt/CYC_JRTL_with_CommonLisp/platform/src/org/armedbear/lisp/fdefinition.lisp (0.005 seconds)
-     [java] ;  Loading /opt/CYC_JRTL_with_CommonLisp/platform/src/org/armedbear/lisp/featurep.lisp ...
-     [java] ;  Loaded /opt/CYC_JRTL_with_CommonLisp/platform/src/org/armedbear/lisp/featurep.lisp (0.003 seconds)
-     [java] ;  Loading /opt/CYC_JRTL_with_CommonLisp/platform/src/org/armedbear/lisp/read-conditional.lisp ...
-     [java] ;  Loaded /opt/CYC_JRTL_with_CommonLisp/platform/src/org/armedbear/lisp/read-conditional.lisp (0.001 seconds)
-     [java] ;  Loading /opt/CYC_JRTL_with_CommonLisp/platform/src/org/armedbear/lisp/macros.lisp ...
-     [java] ;  Loaded /opt/CYC_JRTL_with_CommonLisp/platform/src/org/armedbear/lisp/macros.lisp (0.011 seconds)
-     [java] ;  Loading /opt/CYC_JRTL_with_CommonLisp/platform/src/org/armedbear/lisp/read-circle.lisp ...
-     [java] ;  Loaded /opt/CYC_JRTL_with_CommonLisp/platform/src/org/armedbear/lisp/read-circle.lisp (0.01 seconds)
-     [java] ;  Loading /opt/CYC_JRTL_with_CommonLisp/platform/src/org/armedbear/lisp/inline.lisp ...
-     [java] ;  Loaded /opt/CYC_JRTL_with_CommonLisp/platform/src/org/armedbear/lisp/inline.lisp (0.001 seconds)
-     [java] ;  Loading /opt/CYC_JRTL_with_CommonLisp/platform/src/org/armedbear/lisp/proclaim.lisp ...
-     [java] ;  COMMON-LISP:MAKE-HASH-TABLE triggers autoloading of make-hash-table ...
 ...<SNIP>...
      [java] ; (IN-PACKAGE :SYSTEM)
      [java] ; (DOLIST (FS #) ...)
@@ -500,7 +443,6 @@ Exiting SubL read loop...
 quitOnExit = false
 #$isa
 CL-USER(2):
-
 
 ~~~~
 
