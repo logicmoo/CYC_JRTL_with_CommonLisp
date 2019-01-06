@@ -774,7 +774,7 @@ Initializing Cyc 10.152303 (ResearchCyc (custom))
 Initializing HL backing store caches from units/7166/.
 Initializing Cyc 10.152303 (ResearchCyc (custom))
 Initializing HL backing store caches from units/7166/.
-Enabling base TCP services to port 7600.
+Enabling base TCP services to port 3600.
 Jan 06, 2019 12:21:26 PM com.sun.jersey.api.core.PackagesResourceConfig init
 INFO: Scanning for root resource and provider classes in the packages:
   com.cyc.tool.sksi.ws
@@ -830,10 +830,10 @@ Jan 06, 2019 12:21:47 PM eu.larkc.core.metadata.PluginRegistry loadPlugins
 SEVERE: Decider for this instance of the LarKC platform is not specified. Platform cannot run without the decider! Pleas check ./conf/plugins.ini file.
 
 ...LarKC SPARQL server started on port 8000.
-HTTP server listening on port 7602.  Connect via URL http://gitlab:7602/cgi-bin/cg?cb-start
+HTTP server listening on port 3602.  Connect via URL http://gitlab:3602/cgi-bin/cg?cb-start
 
-SPARQL server started on port 7615.
-Jetty server started on port 7603
+SPARQL server started on port 3615.
+Jetty server started on port 3603
 Ready for services.
 Type ":help" for a list of available commands.
 CL-USER(1): (cyc-repl)
