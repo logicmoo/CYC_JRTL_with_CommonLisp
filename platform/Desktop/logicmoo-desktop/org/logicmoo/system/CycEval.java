@@ -65,7 +65,7 @@ public final class CycEval {
 
 	{
 		cyc_eval() {
-			super("cyc-eval", Lisp.PACKAGE_EXT, true, "&rest forms");
+			super("cyc-eval-progn", Lisp.PACKAGE_EXT, true, "&rest forms");
 			exportInCyc(this);
 		}
 

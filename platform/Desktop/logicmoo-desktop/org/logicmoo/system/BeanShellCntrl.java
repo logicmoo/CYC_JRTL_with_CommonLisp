@@ -31,6 +31,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.logging.Level;
 
 import javax.swing.JDesktopPane;
@@ -591,6 +592,40 @@ public class BeanShellCntrl
 	}
 
 	@LispMethod
+	static public SubLObject cyc_eval_string(String str)
+	{		
+		boolean wasSubLisp = Main.isSubLisp();
+		Main.setSubLisp(true);
+		try {
+			return Eval.eval( str);
+		} finally {
+			Main.setSubLisp(wasSubLisp);
+		}
+	}
+	@LispMethod
+	static public SubLObject cyc_eval(final String str)
+	{
+		return while_not_changing_package( new Callable<SubLObject>() {
+			@Override
+			public SubLObject call() throws Exception {
+				return cyc_eval_string(str);
+			}			
+		});
+	}
+	
+	@LispMethod
+	static public <T> T while_not_changing_package(Callable<T> str) 
+	{
+		SubLPackage prevPackage = SubLPackage.getCurrentPackage();
+		try {
+		  return str.call();
+		} catch (Exception e) {			
+			throw JVMImpl.doThrow(e);			
+		} finally {
+			SubLPackage.setCurrentPackage(prevPackage);
+		}
+	}
+	@LispMethod
 	static public SubLObject cyc_eval(SubLCons specialForm, SubLEnvironment env)
 	{		
 		boolean wasSubLisp = Main.isSubLisp();
@@ -600,7 +635,7 @@ public class BeanShellCntrl
 			SubLListListIterator iter = null;
 			Resourcer resourcer = Resourcer.getInstance();
 			try {
-				iter = resourcer.acquireSubLListListIterator(specialForm, 1);
+				iter = resourcer.acquireSubLListListIterator(specialForm);
 				return SubLSpecialOperatorDeclarations.list_progn(iter, env);
 			} finally {
 				resourcer.releaseSubLListListIterator(iter);
