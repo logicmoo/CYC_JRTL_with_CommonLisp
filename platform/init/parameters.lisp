@@ -6,6 +6,10 @@
 
 (in-package :CYC)
 
+#+CYC-HTML
+(sl:csetq cyc::*CB-DEFAULT-INDEX-VIEW* :legacy)
+
+
 ;;; Possible Values: T or NIL
 ;;; If NIL, transcript problems will cause error breaks that
 ;;; make the system stop. If T, such problems will not cause the
@@ -47,7 +51,7 @@
 
 ;;; Possible Values: a TCP/IP port number
 ;;; The base port number for all the TCP services for the Cyc image.
-(csetq *BASE-TCP-PORT* 7600)
+(csetq *BASE-TCP-PORT* 3600)
 
 ;;; Possible Values: a TCP/IP port offset
 ;;; This parameter specifies the offset of the HTML port offset

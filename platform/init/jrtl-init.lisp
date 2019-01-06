@@ -38,3 +38,11 @@
        (progn
          (load-kb units-directory)
          (system-code-initializations))))
+
+(defpackage "COMMON-LISP-USER" (:nicknames "U" "USER" "CL-USER"))
+
+(cl-imports-cyc)
+
+(cyc-imports-cl)
+
+

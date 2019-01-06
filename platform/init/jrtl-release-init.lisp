@@ -1,19 +1,14 @@
 ;;; -*- Mode: LISP; Package: CYC; Syntax: ANSI-Common-Lisp -*-
 
-;;; -*- Mode: LISP; Package: CYC; Syntax: ANSI-Common-Lisp -*-
-
 (in-package "CYC")
 
 (cvs-id "$Id: jrtl-release-init.lisp 129137 2009-11-05 03:40:25Z rck $")
 
-(csetq *master-license-key* "de47-29ff-c13b-ac5e-b750")
+(csetq *master-license-key* "????-????-????-????-????")
 
 (pwhen-feature :Cyc-ResearchCyc
   (pwhen-feature :SL2Java
-    (csetq *master-license-key* "de47-29ff-c13b-ac5e-b750")))
-(pwhen-feature :Cyc-ResearchCyc
-  (pwhen-feature :SL2Java
-    (csetq *master-license-key* "e36a-89e7-56ca-0426-0193")))
+    (csetq *master-license-key* "????-????-????-????-????")))
 
 #+Ignore
 (cunwind-protect
