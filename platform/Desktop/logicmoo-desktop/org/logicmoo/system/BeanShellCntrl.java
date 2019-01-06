@@ -113,7 +113,7 @@ import bsh.This;
 import bsh.UtilEvalError;
 import bsh.util.JConsole;
 import sun.misc.Unsafe;
-
+//import static org.slf4j.spi.LocationAwareLogger.log;
 public class BeanShellCntrl
 {
 	private static final Object StartupLock = new Object()

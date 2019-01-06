@@ -1,5 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 
+cls 
 # abcl.in
 
 # Copyright (C) 2004 Peter Graves
@@ -18,12 +19,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
 
-. set_classpath.sh
+unset CLASSPATH
 
+source set_classpath.sh
+
+echo $CLASSPATH
+echo ""
+echo ""
+echo "(init-kb) (init-server)  (init-larkc)"
+echo ""
+echo ""
 java \
-  -cp "$CLASSPATH" \
+  -cp build/classes:"$CLASSPATH" \
   -server -d64 -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC -XshowSettings:vm \
   org.armedbear.lisp.Main \
-  "$@"
+  --eval "(init-cyc)" --eval "(init-kb)" --eval "(init-server)" "$@"
 
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.

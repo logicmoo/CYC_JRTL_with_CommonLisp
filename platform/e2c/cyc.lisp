@@ -1,6 +1,8 @@
 
-(let ((*PACKAGE* *PACKAGE*))
-  (cl:load "hash-dollar.lisp"))
+(defpackage "COMMON-LISP-USER" (:nicknames "U" "USER" "CL-USER"))
+
+'(let ((*PACKAGE* *PACKAGE*))
+  (cl:load "e2c/hash-dollar.lisp"))
 
 ;; Starts AppdapterGUI
 ;; (UI-INSPECTOR)
@@ -41,9 +43,9 @@
 (let
   ((*PACKAGE* *PACKAGE*))
      (cyc:init-cyc) ;; Loads CYC code (without a KB)
-   ;;  (cyc::setup-kb-tables 0)
-     ;;(cyc:init-kb) ;; Loads CYC's KB (a server without TCP services)
-     ;;(cyc:init-server) ;; Starts All of CYC
+     '(cyc::setup-kb-tables 0)
+     (cyc:init-kb) ;; Loads CYC's KB (a server without TCP services)
+     (cyc:init-server) ;; Starts All of CYC
  )
 
 #+CYC-HTML
@@ -51,7 +53,7 @@
 
 #+CYC-EXTERNAL
 ;; makes constant names slightly friendlier to prolog
-(let ((*PACKAGE* *PACKAGE*))  (in-package :cyc) (sl:load "e2c/renames-fixed.lisp"))
+(print (let ((*PACKAGE* *PACKAGE*))  (in-package :cyc) (sl:load "e2c/renames-fixed.lisp")))
 
 ;; uses com.cyc.cycjava.cycl.constants_low.lookup_constant_by_guid
 (defun foc (str)
@@ -67,10 +69,10 @@
 
 
 ;; Loads Daydreamer
-;;#+USE-DD
-(cl:load "d")
+#+USE-DD
+(cl:load "e2c/d")
 
-(ss)
+'(ss)
 
 ;; Starts Daydreamer
 (defun dd ()
