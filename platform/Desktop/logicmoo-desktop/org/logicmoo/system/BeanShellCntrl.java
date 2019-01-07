@@ -1100,7 +1100,7 @@ public class BeanShellCntrl
 		if (editor == null)
 			editor = Editor.currentEditor();
 
-		if (true)
+		if (true && false)
 			return org.armedbear.lisp.JavaObject.getInstance(editor);
 
 		if (editor == null)

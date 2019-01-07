@@ -229,7 +229,7 @@ public final class Editor extends JPanel implements Constants,
     public static void main(String[] args) {
     	startJ(args,true);
     }
-    public static void startJ(String[] args , boolean block)
+    public static void startJ(String[] args , boolean blockUnused)
     {
         final File currentDir = File.getInstance(System.getProperty("user.dir"));
         boolean forceNewInstance = false;

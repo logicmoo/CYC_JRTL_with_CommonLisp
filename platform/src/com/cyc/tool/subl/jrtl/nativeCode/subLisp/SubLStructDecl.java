@@ -11,7 +11,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public class SubLStructDecl {
+abstract public class SubLStructDecl {
 	protected SubLStructDecl(SubLSymbol structName, SubLSymbol[] getterNames, SubLSymbol[] setterNames, SubLSymbol[] slotKeywords,
 			SubLSymbol printFunction, SubLSymbol hashFunction, SubLSymbol testFunction, boolean isInterned) {
 		this.isInterned = false;

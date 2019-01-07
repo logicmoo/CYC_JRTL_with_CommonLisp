@@ -435,7 +435,7 @@ INFO: adding assertion: (#$arg1Isa #$larkc-hasCostPerInvocation #$larkc-Plugin) 
 Jan 06, 2019 12:21:47 PM eu.larkc.core.orchestrator.CycUtil addAssertion
 INFO: adding assertion: (#$arg2Isa #$larkc-hasCostPerInvocation #$larkc-Cost) MT: #$BaseKB
 Jan 06, 2019 12:21:47 PM eu.larkc.core.metadata.PluginRegistry loadPlugins
-WARNING: No plug-ins in the plugins directory in the platform's home directory. Using only plugins.ini
+WARNING: No plug-ins in the plugins directory in the platforms home directory. Using only plugins.ini
 Jan 06, 2019 12:21:47 PM eu.larkc.core.metadata.PluginRegistry loadPlugins
 SEVERE: Decider for this instance of the LarKC platform is not specified. Platform cannot run without the decider! Pleas check ./conf/plugins.ini file.
 
@@ -459,5 +459,407 @@ CL-USER(2):
 ~~~~
 
 # Extra Features
+
+Once started
+~~~~
+LarKC SPARQL server started on port 8000.
+HTTP server listening on port 3602.  Connect via URL http://gitlab:3602/cgi-bin/cg?cb-start
+SPARQL server started on port 3615.
+Jetty server started on port 3603
+Ready for services.
+Type ":help" for a list of available commands.
+~~~~
+Runs trival lisp code
+~~~~
+U(1): (cl:load "e2c/d")
+=======================
+Loading GATE 2.3, Common Lisp version of 2004-12-20...
+=======================
+=======================
+Welcome to GATE 2.3, Common Lisp version of 2004-12-20
+=======================
+=======================
+Loading DAYDREAMER 3.5, Common Lisp version of 2004-12-20...
+=======================
+Adding rule ENTERTAINMENT-THEME
+Adding rule ENTERTAINMENT-PLAN1
+Adding rule ENTERTAINMENT-INF1
+Adding rule M-MOVIE-ALONE-PLAN
+Adding rule MTRANS-MOVIE-PLAN
+Adding rule LOVERS-THEME
+Adding rule LOVERS-PLAN
+Adding rule ACQUAINTED-PLAN
+Adding rule M-CONVERSATION-PLAN
+Adding rule MTRANS-ACCEPTABLE-INF1
+Adding rule MTRANS-ACCEPTABLE-INF2
+Adding rule MTRANS-ACCEPTABLE-INF3
+Adding rule M-AGREE-PLAN
+Adding rule LOVERS-THEME-PLAN
+Adding rule M-DATE-PLAN
+Adding rule ENABLE-FUTURE-VPROX-PLAN1
+Adding rule ENABLE-FUTURE-VPROX-PLAN2
+Adding rule FRIDAY-NIGHT-PLAN
+Adding rule NOT-LOVERS-PLAN1
+Adding rule M-BREAK-UP-PLAN1
+Adding rule M-BREAK-UP-PLAN2
+Adding rule AT-PLAN
+Adding rule PTRANS-PLAN
+Adding rule BELIEVE-PLAN1
+Adding rule BELIEVE-PLAN2
+Adding rule MTRANS-PLAN2
+Adding rule VPROX-PLAN1
+Adding rule VPROX-INF
+Adding rule POS-ATTITUDE-PLAN2
+Adding rule POS-ATTITUDE-PLAN3
+Adding rule ROMANTIC-INTEREST-PLAN1
+Adding rule ROMANTIC-INTEREST-PLAN2
+Adding rule STAR-PLAN
+Adding rule M-STUDY-PLAN
+Adding rule RATIONALIZATION-THEME
+Adding rule RATIONALIZATION-PLAN1
+Adding rule RATIONALIZATION-INF1
+Adding rule RATIONALIZATION-PLAN2
+Adding rule LEADTO-PLAN1
+Adding rule OTHER-RULE1
+Adding rule ACTING-JOB-THEME
+Adding rule RPROX-PLAN
+Adding rule PTRANS1-PLAN
+Adding rule JOB-FAILURE
+Adding rule LOVERS-P-GOAL
+Adding rule WELL-DRESSED-PLAN2
+Adding rule RATIONALIZATION-PLAN3
+Adding rule MINIMIZATION-PLAN
+Adding rule REVENGE-THEME
+Adding rule REVENGE-PLAN1
+Adding rule FAILED-REL-GOAL-PLAN1
+Adding rule BELIEF-PERS-ATTR-PLAN1
+Adding rule BELIEF-PERS-ATTR-PLAN3
+Adding rule KNOW-TELNO-RULE1
+Adding rule KNOW-TELNO-RULE2
+Adding rule NEG-ATTITUDE-INF
+Adding rule SOCIAL-ESTEEM-FAILURE
+Adding rule WELL-DRESSED-PLAN1
+Adding rule WEARING-PLAN
+Adding rule M-PUTON-PLAN
+Adding rule VPROX-PLAN2
+Adding rule VPROX-PLAN4
+Adding rule M-PHONE-PLAN1
+Adding rule M-PHONE-PLAN2
+Adding rule KNOW-PLAN2
+Adding rule KNOW-PLAN3
+Adding rule MTRANS-PLAN1
+Adding rule VPROX-REFLEXIVE-PLAN
+Adding rule BELIEVE-BELIEVE-INF
+Defining episode...
+Assert #{OB.1978: (SUCCEEDED-GOAL (RPROX MOVIE-STAR1 CAIRO))} in CX.3
+Assert #{OB.1980: (INTENDS linked-from (SUCCEEDED-GOAL (ACTING-EMPLOY actor MOVIE-STAR1 PARAMOUNT)) linked-to (SUCCEEDED-GOAL (RPROX MOVIE-STAR1 CAIRO)) seq? 'T)} in CX.3
+Assert #{OB.1975: (SUCCEEDED-GOAL (ACTING-EMPLOY actor MOVIE-STAR1 PARAMOUNT))} in CX.3
+Generating rule automatically.
+Adding rule EPISODIC-RULE.1:
+(RULE subgoal (RPROX ?var2298:PERSON ?var2299:CITY) goal (ACTING-EMPLOY actor ?var2298:PERSON ?var2300:ORGANIZATION) is 'PLAN-ONLY plausibility 0.7)
+Make episode for goal #{OB.1975: (SUCCEEDED-GOAL (ACTING-EMPLOY actor MOVIE-STAR1 PARAMOUNT))}
+Storing #{EPISODE.1: (EPISODE rule EPISODIC-RULE.1 goal (SUCCEEDED-GOAL (ACTING-EMPLOY actor MOVIE-STAR1 PARAMOUNT)) context CX.3 realism 0.7 desirability 1.0)} under #{EPISODIC-RULE.1: (RULE subgoal (RPROX ?var2298:PERSON ?var2299:CITY) goal (ACTING-EMPLOY actor ?var2298:PERSON ?var2300:ORGANIZATION) is 'PLAN-ONLY plausibility 0.7)}
+Defining episode...
+Assert #{OB.2012: (SUCCEEDED-GOAL (PTRANS ME HOME BAR1-LOC ME))} in CX.4
+Assert #{OB.2014: (INTENDS linked-from (SUCCEEDED-GOAL (AT ME BAR1-LOC)) linked-to (SUCCEEDED-GOAL (PTRANS ME HOME BAR1-LOC ME)) rule AT-PLAN seq? 'T)} in CX.4
+Assert #{OB.2010: (SUCCEEDED-GOAL (AT ME BAR1-LOC))} in CX.4
+Make episode for goal #{OB.2010: (SUCCEEDED-GOAL (AT ME BAR1-LOC))}
+Storing #{EPISODE.2: (EPISODE rule AT-PLAN goal (SUCCEEDED-GOAL (AT ME BAR1-LOC)) context CX.4 realism 1.0 desirability 1.0)} under #{AT-PLAN: (RULE subgoal (PTRANS ?PERSON ?LOCATION1 ?LOCATION2 ?PERSON) goal (AT ?PERSON ?LOCATION2) delete (AT ?PERSON ?LOCATION1) initial (AT ?PERSON ?LOCATION1) plausibility 1.0)}
+Assert #{OB.2016: (INTENDS linked-from (SUCCEEDED-GOAL (LOVERS ME CHRIS)) linked-to (SUCCEEDED-GOAL (AT ME BAR1-LOC)) seq? 'T)} in CX.4
+Assert #{OB.2017: (SUCCEEDED-GOAL (AT CHRIS BAR1-LOC))} in CX.4
+Assert #{OB.2019: (INTENDS linked-from (SUCCEEDED-GOAL (LOVERS ME CHRIS)) linked-to (SUCCEEDED-GOAL (AT CHRIS BAR1-LOC)) seq? 'T)} in CX.4
+Assert #{OB.2008: (SUCCEEDED-GOAL (LOVERS ME CHRIS))} in CX.4
+Generating rule automatically.
+Adding rule EPISODIC-RULE.2:
+(RULE subgoal (RSEQ (AT ?var2302:PERSON ?var2303:LOCATION) (AT ?var2304:PERSON ?var2303:LOCATION)) goal (LOVERS ?var2302:PERSON ?var2304:PERSON) is 'PLAN-ONLY plausibility 0.7)
+Make episode for goal #{OB.2008: (SUCCEEDED-GOAL (LOVERS ME CHRIS))}
+Storing #{EPISODE.3: (EPISODE rule EPISODIC-RULE.2 goal (SUCCEEDED-GOAL (LOVERS ME CHRIS)) context CX.4 realism 0.7 desirability 1.0)} under #{EPISODIC-RULE.2: (RULE subgoal (RSEQ (AT ?var2302:PERSON ?var2303:LOCATION) (AT ?var2304:PERSON ?var2303:LOCATION)) goal (LOVERS ?var2302:PERSON ?var2304:PERSON) is 'PLAN-ONLY plausibility 0.7)}
+Assert #{OB.2031: (INTENDS linked-from (SUCCEEDED-GOAL (LEADTO ante (FAILED-GOAL (LOVERS ME IRVING)) conseq (SUCCEEDED-GOAL (LOVERS ME CHRIS)))) linked-to (SUCCEEDED-GOAL (LOVERS ME CHRIS)) seq? 'T)} in CX.4
+Assert #{OB.2002: (SUCCEEDED-GOAL (LEADTO ante (FAILED-GOAL (LOVERS ME IRVING)) conseq (SUCCEEDED-GOAL (LOVERS ME CHRIS))))} in CX.4
+Generating rule automatically.
+Adding rule EPISODIC-RULE.3:
+(RULE subgoal (LOVERS ?var2302:PERSON ?var2304:PERSON) goal (LEADTO ante (FAILED-GOAL (LOVERS ?var2302:PERSON ?var2305:PERSON)) conseq (SUCCEEDED-GOAL (LOVERS ?var2302:PERSON ?var2304:PERSON))) is 'PLAN-ONLY plausibility 0.7)
+Make episode for goal #{OB.2002: (SUCCEEDED-GOAL (LEADTO ante (FAILED-GOAL (LOVERS ME IRVING)) conseq (SUCCEEDED-GOAL (LOVERS ME CHRIS))))}
+Storing #{EPISODE.4: (EPISODE rule EPISODIC-RULE.3 goal (SUCCEEDED-GOAL (LEADTO ante (FAILED-GOAL (LOVERS ME IRVING)) conseq (SUCCEEDED-GOAL (LOVERS ME CHRIS)))) context CX.4 realism 0.7 desirability 1.0)} under #{EPISODIC-RULE.3: (RULE subgoal (LOVERS ?var2302:PERSON ?var2304:PERSON) goal (LEADTO ante (FAILED-GOAL (LOVERS ?var2302:PERSON ?var2305:PERSON)) conseq (SUCCEEDED-GOAL (LOVERS ?var2302:PERSON ?var2304:PERSON))) is 'PLAN-ONLY plausibility 0.7)}
+Assert #{OB.2042: (INTENDS linked-from (SUCCEEDED-GOAL (LEADTO ante (FAILED-GOAL (LOVERS ME IRVING)) conseq (SUCCEEDED-GOAL))) linked-to (SUCCEEDED-GOAL (LEADTO ante (FAILED-GOAL (LOVERS ME IRVING)) conseq (SUCCEEDED-GOAL (LOVERS ME CHRIS)))) seq? 'T)} in CX.4
+Assert #{OB.1997: (SUCCEEDED-GOAL (LEADTO ante (FAILED-GOAL (LOVERS ME IRVING)) conseq (SUCCEEDED-GOAL)))} in CX.4
+Generating rule automatically.
+Adding rule EPISODIC-RULE.4:
+(RULE subgoal (LEADTO ante (FAILED-GOAL (LOVERS ?var2302:PERSON ?var2305:PERSON)) conseq (SUCCEEDED-GOAL (LOVERS ?var2302:PERSON ?var2304:PERSON))) goal (LEADTO ante (FAILED-GOAL (LOVERS ?var2302:PERSON ?var2305:PERSON)) conseq (SUCCEEDED-GOAL)) is 'PLAN-ONLY plausibility 0.7)
+Make episode for goal #{OB.1997: (SUCCEEDED-GOAL (LEADTO ante (FAILED-GOAL (LOVERS ME IRVING)) conseq (SUCCEEDED-GOAL)))}
+Storing #{EPISODE.5: (EPISODE rule EPISODIC-RULE.4 goal (SUCCEEDED-GOAL (LEADTO ante (FAILED-GOAL (LOVERS ME IRVING)) conseq (SUCCEEDED-GOAL))) context CX.4 realism 0.7 desirability 1.0)} under #{EPISODIC-RULE.4: (RULE subgoal (LEADTO ante (FAILED-GOAL (LOVERS ?var2302:PERSON ?var2305:PERSON)) conseq (SUCCEEDED-GOAL (LOVERS ?var2302:PERSON ?var2304:PERSON))) goal (LEADTO ante (FAILED-GOAL (LOVERS ?var2302:PERSON ?var2305:PERSON)) conseq (SUCCEEDED-GOAL)) is 'PLAN-ONLY plausibility 0.7)}
+=======================
+Welcome to DAYDREAMER 3.5, Common Lisp version of 2004-12-20
+=======================
+T
+U(2): (Daydreamer)
+DAYDREAMER 3.5, Common Lisp version of 2004-12-20
+Initialize DAYDREAMER
+Performing first-time initialization
+Creating primal reality...
+Assert #{OB.1995: (KNOW CHRIS BAR1-LOC)} in CX.5
+Assert #{OB.1994: (KNOW ME BAR1-LOC)} in CX.5
+Assert #{OB.1992: (AT BAR1 BAR1-LOC)} in CX.5
+Assert #{VENICE: (CITY "Venice Beach")} in CX.5
+Assert #{OB.1781: (KNOW MOVIE-STAR1 (TELNO MOVIE-STAR1))} in CX.5
+Assert #{OB.1710: (EMPLOYMENT actor CARMELITA1 organization (INSURANCE-COMPANY "State Farm"))} in CX.5
+Assert #{OB.1679: (AT RAINCOAT1 HOME)} in CX.5
+Assert #{OB.1662: (AT CHIC-OUTFIT1 HOME)} in CX.5
+Assert #{OB.1647: (RICH MOVIE-STAR1)} in CX.5
+Assert #{OB.1646: (POS-ATTITUDE MOVIE-STAR1)} in CX.5
+Assert #{OB.1503: (MOVIE-STAR MOVIE-STAR1)} in CX.5
+Assert #{OB.1412: (WEARING ME (NECKLACE))} in CX.5
+Assert #{OB.1350: (BELIEVE MOVIE-STAR1 (RPROX MOVIE-STAR1 LOS-ANGELES))} in CX.5
+Assert #{OB.1349: (RPROX MOVIE-STAR1 LOS-ANGELES)} in CX.5
+Assert #{OB.1348: (RPROX ME LOS-ANGELES)} in CX.5
+Assert #{OB.1347: (RPROX MY-JOB LOS-ANGELES)} in CX.5
+Assert #{OB.1346: (EMPLOYMENT actor ME MY-BOSS organization MY-JOB)} in CX.5
+Assert #{OB.1200: (STAR MOVIE-STAR1 'SOME-LEVEL)} in CX.5
+Assert #{OB.594: (KNOW ME NUART-LOCATION)} in CX.5
+Assert #{OB.395: (KNOW ME HOME)} in CX.5
+Assert #{OB.394: (ADDRESS ME HOME)} in CX.5
+Assert #{OB.393: (AT ME HOME)} in CX.5
+Assert #{OB.376: (KNOW ME OUTSIDE)} in CX.5
+Assert #{OB.372: (AT MAIL1 OUTSIDE)} in CX.5
+Assert #{OB.290: (AT NUART-THEATER NUART-LOCATION)} in CX.5
+Assert #{OB.285: (ROMANTIC-INTEREST MOVIE-STAR1)} in CX.5
+
+Creating initial reality context...
+#{CX.5: (CX)} --> #{CX.6: (CX)}
+Assert #{OB.241: (ENTERTAINMENT 0.1)} in CX.6
+Assert #{OB.242: (LOVE-RECEIVING 0.1)} in CX.6
+Assert #{FOOD-NEED: (FOOD 1.0)} in CX.6
+Assert #{MONEY-NEED: (MONEY 1.0)} in CX.6
+Assert #{OB.245: (POSSESSIONS 1.0)} in CX.6
+Assert #{OB.246: (SEX 1.0)} in CX.6
+Assert #{OB.247: (LOVE-GIVING 1.0)} in CX.6
+Assert #{OB.248: (COMPANIONSHIP 1.0)} in CX.6
+State changes from SUSPENDED to DAYDREAMING
+Run inferences in #{CX.6: (CX)}, bp = (#{ME: (FEMALE-PERSON "Sarah")})
+******************
+BELIEF-PERS-ATTR-PLAN1 BELIEF-PERS-ATTR-PLAN1 fired as inference in CX.6
+-------------------------------------------------------
+IF   person is STAR
+THEN person BELIEVE person is STAR
+-------------------------------------------------------
+
+?LEVEL = SOME-LEVEL
+?PERSON = #{MOVIE-STAR1: (MALE-ACTOR "Harrison" "Ford")}
+?SELF = #{ME: (FEMALE-PERSON "Sarah")}
+Assert #{OB.2205: (BELIEVE MOVIE-STAR1 (STAR MOVIE-STAR1 'SOME-LEVEL))} in CX.6
+Assert #{OB.2207: (DEPENDENCY linked-from (STAR MOVIE-STAR1 'SOME-LEVEL) linked-to (BELIEVE MOVIE-STAR1 (STAR MOVIE-STAR1 'SOME-LEVEL)) weight 1.0 offset 0.0 decay 0.0 rule BELIEF-PERS-ATTR-PLAN1)} in CX.6
+******************
+WELL-DRESSED-PLAN2 WELL-DRESSED-PLAN2 fired as inference in CX.6
+-------------------------------------------------------
+IF   self WEARING necklace
+THEN self is WELL-DRESSED
+-------------------------------------------------------
+
+?SELF = #{ME: (FEMALE-PERSON "Sarah")}
+Assert #{OB.2209: (WELL-DRESSED ME)} in CX.6
+Assert #{OB.2210: (DEPENDENCY linked-from (WEARING ME (NECKLACE)) linked-to (WELL-DRESSED ME) weight 0.1 offset 0.0 decay 0.0 rule WELL-DRESSED-PLAN2)} in CX.6
+******************
+LOVERS-THEME LOVERS-THEME fired as inference in CX.6
+-------------------------------------------------------
+IF   self not LOVERS with anyone
+THEN ACTIVE-GOAL for LOVERS with some person
+-------------------------------------------------------
+
+?SELF = #{ME: (FEMALE-PERSON "Sarah")}
+******************
+Activate top-level goal #{OB.2212: (ACTIVE-GOAL (LOVERS ME ?MALE-PERSON))} in #{CX.6: (CX)}
+Assert #{OB.2212: (ACTIVE-GOAL (LOVERS ME ?MALE-PERSON))} in CX.6
+==================================================
+ I want to be going out with someone.
+==================================================
+Add dependency from #{OB.2214: (POS-EMOTION 0.9)} to #{OB.2212: (ACTIVE-GOAL (LOVERS ME ?MALE-PERSON) ^OB.2212)} in #{CX.6: (CX)}
+Assert #{OB.2215: (DEPENDENCY linked-from (POS-EMOTION 0.9) linked-to (ACTIVE-GOAL (LOVERS ME ?MALE-PERSON) ^OB.2212) weight 1.0 offset 0.0 decay 0.0)} in CX.6
+Assert #{OB.2214: (POS-EMOTION 0.9)} in CX.6
+==================================================
+ I feel really interested in going out with
+ someone.
+==================================================
+Personal goal concern OB.2212: LOVERS motiv 0.9 status HALTED
+******************
+ENTERTAINMENT-THEME ENTERTAINMENT-THEME fired as inference in CX.6
+-------------------------------------------------------
+IF   level of satisfaction of ENTERTAINMENT need
+     below threshold
+THEN ACTIVE-GOAL for ENTERTAINMENT
+-------------------------------------------------------
+
+?SELF = #{ME: (FEMALE-PERSON "Sarah")}
+******************
+Activate top-level goal #{OB.2217: (ACTIVE-GOAL (ENTERTAINMENT (UPROC 'NEED-SATISFIED?)))} in #{CX.6: (CX)}
+Assert #{OB.2217: (ACTIVE-GOAL (ENTERTAINMENT (UPROC 'NEED-SATISFIED?)))} in CX.6
+==================================================
+ I want to be entertained.
+==================================================
+Add dependency from #{OB.2219: (POS-EMOTION 0.6)} to #{OB.2217: (ACTIVE-GOAL (ENTERTAINMENT (UPROC 'NEED-SATISFIED?)) ^OB.2217)} in #{CX.6: (CX)}
+Assert #{OB.2220: (DEPENDENCY linked-from (POS-EMOTION 0.6) linked-to (ACTIVE-GOAL (ENTERTAINMENT (UPROC 'NEED-SATISFIED?)) ^OB.2217) weight 1.0 offset 0.0 decay 0.0)} in CX.6
+Assert #{OB.2219: (POS-EMOTION 0.6)} in CX.6
+==================================================
+ I feel interested in being entertained.
+==================================================
+Personal goal concern OB.2217: ENTERTAINMENT motiv 0.6 status RUNABLE
+Personal goal concern OB.2212: LOVERS motiv 0.9 status HALTED
+Running emotion-driven control loop...
+:Switching to new top-level goal #{OB.2217: (ACTIVE-GOAL (ENTERTAINMENT (UPROC 'NEED-SATISFIED?)) ^OB.2217)}
+----------------------CX.6--------------------
+Running rules for #{OB.2217: (ACTIVE-GOAL (ENTERTAINMENT (UPROC 'NEED-SATISFIED?)) ^OB.2217)}
+setting last sprout concept = #{OB.2212: (ACTIVE-GOAL (LOVERS ME ?MALE-PERSON) ^OB.2212)} in #{CX.5: (CX)}
+Run inferences in #{CX.6: (CX)}, bp = (#{ME: (FEMALE-PERSON "Sarah")})
+Running p-goals in #{CX.6: (CX)}
+Running plans in #{CX.6: (CX)} for #{OB.2217: (ACTIVE-GOAL (ENTERTAINMENT (UPROC 'NEED-SATISFIED?)) ^OB.2217)} bp (#{ME: (FEMALE-PERSON "Sarah")})
+Run plan for #{OB.2217: (ACTIVE-GOAL (ENTERTAINMENT (UPROC 'NEED-SATISFIED?)) ^OB.2217)} in #{CX.6: (CX)}
+Try fact plans
+Try rules and episodes
+Find candidate rules for obj #{OB.2218: (ENTERTAINMENT (UPROC 'NEED-SATISFIED?))} in #{CX.6: (CX)}
+Order candidates ((#{ENTERTAINMENT-PLAN1: (RULE subgoal (M-MOVIE ?Self) goal (ENTERTAINMENT) is 'PLAN-ONLY-NO-AUTO plausibility 1.0)} (T (SELF #{ME: (FEMALE-PERSON "Sarah")}))))
+Run generic plan #{ENTERTAINMENT-PLAN1: (RULE subgoal (M-MOVIE ?Self) goal (ENTERTAINMENT) is 'PLAN-ONLY-NO-AUTO plausibility 1.0)} for #{OB.2217: (ACTIVE-GOAL (ENTERTAINMENT (UPROC 'NEED-SATISFIED?)) ^OB.2217)} in #{CX.6: (CX)}
+#{CX.6: (CX)} --> #{CX.7: (CX)}
+Debugging being delayed for broadcast at a later time.
+ENTERTAINMENT-PLAN1 Debugging resumed.
+Pruning possibilities from (#{CX.7: (CX)})
+:----------------------CX.7--------------------
+Running rules for #{OB.2217: (ACTIVE-GOAL (ENTERTAINMENT (UPROC 'NEED-SATISFIED?)) ^OB.2217)}
+setting last sprout concept = #{OB.2229: (ACTIVE-GOAL (M-MOVIE ME) (ACTIVE-GOAL (ENTERTAINMENT (UPROC 'NEED-SATISFIED?)) ^OB.2217))} in #{CX.6: (CX)}
+Broadcasting delayed debugs.
+******************
+ENTERTAINMENT-PLAN1 fired as plan
+for #{OB.2217: (ACTIVE-GOAL (ENTERTAINMENT (UPROC 'NEED-SATISFIED?)) ^OB.2217)}
+in CX.6 sprouting CX.7
+-------------------------------------------------------
+IF   ACTIVE-GOAL for ENTERTAINMENT
+THEN ACTIVE-GOAL for M-MOVIE with self
+-------------------------------------------------------
+...<SNIP>...
+:----------------------CX.71--------------------
+Running rules for #{OB.3433: (ACTIVE-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1) ^OB.2212)) ^OB.3433)}
+setting last sprout concept = #{OB.4234: (BELIEVE MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1)))} in #{CX.70: (CX)}
+setting last sprout concept = #{OB.4234: (BELIEVE MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1)))} in #{CX.69: (CX)}
+setting last sprout concept = #{OB.4234: (BELIEVE MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1)))} in #{CX.48: (CX)}
+Broadcasting delayed debugs.
+Retract #{OB.4260: (ORDERING)} in CX.71
+Assert #{OB.4314: (ORDERING)} in CX.71
+Subgoal relaxation, #{OB.4236: (ACTIVE-GOAL (BELIEVE MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) (ACTIVE-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL ^OB.2677 ^OB.2212)) ^OB.3433))} succeeds
+
+Assert #{OB.4234: (BELIEVE MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1)))} in CX.71
+==================================================
+ Say he fails at going out with me.
+==================================================
+******************
+Goal #{OB.4236: (ACTIVE-GOAL (BELIEVE MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) (ACTIVE-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL ^OB.2677 ^OB.2212)) ^OB.3433))} succeeds in #{CX.71: (CX)}
+Retract #{OB.4236: (ACTIVE-GOAL (BELIEVE MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) (ACTIVE-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL ^OB.2677 ^OB.2212)) ^OB.3433))} in CX.71
+Assert #{OB.4315: (ACTIVE-GOAL (BELIEVE MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))))} in CX.71
+Retract #{OB.4237: (INTENDS linked-from (ACTIVE-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1) ^OB.2212)) ^OB.3433) linked-to (ACTIVE-GOAL (BELIEVE MOVIE-STAR1 (FAILED-GOAL ^OB.2677)) ^OB.3433) rule REVENGE-PLAN1 seq? 'T)} in CX.71
+Assert #{OB.4319: (INTENDS linked-from (ACTIVE-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1) ^OB.2212)) ^OB.3433) linked-to (ACTIVE-GOAL (BELIEVE MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1)))) rule REVENGE-PLAN1 seq? 'T)} in CX.71
+Retract #{OB.4315: (ACTIVE-GOAL (BELIEVE MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) (ACTIVE-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1) ^OB.2212)) ^OB.3433))} in CX.71
+Assert #{OB.4315: (SUCCEEDED-GOAL (BELIEVE MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) (ACTIVE-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1) ^OB.2212)) ^OB.3433))} in CX.71
+End of delayed broadcast.
+Subgoals of #{OB.3433: (ACTIVE-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1) ^OB.2212)) ^OB.3433)} completed
+******************
+Goal #{OB.3433: (ACTIVE-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1) ^OB.2212)) ^OB.3433)} succeeds in #{CX.71: (CX)}
+Replace obj of #{OB.3433: (ACTIVE-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1) ^OB.2212)) ^OB.3433)} with (T)
+Retract #{OB.3433: (ACTIVE-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433)} in CX.71
+Assert #{OB.3433: (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433)} in CX.71
+Assert #{OB.4320: (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1)))} in CX.71
+==================================================
+ I get even with him.
+==================================================
+Run inferences in #{CX.71: (CX)}, bp = (#{ME: (FEMALE-PERSON "Sarah")})
+Running p-goals in #{CX.71: (CX)}
+Running plans in #{CX.71: (CX)} for #{OB.3433: (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433)} bp (#{ME: (FEMALE-PERSON "Sarah")})
+Terminating planning for top-level goal #{OB.3433: (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433)}
+Leaf context #{CX.71: (CX)}
+[OB.3433: (SG. (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))))]
+  [OB.4238: (SG. (BELIEVE MOVIE-STAR1 (ACTIVE-GOAL (LOVERS ME MOVIE-STAR1))))]
+  [OB.4268: (SG. (MTRANS MOVIE-STAR1 MOVIE-STAR1 ME (BELIEVE MOVIE-STAR1 (ACTIVE-GOAL (LOVERS ME MOVIE-STAR1)))))]
+    [OB.4264: (SG. (VPROX ME MOVIE-STAR1))]
+  [OB.4315: (SG. (BELIEVE MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))))]
+Personal goal concern OB.3454: LOVERS motiv 0.9 status HALTED
+Removing motivating emotions of #{OB.3433: (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433)} in #{CX.68: (CX)}
+Retract #{OB.3438: (DEPENDENCY linked-from (NEG-EMOTION 0.05) linked-to (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433) weight 1.0 offset 0.0 decay 0.0)} in CX.68
+Retract #{OB.3437: (NEG-EMOTION 0.05)} in CX.68
+Retract #{OB.3435: (DEPENDENCY linked-from (POS-EMOTION 0.25 MOVIE-STAR1) linked-to (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433) weight 1.0 offset 0.0 decay 0.0)} in CX.68
+Emotional responses for #{OB.3433: (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433)} in #{CX.71: (CX)}
+Add dependency from #{OB.3433: (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433)} to #{OB.4418: (POS-EMOTION)} in #{CX.68: (CX)}
+Assert #{OB.4419: (DEPENDENCY linked-from (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433) linked-to (POS-EMOTION) weight 0.73333335 offset 0.0 decay 0.0)} in CX.68
+Assert #{OB.4418: (POS-EMOTION 0.22000001)} in CX.68
+==================================================
+ Possibly I feel a bit pleased about getting
+ even with him.
+==================================================
+Run inferences in #{CX.68: (CX)}, bp = (#{ME: (FEMALE-PERSON "Sarah")})
+Store episode #{OB.3433: (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433)} in #{CX.71: (CX)}
+Assess scenario desirability in #{CX.71: (CX)}
+Scenario desirability = 0.0
+Store goal of episode #{OB.3433: (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433)}, realism 0.73333335
+Store goal of episode #{OB.4238: (SUCCEEDED-GOAL (BELIEVE MOVIE-STAR1 (ACTIVE-GOAL (LOVERS ME MOVIE-STAR1))) (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433))}, realism 1.0
+Store goal of episode #{OB.4268: (SUCCEEDED-GOAL (MTRANS MOVIE-STAR1 MOVIE-STAR1 ME (BELIEVE MOVIE-STAR1 (ACTIVE-GOAL (LOVERS ME MOVIE-STAR1)))) (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433))}, realism 1.0
+Store goal of episode #{OB.4264: (SUCCEEDED-GOAL (VPROX ME MOVIE-STAR1) (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433))}, realism 1.0
+Make episode for goal #{OB.4268: (SUCCEEDED-GOAL (MTRANS MOVIE-STAR1 MOVIE-STAR1 ME (BELIEVE MOVIE-STAR1 (ACTIVE-GOAL (LOVERS ME MOVIE-STAR1)))) (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433))}
+Storing #{EPISODE.23: (EPISODE rule MTRANS-PLAN2 goal (SUCCEEDED-GOAL (MTRANS MOVIE-STAR1 MOVIE-STAR1 ME (BELIEVE MOVIE-STAR1 (ACTIVE-GOAL (LOVERS ME MOVIE-STAR1)))) (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433)) context CX.71 realism 1.0 desirability 1.0)} under #{MTRANS-PLAN2: (RULE subgoal (VPROX ?PERSON2 ?PERSON1) goal (MTRANS ?PERSON1 ?PERSON1 ?PERSON2 (UOR (UAND ?MENTAL-STATE (UOR (UPROC 'IS-VAR?) (UNOT ?KNOWABLE))) (NOT (UAND ?MENTAL-STATE (UOR (UPROC 'IS-VAR?) (UNOT ?KNOWABLE)))))) is 'ACTION-PLAN plausibility 1.0)}
+Store goal of episode #{OB.4315: (SUCCEEDED-GOAL (BELIEVE MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433))}, realism 0.2
+Make episode for goal #{OB.3433: (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433)}
+Storing #{EPISODE.24: (EPISODE rule REVENGE-PLAN1 goal (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433) context CX.71 realism 0.73333335 desirability 0.0)} under #{REVENGE-PLAN1: (RULE subgoal (RSEQ (BELIEVE ?Other (ACTIVE-GOAL ?POS-RELATIONSHIP)) (MTRANS ?Other ?Other ?Self (BELIEVE ?Other (ACTIVE-GOAL ?POS-RELATIONSHIP))) (BELIEVE ?Other (FAILED-GOAL ?POS-RELATIONSHIP))) goal (REVENGE ?Self ?Other (FAILED-GOAL ?POS-RELATIONSHIP)) is 'PLAN-ONLY plausibility 1.0)}
+Storing #{EPISODE.24: (EPISODE rule REVENGE-PLAN1 goal (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433) context CX.71 realism 0.73333335 desirability 0.0)} under #{OB.4418: (POS-EMOTION 0.22000001)}
+Assert #{OB.4418: (POS-EMOTION 0.22000001)} in EPISODIC-MEMORY
+Storing #{EPISODE.24: (EPISODE rule REVENGE-PLAN1 goal (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433) context CX.71 realism 0.73333335 desirability 0.0)} under #{HOME: (LOCATION "home")}
+Storing #{EPISODE.24: (EPISODE rule REVENGE-PLAN1 goal (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433) context CX.71 realism 0.73333335 desirability 0.0)} under #{NUART-THEATER: (THEATER "the Nuart")}
+Storing #{EPISODE.24: (EPISODE rule REVENGE-PLAN1 goal (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433) context CX.71 realism 0.73333335 desirability 0.0)} under #{BAR1-LOC: (LOCATION "Mom's")}
+Storing #{EPISODE.24: (EPISODE rule REVENGE-PLAN1 goal (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433) context CX.71 realism 0.73333335 desirability 0.0)} under #{OB.1418: (NECKLACE)}
+Assert #{OB.1418: (NECKLACE)} in EPISODIC-MEMORY
+Storing #{EPISODE.24: (EPISODE rule REVENGE-PLAN1 goal (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433) context CX.71 realism 0.73333335 desirability 0.0)} under #{NUART-LOCATION: (LOCATION "the Nuart")}
+Storing #{EPISODE.24: (EPISODE rule REVENGE-PLAN1 goal (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433) context CX.71 realism 0.73333335 desirability 0.0)} under #{IRVING: (MALE-PERSON "Irving")}
+Assert #{IRVING: (MALE-PERSON "Irving")} in EPISODIC-MEMORY
+Storing #{EPISODE.24: (EPISODE rule REVENGE-PLAN1 goal (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433) context CX.71 realism 0.73333335 desirability 0.0)} under #{CHRIS: (MALE-PERSON "Chris")}
+Assert #{CHRIS: (MALE-PERSON "Chris")} in EPISODIC-MEMORY
+Storing #{EPISODE.24: (EPISODE rule REVENGE-PLAN1 goal (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433) context CX.71 realism 0.73333335 desirability 0.0)} under #{PARAMOUNT: (ORGANIZATION "Paramount Pictures")}
+Assert #{PARAMOUNT: (ORGANIZATION "Paramount Pictures")} in EPISODIC-MEMORY
+Storing #{EPISODE.24: (EPISODE rule REVENGE-PLAN1 goal (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433) context CX.71 realism 0.73333335 desirability 0.0)} under #{OB.3014: (MOVIES MOVIE-STAR1)}
+Storing #{EPISODE.24: (EPISODE rule REVENGE-PLAN1 goal (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433) context CX.71 realism 0.73333335 desirability 0.0)} under #{MOVIE-STAR1: (MALE-ACTOR "Harrison" "Ford")}
+Activate index #{REVENGE-PLAN1: (RULE subgoal (RSEQ (BELIEVE ?Other (ACTIVE-GOAL ?POS-RELATIONSHIP)) (MTRANS ?Other ?Other ?Self (BELIEVE ?Other (ACTIVE-GOAL ?POS-RELATIONSHIP))) (BELIEVE ?Other (FAILED-GOAL ?POS-RELATIONSHIP))) goal (REVENGE ?Self ?Other (FAILED-GOAL ?POS-RELATIONSHIP)) is 'PLAN-ONLY plausibility 1.0)}
+Index #{OB.3014: (MOVIES MOVIE-STAR1)} fades
+Activate index #{HOME: (LOCATION "home")}
+Index #{EPISODIC-RULE.4: (RULE subgoal (LEADTO ante (FAILED-GOAL (LOVERS ?var2302:PERSON ?var2305:PERSON)) conseq (SUCCEEDED-GOAL (LOVERS ?var2302:PERSON ?var2304:PERSON))) goal (LEADTO ante (FAILED-GOAL (LOVERS ?var2302:PERSON ?var2305:PERSON)) conseq (SUCCEEDED-GOAL)) is 'PLAN-ONLY plausibility 0.7)} fades
+Activate index #{NUART-THEATER: (THEATER "the Nuart")}
+Index #{RATIONALIZATION-PLAN2: (RULE subgoal (LEADTO ante (FAILED-GOAL ?STATE) conseq (SUCCEEDED-GOAL)) goal (RATIONALIZATION (UAND (FAILED-GOAL ?STATE) (UPROC 'NOT-INFERRED-TOP-LEVEL-GOAL?))) is 'PLAN-ONLY-NO-AUTO plausibility 0.98)} fades
+Index #{BAR1-LOC: (LOCATION "Mom's")} already active
+Activate index #{OB.1418: (NECKLACE)}
+Index #{BAR1-LOC: (LOCATION "Mom's")} fades
+Index #{NUART-LOCATION: (LOCATION "the Nuart")} already active
+Activate index #{IRVING: (MALE-PERSON "Irving")}
+Index #{NUART-LOCATION: (LOCATION "the Nuart")} fades
+Activate index #{CHRIS: (MALE-PERSON "Chris")}
+Index #{MOVIE-STAR1: (MALE-ACTOR "Harrison" "Ford")} fades
+Activate index #{PARAMOUNT: (ORGANIZATION "Paramount Pictures")}
+Index #{REVENGE-PLAN1: (RULE subgoal (RSEQ (BELIEVE ?Other (ACTIVE-GOAL ?POS-RELATIONSHIP)) (MTRANS ?Other ?Other ?Self (BELIEVE ?Other (ACTIVE-GOAL ?POS-RELATIONSHIP))) (BELIEVE ?Other (FAILED-GOAL ?POS-RELATIONSHIP))) goal (REVENGE ?Self ?Other (FAILED-GOAL ?POS-RELATIONSHIP)) is 'PLAN-ONLY plausibility 1.0)} fades
+Activate index #{OB.3014: (MOVIES MOVIE-STAR1)}
+Index #{HOME: (LOCATION "home")} fades
+Activate index #{MOVIE-STAR1: (MALE-ACTOR "Harrison" "Ford")}
+Index #{NUART-THEATER: (THEATER "the Nuart")} fades
+Assert #{OB.3433: (SUCCEEDED-GOAL (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1))) ^OB.3433)} in CX.68
+Assert #{OB.4320: (REVENGE ME MOVIE-STAR1 (FAILED-GOAL (LOVERS ME MOVIE-STAR1)))} in CX.68
+#{CX.68: (CX)} --> #{CX.72: (CX)}
+:Taking optional object or concept input
+Enter concepts in #{CX.72: (CX)}
+Parser>
+End of parser input
+No more goals to run; switching to performance mode
+State changes from DAYDREAMING to PERFORMANCE
+Emotion #{OB.3085: (POS-EMOTION 0.14528356)} below threshold.
+Retract #{OB.3085: (POS-EMOTION 0.14528356)} in CX.72
+:No more goals to run; switching to daydreaming mode
+State changes from PERFORMANCE to DAYDREAMING
+:Taking optional object or concept input
+Enter concepts in #{CX.72: (CX)}
+Parser>
+End of parser input
+No more goals to run; switching to performance mode
+State changes from DAYDREAMING to PERFORMANCE
+DAYDREAMER terminates
+T
+U(3):
 
 
