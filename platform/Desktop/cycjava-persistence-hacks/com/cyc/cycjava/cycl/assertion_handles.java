@@ -4,10 +4,6 @@
 package com.cyc.cycjava.cycl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sxhash;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality;
@@ -101,14 +97,14 @@ public final class assertion_handles extends SubLTranslatedFile
     private static final SubLSymbol $sym40$DO_KB_SUID_TABLE_UPTO_EXCLUDING_ID;
     private static final SubLSymbol $sym41$START;
     private static final SubLSymbol $sym42$DO_KB_SUID_TABLE_STARTING_AT_ID;
-    private static final SubLSymbol $sym43$ASSERTION;
-    private static final SubLSymbol $sym44$ASSERTION_P;
+    static final SubLSymbol $sym43$ASSERTION;
+    static final SubLSymbol $sym44$ASSERTION_P;
     private static final SubLInteger $int45$141;
-    private static final SubLList $list46;
-    private static final SubLList $list47;
-    private static final SubLList $list48;
-    private static final SubLList $list49;
-    private static final SubLSymbol $sym50$PRINT_ASSERTION;
+    static final SubLList $list46;
+    static final SubLList $list47;
+    static final SubLList $list48;
+    static final SubLList $list49;
+    static final SubLSymbol $sym50$PRINT_ASSERTION;
     private static final SubLSymbol $sym51$ASSERTION_PRINT_FUNCTION_TRAMPOLINE;
     private static final SubLList $list52;
     private static final SubLSymbol $sym53$AS_ID;
@@ -1087,32 +1083,6 @@ public final class assertion_handles extends SubLTranslatedFile
         $str78$Return_the_assertion_with_ID__or_ = SubLObjectFactory.makeString("Return the assertion with ID, or NIL if not present.");
         $list79 = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("ID"), (SubLObject)SubLObjectFactory.makeSymbol("INTEGERP")));
         $list80 = ConsesLow.list((SubLObject)ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("NIL-OR"), (SubLObject)SubLObjectFactory.makeSymbol("ASSERTION-P")));
-    }
-    
-    public static final class $assertion_native extends SubLStructNative
-    {
-        public SubLObject $id;
-        private static final SubLStructDeclNative structDecl;
-        
-        public $assertion_native() {
-            this.$id = (SubLObject)CommonSymbols.NIL;
-        }
-        
-        public SubLStructDecl getStructDecl() {
-            return (SubLStructDecl)$assertion_native.structDecl;
-        }
-        
-        public SubLObject getField2() {
-            return this.$id;
-        }
-        
-        public SubLObject setField2(final SubLObject value) {
-            return this.$id = value;
-        }
-        
-        static {
-            structDecl = Structures.makeStructDeclNative((Class)$assertion_native.class, assertion_handles.$sym43$ASSERTION, assertion_handles.$sym44$ASSERTION_P, assertion_handles.$list46, assertion_handles.$list47, new String[] { "$id" }, assertion_handles.$list48, assertion_handles.$list49, assertion_handles.$sym50$PRINT_ASSERTION);
-        }
     }
     
     public static final class $assertion_p$UnaryFunction extends UnaryFunction

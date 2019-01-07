@@ -6888,7 +6888,10 @@ public final class rkf_assisted_reader extends SubLTranslatedFile
         }
         
         static {
-            structDecl = Structures.makeStructDeclNative((Class)$ar_template_native.class, rkf_assisted_reader.$sym151$AR_TEMPLATE, rkf_assisted_reader.$sym152$AR_TEMPLATE_P, rkf_assisted_reader.$list153, rkf_assisted_reader.$list154, new String[] { "$id", "$concept", "$formula", "$prompt", "$choice_table", "$agglomerations" }, rkf_assisted_reader.$list155, rkf_assisted_reader.$list156, rkf_assisted_reader.$sym9$DEFAULT_STRUCT_PRINT_FUNCTION);
+            structDecl = Structures.makeStructDeclNative((Class)$ar_template_native.class, rkf_assisted_reader.$sym151$AR_TEMPLATE, 
+            		rkf_assisted_reader.$sym152$AR_TEMPLATE_P, rkf_assisted_reader.$list153, rkf_assisted_reader.$list154, new String[] { 
+            				"$id", "$concept", "$formula", "$prompt", "$choice_table", "$agglomerations" }, rkf_assisted_reader.$list155,
+            		rkf_assisted_reader.$list156, rkf_assisted_reader.$sym9$DEFAULT_STRUCT_PRINT_FUNCTION);
         }
     }
     

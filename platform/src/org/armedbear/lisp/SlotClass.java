@@ -35,6 +35,8 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
 
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
+
 public class SlotClass extends LispClass
 {
     private LispObject directSlotDefinitions = NIL;
@@ -174,7 +176,7 @@ public class SlotClass extends LispClass
               slotDefinition.getInstanceSlotValue(Symbol.NAME);
             tail = tail.cdr();
         }
-        setClassLayout(new Layout(this, instanceSlotNames, NIL));
+        setClassLayout(new SubLStructDecl(this, instanceSlotNames, NIL));
         setDefaultInitargs(computeDefaultInitargs());
         setFinalized(true);
     }

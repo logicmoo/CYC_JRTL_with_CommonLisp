@@ -42,7 +42,7 @@ public class PrologSync extends SubLTrampolineFile
 	public static SubLFile me = new PrologSync();
 	static volatile Set<String> syncedTypes = new HashSet<String>();
 
-	static boolean trackStructs = true;
+	public static boolean trackStructs = true;
 
 	public static void addLater(final AbstractSubLStruct struct)
 	{

@@ -2413,12 +2413,12 @@ public final class qua_query extends SubLTranslatedFile
         private static final SubLStructDeclNative structDecl;
         
         public $augmented_query_native() {
-            this.$original_phrase = (SubLObject)CommonSymbols.NIL;
-            this.$id = (SubLObject)CommonSymbols.NIL;
-            this.$tokenizations = (SubLObject)CommonSymbols.NIL;
-            this.$query_string = (SubLObject)CommonSymbols.NIL;
-            this.$query_string_staleP = (SubLObject)CommonSymbols.NIL;
-            this.$search_engine = (SubLObject)CommonSymbols.NIL;
+            this.$original_phrase = NIL;
+            this.$id = NIL;
+            this.$tokenizations = NIL;
+            this.$query_string = NIL;
+            this.$query_string_staleP = NIL;
+            this.$search_engine = NIL;
         }
         
         public SubLStructDecl getStructDecl() {
@@ -2505,17 +2505,17 @@ public final class qua_query extends SubLTranslatedFile
         private static final SubLStructDeclNative structDecl;
         
         public $aq_term_native() {
-            this.$id = (SubLObject)CommonSymbols.NIL;
-            this.$original_string = (SubLObject)CommonSymbols.NIL;
-            this.$raw_meanings = (SubLObject)CommonSymbols.NIL;
-            this.$possible_meanings = (SubLObject)CommonSymbols.NIL;
-            this.$disfavored_meanings = (SubLObject)CommonSymbols.NIL;
-            this.$positive_strings = (SubLObject)CommonSymbols.NIL;
-            this.$positive_terms_in_upward_closure = (SubLObject)CommonSymbols.NIL;
-            this.$positive_strings_staleP = (SubLObject)CommonSymbols.NIL;
-            this.$negative_strings = (SubLObject)CommonSymbols.NIL;
-            this.$negative_terms_in_upward_closure = (SubLObject)CommonSymbols.NIL;
-            this.$negative_strings_staleP = (SubLObject)CommonSymbols.NIL;
+            this.$id = NIL;
+            this.$original_string = NIL;
+            this.$raw_meanings = NIL;
+            this.$possible_meanings = NIL;
+            this.$disfavored_meanings = NIL;
+            this.$positive_strings = NIL;
+            this.$positive_terms_in_upward_closure = NIL;
+            this.$positive_strings_staleP = NIL;
+            this.$negative_strings = NIL;
+            this.$negative_terms_in_upward_closure = NIL;
+            this.$negative_strings_staleP = NIL;
         }
         
         public SubLStructDecl getStructDecl() {

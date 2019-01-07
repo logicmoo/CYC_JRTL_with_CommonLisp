@@ -6,118 +6,150 @@ package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.armedbear.lisp.Layout;
+import org.armedbear.lisp.LispObject;
+import org.armedbear.lisp.Primitive;
+import org.armedbear.lisp.SlotClass;
+import org.armedbear.lisp.Symbol;
+
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative.is_instance_of_foriegn_class;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStruct;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructInterpreted;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbolFactory;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLT;
 
-abstract public class SubLStructDecl {
-	protected SubLStructDecl(SubLSymbol structName, SubLSymbol[] getterNames, SubLSymbol[] setterNames, SubLSymbol[] slotKeywords,
-			SubLSymbol printFunction, SubLSymbol hashFunction, SubLSymbol testFunction, boolean isInterned) {
-		this.isInterned = false;
-		this.structName = SubLNil.NIL;
-		concName = SubLNil.NIL;
-		this.getterNames = getterNames;
-		this.setterNames = setterNames;
-		this.printFunction = printFunction;
-		this.structName = structName;
-		this.hashFunction = hashFunction;
-		this.testFunction = testFunction;
-		this.isInterned = isInterned;
-		id = getTypeID(structName);
-		this.slotKeywords = slotKeywords;
-		slotNames = new SubLSymbol[getterNames.length];
-		SubLPackage pkg = structName.getPackage();
-		for (int i = 0, size = slotNames.length; i < size; ++i)
-			try {
-				SubLSymbol slotKeyword = slotKeywords[i];
-				String stotStr = slotKeyword.getName();
-				SubLSymbol slotSymbol = SubLObjectFactory.makeSymbol(stotStr, pkg);
-				slotNames[i] = slotSymbol;
-			} catch (Exception e) {
-				Errors.error(e.getMessage(), e);
-			}
-		SubLStructDecl.structNameToStructDeclMap.put(structName, this);
+public class SubLStructDecl extends Layout
+{
+	protected SubLStructDecl(SubLSymbol structName, SubLSymbol[] getterNames, SubLSymbol[] setterNames, SubLSymbol[] slotKeywords, SubLSymbol printFunction, SubLSymbol hashFunction, SubLSymbol testFunction, boolean isInterned)
+	{
+		super(structName, getterNames, setterNames, slotKeywords, printFunction, hashFunction, testFunction, isInterned);
 	}
 
-	public static SubLStructDecl getStructDecl(SubLSymbol structName) {
+	public SubLStructDecl(LispObject lispClass, LispObject instanceSlots, LispObject sharedSlots)
+	{
+		super(lispClass, instanceSlots, sharedSlots);
+	}
+
+	public SubLStructDecl(SlotClass slotClass, LispObject[] instanceSlotNames, Symbol sharedSlots)
+	{
+		super(slotClass, instanceSlotNames, sharedSlots);
+	}
+
+	public SubLStructDecl(Layout oldLayout)
+	{
+		super(oldLayout);
+	}
+
+	public static SubLStructDecl getStructDecl(SubLSymbol structName)
+	{
 		SubLStructDecl structDecl = SubLStructDecl.structNameToStructDeclMap.get(structName);
-		if (structDecl == null)
-			Errors.error("Invalid struct name: " + structName);
+		if (structDecl == null) Errors.error("Invalid struct name: " + structName);
 		return structDecl;
 	}
 
-	public static int getTypeID(SubLSymbol typeName) {
-		synchronized (SubLStructDecl.structNameToIDMap) {
-			Integer id = SubLStructDecl.structNameToIDMap.get(typeName);
-			if (id == null) {
-				if (SubLStructDecl.idCounter >= 2048)
-					Errors.error("Too many sturcuture declarations.");
-				id = new Integer(SubLStructDecl.idCounter++);
-				SubLStructDecl.structNameToIDMap.put(typeName, id);
-			}
-			return id;
-		}
+	public static void main(String[] args)
+	{
 	}
 
-	public static void main(String[] args) {
-	}
-
-	private int id;
-	public boolean isInterned;
-	private SubLSymbol structName;
-	private SubLSymbol concName;
-	private SubLSymbol[] getterNames;
-	private SubLSymbol[] slotNames;
-	private SubLSymbol[] slotKeywords;
-	final private SubLSymbol[] setterNames;
-	private SubLSymbol printFunction;
-	private SubLSymbol hashFunction;
-	private SubLSymbol testFunction;
-	private static Map<SubLSymbol, SubLStructDecl> structNameToStructDeclMap;
-	private static Map<SubLSymbol, Integer> structNameToIDMap;
-	protected static int idCounter;
-	static {
+	static
+	{
 		structNameToStructDeclMap = new HashMap<SubLSymbol, SubLStructDecl>();
 		structNameToIDMap = new HashMap<SubLSymbol, Integer>();
 		SubLStructDecl.idCounter = 0;
 	}
 
-	public int getFieldCount() {
-		return getterNames.length;
+	public static SubLStructDecl makeStructDeclInterpreted(String[] actualFieldNames, SubLSymbol typeName, String getterPrefix, String setterPre_Prefix)
+	{
+		return makeStructDeclInterpreted(typeName, null, getterPrefix, setterPre_Prefix, actualFieldNames, null);
 	}
 
-	public int getFieldNumForSymbol(SubLSymbol symbol) {
-		for (int i = 0, size = slotNames.length; i < size; ++i)
-			if (slotNames[i] == symbol)
-				return i + 2;
-		Errors.error(symbol + " is not a valid field of struct: " + structName);
-		return -1;
+	public static final class is_instance_of_struct_type extends Primitive
+	{
+		private SubLStructDecl clazz;
+
+		public is_instance_of_struct_type(Symbol named, SubLStructDecl clazz)
+		{
+			super(named);
+			named.setFunction(this);
+			this.clazz = clazz;
+
+		}
+
+		@Override
+		public LispObject execute(LispObject arg)
+		{
+			return clazz.isInstance(arg);
+		}
 	}
 
-	public SubLSymbol getGetterName(int i) {
-		return getterNames[i];
+	public static final class is_instance_of_struct_name extends Primitive
+	{
+		private SubLSymbol clazz;
+
+		public is_instance_of_struct_name(Symbol named, SubLSymbol clazz)
+		{
+			super(named);
+			named.setFunction(this);
+			this.clazz = clazz;
+
+		}
+
+		@Override
+		public LispObject execute(LispObject arg)
+		{
+			LispObject typeSpecifier = clazz.toLispObject();
+			return arg.typep(typeSpecifier);
+		}
 	}
 
-	public int getId() {
-		return id;
+	public static SubLStructDecl makeStructDeclInterpreted(SubLSymbol typeName, SubLSymbol predicateName, String getterPrefix, String setterPre_Prefix, String[] actualFieldNames, SubLSymbol printFunction)
+	{
+		if (getterPrefix == null) getterPrefix = typeName.getName();
+		String getter = getterPrefix + "-";
+		SubLPackage intoPackage = typeName.getPackage();
+		String setter = setterPre_Prefix + getter;
+
+		if (printFunction == null || printFunction == SubLNil.NIL)
+		{
+			printFunction = SubLObjectFactory.makeSymbol("DEFAULT-STRUCT-PRINT-FUNCTION");
+		}
+		if (predicateName == null || predicateName == SubLNil.NIL)
+		{
+			predicateName = SubLObjectFactory.makeSymbol(typeName.getName() + "-P", intoPackage);
+			new is_instance_of_struct_name(predicateName.toLispObject(), typeName);
+		}
+
+		SubLSymbol[] slotNamesArray = new SubLSymbol[actualFieldNames.length];
+		SubLSymbol[] slotKeywordNamesArray = new SubLSymbol[actualFieldNames.length];
+		SubLSymbol[] getterNamesArray = new SubLSymbol[actualFieldNames.length];
+		SubLSymbol[] setterNamesArray = new SubLSymbol[actualFieldNames.length];
+		for (int i = 0; i < actualFieldNames.length; i++)
+		{
+			String fn = actualFieldNames[i];
+			if (fn.startsWith("$"))
+			{
+				fn = fn.substring(1);
+			}
+			else if (fn.startsWith("_"))
+			{
+				fn = fn.substring(1);
+			}
+			fn = fn.replaceAll("_", "-").toUpperCase();
+			slotKeywordNamesArray[i] = SubLSymbolFactory.makeKeyword(fn);
+			slotNamesArray[i] = SubLSymbolFactory.makeSymbol(fn, intoPackage);
+			getterNamesArray[i] = SubLSymbolFactory.makeSymbol(getter + fn, intoPackage);
+			setterNamesArray[i] = SubLSymbolFactory.makeSymbol(setter + fn, intoPackage);
+		}
+		//SubLSymbol structName, SubLSymbol[] getterNames, SubLSymbol[] setterNames, SubLSymbol[] slotKeywords, 
+		//SubLSymbol printFunction, SubLSymbol hashFunction, SubLSymbol testFunction, boolean isInterned
+
+		return new SubLStructDecl(typeName, getterNamesArray, setterNamesArray, slotKeywordNamesArray, //
+				printFunction, null, predicateName, false);
 	}
 
-	public SubLSymbol getSetterName(int i) {
-		return setterNames[i];
-	}
-
-	public SubLSymbol getStructName() {
-		return structName;
-	}
-
-	public boolean isInterned() {
-		return isInterned;
-	}
-
-	public void setStructName(SubLSymbol newStructName) {
-		if (structName != SubLNil.NIL)
-			Errors.error("Can't set a structure's name twice: " + newStructName);
-		structName = newStructName;
-	}
 }

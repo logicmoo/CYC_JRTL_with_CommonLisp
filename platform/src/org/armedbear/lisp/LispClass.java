@@ -196,9 +196,10 @@ public abstract class LispClass extends StandardObject
 
   public final int getLayoutLength()
   {
-    if (getClassLayout() == null)
+    Layout classLayout2 = getClassLayout();
+	if (classLayout2 == null)
       return 0;
-    return getClassLayout().getLength();
+    return classLayout2.getLength();
   }
 
   public LispObject getDirectSuperclasses()

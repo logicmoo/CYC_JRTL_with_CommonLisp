@@ -35,6 +35,8 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
 
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
+
 public final class SlotDefinitionClass extends StandardClass
 {
     public SlotDefinitionClass(Symbol symbol, LispObject cpl) {
@@ -52,7 +54,7 @@ public final class SlotDefinitionClass extends StandardClass
             Symbol._TYPE,
             Symbol._DOCUMENTATION
         };
-        setClassLayout(new Layout(this, instanceSlotNames, NIL));
+        setClassLayout(new SubLStructDecl(this, instanceSlotNames, NIL));
         //Set up slot definitions so that this class can be extended by users
         LispObject slotDefinitions = NIL;
         for(int i = instanceSlotNames.length - 1; i >= 0; i--) {

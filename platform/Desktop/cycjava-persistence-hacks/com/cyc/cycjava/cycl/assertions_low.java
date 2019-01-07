@@ -3,17 +3,15 @@
 
 package com.cyc.cycjava.cycl;
 
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
+
+import org.armedbear.lisp.LispObject;
+
 import com.cyc.cycjava.cycl.inference.harness.forward;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality;
@@ -26,6 +24,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols;
@@ -38,6 +37,7 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
@@ -46,6 +46,20 @@ import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public final class assertions_low extends SubLTranslatedFile
 {
+	public static final class $assertion_content_p$UnaryFunction extends UnaryFunction
+	{
+		public $assertion_content_p$UnaryFunction()
+		{
+			super(SubLTranslatedFile.extractFunctionNamed("ASSERTION-CONTENT-P"));
+		}
+	
+		@Override
+		public SubLObject processItem(final SubLObject arg1)
+		{
+			return assertion_content_p(arg1);
+		}
+	}
+
 	public static final SubLFile me;
 	public static final String myName = "com.cyc.cycjava.cycl.assertions_low";
 	public static final String myFingerPrint = "9610a4129c9be7b648aa4fdfcfdef33cb47007a418cf48afc3f5a671521c6abe";
@@ -75,14 +89,10 @@ public final class assertions_low extends SubLTranslatedFile
 	private static SubLSymbol $dependent_deduction_table$;
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 53067L)
 	private static SubLSymbol $dependent_assertion_table$;
-	private static final SubLSymbol $sym0$ASSERTION_CONTENT;
-	private static final SubLSymbol $sym1$ASSERTION_CONTENT_P;
+	static final SubLSymbol $sym0$ASSERTION_CONTENT;
+	static final SubLSymbol $sym1$ASSERTION_CONTENT_P;
+	static final SubLSymbol $sym7$DEFAULT_STRUCT_PRINT_FUNCTION;
 	private static final SubLInteger $int2$148;
-	private static final SubLList $list3;
-	private static final SubLList $list4;
-	private static final SubLList $list5;
-	private static final SubLList $list6;
-	private static final SubLSymbol $sym7$DEFAULT_STRUCT_PRINT_FUNCTION;
 	private static final SubLSymbol $sym8$ASSERTION_CONTENT_PRINT_FUNCTION_TRAMPOLINE;
 	private static final SubLList $list9;
 	private static final SubLSymbol $sym10$AS_CONTENT_FORMULA_DATA;
@@ -162,93 +172,93 @@ public final class assertions_low extends SubLTranslatedFile
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 1508L)
 	public static SubLObject assertion_content_p(final SubLObject v_object)
-	{
-		return (SubLObject) ((v_object.getClass() == $assertion_content_native.class) ? assertions_low.T : assertions_low.NIL);
+	{		
+		return assertion_content_holder.isInstance(v_object);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 1508L)
 	public static SubLObject as_content_formula_data(final SubLObject v_object)
 	{
-		assert assertions_low.NIL != assertion_content_p(v_object) : v_object;
+		assert NIL != assertion_content_p(v_object) : v_object;
 		return v_object.getField2();
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 1508L)
 	public static SubLObject as_content_mt(final SubLObject v_object)
 	{
-		assert assertions_low.NIL != assertion_content_p(v_object) : v_object;
+		assert NIL != assertion_content_p(v_object) : v_object;
 		return v_object.getField3();
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 1508L)
 	public static SubLObject as_content_flags(final SubLObject v_object)
 	{
-		assert assertions_low.NIL != assertion_content_p(v_object) : v_object;
+		assert NIL != assertion_content_p(v_object) : v_object;
 		return v_object.getField4();
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 1508L)
 	public static SubLObject as_content_arguments(final SubLObject v_object)
 	{
-		assert assertions_low.NIL != assertion_content_p(v_object) : v_object;
+		assert NIL != assertion_content_p(v_object) : v_object;
 		return v_object.getField5();
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 1508L)
 	public static SubLObject as_content_plist(final SubLObject v_object)
 	{
-		assert assertions_low.NIL != assertion_content_p(v_object) : v_object;
+		assert NIL != assertion_content_p(v_object) : v_object;
 		return v_object.getField6();
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 1508L)
 	public static SubLObject _csetf_as_content_formula_data(final SubLObject v_object, final SubLObject value)
 	{
-		assert assertions_low.NIL != assertion_content_p(v_object) : v_object;
+		assert NIL != assertion_content_p(v_object) : v_object;
 		return v_object.setField2(value);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 1508L)
 	public static SubLObject _csetf_as_content_mt(final SubLObject v_object, final SubLObject value)
 	{
-		assert assertions_low.NIL != assertion_content_p(v_object) : v_object;
+		assert NIL != assertion_content_p(v_object) : v_object;
 		return v_object.setField3(value);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 1508L)
 	public static SubLObject _csetf_as_content_flags(final SubLObject v_object, final SubLObject value)
 	{
-		assert assertions_low.NIL != assertion_content_p(v_object) : v_object;
+		assert NIL != assertion_content_p(v_object) : v_object;
 		return v_object.setField4(value);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 1508L)
 	public static SubLObject _csetf_as_content_arguments(final SubLObject v_object, final SubLObject value)
 	{
-		assert assertions_low.NIL != assertion_content_p(v_object) : v_object;
+		assert NIL != assertion_content_p(v_object) : v_object;
 		return v_object.setField5(value);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 1508L)
 	public static SubLObject _csetf_as_content_plist(final SubLObject v_object, final SubLObject value)
 	{
-		assert assertions_low.NIL != assertion_content_p(v_object) : v_object;
+		assert NIL != assertion_content_p(v_object) : v_object;
 		return v_object.setField6(value);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 1508L)
 	public static SubLObject make_assertion_content(SubLObject arglist)
 	{
-		if (arglist == assertions_low.UNPROVIDED)
+		if (arglist == UNPROVIDED)
 		{
 			arglist = NIL;
 		}
-		final SubLObject v_new = (SubLObject) new $assertion_content_native();
+		final SubLStruct v_new =  assertion_content_holder.makeNewInstance();
 		SubLObject next;
 		SubLObject current_arg;
 		SubLObject current_value;
 		SubLObject pcase_var;
-		for (next = NIL, next = arglist; assertions_low.NIL != next; next = conses_high.cddr(next))
+		for (next = NIL, next = arglist; NIL != next; next = conses_high.cddr(next))
 		{
 			current_arg = next.first();
 			current_value = conses_high.cadr(next);
@@ -307,7 +317,7 @@ public final class assertions_low extends SubLTranslatedFile
 		assertion_content = make_assertion_content(UNPROVIDED);
 		_csetf_as_content_formula_data(assertion_content, NIL);
 		_csetf_as_content_mt(assertion_content, mt);
-		_csetf_as_content_flags(assertion_content, assertions_low.$default_assertion_flags$.getGlobalValue());
+		_csetf_as_content_flags(assertion_content, $default_assertion_flags$.getGlobalValue());
 		_csetf_as_content_arguments(assertion_content, NIL);
 		_csetf_as_content_plist(assertion_content, NIL);
 		return assertion_content;
@@ -317,7 +327,7 @@ public final class assertions_low extends SubLTranslatedFile
 	public static SubLObject destroy_assertion_content(final SubLObject id)
 	{
 		final SubLObject assertion_content = assertion_manager.lookup_assertion_content(id);
-		if (assertions_low.NIL != assertion_content_p(assertion_content))
+		if (NIL != assertion_content_p(assertion_content))
 		{
 			assertion_manager.deregister_assertion_content(id);
 			_csetf_as_content_formula_data(assertion_content, NIL);
@@ -334,35 +344,35 @@ public final class assertions_low extends SubLTranslatedFile
 	public static SubLObject lookup_assertion_formula_data(final SubLObject id)
 	{
 		final SubLObject contents = assertion_manager.lookup_assertion_content(id);
-		return (SubLObject) ((assertions_low.NIL != contents) ? as_content_formula_data(contents) : assertions_low.NIL);
+		return ((NIL != contents) ? as_content_formula_data(contents) : NIL);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 3176L)
 	public static SubLObject lookup_assertion_mt(final SubLObject id)
 	{
 		final SubLObject contents = assertion_manager.lookup_assertion_content(id);
-		return (SubLObject) ((assertions_low.NIL != contents) ? as_content_mt(contents) : assertions_low.NIL);
+		return ((NIL != contents) ? as_content_mt(contents) : NIL);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 3323L)
 	public static SubLObject lookup_assertion_flags(final SubLObject id)
 	{
 		final SubLObject contents = assertion_manager.lookup_assertion_content(id);
-		return (SubLObject) ((assertions_low.NIL != contents) ? as_content_flags(contents) : assertions_low.NIL);
+		return ((NIL != contents) ? as_content_flags(contents) : NIL);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 3476L)
 	public static SubLObject lookup_assertion_arguments(final SubLObject id)
 	{
 		final SubLObject contents = assertion_manager.lookup_assertion_content(id);
-		return (SubLObject) ((assertions_low.NIL != contents) ? as_content_arguments(contents) : assertions_low.NIL);
+		return ((NIL != contents) ? as_content_arguments(contents) : NIL);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 3637L)
 	public static SubLObject lookup_assertion_plist(final SubLObject id)
 	{
 		final SubLObject contents = assertion_manager.lookup_assertion_content(id);
-		return (SubLObject) ((assertions_low.NIL != contents) ? as_content_plist(contents) : assertions_low.NIL);
+		return ((NIL != contents) ? as_content_plist(contents) : NIL);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 3790L)
@@ -415,15 +425,15 @@ public final class assertions_low extends SubLTranslatedFile
 		SubLObject remainder;
 		SubLObject property;
 		SubLObject value;
-		for (remainder = NIL, remainder = assertion_plist(assertion); assertions_low.NIL != remainder; remainder = conses_high.cddr(remainder))
+		for (remainder = NIL, remainder = assertion_plist(assertion); NIL != remainder; remainder = conses_high.cddr(remainder))
 		{
 			property = remainder.first();
 			value = conses_high.cadr(remainder);
-			if (property == assertions_low.$kw31$DEPENDENTS)
+			if (property == $kw31$DEPENDENTS)
 			{
 				result_plist = conses_high.putf(result_plist, property, set_contents.set_contents_element_list(value));
 			}
-			else if (property != assertions_low.$kw32$INDEX)
+			else if (property != $kw32$INDEX)
 			{
 				result_plist = conses_high.putf(result_plist, property, value);
 			}
@@ -460,14 +470,14 @@ public final class assertions_low extends SubLTranslatedFile
 	public static SubLObject assertion_cnf_internal(final SubLObject assertion)
 	{
 		final SubLObject hl_cnf = assertion_hl_cnf(assertion);
-		if (assertions_low.NIL != clause_strucs.clause_struc_p(hl_cnf)) { return clause_strucs.clause_struc_cnf(hl_cnf); }
+		if (NIL != clause_strucs.clause_struc_p(hl_cnf)) { return clause_strucs.clause_struc_cnf(hl_cnf); }
 		return hl_cnf;
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 7055L)
 	public static SubLObject possibly_assertion_cnf_internal(final SubLObject assertion)
 	{
-		return (SubLObject) ((assertions_low.NIL != valid_assertion_with_contentP(assertion)) ? assertion_cnf_internal(assertion) : assertions_low.NIL);
+		return ((NIL != valid_assertion_with_contentP(assertion)) ? assertion_cnf_internal(assertion) : NIL);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 7348L)
@@ -479,16 +489,16 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 7581L)
 	public static SubLObject assertion_gaf_hl_formula_internal(final SubLObject assertion)
 	{
-		if (assertions_low.NIL == assertion_gaf_p(assertion)) { return NIL; }
+		if (NIL == assertion_gaf_p(assertion)) { return NIL; }
 		final SubLObject formula_data = assertion_formula_data(assertion);
-		if (assertions_low.NIL != clause_strucs.clause_struc_p(formula_data)) { return cnf_to_gaf_formula(clause_strucs.clause_struc_cnf(formula_data)); }
+		if (NIL != clause_strucs.clause_struc_p(formula_data)) { return cnf_to_gaf_formula(clause_strucs.clause_struc_cnf(formula_data)); }
 		return formula_data;
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 8032L)
 	public static SubLObject assertion_cons_internal(final SubLObject assertion)
 	{
-		return (assertions_low.NIL != assertion_gaf_p(assertion)) ? assertions_high.assertion_gaf_hl_formula(assertion) : assertion_cnf_internal(assertion);
+		return (NIL != assertion_gaf_p(assertion)) ? assertions_high.assertion_gaf_hl_formula(assertion) : assertion_cnf_internal(assertion);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 8338L)
@@ -500,9 +510,9 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 8624L)
 	public static SubLObject assertion_truth_internal(final SubLObject assertion)
 	{
-		if (assertions_low.NIL == use_non_true_assertion_tv_cacheP()) { return enumeration_types.tv_truth(assertion_tv_internal(assertion)); }
+		if (NIL == use_non_true_assertion_tv_cacheP()) { return enumeration_types.tv_truth(assertion_tv_internal(assertion)); }
 		final SubLObject possible_non_true_tv = assertion_non_true_tv(assertion);
-		if (assertions_low.NIL != possible_non_true_tv) { return enumeration_types.tv_truth(possible_non_true_tv); }
+		if (NIL != possible_non_true_tv) { return enumeration_types.tv_truth(possible_non_true_tv); }
 		return $kw33$TRUE;
 	}
 
@@ -515,11 +525,11 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 9304L)
 	public static SubLObject assertion_tv(final SubLObject assertion)
 	{
-		assert assertions_low.NIL != assertion_handles.assertion_p(assertion) : assertion;
-		if (assertions_low.NIL != use_non_true_assertion_tv_cacheP())
+		assert NIL != assertion_handles.assertion_p(assertion) : assertion;
+		if (NIL != use_non_true_assertion_tv_cacheP())
 		{
 			final SubLObject possible_non_true_tv = assertion_non_true_tv(assertion);
-			if (assertions_low.NIL != possible_non_true_tv) { return possible_non_true_tv; }
+			if (NIL != possible_non_true_tv) { return possible_non_true_tv; }
 		}
 		return assertion_tv_internal(assertion);
 	}
@@ -528,7 +538,7 @@ public final class assertions_low extends SubLTranslatedFile
 	public static SubLObject assertion_tv_internal(final SubLObject assertion)
 	{
 		final SubLObject flags = assertion_flags(assertion);
-		if (assertions_low.NIL == flags)
+		if (NIL == flags)
 		{
 			Errors.error($str35$_a__assertion___a__has_null_flags, assertion, assertion_handles.assertion_id(assertion));
 		}
@@ -544,25 +554,25 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 10335L)
 	public static SubLObject asserted_by_internal(final SubLObject assertion)
 	{
-		return (SubLObject) ((assertions_low.NIL != assertions_high.asserted_assertionP(assertion)) ? assert_info_who(assertion_assert_info(assertion)) : assertions_low.NIL);
+		return ((NIL != assertions_high.asserted_assertionP(assertion)) ? assert_info_who(assertion_assert_info(assertion)) : NIL);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 10613L)
 	public static SubLObject asserted_when_internal(final SubLObject assertion)
 	{
-		return (SubLObject) ((assertions_low.NIL != assertions_high.asserted_assertionP(assertion)) ? assert_info_when(assertion_assert_info(assertion)) : assertions_low.NIL);
+		return ((NIL != assertions_high.asserted_assertionP(assertion)) ? assert_info_when(assertion_assert_info(assertion)) : NIL);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 10896L)
 	public static SubLObject asserted_why_internal(final SubLObject assertion)
 	{
-		return (SubLObject) ((assertions_low.NIL != assertions_high.asserted_assertionP(assertion)) ? assert_info_why(assertion_assert_info(assertion)) : assertions_low.NIL);
+		return ((NIL != assertions_high.asserted_assertionP(assertion)) ? assert_info_why(assertion_assert_info(assertion)) : NIL);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 11176L)
 	public static SubLObject asserted_second_internal(final SubLObject assertion)
 	{
-		return (SubLObject) ((assertions_low.NIL != assertions_high.asserted_assertionP(assertion)) ? assert_info_second(assertion_assert_info(assertion)) : assertions_low.NIL);
+		return ((NIL != assertions_high.asserted_assertionP(assertion)) ? assert_info_second(assertion_assert_info(assertion)) : NIL);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 11465L)
@@ -575,7 +585,7 @@ public final class assertions_low extends SubLTranslatedFile
 	public static SubLObject assertion_dependents_internal(final SubLObject assertion)
 	{
 		SubLObject dependents = get_assertion_prop(assertion, $kw31$DEPENDENTS, UNPROVIDED);
-		if (dependents.isList() && assertions_low.NIL != list_utilities.lengthG(dependents, $int37$256, UNPROVIDED))
+		if (dependents.isList() && NIL != list_utilities.lengthG(dependents, $int37$256, UNPROVIDED))
 		{
 			dependents = keyhash_utilities.keyhash_list_elements(set_contents.set_contents_element_list(dependents), EQL, UNPROVIDED);
 			set_assertion_prop(assertion, $kw31$DEPENDENTS, dependents);
@@ -592,20 +602,20 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 12587L)
 	public static SubLObject assertion_has_dependents_p_internal(final SubLObject assertion)
 	{
-		return (SubLObject) SubLObjectFactory.makeBoolean(assertions_low.NIL == set_contents.set_contents_emptyP(get_assertion_prop(assertion, $kw31$DEPENDENTS, UNPROVIDED)));
+		return SubLObjectFactory.makeBoolean(NIL == set_contents.set_contents_emptyP(get_assertion_prop(assertion, $kw31$DEPENDENTS, UNPROVIDED)));
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 12781L)
 	public static SubLObject assertion_formula_data(final SubLObject assertion)
 	{
-		assert assertions_low.NIL != assertion_handles.assertion_p(assertion) : assertion;
+		assert NIL != assertion_handles.assertion_p(assertion) : assertion;
 		return lookup_assertion_formula_data(assertion_handles.assertion_id(assertion));
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 13295L)
 	public static SubLObject reset_assertion_formula_data(final SubLObject assertion, final SubLObject new_formula_data)
 	{
-		assert assertions_low.NIL != assertion_handles.assertion_p(assertion) : assertion;
+		assert NIL != assertion_handles.assertion_p(assertion) : assertion;
 		set_assertion_formula_data(assertion_handles.assertion_id(assertion), new_formula_data);
 		return assertion;
 	}
@@ -613,32 +623,32 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 13813L)
 	public static SubLObject assertion_hl_cnf(final SubLObject assertion)
 	{
-		assert assertions_low.NIL != assertion_handles.assertion_p(assertion) : assertion;
+		assert NIL != assertion_handles.assertion_p(assertion) : assertion;
 		final SubLObject formula_data = assertion_formula_data(assertion);
-		if (assertions_low.NIL != clause_strucs.clause_struc_p(formula_data)) { return formula_data; }
-		if (assertions_low.NIL == formula_data) { return formula_data; }
-		if (assertions_low.NIL == assertion_gaf_p(assertion)) { return formula_data; }
+		if (NIL != clause_strucs.clause_struc_p(formula_data)) { return formula_data; }
+		if (NIL == formula_data) { return formula_data; }
+		if (NIL == assertion_gaf_p(assertion)) { return formula_data; }
 		return gaf_formula_to_cnf(formula_data);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 14512L)
 	public static SubLObject update_assertion_formula_data(final SubLObject assertion, final SubLObject new_formula_data)
 	{
-		if (assertions_low.NIL != clause_strucs.clause_struc_p(new_formula_data))
+		if (NIL != clause_strucs.clause_struc_p(new_formula_data))
 		{
 			reset_assertion_clause_struc(assertion, new_formula_data);
 		}
-		else if (assertions_low.NIL == new_formula_data)
+		else if (NIL == new_formula_data)
 		{
 			annihilate_assertion_formula_data(assertion);
 		}
-		else if (assertions_low.NIL != clauses.cnf_p(new_formula_data))
+		else if (NIL != clauses.cnf_p(new_formula_data))
 		{
 			reset_assertion_cnf(assertion, new_formula_data);
 		}
 		else
 		{
-			if (assertions_low.NIL == el_utilities.el_formula_p(new_formula_data))
+			if (NIL == el_utilities.el_formula_p(new_formula_data))
 			{
 				Errors.error($str38$Unexpected_formula_data_type___S, new_formula_data);
 				return NIL;
@@ -652,14 +662,14 @@ public final class assertions_low extends SubLTranslatedFile
 	public static SubLObject assertion_clause_struc(final SubLObject assertion)
 	{
 		final SubLObject formula_data = assertion_formula_data(assertion);
-		return (SubLObject) ((assertions_low.NIL != clause_strucs.clause_struc_p(formula_data)) ? formula_data : assertions_low.NIL);
+		return ((NIL != clause_strucs.clause_struc_p(formula_data)) ? formula_data : NIL);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 15856L)
 	public static SubLObject reset_assertion_cnf(final SubLObject assertion, final SubLObject new_cnf)
 	{
 		final SubLObject gafP = determine_cnf_gaf_p(new_cnf);
-		reset_assertion_formula_data(assertion, (assertions_low.NIL != gafP) ? cnf_to_gaf_formula(new_cnf) : new_cnf);
+		reset_assertion_formula_data(assertion, (NIL != gafP) ? cnf_to_gaf_formula(new_cnf) : new_cnf);
 		set_assertion_gaf_p(assertion, gafP);
 		return assertion;
 	}
@@ -669,7 +679,7 @@ public final class assertions_low extends SubLTranslatedFile
 	{
 		final SubLObject new_hl_cnf = clause_strucs.clause_struc_cnf(new_clause_struc);
 		reset_assertion_formula_data(assertion, new_clause_struc);
-		if (assertions_low.NIL == new_hl_cnf) { return annihilate_assertion_formula_data(assertion); }
+		if (NIL == new_hl_cnf) { return annihilate_assertion_formula_data(assertion); }
 		recompute_assertion_gaf_p(assertion);
 		return assertion;
 	}
@@ -700,7 +710,7 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 18134L)
 	public static SubLObject reset_assertion_flags(final SubLObject assertion, final SubLObject new_flags)
 	{
-		assert assertions_low.NIL != assertion_handles.assertion_p(assertion) : assertion;
+		assert NIL != assertion_handles.assertion_p(assertion) : assertion;
 		final SubLObject flags = assertion_flags(assertion);
 		if (!flags.eql(new_flags))
 		{
@@ -712,37 +722,37 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 18598L)
 	public static SubLObject assertion_flags_gaf_code(final SubLObject flags)
 	{
-		return bytes.ldb(assertions_low.$assertion_flags_gaf_byte$.getGlobalValue(), flags);
+		return bytes.ldb($assertion_flags_gaf_byte$.getGlobalValue(), flags);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 18695L)
 	public static SubLObject set_assertion_flags_gaf_code(final SubLObject flags, final SubLObject code)
 	{
-		return bytes.dpb(code, assertions_low.$assertion_flags_gaf_byte$.getGlobalValue(), flags);
+		return bytes.dpb(code, $assertion_flags_gaf_byte$.getGlobalValue(), flags);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 18873L)
 	public static SubLObject assertion_flags_direction_code(final SubLObject flags)
 	{
-		return bytes.ldb(assertions_low.$assertion_flags_direction_byte$.getGlobalValue(), flags);
+		return bytes.ldb($assertion_flags_direction_byte$.getGlobalValue(), flags);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 18982L)
 	public static SubLObject set_assertion_flags_direction_code(final SubLObject flags, final SubLObject code)
 	{
-		return bytes.dpb(code, assertions_low.$assertion_flags_direction_byte$.getGlobalValue(), flags);
+		return bytes.dpb(code, $assertion_flags_direction_byte$.getGlobalValue(), flags);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 19165L)
 	public static SubLObject assertion_flags_tv_code(final SubLObject flags)
 	{
-		return bytes.ldb(assertions_low.$assertion_flags_tv_byte$.getGlobalValue(), flags);
+		return bytes.ldb($assertion_flags_tv_byte$.getGlobalValue(), flags);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 19260L)
 	public static SubLObject set_assertion_flags_tv_code(final SubLObject flags, final SubLObject code)
 	{
-		return bytes.dpb(code, assertions_low.$assertion_flags_tv_byte$.getGlobalValue(), flags);
+		return bytes.dpb(code, $assertion_flags_tv_byte$.getGlobalValue(), flags);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 19369L)
@@ -755,7 +765,7 @@ public final class assertions_low extends SubLTranslatedFile
 	public static SubLObject set_assertion_flags_gaf_p(final SubLObject assertion, final SubLObject gafP)
 	{
 		final SubLObject gaf_code = number_utilities.encode_boolean(gafP);
-		if (assertions_low.NIL != gaf_code)
+		if (NIL != gaf_code)
 		{
 			reset_assertion_flags(assertion, set_assertion_flags_gaf_code(assertion_flags(assertion), gaf_code));
 		}
@@ -765,35 +775,35 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 20614L)
 	public static SubLObject use_rule_setP()
 	{
-		return (SubLObject) SubLObjectFactory.makeBoolean(assertions_low.NIL != assertions_low.$prefer_rule_set_over_flagsP$.getGlobalValue() && assertions_low.NIL != assertions_low.$rule_set$.getGlobalValue());
+		return SubLObjectFactory.makeBoolean(NIL != $prefer_rule_set_over_flagsP$.getGlobalValue() && NIL != $rule_set$.getGlobalValue());
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 20821L)
 	public static SubLObject setup_rule_set(final SubLObject estimated_assertion_size)
 	{
-		assert assertions_low.NIL != subl_promotions.non_negative_integer_p(estimated_assertion_size) : estimated_assertion_size;
-		final SubLObject estimated_rule_count = Numbers.ceiling(Numbers.divide(estimated_assertion_size, assertions_low.$estimated_assertions_per_rule$.getGlobalValue()), UNPROVIDED);
-		assertions_low.$rule_set$.setGlobalValue(keyhash.new_keyhash(estimated_rule_count, Symbols.symbol_function(EQL)));
+		assert NIL != subl_promotions.non_negative_integer_p(estimated_assertion_size) : estimated_assertion_size;
+		final SubLObject estimated_rule_count = Numbers.ceiling(Numbers.divide(estimated_assertion_size, $estimated_assertions_per_rule$.getGlobalValue()), UNPROVIDED);
+		$rule_set$.setGlobalValue(keyhash.new_keyhash(estimated_rule_count, Symbols.symbol_function(EQL)));
 		return T;
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 21422L)
 	public static SubLObject kb_rule_set()
 	{
-		return assertions_low.$rule_set$.getGlobalValue();
+		return $rule_set$.getGlobalValue();
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 21513L)
 	public static SubLObject assertion_gaf_p(final SubLObject assertion)
 	{
-		if (assertions_low.NIL != use_rule_setP() && assertions_low.NIL != assertion_manager.assertion_content_cachable_p(assertion))
+		if (NIL != use_rule_setP() && NIL != assertion_manager.assertion_content_cachable_p(assertion))
 		{
-			if (assertions_low.$rule_set$.getGlobalValue().isHashtable()) { return (SubLObject) SubLObjectFactory.makeBoolean(assertions_low.NIL == Hashtables.gethash_without_values(assertion, assertions_low.$rule_set$.getGlobalValue(), NIL)); }
-			return (SubLObject) SubLObjectFactory.makeBoolean(assertions_low.NIL == keyhash.getkeyhash(assertion, assertions_low.$rule_set$.getGlobalValue()));
+			if ($rule_set$.getGlobalValue().isHashtable()) { return SubLObjectFactory.makeBoolean(NIL == Hashtables.gethash_without_values(assertion, $rule_set$.getGlobalValue(), NIL)); }
+			return SubLObjectFactory.makeBoolean(NIL == keyhash.getkeyhash(assertion, $rule_set$.getGlobalValue()));
 		}
 		else
 		{
-			if (assertions_low.NIL != assertion_handles.assertion_has_contentP(assertion)) { return assertion_flags_gaf_p(assertion); }
+			if (NIL != assertion_handles.assertion_has_contentP(assertion)) { return assertion_flags_gaf_p(assertion); }
 			return NIL;
 		}
 	}
@@ -801,14 +811,14 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 22080L)
 	public static SubLObject assertion_rule_p(final SubLObject assertion)
 	{
-		if (assertions_low.NIL != use_rule_setP() && assertions_low.NIL != assertion_manager.assertion_content_cachable_p(assertion))
+		if (NIL != use_rule_setP() && NIL != assertion_manager.assertion_content_cachable_p(assertion))
 		{
-			if (assertions_low.$rule_set$.getGlobalValue().isHashtable()) { return Hashtables.gethash_without_values(assertion, assertions_low.$rule_set$.getGlobalValue(), NIL); }
-			return keyhash.getkeyhash(assertion, assertions_low.$rule_set$.getGlobalValue());
+			if ($rule_set$.getGlobalValue().isHashtable()) { return Hashtables.gethash_without_values(assertion, $rule_set$.getGlobalValue(), NIL); }
+			return keyhash.getkeyhash(assertion, $rule_set$.getGlobalValue());
 		}
 		else
 		{
-			if (assertions_low.NIL != assertion_handles.assertion_has_contentP(assertion)) { return (SubLObject) SubLObjectFactory.makeBoolean(assertions_low.NIL == assertion_flags_gaf_p(assertion)); }
+			if (NIL != assertion_handles.assertion_has_contentP(assertion)) { return SubLObjectFactory.makeBoolean(NIL == assertion_flags_gaf_p(assertion)); }
 			return NIL;
 		}
 	}
@@ -817,14 +827,14 @@ public final class assertions_low extends SubLTranslatedFile
 	public static SubLObject rule_count()
 	{
 		final SubLThread thread = SubLProcess.currentSubLThread();
-		if (assertions_low.NIL != keyhash.keyhash_p(assertions_low.$rule_set$.getGlobalValue())) { return keyhash.keyhash_count(assertions_low.$rule_set$.getGlobalValue()); }
-		if (assertions_low.$rule_set$.getGlobalValue().isHashtable()) { return Hashtables.hash_table_count(assertions_low.$rule_set$.getGlobalValue()); }
+		if (NIL != keyhash.keyhash_p($rule_set$.getGlobalValue())) { return keyhash.keyhash_count($rule_set$.getGlobalValue()); }
+		if ($rule_set$.getGlobalValue().isHashtable()) { return Hashtables.hash_table_count($rule_set$.getGlobalValue()); }
 		SubLObject count = ZERO_INTEGER;
 		final SubLObject idx = assertion_handles.do_assertions_table();
 		final SubLObject mess = $str43$mapping_Cyc_assertions;
 		final SubLObject total = id_index.id_index_count(idx);
 		SubLObject sofar = ZERO_INTEGER;
-		assert assertions_low.NIL != Types.stringp(mess) : mess;
+		assert NIL != Types.stringp(mess) : mess;
 		final SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
 		final SubLObject _prev_bind_2 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
 		final SubLObject _prev_bind_3 = utilities_macros.$within_noting_percent_progress$.currentBinding(thread);
@@ -839,10 +849,10 @@ public final class assertions_low extends SubLTranslatedFile
 			{
 				utilities_macros.noting_percent_progress_preamble(mess);
 				final SubLObject idx_$1 = idx;
-				if (assertions_low.NIL == id_index.id_index_objects_empty_p(idx_$1, $kw45$SKIP))
+				if (NIL == id_index.id_index_objects_empty_p(idx_$1, $kw45$SKIP))
 				{
 					final SubLObject idx_$2 = idx_$1;
-					if (assertions_low.NIL == id_index.id_index_dense_objects_empty_p(idx_$2, $kw45$SKIP))
+					if (NIL == id_index.id_index_dense_objects_empty_p(idx_$2, $kw45$SKIP))
 					{
 						final SubLObject vector_var = id_index.id_index_dense_objects(idx_$2);
 						final SubLObject backwardP_var = NIL;
@@ -853,16 +863,16 @@ public final class assertions_low extends SubLTranslatedFile
 						SubLObject ass;
 						for (length = Sequences.length(vector_var), v_iteration = NIL, v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = Numbers.add(v_iteration, ONE_INTEGER))
 						{
-							a_id = ((assertions_low.NIL != backwardP_var) ? Numbers.subtract(length, v_iteration, ONE_INTEGER) : v_iteration);
+							a_id = ((NIL != backwardP_var) ? Numbers.subtract(length, v_iteration, ONE_INTEGER) : v_iteration);
 							a_handle = Vectors.aref(vector_var, a_id);
-							if (assertions_low.NIL == id_index.id_index_tombstone_p(a_handle) || assertions_low.NIL == id_index.id_index_skip_tombstones_p($kw45$SKIP))
+							if (NIL == id_index.id_index_tombstone_p(a_handle) || NIL == id_index.id_index_skip_tombstones_p($kw45$SKIP))
 							{
-								if (assertions_low.NIL != id_index.id_index_tombstone_p(a_handle))
+								if (NIL != id_index.id_index_tombstone_p(a_handle))
 								{
 									a_handle = $kw45$SKIP;
 								}
 								ass = assertion_handles.resolve_assertion_id_value_pair(a_id, a_handle);
-								if (assertions_low.NIL != assertion_rule_p(ass))
+								if (NIL != assertion_rule_p(ass))
 								{
 									count = Numbers.add(count, ONE_INTEGER);
 								}
@@ -872,19 +882,19 @@ public final class assertions_low extends SubLTranslatedFile
 						}
 					}
 					final SubLObject idx_$3 = idx_$1;
-					if (assertions_low.NIL == id_index.id_index_sparse_objects_empty_p(idx_$3) || assertions_low.NIL == id_index.id_index_skip_tombstones_p($kw45$SKIP))
+					if (NIL == id_index.id_index_sparse_objects_empty_p(idx_$3) || NIL == id_index.id_index_skip_tombstones_p($kw45$SKIP))
 					{
 						final SubLObject sparse = id_index.id_index_sparse_objects(idx_$3);
 						SubLObject a_id2 = id_index.id_index_sparse_id_threshold(idx_$3);
 						final SubLObject end_id = id_index.id_index_next_id(idx_$3);
-						final SubLObject v_default = (SubLObject) ((assertions_low.NIL != id_index.id_index_skip_tombstones_p($kw45$SKIP)) ? assertions_low.NIL : assertions_low.$kw45$SKIP);
+						final SubLObject v_default = ((NIL != id_index.id_index_skip_tombstones_p($kw45$SKIP)) ? NIL : $kw45$SKIP);
 						while (a_id2.numL(end_id))
 						{
 							final SubLObject a_handle2 = Hashtables.gethash_without_values(a_id2, sparse, v_default);
-							if (assertions_low.NIL == id_index.id_index_skip_tombstones_p($kw45$SKIP) || assertions_low.NIL == id_index.id_index_tombstone_p(a_handle2))
+							if (NIL == id_index.id_index_skip_tombstones_p($kw45$SKIP) || NIL == id_index.id_index_tombstone_p(a_handle2))
 							{
 								final SubLObject ass2 = assertion_handles.resolve_assertion_id_value_pair(a_id2, a_handle2);
-								if (assertions_low.NIL != assertion_rule_p(ass2))
+								if (NIL != assertion_rule_p(ass2))
 								{
 									count = Numbers.add(count, ONE_INTEGER);
 								}
@@ -928,26 +938,26 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 23249L)
 	public static SubLObject set_assertion_gaf_p(final SubLObject assertion, final SubLObject gafP)
 	{
-		if (assertions_low.NIL != keyhash.keyhash_p(assertions_low.$rule_set$.getGlobalValue()))
+		if (NIL != keyhash.keyhash_p($rule_set$.getGlobalValue()))
 		{
-			if (assertions_low.NIL != gafP)
+			if (NIL != gafP)
 			{
-				keyhash.remkeyhash(assertion, assertions_low.$rule_set$.getGlobalValue());
+				keyhash.remkeyhash(assertion, $rule_set$.getGlobalValue());
 			}
 			else
 			{
-				keyhash.setkeyhash(assertion, assertions_low.$rule_set$.getGlobalValue());
+				keyhash.setkeyhash(assertion, $rule_set$.getGlobalValue());
 			}
 		}
-		else if (assertions_low.$rule_set$.getGlobalValue().isHashtable())
+		else if ($rule_set$.getGlobalValue().isHashtable())
 		{
-			if (assertions_low.NIL != gafP)
+			if (NIL != gafP)
 			{
-				Hashtables.remhash(assertion, assertions_low.$rule_set$.getGlobalValue());
+				Hashtables.remhash(assertion, $rule_set$.getGlobalValue());
 			}
 			else
 			{
-				Hashtables.sethash(assertion, assertions_low.$rule_set$.getGlobalValue(), T);
+				Hashtables.sethash(assertion, $rule_set$.getGlobalValue(), T);
 			}
 		}
 		return set_assertion_flags_gaf_p(assertion, gafP);
@@ -956,11 +966,11 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 23831L)
 	public static SubLObject possibly_rule_set_delete(final SubLObject assertion)
 	{
-		if (assertions_low.NIL != keyhash.keyhash_p(assertions_low.$rule_set$.getGlobalValue()))
+		if (NIL != keyhash.keyhash_p($rule_set$.getGlobalValue()))
 		{
-			if (assertions_low.NIL != assertion_rule_p(assertion)) { return keyhash.remkeyhash(assertion, assertions_low.$rule_set$.getGlobalValue()); }
+			if (NIL != assertion_rule_p(assertion)) { return keyhash.remkeyhash(assertion, $rule_set$.getGlobalValue()); }
 		}
-		else if (assertions_low.$rule_set$.getGlobalValue().isHashtable() && assertions_low.NIL != assertion_rule_p(assertion)) { return Hashtables.remhash(assertion, assertions_low.$rule_set$.getGlobalValue()); }
+		else if ($rule_set$.getGlobalValue().isHashtable() && NIL != assertion_rule_p(assertion)) { return Hashtables.remhash(assertion, $rule_set$.getGlobalValue()); }
 		return NIL;
 	}
 
@@ -969,11 +979,11 @@ public final class assertions_low extends SubLTranslatedFile
 	{
 		final SubLObject formula_data = assertion_formula_data(assertion);
 		SubLObject gafP = NIL;
-		if (assertions_low.NIL != clause_strucs.clause_struc_p(formula_data))
+		if (NIL != clause_strucs.clause_struc_p(formula_data))
 		{
 			gafP = determine_cnf_gaf_p(clause_strucs.clause_struc_cnf(formula_data));
 		}
-		else if (assertions_low.NIL != clauses.cnf_p(formula_data))
+		else if (NIL != clauses.cnf_p(formula_data))
 		{
 			gafP = determine_cnf_gaf_p(formula_data);
 		}
@@ -987,19 +997,19 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 24837L)
 	public static SubLObject determine_cnf_gaf_p(final SubLObject cnf)
 	{
-		assert assertions_low.NIL != clauses.cnf_p(cnf) : cnf;
+		assert NIL != clauses.cnf_p(cnf) : cnf;
 		return clauses.gaf_cnfP(cnf);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 25036L)
 	public static SubLObject dump_rule_set_to_stream(final SubLObject stream)
 	{
-		SubLObject rule_set = assertions_low.$rule_set$.getGlobalValue();
+		SubLObject rule_set = $rule_set$.getGlobalValue();
 		if (rule_set.isHashtable())
 		{
 			rule_set = keyhash_utilities.hashtable_to_keyhash(rule_set);
 		}
-		assert assertions_low.NIL != keyhash.keyhash_p(rule_set) : rule_set;
+		assert NIL != keyhash.keyhash_p(rule_set) : rule_set;
 		return cfasl.cfasl_output(rule_set, stream);
 	}
 
@@ -1007,8 +1017,8 @@ public final class assertions_low extends SubLTranslatedFile
 	public static SubLObject load_rule_set_from_stream(final SubLObject stream)
 	{
 		final SubLObject rule_set = cfasl.cfasl_input(stream, UNPROVIDED, UNPROVIDED);
-		assert assertions_low.NIL != keyhash.keyhash_p(rule_set) : rule_set;
-		assertions_low.$rule_set$.setGlobalValue(rule_set);
+		assert NIL != keyhash.keyhash_p(rule_set) : rule_set;
+		$rule_set$.setGlobalValue(rule_set);
 		return rule_count();
 	}
 
@@ -1021,7 +1031,7 @@ public final class assertions_low extends SubLTranslatedFile
 		final SubLObject mess = $str48$Rebuilding_the_Rule_Set;
 		final SubLObject total = id_index.id_index_count(idx);
 		SubLObject sofar = ZERO_INTEGER;
-		assert assertions_low.NIL != Types.stringp(mess) : mess;
+		assert NIL != Types.stringp(mess) : mess;
 		final SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
 		final SubLObject _prev_bind_2 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
 		final SubLObject _prev_bind_3 = utilities_macros.$within_noting_percent_progress$.currentBinding(thread);
@@ -1036,10 +1046,10 @@ public final class assertions_low extends SubLTranslatedFile
 			{
 				utilities_macros.noting_percent_progress_preamble(mess);
 				final SubLObject idx_$5 = idx;
-				if (assertions_low.NIL == id_index.id_index_objects_empty_p(idx_$5, $kw45$SKIP))
+				if (NIL == id_index.id_index_objects_empty_p(idx_$5, $kw45$SKIP))
 				{
 					final SubLObject idx_$6 = idx_$5;
-					if (assertions_low.NIL == id_index.id_index_dense_objects_empty_p(idx_$6, $kw45$SKIP))
+					if (NIL == id_index.id_index_dense_objects_empty_p(idx_$6, $kw45$SKIP))
 					{
 						final SubLObject vector_var = id_index.id_index_dense_objects(idx_$6);
 						final SubLObject backwardP_var = NIL;
@@ -1055,11 +1065,11 @@ public final class assertions_low extends SubLTranslatedFile
 						SubLObject _values;
 						for (length = Sequences.length(vector_var), v_iteration = NIL, v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = Numbers.add(v_iteration, ONE_INTEGER))
 						{
-							a_id = ((assertions_low.NIL != backwardP_var) ? Numbers.subtract(length, v_iteration, ONE_INTEGER) : v_iteration);
+							a_id = ((NIL != backwardP_var) ? Numbers.subtract(length, v_iteration, ONE_INTEGER) : v_iteration);
 							a_handle = Vectors.aref(vector_var, a_id);
-							if (assertions_low.NIL == id_index.id_index_tombstone_p(a_handle) || assertions_low.NIL == id_index.id_index_skip_tombstones_p($kw45$SKIP))
+							if (NIL == id_index.id_index_tombstone_p(a_handle) || NIL == id_index.id_index_skip_tombstones_p($kw45$SKIP))
 							{
-								if (assertions_low.NIL != id_index.id_index_tombstone_p(a_handle))
+								if (NIL != id_index.id_index_tombstone_p(a_handle))
 								{
 									a_handle = $kw45$SKIP;
 								}
@@ -1078,15 +1088,15 @@ public final class assertions_low extends SubLTranslatedFile
 											Errors.$error_handler$.bind($sym51$CATCH_ERROR_MESSAGE_HANDLER, thread);
 											try
 											{
-												if (assertions_low.NIL != assertion_handles.assertion_handle_validP(rule) && assertions_low.NIL == assertion_flags_gaf_p(rule))
+												if (NIL != assertion_handles.assertion_handle_validP(rule) && NIL == assertion_flags_gaf_p(rule))
 												{
-													if (assertions_low.$rule_set$.getGlobalValue().isHashtable())
+													if ($rule_set$.getGlobalValue().isHashtable())
 													{
-														Hashtables.sethash(rule, assertions_low.$rule_set$.getGlobalValue(), T);
+														Hashtables.sethash(rule, $rule_set$.getGlobalValue(), T);
 													}
 													else
 													{
-														keyhash.setkeyhash(rule, assertions_low.$rule_set$.getGlobalValue());
+														keyhash.setkeyhash(rule, $rule_set$.getGlobalValue());
 													}
 												}
 											} catch (Throwable catch_var)
@@ -1111,7 +1121,7 @@ public final class assertions_low extends SubLTranslatedFile
 									{
 										Threads.$is_thread_performing_cleanupP$.bind(T, thread);
 										_values = Values.getValuesAsVector();
-										Eval.eval((SubLObject) ConsesLow.list($sym52$CSETQ, $sym49$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__, was_appendingP));
+										Eval.eval(ConsesLow.list($sym52$CSETQ, $sym49$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__, was_appendingP));
 										Values.restoreValuesFromVector(_values);
 									} finally
 									{
@@ -1128,16 +1138,16 @@ public final class assertions_low extends SubLTranslatedFile
 						}
 					}
 					final SubLObject idx_$7 = idx_$5;
-					if (assertions_low.NIL == id_index.id_index_sparse_objects_empty_p(idx_$7) || assertions_low.NIL == id_index.id_index_skip_tombstones_p($kw45$SKIP))
+					if (NIL == id_index.id_index_sparse_objects_empty_p(idx_$7) || NIL == id_index.id_index_skip_tombstones_p($kw45$SKIP))
 					{
 						final SubLObject sparse = id_index.id_index_sparse_objects(idx_$7);
 						SubLObject a_id2 = id_index.id_index_sparse_id_threshold(idx_$7);
 						final SubLObject end_id = id_index.id_index_next_id(idx_$7);
-						final SubLObject v_default = (SubLObject) ((assertions_low.NIL != id_index.id_index_skip_tombstones_p($kw45$SKIP)) ? assertions_low.NIL : assertions_low.$kw45$SKIP);
+						final SubLObject v_default = ((NIL != id_index.id_index_skip_tombstones_p($kw45$SKIP)) ? NIL : $kw45$SKIP);
 						while (a_id2.numL(end_id))
 						{
 							final SubLObject a_handle2 = Hashtables.gethash_without_values(a_id2, sparse, v_default);
-							if (assertions_low.NIL == id_index.id_index_skip_tombstones_p($kw45$SKIP) || assertions_low.NIL == id_index.id_index_tombstone_p(a_handle2))
+							if (NIL == id_index.id_index_skip_tombstones_p($kw45$SKIP) || NIL == id_index.id_index_tombstone_p(a_handle2))
 							{
 								final SubLObject rule2 = assertion_handles.resolve_assertion_id_value_pair(a_id2, a_handle2);
 								SubLObject message_var2 = NIL;
@@ -1154,15 +1164,15 @@ public final class assertions_low extends SubLTranslatedFile
 											Errors.$error_handler$.bind($sym51$CATCH_ERROR_MESSAGE_HANDLER, thread);
 											try
 											{
-												if (assertions_low.NIL != assertion_handles.assertion_handle_validP(rule2) && assertions_low.NIL == assertion_flags_gaf_p(rule2))
+												if (NIL != assertion_handles.assertion_handle_validP(rule2) && NIL == assertion_flags_gaf_p(rule2))
 												{
-													if (assertions_low.$rule_set$.getGlobalValue().isHashtable())
+													if ($rule_set$.getGlobalValue().isHashtable())
 													{
-														Hashtables.sethash(rule2, assertions_low.$rule_set$.getGlobalValue(), T);
+														Hashtables.sethash(rule2, $rule_set$.getGlobalValue(), T);
 													}
 													else
 													{
-														keyhash.setkeyhash(rule2, assertions_low.$rule_set$.getGlobalValue());
+														keyhash.setkeyhash(rule2, $rule_set$.getGlobalValue());
 													}
 												}
 											} catch (Throwable catch_var2)
@@ -1187,7 +1197,7 @@ public final class assertions_low extends SubLTranslatedFile
 									{
 										Threads.$is_thread_performing_cleanupP$.bind(T, thread);
 										final SubLObject _values2 = Values.getValuesAsVector();
-										Eval.eval((SubLObject) ConsesLow.list($sym52$CSETQ, $sym49$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__, was_appendingP2));
+										Eval.eval(ConsesLow.list($sym52$CSETQ, $sym49$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__, was_appendingP2));
 										Values.restoreValuesFromVector(_values2);
 									} finally
 									{
@@ -1244,7 +1254,7 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 26975L)
 	public static SubLObject kb_set_assertion_direction_internal(final SubLObject assertion, final SubLObject new_direction)
 	{
-		if (assertions_low.NIL != assertions_high.gaf_assertionP(assertion))
+		if (NIL != assertions_high.gaf_assertionP(assertion))
 		{
 			reset_assertion_direction(assertion, new_direction);
 		}
@@ -1260,9 +1270,9 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 27491L)
 	public static SubLObject reset_assertion_direction(final SubLObject assertion, final SubLObject new_direction)
 	{
-		assert assertions_low.NIL != assertion_handles.assertion_p(assertion) : assertion;
+		assert NIL != assertion_handles.assertion_p(assertion) : assertion;
 		final SubLObject direction_code = enumeration_types.encode_direction(new_direction);
-		if (assertions_low.NIL != direction_code)
+		if (NIL != direction_code)
 		{
 			reset_assertion_flags(assertion, set_assertion_flags_direction_code(assertion_flags(assertion), direction_code));
 		}
@@ -1272,9 +1282,9 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 27896L)
 	public static SubLObject reset_assertion_tv(final SubLObject assertion, final SubLObject new_tv)
 	{
-		assert assertions_low.NIL != assertion_handles.assertion_p(assertion) : assertion;
+		assert NIL != assertion_handles.assertion_p(assertion) : assertion;
 		final SubLObject tv_code = enumeration_types.encode_tv(new_tv);
-		if (assertions_low.NIL != tv_code)
+		if (NIL != tv_code)
 		{
 			reset_assertion_flags(assertion, set_assertion_flags_tv_code(assertion_flags(assertion), tv_code));
 		}
@@ -1301,40 +1311,40 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 29670L)
 	public static SubLObject use_non_true_assertion_tv_cacheP()
 	{
-		return (SubLObject) SubLObjectFactory.makeBoolean(assertions_low.NIL != assertions_low.$prefer_non_true_set_over_flagsP$.getGlobalValue() && assertions_low.NIL != assertions_low.$non_true_assertion_tv_cache$.getGlobalValue());
+		return SubLObjectFactory.makeBoolean(NIL != $prefer_non_true_set_over_flagsP$.getGlobalValue() && NIL != $non_true_assertion_tv_cache$.getGlobalValue());
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 29925L)
 	public static SubLObject setup_non_true_assertion_tv_cache(final SubLObject estimated_assertion_size)
 	{
-		assert assertions_low.NIL != subl_promotions.non_negative_integer_p(estimated_assertion_size) : estimated_assertion_size;
-		final SubLObject estimated_non_true_count = Numbers.ceiling(Numbers.divide(estimated_assertion_size, assertions_low.$estimated_assertions_per_non_true$.getGlobalValue()), UNPROVIDED);
-		assertions_low.$non_true_assertion_tv_cache$.setGlobalValue(Hashtables.make_hash_table(estimated_non_true_count, Symbols.symbol_function(EQL), $list57));
+		assert NIL != subl_promotions.non_negative_integer_p(estimated_assertion_size) : estimated_assertion_size;
+		final SubLObject estimated_non_true_count = Numbers.ceiling(Numbers.divide(estimated_assertion_size, $estimated_assertions_per_non_true$.getGlobalValue()), UNPROVIDED);
+		$non_true_assertion_tv_cache$.setGlobalValue(Hashtables.make_hash_table(estimated_non_true_count, Symbols.symbol_function(EQL), $list57));
 		return T;
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 30468L)
 	public static SubLObject kb_non_true_assertion_tv_cache()
 	{
-		return assertions_low.$non_true_assertion_tv_cache$.getGlobalValue();
+		return $non_true_assertion_tv_cache$.getGlobalValue();
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 30572L)
 	public static SubLObject assertion_true_p(final SubLObject assertion)
 	{
-		if (assertions_low.NIL != use_non_true_assertion_tv_cacheP() && assertions_low.NIL != assertion_manager.assertion_content_cachable_p(assertion)) { return (SubLObject) SubLObjectFactory.makeBoolean(assertions_low.NIL == Hashtables.gethash_without_values(assertion, assertions_low.$non_true_assertion_tv_cache$.getGlobalValue(), UNPROVIDED)); }
-		if (assertions_low.NIL != assertion_handles.assertion_has_contentP(assertion)) { return Equality.eq($kw33$TRUE, enumeration_types.tv_truth(assertion_tv_internal(assertion))); }
+		if (NIL != use_non_true_assertion_tv_cacheP() && NIL != assertion_manager.assertion_content_cachable_p(assertion)) { return SubLObjectFactory.makeBoolean(NIL == Hashtables.gethash_without_values(assertion, $non_true_assertion_tv_cache$.getGlobalValue(), UNPROVIDED)); }
+		if (NIL != assertion_handles.assertion_has_contentP(assertion)) { return Equality.eq($kw33$TRUE, enumeration_types.tv_truth(assertion_tv_internal(assertion))); }
 		return NIL;
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 31102L)
 	public static SubLObject assertion_non_true_tv(final SubLObject assertion)
 	{
-		if (assertions_low.NIL != use_non_true_assertion_tv_cacheP() && assertions_low.NIL != assertion_manager.assertion_content_cachable_p(assertion)) { return Hashtables.gethash(assertion, assertions_low.$non_true_assertion_tv_cache$.getGlobalValue(), UNPROVIDED); }
-		if (assertions_low.NIL != assertion_handles.assertion_has_contentP(assertion))
+		if (NIL != use_non_true_assertion_tv_cacheP() && NIL != assertion_manager.assertion_content_cachable_p(assertion)) { return Hashtables.gethash(assertion, $non_true_assertion_tv_cache$.getGlobalValue(), UNPROVIDED); }
+		if (NIL != assertion_handles.assertion_has_contentP(assertion))
 		{
 			final SubLObject tv = assertion_tv_internal(assertion);
-			return (SubLObject) ((assertions_low.$kw33$TRUE == enumeration_types.tv_truth(tv)) ? assertions_low.NIL : tv);
+			return (($kw33$TRUE == enumeration_types.tv_truth(tv)) ? NIL : tv);
 		}
 		return NIL;
 	}
@@ -1343,13 +1353,13 @@ public final class assertions_low extends SubLTranslatedFile
 	public static SubLObject non_true_assertion_count()
 	{
 		final SubLThread thread = SubLProcess.currentSubLThread();
-		if (assertions_low.$non_true_assertion_tv_cache$.getGlobalValue().isHashtable()) { return Hashtables.hash_table_count(assertions_low.$non_true_assertion_tv_cache$.getGlobalValue()); }
+		if ($non_true_assertion_tv_cache$.getGlobalValue().isHashtable()) { return Hashtables.hash_table_count($non_true_assertion_tv_cache$.getGlobalValue()); }
 		SubLObject count = ZERO_INTEGER;
 		final SubLObject idx = assertion_handles.do_assertions_table();
 		final SubLObject mess = $str43$mapping_Cyc_assertions;
 		final SubLObject total = id_index.id_index_count(idx);
 		SubLObject sofar = ZERO_INTEGER;
-		assert assertions_low.NIL != Types.stringp(mess) : mess;
+		assert NIL != Types.stringp(mess) : mess;
 		final SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
 		final SubLObject _prev_bind_2 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
 		final SubLObject _prev_bind_3 = utilities_macros.$within_noting_percent_progress$.currentBinding(thread);
@@ -1364,10 +1374,10 @@ public final class assertions_low extends SubLTranslatedFile
 			{
 				utilities_macros.noting_percent_progress_preamble(mess);
 				final SubLObject idx_$13 = idx;
-				if (assertions_low.NIL == id_index.id_index_objects_empty_p(idx_$13, $kw45$SKIP))
+				if (NIL == id_index.id_index_objects_empty_p(idx_$13, $kw45$SKIP))
 				{
 					final SubLObject idx_$14 = idx_$13;
-					if (assertions_low.NIL == id_index.id_index_dense_objects_empty_p(idx_$14, $kw45$SKIP))
+					if (NIL == id_index.id_index_dense_objects_empty_p(idx_$14, $kw45$SKIP))
 					{
 						final SubLObject vector_var = id_index.id_index_dense_objects(idx_$14);
 						final SubLObject backwardP_var = NIL;
@@ -1378,16 +1388,16 @@ public final class assertions_low extends SubLTranslatedFile
 						SubLObject ass;
 						for (length = Sequences.length(vector_var), v_iteration = NIL, v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = Numbers.add(v_iteration, ONE_INTEGER))
 						{
-							a_id = ((assertions_low.NIL != backwardP_var) ? Numbers.subtract(length, v_iteration, ONE_INTEGER) : v_iteration);
+							a_id = ((NIL != backwardP_var) ? Numbers.subtract(length, v_iteration, ONE_INTEGER) : v_iteration);
 							a_handle = Vectors.aref(vector_var, a_id);
-							if (assertions_low.NIL == id_index.id_index_tombstone_p(a_handle) || assertions_low.NIL == id_index.id_index_skip_tombstones_p($kw45$SKIP))
+							if (NIL == id_index.id_index_tombstone_p(a_handle) || NIL == id_index.id_index_skip_tombstones_p($kw45$SKIP))
 							{
-								if (assertions_low.NIL != id_index.id_index_tombstone_p(a_handle))
+								if (NIL != id_index.id_index_tombstone_p(a_handle))
 								{
 									a_handle = $kw45$SKIP;
 								}
 								ass = assertion_handles.resolve_assertion_id_value_pair(a_id, a_handle);
-								if (assertions_low.NIL != assertion_non_true_tv(ass))
+								if (NIL != assertion_non_true_tv(ass))
 								{
 									count = Numbers.add(count, ONE_INTEGER);
 								}
@@ -1397,19 +1407,19 @@ public final class assertions_low extends SubLTranslatedFile
 						}
 					}
 					final SubLObject idx_$15 = idx_$13;
-					if (assertions_low.NIL == id_index.id_index_sparse_objects_empty_p(idx_$15) || assertions_low.NIL == id_index.id_index_skip_tombstones_p($kw45$SKIP))
+					if (NIL == id_index.id_index_sparse_objects_empty_p(idx_$15) || NIL == id_index.id_index_skip_tombstones_p($kw45$SKIP))
 					{
 						final SubLObject sparse = id_index.id_index_sparse_objects(idx_$15);
 						SubLObject a_id2 = id_index.id_index_sparse_id_threshold(idx_$15);
 						final SubLObject end_id = id_index.id_index_next_id(idx_$15);
-						final SubLObject v_default = (SubLObject) ((assertions_low.NIL != id_index.id_index_skip_tombstones_p($kw45$SKIP)) ? assertions_low.NIL : assertions_low.$kw45$SKIP);
+						final SubLObject v_default = ((NIL != id_index.id_index_skip_tombstones_p($kw45$SKIP)) ? NIL : $kw45$SKIP);
 						while (a_id2.numL(end_id))
 						{
 							final SubLObject a_handle2 = Hashtables.gethash_without_values(a_id2, sparse, v_default);
-							if (assertions_low.NIL == id_index.id_index_skip_tombstones_p($kw45$SKIP) || assertions_low.NIL == id_index.id_index_tombstone_p(a_handle2))
+							if (NIL == id_index.id_index_skip_tombstones_p($kw45$SKIP) || NIL == id_index.id_index_tombstone_p(a_handle2))
 							{
 								final SubLObject ass2 = assertion_handles.resolve_assertion_id_value_pair(a_id2, a_handle2);
-								if (assertions_low.NIL != assertion_non_true_tv(ass2))
+								if (NIL != assertion_non_true_tv(ass2))
 								{
 									count = Numbers.add(count, ONE_INTEGER);
 								}
@@ -1453,15 +1463,15 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 32289L)
 	public static SubLObject set_assertion_non_true_cache_tv(final SubLObject assertion, final SubLObject tv)
 	{
-		if (assertions_low.NIL != use_non_true_assertion_tv_cacheP())
+		if (NIL != use_non_true_assertion_tv_cacheP())
 		{
-			if (assertions_low.NIL != enumeration_types.tv_trueP(tv))
+			if (NIL != enumeration_types.tv_trueP(tv))
 			{
-				Hashtables.remhash(assertion, assertions_low.$non_true_assertion_tv_cache$.getGlobalValue());
+				Hashtables.remhash(assertion, $non_true_assertion_tv_cache$.getGlobalValue());
 			}
 			else
 			{
-				Hashtables.sethash(assertion, assertions_low.$non_true_assertion_tv_cache$.getGlobalValue(), tv);
+				Hashtables.sethash(assertion, $non_true_assertion_tv_cache$.getGlobalValue(), tv);
 			}
 		}
 		return tv;
@@ -1470,14 +1480,14 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 32809L)
 	public static SubLObject possibly_non_true_assertion_tv_cache_delete(final SubLObject assertion)
 	{
-		if (assertions_low.NIL != assertion_non_true_tv(assertion)) { return Hashtables.remhash(assertion, assertions_low.$non_true_assertion_tv_cache$.getGlobalValue()); }
+		if (NIL != assertion_non_true_tv(assertion)) { return Hashtables.remhash(assertion, $non_true_assertion_tv_cache$.getGlobalValue()); }
 		return NIL;
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 32987L)
 	public static SubLObject dump_non_true_assertion_tv_cache_to_stream(final SubLObject stream)
 	{
-		return cfasl.cfasl_output(assertions_low.$non_true_assertion_tv_cache$.getGlobalValue(), stream);
+		return cfasl.cfasl_output($non_true_assertion_tv_cache$.getGlobalValue(), stream);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 33283L)
@@ -1486,7 +1496,7 @@ public final class assertions_low extends SubLTranslatedFile
 		final SubLObject non_true_assertion_tv_cache = cfasl.cfasl_input(stream, UNPROVIDED, UNPROVIDED);
 		if (non_true_assertion_tv_cache.isHashtable())
 		{
-			assertions_low.$non_true_assertion_tv_cache$.setGlobalValue(non_true_assertion_tv_cache);
+			$non_true_assertion_tv_cache$.setGlobalValue(non_true_assertion_tv_cache);
 			return non_true_assertion_count();
 		}
 		return NIL;
@@ -1497,15 +1507,15 @@ public final class assertions_low extends SubLTranslatedFile
 	{
 		final SubLThread thread = SubLProcess.currentSubLThread();
 		setup_non_true_assertion_tv_cache(assertion_handles.assertion_count());
-		final SubLObject old_prefer_non_true_set_over_flagsP = assertions_low.$prefer_non_true_set_over_flagsP$.getGlobalValue();
+		final SubLObject old_prefer_non_true_set_over_flagsP = $prefer_non_true_set_over_flagsP$.getGlobalValue();
 		try
 		{
-			assertions_low.$prefer_non_true_set_over_flagsP$.setGlobalValue(NIL);
+			$prefer_non_true_set_over_flagsP$.setGlobalValue(NIL);
 			final SubLObject idx = assertion_handles.do_assertions_table();
 			final SubLObject mess = $str58$Rebuilding_the_non_true_assertion;
 			final SubLObject total = id_index.id_index_count(idx);
 			SubLObject sofar = ZERO_INTEGER;
-			assert assertions_low.NIL != Types.stringp(mess) : mess;
+			assert NIL != Types.stringp(mess) : mess;
 			final SubLObject _prev_bind_0 = utilities_macros.$last_percent_progress_index$.currentBinding(thread);
 			final SubLObject _prev_bind_2 = utilities_macros.$last_percent_progress_prediction$.currentBinding(thread);
 			final SubLObject _prev_bind_3 = utilities_macros.$within_noting_percent_progress$.currentBinding(thread);
@@ -1520,10 +1530,10 @@ public final class assertions_low extends SubLTranslatedFile
 				{
 					utilities_macros.noting_percent_progress_preamble(mess);
 					final SubLObject idx_$17 = idx;
-					if (assertions_low.NIL == id_index.id_index_objects_empty_p(idx_$17, $kw45$SKIP))
+					if (NIL == id_index.id_index_objects_empty_p(idx_$17, $kw45$SKIP))
 					{
 						final SubLObject idx_$18 = idx_$17;
-						if (assertions_low.NIL == id_index.id_index_dense_objects_empty_p(idx_$18, $kw45$SKIP))
+						if (NIL == id_index.id_index_dense_objects_empty_p(idx_$18, $kw45$SKIP))
 						{
 							final SubLObject vector_var = id_index.id_index_dense_objects(idx_$18);
 							final SubLObject backwardP_var = NIL;
@@ -1539,11 +1549,11 @@ public final class assertions_low extends SubLTranslatedFile
 							SubLObject _values;
 							for (length = Sequences.length(vector_var), v_iteration = NIL, v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = Numbers.add(v_iteration, ONE_INTEGER))
 							{
-								a_id = ((assertions_low.NIL != backwardP_var) ? Numbers.subtract(length, v_iteration, ONE_INTEGER) : v_iteration);
+								a_id = ((NIL != backwardP_var) ? Numbers.subtract(length, v_iteration, ONE_INTEGER) : v_iteration);
 								a_handle = Vectors.aref(vector_var, a_id);
-								if (assertions_low.NIL == id_index.id_index_tombstone_p(a_handle) || assertions_low.NIL == id_index.id_index_skip_tombstones_p($kw45$SKIP))
+								if (NIL == id_index.id_index_tombstone_p(a_handle) || NIL == id_index.id_index_skip_tombstones_p($kw45$SKIP))
 								{
-									if (assertions_low.NIL != id_index.id_index_tombstone_p(a_handle))
+									if (NIL != id_index.id_index_tombstone_p(a_handle))
 									{
 										a_handle = $kw45$SKIP;
 									}
@@ -1562,9 +1572,9 @@ public final class assertions_low extends SubLTranslatedFile
 												Errors.$error_handler$.bind($sym51$CATCH_ERROR_MESSAGE_HANDLER, thread);
 												try
 												{
-													if (assertions_low.NIL != assertion_handles.assertion_handle_validP(a) && assertions_low.NIL == assertion_utilities.true_assertionP(a))
+													if (NIL != assertion_handles.assertion_handle_validP(a) && NIL == assertion_utilities.true_assertionP(a))
 													{
-														Hashtables.sethash(a, assertions_low.$non_true_assertion_tv_cache$.getGlobalValue(), assertion_tv_internal(a));
+														Hashtables.sethash(a, $non_true_assertion_tv_cache$.getGlobalValue(), assertion_tv_internal(a));
 													}
 												} catch (Throwable catch_var)
 												{
@@ -1588,7 +1598,7 @@ public final class assertions_low extends SubLTranslatedFile
 										{
 											Threads.$is_thread_performing_cleanupP$.bind(T, thread);
 											_values = Values.getValuesAsVector();
-											Eval.eval((SubLObject) ConsesLow.list($sym52$CSETQ, $sym49$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__, was_appendingP));
+											Eval.eval(ConsesLow.list($sym52$CSETQ, $sym49$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__, was_appendingP));
 											Values.restoreValuesFromVector(_values);
 										} finally
 										{
@@ -1605,16 +1615,16 @@ public final class assertions_low extends SubLTranslatedFile
 							}
 						}
 						final SubLObject idx_$19 = idx_$17;
-						if (assertions_low.NIL == id_index.id_index_sparse_objects_empty_p(idx_$19) || assertions_low.NIL == id_index.id_index_skip_tombstones_p($kw45$SKIP))
+						if (NIL == id_index.id_index_sparse_objects_empty_p(idx_$19) || NIL == id_index.id_index_skip_tombstones_p($kw45$SKIP))
 						{
 							final SubLObject sparse = id_index.id_index_sparse_objects(idx_$19);
 							SubLObject a_id2 = id_index.id_index_sparse_id_threshold(idx_$19);
 							final SubLObject end_id = id_index.id_index_next_id(idx_$19);
-							final SubLObject v_default = (SubLObject) ((assertions_low.NIL != id_index.id_index_skip_tombstones_p($kw45$SKIP)) ? assertions_low.NIL : assertions_low.$kw45$SKIP);
+							final SubLObject v_default = ((NIL != id_index.id_index_skip_tombstones_p($kw45$SKIP)) ? NIL : $kw45$SKIP);
 							while (a_id2.numL(end_id))
 							{
 								final SubLObject a_handle2 = Hashtables.gethash_without_values(a_id2, sparse, v_default);
-								if (assertions_low.NIL == id_index.id_index_skip_tombstones_p($kw45$SKIP) || assertions_low.NIL == id_index.id_index_tombstone_p(a_handle2))
+								if (NIL == id_index.id_index_skip_tombstones_p($kw45$SKIP) || NIL == id_index.id_index_tombstone_p(a_handle2))
 								{
 									final SubLObject a2 = assertion_handles.resolve_assertion_id_value_pair(a_id2, a_handle2);
 									SubLObject message_var2 = NIL;
@@ -1631,9 +1641,9 @@ public final class assertions_low extends SubLTranslatedFile
 												Errors.$error_handler$.bind($sym51$CATCH_ERROR_MESSAGE_HANDLER, thread);
 												try
 												{
-													if (assertions_low.NIL != assertion_handles.assertion_handle_validP(a2) && assertions_low.NIL == assertion_utilities.true_assertionP(a2))
+													if (NIL != assertion_handles.assertion_handle_validP(a2) && NIL == assertion_utilities.true_assertionP(a2))
 													{
-														Hashtables.sethash(a2, assertions_low.$non_true_assertion_tv_cache$.getGlobalValue(), assertion_tv_internal(a2));
+														Hashtables.sethash(a2, $non_true_assertion_tv_cache$.getGlobalValue(), assertion_tv_internal(a2));
 													}
 												} catch (Throwable catch_var2)
 												{
@@ -1657,7 +1667,7 @@ public final class assertions_low extends SubLTranslatedFile
 										{
 											Threads.$is_thread_performing_cleanupP$.bind(T, thread);
 											final SubLObject _values2 = Values.getValuesAsVector();
-											Eval.eval((SubLObject) ConsesLow.list($sym52$CSETQ, $sym49$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__, was_appendingP2));
+											Eval.eval(ConsesLow.list($sym52$CSETQ, $sym49$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__, was_appendingP2));
 											Values.restoreValuesFromVector(_values2);
 										} finally
 										{
@@ -1703,7 +1713,7 @@ public final class assertions_low extends SubLTranslatedFile
 			{
 				Threads.$is_thread_performing_cleanupP$.bind(T, thread);
 				final SubLObject _values4 = Values.getValuesAsVector();
-				assertions_low.$prefer_non_true_set_over_flagsP$.setGlobalValue(old_prefer_non_true_set_over_flagsP);
+				$prefer_non_true_set_over_flagsP$.setGlobalValue(old_prefer_non_true_set_over_flagsP);
 				Values.restoreValuesFromVector(_values4);
 			} finally
 			{
@@ -1722,8 +1732,8 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 34857L)
 	public static SubLObject reset_assertion_plist(final SubLObject assertion, final SubLObject plist)
 	{
-		assert assertions_low.NIL != assertion_handles.assertion_p(assertion) : assertion;
-		assert assertions_low.NIL != Types.listp(plist) : plist;
+		assert NIL != assertion_handles.assertion_p(assertion) : assertion;
+		assert NIL != Types.listp(plist) : plist;
 		set_assertion_plist(assertion_handles.assertion_id(assertion), plist);
 		return assertion;
 	}
@@ -1731,7 +1741,7 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 35105L)
 	public static SubLObject get_assertion_prop(final SubLObject assertion, final SubLObject indicator, SubLObject v_default)
 	{
-		if (v_default == assertions_low.UNPROVIDED)
+		if (v_default == UNPROVIDED)
 		{
 			v_default = NIL;
 		}
@@ -1759,18 +1769,18 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 35689L)
 	public static SubLObject reset_assertion_variable_names(final SubLObject assertion, final SubLObject new_variable_names)
 	{
-		assert assertions_low.NIL != assertion_handles.assertion_p(assertion) : assertion;
-		assert assertions_low.NIL != list_utilities.non_dotted_list_p(new_variable_names) : new_variable_names;
+		assert NIL != assertion_handles.assertion_p(assertion) : assertion;
+		assert NIL != list_utilities.non_dotted_list_p(new_variable_names) : new_variable_names;
 		SubLObject cdolist_list_var = new_variable_names;
 		SubLObject elem = NIL;
 		elem = cdolist_list_var.first();
-		while (assertions_low.NIL != cdolist_list_var)
+		while (NIL != cdolist_list_var)
 		{
-			assert assertions_low.NIL != Types.stringp(elem) : elem;
+			assert NIL != Types.stringp(elem) : elem;
 			cdolist_list_var = cdolist_list_var.rest();
 			elem = cdolist_list_var.first();
 		}
-		if (assertions_low.NIL != new_variable_names)
+		if (NIL != new_variable_names)
 		{
 			set_assertion_prop(assertion, $kw36$VARIABLE_NAMES, new_variable_names);
 		}
@@ -1808,7 +1818,7 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 37234L)
 	public static SubLObject reset_assertion_index(final SubLObject assertion, final SubLObject new_index)
 	{
-		assert assertions_low.NIL != assertion_handles.assertion_p(assertion) : assertion;
+		assert NIL != assertion_handles.assertion_p(assertion) : assertion;
 		if (new_index.eql(kb_indexing_datastructures.new_simple_index()))
 		{
 			kb_indexing_datastructures.assertion_indexing_store_remove(assertion);
@@ -1850,7 +1860,7 @@ public final class assertions_low extends SubLTranslatedFile
 		cdestructuring_bind.destructuring_bind_must_consp(current, datum, $list61);
 		second = current.first();
 		current = current.rest();
-		if (assertions_low.NIL == current)
+		if (NIL == current)
 		{
 			current = temp;
 			SubLObject assert_info = NIL;
@@ -1858,7 +1868,7 @@ public final class assertions_low extends SubLTranslatedFile
 			assert_info = current.first();
 			final SubLObject body;
 			current = (body = current.rest());
-			return (SubLObject) ConsesLow.listS($sym62$CDESTRUCTURING_BIND, (SubLObject) ConsesLow.list($sym63$_OPTIONAL, who, when, why, second), assert_info, ConsesLow.append(body, NIL));
+			return ConsesLow.listS($sym62$CDESTRUCTURING_BIND, ConsesLow.list($sym63$_OPTIONAL, who, when, why, second), assert_info, ConsesLow.append(body, NIL));
 		}
 		cdestructuring_bind.cdestructuring_bind_error(datum, $list61);
 		return NIL;
@@ -1868,15 +1878,15 @@ public final class assertions_low extends SubLTranslatedFile
 	public static SubLObject assertion_assert_info(final SubLObject assertion)
 	{
 		final SubLObject assert_info = get_assertion_prop(assertion, $kw64$ASSERT_INFO, UNPROVIDED);
-		if (assertions_low.NIL != assert_info) { return assert_info; }
+		if (NIL != assert_info) { return assert_info; }
 		return NIL;
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 38551L)
 	public static SubLObject reset_assertion_assert_info(final SubLObject assertion, final SubLObject new_info)
 	{
-		assert assertions_low.NIL != assertion_handles.assertion_p(assertion) : assertion;
-		if (assertions_low.NIL != new_info)
+		assert NIL != assertion_handles.assertion_p(assertion) : assertion;
+		if (NIL != new_info)
 		{
 			set_assertion_prop(assertion, $kw64$ASSERT_INFO, new_info);
 		}
@@ -1890,34 +1900,34 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 39012L)
 	public static SubLObject asserted_assertion_timestampedP(final SubLObject assertion)
 	{
-		assert assertions_low.NIL != assertion_handles.assertion_p(assertion) : assertion;
-		if (assertions_low.NIL != assertions_high.asserted_assertionP(assertion)) { return list_utilities.sublisp_boolean(assertion_assert_info(assertion)); }
+		assert NIL != assertion_handles.assertion_p(assertion) : assertion;
+		if (NIL != assertions_high.asserted_assertionP(assertion)) { return list_utilities.sublisp_boolean(assertion_assert_info(assertion)); }
 		return NIL;
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 39342L)
 	public static SubLObject make_assert_info(SubLObject who, SubLObject when, SubLObject why, SubLObject second)
 	{
-		if (who == assertions_low.UNPROVIDED)
+		if (who == UNPROVIDED)
 		{
 			who = NIL;
 		}
-		if (when == assertions_low.UNPROVIDED)
+		if (when == UNPROVIDED)
 		{
 			when = NIL;
 		}
-		if (why == assertions_low.UNPROVIDED)
+		if (why == UNPROVIDED)
 		{
 			why = NIL;
 		}
-		if (second == assertions_low.UNPROVIDED)
+		if (second == UNPROVIDED)
 		{
 			second = NIL;
 		}
-		if (assertions_low.NIL != second) { return (SubLObject) ConsesLow.list(who, when, why, second); }
-		if (assertions_low.NIL != why) { return (SubLObject) ConsesLow.list(who, when, why); }
-		if (assertions_low.NIL != when) { return (SubLObject) ConsesLow.list(who, when); }
-		if (assertions_low.NIL != who) { return (SubLObject) ConsesLow.list(who); }
+		if (NIL != second) { return ConsesLow.list(who, when, why, second); }
+		if (NIL != why) { return ConsesLow.list(who, when, why); }
+		if (NIL != when) { return ConsesLow.list(who, when); }
+		if (NIL != who) { return ConsesLow.list(who); }
 		return NIL;
 	}
 
@@ -1950,19 +1960,19 @@ public final class assertions_low extends SubLTranslatedFile
 	{
 		SubLObject current;
 		final SubLObject datum = current = assertion_assert_info(assertion);
-		final SubLObject who = (SubLObject) (current.isCons() ? current.first() : assertions_low.NIL);
+		final SubLObject who = (current.isCons() ? current.first() : NIL);
 		cdestructuring_bind.destructuring_bind_must_listp(current, datum, $list65);
 		current = current.rest();
-		final SubLObject when = (SubLObject) (current.isCons() ? current.first() : assertions_low.NIL);
+		final SubLObject when = (current.isCons() ? current.first() : NIL);
 		cdestructuring_bind.destructuring_bind_must_listp(current, datum, $list65);
 		current = current.rest();
-		final SubLObject why = (SubLObject) (current.isCons() ? current.first() : assertions_low.NIL);
+		final SubLObject why = (current.isCons() ? current.first() : NIL);
 		cdestructuring_bind.destructuring_bind_must_listp(current, datum, $list65);
 		current = current.rest();
-		final SubLObject second = (SubLObject) (current.isCons() ? current.first() : assertions_low.NIL);
+		final SubLObject second = (current.isCons() ? current.first() : NIL);
 		cdestructuring_bind.destructuring_bind_must_listp(current, datum, $list65);
 		current = current.rest();
-		if (assertions_low.NIL == current) { return reset_assertion_assert_info(assertion, make_assert_info(assertor, when, why, second)); }
+		if (NIL == current) { return reset_assertion_assert_info(assertion, make_assert_info(assertor, when, why, second)); }
 		cdestructuring_bind.cdestructuring_bind_error(datum, $list65);
 		return NIL;
 	}
@@ -1972,19 +1982,19 @@ public final class assertions_low extends SubLTranslatedFile
 	{
 		SubLObject current;
 		final SubLObject datum = current = assertion_assert_info(assertion);
-		final SubLObject who = (SubLObject) (current.isCons() ? current.first() : assertions_low.NIL);
+		final SubLObject who = (current.isCons() ? current.first() : NIL);
 		cdestructuring_bind.destructuring_bind_must_listp(current, datum, $list65);
 		current = current.rest();
-		final SubLObject when = (SubLObject) (current.isCons() ? current.first() : assertions_low.NIL);
+		final SubLObject when = (current.isCons() ? current.first() : NIL);
 		cdestructuring_bind.destructuring_bind_must_listp(current, datum, $list65);
 		current = current.rest();
-		final SubLObject why = (SubLObject) (current.isCons() ? current.first() : assertions_low.NIL);
+		final SubLObject why = (current.isCons() ? current.first() : NIL);
 		cdestructuring_bind.destructuring_bind_must_listp(current, datum, $list65);
 		current = current.rest();
-		final SubLObject second = (SubLObject) (current.isCons() ? current.first() : assertions_low.NIL);
+		final SubLObject second = (current.isCons() ? current.first() : NIL);
 		cdestructuring_bind.destructuring_bind_must_listp(current, datum, $list65);
 		current = current.rest();
-		if (assertions_low.NIL == current) { return reset_assertion_assert_info(assertion, make_assert_info(who, universal_date, why, second)); }
+		if (NIL == current) { return reset_assertion_assert_info(assertion, make_assert_info(who, universal_date, why, second)); }
 		cdestructuring_bind.cdestructuring_bind_error(datum, $list65);
 		return NIL;
 	}
@@ -1994,19 +2004,19 @@ public final class assertions_low extends SubLTranslatedFile
 	{
 		SubLObject current;
 		final SubLObject datum = current = assertion_assert_info(assertion);
-		final SubLObject who = (SubLObject) (current.isCons() ? current.first() : assertions_low.NIL);
+		final SubLObject who = (current.isCons() ? current.first() : NIL);
 		cdestructuring_bind.destructuring_bind_must_listp(current, datum, $list65);
 		current = current.rest();
-		final SubLObject when = (SubLObject) (current.isCons() ? current.first() : assertions_low.NIL);
+		final SubLObject when = (current.isCons() ? current.first() : NIL);
 		cdestructuring_bind.destructuring_bind_must_listp(current, datum, $list65);
 		current = current.rest();
-		final SubLObject why = (SubLObject) (current.isCons() ? current.first() : assertions_low.NIL);
+		final SubLObject why = (current.isCons() ? current.first() : NIL);
 		cdestructuring_bind.destructuring_bind_must_listp(current, datum, $list65);
 		current = current.rest();
-		final SubLObject second = (SubLObject) (current.isCons() ? current.first() : assertions_low.NIL);
+		final SubLObject second = (current.isCons() ? current.first() : NIL);
 		cdestructuring_bind.destructuring_bind_must_listp(current, datum, $list65);
 		current = current.rest();
-		if (assertions_low.NIL == current) { return reset_assertion_assert_info(assertion, make_assert_info(who, when, reason, second)); }
+		if (NIL == current) { return reset_assertion_assert_info(assertion, make_assert_info(who, when, reason, second)); }
 		cdestructuring_bind.cdestructuring_bind_error(datum, $list65);
 		return NIL;
 	}
@@ -2016,19 +2026,19 @@ public final class assertions_low extends SubLTranslatedFile
 	{
 		SubLObject current;
 		final SubLObject datum = current = assertion_assert_info(assertion);
-		final SubLObject who = (SubLObject) (current.isCons() ? current.first() : assertions_low.NIL);
+		final SubLObject who = (current.isCons() ? current.first() : NIL);
 		cdestructuring_bind.destructuring_bind_must_listp(current, datum, $list65);
 		current = current.rest();
-		final SubLObject when = (SubLObject) (current.isCons() ? current.first() : assertions_low.NIL);
+		final SubLObject when = (current.isCons() ? current.first() : NIL);
 		cdestructuring_bind.destructuring_bind_must_listp(current, datum, $list65);
 		current = current.rest();
-		final SubLObject why = (SubLObject) (current.isCons() ? current.first() : assertions_low.NIL);
+		final SubLObject why = (current.isCons() ? current.first() : NIL);
 		cdestructuring_bind.destructuring_bind_must_listp(current, datum, $list65);
 		current = current.rest();
-		final SubLObject second = (SubLObject) (current.isCons() ? current.first() : assertions_low.NIL);
+		final SubLObject second = (current.isCons() ? current.first() : NIL);
 		cdestructuring_bind.destructuring_bind_must_listp(current, datum, $list65);
 		current = current.rest();
-		if (assertions_low.NIL == current) { return reset_assertion_assert_info(assertion, make_assert_info(who, when, why, universal_second)); }
+		if (NIL == current) { return reset_assertion_assert_info(assertion, make_assert_info(who, when, why, universal_second)); }
 		cdestructuring_bind.cdestructuring_bind_error(datum, $list65);
 		return NIL;
 	}
@@ -2036,13 +2046,13 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 42256L)
 	public static SubLObject valid_assertion_robustP(final SubLObject assertion)
 	{
-		if (assertions_low.NIL != assertion_handles.assertion_p(assertion) && assertions_low.NIL != assertion_handles.valid_assertionP(assertion, UNPROVIDED))
+		if (NIL != assertion_handles.assertion_p(assertion) && NIL != assertion_handles.valid_assertionP(assertion, UNPROVIDED))
 		{
 			final SubLObject v_arguments = assertions_high.assertion_arguments(assertion);
 			final SubLObject dependents = assertions_high.assertion_dependents(assertion);
 			final SubLObject vnames = assertion_variable_names_internal(assertion);
 			final SubLObject index = assertion_index(assertion);
-			return (SubLObject) SubLObjectFactory.makeBoolean(assertions_low.NIL != hlmt.valid_hlmt_p(assertion_mt_internal(assertion), UNPROVIDED) && assertions_low.NIL != enumeration_types.tv_p(assertion_tv(assertion)) && v_arguments.isCons() && assertions_low.NIL != list_utilities.every_in_list(Symbols.symbol_function($sym66$VALID_ARGUMENT), v_arguments, UNPROVIDED) && assertions_low.NIL != set_contents.set_contents_p(dependents) && assertions_low.NIL != list_utilities.every_in_list(Symbols.symbol_function($sym66$VALID_ARGUMENT), set_contents.set_contents_element_list(dependents), UNPROVIDED) && vnames.isList() && assertions_low.NIL != list_utilities.every_in_list(Symbols.symbol_function($sym44$STRINGP), vnames, UNPROVIDED) && assertions_low.NIL != enumeration_types.direction_p(assertions_high.assertion_direction(assertion)) && assertions_low.NIL != kb_indexing_datastructures.index_installed_p(index));
+			return SubLObjectFactory.makeBoolean(NIL != hlmt.valid_hlmt_p(assertion_mt_internal(assertion), UNPROVIDED) && NIL != enumeration_types.tv_p(assertion_tv(assertion)) && v_arguments.isCons() && NIL != list_utilities.every_in_list(Symbols.symbol_function($sym66$VALID_ARGUMENT), v_arguments, UNPROVIDED) && NIL != set_contents.set_contents_p(dependents) && NIL != list_utilities.every_in_list(Symbols.symbol_function($sym66$VALID_ARGUMENT), set_contents.set_contents_element_list(dependents), UNPROVIDED) && vnames.isList() && NIL != list_utilities.every_in_list(Symbols.symbol_function($sym44$STRINGP), vnames, UNPROVIDED) && NIL != enumeration_types.direction_p(assertions_high.assertion_direction(assertion)) && NIL != kb_indexing_datastructures.index_installed_p(index));
 		}
 		return NIL;
 	}
@@ -2056,7 +2066,7 @@ public final class assertions_low extends SubLTranslatedFile
 		SubLObject ignore_errors_tag = NIL;
 		try
 		{
-			thread.throwStack.push(assertions_low.$kw67$IGNORE_ERRORS_TARGET);
+			thread.throwStack.push($kw67$IGNORE_ERRORS_TARGET);
 			final SubLObject _prev_bind_0 = Errors.$error_handler$.currentBinding(thread);
 			try
 			{
@@ -2086,7 +2096,7 @@ public final class assertions_low extends SubLTranslatedFile
 	public static SubLObject kb_create_assertion_kb_store(final SubLObject cnf, final SubLObject mt, final SubLObject variable_names, final SubLObject direction, final SubLObject truth, final SubLObject strength, final SubLObject asserted_argument)
 	{
 		SubLObject assertion = kb_indexing.find_assertion_internal(cnf, mt);
-		if (assertions_low.NIL != assertion) { return assertion_handles.assertion_id(assertion); }
+		if (NIL != assertion) { return assertion_handles.assertion_id(assertion); }
 		final SubLObject internal_id = assertion_handles.make_assertion_id();
 		assertion = assertion_handles.make_assertion_shell(internal_id);
 		kb_create_assertion_int(assertion, internal_id, cnf, mt, variable_names, direction, truth, strength, asserted_argument);
@@ -2103,11 +2113,11 @@ public final class assertions_low extends SubLTranslatedFile
 		final SubLObject formula_data_hook = find_cnf_formula_data_hook(cnf);
 		connect_assertion(assertion, formula_data_hook);
 		kb_set_assertion_direction_internal(assertion, direction);
-		if (assertions_low.NIL != asserted_argument)
+		if (NIL != asserted_argument)
 		{
 			add_new_assertion_argument(assertion, asserted_argument);
 		}
-		if (direction == assertions_low.$kw69$FORWARD)
+		if (direction == $kw69$FORWARD)
 		{
 			forward.queue_forward_assertion(assertion);
 		}
@@ -2118,13 +2128,13 @@ public final class assertions_low extends SubLTranslatedFile
 	public static SubLObject kb_create_assertion_cyc(final SubLObject internal_id)
 	{
 		final SubLObject assertion = assertion_handles.find_assertion_by_id(internal_id);
-		return (assertions_low.NIL != assertion) ? assertion : assertion_handles.make_assertion_shell(internal_id);
+		return (NIL != assertion) ? assertion : assertion_handles.make_assertion_shell(internal_id);
 	}
 
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 45939L)
 	public static SubLObject find_cnf_formula_data_hook(final SubLObject cnf)
 	{
-		if (assertions_low.NIL != clauses.gaf_cnfP(cnf)) { return find_gaf_formula_hook(clause_utilities.gaf_cnf_literal(cnf)); }
+		if (NIL != clauses.gaf_cnfP(cnf)) { return find_gaf_formula_hook(clause_utilities.gaf_cnf_literal(cnf)); }
 		return find_hl_cnf_hook(cnf);
 	}
 
@@ -2132,10 +2142,10 @@ public final class assertions_low extends SubLTranslatedFile
 	public static SubLObject find_hl_cnf_hook(final SubLObject cnf)
 	{
 		final SubLObject assertion = kb_indexing.find_assertion_any_mt(cnf);
-		if (assertions_low.NIL != assertion)
+		if (NIL != assertion)
 		{
 			final SubLObject clause_struc = assertion_clause_struc(assertion);
-			return (assertions_low.NIL != clause_struc) ? clause_struc : assertion;
+			return (NIL != clause_struc) ? clause_struc : assertion;
 		}
 		return cnf;
 	}
@@ -2144,10 +2154,10 @@ public final class assertions_low extends SubLTranslatedFile
 	public static SubLObject find_gaf_formula_hook(final SubLObject gaf)
 	{
 		final SubLObject assertion = kb_indexing.find_gaf_any_mt(gaf);
-		if (assertions_low.NIL != assertion)
+		if (NIL != assertion)
 		{
 			final SubLObject clause_struc = assertion_clause_struc(assertion);
-			return (assertions_low.NIL != clause_struc) ? clause_struc : assertion;
+			return (NIL != clause_struc) ? clause_struc : assertion;
 		}
 		return gaf;
 	}
@@ -2164,11 +2174,11 @@ public final class assertions_low extends SubLTranslatedFile
 	public static SubLObject connect_assertion_formula_data(final SubLObject assertion, final SubLObject formula_data_hook)
 	{
 		SubLObject formula_data = formula_data_hook;
-		if (assertions_low.NIL != clause_strucs.clause_struc_p(formula_data_hook))
+		if (NIL != clause_strucs.clause_struc_p(formula_data_hook))
 		{
 			clause_strucs.add_clause_struc_assertion(formula_data_hook, assertion);
 		}
-		else if (assertions_low.NIL != assertion_handles.assertion_p(formula_data_hook))
+		else if (NIL != assertion_handles.assertion_p(formula_data_hook))
 		{
 			final SubLObject cnf = assertions_high.assertion_cnf(formula_data_hook);
 			final SubLObject new_clause_struc = clause_strucs.create_clause_struc(cnf);
@@ -2177,9 +2187,9 @@ public final class assertions_low extends SubLTranslatedFile
 			formula_data = new_clause_struc;
 			reset_assertion_clause_struc(formula_data_hook, formula_data);
 		}
-		else if (assertions_low.NIL == clauses.cnf_p(formula_data_hook))
+		else if (NIL == clauses.cnf_p(formula_data_hook))
 		{
-			if (assertions_low.NIL == el_utilities.el_formula_p(formula_data_hook))
+			if (NIL == el_utilities.el_formula_p(formula_data_hook))
 			{
 				Errors.error($str70$Unexpected_formula_data_hook___S, formula_data_hook);
 				return NIL;
@@ -2221,7 +2231,7 @@ public final class assertions_low extends SubLTranslatedFile
 	public static SubLObject disconnect_assertion_formula_data(final SubLObject assertion)
 	{
 		final SubLObject clause_struc = assertion_clause_struc(assertion);
-		if (assertions_low.NIL != clause_struc)
+		if (NIL != clause_struc)
 		{
 			clause_strucs.remove_clause_struc_assertion(clause_struc, assertion);
 		}
@@ -2232,7 +2242,7 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 50605L)
 	public static SubLObject add_new_assertion_argument(final SubLObject assertion, final SubLObject new_argument)
 	{
-		set_assertion_arguments(assertion_handles.assertion_id(assertion), (SubLObject) ConsesLow.cons(new_argument, assertions_high.assertion_arguments(assertion)));
+		set_assertion_arguments(assertion_handles.assertion_id(assertion), ConsesLow.cons(new_argument, assertions_high.assertion_arguments(assertion)));
 		return assertion;
 	}
 
@@ -2246,8 +2256,8 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 51526L)
 	public static SubLObject reset_assertion_dependents(final SubLObject assertion, final SubLObject new_dependents)
 	{
-		assert assertions_low.NIL != set_contents.set_contents_p(new_dependents) : new_dependents;
-		if (assertions_low.NIL != new_dependents)
+		assert NIL != set_contents.set_contents_p(new_dependents) : new_dependents;
+		if (NIL != new_dependents)
 		{
 			set_assertion_prop(assertion, $kw31$DEPENDENTS, new_dependents);
 		}
@@ -2261,8 +2271,8 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 52022L)
 	public static SubLObject add_assertion_dependent(final SubLObject assertion, final SubLObject argument)
 	{
-		assert assertions_low.NIL != assertion_handles.assertion_p(assertion) : assertion;
-		assert assertions_low.NIL != arguments.argument_p(argument) : argument;
+		assert NIL != assertion_handles.assertion_p(assertion) : assertion;
+		assert NIL != arguments.argument_p(argument) : argument;
 		reset_assertion_dependents(assertion, set_contents.set_contents_add(argument, assertion_dependents_internal(assertion), UNPROVIDED));
 		return assertion;
 	}
@@ -2270,8 +2280,8 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 52495L)
 	public static SubLObject remove_assertion_dependent(final SubLObject assertion, final SubLObject argument)
 	{
-		assert assertions_low.NIL != assertion_handles.assertion_p(assertion) : assertion;
-		assert assertions_low.NIL != arguments.argument_p(argument) : argument;
+		assert NIL != assertion_handles.assertion_p(assertion) : assertion;
+		assert NIL != arguments.argument_p(argument) : argument;
 		reset_assertion_dependents(assertion, set_contents.set_contents_delete(argument, assertion_dependents_internal(assertion), UNPROVIDED));
 		return assertion;
 	}
@@ -2280,23 +2290,23 @@ public final class assertions_low extends SubLTranslatedFile
 	public static SubLObject assertion_dependencies(final SubLObject assertion)
 	{
 		final SubLThread thread = SubLProcess.currentSubLThread();
-		assert assertions_low.NIL != assertion_handles.assertion_p(assertion) : assertion;
+		assert NIL != assertion_handles.assertion_p(assertion) : assertion;
 		SubLObject assertions = NIL;
 		SubLObject deductions = NIL;
 		final SubLObject dependent_count = set_contents.set_contents_size(assertion_dependents_internal(assertion));
-		final SubLObject _prev_bind_0 = assertions_low.$dependent_assertion_table$.currentBinding(thread);
-		final SubLObject _prev_bind_2 = assertions_low.$dependent_deduction_table$.currentBinding(thread);
+		final SubLObject _prev_bind_0 = $dependent_assertion_table$.currentBinding(thread);
+		final SubLObject _prev_bind_2 = $dependent_deduction_table$.currentBinding(thread);
 		try
 		{
-			assertions_low.$dependent_assertion_table$.bind(Hashtables.make_hash_table(Numbers.integerDivide(dependent_count, TWO_INTEGER), UNPROVIDED, UNPROVIDED), thread);
-			assertions_low.$dependent_deduction_table$.bind(Hashtables.make_hash_table(dependent_count, UNPROVIDED, UNPROVIDED), thread);
+			$dependent_assertion_table$.bind(Hashtables.make_hash_table(Numbers.integerDivide(dependent_count, TWO_INTEGER), UNPROVIDED, UNPROVIDED), thread);
+			$dependent_deduction_table$.bind(Hashtables.make_hash_table(dependent_count, UNPROVIDED, UNPROVIDED), thread);
 			mark_dependent_assertion(assertion);
-			assertions = assertions_low.$dependent_assertion_table$.getDynamicValue(thread);
-			deductions = assertions_low.$dependent_deduction_table$.getDynamicValue(thread);
+			assertions = $dependent_assertion_table$.getDynamicValue(thread);
+			deductions = $dependent_deduction_table$.getDynamicValue(thread);
 		} finally
 		{
-			assertions_low.$dependent_deduction_table$.rebind(_prev_bind_2, thread);
-			assertions_low.$dependent_assertion_table$.rebind(_prev_bind_0, thread);
+			$dependent_deduction_table$.rebind(_prev_bind_2, thread);
+			$dependent_assertion_table$.rebind(_prev_bind_0, thread);
 		}
 		return Values.values(assertions, deductions);
 	}
@@ -2305,17 +2315,17 @@ public final class assertions_low extends SubLTranslatedFile
 	public static SubLObject mark_dependent_assertion(final SubLObject assertion)
 	{
 		final SubLThread thread = SubLProcess.currentSubLThread();
-		if (assertions_low.NIL == Hashtables.gethash(assertion, assertions_low.$dependent_assertion_table$.getDynamicValue(thread), UNPROVIDED))
+		if (NIL == Hashtables.gethash(assertion, $dependent_assertion_table$.getDynamicValue(thread), UNPROVIDED))
 		{
-			Hashtables.sethash(assertion, assertions_low.$dependent_assertion_table$.getDynamicValue(thread), T);
+			Hashtables.sethash(assertion, $dependent_assertion_table$.getDynamicValue(thread), T);
 			final SubLObject set_contents_var = assertion_dependents_internal(assertion);
 			SubLObject basis_object;
 			SubLObject state;
 			SubLObject deduction;
-			for (basis_object = set_contents.do_set_contents_basis_object(set_contents_var), state = NIL, state = set_contents.do_set_contents_initial_state(basis_object, set_contents_var); assertions_low.NIL == set_contents.do_set_contents_doneP(basis_object, state); state = set_contents.do_set_contents_update_state(state))
+			for (basis_object = set_contents.do_set_contents_basis_object(set_contents_var), state = NIL, state = set_contents.do_set_contents_initial_state(basis_object, set_contents_var); NIL == set_contents.do_set_contents_doneP(basis_object, state); state = set_contents.do_set_contents_update_state(state))
 			{
 				deduction = set_contents.do_set_contents_next(basis_object, state);
-				if (assertions_low.NIL != set_contents.do_set_contents_element_validP(state, deduction))
+				if (NIL != set_contents.do_set_contents_element_validP(state, deduction))
 				{
 					mark_dependent_deduction(deduction);
 				}
@@ -2328,22 +2338,22 @@ public final class assertions_low extends SubLTranslatedFile
 	public static SubLObject mark_dependent_deduction(final SubLObject deduction)
 	{
 		final SubLThread thread = SubLProcess.currentSubLThread();
-		assert assertions_low.NIL != deduction_handles.deduction_p(deduction) : deduction;
-		if (assertions_low.NIL == Hashtables.gethash(deduction, assertions_low.$dependent_deduction_table$.getDynamicValue(thread), UNPROVIDED))
+		assert NIL != deduction_handles.deduction_p(deduction) : deduction;
+		if (NIL == Hashtables.gethash(deduction, $dependent_deduction_table$.getDynamicValue(thread), UNPROVIDED))
 		{
-			Hashtables.sethash(deduction, assertions_low.$dependent_deduction_table$.getDynamicValue(thread), T);
+			Hashtables.sethash(deduction, $dependent_deduction_table$.getDynamicValue(thread), T);
 			final SubLObject supported_object = deductions_high.deduction_supported_object(deduction);
-			if (assertions_low.NIL != assertion_handles.assertion_p(supported_object))
+			if (NIL != assertion_handles.assertion_p(supported_object))
 			{
 				SubLObject witness = NIL;
-				if (assertions_low.NIL == witness)
+				if (NIL == witness)
 				{
 					SubLObject csome_list_var = assertion_arguments_internal(supported_object);
 					SubLObject argument = NIL;
 					argument = csome_list_var.first();
-					while (assertions_low.NIL == witness && assertions_low.NIL != csome_list_var)
+					while (NIL == witness && NIL != csome_list_var)
 					{
-						if (assertions_low.NIL != arguments.belief_p(argument) || assertions_low.NIL == Hashtables.gethash(deduction, assertions_low.$dependent_deduction_table$.getDynamicValue(thread), UNPROVIDED))
+						if (NIL != arguments.belief_p(argument) || NIL == Hashtables.gethash(deduction, $dependent_deduction_table$.getDynamicValue(thread), UNPROVIDED))
 						{
 							witness = argument;
 						}
@@ -2351,12 +2361,12 @@ public final class assertions_low extends SubLTranslatedFile
 						argument = csome_list_var.first();
 					}
 				}
-				if (assertions_low.NIL == witness)
+				if (NIL == witness)
 				{
 					mark_dependent_assertion(supported_object);
 				}
 			}
-			else if (assertions_low.NIL != kb_hl_support_handles.kb_hl_support_p(supported_object))
+			else if (NIL != kb_hl_support_handles.kb_hl_support_p(supported_object))
 			{
 			}
 		}
@@ -2366,7 +2376,7 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 55328L)
 	public static SubLObject verify_assertion_content_table(SubLObject repairP)
 	{
-		if (repairP == assertions_low.UNPROVIDED)
+		if (repairP == UNPROVIDED)
 		{
 			repairP = NIL;
 		}
@@ -2376,7 +2386,7 @@ public final class assertions_low extends SubLTranslatedFile
 	@SubLTranslatedFile.SubL(source = "cycl/assertions-low.lisp", position = 55606L)
 	public static SubLObject random_assertion_internal(SubLObject test)
 	{
-		if (test == assertions_low.UNPROVIDED)
+		if (test == UNPROVIDED)
 		{
 			test = Symbols.symbol_function($sym74$TRUE);
 		}
@@ -2385,10 +2395,10 @@ public final class assertions_low extends SubLTranslatedFile
 			final SubLObject max_id = assertion_handles.next_assertion_id();
 			SubLObject v_answer;
 			SubLObject candidate;
-			for (v_answer = NIL; assertions_low.NIL == v_answer; v_answer = candidate)
+			for (v_answer = NIL; NIL == v_answer; v_answer = candidate)
 			{
 				candidate = assertion_handles.find_assertion_by_id(random.random(max_id));
-				if (assertions_low.NIL != candidate && assertions_low.NIL != Functions.funcall(test, candidate))
+				if (NIL != candidate && NIL != Functions.funcall(test, candidate))
 				{
 				}
 			}
@@ -2401,7 +2411,7 @@ public final class assertions_low extends SubLTranslatedFile
 	public static SubLObject random_rule_internal()
 	{
 		final SubLObject rule_set = kb_rule_set();
-		if (assertions_low.NIL != keyhash.keyhash_p(rule_set)) { return keyhash.keyhash_random_key(rule_set); }
+		if (NIL != keyhash.keyhash_p(rule_set)) { return keyhash.keyhash_random_key(rule_set); }
 		return assertions_high.random_assertion(Symbols.symbol_function($sym75$RULE_ASSERTION_));
 	}
 
@@ -2415,7 +2425,7 @@ public final class assertions_low extends SubLTranslatedFile
 	{
 		SubLFiles.declareFunction("com.cyc.cycjava.cycl.assertions_low", "assertion_content_print_function_trampoline", "ASSERTION-CONTENT-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
 		SubLFiles.declareFunction("com.cyc.cycjava.cycl.assertions_low", "assertion_content_p", "ASSERTION-CONTENT-P", 1, 0, false);
-		new $assertion_content_p$UnaryFunction();
+		new assertions_low.$assertion_content_p$UnaryFunction();
 		SubLFiles.declareFunction("com.cyc.cycjava.cycl.assertions_low", "as_content_formula_data", "AS-CONTENT-FORMULA-DATA", 1, 0, false);
 		SubLFiles.declareFunction("com.cyc.cycjava.cycl.assertions_low", "as_content_mt", "AS-CONTENT-MT", 1, 0, false);
 		SubLFiles.declareFunction("com.cyc.cycjava.cycl.assertions_low", "as_content_flags", "AS-CONTENT-FLAGS", 1, 0, false);
@@ -2571,26 +2581,26 @@ public final class assertions_low extends SubLTranslatedFile
 
 	public static SubLObject init_assertions_low_file()
 	{
-		assertions_low.$dtp_assertion_content$ = SubLFiles.defconstant("*DTP-ASSERTION-CONTENT*", $sym0$ASSERTION_CONTENT);
-		assertions_low.$default_assertion_flags$ = SubLFiles.deflexical("*DEFAULT-ASSERTION-FLAGS*", ZERO_INTEGER);
-		assertions_low.$assertion_flags_gaf_byte$ = SubLFiles.defconstant("*ASSERTION-FLAGS-GAF-BYTE*", bytes.sublisp_byte(ONE_INTEGER, ZERO_INTEGER));
-		assertions_low.$assertion_flags_direction_byte$ = SubLFiles.defconstant("*ASSERTION-FLAGS-DIRECTION-BYTE*", bytes.sublisp_byte(TWO_INTEGER, ONE_INTEGER));
-		assertions_low.$assertion_flags_tv_byte$ = SubLFiles.defconstant("*ASSERTION-FLAGS-TV-BYTE*", bytes.sublisp_byte(THREE_INTEGER, THREE_INTEGER));
-		assertions_low.$rule_set$ = SubLFiles.deflexical("*RULE-SET*", (SubLObject) ((assertions_low.NIL != Symbols.boundp($sym39$_RULE_SET_)) ? assertions_low.$rule_set$.getGlobalValue() : assertions_low.NIL));
-		assertions_low.$prefer_rule_set_over_flagsP$ = SubLFiles.deflexical("*PREFER-RULE-SET-OVER-FLAGS?*", (SubLObject) ((assertions_low.NIL != Symbols.boundp($sym40$_PREFER_RULE_SET_OVER_FLAGS__)) ? assertions_low.$prefer_rule_set_over_flagsP$.getGlobalValue() : assertions_low.T));
-		assertions_low.$estimated_assertions_per_rule$ = SubLFiles.deflexical("*ESTIMATED-ASSERTIONS-PER-RULE*", $int41$60);
-		assertions_low.$non_true_assertion_tv_cache$ = SubLFiles.deflexical("*NON-TRUE-ASSERTION-TV-CACHE*", (SubLObject) ((assertions_low.NIL != Symbols.boundp($sym54$_NON_TRUE_ASSERTION_TV_CACHE_)) ? assertions_low.$non_true_assertion_tv_cache$.getGlobalValue() : assertions_low.NIL));
-		assertions_low.$prefer_non_true_set_over_flagsP$ = SubLFiles.deflexical("*PREFER-NON-TRUE-SET-OVER-FLAGS?*", (SubLObject) ((assertions_low.NIL != Symbols.boundp($sym55$_PREFER_NON_TRUE_SET_OVER_FLAGS__)) ? assertions_low.$prefer_non_true_set_over_flagsP$.getGlobalValue() : assertions_low.T));
-		assertions_low.$estimated_assertions_per_non_true$ = SubLFiles.deflexical("*ESTIMATED-ASSERTIONS-PER-NON-TRUE*", $int56$1983);
-		assertions_low.$dependent_deduction_table$ = SubLFiles.defparameter("*DEPENDENT-DEDUCTION-TABLE*", NIL);
-		assertions_low.$dependent_assertion_table$ = SubLFiles.defparameter("*DEPENDENT-ASSERTION-TABLE*", NIL);
+		$dtp_assertion_content$ = SubLFiles.defconstant("*DTP-ASSERTION-CONTENT*", $sym0$ASSERTION_CONTENT);
+		$default_assertion_flags$ = SubLFiles.deflexical("*DEFAULT-ASSERTION-FLAGS*", ZERO_INTEGER);
+		$assertion_flags_gaf_byte$ = SubLFiles.defconstant("*ASSERTION-FLAGS-GAF-BYTE*", bytes.sublisp_byte(ONE_INTEGER, ZERO_INTEGER));
+		$assertion_flags_direction_byte$ = SubLFiles.defconstant("*ASSERTION-FLAGS-DIRECTION-BYTE*", bytes.sublisp_byte(TWO_INTEGER, ONE_INTEGER));
+		$assertion_flags_tv_byte$ = SubLFiles.defconstant("*ASSERTION-FLAGS-TV-BYTE*", bytes.sublisp_byte(THREE_INTEGER, THREE_INTEGER));
+		$rule_set$ = SubLFiles.deflexical("*RULE-SET*", ((NIL != Symbols.boundp($sym39$_RULE_SET_)) ? $rule_set$.getGlobalValue() : NIL));
+		$prefer_rule_set_over_flagsP$ = SubLFiles.deflexical("*PREFER-RULE-SET-OVER-FLAGS?*", ((NIL != Symbols.boundp($sym40$_PREFER_RULE_SET_OVER_FLAGS__)) ? $prefer_rule_set_over_flagsP$.getGlobalValue() : T));
+		$estimated_assertions_per_rule$ = SubLFiles.deflexical("*ESTIMATED-ASSERTIONS-PER-RULE*", $int41$60);
+		$non_true_assertion_tv_cache$ = SubLFiles.deflexical("*NON-TRUE-ASSERTION-TV-CACHE*", ((NIL != Symbols.boundp($sym54$_NON_TRUE_ASSERTION_TV_CACHE_)) ? $non_true_assertion_tv_cache$.getGlobalValue() : NIL));
+		$prefer_non_true_set_over_flagsP$ = SubLFiles.deflexical("*PREFER-NON-TRUE-SET-OVER-FLAGS?*", ((NIL != Symbols.boundp($sym55$_PREFER_NON_TRUE_SET_OVER_FLAGS__)) ? $prefer_non_true_set_over_flagsP$.getGlobalValue() : T));
+		$estimated_assertions_per_non_true$ = SubLFiles.deflexical("*ESTIMATED-ASSERTIONS-PER-NON-TRUE*", $int56$1983);
+		$dependent_deduction_table$ = SubLFiles.defparameter("*DEPENDENT-DEDUCTION-TABLE*", NIL);
+		$dependent_assertion_table$ = SubLFiles.defparameter("*DEPENDENT-ASSERTION-TABLE*", NIL);
 		$sym49$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__.setValue(T);
 		return NIL;
 	}
 
 	public static SubLObject setup_assertions_low_file()
 	{
-		Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), assertions_low.$dtp_assertion_content$.getGlobalValue(), Symbols.symbol_function($sym8$ASSERTION_CONTENT_PRINT_FUNCTION_TRAMPOLINE));
+		Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_assertion_content$.getGlobalValue(), Symbols.symbol_function($sym8$ASSERTION_CONTENT_PRINT_FUNCTION_TRAMPOLINE));
 		SubLSpecialOperatorDeclarations.proclaim($list9);
 		Structures.def_csetf($sym10$AS_CONTENT_FORMULA_DATA, $sym11$_CSETF_AS_CONTENT_FORMULA_DATA);
 		Structures.def_csetf($sym12$AS_CONTENT_MT, $sym13$_CSETF_AS_CONTENT_MT);
@@ -2598,7 +2608,7 @@ public final class assertions_low extends SubLTranslatedFile
 		Structures.def_csetf($sym16$AS_CONTENT_ARGUMENTS, $sym17$_CSETF_AS_CONTENT_ARGUMENTS);
 		Structures.def_csetf($sym18$AS_CONTENT_PLIST, $sym19$_CSETF_AS_CONTENT_PLIST);
 		Equality.identity($sym0$ASSERTION_CONTENT);
-		Structures.register_method(visitation.$visit_defstruct_object_method_table$.getGlobalValue(), assertions_low.$dtp_assertion_content$.getGlobalValue(), Symbols.symbol_function($sym30$VISIT_DEFSTRUCT_OBJECT_ASSERTION_CONTENT_METHOD));
+		Structures.register_method(visitation.$visit_defstruct_object_method_table$.getGlobalValue(), $dtp_assertion_content$.getGlobalValue(), Symbols.symbol_function($sym30$VISIT_DEFSTRUCT_OBJECT_ASSERTION_CONTENT_METHOD));
 		subl_macro_promotions.declare_defglobal($sym39$_RULE_SET_);
 		subl_macro_promotions.declare_defglobal($sym40$_PREFER_RULE_SET_OVER_FLAGS__);
 		subl_macro_promotions.declare_defglobal($sym54$_NON_TRUE_ASSERTION_TV_CACHE_);
@@ -2606,16 +2616,19 @@ public final class assertions_low extends SubLTranslatedFile
 		return NIL;
 	}
 
+	@Override
 	public void declareFunctions()
 	{
 		declare_assertions_low_file();
 	}
 
+	@Override
 	public void initializeVariables()
 	{
 		init_assertions_low_file();
 	}
 
+	@Override
 	public void runTopLevelForms()
 	{
 		setup_assertions_low_file();
@@ -2623,30 +2636,27 @@ public final class assertions_low extends SubLTranslatedFile
 
 	static
 	{
-		me = (SubLFile) new assertions_low();
-		assertions_low.$dtp_assertion_content$ = null;
-		assertions_low.$default_assertion_flags$ = null;
-		assertions_low.$assertion_flags_gaf_byte$ = null;
-		assertions_low.$assertion_flags_direction_byte$ = null;
-		assertions_low.$assertion_flags_tv_byte$ = null;
-		assertions_low.$rule_set$ = null;
-		assertions_low.$prefer_rule_set_over_flagsP$ = null;
-		assertions_low.$estimated_assertions_per_rule$ = null;
-		assertions_low.$non_true_assertion_tv_cache$ = null;
-		assertions_low.$prefer_non_true_set_over_flagsP$ = null;
-		assertions_low.$estimated_assertions_per_non_true$ = null;
-		assertions_low.$dependent_deduction_table$ = null;
-		assertions_low.$dependent_assertion_table$ = null;
+		me = new assertions_low();
+		$dtp_assertion_content$ = null;
+		$default_assertion_flags$ = null;
+		$assertion_flags_gaf_byte$ = null;
+		$assertion_flags_direction_byte$ = null;
+		$assertion_flags_tv_byte$ = null;
+		$rule_set$ = null;
+		$prefer_rule_set_over_flagsP$ = null;
+		$estimated_assertions_per_rule$ = null;
+		$non_true_assertion_tv_cache$ = null;
+		$prefer_non_true_set_over_flagsP$ = null;
+		$estimated_assertions_per_non_true$ = null;
+		$dependent_deduction_table$ = null;
+		$dependent_assertion_table$ = null;
 		$sym0$ASSERTION_CONTENT = SubLObjectFactory.makeSymbol("ASSERTION-CONTENT");
 		$sym1$ASSERTION_CONTENT_P = SubLObjectFactory.makeSymbol("ASSERTION-CONTENT-P");
 		$int2$148 = SubLObjectFactory.makeInteger(148);
-		$list3 = ConsesLow.list((SubLObject) SubLObjectFactory.makeSymbol("FORMULA-DATA"), (SubLObject) SubLObjectFactory.makeSymbol("MT"), (SubLObject) SubLObjectFactory.makeSymbol("FLAGS"), (SubLObject) SubLObjectFactory.makeSymbol("ARGUMENTS"), (SubLObject) SubLObjectFactory.makeSymbol("PLIST"));
-		$list4 = ConsesLow.list((SubLObject) SubLObjectFactory.makeKeyword("FORMULA-DATA"), (SubLObject) SubLObjectFactory.makeKeyword("MT"), (SubLObject) SubLObjectFactory.makeKeyword("FLAGS"), (SubLObject) SubLObjectFactory.makeKeyword("ARGUMENTS"), (SubLObject) SubLObjectFactory.makeKeyword("PLIST"));
-		$list5 = ConsesLow.list((SubLObject) SubLObjectFactory.makeSymbol("AS-CONTENT-FORMULA-DATA"), (SubLObject) SubLObjectFactory.makeSymbol("AS-CONTENT-MT"), (SubLObject) SubLObjectFactory.makeSymbol("AS-CONTENT-FLAGS"), (SubLObject) SubLObjectFactory.makeSymbol("AS-CONTENT-ARGUMENTS"), (SubLObject) SubLObjectFactory.makeSymbol("AS-CONTENT-PLIST"));
-		$list6 = ConsesLow.list((SubLObject) SubLObjectFactory.makeSymbol("_CSETF-AS-CONTENT-FORMULA-DATA"), (SubLObject) SubLObjectFactory.makeSymbol("_CSETF-AS-CONTENT-MT"), (SubLObject) SubLObjectFactory.makeSymbol("_CSETF-AS-CONTENT-FLAGS"), (SubLObject) SubLObjectFactory.makeSymbol("_CSETF-AS-CONTENT-ARGUMENTS"), (SubLObject) SubLObjectFactory.makeSymbol("_CSETF-AS-CONTENT-PLIST"));
+		assertion_content_holder.structDecl.toString();
 		$sym7$DEFAULT_STRUCT_PRINT_FUNCTION = SubLObjectFactory.makeSymbol("DEFAULT-STRUCT-PRINT-FUNCTION");
 		$sym8$ASSERTION_CONTENT_PRINT_FUNCTION_TRAMPOLINE = SubLObjectFactory.makeSymbol("ASSERTION-CONTENT-PRINT-FUNCTION-TRAMPOLINE");
-		$list9 = ConsesLow.list((SubLObject) SubLObjectFactory.makeSymbol("OPTIMIZE-FUNCALL"), (SubLObject) SubLObjectFactory.makeSymbol("ASSERTION-CONTENT-P"));
+		$list9 = ConsesLow.list(SubLObjectFactory.makeSymbol("OPTIMIZE-FUNCALL"), SubLObjectFactory.makeSymbol("ASSERTION-CONTENT-P"));
 		$sym10$AS_CONTENT_FORMULA_DATA = SubLObjectFactory.makeSymbol("AS-CONTENT-FORMULA-DATA");
 		$sym11$_CSETF_AS_CONTENT_FORMULA_DATA = SubLObjectFactory.makeSymbol("_CSETF-AS-CONTENT-FORMULA-DATA");
 		$sym12$AS_CONTENT_MT = SubLObjectFactory.makeSymbol("AS-CONTENT-MT");
@@ -2687,22 +2697,22 @@ public final class assertions_low extends SubLTranslatedFile
 		$sym47$KEYHASH_P = SubLObjectFactory.makeSymbol("KEYHASH-P");
 		$str48$Rebuilding_the_Rule_Set = SubLObjectFactory.makeString("Rebuilding the Rule Set");
 		$sym49$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__ = SubLObjectFactory.makeSymbol("*APPEND-STACK-TRACES-TO-ERROR-MESSAGES?*");
-		$list50 = ConsesLow.list((SubLObject) SubLObjectFactory.makeSymbol("CSETQ"), (SubLObject) SubLObjectFactory.makeSymbol("*APPEND-STACK-TRACES-TO-ERROR-MESSAGES?*"), NIL);
+		$list50 = ConsesLow.list(SubLObjectFactory.makeSymbol("CSETQ"), SubLObjectFactory.makeSymbol("*APPEND-STACK-TRACES-TO-ERROR-MESSAGES?*"), NIL);
 		$sym51$CATCH_ERROR_MESSAGE_HANDLER = SubLObjectFactory.makeSymbol("CATCH-ERROR-MESSAGE-HANDLER");
 		$sym52$CSETQ = SubLObjectFactory.makeSymbol("CSETQ");
 		$str53$_A = SubLObjectFactory.makeString("~A");
 		$sym54$_NON_TRUE_ASSERTION_TV_CACHE_ = SubLObjectFactory.makeSymbol("*NON-TRUE-ASSERTION-TV-CACHE*");
 		$sym55$_PREFER_NON_TRUE_SET_OVER_FLAGS__ = SubLObjectFactory.makeSymbol("*PREFER-NON-TRUE-SET-OVER-FLAGS?*");
 		$int56$1983 = SubLObjectFactory.makeInteger(1983);
-		$list57 = ConsesLow.list((SubLObject) SubLObjectFactory.makeKeyword("WEAK-KEYS"), T);
+		$list57 = ConsesLow.list(SubLObjectFactory.makeKeyword("WEAK-KEYS"), T);
 		$str58$Rebuilding_the_non_true_assertion = SubLObjectFactory.makeString("Rebuilding the non-true assertion cache");
 		$sym59$LISTP = SubLObjectFactory.makeSymbol("LISTP");
 		$sym60$NON_DOTTED_LIST_P = SubLObjectFactory.makeSymbol("NON-DOTTED-LIST-P");
-		$list61 = ConsesLow.list((SubLObject) ConsesLow.list((SubLObject) SubLObjectFactory.makeSymbol("WHO"), (SubLObject) SubLObjectFactory.makeSymbol("WHEN"), (SubLObject) SubLObjectFactory.makeSymbol("WHY"), (SubLObject) SubLObjectFactory.makeSymbol("SECOND")), (SubLObject) SubLObjectFactory.makeSymbol("ASSERT-INFO"), (SubLObject) SubLObjectFactory.makeSymbol("&BODY"), (SubLObject) SubLObjectFactory.makeSymbol("BODY"));
+		$list61 = ConsesLow.list(ConsesLow.list(SubLObjectFactory.makeSymbol("WHO"), SubLObjectFactory.makeSymbol("WHEN"), SubLObjectFactory.makeSymbol("WHY"), SubLObjectFactory.makeSymbol("SECOND")), SubLObjectFactory.makeSymbol("ASSERT-INFO"), SubLObjectFactory.makeSymbol("&BODY"), SubLObjectFactory.makeSymbol("BODY"));
 		$sym62$CDESTRUCTURING_BIND = SubLObjectFactory.makeSymbol("CDESTRUCTURING-BIND");
 		$sym63$_OPTIONAL = SubLObjectFactory.makeSymbol("&OPTIONAL");
 		$kw64$ASSERT_INFO = SubLObjectFactory.makeKeyword("ASSERT-INFO");
-		$list65 = ConsesLow.list((SubLObject) SubLObjectFactory.makeSymbol("&OPTIONAL"), (SubLObject) SubLObjectFactory.makeSymbol("WHO"), (SubLObject) SubLObjectFactory.makeSymbol("WHEN"), (SubLObject) SubLObjectFactory.makeSymbol("WHY"), (SubLObject) SubLObjectFactory.makeSymbol("SECOND"));
+		$list65 = ConsesLow.list(SubLObjectFactory.makeSymbol("&OPTIONAL"), SubLObjectFactory.makeSymbol("WHO"), SubLObjectFactory.makeSymbol("WHEN"), SubLObjectFactory.makeSymbol("WHY"), SubLObjectFactory.makeSymbol("SECOND"));
 		$sym66$VALID_ARGUMENT = SubLObjectFactory.makeSymbol("VALID-ARGUMENT");
 		$kw67$IGNORE_ERRORS_TARGET = SubLObjectFactory.makeKeyword("IGNORE-ERRORS-TARGET");
 		$sym68$IGNORE_ERRORS_HANDLER = SubLObjectFactory.makeSymbol("IGNORE-ERRORS-HANDLER", "SUBLISP");
@@ -2714,97 +2724,5 @@ public final class assertions_low extends SubLTranslatedFile
 		$sym74$TRUE = SubLObjectFactory.makeSymbol("TRUE");
 		$sym75$RULE_ASSERTION_ = SubLObjectFactory.makeSymbol("RULE-ASSERTION?");
 		$sym76$GAF_ASSERTION_ = SubLObjectFactory.makeSymbol("GAF-ASSERTION?");
-	}
-
-	public static final class $assertion_content_native extends SubLStructNative
-	{
-		public SubLObject $formula_data;
-		public SubLObject $mt;
-		public SubLObject $flags;
-		public SubLObject $arguments;
-		public SubLObject $plist;
-		private static final SubLStructDeclNative structDecl;
-
-		public $assertion_content_native()
-		{
-			this.$formula_data = (SubLObject) CommonSymbols.NIL;
-			this.$mt = (SubLObject) CommonSymbols.NIL;
-			this.$flags = (SubLObject) CommonSymbols.NIL;
-			this.$arguments = (SubLObject) CommonSymbols.NIL;
-			this.$plist = (SubLObject) CommonSymbols.NIL;
-		}
-
-		public SubLStructDecl getStructDecl()
-		{
-			return (SubLStructDecl) $assertion_content_native.structDecl;
-		}
-
-		public SubLObject getField2()
-		{
-			return this.$formula_data;
-		}
-
-		public SubLObject getField3()
-		{
-			return this.$mt;
-		}
-
-		public SubLObject getField4()
-		{
-			return this.$flags;
-		}
-
-		public SubLObject getField5()
-		{
-			return this.$arguments;
-		}
-
-		public SubLObject getField6()
-		{
-			return this.$plist;
-		}
-
-		public SubLObject setField2(final SubLObject value)
-		{
-			return this.$formula_data = value;
-		}
-
-		public SubLObject setField3(final SubLObject value)
-		{
-			return this.$mt = value;
-		}
-
-		public SubLObject setField4(final SubLObject value)
-		{
-			return this.$flags = value;
-		}
-
-		public SubLObject setField5(final SubLObject value)
-		{
-			return this.$arguments = value;
-		}
-
-		public SubLObject setField6(final SubLObject value)
-		{
-			return this.$plist = value;
-		}
-
-		static
-		{
-			structDecl = Structures.makeStructDeclNative((Class) $assertion_content_native.class, assertions_low.$sym0$ASSERTION_CONTENT, assertions_low.$sym1$ASSERTION_CONTENT_P, assertions_low.$list3, assertions_low.$list4, new String[] { "$formula_data", "$mt", "$flags", "$arguments", "$plist" }, assertions_low.$list5, assertions_low.$list6, assertions_low.$sym7$DEFAULT_STRUCT_PRINT_FUNCTION);
-		}
-	}
-
-	public static final class $assertion_content_p$UnaryFunction extends UnaryFunction
-	{
-		public $assertion_content_p$UnaryFunction()
-		{
-			super(SubLTranslatedFile.extractFunctionNamed("ASSERTION-CONTENT-P"));
-		}
-
-		public SubLObject processItem(final SubLObject arg1)
-		{
-			return assertions_low.assertion_content_p(arg1);
-		}
 	}
 }

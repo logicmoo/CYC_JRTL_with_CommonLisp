@@ -61,7 +61,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 		return super.equalsS(obj);
 	}
 
-	/*final*/ protected StructureClass structureClass;
+	/*final*/ protected SlotClass structureClass;
 
 	protected StructureObject()
 	{
@@ -69,12 +69,14 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 
 	protected void setStructureClass(Symbol symbol)
 	{
-		structureClass = (StructureClass) LispClass.findClass(symbol/*, true*/); // Might return null.
+		StructureClass structureClass = (StructureClass) LispClass.findClass(symbol/*, true*/); // Might return null.
 		if (structureClass == null)
 		{
 			System.err.println("Oh noes, structure object got a null class:" + symbol + ", symbol name:" + symbol);
 			System.err.println("No mitens sitten: " + BuiltInClass.SYSTEM_STREAM);
 			System.err.println("joopa joo:" + Symbol.SYSTEM_STREAM);
+		} else {
+			this.structureClass =  structureClass;
 		}
 	}
 
@@ -165,6 +167,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 
 	public LispObject typeOf()
 	{
+		if (structureClass == null) return super.typeOf();
 		return structureClass.getLispClassName();
 	}
 
@@ -267,7 +270,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 
 	public LispObject typep(LispObject type)
 	{
-		if (type instanceof StructureClass) return memq(type, ((LispClass) classOf()).getCPL()) ? T : NIL;
+		if (type instanceof StructureClass) { return memq(type, ((LispClass) classOf()).getCPL()) ? T : NIL; }
 		if (type == thisTypeOf()) return T;
 		if (type == Symbol.STRUCTURE_OBJECT) return T;
 		if (type == BuiltInClass.STRUCTURE_OBJECT) return T;
@@ -747,6 +750,23 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 	protected void setStructureClass(StructureClass structureClass)
 	{
 		this.structureClass = structureClass;
+	}
+
+	@Override
+	public void setLayout(Layout structdecl)
+	{
+		if (structdecl != layout)
+		{
+			layout = structdecl;
+			LispObject lispClass = layout.getLispClass();
+			if (lispClass instanceof StructureClass)
+			{
+				setStructureClass((StructureClass) lispClass);
+			}
+			//updateLayoutSync();
+			SubLSymbol sym = layout.getStructName();
+			if (sym != null) setName(sym);
+		}
 	}
 
 }

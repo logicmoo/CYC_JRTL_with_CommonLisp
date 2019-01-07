@@ -231,7 +231,6 @@ public abstract class AbstractSubLObject extends Lisp  implements SubLObject
 		return SubLNil.NIL;
 	}
 
-
 	@Override
 	public void setField(int fieldNum, SubLObject value) {
 		type_error_str(this, "STRUCTURE");

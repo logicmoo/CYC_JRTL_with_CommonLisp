@@ -15,6 +15,7 @@ import org.openrdf.rio.RDFParseException;
 import org.openrdf.rio.RDFParser;
 import org.openrdf.rio.turtle.TurtleParserFactory;
 
+import com.cyc.cycjava.cycl.$constant_native;
 import com.cyc.cycjava.cycl.constant_handles;
 import com.cyc.cycjava.cycl.ke;
 import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
@@ -112,8 +113,8 @@ public class CycUtil {
 		// constants when you're not sure it exists
 		
 		SubLObject constSubL = toConst(constStr);
-		if (constSubL instanceof constant_handles.$constant_native) {
-			constant_handles.$constant_native constant = (constant_handles.$constant_native)constSubL;
+		if (constSubL instanceof $constant_native) {
+			$constant_native constant = ($constant_native)constSubL;
 			if (constant.$suid == SubLNil.NIL) {
 				logger.info("adding constant: "+ constStr);
 				ke.ke_create_now(makeString(constStr), CommonSymbols.UNPROVIDED);

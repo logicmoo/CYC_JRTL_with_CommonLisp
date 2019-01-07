@@ -5,10 +5,6 @@ package com.cyc.cycjava.cycl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sxhash;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality;
@@ -100,14 +96,14 @@ public final class constant_handles extends SubLTranslatedFile
     private static final SubLSymbol $sym36$NEW_CONSTANTS_TABLE_ENTRY_;
     private static final SubLSymbol $sym37$CONSTANTS_TABLE_TUPLE_TO_CONSTANT;
     private static final SubLList $list38;
-    private static final SubLSymbol $sym39$CONSTANT;
-    private static final SubLSymbol $sym40$CONSTANT_P;
+    static final SubLSymbol $sym39$CONSTANT;
+    static final SubLSymbol $sym40$CONSTANT_P;
     private static final SubLInteger $int41$140;
-    private static final SubLList $list42;
-    private static final SubLList $list43;
-    private static final SubLList $list44;
-    private static final SubLList $list45;
-    private static final SubLSymbol $sym46$PRINT_CONSTANT;
+    static final SubLList $list42;
+    static final SubLList $list43;
+    static final SubLList $list44;
+    static final SubLList $list45;
+    static final SubLSymbol $sym46$PRINT_CONSTANT;
     private static final SubLSymbol $sym47$CONSTANT_PRINT_FUNCTION_TRAMPOLINE;
     private static final SubLList $list48;
     private static final SubLSymbol $sym49$C_SUID;
@@ -1622,42 +1618,6 @@ public final class constant_handles extends SubLTranslatedFile
         $str81$Freeing_constants = SubLObjectFactory.makeString("Freeing constants");
         $sym82$INTEGERP = SubLObjectFactory.makeSymbol("INTEGERP");
         $str83$Rebuilding_constant_completion_ta = SubLObjectFactory.makeString("Rebuilding constant completion table");
-    }
-    
-    public static final class $constant_native extends SubLStructNative
-    {
-        public SubLObject $suid;
-        public SubLObject $name;
-        private static final SubLStructDeclNative structDecl;
-        
-        public $constant_native() {
-            this.$suid = (SubLObject)CommonSymbols.NIL;
-            this.$name = (SubLObject)CommonSymbols.NIL;
-        }
-        
-        public SubLStructDecl getStructDecl() {
-            return (SubLStructDecl)$constant_native.structDecl;
-        }
-        
-        public SubLObject getField2() {
-            return this.$suid;
-        }
-        
-        public SubLObject getField3() {
-            return this.$name;
-        }
-        
-        public SubLObject setField2(final SubLObject value) {
-            return this.$suid = value;
-        }
-        
-        public SubLObject setField3(final SubLObject value) {
-            return this.$name = value;
-        }
-        
-        static {
-            structDecl = Structures.makeStructDeclNative((Class)$constant_native.class, constant_handles.$sym39$CONSTANT, constant_handles.$sym40$CONSTANT_P, constant_handles.$list42, constant_handles.$list43, new String[] { "$suid", "$name" }, constant_handles.$list44, constant_handles.$list45, constant_handles.$sym46$PRINT_CONSTANT);
-        }
     }
     
     public static final class $constant_print_function_trampoline$BinaryFunction extends BinaryFunction

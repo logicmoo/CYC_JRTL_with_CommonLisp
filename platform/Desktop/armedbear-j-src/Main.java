@@ -32,7 +32,7 @@ public final class Main
             System.err.print("J requires Java 1.4 or later.");
             System.err.println(" (Java 1.4.2 is recommended.)");
             System.err.println("");
-            System.exit(1);
+            // System.exit(1);
         }
         try {
             Class c = Class.forName("org.armedbear.j.Editor");

@@ -49,18 +49,30 @@ public final class Larkc {
 	
 	// entry points for queries
 	public static VariableBinding sparqlSelect(SPARQLQuery theQuery, QoSParameters theQoSParameters) {
+		ensureDecider();
 		return decider.sparqlSelect(theQuery, theQoSParameters);
 	}
 	
 	public static SetOfStatements sparqlConstruct(SPARQLQuery theQuery, QoSParameters theQoSParameters){
+		ensureDecider();
 		return decider.sparqlConstruct(theQuery, theQoSParameters);
+	}
+
+
+	private static void ensureDecider()
+	{
+		if(decider==null) {
+			decider = pluginRegistry.startDecider();
+		}
 	}
 	
 	public static SetOfStatements sparqlDescribe(SPARQLQuery theQuery, QoSParameters theQoSParameters) {
+		ensureDecider();
 		return decider.sparqlDescribe(theQuery, theQoSParameters);
 	}
 	
 	public static BooleanInformationSet sparqlAsk(SPARQLQuery theQuery, QoSParameters theQoSParameters) {
+		ensureDecider();
 		return decider.sparqlAsk(theQuery, theQoSParameters);
 	}
 }
