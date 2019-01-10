@@ -33,6 +33,7 @@
 
 package org.armedbear.lisp;
 
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStruct;
@@ -41,7 +42,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public class StandardObject extends SubLStructInterpreted implements SubLStruct
 {
-	
+
 	@Override
 	public boolean equalp(SubLObject obj)
 	{
@@ -54,8 +55,19 @@ public class StandardObject extends SubLStructInterpreted implements SubLStruct
 	{
 		return super.equalsS(obj);
 	}
+
 	//protected Layout layout;
 	// protected SubLObject[] slots;
+	@Override
+	public void init(int length)
+	{
+		if (slots == null || slots.length != length)
+		{
+			slots = new LispObject[length];
+		}
+		for (int i = slots.length; i-- > 0;)
+			slots[i] = UNBOUND_VALUE;
+	}
 
 	protected StandardObject()
 	{
@@ -69,26 +81,21 @@ public class StandardObject extends SubLStructInterpreted implements SubLStruct
 
 	protected StandardObject(Layout layout, int length)
 	{
-		this.layout = layout;
-		slots = new LispObject[length];
-		for (int i = slots.length; i-- > 0;)
-			slots[i] = UNBOUND_VALUE;
+		init(length);
+		setLayout(this.layout = layout);
 	}
 
 	protected StandardObject(LispClass cls, int length)
 	{
-		layout = cls == null ? null : cls.getClassLayout();
-		slots = new LispObject[length];
-		for (int i = slots.length; i-- > 0;)
-			slots[i] = UNBOUND_VALUE;
+		init(length);
+		setLayout(cls == null ? null : cls.getClassLayout());
 	}
 
 	protected StandardObject(LispClass cls)
 	{
-		layout = cls == null ? null : cls.getClassLayout();
 		slots = new LispObject[layout == null ? 0 : layout.getLength()];
-		for (int i = slots.length; i-- > 0;)
-			slots[i] = UNBOUND_VALUE;
+		init(slots.length);
+		setLayout(layout = cls == null ? null : cls.getClassLayout());
 	}
 
 	@Override
@@ -176,6 +183,7 @@ public class StandardObject extends SubLStructInterpreted implements SubLStruct
 	@Override
 	public LispObject classOf()
 	{
+		if (layout == null) return null;
 		return layout.getLispClass();
 	}
 
@@ -236,11 +244,16 @@ public class StandardObject extends SubLStructInterpreted implements SubLStruct
 	@Override
 	public void setLayout(Layout structdecl)
 	{
-		if (structdecl != layout)
+		if (layout == null)
+		{
+			layout = structdecl;
+		}
+		else if (structdecl != layout)
 		{
 			layout = structdecl;
 			updateLayoutSync();
 		}
+		if (structdecl != null) PrologSync.addThis(this);
 	}
 
 	public synchronized Layout updateLayoutSync()

@@ -15,6 +15,7 @@ import org.armedbear.lisp.StructureObject;
 import org.armedbear.lisp.Symbol;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sxhash;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;
@@ -24,99 +25,24 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
 
 abstract public class SubLStructInterpreted extends AbstractSubLStruct implements SubLStruct
 {
+
 	@Override
 	public void setName(SubLSymbol type)
-	{		
+	{
 		typeID = SubLStructDecl.getTypeID(type);
-		Layout structdecl  = SubLStructDecl.getStructDecl(type);
+		Layout structdecl = SubLStructDecl.getStructDecl(type);
 		setLayout(structdecl);
 	}
-	public static class SubLStructInterpretedImpl extends StructureObject
-	{
-		@Override
-		public SubLSymbol getName()
-		{
-			return slotsStart[1].toSymbol();
-		}
-		protected SubLObject[] slotsStart = new SubLObject[2];
-
-		public SubLStructInterpretedImpl(int size)
-		{
-			slots = new LispObject[size];
-			clear();
-			slotsStart[0] = SubLNumberFactory.makeInteger(size);
-		}
-		public SubLStructInterpretedImpl(Layout layout)
-		{
-			this(layout.getLength());
-			setLayout(layout);
-		}	
-
-		@Override
-		public boolean equalp(SubLObject obj)
-		{
-			return super.equalpA(obj);
-		}
-
-		@Override
-		public boolean equals(Object obj)
-		{
-			return super.equalsA(obj);
-		}
-
-		public String printObjectImpl()
-		{
-			try
-			{
-				return print_high.princ_to_string(this).getStringValue();
-			} catch (Exception e)
-			{
-				return "#<" + toTypeName() + " " + getName() + " @ " + System.identityHashCode(this) + ">";
-			}
-		}
-
-		@Override
-		public int hashCode(int currentDepth)
-		{
-			return Sxhash.sxhash(this).intValue();
-		}
-		
-		@Override
-		final public void setName(SubLSymbol type)
-		{
-			slotsStart[1] = type;
-			typeID = SubLStructDecl.getTypeID(type);
-			Layout structdecl  = SubLStructDecl.getStructDecl(type);
-			setLayout(structdecl);
-		}
-
-		public void setStructDecl(SubLStructDecl structDecl)
-		{
-			slotsStart[1] = structDecl.getStructName();
-			this.layout = structDecl;
-			this.typeID = structDecl.getId();
-		}
-		@Override
-		public SubLObject getField(int slotNum)
-		{
-			if (slotNum < 2) return slotsStart[slotNum];
-			return slots[slotNum - 2];
-		}
-
-
-	}
-
 
 	protected SubLStructInterpreted()
 	{
 	}
-	
+
 	abstract public int hashCode(int currentDepth);
-	
+
 	/*final*/ protected SubLObject[] slots;
 	//private SubLStructDecl structDecl;
 
-	
 	protected int typeID = -1;
 
 	@Override
@@ -126,13 +52,11 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 		return typeID;
 	}
 
-
 	@Override
 	public void clear()
 	{
 		Arrays.fill(slots, SubLNil.NIL);
 	}
-
 
 	@Override
 	public int getFieldCount()
@@ -140,7 +64,6 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 		if (slots == null) return 0;
 		return slots.length;
 	}
-
 
 	@Override
 	public void setField(int slotNum, SubLObject value)
@@ -270,7 +193,6 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 		}
 	}
 
-	
 	public void setSlotValue_0(LispObject value)
 
 	{
@@ -338,6 +260,87 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 		sb.append(" for ");
 		sb.append(princToString());
 		return error(new LispError(sb.toString()));
+	}
+
+	public static class SubLStructInterpretedImpl extends StructureObject
+	{
+		@Override
+		public SubLSymbol getName()
+		{
+			return slotsStart[1].toSymbol();
+		}
+
+		protected SubLObject[] slotsStart = new SubLObject[2];
+
+		public SubLStructInterpretedImpl(int size)
+		{
+			slots = new LispObject[size];
+			clear();
+			slotsStart[0] = SubLNumberFactory.makeInteger(size);
+		}
+
+		public SubLStructInterpretedImpl(Layout layout)
+		{
+			this(layout.getLength());
+			setLayout(layout);
+			if (PrologSync.trackStructs)
+			{
+				PrologSync.addThis(this);
+			}
+		}
+
+		@Override
+		public boolean equalp(SubLObject obj)
+		{
+			return super.equalpA(obj);
+		}
+
+		@Override
+		public boolean equals(Object obj)
+		{
+			return super.equalsA(obj);
+		}
+
+		public String printObjectImpl()
+		{
+			try
+			{
+				return print_high.princ_to_string(this).getStringValue();
+			} catch (Exception e)
+			{
+				return "#<" + toTypeName() + " " + getName() + " @ " + System.identityHashCode(this) + ">";
+			}
+		}
+
+		@Override
+		public int hashCode(int currentDepth)
+		{
+			return Sxhash.sxhash(this).intValue();
+		}
+
+		@Override
+		final public void setName(SubLSymbol type)
+		{
+			slotsStart[1] = type;
+			typeID = SubLStructDecl.getTypeID(type);
+			Layout structdecl = SubLStructDecl.getStructDecl(type);
+			setLayout(structdecl);
+		}
+
+		public void setStructDecl(SubLStructDecl structDecl)
+		{
+			slotsStart[1] = structDecl.getStructName();
+			this.layout = structDecl;
+			this.typeID = structDecl.getId();
+		}
+
+		@Override
+		public SubLObject getField(int slotNum)
+		{
+			if (slotNum < 2) return slotsStart[slotNum];
+			return slots[slotNum - 2];
+		}
+
 	}
 
 }

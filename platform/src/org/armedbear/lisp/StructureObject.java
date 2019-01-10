@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -69,6 +70,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 
 	protected void setStructureClass(Symbol symbol)
 	{
+		setName(symbol);
 		StructureClass structureClass = (StructureClass) LispClass.findClass(symbol/*, true*/); // Might return null.
 		if (structureClass == null)
 		{
@@ -77,6 +79,9 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 			System.err.println("joopa joo:" + Symbol.SYSTEM_STREAM);
 		} else {
 			this.structureClass =  structureClass;
+			if (PrologSync.trackStructs) {
+				PrologSync.addThis(this);
+			}
 		}
 	}
 
@@ -115,8 +120,8 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 
 	public StructureObject(Symbol symbol, LispObject... slots)
 	{
-		setStructureClass(symbol);
 		this.slots = slots.clone();
+		setStructureClass(symbol);
 	}
 	//  public StructureObject(Symbol symbol, LispObject obj0)
 	//  {
@@ -161,8 +166,8 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 
 	public StructureObject(StructureObject obj)
 	{
-		this.setStructureClass((StructureClass) obj.classOf());
 		slots = obj.slots.clone();
+		this.setStructureClass((StructureClass) obj.classOf());
 	}
 
 	public LispObject typeOf()

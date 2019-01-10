@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.armedbear.lisp.Layout;
+import org.armedbear.lisp.LispClass;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.Primitive;
 import org.armedbear.lisp.SlotClass;
@@ -48,7 +49,15 @@ public class SubLStructDecl extends Layout
 	public static SubLStructDecl getStructDecl(SubLSymbol structName)
 	{
 		SubLStructDecl structDecl = SubLStructDecl.structNameToStructDeclMap.get(structName);
-		if (structDecl == null) Errors.error("Invalid struct name: " + structName);
+		if (structDecl == null)
+		{
+			LispClass lispClass = LispClass.findClass(structName.toLispObject());
+			if (lispClass == null)
+			{
+				Errors.error("Invalid struct name: " + structName.getName());
+			}
+			return (SubLStructDecl) lispClass.getClassLayout();
+		}
 		return structDecl;
 	}
 

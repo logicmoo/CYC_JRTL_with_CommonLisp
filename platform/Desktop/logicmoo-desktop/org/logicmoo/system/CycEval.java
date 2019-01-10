@@ -129,7 +129,14 @@ public final class CycEval {
 
 		@Override
 		public LispObject execute() {
-			return BeanShellCntrl.cyc_repl();
+			try
+			{
+				return BeanShellCntrl.cyc_repl();
+			} catch (Throwable e)
+			{
+				e.printStackTrace();
+				return new JavaException(e);
+			}
 		}
 
 	};
@@ -194,7 +201,15 @@ public final class CycEval {
 
 		@Override
 		public LispObject execute() {
-			BeanShellCntrl.init_subl();
+			try
+			{
+				BeanShellCntrl.init_subl();
+			} catch (InterruptedException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return new JavaException(e);
+			}
 			return T;
 		}
 	}

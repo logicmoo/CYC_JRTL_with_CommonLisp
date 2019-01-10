@@ -24,10 +24,10 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public abstract class AbstractSubLStruct extends LispObject implements SubLStruct
-{	
+{
 	@Override
 	abstract public void setLayout(Layout structdecl);
-	
+
 	//public org.jpl7.Term termRef;
 	public AbstractSubLStruct()
 	{
@@ -36,11 +36,10 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 		if (thiz instanceof Stream) return;
 		if (thiz instanceof GenericFunction) return;
 
-		if (false) PrologSync.addThis(this);
 	}
 
 	protected Layout layout;
-	
+
 	public SubLStructDecl getStructDecl()
 	{
 		if (layout != null) return (SubLStructDecl) layout;
@@ -58,9 +57,10 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 		if (name != NIL && name != UNBOUND_VALUE)
 		{
 			// TYPE-OF.9
-			final LispClass c2 = (LispClass) LispClass.findClass(name, false);
+			//final LispClass c2 = (LispClass) LispClass.findClass(name, false);
+			// dmiles sayz that the above line isnt right
+			final LispClass c2 = (LispClass) LispClass.findClass(name);
 			if (c2 != null) { return c2; }
-
 		}
 		return super.classOf();
 	}
@@ -71,7 +71,6 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 		//if(structureClass!=null) return structureClass.getLispClassName();
 		return (LispObject) getName();
 	}
-
 
 	public static String STRUCT_TYPE_NAME = "STRUCT";
 
@@ -359,7 +358,7 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 	@Override
 	public boolean canFastHash()
 	{
-		if(layout != null) return layout.isInterned;
+		if (layout != null) return layout.isInterned;
 		SubLStructDecl structDecl = getStructDecl();
 		return structDecl != null && structDecl.isInterned;
 	}

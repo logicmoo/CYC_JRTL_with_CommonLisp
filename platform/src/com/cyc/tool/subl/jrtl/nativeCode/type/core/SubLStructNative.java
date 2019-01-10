@@ -10,6 +10,7 @@ import org.armedbear.lisp.Layout;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;
@@ -27,6 +28,9 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 		if (layout == null)
 		{
 			layout = structdecl;
+			if (PrologSync.trackStructs) {
+				PrologSync.addThis(this);
+			}
 		}
 		else
 		{

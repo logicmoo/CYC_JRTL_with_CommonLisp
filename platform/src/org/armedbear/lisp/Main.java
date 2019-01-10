@@ -32,8 +32,12 @@
  */
 package org.armedbear.lisp;
 
-import java.io.File;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+import org.apache.commons.cli.Option;
 import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.JVMImpl;
 
@@ -41,93 +45,106 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 
-public final class Main {
+public final class Main
+{
 
-    public static final long startTimeMillis = System.currentTimeMillis();
-
+	public static final long startTimeMillis = System.currentTimeMillis();
 
 	static public Boolean isSublispDefault = false;
 
+	public static ThreadLocal<Boolean> isSubLisp = new ThreadLocal<Boolean>()
+	{
 
-	public static ThreadLocal<Boolean> isSubLisp = new ThreadLocal<Boolean>() {
-
-	    protected Boolean initialValue() {
-	        return isSublispDefault ;
-	    }
+		protected Boolean initialValue()
+		{
+			return isSublispDefault;
+		}
 
 	};
-	public static ThreadLocal<Boolean> isNoDebug = new ThreadLocal<Boolean>() {
+	public static ThreadLocal<Boolean> isNoDebug = new ThreadLocal<Boolean>()
+	{
 
-	    protected Boolean initialValue() {
-	        return Boolean.FALSE;
-	    }
+		protected Boolean initialValue()
+		{
+			return Boolean.FALSE;
+		}
 
 	};
 	public static boolean isSubLispBindingMode;
 
-	public static void main(final String[] args) throws InterruptedException {
-		BeanShellCntrl.disableProlog = true;
-		BeanShellCntrl.disablePrologSync = true;
-		Thread t = mainUnjoined(args);
-        if(true) {
-        	t.run();
-        	return;
-        }
-        t.start();
-        t.join();
+	public static void main(String[] args) throws InterruptedException
+	{
+		String[] argsNew = BeanShellCntrl.extractOptions(args);
+
+		Thread t = mainUnjoined(argsNew);
+		if (true)
+		{
+			t.run();
+			return;
+		}
+		t.start();
+		t.join();
 
 	}
-	public static Thread mainUnjoined(final String[] args) throws InterruptedException {
-        // Run the interpreter in a secondary thread so we can control the stack
-        // size.
-    	//Lisp.checkOutput(Symbol.STANDARD_OUTPUT,Lisp.stdout);
-       	globalContext.set(true);
+
+	public static Thread mainUnjoined(final String[] args) throws InterruptedException
+	{
+		// Run the interpreter in a secondary thread so we can control the stack
+		// size.
+		//Lisp.checkOutput(Symbol.STANDARD_OUTPUT,Lisp.stdout);
+		globalContext.set(true);
 		needIOConsole = false;
-    	Lisp.initLisp();
-    	passedArgs = args;
-        Runnable r = new SubLProcess("Main Process")
-        {
+		Lisp.initLisp();
+		passedArgs = args;
+		Runnable r = new SubLProcess("Main Process")
+		{
 			@Override
-			public void safeRun() {
-               try {
-            	   globalContext.set(true);
-            	   SubLMain.commonSymbolsOK = true;
+			public void safeRun()
+			{
+				try
+				{
+					globalContext.set(true);
+					SubLMain.commonSymbolsOK = true;
 					setSubLisp(false);
 					//Main.noSubLisp =true;
 					abclProcessArgs = true;
-					Main.noBSH =true;
+					Main.noBSH = true;
 					//File initialDir = new File("./");
-					 Interpreter interpreter = Interpreter.createDefaultInstance(args);
-					 /*Interpreter interpreter = Interpreter.createNewLispInstance(SystemCurrent.in, SystemCurrent.out,
-							 initialDir.getCanonicalPath(),
-                             Version.getLongVersionString());*/
-                    if (interpreter != null)
-                    	interpreter.run();
-               } catch (ProcessingTerminated e) {
-                   System.exit(e.getStatus());
-	            } catch (Throwable e) {
-	                throw JVMImpl.doThrow(e);
-	            }
-            }
-        };
-        Thread t = new SubLThread(null, r, Main.class.getClass().getName() , 4194304L);
-        return t;
-    }
+					Interpreter interpreter = Interpreter.createDefaultInstance(args);
+					/*Interpreter interpreter = Interpreter.createNewLispInstance(SystemCurrent.in, SystemCurrent.out,
+						 initialDir.getCanonicalPath(),
+					        Version.getLongVersionString());*/
+					if (interpreter != null) interpreter.run();
+				} catch (ProcessingTerminated e)
+				{
+					System.exit(e.getStatus());
+				} catch (Throwable e)
+				{
+					throw JVMImpl.doThrow(e);
+				}
+			}
+		};
+		Thread t = new SubLThread(null, r, Main.class.getClass().getName(), 4194304L);
+		return t;
+	}
 
-	public static boolean isSubLisp() {
+	public static boolean isSubLisp()
+	{
 		return isSubLisp.get();
 	}
 
-	public static void setSubLisp(boolean isSubLisp) {
+	public static void setSubLisp(boolean isSubLisp)
+	{
 		Main.isSubLisp.set(isSubLisp);
 	}
 
-
-	public static boolean isNoDebug() {
+	public static boolean isNoDebug()
+	{
 		return isNoDebug.get();
 	}
 
-	public static void setNoDebug(boolean isNoDebug) {
+	public static void setNoDebug(boolean isNoDebug)
+	{
 		Main.isNoDebug.set(isNoDebug);
 	}
 
@@ -137,15 +154,18 @@ public final class Main {
 	public static int lispInstances = 0;
 	public static boolean needIOConsole = true;
 	public static boolean needABCL = true;
-//	public static boolean commonSymbolsOK;
+	//	public static boolean commonSymbolsOK;
 	public static boolean noProlog = false;
 	public static boolean noExit = true;
 	public static boolean abclProcessArgs = false;
 	public static String[] passedArgs;
 
-	public static ThreadLocal<Boolean> globalContext = new ThreadLocal<Boolean>(){
-		protected Boolean initialValue() { return false;};
+	public static ThreadLocal<Boolean> globalContext = new ThreadLocal<Boolean>()
+	{
+		protected Boolean initialValue()
+		{
+			return false;
+		};
 	};
-
 
 }

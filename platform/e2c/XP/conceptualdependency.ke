@@ -1,0 +1,690 @@
+;;; ----------------------------------------------------------------
+;;; OpenCyc implementation of Conceptual Depencency theory (CD)
+;;; date created: feb 17, 2003, Yeb Havinga
+;;; last change: mar 18, 2003
+;;;
+;;; Purpose: link the general definitions of CD to the right opencyc predicate.
+;;; so when a more specific fact is added, the general CD variant can be asked.
+;;;
+;;; Though CD has its disadvantages, representing it's vocabulary against
+;;; OpenCyc's vocabulary may ease incorporation of Schank's other theories,
+;;; first in Schank's own terms, maybe later in a native Cyc representation.
+;;;
+;;; Created from info:
+;;; From Script, Plans, Goals and Understanding (Schank & Abelson) section 1.4
+;;; http://www.cs.berkeley.edu/~wilensky/c288/lectures/ConceptualDependency6topage.pdf
+;;; http://egeria.cs.cf.ac.uk/Dave/AI2/subsection3_9_1.html
+;;; http://acl.ldc.upenn.edu/C/C69/C69-0201.pdf
+;;; http://www.ee.cooper.edu/courses/course_pages/past_courses/EE459/SCHANK/
+;;; http://www.cc.gatech.edu/computing/classes/cs3361_96_spring/Fall95/Notes/cd.html
+;;; ----------------------------------------------------------------
+
+;;***********************************
+
+Default Mt: UniversalVocabularyMt.
+
+Constant: ConceptualDependencyVocabularyMt.
+isa: VocabularyMicrotheory.
+genlMt: BaseKB.
+
+comment: "#$ConceptualDependencyVocabularyMt contains the vocabulary for Schanks
+Conceptual Depencency Theory. Implemented to allow representation of Scripts in
+general terms (see #$PrimitiveAct and #$ConceptualCategory) of causal chains of
+events.".
+
+;;***********************************
+
+Default Mt: UniversalVocabularyMt.
+
+Constant: ConceptualDependencyMt.
+isa: TheoryMicrotheory.
+genlMt-Vocabulary: ConceptualDependencyVocabularyMt.
+genlMt: VertebratePhysiologyMt HumanActivitiesMt AnimalMovementMt.
+
+comment: "#$ConceptualDependencyMt contains general asserions about the
+Conceptual Depencency Theory. The meaning propositions underlying language are
+called conceptualizations. A conceptualization can be active (form is Actor
+Action Object Direction (Instrument)) or stative (form is Object (is in State
+(with Value)). The use of #$PrimitiveActs is essential for representing meanings
+especially if sentences that have the same meaning must be represented in only
+one way. Example; if you #$CD-MTrans something to your #$LTM, then it is present
+there (you know it). This is true whether the verb of #$CD-MTrans ing was 'see',
+'hear' or whatever.".
+
+;;; Note the comment of about 'you know it' -> I read it as
+;;; (implies
+;;;   (and
+;;;     (isa ?EVENT MTrans)
+;;;     (informationUsed ?EVENT ?AIT)    (or infoTransferred?)
+;;;     (informationDestination ?EVENT ?LTM)
+;;;     (memoryOfAgent ?LTM ?AGENT))
+;;;     (containsInfoPropositional ?AIT ?PROP)
+;;;   (knows ?AGENT ?PROP)
+
+;;***********************************
+
+Default Mt: UniversalVocabularyMt.
+
+Constant: CDTestDataMt.
+isa: DataMicrotheory.
+genlMt-Vocabulary: ConceptualDependencyVocabularyMt.
+genlMt: ConceptualDependencyMt.
+
+comment: "#$CDTestDataMt contains some tests.".
+
+;;; ----------------------------------------------------------------
+;;; Conceptual Categories
+;;; The SPGU book doesn't introduce them (and the library doesn't have 
+;;; "Conceptual Dependency: Theory of Natural Language Understanding",
+;;; so the comments are a bit short.
+;;; ----------------------------------------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: ConceptualCategory.
+isa: CollectionType.
+genls: Collection.
+
+comment: "The collection of conceptual categories. The conceptual level works
+with a system of rules that operate on conceptual categories. The categories are
+devided into #$GoverningConceptualCategory and #$AssistingConceptualCategory.".
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: GoverningConceptualCategory.
+isa: CollectionType.
+genls: ConceptualCategory.
+
+comment: "The collection of governing conceptual categories.".
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: AssistingConceptualCategory.
+isa: CollectionType.
+genls: ConceptualCategory.
+
+comment: "The collection of assisting conceptual categories.".
+
+;;----------------------------------
+
+F: (partitionedInto ConceptualCategory
+   (ThePartition GoverningConceptualCategory AssistingConceptualCategory)).
+
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-PP.
+isa: Collection GoverningConceptualCategory.
+genls: Individual.
+
+comment: "Picture producer. Real world objects; an actor or object; corresponds
+syntactically to concrete nominal nouns or noun forms. 'We require that a PP be
+a physical object. Since nouns are often physical
+objects, it might seem that a PP is basically a noun. Certainly many     
+nouns at the syntactic level map into PPs at the conceptual level, but no
+all. No abstract noun is a PP because no abstract noun denotes a physical
+object. Also certain nouns denote much more than just a physical object.
+Thus, "doctor" is mapped conceptually into a PP (human) plus other    
+information describing the particular types of human that a doctor is.'
+Thus, #$coExtensional with #$PartiallyTangible.".
+
+F: (coExtensional PartiallyTangible CD-PP).
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-ACT.
+isa: Collection GoverningConceptualCategory.
+coExtensional: Action.
+
+comment: "Real world actions; corresponds syntactically to verbs, verbal nouns,
+and most abstract nouns. #$coExtensional with #$Action.".
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-STATE.
+isa: Collection.
+coExtensional: StaticSituation.
+
+comment: "States (yes, this is a bad comment, but I only saw STATE
+mentioned a lot but nowhere defined. So I just assume coExtensional with 
+#$StaticSituation and move on :-)".
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-LOC.
+isa: Collection GoverningConceptualCategory.
+genls: SomethingExisting.
+coExtensional: SpatialThing-Localized.
+
+comment: "A location of a conceptualization.".
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-T.
+isa: Collection GoverningConceptualCategory.
+genls: TimeInterval.
+
+comment: "A time of a conceptualization; often has variant forms consisting of
+parts of a conceptualization.".
+
+F: (genls TimeInterval CD-T).
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-PA.
+isa: Collection AssistingConceptualCategory.
+genls: DisjointCollectionType.
+
+comment: "Attribute of an object or agent #$CD-PP. Corresponds (in English) to
+adjectives and some abstract nouns. ".
+
+F: (genls HumanBehavioralAttribute CD-PA)
+ (genls LocationStateAttribute CD-PA)
+ (genls ColorTingeAttribute CD-PA)
+ (genls HumanSkinColor CD-PA)
+ (genls PhysicalAttributeOfTangibleOnly CD-PA)
+ (genls TemperamentAttribute CD-PA)
+ (genls SurfaceAttribute CD-PA).
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-AA.
+isa: Collection AssistingConceptualCategory.
+genls: DisjointCollectionType.
+
+comment: "Attribute of an action #$CD-ACT. Corresponds (in English) to adverbs
+and indirectly objective abstract nouns.".
+
+F: (genls CommissiveIllocutionaryForce CD-AA)
+(genls ConstativeIllocutionaryForce CD-AA)
+(genls DirectiveIllocutionaryForce CD-AA)
+.
+
+;;; ----------------------------------------------------------------
+;;; Primitive acts
+;;; ----------------------------------------------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: PrimitiveAct.
+isa: CollectionType.
+genls: Collection.
+typeGenls: CD-ACT.
+
+comment: "The collection of the eleven primitive acts defined by CD.
+Each instance of this collection is a subcollection (specialisation) of
+#$CD-ACT. In contrast to the subcollections of #$CD-STATE, the number
+of primitive acts is strictly limited.
+A query to find relevant actorslots for a specific kind of primitive act is
+(and 
+   (genls ??EVENT MTrans) 
+   (genlPreds ??SPRED ?GENPRED) 
+   (argIsa ??SPRED ??N ??EVENT))".
+;;; there are not more than the 11 primitive acts.
+F: (completeCollectionExtent PrimitiveAct).
+;; PrimitiveAct is one way of deviding CD-ACT into subcollections.
+F: (facets-Generic CD-ACT PrimitiveAct).
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-ATrans.
+isa: Collection PrimitiveAct.
+genls: Event.
+
+comment: "The transfer of an abstract relationship such as possession, ownership
+or control. Thus, one sense of 'give' is: #$CD-ATrans something to someone else; a
+sense of 'take' is: CD-ATrans something to oneself.".
+
+;; Probably there are more specs.
+
+F: (genls ChangeInUserRights CD-ATrans)
+(genls MonetaryExchangeOfUserRights CD-ATrans)
+(genls ExchangeOfUserRights CD-ATrans)
+(genls ExchangeOfUserRights CD-ATrans)
+(genls GivingSomething CD-ATrans)
+(genls TemporaryChangeOfUserRights CD-ATrans)
+(genls TransferringPossession CD-ATrans).
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-PTrans.
+isa: Collection PrimitiveAct.
+genls: PhysicalEvent.
+
+comment: "The transfer of the physical location of an object. Thus, 'go' is
+#$CD-PTrans oneself to a place; 'put' is #$CD-PTrans of an object to a place.".
+
+F: (coExtensional Translocation CD-PTrans);
+;;;(genls CausingAnotherObjectsTranslationalMotion CD-PTrans).
+F: (genls CD-PTrans MovementEvent).
+
+
+;; add rules to imply isa ?Ptrans MovementEvent or Causing..Motion depending on actors.
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-Propel.
+isa: Collection PrimitiveAct.
+genls: PhysicalEvent CausingAnotherObjectsTranslationalMotion.
+
+comment: "The application of a physical force to an object. #$CD-Propel is used
+whenever a movement (#$CD-PTrans) took place. In English, 'push', 'pull', 'throw',
+'kick', have #$CD-Propel as part of them. 'John pushed the table to the wall' is a
+#$CD-Propel that causes a #$CD-PTrans. Often words that do not necessarily mean
+#$CD-Propel can probably infer #$CD-Propel. Thus 'break' means #$Do something that
+causes a change in physical state of a specific sort (where #$Do indicates an
+unknown #$CD-ACT).".
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-Move.
+isa: Collection PrimitiveAct.
+genls: BodyMovementEvent.
+
+comment: "The movement of a body part of an animal by that animal. #$CD-Move is
+nearly always the #$CD-ACT in an instrumental conceptualization for other #$CD-ACTs. That
+is, in order to throw, it it necessary to #$CD-Move one's arm. Likewise #$CD-Move foot
+is the instrument of 'kick' and #$CD-Move hand is often the instrument of the verb
+'hand'.".
+
+F: (genls BodyMovementEvent CD-Move).
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-Grasp.
+isa: Collection PrimitiveAct.
+genls: Event.
+
+comment: "The grasping og an object by an actor. The verbs 'hold', 'grab', 'let
+go' and 'throw' involve #$CD-Grasp or the ending of a #$CD-Grasp.".
+
+; the only (be it a bit specific perhaps) thing i could find was
+; graspingsomethingwith a tool.
+F: (genls GraspingSomethingWithATool CD-Grasp).
+
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-Ingest.
+isa: Collection PrimitiveAct.
+genls: Event.
+
+comment: "The taking in of an object by an animal to the inside of that animal.
+Most commonly semantics for the objects of #$CD-Ingest (that is, what is usually
+#$CD-Ingest ed) are food, liquid and gas. This 'eat', 'drink', 'smoke', 'breathe'
+are common examples of #$CD-Ingest.".
+
+F: (genls BiologicalIntakeEvent CD-Ingest).
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-Expel.
+isa: Collection PrimitiveAct.
+genls: Event EmittingAnObject.
+
+comment: "The expulsion of an object from the body of an animal into the
+physical world. Whatever #$CD-Expel ed is very likely to have been previously
+#$Ingest ed. Words for excretion and secretion are described by #$CD-Expel, among
+them 'sweat', 'spit and 'cry'.".
+
+F: (genls Exhaling CD-Expel)
+ (genls SecretionEvent CD-Expel).
+
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-MTrans.
+isa: Collection PrimitiveAct.
+genls: Event.
+
+comment: "The transfer of mental information between animals or within an
+animal. We partition memory into two pieces: The #$CP (conscious processor where
+something is thought of), and the #$LTM (long term memory where things are
+stored.) The various sense organs can also serve as the originators of an
+#$CD-MTrans. This, 'tell' is #$CD-MTrans between people, 'see' is #$CD-MTrans from eyes
+to #$CP, 'remember' is #$CD-MTrans from #$LTM to #$CP, 'forget' is the inability to
+do that, 'learn' is the #$CD-MTrans ing of new information to #$LTM.".
+
+F: (genls Communicating CD-MTrans)
+(genls InformationGathering CD-MTrans).
+
+; see also the predicate #$resultantMentalObjects
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-MBuild.
+isa: Collection PrimitiveAct.
+genls: Event.
+
+comment: "The construction by an animal of new information from old information.
+Thus, 'decide', 'conclude', 'imagine', 'consider', are common examples of
+#$MBuild.".
+
+F: (genls SelectingSomething CD-MBuild).
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-Speak.
+isa: Collection PrimitiveAct.
+genls: Event.
+
+comment: "The actions of producing sounds. Many objects can #$CD-Speak, but humans
+usually are #$CD-Speak ing as an instrument of #$CD-MTrans ing. The words 'say', 'play
+music', 'purr', 'scream' involve #$CD-Speak.".
+
+F: (genls Talking CD-Speak).
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+   
+Constant: CD-Attend.
+isa: Collection PrimitiveAct.
+coExtensional: Perceiving-Voluntary.
+
+comment: "The action of attending or focusing a sense organ towards a stimulus.
+#$CD-Attend ear is 'listen', #$CD-Attend eye is 'see' and so on. #$CD-Attend is nearly
+always referred to in English as the instrument of #$CD-MTrans. Thus, in Conceptual
+Dependency, 'see' is treated as #$CD-MTrans to #$CP from eye by instrument of
+#$CD-Attend eye to object".
+
+
+;;; ----------------------------------------------------------------
+;;; Conceptual Cases
+;;; We define the conceptual cases of an action to
+;;; be the set of such additional modifications of an action. There are four    
+;;; connceptual cases: OBJECTIVE, DIRECTIVE, RECIPIENT and INSTRUMENTAL.
+;;; Each ACT in Conceptual Dependency requires a                  
+;;; speecific number of cases (either two or three).                               
+;;; ----------------------------------------------------------------
+
+(hmm forget this part..)
+;; see #$instumentalRole, #$recipientOf..., #$purposeInEvent,
+
+;;; ----------------------------------------------------------------
+;;; Causation Types
+;;;
+;;; New OpenCYC predicates inspired by not existing constants mentioned in
+;;; current OpenCyc 0.7KB comments, and causal relations mentioned in the
+;;; following documents:
+;;; - HPKB material and sources that are relevant for the RKF year 2 challenge problem
+;;;   http://www.isi.edu/expect/projects/rkf/HPKB-material/
+;;; - The representation of actions in KM and Cyc
+;;;   at http://www-formal.stanford.edu/aarati/techreports/action-reps-frg-techreport.ps
+;;; - KE File: KE for the representation of the Vaccinia Virus Life Cycle (done in MELD) 
+;;;   at http://www.iet.com/Projects/RKF/KEForVirusLifeCycleRepresentation.txt
+;;; ----------------------------------------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CausalType.
+isa: PredicateCategory.
+genls: Predicate.
+; I'd like AsymmetricBinaryPredicate as genls, but there is 'rE' which is a ternary predicate.
+
+comment: "The collection of causal types defined by conceptual dependency theory. Each causal
+type is a predicate that causally relates instances of #$CD-ACTs and #$CD-STATES. See also
+#$ScriptCausalType, that causally relates specializations of #$CD-ACTs and #$CD-STATES.".
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: cd-r.
+isa: AsymmetricBinaryPredicate CausalType.
+genlPreds: postSituation.
+arg1Isa: CD-ACT.
+arg2Isa: CD-STATE.
+
+comment: "(#$cd-r ACT STATE) means that an ACT results in a STATE. A predicate that
+causally relates instances of actions and states.".
+;; hmm maybe also this..? but arg1 of postSituation is event, not action..
+;;; F: (genlPreds postSituation cd-r).
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: cd-E.
+isa: AsymmetricBinaryPredicate CausalType.
+genlPreds: different startsAfterStartingOf.
+arg1Isa: CD-STATE.
+arg2Isa: CD-ACT.
+comment: "(#$cd-E STATE ACT) means that a STATE enables an ACT. A predicate that
+causally relates instances of states and actions. Put different, state STATE is 
+a precondition for ACT. #$preconditionFor-SitEvent does not exist. Also it is
+not genlPreds #$preSituation, because it is not said that STATE ends just
+before the start of ACT.".
+; if a state enables an event, it also enables all the events' subevents.
+F: (transitiveViaArg cd-E subEvents 2).
+
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: cd-I.
+isa: AsymmetricBinaryPredicate CausalType.
+genlPreds: different startsAfterStartingOf.
+arg1Isa: Situation-Temporal.
+arg2Isa: CD-STATE MentalSituation.
+
+comment: "(#$cd-I STATE/ACT MSTATE) means that a STATE or ACT initiates a mental
+state MSTATE.".
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+;; to bad... cd-r already defined and this should be called cd-R..
+Constant: cd-R-MP.
+isa: AsymmetricBinaryPredicate CausalType.
+genlPreds: different startsAfterStartingOf.
+arg1Isa: CD-ACT MentalSituation.
+arg2Isa: CD-ACT PhysicalEvent.
+;; or ActionOnObject ?
+
+comment: "(#$cd-R-MP MENTALACT PHYSICALACT) means that a MENTALACT is the reason for a
+PHYSICALACT. (Mental acts include #$CD-MBuild and #$CD-MTrans, physical acts include
+#$CD-Propel, #$CD-PTrans, #$CD-Propel and #$CD-Move".
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: cd-dE.
+isa: AsymmetricBinaryPredicate CausalType.
+genlPreds: different startsAfterStartingOf.
+arg1Isa: CD-STATE.
+arg2Isa: CD-ACT.
+
+comment: "(#$cd-dE STATE ACT) means that a STATE disables an ACT. A predicate that
+causally relates instances of states and actions.".
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: cd-rE.
+isa: TernaryPredicate CausalType.
+arg1Isa: CD-ACT.
+arg2Isa: CD-STATE.
+arg3Isa: CD-ACT.
+
+comment: "(#$cd-rE ACT STATE ACT) an ACT results in a STATE which enables an ACT.".
+
+Default Mt: ConceptualDependencyMt.
+;; rebuild into smaller parts
+Direction: forward.
+F: (implies
+     (cd-rE ?CAUSEACT ?RESULTSTATE ?ENABLEDACT)
+     (and
+       (cd-r ?CAUSEACT ?RESULTSTATE)
+       (cd-E ?RESULTSTATE ?ENABLEDACT))).
+Direction: forward.
+;; rebuild into causes-EventEvent? (if that would exist)
+;F: (implies
+;     (cd-rE ?CAUSEACT ?RESULTSTATE ?ENABLEDACT)
+;     (causes-EventEvent ?CAUSEACT ?ENABLEDACT)).
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: cd-IR.
+isa: TernaryPredicate CausalType.
+arg1Isa: Situation-Temporal.
+arg2Isa: CD-STATE MentalSituation.
+arg3Isa: CD-ACT.
+
+comment: "(#$cd-IR ACT MSTATE ACT) an ACT or STATE initiates a thought MSTATE which
+is the reason to ACT.".
+
+Default Mt: ConceptualDependencyMt.
+;; rebuild into smaller parts
+Direction: forward.
+F: (implies
+     (cd-IR ?CAUSE ?IDEA ?ACTION)
+     (and
+       (cd-I ?CAUSE ?IDEA)
+       (cd-R-MP ?IDEA ?ACTION))).
+
+;;; ----------------------------------------------------------------
+;;; Misc stuff
+;;; CD:  PP <==> ACT    "PPs can perform actions"    
+;;; Cyc: if             isa(PP,IntelligentAgent)
+;;;      then           (performedBy ACT PP)
+;;;      else           (actors ACT PP)
+;;; CD:  ACT <-- PP	"ACTs can have objects of PPs"
+;;; Cyc: most general:  (actors ACT PP)
+;;;      more specific: almost every spec of actors.
+;;;                     examples: fromLocation
+;;;                               toLocation
+;;;                               objectActedOn
+;;;                               objectRemoved, -Selected, -Moving, -Emitted, -TakenCareOf
+;;;                               observers
+;;; ----------------------------------------------------------------
+
+
+
+;;; ----------------------------------------------------------------
+;;; Test
+;;; John gave Bill an orange for his cold
+;;; ----------------------------------------------------------------
+
+Default Mt: CDTestDataMt.
+
+Constant: CD-John.
+isa: Person.
+
+Constant: CD-Bill.
+isa: Person.
+
+Constant: Orange.
+isa: Collection.
+genls: Fruit.
+comment: "Just a quick hack to represent the collection of all oranges.".
+
+; John ATRANS orange to Bill
+;      rE
+; Bill INGEST orange to INSIDE(Bill)
+;      r
+; Bill HEALTH(POS Change)
+
+F:
+(thereExists ?ATRANS
+(thereExists ?ORANGE
+(thereExists ?BILLHASORANGE
+(thereExists ?INGEST
+(thereExists ?BILLBETTER
+  (and
+    (isa ?ATRANS CD-ATrans)
+    (isa ?ORANGE Orange)
+    (isa ?BILLHASORANGE CD-STATE)
+    (isa ?INGEST CD-Ingest)
+    (isa ?BILLBETTER CD-STATE)
+
+    (performedBy ?ATRANS CD-John)
+    (objectOfPossessionTransfer ?ATRANS ?ORANGE)
+
+    (cd-rE ?ATRANS ?BILLHASORANGE ?INGEST)
+    (holdsSometimeDuring ?BILLHASORANGE (owns CD-Bill ?ORANGE))
+    (performedBy ?INGEST CD-Bill)
+
+    (cd-r ?INGEST ?BILLBETTER)
+    (actors ?BILLBETTER CD-Bill)
+  
+)    
+))))).
+;; for health pos change make new DisjointCollectionType Health, and a healthattributedenoting
+;; function that takes integer as argument
+;; then calculate new healthvalue in BILLBETTER situation from old, and
+;; assert (holdsIn BILLBETTER (hasAttributes CD-Bill (HealthValueFn ?NEWVAL)))
+;; or something
+;;
+;; (genls CD-Health CD-STATE)
+;; (relationAllExists constituentInSituation CD-Health Animal)
+;; (implies
+;;   (and
+;;     (isa ?SIT CD-Health)
+;;     (constituentInSituation ?SIT ?PP))
+;;   (thereExists ?VALUE
+;;     (and
+;;       (isa ?VALUE HealthValue)
+;;       (holdsIn ?SIT (hasHealthValue ?PP ?VALUE)))))
+;;
+;; ACT <==> 
+;;      |  .---> HEALTH(a+2)
+;; PP <----|
+;;         .---< HEALTH(a)
+;;
+;; (thereExists ?CD-ACT
+;; (thereExists ?CD-PP
+;; (thereExists ?CD-HEALTHOLD
+;; (thereExists ?CD-HEALTHNEW
+;; (and
+;; (constituentInSituation ?CD-PP ?CD-HEALTHOLD)
+;; (constituentInSituation ?CD-PP ?CD-HEALTHNEW)
+;; (preSituation ?CD-ACT ?CD-HEALTHOLD)
+;; (postSituation ?CD-ACT ?CD-HEALTHNEW)
+;; (holdsIn ?CD-HEALTHOLD (hasHealthValue ?PP (HealthFn ?OLDVAL)))
+;; (holdsIn ?CD-HEALTHNEW (hasHealthValue ?PP (HealthFn ?NEWVAL)))
+;; (equals ?NEWVAL ?OLDVAL+2)
+;; )))))

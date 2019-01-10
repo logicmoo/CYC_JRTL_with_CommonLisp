@@ -85,6 +85,7 @@ abstract public class Layout extends LispObject
 	{
 		return isInterned;
 	}
+	public static Map<SubLSymbol, SubLStructDecl> structNameToStructDeclMap;
 
 	public void setStructName(SubLSymbol newStructName)
 	{
@@ -106,7 +107,6 @@ abstract public class Layout extends LispObject
 	protected SubLSymbol printFunction;
 	protected SubLSymbol hashFunction;
 	protected SubLSymbol testFunction;
-	public static Map<SubLSymbol, SubLStructDecl> structNameToStructDeclMap;
 	public static Map<SubLSymbol, Integer> structNameToIDMap;
 	public static int idCounter;
 

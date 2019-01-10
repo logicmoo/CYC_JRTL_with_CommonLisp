@@ -6681,6 +6681,12 @@ public class CycAccess {
       rs.close();
     }
   }
+  
+  public boolean isQueryTrue(CycList<Object> makeCycList, CycConstant knownConstantByName, int i, int timeoutMsecs)
+  {
+  	// TODO Auto-generated method stub
+  	return false;
+  }
 
   /**
    * Asks a Cyc query (new inference parameters) and returns the binding list for the given variable.
@@ -7258,6 +7264,18 @@ public class CycAccess {
     return canonicalBindings;
   }
 
+  public CycList askWithVariable(CycList query3, CycVariable roleVar, CycFort mtForUser, int i, String string)
+  {
+  	// TODO Auto-generated method stub
+  	return null;
+  }
+  
+  public CycList askWithVariables(CycList query, ArrayList variables, CycConstant knownConstantByName, int i, String string)
+  {
+  	// TODO Auto-generated method stub
+  	return null;
+  }
+  
   /**
    * Returns <tt>true</tt> iff the query is true in the knowledge base.
    *
@@ -10865,4 +10883,8 @@ public class CycAccess {
   
   private static ThreadLocal<CycAccess> currentCyc = new ThreadLocal<CycAccess>();
   private static Map<String, CycAccess> currentCycAccesses = Collections.synchronizedMap(new HashMap<String, CycAccess>());
+
+
+
+
 }

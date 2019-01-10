@@ -191,13 +191,13 @@ public class Atom extends StringHolder
 	 */
 	public String toString()
 	{
-		String value = this.value.replaceAll("\\", "\\\\") //				
-				.replaceAll("\n", "\\\n") //
-				.replaceAll("\r", "\\\r") //
-				.replaceAll("\t", "\\\t");
+		String value = this.value.replace("\\", "\\\\") //				
+				.replace("\n", "\\n") //
+				.replace("\r", "\\r") //
+				.replace("\t", "\\t");
 		
 		if ("string".equals(type))
-			return "\"" + value.replaceAll("\"", "\\\"") + "\"";
+			return "\"" + value.replace("\"", "\\\"") + "\"";
 
 		return (JPL.isSimpleName(value) ? value : "'" + value.replaceAll("'", "\\'") + "'");
 	}

@@ -1,0 +1,226 @@
+;;; ----------------------------------------------------------------
+;;; Test of OpenCyc implementation of CD and SPGU
+;;; date created: 09 03 2003, Yeb Havinga
+;;; last change: 06 05 2003
+;;; built on: ConceptualDependencyMt and SPGUMt
+;;; add conceptualdependency.ke and spgu.ke first.
+;;; ----------------------------------------------------------------
+
+;The classic example of Schank's theory is the restaurant script. The script has
+;the following characteristics:
+;Scene 1: Entering
+;S PTRANS S into restaurant, S ATTEND eyes to tables, S MBUILD where to sit, S
+;PTRANS S to table, S MOVE S to sitting position
+;Scene 2: Ordering
+;S PTRANS menu to S (menu already on table), S MBUILD choice of food, S MTRANS
+;signal to waiter, waiter PTRANS to table, S MTRANS 'I want food' to waiter,
+;waiter PTRANS to cook
+;Scene 3: Eating
+;Cook ATRANS food to waiter, waiter PTRANS food to S, S INGEST food
+;Scene 4: Exiting
+;waiter MOVE write check, waiter PTRANS to S, waiter ATRANS check to S, S ATRANS
+;money to waiter, S PTRANS out of restaurant
+
+;;; ----------------------------------------------------------------
+;;; The roles:      rolepredicate         spec of
+;;; the client (S)  #$customer    #$deliberateActors
+;;;   (in some scenes the object that is customer is also #$buyer)
+;;; the waiter	    #$waiter              #$deliberateActors
+;;;   (in some scenes the object that is the waiter is also #$seller,
+;;;    #$giver, #$presenter, #$entertainer)
+;;; the cook        #$cook                #$deliberateActors
+;;; the food	    #$food                #$actors
+;;;   (this object is in some scenes also #$objectPaidFor, #$objectMoving,
+;;;    #$products, #$thingsConsumed)
+;;; the check	    #$check               #$actors
+;;;   (in some scenes iboCreated)
+;;; the money       #$moneyTransferred
+;;; the restaurant  #$eventOccursAt
+;;; ----------------------------------------------------------------
+
+Default Mt: SPGUTestDataMt.
+
+Constant: customer.
+In Mt: SPGUTestVocabularyMt.
+isa: BinaryRolePredicate.
+arg1Isa: Situation-Temporal.
+arg2Isa: Person CD-PP.
+genlPreds: deliberateActors.
+comment: "(#$customer CD-STATE CD-PP) means that the person CD-PP
+is the client in CD-STATE. (which is a static situation that references
+the #$RestaurantScript.)".
+
+Constant: waiter.
+In Mt: SPGUTestVocabularyMt.
+isa: BinaryRolePredicate.
+arg1Isa: Situation-Temporal.
+arg2Isa: Person CD-PP.
+genlPreds: deliberateActors.
+comment: "(#$waiter CD-STATE CD-PP) means that the person CD-PP
+is the waiter in CD-STATE. (which is a static situation that references
+the #$RestaurantScript.)".
+
+Constant: cook.
+In Mt: SPGUTestVocabularyMt.
+isa: BinaryRolePredicate.
+arg1Isa: Situation-Temporal.
+arg2Isa: Person CD-PP.
+genlPreds: deliberateActors.
+comment: "(#$cook CD-STATE CD-PP) means that the person CD-PP
+is the cook in CD-STATE which is a static situation that references
+the #$RestaurantScript.".
+
+Constant: theFood.
+In Mt: SPGUTestVocabularyMt.
+isa: BinaryRolePredicate.
+arg1Isa: Situation-Temporal.
+arg2Isa: FoodOrDrink CD-PP.
+genlPreds: deliberateActors.
+comment: "(#$theFood CD-STATE CD-PP) means that the object CD-PP
+is the food in CD-STATE which is a static situation that references
+the #$RestaurantScript.".
+
+Constant: check.
+In Mt: SPGUTestVocabularyMt.
+isa: BinaryRolePredicate.
+arg1Isa: Situation-Temporal.
+arg2Isa: Bill-PaymentRequest CD-PP.
+genlPreds: deliberateActors.
+comment: "(#$check CD-STATE CD-PP) means that the object CD-PP
+is the check in CD-STATE which is a static situation that references
+the #$RestaurantScript.".
+
+
+;;; ----------------------------------------------------------------
+;;; The script and subscripts
+;;; Hmmm... relation between a scene and the act and the roles:
+;;; There has to be something that captures act/role combinations: atomic scripts?
+
+Constant: RestaurantScript.
+In Mt: SPGUTestDataMt.
+isa: Script.
+; these two roles are required. Note that requiredRolesForScript is TVA with respect
+; to subScripts, so these two roles are required throughout all subscripts.
+requiredRolesForScript: customer eventOccursAt.
+comment: "This first order object is the restaurant script.".
+F: (scriptRoleIsa (ScriptRoleFn RestaurantScript eventOccursAt)  Restaurant-Organization).
+F: (scriptRoleIsa (ScriptRoleFn RestaurantScript customer)  Person).
+
+Constant: RestaurantScriptScene1.
+In Mt: SPGUTestDataMt.
+isa: Script.
+comment: "Scene 1: Entering. S PTRANS S into restaurant, S ATTEND eyes to tables,
+S MBUILD where to sit, S PTRANS S to table,S MOVE S to sitting position.".
+F: (subScripts RestaurantScript RestaurantScriptScene1).
+
+Constant: RSAtomicScene1.
+In Mt: SPGUTestDataMt.
+isa: AtomicActionScript.
+scriptACT: CD-PTrans.
+requiredRolesForScript: primaryObjectMoving toLocation.
+comment: "S PTRANS S into restaurant.".
+F: (subScripts RestaurantScriptScene1 RSAtomicScene1).
+; the primary object moving is the customer, the toLocation is the restaurant where it occurs.
+F: (equals (ScriptRoleFn RSAtomicScene1 primaryObjectMoving) (ScriptRoleFn RestaurantScript customer)).
+F: (equals (ScriptRoleFn RSAtomicScene1 performedBy) (ScriptRoleFn RestaurantScript customer)).
+F: (equals (ScriptRoleFn RSAtomicScene1 toLocation) (ScriptRoleFn RestaurantScript eventOccursAt)).
+
+Constant: RSState1.
+In Mt: SPGUTestDataMt.
+isa: StateScript.
+; maybe define state 'being somewhere?'
+scriptSTATE: CD-STATE.
+;rolesForScript: eventOccursAt.
+comment: "The state that is the result (and of which the characteristics are the goal of entering the restaurant.)
+'The customer being in the restaurant'.".
+;F: (subScripts RestaurantScriptScene1 RSState1).
+; the primary object moving is the customer, the toLocation is the restaurant where it occurs.
+;F: (holdsIn THIS STATE (The client is in the restaurant).
+F: (subScripts RestaurantScriptScene1 RSState1).
+; In this situation, the client is in the restaurant
+Direction: forward.
+F: (implies
+ (and
+   (subSituations ?EATING ?BEINGINRESTAURANT)
+   (storyReferences ?EATING RestaurantScript)
+   (storyReferences ?BEINGINRESTAURANT RSState1)
+   (eventOccursAt ?EATING ?RESTAURANT)
+   (customer ?EATING ?PERSON))
+ (holdsIn ?BEINGINRESTAURANT (objectFoundInLocation ?PERSON ?RESTAURANT))).
+; the result of 'an entering', is that 'the customer' is in 'the restaurant'
+F: (cd-r-ScriptScript RSAtomicScene1 RSState1).
+
+Constant: Table.
+In Mt: SPGUTestDataMt.
+isa: Collection.
+genls: SpatialThing-Localized PartiallyTangible.
+comment: "The collection of all tables.".
+
+Constant: RSAtomicScene2.
+In Mt: SPGUTestDataMt.
+isa: AtomicActionScript.
+scriptACT: LookingForSomething CD-Attend.
+; (event occurs at is implicit via transitivity of requiredRolesForScript)
+requiredRolesForScript: objectSought performedBy.
+comment: "S ATTEND eyes to tables.".
+F: (subScripts RestaurantScriptScene1 RSAtomicScene2).
+; the objects sought are the tables in the restaurant
+Direction: forward.
+F: (implies
+ (and
+   (eventOccursAt ?EATING ?RESTAURANT)
+   (objectFoundInLocation ?TABLE ?RESTAURANT)
+   (isa ?TABLE Table)
+   (storyReferences ?EATING RestaurantScript)
+   (storyReferences ?SUBEVENT RSAtomicScene2)
+   (subEvents ?EATING ?SUBEVENT))
+ (objectSought ?SUBEVENT ?TABLE)).
+F: (equals (ScriptRoleFn RSAtomicScene2 performedBy) (ScriptRoleFn RestaurantScript customer)).
+F: (scriptRoleIsa (ScriptRoleFn RSAtomicScene2 objectSought) Table).
+
+; 'the customer being in the restaurant' enables looking for tables. Actually, it enables a lot of
+; things.
+F: (cd-E-ScriptScript RSState1 RSAtomicScene2).
+
+; the tables in restaurants.(SubcollectionOfWithRelationFromTypeFn #$Table #$objectFoundInLocation #$Restaurant-Object)
+
+Constant: RSAtomicScene3.
+In Mt: SPGUTestDataMt.
+isa: AtomicActionScript.
+scriptACT: CD-MBuild SelectingSomething.
+requiredRolesForScript: objectSelected performedBy.
+comment: "S MBUILD where to sit. Choose one of the objectSought tables of the previous event.".
+F: (subScripts RestaurantScriptScene1 RSAtomicScene3).
+F: (equals (ScriptRoleFn RSAtomicScene3 performedBy) (ScriptRoleFn RestaurantScript customer)).
+F: (scriptRoleIsa (ScriptRoleFn RSAtomicScene3 objectSelected) Table).
+
+Constant: RSAtomicScene4.
+In Mt: SPGUTestDataMt.
+isa: AtomicActionScript.
+scriptACT: CD-PTrans.
+requiredRolesForScript: primaryObjectMoving toLocation.
+comment: "S PTRANS S to table.".
+F: (subScripts RestaurantScriptScene1 RSAtomicScene4).
+F: (equals (ScriptRoleFn RSAtomicScene4 primaryObjectMoving) (ScriptRoleFn RestaurantScript customer)).
+F: (equals (ScriptRoleFn RSAtomicScene4 toLocation) (ScriptRoleFn RSAtomicScene3 objectSelected)).
+
+;;scene 4 enables scene 5... script enables...
+
+
+Constant: RestaurantScriptScene2.
+In Mt: SPGUTestDataMt.
+isa: Script.
+comment: "Ordering.".
+
+Constant: RestaurantScriptScene3.
+In Mt: SPGUTestDataMt.
+isa: Script.
+comment: "Eating.".
+
+Constant: RestaurantScriptScene4.
+In Mt: SPGUTestDataMt.
+isa: Script.
+comment: "Exiting.".
+
+
+

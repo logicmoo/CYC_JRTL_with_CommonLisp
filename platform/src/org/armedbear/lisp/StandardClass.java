@@ -35,6 +35,8 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
 
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
+
 public class StandardClass extends SlotClass
 {
   // Slot names for standard-class.  Must agree with
@@ -63,7 +65,7 @@ public class StandardClass extends SlotClass
 
 
   static Layout layoutStandardClass =
-      new Layout(null,
+      new SubLStructDecl(null,
                  list(symName,
                       symLayout,
                       symDirectSuperclasses,
@@ -85,7 +87,7 @@ public class StandardClass extends SlotClass
       };
 
   static Layout layoutFuncallableStandardClass =
-      new Layout(null,
+      new SubLStructDecl(null,
                  list(symName,
                       symLayout,
                       symDirectSuperclasses,

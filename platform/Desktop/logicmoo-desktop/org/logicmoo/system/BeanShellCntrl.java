@@ -6,7 +6,6 @@ import static org.armedbear.lisp.Lisp.PACKAGE_CYC;
 import static org.armedbear.lisp.Lisp.PACKAGE_EXT;
 import static org.armedbear.lisp.Lisp.PACKAGE_JAVA;
 import static org.armedbear.lisp.Lisp.PACKAGE_SUBLISP;
-import static org.armedbear.lisp.Lisp.T;
 
 import java.awt.Container;
 import java.awt.Toolkit;
@@ -26,8 +25,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -117,6 +118,7 @@ import bsh.util.JConsole;
 import eu.larkc.core.orchestrator.LarkcInit;
 import eu.larkc.core.orchestrator.servers.LarKCHttpServer;
 import sun.misc.Unsafe;
+
 //import static org.slf4j.spi.LocationAwareLogger.log;
 public class BeanShellCntrl
 {
@@ -128,45 +130,73 @@ public class BeanShellCntrl
 			return "StartupLock";
 		}
 	};
+	public static boolean disableBeanDesk = true;
+	static public boolean disablePrologJNI = false;
+	static public boolean disablePrologSync = false;
+
+	public static String[] extractOptions(String[] args)
+	{
+		List<String> argsList = new ArrayList<String>(Arrays.asList(args));
+		if (argsList.remove("--prolog"))
+		{
+			disablePrologJNI = false;
+		}
+		if (argsList.remove("--noprolog"))
+		{
+			disablePrologJNI = true;
+		}
+		if (argsList.remove("--prologsync"))
+		{
+			disablePrologSync = false;
+			disablePrologJNI = false;
+		}
+		if (argsList.remove("--noprologsync"))
+		{
+			disablePrologSync = true;
+		}
+		if (argsList.remove("--headless"))
+		{
+			disableBeanDesk = true;
+		}
+		if (argsList.remove("--beandesk"))
+		{
+			disableBeanDesk = false;
+		}
+		String[] argsNew = argsList.toArray(new String[argsList.size()]);
+		return argsNew;
+	}
 
 	static public BeanBowl bowl = new BeanBowl();
 
 	static public boolean calledStartAppdatper = false;
 	static public boolean calledStartDmiles = false;
 
+	static public boolean started_from_prolog = true;
+	static boolean swipl_inited_server = false;
+
 	static public Object dbrowser;
-
 	static Container desktop;
-	static public boolean disableProlog = false;
-	static public boolean disablePrologSync = true;
 	static Editor editor = null;
-	static public final LispObject[] EMPTY_LISP_OBJECT = new LispObject[0];
 
+	static public boolean inited_subl;
 	static public boolean inited_cyc;
-
 	static public boolean inited_kb;
 	static public boolean inited_cyc_server;
-
-    static public boolean inited_cyc_complete;
+	static public boolean inited_cyc_complete;
 
 	// final static public BeanBowlGUI gui = BeanBowlGUI.getDefaultFrame();
 
-	static public boolean inited_subl;
-
 	static public Interpreter interpreter;
 
-	static public Method multiMethod = null;
-	static public Map<String, Symbol> prologMethods = new HashMap();
-
+	final static public Map<String, Symbol> prologMethods = new HashMap();
+	final static public Method multiMethod;
 	final static Map<String, CreationInfo> singletons = new HashMap<String, CreationInfo>();
+	static public final LispObject[] EMPTY_LISP_OBJECT = new LispObject[0];
 
-	static boolean swipl_inited_server = false;
-
-	static public boolean started_from_prolog = false;
-	
-  static {
-  	int hc = CycEval.CYC_EVAL.hotCount;
-  }
+	static
+	{
+		int hc = CycEval.CYC_EVAL.hotCount;
+	}
 
 	static public void addConsole(bsh.This thiz, final JConsole console) throws UtilEvalError, EvalError, InterruptedException
 	{
@@ -188,7 +218,8 @@ public class BeanShellCntrl
 				}
 				connectLisp(myName, console);
 				return;
-			} else if (myNameL.contains("prolog"))
+			}
+			else if (myNameL.contains("prolog"))
 			{
 				/// console.setNameCompletion(new LispNameCompletion());
 				connectProlog(myName, console);
@@ -228,8 +259,7 @@ public class BeanShellCntrl
 	static public String addObject(String named, Object value, boolean showNow)
 	{
 		bowl.addBean(named, value);
-		if (showNow)
-			DemoBrowser.showObject(value);
+		if (showNow) DemoBrowser.showObject(value);
 		return bowl.getWrapper(value).getName();
 	}
 
@@ -252,8 +282,7 @@ public class BeanShellCntrl
 		if (inited_cyc_complete)
 		{
 			SubLObject found = constant_reader.find_constant_by_name(ss);
-			if (found instanceof SubLStruct)
-				return found.toLispObject();
+			if (found instanceof SubLStruct) return found.toLispObject();
 		}
 		boolean caseMatters = (!s.toLowerCase().equals(s));
 		// boolean caseMattersU = (!s.toUpperCase().equals(s));
@@ -262,7 +291,8 @@ public class BeanShellCntrl
 		if (caseMatters)
 		{
 			o = Lisp.readObjectFromString(s);
-		} else
+		}
+		else
 		{
 			o = org.armedbear.lisp.Interpreter.readFromString(s);
 		}
@@ -274,10 +304,7 @@ public class BeanShellCntrl
 	{
 
 		java.util.List<VirtualMachineDescriptor> descs = VirtualMachine.list();
-		if (descs.size() == 0)
-		{
-			return false;
-		}
+		if (descs.size() == 0) { return false; }
 		VirtualMachineDescriptor desc = descs.get(0);
 		// attach to target VM
 		VirtualMachine vm = VirtualMachine.attach(desc);
@@ -304,19 +331,18 @@ public class BeanShellCntrl
 
 	static public void bp()
 	{
-		if (false)
-			;
+		if (false) ;
 		// BeanBowlGUI.startBeanBowl();
 	}
 
 	@LispMethod
 	synchronized static public void bsh_desktop()
 	{
+		if (disableBeanDesk) return;
 		try
 		{
-			if (calledStartDmiles)
-				return;
-			// calledStartDmiles = true;
+			if (calledStartDmiles) return;
+			calledStartDmiles = true;
 
 			ensureBSH().eval("startDmiles()");
 
@@ -351,8 +377,7 @@ public class BeanShellCntrl
 	@LispMethod
 	static public Object bsh_eval(Object form) throws EvalError
 	{
-		if (form instanceof String)
-			return ensureBSH().eval((String) form);
+		if (form instanceof String) return ensureBSH().eval((String) form);
 		if (form instanceof File)
 		{
 			try
@@ -378,8 +403,7 @@ public class BeanShellCntrl
 	@LispMethod
 	static public LispObject bsh_exec(LispObject arg) throws EvalError
 	{
-		if (arg.isString())
-			return JavaObject.getInstance(BeanShellCntrl.bsh_eval(arg.getStringValue()), true, null);
+		if (arg.isString()) return JavaObject.getInstance(BeanShellCntrl.bsh_eval(arg.getStringValue()), true, null);
 		return JavaObject.getInstance(BeanShellCntrl.bsh_eval((String) arg.javaInstance()), true, null);
 	}
 
@@ -403,8 +427,7 @@ public class BeanShellCntrl
 			}
 		}
 		boolean wasNoDebug = Main.isNoDebug();
-		if (found == null)
-			throw new JPLException("No method " + key);
+		if (found == null) throw new JPLException("No method " + key);
 		try
 		{
 			if (!wasNoDebug)
@@ -418,10 +441,7 @@ public class BeanShellCntrl
 			{
 				Main.setNoDebug(false);
 			}
-			if (t instanceof JPLException)
-			{
-				throw (JPLException) t;
-			}
+			if (t instanceof JPLException) { throw (JPLException) t; }
 			throw new JPLException(createStackTraceString(t));
 		}
 	}
@@ -450,7 +470,7 @@ public class BeanShellCntrl
 		PACKAGE_CL_USER.usePackage(PACKAGE_JAVA, true);
 		PACKAGE_CL_USER.usePackage(PACKAGE_CL, true);
 		PACKAGE_CL_USER.addNickname("USER");
-    //  PACKAGE_SUBLISP.usePackage(PACKAGE_CL, true);
+		//  PACKAGE_SUBLISP.usePackage(PACKAGE_CL, true);
 	}
 
 	@LispMethod
@@ -479,7 +499,7 @@ public class BeanShellCntrl
 
 		if (Main.lispInstances == 0)
 		{
-			Main.passedArgs = new String[]{"--load", "cyc"};
+			Main.passedArgs = new String[] { "--load", "cyc" };
 			// Thread t = Main.mainUnjoined(new String[] { "--load", "cyc" });
 			// t.start();
 			// return console;
@@ -520,8 +540,7 @@ public class BeanShellCntrl
 			try
 			{
 				p = new Socket("localhost", 4023);
-				if (!p.isConnected())
-					p.connect(p.getRemoteSocketAddress(), 2000);// endpoint,
+				if (!p.isConnected()) p.connect(p.getRemoteSocketAddress(), 2000);// endpoint,
 				// 1000);
 			} catch (IOException sto)
 			{
@@ -593,60 +612,73 @@ public class BeanShellCntrl
 
 	@LispMethod
 	static public SubLObject cyc_eval_string(String str)
-	{		
+	{
 		boolean wasSubLisp = Main.isSubLisp();
 		Main.setSubLisp(true);
-		try {
-			return Eval.eval( str);
-		} finally {
+		try
+		{
+			return Eval.eval(str);
+		} finally
+		{
 			Main.setSubLisp(wasSubLisp);
 		}
 	}
+
 	@LispMethod
 	static public SubLObject cyc_eval(final String str)
 	{
-		return while_not_changing_package( new Callable<SubLObject>() {
+		return while_not_changing_package(new Callable<SubLObject>()
+		{
 			@Override
-			public SubLObject call() throws Exception {
+			public SubLObject call() throws Exception
+			{
 				return cyc_eval_string(str);
-			}			
+			}
 		});
 	}
-	
+
 	@LispMethod
-	static public <T> T while_not_changing_package(Callable<T> str) 
+	static public <T> T while_not_changing_package(Callable<T> str)
 	{
 		SubLPackage prevPackage = SubLPackage.getCurrentPackage();
-		try {
-		  return str.call();
-		} catch (Exception e) {			
-			throw JVMImpl.doThrow(e);			
-		} finally {
+		try
+		{
+			return str.call();
+		} catch (Exception e)
+		{
+			throw JVMImpl.doThrow(e);
+		} finally
+		{
 			SubLPackage.setCurrentPackage(prevPackage);
 		}
 	}
+
 	@LispMethod
 	static public SubLObject cyc_eval(SubLCons specialForm, SubLEnvironment env)
-	{		
+	{
 		boolean wasSubLisp = Main.isSubLisp();
 		Main.setSubLisp(true);
-		try {
+		try
+		{
 
 			SubLListListIterator iter = null;
 			Resourcer resourcer = Resourcer.getInstance();
-			try {
+			try
+			{
 				iter = resourcer.acquireSubLListListIterator(specialForm);
 				return SubLSpecialOperatorDeclarations.list_progn(iter, env);
-			} finally {
+			} finally
+			{
 				resourcer.releaseSubLListListIterator(iter);
 			}
-		} finally {
+		} finally
+		{
 			Main.setSubLisp(wasSubLisp);
 		}
 	}
 
 	@LispMethod
-	static public LispObject cyc_repl()
+	static public LispObject cyc_repl() throws InterruptedException
 	{
 		boolean wasSubLisp = Main.isSubLisp();
 		init_subl();
@@ -660,8 +692,7 @@ public class BeanShellCntrl
 		{
 			try
 			{
-				if (false && SubLMain.shouldRunReadloopInGUI())
-					SubLMain.setMainReader(SubLReaderPanel.startReadloopWindow());
+				if (false && SubLMain.shouldRunReadloopInGUI()) SubLMain.setMainReader(SubLReaderPanel.startReadloopWindow());
 
 				SLR.setThread(SubLProcess.currentSubLThread());
 
@@ -696,11 +727,9 @@ public class BeanShellCntrl
 		pw.println(pw.getClass() + " sihc=" + System.identityHashCode(in));
 	}
 
-
 	static public void describeStreams()
 	{
-		if (true)
-			return;
+		if (true) return;
 		final StringBuilder string = new StringBuilder();
 		OutputStream outputStream = new OutputStream()
 		{
@@ -728,8 +757,7 @@ public class BeanShellCntrl
 
 	static public bsh.Interpreter ensureBSH()
 	{
-		if (interpreter == null)
-			interpreter = new bsh.Interpreter();
+		if (interpreter == null) interpreter = new bsh.Interpreter();
 		return interpreter;
 	}
 
@@ -765,8 +793,7 @@ public class BeanShellCntrl
 	{
 		synchronized (StartupLock)
 		{
-			if (desktop != null)
-				return desktop;
+			if (desktop != null) return desktop;
 		}
 		NameSpace ns = ((This) thiz).getNameSpace();
 		Object pane;
@@ -861,8 +888,7 @@ public class BeanShellCntrl
 			js = "+" + js.substring(1, js.length() - 2) + "+";
 		}
 		js = js.toUpperCase();
-		if (pkg == null)
-			pkg = org.armedbear.lisp.Package.getCurrentPackage();
+		if (pkg == null) pkg = org.armedbear.lisp.Package.getCurrentPackage();
 		Symbol sym = ((Package) pkg).internAndExport(js);
 
 		exportInCyc(sym);
@@ -880,8 +906,7 @@ public class BeanShellCntrl
 		{
 			String named = Lisp.getDotName(isc);
 			CreationInfo was = singletons.get(named);
-			if (was == null)
-				return null;
+			if (was == null) return null;
 			return (T) was.value;
 		}
 	}
@@ -904,8 +929,7 @@ public class BeanShellCntrl
 	{
 		synchronized (StartupLock)
 		{
-			if (inited_cyc)
-				return;
+			if (inited_cyc) return;
 			inited_cyc = true;
 		}
 
@@ -916,15 +940,15 @@ public class BeanShellCntrl
 			SubLPackage prevPackage = SubLPackage.getCurrentPackage();
 			try
 			{
-				init_subl();				 
+				init_subl();
 				SubLMain.handleInits();
-				SubLMain.initializeTranslatedSystems();				
+				SubLMain.initializeTranslatedSystems();
 				inited_cyc = true;
 				inited_cyc_complete = true;
 			} catch (Throwable e)
 			{
 				inited_cyc_complete = false;
-				throw JVMImpl.doThrow(e);								
+				throw JVMImpl.doThrow(e);
 			} finally
 			{
 
@@ -949,8 +973,7 @@ public class BeanShellCntrl
 	{
 		synchronized (StartupLock)
 		{
-			if (inited_kb)
-				return;
+			if (inited_kb) return;
 			inited_kb = true;
 		}
 
@@ -982,8 +1005,7 @@ public class BeanShellCntrl
 	{
 		synchronized (StartupLock)
 		{
-			if (inited_cyc_server)
-				return;
+			if (inited_cyc_server) return;
 		}
 		boolean wasSubLisp = Main.isSubLisp();
 		Main.setSubLisp(true);
@@ -995,10 +1017,10 @@ public class BeanShellCntrl
 				init_cyc();
 				SubLPackage.setCurrentPackage("CYC");
 				Eval.eval("(sl:load \"init/services-init.lisp\")");
-			    SubLFiles.initialize("eu.larkc.core.orchestrator.LarkcInit");	    
-			    SubLFiles.initialize("eu.larkc.core.orchestrator.servers.LarKCHttpServer");
-			    LarkcInit.initializeLarkc();
-			    LarKCHttpServer.start_sparql_server();
+				SubLFiles.initialize("eu.larkc.core.orchestrator.LarkcInit");
+				SubLFiles.initialize("eu.larkc.core.orchestrator.servers.LarKCHttpServer");
+				LarkcInit.initializeLarkc();
+				LarKCHttpServer.start_sparql_server();
 				inited_cyc_server = true;
 			} catch (Throwable e)
 			{
@@ -1014,19 +1036,16 @@ public class BeanShellCntrl
 	}
 
 	@LispMethod
-	synchronized static public void init_subl()
+	synchronized static public void init_subl() throws InterruptedException
 	{
 		synchronized (StartupLock)
 		{
-			if (inited_subl)
-				return;
+			if (inited_subl) return;
 			inited_subl = true;
 		}
+		swipl_init();
 		boolean b = SubLMain.isInitialized();
-		if (b)
-		{
-			return;
-		}
+		if (b) { return; }
 		boolean wasSubLisp = Main.isSubLisp();
 		boolean wasshouldRunInBackground = SubLMain.shouldRunInBackground;
 		SubLMain me = SubLMain.me;
@@ -1070,14 +1089,12 @@ public class BeanShellCntrl
 			if (t instanceof InvocationTargetException)
 			{
 				Throwable tt = ((InvocationTargetException) t).getTargetException();
-				if (tt != null)
-					t = tt;
+				if (tt != null) t = tt;
 			}
 			if (t instanceof UnhandledCondition)
 			{
 				LispObject tt = ((UnhandledCondition) t).getCondition();
-				if (tt != null)
-					return Lisp.error(tt);
+				if (tt != null) return Lisp.error(tt);
 			}
 			t.printStackTrace();
 			String msg = t.getMessage();
@@ -1097,18 +1114,13 @@ public class BeanShellCntrl
 	@LispMethod
 	static public LispObject j_desktop()
 	{
-		if (editor == null)
-			editor = Editor.currentEditor();
+		if (editor == null) editor = Editor.currentEditor();
 
-		if (true && false)
-			return org.armedbear.lisp.JavaObject.getInstance(editor);
+		if (true && false) return org.armedbear.lisp.JavaObject.getInstance(editor);
 
-		if (editor == null)
-			Editor.startJ(new String[0], false);
-		if (editor == null)
-			editor = Editor.currentEditor();
-		if (editor == null)
-			Errors.unimplementedMethod("BeanShellCntrl.j_desktop");
+		if (editor == null) Editor.startJ(new String[0], false);
+		if (editor == null) editor = Editor.currentEditor();
+		if (editor == null) Errors.unimplementedMethod("BeanShellCntrl.j_desktop");
 		addSingleton(editor);
 		return org.armedbear.lisp.JavaObject.getInstance(editor);
 	}
@@ -1125,18 +1137,17 @@ public class BeanShellCntrl
 	{
 		boolean wasSubLisp = Main.isSubLisp();
 		Main.setSubLisp(false);
-		try {
+		try
+		{
 			LispThread thread = LispThread.currentThread();
 			if (args instanceof Cons)
 			{
 				LispObject arg = args.car();
-				if ((arg instanceof Cons))
-				{
-					return Lisp.progn(args, env, thread);
-				}
+				if ((arg instanceof Cons)) { return Lisp.progn(args, env, thread); }
 			}
 			return Lisp.eval(args, env, thread);
-		} finally {
+		} finally
+		{
 			Main.setSubLisp(wasSubLisp);
 		}
 	}
@@ -1209,7 +1220,8 @@ public class BeanShellCntrl
 			if (tailPointer == null)
 			{
 				tailPointer = answers = new Cons(o, Lisp.NIL);
-			} else
+			}
+			else
 			{
 				Cons newP = new Cons(o, Lisp.NIL);
 				tailPointer.setCdr(newP);
@@ -1263,30 +1275,29 @@ public class BeanShellCntrl
 		if (evalArgsFirst)
 		{
 			MethodFunction cf = setMethodFunction(sym);
-			if(cf==null) return;
+			if (cf == null) return;
 			cf.setEvalArgsFirst(evalArgsFirst);
 			cf.addMethod(m);
 			return;
 		}
 		SpecialMethod cf = setSpecialMethod(sym);
-		if(cf==null) return;
+		if (cf == null) return;
 		cf.setEvalArgsFirst(evalArgsFirst);
 		cf.addMethod(m);
 	}
 
 	static public void registerPrologMethod(String prologName, Symbol sym, Method method)
 	{
-		if (disableProlog)
-			return;
-		if (disablePrologSync)
-			return;
+		if (disablePrologJNI) return;
+		//if (disablePrologSync) return;
 		int arity = method.getParameterTypes().length;
 		int harity = arity;
 		Class rt = method.getReturnType();
 		if (rt == void.class || rt == Void.class)
 		{
 			rt = null;
-		} else
+		}
+		else
 		{
 			harity++;
 		}
@@ -1294,8 +1305,7 @@ public class BeanShellCntrl
 		String key = prologName + "/" + harity;
 		synchronized (prologMethods)
 		{
-			if (prologMethods.containsKey(key))
-				return;
+			if (prologMethods.containsKey(key)) return;
 			prologMethods.put(key, sym);
 
 		}
@@ -1318,7 +1328,8 @@ public class BeanShellCntrl
 			}
 			String Head = prologName + params;
 			Query.oneSolution("assert(" + Head + ":- call_ctrl(" + Head + "))");
-		} else
+		}
+		else
 		{
 			String Head;
 			String Body;
@@ -1326,7 +1337,8 @@ public class BeanShellCntrl
 			{
 				Head = prologName + "(RT)";
 				Body = prologName;
-			} else
+			}
+			else
 			{
 				Head = prologName + "(" + args + ",RT)";
 				Body = prologName + "(" + args + ")";
@@ -1369,14 +1381,16 @@ public class BeanShellCntrl
 			sym.setFunction((SubLOperator) sf);
 			sym.setBuiltInFunction(true);
 			return (MethodFunction) sf;
-		} else if (sf instanceof MethodFunction)
+		}
+		else if (sf instanceof MethodFunction)
 		{
 			return (MethodFunction) sf;
-		} else
-		{            
-            //String complaint = "Trying to overwrite a non method function "; // + sf;
+		}
+		else
+		{
+			//String complaint = "Trying to overwrite a non method function "; // + sf;
 			//System.err.println(complaint);
-            // Lisp.program_error(complaint);
+			// Lisp.program_error(complaint);
 			return (MethodFunction) null;
 		}
 
@@ -1386,8 +1400,7 @@ public class BeanShellCntrl
 	{
 		synchronized (singletons)
 		{
-			if (isc == null)
-				isc = self.getClass();
+			if (isc == null) isc = self.getClass();
 			String named = Lisp.getDotName(isc);
 			CreationInfo was = singletons.get(named);
 			CreationInfo wasnt = new CreationInfo(self);
@@ -1397,8 +1410,7 @@ public class BeanShellCntrl
 				{
 					String message = "Difference from " + was + " and " + wasnt + " isntance " + self;
 					MsgBox.error(message);
-					if (false)
-						throw new StartupError(message);
+					if (false) throw new StartupError(message);
 					named = null;
 				}
 				// throw new StartupError("REregistering from " + isc + "
@@ -1419,10 +1431,12 @@ public class BeanShellCntrl
 			sf = new SpecialMethod(sym);
 			sym.setFunction((SubLOperator) sf);
 			sym.setBuiltInFunction(true);
-		} else if (sf instanceof SpecialMethod)
+		}
+		else if (sf instanceof SpecialMethod)
 		{
 			return (SpecialMethod) sf;
-		} else
+		}
+		else
 		{
 			Lisp.program_error("Trying to overwrite a non special method");
 		}
@@ -1441,8 +1455,7 @@ public class BeanShellCntrl
 	{
 		synchronized (StartupLock)
 		{
-			if (started_from_prolog)
-				return;
+			if (started_from_prolog) return;
 			started_from_prolog = true;
 		}
 		Main.needIOConsole = true;
@@ -1454,8 +1467,7 @@ public class BeanShellCntrl
 	{
 		synchronized (StartupLock)
 		{
-			if (started_from_prolog)
-				return;
+			if (started_from_prolog) return;
 			started_from_prolog = true;
 		}
 		Main.needIOConsole = true;
@@ -1465,9 +1477,11 @@ public class BeanShellCntrl
 	@LispMethod
 	synchronized static public void start_lisp_from_prolog() throws InterruptedException
 	{
-		disableProlog = disablePrologSync = false;
+		disablePrologJNI = disablePrologSync = false;
+		PrologSync.trackStructs = !disablePrologSync;
 		bsh_desktop();
 		scanForExports(BeanShellCntrl.class); // again
+		PrologSync.setPrologReady(true);
 	}
 
 	static public void startEmbedded()
@@ -1477,15 +1491,15 @@ public class BeanShellCntrl
 	}
 
 	@LispMethod
-	static void swipl_init()
+	static void swipl_init() throws InterruptedException
 	{
-		if (disableProlog)
-			return;
-		JPL.init();
+		if (disablePrologJNI) return;
+		started_from_prolog = !JPL.init();
 		if (isIKVM())
 		{
 			Query.oneSolution("assert(swicli:is_ikvm)");
 		}
+		start_lisp_from_prolog();
 	}
 
 	@LispMethod
@@ -1493,17 +1507,14 @@ public class BeanShellCntrl
 	{
 		synchronized (StartupLock)
 		{
-			if (disableProlog)
-				return;
-			if (swipl_inited_server)
-				return;
+			if (disablePrologJNI) return;
+			if (swipl_inited_server) return;
 		}
 		try
 		{
 			swipl_init();
 			swipl_inited_server = Query.oneSolution("(current_thread(prolog_server,X),X=running)").size() > 0;
-			if (swipl_inited_server)
-				return;
+			if (swipl_inited_server) return;
 			Query.oneSolution("use_module(library('prolog_server'))");
 			swipl_inited_server = true;
 			Query.oneSolution("prolog_server(4023, [allow(_)])");
@@ -1520,7 +1531,7 @@ public class BeanShellCntrl
 		String prologName = (p == null ? ":" : (p == Lisp.PACKAGE_CL_USER ? "cl_" : (p.showShortName() + "_")) + sym.getName());
 		prologName = prologName.replaceAll("-", "_").toLowerCase();
 
-		for (String rp : new String[]{"cl_lisp_",})
+		for (String rp : new String[] { "cl_lisp_", })
 		{
 			if (prologName.startsWith(rp))
 			{
@@ -1533,8 +1544,7 @@ public class BeanShellCntrl
 
 	static public LispObject term_to_lobject(Term term)
 	{
-		if (term == null)
-			return null;
+		if (term == null) return null;
 		LispObject lo;
 		Object tag = term.getTag();
 		if (tag instanceof LispObject)
@@ -1543,8 +1553,7 @@ public class BeanShellCntrl
 			lo.termRef = term;
 			return lo;
 		}
-		if (term.isListNil())
-			return Lisp.NIL;
+		if (term.isListNil()) return Lisp.NIL;
 		if (term.isListPair())
 		{
 			Cons cons;
@@ -1558,7 +1567,8 @@ public class BeanShellCntrl
 		if (o instanceof Atom)
 		{
 			lo = atom_to_lisp_object((Atom) o);
-		} else
+		}
+		else
 		{
 			lo = JavaObject.getInstance(o, true);
 		}
@@ -1568,8 +1578,7 @@ public class BeanShellCntrl
 
 	static public LispObject[] terms_to_lisp_objects(Term[] args)
 	{
-		if (args.length == 0)
-			return EMPTY_LISP_OBJECT;
+		if (args.length == 0) return EMPTY_LISP_OBJECT;
 		LispObject[] largs = new LispObject[args.length];
 		for (int i = 0; i < args.length; i++)
 		{
@@ -1610,9 +1619,8 @@ public class BeanShellCntrl
 
 	static public Error throwException(Throwable exception)
 	{
-		if (true)
-			getUnsafe().throwException(exception);
-		return BeanShellCntrl.<RuntimeException> throwException1(exception, null);
+		if (true) getUnsafe().throwException(exception);
+		return BeanShellCntrl.<RuntimeException>throwException1(exception, null);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -1624,19 +1632,14 @@ public class BeanShellCntrl
 	static public Object to_lisp_object(Compound thiz, String value, Term[] args)
 	{
 
-		if (value.equals("[]"))
-		{
-			return BeanShellCntrl.terms_to_lisp_objects(args);
-		}
+		if (value.equals("[]")) { return BeanShellCntrl.terms_to_lisp_objects(args); }
 		return thiz;
 	}
 
 	static public LispObject[] toArray(LispObject args)
 	{
-		if (args == Nil.NIL)
-			return EMPTY_LISP_OBJECT;
-		if (!(args instanceof Cons))
-			return new LispObject[]{args};
+		if (args == Nil.NIL) return EMPTY_LISP_OBJECT;
+		if (!(args instanceof Cons)) return new LispObject[] { args };
 		return args.copyToArray();
 	}
 
@@ -1722,9 +1725,11 @@ public class BeanShellCntrl
 		scanForExports(BeanShellCntrl.class);
 		// swipl_init_server();
 	}
-  static {
-  	staticInit();
-  }
+
+	static
+	{
+		staticInit();
+	}
 
 	static class CreationInfo
 	{
@@ -1795,16 +1800,14 @@ public class BeanShellCntrl
 				return;
 			}
 			Method was = methodByArity[paramLen];
-			if (was == m)
-				return;
+			if (was == m) return;
 			if (was == null)
 			{
 				methodByArity[paramLen] = m;
 				methodCount++;
 				return;
 			}
-			if (staticMethods == null)
-				staticMethods = new HashSet<Method>();
+			if (staticMethods == null) staticMethods = new HashSet<Method>();
 			if (was == multiMethod)
 			{
 				staticMethods.add(m);
@@ -1842,10 +1845,7 @@ public class BeanShellCntrl
 					}
 				}
 			}
-			if (args == NIL)
-			{
-				return executeEVA(env, EMPTY_LISP_OBJECT);
-			}
+			if (args == NIL) { return executeEVA(env, EMPTY_LISP_OBJECT); }
 			return executeEVA(env, args.copyToArray());
 		}
 
@@ -1857,8 +1857,7 @@ public class BeanShellCntrl
 
 		private LispObject executeEML(Environment env, int paramLen, boolean tryPTLArityFirst, LispObject[] args)
 		{
-			if (staticMethods == null)
-				return error(new LispError("no methods")); // return error(new
+			if (staticMethods == null) return error(new LispError("no methods")); // return error(new
 			// WrongNumberOfArgumentsException(this,
 			// args.length));
 			Method m = null;
@@ -1872,8 +1871,7 @@ public class BeanShellCntrl
 					m = findMethod(methodsArray, args);
 				}
 			}
-			if (m == null)
-				error(new LispError("no such method"));
+			if (m == null) error(new LispError("no such method"));
 
 			return invokeArgs(m, env, args);
 		}
@@ -1882,17 +1880,10 @@ public class BeanShellCntrl
 		{
 			int paramLen = args.length;
 
-			if (methodByArity == null)
-				executeEML(env, paramLen, true, args);
+			if (methodByArity == null) executeEML(env, paramLen, true, args);
 			Method m = methodByArity[paramLen];
-			if (m == multiMethod)
-			{
-				return executeEML(env, paramLen, true, args);
-			}
-			if (m == null)
-			{
-				return executeEML(env, paramLen, false, args);
-			}
+			if (m == multiMethod) { return executeEML(env, paramLen, true, args); }
+			if (m == null) { return executeEML(env, paramLen, false, args); }
 			return invokeArgs(m, env, args);
 		}
 
@@ -1925,16 +1916,19 @@ public class BeanShellCntrl
 				if (false && arg.equals(NIL))
 				{
 					methodArgs[i] = false;
-				} else if (false && arg.equals(T))
+				}
+				else if (false && arg.equals(T))
 				{
 					methodArgs[i] = true;
-				} else
+				}
+				else
 				{
 					Class type = argTypes[i];
 					if (type == LispObject.class)
 					{
 						methodArgs[i] = arg;
-					} else
+					}
+					else
 					{
 						methodArgs[i] = arg.javaInstance(type);
 					}
@@ -1942,10 +1936,8 @@ public class BeanShellCntrl
 			}
 			m.setAccessible(true);
 			Object result = invokeM(m, null, methodArgs);
-			if (LispObject.class.isAssignableFrom(m.getReturnType()))
-				return (LispObject) result;
-			if (result instanceof Boolean)
-				return (LispObject) SubLObjectFactory.makeBoolean((Boolean) result);
+			if (LispObject.class.isAssignableFrom(m.getReturnType())) return (LispObject) result;
+			if (result instanceof Boolean) return (LispObject) SubLObjectFactory.makeBoolean((Boolean) result);
 			return JavaObject.getInstance(result, true, m.getReturnType());
 		}
 
@@ -2077,16 +2069,14 @@ public class BeanShellCntrl
 				return;
 			}
 			Method was = methodByArity[paramLen];
-			if (was == m)
-				return;
+			if (was == m) return;
 			if (was == null)
 			{
 				methodByArity[paramLen] = m;
 				methodCount++;
 				return;
 			}
-			if (staticMethods == null)
-				staticMethods = new HashSet<Method>();
+			if (staticMethods == null) staticMethods = new HashSet<Method>();
 			if (was == multiMethod)
 			{
 				staticMethods.add(m);
@@ -2124,10 +2114,7 @@ public class BeanShellCntrl
 					}
 				}
 			}
-			if (args == NIL)
-			{
-				return executeEVA(env, EMPTY_LISP_OBJECT);
-			}
+			if (args == NIL) { return executeEVA(env, EMPTY_LISP_OBJECT); }
 			return executeEVA(env, args.copyToArray());
 		}
 
@@ -2139,8 +2126,7 @@ public class BeanShellCntrl
 
 		private LispObject executeEML(Environment env, int paramLen, boolean tryPTLArityFirst, LispObject[] args)
 		{
-			if (staticMethods == null)
-				return error(new LispError("no methods")); // return error(new
+			if (staticMethods == null) return error(new LispError("no methods")); // return error(new
 			// WrongNumberOfArgumentsException(this,
 			// args.length));
 			Method m = null;
@@ -2149,8 +2135,7 @@ public class BeanShellCntrl
 				Method[] methodsArray = staticMethods.toArray(new Method[staticMethods.size()]);
 				m = findMethod(methodsArray, args);
 			}
-			if (m == null)
-				error(new LispError("no such method"));
+			if (m == null) error(new LispError("no such method"));
 
 			return invokeArgs(m, env, args);
 		}
@@ -2159,17 +2144,10 @@ public class BeanShellCntrl
 		{
 			int paramLen = args.length;
 
-			if (methodByArity == null)
-				executeEML(env, paramLen, true, args);
+			if (methodByArity == null) executeEML(env, paramLen, true, args);
 			Method m = methodByArity[paramLen];
-			if (m == multiMethod)
-			{
-				return executeEML(env, paramLen, true, args);
-			}
-			if (m == null)
-			{
-				return executeEML(env, paramLen, false, args);
-			}
+			if (m == multiMethod) { return executeEML(env, paramLen, true, args); }
+			if (m == null) { return executeEML(env, paramLen, false, args); }
 			return invokeArgs(m, env, args);
 		}
 
@@ -2202,20 +2180,20 @@ public class BeanShellCntrl
 				if (false && arg.equals(NIL))
 				{
 					methodArgs[i] = false;
-				} else if (false && arg.equals(T))
+				}
+				else if (false && arg.equals(T))
 				{
 					methodArgs[i] = true;
-				} else
+				}
+				else
 				{
 					methodArgs[i] = arg.javaInstance(argTypes[i]);
 				}
 			}
 			m.setAccessible(true);
 			Object result = invokeM(m, null, methodArgs);
-			if (LispObject.class.isAssignableFrom(m.getReturnType()))
-				return (LispObject) result;
-			if (result instanceof Boolean)
-				return (LispObject) SubLObjectFactory.makeBoolean((Boolean) result);
+			if (LispObject.class.isAssignableFrom(m.getReturnType())) return (LispObject) result;
+			if (result instanceof Boolean) return (LispObject) SubLObjectFactory.makeBoolean((Boolean) result);
 			return JavaObject.getInstance(result, true, m.getReturnType());
 		}
 
@@ -2260,5 +2238,3 @@ public class BeanShellCntrl
 	}
 
 }
-
-
