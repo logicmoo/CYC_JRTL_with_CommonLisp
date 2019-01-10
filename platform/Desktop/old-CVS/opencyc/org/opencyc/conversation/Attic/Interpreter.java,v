@@ -1,0 +1,717 @@
+head	1.10;
+access;
+symbols
+	PRE_1_0:1.10;
+locks; strict;
+comment	@# @;
+
+
+1.10
+date	2002.11.20.16.39.01;	author stephenreed;	state dead;
+branches;
+next	1.9;
+
+1.9
+date	2002.02.28.22.44.22;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2002.02.28.06.02.23;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2002.02.27.03.40.50;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2002.02.26.23.33.06;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2002.02.26.03.37.56;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2002.02.25.22.44.36;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2002.02.20.22.44.59;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2002.02.19.04.46.11;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2002.02.18.16.08.34;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.10
+log
+@Removing previous state machine implementation which is
+replaced by org.opencyc.uml.statemachine package
+@
+text
+@package org.opencyc.conversation;
+
+import java.io.*;
+import java.net.*;
+import java.util.*;
+import org.opencyc.api.*;
+import org.opencyc.chat.*;
+import org.opencyc.templateparser.*;
+import org.opencyc.util.*;
+
+/**
+ * Contains the attributes and behavior of a chat fsm interpreter.<p>
+ *
+ * The chat conversation is in the form of a text conversation using
+ * asynchronous receiving and sending of messages. This interpreter models the
+ * chat interaction with nested fsms in a stack.  Mixed initiative is
+ * supported by a dictionary of fsm stacks, one of which is active,
+ * and the rest suspended.  Sub fsms are passed a list of attribute/value
+ * pairs which form the initial state attributes.  When done, sub fsms
+ * pass back result attribute/value pairs to the calling fsm's state
+ * attributes.
+ *
+ * @@version $Id: Interpreter.java,v 1.9 2002/02/28 22:44:22 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+public class Interpreter {
+
+    /**
+     * reference to the parent ChatterBot
+     */
+    protected ChatterBot chatterBot;
+
+    /**
+     * Reference to the user model, which contains user state and history
+     * information, persisted in the Cyc KB.
+     */
+    protected ChatUserModel chatUserModel;
+
+    /**
+     * dictionary of fsm stacks
+     * fsmStackId --> fsm stack
+     */
+    protected HashMap fsmStacks;
+
+    /**
+     * Reference to the current fsm stack, which is a stack of
+     * FsmInfo elements.  Each of these elements contains
+     * the fsm and its state attributes.
+     *
+     */
+    protected StackWithPointer fsmStack;
+
+    /**
+     * reference to the active fsm
+     */
+    protected Fsm fsm;
+
+    /**
+     * finite state machine current node
+     */
+    protected State currentState;
+
+    /**
+     * Dictionary of state attribute and object values.
+     */
+    protected HashMap stateAttributes = new HashMap();
+
+    /**
+     * Next computed Performative, or null if none.
+     */
+    protected Performative nextPerformative;
+
+    /**
+     * Makes Template objects for the TemplateParser.
+     */
+    protected TemplateFactory templateFactory;
+
+    /**
+     * Parses the users input text.
+     */
+    protected TemplateParser templateParser;
+
+    /**
+     * Performs fsm actions.
+     */
+    protected Performer performer;
+
+    /**
+     * Constructs a new Interpreter without arguments.  Used for unit
+     * testing.
+     */
+    protected Interpreter () {
+    }
+
+    /**
+     * Constructs a new Interpreter object given the parent
+     * ChatterBot.
+     *
+     * @@param chatterBot the parent ChatterBot
+     * @@param chatUserNickname the preferred name (possibly not unique) of the
+     * chat partner
+     * @@param chatUserUniqueId the unique id assigned to the user by the chat
+     * system
+     */
+    public Interpreter(ChatterBot chatterBot,
+                       String chatUserNickname,
+                       String chatUserUniqueId,
+                       String fsmStackId,
+                       Fsm fsm) {
+        Log.makeLog();
+        this.chatterBot = chatterBot;
+        chatUserModel = chatterBot.getChatUserModel(chatUserUniqueId);
+        initialize(fsmStackId, fsm);
+    }
+
+    /**
+     * Receives the given chat message from the given chat partner, obtains
+     * the performative, transitions to the corresponding state and performs
+     * the required action.
+     *
+     * @@param chatPartner the name of the chat partner
+     * @@param chatMessage the chat message
+     */
+    public void receiveChatMessage (String chatMessage)
+        throws CycApiException,
+               IOException,
+               UnknownHostException,
+               ChatException {
+        ParseResults parseResults = templateParser.parse(chatMessage);
+        setStateAttribute("parse results", parseResults);
+        Performative performative = parseResults.getPerformative();
+        nextPerformative = performative;
+        while (nextPerformative != null) {
+            Arc arc = lookupArc(nextPerformative);
+            Action action = arc.getAction();
+            action.setContent(nextPerformative.getContent());
+            nextPerformative = null;
+            transitionState(arc);
+            Fsm subFsm = arc.getSubFsm();
+            if (subFsm != null)
+                performer.performArc(currentState, subFsm);
+            else
+                performer.performArc(currentState, action);
+        }
+    }
+
+    /**
+     * Returns the arc which corresponds to the performative received in the
+     * current state.
+     *
+     * @@param performative the performative
+     * @@return the arc which corresponds to the performative received in the
+     * current state
+     */
+    protected Arc lookupArc (Performative performative) {
+        Iterator arcs = currentState.getArcs().iterator();
+        while (arcs.hasNext()) {
+            Arc arc = (Arc) arcs.next();
+            if (performative.getPerformativeName().equals(arc.getPerformative().getPerformativeName()))
+                return arc;
+        }
+        Log.current.errorPrintln("No valid arc for state " +
+                                 currentState.toString() +
+                                 "\nmatching performative " + performative);
+        return null;
+    }
+
+    /**
+     * Transitions to the to-state given in the arc, and performs the action.
+     *
+     * @@param arc the finite state machine arc
+     */
+    protected void transitionState (Arc arc) {
+        currentState = arc.getTransitionToState();
+        State previousState = arc.getTransitionFromState();
+    }
+
+    /**
+     * Initializes the fsm interpreter.
+     *
+     * @@param fsmStackId provides an id for the first
+     * fsm stack
+     * @@param fsm the initial fsm, which is also the
+     * sole object on the fsm stack
+     */
+    public void initialize (String fsmStackId,
+                            Fsm fsm) {
+        templateFactory = new TemplateFactory();
+        templateFactory.makeAllTemplates();
+        templateParser = new TemplateParser();
+        templateParser.initialize();
+        performer = new Performer(this);
+        fsmStack = new StackWithPointer();
+        this.fsm = fsm;
+        FsmStateInfo fsmStateInfo =
+            new FsmStateInfo(fsm, stateAttributes);
+        pushFsmStateInfo(fsmStateInfo);
+        fsmStacks = new HashMap();
+        fsmStacks.put(fsmStackId, fsmStack);
+        currentState = fsm.getInitialState();
+    }
+
+    /**
+     * Sends the given chat message into the chat system.
+     *
+     * @@param chatMessage the chat message
+     */
+    public void sendChatMessage (String chatMessage) throws ChatException {
+        chatterBot.sendChatMessage(chatMessage);
+    }
+
+    /**
+     * Sets the value for the given state attribute.
+     *
+     * @@param attribute the key object
+     * @@param value the value object
+     */
+    public void setStateAttribute (String attribute, Object value) {
+        stateAttributes.put(attribute, value);
+    }
+
+    /**
+     * Sets the value of the computed next performative.
+     *
+     * @@param nextAction the computed next performative
+     */
+    public void setNextPerformative (Performative nextPerformative) {
+        this.nextPerformative = nextPerformative;
+    }
+
+    /**
+     * Returns the value for the given state attribute.
+     *
+     * @@param attribute the key object
+     * @@retrun the value for the given attribute
+     */
+    public Object getStateAttribute (Object attribute) {
+        return stateAttributes.get(attribute);
+    }
+
+    /**
+     * Sets up the given sub fsm and the input arguments as
+     * a list of attribute/value pairs.
+     *
+     * @@param fsm the new fsm
+     * @@param arguments a list of Object arrays of length two, the first array element is the
+     * attribute and the second array element is its value
+     */
+    public void setupSubFsm (Fsm fsm,
+                                      ArrayList arguments) {
+        FsmStateInfo fsmStateInfo =
+            new FsmStateInfo(fsm,
+                                      new HashMap());
+        pushFsmStateInfo(fsmStateInfo);
+        currentState = fsm.getInitialState();
+        for (int i = 0; i < arguments.size(); i++) {
+            Object [] attributeValuePair = (Object []) arguments.get(i);
+            String attribute = (String) attributeValuePair[0];
+            Object value = attributeValuePair[1];
+            setStateAttribute(attribute, value);
+        }
+        nextPerformative = new Performative("start-new-fsm");
+    }
+
+    /**
+     * Pushes the given fsm state onto the current
+     * fsm stack.
+     *
+     * @@param fsmStateInfo the new fsm and its state
+     */
+    public void pushFsmStateInfo (FsmStateInfo fsmStateInfo) {
+        if (fsmStack.size() > 0) {
+            FsmStateInfo suspendedFsmStateInfo =
+                (FsmStateInfo) fsmStack.peek();
+            suspendedFsmStateInfo.currentState = currentState;
+        }
+        fsmStack.push(fsmStateInfo);
+    }
+
+    /**
+     * Pops the fsm state stack and restores the previous
+     * fsm state.
+     */
+    public void popFsmStateInfo () {
+        ArrayList results = (ArrayList) getStateAttribute("subFsm results");
+        FsmStateInfo fsmStateInfo =
+            (FsmStateInfo) fsmStack.pop();
+        this.fsm = fsmStateInfo.fsm;
+        this.currentState = fsmStateInfo.currentState;
+        this.stateAttributes = fsmStateInfo.stateAttributes;
+        for (int i = 0; i < results.size(); i++) {
+            Object [] attributeValuePair = (Object []) results.get(i);
+            String attribute = (String) attributeValuePair[0];
+            Object value = attributeValuePair[1];
+            setStateAttribute(attribute, value);
+        }
+        nextPerformative = new Performative("resume-previous-fsm");
+    }
+
+}@
+
+
+1.9
+log
+@Renamed Conversation*.java to Fsm*.java
+@
+text
+@d23 1
+a23 1
+ * @@version $Id: Interpreter.java,v 1.8 2002/02/28 06:02:23 stephenreed Exp $
+@
+
+
+1.8
+log
+@Refactored use of sub conversations
+@
+text
+@d12 1
+a12 1
+ * Contains the attributes and behavior of a chat conversation interpreter.<p>
+d16 5
+a20 5
+ * chat interaction with nested conversations in a stack.  Mixed initiative is
+ * supported by a dictionary of conversation stacks, one of which is active,
+ * and the rest suspended.  Sub conversations are passed a list of attribute/value
+ * pairs which form the initial state attributes.  When done, sub conversations
+ * pass back result attribute/value pairs to the calling conversation's state
+d23 1
+a23 1
+ * @@version $Id: Interpreter.java,v 1.7 2002/02/27 03:40:50 stephenreed Exp $
+d59 2
+a60 2
+     * dictionary of conversation stacks
+     * conversationStackId --> conversation stack
+d62 1
+a62 1
+    protected HashMap conversationStacks;
+d65 3
+a67 3
+     * Reference to the current conversation stack, which is a stack of
+     * ConversationInfo elements.  Each of these elements contains
+     * the conversation and its state attributes.
+d70 1
+a70 1
+    protected StackWithPointer conversationStack;
+d73 1
+a73 1
+     * reference to the active conversation
+d75 1
+a75 1
+    protected Conversation conversation;
+d103 1
+a103 1
+     * Performs conversation actions.
+d127 2
+a128 2
+                       String conversationStackId,
+                       Conversation conversation) {
+d132 1
+a132 1
+        initialize(conversationStackId, conversation);
+d158 3
+a160 3
+            Conversation subConversation = arc.getSubConversation();
+            if (subConversation != null)
+                performer.performArc(currentState, subConversation);
+a174 6
+        for (int i = 0; i < ConversationFactory.globalArcs.size(); i++) {
+            Arc arc =
+                (Arc) ConversationFactory.globalArcs.get(i);
+            if (performative.getPerformativeName().equals(arc.getPerformative().getPerformativeName()))
+                return arc;
+        }
+d193 1
+a193 2
+        if (! (arc.getTransitionToState().equals(ConversationFactory.currentState)))
+            currentState = arc.getTransitionToState();
+d200 4
+a203 4
+     * @@param conversationStackId provides an id for the first
+     * conversation stack
+     * @@param conversation the initial conversation, which is also the
+     * sole object on the conversation stack
+d205 2
+a206 2
+    public void initialize (String conversationStackId,
+                            Conversation conversation) {
+d212 8
+a219 8
+        conversationStack = new StackWithPointer();
+        this.conversation = conversation;
+        ConversationStateInfo conversationStateInfo =
+            new ConversationStateInfo(conversation, stateAttributes);
+        pushConversationStateInfo(conversationStateInfo);
+        conversationStacks = new HashMap();
+        conversationStacks.put(conversationStackId, conversationStack);
+        currentState = conversation.getInitialState();
+d261 1
+a261 1
+     * Sets up the given sub conversation and the input arguments as
+d264 1
+a264 1
+     * @@param conversation the new conversation
+d268 1
+a268 1
+    public void setupSubConversation (Conversation conversation,
+d270 2
+a271 2
+        ConversationStateInfo conversationStateInfo =
+            new ConversationStateInfo(conversation,
+d273 2
+a274 2
+        pushConversationStateInfo(conversationStateInfo);
+        currentState = conversation.getInitialState();
+d281 1
+a281 1
+        nextPerformative = new Performative("start-new-conversation");
+d285 2
+a286 2
+     * Pushes the given conversation state onto the current
+     * conversation stack.
+d288 1
+a288 1
+     * @@param conversationStateInfo the new conversation and its state
+d290 5
+a294 5
+    public void pushConversationStateInfo (ConversationStateInfo conversationStateInfo) {
+        if (conversationStack.size() > 0) {
+            ConversationStateInfo suspendedConversationStateInfo =
+                (ConversationStateInfo) conversationStack.peek();
+            suspendedConversationStateInfo.currentState = currentState;
+d296 1
+a296 1
+        conversationStack.push(conversationStateInfo);
+d300 2
+a301 2
+     * Pops the conversation state stack and restores the previous
+     * conversation state.
+d303 7
+a309 7
+    public void popConversationStateInfo () {
+        ArrayList results = (ArrayList) getStateAttribute("subConversation results");
+        ConversationStateInfo conversationStateInfo =
+            (ConversationStateInfo) conversationStack.pop();
+        this.conversation = conversationStateInfo.conversation;
+        this.currentState = conversationStateInfo.currentState;
+        this.stateAttributes = conversationStateInfo.stateAttributes;
+d316 1
+a316 1
+        nextPerformative = new Performative("resume-previous-conversation");
+@
+
+
+1.7
+log
+@Added more code to Performer
+@
+text
+@d18 4
+a21 1
+ * and the rest suspended.
+d23 1
+a23 1
+ * @@version $Id: Interpreter.java,v 1.6 2002/02/26 23:33:06 stephenreed Exp $
+d144 4
+a147 1
+        throws CycApiException, IOException, UnknownHostException {
+d154 2
+d158 5
+a162 1
+            performer.performArc(currentState, arc.getAction());
+d178 1
+a178 1
+            if (performative.equals(arc.getPerformative()))
+d184 1
+a184 1
+            if (performative.equals(arc.getPerformative()))
+d275 2
+a276 1
+    public void setupSubConversation (Conversation conversation, ArrayList arguments) {
+d279 1
+a279 1
+                                      (HashMap) stateAttributes.clone());
+d288 1
+d298 5
+a302 2
+        if (conversationStack.size() > 0)
+            ((ConversationStateInfo) conversationStack.peek()).currentState = currentState;
+d311 1
+d317 7
+@
+
+
+1.6
+log
+@Added code and refactoring Chat Conversation.
+@
+text
+@d20 1
+a20 1
+ * @@version $Id: Interpreter.java,v 1.5 2002/02/26 03:37:56 stephenreed Exp $
+d147 1
+a147 1
+            Arc arc = lookupArc(performative);
+d253 22
+@
+
+
+1.5
+log
+@Improving the initialization of the Interpreter
+@
+text
+@d20 1
+a20 1
+ * @@version $Id: Interpreter.java,v 1.4 2002/02/25 22:44:36 stephenreed Exp $
+d62 4
+a65 1
+     * reference to the current conversation stack
+d85 5
+d125 1
+a125 2
+                       Conversation conversation
+                       ) {
+d143 1
+d145 7
+a151 4
+        Arc arc = lookupArc(performative);
+        transitionState(arc);
+        this.setStateAttribute("parse results", parseResults);
+        performer.performArc(currentState, arc.getAction());
+d209 3
+a211 1
+        conversationStack.push(conversation);
+d237 9
+d254 25
+@
+
+
+1.4
+log
+@Added more methods.
+@
+text
+@d15 4
+a18 3
+ * asynchronous receiving and sending of messages. This interpreter contains
+ * all the possible finite state machine actions and interprets the
+ * actions required for a state transition.
+d20 1
+a20 1
+ * @@version $Id: Interpreter.java,v 1.3 2002/02/20 22:44:59 stephenreed Exp $
+d56 16
+d115 4
+a118 1
+                       String chatUserUniqueId) {
+d122 1
+a122 1
+        initialize();
+d182 6
+a187 1
+     * Initializes the fsm interpreter
+d189 2
+a190 1
+    public void initialize () {
+d196 6
+a201 11
+
+    }
+
+    /**
+     * Sets the current state of the fsm interpreter.  Used to set the initial
+     * state only.
+     *
+     * @@param currentState the current state
+     */
+    public void setCurrentState (State currentState) {
+        this.currentState = currentState;
+@
+
+
+1.3
+log
+@Adding RKF lexicon accessors to CycAccess. Added titles to the HTML export category pages.
+@
+text
+@d19 1
+a19 1
+ * @@version $Id: Interpreter.java,v 1.2 2002/02/19 04:46:11 stephenreed Exp $
+d60 5
+d119 1
+a119 1
+        currentState.set("parse results", parseResults);
+d190 20
+@
+
+
+1.2
+log
+@Added unit test cases for the Interpreter
+@
+text
+@d3 2
+d6 1
+d19 1
+a19 1
+ * @@version $Id: Interpreter.java,v 1.1 2002/02/18 16:08:34 stephenreed Exp $
+d108 2
+a109 1
+    public void receiveChatMessage (String chatMessage) {
+d114 1
+d133 1
+a133 1
+        Iterator arcs = this.currentState.getArcs().iterator();
+@
+
+
+1.1
+log
+@Renamed chatterbot classes, add finite state machine for dialog, and template parser for understanding chat messages.
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: Interpreter.java,v 1.1 2002/02/11 09:21:38 stephenreed Exp $
+d156 1
+@
+

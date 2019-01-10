@@ -1,0 +1,719 @@
+head	1.10;
+access;
+symbols
+	PRE_1_0:1.9;
+locks; strict;
+comment	@# @;
+
+
+1.10
+date	2006.10.21.16.49.16;	author dmiles;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2001.11.27.23.27.28;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2001.11.26.22.03.47;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2001.11.26.16.38.30;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2001.11.26.05.14.28;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2001.11.25.18.31.14;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2001.11.21.23.47.45;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2001.11.21.21.01.58;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2001.11.02.00.31.13;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2001.11.01.22.07.42;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.10
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental packages
+@
+text
+@package  org.opencyc.cycagent;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.Hashtable;
+
+import org.opencyc.util.Log;
+
+/**
+ * Provides a FIPA-OS agent proxy and a Grid proxy for an OpenCyc server.<p>
+ *
+ * @@version $Id: AgentManager.java,v 1.9 2001/11/27 23:27:28 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+public class AgentManager {
+
+    /**
+     * The default verbosity of the solution output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    public static final int DEFAULT_VERBOSITY = 3;
+
+    /**
+     * Sets verbosity of this object's output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    protected int verbosity = DEFAULT_VERBOSITY;
+
+    /**
+     * singleton instance of AgentManager
+     */
+    public static AgentManager agentManager;
+
+    /**
+     * One to one ssociation of local cyc agents with their CycAgentInfo object.
+     * cyc agent name -> CycAgentInfo
+     */
+    public static Hashtable cycAgents;
+
+    /**
+     * Well known port where the Agent Manager listens for requests from cyc clients.
+     */
+    public static final int LOCAL_CLIENT_LISTENER_PORT = 4444;
+
+    /**
+     * Maximum number of local cyc clients supported by this listener.
+     */
+    public static final int MAX_LOCAL_CLIENT_CLIENTS = 50;
+
+    /**
+     * The socket which listens for new connections.
+     */
+    protected ServerSocket listenerSocket = null;
+
+    /**
+     * Provides the main method.
+     */
+    public static void main(String[] args) {
+        Log.makeLog();
+        String localHostName = null;
+        try {
+            localHostName = InetAddress.getLocalHost().getHostName();
+        }
+        catch (java.net.UnknownHostException e) {
+            Log.current.println("Cannot obtain local host name " + e.getMessage());
+            localHostName = "";
+        }
+        agentManager = new AgentManager();
+        if (agentManager.verbosity > 1)
+            Log.current.println("Agent manager started at " + localHostName);
+        agentManager.listenForCycServers();
+    }
+
+    /**
+     * Constructs a new AgentManager object.
+     * This singleton instance manages one or more KB's on a single host.
+     */
+    public AgentManager () {
+        cycAgents = new Hashtable();
+    }
+
+    /**
+     * Handles connecting Cyc servers.
+     */
+    protected void listenForCycServers () {
+        try {
+            listenerSocket = new ServerSocket(LOCAL_CLIENT_LISTENER_PORT, MAX_LOCAL_CLIENT_CLIENTS);
+            while (true) {
+                if (verbosity > 2)
+                    Log.current.println("Listening on port " + LOCAL_CLIENT_LISTENER_PORT);
+                Socket cycSocket = listenerSocket.accept();
+                if (verbosity > 2)
+                    Log.current.println("Cyc Connection accepted " + cycSocket);
+                // Spawn child thread to read from the socket.
+                CycProxyFactory cycProxyFactory =
+                    new CycProxyFactory(cycSocket);
+                Thread cycProxyFactoryThread = new Thread(cycProxyFactory);
+                cycProxyFactoryThread.start();
+            }
+        }
+        catch (IOException e) {
+            Log.current.println("Failed I/O: " + e);
+            System.exit(1);
+        }
+        finally {
+            try {
+                listenerSocket.close();
+            }
+            catch (IOException e) {
+            }
+        }
+    }
+}
+
+
+
+
+
+
+@
+
+
+1.9
+log
+@More cyc agent client support
+@
+text
+@d3 7
+a9 6
+import java.net.*;
+import java.util.*;
+import java.io.*;
+import fipaos.ont.fipa.*;
+import org.opencyc.api.*;
+import org.opencyc.util.*;
+d14 1
+a14 1
+ * @@version $Id: AgentManager.java,v 1.8 2001/11/26 22:03:47 stephenreed Exp $
+@
+
+
+1.8
+log
+@More code for Cyc client agents
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: AgentManager.java,v 1.7 2001/11/26 16:38:30 stephenreed Exp $
+d79 1
+d90 1
+a90 1
+            Log.current.print("Agent manager started at " + localHostName);
+@
+
+
+1.7
+log
+@Moved CycListener functions to AgentManager
+Renamed CycClientHandler to CycProxyFactory
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: AgentManager.java,v 1.6 2001/11/26 05:14:28 stephenreed Exp $
+a75 6
+     * Singleton thread which listens for requests from Cyc.
+     */
+    protected static CycListener cycListener;
+    protected static Thread cycListenerThread;
+
+    /**
+a98 3
+        cycListener = new CycListener();
+        cycListenerThread = new Thread(cycListener);
+        cycListenerThread.start();
+@
+
+
+1.6
+log
+@Refactoring cyc agent client
+@
+text
+@d5 1
+d13 1
+a13 1
+ * @@version $Id: AgentManager.java,v 1.5 2001/11/25 18:31:14 stephenreed Exp $
+d38 12
+d61 15
+d96 1
+a96 7
+        while (true)
+            // Keep root thread running with minimal resource consumption.
+            try {
+                Thread.sleep(1000);
+            }
+            catch (InterruptedException e) {
+            }
+d111 29
+a139 8
+     * Notifies my agent that an Agent Communication Language message has been received.
+     *
+     * @@param acl the Agent Communication Language message which has been received for my agent
+     */
+    public void messageReceived (ACL acl) {
+        super.messageReceived(acl);
+        if (messageConsumed)
+            return;
+@
+
+
+1.5
+log
+@Renamed CycInputHandler to CycClientHandler
+@
+text
+@a8 13
+
+
+
+
+// TO-DO reconcile with CycProxy
+
+
+
+
+
+
+
+
+d12 1
+a12 1
+ * @@version $Id: AgentManager.java,v 1.4 2001/11/21 23:47:45 stephenreed Exp $
+d34 1
+a34 1
+public class AgentManager extends GenericAgent {
+a96 1
+
+@
+
+
+1.4
+log
+@Continued adding source code
+@
+text
+@d13 1
+a13 1
+// TO-DO combine with CycProxy
+d25 1
+a25 1
+ * @@version $Id: AgentManager.java,v 1.3 2001/11/21 21:01:58 stephenreed Exp $
+@
+
+
+1.3
+log
+@Developing AgentManager for cyc agents
+@
+text
+@d9 13
+d25 1
+a25 1
+ * @@version $Id: AgentManager.java,v 1.2 2001/11/02 00:31:13 stephenreed Exp $
+@
+
+
+1.2
+log
+@Revised AgentManager and supporting classes to begin support for FIPA-OS and
+CoABS agent platforms.
+@
+text
+@d3 6
+d12 1
+a12 1
+ * @@version $Id: AgentManager.java,v 1.1 2001/11/01 22:07:42 stephenreed Exp $
+d34 1
+a34 6
+import  java.net.*;
+import  java.util.*;
+import  fipaos.ont.fipa.*;
+import  org.opencyc.util.*;
+import  org.opencyc.api.CycApiException;
+import  org.opencyc.cycobject.*;
+a35 1
+public class AgentManager  {
+d37 1
+a37 2
+     * The default verbosity of the solution output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+d39 1
+a39 7
+    public static final int DEFAULT_VERBOSITY = 3;
+
+    /**
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    protected int verbosity = DEFAULT_VERBOSITY;
+d48 1
+a48 1
+     * Singleton thread to listen for requests from Cyc.
+a53 5
+     * Sington instance of AgentManager.
+     */
+    public static AgentManager agentManager;
+
+    /**
+d89 1
+a89 1
+     * Forwards a message from a cyc agent to the receipient agent.
+d91 1
+a91 1
+     * @@param acl the representation of an ACL communication within an Agent.
+d93 4
+a96 3
+    public void forward (ACL acl) {
+    }
+
+a97 10
+    /**
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     *
+     * @@param verbosity 0 --> quiet ... 9 -> maximum diagnostic input
+     */
+    public void setVerbosity(int verbosity) {
+        this.verbosity = verbosity;
+        if (cycListener != null)
+            cycListener.setVerbosity(verbosity);
+@
+
+
+1.1
+log
+@Added Agent Manager classes for CoABS interface
+@
+text
+@d1 126
+a126 286
+package  org.opencyc.jini.cycproxy;
+
+/**
+ * Provides a jini agent proxy and a Grid proxy for an OpenCyc server.<p>
+ *
+ * @@version $Id: WebServerAdmin.java,v 1.3 2001/10/24 17:00:30 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+import  java.io.*;
+import  java.net.*;
+import  java.rmi.*;
+import  java.util.*;
+import  javax.swing.*;
+import  net.jini.lookup.entry.*;
+import  org.opencyc.jini.shared.*;
+import  org.opencyc.util.*;
+import  org.opencyc.api.CycApiException;
+import  org.opencyc.cycobject.*;
+
+public class AgentManager extends GenericService
+        implements Remote, GenericServiceInterface {
+    /**
+     * Message queue for routing all agent based messages.
+     */
+    public static AgentMessageQueue agentMessageQueue;
+
+    /**
+     * One to one ssociation of local cyc agents with their CycAgentInfo object.
+     * cyc agent name -> CycAgentInfo
+     */
+    public static Hashtable cycAgents;
+
+    /**
+     * Collection AwaitingReplyInfo objects which represent osynchronous message requests
+     * from local agent that are awaiting replies.  The socket object reference is held here
+     * until the response is sent back to the local agent.
+     */
+    public static Vector awaitingReplies;
+
+    /**
+    /**
+     * Singleton thread to listen for requests from Cyc.
+     */
+    protected static CycListener cycListener;
+    protected static Thread cycListenerThread;
+
+    /**
+     * Main method in case tracing is prefered over running JUnit.
+     */
+    public static void main(String[] args) {
+        initialize();
+        String localHostName = null;
+        try {
+            localHostName = InetAddress.getLocalHost().getHostName();
+        }
+        catch (java.net.UnknownHostException e) {
+            Log.current.println("Cannot obtain local host name " + e.getMessage());
+            localHostName = "";
+        }
+        try {
+            String agentName = localHostName + " agent manager";
+            AgentManager agentManager =
+                AgentManager.makeAgentManager(agentName,
+                                              "gold_star.gif");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            Log.current.errorPrintln("Exception while starting AgentManager " + e);
+            System.exit(1);
+        }
+        while (true)
+            try {
+                Thread.sleep(1000);
+            }
+            catch (InterruptedException e) {
+            }
+    }
+
+    /**
+     * Constructs a new AgentManager object.  This singleton instance manages one or more KB's on a single host.
+     *
+     * @@param serviceIcon the icon associated with the service.
+     * @@param nameAttribute the name of the service.
+     * @@param serviceInfo a standard attribute describing the service.
+     * @@exception RemoteException if a communications-related problem occurs during the
+     * execution of a remote method call.
+     */
+    public AgentManager (ImageIcon serviceIcon, Name nameAttribute, ServiceInfo serviceInfo)
+        throws RemoteException {
+        super(serviceIcon, nameAttribute, serviceInfo);
+        // Place for testing methods.
+        //Amp.test();
+        agentMessageQueue = new AgentMessageQueue();
+        cycAgents = new Hashtable();
+        cycListener = new CycListener();
+        cycListenerThread = new Thread(cycListener);
+        cycListenerThread.start();
+    }
+
+    public static AgentManager makeAgentManager (String agentName, String iconPath) {
+        // Name entry for LookupService.
+        Log.current.println("agentName=" + agentName);
+        Name nameAttribute = new Name(agentName);
+        // ServiceInfo entry for LookupService.
+        String name = "Agent Manager";
+        String manufacturer = "Cycorp Inc.";
+        String vendor = "Cycorp Inc.";
+        String version = "1.0";
+        String model = "";
+        String serialNumber = "";
+        ServiceInfo serviceInfo = new ServiceInfo(name, manufacturer, vendor, version, model, serialNumber);
+        ImageIcon serviceIcon = new ImageIcon(ClassLoader.getSystemResource(iconPath));
+        AgentManager agent = null;
+        Log.current.println("nameAttribute=" + nameAttribute);
+        try {
+            agent = new AgentManager(serviceIcon, nameAttribute, serviceInfo);
+        }
+        catch (RemoteException e) {
+            Log.current.errorPrintln("Error while creating service instance " + e);
+        }
+        return  agent;
+    }
+
+    /***
+     * Dispatchs a message from the agent message queue.  Lightweight tasks
+     * are performed using the process resources of the calling thread. Otherwise
+     * the handler corresponding to the message receiver is notified.
+     */
+    public static synchronized void dispatchAgentMessageQueue () {
+        // Get the first queue item, and remove it from the queue.
+        Amp amp = agentMessageQueue.removeFirst();
+        Log.current.println("dispatchAgentMessageQueue amp: " + amp);
+        // Obtain the receiver.
+        String receiver = amp.receiver();
+        Log.current.println("dispatchAgentMessageQueue receiver: " + receiver);
+        // Handle the case where the receiver is a local java method.
+        if (isLocalAgentMethod(receiver)) {
+            routeToLocalAgentMethod(amp);
+            return;
+        }
+        // Handle the case where the receiver is a Cyc agent.
+        if (isCycAgent(receiver)) {
+            try {
+                routeToCycAgent(amp);
+            }
+            catch (Exception e) {
+                Log.current.errorPrintln("Exception " + e + " while routing " + amp);
+            }
+            return;
+        }
+        // Otherwise send the message to the Grid.
+        try {
+            routeToGrid(amp);
+        }
+        catch (Exception e) {
+            Log.current.errorPrintln("Exception " + e + " while routing " + amp);
+        }
+    }
+
+    /***
+     * Returns true if the argument is an agent implemented as a local java
+     * method, or reachable through the Jini network.
+     *
+     * Note to developers - with numerous local method agents, there are
+     * more efficient means of coding this method and its usage.
+     *
+     * @@param receiver the agent receiving the message.
+     * @@return True if the receiver is an agent implemented as a local java
+     * method or reachable through the Jini network.
+     *
+     */
+    public static boolean isLocalAgentMethod (String receiver) {
+        return  receiver.equals("CYC-AGENT-REGISTRAR");
+    }
+
+    /***
+     * Answers true if the argument is an agent implemented within a local
+     * non-java process (e.g. cyc image).
+     * @@param receiver the agent receiving the message.
+     * @@return True if the argument is an agent implemented within a local
+     * non-java process (e.g. cyc image).
+     *
+     */
+    public static boolean isCycAgent (String receiver) {
+        return  cycAgents.containsKey(receiver);
+    }
+
+    /***
+     * Dispatchs a message from the agent message queue.  Performs the local
+     * method and then replies.
+     *
+     * @@param amp the message
+     */
+    public static void routeToLocalAgentMethod (Amp amp) {
+        String receiver = amp.receiver();
+        Log.current.println("routing to local agent method amp: " + amp + "\n  receiver " + receiver);
+        if (receiver.equals("CYC-AGENT-REGISTRAR")) {
+            registerCycAgent(amp);
+            return;
+        }
+        Log.current.println("routeToLocalAgentMethod, receiver not found " + receiver);
+    }
+
+    /***
+     * Registers a Cyc agent.
+     *
+     * @@param amp the registration request message
+     */
+    public static void registerCycAgent (Amp amp) {
+        Log.current.println("registerCycAgent amp: " + amp);
+        String sender = amp.sender();
+        if (cycAgents.containsKey(sender)) {
+            Log.current.errorPrintln("Ignoring registration request - already registered");
+            return;
+        }
+        CycList content = new CycList(amp.content());
+        Log.current.println("content: " + content.cyclify());
+        if (content.size() != 2) {
+            Log.current.errorPrintln("Registration content length not 2");
+            return;
+        }
+        if (! (content.first() instanceof String)) {
+            Log.current.errorPrintln("Registration cyc image name is not a string");
+            return;
+        }
+        if (! (content.second() instanceof Integer)) {
+            Log.current.errorPrintln("Registration base port number is not an integer");
+            return;
+        }
+        String cycImageId = (String) content.first();
+        int basePort = ((Integer) content.second()).intValue();
+        CycAgentInfo cycAgentInfo = new CycAgentInfo();
+        Log.current.println("Creating Cyc proxy for " + sender +
+                            "\nhosted at image " + cycImageId +
+                            " at localhost base port " + basePort);
+        cycAgentInfo.cycProxy = CycProxy.makeCycProxy(sender, "cyc-logo-16.JPG", basePort);
+        cycAgentInfo.cycImageId = cycImageId;
+        cycAgents.put(sender, cycAgentInfo);
+    }
+
+    /***
+     * Dispatches a message from the agent message queue to the receiving cyc agent.
+     */
+    public static synchronized void routeToCycAgent (Amp amp) throws IOException, CycApiException {
+        String receiver = amp.receiver();
+        Log.current.println("routeToCycAgent amp: " + amp);
+        Log.current.println(" receiver: " + receiver);
+        CycAgentInfo cycAgentInfo = (CycAgentInfo) cycAgents.get(receiver);
+        CycProxy cycProxy = cycAgentInfo.cycProxy;
+        cycProxy.routeToCycAgent(amp);
+    }
+
+    /***
+     *
+     * routeToGrid
+     *
+     * Dispatches a message from the agent message queue.  Route it to the Grid.
+     *
+     */
+    public static void routeToGrid (Amp amp) {
+        String receiver = amp.receiver();
+        Log.current.println("routing to grid amp: " + amp + "\n  receiver " + receiver);
+        return;
+    }
+}
+
+
+
+@
+

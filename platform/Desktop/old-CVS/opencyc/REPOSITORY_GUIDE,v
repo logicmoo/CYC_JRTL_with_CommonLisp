@@ -1,0 +1,61 @@
+head	1.1;
+access;
+symbols
+	BRANCH_OPENCYC_1_0_1:1.1.0.2
+	PRE_1_0:1.1
+	OPENCYC_1_0_1:1.1;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2006.10.18.15.20.31;	author dmiles;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@File containing information about TAGS and BRANCHES
+@
+text
+@OpenCyc is the open source version of Cyc,
+the world's largest commonsense knowledge base.
+
+These packages provide a high level deductive inference engine in the form of a
+finite domain constraint solver, together with KB object proxies and OpenCyc
+client interface support classes.
+
+
+Modules Here
+--------------------------------------------------------------
+
+oracle/   -  Oracle Database Server -> Cyc Server interface
+
+python/   - Python Interface to Cyc
+
+swi_interface/   SWI-Prolog interface to Cyc
+
+org/orig - Historical Java Interface
+
+org/opencyc  - Java interface
+    TAGS
+        OPENCYC_1_0_1 - The selective state of CVS to represents what was released with Opencyc-1.0
+        PRE_1_0  - The complete state of the CVS Pre OPENCYC_1_0_1
+        HEAD - Diverse Experemental State that the Opencyc CVS is often in
+
+    BRANCHES
+        BRANCH_OPENCYC_1_0_1 - For those needing the selective thin release that came with OpenCyc-1.0
+        MAIN - Diverse Experemental State that the Opencyc CVS is often in
+
+
+
+
+
+
+
+@

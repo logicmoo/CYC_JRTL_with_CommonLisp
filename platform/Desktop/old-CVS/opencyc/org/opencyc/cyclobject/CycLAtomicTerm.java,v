@@ -1,0 +1,104 @@
+head	1.4;
+access;
+symbols
+	BRANCH_OPENCYC_1_0_1:1.3.0.2
+	OPENCYC_1_0_1:1.3
+	PRE_1_0:1.1;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2006.10.21.16.49.17;	author dmiles;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2006.10.18.14.21.31;	author dmiles;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2006.10.18.13.36.02;	author dmiles;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2002.05.13.18.08.32;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental packages
+@
+text
+@package org.opencyc.cyclobject;
+
+/*****************************************************************************
+ * KB comment for #$CycLAtomicTerm as of 2002/05/07:<p>
+ *
+ * The collection of all atomic #$CycLDenotationalTerms (q.v.).  "Atomic" here
+ * means not constructible from other CycL terms via the syntax of CycL.  Thus,
+ * subcollections of #$CycLAtomicTerm include #$CycLConstant, #$CycLVariable,
+ * and #$SubLAtomicTerm.  Note that #$CycLAtomicTerm, like most instances of
+ * #$CycLExpressionType, is "quoted" (see #$quotedCollection).<p>
+ * 
+ * @@version $Id: CycLAtomicTerm.java,v 1.7 2005/02/17 13:41:14 reed Exp $
+ * @@author Tony Brusseau, Steve Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://sf.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *****************************************************************************/
+public interface CycLAtomicTerm extends CycLDenotationalTerm { 
+}
+@
+
+
+1.3
+log
+@This is the Additional Content to Create OpenCyc-1.0.1
+@
+text
+@@
+
+
+1.2
+log
+@This is a checkin of OpenCyc 1.0.1 Java  OPENCYC_1_0_1
+@
+text
+@@
+
+
+1.1
+log
+@Initial check in of CycL objects, an alternative to org.cycobject.* classes, in
+those cases where closer alignment to the CycL grammar is required.
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycLAtomicTerm.java,v 1.5 2002/05/07 20:04:01 jantos Exp $
+@
+

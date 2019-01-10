@@ -1,0 +1,28 @@
+head	1.1;
+access;
+symbols
+	BRANCH_OPENCYC_1_0_1:1.1.0.2
+	OPENCYC_1_0_1:1.1
+	PRE_1_0:1.1;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2003.08.08.13.33.05;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@check in.
+@
+text
+@<body>
+Provides a set of utility classes to support the OpenCyc Interface.
+</body>@

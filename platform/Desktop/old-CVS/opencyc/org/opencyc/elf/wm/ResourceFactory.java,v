@@ -1,0 +1,219 @@
+head	1.6;
+access;
+symbols
+	PRE_1_0:1.6;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2003.09.18.21.22.57;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2003.09.14.13.58.04;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2003.09.10.23.13.24;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2003.09.05.22.12.22;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2003.09.05.21.15.21;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2003.09.05.18.58.22;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@/home/reed/opencyc/org/opencyc/elf
+removed equals(...)  method if present and reformatted multiline comments to one less line
+@
+text
+@package org.opencyc.elf.wm;
+
+//// Internal Imports
+import org.opencyc.elf.bg.planner.Resource;
+
+//// External Imports
+import java.util.HashMap;
+
+/** ResourceFactory populates the resource pool.  There is
+ * a singleton instance.
+ *
+ * @@version $Id: ResourceFactory.java,v 1.5 2003/09/14 13:58:04 stephenreed Exp $
+ * @@author  reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class ResourceFactory {
+  
+  //// Constructors
+  
+  /** Creates a new instance of ResourceFactory and stores it in the singleton instance. */
+  public ResourceFactory() {
+    resourceFactory = this;
+  }
+  
+  //// Public Area
+  
+  /** Gets the resource factory singleton instance.
+   *
+   * @@return the resource factory singleton instance
+   */
+  public ResourceFactory getInstance() {
+    return resourceFactory;
+  }
+  
+  /** Populates the resource pool. */
+  public static void populateResourcePool () {
+    ResourcePool resourcePool = ResourcePool.getInstance();
+    // console
+    Resource resource = new Resource();
+    resource.setResourceName(Resource.CONSOLE);
+    resourcePool.setResource(Resource.CONSOLE, resource);
+    // user
+    resource = new Resource();
+    resource.setResourceName(Resource.USER);
+    resourcePool.setResource(Resource.USER, resource);
+    
+    //TODO
+  }
+  
+  //// Protected Area
+  
+  //// Private Area
+  
+  //// Internal Rep
+  
+  /** the resource factory singleton instance */
+  protected static ResourceFactory resourceFactory;
+  
+  //// Main
+  
+}
+@
+
+
+1.5
+log
+@Changed ArrayList to List, consistently formatted one line comments. ----------------------------------------------------------------------
+@
+text
+@d9 1
+a9 2
+/**
+ * ResourceFactory populates the resource pool.  There is
+d12 1
+a12 1
+ * @@version $Id: ResourceFactory.java,v 1.4 2003/09/10 23:13:24 stephenreed Exp $
+d44 1
+a44 2
+  /**
+   * Gets the resource factory singleton instance.
+@
+
+
+1.4
+log
+@added population of the user resource
+@
+text
+@d10 1
+a10 1
+ * <P>ResourceFactory populates the resource pool.  There is
+d13 1
+a13 1
+ * @@version $Id: ResourceFactory.java,v 1.3 2003/09/05 22:12:22 stephenreed Exp $
+@
+
+
+1.3
+log
+@renamed makeInstances method to populateResourcePool
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: ResourceFactory.java,v 1.2 2003/09/05 21:15:21 stephenreed Exp $
+d54 1
+a54 3
+  /**
+   * Populates the resource pool.
+   */
+d57 1
+d61 4
+@
+
+
+1.2
+log
+@/home/reed/opencyc/org/opencyc/elf/wm
+better handling of the singleton instance
+@
+text
+@d10 1
+a10 1
+ * <P>ResourceFactory is the factory which creates instances of Resource.  There is
+d13 1
+a13 1
+ * @@version $Id: ResourceFactory.java,v 1.1 2003/09/05 18:58:22 stephenreed Exp $
+d55 1
+a55 1
+   * Makes the resource instances.
+d57 1
+a57 1
+  public static void makeResources () {
+d62 2
+@
+
+
+1.1
+log
+@moved from planner to wm package
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: ResourceFactory.java,v 1.3 2003/09/03 16:51:48 stephenreed Exp $
+d38 1
+a38 1
+  /** Creates a new instance of ResourceFactory */
+d40 1
+d46 9
+d69 3
+@
+

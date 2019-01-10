@@ -1,0 +1,957 @@
+head	1.30;
+access;
+symbols
+	PRE_1_0:1.30;
+locks; strict;
+comment	@# @;
+
+
+1.30
+date	2003.10.02.22.57.16;	author stephenreed;	state Exp;
+branches;
+next	1.29;
+
+1.29
+date	2003.09.26.23.16.08;	author stephenreed;	state Exp;
+branches;
+next	1.28;
+
+1.28
+date	2003.09.25.20.54.40;	author stephenreed;	state Exp;
+branches;
+next	1.27;
+
+1.27
+date	2003.09.22.02.30.02;	author stephenreed;	state Exp;
+branches;
+next	1.26;
+
+1.26
+date	2003.09.20.02.27.48;	author stephenreed;	state Exp;
+branches;
+next	1.25;
+
+1.25
+date	2003.09.19.22.21.35;	author stephenreed;	state Exp;
+branches;
+next	1.24;
+
+1.24
+date	2003.09.18.21.22.53;	author stephenreed;	state Exp;
+branches;
+next	1.23;
+
+1.23
+date	2003.09.14.13.58.03;	author stephenreed;	state Exp;
+branches;
+next	1.22;
+
+1.22
+date	2003.09.10.23.01.24;	author stephenreed;	state Exp;
+branches;
+next	1.21;
+
+1.21
+date	2003.09.10.16.29.59;	author stephenreed;	state Exp;
+branches;
+next	1.20;
+
+1.20
+date	2003.09.10.16.28.41;	author stephenreed;	state Exp;
+branches;
+next	1.19;
+
+1.19
+date	2003.09.10.16.00.53;	author stephenreed;	state Exp;
+branches;
+next	1.18;
+
+1.18
+date	2003.09.10.15.37.41;	author stephenreed;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2003.09.09.19.14.16;	author stephenreed;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2003.09.09.18.59.41;	author stephenreed;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2003.09.09.17.16.11;	author stephenreed;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2003.09.09.16.12.10;	author stephenreed;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2003.09.08.23.07.14;	author stephenreed;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2003.09.08.22.54.52;	author stephenreed;	state dead;
+branches;
+next	1.11;
+
+1.11
+date	2003.09.08.22.43.25;	author stephenreed;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2003.09.05.22.37.40;	author stephenreed;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2003.09.05.18.16.07;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2003.08.29.21.52.51;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2003.08.25.22.25.35;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2003.08.25.13.09.49;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2003.08.18.23.20.31;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2003.08.15.22.45.11;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2003.08.11.21.24.16;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2003.08.08.13.22.24;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2002.11.18.17.45.35;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.30
+log
+@Replaced ActuateMsg with DoTaskMsg
+@
+text
+@package org.opencyc.elf.a;
+
+//// Internal Imports
+import org.opencyc.elf.Node;
+import org.opencyc.elf.bg.planner.Resource;
+
+//// External Imports
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
+import EDU.oswego.cs.dl.util.concurrent.Puttable;
+
+/** Actuator defines the actuator interface for the Elementary Loop Functioning (ELF).
+ * 
+ * @@version $Id: Actuator.java,v 1.29 2003/09/26 23:16:08 stephenreed Exp $
+ * @@author Stephen L. Reed  
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public interface Actuator {
+  
+  /** Gets the name of the actuator or virtual actuator (job assigner)
+   *
+   * @@return the name of the actuator or virtual actuator (job assigner).
+   */
+  public String getName();
+  
+  /** Gets the resources required by this actuator or virtual actuator (job assigner).
+   *
+   * @@return the resources required by this actuator or virtual actuator (job assigner)
+   */
+  public List getResources();
+  
+  /** Gets the puttable channel for this node component to which other node
+   * components can send messages.
+   *
+   * @@return the puttable channel for this node component to which other node
+   * components can send messages
+   */
+  public Puttable getChannel();
+  
+  /** Gets the ELF Node that contains this object.
+   * 
+   * @@return the ELF Node that contains this object
+   */
+  public Node getNode();
+
+  /** Sets the ELF Node that contains this object.
+   * 
+   * @@param node the ELF Node that contains this object
+   */
+  public void setNode(Node node);
+  
+  /** Gets the logger for this node.
+   *
+   * @@return the logger for this node
+   */
+  public Logger getLogger ();
+}
+@
+
+
+1.29
+log
+@refactored for actuator-sensor
+@
+text
+@d4 1
+d10 1
+a10 1
+
+d15 1
+a15 1
+ * @@version $Id: Actuator.java,v 1.28 2003/09/25 20:54:40 stephenreed Exp $
+d57 17
+@
+
+
+1.28
+log
+@the getChannel() method is now included in the interface
+@
+text
+@d14 1
+a14 1
+ * @@version $Id: Actuator.java,v 1.27 2003/09/22 02:30:02 stephenreed Exp $
+a55 2
+  /** the console output actuator name */
+  public static final String CONSOLE_OUTPUT = "console output";
+@
+
+
+1.27
+log
+@fixed compilation errors resulting from messages construct signature change
+@
+text
+@d10 2
+d14 1
+a14 1
+ * @@version $Id: Actuator.java,v 1.26 2003/09/20 02:27:48 stephenreed Exp $
+d47 8
+@
+
+
+1.26
+log
+@adding code to ScheduleLibrary
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: Actuator.java,v 1.25 2003/09/19 22:21:35 stephenreed Exp $
+d46 2
+a47 1
+  
+@
+
+
+1.25
+log
+@/home/reed/opencyc/org/opencyc/elf
+refactored job and schedule
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: Actuator.java,v 1.24 2003/09/18 21:22:53 stephenreed Exp $
+a44 3
+  
+  /** the console output actuator name */
+  public static final String CONSOLE_OUTPUT = "console output";
+@
+
+
+1.24
+log
+@/home/reed/opencyc/org/opencyc/elf
+removed equals(...)  method if present and reformatted multiline comments to one less line
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: Actuator.java,v 1.23 2003/09/14 13:58:03 stephenreed Exp $
+a44 6
+  
+  /** Gets the names of actions that this actuator or virtual actuator (job assigner) can accomplish.
+   *
+   * @@return the names of actions that this actuator or virtual actuator (job assigner) can accomplish
+   */
+  public List getActionCapabilities();
+@
+
+
+1.23
+log
+@Changed ArrayList to List, consistently formatted one line comments. ----------------------------------------------------------------------
+@
+text
+@d10 1
+a10 2
+/**
+ * Actuator defines the actuator interface for the Elementary Loop Functioning (ELF).
+d12 1
+a12 1
+ * @@version $Id: Actuator.java,v 1.22 2003/09/10 23:01:24 stephenreed Exp $
+d34 1
+a34 2
+  /** 
+   * Gets the name of the actuator or virtual actuator (job assigner)
+d40 1
+a40 2
+  /**
+   * Gets the resources required by this actuator or virtual actuator (job assigner).
+d46 1
+a46 2
+  /**
+   * Gets the names of actions that this actuator or virtual actuator (job assigner) can accomplish.
+@
+
+
+1.22
+log
+@changed meaning of getActionCapabilites() to return the names of actons rather than the actions
+@
+text
+@d8 1
+d13 1
+a13 1
+ * @@version $Id: Actuator.java,v 1.21 2003/09/10 16:29:59 stephenreed Exp $
+d47 1
+a47 1
+  public ArrayList getResources();
+d54 1
+a54 1
+  public ArrayList getActionCapabilities();
+@
+
+
+1.21
+log
+@improved comment
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: Actuator.java,v 1.20 2003/09/10 16:28:41 stephenreed Exp $
+d49 1
+a49 1
+   * Gets the actions that this actuator or virtual actuator (job assigner) can accomplish.
+d51 1
+a51 1
+   * @@return the actions that this actuator or virtual actuator (job assigner) can accomplish
+@
+
+
+1.20
+log
+@added getActionCapabilities() method
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: Actuator.java,v 1.19 2003/09/10 16:00:53 stephenreed Exp $
+d49 1
+a49 1
+   * Gets the actions that this actuator can accomplish.
+d51 1
+a51 1
+   * @@return the actions that this actuator can accomplish
+@
+
+
+1.19
+log
+@improved comments
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: Actuator.java,v 1.18 2003/09/10 15:37:41 stephenreed Exp $
+d48 7
+d57 1
+@
+
+
+1.18
+log
+@fixed comment typo
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: Actuator.java,v 1.17 2003/09/09 19:14:16 stephenreed Exp $
+d35 1
+a35 1
+   * Gets the name of the actuator.
+d37 1
+a37 1
+   * @@return the name of the actuator
+d42 1
+a42 1
+   * Gets the resources required by this actuator.
+d44 1
+a44 1
+   * @@return the resources required by this actuator
+@
+
+
+1.17
+log
+@changed to getResources() method
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: Actuator.java,v 1.16 2003/09/09 18:59:41 stephenreed Exp $
+d42 1
+a42 1
+   * Gets the resources requried by this actuator.
+d44 1
+a44 1
+   * @@return the resources requried by this actuator
+@
+
+
+1.16
+log
+@added get actuatedObject method
+@
+text
+@d7 1
+d12 1
+a12 1
+ * @@version $Id: Actuator.java,v 1.15 2003/09/09 17:16:11 stephenreed Exp $
+d42 1
+a42 1
+   * Gets the object acted upon by this actuator.
+d44 1
+a44 1
+   * @@return the object acted upon by this actuator
+d46 1
+a46 1
+  public Resource getActuatedObject();
+@
+
+
+1.15
+log
+@added getName() method
+@
+text
+@d4 1
+d11 1
+a11 1
+ * @@version $Id: Actuator.java,v 1.14 2003/09/09 16:12:10 stephenreed Exp $
+d39 7
+@
+
+
+1.14
+log
+@added console output actuator name
+@
+text
+@d10 1
+a10 1
+ * @@version $Id: Actuator.java,v 1.13 2003/09/08 23:07:14 stephenreed Exp $
+d31 7
+@
+
+
+1.13
+log
+@initial check in
+@
+text
+@d10 1
+a10 1
+ * @@version $Id: ConsoleOutput.java,v 1.1 2003/09/08 22:55:24 stephenreed Exp $
+d31 3
+@
+
+
+1.12
+log
+@renamed as concrete class ConsoleOutput
+@
+text
+@a3 4
+import org.opencyc.elf.NodeComponent;
+
+import org.opencyc.elf.message.GenericMsg;
+import org.opencyc.elf.message.ActuateMsg;
+a5 4
+import EDU.oswego.cs.dl.util.concurrent.Executor;
+import EDU.oswego.cs.dl.util.concurrent.Puttable;
+import EDU.oswego.cs.dl.util.concurrent.Takable;
+import EDU.oswego.cs.dl.util.concurrent.ThreadedExecutor;
+d8 1
+a8 1
+ * Provides Actuators for the Elementary Loop Functioning (ELF).
+d10 1
+a10 1
+ * @@version $Id: Actuator.java,v 1.11 2003/09/08 22:43:25 stephenreed Exp $
+d30 1
+a30 119
+public abstract class Actuator extends NodeComponent {
+  
+  //// Constructors
+
+  /** 
+   * Creates a new instance of Actuator with the given
+   * input message channel.
+   *
+   * @@param actuatorChannel the takable channel from which messages are input
+   */
+  public Actuator(Takable actuatorChannel) {
+    this.actuatorChannel = actuatorChannel;
+    consumer = new Consumer(actuatorChannel, this);
+    executor = new ThreadedExecutor();
+    try {
+      executor.execute(consumer);
+    }
+    catch (InterruptedException e) {
+      e.printStackTrace();
+      System.exit(1);
+    }
+  }
+
+  //// Public Area
+  
+  /**
+   * Returns a string representation of this object.
+   * 
+   * @@return a string representation of this object
+   */
+  public String toString() {
+    return "Actuator for " + node.getName();
+  }
+  
+  /** 
+   * Gets the puttable channel for this node component to which other node
+   * components can send messages.
+   *
+   * @@return the puttable channel for this node component to which other node
+   * components can send messages
+   *
+   */
+  public Puttable getChannel() {
+    return (Puttable) actuatorChannel;
+  }
+  
+  //// Protected Area
+  
+  
+  //TODO think about moving execution logic here via an action look-up table
+  // Action will contain an actionName and the parameter list
+  
+  
+  /**
+   * Thread which processes the input channel of messages.
+   */
+  protected class Consumer implements Runnable {
+    
+    /**
+     * the takable channel from which messages are input
+     */
+    protected final Takable actuatorChannel;
+
+    /**
+     * the parent node component
+     */
+    protected NodeComponent nodeComponent;
+    
+    /**
+     * Creates a new instance of Consumer.
+     *
+     * @@param actuatorChannel the takable channel from which messages are input
+     * @@param nodeComponent the parent node component
+     */
+    protected Consumer (Takable actuatorChannel, 
+                        NodeComponent nodeComponent) { 
+      this.actuatorChannel = actuatorChannel;
+      this.nodeComponent = nodeComponent;
+    }
+
+    /**
+     * Reads messages from the input queue and processes them.
+     */
+    public void run () {
+      try {
+        while (true) { 
+          doAction((ActuateMsg) actuatorChannel.take()); 
+        }
+      }
+      catch (InterruptedException ex) {}
+    }
+
+    /**
+     * Performs the action on the given object using the command and parameters
+     * given by the actuation data.
+     *
+     * @@param actuateMsg the given input channel message
+     */
+    public abstract void doAction (ActuateMsg actuateMsg);
+  
+  }
+  //// Private Area
+  
+  //// Internal Rep
+
+  /**
+   * the takable channel from which messages are input
+   */
+  protected Takable actuatorChannel = null;
+    
+  /**
+   * the thread which processes the input channel of messages
+   */
+  protected Consumer consumer;
+
+  /**
+   * the executor of the consumer thread
+   */
+  protected Executor executor;
+d32 1
+a32 1
+}@
+
+
+1.11
+log
+@made doAction method abstract
+@
+text
+@d18 1
+a18 1
+ * @@version $Id: Actuator.java,v 1.10 2003/09/05 22:37:40 stephenreed Exp $
+@
+
+
+1.10
+log
+@made the class abstract because particular sensors will extend it
+@
+text
+@d18 1
+a18 1
+ * @@version $Id: Actuator.java,v 1.9 2003/09/05 18:16:07 stephenreed Exp $
+d136 1
+a136 5
+    void doAction (ActuateMsg actuateMsg) {
+      Object obj = actuateMsg.getObj();
+      Object data = actuateMsg.getData();
+      //TODO
+    }
+@
+
+
+1.9
+log
+@/home/reed/opencyc/org/opencyc/elf
+fixed javadoc errors
+@
+text
+@d18 1
+a18 1
+ * @@version $Id: Actuator.java,v 1.8 2003/08/29 21:52:51 stephenreed Exp $
+d38 1
+a38 1
+public class Actuator extends NodeComponent {
+a40 6
+
+  /**
+   * Constructs a new Actuator object.
+   */
+  public Actuator() {
+  }
+@
+
+
+1.8
+log
+@added TODO comments on how to have executable actions be implemented as
+looked-up methods on actuator subclasses.  The actuators would be previously
+generated from KB content.
+@
+text
+@d16 1
+a16 1
+ * Provides Actuators for the Elementary Loop Functioning (ELF).<br>
+d18 1
+a18 1
+ * @@version $Id: Actuator.java,v 1.7 2003/08/25 22:25:35 stephenreed Exp $
+@
+
+
+1.7
+log
+@added protected modifiers
+@
+text
+@d18 1
+a18 1
+ * @@version $Id: Actuator.java,v 1.6 2003/08/25 13:09:49 stephenreed Exp $
+d91 5
+@
+
+
+1.6
+log
+@Syncronizing
+
+----------------------------------------------------------------------
+@
+text
+@d18 1
+a18 1
+ * @@version $Id: Actuator.java,v 1.5 2003/08/18 23:20:31 stephenreed Exp $
+d156 1
+a156 1
+  Consumer consumer;
+d161 1
+a161 1
+  Executor executor;
+@
+
+
+1.5
+log
+@formatting
+@
+text
+@d11 1
+d18 1
+a18 1
+ * @@version $Id: Actuator.java,v 1.4 2003/08/15 22:45:11 stephenreed Exp $
+d55 1
+d78 12
+d148 5
+@
+
+
+1.4
+log
+@/home/reed/opencyc/org/opencyc/elf
+Added methods to KnowledgeBase
+@
+text
+@d3 1
+a4 1
+import org.opencyc.elf.bg.procedure.Procedure;
+d6 7
+d17 1
+a17 1
+ * @@version $Id: Actuator.java,v 1.3 2003/08/11 21:24:16 stephenreed Exp $
+d38 2
+a39 2
+  /** the commanded action */
+  protected Procedure commandedAction;
+d47 20
+d75 58
+d135 1
+a135 3
+   * Gets the commanded action
+   * 
+   * @@return the commanded action
+d137 1
+a137 3
+  public Procedure getCommandedAction() {
+    return commandedAction;
+  }
+d140 1
+a140 3
+   * Sets the commanded action
+   * 
+   * @@param commandedAction the commanded action
+d142 1
+a142 6
+  public void setCommandedAction(Procedure commandedAction) {
+    this.commandedAction = commandedAction;
+  }
+  
+  public void run() {
+  }
+@
+
+
+1.3
+log
+@Reinserted the LGPL license clause that was wrongly removed by the Jalopy
+indentation tool.
+@
+text
+@d10 1
+a10 1
+ * @@version $Id: Actuator.java,v 1.2 2003/08/08 13:22:24 stephenreed Exp $
+d66 4
+@
+
+
+1.2
+log
+@synchronized with work in progress.
+@
+text
+@d10 19
+a28 2
+ * @@version $Id: Actuator.java,v 1.1 2002/11/18 17:45:35 stephenreed Exp $
+ * @@author Stephen L. Reed <p><p><p><p><p>
+@
+
+
+1.1
+log
+@Inital check in
+@
+text
+@d3 3
+a5 3
+import org.opencyc.uml.core.*;
+import org.opencyc.uml.interpreter.*;
+import org.opencyc.elf.*;
+d9 3
+a11 21
+ *
+ * @@version $Id: Actuator.java,v 1.4 2002/11/17 03:08:17 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+a12 1
+
+d14 2
+d17 32
+a48 60
+    /**
+     * the commanded action
+     */
+    protected Procedure commandedAction;
+
+    /**
+     * the procedure interpreter
+     */
+    protected ProcedureInterpreter procedureInterpreter;
+
+   /**
+     * Constructs a new Actuator object.
+     */
+    public Actuator() {
+    }
+
+    /**
+     * Returns a string representation of this object.
+     *
+     * @@return a string representation of this object
+     */
+    public String toString() {
+        return "Actuator for " + node.getName();
+    }
+
+    /**
+     * Gets the commanded action
+     *
+     * @@return the commanded action
+     */
+    public Procedure getCommandedAction () {
+        return commandedAction;
+    }
+
+    /**
+     * Sets the commanded action
+     *
+     * @@param commandedAction the commanded action
+     */
+    public void setCommandedAction (Procedure commandedAction) {
+        this.commandedAction = commandedAction;
+    }
+
+    /**
+     * Gets the procedure interpreter
+     *
+     * @@return the procedure interpreter
+     */
+    public ProcedureInterpreter getProcedureInterpreter () {
+        return procedureInterpreter;
+    }
+
+    /**
+     * Sets the procedure interpreter
+     *
+     * @@param procedureInterpreter the procedure interpreter
+     */
+    public void setProcedureInterpreter (ProcedureInterpreter procedureInterpreter) {
+        this.procedureInterpreter = procedureInterpreter;
+    }
+@
+

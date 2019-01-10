@@ -1,0 +1,242 @@
+head	1.6;
+access;
+symbols
+	OPENCYC_1_0_1:1.6
+	PRE_1_0:1.6;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2003.03.19.15.26.55;	author yepster;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2003.01.30.15.39.03;	author yepster;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2003.01.08.13.10.18;	author yepster;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2003.01.02.19.36.33;	author yepster;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2002.12.30.17.02.33;	author yepster;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2002.12.24.15.20.01;	author yepster;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@Some extra procedures and methods
+@
+text
+@CREATE OR REPLACE TYPE cyclist_type
+AS TABLE OF VARCHAR2(4000);
+/
+CREATE OR REPLACE TYPE cyclist_nested_type
+AS TABLE OF cyclist_type;
+/
+----------------------------------------------------------------
+-- Create the package specification.
+-- Please see the package body and the java stored procedure source for more info.
+----------------------------------------------------------------
+CREATE OR REPLACE PACKAGE CYC
+/***************************************************************************
+ *
+ * Copyright (C)
+ * 
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+ * PARTICULAR PURPOSE. See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+ * Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ * yepster@@users.sourceforge.net
+ *
+ * ========================================================================
+ *
+ * Package body: CYC
+ *
+ * Interface to java stored procedures that interface with Cyc.
+ *
+ * @@author Yeb Havinga
+ *
+ * Please note: Oracle is case insensitive.
+ *
+ ***************************************************************************/
+IS
+    TYPE cyclist_type_indexed IS TABLE OF VARCHAR2(4000) INDEX BY BINARY_INTEGER; -- for input cyclists
+
+    TYPE generic_curtype IS REF CURSOR;                                           -- for cursor parameters
+
+
+PROCEDURE makeConnection;
+PROCEDURE makeConnection( hostname_in IN VARCHAR2 );
+
+PROCEDURE endConnection;
+
+PROCEDURE makeCycConstant( constant_in IN VARCHAR2 );
+
+PROCEDURE createMicrotheory(
+    mtname_in IN VARCHAR2,
+    comment_in IN VARCHAR2,
+    isamt_in IN VARCHAR2,
+    genlmts_in IN cyclist_type );
+
+PROCEDURE createMicrotheorySystem(
+    mtname_in IN VARCHAR2,
+    isamt_in IN VARCHAR2,
+    genlmts_in IN cyclist_type  );
+
+PROCEDURE assertGaf( gaf_in IN VARCHAR2, mt_in IN VARCHAR2 );
+
+PROCEDURE unassertGaf( gaf_in IN VARCHAR2, mt_in IN VARCHAR2 );
+
+FUNCTION assertGaf( gaf_in IN VARCHAR2, mt_in IN VARCHAR2 )
+RETURN VARCHAR2;
+
+PROCEDURE assertWithTranscript( sentence_in IN VARCHAR2, mt_in IN VARCHAR2 );
+
+FUNCTION assertWithTranscript( sentence_in IN VARCHAR2, mt_in IN VARCHAR2 )
+RETURN VARCHAR2;
+
+FUNCTION isQueryTrue( query_in IN VARCHAR2, mt_in IN VARCHAR2 )
+RETURN NUMBER;
+
+FUNCTION askWithVariable( query_in IN VARCHAR2, variable_in IN VARCHAR2, mt_in VARCHAR2 )
+RETURN cyclist_type;
+
+FUNCTION askWithVariable(
+    query_in IN VARCHAR2,
+    variable_in IN VARCHAR2,
+    mt_in IN VARCHAR2,
+    backchain_in IN NUMBER )
+RETURN cyclist_type;
+
+FUNCTION askWithVariables( query_in IN VARCHAR2, variables_in IN VARCHAR2, mt_in IN VARCHAR2 )
+RETURN cyclist_type;
+
+FUNCTION getBackChainRules( predicate_in IN VARCHAR2 )
+RETURN cyclist_type;
+
+FUNCTION converseList( command_in IN VARCHAR2 )
+RETURN cyclist_type;
+
+FUNCTION converseString( command_in IN VARCHAR2 )
+RETURN VARCHAR2;
+
+FUNCTION converseObjectToString( command_in IN VARCHAR2 )
+RETURN VARCHAR2;
+
+FUNCTION converseEscapedList( command_in IN VARCHAR2 )
+RETURN VARCHAR2;
+
+PROCEDURE converseVoid( command_in IN VARCHAR2 );
+
+FUNCTION converseVoid( command_in IN VARCHAR2 )
+RETURN cyclist_type;
+
+FUNCTION getKnownConstantByName( name_in IN VARCHAR2 )
+RETURN VARCHAR2;
+
+PROCEDURE kill( constant_in IN VARCHAR2 );
+
+FUNCTION escapeList( list_in IN VARCHAR2 )
+RETURN VARCHAR2;
+
+PROCEDURE truncate_collection ( collection_name_in IN VARCHAR2 );
+
+PROCEDURE openAskWithVariable(
+    query_in        IN VARCHAR2,
+    variable_in     IN VARCHAR2,
+    mt_in           IN VARCHAR2,
+    backchain_in    IN NUMBER,
+    bindings_out    OUT generic_curtype       -- reference cursor
+);
+
+END cyc;
+/
+QUIT
+/
+@
+
+
+1.5
+log
+@Added 'support' for askWithVariables.
+@
+text
+@d45 3
+d118 13
+@
+
+
+1.4
+log
+@New wrapper for createMicrotheorySystem
+CVS----------------------------------------------------------------------
+@
+text
+@d4 3
+d86 3
+@
+
+
+1.3
+log
+@Added method askWithVariable( query, variable, mt, backchain )
+@
+text
+@d43 1
+d54 5
+@
+
+
+1.2
+log
+@Added kill method
+@
+text
+@a47 2
+PROCEDURE assertgaf( gaf_in IN VARCHAR2, mt_in IN VARCHAR2 );
+
+d54 5
+a58 1
+FUNCTION assertgaf( gaf_in IN VARCHAR2, mt_in IN VARCHAR2 )
+d70 7
+@
+
+
+1.1
+log
+@New place for Oracle OpenCyc Interface; no more under 'org' tree, so
+CycJsprocs.java will not cause the org build script to give errors.
+@
+text
+@d93 1
+@
+

@@ -1,0 +1,76 @@
+head	1.3;
+access;
+symbols
+	PRE_1_0:1.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2006.10.21.17.01.55;	author dmiles;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2001.11.02.22.59.34;	author stephenreed;	state dead;
+branches;
+next	1.1;
+
+1.1
+date	2001.11.02.21.49.25;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental classes.
+@
+text
+@package org.opencyc.cycagent;
+
+/**
+ * Title:
+ * Description:
+ * Copyright:    Copyright (c) 2001
+ * Company:
+ * @@author
+ * @@version 1.0
+ */
+
+public class CycApiTestFipaOsAgent {
+
+    /**
+     * Constructs a new CycApiTestFipaOsAgent object.
+     */
+    public CycApiTestFipaOsAgent() {
+    }
+
+    /**
+     * Provides the main method for the CycApiTestFipaOsAgent.
+     */
+    public static void main(String[] args) {
+        CycApiTestFipaOsAgent cycApiTestFipaOsAgent = new CycApiTestFipaOsAgent();
+    }
+}@
+
+
+1.2
+log
+@Moved classes from cycagent package to new subordinate coabs and fipaos packages.
+@
+text
+@@
+
+
+1.1
+log
+@Initial check-in
+@
+text
+@@
+

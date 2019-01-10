@@ -1,0 +1,677 @@
+head	1.17;
+access;
+symbols
+	PRE_1_0:1.17;
+locks; strict;
+comment	@# @;
+
+
+1.17
+date	2003.10.02.22.58.43;	author stephenreed;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2003.09.18.22.56.18;	author stephenreed;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2003.09.14.13.57.59;	author stephenreed;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2003.09.05.20.01.37;	author stephenreed;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2003.09.01.04.52.55;	author stephenreed;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2003.08.31.11.58.32;	author stephenreed;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2003.08.26.17.39.31;	author stephenreed;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2003.08.25.13.55.29;	author stephenreed;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2003.08.25.13.09.46;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2003.08.18.17.20.52;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2003.08.18.13.11.32;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2003.08.15.22.48.56;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2003.08.11.21.24.08;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2003.08.08.13.22.24;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2002.11.20.16.39.18;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2002.11.16.04.01.10;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2002.11.15.22.52.06;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.17
+log
+@javadoc fix
+@
+text
+@package org.opencyc.elf;
+
+//// Internal Imports
+import org.opencyc.elf.message.GenericMsg;
+
+//// External Imports
+import java.util.logging.Logger;
+
+import EDU.oswego.cs.dl.util.concurrent.Puttable;
+
+/** Provides common attributes and behavior for Elementary Loop Functioning
+ * (ELF) node components.
+ * Each node component contains one or more process threads that communicates with other 
+ * node components by sending asychronous messages.
+ * 
+ * @@version $Id: NodeComponent.java,v 1.16 2003/09/18 22:56:18 stephenreed Exp $
+ * @@author Stephen L. Reed  
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public abstract class NodeComponent {
+
+  //// Constructors
+
+  //// Public Area
+  
+  /** Gets the ELF Node that contains this object.
+   * 
+   * @@return the ELF Node that contains this object
+   */
+  public Node getNode() {
+    return node;
+  }
+
+  /** Sets the ELF Node that contains this object.
+   * 
+   * @@param node the ELF Node that contains this object
+   */
+  public void setNode(Node node) {
+    this.node = node;
+  }
+  
+  /** Gets the logger for this node.
+   *
+   * @@return the logger for this node
+   */
+  public Logger getLogger () {
+    return node.getLogger();
+  }
+  
+  /** Sends the given message through the given channel to the recipient.
+   *
+   * @@param channel the communication channel
+   * @@param genericMsg the message to be sent to the recipient
+   */
+  public void sendMsgToRecipient(Puttable channel, 
+                                 GenericMsg genericMsg) {
+    try {
+      channel.put(genericMsg);
+    }
+    catch (InterruptedException e) {
+    }
+  }
+
+  //// Protected Area
+    
+  //// Private Area
+  
+  //// Internal Rep
+  
+  /** the ELF node that contains this object */
+  protected Node node;
+
+  //// Main
+}@
+
+
+1.16
+log
+@/home/reed/opencyc/org/opencyc/elf
+removed equals(...)  method if present and reformatted multiline comments to one less line
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: NodeComponent.java,v 1.15 2003/09/14 13:57:59 stephenreed Exp $
+d52 1
+a52 1
+   * @@param node the ELF Node thatcontains this object
+@
+
+
+1.15
+log
+@Changed ArrayList to List, consistently formatted one line comments. ----------------------------------------------------------------------
+@
+text
+@d11 1
+a11 2
+/**
+ * Provides common attributes and behavior for Elementary Loop Functioning
+d16 1
+a16 1
+ * @@version $Id: NodeComponent.java,v 1.14 2003/09/05 20:01:37 stephenreed Exp $
+d42 1
+a42 2
+  /**
+   * Gets the ELF Node that contains this object.
+d50 1
+a50 2
+  /**
+   * Sets the ELF Node that contains this object.
+d58 1
+a58 2
+  /**
+   * Gets the logger for this node.
+d66 1
+a66 2
+  /**
+   * Sends the given message through the given channel to the recipient.
+@
+
+
+1.14
+log
+@/home/reed/opencyc/org/opencyc/elf
+fixed javadoc errors
+@
+text
+@a6 2
+import java.util.ArrayList;
+
+a10 1
+
+d17 1
+a17 1
+ * @@version $Id: NodeComponent.java,v 1.13 2003/09/01 04:52:55 stephenreed Exp $
+a40 1
+
+d91 1
+a91 3
+  /**
+   * the ELF node that contains this object
+   */
+@
+
+
+1.13
+log
+@update
+@
+text
+@d16 1
+a16 1
+ * (ELF) node components.<br>
+d20 1
+a20 1
+ * @@version $Id: NodeComponent.java,v 1.12 2003/08/31 11:58:32 stephenreed Exp $
+d40 1
+a40 1
+public abstract class NodeComponent extends ELFObject {
+@
+
+
+1.12
+log
+@removed Procedure import
+@
+text
+@d13 1
+d20 1
+a20 1
+ * @@version $Id: NodeComponent.java,v 1.11 2003/08/26 17:39:31 stephenreed Exp $
+@
+
+
+1.11
+log
+@added convenience getLogger() method
+@
+text
+@a3 2
+import org.opencyc.elf.bg.procedure.Procedure;
+
+d19 1
+a19 1
+ * @@version $Id: NodeComponent.java,v 1.10 2003/08/25 13:55:29 stephenreed Exp $
+@
+
+
+1.10
+log
+@Moved getChannel() method to BufferedNodeComponent
+@
+text
+@d11 2
+d21 1
+a21 1
+ * @@version $Id: NodeComponent.java,v 1.9 2003/08/25 13:09:46 stephenreed Exp $
+d64 9
+@
+
+
+1.9
+log
+@Syncronizing
+
+----------------------------------------------------------------------
+@
+text
+@d19 1
+a19 1
+ * @@version $Id: NodeComponent.java,v 1.8 2003/08/18 17:20:52 stephenreed Exp $
+a62 9
+
+  /**
+   * Gets the puttable channel for this node component to which other node
+   * components can send messages.
+   *
+   * @@return the puttable channel for this node component to which other node
+   * components can send messages
+   */
+  public abstract Puttable getChannel ();
+@
+
+
+1.8
+log
+@Removed Runnable implementation because sub classes are defining Producer and Consumer threads directly.
+@
+text
+@d19 1
+a19 1
+ * @@version $Id: NodeComponent.java,v 1.7 2003/08/18 13:11:32 stephenreed Exp $
+d64 8
+a71 1
+  //// Protected Area
+d79 2
+a80 2
+  protected void sendMsgToRecipient(Puttable channel, 
+                                    GenericMsg genericMsg) {
+d87 3
+a89 1
+  
+@
+
+
+1.7
+log
+@formatting change
+@
+text
+@d16 2
+a17 2
+ * Each node component is a separate process that communicates with other node components
+ * by sending asychronous messages.
+d19 1
+a19 1
+ * @@version $Id: NodeComponent.java,v 1.6 2003/08/15 22:48:56 stephenreed Exp $
+d39 1
+a39 1
+public abstract class NodeComponent extends ELFObject implements Runnable {
+a44 5
+  
+  /**
+   * Provides the method to be executed when the thread is started.
+   */
+  public abstract void run ();
+@
+
+
+1.6
+log
+@Added asychronous messaging methods
+@
+text
+@d19 1
+a19 1
+ * @@version $Id: NodeComponent.java,v 1.5 2003/08/11 21:24:08 stephenreed Exp $
+a84 3
+  
+  
+  
+@
+
+
+1.5
+log
+@Reinserted the LGPL license clause that was wrongly removed by the Jalopy
+indentation tool.
+@
+text
+@d3 6
+d11 1
+a11 2
+import org.opencyc.elf.bg.procedure.Procedure;
+
+d16 2
+d19 1
+a19 1
+ * @@version $Id: NodeComponent.java,v 1.4 2003/08/08 13:22:24 stephenreed Exp $
+d39 4
+a42 6
+public abstract class NodeComponent extends ELFObject {
+  /**
+   * The default verbosity of this object's output.  0 --> quiet ... 9 ->
+   * maximum diagnostic input.
+   */
+  public static final int DEFAULT_VERBOSITY = 3;
+d44 2
+d47 1
+a47 2
+   * Sets verbosity of this object's output.  0 --> quiet ... 9 -> maximum
+   * diagnostic input.
+d49 2
+a50 11
+  protected int verbosity = DEFAULT_VERBOSITY;
+
+  /** Reference to the ELF Node which contains this object. */
+  protected Node node;
+
+  /** indicates a pending interruption */
+  protected boolean pendingInterruption = false;
+
+  /** the interruption procedure to execute */
+  protected Procedure interruptionRequest;
+
+d52 1
+a52 1
+   * Gets the ELF Node which contains this object.
+d54 1
+a54 1
+   * @@return the ELF Node which contains this object
+d61 1
+a61 2
+   * Requests an interruption of the current processing of this node component
+   * to execute the given procedure and to return the the output value.
+d63 1
+a63 3
+   * @@param interruptionRequest the given interruption procedure to execute
+   * 
+   * @@return the output value
+d65 3
+a67 3
+  public Object interrupt(Procedure interruptionRequest) {
+    this.interruptionRequest = interruptionRequest;
+    pendingInterruption = true;
+d69 10
+d80 1
+a80 7
+      while (true) {
+        Thread.sleep(100);
+
+        if (!pendingInterruption) {
+          break;
+        }
+      }
+d82 1
+a82 1
+     catch (InterruptedException e) {
+a83 2
+
+    return interruptionRequest.execute(new ArrayList());
+d85 8
+a92 1
+
+d94 1
+a94 3
+   * Sets the ELF Node which contains this object.
+   * 
+   * @@param node the ELF Node which contains this object
+d96 1
+a96 3
+  public void setNode(Node node) {
+    this.node = node;
+  }
+d98 1
+a98 9
+  /**
+   * Sets verbosity of this object's output.  0 --> quiet ... 9 -> maximum
+   * diagnostic input.
+   * 
+   * @@param verbosity 0 --> quiet ... 9 -> maximum diagnostic input
+   */
+  public void setVerbosity(int verbosity) {
+    this.verbosity = verbosity;
+  }
+@
+
+
+1.4
+log
+@synchronized with work in progress.
+@
+text
+@d12 19
+a30 2
+ * @@version $Id: NodeComponent.java,v 1.3 2002/11/20 16:39:18 stephenreed Exp $
+ * @@author Stephen L. Reed <p><p><p><p><p>
+@
+
+
+1.3
+log
+@Removing previous state machine implementation which is
+replaced by org.opencyc.uml.statemachine package
+@
+text
+@d3 4
+a6 3
+import java.util.*;
+import org.opencyc.util.*;
+import org.opencyc.uml.core.*;
+d9 5
+a13 24
+ * Provides common attributes and behavior for Elementary Loop
+ * Functioning (ELF) node components.<br>
+ *
+ *
+ * @@version $Id: NodeComponent.java,v 1.2 2002/11/16 04:01:10 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+a14 1
+
+d16 45
+d62 2
+a63 56
+    /**
+     * The default verbosity of this object's output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    public static final int DEFAULT_VERBOSITY = 3;
+
+    /**
+     * Sets verbosity of this object's output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    protected int verbosity = DEFAULT_VERBOSITY;
+
+    /**
+     * Reference to the ELF Node which contains this object.
+     */
+    protected Node node;
+
+    /**
+     * indicates a pending interruption
+     */
+    protected boolean pendingInterruption = false;
+
+    /**
+     * the interruption procedure to execute
+     */
+    protected Procedure interruptionRequest;
+
+    /**
+     * Gets the ELF Node which contains this object.
+     *
+     * @@return the ELF Node which contains this object
+     */
+    public Node getNode () {
+        return node;
+    }
+
+    /**
+     * Requests an interruption of the current processing of this
+     * node component to execute the given procedure and to return
+     * the list of the output pin values.
+     *
+     * @@param interruptionRequest the given interruption procedure to execute
+     * @@return the list of the output pin values
+     */
+    public ArrayList interrupt(Procedure interruptionRequest) {
+        ArrayList values = new ArrayList();
+        this.interruptionRequest = interruptionRequest;
+        pendingInterruption = true;
+        try {
+            while (true) {
+                Thread.sleep(100);
+                if (! pendingInterruption)
+                    break;
+            }
+        }
+        catch (InterruptedException e) {
+d65 1
+a65 1
+        return interruptionRequest.getResult();
+d67 1
+a67 8
+
+    /**
+     * Sets the ELF Node which contains this object.
+     *
+     * @@param node the ELF Node which contains this object
+     */
+    public void setNode (Node node) {
+        this.node = node;
+d70 2
+a71 9
+    /**
+     * Sets verbosity of this object's output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     *
+     * @@param verbosity 0 --> quiet ... 9 -> maximum diagnostic input
+     */
+    public void setVerbosity(int verbosity) {
+        this.verbosity = verbosity;
+    }
+d73 18
+@
+
+
+1.2
+log
+@Initial check in of LowestLevelNode
+@
+text
+@d3 1
+d5 1
+d12 1
+a12 1
+ * @@version $Id: NodeComponent.java,v 1.1 2002/11/15 22:52:06 stephenreed Exp $
+d54 10
+d73 24
+d99 1
+a99 1
+     * @@param xxx the ELF Node which contains this object
+@
+
+
+1.1
+log
+@Initial check in.
+@
+text
+@d3 2
+d10 1
+a10 1
+ * @@version $Id: SensoryPerception.java,v 1.1 2002/10/25 23:23:57 stephenreed Exp $
+d35 12
+d68 11
+@
+

@@ -1,0 +1,41 @@
+head	1.1;
+access;
+symbols
+	OPENCYC_1_0_1:1.1
+	PRE_1_0:1.1;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2003.01.08.13.10.53;	author yepster;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@New optional scripts with handy stuff.
+@
+text
+@VARIABLE jobno NUMBER;
+BEGIN
+   DBMS_JOB.SUBMIT(:jobno,
+       'cyc.conversevoid( ''(write-image "now.world")'');',
+	   SYSDATE, 'SYSDATE+1/24' );
+   COMMIT;
+END;
+/
+PRINT jobno
+PROMPT CAREFUL!! RUN THIS SCRIPT ONLY ONCE FOR EACH SCHEMA!!!
+PROMPT
+COLUMN what FORMAT A50
+SELECT job,next_date,broken,what FROM user_jobs
+/
+quit
+/
+@

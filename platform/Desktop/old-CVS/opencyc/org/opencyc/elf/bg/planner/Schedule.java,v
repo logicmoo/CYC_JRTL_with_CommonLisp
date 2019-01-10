@@ -1,0 +1,1027 @@
+head	1.16;
+access;
+symbols
+	PRE_1_0:1.16;
+locks; strict;
+comment	@# @;
+
+
+1.16
+date	2003.10.20.15.21.50;	author stephenreed;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2003.10.02.14.17.31;	author stephenreed;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2003.09.22.22.54.21;	author stephenreed;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2003.09.19.22.21.42;	author stephenreed;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2003.09.19.13.55.45;	author stephenreed;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2003.09.18.22.53.11;	author stephenreed;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2003.09.18.22.02.47;	author stephenreed;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2003.09.18.21.22.56;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2003.09.16.23.17.33;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2003.09.15.12.35.28;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2003.09.14.13.58.03;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2003.09.08.20.17.22;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2003.09.03.21.08.12;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2003.08.30.05.40.13;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2003.08.28.20.32.13;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2003.08.12.13.06.19;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.16
+log
+@moved commands to org.opencyc.elf.bg.command package
+@
+text
+@package org.opencyc.elf.bg.planner;
+
+//// Internal Imports
+import org.opencyc.elf.bg.command.Command;
+import org.opencyc.elf.bg.predicate.PredicateExpression;
+
+//// External Imports
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+/** Schedule contains the timing specification for a plan.  It can be represented 
+ * as a time-labeled or event-labeled sequence of actitivies or events.  The scheduler
+ * processes its current job assignment by evaluating alternative schedule sets and choosing
+ * the best set.  Each schedule in the schedule set has an associated predicate expression.
+ * The scheduler passes to the executor the first schedule found that has a predicate expression 
+ * of null.  In the event that the executor sends an exception status message back to the scheduler, 
+ * the scheduler evaluates the non-null predicate expressions in turn and sends to the executor
+ * the schedule whose associated predicate expression evaluates true. 
+ * 
+ * @@version $Id: Schedule.java,v 1.15 2003/10/02 14:17:31 stephenreed Exp $
+ * @@author Stephen L. Reed  
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class Schedule {
+  
+  //// Constructors
+
+  /** Creates a new instance of Schedule given its contents.
+   *
+   * @@param predicateExpression the predicate expression
+   * @@param plannedCommands the list of planned commands that accomplish the assigned action or achieve the assigned goal
+   * @@param plannedTimeMilliseconds the list of planned command times, each of which is the planned duration of time 
+   * in milliseconds to elapse from the time the plan commences exectution until the planned command is acomplished
+   * @@param directActuatorName the name of the direct actuator that achieves or accomplishes the schedule
+   * @@param directSensorName he name of the direct sensor that senses the achievements or accomplishments of the schedule
+   */
+  public Schedule(PredicateExpression predicateExpression, 
+                  List plannedCommands, 
+                  List plannedTimeMilliseconds, 
+                  String directActuatorName, 
+                  String directSensorName) {
+    this.predicateExpression = predicateExpression;
+    this.plannedCommands = plannedCommands;
+    this.directActuatorName = directActuatorName;
+    this.directSensorName = directSensorName;
+  }
+
+  //// Public Area
+
+  /** Gets the list of planned commands that accomplish the assigned action or achieve the assigned goal.
+   *
+   * @@return the list of planned commands that accomplish the assigned action or achieve the assigned goal
+   */
+  public List getPlannedCommands () {
+    return plannedCommands;
+  }
+
+  /** Gets the list of planned command times, each of which is the planned duration of time in milliseconds to
+   * elapse from the time the plan commences exectution until the planned command is acomplished.
+   *
+   * @@return the list of planned command times, each of which is the planned duration of time in milliseconds to
+   * elapse from the time the plan commences exectution until the planned command is acomplished
+   */
+  public List getplannedTimeMilliseconds () {
+    return plannedTimeMilliseconds;
+  }
+
+  /** Gets the name of the direct actuator that achieves or accomplishes the schedule
+   *
+   * @@return the name of the direct actuator that achieves or accomplishes the schedule
+   */
+  public String getDirectActuatorName () {
+    return directActuatorName;
+  }
+
+  /** Gets the name of the direct sensor that senses the achievements or accomplishments of the schedule
+   *
+   * @@return the name of the direct sensor that senses the achievements or accomplishments of the schedule
+   */
+  public String getDirectSensorName () {
+    return directSensorName;
+  }
+
+  /** Returns a string representation of this object.
+   * 
+   * @@return a string representation of this object
+   */
+  public String toString() {
+    StringBuffer stringBuffer = new StringBuffer();
+    stringBuffer.append("[Schedule ");
+    stringBuffer.append(plannedCommands.toString());
+    if (predicateExpression != null) {
+      stringBuffer.append(" when: ");
+      stringBuffer.append(predicateExpression.toString());
+    }
+    stringBuffer.append(" direct actuator: ");
+    stringBuffer.append(directActuatorName);
+    stringBuffer.append(" direct sensor: ");
+    stringBuffer.append(directSensorName);
+    stringBuffer.append("]");
+    return stringBuffer.toString();
+  }
+
+  /*** Creates and returns a copy of this object.
+   *
+   * @@return a copy of this object
+   */
+  public Object clone () {
+    List clonedPlannedCommands = new ArrayList();
+    Iterator iter = plannedCommands.iterator();
+    while (iter.hasNext()) {
+      Command command = (Command) iter.next();
+      clonedPlannedCommands.add(command.clone());
+    }
+    Schedule schedule = new Schedule(predicateExpression, 
+                                     clonedPlannedCommands, 
+                                     plannedTimeMilliseconds, 
+                                     directActuatorName, 
+                                     directSensorName);
+    
+    return schedule;
+  }
+  
+  /** Gets  the predicate expression 
+   *
+   * @@return  the predicate expression 
+   */
+  public PredicateExpression getPredicateExpression () {
+    return predicateExpression;
+  }
+  
+  //// Protected Area
+
+  //// Private Area
+
+  //// Internal Rep
+
+  /** the predicate expression */
+  protected PredicateExpression predicateExpression;
+  
+  /** the list of planned commands that accomplish the assigned action or achieve the assigned goal */
+  protected List plannedCommands = new ArrayList();
+  
+  /** the list of planned command times, each of which is the planned duration of time in milliseconds to
+   * elapse from the time the plan commences exectution until the planned command is acomplished
+   */
+  protected List plannedTimeMilliseconds = new ArrayList();
+
+  /** the name of the direct actuator that achieves or accomplishes the schedule */
+  protected String directActuatorName = "";
+
+  /** the name of the direct sensor that senses the achievements or accomplishments of the schedule */
+  protected String directSensorName = "";
+}@
+
+
+1.15
+log
+@fix toString() method
+@
+text
+@d4 1
+a4 2
+import org.opencyc.elf.bg.taskframe.Command;
+
+d21 1
+a21 1
+ * @@version $Id: Schedule.java,v 1.14 2003/09/22 22:54:21 stephenreed Exp $
+@
+
+
+1.14
+log
+@clarified the class comment
+@
+text
+@d22 1
+a22 1
+ * @@version $Id: Schedule.java,v 1.13 2003/09/19 22:21:42 stephenreed Exp $
+d110 4
+a113 2
+    stringBuffer.append(" when: ");
+    stringBuffer.append(predicateExpression.toString());
+@
+
+
+1.13
+log
+@/home/reed/opencyc/org/opencyc/elf
+refactored job and schedule
+@
+text
+@d17 4
+a20 2
+ * The scheduler passes to the executor the first schedule found that has its expression 
+ * evaluate true.  In the event of replanning, this process is repeated.
+d22 1
+a22 1
+ * @@version $Id: Schedule.java,v 1.12 2003/09/19 13:55:45 stephenreed Exp $
+@
+
+
+1.12
+log
+@refactored with regard to job assignment
+@
+text
+@d4 1
+a4 1
+import org.opencyc.elf.bg.taskframe.Action;
+d6 1
+a6 1
+import org.opencyc.elf.goal.Goal;
+d14 5
+a18 4
+ * as a time-labeled or event-labeled sequence of actitivies or events.  
+ * The job assigner assigns a task or goal to the scheduler by passing partially 
+ * instantiated schedule.  The scheduler determines a schedule of planned actions or
+ * planned goals that accomplish the assigned action or achieve the assigned goal. 
+d20 1
+a20 1
+ * @@version $Id: Schedule.java,v 1.11 2003/09/18 22:53:11 stephenreed Exp $
+d44 1
+a44 7
+  /** Creates a new instance of Schedule. */
+  public Schedule() {
+  }
+
+  //// Public Area
+
+  /** Gets the schedule name or description
+d46 6
+a51 1
+   * @@return the schedule name or description
+d53 9
+a61 2
+  public String getName () {
+    return name;
+d64 1
+a64 7
+  /** Sets the schedule name or description
+   *
+   * @@param name the schedule name or description
+   */
+  public void setName (String name) {
+    this.name = name;
+  }
+d66 1
+a66 1
+  /** Gets the list of planned actions that accomplish the assigned action or achieve the assigned goal
+d68 1
+a68 1
+   * @@return the list of planned actions that accomplish the assigned action or achieve the assigned goal
+d70 2
+a71 2
+  public List getPlannedActions () {
+    return plannedActions;
+d74 2
+a75 1
+  /** Sets tthe list of planned actions that accomplish the assigned action or achieve the assigned goal
+d77 2
+a78 1
+   * @@param plannedActions the list of planned actions that accomplish the assigned action or achieve the assigned goal
+d80 2
+a81 39
+  public void setPlannedActions (List plannedActions) {
+    this.plannedActions = plannedActions;
+  }
+
+  /** Gets the list of planned goals that accomplish the assigned action or achieve the assigned goal
+   *
+   * @@return the list of planned goals that accomplish the assigned action or achieve the assigned goal
+   */
+  public List getPlannedGoals () {
+    return plannedGoals;
+  }
+
+  /** Sets the list of planned goals that accomplish the assigned action or achieve the assigned goal
+   *
+   * @@param plannedGoals the list of planned goals that accomplish the assigned action or achieve the assigned goal
+   */
+  public void setPlannedGoals (List plannedGoals) {
+    this.plannedGoals = plannedGoals;
+  }
+
+  /** Gets the list of planned goal times, each of which is the planned duration of time in milliseconds to
+   * elapse from the time the plan commences exectution until the planned goal is achieved
+   *
+   * @@return the list of planned goal times, each of which is the planned duration of time in milliseconds to
+   * elapse from the time the plan commences exectution until the planned goal is achieved
+   */
+  public List getPlannedGoalTimeMilliseconds () {
+    return plannedGoalTimeMilliseconds;
+  }
+
+  /** Sets the list of planned goal times, each of which is the planned duration of time in milliseconds to
+   * elapse from the time the plan commences exectution until the planned goal is achieved
+   *
+   * @@param plannedGoalTimeMilliseconds the list of planned goal times, each of which is the planned duration 
+   * of time in milliseconds to elapse from the time the plan commences exectution until the planned goal is 
+   * achieved
+   */
+  public void setPlannedGoalTimeMilliseconds (List plannedGoalTimeMilliseconds) {
+    this.plannedGoalTimeMilliseconds = plannedGoalTimeMilliseconds;
+a91 8
+  /** Sets the name of the direct actuator that achieves or accomplishes the schedule
+   *
+   * @@param directActuatorName the name of the direct actuator that achieves or accomplishes the schedule
+   */
+  public void setDirectActuatorName (String directActuatorName) {
+    this.directActuatorName = directActuatorName;
+  }
+
+a99 8
+  /** Sets the name of the direct sensor that senses the achievements or accomplishments of the schedule
+   *
+   * @@param directSensorName the name of the direct sensor that senses the achievements or accomplishments of the schedule
+   */
+  public void setDirectSensorName (String sensorName) {
+    this.directSensorName = directSensorName;
+  }
+
+d107 3
+a109 1
+    stringBuffer.append(plannedActions.toString());
+d123 2
+a124 3
+    Schedule schedule = new Schedule();
+    List clonedPlannedActions = new ArrayList();
+    Iterator iter = plannedActions.iterator();
+d126 2
+a127 2
+      Action action = (Action) iter.next();
+      clonedPlannedActions.add((Action) action.clone());
+d129 6
+a134 3
+    schedule.setPlannedActions(clonedPlannedActions);
+    schedule.setPlannedGoalTimeMilliseconds(plannedGoalTimeMilliseconds);
+    schedule.setPlannedGoals(plannedGoals);
+d138 8
+d152 2
+a153 5
+  // the schedule name or description
+  protected String name = "";
+  
+  /** the list of planned actions that accomplish the assigned action or achieve the assigned goal */
+  protected List plannedActions = new ArrayList();
+d155 2
+a156 2
+  /** the list of planned goals that accomplish the assigned action or achieve the assigned goal */
+  protected List plannedGoals = new ArrayList();
+d158 2
+a159 2
+  /** the list of planned goal times, each of which is the planned duration of time in milliseconds to
+   * elapse from the time the plan commences exectution until the planned goal is achieved
+d161 1
+a161 1
+  protected List plannedGoalTimeMilliseconds = new ArrayList();
+@
+
+
+1.11
+log
+@added assignedJobAction and assignedJobGoal instance variables
+@
+text
+@d19 1
+a19 1
+ * @@version $Id: Schedule.java,v 1.10 2003/09/18 22:02:47 stephenreed Exp $
+d40 1
+a64 32
+  /** Gets the action assigned to a scheduler by the job assigner which has spatially decomposed its commanded task
+   *
+   * @@return the action assigned to a scheduler by the job assigner which has spatially decomposed its commanded task
+   */
+  public Action getAssignedJobAction () {
+    return assignedJobAction;
+  }
+
+  /** Sets the action assigned to a scheduler by the job assigner which has spatially decomposed its commanded task
+   *
+   * @@param assignedJobAction the action assigned to a scheduler by the job assigner which has spatially decomposed its commanded task
+   */
+  public void setAssignedJobAction (Action assignedJobAction) {
+    this.assignedJobAction = assignedJobAction;
+  }
+
+  /** Gets the goal assigned to a scheduler by the job assigner which has spatially decomposed its commanded task
+   *
+   * @@return the goal assigned to a scheduler by the job assigner which has spatially decomposed its commanded task
+   */
+  public Goal getAssignedJobGoal () {
+    return assignedJobGoal;
+  }
+
+  /** Sets the goal assigned to a scheduler by the job assigner which has spatially decomposed its commanded task
+   *
+   * @@param assignedJobGoal the goal assigned to a scheduler by the job assigner which has spatially decomposed its commanded task
+   */
+  public void setAssignedJobGoal (Goal assignedJobGoal) {
+    this.assignedJobGoal = assignedJobGoal;
+  }
+
+d186 4
+a191 6
+  
+  /** the action assigned to a scheduler by the job assigner which has spatially decomposed its commanded task */
+  protected Action assignedJobAction;
+  
+  /** the goal assigned to a scheduler by the job assigner which has spatially decomposed its commanded task */
+  protected Goal assignedJobGoal;
+@
+
+
+1.10
+log
+@/home/reed/opencyc/org/opencyc/elf
+renamed scheduler.actuatorName to scheduler.directActuatorName and renamed scheduler.sensorName to scheduler.directSensorName
+@
+text
+@d6 2
+d13 5
+a17 3
+/** Schedule contains the timing specification for a plan.  It can be
+ * represented as a time-labeled or event-labeled sequence of actitivies or
+ * events.
+d19 1
+a19 1
+ * @@version $Id: Schedule.java,v 1.9 2003/09/18 21:22:56 stephenreed Exp $
+d64 9
+a72 1
+  /** Gets the list of planned actions
+d74 25
+a98 1
+   * @@return the list of planned actions
+d104 1
+a104 1
+  /** Sets the list of planned actions
+d106 1
+a106 1
+   * @@param plannedActions the list of planned actions
+d112 1
+a112 1
+  /** Gets the list of planned goals
+d114 1
+a114 1
+   * @@return the list of planned goals
+d120 1
+a120 1
+  /** Sets the list of planned goals
+d122 1
+a122 1
+   * @@param plannedGoals the list of planned goals
+d149 1
+a149 1
+  /** Gets the name of the actuator or virtual actuator that achieves or accomplishes the schedule
+d151 1
+a151 1
+   * @@return the name of the actuator or virtual actuator that achieves or accomplishes the schedule
+d165 1
+a165 1
+  /** Gets the name of the sensor or virtual sensor that senses the achievements or accomplishments of the schedule
+d167 1
+a167 1
+   * @@return the name of the sensor or virtual sensor that senses the achievements or accomplishments of the schedule
+d220 7
+a226 1
+  /** the list of planned actions */
+d229 1
+a229 1
+  /** the list of planned goals */
+d232 1
+a232 2
+  /**
+   * the list of planned goal times, each of which is the planned duration of time in milliseconds to
+@
+
+
+1.9
+log
+@/home/reed/opencyc/org/opencyc/elf
+removed equals(...)  method if present and reformatted multiline comments to one less line
+@
+text
+@d15 1
+a15 1
+ * @@version $Id: Schedule.java,v 1.8 2003/09/16 23:17:33 stephenreed Exp $
+d117 2
+a118 2
+  public String getActuatorName () {
+    return actuatorName;
+d121 1
+a121 1
+  /** Sets the name of the actuator or virtual actuator that achieves or accomplishes the schedule
+d123 1
+a123 1
+   * @@param actuatorName the name of the actuator or virtual actuator that achieves or accomplishes the schedule
+d125 2
+a126 2
+  public void setActuatorName (String actuatorName) {
+    this.actuatorName = actuatorName;
+d133 2
+a134 2
+  public String getSensorName () {
+    return sensorName;
+d137 1
+a137 1
+  /** Sets the name of the sensor or virtual sensor that senses the achievements or accomplishments of the schedule
+d139 1
+a139 1
+   * @@param sensorName the name of the sensor or virtual sensor that senses the achievements or accomplishments of the schedule
+d141 2
+a142 2
+  public void setSensorName (String sensorName) {
+    this.sensorName = sensorName;
+d153 4
+a156 4
+    stringBuffer.append(" actuator: ");
+    stringBuffer.append(actuatorName);
+    stringBuffer.append(" sensor: ");
+    stringBuffer.append(sensorName);
+d196 2
+a197 2
+  /** the name of the actuator or virtual actuator that achieves or accomplishes the schedule */
+  protected String actuatorName = "";
+d199 2
+a200 2
+  /** the name of the sensor or virtual sensor that senses the achievements or accomplishments of the schedule */
+  protected String sensorName = "";
+@
+
+
+1.8
+log
+@added sensor name and actuator name instance variables
+@
+text
+@d11 1
+a11 2
+/**
+ * Schedule contains the timing specification for a plan.  It can be
+d15 1
+a15 1
+ * @@version $Id: Schedule.java,v 1.7 2003/09/15 12:35:28 stephenreed Exp $
+d44 1
+a44 2
+  /**
+   * Gets the schedule name or description
+d52 1
+a52 2
+  /**
+   * Sets the schedule name or description
+d60 1
+a60 2
+  /**
+   * Gets the list of planned actions
+d68 1
+a68 2
+  /**
+   * Sets the list of planned actions
+d76 1
+a76 2
+  /**
+   * Gets the list of planned goals
+d84 1
+a84 2
+  /**
+   * Sets the list of planned goals
+d92 1
+a92 2
+  /**
+   * Gets the list of planned goal times, each of which is the planned duration of time in milliseconds to
+d102 1
+a102 2
+  /**
+   * Sets the list of planned goal times, each of which is the planned duration of time in milliseconds to
+d113 1
+a113 2
+  /**
+   * Gets the name of the actuator or virtual actuator that achieves or accomplishes the schedule
+d121 1
+a121 2
+  /**
+   * Sets the name of the actuator or virtual actuator that achieves or accomplishes the schedule
+d129 1
+a129 2
+  /**
+   * Gets the name of the sensor or virtual sensor that senses the achievements or accomplishments of the schedule
+d137 1
+a137 2
+  /**
+   * Sets the name of the sensor or virtual sensor that senses the achievements or accomplishments of the schedule
+d145 1
+a145 22
+  /**
+   * Returns true if the given object equals this object.
+   * 
+   * @@param obj the given object
+   * 
+   * @@return true if the given object equals this object
+   */
+  public boolean equals(Object obj) {
+    if (!(obj instanceof Schedule)) {
+      return false;
+    }
+    Schedule that = (Schedule) obj;
+    return 
+      this.plannedActions.equals(that.plannedActions) &&
+      this.plannedGoals.equals(that.plannedGoals) &&
+      this.plannedGoalTimeMilliseconds.equals(that.plannedGoalTimeMilliseconds) &&
+      this.actuatorName.equals(that.actuatorName) &&
+      this.sensorName.equals(that.sensorName);
+  }
+
+  /**
+   * Returns a string representation of this object.
+d161 1
+a161 2
+  /**
+   * Creates and returns a copy of this object.
+@
+
+
+1.7
+log
+@fixes to pass execute method testing of the behavior engine
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: Schedule.java,v 1.6 2003/09/14 13:58:03 stephenreed Exp $
+d123 36
+d173 3
+a175 1
+      this.plannedGoalTimeMilliseconds.equals(that.plannedGoalTimeMilliseconds);
+d187 4
+d231 5
+@
+
+
+1.6
+log
+@Changed ArrayList to List, consistently formatted one line comments. ----------------------------------------------------------------------
+@
+text
+@a11 1
+ * <P>
+a14 1
+ * </p>
+d16 1
+a16 1
+ * @@version $Id: Schedule.java,v 1.5 2003/09/08 20:17:22 stephenreed Exp $
+d46 18
+d174 3
+d178 1
+a178 1
+  protected List plannedActions;
+d181 1
+a181 1
+  protected List plannedGoals;
+d187 1
+a187 1
+  protected List plannedGoalTimeMilliseconds;
+@
+
+
+1.5
+log
+@added clone method
+@
+text
+@d9 1
+d18 1
+a18 1
+ * @@version $Id: Schedule.java,v 1.4 2003/09/03 21:08:12 stephenreed Exp $
+d41 1
+a41 3
+  /**
+   * Creates a new instance of Schedule
+   */
+d52 1
+a52 1
+  public ArrayList getPlannedActions () {
+d61 1
+a61 1
+  public void setPlannedActions (ArrayList plannedActions) {
+d70 1
+a70 1
+  public ArrayList getPlannedGoals () {
+d79 1
+a79 1
+  public void setPlannedGoals (ArrayList plannedGoals) {
+d90 1
+a90 1
+  public ArrayList getPlannedGoalTimeMilliseconds () {
+d102 1
+a102 1
+  public void setPlannedGoalTimeMilliseconds (ArrayList plannedGoalTimeMilliseconds) {
+d144 1
+a144 1
+    ArrayList clonedPlannedActions = new ArrayList();
+d158 2
+a159 4
+  /**
+   * the list of planned actions
+   */
+  protected ArrayList plannedActions;
+d161 2
+a162 4
+  /**
+   * the list of planned goals
+   */
+  protected ArrayList plannedGoals;
+d168 1
+a168 1
+  protected ArrayList plannedGoalTimeMilliseconds;
+@
+
+
+1.4
+log
+@renamed instance variables, removed the state variable
+@
+text
+@d4 1
+d8 1
+d17 1
+a17 1
+ * @@version $Id: Schedule.java,v 1.3 2003/08/30 05:40:13 stephenreed Exp $
+d138 19
+@
+
+
+1.3
+log
+@moved instance variables from Plan which was deleted
+@
+text
+@a3 1
+import org.opencyc.elf.bg.state.State;
+d6 1
+d15 1
+a15 1
+ * @@version $Id: Schedule.java,v 1.2 2003/08/28 20:32:13 stephenreed Exp $
+d47 3
+a49 5
+   * Returns true if the given object equals this object.
+   * 
+   * @@param obj the given object
+   * 
+   * @@return true if the given object equals this object
+d51 2
+a52 8
+  public boolean equals(Object obj) {
+    if (!(obj instanceof Schedule)) {
+      return false;
+    }
+
+    Schedule thatSchedule = (Schedule) obj;
+
+    return getOutputTimeTrajectoryOfMotion().equals(thatSchedule.getOutputTimeTrajectoryOfMotion());
+d56 3
+a58 3
+   * Returns a string representation of this object.
+   * 
+   * @@return a string representation of this object
+d60 2
+a61 7
+  public String toString() {
+    StringBuffer stringBuffer = new StringBuffer();
+    stringBuffer.append("[Schedule ");
+    stringBuffer.append(getOutputTimeTrajectoryOfMotion().toString());
+    stringBuffer.append("]");
+
+    return stringBuffer.toString();
+d65 3
+a67 3
+   * Gets the state of the schedule
+   * 
+   * @@return the state of the schedule
+d69 2
+a70 2
+  public State getState() {
+    return state;
+d74 3
+a76 3
+   * Sets the state of the schedule
+   * 
+   * @@param state the state of the schedule
+d78 2
+a79 2
+  public void setState(State state) {
+    this.state = state;
+d83 5
+a87 5
+   * Gets the value of the state variable for the output time-trajectory of
+   * motion which constists of a pair (Object[]) of ordered lists, the first
+   * being a list of vectors and the second a list of time instances
+   * 
+   * @@return the output time-trajectory of motion
+d89 2
+a90 2
+  public Object[] getOutputTimeTrajectoryOfMotion() {
+    return (Object[]) state.getStateValue(State.OUTPUT_TIME_TRAJECTORY_OF_MOTION);
+d94 6
+a99 5
+   * Sets the value of the state variable for the output time-trajectory of
+   * motion which constists of a pair (Object[]) of ordered lists, the first
+   * being a list of vectors and the second a list of time instances
+   * 
+   * @@param outputTimeTrajectoryOfMotion the output time-trajectory of motion
+d101 2
+a102 2
+  public void setOutputTimeTrajectoryOfMotion(Object[] outputTimeTrajectoryOfMotion) {
+    state.setStateValue(State.OUTPUT_TIME_TRAJECTORY_OF_MOTION, outputTimeTrajectoryOfMotion);
+d106 1
+a106 3
+   * Gets the value of the state variable for the trajectory of the action
+   * vector, which consists of a pair (Object[]) of ordered lists, the first
+   * being a list of vectors and the second a list of time instances
+d108 3
+a110 1
+   * @@return the trajectory of the action vector
+d112 9
+a120 2
+  public Object[] getActionVectorTrajectory() {
+    return (Object[]) state.getStateValue(State.ACTION_VECTOR_TRAJECTORY);
+d124 1
+a124 3
+   * Sets the value of the state variable for the trajectory of the action
+   * vector, which constists of a pair (Object[]) of ordered lists, the first
+   * being a list of vectors and the second a list of time instances
+d126 1
+a126 1
+   * @@param actionVectorTrajectory the action vector trajectory
+d128 6
+a133 2
+  public void setActionVectorTrajectory(Object[] actionVectorTrajectory) {
+    state.setStateValue(State.OUTPUT_TIME_TRAJECTORY_OF_MOTION, actionVectorTrajectory);
+d136 7
+d144 1
+a144 5
+   * Gets the value of the state variable for the trajectory of the input
+   * control vector, which consists of a pair (Object[]) of ordered lists, the
+   * first being a list of vectors and the second a list of time instances
+   * 
+   * @@return the trajectory of the input control vector
+d146 2
+a147 4
+  public Object[] getInputContolVectorTrajectory() {
+    return (Object[]) state.getStateValue(State.INPUT_CONTROL_VECTOR_TIME_TRAJECTORY);
+  }
+
+d149 2
+a150 6
+   * Sets the value of the state variable for the trajectory of the input
+   * control vector, which consists of a pair (Object[]) of ordered lists, the
+   * first being a list of vectors and the second a list of time instances
+   * 
+   * @@param inputControlVectorTrajectory the trajectory of the input control
+   *        vector
+d152 1
+a152 8
+  public void setInputControlVectorTrajectory(Object[] inputControlVectorTrajectory) {
+    state.setStateValue(State.INPUT_CONTROL_VECTOR_TIME_TRAJECTORY, inputControlVectorTrajectory);
+  }
+
+  //// Protected Area
+
+  /** the state of the plan */
+  protected State state;
+@
+
+
+1.2
+log
+@fixed cvs $Id:
+@
+text
+@d4 2
+d15 1
+a15 1
+ * @@version $Id: BehaviorGeneration.java,v 1.3 2002/11/19 02:42:53 stephenreed Exp $
+d39 1
+a39 1
+   * Creates a new instance of Job
+d58 3
+a60 2
+    //TODO
+    return true;
+d69 91
+a159 2
+    //TODO
+    return "";
+d163 4
+a166 2
+  //// Private Area
+  //// Internal Rep
+@
+
+
+1.1
+log
+@Renamed Job.java to Schedule.java
+@
+text
+@d13 1
+a13 2
+ * @@version $Id: BehaviorGeneration.java,v 1.3 2002/11/19 02:42:53 stephenreed
+ *          Exp $
+@
+

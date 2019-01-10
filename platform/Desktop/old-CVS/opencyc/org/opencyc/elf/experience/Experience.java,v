@@ -1,0 +1,654 @@
+head	1.10;
+access;
+symbols
+	PRE_1_0:1.10;
+locks; strict;
+comment	@# @;
+
+
+1.10
+date	2003.09.18.21.22.57;	author stephenreed;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2003.09.17.16.53.51;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2003.09.14.13.58.03;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2003.09.05.18.16.10;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2003.08.25.18.43.26;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2003.08.11.21.24.17;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2003.08.08.13.22.24;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2002.11.19.02.42.53;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2002.11.15.22.52.09;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2002.11.11.04.58.11;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.10
+log
+@/home/reed/opencyc/org/opencyc/elf
+removed equals(...)  method if present and reformatted multiline comments to one less line
+@
+text
+@package org.opencyc.elf.experience;
+
+
+//// Internal Imports
+import org.opencyc.elf.wm.state.State;
+
+import org.opencyc.elf.goal.Goal;
+import org.opencyc.elf.goal.Value;
+
+//// External Imports
+import java.sql.Timestamp;
+
+import java.util.List;
+
+/** Provides the Experience container for the Elementary Loop Functioning
+ * (ELF).
+ * 
+ * @@version $Id: Experience.java,v 1.9 2003/09/17 16:53:51 stephenreed Exp $
+ * @@author Stephen L. Reed  
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class Experience {
+  
+  //// Constructors
+  
+  /** Constructs a new experience object. */
+  public Experience() {
+  }
+
+  //// Public Area
+
+  /**
+   * Returns a string representation of this object.
+   * 
+   * @@return a string representation of this object
+   */
+  public String toString() {
+    return "Experience for " + finalState.toString();
+  }
+
+  /** Gets when the experience occurred
+   * 
+   * @@return when the experience occurred
+   */
+  public Timestamp getTimestamp() {
+    return timestamp;
+  }
+
+  /** Sets when the experience occurred
+   * 
+   * @@param timestamp when the experience occurred
+   */
+  public void setTimestamp(Timestamp timestamp) {
+    this.timestamp = timestamp;
+  }
+
+  /** Gets the intial state of the experience
+   * 
+   * @@return the intial state of the experience
+   */
+  public State getInitialState() {
+    return initialState;
+  }
+
+  /** Sets the intial state of the experience
+   * 
+   * @@param initialState the intial state of the experience
+   */
+  public void setInitialState(State initialState) {
+    this.initialState = initialState;
+  }
+
+  /** Gets the final state of the experience
+   * 
+   * @@return the final state of the experience
+   */
+  public State getFinalState() {
+    return finalState;
+  }
+
+  /** Sets the final state of the experience
+   * 
+   * @@param finalState the final state of the experience
+   */
+  public void setFinalState(State finalState) {
+    this.finalState = finalState;
+  }
+
+  /** Gets the goal that was sought from the initial state
+   * 
+   * @@return the goal that was sought from the initial state
+   */
+  public Goal getGoal() {
+    return goal;
+  }
+
+  /** Sets the goal that was sought from the initial state
+   * 
+   * @@param goal the goal that was sought from the initial state
+   */
+  public void setGoal(Goal goal) {
+    this.goal = goal;
+  }
+
+  /** Gets the state transitions
+   * 
+   * @@return the state transitions
+   */
+  public List getTransitions() {
+    return transitions;
+  }
+
+  /** Sets the state transitions
+   * 
+   * @@param transitions the state transitions
+   */
+  public void setTransitions(List transitions) {
+    this.transitions = transitions;
+  }
+
+  /** Gets the value of the experience
+   * 
+   * @@return the value of the experience
+   */
+  public Value getValue() {
+    return value;
+  }
+
+  /** Sets the value of the experience
+   * 
+   * @@param value the value of the experience
+   */
+  public void setValue(Value value) {
+    this.value = value;
+  }
+  
+  //// Protected Area
+    
+  //// Private Area
+  
+  //// Internal Rep
+  
+  /** when the experience occurred */
+  protected Timestamp timestamp;
+
+  /** the intial state of the experience */
+  protected State initialState;
+
+  /** the final state of the experience */
+  protected State finalState;
+
+  /** the goal that was sought from the initial state */
+  protected Goal goal;
+
+  /** the state transitions from the initial state to the final state */
+  protected List transitions;
+
+  /** the value of the experience */
+  protected Value value;
+  
+  //// Main
+}@
+
+
+1.9
+log
+@moved from org.opencyc.elf.bg.state to org.opencyc.elf.wm.state
+@
+text
+@d15 1
+a15 2
+/**
+ * Provides the Experience container for the Elementary Loop Functioning
+d18 1
+a18 1
+ * @@version $Id: Experience.java,v 1.8 2003/09/14 13:58:03 stephenreed Exp $
+d57 1
+a57 2
+  /**
+   * Gets when the experience occurred
+d65 1
+a65 2
+  /**
+   * Sets when the experience occurred
+d73 1
+a73 2
+  /**
+   * Gets the intial state of the experience
+d81 1
+a81 2
+  /**
+   * Sets the intial state of the experience
+d89 1
+a89 2
+  /**
+   * Gets the final state of the experience
+d97 1
+a97 2
+  /**
+   * Sets the final state of the experience
+d105 1
+a105 2
+  /**
+   * Gets the goal that was sought from the initial state
+d113 1
+a113 2
+  /**
+   * Sets the goal that was sought from the initial state
+d121 1
+a121 2
+  /**
+   * Gets the state transitions
+d129 1
+a129 2
+  /**
+   * Sets the state transitions
+d137 1
+a137 2
+  /**
+   * Gets the value of the experience
+d145 1
+a145 2
+  /**
+   * Sets the value of the experience
+@
+
+
+1.8
+log
+@Changed ArrayList to List, consistently formatted one line comments. ----------------------------------------------------------------------
+@
+text
+@d5 1
+a5 1
+import org.opencyc.elf.bg.state.State;
+d19 1
+a19 1
+ * @@version $Id: Experience.java,v 1.7 2003/09/05 18:16:10 stephenreed Exp $
+@
+
+
+1.7
+log
+@/home/reed/opencyc/org/opencyc/elf
+fixed javadoc errors
+@
+text
+@d13 1
+a13 1
+import java.util.ArrayList;
+d19 1
+a19 1
+ * @@version $Id: Experience.java,v 1.6 2003/08/25 18:43:26 stephenreed Exp $
+d43 1
+a43 3
+  /**
+   * Constructs a new experience object.
+   */
+d135 1
+a135 1
+  public ArrayList getTransitions() {
+d144 1
+a144 1
+  public void setTransitions(ArrayList transitions) {
+d185 1
+a185 1
+  protected ArrayList transitions;
+@
+
+
+1.6
+log
+@added toString() method
+@
+text
+@a4 2
+import org.opencyc.elf.ELFObject;
+
+d17 1
+a17 1
+ * (ELF).<br>
+d19 1
+a19 1
+ * @@version $Id: Experience.java,v 1.5 2003/08/11 21:24:17 stephenreed Exp $
+d39 4
+a42 2
+public class Experience extends ELFObject {
+
+@
+
+
+1.5
+log
+@Reinserted the LGPL license clause that was wrongly removed by the Jalopy
+indentation tool.
+@
+text
+@a2 1
+import java.sql.Timestamp;
+d4 2
+a5 1
+import java.util.ArrayList;
+a6 1
+import org.opencyc.elf.ELFObject;
+d8 1
+d12 4
+d21 1
+a21 1
+ * @@version $Id: Experience.java,v 1.4 2003/08/08 13:22:24 stephenreed Exp $
+a41 2
+  /** when the experience occurred */
+  protected Timestamp timestamp;
+d43 5
+a47 11
+  /** the intial state of the experience */
+  protected State initialState;
+
+  /** the final state of the experience */
+  protected State finalState;
+
+  /** the goal that was sought from the initial state */
+  protected Goal goal;
+
+  /** the state transitions from the initial state to the final state */
+  protected ArrayList transitions;
+d49 1
+a49 2
+  /** the value of the experience */
+  protected Value value;
+d52 3
+a54 1
+   * Constructs a new experience object.
+d56 2
+a57 1
+  public Experience() {
+d167 26
+@
+
+
+1.4
+log
+@synchronized with work in progress.
+@
+text
+@d17 19
+a35 2
+ * @@version $Id: Experience.java,v 1.3 2002/11/19 02:42:53 stephenreed Exp $
+ * @@author Stephen L. Reed <p><p><p><p><p>
+@
+
+
+1.3
+log
+@refactoring
+@
+text
+@a2 1
+import java.util.*;
+d4 8
+a11 4
+import org.opencyc.elf.*;
+import org.opencyc.elf.goal.*;
+import org.opencyc.uml.statemachine.*;
+import org.opencyc.cycobject.*;
+d14 5
+a18 22
+ * Provides the Experience container for the Elementary Loop Functioning (ELF).<br>
+ *
+ * @@version $Id: Experience.java,v 1.2 2002/11/15 22:52:09 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+d20 6
+d27 2
+a28 1
+public class Experience extends ELFObject {
+d30 122
+a151 143
+    /**
+     * when the experience occurred
+     */
+    protected Timestamp timestamp;
+
+    /**
+     * the intial state of the experience
+     */
+    protected State initialState;
+
+    /**
+     * the final state of the experience
+     */
+    protected State finalState;
+
+    /**
+     * the goal that was sought from the initial state
+     */
+    protected Goal goal;
+
+    /**
+     * the state transitions from the initial state to the final state
+     */
+    protected ArrayList transitions;
+
+    /**
+     * the value of the experience
+     */
+    protected Value value;
+
+    /**
+     * Constructs a new experience object.
+     */
+    public Experience() {
+    }
+
+    /**
+     * Gets when the experience occurred
+     *
+     * @@return when the experience occurred
+     */
+    public Timestamp getTimestamp () {
+        return timestamp;
+    }
+
+    /**
+     * Sets when the experience occurred
+     *
+     * @@param xxx when the experience occurred
+     */
+    public void setTimestamp (Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
+
+
+    /**
+     * Gets the intial state of the experience
+     *
+     * @@return the intial state of the experience
+     */
+    public State getInitialState () {
+        return initialState;
+    }
+
+    /**
+     * Sets the intial state of the experience
+     *
+     * @@param initialState the intial state of the experience
+     */
+    public void setInitialState (State initialState) {
+        this.initialState = initialState;
+    }
+
+    /**
+     * Gets the final state of the experience
+     *
+     * @@return the final state of the experience
+     */
+    public State getFinalState () {
+        return finalState;
+    }
+
+    /**
+     * Sets the final state of the experience
+     *
+     * @@param finalState the final state of the experience
+     */
+    public void setFinalState (State finalState) {
+        this.finalState = finalState;
+    }
+
+    /**
+     * Gets the goal that was sought from the initial state
+     *
+     * @@return the goal that was sought from the initial state
+     */
+    public Goal getGoal () {
+        return goal;
+    }
+
+    /**
+     * Sets the goal that was sought from the initial state
+     *
+     * @@param goal the goal that was sought from the initial state
+     */
+    public void setGoal (Goal goal) {
+        this.goal = goal;
+    }
+    /**
+     * Gets the state transitions
+     *
+     * @@return the state transitions
+     */
+    public ArrayList getTransitions () {
+        return transitions;
+    }
+
+    /**
+     * Sets the state transitions
+     *
+     * @@param transitions the state transitions
+     */
+    public void setTransitions (ArrayList transitions) {
+        this.transitions = transitions;
+    }
+
+    /**
+     * Gets the value of the experience
+     *
+     * @@return the value of the experience
+     */
+    public Value getValue () {
+        return value;
+    }
+
+    /**
+     * Sets the value of the experience
+     *
+     * @@param xxx the value of the experience
+     */
+    public void setValue (Value value) {
+        this.value = value;
+    }
+@
+
+
+1.2
+log
+@Initial check in.
+@
+text
+@d4 1
+d13 1
+a13 1
+ * @@version $Id: Experience.java,v 1.1 2002/11/11 04:58:11 stephenreed Exp $
+d38 5
+d71 18
+@
+
+
+1.1
+log
+@Added new classes to support Experience per Albus/NIST reference model.
+@
+text
+@d3 6
+d12 1
+a12 1
+ * @@version $Id: Node.java,v 1.1 2002/10/25 23:23:57 stephenreed Exp $
+d34 26
+a59 1
+public class Experience {
+d65 90
+@
+

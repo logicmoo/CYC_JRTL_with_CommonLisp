@@ -1,0 +1,374 @@
+head	1.3;
+access;
+symbols
+	PRE_1_0:1.1;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2006.10.21.17.01.59;	author dmiles;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2006.10.18.14.21.30;	author dmiles;	state dead;
+branches;
+next	1.1;
+
+1.1
+date	2003.04.06.21.03.11;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental classes.
+@
+text
+@/* 
+ * DQLResponse.java: Handles DQL responses from remote servers.
+ */
+package org.opencyc.xml;
+
+import java.io.*;
+import java.text.*;
+import java.util.*;
+
+import org.jdom.*;
+import org.jdom.input.*;
+import org.jdom.output.*;
+
+import java.net.*;
+
+public class DQLResponse {
+	String xml;
+
+	boolean success;
+
+	Vector answers;
+
+	Vector damls;
+
+	int terminationType;
+
+	String processHandle;
+
+	public void parseResponse(String x) throws JDOMException {
+		StringReader sr = new StringReader(x);
+		Element env;
+		env = new SAXBuilder().build(sr).getRootElement();
+
+		Namespace soap = Namespace.getNamespace(DQLClient.soapns);
+		Namespace dql = Namespace.getNamespace(DQLClient.dqlns);
+		Namespace var = Namespace.getNamespace(DQLClient.varns);
+		Element body = env.getChild("Body", soap);
+		Element dqe = body.getChild("answerBundle", dql);
+		Iterator cit = dqe.getChildren().iterator();
+		answers = new Vector();
+		success = false;
+
+		while (cit.hasNext()) {
+			Element c = (Element) cit.next();
+			String name = c.getName();
+			Namespace ns = c.getNamespace();
+			if (name.equals("answer") && ns.getURI().equals(DQLClient.dqlns)) {
+				success = true;
+				Element bs = c.getChild("binding-set", Namespace
+						.getNamespace(DQLClient.dqlns));
+				Iterator bsit = bs.getChildren().iterator();
+				Vector bindings = new Vector();
+				answers.addElement(bindings);
+				while (bsit.hasNext()) {
+					Element v = (Element) bsit.next();
+					String vn = v.getName();
+					String binding = v.getAttributeValue("resource", Namespace
+							.getNamespace(DQLClient.rdfns));
+					binding = DQLClient.abbreviate(binding);
+					bindings.add(vn + "=" + binding);
+				}
+			} else if (name.equals("continuation")
+					&& ns.getURI().equals(DQLClient.dqlns)) {
+				Element none = c.getChild("none", Namespace
+						.getNamespace(DQLClient.dqlns));
+				Element end = c.getChild("end", Namespace
+						.getNamespace(DQLClient.dqlns));
+				Element ph = c.getChild("processHandle", Namespace
+						.getNamespace(DQLClient.dqlns));
+				if (none != null) {
+					terminationType = DQLClient.DQL_NONE;
+				} else if (end != null) {
+					terminationType = DQLClient.DQL_END;
+				} else if (ph != null) {
+					terminationType = DQLClient.DQL_CONTINUATION;
+					processHandle = ph.getTextTrim();
+				}
+			}
+		}
+	}
+
+	public void parseResponse() throws JDOMException {
+		parseResponse(xml);
+	}
+
+	public DQLResponse(String x) throws JDOMException {
+		xml = x;
+		success = false;
+		answers = null;
+		damls = null;
+		terminationType = DQLClient.DQL_NONE;
+		processHandle = null;
+		parseResponse();
+	}
+
+	public boolean wasSuccessful() {
+		return success;
+	}
+
+	public static String getVariableName(String str) {
+		int i = str.indexOf("=");
+		return str.substring(0, i);
+	}
+
+	public static String getVariableValue(String str) {
+		int i = str.indexOf("=");
+		return str.substring(i + 1);
+	}
+
+	public int getTerminationType() {
+		return terminationType;
+	}
+
+	public String getProcessHandle() {
+		return processHandle;
+	}
+
+	public Vector getBindings() {
+		return answers;
+	}
+
+	public Vector getVariableValues(String wanted) {
+		Vector ret = new Vector();
+		Vector answers = getBindings();
+		for (Iterator ia = answers.iterator(); ia.hasNext();) {
+			Vector bindings = (Vector) ia.next();
+			for (Iterator ib = bindings.iterator(); ib.hasNext();) {
+				String var = (String) ib.next();
+				if (getVariableName(var).equals(wanted)) {
+					ret.add(getVariableValue(var));
+				}
+			}
+		}
+		return ret;
+	}
+
+	public String[] getDAMLset() {
+		String ret[] = new String[damls.size()];
+		for (int x = 0; x < damls.size(); ++x) {
+			ret[x] = (String) damls.elementAt(x);
+		}
+		return ret;
+	}
+
+	public String getDAML() {
+		String set[] = getDAMLset();
+		String ret = "<rdf:RDF>";
+		for (int x = 0; x < set.length; ++x) {
+			ret = ret + set[x];
+		}
+		return ret + "</rdf:RDF>";
+	}
+
+	public String toXML() {
+		return xml;
+	}
+}
+@
+
+
+1.2
+log
+@This is the Additional Content to Create OpenCyc-1.0.1
+@
+text
+@d4 1
+d16 2
+d19 60
+a78 42
+public class DQLResponse
+{
+    String xml;
+    boolean success;
+    Vector answers;
+    Vector damls;
+    int terminationType;
+    String processHandle;
+
+
+    public void parseResponse(String x)
+	throws JDOMException
+    {
+	StringReader sr = new StringReader(x);
+	Element env = new SAXBuilder().build(sr).getRootElement();
+	Namespace soap = Namespace.getNamespace(DQLClient.soapns);
+	Namespace dql = Namespace.getNamespace(DQLClient.dqlns);
+	Namespace var = Namespace.getNamespace(DQLClient.varns);
+	Element body = env.getChild("Body", soap);
+	Element dqe = body.getChild("answerBundle", dql);
+	Iterator cit = dqe.getChildren().iterator();
+	answers = new Vector();
+	success = false;
+
+	while(cit.hasNext()) {
+	    Element c = (Element) cit.next();
+	    String name = c.getName();
+	    Namespace ns = c.getNamespace();
+	    if(name.equals("answer") && ns.getURI().equals(DQLClient.dqlns)) {
+		success = true;
+		Element bs = c.getChild("binding-set", 
+			    Namespace.getNamespace(DQLClient.dqlns));
+		Iterator bsit = bs.getChildren().iterator();
+		Vector bindings = new Vector();
+		answers.addElement(bindings);
+		while(bsit.hasNext()) {
+		    Element v = (Element) bsit.next();
+		    String vn = v.getName();
+		    String binding = v.getAttributeValue("resource",
+				Namespace.getNamespace(DQLClient.rdfns));
+		    binding = DQLClient.abbreviate(binding);
+		    bindings.add(vn + "=" + binding);
+d80 53
+a132 12
+	    }
+	    else if(name.equals("continuation") && 
+		    ns.getURI().equals(DQLClient.dqlns)) 
+	    {
+		Element none = c.getChild("none", 
+				     Namespace.getNamespace(DQLClient.dqlns));
+		Element end = c.getChild("end", 
+				     Namespace.getNamespace(DQLClient.dqlns));
+		Element ph = c.getChild("processHandle", 
+				     Namespace.getNamespace(DQLClient.dqlns));
+		if(none != null) {
+		    terminationType = DQLClient.DQL_NONE;
+d134 7
+a140 6
+		else if(end != null) {
+		    terminationType = DQLClient.DQL_END;
+		}
+		else if(ph != null) {
+		    terminationType = DQLClient.DQL_CONTINUATION;
+		    processHandle = ph.getTextTrim();
+d142 1
+a142 1
+	    }
+a143 1
+    }
+d145 5
+a149 59
+    public void parseResponse() throws JDOMException
+    {
+	parseResponse(xml);
+    }
+
+    public DQLResponse(String x) throws JDOMException
+    {
+	xml = x;
+	success = false;
+	answers = null;
+	damls = null;
+	terminationType = DQLClient.DQL_NONE;
+	processHandle = null;
+	parseResponse();
+    }
+
+    public boolean wasSuccessful()
+    {
+	return success;
+    }
+
+
+    public static String getVariableName(String str)
+    {
+	int i = str.indexOf("=");
+	return str.substring(0, i);
+    }
+    public static String getVariableValue(String str)
+    {
+	int i = str.indexOf("=");
+	return str.substring(i+1);
+    }
+
+
+    public int getTerminationType()
+    {
+	return terminationType;
+    }
+    public String getProcessHandle()
+    {
+	return processHandle;
+    }
+
+
+    public Vector getBindings()
+    {
+	return answers;
+    }
+
+    public Vector getVariableValues(String wanted)
+    {
+	Vector ret = new Vector();
+	Vector answers = getBindings();
+	for(Iterator ia = answers.iterator(); ia.hasNext(); ) {
+	    Vector bindings = (Vector) ia.next();
+	    for(Iterator ib = bindings.iterator(); ib.hasNext(); ) {
+		String var = (String) ib.next();
+		if(getVariableName(var).equals(wanted)) {
+		    ret.add(getVariableValue(var));
+d151 1
+a151 1
+	    }
+a152 2
+	return ret;
+    }
+d154 3
+a156 22
+    public String[] getDAMLset()
+    {
+	String ret[] = new String[damls.size()];
+	for(int x = 0; x < damls.size(); ++x) {
+	    ret[x] = (String) damls.elementAt(x);
+	}
+	return ret;
+    }
+    public String getDAML()
+    {
+	String set[] = getDAMLset();
+	String ret = "<rdf:RDF>";
+	for(int x = 0; x < set.length; ++x) {
+	    ret = ret + set[x];
+	}
+	return ret + "</rdf:RDF>";
+    }
+
+    public String toXML()
+    {
+	return xml;
+    }
+@
+
+
+1.1
+log
+@Initial check-in of DAML Query Language modules adapted from
+KSL (will not compile as I will replace the Java Theorem Prover with
+Cyc Server api calls).
+@
+text
+@@
+

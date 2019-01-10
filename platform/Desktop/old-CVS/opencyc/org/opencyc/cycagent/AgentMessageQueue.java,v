@@ -1,0 +1,311 @@
+head	1.4;
+access;
+symbols
+	PRE_1_0:1.3;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2006.10.21.17.01.55;	author dmiles;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2001.11.02.00.31.13;	author stephenreed;	state dead;
+branches;
+next	1.2;
+
+1.2
+date	2001.11.01.23.37.59;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2001.11.01.22.07.42;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental classes.
+@
+text
+@package  org.opencyc.cycagent;
+
+/**
+ * Contains the attributes and behavior of an agent message queue.
+ *
+ * @@version $Id: AgentMessageQueue.java,v 1.2 2001/11/01 23:37:59 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+import java.util.Enumeration;
+import java.util.Vector;
+
+import org.opencyc.util.Amp;
+
+class AgentMessageQueue {
+    protected static Vector ampMessages = null;
+
+    /**
+     * Constructs an AgentMessageQueue object.
+     */
+    public AgentMessageQueue () {
+        ampMessages = new Vector();
+    }
+
+    /**
+     * Adds an agent message queue item from a string.
+     *
+     * @@param message the message which is added to the agent's message queue
+     */
+    public synchronized void add (String message) {
+        ampMessages.add(new Amp(message));
+    }
+
+    /**
+     * Adds an agent message queue item from an AMP message.
+     *
+     * @@param amp the message which is added to the agent's message queue
+     */
+    public synchronized void add (Amp amp) {
+        ampMessages.add(amp);
+    }
+
+    /**
+     * Returns an enumeration of the AMP messages.
+     *
+     * @@return an enumeration of the AMP messages
+     */
+    public synchronized Enumeration elements () {
+        return  ampMessages.elements();
+    }
+
+    /**
+     * Returns and removes the first AMP message.
+     *
+     * @@return the first AMP message from the queue
+     */
+    public synchronized Amp removeFirst () {
+        if (ampMessages.isEmpty())
+            return  null;
+        Amp amp = (Amp)ampMessages.firstElement();
+        ampMessages.remove(0);
+        return  amp;
+    }
+
+    /**
+     * Returns the receiver type with regard to message routing.<p>
+     *
+     * "local" = agent manager method.<p>
+     * "cyc"   = route to a cyc socket.<p>
+     * "grid"  = route to the Grid.<p>
+     *
+     * @@param amp the message
+     * @@return the receiver type with regard to message routing
+     */
+    public static String receiverType (Amp amp) {
+        String receiver = amp.receiver();
+        return  "amp";
+    }
+
+    /**
+     * Creates an example agent message queue item.
+     */
+    public static Amp example () {
+        AgentMessageQueue agentMessageQueue = new AgentMessageQueue();
+        String exampleMessage = "(evaluate\n" +
+                                "  :sender cyc-image-initialization-DOUBLE-MOUNTAIN-6920-19991129101956\n" +
+                                "  :receiver HttpPortAllocator\n" +
+                                "  :content (obtain-http-port-number)\n" +
+                                "  :ontology cyc-api\n" +
+                                "  :language cyc-api\n" +
+                                "  :reply-with t\n" +
+                                "  :in-reply-to null)";
+        agentMessageQueue.add(exampleMessage);
+        return  agentMessageQueue.removeFirst();
+    }
+}
+
+
+
+
+
+
+@
+
+
+1.3
+log
+@Revised AgentManager and supporting classes to begin support for FIPA-OS and
+CoABS agent platforms.
+@
+text
+@d28 4
+a31 3
+import  java.util.Vector;
+import  java.util.Enumeration;
+import  org.opencyc.util.Amp;
+@
+
+
+1.2
+log
+@Saved files before removing them
+@
+text
+@d6 1
+a6 1
+ * @@version $Id: AgentMessageQueue.java,v 1.1 2001/11/01 22:07:42 stephenreed Exp $
+@
+
+
+1.1
+log
+@Added Agent Manager classes for CoABS interface
+@
+text
+@d1 119
+a119 116
+package  org.opencyc.jini.cycproxy;
+
+/**
+ * Contains the attributes and behavior of an agent message queue.
+ *
+ * @@version $Id: CycApiServiceInterface.java,v 1.1 2001/10/19 02:24:05 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+import  java.util.Vector;
+import  java.util.Enumeration;
+import  org.opencyc.util.Amp;
+
+class AgentMessageQueue {
+    protected static Vector ampMessages = null;
+
+    /**
+     * Constructs an AgentMessageQueue object.
+     */
+    public AgentMessageQueue () {
+        ampMessages = new Vector();
+    }
+
+    /**
+     * Adds an agent message queue item from a string.
+     *
+     * @@param message the message which is added to the agent's message queue
+     */
+    public synchronized void add (String message) {
+        ampMessages.add(new Amp(message));
+    }
+
+    /**
+     * Adds an agent message queue item from an AMP message.
+     *
+     * @@param amp the message which is added to the agent's message queue
+     */
+    public synchronized void add (Amp amp) {
+        ampMessages.add(amp);
+    }
+
+    /**
+     * Returns an enumeration of the AMP messages.
+     *
+     * @@return an enumeration of the AMP messages
+     */
+    public synchronized Enumeration elements () {
+        return  ampMessages.elements();
+    }
+
+    /**
+     * Returns and removes the first AMP message.
+     *
+     * @@return the first AMP message from the queue
+     */
+    public synchronized Amp removeFirst () {
+        if (ampMessages.isEmpty())
+            return  null;
+        Amp amp = (Amp)ampMessages.firstElement();
+        ampMessages.remove(0);
+        return  amp;
+    }
+
+    /**
+     * Returns the receiver type with regard to message routing.<p>
+     *
+     * "local" = agent manager method.<p>
+     * "cyc"   = route to a cyc socket.<p>
+     * "grid"  = route to the Grid.<p>
+     *
+     * @@param amp the message
+     * @@return the receiver type with regard to message routing
+     */
+    public static String receiverType (Amp amp) {
+        String receiver = amp.receiver();
+        return  "amp";
+    }
+
+    /**
+     * Creates an example agent message queue item.
+     */
+    public static Amp example () {
+        AgentMessageQueue agentMessageQueue = new AgentMessageQueue();
+        String exampleMessage = "(evaluate\n" +
+                                "  :sender cyc-image-initialization-DOUBLE-MOUNTAIN-6920-19991129101956\n" +
+                                "  :receiver HttpPortAllocator\n" +
+                                "  :content (obtain-http-port-number)\n" +
+                                "  :ontology cyc-api\n" +
+                                "  :language cyc-api\n" +
+                                "  :reply-with t\n" +
+                                "  :in-reply-to null)";
+        agentMessageQueue.add(exampleMessage);
+        return  agentMessageQueue.removeFirst();
+    }
+}
+
+
+
+@
+

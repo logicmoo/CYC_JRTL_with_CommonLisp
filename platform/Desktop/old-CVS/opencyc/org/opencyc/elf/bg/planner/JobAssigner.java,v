@@ -1,0 +1,2310 @@
+head	1.43;
+access;
+symbols
+	PRE_1_0:1.43;
+locks; strict;
+comment	@# @;
+
+
+1.43
+date	2003.10.20.15.21.50;	author stephenreed;	state Exp;
+branches;
+next	1.42;
+
+1.42
+date	2003.09.25.13.18.22;	author stephenreed;	state Exp;
+branches;
+next	1.41;
+
+1.41
+date	2003.09.23.13.49.01;	author stephenreed;	state Exp;
+branches;
+next	1.40;
+
+1.40
+date	2003.09.22.22.53.40;	author stephenreed;	state Exp;
+branches;
+next	1.39;
+
+1.39
+date	2003.09.22.02.30.03;	author stephenreed;	state Exp;
+branches;
+next	1.38;
+
+1.38
+date	2003.09.19.22.21.42;	author stephenreed;	state Exp;
+branches;
+next	1.37;
+
+1.37
+date	2003.09.18.22.52.28;	author stephenreed;	state Exp;
+branches;
+next	1.36;
+
+1.36
+date	2003.09.18.22.02.47;	author stephenreed;	state Exp;
+branches;
+next	1.35;
+
+1.35
+date	2003.09.18.21.22.56;	author stephenreed;	state Exp;
+branches;
+next	1.34;
+
+1.34
+date	2003.09.18.13.47.09;	author stephenreed;	state Exp;
+branches;
+next	1.33;
+
+1.33
+date	2003.09.18.03.05.16;	author stephenreed;	state Exp;
+branches;
+next	1.32;
+
+1.32
+date	2003.09.17.23.06.21;	author stephenreed;	state Exp;
+branches;
+next	1.31;
+
+1.31
+date	2003.09.17.16.53.49;	author stephenreed;	state Exp;
+branches;
+next	1.30;
+
+1.30
+date	2003.09.17.13.49.37;	author stephenreed;	state Exp;
+branches;
+next	1.29;
+
+1.29
+date	2003.09.16.23.16.42;	author stephenreed;	state Exp;
+branches;
+next	1.28;
+
+1.28
+date	2003.09.15.14.01.25;	author stephenreed;	state Exp;
+branches;
+next	1.27;
+
+1.27
+date	2003.09.15.12.35.28;	author stephenreed;	state Exp;
+branches;
+next	1.26;
+
+1.26
+date	2003.09.14.13.58.03;	author stephenreed;	state Exp;
+branches;
+next	1.25;
+
+1.25
+date	2003.09.10.23.03.47;	author stephenreed;	state Exp;
+branches;
+next	1.24;
+
+1.24
+date	2003.09.10.15.55.23;	author stephenreed;	state Exp;
+branches;
+next	1.23;
+
+1.23
+date	2003.09.05.18.16.10;	author stephenreed;	state Exp;
+branches;
+next	1.22;
+
+1.22
+date	2003.09.05.13.59.00;	author stephenreed;	state Exp;
+branches;
+next	1.21;
+
+1.21
+date	2003.09.01.04.52.58;	author stephenreed;	state Exp;
+branches;
+next	1.20;
+
+1.20
+date	2003.08.31.11.57.32;	author stephenreed;	state Exp;
+branches;
+next	1.19;
+
+1.19
+date	2003.08.28.20.29.30;	author stephenreed;	state Exp;
+branches;
+next	1.18;
+
+1.18
+date	2003.08.28.02.33.22;	author stephenreed;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2003.08.26.19.51.55;	author stephenreed;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2003.08.26.17.47.10;	author stephenreed;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2003.08.26.14.42.32;	author stephenreed;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2003.08.25.20.25.24;	author stephenreed;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2003.08.25.17.56.33;	author stephenreed;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2003.08.25.13.09.49;	author stephenreed;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2003.08.19.19.36.41;	author stephenreed;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2003.08.15.22.45.16;	author stephenreed;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2003.08.14.23.36.39;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2003.08.14.23.01.31;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2003.08.14.22.01.05;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2003.08.14.16.26.07;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2003.08.13.18.26.20;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2003.08.13.13.58.01;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2003.08.12.21.40.46;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2003.08.11.21.24.17;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2003.08.08.13.22.24;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.43
+log
+@moved commands to org.opencyc.elf.bg.command package
+@
+text
+@package org.opencyc.elf.bg.planner;
+
+//// Internal Imports
+import org.opencyc.elf.BufferedNodeComponent;
+import org.opencyc.elf.Node;
+import org.opencyc.elf.NodeComponent;
+import org.opencyc.elf.Status;
+import org.opencyc.elf.a.Actuator;
+import org.opencyc.elf.bg.command.Command;
+import org.opencyc.elf.bg.planner.Resource;
+import org.opencyc.elf.bg.taskframe.TaskCommand;
+import org.opencyc.elf.message.DoTaskMsg;
+import org.opencyc.elf.message.GenericMsg;
+import org.opencyc.elf.message.JobAssignerStatusMsg;
+import org.opencyc.elf.message.ReleaseMsg;
+import org.opencyc.elf.message.SchedulerStatusMsg;
+import org.opencyc.elf.message.ScheduleJobMsg;
+import org.opencyc.elf.wm.JobLibrary;
+import org.opencyc.elf.wm.NodeFactory;
+import org.opencyc.elf.wm.state.State;
+
+//// External Imports
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Logger;
+import EDU.oswego.cs.dl.util.concurrent.BoundedBuffer;
+import EDU.oswego.cs.dl.util.concurrent.Channel;
+import EDU.oswego.cs.dl.util.concurrent.Executor;
+import EDU.oswego.cs.dl.util.concurrent.Puttable;
+import EDU.oswego.cs.dl.util.concurrent.Takable;
+import EDU.oswego.cs.dl.util.concurrent.ThreadedExecutor;
+
+/** JobAssigner performs the non-temporal (for example spatial) task decomposition
+ * among the available agents and resources.  The input task command results in a job
+ * assignments for one or more schedulers.
+ *
+ * @@version $Id: JobAssigner.java,v 1.42 2003/09/25 13:18:22 stephenreed Exp $
+ * @@author Stephen L. Reed
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class JobAssigner extends BufferedNodeComponent implements Actuator {
+  
+  //// Constructors
+  
+  /** Creates a new instance of JobAssigner within the given node, that can accompish
+   * the given named actions.
+   *
+   * @@param node the containing ELF node
+   * @@param jobAssignerChannel the takable channel from which messages are input
+   */
+  public JobAssigner(Node node, Takable jobAssignerChannel) {
+    setNode(node);
+    this.jobAssignerChannel = jobAssignerChannel;
+    node.getBehaviorGeneration().setJobAssigner(this);
+  }
+  
+  //// Public Area
+  
+  /** Initializes with the given input and output channels and starts consuming task commands.
+   *
+   * @@param executorChannel the puttable channel to which messages are output to the higher
+   * level executor, or null if this is the highest level
+   */
+  public void initialize(Puttable executorChannel) {
+    getLogger().info("Initializing JobAssigner");
+    consumer = new Consumer(jobAssignerChannel, executorChannel, this);
+    executor = new ThreadedExecutor();
+    try {
+      executor.execute(consumer);
+    }
+    catch (InterruptedException e) {
+      e.printStackTrace();
+      System.exit(1);
+    }
+  }
+  
+  /** Gets the puttable channel for this node component to which other node
+   * components can send messages.
+   *
+   * @@return the puttable channel for this node component to which other node
+   * components can send messages
+   *
+   */
+  public Puttable getChannel() {
+    return (Puttable) jobAssignerChannel;
+  }
+  
+  /** Returns a string representation of this object.
+   *
+   * @@return a string representation of this object
+   */
+  public String toString() {
+    StringBuffer stringBuffer = new StringBuffer();
+    stringBuffer.append("[JobAssigner ");
+    if (taskCommand != null)
+      stringBuffer.append(taskCommand.toString());
+    stringBuffer.append("]");
+    return stringBuffer.toString();
+  }
+  
+  /** Gets the list of scheduler infos for this job assigner
+   *
+   * @@return the list of scheduler infos for this job assigner
+   */
+  public List getSchedulerInfos() {
+    return schedulerInfos;
+  }
+  
+  /** Gets the name of the virtual actuator.
+   *
+   * @@return the name of the virtual actuator
+   */
+  public String getName() {
+    return getNode().toString();
+  }
+  
+  /** Gets the resources required by this virtual actuator by iterating over the
+   * resources required by the contained schedulers.
+   *
+   * @@return the resources required by this virtual actuator
+   */
+  public List getResources() {
+    List resources = new ArrayList();
+    Iterator schedulerIterator = schedulerInfos.iterator();
+    while (schedulerIterator.hasNext()) {
+      JobAssigner.SchedulerInfo schedulerInfo = (JobAssigner.SchedulerInfo) schedulerIterator.next();
+      Scheduler scheduler = schedulerInfo.scheduler;
+      Iterator resourceIterator = scheduler.getResources().iterator();
+      while (resourceIterator.hasNext()) {
+        Resource resource = (Resource) resourceIterator.next();
+        if (! resources.contains(resource))
+          resources.add(resource);
+      }
+    }
+    return resources;
+  }
+  
+  //// Protected Area
+  
+  /** Thread which processes the input message channel. */
+  protected class Consumer implements Runnable {
+    
+    /** the takable channel from which messages are input */
+    protected final Takable jobAssignerChannel;
+    
+    /** the puttable channel to which messages are output to the higher
+     * level executor, or null if this is the highest level
+     */
+    protected Puttable executorChannel;
+    
+    /** the reference to this node component as a message sender */
+    protected NodeComponent sender;
+    
+    /** Creates a new instance of Consumer.
+     *
+     * @@param jobAssignerChannel the takable channel from which messages are input
+     * @@param executorChannel the puttable channel to which messages are output to the higher
+     * level executor, or null if this is the highest level
+     * @@param sender the reference to this node component as a message sender
+     */
+    protected Consumer(Takable jobAssignerChannel,
+                       Puttable executorChannel,
+                       NodeComponent sender) {
+      getLogger().info("Creating JobAssigner.Consumer");
+      this.jobAssignerChannel = jobAssignerChannel;
+      this.executorChannel = executorChannel;
+      this.sender = sender;
+    }
+    
+    /** Reads messages from the input queue and processes them. */
+    public void run() {
+      getLogger().info("Running JobAssigner.Consumer");
+      try {
+        while (true) {
+          dispatchMsg((GenericMsg) jobAssignerChannel.take());
+        }
+      }
+      catch (InterruptedException ex) {}
+    }
+    
+    /** Sets the puttable channel to which messages are output to the higher
+     * level executor
+     *
+     * @@param executorChannel the puttable channel to which messages are output to the higher
+     * level executor, or null if this is the highest level
+     */
+    public void setExecutorChannel(Puttable executorChannel) {
+      this.executorChannel = executorChannel;
+    }
+    
+    /** Dispatches the given input channel message by type.
+     *
+     * @@param genericMsg the given input channel message
+     */
+    void dispatchMsg(GenericMsg genericMsg) {
+      if (genericMsg instanceof DoTaskMsg)
+        processDoTaskMsg((DoTaskMsg) genericMsg);
+      else if (genericMsg instanceof SchedulerStatusMsg)
+        processSchedulerStatusMsg((SchedulerStatusMsg) genericMsg);
+      else
+        throw new RuntimeException("Unhandled message " + genericMsg);
+    }
+    
+    /** Processes the do task message.
+     *
+     * @@param doTaskMsg the do task message that contains the commanded task
+     */
+    protected void processDoTaskMsg(DoTaskMsg doTaskMsg) {
+      getLogger().info("JobAssigner proccessing " + doTaskMsg);
+      //TODO throw exception if busy schedulers
+      //TODO handle abort task command
+      taskCommand = doTaskMsg.getTaskCommand();
+      getLogger().info("Do task: " + taskCommand);
+      Command command = taskCommand.getCommand();
+      List jobSets = JobLibrary.getInstance().getJobSets(command.getName());
+      List jobs = determineBestJobSet(jobSets);
+      assignJobsToSchedulers(jobs);
+      sendJobsToSchedulers();
+      getLogger().info("JobAssigner completed assignment of " + doTaskMsg);
+    }
+        
+    /** Chooses the best of the alternative job sets.
+     *
+     * @@param jobSets the alternative job sets
+     * @@return the best of the alternative job sets 
+     */
+    protected List determineBestJobSet(List jobSets) {
+      //TODO For now just use the first one.
+      return (List) jobSets.get(0);
+    }
+    
+    /** Assigns the given job set to the schedulers in two passes.  In the first pass jobs
+     * having direct actuators and sensors are assigned to schedulers (direct schedulers) which have 
+     * matching direct actuators and sensors.  New direct schedulers are created for new direct actuators
+     * and direct sensors appearing in the jobs.  Unmatched direct schedulers are releaseed.  In the
+     * second pass, jobs are assinged to the first available scheduler.  New schedulers are created
+     * in the event of an insufficient number of available schedulers.  Conversely, if any schedulers 
+     * remain available after all the jobs have been assigned, then these schedulers are released.
+     *
+     * @@param jobs the given jobs to assign to schedulers
+     */
+    protected void assignJobsToSchedulers(List jobs) {
+      // mark all schedulers as available
+      Iterator iter = schedulerInfos.iterator();
+      while (iter.hasNext()) {
+        JobAssigner.SchedulerInfo schedulerInfo = (JobAssigner.SchedulerInfo) iter.next();
+        schedulerInfo.isAssigned = true;
+      }
+      // pass one that assigns matching direct schedules to existing direct schedulers
+      List passTwoJobs = new ArrayList();
+      List unmatchedDirectJobs = new ArrayList();
+      Iterator jobIterator = jobs.iterator();
+      while (jobIterator.hasNext()) {
+        boolean foundMatchingScheduler = false;
+        Job job = (Job) jobIterator.next();
+        if (job.getDirectActuatorName() == null &&
+            job.getDirectSensorName() == null) {
+         
+          passTwoJobs.add(job);
+          continue;
+        }
+        Iterator schedulerIterator = schedulerInfos.iterator();
+        while (schedulerIterator.hasNext()) {
+          JobAssigner.SchedulerInfo schedulerInfo = (JobAssigner.SchedulerInfo) schedulerIterator.next();
+          if (! schedulerInfo.isAssigned)
+            continue;
+          Job previousJob = schedulerInfo.job;
+          if ((job.getDirectActuatorName() != null &&
+               previousJob.getDirectActuatorName() != null &&
+               job.getDirectActuatorName().equals(previousJob.getDirectActuatorName())) ||
+              (job.getDirectSensorName() != null &&
+               previousJob.getDirectSensorName() != null &&
+               job.getDirectSensorName().equals(previousJob.getDirectSensorName()))) {
+            getLogger().info("matching scheduler:" + schedulerInfo.scheduler + " job: " + job);
+            schedulerInfo.isAssigned = false;
+            schedulerInfo.job = job;
+            foundMatchingScheduler = true;
+            break;
+          }
+        }
+        if (! foundMatchingScheduler)
+          unmatchedDirectJobs.add(job);
+      }
+      Iterator unmatchedDirectJobIterator = unmatchedDirectJobs.iterator();
+      while (unmatchedDirectJobIterator.hasNext()) {
+        Job job = (Job) unmatchedDirectJobIterator.next();
+        createScheduler(job);
+      }
+      // pass two that assigns remaining schedules to existing schedulers
+      jobIterator = passTwoJobs.iterator();
+      Iterator schedulerIterator = schedulerInfos.iterator();
+      while (jobIterator.hasNext()) {
+        Job job = (Job) jobIterator.next();
+        boolean jobAssigned = false;
+        while (schedulerIterator.hasNext()) {
+          JobAssigner.SchedulerInfo schedulerInfo = 
+            (JobAssigner.SchedulerInfo) schedulerIterator.next();
+          if (schedulerInfo.isAssigned) {
+            schedulerInfo.isAssigned = false;
+            schedulerInfo.job = job;
+            jobAssigned = true;
+            getLogger().info("Using scheduler: " + schedulerInfo.scheduler + 
+                             " for job: " + job);
+            break;
+          }
+        }
+        if (! jobAssigned)
+          createScheduler(job);
+      }
+      releaseUnusedSchedulers();
+    }
+
+    /** Creates a new scheduler for the given job.
+     *
+     * @@param job the given job
+     */
+    protected void createScheduler(Job job) {
+      Channel schedulerChannel = new BoundedBuffer(NodeFactory.CHANNEL_CAPACITY);
+      Scheduler scheduler = new Scheduler(getNode(), schedulerChannel);
+      scheduler.initialize((Puttable) jobAssignerChannel);
+      JobAssigner.SchedulerInfo schedulerInfo = new JobAssigner.SchedulerInfo();
+      schedulerInfo.job = job;
+      schedulerInfo.scheduler = scheduler;
+      schedulerInfos.add(schedulerInfo);
+      getLogger().info("Created new scheduler: " + scheduler + " for job: " + job);
+    }
+    
+    /** Releases the unused schedulers. */
+    protected void releaseUnusedSchedulers() {
+      List releasedSchedulers = new ArrayList();
+      Iterator schedulerInfoIterator = schedulerInfos.iterator();
+      while (schedulerInfoIterator.hasNext()) {
+        JobAssigner.SchedulerInfo schedulerInfo = (JobAssigner.SchedulerInfo) schedulerInfoIterator.next();
+        if (schedulerInfo.isAssigned)
+          releasedSchedulers.add(schedulerInfo);
+      }
+      Iterator releasedSchedulerIterator = releasedSchedulers.iterator();
+      while (releasedSchedulerIterator.hasNext()) {
+        JobAssigner.SchedulerInfo schedulerInfo = (JobAssigner.SchedulerInfo) releasedSchedulerIterator.next();
+        getLogger().info("Releasing scheduler: " + schedulerInfo.scheduler);
+        schedulerInfos.remove(schedulerInfo);
+        releaseScheduler(schedulerInfo.scheduler);
+      }
+    }
+    
+    /** Releases the given unused scheduler.
+     *
+     * @@param scheduler the given unused scheduler
+     */
+    protected void releaseScheduler(Scheduler scheduler) {
+      ReleaseMsg releaseMsg = new ReleaseMsg(sender);
+      sender.sendMsgToRecipient(scheduler.getChannel(), releaseMsg);
+    }
+    
+    /** Sends the assigned jobs to the corresponding schedulers */ 
+    protected void sendJobsToSchedulers() {
+      Iterator schedulerInfoIterator = schedulerInfos.iterator();
+      while (schedulerInfoIterator.hasNext()) {
+        JobAssigner.SchedulerInfo schedulerInfo = (JobAssigner.SchedulerInfo) schedulerInfoIterator.next();
+        schedulerInfo.isBusy = true;
+        Job job = schedulerInfo.job;
+        Scheduler scheduler = schedulerInfo.scheduler;
+        ScheduleJobMsg scheduleJobMsg = new ScheduleJobMsg(sender, job);
+        sender.sendMsgToRecipient(scheduler.getChannel(), scheduleJobMsg);
+      }
+    }
+
+    /** Processes the schedule status message.
+     *
+     * @@param schedulerStatusMsg he schedule status message
+     */
+    protected void processSchedulerStatusMsg(SchedulerStatusMsg schedulerStatusMsg) {
+      Scheduler scheduler = (Scheduler) schedulerStatusMsg.getSender();
+      Status status = schedulerStatusMsg.getStatus();
+      boolean isBusy = (status.getValue(Status.SCHEDULE_FINISHED) != null);
+      if (! isBusy)
+        recordSchedulerCompletedSchedule(scheduler);
+      checkIfAllSchedulersDone();
+    }
+    
+    /** Records that the given scheduler has completed its assigned schedule.
+     * 
+     * @@param scheduler the given scheduler
+     */
+    protected void recordSchedulerCompletedSchedule(Scheduler scheduler) {
+      Iterator schedulerInfoIterator = schedulerInfos.iterator();
+      while (schedulerInfoIterator.hasNext()) {
+        JobAssigner.SchedulerInfo schedulerInfo = (JobAssigner.SchedulerInfo) schedulerInfoIterator.next();
+        if (schedulerInfo.scheduler.equals(scheduler)) {
+          schedulerInfo.isBusy = false;
+          return;
+        }
+      }
+      throw new RuntimeException("Scheduler: " + scheduler + " not found");
+    }
+    
+    /** Checks if all the schedulers have completed their schedules and if so then sends
+     * the task completed status message to the higher level exector.  If this is the highest
+     * level job assigner, then the system exits.
+     */
+    protected void checkIfAllSchedulersDone() {
+      Iterator schedulerInfoIterator = schedulerInfos.iterator();
+      while (schedulerInfoIterator.hasNext()) {
+        JobAssigner.SchedulerInfo schedulerInfo = (JobAssigner.SchedulerInfo) schedulerInfoIterator.next();
+        if (schedulerInfo.isBusy)
+          return;
+      }
+      if (this.executorChannel == null) {
+        getLogger().info("The last task at the topmost level is done.");
+        System.exit(0);
+      }
+      else {
+        getLogger().info("The commanded task " + taskCommand + " is done");
+        Status status = new Status();
+        status.setValue(Status.COMMAND_FINISHED, Boolean.TRUE);
+        JobAssignerStatusMsg jobAssignerStatusMsg = new JobAssignerStatusMsg(sender, status);
+        sender.sendMsgToRecipient(executorChannel, jobAssignerStatusMsg);
+      }
+    }   
+  }
+  
+  /** Contains the current schedulers and their assigned jobs. */
+  protected class SchedulerInfo {
+    /** the scheduler */
+    protected Scheduler scheduler;
+    
+    /** the scheduler's job */
+    protected Job job;
+    
+    /** indicates that the scheduler is available for job assignment */
+    protected boolean isAssigned = false;
+    
+    /** indicates that the scheduler is busy with an assigned job */
+    protected boolean isBusy = false;
+  }
+  
+  //// Private Area
+  
+  //// Internal Rep
+  
+  /** the takable channel from which messages are input */
+  protected Takable jobAssignerChannel;
+  
+  /** the thread which processes the input channel of messages */
+  protected Consumer consumer;
+  
+  /** the executor of the consumer thread */
+  protected Executor executor;
+  
+  /** the node's commanded task */
+  protected TaskCommand taskCommand;
+    
+  /** the list of scheduler infos for this job assigner */
+  protected List schedulerInfos = new ArrayList();
+  
+  //// main
+}@
+
+
+1.42
+log
+@removed name and purpose from Node
+@
+text
+@a7 1
+
+d9 1
+a9 1
+
+a10 2
+
+import org.opencyc.elf.bg.taskframe.Command;
+a11 1
+
+a17 1
+
+a25 1
+
+a26 1
+
+d38 1
+a38 1
+ * @@version $Id: JobAssigner.java,v 1.41 2003/09/23 13:49:01 stephenreed Exp $
+@
+
+
+1.41
+log
+@renamed status values
+@
+text
+@d45 1
+a45 1
+ * @@version $Id: JobAssigner.java,v 1.40 2003/09/22 22:53:40 stephenreed Exp $
+d138 1
+a138 1
+    return getNode().getName();
+@
+
+
+1.40
+log
+@used job sets
+@
+text
+@d45 1
+a45 1
+ * @@version $Id: JobAssigner.java,v 1.39 2003/09/22 02:30:03 stephenreed Exp $
+d439 1
+a439 1
+        status.setValue(Status.TASK_FINISHED, Boolean.TRUE);
+@
+
+
+1.39
+log
+@fixed compilation errors resulting from messages construct signature change
+@
+text
+@d45 1
+a45 1
+ * @@version $Id: JobAssigner.java,v 1.38 2003/09/19 22:21:42 stephenreed Exp $
+d239 1
+a239 1
+      List jobSets = JobLibrary.getInstance().getJobSet(command.getName());
+d248 1
+a248 1
+     * @@param jobSets the task frame
+d337 1
+a337 1
+    /** Creates a new scheduler for the given schedule.
+d339 1
+a339 1
+     * @@param schedule the given schedule
+d376 1
+a376 5
+      try {
+        scheduler.getChannel().put(releaseMsg);
+      }
+      catch (InterruptedException e) {
+      }
+d388 1
+a388 6
+        try {
+          scheduler.getChannel().put(scheduleJobMsg);
+          getLogger().info("Sent job: " + job + " to scheduler: " + scheduler);
+        }
+        catch (InterruptedException e) {
+        }
+d440 2
+a441 7
+        JobAssignerStatusMsg jobAssignerStatusMsg = 
+          new JobAssignerStatusMsg(sender, status);
+        try {
+          executorChannel.put(jobAssignerStatusMsg);
+        }
+        catch (InterruptedException e) {
+        }
+@
+
+
+1.38
+log
+@/home/reed/opencyc/org/opencyc/elf
+refactored job and schedule
+@
+text
+@d45 1
+a45 1
+ * @@version $Id: JobAssigner.java,v 1.37 2003/09/18 22:52:28 stephenreed Exp $
+a78 1
+    thisJobAssigner = this;
+d175 2
+a176 4
+    /** the parent node component */
+    protected NodeComponent nodeComponent;
+    
+    /** t
+d183 1
+a183 1
+     * @@param nodeComponent the parent node component
+d186 2
+a187 2
+    Puttable executorChannel,
+    NodeComponent nodeComponent) {
+d191 1
+a191 1
+      this.nodeComponent = nodeComponent;
+d375 1
+a375 2
+      ReleaseMsg releaseMsg = new ReleaseMsg();
+      releaseMsg.setSender(thisJobAssigner);
+d391 1
+a391 3
+        ScheduleJobMsg scheduleJobMsg = new ScheduleJobMsg();
+        scheduleJobMsg.setSender(thisJobAssigner);
+        scheduleJobMsg.setJob(job);
+a446 2
+        JobAssignerStatusMsg jobAssignerStatusMsg = new JobAssignerStatusMsg();
+        jobAssignerStatusMsg.setSender(thisJobAssigner);
+d449 2
+a450 1
+        jobAssignerStatusMsg.setStatus(status);
+a492 3
+  
+  /** a convenient reference to this object for use in the Consumer thread */
+  protected JobAssigner thisJobAssigner;
+@
+
+
+1.37
+log
+@clarified class comment.  Will soon refactor so that schedule determination is performed by the scheduler
+@
+text
+@d13 1
+a13 2
+import org.opencyc.elf.bg.taskframe.Action;
+import org.opencyc.elf.bg.taskframe.TaskFrame;
+d23 1
+a23 1
+import org.opencyc.elf.wm.ActionLibrary;
+a24 1
+import org.opencyc.elf.wm.TaskFrameLibrary;
+d42 2
+a43 5
+ * among the available agents and resources.  In many cases the task frame as retrieved from
+ * the task frame library will aleady contain decomposed schedules for the task command.  In
+ * that case a complete schedule is passed to the scheduler which then passes it to the 
+ * executor.  Otherwise the spatially decomposed task command is passed to the scheduler which
+ * computes a schedule to accomplish it. 
+d45 1
+a45 1
+ * @@version $Id: JobAssigner.java,v 1.36 2003/09/18 22:02:47 stephenreed Exp $
+a72 1
+   * @@param actionCapabilities the names of actions that this virtual actuator can accomplish
+d75 1
+a75 1
+  public JobAssigner(Node node, List actionCapabilities, Takable jobAssignerChannel) {
+a76 1
+    this.actionCapabilities = actionCapabilities;
+a162 8
+  /** Gets the names of actions that this virtual actuator can accomplish.
+   *
+   * @@return names of the actions that this virtual actuator can accomplish
+   */
+  public List getActionCapabilities() {
+    return actionCapabilities;
+  }
+  
+d179 1
+a179 2
+    /** the task frame for the current task command */
+    protected TaskFrame taskFrame;
+a236 1
+      //TODO handle goals if the task command is not specified
+d241 5
+a245 8
+      Action actionCommand = taskCommand.getActionCommand();
+      String taskFrameName = actionCommand.getName();
+      getLogger().info("task name " + taskFrameName);
+      TaskFrame taskFrame = TaskFrameLibrary.getInstance().getTaskFrame(taskFrameName);
+      List conditionalScheduleSets = determineBestScheduleSet(taskFrame);
+      List scheduleSet = determineScheduleSet(conditionalScheduleSets);
+      assignSchedulesToSchedulers(scheduleSet);
+      sendSchedulesToSchedulers();
+d249 1
+a249 12
+    /** Chooses the best of the alternative schedule sets.
+     *
+     * @@param taskFrame the task frame
+     * @@return the best of the alternative schedule sets 
+     */
+    protected List determineBestScheduleSet(TaskFrame taskFrame) {
+      //TODO Use the plan simulator and plan evaluator to chose the best schedule from the schedule set.
+      // For now just use the first one.
+      return (List) taskFrame.getScheduleAlternatives().get(0);
+    }
+    
+    /** Returns the schedule set for the first true schedule set predicate.
+d251 2
+a252 2
+     * @@param conditionalScheduleSets the conditional schedule sets
+     * @@return the schedule set for the first true schedule set predicate
+d254 3
+a256 10
+    protected List determineScheduleSet(List conditionalScheduleSets) {
+      State state = getNode().getWorldModel().getState();
+      Iterator iter = conditionalScheduleSets.iterator();
+      while (iter.hasNext()) {
+        ConditionalScheduleSet conditionalScheduleSet = (ConditionalScheduleSet) iter.next();
+        if (conditionalScheduleSet.getPredicateExpression().evaluate(state))
+          return conditionalScheduleSet.getScheduleSet();
+      }
+      getLogger().severe("no valid schedule for " + taskFrame);
+      throw new RuntimeException("no valid schedule for " + taskFrame);
+d259 1
+a259 1
+    /** Assigns the given schedule set to the schedulers in two passes.  In the first pass schedules
+d262 2
+a263 2
+     * and direct sensors appearing in the schedules.  Unmatched direct schedulers are releaseed.  In the
+     * second pass, schedules are assinged to the first available scheduler.  New schedulers are created
+d265 1
+a265 1
+     * remain available after all the schedules have been assigned, then these schedulers are released.
+d267 1
+a267 1
+     * @@param scheduleSet the given schedule set to assign to schedulers
+d269 1
+a269 1
+    protected void assignSchedulesToSchedulers(List scheduleSet) {
+d277 4
+a280 4
+      List passTwoSchedules = new ArrayList();
+      List unmatchedDirectSchedules = new ArrayList();
+      Iterator scheduleIterator = scheduleSet.iterator();
+      while (scheduleIterator.hasNext()) {
+d282 3
+a284 3
+        Schedule schedule = (Schedule) scheduleIterator.next();
+        if (schedule.getDirectActuatorName() == null &&
+            schedule.getDirectSensorName() == null) {
+d286 1
+a286 1
+          passTwoSchedules.add(schedule);
+d294 8
+a301 8
+          Schedule previousSchedule = schedulerInfo.schedule;
+          if ((schedule.getDirectActuatorName() != null &&
+               previousSchedule.getDirectActuatorName() != null &&
+               schedule.getDirectActuatorName().equals(previousSchedule.getDirectActuatorName())) ||
+              (schedule.getDirectSensorName() != null &&
+               previousSchedule.getDirectSensorName() != null &&
+               schedule.getDirectSensorName().equals(previousSchedule.getDirectSensorName()))) {
+            getLogger().info("matching scheduler:" + schedulerInfo.scheduler + " schedule: " + schedule);
+d303 1
+a303 1
+            schedulerInfo.schedule = schedule;
+d309 1
+a309 1
+          unmatchedDirectSchedules.add(schedule);
+d311 4
+a314 4
+      Iterator unmatchedDirectScheduleIterator = unmatchedDirectSchedules.iterator();
+      while (unmatchedDirectScheduleIterator.hasNext()) {
+        Schedule schedule = (Schedule) unmatchedDirectScheduleIterator.next();
+        createScheduler(schedule);
+d317 1
+a317 1
+      scheduleIterator = passTwoSchedules.iterator();
+d319 3
+a321 3
+      while (scheduleIterator.hasNext()) {
+        Schedule schedule = (Schedule) scheduleIterator.next();
+        boolean scheduleAssigned = false;
+d327 2
+a328 2
+            schedulerInfo.schedule = schedule;
+            scheduleAssigned = true;
+d330 1
+a330 1
+                             " for schedule: " + schedule);
+d334 2
+a335 2
+        if (! scheduleAssigned)
+          createScheduler(schedule);
+d344 1
+a344 1
+    protected void createScheduler(Schedule schedule) {
+d349 1
+a349 1
+      schedulerInfo.schedule = schedule;
+d352 1
+a352 1
+      getLogger().info("Created new scheduler: " + scheduler + " for schedule: " + schedule);
+d387 2
+a388 2
+    /** Sends the assigned schedules to the corresponding schedulers */ 
+    protected void sendSchedulesToSchedulers() {
+d393 1
+a393 1
+        Schedule schedule = schedulerInfo.schedule;
+d397 1
+a397 2
+        scheduleJobMsg.setTaskCommand(taskCommand);
+        scheduleJobMsg.setSchedule(schedule);
+d400 1
+a400 1
+          getLogger().info("Sent schedule: " + schedule + " to scheduler: " + scheduler);
+d467 1
+a467 1
+  /** Contains the current schedulers and their assigned schedules. */
+d472 2
+a473 2
+    /** the schedule */
+    protected Schedule schedule;
+d475 1
+a475 1
+    /** indicates that the scheduler is available for assigning a schedule */
+d478 1
+a478 1
+    /** indicates that the scheduler is busy with an assigned schedule */
+a481 15
+  /** Sends the decompose task frame message to ?. */
+  protected void decomposeTaskFrame() {
+    //TODO
+    // send via channel to ?
+    // TaskCommand taskCommand
+  }
+  
+  /** Decomposes the function for the current task frame. (May return
+   * a list of scheduler/job pairs.)
+   */
+  protected void decomposeFunction() {
+    //TODO
+    // TaskCommand taskCommand
+  }
+  
+a484 3
+  
+  /** the names of actions that this virtual actuator can accomplish */
+  protected List actionCapabilities;
+@
+
+
+1.36
+log
+@/home/reed/opencyc/org/opencyc/elf
+renamed scheduler.actuatorName to scheduler.directActuatorName and renamed scheduler.sensorName to scheduler.directSensorName
+@
+text
+@d44 5
+a48 1
+ * among the available agents and resources.
+d50 1
+a50 1
+ * @@version $Id: JobAssigner.java,v 1.35 2003/09/18 21:22:56 stephenreed Exp $
+@
+
+
+1.35
+log
+@/home/reed/opencyc/org/opencyc/elf
+removed equals(...)  method if present and reformatted multiline comments to one less line
+@
+text
+@d46 1
+a46 1
+ * @@version $Id: JobAssigner.java,v 1.34 2003/09/18 13:47:09 stephenreed Exp $
+d121 6
+a126 2
+    //TODO
+    return "";
+a189 3
+    /** the node's commanded task */
+    protected TaskCommand taskCommand;
+    
+d317 2
+a318 2
+        if (schedule.getActuatorName() == null &&
+            schedule.getSensorName() == null) {
+d329 6
+a334 6
+          if ((schedule.getActuatorName() != null &&
+               previousSchedule.getActuatorName() != null &&
+               schedule.getActuatorName().equals(previousSchedule.getActuatorName())) ||
+              (schedule.getSensorName() != null &&
+               previousSchedule.getSensorName() != null &&
+               schedule.getSensorName().equals(previousSchedule.getSensorName()))) {
+d548 3
+@
+
+
+1.34
+log
+@added sendSchedulesToSchedulers() method
+@
+text
+@d19 1
+a19 1
+import org.opencyc.elf.message.JobAssignmentStatus;
+d46 1
+a46 1
+ * @@version $Id: JobAssigner.java,v 1.33 2003/09/18 03:05:16 stephenreed Exp $
+a115 14
+  /** Returns true if the given object equals this object.
+   *
+   * @@param obj the given object
+   * @@return true if the given object equals this object
+   */
+  public boolean equals(Object obj) {
+    if (!(obj instanceof JobAssigner)) {
+      return false;
+    }
+    
+    //TODO
+    return true;
+  }
+  
+d238 2
+d446 1
+d448 4
+a451 1
+      //TODO
+d454 14
+a467 8
+    /** Sends the job assignment status message to the higher-level executor. */
+    protected void sendJobAssignmentStatus() {
+      //TODO
+      Status status = new Status();
+      
+      JobAssignmentStatus jobAssignmentStatus = new JobAssignmentStatus();
+      jobAssignmentStatus.setSender(nodeComponent);
+      jobAssignmentStatus.setStatus(status);
+d470 29
+d548 1
+a548 1
+  protected List schedulerInfos;
+@
+
+
+1.33
+log
+@added more scheduling code in the job assigner
+@
+text
+@d20 1
+d46 1
+a46 1
+ * @@version $Id: JobAssigner.java,v 1.32 2003/09/17 23:06:21 stephenreed Exp $
+d82 1
+d261 2
+d272 2
+a273 3
+      //sendSchedulesToSchedulers();
+      
+      
+d319 1
+a319 1
+        schedulerInfo.isAvailable = true;
+d321 1
+a321 1
+      // pass one to assign matching direct schedules to existing direct schedulers
+d337 1
+a337 1
+          if (! schedulerInfo.isAvailable)
+d347 1
+a347 1
+            schedulerInfo.isAvailable = false;
+d361 1
+a361 1
+      // pass two to assign remaining schedules to existing schedulers
+d370 2
+a371 4
+  
+          
+          if (schedulerInfo.isAvailable) {
+            schedulerInfo.isAvailable = false;
+d382 1
+d384 1
+a384 1
+    
+d392 1
+a393 1
+      schedulerInfo.isAvailable = false;
+d400 53
+d483 4
+a486 1
+    protected boolean isAvailable;
+d522 3
+@
+
+
+1.32
+log
+@began coding the assignSchedulesToSchedulers(...) method
+@
+text
+@d24 1
+d35 2
+d45 1
+a45 1
+ * @@version $Id: JobAssigner.java,v 1.31 2003/09/17 16:53:49 stephenreed Exp $
+d268 1
+a268 1
+      
+d297 1
+d319 1
+d326 3
+a328 1
+            schedule.getSensorName() == null)
+d330 1
+d343 1
+d355 2
+a356 2
+        
+        //Scheduler scheduler = new Scheduler(getNode(), schedulerChannel, jobAssignerChannel);
+d359 37
+@
+
+
+1.31
+log
+@moved from org.opencyc.elf.bg.state to org.opencyc.elf.wm.state
+@
+text
+@d23 1
+d25 1
+d39 1
+a39 2
+/**
+ * JobAssigner performs the non-temporal (for example spatial) task decomposition
+d41 3
+a43 3
+ * 
+ * @@version $Id: JobAssigner.java,v 1.30 2003/09/17 13:49:37 stephenreed Exp $
+ * @@author Stephen L. Reed  
+d63 1
+a63 1
+
+d65 2
+a66 3
+
+  /**
+   * Creates a new instance of JobAssigner within the given node, that can accompish
+d73 1
+a73 3
+  public JobAssigner (Node node,
+                      List actionCapabilities,
+                      Takable jobAssignerChannel) {
+d81 2
+a82 3
+
+  /** 
+   * Initializes with the given input and output channels and starts consuming task commands.
+d87 1
+a87 1
+  public void initialize (Puttable executorChannel) {
+d89 1
+a89 3
+    consumer = new Consumer(jobAssignerChannel,
+                            executorChannel,
+                            this);
+d99 2
+a100 3
+
+  /** 
+   * Gets the puttable channel for this node component to which other node
+d109 4
+a112 5
+  }  
+
+  /**
+   * Returns true if the given object equals this object.
+   * 
+d120 1
+a120 1
+
+d124 3
+a126 4
+
+  /**
+   * Returns a string representation of this object.
+   * 
+d134 1
+a134 2
+  /**
+   * Gets the list of schedulers for this job assigner
+d136 1
+a136 1
+   * @@return the list of schedulers for this job assigner
+d138 2
+a139 2
+  public List getSchedulers () {
+    return schedulers;
+d141 2
+a142 12
+
+  /**
+   * Sets the list of schedulers for this job assigner
+   *
+   * @@param schedulers the list of schedulers for this job assigner
+   */
+  public void setSchedulers (List schedulers) {
+    this.schedulers = schedulers;
+  }
+
+  /** 
+   * Gets the name of the virtual actuator.
+d150 1
+a150 2
+  /**
+   * Gets the resources required by this virtual actuator by iterating over the 
+d157 1
+a157 1
+    Iterator schedulerIterator = schedulers.iterator();
+d159 2
+a160 1
+      Scheduler scheduler = (Scheduler) schedulerIterator.next();
+d171 1
+a171 2
+  /**
+   * Gets the names of actions that this virtual actuator can accomplish.
+d180 1
+a180 1
+
+d187 1
+a187 2
+    /**
+     * the puttable channel to which messages are output to the higher
+d194 1
+a194 1
+          
+d201 1
+a201 2
+    /**
+     * Creates a new instance of Consumer.
+d208 3
+a210 3
+    protected Consumer (Takable jobAssignerChannel,
+                        Puttable executorChannel,
+                        NodeComponent nodeComponent) { 
+d216 1
+a216 1
+
+d218 1
+a218 1
+    public void run () {
+d221 2
+a222 2
+        while (true) { 
+          dispatchMsg((GenericMsg) jobAssignerChannel.take()); 
+d227 2
+a228 3
+     
+    /**
+     * Sets the puttable channel to which messages are output to the higher
+d234 1
+a234 1
+    public void setExecutorChannel (Puttable executorChannel) {
+d238 1
+a238 2
+    /**
+     * Dispatches the given input channel message by type.
+d242 1
+a242 1
+    void dispatchMsg (GenericMsg genericMsg) {
+d248 2
+a249 3
+  
+    /**
+     * Processes the do task message.
+d253 1
+a253 1
+    protected void processDoTaskMsg (DoTaskMsg doTaskMsg) {
+d262 3
+a265 1
+      // how to initialize the state?
+a266 7
+      // evaluate the schedule predicates to find the first true one
+      
+      
+      
+      // find agents that can collectively execute the task
+      
+      // find the best schedule for each agent
+d270 83
+a352 2
+    /**
+     * Processes the schedule status message.
+d356 1
+a356 1
+    protected void processSchedulerStatusMsg (SchedulerStatusMsg schedulerStatusMsg) {
+d362 1
+a362 1
+    protected void sendJobAssignmentStatus () {
+d370 13
+a382 1
+        
+d386 1
+a386 1
+  protected void decomposeTaskFrame () {
+d392 1
+a392 2
+  /**
+   * Decomposes the function for the current task frame. (May return
+d395 1
+a395 1
+  protected void decomposeFunction () {
+d399 1
+a399 1
+    
+d401 1
+a401 1
+
+d409 1
+a409 1
+    
+d416 2
+a417 2
+  /** the list of schedulers for this job assigner */
+  protected List schedulers;
+@
+
+
+1.30
+log
+@added TODO comment
+@
+text
+@d41 1
+a41 1
+ * @@version $Id: JobAssigner.java,v 1.29 2003/09/16 23:16:42 stephenreed Exp $
+a120 1
+   * 
+@
+
+
+1.29
+log
+@changed processDoTaskMsg to begin to accomodate the conditional schedule set
+@
+text
+@d41 1
+a41 1
+ * @@version $Id: JobAssigner.java,v 1.28 2003/09/15 14:01:25 stephenreed Exp $
+d289 2
+d292 2
+@
+
+
+1.28
+log
+@added code to processDoTaskMsg(...) method
+@
+text
+@d41 1
+a41 1
+ * @@version $Id: JobAssigner.java,v 1.27 2003/09/15 12:35:28 stephenreed Exp $
+d288 2
+a289 6
+      Iterator scheduleInfoIterator = taskFrame.getScheduleInfos().iterator();
+      while (scheduleInfoIterator.hasNext()) {
+        TaskFrame.ScheduleInfo scheduleInfo = 
+          (TaskFrame.ScheduleInfo) scheduleInfoIterator.next();
+        
+      }
+@
+
+
+1.27
+log
+@fixes to pass execute method testing of the behavior engine
+@
+text
+@d13 1
+d41 1
+a41 1
+ * @@version $Id: JobAssigner.java,v 1.26 2003/09/14 13:58:03 stephenreed Exp $
+d284 4
+a287 1
+      TaskFrame taskFrame = TaskFrameLibrary.getInstance().getTaskFrame(taskCommand.getNextActionCommand().getName());
+@
+
+
+1.26
+log
+@Changed ArrayList to List, consistently formatted one line comments. ----------------------------------------------------------------------
+@
+text
+@d22 2
+d40 1
+a40 1
+ * @@version $Id: JobAssigner.java,v 1.25 2003/09/10 23:03:47 stephenreed Exp $
+d70 1
+d73 2
+a74 1
+                      List actionCapabilities) {
+d76 2
+a78 1
+    getLogger().info("Creating JobAssigner");
+a85 1
+   * @@param jobAssignerChannel the takable channel from which messages are input
+d89 1
+a89 2
+  public void initialize (Takable jobAssignerChannel,
+                          Puttable executorChannel) {
+a90 1
+    this.jobAssignerChannel = jobAssignerChannel;
+d280 1
+d283 7
+a289 2
+      //TODO
+      //get the task frame and figure out what is in it wrt Goal, TaskCommand and Action
+d296 1
+a296 1
+                
+@
+
+
+1.25
+log
+@removed the default constructor
+refactored the constructor so that the initialization happens in a separate initialize method
+added action capabilities to the constructor
+@
+text
+@d25 1
+d38 1
+a38 1
+ * @@version $Id: JobAssigner.java,v 1.24 2003/09/10 15:55:23 stephenreed Exp $
+d70 1
+a70 1
+                      ArrayList actionCapabilities) {
+d145 1
+a145 1
+  public ArrayList getSchedulers () {
+d154 1
+a154 1
+  public void setSchedulers (ArrayList schedulers) {
+d173 2
+a174 2
+  public ArrayList getResources() {
+    ArrayList resources = new ArrayList();
+d193 1
+a193 1
+  public ArrayList getActionCapabilities() {
+d199 1
+a199 3
+  /**
+   * Thread which processes the input message channel.
+   */
+d202 1
+a202 3
+    /**
+     * the takable channel from which messages are input
+     */
+d211 1
+a211 3
+    /**
+     * the parent node component
+     */
+d214 1
+a214 3
+    /**
+     * the node's commanded task
+     */
+d217 1
+a217 3
+    /**
+     * the task frame for the current task command
+     */
+d237 1
+a237 3
+    /**
+     * Reads messages from the input queue and processes them.
+     */
+d299 1
+a299 3
+    /**
+     * Sends the job assignment status message to the higher-level executor.
+     */
+d311 1
+a311 3
+  /**
+   * Sends the decompose task frame message to ?.
+   */
+d332 1
+a332 1
+  protected ArrayList actionCapabilities;
+d334 1
+a334 3
+  /**
+   * the takable channel from which messages are input
+   */
+d337 1
+a337 3
+  /**
+   * the thread which processes the input channel of messages
+   */
+d340 1
+a340 3
+  /**
+   * the executor of the consumer thread
+   */
+d343 2
+a344 4
+  /**
+   * the list of schedulers for this job assigner
+   */
+  protected ArrayList schedulers;
+@
+
+
+1.24
+log
+@JobAssigner now implements Actuator
+@
+text
+@d37 1
+a37 1
+ * @@version $Id: JobAssigner.java,v 1.23 2003/09/05 18:16:10 stephenreed Exp $
+d58 1
+d62 5
+a66 1
+   * Creates a new instance of JobAssigner
+d68 5
+a72 1
+  public JobAssigner() {
+d74 2
+d78 1
+a78 2
+   * Creates a new instance of JobAssigner with the given
+   * input and output channels.
+a79 1
+   * @@param node the containing ELF node
+d84 3
+a86 7
+  public JobAssigner (Node node,
+                      Takable jobAssignerChannel,
+                      Puttable executorChannel) {
+    setNode(node);
+    node.getBehaviorGeneration().setJobAssigner(this);
+    System.out.println("");
+    getLogger().info("Creating JobAssigner");
+a100 2
+  //// Public Area
+
+d187 9
+d345 3
+@
+
+
+1.23
+log
+@/home/reed/opencyc/org/opencyc/elf
+fixed javadoc errors
+@
+text
+@d9 4
+d24 2
+d37 1
+a37 1
+ * @@version $Id: JobAssigner.java,v 1.22 2003/09/05 13:59:00 stephenreed Exp $
+d57 1
+a57 1
+public class JobAssigner extends BufferedNodeComponent {
+d154 30
+@
+
+
+1.22
+log
+@beginning to reconcile action, goal, task command and task frame
+@
+text
+@d28 1
+a28 2
+ * <P>
+ * JobAssigner performs the non-temporal (e.g. spatial) task decomposition
+a29 1
+ * </p>
+d31 1
+a31 1
+ * @@version $Id: JobAssigner.java,v 1.21 2003/09/01 04:52:58 stephenreed Exp $
+@
+
+
+1.21
+log
+@update
+@
+text
+@d33 1
+a33 1
+ * @@version $Id: JobAssigner.java,v 1.20 2003/08/31 11:57:32 stephenreed Exp $
+a223 2
+    //TODO think about conversations and thread safety
+    
+d245 6
+a251 1
+      //TODO
+d260 1
+a261 1
+      Status status = schedulerStatusMsg.getStatus();
+@
+
+
+1.20
+log
+@logging in processDoTaskMsg()
+@
+text
+@d33 1
+a33 1
+ * @@version $Id: JobAssigner.java,v 1.19 2003/08/28 20:29:30 stephenreed Exp $
+d248 1
+a248 1
+      //TOTO
+@
+
+
+1.19
+log
+@cvs comment
+@
+text
+@d33 1
+a33 1
+ * @@version $Id: BehaviorGeneration.java,v 1.3 2002/11/19 02:42:53 stephenreed Exp $
+d244 1
+@
+
+
+1.18
+log
+@/home/reed/opencyc/org/opencyc/elf
+@
+text
+@d33 1
+a33 2
+ * @@version $Id: BehaviorGeneration.java,v 1.3 2002/11/19 02:42:53 stephenreed
+ *          Exp $
+@
+
+
+1.17
+log
+@Added logging diagnostics
+@
+text
+@a94 2
+  
+  
+d246 2
+@
+
+
+1.16
+log
+@Added node as a constructor argument because the node component needs to have access
+to the node when initializing
+@
+text
+@d76 2
+@
+
+
+1.15
+log
+@added import for logger
+@
+text
+@d5 1
+d67 1
+d72 2
+a73 1
+  public JobAssigner (Takable jobAssignerChannel,
+d75 2
+d93 2
+d195 1
+d205 1
+@
+
+
+1.14
+log
+@added setExecutorChannel(Puttable executorChannel) method
+@
+text
+@d19 1
+@
+
+
+1.13
+log
+@Removed KB & predictor messaging methods, as calls will be synchronous
+@
+text
+@d4 1
+d52 1
+a52 1
+public class JobAssigner extends NodeComponent {
+d159 1
+a159 1
+    protected final Puttable executorChannel;
+d204 11
+@
+
+
+1.12
+log
+@Syncronizing
+
+----------------------------------------------------------------------
+@
+text
+@a12 4
+import org.opencyc.elf.message.KBObjectRequestMsg;
+import org.opencyc.elf.message.KBObjectResponseMsg;
+import org.opencyc.elf.message.PredictedInputMsg;
+import org.opencyc.elf.message.PredictionRequestMsg;
+a66 3
+   * @@param knowledgeBaseChannel the puttable channel to which messages are output to the
+   * knowledge base
+   * @@param predictorChannel the puttable channel to which messages are output to the predictor
+d69 1
+a69 3
+                      Puttable executorChannel,
+                      Puttable knowledgeBaseChannel,
+                      Puttable predictorChannel) {
+a72 2
+                            knowledgeBaseChannel,
+                            predictorChannel,
+a160 11
+     * the puttable channel to which messages are output to the
+     * knowledge base
+     */
+    protected final Puttable knowledgeBaseChannel;
+    
+    /**
+     * the puttable channel to which messages are output to the predictor
+     */
+    protected final Puttable predictorChannel;
+    
+    /**
+a180 3
+     * @@param knowledgeBaseChannel the puttable channel to which messages are output to the
+     * knowledge base
+     * @@param predictorChannel the puttable channel to which messages are output to the predictor
+a184 2
+                        Puttable knowledgeBaseChannel,
+                        Puttable predictorChannel,
+a187 2
+      this.knowledgeBaseChannel = knowledgeBaseChannel;
+      this.predictorChannel = predictorChannel;
+a212 4
+      else if (genericMsg instanceof KBObjectResponseMsg)
+        processKBObjectResponseMsg((KBObjectResponseMsg) genericMsg);
+      else if (genericMsg instanceof PredictedInputMsg)
+        processPredictedInputMsg((PredictedInputMsg) genericMsg);
+d226 1
+a226 23
+
+    /**
+     * Processes the knowledge base object response message.
+     *
+     * @@param kbObjectResponseMsg the knowledge base object response message
+     */
+    protected void processKBObjectResponseMsg (KBObjectResponseMsg kbObjectResponseMsg) {
+      Object obj = kbObjectResponseMsg.getObj();
+      Object data = kbObjectResponseMsg.getData();
+      //TODO
+    }
+        
+    /**
+     * Processes the predicted input message.
+     *
+     * @@param predictedInputMsg the predicted input message
+     */
+    protected void processPredictedInputMsg (PredictedInputMsg predictedInputMsg) {
+      Object obj = predictedInputMsg.getObj();
+      Object data = predictedInputMsg.getData();
+      //TODO
+    }
+        
+d248 1
+a248 28
+    
+    /**
+     * Requests the given object from the knowledge base.
+     *
+     * @@param obj the given object whose value is requested from the
+     * knowledge base
+     */
+    protected void sendKBObjectRequestMsg (Object obj) {
+      KBObjectRequestMsg kbObjectRequestMsg = new KBObjectRequestMsg();
+      kbObjectRequestMsg.setSender(nodeComponent);
+      kbObjectRequestMsg.setReplyToChannel((Puttable) jobAssignerChannel);
+      kbObjectRequestMsg.setObj(obj);
+      nodeComponent.sendMsgToRecipient(knowledgeBaseChannel, kbObjectRequestMsg);
+    }
+    
+    /**
+     * Requests a predicted value for the given object.
+     *
+     * @@param obj the given object whose predicted value is requested from
+     * the predictor
+     */
+    protected void sendPredictionRequestMsg (Object obj) {
+      PredictionRequestMsg predictionRequestMsg = new PredictionRequestMsg();
+      predictionRequestMsg.setSender(nodeComponent);
+      predictionRequestMsg.setReplyToChannel((Puttable) jobAssignerChannel);
+      predictionRequestMsg.setObj(obj);
+      nodeComponent.sendMsgToRecipient(predictorChannel, predictionRequestMsg);
+    }    
+@
+
+
+1.11
+log
+@added input message handling methods
+@
+text
+@d66 1
+a66 1
+   * input channel.
+d79 1
+d97 12
+d135 18
+d231 3
+a233 1
+      
+d291 40
+a330 47
+        
+    //TODO add methods to send the output messages
+  }
+
+  /**
+   * Receives the do task message from behavior generation.  This
+   * triggers the fetch task message to be sent back to behavior generation.
+   */
+  protected void doTask () {
+    //TODO
+    // received via channel from behavior generation
+    // TaskCommand taskCommand
+    fetchTaskFrame();
+    // may trigger scheduleJob(TaskCommand)
+    // may trigger jobAssignerStatus(status)
+  }
+  
+  /**
+   * Receives the scheduler status message from a scheduler
+   */
+  protected void schedulerStatus () {
+    //TODO
+    // received via channel from a scheduler
+    // ArrayList controlledResources
+    // Status status
+  }
+  
+  /**
+   * Receives the schedule job message from ?.  Subsequently the message is
+   * sent to the appropriate scheduler.
+   */
+  protected void ScheduleJob (TaskCommand taskCommand) {
+    //TODO
+    // received via channel from ?
+    // send via channel to appropriate scheduler
+    // TaskCommand taskCommand
+    // send receiveScheduleJob(taskCommand) to (appropriate) scheduler
+  }
+  
+  /**
+   * Sends the fetch task frame message to behavior generation
+   */
+  protected void fetchTaskFrame () {
+    //TODO
+    // send via channel to behavior generation
+    // TaskCommand taskCommand
+    // send forwardFetchTaskFrame(taskCommand) to behaviorGeneration
+d350 1
+a350 2
+  
+  
+d352 1
+d356 5
+d363 1
+a363 1
+  Consumer consumer;
+d368 6
+a373 1
+  Executor executor;
+@
+
+
+1.10
+log
+@/home/reed/opencyc/org/opencyc/elf
+Added methods to KnowledgeBase
+@
+text
+@d10 10
+d23 5
+d64 30
+d125 138
+a275 12
+   * Receives the receive task frame message from behavior generation.  This triggers
+   * the decompose task frame message.
+   */
+  protected void receiveTaskFrame () {
+    //TODO
+    // received via channel from behavior generation
+    // TaskCommand taskCommand
+    // TaskFrame taskFrame
+    decomposeTaskFrame();
+  }
+
+  /**
+d325 4
+d330 1
+a330 1
+   * Sends the job assigner status message to behavior generation
+d332 1
+a332 6
+  protected void JobAssignerStatus () {
+    //TODO
+    // send via channel to behavior generation
+    // Status status
+    // send behaviorGenerationStatus(status) to behaviorGeneration
+  }
+d334 4
+a337 2
+  public void run() {
+  }
+d339 1
+a339 2
+  //// Private Area
+  //// Internal Rep
+@
+
+
+1.9
+log
+@Added TODO comments
+@
+text
+@d164 3
+@
+
+
+1.8
+log
+@Added TODO comments
+@
+text
+@d88 2
+d146 2
+a147 1
+   * Decomposes the function for the current task frame.
+@
+
+
+1.7
+log
+@Added TODO comments
+@
+text
+@d52 5
+a56 1
+   * Receives the do task message from behavior generation.
+d58 26
+a83 1
+  public void doTask () {
+d87 1
+d91 2
+a92 1
+   * Receives the receive task frame message from behavior generation
+d94 1
+a94 1
+  public void receiveTaskFrame () {
+d99 1
+d105 1
+a105 1
+  public void schedulerStatus () {
+d116 1
+a116 1
+  public void ScheduleJob (TaskCommand taskCommand) {
+d127 1
+a127 1
+  public void fetchTaskFrame () {
+d137 1
+a137 1
+  public void decomposeTaskFrame (TaskFrame taskFrame) {
+d144 8
+d154 1
+a154 1
+  public void JobAssignerStatus () {
+a160 27
+  /**
+   * Returns true if the given object equals this object.
+   * 
+   * @@param obj the given object
+   * 
+   * @@return true if the given object equals this object
+   */
+  public boolean equals(Object obj) {
+    if (!(obj instanceof JobAssigner)) {
+      return false;
+    }
+
+    //TODO
+    return true;
+  }
+
+  /**
+   * Returns a string representation of this object.
+   * 
+   * @@return a string representation of this object
+   */
+  public String toString() {
+    //TODO
+    return "";
+  }
+
+  //// Protected Area
+@
+
+
+1.6
+log
+@/home/reed/opencyc/org/opencyc/elf
+Adding TODO comments
+@
+text
+@d61 1
+a61 1
+   * Receives the receive task frame message from ?
+d65 1
+a65 1
+    // received via channel from ?
+d71 1
+a71 1
+   * receives the scheduler status message from ?
+d75 1
+a75 1
+    // received via channel from ?
+d81 2
+a82 1
+   * Receives the schedule job message from ?
+d87 1
+d89 1
+d112 1
+a112 1
+   * Sends the job assigner status message to ?
+d116 1
+a116 1
+    // send via channel to ?
+d118 1
+@
+
+
+1.5
+log
+@/home/reed/opencyc/org/opencyc/elf
+Refactored Result.java & Status.java into the org.opencyc.elf package.
+@
+text
+@d52 1
+a52 3
+   * Performs job assignment for the given task command.
+   *
+   * @@param taskCommand the given task command
+d54 4
+a57 1
+  public void doTask (TaskCommand taskCommand) {
+d61 1
+a61 4
+   * Receives the task command and task frame.
+   * 
+   * @@param taskCommand the task command
+   * @@param taskFrame the task frame
+d63 1
+a63 1
+  public void receiveTaskFrame (TaskCommand taskCommand, TaskFrame taskFrame) {
+d65 3
+d71 1
+a71 3
+   * Sets the scheduler status given the list of controlled resources.
+   *
+   * @@param status the scheduler status
+d73 5
+a77 2
+  public void schedulerStatus (ArrayList controlledResources,
+                               Status status) {
+d81 1
+a81 3
+   * Schedules the given task command
+   * 
+   * @@param taskCommand the given task command for scheduling
+d85 2
+d90 1
+a90 3
+   * Requests the task frame associated with the given task command.
+   *
+   * @@param taskCommand the task command
+d92 1
+a92 1
+  public void fetchTaskFrame (TaskCommand taskCommand) {
+d94 3
+a96 1
+    // send via channel
+d100 1
+a100 3
+   * Decomposes the given task frame, returning a list of Scheduler/Job pairs.
+   *
+   * @@param the given task frame
+d104 2
+d109 1
+a109 3
+   * Gets the job assigner status.
+   *
+   * @@param status the job assigner status
+d111 1
+a111 1
+  public void JobAssignerStatus (Status status) {
+d113 2
+a115 1
+  
+@
+
+
+1.4
+log
+@Extended NodeComponent.
+@
+text
+@d5 1
+a5 2
+
+import org.opencyc.elf.bg.Status;
+@
+
+
+1.3
+log
+@Added method signatures
+@
+text
+@d4 2
+d41 1
+a41 1
+public class JobAssigner {
+@
+
+
+1.2
+log
+@Reinserted the LGPL license clause that was wrongly removed by the Jalopy
+indentation tool.
+@
+text
+@d4 5
+d10 1
+d50 65
+@
+
+
+1.1
+log
+@synchronized with work in progress.
+@
+text
+@d14 18
+a31 1
+ * @@author reed <p><p><p><p><p>
+@
+

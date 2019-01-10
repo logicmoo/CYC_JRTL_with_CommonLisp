@@ -1,0 +1,760 @@
+head	1.10;
+access;
+symbols
+	PRE_1_0:1.10;
+locks; strict;
+comment	@# @;
+
+
+1.10
+date	2003.02.09.19.45.21;	author stephenreed;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2003.01.27.22.49.40;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2003.01.23.23.15.43;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2003.01.22.23.56.04;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2003.01.13.23.58.09;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2003.01.10.22.31.40;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2003.01.09.21.52.13;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2003.01.09.00.00.19;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2002.11.06.00.24.30;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2002.10.31.02.50.54;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.10
+log
+@removed file
+@
+text
+@package org.opencyc.uml.interpreter;
+
+import java.io.*;
+import java.util.*;
+import org.opencyc.api.*;
+import org.opencyc.cycobject.*;
+import org.opencyc.uml.commonbehavior.*;
+import org.opencyc.util.*;
+
+/**
+ * Evaluates a UML Expression.
+ *
+ * @@version $Id: ExpressionEvaluator.java,v 1.9 2003/01/27 22:49:40 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+public class ExpressionEvaluator {
+
+
+    /**
+     * The quiet verbosity of this object's output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    public static final int QUIET_VERBOSITY = 0;
+
+    /**
+     * The default verbosity of this object's output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    public static final int DEFAULT_VERBOSITY = 3;
+
+    /**
+     * Sets verbosity of this object's output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    protected int verbosity = DEFAULT_VERBOSITY;
+
+    /**
+     * the reference to the parent CycAccess object which provides Cyc api
+     * services
+     */
+    protected CycAccess cycAccess;
+
+    /**
+     * #$EqualsInProgramFn
+     */
+    protected CycConstant equalsInProgramFn;
+
+    /**
+     * #$ProgramAssignmentFn
+     */
+    protected CycConstant programAssignmentFn;
+
+    /**
+     * #$ProgramBlockFn
+     */
+    protected CycConstant programBlockFn;
+
+    /**
+     * #$ProgramConditionFn
+     */
+    protected CycConstant programConditionFn;
+
+    /**
+     * #$softwareParameterValue
+     */
+    protected CycConstant softwareParameterValue;
+
+    /**
+     * #$evaluate
+     */
+    protected CycConstant evaluate;
+
+    /**
+     * ?value
+     */
+    protected CycConstant trueValue;
+
+    /**
+     * Constructs a new ExpressionEvaluator object.
+     *
+     * @@param cycAccess the reference to the parent CycAccess object which provides Cyc api
+     * services
+     * @@param verbosity the output verbosity for this object
+     */
+    public ExpressionEvaluator(CycAccess cycAccess, int verbosity)
+        throws IOException, CycApiException {
+        this.cycAccess = cycAccess;
+        this.verbosity = verbosity;
+        equalsInProgramFn = cycAccess.getKnownConstantByName("EqualsInProgramFn");
+        programAssignmentFn = cycAccess.getKnownConstantByName("ProgramAssignmentFn");
+        programBlockFn = cycAccess.getKnownConstantByName("ProgramBlockFn");
+        programConditionFn = cycAccess.getKnownConstantByName("ProgramConditionFn");
+        softwareParameterValue = cycAccess.getKnownConstantByName("softwareParameterValue");
+        evaluate = cycAccess.getKnownConstantByName("evaluate");
+        trueValue = cycAccess.getKnownConstantByName("True");
+    }
+
+    /**
+     * Evaluates the given boolean expression in the state context.
+     *
+     * @@param booleanExpression the given boolean java expression
+     * @@param evaluationContext the given  state evaluation context
+     * @@return the result of evaluating the given boolean java expression
+     */
+    public boolean evaluateBoolean (BooleanExpression booleanExpression,
+                                    CycFort evaluationContext)
+        throws IOException, CycApiException, ExpressionEvaluationException {
+        Object answer = evaluateCycLExpression((CycList) booleanExpression.getBody(),
+                                               evaluationContext);
+        if (answer.equals(Boolean.TRUE))
+            return true;
+        else if (answer.equals(Boolean.FALSE))
+            return false;
+        else
+            throw new RuntimeException("Expected Boolean answer not returned: " + answer.toString());
+    }
+
+    /**
+     * Evaluates the given expression in the state context.
+     *
+     * @@param expression the given java expression
+     * @@param evaluationContext the given  state evaluation context
+     */
+    public void evaluate (Expression expression,
+                          CycFort evaluationContext)
+        throws IOException, CycApiException, ExpressionEvaluationException {
+        evaluateCycLExpression(expression.getBody(),
+                               evaluationContext);
+    }
+
+    /**
+     * Evaluates the given CycL expression in the state context.
+     *
+     * @@param cycLExpression the given CycL expression
+     * @@param evaluationContext the given  state evaluation context
+     * @@return the value of the evaluated CycL expression
+     */
+    public Object evaluateCycLExpression (Object cycLExpression,
+                                          CycFort evaluationContext)
+        throws IOException, CycApiException, ExpressionEvaluationException {
+        if (verbosity > 2)
+            Log.current.println("Evaluating CycL expression: " + cycLExpression);
+        CycList cycLExpressionList;
+        if (cycLExpression instanceof CycNart) {
+            cycLExpressionList = new CycList();
+            cycLExpressionList.add(((CycNart) cycLExpression).getFunctor());
+            cycLExpressionList.addAll(((CycNart) cycLExpression).getArguments());
+        }
+        else
+            cycLExpressionList = (CycList) cycLExpression;
+        if (cycLExpressionList.first().equals(programAssignmentFn)) {
+            evaluateProgramAssignmentFn((CycFort) cycLExpressionList.second(),
+                                        cycLExpressionList.third(),
+                                        evaluationContext);
+        }
+        else if (cycLExpressionList.first().equals(programBlockFn)) {
+            evaluateProgramBlockFn((CycList) cycLExpressionList.rest(),
+                                   evaluationContext);
+        }
+        else if (cycLExpressionList.first().equals(programConditionFn)) {
+            return evaluateProgramConditionFn((CycList) cycLExpressionList.second(),
+                                              evaluationContext);
+        }
+        else if (cycLExpressionList.first().equals(equalsInProgramFn)) {
+            return evaluateEqualsInProgramFn(cycLExpressionList.second(),
+                                             cycLExpressionList.third(),
+                                            evaluationContext);
+        }
+        else
+            throw new ExpressionEvaluationException("Unhandled expression " + cycLExpression +
+                                                    "\nclass: " + cycLExpression.getClass());
+        return null;
+    }
+
+    /**
+     * Evaluates #$EqualsInProgramFn which evaluates the two given arguments for equality
+     * and returns True if the two evaluated arguments are equal, otherwise return False.
+     *
+     * @@param arg1 the first given argument
+     * @@param arg2 the second given argument
+     * @@return True if the two evaluated arguments are equal, otherwise return False
+     * @@param evaluationContext the given  state evaluation context
+     */
+    public Boolean evaluateEqualsInProgramFn (Object arg1,
+                                              Object arg2,
+                                             CycFort evaluationContext)
+        throws IOException, CycApiException, ExpressionEvaluationException {
+        Object value1 = evaluateCycLObject(arg1, evaluationContext);
+        Object value2 = evaluateCycLObject(arg2, evaluationContext);
+        if (value1.equals(value2)) {
+            if (verbosity > 2)
+                Log.current.println("  " + value1 + " equals " + value2);
+            return Boolean.TRUE;
+        }
+        else {
+            if (verbosity > 2)
+                Log.current.println("  " + value1 + " does not equal " + value2);
+            return Boolean.FALSE;
+        }
+    }
+
+    /**
+     * Evaluates #$ProgramBlockFn which evaluates the given boolean expression.
+     *
+     * @@param cycLExpressions the given expressions in this program block to evaluate
+     * @@param evaluationContext the given  state evaluation context
+     * @@return the symbol NIL
+     */
+    public CycSymbol evaluateProgramBlockFn (CycList cycLExpressions,
+                                               CycFort evaluationContext)
+        throws IOException, CycApiException, ExpressionEvaluationException {
+        Iterator iter = cycLExpressions.iterator();
+        while (iter.hasNext())
+            evaluateCycLExpression(iter.next(), evaluationContext);
+        return CycObjectFactory.nil;
+    }
+
+    /**
+     * Evaluates #$ProgramConditionFn which evaluates the given list of expressions
+     * sequentially.
+     *
+     * @@param cycLExpressions the given boolean expression
+     * @@param evaluationContext the given  state evaluation context
+     * @@return the result of evaluating the given boolean expression
+     */
+    public Boolean evaluateProgramConditionFn (CycList cycLExpression,
+                                               CycFort evaluationContext)
+            throws IOException, CycApiException, ExpressionEvaluationException {
+        boolean answer;
+        answer = cycAccess.isQueryTrue(cycLExpression, evaluationContext);
+        if (verbosity > 2)
+            Log.current.println(cycLExpression.cyclify() + "\n evaluates to " + answer);
+        return new Boolean(answer);
+    }
+
+    /**
+     * Evaluates #$ProgramAssignmentFn which assigns the given value expression to the given
+     * #$SoftwareParameter object.
+     *
+     * @@param softwareParameter the given #$SoftwareParameter object
+     * @@valueExpression the value expression to evaluated and assigned
+     * @@param evaluationContext the given  state evaluation context
+     * @@return the symbol NIL
+     */
+    public CycSymbol evaluateProgramAssignmentFn (CycFort softwareParameter,
+                                                  Object valueExpression,
+                                                  CycFort evaluationContext)
+        throws IOException, CycApiException {
+        if (verbosity > 2)
+            Log.current.println("Assigning value " + valueExpression + " to " + softwareParameter.cyclify());
+        Object value = evaluateCycLObject(valueExpression, evaluationContext);
+        CycList sentence = new CycList();
+        if (value instanceof CycList ||
+            value instanceof CycFort) {
+            sentence.add(evaluationContext);
+            sentence.add(softwareParameterValue);
+            sentence.add(softwareParameter);
+            sentence.add(value);
+        }
+        else if (value instanceof Boolean ||
+            value instanceof String ||
+            value instanceof Integer ||
+            value instanceof Long ||
+            value instanceof Character ||
+            value instanceof Float ||
+            value instanceof Double) {
+            sentence.add(softwareParameterValue);
+            sentence.add(softwareParameter);
+            sentence.add(value);
+        }
+        else
+            throw new RuntimeException("Unhandled value assignment");
+        cycAccess.assertWithBookkeepingAndWithoutTranscript (sentence, evaluationContext);
+        return CycObjectFactory.nil;
+    }
+
+    /**
+     * Returns the result of evaluating the given CycL object in the given
+     * state evaluation context.
+     *
+     * @@param cycLObject the given CycL object
+     * @@param evaluationContext the given  state evaluation context
+     * @@return the result of evaluating the given CycL object in the current
+     * state context
+     */
+    public Object evaluateCycLObject (Object cycLObject, CycFort evaluationContext)
+            throws IOException, CycApiException {
+        Object value = CycObjectFactory.nil;
+        if (cycLObject instanceof Boolean ||
+            cycLObject instanceof String ||
+            cycLObject instanceof Integer ||
+            cycLObject instanceof Long ||
+            cycLObject instanceof Character ||
+            cycLObject instanceof Float ||
+            cycLObject instanceof Double)
+            value = cycLObject;
+        else if (cycLObject instanceof CycFort) {
+            value = cycAccess.getArg2(softwareParameterValue,
+                                      (CycFort) cycLObject,
+                                      evaluationContext);
+        }
+        else if (cycLObject instanceof CycList) {
+            CycList query = new CycList();
+            query.add(cycAccess.getKnownConstantByName("evaluate"));
+            CycVariable variable = CycObjectFactory.makeCycVariable("?x");
+            query.add(variable);
+            query.add(cycLObject);
+            if (verbosity > 2)
+                Log.current.println("evaluation query in mt: " + evaluationContext.cyclify() +
+                                    "\n  " + query.cyclify());
+            CycList answer = cycAccess.askWithVariable(query, variable, evaluationContext);
+            if (answer.isEmpty())
+                throw new RuntimeException("Unevaluatable expression \n" + query.toPrettyString("") +
+                                           "\n in mt " + evaluationContext.cyclify());
+            value = answer.first();
+        }
+        //TODO handle other kinds of evaluatable objects
+        if (verbosity > 2)
+            Log.current.println("Value of " + cycLObject + " is " + value);
+        return value;
+    }
+
+
+    /**
+     * Sets verbosity of this object's output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     *
+     * @@param verbosity 0 --> quiet ... 9 -> maximum diagnostic input
+     */
+    public void setVerbosity(int verbosity) {
+        this.verbosity = verbosity;
+    }
+
+}@
+
+
+1.9
+log
+@Adding code to the state machine interpreter.
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: ExpressionEvaluator.java,v 1.8 2003/01/23 23:15:43 stephenreed Exp $
+d332 2
+a333 1
+                throw new RuntimeException("Unevaluatable object " + cycLObject);
+@
+
+
+1.8
+log
+@added code to the procedure interpreter
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: ExpressionEvaluator.java,v 1.7 2003/01/22 23:56:04 stephenreed Exp $
+d39 6
+d63 1
+a63 1
+     * the expression evaluation state context
+d65 1
+a65 1
+    protected CycFort stateMt;
+a101 1
+     * @@param stateMt the expression evaluation state context
+d104 1
+a104 1
+    public ExpressionEvaluator(CycAccess cycAccess, CycFort stateMt, int verbosity)
+a106 1
+        this.stateMt = stateMt;
+d108 1
+d121 1
+d124 2
+a125 1
+    public boolean evaluateBoolean (BooleanExpression booleanExpression)
+d127 2
+a128 1
+        Object answer = evaluateCycLExpression((CycList) booleanExpression.getBody());
+d141 1
+d143 2
+a144 1
+    public void evaluate (Expression expression)
+d146 2
+a147 1
+        evaluateCycLExpression(expression.getBody());
+d154 1
+d157 2
+a158 1
+    public Object evaluateCycLExpression (Object cycLExpression)
+d172 2
+a173 1
+                                        cycLExpressionList.third());
+d176 2
+a177 1
+            evaluateProgramBlockFn((CycList) cycLExpressionList.rest());
+d180 7
+a186 1
+            evaluateProgramConditionFn((CycList) cycLExpressionList.second());
+d189 2
+a190 1
+            throw new ExpressionEvaluationException("Unhandled expression " + cycLExpression);
+d195 27
+d225 1
+d228 2
+a229 1
+    public CycSymbol evaluateProgramBlockFn (CycList cycLExpressions)
+d233 1
+a233 1
+            evaluateCycLExpression(iter.next());
+d242 1
+d245 2
+a246 1
+    public boolean evaluateProgramConditionFn (CycList cycLExpression)
+d249 1
+a249 1
+        answer = cycAccess.isQueryTrue(cycLExpression, stateMt);
+d252 1
+a252 1
+        return answer;
+d261 1
+d265 2
+a266 1
+                                                  Object valueExpression)
+d270 9
+a278 11
+        Object value = evaluateCycLObject(valueExpression);
+        if (value instanceof CycList)
+            cycAccess.assertGaf(stateMt,
+                                softwareParameterValue,
+                                softwareParameter,
+                                (CycList) value);
+        else if (value instanceof CycFort)
+            cycAccess.assertGaf(stateMt,
+                                softwareParameterValue,
+                                softwareParameter,
+                                (CycFort) value);
+a285 1
+            CycList sentence = new CycList();
+a288 1
+            cycAccess.assertWithBookkeepingAndWithoutTranscript (sentence, stateMt);
+d290 3
+d297 2
+a298 2
+     * Returns the result of evaluating the given CycL object in the current
+     * state context.
+d301 1
+d305 1
+a305 1
+    public Object evaluateCycLObject (Object cycLObject)
+d319 1
+a319 1
+                                      stateMt);
+d327 7
+a333 1
+            value = cycAccess.askWithVariable(query, variable, stateMt);
+@
+
+
+1.7
+log
+@Added more test cases
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: ExpressionEvaluator.java,v 1.6 2003/01/13 23:58:09 stephenreed Exp $
+d113 1
+a113 1
+     * Evaluates the given boolean java expression in the context of the TreeInterpreter.
+@
+
+
+1.6
+log
+@added more code to the state machine interpreter
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: ExpressionEvaluator.java,v 1.5 2003/01/10 22:31:40 stephenreed Exp $
+d267 6
+a272 4
+            // TODO non-reifiable function
+            value = cycAccess.getArg2(softwareParameterValue,
+                                      (CycFort) cycLObject,
+                                      stateMt);
+@
+
+
+1.5
+log
+@Added more code to the state machine interpreter
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: ExpressionEvaluator.java,v 1.4 2003/01/09 21:52:13 stephenreed Exp $
+d165 1
+a165 1
+            evaluateProgramConditionFn((CycList) cycLExpressionList.rest());
+d196 1
+a196 5
+        CycList query = new CycList();
+        query.add(evaluate);
+        query.add(trueValue);
+        query.add(cycLExpression);
+        answer = cycAccess.isQueryTrue(query, stateMt);
+d198 1
+a198 1
+            Log.current.println(cycLExpression + " evaluates to " + answer);
+d262 6
+@
+
+
+1.4
+log
+@Added code to state machine expression evaluator
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: ExpressionEvaluator.java,v 1.3 2003/01/09 00:00:19 stephenreed Exp $
+d72 5
+d82 10
+d106 1
+d108 2
+d119 1
+a119 1
+        throws IOException, CycApiException {
+d135 1
+a135 1
+        throws IOException, CycApiException {
+d146 1
+a146 1
+        throws IOException, CycApiException {
+d164 5
+d173 1
+a173 2
+     * Evaluates #$ProgramBlockFn which evaluates the given list of expressions
+     * sequentially.
+d179 1
+a179 1
+        throws IOException, CycApiException {
+d187 20
+d217 2
+d256 1
+d264 6
+a269 2
+            return cycLObject;
+
+d271 3
+a273 1
+        return CycObjectFactory.nil;
+@
+
+
+1.3
+log
+@Changing the state machine interpreter to keep state in the Cyc server.
+@
+text
+@d3 1
+d8 1
+d13 1
+a13 1
+ * @@version $Id: ExpressionEvaluator.java,v 1.2 2002/11/06 00:24:30 stephenreed Exp $
+d37 13
+d62 15
+a80 1
+     *
+d82 1
+d84 2
+a85 1
+    public ExpressionEvaluator(CycAccess cycAccess, CycFort stateMt) {
+d88 4
+d100 9
+a108 3
+    public boolean evaluateBoolean (BooleanExpression booleanExpression) {
+        //TODO
+        return true;
+d112 1
+a112 1
+     * Evaluates the given java expression in the context of the TreeInterpreter.
+d116 3
+a118 2
+    public void evaluate (Expression expression) {
+        //TODO
+d120 116
+@
+
+
+1.2
+log
+@Added more code for UML state machine interpretation.
+@
+text
+@d4 2
+a5 3
+import java.io.*;
+import koala.dynamicjava.interpreter.*;
+import koala.dynamicjava.parser.wrapper.*;
+d11 1
+a11 1
+ * @@version $Id: ExpressionEvaluator.java,v 1.1 2002/10/31 02:50:54 stephenreed Exp $
+d35 5
+d42 1
+a42 1
+     * the tree interpreter which interprets java statements
+d44 1
+a44 1
+    TreeInterpreter treeInterpreter;
+d47 1
+a47 2
+     * Constructs a new ExpressionEvaluator object given the tree
+     * interpreter which interprets java statements
+d49 4
+a52 1
+     * @@param treeInterpreter the given tree interpreter
+d54 3
+a56 2
+    public ExpressionEvaluator(TreeInterpreter treeInterpreter) {
+        this.treeInterpreter = treeInterpreter;
+d66 2
+a67 8
+
+        StringReader stringReader = new StringReader(booleanExpression.getBody());
+        Object result = treeInterpreter.interpret(stringReader, "boolean expression");
+        if (result instanceof Boolean)
+            return ((Boolean) result).booleanValue();
+        else
+            throw new RuntimeException("Result of evaluating " + booleanExpression.getBody() +
+                                       "\nis not a Boolean " + result.toString());
+d76 1
+a76 2
+        StringReader stringReader = new StringReader(expression.getBody());
+        treeInterpreter.interpret(stringReader, "boolean expression");
+@
+
+
+1.1
+log
+@Initial check in
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: Interpreter.java,v 1.4 2002/10/31 00:12:56 stephenreed Exp $
+d36 1
+d38 1
+a38 1
+     * TreeInterpreter that interprets java source code statements.
+d40 1
+a40 1
+    protected TreeInterpreter interpreter;
+d43 4
+a46 1
+     * Constructs a new ExpressionEvaluator object.
+d48 2
+a49 2
+    public ExpressionEvaluator() {
+        interpreter = new TreeInterpreter(new JavaCCParserFactory());
+d53 1
+a53 1
+     * Evaluates the given boolean java expression.
+d59 1
+d61 1
+a61 1
+        Object result = interpreter.interpret(stringReader, "boolean expression");
+d67 10
+@
+

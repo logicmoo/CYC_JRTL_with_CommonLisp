@@ -1,0 +1,64 @@
+head	1.2;
+access;
+symbols
+	BRANCH_OPENCYC_1_0_1:1.1.0.2
+	OPENCYC_1_0_1:1.1;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2006.10.21.16.49.19;	author dmiles;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.10.18.14.21.30;	author dmiles;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental packages
+@
+text
+@/*
+ * QueryStatus.java
+ *
+ * Created on August 10, 2004, 2:14 PM
+ */
+
+package org.opencyc.util.query;
+
+/**
+ * @@version $Id: QueryStatus.java,v 1.1 2004/08/12 15:42:09 mreimers Exp $
+ * @@author  mreimers
+ */
+public class QueryStatus { 
+  private String text;
+
+  protected QueryStatus(String s) { text = s; }
+
+  public String toString() { 
+    return text;
+  }
+  public final static QueryStatus READY = new QueryStatus("Ready");
+  public final static QueryStatus WORKING = new QueryStatus("Working");
+  public final static QueryStatus PAUSED = new QueryStatus("Paused");
+  public final static QueryStatus FINISHED = new QueryStatus("Finished");
+}
+@
+
+
+1.1
+log
+@This is the Additional Content to Create OpenCyc-1.0.1
+@
+text
+@@
+

@@ -1,0 +1,38 @@
+head	1.1;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2006.10.21.17.01.59;	author dmiles;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental classes.
+@
+text
+@<body>
+OpenCyc is the open source version of Cyc, 
+the world's largest commonsense knowledge base.<p>
+
+These packages provide a high level deductive inference engine in the form of a 
+finite domain constraint solver, together with KB object proxies and OpenCyc 
+client interface support classes.<p>
+
+{@@link org.opencyc.constraintsolver} provides the high level deductive 
+inference engine to answer conjunctive queries.<p>
+
+{@@link org.opencyc.cycobject} provides knowledge base proxy classes which 
+OpenCyc applications must manipulate.<p>
+
+{@@link org.opencyc.util} provides utility classes of general use.
+</body> @

@@ -1,0 +1,296 @@
+head	1.4;
+access;
+symbols
+	PRE_1_0:1.4;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2001.11.26.16.38.30;	author stephenreed;	state dead;
+branches;
+next	1.3;
+
+1.3
+date	2001.11.26.05.14.02;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2001.11.02.00.31.13;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2001.11.01.22.07.42;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@Moved CycListener functions to AgentManager
+Renamed CycClientHandler to CycProxyFactory
+@
+text
+@package  org.opencyc.cycagent;
+
+/**
+ * Provides a a listener for input connections from Cyc images.<p>
+ *
+ * @@version $Id: CycListener.java,v 1.3 2001/11/26 05:14:02 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+import  java.net.ServerSocket;
+import  java.net.Socket;
+import  java.io.*;
+import  org.opencyc.util.*;
+
+
+class CycListener implements Runnable {
+
+    /**
+     * The default verbosity of the solution output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    public static final int DEFAULT_VERBOSITY = 3;
+
+    /**
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    protected int verbosity = DEFAULT_VERBOSITY;
+
+    /**
+     * The socket which listens for new connections.
+     */
+    protected ServerSocket listenerSocket = null;
+    /**
+     * Well known port where the Agent Manager listens for requests from cyc clients.
+     */
+    public static final int LOCAL_CLIENT_LISTENER_PORT = 4444;
+
+    /**
+     * Maximum number of local cyc clients supported by this listener.
+     */
+    public static final int MAX_LOCAL_CLIENT_CLIENTS = 50;
+
+    /**
+     * A flag to keep the localClient port listener looping until interrupted.
+     */
+    protected boolean localClientKeepRunning = true;
+
+
+    /**
+     * Constructs a new LocalClientPortListener object.
+     */
+    public CycListener () {
+    }
+
+    /**
+     * Runs the CycListener thread.
+     */
+    public void run () {
+        try {
+            listenerSocket = new ServerSocket(LOCAL_CLIENT_LISTENER_PORT, MAX_LOCAL_CLIENT_CLIENTS);
+            while (localClientKeepRunning) {
+                if (verbosity > 2)
+                    Log.current.println("Listening on port " + LOCAL_CLIENT_LISTENER_PORT);
+                Socket cycSocket = listenerSocket.accept();
+                if (verbosity > 2)
+                    Log.current.println("Cyc Connection accepted " + cycSocket);
+                // Spawn child thread to read from the socket.
+                CycClientHandler cycClientHandler =
+                    new CycClientHandler(cycSocket);
+                Thread cycClientHandlerThread = new Thread(cycClientHandler);
+                cycClientHandlerThread.start();
+            }
+        }
+        catch (IOException e) {
+            Log.current.println("Failed I/O: " + e);
+            System.exit(1);
+        }
+        finally {
+            try {
+                listenerSocket.close();
+            }
+            catch (IOException e) {
+            }
+        }
+    }
+
+    /**
+     * Sets verbosity of this object's output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     *
+     * @@param verbosity 0 --> quiet ... 9 -> maximum diagnostic input
+     */
+    public void setVerbosity(int verbosity) {
+        this.verbosity = verbosity;
+    }
+}
+
+
+
+
+
+
+@
+
+
+1.3
+log
+@Refactoring Cyc agent client
+@
+text
+@d6 1
+a6 1
+ * @@version $Id: CycListener.java,v 1.2 2001/11/02 00:31:13 stephenreed Exp $
+@
+
+
+1.2
+log
+@Revised AgentManager and supporting classes to begin support for FIPA-OS and
+CoABS agent platforms.
+@
+text
+@d6 1
+a6 1
+ * @@version $Id: CycListener.java,v 1.1 2001/11/01 22:07:42 stephenreed Exp $
+d86 4
+a89 4
+                CycInputHandler cycInputHandler =
+                    new CycInputHandler(cycSocket);
+                Thread cycInputHandlerThread = new Thread(cycInputHandler);
+                cycInputHandlerThread.start();
+d106 1
+a106 1
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+@
+
+
+1.1
+log
+@Added Agent Manager classes for CoABS interface
+@
+text
+@d1 120
+a120 93
+package  org.opencyc.jini.cycproxy;
+
+/**
+ * Provides a a listener for input connections from Cyc images.<p>
+ *
+ * @@version $Id: WebServerAdmin.java,v 1.3 2001/10/24 17:00:30 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+import  java.net.ServerSocket;
+import  java.net.Socket;
+import  java.io.*;
+import  org.opencyc.util.*;
+
+
+class CycListener implements Runnable {
+
+    /**
+     * The socket which listens for new connections.
+     */
+    protected ServerSocket listenerSocket = null;
+    /**
+     * Well known port where the Agent Manager listens for requests from cyc clients.
+     */
+    public static final int LOCAL_CLIENT_LISTENER_PORT = 4444;
+
+    /**
+     * Maximum number of local cyc clients supported by this listener.
+     */
+    public static final int MAX_LOCAL_CLIENT_CLIENTS = 50;
+
+    /**
+     * A flag to keep the localClient port listener looping until interrupted.
+     */
+    protected boolean localClientKeepRunning = true;
+
+
+    /**
+     * Constructs a new LocalClientPortListener object.
+     */
+    public CycListener () {
+    }
+
+    /**
+     * Runs the CycListener thread.
+     */
+    public void run () {
+        try {
+            listenerSocket = new ServerSocket(LOCAL_CLIENT_LISTENER_PORT, MAX_LOCAL_CLIENT_CLIENTS);
+            while (localClientKeepRunning) {
+                Log.current.println("Listening");
+                Socket cycSocket = listenerSocket.accept();
+                Log.current.println("Cyc Connection accepted " + cycSocket);
+                // Spawn child thread to read from the socket.
+                CycInputHandler cycInputHandler =
+                    new CycInputHandler(cycSocket);
+                Thread cycInputHandlerThread = new Thread(cycInputHandler);
+                cycInputHandlerThread.start();
+            }
+        }
+        catch (IOException e) {
+            Log.current.println("Failed I/O: " + e);
+            System.exit(1);
+        }
+        finally {
+            try {
+                listenerSocket.close();
+            }
+            catch (IOException e) {
+            }
+        }
+    }
+}
+
+
+
+@
+

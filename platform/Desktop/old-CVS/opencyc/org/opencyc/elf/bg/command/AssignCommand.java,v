@@ -1,0 +1,121 @@
+head	1.1;
+access;
+symbols
+	PRE_1_0:1.1;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2003.10.18.18.19.46;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@moved from org.opencyc.elf.bg.taskframe to org.opencyc.elf.bg.command package
+@
+text
+@package org.opencyc.elf.bg.command;
+
+//// Internal Imports
+import org.opencyc.elf.wm.state.StateVariable;
+
+//// External Imports
+
+/** AssignCommand is a command that assigns the evaluated second argument to its
+ * first argument which is a state variable.
+ *
+ * <P>Copyright (c) 2003 Cycorp, Inc.  All rights reserved.
+ * <BR>This software is the proprietary information of Cycorp, Inc.
+ * <P>Use is subject to license terms.
+ *
+ * @@author Stephen L. Reed  
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * @@version $Id: AssignCommand.java,v 1.3 2003/10/06 05:15:09 stephenreed Exp $
+ */
+public class AssignCommand implements Command {
+  
+  //// Constructors
+
+  /** Creates a new instance of AssignCommand.
+   *
+   * @@param name the name of this command
+   * @@param assignee the state variable that receives the assigned value
+   * @@param assignedObject the literal or evaluatable expression that is assigned
+   */
+  public AssignCommand(String name, StateVariable assignee, Object assignedObject) {
+    this.name = name;
+    this.assignee = assignee;
+    this.assignedObject = assignedObject;
+  }
+  
+  //// Public Area
+
+  /** Returns a string representation of this object.
+   *
+   * @@return a string representation of this object
+   */
+  public String toString () {
+    StringBuffer stringBuffer = new StringBuffer();
+    stringBuffer.append("(assign ");
+    stringBuffer.append(assignee.toString());
+    stringBuffer.append(" ");
+    stringBuffer.append(assignedObject.toString());
+    stringBuffer.append(")");
+    return stringBuffer.toString();
+  }
+  
+  /** Returns the name of this assign command.
+   *
+   * @@return the name of this assign command
+   */
+  public String getName() {
+    return name;
+  }
+  
+  /** Creates and returns a copy of this object. */
+  public Object clone() {
+    return new AssignCommand(name, assignee, assignedObject);
+  }
+  
+  //// Protected Area
+  
+  //// Private Area
+  
+  //// Internal Rep
+  
+  /** the name of this assign command */
+  protected String name;
+ 
+  /** the state variable that receives the assigned value */
+  protected StateVariable assignee;
+  
+  /** the literal or evaluatable expression that is assigned */
+  protected Object assignedObject;
+  
+  //// Main
+  
+}
+@

@@ -1,0 +1,83 @@
+head	1.2;
+access;
+symbols
+	BRANCH_OPENCYC_1_0_1:1.1.0.2
+	OPENCYC_1_0_1:1.1;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2006.10.21.16.49.19;	author dmiles;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.10.18.14.21.30;	author dmiles;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental packages
+@
+text
+@/*
+ * Query.java
+ *
+ * Created on August 11, 2004, 10:21 AM
+ */
+
+package org.opencyc.util.query;
+
+/**
+ * @@version $Id: Query.java,v 1.1 2004/08/12 15:42:03 mreimers Exp $
+ * @@author  mreimers
+ */
+public interface Query {
+
+  public Object getId();
+  public QuerySpecification getOriginalQuerySpecification();
+  public QuerySpecification getQuerySpecification();
+  public void setQuerySpecification(QuerySpecification querySpecification);
+  
+  //public Query makeQuery(QuerySpecification querySpecification);
+  
+  /**
+   * Revert this Query back to the original QuerySpecification.
+   */
+  public void revertQuerySpecification();
+  
+  public QueryStatus getQueryStatus();
+  public void setQueryStatus(QueryStatus queryStatus);
+  
+  public QueryResultSet getQueryResultSet();
+  public void setQueryResultSet(QueryResultSet resultSet);
+  
+  //public void notifyDataAvailable();
+  //public void notifySpecificationChanged();
+  //public void notifyStatusChanged();
+  
+  public void startQuery();
+  public void stopQuery();
+  public void pauseQuery();
+  public void continueQuery();
+  
+  public void addQueryListener(QueryListener listener);
+  public void removeQueryListener(QueryListener listener);
+}
+@
+
+
+1.1
+log
+@This is the Additional Content to Create OpenCyc-1.0.1
+@
+text
+@@
+

@@ -1,0 +1,1246 @@
+head	1.16;
+access;
+symbols
+	BRANCH_OPENCYC_1_0_1:1.15.0.2
+	OPENCYC_1_0_1:1.15
+	PRE_1_0:1.13
+	start:1.1.1.1
+	opencyc:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.16
+date	2006.10.21.16.49.17;	author dmiles;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2006.10.18.14.21.32;	author dmiles;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2006.10.18.13.36.02;	author dmiles;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2003.01.09.21.52.08;	author stephenreed;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2002.05.30.20.00.27;	author stephenreed;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2001.11.17.00.32.48;	author stephenreed;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2001.10.17.23.44.19;	author stephenreed;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2001.09.14.22.14.55;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2001.09.07.23.43.03;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2001.08.30.00.06.55;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2001.08.24.22.39.27;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2001.08.23.09.33.14;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2001.08.22.15.09.47;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2001.08.13.16.14.44;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2001.07.25.17.17.34;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2001.07.23.21.54.15;	author stephenreed;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2001.07.23.21.54.15;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.16
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental packages
+@
+text
+@package  org.opencyc.cycobject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.opencyc.api.CycAccess;
+import org.opencyc.api.CycObjectFactory;
+import org.opencyc.xml.XMLStringWriter;
+import org.opencyc.xml.XMLWriter;
+
+
+/**
+ * Provides the behavior and attributes of OpenCyc assertions.<p>
+ * <p>
+ * Assertions are communicated over the binary API using their Id number (an int).
+ * The associated formula, microtheory, truth-value, direction, and remaining attributes are
+ * is fetched later.
+ *
+ * @@version $Id: CycAssertion.java,v 1.13 2004/11/09 15:11:14 reed Exp $
+ * @@author Stephen L. Reed
+ * @@author Dan Lipofsky
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class CycAssertion extends DefaultCycObject{
+    /**
+     * The name of the XML tag for this object.
+     */
+    public static final String cycAssertionXMLTag = "assertion";
+
+    /**
+     * The default indentation for printing objects to XML
+     */
+    public static int indentLength = 2;
+
+    /** the assertion in HL form */
+    private CycList hlFormula;
+
+    /** the assertion mt */
+    private CycObject mt;
+    
+    /**
+     * Constructs an assertion object given its HL formula and assertion mt.
+     *
+     * @@param hlFormula the assertion in HL form
+     * @@param mt the assertion mt
+     */
+    public CycAssertion (CycList hlFormula, CycObject mt) {
+        //// Preconditions
+        assert hlFormula != null : "hlFormula cannot be null";
+        assert ! hlFormula.isEmpty() : "hlFormula cannot be empty";
+        assert mt != null : "mt cannot be null";
+        
+        this.hlFormula = hlFormula;
+        this.mt = mt;
+    }
+
+    /**
+     * Indicates whether the object is equal to this object.
+     *
+     * @@return <tt>true</tt> if the object is equal to this object, otherwise
+     * returns <tt>false</tt>
+     */
+    public boolean equals (Object object) {
+        if (!(object instanceof CycAssertion))
+            return  false;
+        CycAssertion that  = (CycAssertion) object;
+        if (! this.mt.equals(that.mt))
+          return false;
+        else
+          return this.hlFormula.equals(that.hlFormula);
+    }
+
+    /**
+     * Returns a <tt>String</tt> representation of the <tt>CycAssertion</tt>.
+     *
+     * @@return a <tt>String</tt> representation of the <tt>CycAssertion</tt>
+     */
+    public String toString () {
+        return hlFormula.cyclify();
+    }
+
+    /**
+     * Returns a string representation without causing additional api calls.
+     *
+     * @@return a string representation without causing additional api calls
+     */
+    public String safeToString () {
+        return hlFormula.safeToString();
+    }
+
+  /**
+   * Returns a cyclified string representation of the CycL assertion.
+   * A cyclified string representation with escape chars is one where
+   * constants have been prefixed with #$ and Strings have had an escape
+   * character inserted before each character that needs to be escaped in SubL.
+   *
+   * @@return a cyclified <tt>String</tt> with escape characters.
+   */ 
+    public String cyclifyWithEscapeChars() {
+      return hlFormula.cyclifyWithEscapeChars();
+    }
+
+    /**
+     * Returns this object in a form suitable for use as an <tt>String</tt> api expression value.
+     *
+     * @@return this object in a form suitable for use as an <tt>String</tt> api expression value
+     */
+    public String stringApiValue() {
+        return "(find-assertion " + hlFormula.stringApiValue() + " " + mt.stringApiValue() + ")";
+    }
+
+    /**
+     * Returns this object in a form suitable for use as an <tt>CycList</tt> api expression value.
+     *
+     * @@return this object in a form suitable for use as an <tt>CycList</tt> api expression value
+     */
+    public Object cycListApiValue() {
+        return this;
+    }
+
+    /**
+     * Returns the HL formula for this assertion.
+     *
+     * @@return the HL formula for this assertion
+     */
+    public CycList getFormula () {
+        return hlFormula;
+    }
+
+    /**
+     * Returns the Ground Atomic Formula (gaf) for this assertion.
+     *
+     * @@return the Ground Atomic Formula (gaf) for this assertion
+     */
+    public CycList getGaf () {
+        //// Preconditions
+        assert ! hlFormula.isEmpty() : "hlFormula cannot be empty";
+        final Object negativeLiterals = ((CycList) hlFormula).first();
+        assert negativeLiterals.equals(CycObjectFactory.nil) : ((CycList) hlFormula).cyclify() + " negativeLiterals must be nil";
+        assert ((CycList) hlFormula).size() == 2 : ((CycList) hlFormula).cyclify() + " must be of the form (nil ( ... ))";
+        
+        final CycList positiveLiterals = (CycList) hlFormula.second();
+        if (positiveLiterals.size() == 1)
+            return (CycList) positiveLiterals.first();
+        final CycList gaf = new CycList();
+        gaf.add(CycAccess.current().and);
+        gaf.addAll(positiveLiterals);
+        
+        //// Postconditions
+        assert gaf != null : "gaf cannot be null";
+        assert ! gaf.isEmpty() : "gaf cannot be empty";
+        
+        return gaf;
+    }
+
+    /**
+     * Returns the microtheory for this assertion.
+     *
+     * @@return the microtheory for this assertion
+     */
+    public CycObject getMt () {
+        return mt;
+    }
+
+    /**
+     * Returns the XML representation of this object.
+     *
+     * @@return the XML representation of this object
+     */
+    public String toXMLString () throws IOException {
+        XMLStringWriter xmlStringWriter = new XMLStringWriter();
+        toXML(xmlStringWriter, 0, false);
+        return xmlStringWriter.toString();
+    }
+
+    /**
+     * Prints the XML representation of the CycAssertion to an <code>XMLWriter</code>
+     *
+     * @@param xmlWriter an <tt>XMLWriter</tt>
+     * @@param indent an int that specifies by how many spaces to indent
+     * @@param relative a boolean; if true indentation is relative, otherwise absolute
+     */
+    public void toXML (XMLWriter xmlWriter, int indent, boolean relative)
+        throws IOException {
+        xmlWriter.printXMLStartTag(cycAssertionXMLTag, indent, relative, true);
+        hlFormula.toXML(xmlWriter, indent, relative);
+        mt.toXML(xmlWriter, indent, relative);
+        xmlWriter.printXMLEndTag(cycAssertionXMLTag, -indentLength, true);
+    }
+    
+   /**
+   * Returns a list of all constants refered to by this CycObject.
+   * For example, a CycConstant will return a List with itself as the
+   * value, a nart will return a list of its functor and all the constants refered
+   * to by its arguments, a CycList will do a deep search for all constants,
+   * a symbol or variable will return the empty list.
+   * @@return a list of all constants refered to by this CycObject
+   **/
+  public List getReferencedConstants() {
+    List result = null;
+    if (getFormula() != null) {
+      result = DefaultCycObject.getReferencedConstants(getFormula());
+      if (getMt() != null) {
+        result.addAll(getMt().getReferencedConstants());
+      }
+      return result;
+    }
+    if (getMt() != null) {
+      result = DefaultCycObject.getReferencedConstants(getMt());
+    }
+    return (result == null) ? new ArrayList() : result;
+  }
+  
+  public int compareTo(Object o){
+    if(!(o instanceof CycAssertion)) return toString().compareTo(o.toString());
+    CycAssertion cao=(CycAssertion)o;
+    int ret= this.getMt().compareTo(cao.getMt());
+    if(ret!=0) return ret;
+    return this.getFormula().compareTo(cao.getFormula());
+  }
+}
+
+
+
+
+
+
+
+@
+
+
+1.15
+log
+@This is the Additional Content to Create OpenCyc-1.0.1
+@
+text
+@d3 8
+a10 5
+import  java.io.IOException;
+import  java.net.UnknownHostException;
+import  java.util.*;
+import  org.opencyc.api.*;
+import  org.opencyc.xml.*;
+d20 1
+a20 1
+ * @@version $Id: CycAssertion.java,v 1.17 2005/11/10 13:53:48 reed Exp $
+d43 66
+a108 82
+  /**
+   * The name of the XML tag for this object.
+   */
+  public static final String cycAssertionXMLTag = "assertion";
+  
+  /**
+   * The default indentation for printing objects to XML
+   */
+  public static int indentLength = 2;
+  
+  /** the assertion in HL form */
+  private CycList hlFormula;
+  
+  /** the assertion mt */
+  private CycObject mt;
+  
+  /**
+   * When true, indicates that the assertion is invalid.
+   */
+  private boolean isInvalid = false;
+  
+  /** Constructs an assertion object. */
+  private CycAssertion() {
+  }
+  
+  /**
+   * Constructs an assertion object given its HL formula and assertion mt.
+   *
+   * @@param hlFormula the assertion in HL form
+   * @@param mt the assertion mt
+   */
+  public CycAssertion(CycList hlFormula, CycObject mt) {
+    //// Preconditions
+    assert hlFormula != null : "hlFormula cannot be null";
+    assert ! hlFormula.isEmpty() : "hlFormula cannot be empty";
+    assert mt != null : "mt cannot be null";
+    
+    this.hlFormula = hlFormula;
+    this.mt = mt;
+  }
+  
+  /** Constructs a the singleton invalid <tt>CycAssertion</tt> object. 
+   * This should only be called from CycObjectFactory.
+   *
+   * @@return the invalid cyc assertion
+   */
+  public static CycAssertion makeInvalidAssertion() {
+    final CycAssertion cycAssertion = new CycAssertion();
+    cycAssertion.isInvalid = true;
+    return cycAssertion;
+  }
+  
+  /**
+   * Indicates whether the object is equal to this object.
+   *
+   * @@return <tt>true</tt> if the object is equal to this object, otherwise
+   * returns <tt>false</tt>
+   */
+  public boolean equals(Object object) {
+    if (! (object instanceof CycAssertion))
+      return  false;
+    CycAssertion that  = (CycAssertion) object;
+    if (this.isInvalid && that.isInvalid)
+      return true;
+    else if (! this.mt.equals(that.mt))
+      return false;
+    else
+      return this.hlFormula.equals(that.hlFormula);
+  }
+  
+  /**
+   * Returns a <tt>String</tt> representation of the <tt>CycAssertion</tt>.
+   *
+   * @@return a <tt>String</tt> representation of the <tt>CycAssertion</tt>
+   */
+  public String toString() {
+    if (isInvalid)
+      return "INVALID-ASSERTION";
+    else
+      return hlFormula.cyclify();
+  }
+  
+d116 2
+a117 5
+   */
+  public String cyclifyWithEscapeChars() {
+    if (isInvalid)
+      return "INVALID-ASSERTION";
+    else
+d119 89
+a207 65
+  }
+  
+  /**
+   * Returns this object in a form suitable for use as an <tt>String</tt> api expression value.
+   *
+   * @@return this object in a form suitable for use as an <tt>String</tt> api expression value
+   */
+  public String stringApiValue() {
+    if (isInvalid)
+      return "INVALID-ASSERTION";
+    else
+      return "(find-assertion " + hlFormula.stringApiValue() + " " + mt.stringApiValue() + ")";
+  }
+  
+  /**
+   * Returns this object in a form suitable for use as an <tt>CycList</tt> api expression value.
+   *
+   * @@return this object in a form suitable for use as an <tt>CycList</tt> api expression value
+   */
+  public Object cycListApiValue() {
+    return this;
+  }
+  
+  /**
+   * Returns the HL formula for this assertion.
+   *
+   * @@return the HL formula for this assertion
+   */
+  // BZG This currently actually returns the CNF, not the HL formula.  See bug #17047.
+  public CycList getFormula() {
+    return hlFormula;
+  }
+  
+  // @@hack!!! We shouldn't have to hit Cyc to get the formula, but we do because getFormula() actually returns a CNF.
+  //          See bug #17047.
+  public CycList getFormulaFromCyc(CycAccess access) throws CycApiException, IOException, UnknownHostException {
+    CycList command = new CycList();
+    command.add(org.opencyc.api.CycObjectFactory.makeCycSymbol("assertion-el-formula"));
+    command.add(this);
+    return access.converseList(command);
+  }
+  
+  /**
+   * Returns the Ground Atomic Formula (gaf) for this assertion.
+   *
+   * @@return the Ground Atomic Formula (gaf) for this assertion
+   * @@deprecated
+   */
+  public CycList getGaf() {
+    //// Preconditions
+    assert ! hlFormula.isEmpty() : "hlFormula cannot be empty";
+    final Object negativeLiterals = ((CycList) hlFormula).first();
+    assert negativeLiterals.equals(CycObjectFactory.nil) : ((CycList) hlFormula).cyclify() + " negativeLiterals must be nil";
+    assert ((CycList) hlFormula).size() == 2 : ((CycList) hlFormula).cyclify() + " must be of the form (nil ( ... ))";
+    
+    final CycList positiveLiterals = (CycList) hlFormula.second();
+    if (positiveLiterals.size() == 1)
+      return (CycList) positiveLiterals.first();
+    final CycList gaf = new CycList();
+    gaf.add(CycAccess.current().and);
+    gaf.addAll(positiveLiterals);
+    
+    //// Postconditions
+    assert gaf != null : "gaf cannot be null";
+    assert ! gaf.isEmpty() : "gaf cannot be empty";
+d209 1
+a209 66
+    return gaf;
+  }
+  
+  /**
+   * Returns the Ground Atomic Formula (gaf) for this assertion.
+   *
+   * @@param cycAccess the Cyc communications object
+   * @@return the Ground Atomic Formula (gaf) for this assertion
+   */
+  public CycList getGaf(final CycAccess cycAccess) {
+    //// Preconditions
+    assert ! hlFormula.isEmpty() : "hlFormula cannot be empty";
+    final Object negativeLiterals = ((CycList) hlFormula).first();
+    assert negativeLiterals.equals(CycObjectFactory.nil) : ((CycList) hlFormula).cyclify() + " negativeLiterals must be nil";
+    assert ((CycList) hlFormula).size() == 2 : ((CycList) hlFormula).cyclify() + " must be of the form (nil ( ... ))";
+    
+    final CycList positiveLiterals = (CycList) hlFormula.second();
+    if (positiveLiterals.size() == 1)
+      return (CycList) positiveLiterals.first();
+    final CycList gaf = new CycList();
+    gaf.add(cycAccess.and);
+    gaf.addAll(positiveLiterals);
+    
+    //// Postconditions
+    assert gaf != null : "gaf cannot be null";
+    assert ! gaf.isEmpty() : "gaf cannot be empty";
+    
+    return gaf;
+  }
+  
+  /**
+   * Returns the microtheory for this assertion.
+   *
+   * @@return the microtheory for this assertion
+   */
+  public CycObject getMt() {
+    return mt;
+  }
+  
+  /**
+   * Returns the XML representation of this object.
+   *
+   * @@return the XML representation of this object
+   */
+  public String toXMLString() throws IOException {
+    XMLStringWriter xmlStringWriter = new XMLStringWriter();
+    toXML(xmlStringWriter, 0, false);
+    return xmlStringWriter.toString();
+  }
+  
+  /**
+   * Prints the XML representation of the CycAssertion to an <code>XMLWriter</code>
+   *
+   * @@param xmlWriter an <tt>XMLWriter</tt>
+   * @@param indent an int that specifies by how many spaces to indent
+   * @@param relative a boolean; if true indentation is relative, otherwise absolute
+   */
+  public void toXML(XMLWriter xmlWriter, int indent, boolean relative)
+  throws IOException {
+    xmlWriter.printXMLStartTag(cycAssertionXMLTag, indent, relative, true);
+    hlFormula.toXML(xmlWriter, indent, relative);
+    mt.toXML(xmlWriter, indent, relative);
+    xmlWriter.printXMLEndTag(cycAssertionXMLTag);
+  }
+  
+  /**
+@
+
+
+1.14
+log
+@This is a checkin of OpenCyc 1.0.1 Java  OPENCYC_1_0_1
+@
+text
+@@
+
+
+1.13
+log
+@Added code to state machine expression evaluator
+@
+text
+@d4 1
+d17 1
+a17 1
+ * @@version $Id: CycAssertion.java,v 1.12 2002/05/30 20:00:27 stephenreed Exp $
+d39 257
+a295 154
+public class CycAssertion extends CycObject {
+    /**
+     * The name of the XML tag for this object.
+     */
+    public static final String cycAssertionXMLTag = "assertion";
+
+    /**
+     * The default indentation for printing objects to XML
+     */
+    public static int indentLength = 2;
+
+    /**
+     * The name of the XML tag for id objects
+     */
+    public static final String idXMLTag = "id";
+
+    /**
+     * Assertion id assigned by the local KB server.  Not globally unique.
+     */
+    public Integer id;
+
+    /**
+     * The assertion in the form of a <tt>CycList</tt>.
+     */
+    private CycList formula;
+
+    /**
+     * Constructs an incomplete <tt>CycAssertion</tt> object given its local KB id.
+     *
+     * @@param id the assertion id assigned by the local KB
+     */
+    public CycAssertion (Integer id) {
+        this.id = id;
+    }
+
+    /**
+     * Indicates whether the object is equal to this object.
+     *
+     * @@return <tt>true</tt> if the object is equal to this object, otherwise
+     * returns <tt>false</tt>
+     */
+    public boolean equals (Object object) {
+        if (!(object instanceof CycAssertion))
+            return  false;
+        CycAssertion that  = (CycAssertion) object;
+        return this.id.equals(that.id);
+    }
+
+    /**
+     * Returns a <tt>String</tt> representation of the <tt>CycAssertion</tt>.
+     *
+     * @@return a <tt>String</tt> representation of the <tt>CycAssertion</tt>
+     */
+    public String toString () {
+        if (formula == null)
+            return "assertion-with-id:" + id;
+        else
+            return formula.cyclify();
+    }
+
+    /**
+     * Returns a string representation without causing additional api calls.
+     *
+     * @@return a string representation without causing additional api calls
+     */
+    public String safeToString () {
+        StringBuffer result = new StringBuffer("[CycAssertion ");
+        if (id != null)
+            result.append(" id: " + id);
+        result.append("]");
+        return result.toString();
+    }
+
+    /**
+     * Returns this object in a form suitable for use as an <tt>String</tt> api expression value.
+     *
+     * @@return this object in a form suitable for use as an <tt>String</tt> api expression value
+     */
+    public String stringApiValue() {
+        return getFormula().cyclify();
+    }
+
+    /**
+     * Returns this object in a form suitable for use as an <tt>CycList</tt> api expression value.
+     *
+     * @@return this object in a form suitable for use as an <tt>CycList</tt> api expression value
+     */
+    public Object cycListApiValue() {
+        return this;
+    }
+
+    /**
+     * Returns the formula for this assertion.
+     *
+     * @@return the formula for this assertion
+     */
+    public CycList getFormula () {
+        if (formula == null) {
+            CycAssertion cycAssertion = null;
+            try {
+                cycAssertion = CycAccess.current().completeCycAssertion(this);
+            }
+            catch (Exception e) {
+                throw new RuntimeException(e.getMessage());
+            }
+            formula = cycAssertion.formula;
+        }
+        return formula;
+    }
+
+    /**
+     * Sets the formula for this assertion.
+     *
+     * @@param formula the formula for this assertion
+     */
+    public void setFormula (CycList formula) {
+        this.formula = formula;
+    }
+
+    /**
+     * Returns the id for this assertion.
+     *
+     * @@return the id for this assertion
+     */
+    public Integer getId () {
+        return id;
+    }
+
+    /**
+     * Returns the XML representation of this object.
+     *
+     * @@return the XML representation of this object
+     */
+    public String toXMLString () throws IOException {
+        XMLStringWriter xmlStringWriter = new XMLStringWriter();
+        toXML(xmlStringWriter, 0, false);
+        return xmlStringWriter.toString();
+    }
+
+    /**
+     * Prints the XML representation of the CycAssertion to an <code>XMLWriter</code>
+     *
+     * @@param xmlWriter an <tt>XMLWriter</tt>
+     * @@param indent an int that specifies by how many spaces to indent
+     * @@param relative a boolean; if true indentation is relative, otherwise absolute
+     */
+    public void toXML (XMLWriter xmlWriter, int indent, boolean relative)
+        throws IOException {
+        xmlWriter.printXMLStartTag(cycAssertionXMLTag, indent, relative, true);
+        xmlWriter.printXMLStartTag(idXMLTag, 2, true, false);
+        xmlWriter.print(id.toString());
+        xmlWriter.printXMLEndTag(idXMLTag);
+        xmlWriter.printXMLEndTag(cycAssertionXMLTag, -indentLength, true);
+    }
+@
+
+
+1.12
+log
+@Unit test compliance mods.
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: CycAssertion.java,v 1.6 2002/05/10 23:24:34 tbrussea Exp $
+d117 1
+a117 1
+        return formula.cyclify();
+@
+
+
+1.11
+log
+@CoAbs agent tests
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: CycAssertion.java,v 1.10 2001/10/17 23:44:19 stephenreed Exp $
+d38 1
+a38 1
+public class CycAssertion {
+@
+
+
+1.10
+log
+@Added CycApiException, and replaced throws to IOException with it.
+@
+text
+@d6 1
+d16 1
+a16 1
+ * @@version $Id: CycAssertion.java,v 1.9 2001/09/14 22:14:55 stephenreed Exp $
+d40 15
+d82 2
+a83 2
+        CycAssertion cycAssertion = (CycAssertion)object;
+        return formula.equals(cycAssertion.id);
+d99 13
+d166 26
+@
+
+
+1.9
+log
+@Created new CycObjectFactory class to contain all cyc object caches
+@
+text
+@d15 1
+a15 1
+ * @@version $Id: CycAssertion.java,v 1.8 2001/09/07 23:43:03 stephenreed Exp $
+d111 1
+a111 1
+            catch (IOException e) {
+@
+
+
+1.8
+log
+@Added defered completion of CycForts in the binary api. Continued with HashJoiner.
+@
+text
+@a4 1
+import  org.apache.oro.util.*;
+d15 1
+a15 1
+ * @@version $Id: CycAssertion.java,v 1.7 2001/08/30 00:06:55 stephenreed Exp $
+a38 6
+     * Least Recently Used Cache of CycAssertions, so that a reference to an existing <tt>CycAssertion</tt>
+     * is returned instead of constructing a duplicate.
+     */
+    protected static Cache cache = new CacheLRU(500);
+
+    /**
+d41 1
+a41 1
+    protected Integer id;
+a136 38
+    /**
+     * Resets the Cyc assertion cache.
+     */
+    public static void resetCache() {
+        cache = new CacheLRU(500);
+    }
+
+    /**
+     * Adds the <tt>CycAssertion<tt> to the cache.
+     */
+    public static void addCache(CycAssertion cycAssertion) {
+        cache.addElement(cycAssertion.id, cycAssertion);
+    }
+
+    /**
+     * Retrieves the <tt>CycConstant<tt> with guid, returning null if not found in the cache.
+     */
+    public static CycAssertion getCache(Integer id) {
+        return (CycAssertion) cache.getElement(id);
+    }
+
+    /**
+     * Removes the cycConstant from the cache if it is contained within.
+     */
+    public static void removeCache(Integer id) {
+        Object element = cache.getElement(id);
+        if (element != null)
+            cache.addElement(id, null);
+    }
+
+    /**
+     * Returns the size of the <tt>CycAssertion</tt> object cache.
+     *
+     * @@return an <tt>int</tt> indicating the number of <tt>CycAssertion</tt> objects in the cache
+     */
+    public static int getCacheSize() {
+        return cache.size();
+    }
+@
+
+
+1.7
+log
+@Changed CycAccess parameters from CycConstants to CycForts, more backchaining tests
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: CycAssertion.java,v 1.6 2001/08/24 22:39:27 stephenreed Exp $
+d53 1
+a53 1
+    protected CycList formula;
+d113 10
+@
+
+
+1.6
+log
+@Continued binary api test cases
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: CycAssertion.java,v 1.5 2001/08/23 09:33:14 stephenreed Exp $
+d87 18
+@
+
+
+1.5
+log
+@Continued unit testing binary api
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: CycAssertion.java,v 1.4 2001/08/22 15:09:47 stephenreed Exp $
+d83 4
+a86 1
+        return formula.cyclify();
+@
+
+
+1.4
+log
+@Changes associated with binary interface to OpenCyc
+@
+text
+@d1 158
+a158 155
+package  org.opencyc.cycobject;
+
+import  java.io.IOException;
+import  java.util.*;
+import  org.apache.oro.util.*;
+import  org.opencyc.api.*;
+
+
+/**
+ * Provides the behavior and attributes of OpenCyc assertions.<p>
+ * <p>
+ * Assertions are communicated over the binary API using their Id number (an int).
+ * The associated formula, microtheory, truth-value, direction, and remaining attributes are
+ * is fetched later.
+ *
+ * @@version $Id: CycAssertion.java,v 1.3 2001/08/13 16:14:44 stephenreed Exp $
+ * @@author Stephen L. Reed
+ * @@author Dan Lipofsky
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class CycAssertion {
+    /**
+     * Least Recently Used Cache of CycAssertions, so that a reference to an existing <tt>CycAssertion</tt>
+     * is returned instead of constructing a duplicate.
+     */
+    protected static Cache cache = new CacheLRU(500);
+
+    /**
+     * Assertion id assigned by the local KB server.  Not globally unique.
+     */
+    protected Integer id;
+
+    /**
+     * The assertion in the form of a <tt>CycList</tt>.
+     */
+    protected CycList formula;
+
+    /**
+     * Constructs an incomplete <tt>CycAssertion</tt> object given its local KB id.
+     *
+     * @@param id the assertion id assigned by the local KB
+     */
+    public CycAssertion (Integer id) {
+        this.id = id;
+    }
+
+    /**
+     * Indicates whether the object is equal to this object.
+     *
+     * @@return <tt>true</tt> if the object is equal to this object, otherwise
+     * returns <tt>false</tt>
+     */
+    public boolean equals (Object object) {
+        if (!(object instanceof CycAssertion))
+            return  false;
+        CycAssertion cycAssertion = (CycAssertion)object;
+        return formula.equals(cycAssertion.id);
+    }
+
+    /**
+     * Returns a <tt>String</tt> representation of the <tt>CycAssertion</tt>.
+     *
+     * @@return a <tt>String</tt> representation of the <tt>CycAssertion</tt>
+     */
+    public String toString () {
+        return formula.cyclify();
+    }
+
+    /**
+     * Returns the formula for this assertion.
+     *
+     * @@return the formula for this assertion
+     */
+    public CycList getFormula () {
+        return formula;
+    }
+
+    /**
+     * Sets the formula for this assertion.
+     *
+     * @@param formula the formula for this assertion
+     */
+    public void setFormula (CycList formula) {
+        this.formula = formula;
+    }
+
+    /**
+     * Returns the id for this assertion.
+     *
+     * @@return the id for this assertion
+     */
+    public Integer getId () {
+        return id;
+    }
+
+    /**
+     * Resets the Cyc assertion cache.
+     */
+    public static void resetCache() {
+        cache = new CacheLRU(500);
+    }
+
+    /**
+     * Adds the <tt>CycAssertion<tt> to the cache.
+     */
+    public static void addCache(CycAssertion cycAssertion) {
+        cache.addElement(cycAssertion.id, cycAssertion);
+    }
+
+    /**
+     * Retrieves the <tt>CycConstant<tt> with guid, returning null if not found in the cache.
+     */
+    public static CycAssertion getCache(Integer id) {
+        return (CycAssertion) cache.getElement(id);
+    }
+
+    /**
+     * Removes the cycConstant from the cache if it is contained within.
+     */
+    public static void removeCache(Integer id) {
+        Object element = cache.getElement(id);
+        if (element != null)
+            cache.addElement(id, null);
+    }
+
+    /**
+     * Returns the size of the <tt>CycAssertion</tt> object cache.
+     *
+     * @@return an <tt>int</tt> indicating the number of <tt>CycAssertion</tt> objects in the cache
+     */
+    public static int getCacheSize() {
+        return cache.size();
+    }
+
+}
+
+
+
+@
+
+
+1.3
+log
+@Revised copyright notice to Cycorp Inc.
+@
+text
+@d1 155
+a155 82
+package org.opencyc.cycobject;
+
+/**
+ * Provides the behavior and attributes of an <tt>CycAssertion</tt>.<p>
+ *
+ * @@version $Id: CycAssertion.java,v 1.2 2001/07/25 17:17:34 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class CycAssertion {
+
+    /**
+     * The assertion in the form of a <tt>CycList</tt>.
+     */
+    private CycList cycList;
+
+    /**
+     * Constructs a new <tt>CycAssertion</tt> object from a <tt>CycList</tt>.
+     */
+    public CycAssertion(CycList cycList) {
+        this.cycList = cycList;
+    }
+
+    /**
+     * Returns the assertion in the form of a <tt>CycList</tt>.
+     *
+     * @@return the assertion in the form of a <tt>CycList</tt>
+     */
+    public CycList asCycList() {
+        return cycList;
+    }
+
+    /**
+     * Indicates whether the object is equal to this object.
+     *
+     * @@return <tt>true</tt> if the object is equal to this object, otherwise
+     * returns <tt>false</tt>
+     */
+    public boolean equals(Object object) {
+        if (! (object instanceof CycAssertion))
+            return false;
+        CycAssertion cycAssertion = (CycAssertion) object;
+        return cycList.equals(cycAssertion.asCycList());
+    }
+
+    /**
+     * Returns a <tt>String</tt> representation of the <tt>CycAssertion</tt>.
+     *
+     * @@return a <tt>String</tt> representation of the <tt>CycAssertion</tt>
+     */
+    public String toString() {
+        return cycList.toString();
+    }
+
+    /**
+     * Returns an <tt>String</tt> representation of the <tt>CycAssertion</tt>,
+     * in which CycConstants are prefixed with "#$".
+     *
+     * @@return an <tt>String</tt> representation of the <tt>CycAssertion</tt>
+     * in which CycConstants are prefixed with "#$".
+     */
+    public String cyclify() {
+        return cycList.cyclify();
+    }
+}@
+
+
+1.2
+log
+@Updated javadoc comments.
+Employed apache-oro cache classes
+@
+text
+@d6 1
+a6 1
+ * @@version $Id$
+d9 1
+a9 1
+ * <p>Copyright 2001 OpenCyc.org, license is open source GNU LGPL.
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d4 1
+a4 1
+ * OpenCyc <tt>CycAssertion</tt> object to model the attributes and behavior of an assertion .<p>
+d6 2
+a7 2
+ * @@version $Id: CycAssertion.java,v 1.1 2001/07/23 21:39:25 reed Exp $
+ * @@author Stephen Reed
+d9 17
+a25 3
+ * Copyright 2001 OpenCyc.org, license is open source GNU LGPL.<p>
+ * <a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+a26 1
+
+d29 3
+d34 3
+d41 5
+d50 6
+d63 5
+d72 7
+@
+
+
+1.1.1.1
+log
+@Imported sources
+@
+text
+@@

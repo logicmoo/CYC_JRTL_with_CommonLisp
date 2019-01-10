@@ -1,0 +1,150 @@
+head	1.4;
+access;
+symbols
+	PRE_1_0:1.4;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2003.08.29.02.12.04;	author stephenreed;	state dead;
+branches;
+next	1.3;
+
+1.3
+date	2003.08.28.20.35.47;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2003.08.11.22.48.36;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2003.08.11.22.36.55;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@replacing with an instance of Procedure
+@
+text
+@package org.opencyc.elf.bg.procedure;
+
+//// Internal Imports
+
+//// External Imports
+
+import java.util.ArrayList;
+
+/**
+ * <P>PauseOrResume contains the pause-or-resume procedure.
+ *
+ * <P>Copyright (c) 2003 Cycorp, Inc.  All rights reserved.
+ * <BR>This software is the proprietary information of Cycorp, Inc.
+ * <P>Use is subject to license terms.
+ *
+ * @@author Stephen L. Reed  
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * @@date August 11, 2003, 4:24 PM
+ * @@version $Id: PauseOrResume.java,v 1.3 2003/08/28 20:35:47 stephenreed Exp $
+ */
+public class PauseOrResume extends org.opencyc.elf.bg.procedure.Procedure {
+  
+  //// Constructors
+  
+  /**
+   * Creates a new instance of PauseOrResume.
+   * @@param namespace the procedure namespace
+   * @@param name the procedure name
+   * @@param parameterTypes the types of the procedure parameters
+   * @@param outputType the type of the procedure output
+   */
+  public PauseOrResume (String namespace, String name, ArrayList parameterTypes, Class outputType) {
+    super(namespace, name, parameterTypes, outputType);
+  }
+  
+  //// Public Area
+  
+  public Object execute(java.util.ArrayList inputs) {
+    //TODO
+    return null;
+  }
+  
+  //// Protected Area
+  
+  //// Private Area
+  
+  //// Internal Rep
+  
+  //// Main
+  
+}
+@
+
+
+1.3
+log
+@class comment
+@
+text
+@d35 1
+a35 1
+ * @@version $Id: PauseOrResume.java,v 1.2 2003/08/11 22:48:36 stephenreed Exp $
+@
+
+
+1.2
+log
+@/home/reed/opencyc/org/opencyc/elf/bg/procedure
+Corrected javadoc class comments
+@
+text
+@d10 1
+a10 1
+ * <P>PauseOrResume is designed to...
+d35 1
+a35 1
+ * @@version $Id: PauseOrResume.java,v 1.1 2003/08/11 22:36:55 stephenreed Exp $
+@
+
+
+1.1
+log
+@Initial check in of the pause or resume procedure
+@
+text
+@d35 1
+a35 3
+ * @@version $Id: Init.java,v 1.1 2003/08/11 22:27:51 stephenreed Exp $
+ * @@date August 11, 2003, 4:34 PM
+ * @@version $Id$
+d52 2
+a57 2
+  
+  //// Public Area
+@
+

@@ -1,0 +1,633 @@
+head	1.9;
+access;
+symbols
+	PRE_1_0:1.8;
+locks; strict;
+comment	@# @;
+
+
+1.9
+date	2006.10.21.17.01.59;	author dmiles;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2001.10.06.02.37.21;	author stephenreed;	state dead;
+branches;
+next	1.7;
+
+1.7
+date	2001.09.14.19.58.54;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2001.09.11.13.56.34;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2001.09.10.17.44.25;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2001.09.10.16.00.28;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2001.09.08.03.30.41;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2001.09.07.23.43.03;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2001.09.06.21.45.03;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.9
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental classes.
+@
+text
+@package org.opencyc.queryprocessor;
+
+import java.util.*;
+import java.io.*;
+
+import org.opencyc.cycobject.*;
+import org.opencyc.inferencesupport.*;
+import org.opencyc.api.*;
+
+/**
+ * <tt>LiteralAsker</tt> object to obtain bindings for query literals by asking the
+ * KB.  Literals whose number of estimated instances exceed a user-controlled threshold,
+ * have a postponed query binding set.<p>
+ *
+ * @@version $Id: LiteralAsker.java,v 1.7 2001/09/14 19:58:54 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+public class LiteralAsker {
+
+    /**
+     * The default verbosity of the solution output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    public static final int DEFAULT_VERBOSITY = 3;
+
+    /**
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    protected int verbosity = DEFAULT_VERBOSITY;
+
+    /**
+     * The default value of the estimated number of instances beyond which the binding values are not
+     * all fetched from the KB.
+     */
+    public static final int DEFAULT_FORMULA_INSTANCES_THRESHOLD = 200;
+
+    /**
+     * The default value of the estimated number of instances beyond which the binding values are not
+     * all fetched from the KB.
+     */
+    public int formulaInstancesThreshold = DEFAULT_FORMULA_INSTANCES_THRESHOLD;
+
+    /**
+     * Constructs a new <tt>LiteralAsker</tt> object.
+     */
+    public LiteralAsker() {
+    }
+
+    /**
+     * Asks the KB about each of the given query literals on the condition that their estimated
+     * number of instances do not exceed the user-controlled threshold.
+     *
+     * @@param queryLiterals the query literals which are asked in the KB
+     * @@param mt the KB microtheory in which the query literals are asked
+     * @@return a list of variable binding sets for each literal.
+     */
+    public ArrayList ask(ArrayList queryLiterals, CycFort mt) throws IOException {
+        ArrayList result = new ArrayList();
+        for (int i = 0; i < queryLiterals.size(); i++) {
+            QueryLiteral queryLiteral = (QueryLiteral) queryLiterals.get(i);
+            BindingSet bindingSet = new BindingSet(queryLiteral, mt);
+            if (bindingSet.isUnary() &&
+                (bindingSet.getNbrInstances() < formulaInstancesThreshold ||
+                neverPostponeAskingForPredicate(queryLiteral.getPredicate()))) {
+                if (verbosity > 3)
+                    System.out.println("Asking " + queryLiteral.cyclify());
+                bindingSet.setBindingValues(CycAccess.current().askWithVariables(bindingSet.getQueryLiteral().getFormula(),
+                                                                                 bindingSet.getVariables(),
+                                                                                 bindingSet.getMt()));
+            }
+            else {
+                if (verbosity > 3)
+                    System.out.println("Postponed asking " + queryLiteral.cyclify());
+            }
+            if (verbosity > 8)
+                bindingSet.displayBindingSet();
+            result.add(bindingSet);
+        }
+        return result;
+    }
+
+    /**
+     * Asks the KB about the query literal contained in the given binding set.
+     *
+     * @@param bindingSet the query literals which are asked in the KB
+     * @@param mt the KB microtheory in which the query literals are asked
+     */
+    public void ask(BindingSet bindingSet) throws IOException {
+        QueryLiteral queryLiteral = bindingSet.getQueryLiteral();
+        CycFort mt = bindingSet.getMt();
+        if (verbosity > 3)
+            System.out.println("Asking " + queryLiteral.cyclify());
+        bindingSet.setBindingValues(CycAccess.current().askWithVariables(bindingSet.getQueryLiteral().getFormula(),
+                                                                         bindingSet.getVariables(),
+                                                                         bindingSet.getMt()));
+        if (verbosity > 8)
+            bindingSet.displayBindingSet();
+    }
+
+    /**
+     * Asks the KB about a partially instantiated query literal and if bindings are found, returns
+     * a list of value binding lists for all the variables in the given query literal, otherwise if
+     * no bindings are found, returns an empty list.
+     *
+     * @@param joinedQueryLiteral the joined query literal which contains the uninstantiated query literal
+     * @@param uninstantiatedQueryLiteral the literal which will be partially instantiated and asked
+     * @@param variables the list of instantiated variables
+     * @@param valueBindingList the list of values corresponding in position to the variables
+     * @@return a list of value binding lists for all the variables in the given joined query literal, otherwise if
+     * no bindings are found, returns an empty list
+     */
+    public ArrayList ask(QueryLiteral joinedQueryLiteral,
+                         QueryLiteral uninstantiatedQueryLiteral,
+                         ArrayList variables,
+                         ArrayList bindingValues,
+                         CycFort mt)  throws IOException {
+        if (verbosity > 3)
+            System.out.println("Asking about " + uninstantiatedQueryLiteral.cyclify() +
+                               "\n  with bound variables " + variables +
+                               "\n  with bound values " + bindingValues);
+        CycList partiallyInstantiatedFormula = (CycList) uninstantiatedQueryLiteral.getFormula().clone();
+        for (int i = 0; i < variables.size(); i++) {
+            partiallyInstantiatedFormula =
+                partiallyInstantiatedFormula.subst(bindingValues.get(i), variables.get(i));
+        }
+        QueryLiteral partiallyInstantiatedQueryLiteral = new QueryLiteral(partiallyInstantiatedFormula);
+        if (verbosity > 5)
+            System.out.println("  partially instantiated " + partiallyInstantiatedQueryLiteral.cyclify());
+        ArrayList bindingLists =
+            CycAccess.current().askWithVariables(partiallyInstantiatedFormula,
+                                                 partiallyInstantiatedQueryLiteral.getVariables(),
+                                                 mt);
+        if (verbosity > 5)
+            System.out.println("  --> " + bindingLists);
+        CycList result = new CycList();
+        boolean foundValue;
+        Object bindingValue;
+        for (int i = 0; i < bindingLists.size(); i++) {
+            CycList partiallyInstantiatedBindingValues = (CycList) bindingLists.get(i);
+            CycList joinedBindingValueList = new CycList();
+            for (int j = 0; j < joinedQueryLiteral.getVariables().size(); j++) {
+                CycVariable queryLiteralVariable = (CycVariable) joinedQueryLiteral.getVariables().get(j);
+                if (verbosity > 5)
+                    System.out.print("    binding for " + queryLiteralVariable);
+                foundValue = false;
+                for (int k = 0; k < variables.size(); k++) {
+                    if (queryLiteralVariable.equals(variables.get(k))) {
+                        // found in the input variables
+                        foundValue = true;
+                        bindingValue = bindingValues.get(k);
+                        joinedBindingValueList.add(bindingValue);
+                        if (verbosity > 5)
+                            System.out.println(" [input] --> " + bindingValue);
+                        break;
+                    }
+                }
+                if (! foundValue) {
+                    for (int k = 0; k < partiallyInstantiatedQueryLiteral.getVariables().size(); k++) {
+                        if (queryLiteralVariable.equals(partiallyInstantiatedQueryLiteral.getVariables().get(k))) {
+                            // found in the asked variables
+                            foundValue = true;
+                            bindingValue = partiallyInstantiatedBindingValues.get(k);
+                            joinedBindingValueList.add(bindingValue);
+                            if (verbosity > 5)
+                                System.out.println(" [asked] --> " + bindingValue);
+                            break;
+                        }
+                    }
+                }
+                if (! foundValue)
+                    throw new RuntimeException("Expected variable not found in " + joinedQueryLiteral.cyclify());
+            }
+            if (verbosity > 3)
+                System.out.println("  joined binding list " + joinedBindingValueList);
+            result.add(joinedBindingValueList);
+        }
+         return result;
+    }
+
+    /**
+     * Returns <tt>true</tt> iff the predicate in the query literal indicates that the ask should
+     * never be postponed.
+     *
+     * @@param predicate the predicate in the query literal
+     * @@return <tt>true</tt> iff the predicate in the query literal indicates that the ask should
+     * never be postponed
+     */
+    public boolean neverPostponeAskingForPredicate(CycConstant predicate) throws IOException {
+        if (predicate.equals(CycAccess.current().getKnownConstantByName("#$holdsIn")))
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * Sets verbosity of the diagnostic output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     *
+     * @@param verbosity 0 --> quiet ... 9 -> maximum diagnostic input
+     */
+    public void setVerbosity(int verbosity) {
+        this.verbosity = verbosity;
+    }
+}@
+
+
+1.8
+log
+@Removed experimental classes
+@
+text
+@d5 1
+@
+
+
+1.7
+log
+@Replaced getConstantByName with getConstantByGuid
+Replaced getKnownConstantByName with getKnownConstantByGuid
+to reflect the stability of guids and the lesser stability of constant names.
+@
+text
+@d14 1
+a14 1
+ * @@version $Id: LiteralAsker.java,v 1.6 2001/09/11 13:56:34 stephenreed Exp $
+@
+
+
+1.6
+log
+@Removing domain population logic from the constraint solver, having moved that behavior to the query processor.
+@
+text
+@d14 1
+a14 1
+ * @@version $Id: LiteralAsker.java,v 1.5 2001/09/10 17:44:25 stephenreed Exp $
+d81 3
+a83 2
+            if (bindingSet.getNbrInstances() < formulaInstancesThreshold ||
+                neverPostponeAskingForPredicate(queryLiteral.getPredicate())) {
+@
+
+
+1.5
+log
+@Continue unit testing postponed literal asks
+@
+text
+@d14 1
+a14 1
+ * @@version $Id: LiteralAsker.java,v 1.4 2001/09/10 16:00:28 stephenreed Exp $
+d54 1
+a54 1
+    public static final int DEFAULT_FORMULA_INSTANCES_THRESHOLD = 50;
+d81 2
+a82 1
+            if (bindingSet.getNbrInstances() < formulaInstancesThreshold) {
+d145 1
+a145 1
+        if (verbosity > 3)
+d151 2
+a152 2
+        if (verbosity > 3)
+            System.out.println("\n  --> " + bindingLists);
+d154 2
+d161 3
+a163 1
+                boolean foundValue = false;
+d168 4
+a171 1
+                        joinedBindingValueList.add(bindingValues.get(k));
+d180 4
+a183 1
+                            joinedBindingValueList.add(partiallyInstantiatedBindingValues.get(k));
+d195 16
+a210 1
+         return bindingLists;
+@
+
+
+1.4
+log
+@Added code to support postponed asks for in the HashJoiner class
+@
+text
+@d14 1
+a14 1
+ * @@version $Id: LiteralAsker.java,v 1.3 2001/09/08 03:30:41 stephenreed Exp $
+d122 3
+a124 2
+     * @@param queryLiteral the query literal to be asked
+     * @@param variables the list of instaniated variables
+d126 1
+a126 1
+     * @@return a list of value binding lists for all the variables in the given query literal, otherwise if
+d129 2
+a130 1
+    public ArrayList ask(QueryLiteral queryLiteral,
+a132 1
+                         QueryLiteral entireQueryLiteral,
+d135 1
+a135 1
+            System.out.println("Asking about " + queryLiteral.cyclify() +
+d138 1
+a138 1
+        CycList partiallyInstantiatedFormula = (CycList) queryLiteral.getFormula().clone();
+d141 1
+a141 2
+                partiallyInstantiatedFormula.subst(bindingValues.get(i),
+                                                   variables.get(i));
+d155 3
+a157 3
+            CycList entireBindingValueList = new CycList();
+            for (int j = 0; j < entireQueryLiteral.getVariables().size(); j++) {
+                CycVariable queryLiteralVariable = (CycVariable) entireQueryLiteral.getVariables().get(j);
+d163 1
+a163 1
+                        entireBindingValueList.add(bindingValues.get(k));
+d172 1
+a172 1
+                            entireBindingValueList.add(partiallyInstantiatedBindingValues.get(k));
+d178 1
+a178 1
+                    throw new RuntimeException("Expected variable not found in " + queryLiteral.cyclify());
+d181 2
+a182 2
+                System.out.println("  entire binding list " + entireBindingValueList);
+            result.add(entireBindingValueList);
+@
+
+
+1.3
+log
+@Unit testing HashJoiner
+@
+text
+@d11 2
+a12 1
+ * KB.<p>
+d14 1
+a14 1
+ * @@version $Id: LiteralAsker.java,v 1.2 2001/09/07 23:43:03 stephenreed Exp $
+d42 1
+a43 1
+    public static final int DEFAULT_VERBOSITY = 3;
+d51 12
+d69 2
+a70 1
+     * Asks the KB about each of the given query literals.
+a79 2
+            if (verbosity > 3)
+                System.out.println("Asking " + queryLiteral.cyclify());
+d81 11
+a91 3
+            bindingSet.setBindingValues(CycAccess.current().askWithVariables(bindingSet.getQueryLiteral().getFormula(),
+                                                                             bindingSet.getVariables(),
+                                                                             bindingSet.getMt()));
+d96 2
+d99 17
+d117 68
+a184 1
+        return result;
+@
+
+
+1.2
+log
+@Added defered completion of CycForts in the binary api. Continued with HashJoiner.
+@
+text
+@d1 89
+a89 89
+package org.opencyc.queryprocessor;
+
+import java.util.*;
+import java.io.*;
+import org.opencyc.cycobject.*;
+import org.opencyc.inferencesupport.*;
+import org.opencyc.api.*;
+
+/**
+ * <tt>LiteralAsker</tt> object to obtain bindings for query literals by asking the
+ * KB.<p>
+ *
+ * @@version $Id: LiteralAsker.java,v 1.1 2001/09/06 21:45:03 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+public class LiteralAsker {
+
+    /**
+     * The default verbosity of the solution output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+
+    public static final int DEFAULT_VERBOSITY = 3;
+    /**
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    protected int verbosity = DEFAULT_VERBOSITY;
+
+    /**
+     * Constructs a new <tt>LiteralAsker</tt> object.
+     */
+    public LiteralAsker() {
+    }
+
+    /**
+     * Asks the KB about each of the given query literals.
+     *
+     * @@param queryLiterals the query literals which are asked in the KB
+     * @@param mt the KB microtheory in which the query literals are asked
+     * @@return a list of variable binding sets for each literal.
+     */
+    public ArrayList ask(ArrayList queryLiterals, CycFort mt) throws IOException {
+        ArrayList result = new ArrayList();
+        for (int i = 0; i < queryLiterals.size(); i++) {
+            QueryLiteral queryLiteral = (QueryLiteral) queryLiterals.get(i);
+            if (verbosity > 3)
+                System.out.println("Asking " + queryLiteral.cyclify());
+            BindingSet bindingSet = new BindingSet(queryLiteral, mt);
+            bindingSet.setBindingValues(CycAccess.current().askWithVariables(bindingSet.getQueryLiteral().getFormula(),
+                                                                             bindingSet.getVariables(),
+                                                                             bindingSet.getMt()));
+            if (verbosity > 8)
+                bindingSet.displayBindingSet();
+            result.add(bindingSet);
+        }
+
+
+        return result;
+    }
+
+    /**
+     * Sets verbosity of the diagnostic output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     *
+     * @@param verbosity 0 --> quiet ... 9 -> maximum diagnostic input
+     */
+    public void setVerbosity(int verbosity) {
+        this.verbosity = verbosity;
+    }
+@
+
+
+1.1
+log
+@Added new class for obtaining answers for a QueryLiteral via KB asks.
+@
+text
+@d1 89
+a89 77
+package org.opencyc.queryprocessor;
+
+import org.opencyc.cycobject.*;
+import org.opencyc.api.*;
+import java.util.*;
+import java.io.*;
+
+/**
+ * <tt>LiteralAsker</tt> object to obtain bindings for query literals by asking the
+ * KB.<p>
+ *
+ * @@version $Id: Solution.java,v 1.2 2001/09/06 14:39:21 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ */
+public class LiteralAsker {
+
+    /**
+     * The default verbosity of the solution output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+
+    public static final int DEFAULT_VERBOSITY = 3;
+    /**
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    protected int verbosity = DEFAULT_VERBOSITY;
+
+    /**
+     * Constructs a new <tt>LiteralAsker</tt> object.
+     */
+    public LiteralAsker() {
+    }
+
+    /**
+     * Asks the KB about each of the given query literals.
+     *
+     * @@param queryLiterals the query literals which are asked in the KB
+     * @@param mt the KB microtheory in which the query literals are asked
+     * @@return a list of variable binding sets for each literal.
+     */
+    public ArrayList ask(ArrayList queryLiterals, CycFort mt) throws IOException {
+        ArrayList result = new ArrayList();
+
+        //TODO implement asks.
+
+        return result;
+    }
+
+    /**
+     * Sets verbosity of the diagnostic output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     *
+     * @@param verbosity 0 --> quiet ... 9 -> maximum diagnostic input
+     */
+    public void setVerbosity(int verbosity) {
+        this.verbosity = verbosity;
+    }
+@
+

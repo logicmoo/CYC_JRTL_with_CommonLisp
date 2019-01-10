@@ -1,0 +1,63 @@
+head	1.2;
+access;
+symbols
+	BRANCH_OPENCYC_1_0_1:1.1.0.2
+	OPENCYC_1_0_1:1.1;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2006.10.21.16.49.20;	author dmiles;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.10.18.14.21.34;	author dmiles;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental packages
+@
+text
+@These are commonly used files that have been cached locally for
+efficiency and...
+
+some of these files are not written with up to date RDF, or contain
+references to files that no longer exist.  Because the RDF parser
+being used is more recent than most of these files, I had to clean up
+these cache files to prevent errors.  It is recommended that you do
+not remove or update these cache files (unless you know what you are
+doing), otherwise the validator may report addition problems caused 
+by these files.
+
+@
+
+
+1.1
+log
+@This is the Additional Content to Create OpenCyc-1.0.1
+@
+text
+@d1 11
+a11 11
+These are commonly used files that have been cached locally for
+efficiency and...
+
+some of these files are not written with up to date RDF, or contain
+references to files that no longer exist.  Because the RDF parser
+being used is more recent than most of these files, I had to clean up
+these cache files to prevent errors.  It is recommended that you do
+not remove or update these cache files (unless you know what you are
+doing), otherwise the validator may report addition problems caused 
+by these files.
+
+@
+

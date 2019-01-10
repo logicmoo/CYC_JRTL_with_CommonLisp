@@ -1,0 +1,1051 @@
+head	1.14;
+access;
+symbols
+	PRE_1_0:1.13;
+locks; strict;
+comment	@# @;
+
+
+1.14
+date	2006.10.21.16.49.17;	author dmiles;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2002.01.23.17.16.35;	author stephenreed;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2001.11.29.22.04.20;	author stephenreed;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2001.11.29.08.10.48;	author stephenreed;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2001.11.27.23.27.28;	author stephenreed;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2001.11.26.22.03.47;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2001.11.20.21.58.59;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2001.11.19.21.55.33;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2001.11.14.01.15.17;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2001.11.13.22.40.51;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2001.11.13.04.08.58;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2001.11.13.02.16.53;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2001.11.12.03.56.49;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2001.11.09.22.09.34;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.14
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental packages
+@
+text
+@package org.opencyc.cycagent.coabs;
+
+import java.io.IOException;
+import java.rmi.RemoteException;
+import java.util.Date;
+import java.util.Hashtable;
+
+import javax.naming.TimeLimitExceededException;
+
+import net.jini.core.lookup.ServiceID;
+import net.jini.core.lookup.ServiceItem;
+import net.jini.core.lookup.ServiceMatches;
+import net.jini.core.lookup.ServiceRegistrar;
+import net.jini.core.lookup.ServiceTemplate;
+import net.jini.lookup.ServiceIDListener;
+
+import org.opencyc.cycagent.AgentCommunityAdapter;
+import org.opencyc.cycagent.MessageReceiver;
+import org.opencyc.util.Log;
+
+import com.globalinfotek.coabsgrid.AgentRegistrationHelper;
+import com.globalinfotek.coabsgrid.AgentRep;
+import com.globalinfotek.coabsgrid.BasicMessage;
+import com.globalinfotek.coabsgrid.Directory;
+import com.globalinfotek.coabsgrid.Message;
+import com.globalinfotek.coabsgrid.MessageListener;
+import com.globalinfotek.coabsgrid.ShutdownHandler;
+import com.globalinfotek.coabsgrid.ShutdownHook;
+
+import fipaos.ont.fipa.ACL;
+import fipaos.ont.fipa.FIPACONSTANTS;
+import fipaos.ont.fipa.fipaman.AgentID;
+import fipaos.parser.ParserException;
+
+/**
+ * Provides the interface for interacting with the CoABS agent community.<p>
+ *
+ * The package org.opencyc.cycagent.coabs is an optional package for OpenCyc.  If the
+ * developer does not have access to the CoABS grid classes from Global Infotek, then
+ * the org.opencyc.cycagent.coabs package can be ommitted from the build.  The FIPA-OS
+ * agent community is freely available as open source and OpenCyc can be configured to
+ * work with it alone, or in combination with CoABS when available.
+ *
+ * @@version $Id: CoAbsCommunityAdapter.java,v 1.13 2002/01/23 17:16:35 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+public class CoAbsCommunityAdapter
+    implements AgentCommunityAdapter, MessageListener, ShutdownHook{
+
+    /**
+     * outbound message serial number.
+     */
+    public int msgSerialNumber = 0;
+
+    /**
+     * Sets verbosity of this object's output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    protected int verbosity = DEFAULT_VERBOSITY;
+
+    /**
+     * reference to the name of my agent
+     */
+    protected String myAgentName;
+
+    /**
+     * the CoABS AgentRestrationHelper object.
+     */
+    protected AgentRegistrationHelper regHelper;
+
+    /**
+     * Implements an association:  message id --> waiting thread for the reply.
+     */
+    protected Hashtable waitingReplyThreads = new Hashtable();
+
+    /**
+     * Implements an association:  message id --> reply message acl.
+     */
+    protected Hashtable replyMessages = new Hashtable();
+
+    /**
+     * The conversation state.
+     */
+    protected String conversationState = "initial";
+
+    /**
+     * Cached AgentRep objects which reduce lookup overhead.
+     * myAgentName --> agentRep
+     */
+    protected static Hashtable agentRepCache = new Hashtable();
+
+    /**
+     * The parent agent object which implements the MessageReceiver interface.
+     */
+    MessageReceiver messageReceiver;
+
+    /**
+     * CoABS Directory helper.
+     */
+    Directory directory;
+
+    /**
+     * Constructs a new CoAbsCommunityAdapter.
+     * The default constructor is required for convenient instantiation via the class newInstance method.
+     * The CoABS source package is optional when building OpenCyc and this object is contructed using
+     * its string name to avoid compilation errors when the org.opencyc.cycagent.coabs source package
+     * is ommited from the build.
+     */
+    public CoAbsCommunityAdapter() throws IOException {
+    }
+
+    /**
+     * Initializes the new CoAbsCommunityAdapter instance.
+     *
+     * @@param messageReceiver the parent application which can receive agent messages via a callback
+     * @@param verbosity the verbosity of this agent adapter's output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input
+     */
+    public void initialize (MessageReceiver messageReceiver, int verbosity) throws IOException {
+        myAgentName = messageReceiver.getMyAgentName();
+        this.messageReceiver = messageReceiver;
+        this.verbosity = verbosity;
+        if (Log.current == null)
+            Log.makeLog();
+        register();
+    }
+
+    /**
+     * Registers the CoABS agent on the grid.
+     */
+    protected void register() throws IOException {
+        if (verbosity > 0)
+            Log.current.println("Starting CoAbsCommunityAdapter for " + myAgentName);
+        regHelper = new AgentRegistrationHelper(myAgentName);
+        regHelper.addMessageListener(this);
+        //Entry[] entries = {new AMSAgentDescription(myAgentName)};
+        //regHelper.addAdvertisedCapabilities(entries);
+        ShutdownHandler.addHook(this);
+        conversationState = "register";
+        if (verbosity > 2)
+            Log.current.println(myAgentName +
+                                " calling AgentRegistrationHelper.registerAgent()...");
+        String filename = myAgentName + "ServiceIDFile";
+        try {
+            regHelper.readServiceIDFromFile(filename);
+            if (verbosity > 2)
+                Log.current.println("Read ServiceID from file " + filename + ".");
+        }
+        catch (IOException e) {
+            if (verbosity > 2)
+                Log.current.println("Could not get ServiceID from file - " +
+                                    "will get one from LUS.");
+            addServiceIDListener(filename);
+        }
+        catch (ClassNotFoundException e) {
+            if (verbosity > 2)
+                Log.current.println("Could not get ServiceID from file - " +
+                                    "will get one from LUS.");
+            addServiceIDListener(filename);
+        }
+        String registrationMessageId = nextMessageId();
+        try {
+            regHelper.registerAgent (registrationMessageId);
+        }
+        catch (IOException e) {
+            Log.current.errorPrintln(e.getMessage());
+            Log.current.printStackTrace(e);
+            }
+        long oneMinuteDuration = 60000;
+        org.opencyc.util.Timer timer = new org.opencyc.util.Timer(oneMinuteDuration);
+        waitingReplyThreads.put(registrationMessageId, Thread.currentThread());
+        while (true)
+            try {
+                Thread.sleep(10000);
+                if (verbosity > 0)
+                    System.out.print(".");
+                if (timer.isTimedOut()) {
+                    Log.current.errorPrintln("Time limit exceeded while awaiting CoABS registration");
+                    throw new IOException("Time limit exceeded while awaiting CoABS registration");
+                }
+                if (this.lookupAgentRep(myAgentName) != null)
+                    break;
+            }
+            catch (InterruptedException e) {
+                if (this.lookupAgentRep(myAgentName) != null)
+                    break;
+            }
+        if (verbosity > 2)
+            Log.current.println(myAgentName + " registered with CoABS grid");
+        waitingReplyThreads.remove(registrationMessageId);
+        replyMessages.remove(registrationMessageId);
+    }
+
+    /**
+     * Fixes the :sender and :receiver parameter in the CoABS message to make them FIPA ACL compatible.  Also
+     * encloses service id in string quotes.
+     *
+     * @@param aclText the ACL expression in string form with :sender <sender-symbol> and
+     * with :receiver <receiver-symbol>
+     * @@return the ACL expression in string form with :sender (agent-identifier :name <sender-symbol> ) and
+     * with :receiver (set (agent-identifier :name <receiver-symbol>))
+     */
+    protected static String fixSenderReceiver (String aclText) throws ParserException {
+        StringBuffer correctedSenderAclText = new StringBuffer();
+        int index = aclText.indexOf(":sender");
+        if (index < 0)
+            throw new ParserException("No :sender parameter in " + aclText);
+        index = index + 8;
+        while (true) {
+            char ch = aclText.charAt(index);
+            if (ch == '(')
+                return aclText;
+            if (Character.isWhitespace(ch)) {
+                index++;
+                continue;
+            }
+            break;
+        }
+        correctedSenderAclText.append(aclText.substring(0, index - 1));
+        correctedSenderAclText.append(" (agent-identifier :name ");
+        while (true) {
+            char ch = aclText.charAt(index);
+            if (Character.isWhitespace(ch))
+                break;
+            correctedSenderAclText.append(ch);
+            index++;
+        }
+        correctedSenderAclText.append(')');
+        correctedSenderAclText.append(aclText.substring(index));
+        String tempText = correctedSenderAclText.toString();
+        StringBuffer correctedReceiverAclText = new StringBuffer();
+        index = tempText.indexOf(":receiver");
+        if (index < 0)
+            throw new ParserException("No :receiver parameter in " + tempText);
+        index = index + 10;
+        while (true) {
+            char ch = tempText.charAt(index);
+            if (ch == '(')
+                return tempText;
+            if (Character.isWhitespace(ch)) {
+                index++;
+                continue;
+            }
+            break;
+        }
+        correctedReceiverAclText.append(tempText.substring(0, index - 1));
+        correctedReceiverAclText.append(" (set (agent-identifier :name ");
+        while (true) {
+            char ch = tempText.charAt(index);
+            if (Character.isWhitespace(ch))
+                break;
+            correctedReceiverAclText.append(ch);
+            index++;
+        }
+        correctedReceiverAclText.append("))");
+        correctedReceiverAclText.append(tempText.substring(index));
+
+        tempText = correctedReceiverAclText.toString();
+        StringBuffer correctedServiceIdText = new StringBuffer();
+        index = tempText.indexOf("(:serviceID ");
+        if (index < 0)
+            return tempText;
+        index = index + 12;
+        correctedServiceIdText.append(tempText.substring(0, index));
+        correctedServiceIdText.append("\"");
+        int serviceIdStartIndex = index;
+        index = tempText.indexOf(")", index);
+        correctedServiceIdText.append(tempText.substring(serviceIdStartIndex, index));
+        correctedServiceIdText.append("\"");
+        correctedServiceIdText.append(tempText.substring(index));
+        return correctedServiceIdText.toString();
+    }
+
+    /**
+     * Returns the next message serial number identifier.
+     *
+     * @@return the next message serial number identifier
+     */
+    public String nextMessageId () {
+        return "message" + ++msgSerialNumber;
+    }
+
+    /**
+     * Sends an Agent Communication Language message.
+     *
+     * @@param acl the Agent Communication Language message to be sent
+     */
+    public void sendMessage (ACL acl) throws IOException {
+        Message requestMessage = new BasicMessage(acl.getReceiverAID().getName(),
+                                                  "fipa-xml",
+                                                  acl.toString());
+        requestMessage.setSender(regHelper.getAgentRep());
+        if (verbosity > 2)
+            Log.current.println("\nSending\n" + requestMessage.toString() +
+                                "\n  receiver: " + requestMessage.getReceiver());
+        AgentRep receivingAgentRep = this.lookupAgentRep(acl.getReceiverAID().getName());
+        receivingAgentRep.addMessage(requestMessage);
+    }
+
+    /**
+     * Sends an Agent Communication Language message and returns the reply.
+     *
+     * @@param acl the Agent Communication Language message to be sent
+     * @@param timer the Timer object controlling the maximum wait time for a reply message,
+     * after which an excecption is thrown.
+     * @@return the Agent Communication Language reply message which has been received for my agent
+     *
+     * @@thows TimeLimitExceededException when the time limit is exceeded before a reply message
+     * is received.
+     */
+    public ACL converseMessage (ACL acl, org.opencyc.util.Timer timer)
+        throws TimeLimitExceededException, IOException {
+        Message requestMessage = new BasicMessage(acl.getReceiverAID().getName(),
+                                                  "fipa-xml",
+                                                  acl.toString());
+        requestMessage.setSender(regHelper.getAgentRep());
+        if (verbosity > 2)
+            Log.current.println("\nSending " + requestMessage.toString() +
+                                "\n  receiver: " + requestMessage.getReceiver());
+        String replyWith = acl.getReplyWith();
+        waitingReplyThreads.put(replyWith, Thread.currentThread());
+        String receiverName = acl.getReceiverAID().getName();
+        AgentRep receivingAgentRep = this.lookupAgentRep(receiverName);
+        if (receivingAgentRep == null)
+            throw new IOException("Receiving agent " + receiverName + " not found");
+        waitingReplyThreads.put(replyWith, Thread.currentThread());
+        receivingAgentRep.addMessage(requestMessage);
+        while (true)
+            try {
+                Thread.sleep(500);
+                if (timer.isTimedOut())
+                    throw new IOException("Time limit exceeded - " + timer.getElapsedSeconds() +
+                                          " seconds, while awaiting reply message to " + replyWith);
+            }
+            catch (InterruptedException e) {
+                ACL replyAcl = (ACL) replyMessages.get(replyWith);
+                if (replyAcl == null)
+                    throw new RuntimeException("No reply message for " + replyWith);
+                waitingReplyThreads.remove(replyWith);
+                if (verbosity > 2)
+                    Log.current.println("\nReceived reply to " + replyWith + "\n" + replyAcl);
+                return replyAcl;
+            }
+    }
+
+    /**
+     * Receives messages from the CoABS grid.
+     *
+     * @@param message the message received from the CoABS grid
+     */
+    public void messageAdded(Message message) {
+        Date time = regHelper.getTimeLastMessageReceived();
+        AgentRep agentRep = message.getSenderAgentRep();
+        String fromAgentName = "Unknown";
+        if (agentRep != null)
+            fromAgentName = agentRep.getName();
+        if (verbosity > 2) {
+            Log.current.println("\n" + myAgentName + " received:\n" + message.toString());
+            if (verbosity > 3)
+                Log.current.println("  ACL: " + message.getACL() +
+                                    "\n  Time message received: " + time +
+                                    "\n  Sender AgentRep: " + agentRep +
+                                    "\n  From: " + fromAgentName);
+        }
+        if (agentRep != agentRepCache.get(fromAgentName.toUpperCase()))
+            agentRepCache.put(fromAgentName.toUpperCase(), agentRep);
+        ACL acl = null;
+        String fixedText = null;
+        try {
+            fixedText = fixSenderReceiver(message.getRawText());
+            acl = new ACL(fixedText);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            Log.current.errorPrintln(e.getMessage() + "\n in message:\n" + fixedText);
+            return;
+        }
+        if (acl.getPerformative().equals(FIPACONSTANTS.INFORM)) {
+            String inReplyTo = acl.getInReplyTo();
+            Thread waitingForReply = (Thread) this.waitingReplyThreads.get(inReplyTo);
+            if (waitingForReply != null) {
+                this.replyMessages.put(inReplyTo, acl);
+                waitingForReply.interrupt();
+                return;
+            }
+        }
+        if (messageReceiver != null)
+            messageReceiver.messageReceived(AgentCommunityAdapter.COABS_AGENT_COMMUNITY, acl);
+        else
+            Log.current.println("no message receiver instance to process\n" + acl);
+    }
+
+    /**
+     * Adds a Service ID Listener.
+     *
+     * @@param filename the file to which the serice ID is written.
+     */
+    private void addServiceIDListener(final String filename) {
+        final AgentRegistrationHelper finalRegHelper = regHelper;
+        ServiceIDListener sidl = new ServiceIDListener() {
+            public void serviceIDNotify(ServiceID id) {
+                try {
+                    finalRegHelper.writeServiceIDToFile(filename);
+                    if (verbosity > 2)
+                        Log.current.println("Wrote ServiceID to file " + filename + ".");
+                }
+                catch (IOException exc) {
+                    if (verbosity > 2)
+                        Log.current.println("Couldn't save ServiceID to file.");
+                }
+                finalRegHelper.removeServiceIDListener(this);
+            }
+        };
+        regHelper.addServiceIDListener(sidl);
+    }
+
+    /**
+     * Returns the AgentRep object for the given agent name.
+     *
+     * @@param agentName the agent name
+     * @@return the AgentRep object for the given agent name
+     */
+    protected AgentRep lookupAgentRep(String agentName) throws IOException {
+        if (verbosity > 2)
+            Log.current.println("directory lookup for " + agentName);
+        AgentRep agentRep = (AgentRep) agentRepCache.get(agentName.toUpperCase());
+        if (agentRep != null)
+            return agentRep;
+        ServiceTemplate serviceTemplate = new ServiceTemplate(null, null, null);
+        Directory directory = new Directory();
+        if (verbosity > 0)
+            Log.current.println("Getting service registrars from directory " + directory);
+        ServiceRegistrar[] serviceRegistrars = directory.getServiceRegistrars();
+        for (int i = 0; i < serviceRegistrars.length; i++) {
+            ServiceRegistrar serviceRegistrar = (ServiceRegistrar) serviceRegistrars[i];
+            if (verbosity > 0)
+                Log.current.println("Using service registrar " + serviceRegistrar);
+            ServiceMatches serviceMatches =
+                serviceRegistrar.lookup(serviceTemplate, Integer.MAX_VALUE);
+            ServiceItem[] items = serviceMatches.items;
+            if (verbosity > 0)
+                Log.current.println("searching through " + items.length + " directory items for " + agentName);
+            for (int j = 0; j < items.length; j++) {
+                ServiceItem si = items[j];
+                Object service =  si.service;
+                if (verbosity > 0)
+                    Log.current.println("  registered service " + service);
+                if (service instanceof AgentRep) {
+                    agentRep = (AgentRep) service;
+                    if (verbosity > 0)
+                        Log.current.println("    registered agent " + agentRep.getName());
+                    if (agentName.equalsIgnoreCase(agentRep.getName())) {
+                        agentRepCache.put(agentName.toUpperCase(), agentRep);
+                        if (verbosity > 0)
+                            Log.current.println("\ncached AgentRep for " + agentName);
+                        return agentRep;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+
+    // FIPA ACC
+
+    /**
+     * Forwards the message to the CoABS grid.
+     *
+     * @@param message the CoABS message
+     */
+    public void xforward(Message message, String messageId) {
+        try {
+            regHelper.getDirectory().forward(message,
+                                             regHelper.getAgentRep(),
+                                             messageId);
+        }
+        catch (RemoteException e) {
+            Log.current.errorPrintln(e.getMessage());
+            Log.current.printStackTrace(e);
+        }
+    }
+
+    /**
+     * Deregisters this agent when the application is terminated.
+     */
+    public void cleanup() {
+        if (! regHelper.isTerminated()) {
+            if (regHelper.isRegistered()) {
+                if (verbosity > 1)
+                    Log.current.println("de-registering" + regHelper.getAgentRep().getName());
+                deregister();
+            }
+            if (verbosity > 1)
+                Log.current.println("terminating");
+            regHelper.terminate();
+        }
+    }
+
+    /**
+     * Deregisters this agent.
+     */
+    public void deregister() {
+        if (verbosity > 2)
+            Log.current.println(myAgentName +
+                                " calling AgentRegistrationHelper.deregisterAgent()...");
+        try {
+            regHelper.deregisterAgent(regHelper.getAgentRep(),
+                                      "message" + msgSerialNumber++);
+        }
+        catch (RemoteException e) {
+            Log.current.errorPrintln(e.getMessage());
+            Log.current.printStackTrace(e);
+        }
+    }
+
+    /**
+     * Terminate this agent.
+     */
+    public void terminate() {
+        if (regHelper.isRegistered())
+            deregister();
+        regHelper.terminate();
+    }
+
+    /**
+     * Gets the AgentID of this Agent.  Not used by the CoAbsCommunityAdapter.
+     */
+    public AgentID getAID () {
+        return null;
+    }
+
+    /**
+     * Sets verbosity of this object's output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     *
+     * @@param verbosity 0 --> quiet ... 9 -> maximum diagnostic input
+     */
+    public void setVerbosity(int verbosity) {
+        this.verbosity = verbosity;
+    }
+
+}@
+
+
+1.13
+log
+@Made the org.opencyc.cycagent.coabs package optional, as the required CoABS grid
+classes are not open source, nor freely downloadable.  The FIPA-OS package is
+open source and OpenCyc can be configured to work with it alone.
+@
+text
+@d5 3
+a7 1
+import java.util.*;
+d9 6
+a14 1
+import net.jini.core.entry.Entry;
+d16 17
+a32 3
+import net.jini.core.lookup.*;
+import fipaos.ont.fipa.*;
+import fipaos.ont.fipa.fipaman.*;
+a33 4
+import com.globalinfotek.coabsgrid.*;
+import com.globalinfotek.coabsgrid.entry.fipa98.AMSAgentDescription;
+import org.opencyc.cycagent.*;
+import org.opencyc.util.*;
+d44 1
+a44 1
+ * @@version $Id: CoAbsCommunityAdapter.java,v 1.12 2001/11/29 22:04:20 stephenreed Exp $
+@
+
+
+1.12
+log
+@Continued Cyc agent client testing
+@
+text
+@d11 1
+d21 7
+a27 1
+ * @@version $Id: CoAbsCommunityAdapter.java,v 1.11 2001/11/29 08:10:48 stephenreed Exp $
+d105 11
+a115 1
+     * Constructs a new CoAbsCommunityAdapter for the given CoAbs agent, with the given verbosity.
+d117 1
+d121 1
+a121 1
+    public CoAbsCommunityAdapter(MessageReceiver messageReceiver, int verbosity) throws IOException {
+d526 7
+@
+
+
+1.11
+log
+@Added FIPA-OS agent code
+@
+text
+@d20 1
+a20 1
+ * @@version $Id: CoAbsCommunityAdapter.java,v 1.10 2001/11/27 23:27:28 stephenreed Exp $
+d278 1
+a278 1
+            Log.current.println("\nSending " + requestMessage.toString() +
+d349 2
+a350 2
+        if (agentRep != agentRepCache.get(fromAgentName))
+            agentRepCache.put(fromAgentName, agentRep);
+d410 1
+a410 1
+        AgentRep agentRep = (AgentRep) agentRepCache.get(agentName);
+d436 2
+a437 2
+                    if (agentName.equals(agentRep.getName())) {
+                        agentRepCache.put(agentName, agentRep);
+@
+
+
+1.10
+log
+@More cyc agent client support
+@
+text
+@d20 1
+a20 1
+ * @@version $Id: CoAbsCommunityAdapter.java,v 1.9 2001/11/26 22:03:47 stephenreed Exp $
+d310 1
+a311 1
+        waitingReplyThreads.put(replyWith, Thread.currentThread());
+@
+
+
+1.9
+log
+@More code for Cyc client agents
+@
+text
+@d20 1
+a20 1
+ * @@version $Id: CoAbsCommunityAdapter.java,v 1.8 2001/11/20 21:58:59 stephenreed Exp $
+d179 2
+a180 1
+     * Fixes the :sender and :receiver parameter in the CoABS message to make them FIPA ACL compatible.
+d241 15
+a255 1
+        return correctedReceiverAclText.toString();
+@
+
+
+1.8
+log
+@Unit testing CoABS agent classes
+@
+text
+@d20 1
+a20 1
+ * @@version $Id: CoAbsCommunityAdapter.java,v 1.7 2001/11/19 21:55:33 stephenreed Exp $
+d357 1
+a357 1
+            messageReceiver.messageReceived(acl);
+@
+
+
+1.7
+log
+@Initial check in.
+@
+text
+@d20 1
+a20 1
+ * @@version $Id: CoAbsCommunityAdapter.java,v 1.6 2001/11/14 01:15:17 stephenreed Exp $
+d93 5
+d116 1
+a116 1
+        if (verbosity > 1)
+d158 1
+a158 1
+                Thread.sleep(2000);
+d291 4
+a294 1
+        AgentRep receivingAgentRep = this.lookupAgentRep(acl.getReceiverAID().getName());
+d334 2
+d398 1
+a398 1
+        // create a Directory to use for lookups
+d400 27
+a426 15
+        ServiceItem[] items = directory.lookup((net.jini.core.lookup.ServiceTemplate) null);
+        for (int i = 0; i < items.length; i++) {
+            ServiceItem si = items[i];
+            Object service =  si.service;
+            if (verbosity > 2)
+                Log.current.println("  directory service " + service);
+            if (service instanceof AgentRep) {
+                agentRep = (AgentRep) service;
+                if (verbosity > 2)
+                    Log.current.println("    directory agent " + agentRep.getName());
+                if (agentName.equals(agentRep.getName())) {
+                    agentRepCache.put(agentName, agentRep);
+                    if (verbosity > 2)
+                        Log.current.print("cached AgentRep for " + agentName);
+                    return agentRep;
+@
+
+
+1.6
+log
+@Completed first round of CoABS agent tests with the OpenCyc api
+@
+text
+@d20 1
+a20 1
+ * @@version $Id: CoAbsCommunityAdapter.java,v 1.5 2001/11/13 22:40:51 stephenreed Exp $
+d51 1
+a51 1
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+d57 1
+a57 1
+     * name of my agent
+d59 1
+a59 1
+    protected String agentName;
+d83 1
+a83 1
+     * agentName --> agentRep
+d88 6
+a93 1
+     * Constructs a new CoAbsCommunityAdapter for the given CoAbs agent name.
+d95 2
+a96 1
+     * @@param agentName the name of my agent in the CoAbs community.
+d98 4
+a101 2
+    public CoAbsCommunityAdapter(String agentName) throws IOException {
+        this.agentName = agentName;
+d112 2
+a113 2
+            Log.current.println("Starting CoAbsCommunityAdapter for " + agentName);
+        regHelper = new AgentRegistrationHelper(agentName);
+d115 1
+a115 1
+        //Entry[] entries = {new AMSAgentDescription(agentName)};
+d120 1
+a120 1
+            Log.current.println(agentName +
+d122 1
+a122 1
+        String filename = agentName + "ServiceIDFile";
+d148 2
+a149 2
+        long tenSecondsDuration = 10000;
+        org.opencyc.util.Timer timer = new org.opencyc.util.Timer(tenSecondsDuration);
+d153 3
+a155 1
+                Thread.sleep(500);
+d160 2
+d164 2
+a165 1
+                break;
+d168 1
+a168 1
+            Log.current.println(agentName + " registered with CoABS grid");
+a264 10
+     * Notifies my agent that an Agent Communication Language message has been received.
+     *
+     * @@param acl the Agent Communication Language message which has been received for my agent
+     */
+    public void messageReceived (ACL acl){
+        if (verbosity > 2)
+            Log.current.println("\nIgnoring " + acl);
+    }
+
+    /**
+d319 1
+a319 1
+            Log.current.println("\n" + agentName + " received:\n" + message.toString());
+d327 1
+d329 2
+a330 1
+            acl = new ACL(fixSenderReceiver(message.getRawText()));
+d332 3
+a334 2
+        catch (ParserException e) {
+            Log.current.errorPrintln(e.getMessage());
+d346 4
+a349 1
+        messageReceived(acl);
+d383 2
+d394 2
+d398 2
+d408 1
+a408 1
+        throw new IOException("Agent not found " + agentName);
+d452 1
+a452 1
+            Log.current.println(agentName +
+d472 11
+@
+
+
+1.5
+log
+@Moved ByteArray to the cycobject package from the util package
+@
+text
+@d20 1
+a20 1
+ * @@version $Id: CoAbsCommunityAdapter.java,v 1.4 2001/11/13 04:08:58 stephenreed Exp $
+d265 2
+a266 2
+     * @@param timeoutMilliseconds the maximum wait time for a reply message, after which an
+     * excecption is thrown.
+d272 1
+a272 1
+    public ACL converseMessage (ACL acl, long timeoutMilliseconds)
+a284 1
+        org.opencyc.util.Timer timer = new org.opencyc.util.Timer(timeoutMilliseconds);
+d420 6
+a425 1
+        if (regHelper.isRegistered()) {
+d427 2
+a428 2
+                Log.current.println("de-registering" + regHelper.getAgentRep().getName());
+            deregister();
+d453 3
+a455 1
+        deregister();
+@
+
+
+1.4
+log
+@CoABS Unit tests
+@
+text
+@d20 1
+a20 1
+ * @@version $Id: CoAbsCommunityAdapter.java,v 1.3 2001/11/13 02:16:53 stephenreed Exp $
+d316 8
+a323 7
+        if (verbosity > 2)
+            Log.current.println("\n" + agentName + " received:\n" + message.toString() +
+                                "\n  ACL: " + message.getACL() +
+                                "\n  Time message received: " + time +
+                                "\n  Sender AgentRep: " + agentRep +
+                                "\n  From: " + fromAgentName);
+
+a379 1
+        System.out.println("*** Looking up everything:");
+a381 3
+            System.out.println();
+            System.out.println("Match " + (i + 1));
+            System.out.println("---------");
+a383 1
+            System.out.println("Service (" + service.getClass() + ") = " + service);
+a385 1
+                System.out.println("Agent name " + agentRep.getName());
+@
+
+
+1.3
+log
+@Continued testing
+@
+text
+@d20 1
+a20 1
+ * @@version $Id: CoAbsCommunityAdapter.java,v 1.2 2001/11/12 03:56:49 stephenreed Exp $
+d243 1
+d277 1
+@
+
+
+1.2
+log
+@Added methods to agent communication classes
+@
+text
+@d9 1
+a9 1
+import net.jini.core.lookup.ServiceID;
+d20 1
+a20 1
+ * @@version $Id: CoAbsCommunityAdapter.java,v 1.1 2001/11/09 22:09:34 stephenreed Exp $
+d82 6
+d94 2
+d107 2
+a108 2
+        Entry[] entries = {new AMSAgentDescription(agentName)};
+        regHelper.addAdvertisedCapabilities(entries);
+d134 1
+a134 3
+            // The agent version of registerAgent(), used below, sends a message
+            // confirming that registration has been initiated.
+            regHelper.registerAgent ("message" + ++msgSerialNumber);
+d140 2
+a141 1
+        org.opencyc.util.Timer timer = new org.opencyc.util.Timer(10000);
+d146 2
+a147 1
+                if (timer.isTimedOut())
+d149 1
+d152 1
+a152 4
+                if (verbosity > 2)
+                    Log.current.println(agentName + " registered with CoABS grid");
+                waitingReplyThreads.remove(registrationMessageId);
+                replyMessages.remove(registrationMessageId);
+d154 4
+d239 2
+a240 2
+    public void sendMessage (ACL acl) {
+        Message requestMessage = new BasicMessage(agentName,
+d246 2
+a247 1
+        forward(requestMessage, acl.getReplyWith());
+d273 1
+a273 1
+        Message requestMessage = new BasicMessage(agentName,
+d281 2
+a282 1
+        forward(requestMessage, replyWith);
+d289 2
+a290 1
+                    throw new IOException("Time limit exceeded while awaiting reply message to " + replyWith);
+d365 36
+d408 1
+a408 1
+    public void forward(Message message, String messageId) {
+@
+
+
+1.1
+log
+@Initial check in
+@
+text
+@d20 1
+a20 1
+ * @@version $Id: CycConnectionInterface.java,v 1.1 2001/11/09 02:50:59 stephenreed Exp $
+d397 7
+@
+

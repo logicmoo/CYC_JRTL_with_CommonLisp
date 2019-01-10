@@ -1,0 +1,866 @@
+head	1.18;
+access;
+symbols
+	PRE_1_0:1.18;
+locks; strict;
+comment	@# @;
+
+
+1.18
+date	2003.10.20.21.55.20;	author stephenreed;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2003.10.06.05.15.22;	author stephenreed;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2003.10.01.22.29.58;	author stephenreed;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2003.09.26.23.17.07;	author stephenreed;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2003.09.22.22.57.15;	author stephenreed;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2003.09.22.16.12.24;	author stephenreed;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2003.09.22.16.10.04;	author stephenreed;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2003.09.22.02.30.03;	author stephenreed;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2003.09.19.22.21.42;	author stephenreed;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2003.09.17.23.12.58;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2003.09.17.16.53.51;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2003.09.16.23.24.05;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2003.09.14.13.58.04;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2003.09.09.22.04.36;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2003.09.05.15.59.21;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2003.09.04.13.46.40;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2003.08.11.21.24.17;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2003.08.08.13.22.25;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.18
+log
+@/home/reed/opencyc/org/opencyc/elf
+replaced command with commandName in job
+@
+text
+@package org.opencyc.elf.wm;
+
+//// Internal Imports
+import org.opencyc.elf.a.Actuator;
+import org.opencyc.elf.a.DirectActuator;
+import org.opencyc.elf.bg.planner.Job;
+import org.opencyc.elf.bg.planner.Resource;
+import org.opencyc.elf.bg.predicate.NotNull;
+import org.opencyc.elf.bg.taskframe.Action;
+import org.opencyc.elf.goal.Goal;
+import org.opencyc.elf.s.DirectSensor;
+import org.opencyc.elf.s.Sensor;
+import org.opencyc.elf.wm.state.StateVariable;
+
+//// External Imports
+import java.util.Iterator;
+import java.util.List;
+import java.util.logging.Logger;
+import junit.framework.Assert;
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+import junit.textui.TestRunner;
+
+/** Provides a suite of JUnit test cases for the org.opencyc.elf.wm package.
+ * 
+ * @@version $Id: UnitTest.java,v 1.17 2003/10/06 05:15:22 stephenreed Exp $
+ * @@author Stephen L. Reed  
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class UnitTest extends TestCase {
+  
+  //// Constructors
+  
+  /**
+   * Construct a new UnitTest object.
+   * 
+   * @@param name the test case name.
+   */
+  public UnitTest(String name) {
+    super(name);
+  }
+
+  //// Public Area
+  
+  /** Runs the unit tests
+   *
+   * @@return the unit test suite
+   */
+  public static Test suite() {
+    logger = Logger.getLogger("org.opencyc.elf");
+    TestSuite testSuite = new TestSuite();
+    testSuite.addTest(new UnitTest("testStateVariableLibrary"));
+    testSuite.addTest(new UnitTest("testActionLibrary"));
+    testSuite.addTest(new UnitTest("testGoalLibrary"));
+    testSuite.addTest(new UnitTest("testResourcePool"));
+    testSuite.addTest(new UnitTest("testJobLibrary"));
+    testSuite.addTest(new UnitTest("testActuatorPool"));
+    testSuite.addTest(new UnitTest("testSensorPool"));
+    return testSuite;
+  }
+
+  /** Tests state variable library and state variable factory behavior. */
+  public void testStateVariableLibrary() {
+    System.out.println("\n*** testStateVariableLibrary ***");
+    new StateVariableLibrary();
+    (new StateVariableFactory()).getInstance().populateStateVariableLibrary();
+    Assert.assertNotNull(StateVariableLibrary.getInstance());
+    Assert.assertNotNull(StateVariableLibrary.getInstance().getStateVariable(StateVariable.CONSOLE_INPUT));
+    Assert.assertNotNull(StateVariableLibrary.getInstance().getStateVariable(StateVariable.CONSOLE_PROMPT));
+    Assert.assertNotNull(StateVariableLibrary.getInstance().getStateVariable(StateVariable.USER_INPUT));
+    Assert.assertNotNull(StateVariableLibrary.getInstance().getStateVariable(StateVariable.USER_PROMPT));
+    Assert.assertEquals("consoleInput", 
+                        StateVariableLibrary.getInstance().getStateVariable(StateVariable.CONSOLE_INPUT).toString());
+    Assert.assertEquals("userPrompt", 
+                        StateVariableLibrary.getInstance().getStateVariable(StateVariable.USER_PROMPT).toString());
+    System.out.println("*** testStateVariableLibrary OK ***");
+  }
+  
+  /** Tests action library and action factory behavior. */
+  public void testActionLibrary() {
+    System.out.println("\n*** testActionLibrary ***");
+    new StateVariableLibrary();
+    (new StateVariableFactory()).getInstance().populateStateVariableLibrary();
+    new ActionLibrary();
+    (new ActionFactory()).getInstance().populateActionLibrary();
+    Assert.assertNotNull(ActionLibrary.getInstance());
+    Assert.assertNotNull(ActionLibrary.getInstance().getAction(Action.ABORT));
+    Assert.assertNotNull(ActionLibrary.getInstance().getAction(Action.CONSOLE_PROMPTED_INPUT));
+    Assert.assertNotNull(ActionLibrary.getInstance().getAction(Action.CONVERSE_WITH_USER));
+    Assert.assertNotNull(ActionLibrary.getInstance().getAction(Action.EMERGENCY_STOP));
+    Assert.assertNotNull(ActionLibrary.getInstance().getAction(Action.INITIALIZE));
+    Assert.assertEquals("[Action: console prompted input( prompt: null)]", 
+                        ActionLibrary.getInstance().getAction(Action.CONSOLE_PROMPTED_INPUT).toString());
+    System.out.println("*** testActionLibrary OK ***");
+  }
+  
+  /** Tests goal library and goal factory behavior. */
+  public void testGoalLibrary() {
+    System.out.println("\n*** testGoalLibrary ***");
+    new StateVariableLibrary();
+    (new StateVariableFactory()).getInstance().populateStateVariableLibrary();
+    new ActionLibrary();
+    (new ActionFactory()).getInstance().populateActionLibrary();
+    new NotNull();
+    new GoalLibrary();
+    (new GoalFactory()).getInstance().populateGoalLibrary();
+    Assert.assertNotNull(GoalLibrary.getInstance());
+    Assert.assertNotNull(GoalLibrary.getInstance().getGoal(Goal.PERCEIVE_SENSATION));
+    Assert.assertEquals("(not-null \"consoleInput\")", 
+                        GoalLibrary.getInstance().getGoal(Goal.PERCEIVE_SENSATION).toString());
+    Assert.assertNotNull(GoalLibrary.getInstance().getGoal(Goal.PERCEIVE_SENSATION));
+    Assert.assertEquals("(not-null \"userInput\")", 
+                        GoalLibrary.getInstance().getGoal(Goal.PERCEIVE_SENSATION).toString());
+    System.out.println("*** testGoalLibrary OK ***");
+  }
+  
+  /** Tests resource pool and resource factory behavior. */
+  public void testResourcePool() {
+    System.out.println("\n*** testResourcePool ***");
+    new ResourcePool();
+    (new ResourceFactory()).getInstance().populateResourcePool();
+    Assert.assertNotNull(ResourcePool.getInstance());
+    Assert.assertNotNull(ResourcePool.getInstance().getResource(Resource.CONSOLE));
+    Assert.assertEquals("[Resource: console]", 
+                        ResourcePool.getInstance().getResource(Resource.CONSOLE).toString());
+    System.out.println("*** testResourcePool OK ***");
+  }
+  
+  /** Tests job library and job factory behavior. */
+  public void testJobLibrary() {
+    System.out.println("\n*** testJobLibrary ***");
+    new StateVariableLibrary();
+    (new StateVariableFactory()).getInstance().populateStateVariableLibrary();
+    new ActionLibrary();
+    (new ActionFactory()).getInstance().populateActionLibrary();
+    new NotNull();
+    new GoalLibrary();
+    (new GoalFactory()).getInstance().populateGoalLibrary();
+    new ResourcePool();
+    (new ResourceFactory()).getInstance().populateResourcePool();
+    new JobLibrary();
+    (new JobFactory()).getInstance().populateJobLibrary();
+    Assert.assertNotNull(JobLibrary.getInstance());
+    List jobSets = JobLibrary.getInstance().getJobSets(Action.CONVERSE_WITH_USER);
+    Assert.assertNotNull(jobSets);
+    Assert.assertEquals(1, jobSets.size());
+    List jobSet = (List) jobSets.get(0);
+    Assert.assertNotNull(jobSet);
+    Assert.assertEquals(1, jobSet.size());
+    Job job = (Job) jobSet.get(0);
+    Assert.assertNotNull(job);
+    Assert.assertEquals("[JobAssignment for [Action: converse with user( prompt: null)] using: [[Resource: console]]]", 
+                        job.toString());
+    Assert.assertNotNull(job.getCommandName());
+    Assert.assertEquals("", job.getCommandName());
+    List requiredResources = job.getRequiredResources();
+    Assert.assertNotNull(requiredResources);
+    Assert.assertEquals(1, requiredResources.size());
+    Assert.assertEquals("[Resource: console]", requiredResources.get(0).toString());
+    System.out.println("*** testJobLibrary OK ***");
+  }
+  
+  /** Tests actuator pool and actuator factory behavior. */
+  public void testActuatorPool() {
+    System.out.println("\n*** testActuatorPool ***");
+    new ActuatorPool();
+    (new ActuatorFactory()).getInstance().populateActuatorPool();
+    Assert.assertNotNull(ActuatorPool.getInstance().getActuator(DirectActuator.CONSOLE_OUTPUT));
+    Assert.assertEquals("[ConsoleOutput resources: [[Resource: console]]]", 
+                        ActuatorPool.getInstance().getActuator(DirectActuator.CONSOLE_OUTPUT).toString());
+    System.out.println("*** testActuatorPool OK ***");
+  }
+  
+  /** Tests sensor pool and sensor factory behavior. */
+  public void testSensorPool() {
+    System.out.println("\n*** testSensorPool ***");
+    new SensorPool();
+    (new SensorFactory()).getInstance().populateSensorPool();
+    Assert.assertNotNull(SensorPool.getInstance().getSensor(DirectSensor.CONSOLE_INPUT));
+    Assert.assertEquals("[DirectSensor resources: [[Resource: console]]]", 
+                        SensorPool.getInstance().getSensor(DirectSensor.CONSOLE_INPUT).toString());
+    System.out.println("*** testSensorPool OK ***");
+  }
+  
+  //// Protected Area
+  
+  //// Private Area
+  
+  //// Internal Rep
+  
+  /** the logger */
+  protected static Logger logger;
+
+  //// Main
+  
+  /** Main method in case tracing is prefered over running JUnit.
+   *
+   * @@param args the command line arguments (unused)
+   */
+  public static void main(String[] args) {
+    TestRunner.run(suite());
+  }
+
+}@
+
+
+1.17
+log
+@refactored Action and Goal to include Parameter
+@
+text
+@d27 1
+a27 1
+ * @@version $Id: UnitTest.java,v 1.16 2003/10/01 22:29:58 stephenreed Exp $
+d171 2
+a172 2
+    Assert.assertNotNull(job.getCommand());
+    Assert.assertEquals("[Action: converse with user( prompt: null)]", job.getCommand().toString());
+@
+
+
+1.16
+log
+@pass unit tests
+@
+text
+@a5 1
+
+a7 1
+
+a8 1
+
+a9 1
+
+a10 1
+
+a12 1
+
+a18 1
+
+d27 1
+a27 1
+ * @@version $Id: UnitTest.java,v 1.15 2003/09/26 23:17:07 stephenreed Exp $
+a68 1
+    testSuite.addTest(new UnitTest("testEntityFrame"));
+a78 34
+  /** Tests EntityFrame object behavior. */
+  public void testEntityFrame() {
+    System.out.println("\n*** testEntityFrame ***");
+    EntityFrame entityFrame1 = new EntityFrame();
+    StateVariable stateVariable1 = new StateVariable(String.class, 
+                                                     "stateVariable1", 
+                                                     "test state variable stateVariable1");
+    Object attribute1 = new Object();
+    Assert.assertNull(entityFrame1.getState().getStateValue(stateVariable1));
+    entityFrame1.getState().setStateValue(stateVariable1, "abc");
+    Assert.assertEquals("abc", entityFrame1.getState().getStateValue(stateVariable1));
+
+    EntityFrame entityFrame2 = new EntityFrame(entityFrame1);
+    Assert.assertNotSame(entityFrame1, entityFrame2);
+    StateVariable stateVariable2 = new StateVariable(String.class, 
+                                                     "stateVariable2", 
+                                                     "test state variable stateVariable2");
+    entityFrame2.getState().setStateValue(stateVariable2, "def");
+    Assert.assertTrue(!entityFrame1.equals(entityFrame2));
+    System.out.println(entityFrame2.toString());
+    int iteratorCount = 0;
+    Object iterator1 = entityFrame1.getState().stateVariables();
+    Assert.assertTrue(iterator1 instanceof Iterator);
+    Iterator iterator2 = entityFrame1.getState().stateVariables();
+    while (iterator2.hasNext()) {
+      Object stateVariable = iterator2.next();
+      iteratorCount++;
+      Assert.assertEquals(stateVariable1, stateVariable);
+    }
+    Assert.assertEquals(1, iteratorCount);
+    Assert.assertTrue(entityFrame1.getState().isStateVariable(stateVariable1));
+    System.out.println("*** testEntityFrame OK ***");
+  }
+  
+d108 1
+a108 1
+    Assert.assertNotNull(ActionLibrary.getInstance().getAction(Action.INIT));
+d125 1
+a125 1
+    Assert.assertNotNull(GoalLibrary.getInstance().getGoal(Goal.GET_CONSOLE_PROMPTED_INPUT));
+d127 2
+a128 2
+                        GoalLibrary.getInstance().getGoal(Goal.GET_CONSOLE_PROMPTED_INPUT).toString());
+    Assert.assertNotNull(GoalLibrary.getInstance().getGoal(Goal.GET_USER_INPUT));
+d130 1
+a130 1
+                        GoalLibrary.getInstance().getGoal(Goal.GET_USER_INPUT).toString());
+@
+
+
+1.15
+log
+@refactored for actuator-sensor
+@
+text
+@d34 1
+a34 1
+ * @@version $Id: UnitTest.java,v 1.14 2003/09/22 22:57:15 stephenreed Exp $
+d100 1
+a100 1
+    Assert.assertEquals(entityFrame1, entityFrame2);
+d168 1
+a168 1
+    Assert.assertEquals("(not-null consoleInput)", 
+d171 1
+a171 1
+    Assert.assertEquals("(not-null userInput)", 
+d211 1
+a211 1
+    Assert.assertEquals("[Job for [[Resource: console]] action: converse with user]", 
+d214 1
+a214 1
+    Assert.assertEquals("converse with user", job.getCommand().toString());
+@
+
+
+1.14
+log
+@used job sets
+@
+text
+@d5 1
+d16 1
+d34 1
+a34 1
+ * @@version $Id: UnitTest.java,v 1.13 2003/09/22 16:12:24 stephenreed Exp $
+d227 1
+a227 1
+    Assert.assertNotNull(ActuatorPool.getInstance().getActuator(Actuator.CONSOLE_OUTPUT));
+d229 1
+a229 1
+                        ActuatorPool.getInstance().getActuator(Actuator.CONSOLE_OUTPUT).toString());
+d238 1
+a238 1
+    Assert.assertNotNull(SensorPool.getInstance().getSensor(Sensor.CONSOLE_INPUT));
+d240 1
+a240 1
+                        SensorPool.getInstance().getSensor(Sensor.CONSOLE_INPUT).toString());
+@
+
+
+1.13
+log
+@cleaned up imports
+@
+text
+@a29 1
+
+d32 1
+a32 1
+ * @@version $Id: UnitTest.java,v 1.12 2003/09/22 16:10:04 stephenreed Exp $
+d201 4
+a204 1
+    List jobSet = JobLibrary.getInstance().getJobSet(Action.CONVERSE_WITH_USER);
+@
+
+
+1.12
+log
+@removed obsolete import
+@
+text
+@a4 3
+import org.opencyc.elf.a.ConsoleOutput;
+
+import org.opencyc.elf.bg.predicate.NotNull;
+d9 2
+a14 1
+import org.opencyc.elf.s.ConsoleInput;
+d20 2
+a21 2
+import java.util.*;
+
+d24 5
+a28 1
+import junit.framework.*;
+a29 1
+import org.doomdark.uuid.UUID;
+d33 1
+a33 1
+ * @@version $Id: UnitTest.java,v 1.11 2003/09/22 02:30:03 stephenreed Exp $
+d256 1
+a256 1
+    junit.textui.TestRunner.run(suite());
+@
+
+
+1.11
+log
+@fixed compilation errors resulting from messages construct signature change
+@
+text
+@a8 1
+import org.opencyc.elf.bg.planner.ConditionalScheduleSet;
+d32 1
+a32 1
+ * @@version $Id: UnitTest.java,v 1.10 2003/09/19 22:21:42 stephenreed Exp $
+@
+
+
+1.10
+log
+@/home/reed/opencyc/org/opencyc/elf
+refactored job and schedule
+@
+text
+@d10 1
+a10 1
+import org.opencyc.elf.bg.planner.JobAssignment;
+d33 1
+a33 1
+ * @@version $Id: UnitTest.java,v 1.9 2003/09/17 23:12:58 stephenreed Exp $
+d80 1
+a80 1
+    testSuite.addTest(new UnitTest("testJobAssignmentLibrary"));
+d187 3
+a189 3
+  /** Tests job assignment library and job assignment factory behavior. */
+  public void testJobAssignmentLibrary() {
+    System.out.println("\n*** testJobAssignmentLibrary ***");
+d199 13
+a211 13
+    new JobAssignmentLibrary();
+    (new JobAssignmentFactory()).getInstance().populateJobAssignmentLibrary();
+    Assert.assertNotNull(JobAssignmentLibrary.getInstance());
+    JobAssignment jobAssignment = JobAssignmentLibrary.getInstance().getJobAssignment(Action.CONVERSE_WITH_USER);
+    Assert.assertNotNull(jobAssignment);
+    Assert.assertEquals("[JobAssignment for [[Resource: console]] action: converse with user]", 
+                        jobAssignment.toString());
+    Assert.assertNotNull(jobAssignment.getActionName());
+    Assert.assertEquals("converse with user", jobAssignment.getActionName());
+    Action action = jobAssignment.getActionForScheduling();
+    Assert.assertNotNull(action);    
+    Assert.assertEquals("[Action: console prompted input( prompt: null)]", action.toString());
+    List requiredResources = jobAssignment.getRequiredResources();
+d215 1
+a215 1
+    System.out.println("*** testJobAssignmentLibrary OK ***");
+@
+
+
+1.9
+log
+@handled task frame alternative schedules
+@
+text
+@a13 1
+import org.opencyc.elf.bg.taskframe.TaskFrame;
+d33 1
+a33 1
+ * @@version $Id: UnitTest.java,v 1.8 2003/09/17 16:53:51 stephenreed Exp $
+a80 1
+    testSuite.addTest(new UnitTest("testTaskFrameLibrary"));
+a215 44
+  }
+  
+  /** Tests task frame library and task frame factory behavior. */
+  public void testTaskFrameLibrary() {
+    System.out.println("\n*** testTaskFrameLibrary ***");
+    new StateVariableLibrary();
+    (new StateVariableFactory()).getInstance().populateStateVariableLibrary();
+    new ActionLibrary();
+    (new ActionFactory()).getInstance().populateActionLibrary();
+    new NotNull();
+    new GoalLibrary();
+    (new GoalFactory()).getInstance().populateGoalLibrary();
+    new ResourcePool();
+    (new ResourceFactory()).getInstance().populateResourcePool();
+    new JobAssignmentLibrary();
+    (new JobAssignmentFactory()).getInstance().populateJobAssignmentLibrary();
+    new ActuatorPool();
+    (new ActuatorFactory()).getInstance().populateActuatorPool();
+    new SensorPool();
+    (new SensorFactory()).getInstance().populateSensorPool();
+    new TaskFrameLibrary();
+    (new TaskFrameFactory()).getInstance().populateTaskFrameLibrary();
+    Assert.assertNotNull(TaskFrameLibrary.getInstance());
+    TaskFrame taskFrame = TaskFrameLibrary.getInstance().getTaskFrame(Action.CONVERSE_WITH_USER);
+    Assert.assertEquals(1, TaskFrameLibrary.getInstance().taskFrameDictionary.entrySet().size());
+    Assert.assertNotNull(taskFrame);
+    Assert.assertEquals("[TaskFrame task: converse with user goal: (not-null userInput)]", 
+                        taskFrame.toString());
+    Assert.assertNotNull(taskFrame.getTaskId());
+    Assert.assertTrue(taskFrame.getTaskId() instanceof UUID);
+    Assert.assertNotNull(taskFrame.getTaskName());
+    Assert.assertEquals("converse with user", taskFrame.getTaskName());
+    Assert.assertNotNull(taskFrame.getTaskAction());
+    Assert.assertEquals("[Action: converse with user( prompt: null)]", taskFrame.getTaskAction().toString());
+    List scheduleAlternatives = taskFrame.getScheduleAlternatives();
+    Assert.assertNotNull(scheduleAlternatives);
+    Assert.assertEquals(1, scheduleAlternatives.size());
+    List conditionalScheduleSets = (List) scheduleAlternatives.get(0);
+    Assert.assertNotNull(conditionalScheduleSets);
+    Assert.assertEquals(1, conditionalScheduleSets.size());
+    ConditionalScheduleSet conditionalScheduleSet = (ConditionalScheduleSet) conditionalScheduleSets.get(0);
+    Assert.assertEquals("[ConditionalScheduleSet condition: TRUE scheduleSet: [[Schedule [] actuator:  sensor: ]]]",  conditionalScheduleSet.toString());
+    
+    System.out.println("*** testTaskFrameLibrary OK ***");
+@
+
+
+1.8
+log
+@moved from org.opencyc.elf.bg.state to org.opencyc.elf.wm.state
+@
+text
+@d32 1
+a32 2
+/**
+ * Provides a suite of JUnit test cases for the org.opencyc.elf.wm package.
+d34 1
+a34 1
+ * @@version $Id: UnitTest.java,v 1.7 2003/09/16 23:24:05 stephenreed Exp $
+d69 1
+a69 2
+  /**
+   * Runs the unit tests
+d242 1
+a245 8
+    List actuatorNames = taskFrame.getActuatorNames();
+    Assert.assertNotNull(actuatorNames);
+    Assert.assertEquals(1, actuatorNames.size());
+    Assert.assertEquals("", actuatorNames.get(0));
+    List sensorNames = taskFrame.getSensorNames();
+    Assert.assertNotNull(sensorNames);
+    Assert.assertEquals(1, sensorNames.size());
+    Assert.assertEquals("", sensorNames.get(0));
+d252 4
+a255 1
+    List conditionalScheduleSets = taskFrame.getConditionalScheduleSets();
+d259 1
+a259 2
+    Assert.assertEquals("", 
+                        conditionalScheduleSet.toString());
+d281 1
+a281 1
+    Assert.assertEquals("[ConsoleInput resources: [[Resource: console]]]", 
+d292 1
+a292 3
+  /**
+   * the logger
+   */
+d297 2
+a298 2
+  /**
+   * Main method in case tracing is prefered over running JUnit.
+@
+
+
+1.7
+log
+@revised unit tests to accomodate conditional schedule set
+@
+text
+@a8 2
+import org.opencyc.elf.bg.state.StateVariable;
+
+d21 2
+d35 1
+a35 1
+ * @@version $Id: UnitTest.java,v 1.6 2003/09/14 13:58:04 stephenreed Exp $
+@
+
+
+1.6
+log
+@Changed ArrayList to List, consistently formatted one line comments. ----------------------------------------------------------------------
+@
+text
+@d11 1
+d35 1
+a35 1
+ * @@version $Id: WorldModel.java,v 1.11 2003/09/05 20:29:25 stephenreed Exp $
+d247 8
+a254 8
+    List actuators = taskFrame.getActuators();
+    Assert.assertNotNull(actuators);
+    Assert.assertEquals(1, actuators.size());
+    Assert.assertEquals("[ConsoleOutput resources: [[Resource: console]]]", actuators.get(0).toString());
+    List sensors = taskFrame.getSensors();
+    Assert.assertNotNull(sensors);
+    Assert.assertEquals(1, sensors.size());
+    Assert.assertEquals("[ConsoleInput resources: [[Resource: console]]]", sensors.get(0).toString());
+d261 6
+a266 8
+    List scheduleInfos = taskFrame.getScheduleInfos();
+    Assert.assertNotNull(scheduleInfos);
+    Assert.assertEquals(1, scheduleInfos.size());
+    TaskFrame.ScheduleInfo scheduleInfo = (TaskFrame.ScheduleInfo) scheduleInfos.get(0);
+    Assert.assertEquals("[ScheduleInfo schedule: [Schedule []] " +
+                        "actuator: [ConsoleOutput resources: [[Resource: console]]] " + 
+                        "sensor: [ConsoleInput resources: [[Resource: console]]]]", 
+                        scheduleInfo.toString());
+@
+
+
+1.5
+log
+@added unit test cases for wm library objects
+@
+text
+@d34 1
+a34 3
+ * <p></p>
+ * 
+ * @@version $Id: UnitTest.java,v 1.4 2003/09/05 15:59:21 stephenreed Exp $
+d214 1
+a214 1
+    ArrayList requiredResources = jobAssignment.getRequiredResources();
+d246 1
+a246 1
+    ArrayList actuators = taskFrame.getActuators();
+d250 1
+a250 1
+    ArrayList sensors = taskFrame.getSensors();
+d260 1
+a260 1
+    ArrayList scheduleInfos = taskFrame.getScheduleInfos();
+@
+
+
+1.4
+log
+@fixed StateVariable constructor to include type argument
+@
+text
+@d4 5
+d11 11
+d29 1
+d36 1
+a36 1
+ * @@version $Id: UnitTest.java,v 1.3 2003/09/04 13:46:40 stephenreed Exp $
+d73 1
+d80 8
+a87 1
+
+d91 1
+a91 3
+  /**
+   * Tests EntityFrame object behavior.
+   */
+a93 1
+
+a104 1
+
+a110 1
+
+a113 1
+
+a114 1
+
+a119 1
+
+a121 1
+
+d123 171
+@
+
+
+1.3
+log
+@introduced StateVariable to distinguish state variables from ordinary strings within predicate expressions
+@
+text
+@d19 1
+a19 1
+ * @@version $Id: UnitTest.java,v 1.2 2003/08/11 21:24:17 stephenreed Exp $
+d73 2
+a74 1
+    StateVariable stateVariable1 = new StateVariable("stateVariable1", 
+d84 2
+a85 1
+    StateVariable stateVariable2 = new StateVariable("stateVariable2", 
+@
+
+
+1.2
+log
+@Reinserted the LGPL license clause that was wrongly removed by the Jalopy
+indentation tool.
+@
+text
+@d3 4
+d9 2
+d19 1
+a19 1
+ * @@version $Id: UnitTest.java,v 1.1 2003/08/08 13:22:25 stephenreed Exp $
+d40 3
+a42 8
+  /**
+   * Main method in case tracing is prefered over running JUnit.
+   * @@param args DOCUMENT ME!
+   */
+  public static void main(String[] args) {
+    junit.textui.TestRunner.run(suite());
+  }
+
+d52 2
+d56 1
+a56 1
+   * @@return DOCUMENT ME!
+d59 1
+d73 2
+a74 1
+    Object stateVariable1 = new Object();
+d83 2
+a84 1
+    Object stateVariable2 = new Object();
+a88 10
+    String context = "context";
+    entityFrame2 = new EntityFrame(entityFrame1);
+    entityFrame1.getState().setContext(context);
+    Assert.assertEquals(context, entityFrame1.getState().getContext());
+    Assert.assertTrue(!entityFrame1.equals(entityFrame2));
+    entityFrame2.getState().setContext(context);
+    Assert.assertTrue(entityFrame1.equals(entityFrame2));
+    entityFrame2.getState().setContext("context2");
+    Assert.assertTrue(!entityFrame1.equals(entityFrame2));
+
+d106 22
+@
+
+
+1.1
+log
+@synchronized with work in progress.
+@
+text
+@d13 19
+a31 2
+ * @@version $Id: UnitTest.java,v 1.48 2002/12/06 00:12:27 stephenreed Exp $
+ * @@author Stephen L. Reed <p><p><p><p><p>
+@
+

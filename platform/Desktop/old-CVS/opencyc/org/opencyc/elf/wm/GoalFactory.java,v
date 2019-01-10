@@ -1,0 +1,374 @@
+head	1.11;
+access;
+symbols
+	PRE_1_0:1.11;
+locks; strict;
+comment	@# @;
+
+
+1.11
+date	2003.10.20.15.21.51;	author stephenreed;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2003.10.06.05.15.22;	author stephenreed;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2003.10.01.00.10.25;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2003.09.22.02.30.03;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2003.09.18.21.22.57;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2003.09.17.16.53.51;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2003.09.16.23.22.46;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2003.09.14.13.58.04;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2003.09.08.17.39.05;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2003.09.05.21.15.21;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2003.09.05.19.24.43;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.11
+log
+@moved commands to org.opencyc.elf.bg.command package
+@
+text
+@package org.opencyc.elf.wm;
+
+//// Internal Imports
+import org.opencyc.elf.bg.command.Parameter;
+import org.opencyc.elf.bg.predicate.NotNull;
+import org.opencyc.elf.bg.predicate.Predicate;
+import org.opencyc.elf.bg.predicate.PredicateExpression;
+import org.opencyc.elf.goal.Goal;
+import org.opencyc.elf.goal.GoalTime;
+import org.opencyc.elf.goal.Importance;
+import org.opencyc.elf.wm.state.StateVariable;
+
+//// External Imports
+import java.util.ArrayList;
+import java.util.List;
+
+/** GoalFactory is designed to create goals.  There is a singleton instance of goal factory.
+ *
+ * <P>Copyright (c) 2003 Cycorp, Inc.  All rights reserved.
+ * <BR>This software is the proprietary information of Cycorp, Inc.
+ * <P>Use is subject to license terms.
+ *
+ * @@author Stephen L. Reed  
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * @@version $Id: GoalFactory.java,v 1.10 2003/10/06 05:15:22 stephenreed Exp $
+ */
+public class GoalFactory {
+  
+  //// Constructors
+  
+  /** Creates a new instance of GoalFactory and stores it in the singleton instance. */
+  public GoalFactory() {
+    goalFactory = this;
+  }
+  
+  //// Public Area
+  
+  /** Gets the singleton goal factory instance.
+   *
+   * @@return the singleton goal factory instance
+   */
+  public static GoalFactory getInstance () {
+    return goalFactory;
+  }
+  
+  /** Populates the goal library. */
+  public void populateGoalLibrary() {
+    // perceived sensation
+    String name = Goal.PERCEIVE_SENSATION;
+    Parameter parameter = new Parameter(Parameter.USER_INPUT,  String.class);
+    PredicateExpression predicateExpression = 
+      new PredicateExpression((Predicate)NotNull.getInstance(),
+                              parameter);
+    List failurePredicateExpressions = new ArrayList();
+    Importance importance = new Importance(Importance.NEUTRAL);
+    GoalTime goalTime = new GoalTime(GoalTime.TEN_MINUTES, 0);
+    List inputParameters = new ArrayList();
+    inputParameters.add(parameter);
+    Goal goal = new Goal(name, 
+                         predicateExpression,
+                         failurePredicateExpressions,
+                         importance,
+                         goalTime,
+                         inputParameters);
+    GoalLibrary.getInstance().setGoal(name,goal); 
+  }
+  
+  //// Protected Area
+  
+  //// Private Area
+  
+  //// Internal Rep
+  
+  /** the singleton goal factory instance */
+  protected static GoalFactory goalFactory;
+  
+  //// Main
+  
+}
+@
+
+
+1.10
+log
+@refactored Action and Goal to include Parameter
+@
+text
+@d4 1
+a7 1
+import org.opencyc.elf.bg.taskframe.Parameter;
+d41 1
+a41 1
+ * @@version $Id: GoalFactory.java,v 1.9 2003/10/01 00:10:25 stephenreed Exp $
+@
+
+
+1.9
+log
+@refactoring of Predicate
+@
+text
+@d7 1
+a7 1
+
+d9 1
+a10 1
+
+d14 2
+d41 1
+a41 1
+ * @@version $Id: GoalFactory.java,v 1.8 2003/09/22 02:30:03 stephenreed Exp $
+d64 18
+a81 14
+    // get input from user
+    Goal goal = new Goal();
+    goal.setName(Goal.GET_USER_INPUT);
+    goal.setPredicateExpression(new PredicateExpression((Predicate)NotNull.getInstance(),
+                                                        StateVariable.USER_INPUT));
+    goal.setImportance(new Importance(Importance.NEUTRAL));
+    GoalLibrary.getInstance().setGoal(goal.getName(), goal);
+    // get console prompted input
+    goal = new Goal();
+    goal.setName(Goal.GET_CONSOLE_PROMPTED_INPUT);
+    goal.setPredicateExpression(new PredicateExpression((Predicate)NotNull.getInstance(),
+                                                        StateVariable.CONSOLE_INPUT));
+    goal.setImportance(new Importance(Importance.NEUTRAL));
+    GoalLibrary.getInstance().setGoal(goal.getName(), goal);
+@
+
+
+1.8
+log
+@fixed compilation errors resulting from messages construct signature change
+@
+text
+@d5 1
+d39 1
+a39 1
+ * @@version $Id: GoalFactory.java,v 1.7 2003/09/18 21:22:57 stephenreed Exp $
+d65 1
+a65 1
+    goal.setPredicateExpression(new PredicateExpression(NotNull.getInstance(),
+d72 1
+a72 1
+    goal.setPredicateExpression(new PredicateExpression(NotNull.getInstance(),
+@
+
+
+1.7
+log
+@/home/reed/opencyc/org/opencyc/elf
+removed equals(...)  method if present and reformatted multiline comments to one less line
+@
+text
+@d38 1
+a38 1
+ * @@version $Id: GoalFactory.java,v 1.6 2003/09/17 16:53:51 stephenreed Exp $
+d63 1
+a63 1
+    goal.setGoalName(Goal.GET_USER_INPUT);
+d67 1
+a67 1
+    GoalLibrary.getInstance().setGoal(goal.getGoalName(), goal);
+d70 1
+a70 1
+    goal.setGoalName(Goal.GET_CONSOLE_PROMPTED_INPUT);
+d74 1
+a74 1
+    GoalLibrary.getInstance().setGoal(goal.getGoalName(), goal);
+@
+
+
+1.6
+log
+@moved from org.opencyc.elf.bg.state to org.opencyc.elf.wm.state
+@
+text
+@d14 1
+a14 2
+/**
+ * GoalFactory is designed to create goals.  There is a singleton instance of goal factory.
+d38 1
+a38 1
+ * @@version $Id: GoalFactory.java,v 1.5 2003/09/16 23:22:46 stephenreed Exp $
+d51 1
+a51 2
+  /**
+   * Gets the singleton goal factory instance.
+d59 1
+a59 3
+  /**
+   * Populates the goal library.
+   */
+@
+
+
+1.5
+log
+@changed import of PredicateExpression becuase it moved
+@
+text
+@a6 2
+import org.opencyc.elf.bg.state.StateVariable;
+
+d10 2
+d39 1
+a39 1
+ * @@version $Id: GoalFactory.java,v 1.4 2003/09/14 13:58:04 stephenreed Exp $
+@
+
+
+1.4
+log
+@Changed ArrayList to List, consistently formatted one line comments. ----------------------------------------------------------------------
+@
+text
+@d5 1
+a10 1
+import org.opencyc.elf.goal.PredicateExpression;
+d39 1
+a39 1
+ * @@version $Id: GoalFactory.java,v 1.3 2003/09/08 17:39:05 stephenreed Exp $
+@
+
+
+1.3
+log
+@added populateGoalLibary() method
+@
+text
+@a12 1
+import java.util.ArrayList;
+d39 1
+a39 1
+ * @@version $Id: GoalFactory.java,v 1.2 2003/09/05 21:15:21 stephenreed Exp $
+d87 1
+a87 3
+  /**
+   * the singleton goal factory instance
+   */
+@
+
+
+1.2
+log
+@/home/reed/opencyc/org/opencyc/elf/wm
+better handling of the singleton instance
+@
+text
+@d16 1
+a16 1
+ * GoalFactory is designed to create goals.  There is a singleton instance.
+d40 1
+a40 1
+ * @@version $Id: GoalFactory.java,v 1.1 2003/09/05 19:24:43 stephenreed Exp $
+d63 1
+a63 1
+   * Makes a new console prompted input goal that achieves a string return value.
+d65 2
+a66 1
+  public Goal makeConsolePromptedInput () {
+d68 1
+d70 1
+a70 1
+                                                        StateVariable.CONSOLE_PROMPT));
+d72 9
+a80 2
+    return goal;
+  }  
+@
+
+
+1.1
+log
+@moved from goal to wm package
+@
+text
+@d40 1
+a40 1
+ * @@version $Id: GoalFactory.java,v 1.4 2003/09/05 18:16:10 stephenreed Exp $
+d46 1
+a46 1
+  /** Creates a new instance of GoalFactory. */
+@
+

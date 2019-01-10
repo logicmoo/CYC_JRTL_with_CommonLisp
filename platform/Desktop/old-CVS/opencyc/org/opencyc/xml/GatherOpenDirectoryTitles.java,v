@@ -1,0 +1,775 @@
+head	1.6;
+access;
+symbols
+	PRE_1_0:1.4;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2006.10.21.17.01.59;	author dmiles;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2006.10.18.14.21.30;	author dmiles;	state dead;
+branches;
+next	1.4;
+
+1.4
+date	2002.10.09.04.01.57;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2002.10.01.15.21.15;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2002.10.01.02.05.02;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2002.09.30.14.33.29;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental classes.
+@
+text
+@package org.opencyc.xml;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.UnknownHostException;
+import java.util.HashMap;
+
+import org.opencyc.api.CycApiException;
+import org.opencyc.cycobject.CycFort;
+import org.opencyc.util.Log;
+import org.xml.sax.SAXException;
+
+import ViolinStrings.Strings;
+
+import com.hp.hpl.jena.rdf.arp.ALiteral;
+import com.hp.hpl.jena.rdf.arp.ARP;
+import com.hp.hpl.jena.rdf.arp.AResource;
+import com.hp.hpl.jena.rdf.arp.ParseException;
+import com.hp.hpl.jena.rdf.arp.StatementHandler;
+import com.hp.hpl.jena.rdf.model.Resource;
+import com.hp.hpl.jena.rdf.model.impl.ResourceImpl;
+
+/**
+ * Gathers Open Directory Titles and constructs a dictionary associating
+ * topic resource IDs with their titles.<p>
+ * <p>
+ * The Another RDF Parser (ARP) is used to parse the input DAML document.
+ * This class implements statement callbacks from ARP. Each triple in the
+ * input file causes a call on one of the statement methods.
+ * The same triple may occur more than once in a file, causing repeat calls
+ * to the method.
+ *
+ * @@version $Id: GatherOpenDirectoryTitles.java,v 1.4 2002/10/09 04:01:57 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class GatherOpenDirectoryTitles implements StatementHandler {
+
+    /**
+     * The default verbosity of this application.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    public static final int DEFAULT_VERBOSITY = 2;
+
+    /**
+     * Sets verbosity of this application.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    protected int verbosity = DEFAULT_VERBOSITY;
+
+    /**
+     * Another RDF Parser instance.
+     */
+    protected ARP arp;
+
+    /**
+     * Ontology library nicknames, which become namespace identifiers
+     * upon import into Cyc.
+     * namespace uri --> ontologyNickname
+     */
+    protected HashMap ontologyNicknames;
+
+    /**
+     * Previously imported term used to avoid redundant assertions.
+     */
+    protected DamlTermInfo previousDamlTermInfo = null;
+
+    /**
+     * URL string which defines the imported daml ontology
+     */
+    protected String damlOntologyDefiningURLString;
+
+    /**
+     * URL which defines the imported daml ontology
+     */
+    protected CycFort damlOntologyDefiningURL;
+
+    /**
+     * Dictionary of category identifiers and Open Directory
+     * topic strings.  The topic strings are not valid XML names
+     * and will be imported into Cyc as functionally wrapped strings.
+     */
+    public HashMap odpTitles = new HashMap();
+
+    /**
+     * Constructs a new GatherOpenDirectoryTitles object.
+     *
+     * @@param cycAccess the CycAccess instance which manages the connection
+     * to the Cyc server and provides Cyc API services
+     * @@param ontologyNicknames the dictionary associating each ontology uri with
+     * the nickname used for the Cyc namespace qualifier
+     */
+    public GatherOpenDirectoryTitles(HashMap ontologyNicknames) {
+        this.ontologyNicknames = ontologyNicknames;
+        arp = new ARP();
+        arp.setStatementHandler(this);
+    }
+
+    /**
+     * Parses and imports the given DAML URL.
+     *
+     * @@param damlOntologyDefiningURLString the URL to import
+     * @@param importMtName the microtheory into which DAML content is asserted
+     */
+    protected void gatherTitles (String damlOntologyDefiningURLString)
+        throws IOException {
+        this.damlOntologyDefiningURLString = damlOntologyDefiningURLString;
+        if (verbosity > 0)
+            Log.current.println("\nGathering titles from " + damlOntologyDefiningURLString);
+        InputStream in;
+        URL url;
+        try {
+            File ff = new File(damlOntologyDefiningURLString);
+            in = new FileInputStream(ff);
+            url = ff.toURL();
+        }
+        catch (Exception ignore) {
+            try {
+                url = new URL(damlOntologyDefiningURLString);
+                in = url.openStream();
+            }
+            catch (Exception e) {
+                System.err.println("ARP: Failed to open: " + damlOntologyDefiningURLString);
+                System.err.println("    " + ParseException.formatMessage(ignore));
+                System.err.println("    " + ParseException.formatMessage(e));
+                return;
+            }
+        }
+        try {
+            arp.load(in, url.toExternalForm());
+        }
+        catch (IOException e) {
+            System.err.println("Error: " + damlOntologyDefiningURLString + ": " + ParseException.formatMessage(e));
+        }
+        catch (SAXException sax) {
+            System.err.println("Error: " + damlOntologyDefiningURLString + ": " + ParseException.formatMessage(sax));
+        }
+        if (verbosity > 0)
+            Log.current.println("\nDone gathering " +
+                                odpTitles.size() + " titles from " +
+                                damlOntologyDefiningURLString + "\n");
+    }
+
+    /**
+     * Provides the ARP statement handler for triple having an Object.
+     *
+     * @@param subject the RDF Triple Subject
+     * @@param predicate the RDF Triple Predicate
+     * @@param object the RDF Triple Object
+     */
+    public void statement(AResource subject, AResource predicate, AResource object) {
+        try {
+            if (subject.isAnonymous()) {
+                return;
+            }
+            if (object.isAnonymous()) {
+                return;
+            }
+            DamlTermInfo subjectTermInfo = resource(subject, null);
+            DamlTermInfo predicateTermInfo = resource(predicate, null);
+            DamlTermInfo objectTermInfo = resource(object, predicateTermInfo);
+            if (verbosity > 3)
+                displayTriple(subjectTermInfo,
+                              predicateTermInfo,
+                              objectTermInfo);
+
+            examineTriple(subjectTermInfo,
+                          predicateTermInfo,
+                          objectTermInfo);
+        }
+        catch (Exception e) {
+            Log.current.errorPrintln(e.getMessage());
+            Log.current.printStackTrace(e);
+        }
+    }
+
+    /**
+     * Provides the ARP statement handler for triple having an Literal.
+     *
+     * @@param subject the RDF Triple Subject
+     * @@param predicate the RDF Triple Predicate
+     * @@param literal the RDF Triple Literal
+     */
+    public void statement(AResource subject, AResource predicate, ALiteral literal) {
+        try {
+            if (! subject.isAnonymous()) {
+                DamlTermInfo subjectTermInfo = resource(subject, null);
+                DamlTermInfo predicateTermInfo = resource(predicate, null);
+                DamlTermInfo literalTermInfo = literal(literal);
+
+                if (verbosity > 3)
+                    displayTriple(subjectTermInfo,
+                                  predicateTermInfo,
+                                  literalTermInfo);
+
+                examineTriple(subjectTermInfo,
+                             predicateTermInfo,
+                             literalTermInfo);
+            }
+        }
+        catch (Exception e) {
+            Log.current.errorPrintln(e.getMessage());
+            Log.current.printStackTrace(e);
+        }
+    }
+
+    /**
+     * Examines the RDF triple and gathers the topic titles.
+     *
+     * @@param subjectTermInfo the subject DamlTermInfo object
+     * @@param predicateTermInfo the predicate DamlTermInfo object
+     * @@param objLitTermInfo the object or literal DamlTermInfo object
+     */
+    protected void examineTriple (DamlTermInfo subjectTermInfo,
+                                  DamlTermInfo predicateTermInfo,
+                                  DamlTermInfo objLitTermInfo)
+        throws IOException, UnknownHostException, CycApiException {
+        if (predicateTermInfo.isURI)
+            predicateTermInfo.coerceToNamespace();
+        String damlPredicate = predicateTermInfo.toString();
+        if (damlPredicate.equals("rdfs:label")) {
+            String dmozId = subjectTermInfo.toString();
+            String topic = objLitTermInfo.toOriginalString();
+            topic = Strings.stripLeading(topic, '"');
+            topic = Strings.stripTrailing(topic, '"');
+            odpTitles.put(dmozId, topic);
+            if (verbosity > 2)
+                Log.current.println(dmozId + " --> " + topic);
+        }
+    }
+
+    /**
+     * Returns the given string argument with embedded double quote characters
+     * escaped.
+     *
+     * @@param string the given string
+     * @@return the given string argument with embedded double quote characters
+     * escaped
+     */
+    protected String escaped (String text) {
+        String result = Strings.change(text, "\"", "\\\"");
+        result = Strings.change(result, "\n", " ");
+        result = Strings.change(result, "\r", " ");
+        return result;
+    }
+
+    /**
+     * Displays the RDF triple.
+     *
+     * @@param subjectTermInfo the subject DamlTermInfo object
+     * @@param predicateTermInfo the predicate DamlTermInfo object
+     * @@param objLitTermInfo the object or literal DamlTermInfo object
+     */
+    protected void displayTriple (DamlTermInfo subjectTermInfo,
+                                  DamlTermInfo predicateTermInfo,
+                                  DamlTermInfo objLitTermInfo) {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append(subjectTermInfo.toOriginalString());
+        stringBuffer.append(" ");
+        stringBuffer.append(predicateTermInfo.toOriginalString());
+        stringBuffer.append(" ");
+        stringBuffer.append(objLitTermInfo.toOriginalString());
+        Log.current.println(stringBuffer.toString());
+    }
+
+    /**
+     * Returns the DamlTerm info of the given RDF resource.
+     *
+     * @@param aResource the RDF resource
+     * @@param predicateTermInfo when processing the RDF triple object,
+     * contains the predicate term info, otherwise is null;
+     * @@return the DamlTerm info of the given RDF resource
+     */
+    protected DamlTermInfo resource(AResource aResource,
+                                    DamlTermInfo predicateTermInfo) {
+        DamlTermInfo damlTermInfo = new DamlTermInfo(this);
+        String localName;
+        String nameSpace;
+        Resource resource = translateResource(aResource);
+        damlTermInfo.uri = resource.toString();
+        if (aResource.isAnonymous()) {
+            damlTermInfo.isAnonymous = true;
+            damlTermInfo.anonymousId = aResource.getAnonymousID();
+            return damlTermInfo;
+        }
+        else if (aResource.getURI().indexOf("?") > -1) {
+            damlTermInfo.isURI = false;
+            int index = aResource.getURI().indexOf("?");
+            localName = aResource.getURI().substring(index + 1);
+            nameSpace = aResource.getURI().substring(0, index + 1);
+        }
+        else if (! hasUriNamespaceSyntax(aResource.getURI())) {
+            damlTermInfo.isURI = true;
+            if (! damlTermInfo.mustBeUri(predicateTermInfo))
+                damlTermInfo.coerceToNamespace();
+            return damlTermInfo;
+        }
+        else {
+            localName = resource.getLocalName();
+            nameSpace = resource.getNameSpace();
+        }
+        if (localName == null ||
+            nameSpace == null)
+            throw new RuntimeException("Invalid nameSpace " + nameSpace +
+                                       " localName " + localName +
+                                       " for resource " + resource.toString());
+        damlTermInfo.localName = localName;
+        damlTermInfo.nameSpace = nameSpace;
+        String ontologyNickname = getOntologyNickname(nameSpace, resource);
+        damlTermInfo.ontologyNickname = ontologyNickname;
+        String constantName = ontologyNickname + ":" + localName;
+        damlTermInfo.constantName = constantName;
+        return damlTermInfo;
+    }
+
+    /**
+     * Returns the DamlTerm info of the given RDF literal.
+     *
+     * @@param literal the RDF literal
+     * @@return the DamlTerm info of the given RDF literal
+     */
+    protected DamlTermInfo literal(ALiteral literal) {
+        DamlTermInfo damlTermInfo = new DamlTermInfo(this);
+        String literalString = literal.toString();
+        if (this.isProbableUri(literalString)) {
+            damlTermInfo.isURI = true;
+            damlTermInfo.uri = literalString;
+        }
+        else {
+            damlTermInfo.isLiteral = true;
+            damlTermInfo.literal = literalString;
+        }
+        return damlTermInfo;
+    }
+
+    /**
+     * Returns true if the given string is likely to be a URI.
+     *
+     * @@param string the given string
+     * @@return true if the given string is likely to be a URI
+     */
+    protected boolean isProbableUri (String string) {
+        return
+            string.startsWith("http://") ||
+            string.startsWith("https://") ||
+            string.startsWith("ftp://") ||
+            string.startsWith("file:/") ||
+            string.startsWith("urn:");
+    }
+
+    /**
+     * Returns true if the given URI has embedded XML namespace separators.
+     *
+     * @@param uri the URI
+     * @@return true if the given URI has embedded XML namespace separators, otherwise
+     * false
+     */
+    protected boolean hasUriNamespaceSyntax (String uri) {
+        return (uri.indexOf(":", 9) > -1) || (uri.indexOf("#") > -1);
+    }
+
+    /**
+     * Returns the ontology nickname for the given XML namespace.
+     *
+     * @@param nameSpace the XML namespace for which the nickname is sought
+     * @@param resource the resource containing the namespace, used for error messages
+     * @@return the ontology nickname for the given XML namespace
+     */
+    protected String getOntologyNickname (String nameSpace, Resource resource) {
+        int len = nameSpace.length() - 1;
+        String key = nameSpace.substring(0, len);
+        String nickname = (String) ontologyNicknames.get(key);
+        if (nickname == null) {
+            if (verbosity > 2)
+                Log.current.println("\n*** Ontology nickname not found for " + key +
+                                    "\nResource " + resource.toString());
+            nickname = "unknown";
+        }
+        return nickname;
+    }
+
+    /**
+     * Converts an ARP resource into a Jena resource.
+     *
+     * @@param aResource The ARP resource.
+     * @@return The Jena resource.
+     */
+    protected Resource translateResource(AResource aResource) {
+        if (aResource.isAnonymous()) {
+            String id = aResource.getAnonymousID();
+            Resource rr = (Resource) aResource.getUserData();
+            if (rr == null) {
+                rr = new ResourceImpl();
+                aResource.setUserData(rr);
+            }
+            return rr;
+        }
+        else
+            return new ResourceImpl(aResource.getURI());
+    }
+
+    /**
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     *
+     * @@param verbosity 0 --> quiet ... 9 -> maximum diagnostic input
+     */
+    public void setVerbosity(int verbosity) {
+        this.verbosity = verbosity;
+    }
+
+    /**
+     * Records the DAML term information for Cyc import.
+     */
+    protected class DamlTermInfo {
+        GatherOpenDirectoryTitles parent;
+        boolean isAnonymous = false;
+        boolean isURI = false;
+        boolean isLiteral = false;
+        String anonymousId;
+        String nameSpace;
+        String ontologyNickname;
+        String localName;
+        String constantName;
+        String uri;
+        String literal;
+        String equivalentDamlCycTerm;
+        CycFort cycFort;
+
+        /**
+         * Constructs a new DamlTermInfo object.
+         */
+        public DamlTermInfo(GatherOpenDirectoryTitles parent) {
+            this.parent = parent;
+        }
+
+        /**
+         * Returns <tt>true</tt> some object equals this object
+         *
+         * @@param object the <tt>Object</tt> for equality comparison
+         * @@return equals <tt>boolean</tt> value indicating equality or non-equality.
+         */
+        public boolean equals(Object object) {
+            if (! (object instanceof DamlTermInfo))
+                return false;
+            return this.toString().equals(object.toString());
+        }
+
+        /**
+         * Returns a non-substituted string representation of this object.
+         *
+         * @@return a non-substituted string representation of this object
+         */
+        public String toOriginalString() {
+            if (equivalentDamlCycTerm == null)
+                return this.toString();
+            else
+                return constantName;
+        }
+
+        /**
+         * Returns a string representation of this object.
+         *
+         * @@return a string representation of this object
+         */
+        public String toString() {
+            if (isAnonymous)
+                return "anon-" + anonymousId;
+            else if (isURI)
+                return uri;
+            else if (isLiteral)
+                return "\"" + literal + "\"";
+            else if (equivalentDamlCycTerm != null)
+                return equivalentDamlCycTerm;
+            else
+                return constantName;
+        }
+
+        /**
+         * Returns the literal value of this object.
+         *
+         * @@return the literal value of this object
+         */
+        public String literalValue() {
+            if (isLiteral)
+                return literal;
+            else
+                throw new RuntimeException(this.toString() + " is not a literal");
+        }
+
+        /**
+         * Coerces a namespace:localname from the URI.
+         * For example, http://xmlns.com/foaf/0.1/Person -->
+         * http://xmlns.com/foaf/0.1#Person
+         */
+        public void coerceToNamespace() {
+            int index = uri.lastIndexOf("/");
+            nameSpace = uri.substring(0, index);
+            localName = uri.substring(index + 1);
+            if (localName.equals(""))
+                return;
+            ontologyNickname = (String) ontologyNicknames.get(nameSpace);
+            if (ontologyNickname == null) {
+                Log.current.println("*** nickname not found for " + nameSpace +
+                                    "\nuri " + uri);
+                ontologyNickname = "unknown";
+            }
+            constantName = ontologyNickname + ":" + localName;
+            isURI = false;
+        }
+
+        /**
+         * Returns true if the uri does not represent an RDF
+         * object.  Heuristic patterns are used.
+         *
+         * @@param predicateTermInfo when present indicates that this
+         * is the object of the RDF triple
+         * @@return true if the uri does not represent an RDF
+         * object
+         */
+        public boolean mustBeUri(DamlTermInfo predicateTermInfo) {
+            if (predicateTermInfo != null) {
+                if (predicateTermInfo.toString().equals("daml:imports") ||
+                    predicateTermInfo.toString().equals("rdfs:isDefinedBy") ||
+                    predicateTermInfo.toString().equals("rdfs:seeAlso"))
+                    return true;
+            }
+            if (parent.ontologyNicknames.containsKey(uri))
+                return true;
+            if (uri.endsWith(".daml") ||
+                uri.startsWith("news:") ||
+                (uri.indexOf("daml+oil") > -1))
+                return true;
+            return false;
+        }
+
+        /**
+         * Returns true if this term has an equivalent existing Cyc term.
+         *
+         * @@return true if this term has an equivalent existing Cyc term
+         */
+        public boolean hasEquivalentCycTerm () {
+            return equivalentDamlCycTerm != null;
+        }
+    }
+
+
+
+
+}@
+
+
+1.5
+log
+@This is the Additional Content to Create OpenCyc-1.0.1
+@
+text
+@d3 13
+a15 11
+import java.io.*;
+import java.net.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import org.xml.sax.*;
+import com.hp.hpl.jena.rdf.arp.*;
+import com.hp.hpl.mesa.rdf.jena.common.*;
+import com.hp.hpl.mesa.rdf.jena.model.*;
+import org.opencyc.api.*;
+import org.opencyc.cycobject.*;
+import org.opencyc.util.*;
+d18 8
+@
+
+
+1.4
+log
+@Improved SONAT import after refactoring.
+@
+text
+@d26 1
+a26 1
+ * @@version $Id: GatherOpenDirectoryTitles.java,v 1.3 2002/10/01 15:21:15 stephenreed Exp $
+@
+
+
+1.3
+log
+@Improved handling of lexical entries for imported DAML terms.
+@
+text
+@d26 1
+a26 1
+ * @@version $Id: GatherOpenDirectoryTitles.java,v 1.2 2002/10/01 02:05:02 stephenreed Exp $
+d149 3
+a151 1
+            Log.current.println("\nDone gathering titles from " + damlOntologyDefiningURLString + "\n");
+@
+
+
+1.2
+log
+@Improving representation of the Open Directory DAML import.
+@
+text
+@d26 1
+a26 1
+ * @@version $Id: GatherOpenDirectoryTitles.java,v 1.1 2002/09/30 14:33:29 stephenreed Exp $
+d89 7
+d170 5
+a174 5
+            /*
+            displayTriple(subjectTermInfo,
+                          predicateTermInfo,
+                          objectTermInfo);
+            */
+d198 6
+a203 5
+                /*
+                displayTriple(subjectTermInfo,
+                              predicateTermInfo,
+                              literalTermInfo);
+                */
+d232 5
+a236 1
+            Log.current.println(dmozId + " --> " + topic);
+@
+
+
+1.1
+log
+@Refactored DAML import classes to permit specialization for
+the Open Directory DAML import.
+@
+text
+@d26 1
+a26 1
+ * @@version $Id: ImportDaml.java,v 1.33 2002/09/27 15:09:48 stephenreed Exp $
+d53 1
+a53 1
+    public static final int DEFAULT_VERBOSITY = 3;
+a66 6
+     * Cyc terms which have semantic counterparts in DAML.
+     * DAML term --> Cyc term
+     */
+    protected static HashMap equivalentDamlCycTerms;
+
+    /**
+a94 2
+     * @@param kbSubsetCollectionName the name of the Cyc KbSubsetCollection
+     * which identifies each of the imported terms
+d96 1
+a96 2
+    public GatherOpenDirectoryTitles(HashMap ontologyNicknames,
+                                     HashMap equivalentDamlCycTerms) {
+a97 1
+        this.equivalentDamlCycTerms = equivalentDamlCycTerms;
+d109 1
+a109 1
+        throws IOException, CycApiException {
+d163 1
+d167 4
+a170 3
+            importTriple(subjectTermInfo,
+                         predicateTermInfo,
+                         objectTermInfo);
+d191 1
+d195 2
+a196 2
+
+                importTriple(subjectTermInfo,
+d208 1
+a208 1
+     * Imports the RDF triple.
+d214 1
+a214 1
+    protected void importTriple (DamlTermInfo subjectTermInfo,
+d221 4
+a224 17
+        if (! subjectTermInfo.hasEquivalentCycTerm()) {
+            if (damlPredicate.equals("isa")) {
+
+
+
+
+                return;
+            }
+            if (damlPredicate.equals("nameString")) {
+
+
+
+
+
+
+                return;
+            }
+a308 5
+        if (equivalentDamlCycTerms.containsKey(constantName))
+            damlTermInfo.equivalentDamlCycTerm =
+                (String) equivalentDamlCycTerms.get(constantName);
+        else if (ontologyNickname.equals("xsd"))
+            Log.current.println("\n*** unhandled primitive datatype: " + constantName + "\n");
+d370 3
+a372 2
+            Log.current.println("\n*** Ontology nickname not found for " + key +
+                                "\nResource " + resource.toString());
+@
+

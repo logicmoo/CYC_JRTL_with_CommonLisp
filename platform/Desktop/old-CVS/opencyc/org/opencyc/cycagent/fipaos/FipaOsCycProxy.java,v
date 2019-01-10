@@ -1,0 +1,208 @@
+head	1.6;
+access;
+symbols
+	PRE_1_0:1.6;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2001.12.05.03.47.59;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2001.12.03.02.51.37;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2001.12.02.23.32.01;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2001.11.30.07.25.22;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2001.11.26.22.03.47;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2001.11.21.18.05.51;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@Continued FIPA-OS Cyc-API testing
+@
+text
+@package org.opencyc.cycagent.fipaos;
+
+import org.opencyc.cycagent.*;
+
+/**
+ * Provides a proxy for a cyc agent on the FIPA-OS agent community.<p>
+ *
+ * An instance of this class is created for each unique cyc agent which makes
+ * itself known to the agent manager.  A cyc image can host one or more cyc
+ * agents.  Each message envelope from a cyc agent contains a parameter to
+ * indicate which agent agent community processes the messge - either the CoABS
+ * grid (Darpa & gov) or the FIPA-OS platform (OpenCyc).
+ *
+ * @@version $Id: FipaOsCycProxy.java,v 1.5 2001/12/03 02:51:37 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+public class FipaOsCycProxy {
+
+    /**
+     * the CycProxy instance.
+     */
+    CycProxy cycProxy;
+
+    /**
+     * Constructs a FipaOsCycProxy object.
+     *
+     * @@param myAgentName name of the local agent
+     * @@param verbosity the verbosity of this agent adapter's output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input
+     */
+    public FipaOsCycProxy (String myAgentName, int verbosity) {
+        cycProxy = new CycProxy(myAgentName,
+                                AgentCommunityAdapter.FIPA_OS_AGENT_COMMUNITY,
+                                verbosity);
+    }
+
+    /**
+     * Provides the main method.
+     */
+    public static void main(String[] args) {
+        if(args == null || args.length < 2) {
+            System.out.println("Usage: java org.opencyc.cycagent.fipaos.FipaOsCycProxy <platform.profile> <name>" );
+            return;
+        }
+        FipaOsCommunityAdapter.platform_profile = args[0];
+        FipaOsCycProxy fipaOsCycProxy =
+             //new FipaOsCycProxy(args[1], AgentCommunityAdapter.QUIET_VERBOSITY);
+             new FipaOsCycProxy(args[1], AgentCommunityAdapter.MAX_VERBOSITY);
+        fipaOsCycProxy.cycProxy.initializeAgentCommunity();
+        while (true)
+            // Keep root thread running with minimal resource consumption, while awaiting
+            // cyc api requests.
+            try {
+                Thread.sleep(1000);
+            }
+            catch (InterruptedException e) {
+                break;
+            }
+        fipaOsCycProxy.cycProxy.getFipaOsCommunityAdapter().deregister();
+        System.exit(0);
+    }
+
+}@
+
+
+1.5
+log
+@Continued testing FIPA-OS code
+@
+text
+@d14 1
+a14 1
+ * @@version $Id: FipaOsCycProxy.java,v 1.4 2001/12/02 23:32:01 stephenreed Exp $
+d66 1
+@
+
+
+1.4
+log
+@Continued testing FIPA-OS agent integration
+@
+text
+@d14 1
+a14 1
+ * @@version $Id: FipaOsCycProxy.java,v 1.3 2001/11/30 07:25:22 stephenreed Exp $
+d65 2
+a66 2
+        FipaOsCycProxy fipaOsCycProxy = new FipaOsCycProxy(args[1],
+                                                           AgentCommunityAdapter.MAX_VERBOSITY);
+@
+
+
+1.3
+log
+@Coding FIPA-OS support
+@
+text
+@d14 1
+a14 1
+ * @@version $Id: FipaOsCycProxy.java,v 1.2 2001/11/26 22:03:47 stephenreed Exp $
+d60 2
+a61 2
+        if( args == null || args.length < 2 ) {
+            System.out.println( "Usage: java org.opencyc.cycagent.fipaos.FipaOsCycProxy <platform.profile> <name>" );
+d65 2
+a66 1
+        FipaOsCycProxy fipaOsCycProxy = new FipaOsCycProxy(args[1], AgentCommunityAdapter.MAX_VERBOSITY);
+@
+
+
+1.2
+log
+@More code for Cyc client agents
+@
+text
+@d14 1
+a14 1
+ * @@version $Id: FipaOsCycProxy.java,v 1.1 2001/11/21 18:05:51 stephenreed Exp $
+d60 6
+a65 2
+        FipaOsCycProxy fipaOsCycProxy =
+            new FipaOsCycProxy("Agent1", AgentCommunityAdapter.QUIET_VERBOSITY);
+@
+
+
+1.1
+log
+@Refactored CycProxy class
+@
+text
+@d14 1
+a14 1
+ * @@version $Id: CycProxy.java,v 1.5 2001/11/21 05:34:01 stephenreed Exp $
+d52 1
+a52 1
+                                AgentCommunityAdapter.FIPA_OS_AGENT_COMMUNTITY,
+d72 1
+a72 1
+        fipaOsCycProxy.cycProxy.getAgentCommunityAdapter().deregister();
+@
+

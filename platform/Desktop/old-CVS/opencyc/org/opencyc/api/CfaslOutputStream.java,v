@@ -1,0 +1,4014 @@
+head	1.22;
+access;
+symbols
+	BRANCH_OPENCYC_1_0_1:1.21.0.2
+	OPENCYC_1_0_1:1.21
+	PRE_1_0:1.19;
+locks; strict;
+comment	@# @;
+
+
+1.22
+date	2006.10.21.16.49.15;	author dmiles;	state Exp;
+branches;
+next	1.21;
+
+1.21
+date	2006.10.18.14.21.33;	author dmiles;	state Exp;
+branches;
+next	1.20;
+
+1.20
+date	2006.10.18.13.36.02;	author dmiles;	state Exp;
+branches;
+next	1.19;
+
+1.19
+date	2002.10.04.21.12.46;	author stephenreed;	state Exp;
+branches;
+next	1.18;
+
+1.18
+date	2002.10.02.13.59.26;	author stephenreed;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2002.09.08.02.43.02;	author stephenreed;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2002.02.18.18.46.33;	author stephenreed;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2001.12.15.19.05.11;	author stephenreed;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2001.11.17.00.32.47;	author stephenreed;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2001.11.14.01.15.16;	author stephenreed;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2001.10.24.17.00.29;	author stephenreed;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2001.10.22.17.03.15;	author stephenreed;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2001.10.03.21.30.38;	author stephenreed;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2001.09.14.22.14.55;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2001.09.07.23.43.03;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2001.09.03.22.30.50;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2001.08.27.14.39.27;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2001.08.27.02.30.53;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2001.08.24.22.39.27;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2001.08.23.09.33.13;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2001.08.23.00.47.46;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2001.08.21.23.28.16;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.22
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental packages
+@
+text
+@package org.opencyc.api;
+
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.lang.reflect.Method;
+import java.math.BigInteger;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+
+import org.opencyc.cycobject.ByteArray;
+import org.opencyc.cycobject.CycAssertion;
+import org.opencyc.cycobject.CycConstant;
+import org.opencyc.cycobject.CycList;
+import org.opencyc.cycobject.CycNart;
+import org.opencyc.cycobject.CycSymbol;
+import org.opencyc.cycobject.CycVariable;
+import org.opencyc.cycobject.Guid;
+import org.opencyc.util.Log;
+import org.opencyc.util.ResultSetSlice;
+import org.opencyc.util.StringUtils;
+
+
+
+/**
+ * A CFASL translating buffered output stream.  All Java-native types which have logical sublisp
+ * equivalents are translated automatically by this stream.  Classes implementing the
+ * CfaslTranslatingObject interface are translated using their writeObject() method.  Other CYC
+ * objects, such as binding-lists and formulas, should be explicitly coerced before being sent,
+ * unless they inherit from a class which can be translated automatically.
+ * 
+ * @@version $Id: CfaslOutputStream.java,v 1.26 2005/07/13 16:05:07 reed Exp $
+ * @@author Christopher
+ * @@author Dan Lipofsky <p><p><p><p><p>
+ */
+public class CfaslOutputStream
+  extends BufferedOutputStream {
+  /** No api trace. */
+  public static final int API_TRACE_NONE = 0;
+
+  /** Message-level api trace. */
+  public static final int API_TRACE_MESSAGES = 1;
+
+  /** Detailed api trace. */
+  public static final int API_TRACE_DETAILED = 2;
+
+  /** Parameter that, when true, causes a trace of the messages to and from the server. */
+  public int trace = API_TRACE_NONE;
+
+  /** Binary values for assembling CFASL messages. */
+  protected static final int CFASL_IMMEDIATE_FIXNUM_CUTOFF = 128;
+
+  /** CFASL code */
+  protected static final int CFASL_IMMEDIATE_FIXNUM_OFFSET = 256 - CFASL_IMMEDIATE_FIXNUM_CUTOFF;
+
+  /** CFASL code */
+  protected static final int CFASL_P_8BIT_INT = 0;
+
+  /** CFASL code */
+  protected static final int CFASL_N_8BIT_INT = 1;
+
+  /** CFASL code */
+  protected static final int CFASL_P_16BIT_INT = 2;
+
+  /** CFASL code */
+  protected static final int CFASL_N_16BIT_INT = 3;
+
+  /** CFASL code */
+  protected static final int CFASL_P_24BIT_INT = 4;
+
+  /** CFASL code */
+  protected static final int CFASL_N_24BIT_INT = 5;
+
+  /** CFASL code */
+  protected static final int CFASL_P_32BIT_INT = 6;
+
+  /** CFASL code */
+  protected static final int CFASL_N_32BIT_INT = 7;
+
+  /** CFASL code */
+  protected static final int CFASL_P_FLOAT = 8;
+
+  /** CFASL code */
+  protected static final int CFASL_N_FLOAT = 9;
+
+  /** CFASL code */
+  protected static final int CFASL_KEYWORD = 10;
+
+  /** CFASL code */
+  protected static final int CFASL_SYMBOL = 11;
+
+  /** CFASL code */
+  protected static final int CFASL_NIL = 12;
+
+  /** CFASL code */
+  protected static final int CFASL_LIST = 13;
+
+  /** CFASL code */
+  protected static final int CFASL_VECTOR = 14;
+
+  /** CFASL code */
+  protected static final int CFASL_STRING = 15;
+
+  /** CFASL code */
+  protected static final int CFASL_CHARACTER = 16;
+
+  /** CFASL code */
+  protected static final int CFASL_DOTTED = 17;
+
+  /** CFASL code */
+  protected static final int CFASL_HASHTABLE = 18;
+
+  /** CFASL code */
+  protected static final int CFASL_BTREE_LOW_HIGH = 19;
+
+  /** CFASL code */
+  protected static final int CFASL_BTREE_LOW = 20;
+
+  /** CFASL code */
+  protected static final int CFASL_BTREE_HIGH = 21;
+
+  /** CFASL code */
+  protected static final int CFASL_BTREE_LEAF = 22;
+
+  /** CFASL code */
+  protected static final int CFASL_P_BIGNUM = 23;
+
+  /** CFASL code */
+  protected static final int CFASL_N_BIGNUM = 24;
+
+  /** CFASL code */
+  protected static final int CFASL_GUID = 25;
+
+  /** CFASL code */
+  protected static final int CFASL_BYTE_VECTOR = 26;
+
+  /** CFASL code */
+  protected static final int CFASL_RESULT_SET_SLICE = 27;
+
+  /** CFASL code */
+  protected static final int CFASL_CONSTANT = 30;
+
+  /** CFASL code */
+  protected static final int CFASL_NART = 31;
+
+  /** CFASL code */
+  protected static final int CFASL_COMPLETE_CONSTANT = 32;
+
+  /** CFASL code */
+  protected static final int CFASL_ASSERTION = 33;
+
+  /** CFASL code */
+  protected static final int CFASL_ASSERTION_SHELL = 34;
+
+  /** CFASL code */
+  protected static final int CFASL_ASSERTION_DEF = 35;
+
+  /** CFASL code */
+  protected static final int CFASL_SOURCE = 36;
+
+  /** CFASL code */
+  protected static final int CFASL_SOURCE_DEF = 37;
+
+  /** CFASL code */
+  protected static final int CFASL_AXIOM = 38;
+
+  /** CFASL code */
+  protected static final int CFASL_AXIOM_DEF = 39;
+
+  /** CFASL code */
+  protected static final int CFASL_VARIABLE = 40;
+
+  /** CFASL code */
+  protected static final int CFASL_INDEX = 41;
+
+  /** CFASL code */
+  protected static final int CFASL_COMPLETE_VARIABLE = 42;
+
+  /** CFASL code */
+  protected static final int CFASL_SPECIAL_OBJECT = 50;
+
+  /** CFASL code */
+  protected static final int CFASL_EXTERNALIZATION = 51;
+
+  /** CFASL code */
+  protected static final int CFASL_UNICODE_CHAR = 52;
+
+  /** CFASL code */
+  protected static final int CFASL_UNICODE_STRING = 53;
+
+  /** CFASL code */
+  protected static final int CFASL_DICTIONARY = 64;
+
+  /** CFASL code */
+  protected static final int CFASL_SERVER_DEATH = -1;
+
+  /**
+   * Creates a new CfaslOutputStream to write data to the specified underlying output stream with
+   * the default buffer size.
+   * 
+   * @@param out the underlying output stream.
+   */
+  public CfaslOutputStream(OutputStream out) {
+    super(out);
+
+    if (Log.current == null) {
+      Log.makeLog("cfasl.log");
+    }
+  }
+
+  /**
+   * Creates a new CfaslOutputStream to write data to the specified underlying output stream with
+   * the specified buffer size.
+   * 
+   * @@param out    the underlying output stream.
+   * @@param size   the buffer size.
+   */
+  public CfaslOutputStream(OutputStream out, 
+                           int size) {
+    super(out, size);
+
+    if (Log.current == null) {
+      Log.makeLog("cfasl.log");
+    }
+  }
+
+  /**
+   * Writes a boolean onto this CFASL output stream. What is actually written is either the symbol
+   * T or NIL.
+   * 
+   * @@param v the boolean value to be written
+   * 
+   * @@throws IOException if a communications error occurs
+   */
+  public void writeBoolean(boolean v)
+                    throws IOException {
+    if (trace == API_TRACE_DETAILED) {
+      Log.current.println("writeBoolean = " + v);
+    }
+
+    if (v) {
+      writeSymbol(CycObjectFactory.t);
+    }
+    else {
+      writeSymbol(CycObjectFactory.nil);
+    }
+  }
+
+  /**
+   * Writes a one byte character onto this CFASL output stream. Crudely converts from Unicode to
+   * 8-bit ASCII.
+   * 
+   * @@param v the character to be written
+   * 
+   * @@throws IOException if a communications error occurs
+   */
+  public void writeChar(char v)
+                 throws IOException {
+    if (trace == API_TRACE_DETAILED) {
+      Log.current.println("writeChar = " + v);
+    }
+
+    write(CFASL_CHARACTER);
+    write(v);
+  }
+
+  /**
+   * Writes a long integer to this CFASL output stream.  It may be written as either a CFASL Fixnum
+   * or a CFASL Bignum, depending on its size. For legacy reasons it is called writeInt instead of
+   * writeLong.
+   * 
+   * @@param v long integer to be written
+   * 
+   * @@throws IOException if a communications error occurs
+   */
+  public void writeInt(long v)
+                throws IOException {
+    if (trace == API_TRACE_DETAILED) {
+      Log.current.println("writeInt = " + v);
+    }
+
+    if ((-2147483648L < v) && (v < 2147483648L)) {
+      writeFixnum((int) v);
+    }
+    else {
+      writeBignum(v);
+    }
+  }
+
+  /**
+   * Writes an integer to this CFASL output stream as a Fixnum. This method is protected because it
+   * does no size checking, so the calling method must be wise as to what fits in a Fixnum.
+   * 
+   * @@param v the integer to be written
+   * 
+   * @@throws IOException if a communications error occurs
+   */
+  protected void writeFixnum(int v)
+                      throws IOException {
+    if (trace == API_TRACE_DETAILED) {
+      Log.current.println("* writeFixnum(long " + v + ")");
+    }
+
+    int numBytes;
+
+    if (v >= 0) {
+      if (v < CFASL_IMMEDIATE_FIXNUM_CUTOFF) {
+        // We have a special way of transmitting very small positive integers
+        if (trace == API_TRACE_DETAILED) {
+          Log.current.println("Writing Immediate Fixnum: " + v);
+        }
+
+        write((int) v + CFASL_IMMEDIATE_FIXNUM_OFFSET);
+        numBytes = 0;
+      }
+      else if (v < 128) { // v < 2^7
+        write(CFASL_P_8BIT_INT);
+        numBytes = 1;
+      }
+      else if (v < 32768) { // v < 2^15
+        write(CFASL_P_16BIT_INT);
+        numBytes = 2;
+      }
+      else if (v < 8388608) { // v < 2^23
+        write(CFASL_P_24BIT_INT);
+        numBytes = 3;
+      }
+      else { // v < 2^31 (implicit: nothing bigger should ever be passed in)
+        write(CFASL_P_32BIT_INT);
+        numBytes = 4;
+      }
+    }
+    else {
+      v = -v;
+
+      if (v < 128) { // v < 2^7
+        write(CFASL_N_8BIT_INT);
+        numBytes = 1;
+      }
+      else if (v < 32768) { // v < 2^15
+        write(CFASL_N_16BIT_INT);
+        numBytes = 2;
+      }
+      else if (v < 8388608) { // v < 2^23
+        write(CFASL_N_24BIT_INT);
+        numBytes = 3;
+      }
+      else { // v < 2^31 (implicit: nothing bigger should ever be passed in)
+        write(CFASL_N_32BIT_INT);
+        numBytes = 4;
+      }
+    }
+
+    // Transmit the bytes of the Fixnum in little-endian order (LSB first)
+    for (int i = 0; i < numBytes; i++) {
+      if (trace == API_TRACE_DETAILED) {
+        Log.current.println("f\t" + ((v >>> (8 * i)) & 0xFF));
+      }
+
+      write(v >>> (8 * i));
+    }
+  }
+
+  /**
+   * Writes a long integer to this CFASL output stream as a Bignum. This method is protected
+   * because it does no size checking, so the calling method must be wise as to whether Fixnum or
+   * Bignum is better.
+   * 
+   * @@param v the long integer to be written
+   * 
+   * @@throws IOException if a communications error occurs
+   */
+  protected void writeBignum(long v)
+                      throws IOException {
+    if (trace == API_TRACE_DETAILED) {
+      Log.current.println("* writeBignum(long " + v + ")");
+    }
+
+    // Determine the sign, transmit the opcode, and take the absolute value
+    if (v < 0) {
+      write(CFASL_N_BIGNUM);
+      v = -v;
+    }
+    else {
+      write(CFASL_P_BIGNUM);
+    }
+
+    // Convert to an array of bytes in little-endian order (LSB at 0)
+    int[] parts = new int[8];
+    int numBytes = 0;
+
+    while (v > 0) {
+      parts[numBytes++] = (int) (v & 0x000000FF);
+      v = v >>> 8;
+    }
+
+
+    // Transmit the size of the Bignum
+    writeFixnum(numBytes);
+
+    // Transmit the bytes of the Bignum in little-endian order (LSB first)
+    for (int i = 0; i < numBytes; i++) {
+      if (trace == API_TRACE_DETAILED) {
+        Log.current.println("b\t" + parts[i]);
+      }
+
+
+      // It sure seems dumb to send each byte as a fixnum instead of as
+      // a raw byte.  But that is the way the CFASL protocol was written.
+      writeFixnum(parts[i]);
+    }
+  }
+
+  /**
+   * Writes a BigInteger to this CFASL output stream as a CFASL Bignum (unless it is small enough
+   * to be transmitted as a CFASL Fixnum, in which case it is passed on to writeFixnum(long)).
+   * 
+   * @@param v the <tt>BigInteger</tt> to be written
+   * 
+   * @@throws IOException if a communications error occurs
+   */
+  public void writeBigInteger(BigInteger v)
+                       throws IOException {
+    if (trace == API_TRACE_DETAILED) {
+      Log.current.println("writeBigInteger = " + v);
+    }
+
+    // If the absolute value of the BigInteger is less than 2^31, it can to be
+    // transmitted as a CFASL Fixnum.  Why do we use v.abs().bitLength()
+    // instead of just v.bitLength()?  There is exactly 1 case that is
+    // different: -2^31 has a bitLength of 31 while 2^31 has a bitLength of 32.
+    if (v.abs().bitLength() < 32) {
+      writeFixnum(v.intValue());
+
+      return;
+    }
+
+    // Determine the sign, transmit the opcode, and take the absolute value
+    if (v.signum() < 0) {
+      write(CFASL_N_BIGNUM);
+      v = v.abs();
+    }
+    else {
+      write(CFASL_P_BIGNUM);
+    }
+
+    // Convert the number to an array of bytes in big-endian order (MSB at 0)
+    byte[] parts = v.toByteArray();
+
+
+    // Transmit the size of the Bignum
+    writeFixnum(parts.length);
+
+    // Transmit the bytes of the Bignum in little-endian order (LSB first)
+    for (int i = parts.length - 1; i >= 0; i--) {
+      // Log.current.println("b\t" + (parts[i] & 0x00FF));
+      // It sure seems dumb to send each byte as a fixnum instead of as
+      // a raw byte.  But that is the way the CFASL protocol was written.
+      writeFixnum(parts[i] & 0x00FF);
+    }
+  }
+
+  /**
+   * Writes a double onto this CfaslOutputStream.  The double is encoded as the sign (part of the
+   * opcode), significand, and exponent, such that the original double can be reconstructed as
+   * sign  significand  2^exp. All parts are integers with the significand as small as possible.
+   * 
+   * @@param v the double value to be written
+   * 
+   * @@throws IOException if a communications error occurs
+   * @@throws RuntimeException if the argument is Not A Number (NaN)
+   */
+  public void writeDouble(double v)
+                   throws IOException {
+    if (trace == API_TRACE_DETAILED) {
+      Log.current.println("writeDouble = " + v);
+    }
+
+    if (Double.isNaN(v)) {
+      throw new RuntimeException("Tried to send a NaN floating-point");
+    }
+    else if (Double.isInfinite(v)) {
+      throw new RuntimeException("Tried to send an infinite floating-point");
+    }
+    else {
+      if (v < 0.0) {
+        write(CFASL_N_FLOAT);
+        v = -v;
+
+        // Log.current.print("writeDouble sign=-1");
+      }
+      else {
+        write(CFASL_P_FLOAT);
+
+        // Log.current.print("writeDouble sign=+1");
+      }
+
+      int exp = 0;
+      double sig = v;
+
+      while ((sig != 0.0) && (sig == Math.floor(sig))) {
+        sig = sig / 2.0;
+        exp++;
+      }
+
+      while (sig != Math.floor(sig)) {
+        sig = sig * 2.0;
+        exp--;
+      }
+
+
+      // Log.current.println(" signif=" + (long)Math.floor(sig) + " exp=" + exp);
+      writeInt((long) Math.floor(sig));
+      writeInt(exp);
+    }
+  }
+
+  /**
+   * Writes a String to this CfaslOutputStream.
+   * 
+   * @@param s the string to be written
+   * 
+   * @@throws IOException if a communications error occurs
+   */
+  public void writeString(String s)
+    throws IOException {
+    String escapedString = escapeString(s);
+    
+    if (trace == API_TRACE_DETAILED) {
+      Log.current.println("writeString = \"" + escapedString + "\"");
+    }
+    
+    if (StringUtils.is7BitASCII(escapedString))   write(CFASL_STRING);
+    else write(CFASL_UNICODE_STRING);
+    
+    byte[] bytes = escapedString.getBytes("UTF-8");
+    
+    writeInt(bytes.length);
+    write(bytes);
+  }
+  
+  /**
+   * Adds required escape chars for cfasl strings.
+   * 
+   * @@param s the string
+   * 
+   * @@return the string with required escape chars for cfasl
+   */
+  private String escapeString(String s) {
+    StringBuffer stringBuffer = new StringBuffer();
+    char backslash = '\\';
+    char previousChar = 0;
+    char ch = 0;
+    
+    for (int i = 0; i < s.length(); i++) {
+      previousChar = ch;
+      ch = s.charAt(i);
+
+      if (ch == '\\') {
+        //stringBuffer.append("\\\\");
+        stringBuffer.append(ch);
+      }
+      else if (ch == '"') {
+        if (previousChar == '\\') {
+          stringBuffer.append("\\\"");
+        }
+        else {
+          stringBuffer.append('"');
+        }
+      }
+      else {
+        stringBuffer.append(ch);
+      }
+    }
+
+    return stringBuffer.toString();
+  }
+
+  /**
+   * Writes a byte array to this CfaslOutputStream.
+   * 
+   * @@param bytes the byte array to be written.
+   * 
+   * @@throws IOException if a communications error occurs
+   */
+  public void writeByteArray(byte[] bytes)
+                      throws IOException {
+    if (trace == API_TRACE_DETAILED) {
+      Log.current.println("writeByteArray = \"" + bytes + "\"");
+    }
+
+    write(CFASL_BYTE_VECTOR);
+    writeInt(bytes.length);
+    write(bytes);
+  }
+
+  /**
+   * Writes a List of Objects to this CfaslOutputStream as a CFASL List.
+   * 
+   * @@param list the list of objects to be written
+   * 
+   * @@throws IOException if a communications error occurs
+   */
+  public void writeList(List list)
+                 throws IOException {
+    if (list instanceof CycList && !((CycList) list).isProperList()) {
+      writeDottedList((CycList) list);
+
+      return;
+    }
+
+    if (trace == API_TRACE_DETAILED) {
+      if (list instanceof CycList) {
+        Log.current.println("writeList = " + ((CycList) list).toString() + "\n  of size " + 
+                            list.size());
+      }
+      else {
+        Log.current.println("writeList = " + list + "\n  of size " + list.size());
+      }
+    }
+
+    write(CFASL_LIST);
+    writeInt(list.size());
+
+    for (int i = 0; i < list.size(); i++) {
+      writeObject(list.get(i));
+    }
+  }
+
+  /**
+   * Writes an improper (dotted) CycList of Objects to this CfaslOutputStream as a CFASL dotted
+   * list.
+   * 
+   * @@param dottedList the list of objects to be written
+   * 
+   * @@throws IOException if a communications error occurs
+   */
+  public void writeDottedList(CycList dottedList)
+                       throws IOException {
+    int size = dottedList.getProperListSize();
+
+    if (trace == API_TRACE_DETAILED) {
+      Log.current.println("writeDottedList = " + dottedList.toString() + 
+                          "\n  proper elements size " + size);
+    }
+    
+    write(CFASL_DOTTED);
+    writeInt(size);
+
+    for (int i = 0; i < size; i++) {
+      writeObject(dottedList.get(i));
+    }
+
+    Object dottedElement = dottedList.getDottedElement();
+
+    if (trace == API_TRACE_DETAILED) {
+      try {
+        // If object dottedElement understands the safeToString method, then use it.
+        Method safeToString = dottedElement.getClass().getMethod(
+                                    "safeToString", 
+                                    null);
+        Log.current.println("writeDottedList.cdr = " + 
+                            safeToString.invoke(dottedElement, 
+                                                null));
+      }
+       catch (Exception e) {
+        Log.current.println("writeDottedList.cdr = " + dottedElement);
+      }
+    }
+
+    writeObject(dottedElement);
+  }
+
+  /**
+   * Writes an array of Objects to this CfaslOutputStream as a CFASL List.
+   * 
+   * @@param list the array of objects to be written
+   * 
+   * @@throws IOException if a communications error occurs
+   */
+  public void writeList(Object[] list)
+                 throws IOException {
+    if (trace == API_TRACE_DETAILED) {
+      Log.current.println("writeList(Array) = " + list + "\n  of size " + list.length);
+    }
+
+    write(CFASL_LIST);
+    writeInt(list.length);
+
+    for (int i = 0; i < list.length; i++) {
+      writeObject(list[i]);
+    }
+  }
+
+  /**
+   * Writes a <tt>Guid</tt> object to this CfaslOutputStream.
+   * 
+   * @@param guid the <tt>Guid</tt> to be written
+   * 
+   * @@throws IOException if a communications error occurs
+   */
+  public void writeGuid(Guid guid)
+                 throws IOException {
+    if (trace == API_TRACE_DETAILED) {
+      Log.current.println("writeGuid = " + guid);
+    }
+
+    write(CFASL_GUID);
+    writeString(guid.toString());
+  }
+
+  /**
+   * Writes a <tt>CycSymbol</tt> object to this CfaslOutputStream.
+   * 
+   * @@param cycSymbol the <tt>CycSymbol</tt> to be written
+   * 
+   * @@throws IOException if a communications error occurs
+   */
+  public void writeSymbol(CycSymbol cycSymbol)
+                   throws IOException {
+    if (trace == API_TRACE_DETAILED) {
+      Log.current.println("writeSymbol = " + cycSymbol);
+    }
+
+    if (cycSymbol.isKeyword()) {
+      writeKeyword(cycSymbol);
+
+      return;
+    }
+
+    if (cycSymbol.equals(CycObjectFactory.nil)) {
+      if (trace == API_TRACE_DETAILED) {
+        Log.current.println("writing CFASL_NIL");
+      }
+
+      write(CFASL_NIL);
+    }
+    else {
+      write(CFASL_SYMBOL);
+      writeString(cycSymbol.toString().toUpperCase());
+    }
+  }
+
+  /**
+   * Writes a keyword symbol object to this CfaslOutputStream.
+   * 
+   * @@param cycSymbol the keyword to be written
+   * 
+   * @@throws IOException if a communications error occurs
+   */
+  public void writeKeyword(CycSymbol cycSymbol)
+                    throws IOException {
+    if (trace == API_TRACE_DETAILED) {
+      Log.current.println("writeKeyword = " + cycSymbol);
+    }
+
+    write(CFASL_KEYWORD);
+    writeString(cycSymbol.toString().toUpperCase());
+  }
+
+  /**
+   * Writes a <tt>CycVariable</tt> object to this CfaslOutputStream.
+   * 
+   * @@param cycVariable the <tt>CycVariable</tt> to be written
+   * 
+   * @@throws IOException if a communications error occurs
+   */
+  public void writeVariable(CycVariable cycVariable)
+                     throws IOException {
+    if (trace == API_TRACE_DETAILED) {
+      Log.current.println("writeVariable = " + cycVariable.toString());
+    }
+    final String name = cycVariable.toString();
+    if (cycVariable.isHLVariable()) {
+      write(CFASL_COMPLETE_VARIABLE);
+      writeInt(cycVariable.hlVariableId.intValue());
+      writeString(name);
+    }
+    else {
+      write(CFASL_SYMBOL);
+      writeString(name.toUpperCase());
+    }
+  }
+
+  /**
+   * Writes a <tt>CycConstant</tt> object to this CfaslOutputStream.
+   * 
+   * @@param cycConstant the <tt>CycConstant</tt> to be written
+   * 
+   * @@throws IOException if a communications error occurs
+   */
+  public void writeCompleteConstant(CycConstant cycConstant)
+                     throws IOException {
+    if (trace == API_TRACE_DETAILED) {
+      Log.current.println("writeCompleteConstant = " + cycConstant.toString());
+    }
+
+    write(CFASL_EXTERNALIZATION);
+    write(CFASL_COMPLETE_CONSTANT);
+    writeGuid(cycConstant.getGuid());
+    writeString(cycConstant.getName());
+  }
+
+  /**
+   * Writes a <tt>CycNart</tt> object to this CfaslOutputStream.
+   * 
+   * @@param cycNart the <tt>CycNart</tt> to be written
+   * 
+   * @@throws IOException if a communications error occurs
+   */
+  public void writeNart(CycNart cycNart)
+                 throws IOException {
+    if (trace == API_TRACE_DETAILED) {
+      Log.current.println("writeNart = " + cycNart.toString());
+    }
+
+    write(CFASL_EXTERNALIZATION);
+    write(CFASL_NART);
+    writeList(cycNart.toCycList());
+  }
+
+  /**
+   * Writes a <tt>CycAssertion</tt> object to this CfaslOutputStream.
+   * 
+   * @@param cycAssertion the <tt>CycAssertion</tt> to be written
+   * 
+   * @@throws IOException if a communications error occurs
+   */
+  public void writeAssertion(CycAssertion cycAssertion)
+                      throws IOException {
+    if (trace == API_TRACE_DETAILED) {
+      Log.current.println("writeAssertion = " + cycAssertion.toString());
+    }
+    write(CFASL_EXTERNALIZATION);
+    write(CFASL_ASSERTION);
+    writeList(cycAssertion.getFormula());
+    writeObject(cycAssertion.getMt());
+  }
+
+  /**
+   * Writes a ResultSetSlice onto this CFASL output stream. ResultSetSlices are a slice from
+   * actual java.sql.ResultSets.
+   */ 
+
+  public void writeResultSetSlice(ResultSetSlice rss) throws IOException {
+    if (trace == API_TRACE_DETAILED) {
+      Log.current.println("writeResultSetSlice = " + rss);
+    }
+
+    ResultSet rs = rss.resultSet();
+    
+    int first = rss.first();
+    int last = rss.last();
+    int columnCount = rss.columnCount();
+    
+    write(CFASL_RESULT_SET_SLICE);
+    writeInt(rss.rowCount());
+    writeInt(rss.sliceRowCount());
+    writeInt(columnCount);
+    writeInt(first);
+    
+    try {
+      rss.beforeFirst();
+      for (int row = first; row <= last; row++) {
+ 	rs.next();
+ 	for (int column = 1; column <= columnCount; column++) {
+ 	  writeObject(rs.getObject(column));
+ 	}
+      }
+    }
+    catch (SQLException e) {
+      throw new RuntimeException(e.getMessage());
+    }
+  }
+  
+
+
+  /**
+   * Writes a generic object to this CfaslOutputStream.
+   * 
+   * @@param o the object to be written
+   * 
+   * @@throws IOException if the Object cannot be translated.
+   */
+  public void writeObject(Object o)
+                   throws IOException {
+    if (trace == API_TRACE_DETAILED) {
+      try {
+        if (o == null) {
+          Log.current.println("writeObject = null");
+        }
+        else {
+          // If object o understands the safeToString method, then use it.
+          Method safeToString = o.getClass().getMethod(
+                                      "safeToString", 
+                                      null);
+          Log.current.println("writeObject = " + 
+                              safeToString.invoke(o, 
+                                                  null) + " (" + o.getClass() + ")");
+        }
+      }
+       catch (Exception e) {
+        Log.current.println("writeObject = " + o + " (" + o.getClass() + ")");
+      }
+    }
+
+    if (o == null) {
+      // Substitute :NULL symbol for java null
+      writeKeyword(CycObjectFactory.nul);
+    }
+    else if (o instanceof Guid) {
+      writeGuid((Guid) o);
+    }
+    else if (o instanceof CycSymbol) {
+      writeSymbol((CycSymbol) o);
+    }
+    else if (o instanceof CycVariable) {
+      writeVariable((CycVariable) o);
+    }
+    else if (o instanceof CycConstant) {
+      writeCompleteConstant((CycConstant) o);
+    }
+    else if (o instanceof CycNart) {
+      writeNart((CycNart) o);
+    }
+    else if (o instanceof CycAssertion) {
+      writeAssertion((CycAssertion) o);
+    }
+    else if (o instanceof List) {
+      writeList((List) o);
+    }
+    else if (o instanceof Boolean) {
+      writeBoolean(((Boolean) o).booleanValue());
+    }
+    else if (o instanceof ResultSetSlice) {
+      writeResultSetSlice((ResultSetSlice) o);
+    }
+    else if (o instanceof Character) {
+      writeChar(((Character) o).charValue());
+    }
+    else if (o instanceof String) {
+      writeString((String) o);
+    }
+    else if (o instanceof Double) {
+      writeDouble(((Double) o).doubleValue());
+    }
+    else if (o instanceof Float) {
+      writeDouble(((Float) o).doubleValue());
+    }
+    else if (o instanceof Long) {
+      writeInt(((Long) o).longValue());
+    }
+    else if (o instanceof Integer) {
+      writeInt(((Integer) o).longValue());
+    }
+    else if (o instanceof Short) {
+      writeInt(((Short) o).longValue());
+    }
+    else if (o instanceof Byte) {
+      writeInt(((Byte) o).longValue());
+    }
+    else if (o instanceof BigInteger) {
+      writeBigInteger((BigInteger) o);
+    }
+    else if (o instanceof Object[]) {
+      writeList((Object[]) o);
+    }
+    else if (o instanceof ByteArray) {
+      writeByteArray(((ByteArray) o).byteArrayValue());
+    }
+    else if (o instanceof byte[]) {
+      writeByteArray((byte[]) o);
+    }
+    else {
+      writeString(o.toString());
+    }
+  }
+}
+@
+
+
+1.21
+log
+@This is the Additional Content to Create OpenCyc-1.0.1
+@
+text
+@a5 1
+
+a6 1
+
+d8 2
+a9 1
+
+d20 1
+a21 1
+import org.opencyc.util.Log;
+a23 3
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+@
+
+
+1.20
+log
+@This is a checkin of OpenCyc 1.0.1 Java  OPENCYC_1_0_1
+@
+text
+@@
+
+
+1.19
+log
+@Added Log class to the api package classes.
+@
+text
+@d1 27
+a27 1
+package  org.opencyc.api;
+a28 6
+import  java.io.*;
+import  java.math.BigInteger;
+import  java.util.*;
+import  java.lang.reflect.*;
+import  org.opencyc.cycobject.*;
+import  org.opencyc.util.*;
+d31 7
+a37 8
+ * A CFASL translating buffered output stream.  All Java-native types which have logical
+ * sublisp equivalents are translated automatically by this stream.  Classes
+ * implementing the CfaslTranslatingObject interface are translated using their
+ * writeObject() method.  Other CYC objects, such as binding-lists and formulas,
+ * should be explicitly coerced before being sent, unless they inherit from
+ * a class which can be translated automatically.
+ *
+ * @@version $Id: CfaslOutputStream.java,v 1.12 2002/10/04 17:37:20 reed Exp $
+d39 1
+a39 19
+ * @@author Dan Lipofsky
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+d41 190
+d232 13
+d246 5
+a250 198
+public class CfaslOutputStream extends BufferedOutputStream {
+    /**
+     * No api trace.
+     */
+    public static final int API_TRACE_NONE = 0;
+
+    /**
+     * Message-level api trace.
+     */
+    public static final int API_TRACE_MESSAGES = 1;
+
+    /**
+     * Detailed api trace.
+     */
+    public static final int API_TRACE_DETAILED = 2;
+
+    /**
+     * Parameter that, when true, causes a trace of the messages to and from the server.
+     */
+    public int trace = API_TRACE_NONE;
+
+    /**
+     * Binary values for assembling CFASL messages.
+     */
+    protected static final int CFASL_IMMEDIATE_FIXNUM_CUTOFF = 128;
+    protected static final int CFASL_IMMEDIATE_FIXNUM_OFFSET = 256 - CFASL_IMMEDIATE_FIXNUM_CUTOFF;
+    protected static final int CFASL_P_8BIT_INT = 0;
+    protected static final int CFASL_N_8BIT_INT = 1;
+    protected static final int CFASL_P_16BIT_INT = 2;
+    protected static final int CFASL_N_16BIT_INT = 3;
+    protected static final int CFASL_P_24BIT_INT = 4;
+    protected static final int CFASL_N_24BIT_INT = 5;
+    protected static final int CFASL_P_32BIT_INT = 6;
+    protected static final int CFASL_N_32BIT_INT = 7;
+    protected static final int CFASL_P_FLOAT = 8;
+    protected static final int CFASL_N_FLOAT = 9;
+    protected static final int CFASL_KEYWORD = 10;
+    protected static final int CFASL_SYMBOL = 11;
+    protected static final int CFASL_NIL = 12;
+    protected static final int CFASL_LIST = 13;
+    protected static final int CFASL_VECTOR = 14;
+    protected static final int CFASL_STRING = 15;
+    protected static final int CFASL_CHARACTER = 16;
+    protected static final int CFASL_DOTTED = 17;
+    protected static final int CFASL_HASHTABLE = 18;
+    protected static final int CFASL_BTREE_LOW_HIGH = 19;
+    protected static final int CFASL_BTREE_LOW = 20;
+    protected static final int CFASL_BTREE_HIGH = 21;
+    protected static final int CFASL_BTREE_LEAF = 22;
+    protected static final int CFASL_P_BIGNUM = 23;
+    protected static final int CFASL_N_BIGNUM = 24;
+    protected static final int CFASL_GUID = 25;
+    protected static final int CFASL_BYTE_VECTOR = 26;
+    protected static final int CFASL_CONSTANT = 30;
+    protected static final int CFASL_NART = 31;
+    protected static final int CFASL_ASSERTION = 33;
+    protected static final int CFASL_ASSERTION_SHELL = 34;
+    protected static final int CFASL_ASSERTION_DEF = 35;
+    protected static final int CFASL_SOURCE = 36;
+    protected static final int CFASL_SOURCE_DEF = 37;
+    protected static final int CFASL_AXIOM = 38;
+    protected static final int CFASL_AXIOM_DEF = 39;
+    protected static final int CFASL_VARIABLE = 40;
+    protected static final int CFASL_INDEX = 41;
+    protected static final int CFASL_SPECIAL_OBJECT = 50;
+    protected static final int CFASL_DICTIONARY = 64;
+    protected static final int CFASL_SERVER_DEATH = -1;
+
+    /**
+     * Creates a new CfaslOutputStream to write data to the specified
+     * underlying output stream with the default buffer size.
+     *
+     * @@param out the underlying output stream.
+     */
+    public CfaslOutputStream (OutputStream out) {
+        super(out);
+        if (Log.current == null)
+            Log.makeLog("cyc-api.log");
+    }
+
+    /**
+     * Creates a new CfaslOutputStream to write data to the specified
+     * underlying output stream with the specified buffer size.
+     *
+     * @@param out    the underlying output stream.
+     * @@param size   the buffer size.
+     */
+    public CfaslOutputStream (OutputStream out, int size) {
+        super(out, size);
+        if (Log.current == null)
+            Log.makeLog("cyc-api.log");
+    }
+
+    /**
+     * Writes a boolean onto this CFASL output stream.
+     * What is actually written is either the symbol T or NIL.
+     *
+     * @@param v the boolean value to be written
+     */
+    public void writeBoolean (boolean v) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            Log.current.println("writeBoolean = " + v);
+        if (v)
+            writeSymbol(CycObjectFactory.t);
+        else
+            writeSymbol(CycObjectFactory.nil);
+    }
+
+    /**
+     * Writes a one byte character onto this CFASL output stream.
+     * Crudely converts from Unicode to 8-bit ASCII.
+     *
+     * @@param v the character to be written
+     */
+    public void writeChar (char v) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            Log.current.println("writeChar = " + v);
+        write(CFASL_CHARACTER);
+        write(v);
+    }
+
+    /**
+     * Writes a long integer to this CFASL output stream.  It may be written
+     * as either a CFASL Fixnum or a CFASL Bignum, depending on its size.
+     * For legacy reasons it is called writeInt instead of writeLong.
+     *
+     * @@param the long integer to be written
+     */
+    public void writeInt (long v) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            Log.current.println("writeInt = " + v);
+        if (-2147483648L < v && v < 2147483648L)
+            writeFixnum((int)v);
+        else
+            writeBignum(v);
+    }
+
+    /**
+     * Writes an integer to this CFASL output stream as a Fixnum.
+     * This method is protected because it does no size checking, so
+     * the calling method must be wise as to what fits in a Fixnum.
+     *
+     * @@param v the integer to be written
+     */
+    protected void writeFixnum (int v) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            Log.current.println("* writeFixnum(long " + v + ")");
+        int numBytes;
+        if (v >= 0) {
+            if (v < CFASL_IMMEDIATE_FIXNUM_CUTOFF) {
+                // We have a special way of transmitting very small positive integers
+                if (trace == API_TRACE_DETAILED)
+                    Log.current.println("Writing Immediate Fixnum: " + v);
+                write((int)v + CFASL_IMMEDIATE_FIXNUM_OFFSET);
+                numBytes = 0;
+            }
+            else if (v < 128) {                 // v < 2^7
+                write(CFASL_P_8BIT_INT);
+                numBytes = 1;
+            }
+            else if (v < 32768) {               // v < 2^15
+                write(CFASL_P_16BIT_INT);
+                numBytes = 2;
+            }
+            else if (v < 8388608) {             // v < 2^23
+                write(CFASL_P_24BIT_INT);
+                numBytes = 3;
+            }
+            else {              // v < 2^31 (implicit: nothing bigger should ever be passed in)
+                write(CFASL_P_32BIT_INT);
+                numBytes = 4;
+            }
+        }
+        else {
+            v = -v;
+            if (v < 128) {      // v < 2^7
+                write(CFASL_N_8BIT_INT);
+                numBytes = 1;
+            }
+            else if (v < 32768) {               // v < 2^15
+                write(CFASL_N_16BIT_INT);
+                numBytes = 2;
+            }
+            else if (v < 8388608) {             // v < 2^23
+                write(CFASL_N_24BIT_INT);
+                numBytes = 3;
+            }
+            else {              // v < 2^31 (implicit: nothing bigger should ever be passed in)
+                write(CFASL_N_32BIT_INT);
+                numBytes = 4;
+            }
+        }
+        // Transmit the bytes of the Fixnum in little-endian order (LSB first)
+        for (int i = 0; i < numBytes; i++) {
+            if (trace == API_TRACE_DETAILED)
+                Log.current.println("f\t" + ((v >>> (8*i)) & 0xFF));
+            write(v >>> (8*i));
+        }
+d252 1
+d254 12
+a265 35
+    /**
+     * Writes a long integer to this CFASL output stream as a Bignum.
+     * This method is protected because it does no size checking, so the
+     * calling method must be wise as to whether Fixnum or Bignum is better.
+     *
+     * @@param v the long integer to be written
+     */
+    protected void writeBignum (long v) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            Log.current.println("* writeBignum(long " + v + ")");
+        // Determine the sign, transmit the opcode, and take the absolute value
+        if (v < 0) {
+            write(CFASL_N_BIGNUM);
+            v = -v;
+        }
+        else {
+            write(CFASL_P_BIGNUM);
+        }
+        // Convert to an array of bytes in little-endian order (LSB at 0)
+        int[] parts = new int[8];
+        int numBytes = 0;
+        while (v > 0) {
+            parts[numBytes++] = (int)(v & 0x000000FF);
+            v = v >>> 8;
+        }
+        // Transmit the size of the Bignum
+        writeFixnum(numBytes);
+        // Transmit the bytes of the Bignum in little-endian order (LSB first)
+        for (int i = 0; i < numBytes; i++) {
+            if (trace == API_TRACE_DETAILED)
+                Log.current.println("b\t" + parts[i]);
+            // It sure seems dumb to send each byte as a fixnum instead of as
+            // a raw byte.  But that is the way the CFASL protocol was written.
+            writeFixnum(parts[i]);
+        }
+d268 17
+a284 37
+    /**
+     * Writes a BigInteger to this CFASL output stream as a CFASL
+     * Bignum (unless it is small enough to be transmitted as a CFASL Fixnum,
+     * in which case it is passed on to writeFixnum(long)).
+     *
+     * @@param v the <tt>BigInteger</tt> to be written
+     */
+    public void writeBigInteger (BigInteger v) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            Log.current.println("writeBigInteger = " + v);
+        // If the absolute value of the BigInteger is less than 2^31, it can to be
+        // transmitted as a CFASL Fixnum.  Why do we use v.abs().bitLength()
+        // instead of just v.bitLength()?  There is exactly 1 case that is
+        // different: -2^31 has a bitLength of 31 while 2^31 has a bitLength of 32.
+        if (v.abs().bitLength() < 32) {
+            writeFixnum(v.intValue());
+            return;
+        }
+        // Determine the sign, transmit the opcode, and take the absolute value
+        if (v.signum() < 0) {
+            write(CFASL_N_BIGNUM);
+            v = v.abs();
+        }
+        else {
+            write(CFASL_P_BIGNUM);
+        }
+        // Convert the number to an array of bytes in big-endian order (MSB at 0)
+        byte[] parts = v.toByteArray();
+        // Transmit the size of the Bignum
+        writeFixnum(parts.length);
+        // Transmit the bytes of the Bignum in little-endian order (LSB first)
+        for (int i = parts.length - 1; i >= 0; i--) {
+            // Log.current.println("b\t" + (parts[i] & 0x00FF));
+            // It sure seems dumb to send each byte as a fixnum instead of as
+            // a raw byte.  But that is the way the CFASL protocol was written.
+            writeFixnum(parts[i] & 0x00FF);
+        }
+d287 5
+a291 41
+    /**
+     * Writes a double onto this CfaslOutputStream.  The double is encoded as
+     * the sign (part of the opcode), significand, and exponent, such that
+     * the original double can be reconstructed as sign * significand * 2^exp.
+     * All parts are integers with the significand as small as possible.
+     *
+     * @@param v the double value to be written
+     */
+    public void writeDouble (double v) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            Log.current.println("writeDouble = " + v);
+        if (Double.isNaN(v)) {
+            throw  new RuntimeException("Tried to send a NaN floating-point");
+        }
+        else if (Double.isInfinite(v)) {
+            throw  new RuntimeException("Tried to send an infinite floating-point");
+        }
+        else {
+            if (v < 0.0) {
+                write(CFASL_N_FLOAT);
+                v = -v;
+                // Log.current.print("writeDouble sign=-1");
+            }
+            else {
+                write(CFASL_P_FLOAT);
+                // Log.current.print("writeDouble sign=+1");
+            }
+            int exp = 0;
+            double sig = v;
+            while ((sig != 0.0) && (sig == Math.floor(sig))) {
+                sig = sig/2.0;
+                exp++;
+            }
+            while (sig != Math.floor(sig)) {
+                sig = sig*2.0;
+                exp--;
+            }
+            // Log.current.println(" signif=" + (long)Math.floor(sig) + " exp=" + exp);
+            writeInt((long)Math.floor(sig));
+            writeInt(exp);
+        }
+d293 1
+d295 12
+a306 50
+    /**
+     * Writes a String to this CfaslOutputStream.
+     *
+     * @@param s the string to be written
+     */
+    public void writeString (String s) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            Log.current.println("writeString = \"" + s + "\"");
+        write(CFASL_STRING);
+        byte [] bytes = s.getBytes("UTF-8");
+        writeInt(bytes.length);
+        write(bytes);
+    }
+
+    /**
+     * Writes a byte array to this CfaslOutputStream.
+     *
+     * @@param bytes the byte array to be written.
+     */
+    public void writeByteArray (byte[] bytes) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            Log.current.println("writeByteArray = \"" + bytes + "\"");
+        write(CFASL_BYTE_VECTOR);
+        writeInt(bytes.length);
+        write(bytes);
+    }
+
+    /**
+     * Writes a List of Objects to this CfaslOutputStream as a CFASL List.
+     *
+     * @@param list the list of objects to be written
+     */
+    public void writeList (List list) throws IOException {
+        if (list instanceof CycList && !((CycList)list).isProperList()) {
+            writeDottedList((CycList)list);
+            return;
+        }
+        if (trace == API_TRACE_DETAILED) {
+            if (list instanceof CycList)
+                Log.current.println("writeList = " + ((CycList) list).safeToString() +
+                                   "\n  of size " + list.size());
+            else
+                Log.current.println("writeList = " + list +
+                                   "\n  of size " + list.size());
+        }
+        write(CFASL_LIST);
+        writeInt(list.size());
+        for (int i = 0; i < list.size(); i++) {
+            writeObject(list.get(i));
+        }
+d309 5
+a313 15
+    /**
+     * Writes an improper (dotted) CycList of Objects to this CfaslOutputStream as a CFASL dotted list.
+     *
+     * @@param improperList the list of objects to be written
+     */
+    public void writeDottedList (CycList dottedList) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            Log.current.println("writeDottedList = " + dottedList.safeToString() +
+                               "\n  proper elements size " + dottedList.size());
+        write(CFASL_DOTTED);
+        writeInt(dottedList.size());
+        for (int i = 0; i < dottedList.size(); i++) {
+            writeObject(dottedList.get(i));
+        }
+        Object dottedElement = dottedList.getDottedElement();
+d315 1
+a315 8
+            try {
+                // If object dottedElement understands the safeToString method, then use it.
+                Method safeToString = dottedElement.getClass().getMethod("safeToString", null);
+                Log.current.println("writeDottedList.cdr = " + safeToString.invoke(dottedElement, null));
+            }
+            catch (Exception e) {
+                Log.current.println("writeDottedList.cdr = " + dottedElement);
+            }
+a316 2
+        writeObject(dottedElement);
+    }
+d318 253
+a570 12
+    /**
+     * Writes an array of Objects to this CfaslOutputStream as a CFASL List.
+     *
+     * @@param list the array of objects to be written
+     */
+    public void writeList (Object[] list) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            Log.current.println("writeList(Array) = " + list + "\n  of size " + list.length);
+        write(CFASL_LIST);
+        writeInt(list.length);
+        for (int i = 0; i < list.length; i++) {
+            writeObject(list[i]);
+d572 2
+a573 25
+    }
+
+    /**
+     * Writes a <tt>Guid</tt> object to this CfaslOutputStream.
+     *
+     * @@param guid the <tt>Guid</tt> to be written
+     */
+    public void writeGuid (Guid guid) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            Log.current.println("writeGuid = " + guid);
+        write(CFASL_GUID);
+        writeString(guid.toString());
+    }
+
+    /**
+     * Writes a <tt>CycSymbol</tt> object to this CfaslOutputStream.
+     *
+     * @@param cycSymbol the <tt>CycSymbol</tt> to be written
+     */
+    public void writeSymbol (CycSymbol cycSymbol) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            Log.current.println("writeSymbol = " + cycSymbol);
+        if (cycSymbol.isKeyword()) {
+            writeKeyword(cycSymbol);
+            return;
+d575 321
+a895 4
+        if (cycSymbol.equals(CycObjectFactory.nil)) {
+            if (trace == API_TRACE_DETAILED)
+                Log.current.println("writing CFASL_NIL");
+            write(CFASL_NIL);
+d898 7
+a904 2
+            write(CFASL_SYMBOL);
+            writeString(cycSymbol.toString().toUpperCase());
+d906 4
+d912 69
+a980 128
+    /**
+     * Writes a keyword symbol object to this CfaslOutputStream.
+     *
+     * @@param cycSymbol the keyword to be written
+     */
+    public void writeKeyword (CycSymbol cycSymbol) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            Log.current.println("writeKeyword = " + cycSymbol);
+        write(CFASL_KEYWORD);
+        writeString(cycSymbol.toString().toUpperCase());
+    }
+
+    /**
+     * Writes a <tt>CycVariable</tt> object to this CfaslOutputStream.
+     *
+     * @@param cycVariable the <tt>CycVariable</tt> to be written
+     */
+    public void writeVariable (CycVariable cycVariable) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            Log.current.println("writeVariable = " + cycVariable.safeToString());
+        //write(CFASL_VARIABLE);
+        write(CFASL_SYMBOL);
+        writeString(cycVariable.toString().toUpperCase());
+    }
+
+    /**
+     * Writes a <tt>CycConstant</tt> object to this CfaslOutputStream.
+     *
+     * @@param cycConstant the <tt>CycConstant</tt> to be written
+     */
+    public void writeConstant (CycConstant cycConstant) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            Log.current.println("writeConstant = " + cycConstant.safeToString());
+        write(CFASL_CONSTANT);
+        writeInt(cycConstant.getId().intValue());
+    }
+
+    /**
+     * Writes a <tt>CycNart</tt> object to this CfaslOutputStream.
+     *
+     * @@param cycNart the <tt>CycNart</tt> to be written
+     */
+    public void writeNart (CycNart cycNart) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            Log.current.println("writeNart = " + cycNart.safeToString());
+        write(CFASL_NART);
+        writeInt(cycNart.getId().intValue());
+    }
+
+    /**
+     * Writes a <tt>CycAssertion</tt> object to this CfaslOutputStream.
+     *
+     * @@param cycAssertion the <tt>CycAssertion</tt> to be written
+     */
+    public void writeAssertion (CycAssertion cycAssertion) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            Log.current.println("writeAssertion = " + cycAssertion.safeToString());
+        write(CFASL_ASSERTION);
+        writeInt(cycAssertion.getId().intValue());
+    }
+
+    /**
+     * Writes a generic object to this CfaslOutputStream.
+     *
+     * @@param o the object to be written
+     * @@throws RuntimeException if the Object cannot be translated.
+     */
+    public void writeObject (Object o) throws IOException {
+        if (trace == API_TRACE_DETAILED) {
+            try {
+                if (o == null)
+                    Log.current.println("writeObject = null");
+                else {
+                    // If object o understands the safeToString method, then use it.
+                    Method safeToString = o.getClass().getMethod("safeToString", null);
+                    Log.current.println("writeObject = " + safeToString.invoke(o, null) +
+                                       " (" + o.getClass() + ")");
+                }
+            }
+            catch (Exception e) {
+                Log.current.println("writeObject = " + o + " (" + o.getClass() + ")");
+            }
+        }
+        if (o == null)
+            // Substitute NIL symbol for java null
+            writeSymbol(CycObjectFactory.nil);
+        else if (o instanceof Guid)
+            writeGuid((Guid) o);
+        else if (o instanceof CycSymbol)
+            writeSymbol((CycSymbol) o);
+        else if (o instanceof CycVariable)
+            writeVariable((CycVariable) o);
+        else if (o instanceof CycConstant)
+            writeConstant((CycConstant) o);
+        else if (o instanceof CycNart)
+            writeNart((CycNart) o);
+        else if (o instanceof CycAssertion)
+            writeAssertion((CycAssertion) o);
+        else if (o instanceof List)
+            writeList((List)o);
+        else if (o instanceof Boolean)
+            writeBoolean(((Boolean) o).booleanValue());
+        else if (o instanceof Character)
+            writeChar(((Character) o).charValue());
+        else if (o instanceof String)
+            writeString((String) o);
+        else if (o instanceof Double)
+            writeDouble(((Double) o).doubleValue());
+        else if (o instanceof Float)
+            writeDouble(((Float) o).doubleValue());
+        else if (o instanceof Long)
+            writeInt(((Long) o).longValue());
+        else if (o instanceof Integer)
+            writeInt(((Integer) o).longValue());
+        else if (o instanceof Short)
+            writeInt(((Short) o).longValue());
+        else if (o instanceof Byte)
+            writeInt(((Byte) o).longValue());
+        else if (o instanceof BigInteger)
+            writeBigInteger((BigInteger) o);
+        else if (o instanceof Object[])
+            writeList((Object[]) o);
+        else if (o instanceof ByteArray)
+            writeByteArray(((ByteArray) o).byteArrayValue());
+        else if (o instanceof byte[])
+            writeByteArray((byte[]) o);
+        else
+            writeString(o.toString());
+d982 1
+a983 3
+
+
+
+@
+
+
+1.18
+log
+@Experiments with UTF-8 character encoding scheme
+@
+text
+@d8 1
+d18 1
+a18 1
+ * @@version $Id: CfaslOutputStream.java,v 1.17 2002/09/08 02:43:02 stephenreed Exp $
+d118 2
+d131 2
+d143 1
+a143 1
+            System.out.println("writeBoolean = " + v);
+d158 1
+a158 1
+            System.out.println("writeChar = " + v);
+d172 1
+a172 1
+            System.out.println("writeInt = " + v);
+d188 1
+a188 1
+            System.out.println("* writeFixnum(long " + v + ")");
+d194 1
+a194 1
+                    System.out.println("Writing Immediate Fixnum: " + v);
+d237 1
+a237 1
+                System.out.println("f\t" + ((v >>> (8*i)) & 0xFF));
+d251 1
+a251 1
+            System.out.println("* writeBignum(long " + v + ")");
+d272 1
+a272 1
+                System.out.println("b\t" + parts[i]);
+d288 1
+a288 1
+            System.out.println("writeBigInteger = " + v);
+d311 1
+a311 1
+            // System.out.println("b\t" + (parts[i] & 0x00FF));
+d328 1
+a328 1
+            System.out.println("writeDouble = " + v);
+d339 1
+a339 1
+                // System.out.print("writeDouble sign=-1");
+d343 1
+a343 1
+                // System.out.print("writeDouble sign=+1");
+d355 1
+a355 1
+            // System.out.println(" signif=" + (long)Math.floor(sig) + " exp=" + exp);
+d368 1
+a368 1
+            System.out.println("writeString = \"" + s + "\"");
+d370 3
+a372 6
+        writeInt(s.length());
+        write(s.getBytes());
+        /**
+         * Enable when/if UTF-8 is supported by Cyc
+         */
+        //write(s.getBytes("UTF-8"));
+d382 1
+a382 1
+            System.out.println("writeByteArray = \"" + bytes + "\"");
+d400 1
+a400 1
+                System.out.println("writeList = " + ((CycList) list).safeToString() +
+d403 1
+a403 1
+                System.out.println("writeList = " + list +
+d420 1
+a420 1
+            System.out.println("writeDottedList = " + dottedList.safeToString() +
+d432 1
+a432 1
+                System.out.println("writeDottedList.cdr = " + safeToString.invoke(dottedElement, null));
+d435 1
+a435 1
+                System.out.println("writeDottedList.cdr = " + dottedElement);
+d448 1
+a448 1
+            System.out.println("writeList(Array) = " + list + "\n  of size " + list.length);
+d463 1
+a463 1
+            System.out.println("writeGuid = " + guid);
+d475 1
+a475 1
+            System.out.println("writeSymbol = " + cycSymbol);
+d482 1
+a482 1
+                System.out.println("writing CFASL_NIL");
+d498 1
+a498 1
+            System.out.println("writeKeyword = " + cycSymbol);
+d510 1
+a510 1
+            System.out.println("writeVariable = " + cycVariable.safeToString());
+d523 1
+a523 1
+            System.out.println("writeConstant = " + cycConstant.safeToString());
+d535 1
+a535 1
+            System.out.println("writeNart = " + cycNart.safeToString());
+d547 1
+a547 1
+            System.out.println("writeAssertion = " + cycAssertion.safeToString());
+d562 1
+a562 1
+                    System.out.println("writeObject = null");
+d566 1
+a566 1
+                    System.out.println("writeObject = " + safeToString.invoke(o, null) +
+d571 1
+a571 1
+                System.out.println("writeObject = " + o + " (" + o.getClass() + ")");
+@
+
+
+1.17
+log
+@Concurrent api calls
+@
+text
+@d17 1
+a17 1
+ * @@version $Id: CfaslOutputStream.java,v 1.16 2002/02/18 18:46:33 stephenreed Exp $
+d367 4
+@
+
+
+1.16
+log
+@Added ability to coerce java null to Cyc NIL symbol when sending objects to Cyc
+@
+text
+@d17 1
+a17 1
+ * @@version $Id: CfaslOutputStream.java,v 1.15 2001/12/15 19:05:11 stephenreed Exp $
+d612 1
+a612 1
+            throw  new RuntimeException("No cfasl opcode for " + o);
+@
+
+
+1.15
+log
+@Changes to support a government application
+@
+text
+@d17 1
+a17 1
+ * @@version $Id: CfaslOutputStream.java,v 1.14 2001/11/17 00:32:47 stephenreed Exp $
+d555 8
+a562 4
+                // If object o understands the safeToString method, then use it.
+                Method safeToString = o.getClass().getMethod("safeToString", null);
+                System.out.println("writeObject = " + safeToString.invoke(o, null) +
+                                   " (" + o.getClass() + ")");
+d568 4
+a571 1
+        if (o instanceof Guid)
+@
+
+
+1.14
+log
+@CoAbs agent tests
+@
+text
+@d1 610
+a610 610
+package  org.opencyc.api;
+
+import  java.io.*;
+import  java.math.BigInteger;
+import  java.util.*;
+import  java.lang.reflect.*;
+import  org.opencyc.cycobject.*;
+
+/**
+ * A CFASL translating buffered output stream.  All Java-native types which have logical
+ * sublisp equivalents are translated automatically by this stream.  Classes
+ * implementing the CfaslTranslatingObject interface are translated using their
+ * writeObject() method.  Other CYC objects, such as binding-lists and formulas,
+ * should be explicitly coerced before being sent, unless they inherit from
+ * a class which can be translated automatically.
+ *
+ * @@version $Id: CfaslOutputStream.java,v 1.13 2001/11/14 01:15:16 stephenreed Exp $
+ * @@author Christopher
+ * @@author Dan Lipofsky
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+
+public class CfaslOutputStream extends BufferedOutputStream {
+    /**
+     * No api trace.
+     */
+    public static final int API_TRACE_NONE = 0;
+
+    /**
+     * Message-level api trace.
+     */
+    public static final int API_TRACE_MESSAGES = 1;
+
+    /**
+     * Detailed api trace.
+     */
+    public static final int API_TRACE_DETAILED = 2;
+
+    /**
+     * Parameter that, when true, causes a trace of the messages to and from the server.
+     */
+    public int trace = API_TRACE_NONE;
+
+    /**
+     * Binary values for assembling CFASL messages.
+     */
+    protected static final int CFASL_IMMEDIATE_FIXNUM_CUTOFF = 128;
+    protected static final int CFASL_IMMEDIATE_FIXNUM_OFFSET = 256 - CFASL_IMMEDIATE_FIXNUM_CUTOFF;
+    protected static final int CFASL_P_8BIT_INT = 0;
+    protected static final int CFASL_N_8BIT_INT = 1;
+    protected static final int CFASL_P_16BIT_INT = 2;
+    protected static final int CFASL_N_16BIT_INT = 3;
+    protected static final int CFASL_P_24BIT_INT = 4;
+    protected static final int CFASL_N_24BIT_INT = 5;
+    protected static final int CFASL_P_32BIT_INT = 6;
+    protected static final int CFASL_N_32BIT_INT = 7;
+    protected static final int CFASL_P_FLOAT = 8;
+    protected static final int CFASL_N_FLOAT = 9;
+    protected static final int CFASL_KEYWORD = 10;
+    protected static final int CFASL_SYMBOL = 11;
+    protected static final int CFASL_NIL = 12;
+    protected static final int CFASL_LIST = 13;
+    protected static final int CFASL_VECTOR = 14;
+    protected static final int CFASL_STRING = 15;
+    protected static final int CFASL_CHARACTER = 16;
+    protected static final int CFASL_DOTTED = 17;
+    protected static final int CFASL_HASHTABLE = 18;
+    protected static final int CFASL_BTREE_LOW_HIGH = 19;
+    protected static final int CFASL_BTREE_LOW = 20;
+    protected static final int CFASL_BTREE_HIGH = 21;
+    protected static final int CFASL_BTREE_LEAF = 22;
+    protected static final int CFASL_P_BIGNUM = 23;
+    protected static final int CFASL_N_BIGNUM = 24;
+    protected static final int CFASL_GUID = 25;
+    protected static final int CFASL_BYTE_VECTOR = 26;
+    protected static final int CFASL_CONSTANT = 30;
+    protected static final int CFASL_NART = 31;
+    protected static final int CFASL_ASSERTION = 33;
+    protected static final int CFASL_ASSERTION_SHELL = 34;
+    protected static final int CFASL_ASSERTION_DEF = 35;
+    protected static final int CFASL_SOURCE = 36;
+    protected static final int CFASL_SOURCE_DEF = 37;
+    protected static final int CFASL_AXIOM = 38;
+    protected static final int CFASL_AXIOM_DEF = 39;
+    protected static final int CFASL_VARIABLE = 40;
+    protected static final int CFASL_INDEX = 41;
+    protected static final int CFASL_SPECIAL_OBJECT = 50;
+    protected static final int CFASL_DICTIONARY = 64;
+    protected static final int CFASL_SERVER_DEATH = -1;
+
+    /**
+     * Creates a new CfaslOutputStream to write data to the specified
+     * underlying output stream with the default buffer size.
+     *
+     * @@param out the underlying output stream.
+     */
+    public CfaslOutputStream (OutputStream out) {
+        super(out);
+    }
+
+    /**
+     * Creates a new CfaslOutputStream to write data to the specified
+     * underlying output stream with the specified buffer size.
+     *
+     * @@param out    the underlying output stream.
+     * @@param size   the buffer size.
+     */
+    public CfaslOutputStream (OutputStream out, int size) {
+        super(out, size);
+    }
+
+    /**
+     * Writes a boolean onto this CFASL output stream.
+     * What is actually written is either the symbol T or NIL.
+     *
+     * @@param v the boolean value to be written
+     */
+    public void writeBoolean (boolean v) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            System.out.println("writeBoolean = " + v);
+        if (v)
+            writeSymbol(CycObjectFactory.t);
+        else
+            writeSymbol(CycObjectFactory.nil);
+    }
+
+    /**
+     * Writes a one byte character onto this CFASL output stream.
+     * Crudely converts from Unicode to 8-bit ASCII.
+     *
+     * @@param v the character to be written
+     */
+    public void writeChar (char v) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            System.out.println("writeChar = " + v);
+        write(CFASL_CHARACTER);
+        write(v);
+    }
+
+    /**
+     * Writes a long integer to this CFASL output stream.  It may be written
+     * as either a CFASL Fixnum or a CFASL Bignum, depending on its size.
+     * For legacy reasons it is called writeInt instead of writeLong.
+     *
+     * @@param the long integer to be written
+     */
+    public void writeInt (long v) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            System.out.println("writeInt = " + v);
+        if (-2147483648L < v && v < 2147483648L)
+            writeFixnum((int)v);
+        else
+            writeBignum(v);
+    }
+
+    /**
+     * Writes an integer to this CFASL output stream as a Fixnum.
+     * This method is protected because it does no size checking, so
+     * the calling method must be wise as to what fits in a Fixnum.
+     *
+     * @@param v the integer to be written
+     */
+    protected void writeFixnum (int v) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            System.out.println("* writeFixnum(long " + v + ")");
+        int numBytes;
+        if (v >= 0) {
+            if (v < CFASL_IMMEDIATE_FIXNUM_CUTOFF) {
+                // We have a special way of transmitting very small positive integers
+                if (trace == API_TRACE_DETAILED)
+                    System.out.println("Writing Immediate Fixnum: " + v);
+                write((int)v + CFASL_IMMEDIATE_FIXNUM_OFFSET);
+                numBytes = 0;
+            }
+            else if (v < 128) {                 // v < 2^7
+                write(CFASL_P_8BIT_INT);
+                numBytes = 1;
+            }
+            else if (v < 32768) {               // v < 2^15
+                write(CFASL_P_16BIT_INT);
+                numBytes = 2;
+            }
+            else if (v < 8388608) {             // v < 2^23
+                write(CFASL_P_24BIT_INT);
+                numBytes = 3;
+            }
+            else {              // v < 2^31 (implicit: nothing bigger should ever be passed in)
+                write(CFASL_P_32BIT_INT);
+                numBytes = 4;
+            }
+        }
+        else {
+            v = -v;
+            if (v < 128) {      // v < 2^7
+                write(CFASL_N_8BIT_INT);
+                numBytes = 1;
+            }
+            else if (v < 32768) {               // v < 2^15
+                write(CFASL_N_16BIT_INT);
+                numBytes = 2;
+            }
+            else if (v < 8388608) {             // v < 2^23
+                write(CFASL_N_24BIT_INT);
+                numBytes = 3;
+            }
+            else {              // v < 2^31 (implicit: nothing bigger should ever be passed in)
+                write(CFASL_N_32BIT_INT);
+                numBytes = 4;
+            }
+        }
+        // Transmit the bytes of the Fixnum in little-endian order (LSB first)
+        for (int i = 0; i < numBytes; i++) {
+            if (trace == API_TRACE_DETAILED)
+                System.out.println("f\t" + ((v >>> (8*i)) & 0xFF));
+            write(v >>> (8*i));
+        }
+    }
+
+    /**
+     * Writes a long integer to this CFASL output stream as a Bignum.
+     * This method is protected because it does no size checking, so the
+     * calling method must be wise as to whether Fixnum or Bignum is better.
+     *
+     * @@param v the long integer to be written
+     */
+    protected void writeBignum (long v) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            System.out.println("* writeBignum(long " + v + ")");
+        // Determine the sign, transmit the opcode, and take the absolute value
+        if (v < 0) {
+            write(CFASL_N_BIGNUM);
+            v = -v;
+        }
+        else {
+            write(CFASL_P_BIGNUM);
+        }
+        // Convert to an array of bytes in little-endian order (LSB at 0)
+        int[] parts = new int[8];
+        int numBytes = 0;
+        while (v > 0) {
+            parts[numBytes++] = (int)(v & 0x000000FF);
+            v = v >>> 8;
+        }
+        // Transmit the size of the Bignum
+        writeFixnum(numBytes);
+        // Transmit the bytes of the Bignum in little-endian order (LSB first)
+        for (int i = 0; i < numBytes; i++) {
+            if (trace == API_TRACE_DETAILED)
+                System.out.println("b\t" + parts[i]);
+            // It sure seems dumb to send each byte as a fixnum instead of as
+            // a raw byte.  But that is the way the CFASL protocol was written.
+            writeFixnum(parts[i]);
+        }
+    }
+
+    /**
+     * Writes a BigInteger to this CFASL output stream as a CFASL
+     * Bignum (unless it is small enough to be transmitted as a CFASL Fixnum,
+     * in which case it is passed on to writeFixnum(long)).
+     *
+     * @@param v the <tt>BigInteger</tt> to be written
+     */
+    public void writeBigInteger (BigInteger v) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            System.out.println("writeBigInteger = " + v);
+        // If the absolute value of the BigInteger is less than 2^31, it can to be
+        // transmitted as a CFASL Fixnum.  Why do we use v.abs().bitLength()
+        // instead of just v.bitLength()?  There is exactly 1 case that is
+        // different: -2^31 has a bitLength of 31 while 2^31 has a bitLength of 32.
+        if (v.abs().bitLength() < 32) {
+            writeFixnum(v.intValue());
+            return;
+        }
+        // Determine the sign, transmit the opcode, and take the absolute value
+        if (v.signum() < 0) {
+            write(CFASL_N_BIGNUM);
+            v = v.abs();
+        }
+        else {
+            write(CFASL_P_BIGNUM);
+        }
+        // Convert the number to an array of bytes in big-endian order (MSB at 0)
+        byte[] parts = v.toByteArray();
+        // Transmit the size of the Bignum
+        writeFixnum(parts.length);
+        // Transmit the bytes of the Bignum in little-endian order (LSB first)
+        for (int i = parts.length - 1; i >= 0; i--) {
+            // System.out.println("b\t" + (parts[i] & 0x00FF));
+            // It sure seems dumb to send each byte as a fixnum instead of as
+            // a raw byte.  But that is the way the CFASL protocol was written.
+            writeFixnum(parts[i] & 0x00FF);
+        }
+    }
+
+    /**
+     * Writes a double onto this CfaslOutputStream.  The double is encoded as
+     * the sign (part of the opcode), significand, and exponent, such that
+     * the original double can be reconstructed as sign * significand * 2^exp.
+     * All parts are integers with the significand as small as possible.
+     *
+     * @@param v the double value to be written
+     */
+    public void writeDouble (double v) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            System.out.println("writeDouble = " + v);
+        if (Double.isNaN(v)) {
+            throw  new RuntimeException("Tried to send a NaN floating-point");
+        }
+        else if (Double.isInfinite(v)) {
+            throw  new RuntimeException("Tried to send an infinite floating-point");
+        }
+        else {
+            if (v < 0.0) {
+                write(CFASL_N_FLOAT);
+                v = -v;
+                // System.out.print("writeDouble sign=-1");
+            }
+            else {
+                write(CFASL_P_FLOAT);
+                // System.out.print("writeDouble sign=+1");
+            }
+            int exp = 0;
+            double sig = v;
+            while ((sig != 0.0) && (sig == Math.floor(sig))) {
+                sig = sig/2.0;
+                exp++;
+            }
+            while (sig != Math.floor(sig)) {
+                sig = sig*2.0;
+                exp--;
+            }
+            // System.out.println(" signif=" + (long)Math.floor(sig) + " exp=" + exp);
+            writeInt((long)Math.floor(sig));
+            writeInt(exp);
+        }
+    }
+
+    /**
+     * Writes a String to this CfaslOutputStream.
+     *
+     * @@param s the string to be written
+     */
+    public void writeString (String s) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            System.out.println("writeString = \"" + s + "\"");
+        write(CFASL_STRING);
+        writeInt(s.length());
+        write(s.getBytes());
+    }
+
+    /**
+     * Writes a byte array to this CfaslOutputStream.
+     *
+     * @@param bytes the byte array to be written.
+     */
+    public void writeByteArray (byte[] bytes) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            System.out.println("writeByteArray = \"" + bytes + "\"");
+        write(CFASL_BYTE_VECTOR);
+        writeInt(bytes.length);
+        write(bytes);
+    }
+
+    /**
+     * Writes a List of Objects to this CfaslOutputStream as a CFASL List.
+     *
+     * @@param list the list of objects to be written
+     */
+    public void writeList (List list) throws IOException {
+        if (list instanceof CycList && !((CycList)list).isProperList()) {
+            writeDottedList((CycList)list);
+            return;
+        }
+        if (trace == API_TRACE_DETAILED) {
+            if (list instanceof CycList)
+                System.out.println("writeList = " + ((CycList) list).safeToString() +
+                                   "\n  of size " + list.size());
+            else
+                System.out.println("writeList = " + list +
+                                   "\n  of size " + list.size());
+        }
+        write(CFASL_LIST);
+        writeInt(list.size());
+        for (int i = 0; i < list.size(); i++) {
+            writeObject(list.get(i));
+        }
+    }
+
+    /**
+     * Writes an improper (dotted) CycList of Objects to this CfaslOutputStream as a CFASL dotted list.
+     *
+     * @@param improperList the list of objects to be written
+     */
+    public void writeDottedList (CycList dottedList) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            System.out.println("writeDottedList = " + dottedList.safeToString() +
+                               "\n  proper elements size " + dottedList.size());
+        write(CFASL_DOTTED);
+        writeInt(dottedList.size());
+        for (int i = 0; i < dottedList.size(); i++) {
+            writeObject(dottedList.get(i));
+        }
+        Object dottedElement = dottedList.getDottedElement();
+        if (trace == API_TRACE_DETAILED) {
+            try {
+                // If object dottedElement understands the safeToString method, then use it.
+                Method safeToString = dottedElement.getClass().getMethod("safeToString", null);
+                System.out.println("writeDottedList.cdr = " + safeToString.invoke(dottedElement, null));
+            }
+            catch (Exception e) {
+                System.out.println("writeDottedList.cdr = " + dottedElement);
+            }
+        }
+        writeObject(dottedElement);
+    }
+
+    /**
+     * Writes an array of Objects to this CfaslOutputStream as a CFASL List.
+     *
+     * @@param list the array of objects to be written
+     */
+    public void writeList (Object[] list) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            System.out.println("writeList(Array) = " + list + "\n  of size " + list.length);
+        write(CFASL_LIST);
+        writeInt(list.length);
+        for (int i = 0; i < list.length; i++) {
+            writeObject(list[i]);
+        }
+    }
+
+    /**
+     * Writes a <tt>Guid</tt> object to this CfaslOutputStream.
+     *
+     * @@param guid the <tt>Guid</tt> to be written
+     */
+    public void writeGuid (Guid guid) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            System.out.println("writeGuid = " + guid);
+        write(CFASL_GUID);
+        writeString(guid.toString());
+    }
+
+    /**
+     * Writes a <tt>CycSymbol</tt> object to this CfaslOutputStream.
+     *
+     * @@param cycSymbol the <tt>CycSymbol</tt> to be written
+     */
+    public void writeSymbol (CycSymbol cycSymbol) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            System.out.println("writeSymbol = " + cycSymbol);
+        if (cycSymbol.isKeyword()) {
+            writeKeyword(cycSymbol);
+            return;
+        }
+        if (cycSymbol.equals(CycObjectFactory.nil)) {
+            if (trace == API_TRACE_DETAILED)
+                System.out.println("writing CFASL_NIL");
+            write(CFASL_NIL);
+        }
+        else {
+            write(CFASL_SYMBOL);
+            writeString(cycSymbol.toString().toUpperCase());
+        }
+    }
+
+    /**
+     * Writes a keyword symbol object to this CfaslOutputStream.
+     *
+     * @@param cycSymbol the keyword to be written
+     */
+    public void writeKeyword (CycSymbol cycSymbol) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            System.out.println("writeKeyword = " + cycSymbol);
+        write(CFASL_KEYWORD);
+        writeString(cycSymbol.toString().toUpperCase());
+    }
+
+    /**
+     * Writes a <tt>CycVariable</tt> object to this CfaslOutputStream.
+     *
+     * @@param cycVariable the <tt>CycVariable</tt> to be written
+     */
+    public void writeVariable (CycVariable cycVariable) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            System.out.println("writeVariable = " + cycVariable.safeToString());
+        //write(CFASL_VARIABLE);
+        write(CFASL_SYMBOL);
+        writeString(cycVariable.toString().toUpperCase());
+    }
+
+    /**
+     * Writes a <tt>CycConstant</tt> object to this CfaslOutputStream.
+     *
+     * @@param cycConstant the <tt>CycConstant</tt> to be written
+     */
+    public void writeConstant (CycConstant cycConstant) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            System.out.println("writeConstant = " + cycConstant.safeToString());
+        write(CFASL_CONSTANT);
+        writeInt(cycConstant.getId().intValue());
+    }
+
+    /**
+     * Writes a <tt>CycNart</tt> object to this CfaslOutputStream.
+     *
+     * @@param cycNart the <tt>CycNart</tt> to be written
+     */
+    public void writeNart (CycNart cycNart) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            System.out.println("writeNart = " + cycNart.safeToString());
+        write(CFASL_NART);
+        writeInt(cycNart.getId().intValue());
+    }
+
+    /**
+     * Writes a <tt>CycAssertion</tt> object to this CfaslOutputStream.
+     *
+     * @@param cycAssertion the <tt>CycAssertion</tt> to be written
+     */
+    public void writeAssertion (CycAssertion cycAssertion) throws IOException {
+        if (trace == API_TRACE_DETAILED)
+            System.out.println("writeAssertion = " + cycAssertion.safeToString());
+        write(CFASL_ASSERTION);
+        writeInt(cycAssertion.getId().intValue());
+    }
+
+    /**
+     * Writes a generic object to this CfaslOutputStream.
+     *
+     * @@param o the object to be written
+     * @@throws RuntimeException if the Object cannot be translated.
+     */
+    public void writeObject (Object o) throws IOException {
+        if (trace == API_TRACE_DETAILED) {
+            try {
+                // If object o understands the safeToString method, then use it.
+                Method safeToString = o.getClass().getMethod("safeToString", null);
+                System.out.println("writeObject = " + safeToString.invoke(o, null) +
+                                   " (" + o.getClass() + ")");
+            }
+            catch (Exception e) {
+                System.out.println("writeObject = " + o + " (" + o.getClass() + ")");
+            }
+        }
+        if (o instanceof Guid)
+            writeGuid((Guid) o);
+        else if (o instanceof CycSymbol)
+            writeSymbol((CycSymbol) o);
+        else if (o instanceof CycVariable)
+            writeVariable((CycVariable) o);
+        else if (o instanceof CycConstant)
+            writeConstant((CycConstant) o);
+        else if (o instanceof CycNart)
+            writeNart((CycNart) o);
+        else if (o instanceof CycAssertion)
+            writeAssertion((CycAssertion) o);
+        else if (o instanceof List)
+            writeList((List)o);
+        else if (o instanceof Boolean)
+            writeBoolean(((Boolean) o).booleanValue());
+        else if (o instanceof Character)
+            writeChar(((Character) o).charValue());
+        else if (o instanceof String)
+            writeString((String) o);
+        else if (o instanceof Double)
+            writeDouble(((Double) o).doubleValue());
+        else if (o instanceof Float)
+            writeDouble(((Float) o).doubleValue());
+        else if (o instanceof Long)
+            writeInt(((Long) o).longValue());
+        else if (o instanceof Integer)
+            writeInt(((Integer) o).longValue());
+        else if (o instanceof Short)
+            writeInt(((Short) o).longValue());
+        else if (o instanceof Byte)
+            writeInt(((Byte) o).longValue());
+        else if (o instanceof BigInteger)
+            writeBigInteger((BigInteger) o);
+        else if (o instanceof Object[])
+            writeList((Object[]) o);
+        else if (o instanceof ByteArray)
+            writeByteArray(((ByteArray) o).byteArrayValue());
+        else if (o instanceof byte[])
+            writeByteArray((byte[]) o);
+        else
+            throw  new RuntimeException("No cfasl opcode for " + o);
+    }
+}
+
+
+
+@
+
+
+1.13
+log
+@Completed first round of CoABS agent tests with the OpenCyc api
+@
+text
+@d6 1
+d17 1
+a17 1
+ * @@version $Id: CfaslOutputStream.java,v 1.12 2001/10/24 17:00:29 stephenreed Exp $
+d392 8
+a399 2
+        if (trace == API_TRACE_DETAILED)
+            System.out.println("writeList = " + list + "\n  of size " + list.size());
+d414 2
+a415 1
+            System.out.println("writeDottedList = " + dottedList + "\n  proper elements size " + dottedList.size());
+d421 12
+a432 3
+        if (trace == API_TRACE_DETAILED)
+            System.out.println("writeDottedList.cdr = " + dottedList.getDottedElement());
+        writeObject(dottedList.getDottedElement());
+d504 1
+a504 1
+            System.out.println("writeVariable = " + cycVariable);
+d517 1
+a517 1
+            System.out.println("writeConstant = " + cycConstant);
+d529 1
+a529 1
+            System.out.println("writeNart = " + cycNart);
+d541 1
+a541 1
+            System.out.println("writeAssertion = " + cycAssertion);
+d553 11
+a563 2
+        if (trace == API_TRACE_DETAILED)
+            System.out.println("writeObject = " + o + " (" + o.getClass() + ")");
+d565 1
+a565 1
+            writeGuid((Guid)o);
+d567 1
+a567 1
+            writeSymbol((CycSymbol)o);
+d569 1
+a569 1
+            writeVariable((CycVariable)o);
+d571 1
+a571 1
+            writeConstant((CycConstant)o);
+d573 1
+a573 1
+            writeNart((CycNart)o);
+d575 1
+a575 1
+            writeAssertion((CycAssertion)o);
+d579 1
+a579 1
+            writeBoolean(((Boolean)o).booleanValue());
+d581 1
+a581 1
+            writeChar(((Character)o).charValue());
+d583 1
+a583 1
+            writeString((String)o);
+d585 1
+a585 1
+            writeDouble(((Double)o).doubleValue());
+d587 1
+a587 1
+            writeDouble(((Float)o).doubleValue());
+d589 1
+a589 1
+            writeInt(((Long)o).longValue());
+d591 1
+a591 1
+            writeInt(((Integer)o).longValue());
+d593 1
+a593 1
+            writeInt(((Short)o).longValue());
+d595 1
+a595 1
+            writeInt(((Byte)o).longValue());
+d597 1
+a597 1
+            writeBigInteger((BigInteger)o);
+d599 1
+a599 1
+            writeList((Object[])o);
+d601 1
+a601 1
+            writeByteArray(((ByteArray)o).byteArrayValue());
+d603 1
+a603 1
+            writeByteArray((byte[])o);
+@
+
+
+1.12
+log
+@Modifications to support jini agent interface to OpenCyc
+@
+text
+@d3 4
+d16 1
+a16 1
+ * @@version $Id: CfaslOutputStream.java,v 1.11 2001/10/22 17:03:15 stephenreed Exp $
+a38 5
+import  java.io.*;
+import  java.math.BigInteger;
+import  java.util.*;
+import  org.opencyc.cycobject.*;
+import  org.opencyc.util.ByteArray;
+@
+
+
+1.11
+log
+@Added ByteArray class, updated jini classes as a result of testing.
+@
+text
+@d1 585
+a585 575
+package  org.opencyc.api;
+
+import  java.io.*;
+import  java.math.BigInteger;
+import  java.util.*;
+import  org.opencyc.cycobject.*;
+import  org.opencyc.util.ByteArray;
+
+/**
+ * A CFASL translating buffered output stream.  All Java-native types which have logical
+ * sublisp equivalents are translated automatically by this stream.  Classes
+ * implementing the CfaslTranslatingObject interface are translated using their
+ * writeObject() method.  Other CYC objects, such as binding-lists and formulas,
+ * should be explicitly coerced before being sent, unless they inherit from
+ * a class which can be translated automatically.
+ *
+ * @@version $Id: CfaslOutputStream.java,v 1.6 2001/10/19 21:08:35 aldag Exp $
+ * @@author Christopher
+ * @@author Dan Lipofsky
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class CfaslOutputStream extends BufferedOutputStream {
+
+    /**
+     * Binary values for assembling CFASL messages.
+     */
+    protected static final int CFASL_IMMEDIATE_FIXNUM_CUTOFF = 128;
+    protected static final int CFASL_IMMEDIATE_FIXNUM_OFFSET = 256 - CFASL_IMMEDIATE_FIXNUM_CUTOFF;
+    protected static final int CFASL_P_8BIT_INT = 0;
+    protected static final int CFASL_N_8BIT_INT = 1;
+    protected static final int CFASL_P_16BIT_INT = 2;
+    protected static final int CFASL_N_16BIT_INT = 3;
+    protected static final int CFASL_P_24BIT_INT = 4;
+    protected static final int CFASL_N_24BIT_INT = 5;
+    protected static final int CFASL_P_32BIT_INT = 6;
+    protected static final int CFASL_N_32BIT_INT = 7;
+    protected static final int CFASL_P_FLOAT = 8;
+    protected static final int CFASL_N_FLOAT = 9;
+    protected static final int CFASL_KEYWORD = 10;
+    protected static final int CFASL_SYMBOL = 11;
+    protected static final int CFASL_NIL = 12;
+    protected static final int CFASL_LIST = 13;
+    protected static final int CFASL_VECTOR = 14;
+    protected static final int CFASL_STRING = 15;
+    protected static final int CFASL_CHARACTER = 16;
+    protected static final int CFASL_DOTTED = 17;
+    protected static final int CFASL_HASHTABLE = 18;
+    protected static final int CFASL_BTREE_LOW_HIGH = 19;
+    protected static final int CFASL_BTREE_LOW = 20;
+    protected static final int CFASL_BTREE_HIGH = 21;
+    protected static final int CFASL_BTREE_LEAF = 22;
+    protected static final int CFASL_P_BIGNUM = 23;
+    protected static final int CFASL_N_BIGNUM = 24;
+    protected static final int CFASL_GUID = 25;
+    protected static final int CFASL_BYTE_VECTOR = 26;
+    protected static final int CFASL_CONSTANT = 30;
+    protected static final int CFASL_NART = 31;
+    protected static final int CFASL_ASSERTION = 33;
+    protected static final int CFASL_ASSERTION_SHELL = 34;
+    protected static final int CFASL_ASSERTION_DEF = 35;
+    protected static final int CFASL_SOURCE = 36;
+    protected static final int CFASL_SOURCE_DEF = 37;
+    protected static final int CFASL_AXIOM = 38;
+    protected static final int CFASL_AXIOM_DEF = 39;
+    protected static final int CFASL_VARIABLE = 40;
+    protected static final int CFASL_INDEX = 41;
+    protected static final int CFASL_SPECIAL_OBJECT = 50;
+    protected static final int CFASL_DICTIONARY = 64;
+    protected static final int CFASL_SERVER_DEATH = -1;
+
+    /**
+     * Reference to the parent <tt>CycConnection</tt> object.
+     */
+    protected CycConnection cycConnection;
+
+    /**
+     * Creates a new CfaslOutputStream to write data to the specified
+     * underlying output stream with the default buffer size.
+     *
+     * @@param out the underlying output stream.
+     * @@param cycConnection the parent <tt>CycConnection</tt> object
+     */
+    public CfaslOutputStream (OutputStream out, CycConnection cycConnection) {
+        super(out);
+        this.cycConnection = cycConnection;
+    }
+
+    /**
+     * Creates a new CfaslOutputStream to write data to the specified
+     * underlying output stream with the specified buffer size.
+     *
+     * @@param out    the underlying output stream.
+     * @@param size   the buffer size.
+     */
+    public CfaslOutputStream (OutputStream out, int size) {
+        super(out, size);
+    }
+
+    /**
+     * Writes a boolean onto this CFASL output stream.
+     * What is actually written is either the symbol T or NIL.
+     *
+     * @@param v the boolean value to be written
+     */
+    public void writeBoolean (boolean v) throws IOException {
+        if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+            System.out.println("writeBoolean = " + v);
+        if (v)
+            writeSymbol(CycObjectFactory.t);
+        else
+            writeSymbol(CycObjectFactory.nil);
+    }
+
+    /**
+     * Writes a one byte character onto this CFASL output stream.
+     * Crudely converts from Unicode to 8-bit ASCII.
+     *
+     * @@param v the character to be written
+     */
+    public void writeChar (char v) throws IOException {
+        if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+            System.out.println("writeChar = " + v);
+        write(CFASL_CHARACTER);
+        write(v);
+    }
+
+    /**
+     * Writes a long integer to this CFASL output stream.  It may be written
+     * as either a CFASL Fixnum or a CFASL Bignum, depending on its size.
+     * For legacy reasons it is called writeInt instead of writeLong.
+     *
+     * @@param the long integer to be written
+     */
+    public void writeInt (long v) throws IOException {
+        if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+            System.out.println("writeInt = " + v);
+        if (-2147483648L < v && v < 2147483648L)
+            writeFixnum((int)v);
+        else
+            writeBignum(v);
+    }
+
+    /**
+     * Writes an integer to this CFASL output stream as a Fixnum.
+     * This method is protected because it does no size checking, so
+     * the calling method must be wise as to what fits in a Fixnum.
+     *
+     * @@param v the integer to be written
+     */
+    protected void writeFixnum (int v) throws IOException {
+        if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+            System.out.println("* writeFixnum(long " + v + ")");
+        int numBytes;
+        if (v >= 0) {
+            if (v < CFASL_IMMEDIATE_FIXNUM_CUTOFF) {
+                // We have a special way of transmitting very small positive integers
+                if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+                    System.out.println("Writing Immediate Fixnum: " + v);
+                write((int)v + CFASL_IMMEDIATE_FIXNUM_OFFSET);
+                numBytes = 0;
+            }
+            else if (v < 128) {                 // v < 2^7
+                write(CFASL_P_8BIT_INT);
+                numBytes = 1;
+            }
+            else if (v < 32768) {               // v < 2^15
+                write(CFASL_P_16BIT_INT);
+                numBytes = 2;
+            }
+            else if (v < 8388608) {             // v < 2^23
+                write(CFASL_P_24BIT_INT);
+                numBytes = 3;
+            }
+            else {              // v < 2^31 (implicit: nothing bigger should ever be passed in)
+                write(CFASL_P_32BIT_INT);
+                numBytes = 4;
+            }
+        }
+        else {
+            v = -v;
+            if (v < 128) {      // v < 2^7
+                write(CFASL_N_8BIT_INT);
+                numBytes = 1;
+            }
+            else if (v < 32768) {               // v < 2^15
+                write(CFASL_N_16BIT_INT);
+                numBytes = 2;
+            }
+            else if (v < 8388608) {             // v < 2^23
+                write(CFASL_N_24BIT_INT);
+                numBytes = 3;
+            }
+            else {              // v < 2^31 (implicit: nothing bigger should ever be passed in)
+                write(CFASL_N_32BIT_INT);
+                numBytes = 4;
+            }
+        }
+        // Transmit the bytes of the Fixnum in little-endian order (LSB first)
+        for (int i = 0; i < numBytes; i++) {
+            if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+                System.out.println("f\t" + ((v >>> (8 * i)) & 0xFF) );
+            write(v >>> (8*i));
+        }
+    }
+
+    /**
+     * Writes a long integer to this CFASL output stream as a Bignum.
+     * This method is protected because it does no size checking, so the
+     * calling method must be wise as to whether Fixnum or Bignum is better.
+     *
+     * @@param v the long integer to be written
+     */
+    protected void writeBignum (long v) throws IOException {
+        if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+            System.out.println("* writeBignum(long " + v + ")");
+        // Determine the sign, transmit the opcode, and take the absolute value
+        if (v < 0) {
+            write(CFASL_N_BIGNUM);
+            v = -v;
+        }
+        else {
+            write(CFASL_P_BIGNUM);
+        }
+        // Convert to an array of bytes in little-endian order (LSB at 0)
+        int[] parts = new int[8];
+        int numBytes = 0;
+        while (v > 0) {
+            parts[numBytes++] = (int)(v & 0x000000FF);
+            v = v >>> 8;
+        }
+        // Transmit the size of the Bignum
+        writeFixnum(numBytes);
+        // Transmit the bytes of the Bignum in little-endian order (LSB first)
+        for (int i = 0; i < numBytes; i++) {
+            if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+                System.out.println("b\t" + parts[i]);
+            // It sure seems dumb to send each byte as a fixnum instead of as
+            // a raw byte.  But that is the way the CFASL protocol was written.
+            writeFixnum(parts[i]);
+        }
+    }
+
+    /**
+     * Writes a BigInteger to this CFASL output stream as a CFASL
+     * Bignum (unless it is small enough to be transmitted as a CFASL Fixnum,
+     * in which case it is passed on to writeFixnum(long)).
+     *
+     * @@param v the <tt>BigInteger</tt> to be written
+     */
+    public void writeBigInteger (BigInteger v) throws IOException {
+        if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+            System.out.println("writeBigInteger = " + v);
+        // If the absolute value of the BigInteger is less than 2^31, it can to be
+        // transmitted as a CFASL Fixnum.  Why do we use v.abs().bitLength()
+        // instead of just v.bitLength()?  There is exactly 1 case that is
+        // different: -2^31 has a bitLength of 31 while 2^31 has a bitLength of 32.
+        if (v.abs().bitLength() < 32) {
+            writeFixnum(v.intValue());
+            return;
+        }
+        // Determine the sign, transmit the opcode, and take the absolute value
+        if (v.signum() < 0) {
+            write(CFASL_N_BIGNUM);
+            v = v.abs();
+        }
+        else {
+            write(CFASL_P_BIGNUM);
+        }
+        // Convert the number to an array of bytes in big-endian order (MSB at 0)
+        byte[] parts = v.toByteArray();
+        // Transmit the size of the Bignum
+        writeFixnum(parts.length);
+        // Transmit the bytes of the Bignum in little-endian order (LSB first)
+        for (int i = parts.length - 1; i >= 0; i--) {
+            // System.out.println("b\t" + (parts[i] & 0x00FF));
+            // It sure seems dumb to send each byte as a fixnum instead of as
+            // a raw byte.  But that is the way the CFASL protocol was written.
+            writeFixnum(parts[i] & 0x00FF);
+        }
+    }
+
+    /**
+     * Writes a double onto this CfaslOutputStream.  The double is encoded as
+     * the sign (part of the opcode), significand, and exponent, such that
+     * the original double can be reconstructed as sign * significand * 2^exp.
+     * All parts are integers with the significand as small as possible.
+     *
+     * @@param v the double value to be written
+     */
+    public void writeDouble (double v) throws IOException {
+        if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+            System.out.println("writeDouble = " + v);
+        if (Double.isNaN(v)) {
+            throw  new RuntimeException("Tried to send a NaN floating-point");
+        }
+        else if (Double.isInfinite(v)) {
+            throw  new RuntimeException("Tried to send an infinite floating-point");
+        }
+        else {
+            if (v < 0.0) {
+                write(CFASL_N_FLOAT);
+                v = -v;
+                // System.out.print("writeDouble sign=-1");
+            }
+            else {
+                write(CFASL_P_FLOAT);
+                // System.out.print("writeDouble sign=+1");
+            }
+            int exp = 0;
+            double sig = v;
+            while ((sig != 0.0) && (sig == Math.floor(sig))) {
+                sig = sig/2.0;
+                exp++;
+            }
+            while (sig != Math.floor(sig)) {
+                sig = sig*2.0;
+                exp--;
+            }
+            // System.out.println(" signif=" + (long)Math.floor(sig) + " exp=" + exp);
+            writeInt((long)Math.floor(sig));
+            writeInt(exp);
+        }
+    }
+
+    /**
+     * Writes a String to this CfaslOutputStream.
+     *
+     * @@param s the string to be written
+     */
+    public void writeString (String s) throws IOException {
+        if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+            System.out.println("writeString = \"" + s + "\"");
+        write(CFASL_STRING);
+        writeInt(s.length());
+        write(s.getBytes());
+    }
+
+  /**
+   * Writes a byte array to this CfaslOutputStream.
+   *
+   * @@param bytes the byte array to be written.
+   */ 
+  public void writeByteArray(byte[] bytes) throws IOException {
+    if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+      System.out.println("writeByteArray = \"" + bytes + "\"");
+    write(CFASL_BYTE_VECTOR);
+    writeInt(bytes.length);
+    write(bytes);
+  }
+
+    /**
+     * Writes a List of Objects to this CfaslOutputStream as a CFASL List.
+     *
+     * @@param list the list of objects to be written
+     */
+    public void writeList (List list) throws IOException {
+        if (list instanceof CycList &&
+            ! ((CycList) list).isProperList()) {
+            writeDottedList((CycList) list);
+            return;
+        }
+        if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+            System.out.println("writeList = " + list + "\n  of size " + list.size());
+        write(CFASL_LIST);
+        writeInt(list.size());
+        for (int i = 0; i < list.size(); i++) {
+            writeObject(list.get(i));
+        }
+    }
+
+    /**
+     * Writes an improper (dotted) CycList of Objects to this CfaslOutputStream as a CFASL dotted list.
+     *
+     * @@param improperList the list of objects to be written
+     */
+    public void writeDottedList (CycList dottedList) throws IOException {
+        if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+            System.out.println("writeDottedList = " + dottedList + "\n  proper elements size " +
+                               dottedList.size());
+        write(CFASL_DOTTED);
+        writeInt(dottedList.size());
+        for (int i = 0; i < dottedList.size(); i++) {
+            writeObject(dottedList.get(i));
+        }
+        if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+            System.out.println("writeDottedList.cdr = " + dottedList.getDottedElement());
+        writeObject(dottedList.getDottedElement());
+    }
+
+    /**
+     * Writes an array of Objects to this CfaslOutputStream as a CFASL List.
+     *
+     * @@param list the array of objects to be written
+     */
+    public void writeList (Object[] list) throws IOException {
+        if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+            System.out.println("writeList(Array) = " + list + "\n  of size " + list.length);
+        write(CFASL_LIST);
+        writeInt(list.length);
+        for (int i = 0; i < list.length; i++) {
+            writeObject(list[i]);
+        }
+    }
+
+    /**
+     * Writes a <tt>Guid</tt> object to this CfaslOutputStream.
+     *
+     * @@param guid the <tt>Guid</tt> to be written
+     */
+    public void writeGuid(Guid guid) throws IOException {
+        if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+            System.out.println("writeGuid = " + guid);
+        write(CFASL_GUID);
+        writeString(guid.toString());
+    }
+
+    /**
+     * Writes a <tt>CycSymbol</tt> object to this CfaslOutputStream.
+     *
+     * @@param cycSymbol the <tt>CycSymbol</tt> to be written
+     */
+    public void writeSymbol(CycSymbol cycSymbol) throws IOException {
+        if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+            System.out.println("writeSymbol = " + cycSymbol);
+        if (cycSymbol.isKeyword()) {
+            writeKeyword(cycSymbol);
+            return;
+        }
+        if (cycSymbol.equals(CycObjectFactory.nil)) {
+            if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+                System.out.println("writing CFASL_NIL");
+            write(CFASL_NIL);
+        }
+        else {
+            write(CFASL_SYMBOL);
+            writeString(cycSymbol.toString().toUpperCase());
+        }
+    }
+
+    /**
+     * Writes a keyword symbol object to this CfaslOutputStream.
+     *
+     * @@param cycSymbol the keyword to be written
+     */
+    public void writeKeyword(CycSymbol cycSymbol) throws IOException {
+        if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+            System.out.println("writeKeyword = " + cycSymbol);
+        write(CFASL_KEYWORD);
+        writeString(cycSymbol.toString().toUpperCase());
+    }
+
+    /**
+     * Writes a <tt>CycVariable</tt> object to this CfaslOutputStream.
+     *
+     * @@param cycVariable the <tt>CycVariable</tt> to be written
+     */
+    public void writeVariable(CycVariable cycVariable) throws IOException {
+        if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+            System.out.println("writeVariable = " + cycVariable);
+        //write(CFASL_VARIABLE);
+        write(CFASL_SYMBOL);
+        writeString(cycVariable.toString().toUpperCase());
+    }
+
+    /**
+     * Writes a <tt>CycConstant</tt> object to this CfaslOutputStream.
+     *
+     * @@param cycConstant the <tt>CycConstant</tt> to be written
+     */
+    public void writeConstant(CycConstant cycConstant) throws IOException {
+        if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+            System.out.println("writeConstant = " + cycConstant);
+        write(CFASL_CONSTANT);
+        writeInt(cycConstant.getId().intValue());
+    }
+
+    /**
+     * Writes a <tt>CycNart</tt> object to this CfaslOutputStream.
+     *
+     * @@param cycNart the <tt>CycNart</tt> to be written
+     */
+    public void writeNart(CycNart cycNart) throws IOException {
+        if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+            System.out.println("writeNart = " + cycNart);
+        write(CFASL_NART);
+        writeInt(cycNart.getId().intValue());
+    }
+
+    /**
+     * Writes a <tt>CycAssertion</tt> object to this CfaslOutputStream.
+     *
+     * @@param cycAssertion the <tt>CycAssertion</tt> to be written
+     */
+    public void writeAssertion(CycAssertion cycAssertion) throws IOException {
+        if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+            System.out.println("writeAssertion = " + cycAssertion);
+        write(CFASL_ASSERTION);
+        writeInt(cycAssertion.getId().intValue());
+    }
+
+    /**
+     * Writes a generic object to this CfaslOutputStream.
+     *
+     * @@param o the object to be written
+     * @@throws RuntimeException if the Object cannot be translated.
+     */
+    public void writeObject (Object o) throws IOException {
+        if (cycConnection.trace == CycConnection.API_TRACE_DETAILED)
+            System.out.println("writeObject = " + o + " (" + o.getClass() + ")");
+        if (o instanceof Guid)
+            writeGuid((Guid)o);
+        else if (o instanceof CycSymbol)
+            writeSymbol((CycSymbol)o);
+        else if (o instanceof CycVariable)
+            writeVariable((CycVariable)o);
+        else if (o instanceof CycConstant)
+            writeConstant((CycConstant)o);
+        else if (o instanceof CycNart)
+            writeNart((CycNart)o);
+        else if (o instanceof CycAssertion)
+            writeAssertion((CycAssertion)o);
+        else if (o instanceof List)
+            writeList((List)o);
+        else if (o instanceof Boolean)
+            writeBoolean(((Boolean)o).booleanValue());
+        else if (o instanceof Character)
+            writeChar(((Character)o).charValue());
+        else if (o instanceof String)
+            writeString((String)o);
+        else if (o instanceof Double)
+            writeDouble(((Double)o).doubleValue());
+        else if (o instanceof Float)
+            writeDouble(((Float)o).doubleValue());
+        else if (o instanceof Long)
+            writeInt(((Long)o).longValue());
+        else if (o instanceof Integer)
+            writeInt(((Integer)o).longValue());
+        else if (o instanceof Short)
+            writeInt(((Short)o).longValue());
+        else if (o instanceof Byte)
+            writeInt(((Byte)o).longValue());
+        else if (o instanceof BigInteger)
+            writeBigInteger((BigInteger)o);
+        else if (o instanceof Object[])
+            writeList((Object[])o);
+	else if (o instanceof byte[])
+	    writeByteArray((byte[])o);
+        else
+            throw  new RuntimeException("No cfasl opcode for " + o);
+    }
+}
+
+
+
+
+
+
+
+@
+
+
+1.10
+log
+@Fixed errors in mapdictionary api function discovered by unit test cases.
+@
+text
+@d7 1
+d17 1
+a17 1
+ * @@version $Id: CfaslOutputStream.java,v 1.9 2001/09/14 22:14:55 stephenreed Exp $
+d19 1
+a19 1
+ * @@autoor Dan Lipofsky
+d72 1
+d355 13
+d563 2
+@
+
+
+1.9
+log
+@Created new CycObjectFactory class to contain all cyc object caches
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: CfaslOutputStream.java,v 1.8 2001/09/07 23:43:03 stephenreed Exp $
+d83 1
+@
+
+
+1.8
+log
+@Added defered completion of CycForts in the binary api. Continued with HashJoiner.
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: CfaslOutputStream.java,v 1.7 2001/09/03 22:30:50 stephenreed Exp $
+d123 1
+a123 1
+            writeSymbol(CycSymbol.t);
+d125 1
+a125 1
+            writeSymbol(CycSymbol.nil);
+d430 1
+a430 1
+        if (cycSymbol.equals(CycSymbol.nil)) {
+@
+
+
+1.7
+log
+@Reworking ProblemParser to handle high cardinality domains better
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: CfaslOutputStream.java,v 1.6 2001/08/27 14:39:27 stephenreed Exp $
+d475 1
+a475 1
+        writeInt(cycConstant.id.intValue());
+d487 1
+a487 1
+        writeInt(cycNart.id.intValue());
+@
+
+
+1.6
+log
+@Added id to CycVariable, completed binary api test cases.
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: CfaslOutputStream.java,v 1.5 2001/08/27 02:30:53 stephenreed Exp $
+d120 1
+a120 1
+        if (cycConnection.trace)
+d135 1
+a135 1
+        if (cycConnection.trace)
+d149 1
+a149 1
+        if (cycConnection.trace)
+d165 1
+a165 1
+        if (cycConnection.trace)
+d171 1
+a171 1
+                if (cycConnection.trace)
+d214 1
+a214 1
+            if (cycConnection.trace)
+d228 1
+a228 1
+        if (cycConnection.trace)
+d249 1
+a249 1
+            if (cycConnection.trace)
+d265 1
+a265 1
+        if (cycConnection.trace)
+d305 1
+a305 1
+        if (cycConnection.trace)
+d345 1
+a345 1
+        if (cycConnection.trace)
+d363 1
+a363 1
+        if (cycConnection.trace)
+d378 1
+a378 1
+        if (cycConnection.trace)
+d386 1
+a386 1
+        if (cycConnection.trace)
+d397 1
+a397 1
+        if (cycConnection.trace)
+d412 1
+a412 1
+        if (cycConnection.trace)
+d424 1
+a424 1
+        if (cycConnection.trace)
+d431 1
+a431 1
+            if (cycConnection.trace)
+d447 1
+a447 1
+        if (cycConnection.trace)
+d459 1
+a459 1
+        if (cycConnection.trace)
+d472 1
+a472 1
+        if (cycConnection.trace)
+d484 1
+a484 1
+        if (cycConnection.trace)
+d496 1
+a496 1
+        if (cycConnection.trace)
+d509 1
+a509 1
+        if (cycConnection.trace)
+@
+
+
+1.5
+log
+@Unit test cases for binary api connnection
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: CfaslOutputStream.java,v 1.4 2001/08/24 22:39:27 stephenreed Exp $
+d426 7
+a432 1
+        if (cycSymbol.equals(CycSymbol.nil))
+d434 1
+d442 12
+d461 1
+@
+
+
+1.4
+log
+@Continued binary api test cases
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: CfaslOutputStream.java,v 1.3 2001/08/23 09:33:13 stephenreed Exp $
+a58 1
+    protected static final int CFASL_DOTTED = 17;
+d62 1
+d358 5
+d370 19
+@
+
+
+1.3
+log
+@Continued unit testing binary api
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: CfaslOutputStream.java,v 1.2 2001/08/23 00:47:46 stephenreed Exp $
+d346 1
+a346 1
+            System.out.println("writeString = " + s);
+d359 1
+a359 1
+            System.out.println("writeList = " + list);
+d374 1
+a374 1
+            System.out.println("writeList = " + list);
+@
+
+
+1.2
+log
+@Continuing integration of legacy binary api
+@
+text
+@d1 513
+a513 509
+package  org.opencyc.api;
+
+import  java.io.*;
+import  java.math.BigInteger;
+import  java.util.*;
+import  org.opencyc.cycobject.*;
+
+/**
+ * A CFASL translating buffered output stream.  All Java-native types which have logical
+ * sublisp equivalents are translated automatically by this stream.  Classes
+ * implementing the CfaslTranslatingObject interface are translated using their
+ * writeObject() method.  Other CYC objects, such as binding-lists and formulas,
+ * should be explicitly coerced before being sent, unless they inherit from
+ * a class which can be translated automatically.
+ *
+ * @@version $Id: CfaslOutputStream.java,v 1.1 2001/08/21 23:28:16 stephenreed Exp $
+ * @@author Christopher
+ * @@autoor Dan Lipofsky
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class CfaslOutputStream extends BufferedOutputStream {
+
+    /**
+     * Binary values for assembling CFASL messages.
+     */
+    protected static final int CFASL_IMMEDIATE_FIXNUM_CUTOFF = 128;
+    protected static final int CFASL_IMMEDIATE_FIXNUM_OFFSET = 256 - CFASL_IMMEDIATE_FIXNUM_CUTOFF;
+    protected static final int CFASL_P_8BIT_INT = 0;
+    protected static final int CFASL_N_8BIT_INT = 1;
+    protected static final int CFASL_P_16BIT_INT = 2;
+    protected static final int CFASL_N_16BIT_INT = 3;
+    protected static final int CFASL_P_24BIT_INT = 4;
+    protected static final int CFASL_N_24BIT_INT = 5;
+    protected static final int CFASL_P_32BIT_INT = 6;
+    protected static final int CFASL_N_32BIT_INT = 7;
+    protected static final int CFASL_P_FLOAT = 8;
+    protected static final int CFASL_N_FLOAT = 9;
+    protected static final int CFASL_KEYWORD = 10;
+    protected static final int CFASL_SYMBOL = 11;
+    protected static final int CFASL_NIL = 12;
+    protected static final int CFASL_LIST = 13;
+    protected static final int CFASL_DOTTED = 17;
+    protected static final int CFASL_VECTOR = 14;
+    protected static final int CFASL_STRING = 15;
+    protected static final int CFASL_CHARACTER = 16;
+    protected static final int CFASL_HASHTABLE = 18;
+    protected static final int CFASL_BTREE_LOW_HIGH = 19;
+    protected static final int CFASL_BTREE_LOW = 20;
+    protected static final int CFASL_BTREE_HIGH = 21;
+    protected static final int CFASL_BTREE_LEAF = 22;
+    protected static final int CFASL_P_BIGNUM = 23;
+    protected static final int CFASL_N_BIGNUM = 24;
+    protected static final int CFASL_GUID = 25;
+    protected static final int CFASL_CONSTANT = 30;
+    protected static final int CFASL_NART = 31;
+    protected static final int CFASL_ASSERTION = 33;
+    protected static final int CFASL_ASSERTION_SHELL = 34;
+    protected static final int CFASL_ASSERTION_DEF = 35;
+    protected static final int CFASL_SOURCE = 36;
+    protected static final int CFASL_SOURCE_DEF = 37;
+    protected static final int CFASL_AXIOM = 38;
+    protected static final int CFASL_AXIOM_DEF = 39;
+    protected static final int CFASL_VARIABLE = 40;
+    protected static final int CFASL_INDEX = 41;
+    protected static final int CFASL_SPECIAL_OBJECT = 50;
+    protected static final int CFASL_SERVER_DEATH = -1;
+
+    /**
+     * Reference to the parent <tt>CycConnection</tt> object.
+     */
+    protected CycConnection cycConnection;
+
+    /**
+     * Creates a new CfaslOutputStream to write data to the specified
+     * underlying output stream with the default buffer size.
+     *
+     * @@param out the underlying output stream.
+     * @@param cycConnection the parent <tt>CycConnection</tt> object
+     */
+    public CfaslOutputStream (OutputStream out, CycConnection cycConnection) {
+        super(out);
+        this.cycConnection = cycConnection;
+    }
+
+    /**
+     * Creates a new CfaslOutputStream to write data to the specified
+     * underlying output stream with the specified buffer size.
+     *
+     * @@param out    the underlying output stream.
+     * @@param size   the buffer size.
+     */
+    public CfaslOutputStream (OutputStream out, int size) {
+        super(out, size);
+    }
+
+    /**
+     * Writes a boolean onto this CFASL output stream.
+     * What is actually written is either the symbol T or NIL.
+     *
+     * @@param v the boolean value to be written
+     */
+    public void writeBoolean (boolean v) throws IOException {
+        if (cycConnection.trace)
+            System.out.println("writeBoolean = " + v);
+        if (v)
+            writeSymbol(CycSymbol.t);
+        else
+            writeSymbol(CycSymbol.nil);
+    }
+
+    /**
+     * Writes a one byte character onto this CFASL output stream.
+     * Crudely converts from Unicode to 8-bit ASCII.
+     *
+     * @@param v the character to be written
+     */
+    public void writeChar (char v) throws IOException {
+        if (cycConnection.trace)
+            System.out.println("writeChar = " + v);
+        write(CFASL_CHARACTER);
+        write(v);
+    }
+
+    /**
+     * Writes a long integer to this CFASL output stream.  It may be written
+     * as either a CFASL Fixnum or a CFASL Bignum, depending on its size.
+     * For legacy reasons it is called writeInt instead of writeLong.
+     *
+     * @@param the long integer to be written
+     */
+    public void writeInt (long v) throws IOException {
+        if (cycConnection.trace)
+            System.out.println("writeInt = " + v);
+        if (-2147483648L < v && v < 2147483648L)
+            writeFixnum((int)v);
+        else
+            writeBignum(v);
+    }
+
+    /**
+     * Writes an integer to this CFASL output stream as a Fixnum.
+     * This method is protected because it does no size checking, so
+     * the calling method must be wise as to what fits in a Fixnum.
+     *
+     * @@param v the integer to be written
+     */
+    protected void writeFixnum (int v) throws IOException {
+        if (cycConnection.trace)
+            System.out.println("* writeFixnum(long " + v + ")");
+        int numBytes;
+        if (v >= 0) {
+            if (v < CFASL_IMMEDIATE_FIXNUM_CUTOFF) {
+                // We have a special way of transmitting very small positive integers
+                if (cycConnection.trace)
+                    System.out.println("Writing Immediate Fixnum: " + v);
+                write((int)v + CFASL_IMMEDIATE_FIXNUM_OFFSET);
+                numBytes = 0;
+            }
+            else if (v < 128) {                 // v < 2^7
+                write(CFASL_P_8BIT_INT);
+                numBytes = 1;
+            }
+            else if (v < 32768) {               // v < 2^15
+                write(CFASL_P_16BIT_INT);
+                numBytes = 2;
+            }
+            else if (v < 8388608) {             // v < 2^23
+                write(CFASL_P_24BIT_INT);
+                numBytes = 3;
+            }
+            else {              // v < 2^31 (implicit: nothing bigger should ever be passed in)
+                write(CFASL_P_32BIT_INT);
+                numBytes = 4;
+            }
+        }
+        else {
+            v = -v;
+            if (v < 128) {      // v < 2^7
+                write(CFASL_N_8BIT_INT);
+                numBytes = 1;
+            }
+            else if (v < 32768) {               // v < 2^15
+                write(CFASL_N_16BIT_INT);
+                numBytes = 2;
+            }
+            else if (v < 8388608) {             // v < 2^23
+                write(CFASL_N_24BIT_INT);
+                numBytes = 3;
+            }
+            else {              // v < 2^31 (implicit: nothing bigger should ever be passed in)
+                write(CFASL_N_32BIT_INT);
+                numBytes = 4;
+            }
+        }
+        // Transmit the bytes of the Fixnum in little-endian order (LSB first)
+        for (int i = 0; i < numBytes; i++) {
+            if (cycConnection.trace)
+                System.out.println("f\t" + ((v >>> (8 * i)) & 0xFF) );
+            write(v >>> (8*i));
+        }
+    }
+
+    /**
+     * Writes a long integer to this CFASL output stream as a Bignum.
+     * This method is protected because it does no size checking, so the
+     * calling method must be wise as to whether Fixnum or Bignum is better.
+     *
+     * @@param v the long integer to be written
+     */
+    protected void writeBignum (long v) throws IOException {
+        if (cycConnection.trace)
+            System.out.println("* writeBignum(long " + v + ")");
+        // Determine the sign, transmit the opcode, and take the absolute value
+        if (v < 0) {
+            write(CFASL_N_BIGNUM);
+            v = -v;
+        }
+        else {
+            write(CFASL_P_BIGNUM);
+        }
+        // Convert to an array of bytes in little-endian order (LSB at 0)
+        int[] parts = new int[8];
+        int numBytes = 0;
+        while (v > 0) {
+            parts[numBytes++] = (int)(v & 0x000000FF);
+            v = v >>> 8;
+        }
+        // Transmit the size of the Bignum
+        writeFixnum(numBytes);
+        // Transmit the bytes of the Bignum in little-endian order (LSB first)
+        for (int i = 0; i < numBytes; i++) {
+            if (cycConnection.trace)
+                System.out.println("b\t" + parts[i]);
+            // It sure seems dumb to send each byte as a fixnum instead of as
+            // a raw byte.  But that is the way the CFASL protocol was written.
+            writeFixnum(parts[i]);
+        }
+    }
+
+    /**
+     * Writes a BigInteger to this CFASL output stream as a CFASL
+     * Bignum (unless it is small enough to be transmitted as a CFASL Fixnum,
+     * in which case it is passed on to writeFixnum(long)).
+     *
+     * @@param v the <tt>BigInteger</tt> to be written
+     */
+    public void writeBigInteger (BigInteger v) throws IOException {
+        if (cycConnection.trace)
+            System.out.println("writeBigInteger = " + v);
+        // If the absolute value of the BigInteger is less than 2^31, it can to be
+        // transmitted as a CFASL Fixnum.  Why do we use v.abs().bitLength()
+        // instead of just v.bitLength()?  There is exactly 1 case that is
+        // different: -2^31 has a bitLength of 31 while 2^31 has a bitLength of 32.
+        if (v.abs().bitLength() < 32) {
+            writeFixnum(v.intValue());
+            return;
+        }
+        // Determine the sign, transmit the opcode, and take the absolute value
+        if (v.signum() < 0) {
+            write(CFASL_N_BIGNUM);
+            v = v.abs();
+        }
+        else {
+            write(CFASL_P_BIGNUM);
+        }
+        // Convert the number to an array of bytes in big-endian order (MSB at 0)
+        byte[] parts = v.toByteArray();
+        // Transmit the size of the Bignum
+        writeFixnum(parts.length);
+        // Transmit the bytes of the Bignum in little-endian order (LSB first)
+        for (int i = parts.length - 1; i >= 0; i--) {
+            // System.out.println("b\t" + (parts[i] & 0x00FF));
+            // It sure seems dumb to send each byte as a fixnum instead of as
+            // a raw byte.  But that is the way the CFASL protocol was written.
+            writeFixnum(parts[i] & 0x00FF);
+        }
+    }
+
+    /**
+     * Writes a double onto this CfaslOutputStream.  The double is encoded as
+     * the sign (part of the opcode), significand, and exponent, such that
+     * the original double can be reconstructed as sign * significand * 2^exp.
+     * All parts are integers with the significand as small as possible.
+     *
+     * @@param v the double value to be written
+     */
+    public void writeDouble (double v) throws IOException {
+        if (cycConnection.trace)
+            System.out.println("writeDouble = " + v);
+        if (Double.isNaN(v)) {
+            throw  new RuntimeException("Tried to send a NaN floating-point");
+        }
+        else if (Double.isInfinite(v)) {
+            throw  new RuntimeException("Tried to send an infinite floating-point");
+        }
+        else {
+            if (v < 0.0) {
+                write(CFASL_N_FLOAT);
+                v = -v;
+                // System.out.print("writeDouble sign=-1");
+            }
+            else {
+                write(CFASL_P_FLOAT);
+                // System.out.print("writeDouble sign=+1");
+            }
+            int exp = 0;
+            double sig = v;
+            while ((sig != 0.0) && (sig == Math.floor(sig))) {
+                sig = sig/2.0;
+                exp++;
+            }
+            while (sig != Math.floor(sig)) {
+                sig = sig*2.0;
+                exp--;
+            }
+            // System.out.println(" signif=" + (long)Math.floor(sig) + " exp=" + exp);
+            writeInt((long)Math.floor(sig));
+            writeInt(exp);
+        }
+    }
+
+    /**
+     * Writes a String to this CfaslOutputStream.
+     *
+     * @@param s the string to be written
+     */
+    public void writeString (String s) throws IOException {
+        if (cycConnection.trace)
+            System.out.println("writeString = " + s);
+        write(CFASL_STRING);
+        writeInt(s.length());
+        write(s.getBytes());
+    }
+
+    /**
+     * Writes a List of Objects to this CfaslOutputStream as a CFASL List.
+     *
+     * @@param list the list of objects to be written
+     */
+    public void writeList (List list) throws IOException {
+        if (cycConnection.trace)
+            System.out.println("writeList = " + list);
+        write(CFASL_LIST);
+        writeInt(list.size());
+        for (int i = 0; i < list.size(); i++) {
+            writeObject(list.get(i));
+        }
+    }
+
+    /**
+     * Writes an array of Objects to this CfaslOutputStream as a CFASL List.
+     *
+     * @@param list the array of objects to be written
+     */
+    public void writeList (Object[] list) throws IOException {
+        if (cycConnection.trace)
+            System.out.println("writeList = " + list);
+        write(CFASL_LIST);
+        writeInt(list.length);
+        for (int i = 0; i < list.length; i++) {
+            writeObject(list[i]);
+        }
+    }
+
+    /**
+     * Writes a <tt>Guid</tt> object to this CfaslOutputStream.
+     *
+     * @@param guid the <tt>Guid</tt> to be written
+     */
+    public void writeGuid(Guid guid) throws IOException {
+        if (cycConnection.trace)
+            System.out.println("writeGuid = " + guid);
+        write(CFASL_GUID);
+        writeString(guid.toString());
+    }
+
+    /**
+     * Writes a <tt>CycSymbol</tt> object to this CfaslOutputStream.
+     *
+     * @@param cycSymbol the <tt>CycSymbol</tt> to be written
+     */
+    public void writeSymbol(CycSymbol cycSymbol) throws IOException {
+        if (cycConnection.trace)
+            System.out.println("writeSymbol = " + cycSymbol);
+        if (cycSymbol.equals(CycSymbol.nil))
+            write(CFASL_NIL);
+        else {
+            write(CFASL_SYMBOL);
+            writeString(cycSymbol.toString().toUpperCase());
+        }
+    }
+
+    /**
+     * Writes a <tt>CycVariable</tt> object to this CfaslOutputStream.
+     *
+     * @@param cycVariable the <tt>CycVariable</tt> to be written
+     */
+    public void writeVariable(CycVariable cycVariable) throws IOException {
+        if (cycConnection.trace)
+            System.out.println("writeVariable = " + cycVariable);
+        write(CFASL_SYMBOL);
+        writeString(cycVariable.toString().toUpperCase());
+    }
+
+    /**
+     * Writes a <tt>CycConstant</tt> object to this CfaslOutputStream.
+     *
+     * @@param cycConstant the <tt>CycConstant</tt> to be written
+     */
+    public void writeConstant(CycConstant cycConstant) throws IOException {
+        if (cycConnection.trace)
+            System.out.println("writeConstant = " + cycConstant);
+        write(CFASL_CONSTANT);
+        writeInt(cycConstant.id);
+    }
+
+    /**
+     * Writes a <tt>CycNart</tt> object to this CfaslOutputStream.
+     *
+     * @@param cycNart the <tt>CycNart</tt> to be written
+     */
+    public void writeNart(CycNart cycNart) throws IOException {
+        if (cycConnection.trace)
+            System.out.println("writeNart = " + cycNart);
+        write(CFASL_NART);
+        writeInt(cycNart.id);
+    }
+
+    /**
+     * Writes a <tt>CycAssertion</tt> object to this CfaslOutputStream.
+     *
+     * @@param cycAssertion the <tt>CycAssertion</tt> to be written
+     */
+    public void writeAssertion(CycAssertion cycAssertion) throws IOException {
+        if (cycConnection.trace)
+            System.out.println("writeAssertion = " + cycAssertion);
+        write(CFASL_ASSERTION);
+        writeInt(cycAssertion.getId().intValue());
+    }
+
+    /**
+     * Writes a generic object to this CfaslOutputStream.
+     *
+     * @@param o the object to be written
+     * @@throws RuntimeException if the Object cannot be translated.
+     */
+    public void writeObject (Object o) throws IOException {
+        if (cycConnection.trace)
+            System.out.println("writeObject = " + o + " (" + o.getClass() + ")");
+        if (o instanceof Guid)
+            writeGuid((Guid)o);
+        else if (o instanceof CycSymbol)
+            writeSymbol((CycSymbol)o);
+        else if (o instanceof CycVariable)
+            writeVariable((CycVariable)o);
+        else if (o instanceof CycConstant)
+            writeConstant((CycConstant)o);
+        else if (o instanceof CycNart)
+            writeNart((CycNart)o);
+        else if (o instanceof CycAssertion)
+            writeAssertion((CycAssertion)o);
+        else if (o instanceof List)
+            writeList((List)o);
+        else if (o instanceof Boolean)
+            writeBoolean(((Boolean)o).booleanValue());
+        else if (o instanceof Character)
+            writeChar(((Character)o).charValue());
+        else if (o instanceof String)
+            writeString((String)o);
+        else if (o instanceof Double)
+            writeDouble(((Double)o).doubleValue());
+        else if (o instanceof Float)
+            writeDouble(((Float)o).doubleValue());
+        else if (o instanceof Long)
+            writeInt(((Long)o).longValue());
+        else if (o instanceof Integer)
+            writeInt(((Integer)o).longValue());
+        else if (o instanceof Short)
+            writeInt(((Short)o).longValue());
+        else if (o instanceof Byte)
+            writeInt(((Byte)o).longValue());
+        else if (o instanceof BigInteger)
+            writeBigInteger((BigInteger)o);
+        else if (o instanceof Object[])
+            writeList((Object[])o);
+        else
+            throw  new RuntimeException("No cfasl opcode for " + o);
+    }
+}
+
+
+
+@
+
+
+1.1
+log
+@Added new binary api connection classes
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: CycConnection.java,v 1.3 2001/08/15 23:49:55 stephenreed Exp $
+d70 1
+d388 4
+d400 8
+d416 4
+d428 4
+d439 5
+a443 1
+    public void writeNart(CycNart cycSNart) throws IOException {
+d452 4
+d467 1
+a467 1
+        else if (o instanceof Guid)
+@
+

@@ -1,0 +1,420 @@
+head	1.8;
+access;
+symbols
+	PRE_1_0:1.8;
+locks; strict;
+comment	@# @;
+
+
+1.8
+date	2003.09.19.22.21.42;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2003.09.18.21.22.57;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2003.09.14.13.58.03;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2003.09.05.18.16.10;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2003.09.04.13.46.40;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2003.08.11.21.24.17;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2003.08.08.13.22.24;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2002.11.15.22.52.09;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.8
+log
+@/home/reed/opencyc/org/opencyc/elf
+refactored job and schedule
+@
+text
+@package org.opencyc.elf.goal;
+
+//// Internal Imports
+
+//// External Imports
+
+/** Provides the Importance container for the Elementary Loop Functioning
+ * (ELF).
+ * 
+ * @@version $Id: Importance.java,v 1.7 2003/09/18 21:22:57 stephenreed Exp $
+ * @@author Stephen L. Reed  
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class Importance {
+  
+  //// Constructors
+  
+  /** Constructs a new Importance object. */
+  public Importance() {
+  }
+
+  /** Constructs a new Importance object given the importance value.
+   *
+   * @@param importanceValue the importance value
+   */
+  public Importance(float importanceValue) {
+    setImportanceValue(importanceValue);
+  }
+
+  //// Public Area
+  
+  /** Creates and returns a copy of this object. */
+  public Object clone() {
+    Importance importance = new Importance();
+    importance.setImportanceValue(importanceValue);
+    return importance;
+  }
+  
+  /** most important */
+  public static final float MOST = 1.0f;
+  
+  /** more important */
+  public static final float MORE = .75f;
+  
+  /** neutrally important */
+  public static final float NEUTRAL = .5f;
+  
+  /** less important */
+  public static final float LESS = .75f;
+  
+  /** least important */
+  public static final float LEAST = 0.0f;
+  
+  /** Gets the importance value
+   * 
+   * @@return the importance value
+   */
+  public float getImportanceValue() {
+    return importanceValue;
+  }
+
+  /** Sets the importance value.
+   * 
+   * @@param importanceValue the importance value
+   * @@throws IllegalArgumentException when the importance is not in the range [0.0 ... +1.0]
+   */
+  public void setImportanceValue(float importanceValue) {
+    if ((importanceValue < 0.0) || (importanceValue > 1.0))
+      throw new IllegalArgumentException(importanceValue + " is not in the range [0.0 ... +1.0]");
+    this.importanceValue = importanceValue;
+  }
+  
+  //// Protected Area
+  
+  /** importances range from 0.0 for least important, to +1 for most important. */
+  protected float importanceValue;
+
+  //// Private Area
+  
+  //// Internal Rep
+  
+}@
+
+
+1.7
+log
+@/home/reed/opencyc/org/opencyc/elf
+removed equals(...)  method if present and reformatted multiline comments to one less line
+@
+text
+@d10 1
+a10 1
+ * @@version $Id: Importance.java,v 1.6 2003/09/14 13:58:03 stephenreed Exp $
+d38 1
+a38 1
+  /** Constructs a new Importance object given the importance.
+d40 1
+a40 1
+   * @@param importance the importance
+d42 2
+a43 2
+  public Importance(float importance) {
+    setImportance(importance);
+d48 7
+d70 1
+a70 1
+  /** Gets the importance
+d72 1
+a72 1
+   * @@return the importance
+d74 2
+a75 2
+  public float getImportance() {
+    return importance;
+d78 1
+a78 1
+  /** Sets the importance
+d80 1
+a80 1
+   * @@param importance the importance
+d83 4
+a86 4
+  public void setImportance(float importance) {
+    if ((importance < 0.0) || (importance > 1.0))
+      throw new IllegalArgumentException(importance + " is not in the range [0.0 ... +1.0]");
+    this.importance = importance;
+d92 1
+a92 1
+  protected float importance;
+@
+
+
+1.6
+log
+@Changed ArrayList to List, consistently formatted one line comments. ----------------------------------------------------------------------
+@
+text
+@d7 1
+a7 2
+/**
+ * Provides the Importance container for the Elementary Loop Functioning
+d10 1
+a10 1
+ * @@version $Id: Importance.java,v 1.5 2003/09/05 18:16:10 stephenreed Exp $
+d38 1
+a38 2
+  /**
+   * Constructs a new Importance object given the importance.
+d63 1
+a63 2
+  /**
+   * Gets the importance
+d71 1
+a71 2
+  /**
+   * Sets the importance
+d84 1
+a84 1
+  /** Importances range from 0.0 for least important, to +1 for most important. */
+@
+
+
+1.5
+log
+@/home/reed/opencyc/org/opencyc/elf
+fixed javadoc errors
+@
+text
+@d11 1
+a11 1
+ * @@version $Id: Importance.java,v 1.4 2003/09/04 13:46:40 stephenreed Exp $
+d35 1
+a35 3
+  /**
+   * Constructs a new Importance object.
+   */
+d50 1
+a50 3
+  /**
+   * most important
+   */
+d53 1
+a53 3
+  /**
+   * more important
+   */
+d56 1
+a56 3
+  /**
+   * neutrally important
+   */
+d59 1
+a59 3
+  /**
+   * less important
+   */
+d62 1
+a62 3
+  /**
+   * least important
+   */
+d88 2
+a89 4
+  /**
+   * Importances range from 0.0 for least important, to +1 for most important.
+   */
+  float importance;
+@
+
+
+1.4
+log
+@introduced StateVariable to distinguish state variables from ordinary strings within predicate expressions
+@
+text
+@d9 1
+a9 1
+ * (ELF).<br>
+d11 1
+a11 1
+ * @@version $Id: Importance.java,v 1.3 2003/08/11 21:24:17 stephenreed Exp $
+d44 1
+a44 1
+   * @@importance the importance
+@
+
+
+1.3
+log
+@Reinserted the LGPL license clause that was wrongly removed by the Jalopy
+indentation tool.
+@
+text
+@d3 4
+d11 1
+a11 1
+ * @@version $Id: Importance.java,v 1.2 2003/08/08 13:22:24 stephenreed Exp $
+d32 3
+d36 1
+a36 1
+   * Importances range from 0.0 for least important, to +1 for most important.
+d38 2
+a39 1
+  float importance;
+d42 3
+a44 1
+   * Constructs a new Importance object.
+d46 2
+a47 1
+  public Importance() {
+d50 27
+d90 1
+a90 1
+   * @@throws IllegalArgumentException DOCUMENT ME!
+d93 1
+a93 1
+    if ((importance < 0.0) || (importance > 1.0)) {
+a94 2
+    }
+
+d97 12
+@
+
+
+1.2
+log
+@synchronized with work in progress.
+@
+text
+@d7 19
+a25 2
+ * @@version $Id: Importance.java,v 1.1 2002/11/15 22:52:09 stephenreed Exp $
+ * @@author Stephen L. Reed <p><p><p><p><p>
+@
+
+
+1.1
+log
+@Initial check in.
+@
+text
+@d4 5
+a8 22
+ * Provides the Importance container for the Elementary Loop Functioning (ELF).<br>
+ *
+ * @@version $Id: Experience.java,v 1.1 2002/11/11 04:58:11 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+a9 1
+
+d11 4
+d16 5
+a20 5
+    /**
+     * Importances range from 0.0 for least important, to +1 for
+     * most important.
+     */
+    float importance;
+d22 8
+a29 5
+    /**
+     * Constructs a new Importance object.
+     */
+    public Importance() {
+    }
+d31 9
+a39 7
+    /**
+     * Gets the importance
+     *
+     * @@return the importance
+     */
+    public float getImportance () {
+        return importance;
+d42 2
+a43 10
+    /**
+     * Sets the importance
+     *
+     * @@param importance the importance
+     */
+    public void setImportance (float importance) {
+        if (importance < 0.0 || importance > 1.0)
+            throw new IllegalArgumentException(importance + " is not in the range [0.0 ... +1.0]");
+        this.importance = importance;
+    }
+@
+

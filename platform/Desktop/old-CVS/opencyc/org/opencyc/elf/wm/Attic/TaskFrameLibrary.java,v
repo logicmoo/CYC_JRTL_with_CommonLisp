@@ -1,0 +1,303 @@
+head	1.9;
+access;
+symbols
+	PRE_1_0:1.9;
+locks; strict;
+comment	@# @;
+
+
+1.9
+date	2003.09.19.16.22.54;	author stephenreed;	state dead;
+branches;
+next	1.8;
+
+1.8
+date	2003.09.18.21.22.57;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2003.09.17.23.12.33;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2003.09.14.13.58.04;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2003.09.12.13.45.54;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2003.09.09.22.08.19;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2003.09.08.19.05.31;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2003.09.05.21.30.56;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2003.09.05.20.30.48;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.9
+log
+@removed because the task frame was removed
+@
+text
+@package org.opencyc.elf.wm;
+
+//// Internal Imports
+import org.opencyc.elf.bg.taskframe.TaskFrame;
+
+//// External Imports
+import java.util.HashMap;
+
+/** TaskFrameLibrary provides the library of task frames.  There is a singleton instance.
+ *
+ * @@version $Id: TaskFrameLibrary.java,v 1.8 2003/09/18 21:22:57 stephenreed Exp $
+ * @@author Stephen L. Reed  
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class TaskFrameLibrary {
+  
+  //// Constructors
+  
+  /** Creates a new instance of TaskFrameLibrary and stores it in the singleton instance. */
+  public TaskFrameLibrary() {
+    taskFrameLibrary = this;
+  }
+  
+  //// Public Area
+  
+  /** Gets the task frame library singleton instance.
+   *
+   * @@return the task frame library singleton instance
+   */
+  public static TaskFrameLibrary getInstance() {
+    return taskFrameLibrary;
+  }
+  
+  /** Gets the task frame given the task name.
+   *
+   * @@param taskName the task name
+   * @@return the task frame given the task name
+   */
+  public TaskFrame getTaskFrame (String taskName) {
+    TaskFrame taskFrame = (TaskFrame) taskFrameDictionary.get(taskName);
+    TaskFrame clonedTaskFrame = (TaskFrame) taskFrame.clone();
+    clonedTaskFrame.generateTaskId();
+    return clonedTaskFrame;
+  }
+    
+  /** Gets the root task frame
+   *
+   * @@return the root task frame
+   */
+  public TaskFrame getRootTaskFrame () {
+    return rootTaskFrame;
+  }
+
+  /** Sets the root task frame
+   *
+   * @@param rootTaskFrame the root task frame
+   */
+  public void setRootTaskFrame (TaskFrame rootTaskFrame) {
+    this.rootTaskFrame = rootTaskFrame;
+  }
+
+  //// Protected Area
+  
+  /** Adds a named task frame to the dictionary.
+   *
+   * @@param taskFrame the named task frame
+   */
+  protected void addTaskFrame (TaskFrame taskFrame) {
+    taskFrameDictionary.put(taskFrame.getTaskName(), taskFrame);
+  }
+  
+  //// Private Area
+  
+  //// Internal Rep
+  
+  /** the task frame library singleton instance */
+  protected static TaskFrameLibrary taskFrameLibrary;
+  
+  /** the task frame dictionary, task name --> task frame */
+  protected HashMap taskFrameDictionary = new HashMap();
+  
+  /** the root task frame */
+  protected TaskFrame rootTaskFrame;
+  
+  //// Main
+  
+}
+@
+
+
+1.8
+log
+@/home/reed/opencyc/org/opencyc/elf
+removed equals(...)  method if present and reformatted multiline comments to one less line
+@
+text
+@d11 1
+a11 1
+ * @@version $Id: TaskFrameLibrary.java,v 1.7 2003/09/17 23:12:33 stephenreed Exp $
+@
+
+
+1.7
+log
+@comment reformatting
+@
+text
+@d11 1
+a11 1
+ * @@version $Id: TaskFrameLibrary.java,v 1.6 2003/09/14 13:58:04 stephenreed Exp $
+d50 1
+a50 2
+  /**
+   * Gets the task frame given the task name.
+@
+
+
+1.6
+log
+@Changed ArrayList to List, consistently formatted one line comments. ----------------------------------------------------------------------
+@
+text
+@d9 1
+a9 2
+/**
+ * TaskFrameLibrary provides the library of task frames.  There is a singleton instance.
+d11 1
+a11 1
+ * @@version $Id: TaskFrameLibrary.java,v 1.5 2003/09/12 13:45:54 stephenreed Exp $
+d42 1
+a42 2
+  /**
+   * Gets the task frame library singleton instance.
+d63 1
+a63 2
+  /**
+   * Gets the root task frame
+d71 1
+a71 2
+  /**
+   * Sets the root task frame
+d81 1
+a81 2
+  /**
+   * Adds a named task frame to the dictionary.
+d93 3
+a97 3
+  
+  /** the task frame library singleton instance */
+  protected static TaskFrameLibrary taskFrameLibrary;
+@
+
+
+1.5
+log
+@added root task frame instance variable
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: TaskFrameLibrary.java,v 1.4 2003/09/09 22:08:19 stephenreed Exp $
+d87 2
+@
+
+
+1.4
+log
+@generate task ID in the getTaskFrame(...) method
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: TaskFrameLibrary.java,v 1.3 2003/09/08 19:05:31 stephenreed Exp $
+d65 18
+d99 1
+a99 3
+  /**
+   * the task frame library singleton instance
+   */
+d101 3
+@
+
+
+1.3
+log
+@returned a clone in getTaskFrame(...) method
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: TaskFrameLibrary.java,v 1.2 2003/09/05 21:30:56 stephenreed Exp $
+d60 3
+a62 1
+    return (TaskFrame) taskFrame.clone();
+@
+
+
+1.2
+log
+@added getTaskFrame, addTaskFrame methods
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: TaskFrameLibrary.java,v 1.1 2003/09/05 20:30:48 stephenreed Exp $
+d59 2
+a60 1
+    return (TaskFrame) taskFrameDictionary.get(taskName);
+@
+
+
+1.1
+log
+@initial check in
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: JobAssignmentLibrary.java,v 1.3 2003/09/05 19:20:27 stephenreed Exp $
+d43 19
+d64 7
+d74 3
+@
+

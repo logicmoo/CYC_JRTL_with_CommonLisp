@@ -1,0 +1,171 @@
+head	1.2;
+access;
+symbols
+	BRANCH_OPENCYC_1_0_1:1.1.0.2
+	OPENCYC_1_0_1:1.1;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2006.10.21.16.49.20;	author dmiles;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.10.18.14.21.30;	author dmiles;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental packages
+@
+text
+@/* $Id: OwlDocInfo.java,v 1.2 2005/01/18 19:20:08 builder Exp $
+ *
+ * Copyright (c) 2003 - 2005 Cycorp, Inc.  All rights reserved.
+ * This software is the proprietary information of Cycorp, Inc.
+ * Use is subject to license terms.
+ */
+
+package org.opencyc.xml;
+
+//// Internal Imports
+
+//// External Imports
+
+/**
+ * <P>OwlDocInfo is designed to contain the information about an OWL document to be imported into Cyc.
+ *
+ * <P>Copyright (c) 2004 - 2005 Cycorp, Inc.  All rights reserved.
+ * <BR>This software is the proprietary information of Cycorp, Inc.
+ * <P>Use is subject to license terms.
+ *
+ * @@author reed
+ * @@date January 30, 2004, 3:30 PM
+ * @@version $Id: OwlDocInfo.java,v 1.2 2005/01/18 19:20:08 builder Exp $
+ */
+public final class OwlDocInfo {
+  
+  //// Constructors
+  
+  /**
+   * Constructs a new OwlDocInfo object
+   *
+   * @@param owlPath the path to the OWL docuement - as a URI
+   * @@parma nickname the ontology nickname
+   * @@param characterEncoding the character encoding scheme of the input OWL
+   * document or null if default ASCII encoding
+   * @@param importMtName the microtheory name into which the non-definitional assertions are
+   * placed
+   * @@param importGenlMtName the genlMt name for the import mt
+   */
+  public OwlDocInfo(final String owlPath,
+                    final String nickname,
+                    final String characterEncoding,
+                    final String importMtName,
+                    final String importGenlMtName) {
+    this.owlPath = owlPath;
+    this.nickname = nickname;
+    this.characterEncoding = characterEncoding;
+    this.importMtName = importMtName;
+    this.importGenlMtName = importGenlMtName;
+  }
+  
+  //// Public Area
+  
+  /** Returns the owl document path.
+   *
+   * @@return the owl document path
+   */
+  public String getOwlPath() {
+    return owlPath;
+  }
+  
+  /** Returns the nickname.
+   *
+   * @@return the nickname
+   */
+  public String getNickname() {
+    return nickname;
+  }
+  
+  /** Returns the character encoding scheme of the input OWL
+   * document.
+   *
+   * @@return the the character encoding scheme of the input OWL
+   * document
+   */
+  public String getCharacterEncoding() {
+    return characterEncoding;
+  }
+  
+  /** Returns the microtheory name into which OWL content is imported.
+   *
+   * @@return the microtheory name into which OWL content is imported
+   */
+  public String getImportMtName() {
+    return importMtName;
+  }
+  
+  /** Returns the genlMt name.
+   *
+   * @@return the genlMt name
+   */
+  public String getImportGenlMtName() {
+    return importGenlMtName;
+  }
+  
+  //// Protected Area
+  
+  //// Private Area
+  
+  //// Internal Rep
+  
+  /** path (url) to the OWL document */
+  final private String owlPath;
+  
+  /** ontology nickiname */
+  final private  String nickname;
+  
+  /** character encoding (e.g. UTF-8) */
+  final private  String characterEncoding;
+  
+  /** the microtheory name into which OWL content is imported */
+  final private  String importMtName;
+  
+  /** the genlMt name */
+  final private  String importGenlMtName;
+  
+  //// Main
+  
+}
+
+@
+
+
+1.1
+log
+@This is the Additional Content to Create OpenCyc-1.0.1
+@
+text
+@d1 1
+a1 1
+/* $Id: OwlDocInfo.java,v 1.3 2005/12/22 23:32:49 jantos Exp $
+d3 1
+a3 1
+ * Copyright (c) 2003 - 2006 Cycorp, Inc.  All rights reserved.
+d17 1
+a17 1
+ * <P>Copyright (c) 2004 - 2006 Cycorp, Inc.  All rights reserved.
+d23 1
+a23 1
+ * @@version $Id: OwlDocInfo.java,v 1.3 2005/12/22 23:32:49 jantos Exp $
+@
+

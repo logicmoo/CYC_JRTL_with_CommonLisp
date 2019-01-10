@@ -1,0 +1,1148 @@
+head	1.26;
+access;
+symbols
+	PRE_1_0:1.25;
+locks; strict;
+comment	@# @;
+
+
+1.26
+date	2006.10.21.16.49.18;	author dmiles;	state Exp;
+branches;
+next	1.25;
+
+1.25
+date	2003.02.09.19.45.22;	author stephenreed;	state Exp;
+branches;
+next	1.24;
+
+1.24
+date	2003.02.09.02.14.19;	author stephenreed;	state Exp;
+branches;
+next	1.23;
+
+1.23
+date	2003.02.06.02.57.03;	author stephenreed;	state Exp;
+branches;
+next	1.22;
+
+1.22
+date	2003.01.29.00.18.10;	author stephenreed;	state Exp;
+branches;
+next	1.21;
+
+1.21
+date	2003.01.27.22.49.40;	author stephenreed;	state Exp;
+branches;
+next	1.20;
+
+1.20
+date	2003.01.23.23.15.43;	author stephenreed;	state Exp;
+branches;
+next	1.19;
+
+1.19
+date	2003.01.10.22.31.42;	author stephenreed;	state Exp;
+branches;
+next	1.18;
+
+1.18
+date	2003.01.09.21.52.14;	author stephenreed;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2003.01.09.00.00.24;	author stephenreed;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2002.11.26.03.45.25;	author stephenreed;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2002.11.09.15.18.57;	author stephenreed;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2002.11.06.16.35.17;	author stephenreed;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2002.11.06.04.51.02;	author stephenreed;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2002.11.06.00.24.31;	author stephenreed;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2002.11.05.15.44.15;	author stephenreed;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2002.11.04.16.23.23;	author stephenreed;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2002.11.04.02.21.04;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2002.11.03.00.03.10;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2002.11.01.16.18.50;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2002.11.01.03.43.33;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2002.11.01.03.28.32;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2002.11.01.03.05.58;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2002.10.31.20.58.42;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2002.10.31.15.07.55;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2002.10.31.00.12.56;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.26
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental packages
+@
+text
+@package org.opencyc.uml.interpreter;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Stack;
+
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+
+import org.opencyc.api.CycApiException;
+import org.opencyc.uml.core.Procedure;
+import org.opencyc.uml.statemachine.CompletionEvent;
+import org.opencyc.uml.statemachine.CompositeState;
+import org.opencyc.uml.statemachine.FinalState;
+import org.opencyc.uml.statemachine.StateVertex;
+import org.opencyc.uml.statemachine.Transition;
+import org.opencyc.util.Log;
+
+/**
+ * Interprets an active state of a UML StateMachine.
+ *
+ * @@version $Id: StateInterpreter.java,v 1.25 2003/02/09 19:45:22 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+public class StateInterpreter extends Thread {
+
+    /**
+     * The default verbosity of this object's output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    public static final int DEFAULT_VERBOSITY = 3;
+
+    /**
+     * Sets verbosity of this object's output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    protected int verbosity = DEFAULT_VERBOSITY;
+
+    /**
+     * the parent state machine interpreter
+     */
+    protected Interpreter interpreter;
+
+    /**
+     * the procedure interpreter
+     */
+    protected ProcedureInterpreter procedureInterpreter;
+
+    /**
+     * the interpreted active state
+     */
+    protected org.opencyc.uml.statemachine.State state;
+
+    /**
+     * Constructs a new StateInterpreter object given the
+     * parent state machine interpreter and the state to
+     * interpret.
+     *
+     * @@param interpreter the parent state machine interpreter
+     * @@param state the state to interpret
+     */
+    public StateInterpreter(Interpreter interpreter,
+                            org.opencyc.uml.statemachine.State state)
+        throws IOException, CycApiException {
+        this.interpreter = interpreter;
+        verbosity = interpreter.getVerbosity();
+        this.state = state;
+        procedureInterpreter = new ProcedureInterpreter(interpreter.getCycAccess(),
+                                                        interpreter.getStateMachineDefinitionMt(),
+                                                        interpreter.getContextStackPool(),
+                                                        verbosity);
+    }
+
+    /**
+     * indicates whether a thread is running this state.
+     */
+    protected boolean isThreadRunning = false;
+
+    /**
+     * Interprets the effects of a transition into the given state.
+     */
+    public void run () {
+        isThreadRunning = true;
+
+    }
+
+    /**
+     * Interprets a transition into this state.
+     *
+     * @@param transition the transistion
+     */
+    public void interpretTransitionEntry (Transition transition)
+        throws IOException, CycApiException, ExpressionEvaluationException {
+        if (verbosity > 2)
+            Log.current.println(transition.toString() + " entering " + state.toString());
+        performTransitionEffect(transition);
+        if (interpreter.isTerminated)
+            return;
+        performEntryActions(transition);
+    }
+
+    /**
+     * Performs entry actions for the given entry state and for each of
+     * its superstates disjoint from the superstates of the transition
+     * source state.
+     *
+     * @@param transition the transition
+     */
+    protected void performEntryActions (Transition transition)
+        throws IOException, CycApiException, ExpressionEvaluationException {
+        Object[] statesFromRootToTarget = interpreter.getStatesFromRootTo(state);
+        //TODO think more about how to handle complex tranistions whose source is a vertex
+        StateVertex sourceStateVertex = (StateVertex)transition.getSource();
+        if (sourceStateVertex instanceof org.opencyc.uml.statemachine.State) {
+            org.opencyc.uml.statemachine.State source = (org.opencyc.uml.statemachine.State) sourceStateVertex;
+            Object[] statesFromRootToSource = interpreter.getStatesFromRootTo(source);
+            for (int i = 0; i < statesFromRootToTarget.length; i++)
+                if ((i > statesFromRootToSource.length) ||
+                    (! statesFromRootToSource[i].equals(statesFromRootToTarget[i])))
+                    enterState((org.opencyc.uml.statemachine.State) statesFromRootToTarget[i]);
+        }
+        else {
+            for (int i = 0; i < statesFromRootToTarget.length; i++)
+                enterState((org.opencyc.uml.statemachine.State) statesFromRootToTarget[i]);
+        }
+    }
+
+    /**
+     * Performs the transition effect in this state and creates
+     * the transition completion event.
+     */
+    public void performTransitionEffect (Transition transition)
+        throws IOException, CycApiException, ExpressionEvaluationException {
+        Procedure procedure = transition.getEffect();
+        if (procedure != null) {
+            if (verbosity > 2)
+                Log.current.println("Evaluating effect " + procedure.toString());
+            procedureInterpreter.interpretProcedure(procedure,
+                                                    transition.getEffectInputBindings(),
+                                                    transition.getEffectOutputBindings(),
+                                                    interpreter.getStateMt());
+        }
+        if (state instanceof FinalState) {
+            state.getContainer().getStateInterpreter().complete();
+            return;
+        }
+        CompletionEvent completionEvent =
+            interpreter.getStateMachineFactory().makeCompletionEvent(transition.toString() +
+                                                                     "EntryInto" + state.toString(),
+                                                                     "Completion of " + transition.toString() +
+                                                                     " entering " + state.toString(),
+                                                                     state);
+        interpreter.enqueueEvent(completionEvent);
+    }
+
+    /**
+     * Completes this composite state.  If this is the top state then
+     * the state machine terminates.
+     */
+    protected void complete ()
+        throws IOException, CycApiException, ExpressionEvaluationException {
+        if (verbosity > 2)
+            Log.current.println("Completing " + state.toString());
+        exit();
+        if (state.equals(interpreter.getStateMachine().getTop()))
+            interpreter.terminate();
+    }
+
+
+    /**
+     * Enters the given state, which might be the state interpreted by
+     * this state interpreter, or might be another state.
+     *
+     * @@param entryState the given state
+     */
+    public void enterState (org.opencyc.uml.statemachine.State entryState)
+        throws IOException, CycApiException, ExpressionEvaluationException {
+        if (entryState.equals(state))
+            enter();
+        else {
+            StateInterpreter stateInterpreter = entryState.getStateInterpreter();
+            if (stateInterpreter == null) {
+                stateInterpreter = new StateInterpreter(interpreter, entryState);
+                entryState.setStateInterpreter(stateInterpreter);
+            }
+            stateInterpreter.enter();
+        }
+    }
+
+    /**
+     * Enters this state, performing the entry action and the do-activity.
+     */
+    public void enter ()
+        throws IOException, CycApiException, ExpressionEvaluationException {
+        if (verbosity > 2)
+            Log.current.println("Entering " + state.toString());
+        state.setIsActive(true);
+
+        if (! isTopState()) {
+            DefaultMutableTreeNode parentStateNode =
+                    interpreter.getActiveStateConfigurationTreeNode(getParentState());
+            DefaultMutableTreeNode stateNode = new DefaultMutableTreeNode(state);
+            parentStateNode.add(stateNode);
+            interpreter.getActiveStates().put(state, stateNode);
+        }
+        Procedure procedure = state.getEntry();
+        if (procedure != null)
+            procedureInterpreter.interpretProcedure(procedure,
+                                                    state.getEntryInputBindings(),
+                                                    state.getEntryOutputBindings(),
+                                                    interpreter.getStateMt());
+        if (state.getDoActivity() != null)
+            new DoActivity(state);
+    }
+
+    /**
+     * Interprets a transition from this state.
+     *
+     * @@param transition the transistion
+     */
+    public void interpretTransitionExit (Transition transition)
+        throws IOException, CycApiException, ExpressionEvaluationException {
+        if (! isCompositeState()) {
+            exit();
+            return;
+        }
+        DefaultMutableTreeNode treeNode = interpreter.getActiveStatesRootedAt(state);
+        ArrayList activeSubstateList = new ArrayList();
+        Stack treeNodeStack = new Stack();
+        treeNodeStack.push(treeNode);
+        while (! treeNodeStack.isEmpty()) {
+            treeNode = (DefaultMutableTreeNode) treeNodeStack.pop();
+            activeSubstateList.add(treeNode.getUserObject());
+            Enumeration children = treeNode.children();
+            while (children.hasMoreElements())
+                treeNodeStack.push(children.nextElement());
+        }
+        for (int i = activeSubstateList.size() - 1; i > -1; i--)
+            ((org.opencyc.uml.statemachine.State) activeSubstateList.get(i)).getStateInterpreter().exit();
+    }
+
+    /**
+     * Exits this state.
+     */
+    public void exit () throws IOException, CycApiException, ExpressionEvaluationException {
+        if (verbosity > 2)
+            Log.current.println("Exiting " + state.toString());
+        DoActivity doActivityThread = state.getDoActivityThread();
+        if (doActivityThread != null)
+            doActivityThread.terminate();
+        Procedure procedure = state.getExit();
+        if (procedure != null)
+            procedureInterpreter.interpretProcedure(procedure,
+                                                    state.getExitInputBindings(),
+                                                    state.getExitOutputBindings(),
+                                                    interpreter.getStateMt());
+        DefaultMutableTreeNode stateNode =
+            (DefaultMutableTreeNode) interpreter.getActiveStates().get(state);
+        interpreter.getActiveStates().remove(state);
+        if (state.equals(interpreter.getStateMachine().getTop()))
+            interpreter.setStateConfiguration((DefaultTreeModel) null);
+        stateNode.removeFromParent();
+        CompletionEvent completionEvent = new CompletionEvent(state);
+        interpreter.enqueueEvent(completionEvent);
+    }
+
+    /**
+     * Gets the interpreted active state
+     *
+     * @@return the interpreted active state
+     */
+    public org.opencyc.uml.statemachine.State getActiveState () { // Conflict with Thread.State java.lang.Thread.getState();
+        return state;
+    }
+
+    /**
+     * Sets the interpreted active state
+     *
+     * @@param state the interpreted active state
+     */
+    public void setState (org.opencyc.uml.statemachine.State state) {
+        this.state = state;
+    }
+
+    /**
+     * Gets whether a thread is running this state
+     *
+     * @@return whether a thread is running this state
+     */
+    public boolean isThreadRunning () {
+        return isThreadRunning;
+    }
+
+    /**
+     * Gets whether the interpreted state is a composite
+     * state.
+     *
+     * @@return true if the interpreted state is a composite
+     * state, otherwise returns false
+     */
+    public boolean isCompositeState () {
+        return state instanceof CompositeState;
+    }
+
+    /**
+     * Sets verbosity of this object's output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     *
+     * @@param verbosity 0 --> quiet ... 9 -> maximum diagnostic input
+     */
+    public void setVerbosity(int verbosity) {
+        this.verbosity = verbosity;
+    }
+
+    /**
+     * Returns true if the interpreted state is the top state.
+     *
+     * @@return  true if the interpreted state is the top state
+     */
+    public boolean isTopState() {
+        return state.equals(interpreter.getStateMachine().getTop());
+    }
+
+    /**
+     * Returns the parent state of the this state, or null if
+     * this is the top state.
+     *
+     * @@param state the given state
+     * @@return the parent state of this state, or null if
+     * given the top state
+     */
+    public org.opencyc.uml.statemachine.State getParentState() {
+        if (isTopState())
+            return null;
+        return interpreter.getParentState(state);
+    }
+
+}@
+
+
+1.25
+log
+@removed file
+@
+text
+@d3 16
+a18 8
+import java.io.*;
+import java.util.*;
+import javax.swing.tree.*;
+import org.opencyc.api.*;
+import org.opencyc.util.*;
+import org.opencyc.uml.core.*;
+import org.opencyc.uml.commonbehavior.*;
+import org.opencyc.uml.statemachine.*;
+d23 1
+a23 1
+ * @@version $Id: StateInterpreter.java,v 1.24 2003/02/09 02:14:19 stephenreed Exp $
+d72 1
+a72 1
+    protected State state;
+d83 1
+a83 1
+                            State state)
+d134 2
+a135 2
+        if (sourceStateVertex instanceof State) {
+            State source = (State) sourceStateVertex;
+d140 1
+a140 1
+                    enterState((State) statesFromRootToTarget[i]);
+d144 1
+a144 1
+                enterState((State) statesFromRootToTarget[i]);
+d196 1
+a196 1
+    public void enterState (State entryState)
+d259 1
+a259 1
+            ((State) activeSubstateList.get(i)).getStateInterpreter().exit();
+d292 1
+a292 1
+    public State getState () {
+d301 1
+a301 1
+    public void setState (State state) {
+d352 1
+a352 1
+    public State getParentState() {
+@
+
+
+1.24
+log
+@Completed coding of procedure bindings - ready to test them
+@
+text
+@d15 1
+a15 1
+ * @@version $Id: StateInterpreter.java,v 1.23 2003/02/06 02:57:03 stephenreed Exp $
+d152 2
+a153 1
+                                                    transition.getEffectOutputBindings());
+d222 2
+a223 1
+                                                    state.getEntryOutputBindings());
+d267 2
+a268 1
+                                                    state.getExitOutputBindings());
+@
+
+
+1.23
+log
+@Refactoring of the UML state machine extractor.
+Work in progress  and will not all compile.
+@
+text
+@d15 1
+a15 1
+ * @@version $Id: StateInterpreter.java,v 1.22 2003/01/29 00:18:10 stephenreed Exp $
+d150 3
+a152 2
+            procedureInterpreter.interpretTransitionProcedure(transition,
+                                                              interpreter.getStateMt());
+d217 5
+a221 3
+
+        if (state.getEntry() != null)
+            procedureInterpreter.interpretStateEntryProcedure(state, interpreter.getStateMt());
+d261 5
+a265 2
+        if (state.getExit() != null)
+            procedureInterpreter.interpretStateExitProcedure(state);
+@
+
+
+1.22
+log
+@Mostly completed the code for UML state machine interpretation.
+@
+text
+@d15 1
+a15 1
+ * @@version $Id: StateInterpreter.java,v 1.21 2003/01/27 22:49:40 stephenreed Exp $
+d81 1
+a81 1
+                                                        interpreter.getDefinitionMt(),
+@
+
+
+1.21
+log
+@Adding code to the state machine interpreter.
+@
+text
+@d15 1
+a15 1
+ * @@version $Id: StateInterpreter.java,v 1.20 2003/01/23 23:15:43 stephenreed Exp $
+d82 1
+a82 1
+                                                        interpreter.getStateMt(),
+d150 2
+a151 1
+            procedureInterpreter.interpretTransitionProcedure(transition);
+d218 1
+a218 1
+            procedureInterpreter.interpretStateEntryProcedure(state);
+@
+
+
+1.20
+log
+@added code to the procedure interpreter
+@
+text
+@d15 1
+a15 1
+ * @@version $Id: StateInterpreter.java,v 1.19 2003/01/10 22:31:42 stephenreed Exp $
+d81 1
+@
+
+
+1.19
+log
+@Added more code to the state machine interpreter
+@
+text
+@d15 1
+a15 1
+ * @@version $Id: StateInterpreter.java,v 1.18 2003/01/09 21:52:14 stephenreed Exp $
+d149 1
+a149 1
+            procedureInterpreter.interpret(procedure);
+d216 1
+a216 1
+            procedureInterpreter.interpret(state.getEntry());
+d257 1
+a257 1
+            procedureInterpreter.interpret(state.getExit());
+@
+
+
+1.18
+log
+@Added code to state machine expression evaluator
+@
+text
+@d15 1
+a15 1
+ * @@version $Id: StateInterpreter.java,v 1.17 2003/01/09 00:00:24 stephenreed Exp $
+d104 1
+a104 1
+        throws IOException, CycApiException {
+d121 1
+a121 1
+        throws IOException, CycApiException {
+d144 1
+a144 1
+        throws IOException, CycApiException {
+d169 1
+a169 1
+        throws IOException, CycApiException {
+d185 1
+a185 1
+        throws IOException, CycApiException {
+d202 1
+a202 1
+        throws IOException, CycApiException {
+d227 1
+a227 1
+        throws IOException, CycApiException {
+d250 1
+a250 1
+    public void exit () throws IOException, CycApiException {
+@
+
+
+1.17
+log
+@Changing the state machine interpreter to keep state in the Cyc server.
+@
+text
+@d3 1
+d6 1
+d15 1
+a15 1
+ * @@version $Id: StateInterpreter.java,v 1.16 2002/11/26 03:45:25 stephenreed Exp $
+d75 2
+a76 1
+                            State state) {
+d80 3
+a82 1
+        procedureInterpreter = new ProcedureInterpreter(verbosity);
+d103 2
+a104 1
+    public void interpretTransitionEntry (Transition transition) {
+d120 2
+a121 1
+    protected void performEntryActions (Transition transition) {
+d143 2
+a144 1
+    public void performTransitionEffect (Transition transition) {
+d168 2
+a169 1
+    protected void complete () {
+d184 2
+a185 1
+    public void enterState (State entryState) {
+d201 2
+a202 1
+    public void enter () {
+d226 2
+a227 1
+    public void interpretTransitionExit (Transition transition) {
+d250 1
+a250 1
+    public void exit () {
+@
+
+
+1.16
+log
+@Continuing ChatterBot state machine unit test
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: StateInterpreter.java,v 1.15 2002/11/09 15:18:57 stephenreed Exp $
+d77 1
+a77 1
+        procedureInterpreter = new ProcedureInterpreter(interpreter.getTreeInterpreter(), verbosity);
+@
+
+
+1.15
+log
+@Small mods to update UML association names per the UML doc.
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: StateInterpreter.java,v 1.14 2002/11/06 16:35:17 stephenreed Exp $
+d101 3
+a104 1
+        performTransitionEffect(transition);
+a143 1
+            exit();
+d251 1
+a251 1
+            stateNode.removeFromParent();
+@
+
+
+1.14
+log
+@Completed first (simple) unit test of UML state machine support.
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: StateInterpreter.java,v 1.13 2002/11/06 04:51:02 stephenreed Exp $
+d75 1
+d77 1
+a77 1
+        procedureInterpreter = new ProcedureInterpreter(interpreter.getTreeInterpreter());
+d248 3
+a250 1
+        stateNode.removeFromParent();
+@
+
+
+1.13
+log
+@Adding more code to UML state machine support.
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: StateInterpreter.java,v 1.12 2002/11/06 00:24:31 stephenreed Exp $
+d100 2
+a101 16
+        Procedure procedure = transition.getEffect();
+        if (procedure != null) {
+            if (verbosity > 2)
+                Log.current.println("Evaluating effect " + procedure.toString());
+            procedureInterpreter.interpret(procedure);
+        }
+        if (! transition.isSelfTransition())
+            performEntryActions(transition);
+        CompletionEvent completionEvent =
+            interpreter.getStateMachineFactory().makeCompletionEvent(transition.toString() +
+                                                                     "EntyrInto" + state.toString(),
+                                                                     "Completion of " + transition.toString() +
+                                                                     " entering " + state.toString(),
+                                                                     state);
+
+        interpreter.enqueueEvent(completionEvent);
+d129 37
+d180 1
+a180 1
+                state.setStateInterpreter(stateInterpreter);
+d240 2
+a241 1
+        doActivityThread.terminate();
+d244 4
+@
+
+
+1.12
+log
+@Added more code for UML state machine interpretation.
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: StateInterpreter.java,v 1.11 2002/11/05 15:44:15 stephenreed Exp $
+d176 1
+@
+
+
+1.11
+log
+@Added more support for UML State Machine state interpretation
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: StateInterpreter.java,v 1.10 2002/11/04 16:23:23 stephenreed Exp $
+d55 5
+d76 1
+d101 5
+a105 2
+        if (procedure != null)
+            new ProcedureInterpreter(procedure);
+d108 8
+d126 1
+a126 1
+        State[] statesFromRootToTarget = interpreter.getStatesFromRootTo(state);
+d128 30
+a157 10
+        State source = (State)transition.getSource();
+        State[] statesFromRootToSource = interpreter.getStatesFromRootTo(source);
+        for (int i = 0; i < statesFromRootToTarget.length; i++) {
+            if ((i > statesFromRootToSource.length) ||
+                (! statesFromRootToSource[i].equals(statesFromRootToTarget[i]))) {
+                    State state = statesFromRootToTarget[i];
+                    StateInterpreter stateInterpreter = state.getStateInterpreter();
+                    if (stateInterpreter == null)
+                        state.setStateInterpreter(new StateInterpreter(interpreter, state));
+                    stateInterpreter.enter();
+d159 1
+d166 1
+a166 1
+    protected void enter () {
+d170 8
+d179 1
+a179 1
+            new ProcedureInterpreter(state.getEntry());
+d212 1
+a212 1
+    protected void exit () {
+d218 1
+a218 1
+            new ProcedureInterpreter(state.getExit());
+d269 23
+@
+
+
+1.10
+log
+@Adding unit test case for simple state machine to increment a number from zero to ten.
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: StateInterpreter.java,v 1.9 2002/11/04 02:21:04 stephenreed Exp $
+a59 5
+     * the log of state transitions and actions
+     */
+    protected ArrayList log = new ArrayList();
+
+    /**
+d61 2
+a62 1
+     * parent state machine interpreter.
+d65 1
+d67 2
+a68 1
+    public StateInterpreter(Interpreter interpreter) {
+d70 1
+d92 2
+d116 5
+a120 1
+                    enterState(statesFromRootToTarget[i]);
+d126 1
+a126 3
+     * Enters the given state, performing the entry action and the do-activity.
+     *
+     * @@param stateToEnter the given state to enter
+d128 8
+a135 6
+    protected void enterState (State stateToEnter) {
+        stateToEnter.setIsActive(true);
+        if (stateToEnter.getEntry() != null)
+            new ProcedureInterpreter(stateToEnter.getEntry());
+        if (stateToEnter.getDoActivity() != null)
+            new DoActivity(stateToEnter);
+d145 1
+a145 1
+            exitState(state);
+d160 1
+a160 1
+            exitState((State) activeSubstateList.get(i));
+d164 1
+a164 3
+     * Exits the given state.
+     *
+     * @@param stateToExit the given state to exit
+d166 4
+a169 2
+    protected void exitState (State stateToExit) {
+        DoActivity doActivityThread = stateToExit.getDoActivityThread();
+d171 1
+a171 1
+        if (stateToExit.getExit() != null)
+d173 1
+a173 1
+        CompletionEvent completionEvent = new CompletionEvent(stateToExit);
+a224 8
+    /**
+     * Displays the state machine log.
+     */
+    public void displayLog () {
+        Iterator logItems = log.iterator();
+        while (logItems.hasNext())
+            Log.current.println(logItems.next().toString());
+    }
+@
+
+
+1.9
+log
+@Added more support for UML state machine interpretation.
+@
+text
+@d5 1
+d13 1
+a13 1
+ * @@version $Id: StateInterpreter.java,v 1.8 2002/11/03 00:03:10 stephenreed Exp $
+d60 5
+d220 8
+@
+
+
+1.8
+log
+@Removing this class.
+@
+text
+@d5 1
+d12 1
+a12 1
+ * @@version $Id: StateInterpreter.java,v 1.7 2002/11/01 16:18:50 stephenreed Exp $
+@
+
+
+1.7
+log
+@More support for UML StateMachines.
+@
+text
+@d11 1
+a11 1
+ * @@version $Id: StateInterpreter.java,v 1.6 2002/11/01 03:43:33 stephenreed Exp $
+d121 1
+a121 1
+            new ActionInterpreter(stateToEnter.getEntry());
+d160 1
+a160 1
+            new ActionInterpreter(state.getExit());
+@
+
+
+1.6
+log
+@Added more UML state machine support.
+@
+text
+@d11 1
+a11 1
+ * @@version $Id: StateInterpreter.java,v 1.5 2002/11/01 03:28:32 stephenreed Exp $
+d89 2
+a90 3
+        state.setIsActive(true);
+        if (state.getEntry() != null)
+            new ActionInterpreter(state.getEntry());
+d94 3
+a96 1
+     * Interprets a transition from this state.
+d98 1
+a98 1
+     * @@param transition the transistion
+d100 10
+a109 3
+    public void interpretTransitionExit (Transition transition) {
+        if (isCompositeState()) {
+            exitActiveSubstates();
+d114 3
+a116 1
+     * Exits the active substates of the interpreted composite state.
+d118 19
+a136 2
+    protected void exitActiveSubstates() {
+        DefaultMutableTreeNode treeNode = interpreter.getActiveSubstates(state);
+d148 1
+a148 1
+            exitActiveSubstate((State) activeSubstateList.get(i));
+d152 1
+a152 1
+     * Exits the active substate of the given state.
+d154 1
+a154 1
+     * @@param state the given state to exit
+d156 2
+a157 2
+    protected void exitActiveSubstate (State state) {
+        DoActivity doActivityThread = state.getDoActivityThread();
+d159 1
+a159 1
+        if (state.getExit() != null)
+d161 1
+a161 1
+        CompletionEvent completionEvent = new CompletionEvent(state);
+@
+
+
+1.5
+log
+@More support for UML state machines.
+@
+text
+@d5 1
+d11 1
+a11 1
+ * @@version $Id: StateInterpreter.java,v 1.4 2002/11/01 03:05:58 stephenreed Exp $
+d86 3
+a91 1
+
+d134 2
+a135 1
+
+@
+
+
+1.4
+log
+@Adding more UML state machine support.
+@
+text
+@d10 1
+a10 1
+ * @@version $Id: StateInterpreter.java,v 1.3 2002/10/31 20:58:42 stephenreed Exp $
+a33 1
+
+d85 4
+@
+
+
+1.3
+log
+@Some more UML state machine interpreter code.
+@
+text
+@d3 2
+d10 1
+a10 1
+ * @@version $Id: StateInterpreter.java,v 1.2 2002/10/31 15:07:55 stephenreed Exp $
+d103 13
+a115 1
+        //interpreter
+d118 12
+@
+
+
+1.2
+log
+@Added more support for UML state machine interpretation.
+@
+text
+@d8 1
+a8 1
+ * @@version $Id: StateInterpreter.java,v 1.1 2002/10/31 00:12:56 stephenreed Exp $
+d32 18
+d56 4
+a59 1
+     * Constructs a new StateInterpreter object.
+d61 2
+a62 1
+    public StateInterpreter() {
+d92 10
+d104 1
+d130 21
+@
+
+
+1.1
+log
+@Initial check in.
+@
+text
+@d8 1
+a8 1
+ * @@version $Id: Interpreter.java,v 1.3 2002/10/30 15:52:01 stephenreed Exp $
+d44 5
+d52 3
+d56 14
+d89 10
+@
+

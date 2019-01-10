@@ -1,0 +1,142 @@
+head	1.3;
+access;
+symbols
+	OPENCYC_1_0_1:1.3
+	PRE_1_0:1.3;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2002.06.18.23.55.09;	author dmiles;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2002.06.06.15.43.12;	author dmiles;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2002.06.05.13.24.47;	author dmiles;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@Adding the tested opencyc.pl
+@
+text
+@This is an interface for interaction with SWI-Prolog:
+Assuming you have downloaded and installed SWI-Prolog >version 5.x from http://www.swi-prolog.org
+
+
+It supports Queries, Asserts, UnAsserts, SubL, Loading Files and natural language parsing in SWI-Prolog.
+
+To INSTALL:
+
+
+run install.sh (This will concatinate certain files together and copy them into $SWI_HOME/library)
+
+[root@@titan swi_interface]# ./install.sh
+/opt/opencyc/src/swi_interface
+% library(opencyc) compiled into opencyc 0.04 sec, 148,796 bytes
+%  library(opencyc) compiled into opencyc 0.04 sec, 148,836 bytes
+% library(e2c) compiled into e2c 0.05 sec, 192,492 bytes
+% Updating index for library /usr/lib/pl-5.0.6/library/
+[root@@titan swi_interface]#
+
+
+from prolog:
+
+[root@@titan swi_interface]# pl
+Welcome to SWI-Prolog (Version 5.0.6)
+Copyright (c) 1990-2002 University of Amsterdam.
+SWI-Prolog comes with ABSOLUTELY NO WARRANTY. This is free software,
+and you are welcome to redistribute it under certain conditions.
+Please visit http://www.swi-prolog.org for details.
+
+For help, use ?- help(Topic). or ?- apropos(Word).
+
+Yes
+?- cycQuery(isa(X,'Dog')).
+Connected to Cyc TCP Server {$stream(236966),$stream(236986)}
+
+X = ['GenericInstanceFn', 'Dog'] ;
+
+X = 'Buffy' ;
+
+No
+?- cycAssert(isa('Fido','Dog'),'PrologDataMt').
+
+Yes
+?- cycQuery(isa(X,'Dog')).
+
+X = ['GenericInstanceFn', 'Dog'] ;
+
+X = 'Buffy' ;
+
+X = 'Fido' ;
+
+No
+?- cycRetract(isa('Fido','Dog')).
+
+Yes
+?- cycQuery(isa('Fido','Dog')).
+
+No
+?- cycQuery(isa('Buffy','Dog')).
+
+Yes
+?- cycQuery(isa(X,'Dog')).
+
+X = ['GenericInstanceFn', 'Dog'] ;
+
+X = 'Buffy' ;
+
+No
+
+
+
+@
+
+
+1.2
+log
+@Fixed the SubL socket to work more inteligently to look for Number+Term (instead of timeout wait check)
+@
+text
+@a41 1
+T
+a53 1
+T
+@
+
+
+1.1
+log
+@Intializing CVS with inprogress version of the interface to SWI-Prolog for OpenCyc as well as a semi-usefull NL Parser
+@
+text
+@d4 2
+a5 1
+It supports Queries, Asserts, UnAsserts, SubL, Loading Files and natural language Parsing in Prolog.
+d10 9
+a18 1
+run install.sh
+a19 1
+This will concatinate certain files together and copy them into $SWI_HOME/library
+a31 3
+?- [opencyc].
+% opencyc compiled 0.01 sec, 50,980 bytes
+
+d41 1
+a41 1
+?- cycAssert(isa('Fido','Dog'),'JamudMt').
+@
+

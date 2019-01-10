@@ -1,0 +1,78 @@
+head	1.2;
+access;
+symbols
+	PRE_1_0:1.2;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2003.08.13.18.26.21;	author stephenreed;	state dead;
+branches;
+next	1.1;
+
+1.1
+date	2003.08.12.20.44.39;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@/home/reed/opencyc/org/opencyc/elf
+Refactored Result.java & Status.java into the org.opencyc.elf package.
+@
+text
+@package org.opencyc.elf.vj;
+
+//// Internal Imports
+
+//// External Imports
+
+/**
+ * <P>Result contains the result of a value judgement.
+ *
+ * <P>Copyright (c) 2003 Cycorp, Inc.  All rights reserved.
+ * <BR>This software is the proprietary information of Cycorp, Inc.
+ * <P>Use is subject to license terms.
+ *
+ * @@author reed
+ * @@date August 12, 2003, 2:43 PM
+ * @@version $Id: Result.java,v 1.1 2003/08/12 20:44:39 stephenreed Exp $
+ */
+public class Result {
+  
+  //// Constructors
+  
+  /** Creates a new instance of Result. */
+  public Result() {
+  }
+  
+  //// Public Area
+  
+  //// Protected Area
+  
+  //// Private Area
+  
+  //// Internal Rep
+  
+  //// Main
+  
+}
+@
+
+
+1.1
+log
+@Initial check in
+@
+text
+@d16 1
+a16 1
+ * @@version $Id$
+@
+

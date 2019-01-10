@@ -1,0 +1,1606 @@
+head	1.28;
+access;
+symbols
+	PRE_1_0:1.27;
+locks; strict;
+comment	@# @;
+
+
+1.28
+date	2006.10.21.16.49.16;	author dmiles;	state Exp;
+branches;
+next	1.27;
+
+1.27
+date	2002.04.23.02.59.02;	author stephenreed;	state Exp;
+branches;
+next	1.26;
+
+1.26
+date	2001.10.17.23.44.19;	author stephenreed;	state Exp;
+branches;
+next	1.25;
+
+1.25
+date	2001.09.11.21.46.17;	author stephenreed;	state Exp;
+branches;
+next	1.24;
+
+1.24
+date	2001.09.11.13.56.34;	author stephenreed;	state Exp;
+branches;
+next	1.23;
+
+1.23
+date	2001.09.06.21.43.25;	author stephenreed;	state Exp;
+branches;
+next	1.22;
+
+1.22
+date	2001.09.06.14.49.47;	author stephenreed;	state Exp;
+branches;
+next	1.21;
+
+1.21
+date	2001.09.06.13.55.07;	author stephenreed;	state Exp;
+branches;
+next	1.20;
+
+1.20
+date	2001.09.05.22.59.00;	author stephenreed;	state Exp;
+branches;
+next	1.19;
+
+1.19
+date	2001.09.04.23.57.47;	author stephenreed;	state Exp;
+branches;
+next	1.18;
+
+1.18
+date	2001.09.04.14.30.23;	author stephenreed;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2001.09.03.22.30.50;	author stephenreed;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2001.08.31.23.30.33;	author stephenreed;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2001.08.31.15.45.42;	author stephenreed;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2001.08.30.14.52.08;	author stephenreed;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2001.08.30.00.06.55;	author stephenreed;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2001.08.29.15.25.19;	author stephenreed;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2001.08.28.23.52.16;	author stephenreed;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2001.08.21.14.34.31;	author stephenreed;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2001.08.20.21.26.24;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2001.08.20.14.00.07;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2001.08.17.13.57.21;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2001.08.16.23.04.57;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2001.08.16.17.31.46;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2001.08.16.14.25.27;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2001.08.15.23.49.56;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2001.08.13.16.14.44;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2001.07.30.22.59.00;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.28
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental packages
+@
+text
+@package org.opencyc.constraintsolver;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+
+import org.opencyc.api.CycApiException;
+import org.opencyc.cycobject.CycList;
+import org.opencyc.cycobject.CycVariable;
+import org.opencyc.inferencesupport.ConstraintRule;
+import org.opencyc.inferencesupport.UnitTest;
+
+/**
+ * <tt>ProblemParser</tt> object to model the attributes and behavior of
+ * a parser which inputs the constraint problem representation and sets up
+ * the parent <tt>ConstraintProblem</tt> object.<p>
+ *
+ * @@version $Id: ProblemParser.java,v 1.27 2002/04/23 02:59:02 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * @@see UnitTest#testConstraintProblem
+ */
+public class ProblemParser {
+    /**
+     * Reference to the parent <tt>ConstraintProblem</tt> object.
+     */
+    protected ConstraintProblem constraintProblem;
+
+    /**
+     * Reference to the parent list of simplified constraint rules.
+     */
+    protected ArrayList simplifiedRules;
+
+    /**
+     * Reference to the parent list of domain populating constraint rules.
+     */
+    protected ArrayList domainPopulationRules;
+
+    /**
+     * Reference to the parent list of constraint rules.
+     */
+    protected ArrayList constraintRules;
+
+    /**
+     * Reference to the constraint problem's ArgumentTypeConstrainer object.
+     */
+    protected ArgumentTypeConstrainer argumentTypeConstrainer;
+
+    /**
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    protected int verbosity = ConstraintProblem.DEFAULT_VERBOSITY;
+
+    /**
+     * Constructs a new <tt>ProblemParser</tt> object for the parent
+     * <tt>ConstraintProblem</tt>.
+     *
+     * @@param constraintProblem the parent constraint problem
+     */
+    public ProblemParser(ConstraintProblem constraintProblem) {
+        this.constraintProblem = constraintProblem;
+        simplifiedRules = constraintProblem.simplifiedRules;
+        domainPopulationRules = constraintProblem.domainPopulationRules;
+        constraintRules = constraintProblem.constraintRules;
+        argumentTypeConstrainer = constraintProblem.argumentTypeConstrainer;
+    }
+
+    /**
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     *
+     * @@param verbosity 0 --> quiet ... 9 -> maximum diagnostic input
+     */
+    public void setVerbosity(int verbosity) {
+        this.verbosity = verbosity;
+    }
+
+    /**
+     * Simplifies the input problem into its constituent <tt>Rule</tt> objects,
+     * then divides the input rules into those which populate the variable
+     * domains, and those which subsequently constrain the search for
+     * one or more solutions.
+     */
+    protected void extractRulesAndDomains() throws IOException, CycApiException {
+        constraintProblem.simplifiedRules =
+            ConstraintRule.simplifyConstraintRuleExpression(constraintProblem.problem);
+        constraintProblem.domainPopulationRules = new ArrayList();
+        constraintProblem.constraintRules = new ArrayList();
+        for (int i = 0; i < constraintProblem.simplifiedRules.size(); i++) {
+            ConstraintRule rule = (ConstraintRule) constraintProblem.simplifiedRules.get(i);
+            if (rule.isVariableDomainPopulatingRule())
+                constraintProblem.domainPopulationRules.add(rule);
+            else
+                constraintProblem.constraintRules.add(rule);
+        }
+        if (verbosity > 1)
+            constraintProblem.displayConstraintRules();
+    }
+
+    /**
+     * Initializes the value domains for each variable.
+     */
+    protected void initializeDomains() throws IOException, CycApiException {
+        for (int i = 0; i < constraintProblem.domainPopulationRules.size(); i++) {
+            ConstraintRule rule = (ConstraintRule) constraintProblem.domainPopulationRules.get(i);
+            if (rule.isExtensionalVariableDomainPopulatingConstraintRule()) {
+                CycVariable cycVariable = (CycVariable) rule.getVariables().get(0);
+                if (constraintProblem.valueDomains.domains.containsKey(cycVariable))
+                    throw new RuntimeException("Duplicate domain specifying rule for " + cycVariable);
+                constraintProblem.valueDomains.domains.put(cycVariable, null);
+                if (constraintProblem.valueDomains.varsDictionary.containsKey(cycVariable))
+                    throw new RuntimeException("Duplicate varsDictionary entry for " + cycVariable);
+                CycList theSet =  (CycList) rule.getFormula().third();
+                if (! (theSet.first().toString().equals("TheSet")))
+                    throw new RuntimeException("Invalid TheSet entry for " + cycVariable);
+                ArrayList domainValues = new ArrayList((CycList) theSet.rest());
+                constraintProblem.valueDomains.varsDictionary.put(cycVariable, domainValues);
+                if (verbosity > 8)
+                    System.out.println("Initializing domain for " + cycVariable +
+                                       "\n  with " + domainValues);
+           }
+        }
+        if (verbosity > 1)
+            constraintProblem.valueDomains.displayVariablesAndDomains();
+    }
+
+    /**
+     * Gathers the unique variables used in this constraint problem.
+     */
+    public void gatherVariables() {
+        HashSet uniqueVariables = new HashSet();
+        for (int i = 0; i < constraintProblem.simplifiedRules.size(); i++) {
+            ConstraintRule rule = (ConstraintRule) constraintProblem.simplifiedRules.get(i);
+            uniqueVariables.addAll(rule.getVariables());
+        }
+        constraintProblem.variables.addAll(uniqueVariables);
+    }
+
+
+}@
+
+
+1.27
+log
+@Fixed bug in CycList.rest() method where it did not return the
+dotted element in a dotted pair list.  Wide impact because the
+function signature changed from CycList to Object.
+@
+text
+@a2 1
+import java.util.*;
+d4 8
+a11 3
+import org.opencyc.cycobject.*;
+import org.opencyc.inferencesupport.*;
+import org.opencyc.api.*;
+d18 1
+a18 1
+ * @@version $Id: ProblemParser.java,v 1.26 2001/10/17 23:44:19 stephenreed Exp $
+@
+
+
+1.26
+log
+@Added CycApiException, and replaced throws to IOException with it.
+@
+text
+@d14 1
+a14 1
+ * @@version $Id: ProblemParser.java,v 1.25 2001/09/11 21:46:17 stephenreed Exp $
+d131 1
+a131 1
+                ArrayList domainValues = new ArrayList(theSet.rest());
+@
+
+
+1.25
+log
+@Constraint problems now enter the cyc api initially as queries.
+@
+text
+@d14 1
+a14 1
+ * @@version $Id: ProblemParser.java,v 1.24 2001/09/11 13:56:34 stephenreed Exp $
+d99 1
+a99 1
+    protected void extractRulesAndDomains() throws IOException {
+d118 1
+a118 1
+    protected void initializeDomains() throws IOException {
+@
+
+
+1.24
+log
+@Removing domain population logic from the constraint solver, having moved that behavior to the query processor.
+@
+text
+@d14 1
+a14 1
+ * @@version $Id: ProblemParser.java,v 1.23 2001/09/06 21:43:25 stephenreed Exp $
+a63 5
+     * Reference to the constraint problem's VariableDomainPopulator object.
+     */
+    protected VariableDomainPopulator variableDomainPopulator;
+
+    /**
+a80 1
+        variableDomainPopulator = constraintProblem.variableDomainPopulator;
+a93 40
+     * Simplifies the input problem into its constituent <tt>ConstraintRule</tt> objects,
+     * then divides the input rules into those which populate the variable
+     * domains, and those which subsequently constrain the search for
+     * one or more solutions.  Obtains additional argument type constraints for the constraint
+     * rules.  If a ground fact discovered among the rule set is proven false, then immediately
+     * return the value false.  If a rule has no instances, then immediately return the value false
+     *
+     * @@return <tt>false</tt> if no further backchaining is possible and a rule cannot be satisfied,
+     * otherwise return <tt>true</tt>
+     */
+     /*
+    public boolean extractRulesAndDomains() throws IOException {
+        simplifiedRules.addAll(ConstraintRule.simplifyConstraintRuleExpression(constraintProblem.problem));
+        // Sort by ascending arity to find likely unsatisfiable facts first.
+        Collections.sort(simplifiedRules);
+        for (int i = 0; i < simplifiedRules.size(); i++) {
+            ConstraintRule rule = (ConstraintRule) simplifiedRules.get(i);
+            if (! isRuleSatisfiable(rule))
+                return false;
+            if (rule.isExtensionalVariableDomainPopulatingConstraintRule())
+                // Extensional rules that explicitly define the value domain will rank best.
+                rule.nbrFormulaInstances = 1;
+            else
+                rule.nbrFormulaInstances =
+                    CycAccess.current().countUsingBestIndex(rule.getFormula(), constraintProblem.mt);
+            for (int j = 0; j < rule.getVariables().size(); j++) {
+                VariablePopulationItem variablePopulationItem =
+                    new VariablePopulationItem((CycVariable) rule.getVariables().get(j),
+                                               rule);
+                variableDomainPopulator.add(variablePopulationItem);
+            }
+        }
+        variableDomainPopulator.populateDomains();
+        if (verbosity > 1)
+            constraintProblem.displayConstraintRules();
+        return true;
+    }
+    */
+
+    /**
+d102 2
+d116 1
+a116 4
+     * Returns <tt>true</tt> iff the rule cannot be satisfied.
+     *
+     * @@param rule the rule to check in the KB
+     * @@return <tt>true</tt> iff the rule cannot be satisfied
+d118 19
+a136 14
+    /*
+    protected boolean isRuleSatisfiable(ConstraintRule rule) throws IOException {
+        if (rule.isGround()) {
+            if (verbosity > 3)
+                System.out.println("Ground fact with no backchaining possible\n" + rule);
+            boolean isTrueFact;
+            if (rule.isEvaluatable())
+                isTrueFact = ConstraintRule.evaluateConstraintRule(rule.getFormula());
+            else
+                isTrueFact = CycAccess.current().isQueryTrue(rule.getFormula(), constraintProblem.mt);
+            if (verbosity > 3)
+                System.out.println("  --> " + isTrueFact);
+            if (! isTrueFact)
+                return false;
+d138 2
+a139 23
+        CycConstant term = null;
+        Integer argumentPostion = null;
+        for (int j = 0; j < rule.getArguments().size(); j++) {
+            Object argument = rule.getArguments().get(j);
+            if (argument instanceof CycConstant) {
+                term = (CycConstant) argument;
+                argumentPostion = new Integer(j + 1);
+                break;
+            }
+        }
+        if (term != null) {
+            boolean someInstancesExist =
+                CycAccess.current().hasSomePredicateUsingTerm(rule.getPredicate(),
+                                                              term,
+                                                              argumentPostion,
+                                                              constraintProblem.mt);
+            if (! someInstancesExist) {
+                if (verbosity > 3)
+                    System.out.println("No instances exist and with no backchaining possible\n" + rule);
+                return false;
+            }
+        }
+        return true;
+a140 1
+    */
+@
+
+
+1.23
+log
+@Completed renaming of Rule to ConstraintRule class
+@
+text
+@d14 1
+a14 1
+ * @@version $Id: ProblemParser.java,v 1.22 2001/09/06 14:49:47 stephenreed Exp $
+d110 1
+d117 1
+a117 3
+            if ((constraintProblem.backchainer.backchainDepth ==
+                 constraintProblem.backchainer.maxBackchainDepth) &&
+                (! isRuleSatisfiable(rule)))
+d137 21
+d165 1
+d204 1
+@
+
+
+1.22
+log
+@Renamed Rule to ConstraintRule, moved QueryLiteral class to inferencesupport.
+@
+text
+@d6 1
+d14 1
+a14 1
+ * @@version $Id: ProblemParser.java,v 1.21 2001/09/06 13:55:07 stephenreed Exp $
+d111 1
+a111 1
+        simplifiedRules.addAll(ConstraintRule.simplifyRuleExpression(constraintProblem.problem));
+d120 1
+a120 1
+            if (rule.isExtensionalVariableDomainPopulatingRule())
+d125 1
+a125 1
+                    CycAccess.current().countUsingBestIndex(rule.formula, constraintProblem.mt);
+@
+
+
+1.21
+log
+@Added inferencesupport and queryprocessor packages, refactored support classes among them.
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: ProblemParser.java,v 1.20 2001/09/05 22:59:00 stephenreed Exp $
+d99 1
+a99 1
+     * Simplifies the input problem into its constituent <tt>Rule</tt> objects,
+d110 1
+a110 1
+        simplifiedRules.addAll(Rule.simplifyRuleExpression(constraintProblem.problem));
+d114 1
+a114 1
+            Rule rule = (Rule) simplifiedRules.get(i);
+d144 1
+a144 1
+    protected boolean isRuleSatisfiable(Rule rule) throws IOException {
+d150 1
+a150 1
+                isTrueFact = Rule.evaluateConstraintRule(rule.getFormula());
+d189 1
+a189 1
+            Rule rule = (Rule) constraintProblem.simplifiedRules.get(i);
+@
+
+
+1.20
+log
+@Reworking population of high cardinality domains
+@
+text
+@d1 1
+a1 2
+
+ package org.opencyc.constraintsolver;
+d13 1
+a13 1
+ * @@version $Id: ProblemParser.java,v 1.19 2001/09/04 23:57:47 stephenreed Exp $
+@
+
+
+1.19
+log
+@Continued refactoring domain population methods.
+@
+text
+@d1 2
+a2 1
+package org.opencyc.constraintsolver;
+d14 1
+a14 1
+ * @@version $Id: ProblemParser.java,v 1.18 2001/09/04 14:30:23 stephenreed Exp $
+a133 2
+
+        System.exit(1);
+a181 238
+    }
+
+    /**
+     * Places the best domain populating rules into the the set of domainPopulationRules and puts
+     * any other non-subsumed candidate domain populating rule into the set of problem constraint
+     * rules.  The priority for determining the best domain populating rule is, from best to worst:
+     * #$elementOf (accept all), #$genls (choose least cardinality), #$isa (choose least cardinality).
+     *
+     * @@param candidateRules a list of candidate domain population rules
+     */
+    protected void placeDomainPopulatingRules(ArrayList candidateRules) throws IOException {
+        for (int i = 0; i < candidateRules.size(); i++)
+            placeDomainPopulatingRule((Rule) candidateRules.get(i));
+    }
+
+    /**
+     * Places the best domain populating rule into the the set of domainPopulationRules and puts
+     * any other non-subsumed candidate domain populating rule into the set of problem constraint
+     * rules.
+     *
+     * @@param candidateRule the given candidate domain population rules
+     */
+    protected void placeDomainPopulatingRule(Rule candidateRule) throws IOException {
+        if (verbosity > 3)
+            System.out.println("\nConsidering \n" + candidateRule.cyclify() +
+                               " as candidate domain populating rule");
+        candidateRule.nbrFormulaInstances =
+            CycAccess.current().countUsingBestIndex(candidateRule.formula, constraintProblem.mt);
+
+        // TODO loop for variables, handle no variable case.
+        // Each rule can populate contained varables, if the number of instances is lower
+        // than the previous rule for that variable.
+
+
+        CycVariable variable = (CycVariable) candidateRule.getVariables().get(0);
+        ArrayList tempDomainPopulationRules = (ArrayList) domainPopulationRules.clone();
+        for (int i = 0; i < tempDomainPopulationRules.size(); i++) {
+            Rule domainPopulationRule = (Rule) tempDomainPopulationRules.get(i);
+            CycVariable domainPopulationVariable =
+                (CycVariable) domainPopulationRule.getVariables().get(0);
+            if (variable.equals(domainPopulationVariable)) {
+                if (verbosity > 3)
+                    System.out.println("Comparing to \n" + domainPopulationRule.cyclify());
+                CycConstant domainPopulationPredicate = domainPopulationRule.getPredicate();
+                CycConstant candidatePredicate = candidateRule.getPredicate();
+                if (domainPopulationPredicate.equals(CycAccess.elementOf)) {
+                    if (candidatePredicate.equals(CycAccess.elementOf))
+                        // Add another #$elementOf domain population rule
+                        placeAsDomainPopulationRule(candidateRule);
+                    else {
+                        // Existing #$elementOf domain population rule takes
+                        // priority over the non-#$elementOf candidate rule.
+                        placeConstraintRule(candidateRule);
+                    }
+                    return;
+                }
+                if (candidatePredicate.equals(CycAccess.elementOf)) {
+                    // Candidate #$elementOf rule takes priority over (and replaces) the
+                    // existing non-#$elementOf domain population rule.
+                    replaceDomainPopulationRule(domainPopulationRule, candidateRule);
+                    return;
+                }
+                if (domainPopulationPredicate.equals(CycAccess.genls)) {
+                    if (candidatePredicate.equals(CycAccess.genls)) {
+                        CycConstant domainPopulationCollection =
+                            (CycConstant) domainPopulationRule.getArguments().get(1);
+                        CycConstant candidateCollection =
+                            (CycConstant) candidateRule.getArguments().get(1);
+                        if (CycAccess.current().isGenlOf(candidateCollection,
+                                                         domainPopulationCollection))
+                            // Existing #$genls constraint is more specific and takes
+                            // priority over the candidate #$genls rule.
+                            placeConstraintRule(candidateRule);
+                        else
+                            // Candidate #$genls rule is more specific - takes priority over
+                            // (and replaces) the existing #$genls domain population rule.
+                            replaceDomainPopulationRule(domainPopulationRule, candidateRule);
+                    }
+                    else {
+                        // Existing #$genls domain population rule takes
+                        // priority over the non-#$genls candidate rule.
+                        placeConstraintRule(candidateRule);
+                    }
+                    return;
+                }
+                if (domainPopulationPredicate.equals(CycAccess.isa) &&
+                    (! (domainPopulationRule.getArguments().get(1) instanceof CycVariable))) {
+                    if (candidatePredicate.equals(CycAccess.isa)) {
+                        Object object = domainPopulationRule.getArguments().get(1);
+                        CycFort domainPopulationCollection;
+                        if (object instanceof CycList)
+                            domainPopulationCollection = new CycNart((CycList) object);
+                        else
+                            domainPopulationCollection = (CycFort) object;
+                        object = candidateRule.getArguments().get(1);
+                        CycFort candidateCollection;
+                        if (object instanceof CycList)
+                            candidateCollection = new CycNart((CycList) object);
+                        else
+                            candidateCollection = (CycFort) object;
+                        if (CycAccess.current().isGenlOf(candidateCollection,
+                                                         domainPopulationCollection))
+                            // Existing #$isa constraint is more specific and takes
+                            // priority over the candidate #$isa rule.
+                            placeConstraintRule(candidateRule);
+                        else
+                            // Candidate #$isa rule is more specific - takes priority over
+                            // (and replaces) the existing #$isa domain population rule.
+                            replaceDomainPopulationRule(domainPopulationRule, candidateRule);
+                    }
+                    else {
+                        // Existing #$isa domain population rule takes
+                        // priority over the non-#$isa candidate rule.
+                        placeConstraintRule(candidateRule);
+                    }
+                    return;
+                }
+                // Existing constraint is not proveably more general.
+                placeConstraintRule(candidateRule);
+                return;
+            }
+        }
+        // No existing rules for comparison.
+        placeAsDomainPopulationRule(candidateRule);
+    }
+
+    /**
+     * Places the given constraint rule into the set of constraint rules if it does not subsume any
+     * existing member of the constraint rule set.  Replaces an existing member of the constraint
+     * rule set if the given rule is subsumed by the existing constraint rule.
+     *
+     * @@param candidateRule the candidate constraint rule for placement into the set of constraint
+     * rules
+     */
+    public void placeConstraintRule(Rule candidateRule) throws IOException {
+        if (verbosity > 3)
+            System.out.println("\nConsidering \n" + candidateRule.cyclify() +
+                               " as candidate constraint rule");
+        if (candidateRule.getArity() == 1 &&
+            candidateRule.getPredicate().equals(CycAccess.isa) &&
+            candidateRule.getArguments().get(1).equals(CycAccess.thing)) {
+            if (verbosity > 3)
+                System.out.println("  dropped because rule is trivially true");
+            return;
+        }
+        ArrayList tempConstraintRules = (ArrayList) constraintRules.clone();
+        for (int i = 0; i < tempConstraintRules.size(); i++) {
+            Rule constraintRule = (Rule) tempConstraintRules.get(i);
+            if (candidateRule.isSubsumedBy(constraintRule)) {
+                if (verbosity > 3)
+                    System.out.println(candidateRule.cyclify() + "\n  is subsumed by constraint rule\n" +
+                                       constraintRule.cyclify());
+                this.replaceConstraintRule(constraintRule, candidateRule);
+                return;
+            }
+        }
+        ArrayList tempDomainPopulationRules = (ArrayList) domainPopulationRules.clone();
+        for (int i = 0; i < tempDomainPopulationRules.size(); i++) {
+            Rule domainPopulationRule = (Rule) tempDomainPopulationRules.get(i);
+            if (candidateRule.subsumes(domainPopulationRule)) {
+                if (verbosity > 3)
+                    System.out.println(candidateRule.cyclify() + "\n  subsumes domain population rule\n" +
+                                       domainPopulationRule.cyclify() + "\n  and is is dropped");
+                return;
+            }
+        }
+        placeAsConstraintRule(candidateRule);
+    }
+
+    /**
+     * Places the candidate rule into the the set of domainPopulationRules
+     *
+     * @@param candidateRule the given candidate domain population rule
+     */
+    protected void placeAsDomainPopulationRule(Rule candidateRule) {
+        domainPopulationRules.add(candidateRule);
+        if (verbosity > 3)
+            System.out.println("  placed \n" + candidateRule.cyclify() +
+                               " as domain population rule");
+    }
+
+    /**
+     * Places the candidate rule into the the set of constraintRules. If the predicate is
+     * neither #$isa nor #$genls, then gathers the type constraints of the predicate as
+     * additional candidate domain population rules.
+     *
+     * @@param candidateRule the given candidate domain population rule
+     */
+    protected void placeAsConstraintRule(Rule candidateRule) throws IOException {
+        constraintRules.add(candidateRule);
+        if (verbosity > 3)
+            System.out.println("  placed \n" + candidateRule.cyclify() +
+                               " as constraint rule");
+        CycConstant predicate = candidateRule.getPredicate();
+        if ((! (predicate.equals(CycAccess.isa))) &&
+            (! (predicate.equals(CycAccess.genls)))) {
+            ArrayList argConstraints =
+                argumentTypeConstrainer.retrieveArgumentTypeConstraintRules(candidateRule);
+            placeDomainPopulatingRules(argConstraints);
+        }
+    }
+
+    /**
+     * Replaces the given domainPopulatingRule with the candidate rule,
+     * moving the domainPopulatingRule into the the set of constraintRules
+     *
+     * @@param domainPopulationRule the domain population rule which is to be replaced
+     * @@param candidateRule the given candidate domain population rule
+     */
+    protected void replaceDomainPopulationRule(Rule domainPopulationRule,
+                                               Rule candidateRule) throws IOException {
+        domainPopulationRules.remove(domainPopulationRule);
+        domainPopulationRules.add(candidateRule);
+        placeConstraintRule(domainPopulationRule);
+        if (verbosity > 3) {
+            System.out.println(domainPopulationRule.cyclify() + "\n  replaced with \n" +
+                               candidateRule.cyclify() +
+                               " as domain populating rule");
+            System.out.println("  placed \n" + domainPopulationRule.cyclify() +
+                               " as constraint rule");
+        }
+    }
+
+    /**
+     * Replaces the given constraintRule with the candidate rule.
+     *
+     * @@param constraintRule the constraint rule which is to be replaced
+     * @@param candidateRule the given candidate constraint rule
+     */
+    protected void replaceConstraintRule(Rule constraintRule,
+                                         Rule candidateRule) throws IOException {
+        constraintRules.remove(constraintRule);
+        placeConstraintRule(candidateRule);
+        if (verbosity > 3) {
+            System.out.println(constraintRule.cyclify() + "\n  replaced with \n" +
+                               candidateRule.cyclify() +
+                               " as constraint rule");
+        }
+@
+
+
+1.18
+log
+@Renamed HighCardinalityDomains to VariableDomainPopulator, in preparation
+for a reworking of the variable domain population technique.  The previous
+idea of augmenting the constraint problem with the constraint problem argument
+constraints is not efficient in a few cases where most of the rules involve
+high cardinality situations.
+
+The new technique will determine the best rule to instantiate domains for each
+variable, and whether to perform the instantiation immediately, or to postpone it
+for the forward checking search.  A new api call was added to get the instantiation
+counts from the OpenCyc indexing mechanism.
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: ProblemParser.java,v 1.17 2001/09/03 22:30:50 stephenreed Exp $
+a57 5
+     * Reference to the constraint problem's ValueDomains object.
+     */
+    protected ValueDomains valueDomains;
+
+    /**
+a85 1
+        valueDomains = constraintProblem.valueDomains;
+d119 6
+d128 1
+a128 1
+                                            rule);
+d132 1
+d134 1
+a134 13
+        //TODO having rethought the benefit of argument type constraint additions, -- they are
+        //unary constraints disposed of before the constraint search begins.  Not useful for
+        //domain population because any non-isa/genls rule will be lower cardinality and thus
+        //a better domain population alternative.
+
+        //Simply get all the VariablePopulation objects and rank the rules and populate any variables
+        //below the high cardinality theshold.
+
+
+
+
+
+
+a434 70
+    /**
+     * Initializes the value domains for each variable.
+     */
+    public void initializeDomains() throws IOException {
+
+        //TODO use iterate over VariablePopulation instead of domain population rules.
+
+        for (int i = 0; i < domainPopulationRules.size(); i++) {
+            Rule rule = (Rule) domainPopulationRules.get(i);
+            if (rule.isExtensionalVariableDomainPopulatingRule()) {
+                CycVariable cycVariable = (CycVariable) rule.getVariables().get(0);
+                if (valueDomains.domains.containsKey(cycVariable))
+                    throw new RuntimeException("Duplicate domain specifying rule for " +
+                                               cycVariable);
+                valueDomains.domains.put(cycVariable, null);
+                if (valueDomains.varsDictionary.containsKey(cycVariable))
+                    throw new RuntimeException("Duplicate varsDictionary entry for " + cycVariable);
+                CycList theSet =  (CycList) rule.getFormula().third();
+                if (! (theSet.first().toString().equals("TheSet")))
+                    throw new RuntimeException("Invalid TheSet entry for " + cycVariable);
+                ArrayList domainValues = new ArrayList(theSet.rest());
+                valueDomains.varsDictionary.put(cycVariable, domainValues);
+            }
+            else {
+                CycVariable cycVariable = (CycVariable) rule.getVariables().get(0);
+                if (rule.getPredicate().equals(CycAccess.isa) ||
+                    rule.getPredicate().equals(CycAccess.genls)) {
+                    CycFort collection;
+                    Object object = rule.getArguments().second();
+                    if (object instanceof CycList)
+                        collection = new CycNart((CycList) object);
+                    else
+                        collection = (CycFort) object;
+                    int nbrInstances =
+                        CycAccess.current().countAllInstances_Cached(collection,
+                                                                     constraintProblem.mt);
+                    if (verbosity > 3) {
+                        System.out.println("\nIntensional variable domain populating rule\n" + rule);
+                        System.out.println("  nbrInstances " + nbrInstances);
+                    }
+                    if (nbrInstances > variableDomainPopulator.domainSizeThreshold) {
+                        if (verbosity > 3)
+                            System.out.println("  domain size " + nbrInstances +
+                                               " exceeded high cardinality threshold of " +
+                                               variableDomainPopulator.domainSizeThreshold);
+                        variableDomainPopulator.setDomainSize(cycVariable,
+                                                             new Integer(nbrInstances));
+                        valueDomains.varsDictionary.put(cycVariable, new ArrayList());
+                    }
+                    else
+                        populateDomainViaQuery(rule, cycVariable);
+                }
+                else
+                    populateDomainViaQuery(rule, cycVariable);
+            }
+        }
+        if (verbosity > 1)
+            valueDomains.displayVariablesAndDomains();
+    }
+
+    /**
+     * Populates the domain by asking a query.
+     */
+    protected void populateDomainViaQuery(Rule rule, CycVariable cycVariable) throws IOException {
+        CycList domainValuesCycList =
+            CycAccess.current().askWithVariable (rule.getFormula(),
+                                                 cycVariable,
+                                                 constraintProblem.mt);
+        ArrayList domainValues = new ArrayList();
+        domainValues.addAll(domainValuesCycList);
+a435 14
+        if (constraintProblem.backchainer.maxBackchainDepth >
+            constraintProblem.backchainer.backchainDepth) {
+            if (verbosity > 3)
+                System.out.println("maxBackchainDepth " +
+                                   constraintProblem.backchainer.maxBackchainDepth +
+                                   " > " + constraintProblem.backchainer.backchainDepth +
+                                   "\n  for rule\n" + rule);
+            ArrayList backchainDomainValues = constraintProblem.backchainer.backchain(rule);
+            if (verbosity > 3)
+                System.out.println("Adding backchain domain values " + backchainDomainValues +
+                                   "\n  for " + cycVariable);
+        }
+        valueDomains.varsDictionary.put(cycVariable, domainValues);
+    }
+@
+
+
+1.17
+log
+@Reworking ProblemParser to handle high cardinality domains better
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: ProblemParser.java,v 1.16 2001/08/31 23:30:33 stephenreed Exp $
+d68 1
+a68 1
+     * Reference to the constraint problem's HighCardinalityDomains object.
+d70 1
+a70 7
+    protected HighCardinalityDomains highCardinalityDomains;
+
+    /**
+     * List of <tt>VariablePopulation</tt> objects used to determine the best domain population rule
+     * for each variable.
+     */
+    protected ArrayList variablePopulations = new ArrayList();
+d76 1
+a76 1
+    protected int verbosity = 9;
+d90 1
+a90 1
+        highCardinalityDomains = constraintProblem.highCardinalityDomains;
+d126 2
+a127 2
+                VariablePopulation variablePopulation =
+                    new VariablePopulation((CycVariable) rule.getVariables().get(j),
+d129 1
+a129 1
+                variablePopulations.add(variablePopulation);
+a132 1
+        Collections.sort(variablePopulations);
+d138 1
+a138 1
+        //Simple get all the VariablePopulation objects and rank the rules and populate any variables
+d450 3
+d486 1
+a486 1
+                    if (nbrInstances > highCardinalityDomains.domainSizeThreshold) {
+d490 2
+a491 2
+                                               highCardinalityDomains.domainSizeThreshold);
+                        highCardinalityDomains.setDomainSize(cycVariable,
+@
+
+
+1.16
+log
+@Continued backchain test cases
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: ProblemParser.java,v 1.15 2001/08/31 15:45:42 stephenreed Exp $
+d45 1
+a45 1
+    ArrayList simplifiedRules;
+d50 1
+a50 1
+    ArrayList domainPopulationRules;
+d55 1
+a55 1
+    ArrayList constraintRules;
+d60 1
+a60 1
+    ValueDomains valueDomains;
+d65 1
+a65 1
+    ArgumentTypeConstrainer argumentTypeConstrainer;
+d70 7
+a76 1
+    HighCardinalityDomains highCardinalityDomains;
+d123 1
+a123 1
+        // Sort by ascending arity to find ground facts first.
+d131 6
+a136 4
+            if (rule.isVariableDomainPopulatingRule())
+                placeDomainPopulatingRule(rule);
+            else
+                placeConstraintRule(rule);
+a137 2
+        for (int i = 0; i < constraintRules.size(); i++) {
+            Rule rule = (Rule) constraintRules.get(i);
+d139 13
+a151 2
+            //TODO add backchaining on constraint rules during search.
+            //     then add backchain limit check here
+a152 3
+            if (! isRuleSatisfiable(rule))
+                return false;
+        }
+d227 8
+a234 3
+        if (candidateRule.getArity() != 1)
+            throw new RuntimeException("candidateRule does not have arity=1 " +
+                                       candidateRule.cyclify());
+d473 1
+a473 1
+            else if (rule.isIntensionalVariableDomainPopulatingRule()) {
+a503 4
+            }
+            else {
+                if (verbosity > 1)
+                    System.out.println("Unhandled domain population rule:\n" + rule);
+@
+
+
+1.15
+log
+@Renamed rule instance variable to formula, continued backchain test cases
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: ProblemParser.java,v 1.14 2001/08/30 14:52:08 stephenreed Exp $
+d110 1
+a110 1
+     * return the value false.
+d112 2
+a113 2
+     * @@return <tt>false</tt> if a ground fact (rule with no variables) is proven false, otherwise
+     * return <tt>true</tt>
+d121 4
+a124 13
+            if (rule.isGround()) {
+                if (verbosity > 3)
+                    System.out.println("Ground fact\n" + rule);
+                boolean isTrueFact;
+                if (rule.isEvaluatable())
+                    isTrueFact = Rule.evaluateConstraintRule(rule.getFormula());
+                else
+                    isTrueFact = CycAccess.current().isQueryTrue(rule.getFormula(), constraintProblem.mt);
+                if (verbosity > 3)
+                    System.out.println("  --> " + isTrueFact);
+                if (! isTrueFact)
+                    return false;
+            }
+d127 1
+a127 1
+            else {
+d129 9
+a137 1
+            }
+d145 45
+d267 2
+a268 1
+                if (domainPopulationPredicate.equals(CycAccess.isa)) {
+@
+
+
+1.14
+log
+@Abbreviated diagnostic output for deep backchain examination.
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: ProblemParser.java,v 1.13 2001/08/30 00:06:55 stephenreed Exp $
+d126 1
+a126 1
+                    isTrueFact = Rule.evaluateConstraintRule(rule.getRule());
+d128 1
+a128 1
+                    isTrueFact = CycAccess.current().isQueryTrue(rule.getRule(), constraintProblem.mt);
+d403 1
+a403 1
+                CycList theSet =  (CycList) rule.getRule().third();
+d455 1
+a455 1
+            CycAccess.current().askWithVariable (rule.getRule(),
+@
+
+
+1.13
+log
+@Changed CycAccess parameters from CycConstants to CycForts, more backchaining tests
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: ProblemParser.java,v 1.12 2001/08/29 15:25:19 stephenreed Exp $
+a409 1
+                System.out.println("\nIntensional variable domain populating rule\n" + rule);
+@
+
+
+1.12
+log
+@More backchain test cases
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: ProblemParser.java,v 1.11 2001/08/28 23:52:16 stephenreed Exp $
+d225 12
+a236 4
+                        CycConstant domainPopulationCollection =
+                            (CycConstant) domainPopulationRule.getArguments().get(1);
+                        CycConstant candidateCollection =
+                            (CycConstant) candidateRule.getArguments().get(1);
+d414 6
+a419 1
+                    CycConstant collection = (CycConstant) rule.getArguments().second();
+@
+
+
+1.11
+log
+@Added more backchain support - testing with one level of backchaining
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: ProblemParser.java,v 1.10 2001/08/21 14:34:31 stephenreed Exp $
+d121 1
+a121 1
+            if (rule.getArity() == 0) {
+d402 1
+d404 21
+a424 39
+                CycConstant collection = (CycConstant) rule.getArguments().second();
+                int nbrInstances =
+                    CycAccess.current().countAllInstances_Cached(collection,
+                                                                 constraintProblem.mt);
+                if (verbosity > 3) {
+                    System.out.println("\nIntensional variable domain populating rule\n" + rule);
+                    System.out.println("  nbrInstances " + nbrInstances);
+                }
+                if (nbrInstances > highCardinalityDomains.domainSizeThreshold) {
+                    if (verbosity > 3)
+                        System.out.println("  domain size " + nbrInstances +
+                                           " exceeded high cardinality threshold of " +
+                                           highCardinalityDomains.domainSizeThreshold);
+                    highCardinalityDomains.setDomainSize(cycVariable,
+                                                         new Integer(nbrInstances));
+                    valueDomains.varsDictionary.put(cycVariable, new ArrayList());
+                }
+                else {
+                    // Get the domain values by asking a query.
+                    CycList domainValuesCycList =
+                        CycAccess.current().askWithVariable (rule.getRule(),
+                                                             cycVariable,
+                                                             constraintProblem.mt);
+                ArrayList domainValues = new ArrayList();
+                domainValues.addAll(domainValuesCycList);
+
+                if (constraintProblem.backchainer.maxBackchainDepth >
+                    constraintProblem.backchainer.backchainDepth) {
+                    if (verbosity > 3)
+                        System.out.println("maxBackchainDepth " +
+                                           constraintProblem.backchainer.maxBackchainDepth +
+                                           " > " + constraintProblem.backchainer.backchainDepth +
+                                           "\n  for rule\n" + rule);
+                    ArrayList backchainDomainValues = constraintProblem.backchainer.backchain(rule);
+                    if (verbosity > 3)
+                        System.out.println("Adding backchain domain values " + backchainDomainValues +
+                                           "\n  for " + cycVariable);
+                }
+                valueDomains.varsDictionary.put(cycVariable, domainValues);
+d426 2
+d438 25
+@
+
+
+1.10
+log
+@Implemented gathering of candidate backchain rules from the KB
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: ProblemParser.java,v 1.9 2001/08/20 21:26:24 stephenreed Exp $
+d109 5
+a113 1
+     * rules.
+d115 1
+a115 1
+    public void extractRulesAndDomains() throws IOException {
+d117 2
+d121 13
+d142 1
+d428 13
+@
+
+
+1.9
+log
+@Unit tests for argument type constraint augmentation now work.
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: ProblemParser.java,v 1.8 2001/08/20 14:00:07 stephenreed Exp $
+d158 1
+a158 1
+            if (domainPopulationVariable.equals(variable)) {
+d167 1
+a167 1
+                    else
+d171 1
+d196 1
+a196 1
+                    else
+d200 1
+d219 3
+a221 3
+                    else
+                        // Existing #$genls domain population rule takes
+                        // priority over the non-#$genls candidate rule.
+d223 1
+d226 3
+a228 2
+                throw new RuntimeException("Could not place candidate domain populating rule " +
+                                           candidateRule.cyclify());
+d231 1
+d236 43
+d318 2
+a319 1
+    protected void replaceDomainPopulationRule(Rule domainPopulationRule, Rule candidateRule) {
+a320 1
+        constraintRules.add(domainPopulationRule);
+d322 1
+d324 2
+a325 1
+            System.out.println(domainPopulationRule.cyclify() + "\n  replaced with \n" + candidateRule.cyclify() +
+d338 2
+a339 1
+    protected void replaceConstraintRule(Rule constraintRule, Rule candidateRule) {
+d341 1
+a341 1
+        constraintRules.add(candidateRule);
+d343 2
+a344 1
+            System.out.println(constraintRule.cyclify() + "\n  replaced with \n" + candidateRule.cyclify() +
+a346 43
+    }
+
+    /**
+     * Places the given constraint rule into the set of constraint rules if it does not subsume any
+     * existing member of the constraint rule set.  Replaces an existing member of the constraint
+     * rule set if the given rule is subsumed by the existing constraint rule.
+     *
+     * @@param candidateRule the candidate constraint rule for placement into the set of constraint
+     * rules
+     */
+    public void placeConstraintRule(Rule candidateRule) throws IOException {
+        if (verbosity > 3)
+            System.out.println("\nConsidering \n" + candidateRule.cyclify() +
+                               " as candidate constraint rule");
+        if (candidateRule.getArity() == 1 &&
+            candidateRule.getPredicate().equals(CycAccess.isa) &&
+            candidateRule.getArguments().get(1).equals(CycAccess.thing)) {
+            if (verbosity > 3)
+                System.out.println("  dropped because rule is trivially true");
+            return;
+        }
+        ArrayList tempConstraintRules = (ArrayList) constraintRules.clone();
+        for (int i = 0; i < tempConstraintRules.size(); i++) {
+            Rule constraintRule = (Rule) tempConstraintRules.get(i);
+            if (candidateRule.isSubsumedBy(constraintRule)) {
+                if (verbosity > 3)
+                    System.out.println(candidateRule.cyclify() + "\n  is subsumed by constraint rule\n" +
+                                       constraintRule.cyclify());
+                this.replaceConstraintRule(constraintRule, candidateRule);
+                return;
+            }
+        }
+        ArrayList tempDomainPopulationRules = (ArrayList) domainPopulationRules.clone();
+        for (int i = 0; i < tempDomainPopulationRules.size(); i++) {
+            Rule domainPopulationRule = (Rule) tempDomainPopulationRules.get(i);
+            if (candidateRule.subsumes(domainPopulationRule)) {
+                if (verbosity > 3)
+                    System.out.println(candidateRule.cyclify() + "\n  subsumes domain population rule\n" +
+                                       domainPopulationRule.cyclify() + "\n  and is is dropped");
+                return;
+            }
+        }
+        placeAsConstraintRule(candidateRule);
+@
+
+
+1.8
+log
+@Geting unit tests working for ProblemParser and arg constraints gathering.
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: ProblemParser.java,v 1.7 2001/08/17 13:57:21 stephenreed Exp $
+d112 1
+a112 1
+        simplifiedRules = Rule.simplifyRuleExpression(constraintProblem.problem);
+d147 1
+a147 1
+            System.out.println("Considering \n" + candidateRule.cyclify() +
+d170 1
+a170 1
+                        placeAsConstraintRule(candidateRule);
+d189 1
+a189 1
+                            placeAsConstraintRule(candidateRule);
+d198 1
+a198 1
+                        placeAsConstraintRule(candidateRule);
+d211 1
+a211 1
+                            placeAsConstraintRule(candidateRule);
+d220 1
+a220 1
+                        placeAsConstraintRule(candidateRule);
+d267 1
+d275 1
+a275 1
+            System.out.println("  replaced with \n" + candidateRule.cyclify() +
+d283 15
+d307 1
+a307 1
+            System.out.println("Considering \n" + candidateRule.cyclify() +
+d309 7
+d319 17
+a335 3
+
+            //TODO subsumption test
+
+@
+
+
+1.7
+log
+@Added more methods to argument type constraints class
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: ProblemParser.java,v 1.6 2001/08/16 23:04:57 stephenreed Exp $
+d58 15
+d89 3
+d116 1
+a116 1
+                domainPopulationRules.add(rule);
+d118 1
+a118 4
+                constraintRules.add(rule);
+                ArrayList argConstraints =
+                    constraintProblem.argumentTypeConstrainer.retrieveArgumentTypeConstraintRules(rule);
+                placeDomainPopulatingRules(argConstraints);
+d150 2
+a151 1
+            throw new RuntimeException("candidateRule does not have arity=1 " + candidateRule.cyclify());
+d153 5
+a157 3
+        for (int i = 0; i < domainPopulationRules.size(); i++) {
+            Rule domainPopulationRule = (Rule) domainPopulationRules.get(i);
+            CycVariable domainPopulationVariable = (CycVariable) domainPopulationRule.getVariables().get(0);
+d163 31
+a193 6
+                CycConstant elementOf = CycAccess.current().getConstantByName("elementOf");
+                if (domainPopulationPredicate.equals(elementOf)) {
+                    if (candidatePredicate.equals(elementOf)) {
+                        if (verbosity > 3)
+                            System.out.println("  placed \n" + candidateRule.cyclify() +
+                                               " as domain populating rule");
+d195 21
+a215 1
+                    else {
+d217 5
+d223 2
+a224 4
+                else {
+                }
+
+                return;
+d227 9
+d239 36
+d276 25
+d319 2
+a320 2
+        for (int i = 0; i < constraintProblem.domainPopulationRules.size(); i++) {
+            Rule rule = (Rule) constraintProblem.domainPopulationRules.get(i);
+d323 5
+a327 4
+                if (constraintProblem.valueDomains.domains.containsKey(cycVariable))
+                    throw new RuntimeException("Duplicate domain specifying rule for " + cycVariable);
+                constraintProblem.valueDomains.domains.put(cycVariable, null);
+                if (constraintProblem.valueDomains.varsDictionary.containsKey(cycVariable))
+d333 1
+a333 1
+                constraintProblem.valueDomains.varsDictionary.put(cycVariable, domainValues);
+d338 3
+a340 2
+                int nbrInstances = CycAccess.current().countAllInstances(collection,
+                                                                         constraintProblem.mt);
+d345 1
+a345 1
+                if (nbrInstances > constraintProblem.highCardinalityDomains.domainSizeThreshold) {
+d349 4
+a352 4
+                                           constraintProblem.highCardinalityDomains.domainSizeThreshold);
+                    constraintProblem.highCardinalityDomains.setDomainSize(cycVariable,
+                                                                           new Integer(nbrInstances));
+                    constraintProblem.valueDomains.varsDictionary.put(cycVariable, new ArrayList());
+d362 1
+a362 1
+                constraintProblem.valueDomains.varsDictionary.put(cycVariable, domainValues);
+d371 1
+a371 1
+            constraintProblem.valueDomains.displayVariablesAndDomains();
+a372 1
+
+@
+
+
+1.6
+log
+@Added argument type constraint rule augmentation.
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: ProblemParser.java,v 1.5 2001/08/16 17:31:46 stephenreed Exp $
+d37 4
+d42 4
+d48 6
+a53 1
+     * Reference to the parent <tt>ConstraintProblem</tt> object.
+d55 1
+a55 1
+    protected ConstraintProblem constraintProblem;
+d71 3
+a75 2
+
+
+d90 2
+a91 1
+     * one or more solutions.
+d94 3
+a96 3
+        constraintProblem.simplifiedRules = Rule.simplifyRuleExpression(constraintProblem.problem);
+        for (int i = 0; i < constraintProblem.simplifiedRules.size(); i++) {
+            Rule rule = (Rule) constraintProblem.simplifiedRules.get(i);
+d98 1
+a98 1
+                constraintProblem.domainPopulationRules.add(rule);
+d100 4
+a103 3
+                constraintProblem.constraintRules.add(rule);
+                ArrayList argConstraints = constraintProblem.argumentTypeConstrainer.retrieveArgumentTypeConstraintRules(rule);
+                constraintProblem.domainPopulationRules.addAll(argConstraints);
+d108 57
+@
+
+
+1.5
+log
+@Completed European Cathedrals use case accessing OpenCyc.
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: ProblemParser.java,v 1.4 2001/08/16 14:25:27 stephenreed Exp $
+d84 1
+a84 1
+            else
+d86 3
+a92 1
+
+@
+
+
+1.4
+log
+@Changed toString method of CycVariable to include "?" prefix.
+Continued with unit test of the European Cathedrals constraint use case with OpenCyc connection.
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: ProblemParser.java,v 1.3 2001/08/15 23:49:56 stephenreed Exp $
+d129 1
+a129 1
+                    System.out.println("intensional variable domain populating rule\n" + rule);
+@
+
+
+1.3
+log
+@Cached CycAccess instances by thread and introduced European Cathedrals
+constraint problem that evaluates its rules in OpenCyc.
+@
+text
+@a2 1
+import org.opencyc.cycobject.*;
+d5 2
+d13 1
+a13 1
+ * @@version $Id: ProblemParser.java,v 1.2 2001/08/13 16:14:44 stephenreed Exp $
+a109 1
+            //TODO handle high cardinality domains.
+d122 34
+a155 1
+           }
+@
+
+
+1.2
+log
+@Revised copyright notice to Cycorp Inc.
+@
+text
+@d5 1
+d12 1
+a12 1
+ * @@version $Id: ProblemParser.java,v 1.1 2001/07/30 22:59:00 stephenreed Exp $
+d77 1
+a77 1
+    public void extractRulesAndDomains() {
+d106 1
+a106 1
+    public void initializeDomains() {
+@
+
+
+1.1
+log
+@Refactored ConstraintProblem class and added several other supporting classes
+@
+text
+@d11 1
+a11 1
+ * @@version $Id$
+d14 1
+a14 1
+ * <p>Copyright 2001 OpenCyc.org, license is open source GNU LGPL.
+d66 1
+a66 1
+    protected void setVerbosity(int verbosity) {
+d76 1
+a76 1
+    protected void extractRulesAndDomains() {
+d93 1
+a93 1
+    protected void gatherVariables() {
+d105 1
+a105 1
+    protected void initializeDomains() {
+@
+

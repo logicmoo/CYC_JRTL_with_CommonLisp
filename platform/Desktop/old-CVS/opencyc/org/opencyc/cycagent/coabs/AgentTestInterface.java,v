@@ -1,0 +1,145 @@
+head	1.3;
+access;
+symbols
+	PRE_1_0:1.2;
+locks; strict;
+comment	@# @;
+
+
+1.3
+date	2006.10.21.17.01.55;	author dmiles;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2001.11.05.21.17.19;	author stephenreed;	state dead;
+branches;
+next	1.1;
+
+1.1
+date	2001.11.05.00.55.42;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.3
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental classes.
+@
+text
+@package org.opencyc.cycagent.coabs;
+
+import com.globalinfotek.coabsgrid.MessageListener;
+import com.globalinfotek.coabsgrid.paamtutorial.WeatherAgent;
+
+/**
+ *  Copyright:    Copyright (c) 1999-2001 Global InfoTek, Inc.
+ *  Author:       Martha L. Kahn
+ *  Date:         March, 1999
+ *  Company:      Global InfoTek, Inc.
+ *  Description:  Interface used by agents using the AgentTestGUI.
+ *
+ ********************************************************************************
+ * This code is the exclusive property of Global InfoTek Inc. and may not
+ * be used for any purpose without the written permission of Global
+ * InfoTek, Inc.
+ ********************************************************************************
+ *  An inteface implemented by agents so they can be used by AgentTestGUI.
+ *
+ *  Send bug reports to coabsgrid-bugs@@globalinfotek.com
+ *  @@see Agent2Test
+ *  @@see JFCAgent
+ *  @@see WeatherAgent
+ *  @@see Agent1Test
+ *  @@author Martha L. Kahn, Global InfoTek, Inc.
+ */
+public interface AgentTestInterface {
+
+    /**
+     * Gets the agent name for the test GUI title.
+     */
+    public String getName();
+
+    /**
+     * Gets the the message receiver for the test GUI.
+     */
+    public String getReceiver();
+
+    /**
+     * Sets the message receiver.
+     * Used by the GUI when the user edits the message receiver.
+     *
+     * @@param r the message receiver
+     */
+    public void setReceiver(String r);
+
+    /**
+     * Gets the message text. Used by the GUI to display the message text.
+     */
+    public String getRawText();
+
+    /**
+     * Sets the message text.
+     * Used by the GUI when the user edits the message text.
+     *
+     * @@param text the message text
+     */
+    public void setRawText(String text);
+
+    /**
+     * Adds a message listener.
+     * Just for working with the AgentTestFrame.
+     * Lets the frame be a listener for new messages on the queue
+     * so it can print them out.
+     *
+     * @@param ml the message listener
+     */
+    public void addMessageListener(MessageListener ml);
+
+    // FIPA AMS
+    /**
+     * Register this agent.
+     */
+    public void register();
+
+    /**
+     * Deregisters this agent.
+     */
+    public void deregister();
+
+    /**
+     * Modifies this agent's advertised capabilities.
+     */
+    public void modify();
+
+    // FIPA ACC
+    /**
+     * Forwards the message.
+     */
+    public void forward();
+}
+@
+
+
+1.2
+log
+@Removed unneeded CoABS example classes
+@
+text
+@d4 1
+a4 1
+import java.rmi.RemoteException;
+@
+
+
+1.1
+log
+@Initial check-in
+@
+text
+@@
+

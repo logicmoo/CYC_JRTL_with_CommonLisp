@@ -1,0 +1,4262 @@
+head	1.37;
+access;
+symbols
+	BRANCH_OPENCYC_1_0_1:1.36.0.2
+	OPENCYC_1_0_1:1.36
+	PRE_1_0:1.35
+	start:1.1.1.1
+	opencyc:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.37
+date	2006.10.21.16.49.17;	author dmiles;	state Exp;
+branches;
+next	1.36;
+
+1.36
+date	2006.10.18.13.36.03;	author dmiles;	state Exp;
+branches;
+next	1.35;
+
+1.35
+date	2003.04.22.19.54.41;	author stephenreed;	state Exp;
+branches;
+next	1.34;
+
+1.34
+date	2003.01.29.00.18.09;	author stephenreed;	state Exp;
+branches;
+next	1.33;
+
+1.33
+date	2002.10.25.23.23.56;	author stephenreed;	state Exp;
+branches;
+next	1.32;
+
+1.32
+date	2002.10.21.22.01.42;	author stephenreed;	state Exp;
+branches;
+next	1.31;
+
+1.31
+date	2002.08.29.21.59.24;	author stephenreed;	state Exp;
+branches;
+next	1.30;
+
+1.30
+date	2002.08.23.18.37.13;	author stephenreed;	state Exp;
+branches;
+next	1.29;
+
+1.29
+date	2002.07.23.20.17.21;	author stephenreed;	state Exp;
+branches;
+next	1.28;
+
+1.28
+date	2002.04.23.02.59.02;	author stephenreed;	state Exp;
+branches;
+next	1.27;
+
+1.27
+date	2002.03.27.19.51.20;	author stephenreed;	state Exp;
+branches;
+next	1.26;
+
+1.26
+date	2002.02.18.18.46.34;	author stephenreed;	state Exp;
+branches;
+next	1.25;
+
+1.25
+date	2002.02.03.18.07.22;	author stephenreed;	state Exp;
+branches;
+next	1.24;
+
+1.24
+date	2001.11.21.21.01.59;	author stephenreed;	state Exp;
+branches;
+next	1.23;
+
+1.23
+date	2001.11.19.21.55.33;	author stephenreed;	state Exp;
+branches;
+next	1.22;
+
+1.22
+date	2001.11.17.00.32.48;	author stephenreed;	state Exp;
+branches;
+next	1.21;
+
+1.21
+date	2001.11.14.01.15.17;	author stephenreed;	state Exp;
+branches;
+next	1.20;
+
+1.20
+date	2001.11.13.02.16.53;	author stephenreed;	state Exp;
+branches;
+next	1.19;
+
+1.19
+date	2001.11.08.22.12.27;	author stephenreed;	state Exp;
+branches;
+next	1.18;
+
+1.18
+date	2001.11.08.13.06.47;	author stephenreed;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2001.11.08.03.21.00;	author stephenreed;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2001.11.07.22.04.25;	author stephenreed;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2001.11.07.00.59.30;	author stephenreed;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2001.11.06.22.09.12;	author stephenreed;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2001.10.24.17.00.29;	author stephenreed;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2001.10.15.22.34.00;	author stephenreed;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2001.10.09.16.09.01;	author stephenreed;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2001.10.04.08.24.54;	author stephenreed;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2001.09.14.22.14.55;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2001.08.30.00.06.55;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2001.08.28.10.05.25;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2001.08.23.00.47.46;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2001.08.15.14.50.46;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2001.08.13.16.14.44;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2001.07.30.23.04.19;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2001.07.25.17.17.34;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2001.07.23.21.54.15;	author stephenreed;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2001.07.23.21.54.15;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.37
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental packages
+@
+text
+@package  org.opencyc.cycobject;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.lang.reflect.Method;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+import java.util.Stack;
+
+import org.opencyc.api.CycAccess;
+import org.opencyc.api.CycApiException;
+import org.opencyc.api.CycObjectFactory;
+import org.opencyc.util.StringUtils;
+import org.opencyc.xml.TextUtil;
+import org.opencyc.xml.XMLStringWriter;
+import org.opencyc.xml.XMLWriter;
+
+
+/**
+ * Provides the behavior and attributes of an OpenCyc list, typically used
+ * to represent assertions in their external (EL) form.
+ *
+ * @@version $0.1$
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class CycList extends ArrayList implements CycObject, List, Serializable {
+
+  static final long serialVersionUID = 2031704553206469327L;
+  /**
+   * XML serialization tags.
+   */
+  public static final String cycListXMLTag = "list";
+  public static final String integerXMLTag = "integer";
+  public static final String doubleXMLTag = "double";
+  public static final String stringXMLTag = "string";
+  public static final String dottedElementXMLTag = "dotted-element";
+  /**
+   * XML serialization indentation.
+   */
+  public static int indentLength = 2;
+  private boolean isProperList = true;
+  private Object dottedElement;
+  
+  /**
+   * Constructs a new empty <tt>CycList</tt> object.
+   */
+  public CycList() {
+  }
+  
+  /**
+   * Constructs a new empty <tt>CycList</tt> object of the given size.
+   *
+   * @@param size the initial size of the list
+   */
+  public CycList(final int size) {
+    super(size);
+  }
+  
+  /**
+   * Constructs a new <tt>CycList</tt> object, containing the elements of the
+   * specified collection, in the order they are returned by the collection's iterator.
+   *
+   * @@param c the collection of assumed valid OpenCyc objects.
+   */
+  public CycList(final Collection c) {
+    super(c);
+    if (c instanceof CycList) {
+      if (!((CycList)c).isProperList()) {
+        if (this.size() > 0) {
+          super.remove(this.size() - 1);
+        }
+        setDottedElement(((CycList)c).getDottedElement());
+      }
+    }
+  }
+  
+  /**
+   * Constructs a new <tt>CycList</tt> object, containing as its first element
+   * <tt>firstElement</tt>, and containing as its remaining elements the
+   * contents of the <tt>Collection</tt> remaining elements.
+   *
+   * @@param firstElement the object which becomes the head of the <tt>CycList</tt>
+   * @@param remainingElements a <tt>Collection</tt>, whose elements become the
+   * remainder of the <tt>CycList</tt>
+   */
+  public CycList(final Object firstElement, final Collection remainingElements) {
+    this.add(firstElement);
+    addAll(remainingElements);
+  }
+  
+  /**
+   * Constructs a new <tt>CycList</tt> object, containing as its sole element
+   * <tt>element</tt>
+   *
+   * @@param element the object which becomes the head of the <tt>CycList</tt>
+   */
+  public CycList(final Object element) {
+    this.add(element);
+  }
+  
+  /**
+   * Constructs a new <tt>CycList</tt> object, containing as its first element
+   * <tt>element1</tt>, and <tt>element2</tt> as its second element.
+   *
+   * @@param element1 the object which becomes the head of the <tt>CycList</tt>
+   * @@param element2 the object which becomes the second element of the <tt>CycList</tt>
+   */
+  public CycList(final Object element1, final Object element2) {
+    this.add(element1);
+    this.add(element2);
+  }
+  
+  /** Returns a new proper CycList having the given element as it's initial element.
+   *
+   * @@param obj the initial element
+   * @@return a new proper CycList having the given element as it's initial element
+   */
+  public static CycList makeCycList(final Object obj) {
+    
+    //// Preconditions 
+    if (obj == null)
+      throw new NullPointerException("obj cannot be null");
+    
+    final CycList cycList = new CycList();
+    cycList.add(obj);
+    return cycList;
+  }
+  
+  /** Returns a new proper CycList having the given two elements as it's initial elements.
+   *
+   * @@param obj1 the first element
+   * @@param obj2 the second element
+   * @@return a new proper CycList having the given two elements as it's initial elements
+   */
+  public static CycList makeCycList(final Object obj1, final Object obj2) {
+    
+    //// Preconditions 
+    if (obj1 == null)
+      throw new NullPointerException("obj1 cannot be null");
+    if (obj2 == null)
+      throw new NullPointerException("obj2 cannot be null");
+    
+    final CycList cycList = new CycList();
+    cycList.add(obj1);
+    cycList.add(obj2);
+    return cycList;
+  }
+  
+  /** Returns a new proper CycList having the given three elements as it's initial elements.
+   *
+   * @@param obj1 the first element
+   * @@param obj2 the second element
+   * @@param obj3 the third element
+   * @@return a new proper CycList having the given three elements as it's initial elements
+   */
+  public static CycList makeCycList(final Object obj1, final Object obj2, final Object obj3) {
+    
+    //// Preconditions 
+    if (obj1 == null)
+      throw new NullPointerException("obj1 cannot be null");
+    if (obj2 == null)
+      throw new NullPointerException("obj2 cannot be null");
+    if (obj3 == null)
+      throw new NullPointerException("obj3 cannot be null");
+    
+    final CycList cycList = new CycList();
+    cycList.add(obj1);
+    cycList.add(obj2);
+    cycList.add(obj3);
+    return cycList;
+  }
+  
+  /** Returns a new proper CycList having the given four elements as it's initial elements.
+   *
+   * @@param obj1 the first element
+   * @@param obj2 the second element
+   * @@param obj3 the third element
+   * @@param obj4 the fourth element
+   * @@return a new proper CycList having the given four elements as it's initial elements
+   */
+  public static CycList makeCycList(final Object obj1, final Object obj2, final Object obj3, final Object obj4) {
+    
+    //// Preconditions 
+    if (obj1 == null)
+      throw new NullPointerException("obj1 cannot be null");
+    if (obj2 == null)
+      throw new NullPointerException("obj2 cannot be null");
+    if (obj3 == null)
+      throw new NullPointerException("obj3 cannot be null");
+    if (obj4 == null)
+      throw new NullPointerException("obj4 cannot be null");
+    
+    final CycList cycList = new CycList();
+    cycList.add(obj1);
+    cycList.add(obj2);
+    cycList.add(obj3);
+    cycList.add(obj4);
+    return cycList;
+  }
+  
+  /**
+   * Constructs a CycList using the semantics of Lisp symbolic expressions.<br>
+   * 1.  construct(a, NIL) --> (a)<br>
+   * 2.  construct(a, b) --> (a . b)<br>
+   *
+   * @@param object1 the first <tt>Object</tt> in the <tt>CycList</tt>
+   * @@param object2 <tt>NIL</tt> or an <tt>Object</tt>
+   * @@return <tt>CycList</tt> (object) if <tt>object2</tt> is <tt>NIL</tt>,
+   * otherwise return the improper <tt>CycList</tt> (object1 . object2)
+   */
+  public static CycList construct(final Object object1, final Object object2) {
+    final CycList cycList = new CycList(object1);
+    if (object2.equals(CycObjectFactory.nil))
+      return  cycList;
+    if (object2 instanceof CycList) {
+      final CycList cycList2 = (CycList)object2;
+      cycList.addAll(cycList2);
+      if (!cycList2.isProperList)
+        cycList.setDottedElement(cycList2.getDottedElement());
+      return  cycList;
+    }
+    cycList.setDottedElement(object2);
+    return cycList;
+  }
+  
+  /**
+   * Creates and returns a copy of this <tt>CycList</tt>.
+   *
+   * @@return a clone of this instance
+   */
+  public Object clone() {
+    return new CycList(this);
+  }
+  
+  /**
+   * Creates and returns a deep copy of this <tt>CycList</tt>.  In a deep copy,
+   * directly embedded <tt>CycList</tt> objects are also deep copied.  Objects
+   * which are not CycLists are cloned.
+   *
+   * @@return a deep copy of this <tt>CycList</tt>
+   */
+  public CycList deepCopy() {
+    final CycList cycList = new CycList();
+    if (!this.isProperList()) {
+      if (this.dottedElement instanceof CycList)
+        cycList.setDottedElement(((CycList)this.dottedElement).deepCopy());
+      else
+        cycList.setDottedElement(this.getDottedElement());
+    }
+    for (int i = 0; i < super.size(); i++) {
+      final Object element = this.get(i);
+      if (element instanceof CycList)
+        cycList.add(((CycList)element).deepCopy());
+      else
+        cycList.add(element);
+    }
+    return cycList;
+  }
+  
+  /**
+   * Gets the dotted element.
+   *
+   * @@return the <tt>Object</tt> which forms the dotted element of this <tt>CycList</tt>
+   */
+  public Object getDottedElement() {
+    return dottedElement;
+  }
+  
+  /**
+   * Sets the dotted element and set the improper list attribute to <tt>true</tt>.
+   */
+  public void setDottedElement(final Object dottedElement) {
+    this.dottedElement = dottedElement;
+    this.isProperList = false;
+  }
+  
+  /**
+   * Returns <tt>true</tt> if this is a proper list.
+   *
+   * @@return <tt>true</tt> if this is a proper list, otherwise return <tt>false</tt>
+   */
+  public boolean isProperList() {
+    return isProperList;
+  }
+  
+  public int size() {
+    int result = super.size();
+    if (!isProperList()) { result++; }
+    return result;
+  }
+
+  public int getProperListSize() {
+    return super.size();
+  }
+  
+  /**
+   * Answers true iff the CycList contains valid elements.  This is a necessary, but
+   * not sufficient condition for CycL well-formedness.
+   */
+  public boolean isValid() {
+    for (int i = 0; i < this.size(); i++) {
+      final Object object = this.get(i);
+      if (object instanceof String ||
+      object instanceof Integer ||
+      object instanceof Guid ||
+      object instanceof Float ||
+      object instanceof ByteArray ||
+      object instanceof CycConstant ||
+      object instanceof CycNart)
+        continue;
+      else if (object instanceof CycList) {
+        if (!((CycList)object).isValid())
+          return false;
+      }
+      else
+        return false;
+    }
+    return true;
+  }
+  
+  /**
+   * Returns true if formula is well-formed in the relevant mt.
+   *
+   * @@param formula the given EL formula
+   * @@param mt the relevant mt
+   * @@return true if formula is well-formed in the relevant mt, otherwise false
+   * @@throws UnknownHostException if cyc server host not found on the network
+   * @@throws IOException if a data communication error occurs
+   * @@throws CycApiException if the api request results in a cyc server error
+   */
+  public boolean isFormulaWellFormed(final ELMt mt)
+  throws IOException, UnknownHostException, CycApiException {
+    return CycAccess.current().isFormulaWellFormed(this, mt);
+  }
+  
+  /**
+   * Returns true if formula is well-formed Non Atomic Reifable Term.
+   *
+   * @@param formula the given EL formula
+   * @@return true if formula is well-formed Non Atomic Reifable Term, otherwise false
+   * @@throws UnknownHostException if cyc server host not found on the network
+   * @@throws IOException if a data communication error occurs
+   * @@throws CycApiException if the api request results in a cyc server error
+   */
+  public boolean isCycLNonAtomicReifableTerm() 
+  throws IOException, UnknownHostException, CycApiException {
+    return CycAccess.current().isCycLNonAtomicReifableTerm(this);
+  }
+  
+  /**
+   * Returns true if formula is well-formed Non Atomic Un-reifable Term.
+   *
+   * @@param formula the given EL formula
+   * @@return true if formula is well-formed Non Atomic Un-reifable Term, otherwise false
+   * @@throws UnknownHostException if cyc server host not found on the network
+   * @@throws IOException if a data communication error occurs
+   * @@throws CycApiException if the api request results in a cyc server error
+   */
+  public boolean isCycLNonAtomicUnreifableTerm() 
+  throws IOException, UnknownHostException,
+  CycApiException {
+    return CycAccess.current().isCycLNonAtomicUnreifableTerm(this);
+  }
+  
+  /**
+   * Creates a new <tt>CycList</tt> containing the given element.
+   *
+   * @@param element the contents of the new <tt>CycList</tt>
+   * @@return a new <tt>CycList</tt> containing the given element
+   */
+  public static CycList list(final Object element) {
+    final CycList result = new CycList();
+    result.add(element);
+    return result;
+  }
+  
+  /**
+   * Creates a new <tt>CycList</tt> containing the given two elements.
+   *
+   * @@param element1 the first item of the new <tt>CycList</tt>
+   * @@param element2 the second item of the new <tt>CycList</tt>
+   * @@return a new <tt>CycList</tt> containing the given two elements
+   */
+  public static CycList list(final Object element1, final Object element2) {
+    final CycList result = new CycList();
+    result.add(element1);
+    result.add(element2);
+    return result;
+  }
+  
+  /**
+   * Creates a new <tt>CycList</tt> containing the given three elements.
+   *
+   * @@param element1 the first item of the new <tt>CycList</tt>
+   * @@param element2 the second item of the new <tt>CycList</tt>
+   * @@param element3 the third item of the new <tt>CycList</tt>
+   * @@return a new <tt>CycList</tt> containing the given three elements
+   */
+  public static CycList list(final Object element1, final Object element2, final Object element3) {
+    final CycList result = new CycList();
+    result.add(element1);
+    result.add(element2);
+    result.add(element3);
+    return result;
+  }
+  
+  /**
+   * Returns the first element of the <tt>CycList</tt>.
+   *
+   * @@return the <tt>Object</tt> which is the first element of the list.
+   */
+  public Object first() {
+    if(size() == 0)
+      throw new RuntimeException("First element not available for an empty CycList");
+    return this.get(0);
+  }
+  
+  /**
+   * Returns the second element of the <tt>CycList</tt>.
+   *
+   * @@return the <tt>Object</tt> which is the second element of the list.
+   */
+  public Object second() {
+    if(size() < 1)
+      throw new RuntimeException("Second element not available");
+    return this.get(1);
+  }
+  
+  /**
+   * Returns the third element of the <tt>CycList</tt>.
+   *
+   * @@return the <tt>Object</tt> which is the third element of the list.
+   */
+  public Object third() {
+    if(size() < 2)
+      throw new RuntimeException("Third element not available");
+    return this.get(2);
+  }
+  
+  /**
+   * Returns the fourth element of the <tt>CycList</tt>.
+   *
+   * @@return the <tt>Object</tt> which is the fourth element of the list.
+   */
+  public Object fourth() {
+    if(size() < 3)
+      throw new RuntimeException("Fourth element not available");
+    return this.get(3);
+  }
+  
+  /**
+   * Returns the last element of the <tt>CycList</tt>.
+   *
+   * @@return the <tt>Object</tt> which is the last element of the list.
+   */
+  public Object last() {
+    if(size() == 0)
+      throw new RuntimeException("Last element not available");
+    return this.get(this.size() - 1);
+  }
+  
+  /**
+   * Returns the CycList after removing the first element, in in the case of a
+   * dotted pair, returns the dotted element.
+   *
+   * @@return the CycList after removing the first element, in in the case of a
+   * dotted pair, returns the dotted element.
+   */
+  public Object rest() {
+    if(this.size() == 0)
+      throw new RuntimeException("Cannot remove first element of an empty list.");
+    else if((super.size() == 1) && (!this.isProperList))
+      return this.getDottedElement();
+    final CycList cycList = new CycList(this);
+    cycList.remove(0);
+    return cycList;
+  }
+  
+  /**
+   * Appends the given elements to the end of the list and returns the list (useful when nesting method calls).
+   *
+   * @@param cycList the elements to add
+   * @@return the list after adding the given elements to the end
+   */
+  public CycList appendElements(final CycList cycList) {
+      addAll(cycList);
+      return this;
+  }
+  
+  /**
+   * Appends the given element to the end of the list and returns the list (useful when nesting method calls).
+   *
+   * @@param object the object element to add
+   * @@return the list after adding the given element to the end
+   */
+  public CycList appendElement(final Object object) {
+      add(object);
+      return this;
+  }
+  
+  /**
+   * Appends the given element to the end of the list and returns the list (useful when nesting method calls).
+   *
+   * @@param i the integer element to add
+   * @@return the list after adding the given element to the end
+   */
+  public CycList appendElement(final int i) {
+      add(new Integer(i));
+      return this;
+  }
+  
+  /**
+   * Appends the given element to the end of the list and returns the list (useful when nesting method calls).
+   *
+   * @@param l the long element to add
+   * @@return the list after adding the given element to the end
+   */
+  public CycList appendElement(final long l) {
+      add(new Long(l));
+      return this;
+  }
+  
+  /**
+   * Appends the given element to the end of the list and returns the list (useful when nesting method calls).
+   *
+   * @@param b the boolean element to add
+   * @@return the list after adding the given element to the end
+   */
+  public CycList appendElement(final boolean b) {
+      add(new Boolean(b));
+      return this;
+  }
+  
+  /**
+   * Adds the given integer to this list by wrapping it with an Integer object.
+   *
+   * @@param i the given integer to add
+   */
+  public void add(final int i) {
+    this.add(new Integer(i));
+  }
+  
+  /**
+   * Adds the given long to this list by wrapping it with an Long object.
+   *
+   * @@param l the given long to add
+   */
+  public void add(final long l) {
+    this.add(new Long(l));
+  }
+  
+  /**
+   * Adds the given float to this list by wrapping it with a Float object.
+   *
+   * @@param f the given float to add
+   */
+  public void add(final float f) {
+    this.add(new Float(f));
+  }
+  
+  /**
+   * Adds the given double to this list by wrapping it with a Double object.
+   *
+   * @@param d the given double to add
+   */
+  public void add(final double d) {
+    this.add(new Double(d));
+  }
+  
+  /**
+   * Adds the given boolean to this list by wrapping it with a Boolean object.
+   *
+   * @@param b the given boolean to add
+   */
+  public void add(final boolean b) {
+    this.add(new Boolean(b));
+  }
+  
+  /**
+   * Adds the given element to this list if it is not already contained.
+   */
+  public void addNew(final Object object) {
+    if(!this.contains(object))
+      this.add(object);
+  }
+  
+  /**
+   * Adds the given elements to this list if they are not already contained.
+   */
+  public void addAllNew(final Collection objects) {
+    final Iterator iter = objects.iterator();
+    while (true) {
+      if(!iter.hasNext())
+        break;
+      this.addNew(iter.next());
+    }
+  }
+  
+  public boolean addAll(Collection col) {
+    boolean result = super.addAll(col);
+    if (col instanceof CycList) {
+      CycList cycList = (CycList)col;
+      if (!cycList.isProperList()) { 
+        if (isProperList()) {
+          setDottedElement(cycList.getDottedElement());
+        } else {
+          add(getDottedElement());
+          setDottedElement(cycList.getDottedElement());
+        }
+      }
+    }
+    return result;
+  }
+  
+  /**
+   * Returns true iff this list contains duplicate elements.
+   *
+   * @@return true iff this list contains duplicate elements
+   */
+  public boolean containsDuplicates() {
+    if(!isProperList)
+      if(this.contains(this.dottedElement))
+        return  true;
+    for(int i = 0; i < this.size(); i++)
+      for(int j = i + 1; j < this.size(); j++)
+        if(this.get(i).equals(this.get(j)))
+          return true;
+    return false;
+  }
+  
+  /**
+   * Destructively delete duplicates from the list.
+   * @@return <code>this</code> list with the duplicates deleted.
+   */
+  public CycList deleteDuplicates() {
+    if(this.isProperList)
+      if(this.contains(this.dottedElement))
+        this.setDottedElement(null);
+    for(int i = 0; i< this.size(); i++)
+      for(int j = i+1; j<this.size(); j++) {
+        if(this.get(i).equals(this.get(j))) {
+          this.remove(j);
+          j--;
+        }
+      }
+    return this;
+  }
+  
+  /**
+   * Remove duplicates from the list.  Just like #deleteDuplicates but
+   * non-destructive.
+   * @@return A new list with the duplicates removed.
+   */
+  public CycList removeDuplicates() {
+    final CycList result = this.deepCopy();
+    return result.deleteDuplicates();
+  }
+  
+  /**
+   * Flatten the list. Recursively iterate through tree, and return a list of
+   * the atoms found.
+   * @@return List of atoms in <code>this</code> CycList.
+   */
+  public CycList flatten() {
+    final CycList result = new CycList();
+    final Iterator i = this.iterator();
+    while(i.hasNext()) {
+      Object obj = i.next();
+      if(obj instanceof CycList)
+        result.addAll(((CycList)obj).flatten());
+      else
+        result.add(obj);
+    } //end while
+    if(!isProperList)
+      result.add(getDottedElement());
+    return result;
+  }
+  
+  /**
+   * Returns a new <tt>CycList</tt> whose elements are the reverse of
+   * this <tt>CycList</tt>, which is unaffected.
+   *
+   * @@return new <tt>CycList</tt> with elements reversed.
+   */
+  public CycList reverse() {
+    if (!isProperList)
+      throw new RuntimeException(this + " is not a proper list and cannot be reversed");
+    final CycList result = new CycList();
+    for(int i = (this.size() - 1); i >= 0; i--)
+      result.add(this.get(i));
+    return result;
+  }
+  
+  /**
+   * Returns a <tt>CycList</tt> of the length N combinations of sublists from this
+   * object.  This algorithm preserves the list order with the sublists.
+   *
+   * @@param n the length of the sublist
+   * @@return a <tt>CycList</tt> of the length N combinations of sublists from this
+   * object
+   */
+  public CycList combinationsOf(int n) {
+    if(!isProperList)
+      throw new RuntimeException(this + " is not a proper list");
+    final CycList result = new CycList();
+    if(this.size() == 0 || n == 0)
+      return result;
+    return combinationsOfInternal(new CycList(this.subList(0, n)), new CycList(this.subList(n, this.size())));
+  }
+  
+  /**
+   * Provides the internal implementation <tt.combinationsOf</tt> using a recursive
+   * algorithm.
+   *
+   * @@param selectedItems a window of contiguous items to be combined
+   * @@param availableItems the complement of the selectedItems
+   * @@return a <tt>CycList</tt> of the combinations of sublists from the
+   * selectedItems.
+   */
+  private static CycList combinationsOfInternal(final CycList selectedItems, final CycList availableItems) {
+    final CycList result = CycList.list(selectedItems);
+    if(availableItems.size() == 0)
+      return result;
+    CycList combination = null;
+    for(int i = 0; i < (selectedItems.size() - 1); i++)
+      for(int j = 0; j < availableItems.size(); j++) {
+        final Object availableItem = availableItems.get(j);
+        // Remove it (making copy), shift left, append replacement.
+        combination = (CycList)selectedItems.clone();
+        combination.remove(i + 1);
+        combination.add(availableItem);
+        result.add(combination);
+      }
+    final CycList newSelectedItems = (CycList)selectedItems.rest();
+    newSelectedItems.add(availableItems.first());
+    final CycList newAvailableItems = (CycList)availableItems.rest();
+    result.addAll(combinationsOfInternal(newSelectedItems, newAvailableItems));
+    return result;
+  }
+  
+  /**
+   * Returns a random ordering of the <tt>CycList</tt> without recursion.
+   *
+   * @@return a random ordering of the <tt>CycList</tt> without recursion
+   */
+  public CycList randomPermutation() {
+    final Random random = new Random();
+    int randomIndex = 0;
+    final CycList remainingList = (CycList)this.clone();
+    final CycList permutedList = new CycList();
+    if (this.size() == 0)
+      return remainingList;
+    while(true) {
+      if (remainingList.size() == 1) {
+        permutedList.addAll(remainingList);
+        return permutedList;
+      }
+      randomIndex = random.nextInt(remainingList.size() - 1);
+      permutedList.add(remainingList.get(randomIndex));
+      remainingList.remove(randomIndex);
+    }
+  }
+  
+  /**
+   * Returns a new <tt>CycList</tt> with every occurrance of <tt>Object</tt> oldObject
+   * replaced by <tt>Object</tt> newObject.  Substitute recursively into embedded
+   * <tt>CycList</tt> objects.
+   *
+   * @@return a new <tt>CycList</tt> with every occurrance of <tt>Object</tt> oldObject
+   * replaced by <tt>Object</tt> newObject
+   */
+  public CycList subst(final Object newObject, final Object oldObject) {
+    final CycList result = new CycList();
+    if(!isProperList)
+      result.setDottedElement((dottedElement.equals(oldObject)) ? oldObject : newObject);
+    for(int i = 0; i < getProperListSize(); i++) {
+      final Object element = this.get(i);
+      if(element.equals(oldObject))
+        result.add(newObject);
+      else if(element instanceof CycList)
+        result.add(((CycList)element).subst(newObject, oldObject));
+      else
+        result.add(element);
+    }
+    return result;
+  }
+  
+  /**
+   * Returns a <tt>String</tt> representation of this
+   * <tt>List</tt>.
+   */
+  public String toString() {
+    return toStringHelper(false);
+  }
+  
+  /**
+   * Returns a <tt>String</tt> representation of this
+   * <tt>List</tt> without causing  additional api calls to complete the name field of constants.
+   */
+  public String safeToString() {
+    return toStringHelper(true);
+  }
+  
+  /**
+   * Returns a <tt>String</tt> representation of this
+   * <tt>CycList</tt>.  When the parameter is true, the representation is created without causing
+   * additional api calls to complete the name field of constants.
+   *
+   * @@param safe when true, the representation is created without causing
+   * additional api calls to complete the name field of constants
+   * @@return a <tt>String</tt> representation of this <tt>CycList</tt>
+   */
+  protected String toStringHelper(final boolean safe) {
+    final StringBuffer result = new StringBuffer("(");
+    for(int i = 0; i < super.size(); i++) {
+      if(i > 0)
+        result.append(" ");
+      final Object element = this.get(i);
+      if(element == null)
+        result.append("null");
+      else if(element instanceof String)
+        result.append("\"" + element + "\"");
+      else if(safe) {
+        try {
+          // If element understands the safeToString method, then use it.
+          final Method safeToString = element.getClass().getMethod("safeToString", null);
+          result.append(safeToString.invoke(element, null));
+        } catch (Exception e) {
+          result.append(element.toString());
+        }
+      }
+      else
+        result.append(element.toString());
+    }
+    if (!isProperList) {
+      result.append(" . ");
+      if(dottedElement instanceof String) {
+        result.append("\"");
+        result.append(dottedElement);
+        result.append("\"");
+      }
+      else if(safe) {
+        try {
+          // If dottedElement understands the safeToString method, then use it.
+          final Method safeToString = dottedElement.getClass().getMethod("safeToString", null);
+          result.append(safeToString.invoke(dottedElement, null));
+        } catch (Exception e) {
+          result.append(dottedElement.toString());
+        }
+      }
+      else
+        result.append(dottedElement.toString());
+    }
+    result.append(")");
+    return result.toString();
+  }
+  
+  /**
+   * Returns a `pretty-printed' <tt>String</tt> representation of this
+   * <tt>CycList</tt>.
+   * @@param indent, the indent string that is added before the
+   * <tt>String</tt> representation this <tt>CycList</tt>
+   * @@return a `pretty-printed' <tt>String</tt> representation of this
+   * <tt>CycList</tt>.
+   */
+  public String toPrettyString(String indent) {
+    return  toPrettyStringInt(indent, "  ", "\n", false);
+  }
+  
+  /**
+   * Returns a `pretty-printed' <tt>String</tt> representation of this
+   * <tt>CycList</tt>.
+   * @@param indent, the indent string that is added before the
+   * <tt>String</tt> representation this <tt>CycList</tt>
+   * @@return a `pretty-printed' <tt>String</tt> representation of this
+   * <tt>CycList</tt>.
+   */
+  public String toPrettyCyclifiedString(String indent) {
+    return  toPrettyStringInt(indent, "  ", "\n", true);
+  }
+  
+  /**
+   * Returns an HTML `pretty-printed' <tt>String</tt> representation of this
+   * <tt>CycList</tt>.
+   * @@param indent, the indent string that is added before the
+   * <tt>String</tt> representation this <tt>CycList</tt>
+   * @@return an HTML `pretty-printed' <tt>String</tt> representation of this
+   * <tt>CycList</tt>.
+   */
+
+  public String toHTMLPrettyString (final String indent) {
+    return "<html><body>" + toPrettyStringInt(indent, "&nbsp&nbsp", "<br>", false) + "</body></html>";
+  }
+  
+  /**
+   * Returns a `pretty-printed' <tt>String</tt> representation of this
+   * <tt>CycList</tt>.
+   * @@param indent, the indent string that is added before the
+   * <tt>String</tt> representation this <tt>CycList</tt>
+   * @@param incrementIndent, the indent string that to the <tt>String</tt> 
+   * representation this <tt>CycList</tt>is added at each level
+   * of indenting
+   * @@param newLineString, the string added to indicate a new line
+   * @@return a `pretty-printed' <tt>String</tt> representation of this
+   * <tt>CycList</tt>.
+   */
+  public String toPrettyStringInt(final String indent, 
+      final String incrementIndent, final String newLineString,
+      final boolean shouldCyclify) {
+    final StringBuffer result = new StringBuffer(indent + "(");
+    for(int i = 0; i < super.size(); i++) {
+      Object element = this.get(i);
+      if (element instanceof CycNart) {
+        CycList newElem = new CycList();
+        newElem.add(((CycNart)element).getFunctor());
+        newElem.addAll(((CycNart)element).getArguments());
+        element = newElem;
+      }
+      if(element instanceof String) {
+        if(i > 0) { result.append(" "); }
+        result.append("\"" + element + "\"");
+      } else if (element instanceof CycList) {
+        result.append(newLineString + ((CycList)element).
+          toPrettyStringInt(indent + incrementIndent, incrementIndent, 
+          newLineString, shouldCyclify));
+      } else {
+        if(i > 0) { result.append(" "); }
+        if (shouldCyclify) {
+          result.append(DefaultCycObject.cyclify(element));
+        } else {
+          result.append(element.toString());
+        }
+      }
+    }
+    if(!isProperList) {
+      result.append(" . ");
+      if(dottedElement instanceof String) {
+        result.append("\"");
+        result.append(dottedElement);
+        result.append("\"");
+      } else {
+        result.append(this.dottedElement.toString());
+      }
+    }
+    result.append(")");
+    return result.toString();
+  }
+  
+  public boolean equals(Object o) {
+    if (o == this) { return true; }
+    if (o == null) { return false; }
+    if (!(o instanceof List)) { return false; }
+    if (!isProperList()) {
+      if (!(o instanceof CycList)) { return false; }
+      if (((CycList)o).isProperList()) { return false; }
+    } else {
+      if (o instanceof CycList) {
+        if (!((CycList)o).isProperList()) { return false; }
+      }
+    }
+    java.util.ListIterator e1 = listIterator();
+    java.util.ListIterator e2 = ((List)o).listIterator();
+    while(e1.hasNext() && e2.hasNext()) {
+      Object o1 = e1.next();
+      Object o2 = e2.next();
+      if (o1 instanceof CycList) {
+        if (!((CycList)o1).isProperList()) {
+          if (!(o2 instanceof CycList)) { return false; }
+          if (((CycList)o2).isProperList()) { return false; }
+        } else {
+          if (o2 instanceof CycList) {
+            if (!((CycList)o2).isProperList()) { return false; }
+          }
+        }
+      } 
+      if (!(o1==null ? o2==null : o1.equals(o2))) { return false; }
+    }
+    return !(e1.hasNext() || e2.hasNext());
+  }
+  
+  public boolean equalsAtEL(Object o) {
+    if (o == this) { return true; }
+    if (o == null) { return false; }
+    if (o instanceof CycNart) {
+      o = ((CycNart)o).toCycList();
+    }
+    if (!(o instanceof List)) { return false; }
+    if (!isProperList()) {
+      if (!(o instanceof CycList)) { return false; }
+      if (((CycList)o).isProperList()) { return false; }
+    } else {
+      if (o instanceof CycList) {
+        if (!((CycList)o).isProperList()) { return false; }
+      }
+    }
+    java.util.ListIterator e1 = listIterator();
+    java.util.ListIterator e2 = ((List)o).listIterator();
+    while(e1.hasNext() && e2.hasNext()) {
+      Object o1 = e1.next();
+      if ((o1 != null) && (o1 instanceof CycNart)) { o1 = ((CycNart)o1).toCycList(); }
+      Object o2 = e2.next();
+      if ((o2 != null) && (o2 instanceof CycNart)) { o2 = ((CycNart)o2).toCycList(); }
+      if (o1 instanceof CycList) {
+        if (!((CycList)o1).isProperList()) {
+          if (!(o2 instanceof CycList)) { return false; }
+          if (((CycList)o2).isProperList()) { return false; }
+        } else {
+          if (o2 instanceof CycList) {
+            if (!((CycList)o2).isProperList()) { return false; }
+          }
+        }
+        if (!(o1==null ? o2==null : ((CycList)o1).equalsAtEL(o2))) { return false; }
+      } else {
+        if (!(o1==null ? o2==null : o1.equals(o2))) { return false; }
+      }
+    }
+    return !(e1.hasNext() || e2.hasNext());
+  }
+  
+
+ public int compareTo( Object o) {
+    if (o == this) { return 0; }
+    if (o == null) { return 1; }
+    if (!(o instanceof List)) { return 1; }
+    if (!isProperList()) {
+      if (!(o instanceof CycList)) { return 1; }
+      if (((CycList)o).isProperList()) { return 1; }
+    } else {
+      if (o instanceof CycList) {
+        if (!((CycList)o).isProperList()) { return -1; }
+      }
+    }
+    java.util.ListIterator e1 = listIterator();
+    java.util.ListIterator e2 = ((List)o).listIterator();
+    while(e1.hasNext() && e2.hasNext()) {
+      Object o1 = e1.next();
+      Object o2 = e2.next();
+
+      if (o1==o2) continue;
+      if (o1==null) return -1;
+      if (o2==null) return 1;
+
+ 
+      if(!(o1 instanceof Comparable)) return 1;
+      if(!(o2 instanceof Comparable)) return -1;
+
+      Comparable co1 = (Comparable) o1;
+      Comparable co2 = (Comparable) o2;
+
+
+      if (co1 instanceof CycList) {
+        if (!((CycList)co1).isProperList()) {
+          if (!(co2 instanceof CycList)) { return 1; }
+          if (((CycList)co2).isProperList()) { return 1; }
+        } else {
+          if (co2 instanceof CycList) {
+            if (!((CycList)co2).isProperList()) { return -1; }
+          }
+        }
+      } 
+      
+      int ret=co1.compareTo(co2);
+      if(ret!=0) return ret;
+    }
+    if (e1.hasNext()) return 1;
+    if (e2.hasNext()) return -1;
+    return 0;
+ }
+
+
+  /**
+   * Returns a cyclified string representation of the OpenCyc <tt>CycList</tt>.
+   * Embedded constants are prefixed with ""#$".  Embedded quote and backslash
+   * chars in strings are escaped.
+   *
+   * @@return a <tt>String</tt> representation in cyclified form.
+   *
+   */
+  public String cyclifyWithEscapeChars() {
+    final StringBuffer result = new StringBuffer("(");
+    String cyclifiedObject = null;
+    for(int i = 0; i < super.size(); i++) {
+      final Object object = this.get(i);
+      cyclifiedObject = DefaultCycObject.cyclifyWithEscapeChars(object);
+      if (i > 0)
+        result.append(" ");
+      result.append(cyclifiedObject);
+    }
+    if(!isProperList) {
+      result.append(" . ");
+      result.append(DefaultCycObject.cyclifyWithEscapeChars(dottedElement));
+    }
+    result.append(")");
+    return result.toString();
+  }
+  
+  /**
+   * Returns a cyclified string representation of the OpenCyc <tt>CycList</tt>.
+   * Embedded constants are prefixed with ""#$".
+   *
+   * @@return a <tt>String</tt> representation in cyclified form.
+   *
+   */
+  public String cyclify() {
+    if (CycAccess.hasCurrent())
+      // efficiently get all the required constant names beforehand
+      try {
+        CycAccess.current().obtainConstantNames(treeConstants());
+      }
+      catch (Exception e) {
+        throw new CycApiException(e);
+      }
+    
+    final StringBuffer result = new StringBuffer("(");
+    String cyclifiedObject = null;
+    for(int i = 0; i < super.size(); i++) {
+      Object object = this.get(i);
+      if(object == null)
+        throw new RuntimeException("Invalid null element after " + result);      
+      if (i > 0)
+        result.append(" ");
+      result.append(DefaultCycObject.cyclify(object));
+    }
+    if(!isProperList) {
+      result.append(" . ");
+      result.append(DefaultCycObject.cyclify(dottedElement));
+    }
+    result.append(")");
+    return result.toString();
+  }
+  
+  public HashMap getPrettyStringDetails() {
+    HashMap map = new HashMap();
+    getPrettyStringDetails(this, "", 0, new CycList(), map);
+    int[] loc = { 0, toPrettyString("").length() - 1 };
+    map.put(new CycList(), loc);
+    return map;
+  }
+  
+  private static int getPrettyStringDetails(final CycList list, final String indent, int currentPos, final CycList argPos, final HashMap map) {
+    String str;
+    CycList newArgPos;
+    String tab = "  ";
+    str = indent + "(";
+    currentPos += str.length();
+    String cyclifiedObject = null;
+    int tempPos;
+    for(int i = 0, size = list.size(); i < size; i++) {
+      if(i > 0) {
+        str = " ";
+        currentPos += str.length();
+      }
+      if ((!list.isProperList()) && ((i + 1) >= size)) {
+        currentPos += 2;
+      }
+      Object element = list.get(i);
+      if(element instanceof CycNart) {
+        element = ((CycNart)element).toCycList();
+      }
+      if(element instanceof String) {
+        str = "\"" + element + "\"";
+        newArgPos = argPos.deepCopy();
+        newArgPos.add(new Integer(i));
+        int[] loc = {currentPos, currentPos + str.length()};
+        map.put(newArgPos, loc);
+        currentPos += str.length();
+      } else if(element instanceof CycList) {
+        argPos.add(new Integer(i));
+        tempPos = currentPos + indent.length() + tab.length();
+        currentPos = getPrettyStringDetails((CycList)element,
+        indent + tab, currentPos, argPos, map);
+        int[] loc = {tempPos, currentPos-1};
+        map.put(argPos.deepCopy(), loc);
+        argPos.remove(argPos.size() - 1);
+      } else {
+        str = element.toString();
+        newArgPos = argPos.deepCopy();
+        newArgPos.add(new Integer(i));
+        int[] loc = {currentPos, currentPos + str.length()};
+        map.put(newArgPos, loc);
+        currentPos += str.length();
+      }
+    }
+    str = ")";
+    return currentPos + str.length();
+  }
+
+  /**
+   * Returns this object in a form suitable for use as an <tt>String</tt> api expression value.
+   *
+   * @@return this object in a form suitable for use as an <tt>String</tt> api expression value
+   */
+  public String stringApiValue() {
+    final StringBuffer result = new StringBuffer(300);
+    if (isProperList()) {
+      result.append("(list");
+      final String cyclifiedObject = null;
+      for(int i = 0; i < this.size(); i++) {
+        final Object object = this.get(i);
+        result.append(" ");
+        result.append(DefaultCycObject.stringApiValue(object));
+      }
+    } else {
+      result.append("(list*"); // note the asterisk, which results in a dotted list
+      final String cyclifiedObject = null;
+      for(int i = 0; i < super.size(); i++) {
+        final Object object = this.get(i);
+        result.append(" ");
+        result.append(DefaultCycObject.stringApiValue(object));
+      }
+      result.append(" ");
+      if(dottedElement == null)
+        result.append(new CycSymbol("NIL").stringApiValue());
+      else
+        result.append(DefaultCycObject.stringApiValue(dottedElement));
+    }
+    result.append(")");
+    return result.toString();
+  }
+
+  /**
+   * Returns this object in a form suitable for use as an <tt>CycList</tt> api expression value.
+   *
+   * @@return this object in a form suitable for use as an <tt>CycList</tt> api expression value
+   */
+  public Object cycListApiValue() {
+    return this;
+  }
+  
+  /**
+   * Returns a new CycList, which is sorted in the default collating sequence.
+   *
+   * @@return a new <tt>CycList</tt>, sorted in the default collating sequence.
+   */
+  public CycList sort() {
+    final CycList sortedList = new CycList(this);
+    Collections.sort(sortedList, new CycListComparator());
+    return sortedList;
+  }
+  
+  /**
+   * Returns a <tt>CycListVisitor</tt> enumeration of the non-CycList and non-nil elements.
+   *
+   * @@return a <tt>CycListVisitor</tt> enumeration of the non-CycList and non-nil elements.
+   */
+  public CycListVisitor cycListVisitor() {
+    return new CycListVisitor(this);
+  }
+  
+  /**
+   * Returns the list of constants found in the tree
+   *
+   * @@param object the object to be found in the tree.
+   * @@return the list of constants found in the tree
+   */
+  public CycList treeConstants() {
+    final CycList constants = new CycList();
+    final Stack stack = new Stack();
+    stack.push(this);
+    while(!stack.empty()) {
+      final Object obj = stack.pop();
+      if (obj instanceof CycConstant) {
+        constants.add(obj);
+      } else if (obj instanceof CycAssertion) {
+        stack.push(((CycAssertion)obj).getMt());
+        pushTreeConstantElements(((CycAssertion)obj).getFormula(), stack);
+      } else if (obj instanceof CycNart) {
+        stack.push(((CycNart)obj).getFunctor());
+        pushTreeConstantElements(((CycNart)obj).getArguments(), stack);
+      } else if(obj instanceof CycList) {
+        pushTreeConstantElements(((CycList)obj), stack);
+      }
+    }
+    return constants;
+  }
+  
+  private void pushTreeConstantElements(List list, Stack stack) {
+    final Iterator iter = list.iterator();
+    while (iter.hasNext()) {
+      stack.push(iter.next());
+    }
+  }
+  
+  public Object get(int index) {
+    if ((index == (size() - 1)) && (!isProperList())) {
+      return getDottedElement();
+    } else {
+      return super.get(index);
+    }
+  }
+  
+  /**
+   * Returns the list of objects of the specified type found in the tree.
+   * 
+   * @@param cls What class to select from the tree
+   * @@return the list of objects of type <code>cls</code> found in the tree
+   */
+  public CycList treeGather(Class cls) {
+    final CycList result = new CycList();
+    final Stack stack = new Stack();
+    stack.push(this);
+    while(!stack.empty()) {
+      final Object obj = stack.pop();
+      if(cls.isInstance(obj))
+        result.add(obj);
+      else if(obj instanceof CycList) {
+        CycList l = (CycList)obj;
+        final Iterator iter = l.iterator();
+        while(iter.hasNext()) 
+          stack.push(iter.next());
+        if(!l.isProperList)
+          stack.push(l.getDottedElement());
+      }
+    }
+    return result;
+  }
+  
+  /**
+   * Returns true if the proper list tree contains the given object anywhere in the tree.
+   *
+   * @@param object the object to be found in the tree.
+   * @@return true if the proper list tree contains the given object anywhere in the tree
+   */
+  public boolean treeContains(final Object object) {
+    if(this.contains(object))
+      return true;
+    for (int i = 0; i < this.size(); i++) {
+      final Object element = this.get(i);
+      if ((element instanceof CycList) && (((CycList)element).treeContains(object)))
+        return true;
+    }
+    return false;
+  }
+  
+  /**
+   * Returns <tt>true</tt> if the element is a member of this <tt>CycList</tt> and
+   * no element in <tt>CycList</tt> otherElements precede it.
+   *
+   * @@param element the element under consideration
+   * @@param otherElements the <tt>CycList</tt> of other elements under consideration
+   * @@return <tt>true</tt> if the element is a member of this <tt>CycList</tt> and
+   * no elements in <tt>CycList</tt> otherElements contained in this <tt>CycList</tt>
+   * precede it
+   */
+  public boolean doesElementPrecedeOthers(final Object element, final CycList otherElements) {
+    for(int i = 0; i < this.size(); i++) {
+      if(element.equals(this.get(i)))
+        return true;
+      if(otherElements.contains(this.get(i)))
+        return false;
+    }
+    return false;
+  }
+  
+  /**
+   * Returns the XML representation of this object.
+   *
+   * @@return the XML representation of this object
+   */
+  public String toXMLString() throws IOException {
+    final XMLStringWriter xmlStringWriter = new XMLStringWriter();
+    toXML(xmlStringWriter, 0, false);
+    return xmlStringWriter.toString();
+  }
+  
+  /**
+   * Prints the XML representation of the <ttt>CycList</tt> to an <tt>XMLWriter</tt>
+   *
+   * @@param xmlWriter the output XML serialization writer
+   * @@param indent specifies by how many spaces the XML output should be indented
+   * @@param relative specifies whether the indentation should be absolute --
+   * indentation with respect to the beginning of a new line, relative = false
+   * -- or relative to the indentation currently specified in the indent_string field
+   * of the xml_writer object, relative = true.
+   */
+  public void toXML(final XMLWriter xmlWriter, final int indent, final boolean relative) throws IOException {
+    final int startingIndent = xmlWriter.getIndentLength();
+    xmlWriter.printXMLStartTag(cycListXMLTag, indent, relative, true);
+    final Iterator iterator = this.iterator();
+    Object arg;
+    while(iterator.hasNext()) {
+      arg = iterator.next();
+      if ((!iterator.hasNext()) && (!isProperList())) { break; }
+      toXML(arg, xmlWriter, indentLength, true);
+    }
+    if(!isProperList) {
+      xmlWriter.printXMLStartTag(dottedElementXMLTag, indentLength, relative,
+      true);
+      toXML(dottedElement, xmlWriter, indentLength, true);
+      xmlWriter.printXMLEndTag(dottedElementXMLTag, 0, true);
+      xmlWriter.setIndent(-indentLength, true);
+    }
+    xmlWriter.printXMLEndTag(cycListXMLTag, 0, true);        /*
+         if (startingIndent != xmlWriter.getIndentLength())
+         throw new RuntimeException("Starting indent " + startingIndent +
+         " is not equal to ending indent " + xmlWriter.getIndentLength());
+     */
+    
+  }
+  
+  /**
+   * Writes a CycList element the the given XML output stream.
+   *
+   * @@param object the object to be serialized as XML
+   * @@param xmlWriter the output XML serialization writer
+   * @@param indent specifies by how many spaces the XML output should be indented
+   * @@param relative specifies whether the indentation should be absolute --
+   * indentation with respect to the beginning of a new line, relative = false
+   * -- or relative to the indentation currently specified in the indent_string field
+   * of the xml_writer object, relative = true.
+   */
+  public static void toXML(final Object object, final XMLWriter xmlWriter, final int indent, final boolean relative) throws IOException {
+    final int startingIndent = xmlWriter.getIndentLength();
+    if(object instanceof Integer) {
+      xmlWriter.printXMLStartTag(integerXMLTag, indentLength, true, false);
+      xmlWriter.print(object.toString());
+      xmlWriter.printXMLEndTag(integerXMLTag);
+    }
+    else if(object instanceof String) {
+      xmlWriter.printXMLStartTag(stringXMLTag, indentLength, true, false);
+      xmlWriter.print(TextUtil.doEntityReference((String)object));
+      xmlWriter.printXMLEndTag(stringXMLTag);
+    }
+    else if(object instanceof Double) {
+      xmlWriter.printXMLStartTag(doubleXMLTag, indentLength, true, false);
+      xmlWriter.print(object.toString());
+      xmlWriter.printXMLEndTag(doubleXMLTag);
+    }
+    else if(object instanceof CycFort)
+      ((CycFort)object).toXML(xmlWriter, indentLength, true);
+    else if(object instanceof ByteArray)
+      ((ByteArray)object).toXML(xmlWriter, indentLength, true);
+    else if(object instanceof CycVariable)
+      ((CycVariable)object).toXML(xmlWriter, indentLength, true);
+    else if(object instanceof CycSymbol)
+      ((CycSymbol)object).toXML(xmlWriter, indentLength, true);
+    else if(object instanceof Guid)
+      ((Guid)object).toXML(xmlWriter, indentLength, true);
+    else if(object instanceof CycList)
+      ((CycList)object).toXML(xmlWriter, indentLength, true);
+    else if(object instanceof CycAssertion)
+      ((CycAssertion)object).toXML(xmlWriter, indentLength, true);
+    else
+      throw new RuntimeException("Invalid CycList object " + object);
+    xmlWriter.setIndent(-indentLength, true);
+    if(startingIndent != xmlWriter.getIndentLength())
+      throw new RuntimeException("Starting indent " + startingIndent + " is not equal to ending indent "
+      + xmlWriter.getIndentLength() + " for object " + object);
+  }
+  
+  /**
+   * Gets the value following the given keyword symbol.
+   *
+   * @@param keyword the keyword symbol
+   * @@return the value following the given keyword symbol, or null if not found
+   */
+  public Object getValueForKeyword(final CycSymbol keyword) {
+    for(int i = 0; i < this.size() - 1; i++) {
+      if(this.get(i).equals(keyword))
+        return this.get(i + 1);
+    }
+    return null;
+  }
+  
+  /**
+   * Forms a quote expression for the given object and adds it to the list.
+   *
+   * @@param object the object to be quoted and added to this list
+   */
+  public void addQuoted(final Object object) {
+    final CycList cycList = new CycList();
+    this.add(cycList);
+    cycList.add(CycObjectFactory.quote);
+    cycList.add(object);
+  }
+  
+  /**
+   * Returns the object from the this CycList according to the
+   * path specified by the given (n1 n2 ...) zero-indexed path expression.
+   *
+   * @@param cycList the given CycList
+   * @@param pathSpecification the given (n1 n2 ...) zero-indexed path expression
+   * @@return the object from this CycList according to the
+   * path specified by the given (n1 n2 ...) zero-indexed path expression
+   */
+  public Object getSpecifiedObject(CycList pathSpecification) {
+    try {
+      if (pathSpecification.size() == 0) { return this; }
+      Object answer = (CycList) this.clone();
+      while (! pathSpecification.isEmpty()) {
+        int index = ((Integer) pathSpecification.first()).intValue();
+        if(answer instanceof CycNart) {
+          if(index == 0) {
+            answer = ((CycNart)answer).getFunctor();
+          } else {
+            answer = ((CycNart)answer).getArguments().get(index-1);
+          }
+        } else {
+          answer = ((CycList)answer).get(index);
+        }
+        pathSpecification = (CycList) pathSpecification.rest();
+      }
+      return answer;
+    } catch (Exception e) {
+      throw new RuntimeException("Can't get object specified by path expression: '" +
+      pathSpecification + "' in forumla: '" + this + "'.\n" +
+      StringUtils.getStringForException(e));
+    }
+  }
+  
+  /**
+   * Sets the object in this CycList to the given value according to the
+   * path specified by the given ((n1 n2 ...) zero-indexed path expression.
+   *
+   * @@param cycList the given CycList
+   * @@param pathSpecification the (n1 n2 ...) zero-indexed path expression
+   * @@param value the given value
+   */
+  public void setSpecifiedObject(CycList pathSpecification, final Object value) {
+    CycList parentContainer = null;
+    Object container = this;
+    int parentIndex = -1;
+    int index = ((Integer) pathSpecification.first()).intValue();
+    pathSpecification = (CycList) pathSpecification.rest();
+    while(true) {
+      if(container instanceof CycNart) {
+        // after the first iteration the imbedded container can be a CycNart
+        container = ((CycNart) container).toCycList();
+        parentContainer.set(parentIndex, container);
+      }
+      if(pathSpecification.isEmpty()) { break; }
+      parentContainer = (CycList) container;
+      if(container instanceof CycList) {
+        container = ((CycList) container).get(index);
+      } else {
+        throw new RuntimeException("Don't know a path into: " + container);
+      }
+      parentIndex = index;
+      index = ((Integer) pathSpecification.first()).intValue();
+      pathSpecification = (CycList) pathSpecification.rest();
+    }
+    if(container instanceof CycList) {
+      container = ((CycList)container).set(index,  value);
+    } else if(container instanceof CycNart) {
+      if(index == 0) {
+        ((CycNart)container).setFunctor((CycFort)value);
+      } else {
+        ((CycNart)container).getArguments().set(index-1, value);
+      }
+    } else {
+      throw new RuntimeException("Don't know about: " + container);
+    }
+  }
+  
+  /** Returns a list of arg postions that describe all the locations where 
+   * the given term can be found in this CycList. An arg position is a flat 
+   * list of Integers that give the nths (0 based) to get to a particular 
+   * sub term in a tree.
+   * @@param term The term to search for
+   * @@return The list of all arg postions where term can be found
+   */  
+  public List getArgPositionsForTerm(final Object term) {
+    if (this.equals(term)) { return new ArrayList(); }
+    List result = new ArrayList();
+    List curArgPosition = new ArrayList();
+    internalGetArgPositionsForTerm(term, this, curArgPosition, result);
+    return result;
+  }
+  
+  /** Private method used to implement getArgPositionForTerm() functionality.
+   * @@param term The term to search for
+   * @@param subTree The current sub part of the tree being explored
+   * @@param curPosPath The current arg position being explored
+   * @@param result Current store of arg positions found so far
+   */
+  private static void internalGetArgPositionsForTerm(final Object term, final Object subTree, 
+      final List curPosPath, final List result) {
+    if (term == subTree) {
+      final List newArgPos = new ArrayList(curPosPath);
+      result.add(newArgPos);
+      return;
+    }
+    if (subTree == null) { return; }
+    if (subTree.equals(term)) {
+      final List newArgPos = new ArrayList(curPosPath);
+      result.add(newArgPos);
+      return;
+    }
+    if ((subTree instanceof CycList) && ((CycList)subTree).treeContains(term)) {
+      int newPos = 0;
+      for (Iterator iter = ((List)subTree).iterator(); iter.hasNext(); newPos++) {
+        final List newPosPath = new ArrayList(curPosPath);
+        newPosPath.add(new Integer(newPos));
+        internalGetArgPositionsForTerm(term, iter.next(), newPosPath, result);
+      }
+    }
+  }  
+  
+  public List getReferencedConstants() {
+    return treeConstants();
+  }
+
+  
+  //// serializable
+    private void writeObject(ObjectOutputStream stream) throws java.io.IOException {
+    stream.defaultWriteObject();
+    if (!isProperList) {
+      stream.writeBoolean(false);
+      stream.writeObject( this.dottedElement);
+    }
+    else {
+      stream.writeBoolean( true);
+    }
+  }
+   
+  private void readObject(ObjectInputStream stream) throws java.io.IOException, 
+  java.lang.ClassNotFoundException {
+    stream.defaultReadObject();
+    isProperList = stream.readBoolean();
+    if (!isProperList)
+      dottedElement = stream.readObject();
+  }
+
+ 
+}
+
+
+
+@
+
+
+1.36
+log
+@This is a checkin of OpenCyc 1.0.1 Java  OPENCYC_1_0_1
+@
+text
+@d3 1
+a3 1
+import java.io.Serializable;
+d6 1
+a6 9
+
+import org.opencyc.api.CycAccess;
+import org.opencyc.api.CycApiException;
+import org.opencyc.api.CycObjectFactory;
+import org.opencyc.util.StringUtils;
+import org.opencyc.xml.TextUtil;
+import org.opencyc.xml.XMLStringWriter;
+
+import java.io.IOException;
+d17 7
+a311 4
+  /** Returns the CycList size including the optional dotted element.  Note that this fools list iterators. 
+   *
+   * @@return the CycList size including the optional dotted element
+   */
+a355 1
+   * @@deprecated use CycAccess.isFormulaWellFormed(this, mt);
+a369 1
+   * @@deprecated use CycAccess.isCycLNonAtomicReifableTerm();
+a383 1
+   * @@deprecated use CycAccess.isCycLNonAtomicUnreifableTerm();
+d386 2
+a387 1
+  throws IOException, UnknownHostException, CycApiException {
+d390 1
+a390 1
+    
+d824 8
+d893 1
+a893 13
+    return  toPrettyStringInt(indent, "  ", "\n", false, false);
+  }
+  
+  /**
+   * Returns a `pretty-printed' <tt>String</tt> representation of this
+   * <tt>CycList</tt> with embedded strings escaped.
+   * @@param indent, the indent string that is added before the
+   * <tt>String</tt> representation this <tt>CycList</tt>
+   * @@return a `pretty-printed' <tt>String</tt> representation of this
+   * <tt>CycList</tt>.
+   */
+  public String toPrettyEscapedCyclifiedString(String indent) {
+    return  toPrettyStringInt(indent, "  ", "\n", true, true);
+d905 1
+a905 1
+    return  toPrettyStringInt(indent, "  ", "\n", true, false);
+d918 1
+a918 1
+    return "<html><body>" + toPrettyStringInt(indent, "&nbsp&nbsp", "<br>", false, false) + "</body></html>";
+a929 2
+   * @@param shouldCyclify indicates that the output constants should have #$ prefix
+   * @@param shouldEscape indicates that embedded strings should have appropriate escapes for the SubL reader
+d935 1
+a935 1
+      final boolean shouldCyclify, final boolean shouldEscape) {
+d947 1
+a947 6
+        result.append('"');
+        if (shouldEscape)
+          result.append(StringUtils.escapeDoubleQuotes((String) element));
+        else
+          result.append(element);
+        result.append('"');
+d951 1
+a951 1
+          newLineString, shouldCyclify, shouldEscape));
+d955 1
+a955 4
+          if (shouldEscape)
+            result.append(DefaultCycObject.cyclify(element));
+          else
+            result.append(DefaultCycObject.cyclifyWithEscapeChars(element));
+d965 1
+a965 4
+        if (shouldEscape)
+          result.append(StringUtils.escapeDoubleQuotes((String) dottedElement));
+        else
+          result.append(dottedElement);
+a1006 6
+  /** Returns true if the given object is equal to this object as EL CycL expressions
+   *
+   * @@param o the given object
+   * @@return true if the given object is equal to this object as EL CycL expressions, otherwise
+   * return false
+   */
+a1038 4
+      } else if ((o1 instanceof Integer && o2 instanceof Long) || (o1 instanceof Long && o2 instanceof Integer)) {
+        return ((Number) o1).longValue() == ((Number) o2).longValue();
+      } else if ((o1 instanceof Float && o2 instanceof Double) || (o1 instanceof Double && o2 instanceof Float)) {
+        return ((Number) o1).doubleValue() == ((Number) o2).doubleValue();
+d1131 9
+d1161 1
+a1161 1
+    int[] loc = { 0, toPrettyString("").length() };
+a1166 1
+    // System.out.println( "list=" + list + " // indent= " + indent + " // currentPos= " + currentPos + "// argPos= " + argPos + "// map= " + map);
+d1174 2
+a1175 2
+    for (int i = 0, size = list.size(); i < size; i++) {
+      if (i > 0) {
+d1183 1
+a1183 1
+      if (element instanceof CycNart) {
+d1186 1
+a1186 1
+      if (element instanceof String) {
+a1190 1
+        // System.out.println( "-- adding " + newArgPos + " referencing [" + loc[0] + "," + loc[1] + "] to the map " + map);
+d1193 1
+a1193 1
+      } else if (element instanceof CycList) {
+d1198 2
+a1199 4
+        int[] loc = {tempPos, currentPos};
+        CycList deepCopy = argPos.deepCopy();
+        map.put(deepCopy, loc);
+        // System.out.println( "-- adding " + deepCopy + " referencing [" + loc[0] + "," + loc[1] + "] to the map " + map);
+a1205 1
+        // System.out.println( "-- adding " + newArgPos + " referencing [" + loc[0] + "," + loc[1] + "] to the map " + map);
+a1317 76
+ /**
+  * Replaces the element at the specified position in this list with
+  * the specified element.
+  *
+  * @@param index index of element to replace.
+  * @@param element element to be stored at the specified position.
+  * @@return the element previously at the specified position.
+  * @@throws    IndexOutOfBoundsException if index out of range
+  *		  <tt>(index &lt; 0 || index &gt;= size())</tt>.
+  */
+  public Object set(int index, Object element) {
+    if ((index == (size() - 1)) && (!isProperList())) {
+      final Object oldValue = getDottedElement();
+      setDottedElement(element);
+      return oldValue;
+    } 
+    else
+      return super.set(index, element);
+  }
+  
+  /**
+   * This behaves like the SubL function GETF
+   */
+  public Object getf(CycSymbol indicator) {
+    int indicatorIndex = firstEvenIndexOf(indicator);
+    if (indicatorIndex == -1) { // the indicator is not present
+      return null;
+    }
+    else {
+      return get(indicatorIndex + 1);
+    }
+  }
+  
+  private int firstEvenIndexOf(Object elem) {
+    if (elem == null) {
+      for (int i = 0; i < size(); i = i + 2) {
+        if (get(i) == null) {
+          return i;
+        }
+      }
+    }
+    else {
+	    for (int i = 0; i < size(); i = i + 2) {
+        if (elem.equals(get(i))) {
+  		    return i;
+        }
+      }
+  	}
+  	return -1;
+  }
+  
+  /**
+   * Returns a <tt>CycList</tt> of all the indices of the given element within this CycList.
+   *
+   * @@param elem The element to search for in the list
+   * @@return a <tt>CycList</tt> of all the indices of the given element within this CycList.
+   */
+  public CycList allIndicesOf(Object elem) {
+    CycList result = new CycList();
+    if (elem == null) {
+	    for (int i = 0; i < size(); i++) {
+        if (get(i) == null) {
+          result.add(i);
+        }
+      }
+    }
+    else {
+	    for (int i = 0; i < size(); i++) {
+        if (elem.equals(get(i))) {
+          result.add(i);
+        }
+      }
+  	}
+    return result;
+  }
+  
+d1350 2
+a1351 5
+  public boolean treeContains(Object object) {
+    if (object instanceof CycNart) {
+      object = ((CycNart)object).toCycList();
+    }
+    if(this.contains(object)) {
+a1352 1
+    }
+d1354 2
+a1355 5
+      Object element = this.get(i);
+      if (element instanceof CycNart) {
+        element = ((CycNart)element).toCycList();
+      }
+      if (element.equals(object)) {
+a1356 4
+      }
+      if ((element instanceof CycList) && (((CycList)element).treeContains(object))) {
+        return true;
+      }
+d1512 1
+a1512 5
+  public Object getSpecifiedObject(final CycList pathSpecification) {
+    if (pathSpecification.size() == 0) { return this; }
+    Object answer = (CycList) this.clone();
+    CycList tempPathSpecification = pathSpecification;
+    int index = 0;
+d1514 4
+a1517 2
+      while (! tempPathSpecification.isEmpty()) {
+        index = ((Integer) tempPathSpecification.first()).intValue();
+d1527 1
+a1527 1
+        tempPathSpecification = (CycList) tempPathSpecification.rest();
+d1532 2
+a1533 3
+                                 pathSpecification + "' in forumla: '" + this + "'.  answer: " + answer + 
+                                 " index: " + index + "\n" +
+                                 StringUtils.getStringForException(e));
+d1602 1
+a1602 1
+  private static void internalGetArgPositionsForTerm(Object term, Object subTree, 
+a1603 3
+    if (term instanceof CycNart) {
+      term = ((CycNart)term).toCycList();
+    }
+a1609 3
+    if (subTree instanceof CycNart) {
+      subTree = ((CycNart)subTree).toCycList();
+    }
+@
+
+
+1.35
+log
+@Added Epistemlogical Layer Microtheory definition to better
+represent microtheories in the OpenCyc API.
+@
+text
+@d3 23
+a25 8
+import  java.util.*;
+import  java.io.*;
+import  java.net.*;
+import  java.lang.reflect.*;
+import  org.opencyc.util.*;
+import  org.opencyc.xml.*;
+import  org.opencyc.api.*;
+import  ViolinStrings.*;
+d53 1
+a53 67
+public class CycList extends ArrayList implements CycObject, ELMT {
+    /**
+     * XML serialization tags.
+     */
+    public static final String cycListXMLTag = "list";
+    public static final String integerXMLTag = "integer";
+    public static final String doubleXMLTag = "double";
+    public static final String stringXMLTag = "string";
+    public static final String dottedElementXMLTag = "dotted-element";
+    /**
+     * XML serialization indentation.
+     */
+    public static int indentLength = 2;
+    private boolean isProperList = true;
+    private Object dottedElement;
+
+    /**
+     * Constructs a new empty <tt>CycList</tt> object.
+     */
+    public CycList () {
+    }
+
+    /**
+     * Constructs a new <tt>CycList</tt> object, containing the elements of the
+     * specified collection, in the order they are returned by the collection's iterator.
+     *
+     * @@param c the collection of assumed valid OpenCyc objects.
+     */
+    public CycList (Collection c) {
+        super(c);
+    }
+
+    /**
+     * Constructs a new <tt>CycList</tt> object, containing as its first element
+     * <tt>firstElement</tt>, and containing as its remaining elements the
+     * contents of the <tt>Collection</tt> remaining elements.
+     *
+     * @@param firstElement the object which becomes the head of the <tt>CycList</tt>
+     * @@param remainingElements a <tt>Collection</tt>, whose elements become the
+     * remainder of the <tt>CycList</tt>
+     */
+    public CycList (Object firstElement, Collection remainingElements) {
+        this.add(firstElement);
+        addAll(remainingElements);
+    }
+
+    /**
+     * Constructs a new <tt>CycList</tt> object, containing as its sole element
+     * <tt>element</tt>
+     *
+     * @@param element the object which becomes the head of the <tt>CycList</tt>
+     */
+    public CycList (Object element) {
+        this.add(element);
+    }
+
+    /**
+     * Constructs a new <tt>CycList</tt> object, containing as its first element
+     * <tt>element1</tt>, and <tt>element2</tt> as its second element.
+     *
+     * @@param element1 the object which becomes the head of the <tt>CycList</tt>
+     * @@param element2 the object which becomes the second element of the <tt>CycList</tt>
+     */
+    public CycList (Object element1, Object element2) {
+        this.add(element1);
+        this.add(element2);
+    }
+d55 601
+a655 110
+    /**
+     * Constructs a CycList using the semantics of Lisp symbolic expressions.<br>
+     * 1.  construct(a, NIL) --> (a)<br>
+     * 2.  construct(a, b) --> (a . b)<br>
+     *
+     * @@param object1 the first <tt>Object</tt> in the <tt>CycList</tt>
+     * @@param object2 <tt>NIL</tt> or an <tt>Object</tt>
+     * @@return <tt>CycList</tt> (object) if <tt>object2</tt> is <tt>NIL</tt>,
+     * otherwise return the improper <tt>CycList</tt> (object1 . object2)
+     */
+    public static CycList construct (Object object1, Object object2) {
+        CycList cycList = new CycList(object1);
+        if (object2.equals(CycObjectFactory.nil))
+            return  cycList;
+        if (object2 instanceof CycList) {
+            CycList cycList2 = (CycList)object2;
+            cycList.addAll(cycList2);
+            if (!cycList2.isProperList)
+                cycList.setDottedElement(cycList2.getDottedElement());
+            return  cycList;
+        }
+        cycList.setDottedElement(object2);
+        return  cycList;
+    }
+
+    /**
+     * Creates and returns a copy of this <tt>CycList</tt>.
+     *
+     * @@return a clone of this instance
+     */
+    public Object clone () {
+        CycList newClone = new CycList(this);
+        if (!this.isProperList())
+            newClone.setDottedElement(this.getDottedElement());
+        return  newClone;
+    }
+
+    /**
+     * Creates and returns a deep copy of this <tt>CycList</tt>.  In a deep copy,
+     * directly embedded <tt>CycList</tt> objects are also deep copied.  Objects
+     * which are not CycLists are cloned.
+     *
+     * @@return a deep copy of this <tt>CycList</tt>
+     */
+    public CycList deepCopy () {
+        CycList cycList = new CycList();
+        if (!this.isProperList()) {
+            if (this.dottedElement instanceof CycList)
+                cycList.setDottedElement(((CycList)this.dottedElement).deepCopy());
+            else
+                cycList.setDottedElement(this.getDottedElement());
+        }
+        for (int i = 0; i < this.size(); i++) {
+            Object element = this.get(i);
+            if (element instanceof CycList)
+                cycList.add(((CycList)element).deepCopy());
+            else
+                cycList.add(element);
+        }
+        return  cycList;
+    }
+
+    /**
+     * Gets the dotted element.
+     *
+     * @@return the <tt>Object</tt> which forms the dotted element of this <tt>CycList</tt>
+     */
+    public Object getDottedElement () {
+        return  dottedElement;
+    }
+
+    /**
+     * Sets the dotted element and set the improper list attribute to <tt>true</tt>.
+     */
+    public void setDottedElement (Object dottedElement) {
+        this.dottedElement = dottedElement;
+        this.isProperList = false;
+    }
+
+    /**
+     * Returns <tt>true</tt> if this is a proper list.
+     *
+     * @@return <tt>true</tt> if this is a proper list, otherwise return <tt>false</tt>
+     */
+    public boolean isProperList () {
+        return  isProperList;
+    }
+
+    /**
+     * Answers true iff the CycList contains valid elements.  This is a necessary, but
+     * not sufficient condition for CycL well-formedness.
+     */
+    public boolean isValid () {
+        for (int i = 0; i < this.size(); i++) {
+            Object object = this.get(i);
+            if (object instanceof String ||
+                object instanceof Integer ||
+                object instanceof Guid ||
+                object instanceof Float ||
+                object instanceof ByteArray ||
+                object instanceof CycConstant ||
+                object instanceof CycNart)
+                continue;
+            else if (object instanceof CycList) {
+                if (!((CycList)object).isValid())
+                    return  false;
+            }
+            else
+                return  false;
+        }
+d657 159
+a815 53
+    }
+
+    /**
+     * Returns true if formula is well-formed in the relevant mt.
+     *
+     * @@param formula the given EL formula
+     * @@param mt the relevant mt
+     * @@return true if formula is well-formed in the relevant mt, otherwise false
+     * @@throws UnknownHostException if cyc server host not found on the network
+     * @@throws IOException if a data communication error occurs
+     * @@throws CycApiException if the api request results in a cyc server error
+     */
+    public boolean isFormulaWellFormed (ELMT mt) throws IOException, UnknownHostException,
+            CycApiException {
+        return  CycAccess.current().isFormulaWellFormed(this, mt);
+    }
+
+    /**
+     * Returns true if formula is well-formed Non Atomic Reifable Term.
+     *
+     * @@param formula the given EL formula
+     * @@return true if formula is well-formed Non Atomic Reifable Term, otherwise false
+     * @@throws UnknownHostException if cyc server host not found on the network
+     * @@throws IOException if a data communication error occurs
+     * @@throws CycApiException if the api request results in a cyc server error
+     */
+    public boolean isCycLNonAtomicReifableTerm () throws IOException, UnknownHostException,
+            CycApiException {
+        return  CycAccess.current().isCycLNonAtomicReifableTerm(this);
+    }
+
+    /**
+     * Returns true if formula is well-formed Non Atomic Un-reifable Term.
+     *
+     * @@param formula the given EL formula
+     * @@return true if formula is well-formed Non Atomic Un-reifable Term, otherwise false
+     * @@throws UnknownHostException if cyc server host not found on the network
+     * @@throws IOException if a data communication error occurs
+     * @@throws CycApiException if the api request results in a cyc server error
+     */
+    public boolean isCycLNonAtomicUnreifableTerm () throws IOException, UnknownHostException,
+            CycApiException {
+        return  CycAccess.current().isCycLNonAtomicUnreifableTerm(this);
+    }
+
+    /**
+     * Creates a new <tt>CycList</tt> containing the given element.
+     *
+     * @@param element the contents of the new <tt>CycList</tt>
+     * @@return a new <tt>CycList</tt> containing the given element
+     */
+    public static CycList list (Object element) {
+        CycList result = new CycList();
+a816 1
+        return  result;
+d818 717
+a1534 13
+
+    /**
+     * Creates a new <tt>CycList</tt> containing the given two elements.
+     *
+     * @@param element1 the first item of the new <tt>CycList</tt>
+     * @@param element2 the second item of the new <tt>CycList</tt>
+     * @@return a new <tt>CycList</tt> containing the given two elements
+     */
+    public static CycList list (Object element1, Object element2) {
+        CycList result = new CycList();
+        result.add(element1);
+        result.add(element2);
+        return  result;
+d1536 1
+a1536 558
+
+    /**
+     * Creates a new <tt>CycList</tt> containing the given three elements.
+     *
+     * @@param element1 the first item of the new <tt>CycList</tt>
+     * @@param element2 the second item of the new <tt>CycList</tt>
+     * @@param element3 the third item of the new <tt>CycList</tt>
+     * @@return a new <tt>CycList</tt> containing the given three elements
+     */
+    public static CycList list (Object element1, Object element2, Object element3) {
+        CycList result = new CycList();
+        result.add(element1);
+        result.add(element2);
+        result.add(element3);
+        return  result;
+    }
+
+    /**
+     * Returns the first element of the <tt>CycList</tt>.
+     *
+     * @@return the <tt>Object</tt> which is the first element of the list.
+     */
+    public Object first () {
+        if (size() == 0)
+            throw  new RuntimeException("First element not available for an empty CycList");
+        return  this.get(0);
+    }
+
+    /**
+     * Returns the second element of the <tt>CycList</tt>.
+     *
+     * @@return the <tt>Object</tt> which is the second element of the list.
+     */
+    public Object second () {
+        if (size() < 1)
+            throw  new RuntimeException("Second element not available");
+        return  this.get(1);
+    }
+
+    /**
+     * Returns the third element of the <tt>CycList</tt>.
+     *
+     * @@return the <tt>Object</tt> which is the third element of the list.
+     */
+    public Object third () {
+        if (size() < 2)
+            throw  new RuntimeException("Third element not available");
+        return  this.get(2);
+    }
+
+    /**
+     * Returns the fourth element of the <tt>CycList</tt>.
+     *
+     * @@return the <tt>Object</tt> which is the fourth element of the list.
+     */
+    public Object fourth () {
+        if (size() < 3)
+            throw  new RuntimeException("Fourth element not available");
+        return  this.get(3);
+    }
+
+    /**
+     * Returns the last element of the <tt>CycList</tt>.
+     *
+     * @@return the <tt>Object</tt> which is the last element of the list.
+     */
+    public Object last () {
+        if (size() == 0)
+            throw  new RuntimeException("Last element not available");
+        return  this.get(this.size() - 1);
+    }
+
+    /**
+     * Returns the CycList after removing the first element, in in the case of a
+     * dotted pair, returns the dotted element.
+     *
+     * @@return the CycList after removing the first element, in in the case of a
+     * dotted pair, returns the dotted element.
+     */
+    public Object rest () {
+        if (this.size() == 0)
+            throw  new RuntimeException("Cannot remove first element of an empty list.");
+        else if ((this.size() == 1) && (!this.isProperList))
+            return  this.getDottedElement();
+        CycList cycList = new CycList(this);
+        cycList.remove(0);
+        return  cycList;
+    }
+
+    /**
+     * Adds the given element to this list if it is not already contained.
+     */
+    public void addNew (Object object) {
+        if (!this.contains(object))
+            this.add(object);
+    }
+
+    /**
+     * Adds the given elements to this list if they are not already contained.
+     */
+    public void addAllNew (Collection objects) {
+        Iterator iter = objects.iterator();
+        while (true) {
+            if (!iter.hasNext())
+                break;
+            this.addNew(iter.next());
+        }
+    }
+
+    /**
+     * Returns true iff this list contains duplicate elements.
+     *
+     * @@return true iff this list contains duplicate elements
+     */
+    public boolean containsDuplicates () {
+        if (!isProperList)
+            if (this.contains(this.dottedElement))
+                return  true;
+        for (int i = 0; i < this.size(); i++)
+            for (int j = i + 1; j < this.size(); j++)
+                if (this.get(i).equals(this.get(j)))
+                    return  true;
+        return  false;
+    }
+
+    /**
+     * Returns a new <tt>CycList</tt> whose elements are the reverse of
+     * this <tt>CycList</tt>, which is unaffected.
+     *
+     * @@return new <tt>CycList</tt> with elements reversed.
+     */
+    public CycList reverse () {
+        if (!isProperList)
+            throw  new RuntimeException(this + " is not a proper list and cannot be reversed");
+        CycList result = new CycList();
+        for (int i = (this.size() - 1); i >= 0; i--)
+            result.add(this.get(i));
+        return  result;
+    }
+
+    /**
+     * Returns a <tt>CycList</tt> of the length N combinations of sublists from this
+     * object.  This algorithm preserves the list order with the sublists.
+     *
+     * @@param n the length of the sublist
+     * @@return a <tt>CycList</tt> of the length N combinations of sublists from this
+     * object
+     */
+    public CycList combinationsOf (int n) {
+        if (!isProperList)
+            throw  new RuntimeException(this + " is not a proper list");
+        CycList result = new CycList();
+        if (this.size() == 0 || n == 0)
+            return  result;
+        return  combinationsOfInternal(new CycList(this.subList(0, n)), new CycList(this.subList(n,
+                this.size())));
+    }
+
+    /**
+     * Provides the internal implementation <tt.combinationsOf</tt> using a recursive
+     * algorithm.
+     *
+     * @@param selectedItems a window of contiguous items to be combined
+     * @@param availableItems the complement of the selectedItems
+     * @@return a <tt>CycList</tt> of the combinations of sublists from the
+     * selectedItems.
+     */
+    private static CycList combinationsOfInternal (CycList selectedItems, CycList availableItems) {
+        CycList result = CycList.list(selectedItems);
+        if (availableItems.size() == 0)
+            return  result;
+        CycList combination = null;
+        for (int i = 0; i < (selectedItems.size() - 1); i++)
+            for (int j = 0; j < availableItems.size(); j++) {
+                Object availableItem = availableItems.get(j);
+                // Remove it (making copy), shift left, append replacement.
+                combination = (CycList)selectedItems.clone();
+                combination.remove(i + 1);
+                combination.add(availableItem);
+                result.add(combination);
+            }
+        CycList newSelectedItems = (CycList)selectedItems.rest();
+        newSelectedItems.add(availableItems.first());
+        CycList newAvailableItems = (CycList)availableItems.rest();
+        result.addAll(combinationsOfInternal(newSelectedItems, newAvailableItems));
+        return  result;
+    }
+
+    /**
+     * Returns a random ordering of the <tt>CycList</tt> without recursion.
+     *
+     * @@return a random ordering of the <tt>CycList</tt> without recursion
+     */
+    public CycList randomPermutation () {
+        Random random = new Random();
+        int randomIndex = 0;
+        CycList remainingList = (CycList)this.clone();
+        CycList permutedList = new CycList();
+        if (this.size() == 0)
+            return  remainingList;
+        while (true) {
+            if (remainingList.size() == 1) {
+                permutedList.addAll(remainingList);
+                return  permutedList;
+            }
+            randomIndex = random.nextInt(remainingList.size() - 1);
+            permutedList.add(remainingList.get(randomIndex));
+            remainingList.remove(randomIndex);
+        }
+    }
+
+    /**
+     * Returns a new <tt>CycList</tt> with every occurrance of <tt>Object</tt> oldObject
+     * replaced by <tt>Object</tt> newObject.  Substitute recursively into embedded
+     * <tt>CycList</tt> objects.
+     *
+     * @@return a new <tt>CycList</tt> with every occurrance of <tt>Object</tt> oldObject
+     * replaced by <tt>Object</tt> newObject
+     */
+    public CycList subst (Object newObject, Object oldObject) {
+        CycList result = new CycList();
+        if (!isProperList)
+            if (dottedElement.equals(oldObject))
+                result.setDottedElement(newObject);
+        for (int i = 0; i < this.size(); i++) {
+            Object element = this.get(i);
+            if (element.equals(oldObject))
+                result.add(newObject);
+            else if (element instanceof CycList)
+                result.add(((CycList)element).subst(newObject, oldObject));
+            else
+                result.add(element);
+        }
+        return  result;
+    }
+
+    /**
+     * Returns a <tt>String</tt> representation of this
+     * <tt>List</tt>.
+     */
+    public String toString () {
+        return  toStringHelper(false);
+    }
+
+    /**
+     * Returns a <tt>String</tt> representation of this
+     * <tt>List</tt> without causing  additional api calls to complete the name field of constants.
+     */
+    public String safeToString () {
+        return  toStringHelper(true);
+    }
+
+    /**
+     * Returns a <tt>String</tt> representation of this
+     * <tt>CycList</tt>.  When the parameter is true, the representation is created without causing
+     * additional api calls to complete the name field of constants.
+     *
+     * @@param safe when true, the representation is created without causing
+     * additional api calls to complete the name field of constants
+     * @@return a <tt>String</tt> representation of this <tt>CycList</tt>
+     */
+    protected String toStringHelper (boolean safe) {
+        StringBuffer result = new StringBuffer("(");
+        for (int i = 0; i < this.size(); i++) {
+            if (i > 0)
+                result.append(" ");
+            Object element = this.get(i);
+            if (element == null)
+                result.append("null");
+            else if (element instanceof String)
+                result.append("\"" + element + "\"");
+            else if (safe) {
+                try {
+                    // If element understands the safeToString method, then use it.
+                    Method safeToString = element.getClass().getMethod("safeToString",
+                            null);
+                    result.append(safeToString.invoke(element, null));
+                } catch (Exception e) {
+                    result.append(element.toString());
+                }
+            }
+            else
+                result.append(element.toString());
+        }
+        if (!isProperList) {
+            result.append(" . ");
+            if (dottedElement instanceof String) {
+                result.append("\"");
+                result.append(dottedElement);
+                result.append("\"");
+            }
+            else
+                result.append(this.dottedElement.toString());
+        }
+        result.append(")");
+        return  result.toString();
+    }
+
+    /**
+     * Returns a `pretty-printed' <tt>String</tt> representation of this
+     * <tt>CycList</tt>.
+     * @@param indent, the indent string that is added before the
+     * <tt>String</tt> representation this <tt>CycList</tt>
+     * @@return a `pretty-printed' <tt>String</tt> representation of this
+     * <tt>CycList</tt>.
+     */
+    public String toPrettyString (String indent) {
+        StringBuffer result = new StringBuffer(indent + "(");
+        for (int i = 0; i < this.size(); i++) {
+            if (i > 0)
+                result.append(" ");
+            Object element = this.get(i);
+            if (element instanceof String) {
+                result.append("\"" + element + "\"");
+            }
+            else if (element instanceof CycList) {
+                result.append("\n" + ((CycList)element).toPrettyString(indent +
+                        "  "));
+            }
+            else {
+                result.append(element.toString());
+            }
+        }
+        if (!isProperList) {
+            result.append(" . ");
+            if (dottedElement instanceof String) {
+                result.append("\"");
+                result.append(dottedElement);
+                result.append("\"");
+            }
+            else
+                result.append(this.dottedElement.toString());
+        }
+        result.append(")");
+        return  result.toString();
+    }
+
+    /**
+     * Returns a cyclified string representation of the OpenCyc <tt>CycList</tt>.
+     * Embedded constants are prefixed with ""#$".  Embedded quote chars in strings
+     * are escaped.
+     *
+     * @@return a <tt>String</tt> representation in cyclified form.
+     *
+     */
+    public String cyclifyWithEscapeChars () {
+        StringBuffer result = new StringBuffer("(");
+        String cyclifiedObject = null;
+        for (int i = 0; i < this.size(); i++) {
+            Object object = this.get(i);
+            if (object == null)
+                throw  new RuntimeException("Invalid null element after " + result);
+            if (object instanceof DefaultCycObject)
+                cyclifiedObject = ((DefaultCycObject)object).cyclify();
+            else if (object instanceof CycConstant)
+                cyclifiedObject = ((CycConstant)object).cyclify();
+            else if (object instanceof CycNart)
+                cyclifiedObject = ((CycNart)object).cyclify();
+            else if (object instanceof CycVariable)
+                cyclifiedObject = ((CycVariable)object).cyclify();
+            else if (object instanceof String) {
+                String stringObject = escapeQuoteChars((String)object);
+                cyclifiedObject = "\"" + stringObject + "\"";
+            }
+            else if (object instanceof CycList)
+                cyclifiedObject = ((CycList)object).cyclifyWithEscapeChars();
+            else
+                cyclifiedObject = object.toString();
+            if (i > 0)
+                result.append(" ");
+            result.append(cyclifiedObject);
+        }
+        if (!isProperList) {
+            result.append(" . ");
+            if (dottedElement instanceof CycConstant)
+                cyclifiedObject = ((CycConstant)dottedElement).cyclify();
+            else if (dottedElement instanceof CycNart)
+                cyclifiedObject = ((CycNart)dottedElement).cyclify();
+            else if (dottedElement instanceof CycList)
+                cyclifiedObject = ((CycList)dottedElement).cyclifyWithEscapeChars();
+            else
+                cyclifiedObject = dottedElement.toString();
+            result.append(cyclifiedObject);
+        }
+        result.append(")");
+        return  result.toString();
+    }
+
+    /**
+     * Returns a cyclified string representation of the OpenCyc <tt>CycList</tt>.
+     * Embedded constants are prefixed with ""#$".
+     *
+     * @@return a <tt>String</tt> representation in cyclified form.
+     *
+     */
+    public String cyclify () {
+        StringBuffer result = new StringBuffer("(");
+        String cyclifiedObject = null;
+        for (int i = 0; i < this.size(); i++) {
+            Object object = this.get(i);
+            if (object == null)
+                throw  new RuntimeException("Invalid null element after " + result);
+            if (object instanceof DefaultCycObject)
+                cyclifiedObject = ((DefaultCycObject)object).cyclify();
+            else if (object instanceof CycVariable)
+                cyclifiedObject = ((CycVariable)object).cyclify();
+            else if (object instanceof String)
+                cyclifiedObject = "\"" + (String)object + "\"";
+            else if (object instanceof Double) {
+                cyclifiedObject = object.toString();
+            }
+            else if (object instanceof CycList)
+                cyclifiedObject = ((CycList)object).cyclify();
+            else
+                cyclifiedObject = object.toString();
+            if (i > 0)
+                result.append(" ");
+            result.append(cyclifiedObject);
+        }
+        if (!isProperList) {
+            result.append(" . ");
+            if (dottedElement instanceof CycConstant)
+                cyclifiedObject = ((CycConstant)dottedElement).cyclify();
+            else if (dottedElement instanceof CycNart)
+                cyclifiedObject = ((CycNart)dottedElement).cyclify();
+            else if (dottedElement instanceof CycList)
+                cyclifiedObject = ((CycList)dottedElement).cyclify();
+            else
+                cyclifiedObject = dottedElement.toString();
+            result.append(cyclifiedObject);
+        }
+        result.append(")");
+        return  result.toString();
+    }
+
+    /**
+     * Inserts an escape character before each quote character in the given string.
+     *
+     * @@param string the given string
+     * @@return the string with an escape character before each quote character
+     */
+    public String escapeQuoteChars (String string) {
+        return  Strings.change(string, "\"", "\\\"");
+    }
+
+    /**
+     * Returns this object in a form suitable for use as an <tt>String</tt> api expression value.
+     *
+     * @@return this object in a form suitable for use as an <tt>String</tt> api expression value
+     */
+    public String stringApiValue () {
+        return  this.cyclifyWithEscapeChars();
+    }
+
+    /**
+     * Returns this object in a form suitable for use as an <tt>CycList</tt> api expression value.
+     *
+     * @@return this object in a form suitable for use as an <tt>CycList</tt> api expression value
+     */
+    public Object cycListApiValue () {
+        return  this;
+    }
+
+    /**
+     * Returns a new CycList, which is sorted in the default collating sequence.
+     *
+     * @@return a new <tt>CycList</tt>, sorted in the default collating sequence.
+     */
+    public CycList sort () {
+        CycList sortedList = new CycList(this);
+        Collections.sort(sortedList, new CycListComparator());
+        return  sortedList;
+    }
+
+    /**
+     * Returns a <tt>CycListVisitor</tt> enumeration of the non-CycList and non-nil elements.
+     *
+     * @@return a <tt>CycListVisitor</tt> enumeration of the non-CycList and non-nil elements.
+     */
+    public CycListVisitor cycListVisitor () {
+        return  new CycListVisitor(this);
+    }
+
+    /**
+     * Returns true if the proper list tree contains the given object anywhere in the tree.
+     *
+     * @@param object the object to be found in the tree.
+     * @@return true if the proper list tree contains the given object anywhere in the tree
+     */
+    public boolean treeContains (Object object) {
+        if (this.contains(object))
+            return  true;
+        for (int i = 0; i < this.size(); i++) {
+            Object element = this.get(i);
+            if ((element instanceof CycList) && (((CycList)element).treeContains(object)))
+                return  true;
+        }
+        return  false;
+    }
+
+    /**
+     * Returns <tt>true</tt> if the element is a member of this <tt>CycList</tt> and
+     * no element in <tt>CycList</tt> otherElements precede it.
+     *
+     * @@param element the element under consideration
+     * @@param otherElements the <tt>CycList</tt> of other elements under consideration
+     * @@return <tt>true</tt> if the element is a member of this <tt>CycList</tt> and
+     * no elements in <tt>CycList</tt> otherElements contained in this <tt>CycList</tt>
+     * precede it
+     */
+    public boolean doesElementPrecedeOthers (Object element, CycList otherElements) {
+        for (int i = 0; i < this.size(); i++) {
+            if (element.equals(this.get(i)))
+                return  true;
+            if (otherElements.contains(this.get(i)))
+                return  false;
+        }
+        return  false;
+    }
+
+    /**
+     * Returns the XML representation of this object.
+     *
+     * @@return the XML representation of this object
+     */
+    public String toXMLString () throws IOException {
+        XMLStringWriter xmlStringWriter = new XMLStringWriter();
+        toXML(xmlStringWriter, 0, false);
+        return  xmlStringWriter.toString();
+    }
+
+    /**
+     * Prints the XML representation of the <ttt>CycList</tt> to an <tt>XMLWriter</tt>
+     *
+     * @@param xmlWriter the output XML serialization writer
+     * @@param indent specifies by how many spaces the XML output should be indented
+     * @@param relative specifies whether the indentation should be absolute --
+     * indentation with respect to the beginning of a new line, relative = false
+     * -- or relative to the indentation currently specified in the indent_string field
+     * of the xml_writer object, relative = true.
+     */
+    public void toXML (XMLWriter xmlWriter, int indent, boolean relative) throws IOException {
+        int startingIndent = xmlWriter.getIndentLength();
+        xmlWriter.printXMLStartTag(cycListXMLTag, indent, relative, true);
+        Iterator iterator = this.iterator();
+        Object arg;
+        while (iterator.hasNext()) {
+            arg = iterator.next();
+            toXML(arg, xmlWriter, indentLength, true);
+        }
+        if (!isProperList) {
+            xmlWriter.printXMLStartTag(dottedElementXMLTag, indentLength, relative,
+                    true);
+            toXML(dottedElement, xmlWriter, indentLength, true);
+            xmlWriter.printXMLEndTag(dottedElementXMLTag, 0, true);
+            xmlWriter.setIndent(-indentLength, true);
+        }
+        xmlWriter.printXMLEndTag(cycListXMLTag, 0, true);        /*
+a1539 59
+         */
+
+    }
+
+    /**
+     * Writes a CycList element the the given XML output stream.
+     *
+     * @@param object the object to be serialized as XML
+     * @@param xmlWriter the output XML serialization writer
+     * @@param indent specifies by how many spaces the XML output should be indented
+     * @@param relative specifies whether the indentation should be absolute --
+     * indentation with respect to the beginning of a new line, relative = false
+     * -- or relative to the indentation currently specified in the indent_string field
+     * of the xml_writer object, relative = true.
+     */
+    public static void toXML (Object object, XMLWriter xmlWriter, int indent, boolean relative) throws IOException {
+        int startingIndent = xmlWriter.getIndentLength();
+        if (object instanceof Integer) {
+            xmlWriter.printXMLStartTag(integerXMLTag, indentLength, true, false);
+            xmlWriter.print(object.toString());
+            xmlWriter.printXMLEndTag(integerXMLTag);
+        }
+        else if (object instanceof String) {
+            xmlWriter.printXMLStartTag(stringXMLTag, indentLength, true, false);
+            xmlWriter.print(TextUtil.doEntityReference((String)object));
+            xmlWriter.printXMLEndTag(stringXMLTag);
+        }
+        else if (object instanceof Double) {
+            xmlWriter.printXMLStartTag(doubleXMLTag, indentLength, true, false);
+            xmlWriter.print(object.toString());
+            xmlWriter.printXMLEndTag(doubleXMLTag);
+        }
+        else if (object instanceof CycFort)
+            ((CycFort)object).toXML(xmlWriter, indentLength, true);
+        else if (object instanceof ByteArray)
+            ((ByteArray)object).toXML(xmlWriter, indentLength, true);
+        else if (object instanceof CycVariable)
+            ((CycVariable)object).toXML(xmlWriter, indentLength, true);
+        else if (object instanceof CycSymbol)
+            ((CycSymbol)object).toXML(xmlWriter, indentLength, true);
+        else if (object instanceof Guid)
+            ((Guid)object).toXML(xmlWriter, indentLength, true);
+        else if (object instanceof CycList)
+            ((CycList)object).toXML(xmlWriter, indentLength, true);
+        else if (object instanceof CycAssertion)
+            ((CycAssertion)object).toXML(xmlWriter, indentLength, true);
+        else
+            throw  new RuntimeException("Invalid CycList object " + object);
+        xmlWriter.setIndent(-indentLength, true);
+        if (startingIndent != xmlWriter.getIndentLength())
+            throw  new RuntimeException("Starting indent " + startingIndent + " is not equal to ending indent "
+                    + xmlWriter.getIndentLength() + " for object " + object);
+    }
+
+    /**
+     * Gets the value following the given keyword symbol.
+     *
+     * @@param keyword the keyword symbol
+     * @@return the value following the given keyword symbol, or null if not found
+d1541 234
+a1774 7
+    public Object getValueForKeyword (CycSymbol keyword) {
+        for (int i = 0; i < this.size() - 1; i++) {
+            if (this.get(i).equals(keyword))
+                return  this.get(i + 1);
+        }
+        return  null;
+    }
+d1776 1
+a1776 11
+    /**
+     * Forms a quote expression for the given object and adds it to the list.
+     *
+     * @@param object the object to be quoted and added to this list
+     */
+    public void addQuoted (Object object) {
+        CycList cycList = new CycList();
+        this.add(cycList);
+        cycList.add(CycObjectFactory.quote);
+        cycList.add(object);
+    }
+@
+
+
+1.34
+log
+@Mostly completed the code for UML state machine interpretation.
+@
+text
+@d38 1
+a38 1
+public class CycList extends ArrayList {
+d229 1
+a229 1
+    public boolean isFormulaWellFormed (CycFort mt) throws IOException, UnknownHostException,
+d639 2
+a640 2
+            if (object instanceof CycObject)
+                cyclifiedObject = ((CycObject)object).cyclify();
+d689 2
+a690 6
+            if (object instanceof CycObject)
+                cyclifiedObject = ((CycObject)object).cyclify();
+            else if (object instanceof CycConstant)
+                cyclifiedObject = ((CycConstant)object).cyclify();
+            else if (object instanceof CycNart)
+                cyclifiedObject = ((CycNart)object).cyclify();
+@
+
+
+1.33
+log
+@Adding UML StateMachine support
+Adding NIST Reference Architecture support
+@
+text
+@d1 10
+a10 1
+package org.opencyc.cycobject;
+a11 8
+import java.util.*;
+import java.io.*;
+import java.net.*;
+import java.lang.reflect.*;
+import org.opencyc.util.*;
+import org.opencyc.xml.*;
+import org.opencyc.api.*;
+import ViolinStrings.*;
+a38 1
+
+a46 1
+
+a50 1
+
+d53 1
+d57 1
+a57 1
+    public CycList() {
+d66 1
+a66 1
+    public CycList(Collection c) {
+d79 1
+a79 2
+    public CycList(Object firstElement,
+                   Collection remainingElements) {
+d90 1
+a90 1
+    public CycList(Object element) {
+d101 1
+a101 1
+    public CycList(Object element1, Object element2) {
+d116 1
+a116 1
+    public static CycList construct(Object object1, Object object2) {
+d119 1
+a119 1
+            return cycList;
+d121 1
+a121 1
+            CycList cycList2 = (CycList) object2;
+d123 1
+a123 1
+            if (! cycList2.isProperList)
+d125 1
+a125 1
+            return cycList;
+d128 1
+a128 1
+        return cycList;
+d136 1
+a136 1
+    public Object clone() {
+d138 1
+a138 1
+        if (! this.isProperList())
+d140 1
+a140 1
+        return newClone;
+d150 1
+a150 1
+    public CycList deepCopy() {
+d152 1
+a152 1
+        if (! this.isProperList()) {
+d154 1
+a154 1
+                cycList.setDottedElement(((CycList) this.dottedElement).deepCopy());
+d161 1
+a161 1
+                cycList.add(((CycList) element).deepCopy());
+d165 1
+a165 1
+        return cycList;
+d173 2
+a174 2
+    public Object getDottedElement() {
+        return dottedElement;
+d180 1
+a180 1
+    public void setDottedElement(Object dottedElement) {
+d190 2
+a191 2
+    public boolean isProperList() {
+        return isProperList;
+d198 1
+a198 1
+    public boolean isValid() {
+d210 2
+a211 2
+                if (! ((CycList) object).isValid())
+                     return false;
+d214 1
+a214 1
+                return false;
+d216 1
+a216 1
+        return true;
+d229 3
+a231 3
+    public boolean isFormulaWellFormed(CycFort mt)
+        throws IOException, UnknownHostException, CycApiException {
+        return CycAccess.current().isFormulaWellFormed(this, mt);
+d243 3
+a245 3
+    public boolean isCycLNonAtomicReifableTerm()
+        throws IOException, UnknownHostException, CycApiException {
+        return CycAccess.current().isCycLNonAtomicReifableTerm(this);
+d257 3
+a259 3
+    public boolean isCycLNonAtomicUnreifableTerm()
+        throws IOException, UnknownHostException, CycApiException {
+        return CycAccess.current().isCycLNonAtomicUnreifableTerm(this);
+d268 1
+a268 1
+    public static CycList list(Object element) {
+d271 1
+a271 1
+        return result;
+d281 1
+a281 2
+    public static CycList list(Object element1,
+                               Object element2) {
+d285 1
+a285 1
+        return result;
+d296 1
+a296 3
+    public static CycList list(Object element1,
+                               Object element2,
+                               Object element3) {
+d301 1
+a301 1
+        return result;
+d309 1
+a309 1
+    public Object first() {
+d311 2
+a312 2
+            throw new RuntimeException("First element not available for an empty CycList");
+        return this.get(0);
+d320 1
+a320 1
+    public Object second() {
+d322 2
+a323 2
+            throw new RuntimeException("Second element not available");
+        return this.get(1);
+d331 1
+a331 1
+    public Object third() {
+d333 2
+a334 2
+            throw new RuntimeException("Third element not available");
+        return this.get(2);
+d342 1
+a342 1
+    public Object fourth() {
+d344 2
+a345 2
+            throw new RuntimeException("Fourth element not available");
+        return this.get(3);
+d353 1
+a353 1
+    public Object last() {
+d355 2
+a356 2
+            throw new RuntimeException("Last element not available");
+        return this.get(this.size() - 1);
+d366 1
+a366 1
+    public Object rest() {
+d368 3
+a370 3
+            throw new RuntimeException("Cannot remove first element of an empty list.");
+        else if ((this.size() == 1) && (! this.isProperList))
+            return this.getDottedElement();
+d373 1
+a373 1
+        return cycList;
+d379 2
+a380 2
+    public void addNew(Object object) {
+        if (! this.contains(object))
+d387 1
+a387 1
+    public void addAllNew(Collection objects) {
+d390 1
+a390 1
+            if (! iter.hasNext())
+d401 2
+a402 2
+    public boolean containsDuplicates() {
+        if (! isProperList)
+d404 1
+a404 1
+                return true;
+d408 2
+a409 2
+                    return true;
+        return false;
+d418 3
+a420 3
+    public CycList reverse() {
+        if (! isProperList)
+           throw new RuntimeException(this + " is not a proper list and cannot be reversed");
+d424 1
+a424 1
+        return result;
+d435 3
+a437 3
+    public CycList combinationsOf(int n) {
+        if (! isProperList)
+           throw new RuntimeException(this + " is not a proper list");
+d440 3
+a442 3
+            return result;
+        return combinationsOfInternal(new CycList(this.subList(0, n)),
+                                      new CycList(this.subList(n, this.size())));
+d454 1
+a454 1
+    private static CycList combinationsOfInternal(CycList selectedItems, CycList availableItems) {
+d457 1
+a457 1
+            return result;
+d463 1
+a463 1
+                combination = (CycList) selectedItems.clone();
+d468 1
+a468 1
+        CycList newSelectedItems = (CycList) selectedItems.rest();
+d470 1
+a470 1
+        CycList newAvailableItems = (CycList) availableItems.rest();
+d472 1
+a472 1
+        return result;
+d480 1
+a480 1
+    public CycList randomPermutation() {
+d483 1
+a483 1
+        CycList remainingList = (CycList) this.clone();
+d486 1
+a486 1
+            return remainingList;
+d490 1
+a490 1
+                return permutedList;
+a495 1
+
+a497 1
+
+d506 1
+a506 1
+    public CycList subst(Object newObject, Object oldObject) {
+d508 1
+a508 1
+        if (! isProperList)
+d516 1
+a516 1
+                result.add(((CycList) element).subst(newObject, oldObject));
+d520 1
+a520 1
+        return result;
+d527 2
+a528 2
+    public String toString() {
+        return toStringHelper(false);
+d535 2
+a536 2
+    public String safeToString() {
+        return toStringHelper(true);
+d548 1
+a548 1
+    protected String toStringHelper(boolean safe) {
+d561 2
+a562 1
+                    Method safeToString = element.getClass().getMethod("safeToString", null);
+d564 1
+a564 2
+                }
+                catch (Exception e) {
+d582 1
+a582 1
+        return result.toString();
+d585 38
+a622 32
+  /**
+   * Returns a `pretty-printed' <tt>String</tt> representation of this
+   * <tt>CycList</tt>.
+   * @@param indent, the indent string that is added before the
+   * <tt>String</tt> representation this <tt>CycList</tt>
+   * @@return a `pretty-printed' <tt>String</tt> representation of this
+   * <tt>CycList</tt>.
+   */
+  public String toPrettyString(String indent) {
+    StringBuffer result = new StringBuffer(indent + "(");
+    for (int i = 0; i < this.size(); i++) {
+      if (i > 0)
+    result.append(" ");
+      Object element = this.get(i);
+      if (element instanceof String) {result.append("\"" + element + "\"");}
+      else if (element instanceof CycList)
+    {result.append("\n" + ((CycList)element).toPrettyString(indent + "  "));}
+      else {result.append(element.toString());}
+    }
+    if (!isProperList) {
+      result.append(" . ");
+      if (dottedElement instanceof String) {
+    result.append("\"");
+    result.append(dottedElement);
+    result.append("\"");
+      }
+      else
+    result.append(this.dottedElement.toString());
+    }
+    result.append(")");
+    return result.toString();
+  }
+d632 1
+a632 1
+  public String cyclifyWithEscapeChars() {
+d638 1
+a638 1
+                throw new RuntimeException("Invalid null element after " + result);
+d640 1
+a640 1
+                cyclifiedObject = ((CycObject) object).cyclify();
+d642 1
+a642 1
+                cyclifiedObject = ((CycConstant) object).cyclify();
+d644 1
+a644 1
+                cyclifiedObject = ((CycNart) object).cyclify();
+d646 1
+a646 1
+                cyclifiedObject = ((CycVariable) object).cyclify();
+d648 1
+a648 1
+                String stringObject = escapeQuoteChars((String) object);
+d652 1
+a652 1
+                cyclifiedObject = ((CycList) object).cyclifyWithEscapeChars();
+d659 1
+a659 1
+        if (! isProperList) {
+d662 1
+a662 1
+                cyclifiedObject = ((CycConstant) dottedElement).cyclify();
+d664 1
+a664 1
+                cyclifiedObject = ((CycNart) dottedElement).cyclify();
+d666 1
+a666 1
+                cyclifiedObject = ((CycList) dottedElement).cyclifyWithEscapeChars();
+d672 2
+a673 2
+        return result.toString();
+  }
+d682 1
+a682 1
+    public String cyclify() {
+d688 1
+a688 1
+                throw new RuntimeException("Invalid null element after " + result);
+d690 1
+a690 1
+                cyclifiedObject = ((CycObject) object).cyclify();
+d692 1
+a692 1
+                cyclifiedObject = ((CycConstant) object).cyclify();
+d694 1
+a694 1
+                cyclifiedObject = ((CycNart) object).cyclify();
+d696 1
+a696 1
+                cyclifiedObject = ((CycVariable) object).cyclify();
+d698 1
+a698 1
+                cyclifiedObject = "\"" + (String) object + "\"";
+d703 1
+a703 1
+                cyclifiedObject = ((CycList) object).cyclify();
+d710 1
+a710 1
+        if (! isProperList) {
+d713 1
+a713 1
+                cyclifiedObject = ((CycConstant) dottedElement).cyclify();
+d715 1
+a715 1
+                cyclifiedObject = ((CycNart) dottedElement).cyclify();
+d717 1
+a717 1
+                cyclifiedObject = ((CycList) dottedElement).cyclify();
+d723 1
+a723 1
+        return result.toString();
+d732 2
+a733 2
+    public String escapeQuoteChars(String string) {
+        return Strings.change(string, "\"", "\\\"");
+d741 2
+a742 2
+    public String stringApiValue() {
+        return this.cyclifyWithEscapeChars();
+d750 2
+a751 2
+    public Object cycListApiValue() {
+        return this;
+d759 1
+a759 1
+    public CycList sort() {
+d762 1
+a762 1
+        return sortedList;
+d770 2
+a771 2
+    public CycListVisitor cycListVisitor() {
+        return new CycListVisitor(this);
+d782 1
+a782 1
+            return true;
+d785 2
+a786 3
+            if ((element instanceof CycList) &&
+                (((CycList) element).treeContains(object)))
+                return true;
+d788 1
+a788 1
+        return false;
+d801 1
+a801 1
+    public boolean doesElementPrecedeOthers(Object element, CycList otherElements) {
+d804 1
+a804 1
+                return true;
+d806 1
+a806 1
+                return false;
+d808 1
+a808 1
+        return false;
+d819 1
+a819 1
+        return xmlStringWriter.toString();
+d832 1
+a832 2
+    public void toXML (XMLWriter xmlWriter, int indent, boolean relative)
+        throws IOException {
+d841 3
+a843 2
+        if (! isProperList) {
+            xmlWriter.printXMLStartTag(dottedElementXMLTag, indentLength, relative, true);
+d848 6
+a853 6
+        xmlWriter.printXMLEndTag(cycListXMLTag, 0, true);
+        /*
+        if (startingIndent != xmlWriter.getIndentLength())
+            throw new RuntimeException("Starting indent " + startingIndent +
+                                       " is not equal to ending indent " + xmlWriter.getIndentLength());
+                                       */
+d867 1
+a867 2
+    public static void toXML(Object object, XMLWriter xmlWriter, int indent, boolean relative)
+        throws IOException {
+d876 1
+a876 1
+            xmlWriter.print(TextUtil.doEntityReference((String) object));
+d885 1
+a885 1
+             ((CycFort) object).toXML(xmlWriter, indentLength, true);
+d887 1
+a887 1
+             ((ByteArray) object).toXML(xmlWriter, indentLength, true);
+d889 1
+a889 1
+             ((CycVariable) object).toXML(xmlWriter, indentLength, true);
+d891 1
+a891 1
+             ((CycSymbol) object).toXML(xmlWriter, indentLength, true);
+d893 1
+a893 1
+             ((Guid) object).toXML(xmlWriter, indentLength, true);
+d895 1
+a895 1
+             ((CycList) object).toXML(xmlWriter, indentLength, true);
+d897 1
+a897 1
+             ((CycAssertion) object).toXML(xmlWriter, indentLength, true);
+d899 1
+a899 1
+            throw new RuntimeException("Invalid CycList object " + object);
+d902 2
+a903 3
+            throw new RuntimeException("Starting indent " + startingIndent +
+                                       " is not equal to ending indent " + xmlWriter.getIndentLength() +
+                                       " for object " + object);
+d915 1
+a915 1
+                return this.get(i + 1);
+d917 1
+a917 1
+        return null;
+d932 3
+@
+
+
+1.32
+log
+@*** empty log message ***
+@
+text
+@a4 1
+import java.math.BigDecimal;
+d701 1
+a701 2
+                BigDecimal bigDecimal = new BigDecimal(((Double) object).doubleValue());
+                cyclifiedObject = bigDecimal.toString();
+@
+
+
+1.31
+log
+@Added more api calls to CycAccess
+Added naut and nart tests to CycList
+@
+text
+@d5 1
+d701 4
+@
+
+
+1.30
+log
+@Updates prior to release 0.7.0
+@
+text
+@d5 1
+d219 43
+@
+
+
+1.29
+log
+@Handled embedded quotes within strings sent to Cyc.  This patch makes the ascii
+and cfasl (binary) api commands behave the same.  Added unit test cases.
+@
+text
+@d596 3
+a598 1
+            if (object instanceof CycConstant)
+d646 3
+a648 1
+            if (object instanceof CycConstant)
+@
+
+
+1.28
+log
+@Fixed bug in CycList.rest() method where it did not return the
+dotted element in a dotted pair list.  Wide impact because the
+function signature changed from CycList to Object.
+@
+text
+@d9 1
+a53 1
+
+d583 49
+d651 1
+a651 1
+                cyclifiedObject = "\"" + object + "\"";
+d677 10
+d692 1
+a692 1
+        return cyclify();
+@
+
+
+1.27
+log
+@Prepared ApiDemo class as first in a series for the programming tutorial.  Other modules
+updated in preparation for public beta release.
+@
+text
+@d321 2
+a322 1
+     * Returns the CycList after removing the first element.
+d324 2
+a325 1
+     * @@return new <tt>CycList</tt> with first element removed.
+d327 1
+a327 1
+    public CycList rest() {
+d330 2
+d429 1
+a429 1
+        CycList newSelectedItems = selectedItems.rest();
+d431 1
+a431 1
+        CycList newAvailableItems = availableItems.rest();
+@
+
+
+1.26
+log
+@Added ability to coerce java null to Cyc NIL symbol when sending objects to Cyc
+@
+text
+@d755 1
+a755 1
+    protected void toXML(Object object, XMLWriter xmlWriter, int indent, boolean relative)
+@
+
+
+1.25
+log
+@More JXTA interface code and fixing CycNart api bug
+@
+text
+@d513 3
+a515 1
+            if (element instanceof String)
+@
+
+
+1.24
+log
+@Developing AgentManager for cyc agents
+@
+text
+@d807 12
+@
+
+
+1.23
+log
+@Initial check in.
+@
+text
+@d794 13
+@
+
+
+1.22
+log
+@CoAbs agent tests
+@
+text
+@d763 1
+a763 1
+            xmlWriter.print((String) object);
+@
+
+
+1.21
+log
+@Completed first round of CoABS agent tests with the OpenCyc api
+@
+text
+@d5 1
+d487 21
+d515 10
+d660 18
+d783 2
+@
+
+
+1.20
+log
+@Continued testing
+@
+text
+@d723 2
+@
+
+
+1.19
+log
+@Updated coabs agent messaging to use cyc-ml databinding.
+@
+text
+@d736 2
+a737 1
+                                       " is not equal to ending indent " + xmlWriter.getIndentLength());
+@
+
+
+1.18
+log
+@Revised XML serialization for use with agent messaging
+@
+text
+@d6 1
+d36 14
+d645 92
+@
+
+
+1.17
+log
+@Added xml databinding classes
+@
+text
+@a6 1
+import org.opencyc.cycobject.databinding.*;
+a631 46
+    /**
+     * Returns the CycListXmlDataBindingImpl object which contains this CycList.  The
+     * xml databinding object can be subsequently serialized into xml.
+     *
+     * @@return the CycListXmlDataBindingImpl object which contains this CycList
+     */
+    public CycListXmlDataBinding toCycListXmlDataBinding () {
+        CycListXmlDataBinding cycListXmlDataBindingImpl = new CycListXmlDataBindingImpl();
+        ArrayList elementList = new ArrayList();
+        for (int i = 0; i < this.size(); i++) {
+            Object element = this.get(i);
+            if (element instanceof CycConstant)
+                elementList.add(((CycConstant) element).toCycConstantXmlDataBinding());
+            else if (element instanceof CycNart)
+                elementList.add(((CycNart) element).toCycNartXmlDataBinding());
+            else if (element instanceof CycSymbol)
+                elementList.add(((CycSymbol) element).toCycSymbolXmlDataBinding());
+            else if (element instanceof CycVariable)
+                elementList.add(((CycVariable) element).toCycVariableXmlDataBinding());
+            else if (element instanceof Guid)
+                elementList.add(((Guid) element).toGuidXmlDataBinding());
+            else if (element instanceof CycList)
+                elementList.add(((CycList) element).toCycListXmlDataBinding());
+            else
+                elementList.add(element);
+        }
+        cycListXmlDataBindingImpl.setElementList(elementList);
+        cycListXmlDataBindingImpl.setIsProperListIndicator(this.isProperList);
+        if (dottedElement == null)
+            cycListXmlDataBindingImpl.setDottedElement(null);
+        else if (dottedElement instanceof CycConstant)
+            cycListXmlDataBindingImpl.setDottedElement(((CycConstant) dottedElement).toCycConstantXmlDataBinding());
+        else if (dottedElement instanceof CycNart)
+            cycListXmlDataBindingImpl.setDottedElement(((CycNart) dottedElement).toCycNartXmlDataBinding());
+        else if (dottedElement instanceof CycSymbol)
+            cycListXmlDataBindingImpl.setDottedElement(((CycSymbol) dottedElement).toCycSymbolXmlDataBinding());
+        else if (dottedElement instanceof CycVariable)
+            cycListXmlDataBindingImpl.setDottedElement(((CycVariable) dottedElement).toCycVariableXmlDataBinding());
+        else if (dottedElement instanceof Guid)
+            cycListXmlDataBindingImpl.setDottedElement(((Guid) dottedElement).toGuidXmlDataBinding());
+        else if (dottedElement instanceof CycList)
+            cycListXmlDataBindingImpl.setDottedElement(((CycList) dottedElement).toCycListXmlDataBinding());
+        else
+            cycListXmlDataBindingImpl.setDottedElement(dottedElement);
+        return cycListXmlDataBindingImpl;
+    }
+@
+
+
+1.16
+log
+@Check in of XML databinding interface
+@
+text
+@d7 1
+d639 2
+a640 2
+    public CycListXmlDataBindingImpl toCycListXmlDataBindingImpl () {
+        CycListXmlDataBindingImpl cycListXmlDataBindingImpl = new CycListXmlDataBindingImpl();
+d645 1
+a645 1
+                elementList.add(((CycConstant) element).toCycConstantXmlDataBindingImpl());
+d647 1
+a647 1
+                elementList.add(((CycNart) element).toCycNartXmlDataBindingImpl());
+d649 1
+a649 1
+                elementList.add(((CycSymbol) element).toCycSymbolXmlDataBindingImpl());
+d651 1
+a651 1
+                elementList.add(((CycVariable) element).toCycVariableXmlDataBindingImpl());
+d653 1
+a653 1
+                elementList.add(((Guid) element).toGuidXmlDataBindingImpl());
+d655 1
+a655 1
+                elementList.add(((CycList) element).toCycListXmlDataBindingImpl());
+d664 1
+a664 1
+            cycListXmlDataBindingImpl.setDottedElement(((CycConstant) dottedElement).toCycConstantXmlDataBindingImpl());
+d666 1
+a666 1
+            cycListXmlDataBindingImpl.setDottedElement(((CycNart) dottedElement).toCycNartXmlDataBindingImpl());
+d668 1
+a668 1
+            cycListXmlDataBindingImpl.setDottedElement(((CycSymbol) dottedElement).toCycSymbolXmlDataBindingImpl());
+d670 1
+a670 1
+            cycListXmlDataBindingImpl.setDottedElement(((CycVariable) dottedElement).toCycVariableXmlDataBindingImpl());
+d672 1
+a672 1
+            cycListXmlDataBindingImpl.setDottedElement(((Guid) dottedElement).toGuidXmlDataBindingImpl());
+d674 1
+a674 1
+            cycListXmlDataBindingImpl.setDottedElement(((CycList) dottedElement).toCycListXmlDataBindingImpl());
+@
+
+
+1.15
+log
+@Renamed classes for XML databinding
+@
+text
+@a91 37
+     * Constructs a CycList from the given xml databinding object.
+     *
+     * @@pararm cycListXmlDataBindingImpl the xml databinding object
+     */
+    public CycList (CycListXmlDataBindingImpl cycListXmlDataBindingImpl) {
+        for (int i = 0; i < cycListXmlDataBindingImpl.getElementList().size(); i++) {
+            Object element = cycListXmlDataBindingImpl.getElementList().get(i);
+            if (element instanceof CycConstantXmlDataBindingImpl)
+                this.add(CycObjectFactory.makeCycConstant((CycConstantXmlDataBindingImpl) element));
+            else if (element instanceof CycNartXmlDataBindingImpl)
+                this.add(CycObjectFactory.makeCycNart((CycNartXmlDataBindingImpl) element));
+            else if (element instanceof CycSymbolXmlDataBindingImpl)
+                this.add(CycObjectFactory.makeCycSymbol((CycSymbolXmlDataBindingImpl) element));
+            else if (element instanceof CycVariableXmlDataBindingImpl)
+                this.add(CycObjectFactory.makeCycConstant((CycConstantXmlDataBindingImpl) element));
+            else if (element instanceof GuidXmlDataBindingImpl)
+                this.add(CycObjectFactory.makeGuid((GuidXmlDataBindingImpl) element));
+            else
+                this.add(element);
+        }
+        this.addAll(cycListXmlDataBindingImpl.getElementList());
+        this.isProperList = cycListXmlDataBindingImpl.getIsProperListIndicator();
+        if (cycListXmlDataBindingImpl.getDottedElement() instanceof CycConstantXmlDataBindingImpl)
+            this.dottedElement = CycObjectFactory.makeCycConstant((CycConstantXmlDataBindingImpl) cycListXmlDataBindingImpl.getDottedElement());
+        else if (cycListXmlDataBindingImpl.getDottedElement() instanceof CycNartXmlDataBindingImpl)
+            this.dottedElement = CycObjectFactory.makeCycNart((CycNartXmlDataBindingImpl) cycListXmlDataBindingImpl.getDottedElement());
+        else if (cycListXmlDataBindingImpl.getDottedElement() instanceof CycSymbolXmlDataBindingImpl)
+            this.dottedElement = CycObjectFactory.makeCycSymbol((CycSymbolXmlDataBindingImpl) cycListXmlDataBindingImpl.getDottedElement());
+        else if (cycListXmlDataBindingImpl.getDottedElement() instanceof CycVariableXmlDataBindingImpl)
+            this.dottedElement = CycObjectFactory.makeCycVariable((CycVariableXmlDataBindingImpl) cycListXmlDataBindingImpl.getDottedElement());
+        else if (cycListXmlDataBindingImpl.getDottedElement() instanceof GuidXmlDataBindingImpl)
+            this.dottedElement = CycObjectFactory.makeGuid((GuidXmlDataBindingImpl) cycListXmlDataBindingImpl.getDottedElement());
+        else
+            this.dottedElement = cycListXmlDataBindingImpl.getDottedElement();
+    }
+
+    /**
+@
+
+
+1.14
+log
+@Added XML databinding classes
+@
+text
+@d94 1
+a94 1
+     * @@pararm cycListXmlDataBinding the xml databinding object
+d96 13
+a108 13
+    public CycList (CycListXmlDataBinding cycListXmlDataBinding) {
+        for (int i = 0; i < cycListXmlDataBinding.getElementList(); i++) {
+            Object element = cycListXmlDataBinding.elementList.get(i);
+            if (element instanceof CycConstantXmlDataBinding)
+                this.add(new CycConstant((CycConstantXmlDataBinding) element));
+            else if (element instanceof CycNartXmlDataBinding)
+                this.add(new CycNart((CycNartXmlDataBinding) element));
+            else if (element instanceof CycSymbolXmlDataBinding)
+                this.add(new CycSymbol((CycSymbolXmlDataBinding) element));
+            else if (element instanceof CycVariableXmlDataBinding)
+                this.add(new CycVariable((CycVariableXmlDataBinding) element));
+            else if (element instanceof GuidXmlDataBinding)
+                this.add(new CycVariable((GuidXmlDataBinding) element));
+d112 12
+a123 12
+        this.addAll(cycListXmlDataBinding.elementList);
+        this.isProperList = cycListXmlDataBinding.getIsProperListIndicator();
+        if (element instanceof CycConstantXmlDataBinding)
+            this.dottedElement = new CycConstant((CycConstantXmlDataBinding) element);
+        else if (element instanceof CycNartXmlDataBinding)
+            this.dottedElement = new CycNart((CycNartXmlDataBinding) element);
+        else if (element instanceof CycSymbolXmlDataBinding)
+            this.dottedElement = new CycSymbol((CycSymbolXmlDataBinding) element);
+        else if (element instanceof CycVariableXmlDataBinding)
+            this.dottedElement = new CycVariable((CycVariableXmlDataBinding) element);
+        else if (element instanceof GuidXmlDataBinding)
+            this.dottedElement = new CycVariable((GuidXmlDataBinding) element);
+d125 1
+a125 1
+            this.dottedElement = element;
+d670 1
+a670 1
+     * Returns the CycListXmlDataBinding object which contains this CycList.  The
+d673 1
+a673 1
+     * @@return the CycListXmlDataBinding object which contains this CycList
+d675 2
+a676 2
+    public CycListXmlDataBinding toCycListXmlDataBinding () {
+        CycListXmlDataBinding cycListXmlDataBinding = new CycListXmlDataBinding();
+d681 13
+a693 1
+
+d695 19
+a713 4
+        cycListXmlDataBinding.setElementList(new ArrayList(this));
+        cycListXmlDataBinding.setIsProperListIndicator(this.isProperList);
+        cycListXmlDataBinding.setDottedElement(this.dottedElement);
+        return cycListXmlDataBinding;
+@
+
+
+1.13
+log
+@Modifications to support jini agent interface to OpenCyc
+@
+text
+@d92 37
+d577 2
+d667 20
+@
+
+
+1.12
+log
+@Added boundp to OpenCyc api.
+Added upward closure option to DAML export.
+Added addNew(Object) and addAllNew(Collection) methods to CycList class
+@
+text
+@d190 1
+@
+
+
+1.11
+log
+@Added connection accessors and pretty printing for CycLists.
+@
+text
+@d306 1
+a306 1
+     * @@ret urn new <tt>CycList</tt> with first element removed.
+d317 21
+a337 2
+     * Returns a new <tt>CycList</tt> whose elements are the reverse of
+     * this <tt>CycList</tt>, which is unaffected.
+d339 1
+a339 1
+     * @@return new <tt>CycList</tt> with elements reversed.
+d501 1
+a501 1
+   */  
+d506 1
+a506 1
+	result.append(" ");
+d509 2
+a510 2
+      else if (element instanceof CycList) 
+	{result.append("\n" + ((CycList)element).toPrettyString(indent + "  "));}
+d516 3
+a518 3
+	result.append("\"");
+	result.append(dottedElement);
+	result.append("\"");
+d521 1
+a521 1
+	result.append(this.dottedElement.toString());
+@
+
+
+1.10
+log
+@Fixed parsing of dotted lists
+@
+text
+@d475 33
+@
+
+
+1.9
+log
+@Created new CycObjectFactory class to contain all cyc object caches
+@
+text
+@d106 4
+a109 1
+            cycList.addAll((CycList) object2);
+@
+
+
+1.8
+log
+@Changed CycAccess parameters from CycConstants to CycForts, more backchaining tests
+@
+text
+@d6 1
+d103 1
+a103 1
+        if (object2.equals(CycSymbol.nil))
+@
+
+
+1.7
+log
+@Refactored binary api support to pass all unit tests
+@
+text
+@d516 18
+@
+
+
+1.6
+log
+@Continuing integration of legacy binary api
+@
+text
+@d184 1
+a184 2
+                object instanceof Long ||
+                //object instanceof GUID ||
+@
+
+
+1.5
+log
+@Made CycAccess the factory object for CycLists
+@
+text
+@d290 11
+@
+
+
+1.4
+log
+@Revised copyright notice to Cycorp Inc.
+@
+text
+@a112 13
+     * Constructs a new <tt>CycList<tt> object by parsing a string.
+     *
+     * @@param string the string in CycL external (EL). For example:<BR>
+     * <code>(#$isa #$Dog #$TameAnimal)</code>
+     */
+    public CycList(String string) {
+        CycList cycList = (new CycListParser()).read(string);
+        addAll(cycList);
+        if (! cycList.isProperList())
+            setDottedElement(cycList.getDottedElement());
+    }
+
+    /**
+@
+
+
+1.3
+log
+@Added more list processing methods to CycList and UnitTest
+@
+text
+@d14 1
+a14 1
+ * <p>Copyright 2001 OpenCyc.org, license is open source GNU LGPL.
+@
+
+
+1.2
+log
+@Updated javadoc comments.
+Employed apache-oro cache classes
+@
+text
+@d126 37
+d187 1
+d214 45
+d272 1
+a272 1
+     * @@return the <tt>Object</tt> which is the first second of the list.
+d276 1
+a276 1
+            throw new RuntimeException("First element not available for an empty CycList");
+d287 1
+a287 1
+            throw new RuntimeException("First element not available for an empty CycList");
+d292 11
+d316 18
+a333 1
+     * Returns a new <tt>List</tt> whose elements are the reverse of
+d348 98
+d525 1
+a525 1
+        Collections.sort(sortedList ,new CycListComparator());
+d538 19
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d7 1
+a7 1
+/*****************************************************************************
+d12 1
+a12 2
+ * @@author
+ *      Stephen L. Reed<P>
+d14 18
+a31 5
+ * Copyright 2001 OpenCyc.org, license is open source GNU LGPL.<p>
+ * <a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ *****************************************************************************/
+
+d38 1
+a38 1
+     * Construct a new <tt>CycList</tt> object.
+d44 1
+a44 1
+     * Construct a new <tt>CycList</tt> object, containing the elements of the
+a47 1
+     * @@see isValid
+d54 1
+a54 1
+     * Construct a new <tt>CycList</tt> object, containing as its first element
+d69 1
+a69 1
+     * Construct a new <tt>CycList</tt> object, containing as its sole element
+d79 1
+a79 1
+     * Construct a new <tt>CycList</tt> object, containing as its first element
+d91 3
+a93 3
+     * Construct a CycList using the semantics of Lisp symbolic expressions.
+     * 1.  construct(a, NIL) --> (a)
+     * 2.  construct(a, b) --> (a . b)
+d113 1
+a113 1
+     * Construct a new <tt>CycList<tt> object by parsing a string.
+d126 1
+a126 1
+     * Get the dotted element.
+d135 1
+a135 1
+     * Set the dotted element and set the improper list attribute to <tt>true</tt>.
+d143 1
+a143 1
+     * Return <tt>true</tt> if this is a proper list.
+d151 1
+a151 1
+     * Answer true iff the CycList contains valid elements.  This is a necessary, but
+d176 1
+a176 1
+     * Return the first element of the <tt>CycList</tt>.
+d187 1
+a187 1
+     * Return the second element of the <tt>CycList</tt>.
+d198 1
+a198 1
+     * Return the third element of the <tt>CycList</tt>.
+d209 1
+a209 1
+     * Return the CycList after removing the first element.
+d266 1
+a266 1
+     * Return a cyclified string representation of the OpenCyc <tt>CycList</tt>.
+d310 1
+a310 1
+     * Return a new CycList, which is sorted in the default collating sequence.
+d321 1
+a321 1
+     * Return a <tt>CycListVisitor</tt> enumeration of the non-CycList and non-nil elements.
+@
+
+
+1.1.1.1
+log
+@Imported sources
+@
+text
+@@

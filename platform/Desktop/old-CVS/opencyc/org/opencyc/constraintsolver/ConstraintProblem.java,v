@@ -1,0 +1,1981 @@
+head	1.31;
+access;
+symbols
+	PRE_1_0:1.30
+	start:1.1.1.1
+	opencyc:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.31
+date	2006.10.21.16.49.16;	author dmiles;	state Exp;
+branches;
+next	1.30;
+
+1.30
+date	2002.10.31.00.14.41;	author stephenreed;	state Exp;
+branches;
+next	1.29;
+
+1.29
+date	2001.10.17.23.44.19;	author stephenreed;	state Exp;
+branches;
+next	1.28;
+
+1.28
+date	2001.09.11.21.46.17;	author stephenreed;	state Exp;
+branches;
+next	1.27;
+
+1.27
+date	2001.09.11.13.56.34;	author stephenreed;	state Exp;
+branches;
+next	1.26;
+
+1.26
+date	2001.09.07.03.28.15;	author stephenreed;	state Exp;
+branches;
+next	1.25;
+
+1.25
+date	2001.09.06.21.43.25;	author stephenreed;	state Exp;
+branches;
+next	1.24;
+
+1.24
+date	2001.09.06.14.49.47;	author stephenreed;	state Exp;
+branches;
+next	1.23;
+
+1.23
+date	2001.09.05.22.58.59;	author stephenreed;	state Exp;
+branches;
+next	1.22;
+
+1.22
+date	2001.09.04.23.57.47;	author stephenreed;	state Exp;
+branches;
+next	1.21;
+
+1.21
+date	2001.09.04.14.30.23;	author stephenreed;	state Exp;
+branches;
+next	1.20;
+
+1.20
+date	2001.09.03.22.30.50;	author stephenreed;	state Exp;
+branches;
+next	1.19;
+
+1.19
+date	2001.08.31.23.30.33;	author stephenreed;	state Exp;
+branches;
+next	1.18;
+
+1.18
+date	2001.08.30.14.52.08;	author stephenreed;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2001.08.30.00.06.55;	author stephenreed;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2001.08.29.15.25.19;	author stephenreed;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2001.08.28.23.52.16;	author stephenreed;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2001.08.21.14.34.31;	author stephenreed;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2001.08.20.21.26.24;	author stephenreed;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2001.08.20.14.00.07;	author stephenreed;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2001.08.16.17.31.46;	author stephenreed;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2001.08.15.23.49.56;	author stephenreed;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2001.08.15.18.00.34;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2001.08.15.14.50.46;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2001.08.14.01.06.43;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2001.08.13.16.14.44;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2001.08.10.22.22.00;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2001.08.02.11.14.59;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2001.07.30.22.59.00;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2001.07.25.17.17.34;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2001.07.23.21.54.15;	author stephenreed;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2001.07.23.21.54.15;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.31
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental packages
+@
+text
+@package org.opencyc.constraintsolver;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import org.opencyc.api.CycAccess;
+import org.opencyc.api.CycApiException;
+import org.opencyc.cycobject.CycConstant;
+import org.opencyc.cycobject.CycFort;
+import org.opencyc.cycobject.CycList;
+import org.opencyc.cycobject.CycVariable;
+import org.opencyc.inferencesupport.Binding;
+import org.opencyc.inferencesupport.ConstraintRule;
+import org.opencyc.inferencesupport.Solution;
+
+/**
+ * <tt>ConstraintRule</tt> object to model the attributes and behavior of a constraint problem.<p>
+ * A <tt>ProblemParser</tt> object is created to parse the input constraint problem
+ * representation.<br>
+ * A <tt>ValueDomains</tt> object is created to model the variables and their value domains.<br>
+ * A <tt>VariableDomainPopulator</tt> object is created to model variables whose value domain
+ * cardinality exceeds a threshold for special case processing.
+ *
+ * @@version $Id: ConstraintProblem.java,v 1.30 2002/10/31 00:14:41 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class ConstraintProblem {
+
+    /**
+     * CycAccess object which provides the OpenCyc api.
+     */
+    CycAccess cycAccess;
+
+    /**
+     * <tt>ValueDomains</tt> object for this <tt>ConstraintProblem</tt>.
+     */
+    protected ValueDomains valueDomains = new ValueDomains(this);
+
+    /**
+     * <tt>NodeConsistencyAchiever</tt> for this <tt>ConstraintProblem</tt>.
+     */
+    protected NodeConsistencyAchiever nodeConsistencyAchiever = new NodeConsistencyAchiever(this);
+
+    /**
+     * <tt>RuleEvaluator</tt> for this <tt>ConstraintProblem</tt>.
+     */
+    protected RuleEvaluator ruleEvaluator = new RuleEvaluator(this);
+
+    /**
+     * <tt>ArgumentTypeConstrainer</tt> for this <tt>ConstraintProblem</tt>.
+     */
+    protected ArgumentTypeConstrainer argumentTypeConstrainer = new ArgumentTypeConstrainer(this);
+
+    /**
+     * <tt>Solution</tt> for this <tt>ConstraintProblem</tt>.
+     */
+    protected Solution solution;
+
+    /**
+     * <tt>ForwardCheckingSearcher</tt> for this <tt>ConstraintProblem</tt>.
+     */
+    protected ForwardCheckingSearcher forwardCheckingSearcher;
+
+    /**
+     * The OpenCyc microtheory in which the constraint rules should be asked.
+     */
+    public CycFort mt;
+
+    /**
+     * When <tt>true</tt> randomizes the order of the variables and domain values before
+     * beginning the search for a solution.  Do this when tuning search heuristics to avoid
+     * bias for a particular order of input.
+     */
+    public boolean randomizeInput = false;
+
+    /**
+     * The number of solutions requested.  When <tt>null</tt>, all solutions are sought.
+     */
+    public Integer nbrSolutionsRequested = new Integer(1);
+
+    /**
+     * The default verbosity of this object's output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    public static final int DEFAULT_VERBOSITY = 3;
+
+    /**
+     * Sets verbosity of this object's output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    protected int verbosity = DEFAULT_VERBOSITY;
+
+    /**
+     * Collection of the rules which populate variable domains.
+     */
+    protected ArrayList domainPopulationRules;
+
+    /**
+     * Collection of the constraint rules used in the search for
+     * solution(s).
+     */
+    protected ArrayList constraintRules;
+
+    /**
+     * Collection of the simplified constraint rules derived
+     * from the input problem <tt>CycList</tt>.  These include
+     * <tt>#$elementOf</tt> predicates which populate variable
+     * domains and then are discarded from the constraint rule
+     * set.
+     */
+    protected ArrayList simplifiedRules = new ArrayList();
+
+    /**
+     * <tt>ProblemParser</tt> object for this <tt>ConstraintProblem</tt>.
+     */
+    protected ProblemParser problemParser = new ProblemParser(this);
+
+    /**
+     * Collection of additional argument type constraint rules.
+     */
+    ArrayList argumentTypeConstraintRules = new ArrayList();
+
+    /**
+     * Collection of the constraint variables as <tt>CycVariable</tt> objects.
+     */
+    protected ArrayList variables = new ArrayList();
+
+    /**
+     * Number of KB asks performed during the search for solution(s).
+     */
+    protected int nbrAsks = 0;
+
+    /**
+     * The input problem <tt>CycList</tt>.
+     */
+    protected CycList problem = null;
+
+    /**
+     * Constructs a new <tt>ConstraintProblem</tt> object, creating a new <tt>CycAccess</tt>
+     * object.
+     */
+    public ConstraintProblem() {
+        this(initializeCycAccess());
+    }
+
+    /**
+     * Creates a <tt>CycAccess</tt> object to connect to the OpenCyc server and provide api
+     * services.
+     *
+     * @@return a <tt>CycAccess</tt> object to connect to the OpenCyc server and provide api
+     * services
+     */
+    protected static CycAccess initializeCycAccess() {
+        CycAccess cycAccess = null;
+        try {
+            cycAccess = new CycAccess();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Cannot access OpenCyc server " + e.getMessage());
+            System.exit(1);
+        }
+        return cycAccess;
+    }
+
+    /**
+     * Constructs a new <tt>ConstraintProblem</tt> object given an existing connection to the
+     * OpenCyc server.
+     *
+     * @@param cycAccess the <tt>CycAccess</tt> object to use for this constraint problem
+     */
+    public ConstraintProblem(CycAccess cycAccess) {
+        this.cycAccess = cycAccess;
+        try {
+            // Default microtheory
+            mt = cycAccess.makeCycConstant("EverythingPSC");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Cannot access OpenCyc server " + e.getMessage());
+            System.exit(1);
+        }
+        ruleEvaluator.initialize();
+    }
+
+    /**
+     * Solves a constraint problem and return a list of solutions if one or more
+     * was found, otherwise returns <tt>null</tt>.
+     *
+     * @@param solution the partial solution
+     * @@param variables the list of variables present in this constraint problem
+     * @@param constraintRules a list of constraint rules to further restrict the partial solution.
+     * @@return an <tt>ArrayList</tt> of solutions or <tt>null</tt> if no solutions were
+     * found.  Each solution is an <tt>ArrayList</tt> of variable binding <tt>ArrayList</tt>
+     * objects, each binding having the form of an <tt>ArrayList</tt> where the first
+     * element is the <tt>CycVariable</tt> and the second element is the domain value
+     * <tt>Object</tt>.
+     */
+    public ArrayList solveUsingPartialSolution(Solution solution,
+                                               ArrayList variables,
+                                               ArrayList constraintRules)
+        throws IOException, CycApiException {
+        CycList problem = new CycList();
+        problem.add(buildDomainPopulationRules(solution, variables));
+        problem.add(buildSolutionConstraint(solution));
+        problem.addAll(constraintRules);
+        return solve(problem);
+    }
+
+    /**
+     * Builds a list of domain population rules from the given partial solution object.
+     * <code>
+     * (#$elementOf ?var1 (#$TheSet value1_1 ... value1_N))
+     *       ...
+     * (#$elementOf ?varM (#$TheSet valueM_1 ... valueM_N))
+     * </code>
+     * @@param solution the partial solution
+     * @@param variables the list of variables present in this constraint problem
+     * @@return solution constraint built from the given partial solution object
+     */
+    protected ArrayList buildDomainPopulationRules(Solution solution, ArrayList variables)
+        throws IOException, CycApiException {
+        ArrayList domainPopulationRules = new ArrayList();
+        ArrayList partialSolution = null;
+        for (int i = 0; i < variables.size(); i++) {
+            CycVariable variable = (CycVariable) variables.get(i);
+            CycList elementOfClause = new CycList();
+            elementOfClause.add(CycAccess.elementOf);
+            ArrayList partialSolutions = solution.getSolutions();
+            for (int j = 0; j < partialSolutions.size(); j++) {
+                partialSolution = (ArrayList) partialSolution.get(j);
+                CycList theSetClause = new CycList();
+                theSetClause.add(CycAccess.current().getKnownConstantByName("#$TheSet"));
+                for (int k = 0;k < partialSolution.size(); k++) {
+                    Binding binding = (Binding) partialSolution.get(k);
+                    CycVariable boundVariable = binding.getCycVariable();
+                    if (variable.equals(boundVariable))
+                        theSetClause.add(binding.getValue());
+                }
+            }
+            domainPopulationRules.add(elementOfClause);
+        }
+        return domainPopulationRules;
+    }
+
+    /**
+     * Builds a constraint expression from the given partial solution object.
+     * <code>
+     * (#$or (#$and (#$equals ?var1 value1_1) ... (#$equals ?varN value1_N))
+     *       ...
+     *       (#$and (#$equals ?var1 valueM_1) ... (#$equals ?varN valueM_N)))
+     * </code>
+     * @@param solution a partial solution
+     * @@return solution constraint built from the given partial solution object
+     */
+    protected CycList buildSolutionConstraint(Solution solution)
+        throws IOException, CycApiException {
+        CycList solutionConstraint = new CycList();
+        solutionConstraint.add(CycAccess.or);
+        ArrayList partialSolutions = solution.getSolutions();
+        ArrayList partialSolution = null;
+        CycList andClause;
+        CycList equalsClause;
+        CycConstant equals = CycAccess.current().getKnownConstantByName("equals");
+        for (int i = 0; i < partialSolutions.size(); i++) {
+            partialSolution = (ArrayList) partialSolution.get(i);
+            andClause = new CycList();
+            solutionConstraint.add(andClause);
+            andClause.add(CycAccess.and);
+            for (int j = 0; j < partialSolution.size(); j++) {
+                Binding binding = (Binding) partialSolution.get(j);
+                CycVariable cycVariable = binding.getCycVariable();
+                Object value = binding.getValue();
+                equalsClause = new CycList();
+                andClause.add(equalsClause);
+                equalsClause.add(equals);
+                equalsClause.add(cycVariable);
+                equalsClause.add(value);
+            }
+        }
+        return solutionConstraint;
+    }
+
+
+    /**
+     * Solves a constraint problem and return a list of solutions if one or more
+     * was found, otherwise returns <tt>null</tt>.
+     *
+     * @@param problem a constraint problem in the form of an OpenCyc query string
+     * @@return an <tt>ArrayList</tt> of solutions or <tt>null</tt> if no solutions were
+     * found.  Each solution is an <tt>ArrayList</tt> of variable binding <tt>ArrayList</tt>
+     * objects, each binding having the form of an <tt>ArrayList</tt> where the first
+     * element is the <tt>CycVariable</tt> and the second element is the domain value
+     * <tt>Object</tt>.
+     */
+    public ArrayList solve(String problemString) throws CycApiException{
+        return solve(cycAccess.makeCycList(problemString));
+    }
+
+    /**
+     * Solves a constraint problem and return a list of solutions if one or more
+     * was found, otherwise returns <tt>null</tt>.
+     *
+     * @@param problem a constraint problem in the form of an OpenCyc query <tt>CycList</tt>
+     * @@return an <tt>ArrayList</tt> of solutions or <tt>null</tt> if no solutions were
+     * found.  Each solution is an <tt>ArrayList</tt> of variable binding <tt>ArrayList</tt>
+     * objects, each binding having the form of an <tt>ArrayList</tt> where the first
+     * element is the <tt>CycVariable</tt> and the second element is the domain value
+     * <tt>Object</tt>.
+     */
+    public ArrayList solve(CycList problem) {
+        long startMilliseconds = System.currentTimeMillis();
+        this.problem = problem;
+        solution = new Solution(nbrSolutionsRequested, verbosity);
+        try {
+            problemParser.extractRulesAndDomains();
+            problemParser.gatherVariables();
+            problemParser.initializeDomains();
+            if (variables.size() > 0)
+                nodeConsistencyAchiever.applyUnaryRulesAndPropagate();
+            valueDomains.initializeDomainValueMarking();
+            if (verbosity > 0) {
+                if (nbrSolutionsRequested == null)
+                    System.out.println("Solving for all solutions");
+                else if (nbrSolutionsRequested.intValue() == 1)
+                    System.out.println("Solving for the first solution");
+                else
+                    System.out.println("Solving for " + nbrSolutionsRequested + " solutions");
+            }
+            forwardCheckingSearcher  = new ForwardCheckingSearcher(this);
+            forwardCheckingSearcher.search(variables, 1);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error accessing OpenCyc " + e.getMessage());
+            System.exit(1);
+        }
+        long endMilliseconds = System.currentTimeMillis();
+        if (verbosity > 0)
+            System.out.println("  " + (endMilliseconds - startMilliseconds) + " milliseconds");
+
+        return solution.getSolutions();
+    }
+
+   /**
+     * Returns the number of variable domain populating <tt>ConstraintRule</tt>
+     * objects derived from the input problem.
+     *
+     * @@return the number of variable domain populating <tt>ConstraintRule</tt> objects.
+     */
+    public int getNbrDomainPopulationRules() {
+        return domainPopulationRules.size();
+    }
+
+    /**
+     * Returns the number of constraint <tt>ConstraintRule</tt> objects derived from
+     * the input problem.
+     *
+     * @@return the number of constraint <tt>ConstraintRule</tt> objects.
+     */
+    public int getNbrConstraintRules() {
+        return constraintRules.size();
+    }
+
+    /**
+     * Returns the number of <tt>Variable</tt> objects derived from
+     * the input problem.
+     *
+     * @@return the number of <tt>CycVariable</tt> objects.
+     */
+    public int getNbrVariables() {
+        return variables.size();
+    }
+
+    /**
+     * Displays the input constraint rules.
+     */
+    public void displayConstraintRules() {
+        if (domainPopulationRules.size() > 0) {
+            System.out.println("Domain Population Rules");
+            for (int i = 0; i < domainPopulationRules.size(); i++) {
+                ConstraintRule rule = (ConstraintRule) domainPopulationRules.get(i);
+                if (rule.nbrFormulaInstances == -1)
+                    System.out.println("  " + rule.cyclify());
+                else
+                    System.out.println("  " + rule.cyclify() + "  " +
+                                       rule.nbrFormulaInstances + " instances");
+            }
+        }
+        else
+            System.out.println("No domain population rules");
+
+        if (constraintRules.size() > 0) {
+            System.out.println("Constraint Rules");
+            for (int i = 0; i < constraintRules.size(); i++) {
+                ConstraintRule rule = (ConstraintRule) constraintRules.get(i);
+                if (rule.nbrFormulaInstances == -1)
+                    System.out.println("  " + rule.cyclify());
+                else
+                    System.out.println("  " + rule.cyclify() + "  " +
+                                       rule.nbrFormulaInstances + " instances");
+            }
+        }
+        else
+            System.out.println("No Constraint rules");
+        System.out.println();
+    }
+
+    /**
+     * Displays the variables and their value domains.
+     */
+    public void displayVariablesAndDomains() {
+        valueDomains.displayVariablesAndDomains();
+    }
+
+    /**
+     * Sets verbosity of this object's output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     *
+     * @@param verbosity 0 --> quiet ... 9 -> maximum diagnostic input
+     */
+    public void setVerbosity(int verbosity) {
+        this.verbosity = verbosity;
+        problemParser.setVerbosity(verbosity);
+        valueDomains.setVerbosity(verbosity);
+        argumentTypeConstrainer.setVerbosity(verbosity);
+        nodeConsistencyAchiever.setVerbosity(verbosity);
+        ruleEvaluator.setVerbosity(verbosity);
+        if (forwardCheckingSearcher != null)
+            forwardCheckingSearcher.setVerbosity(verbosity);
+        if (solution != null)
+            solution.setVerbosity(verbosity);
+    }
+
+
+}@
+
+
+1.30
+log
+@Slight code fixes for UML state machine support.
+@
+text
+@a2 1
+import java.util.*;
+d4 11
+a14 3
+import org.opencyc.cycobject.*;
+import org.opencyc.api.*;
+import org.opencyc.inferencesupport.*;
+d24 1
+a24 1
+ * @@version $Id: ConstraintProblem.java,v 1.29 2001/10/17 23:44:19 stephenreed Exp $
+@
+
+
+1.29
+log
+@Added CycApiException, and replaced throws to IOException with it.
+@
+text
+@d17 1
+a17 1
+ * @@version $Id: ConstraintProblem.java,v 1.28 2001/09/11 21:46:17 stephenreed Exp $
+d93 1
+a93 1
+     * The default verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+d99 1
+a99 1
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+d428 1
+a428 1
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+@
+
+
+1.28
+log
+@Constraint problems now enter the cyc api initially as queries.
+@
+text
+@d17 1
+a17 1
+ * @@version $Id: ConstraintProblem.java,v 1.27 2001/09/11 13:56:34 stephenreed Exp $
+d212 2
+a213 1
+                                               ArrayList constraintRules) throws IOException {
+d233 1
+a233 1
+        throws IOException {
+d267 2
+a268 1
+    protected CycList buildSolutionConstraint(Solution solution) throws IOException {
+d307 1
+a307 1
+    public ArrayList solve(String problemString) {
+d344 1
+a344 1
+        catch (IOException e) {
+@
+
+
+1.27
+log
+@Removing domain population logic from the constraint solver, having moved that behavior to the query processor.
+@
+text
+@d17 1
+a17 1
+ * @@version $Id: ConstraintProblem.java,v 1.26 2001/09/07 03:28:15 stephenreed Exp $
+a50 5
+     * Variable Domain Populator for this <tt>ConstraintProblem</tt>.
+     */
+    protected VariableDomainPopulator variableDomainPopulator = new VariableDomainPopulator(this);
+
+    /**
+d201 2
+a202 1
+     * @@param solution a partial solution
+d211 1
+d214 20
+a233 2
+        problem.add(CycAccess.and);
+        ArrayList partialSolutions = solution.getSolutions();
+d235 32
+a267 1
+        problem.add(solutionConstraint);
+d269 2
+d290 1
+a290 2
+        problem.addAll(constraintRules);
+        return solve(problem);
+d293 1
+d327 1
+a434 1
+        variableDomainPopulator.setVerbosity(verbosity);
+a441 11
+    }
+
+    /**
+     * Sets the domain size threshold, beyond which the population of a
+     * variable's domain is typically postponed until the forward checking
+     * search.
+     *
+     * @@param domainSizeThreshold domain size threshold
+     */
+    public void setDomainSizeThreshold(int domainSizeThreshold) {
+        variableDomainPopulator.setDomainSizeThreshold(domainSizeThreshold);
+@
+
+
+1.26
+log
+@Beginning unit test cases for query processor.
+@
+text
+@d17 1
+a17 1
+ * @@version $Id: ConstraintProblem.java,v 1.25 2001/09/06 21:43:25 stephenreed Exp $
+a70 5
+     * <tt>Backchainer</tt> for this <tt>ConstraintProblem</tt>.
+     */
+    protected Backchainer backchainer = new Backchainer();
+
+    /**
+d206 44
+d277 1
+a277 8
+            if (! problemParser.extractRulesAndDomains()) {
+                long endMilliseconds = System.currentTimeMillis();
+                if (verbosity > 0) {
+                    System.out.println("No solution because an input constraint cannot be satisfied");
+                    System.out.println((endMilliseconds - startMilliseconds) + " milliseconds");
+                }
+                return new ArrayList();
+            }
+d283 2
+a284 7
+                if (nbrSolutionsRequested == null) {
+                    if (backchainer.backchainDepth > 0)
+                        System.out.println("Solving for all solutions at backchain depth " +
+                                           backchainer.backchainDepth);
+                    else
+                        System.out.println("Solving for all solutions");
+                }
+a387 1
+        backchainer.setVerbosity(verbosity);
+a393 22
+    }
+
+    /**
+     * Sets the maximum depth of backchaining from an input constraint rule. A value of zero indicates
+     * no backchaining.
+     *
+     * @@param maxBackchainDepth the maximum depth of backchaining, or zero if no backchaing on the input
+     * constraint rules
+     */
+    public void setMaxBackchainDepth(int maxBackchainDepth) {
+        backchainer.maxBackchainDepth = maxBackchainDepth;
+    }
+
+    /**
+     * Sets whether backchaining is performed on rules with the predicate of #$isa or #$genls.  Large
+     * numbers of rules conclude #$isa or #$genls, which are not usually relevant - so the default is
+     * false.
+     *
+     * @@param sbhlBackchain whether backchaining is performed on rules with the predicate of #$isa or #$genls
+     */
+    public void setSbhlBackchain(boolean sbhlBackchain) {
+        backchainer.setSbhlBackchain(sbhlBackchain);
+@
+
+
+1.25
+log
+@Completed renaming of Rule to ConstraintRule class
+@
+text
+@d17 1
+a17 1
+ * @@version $Id: ConstraintProblem.java,v 1.24 2001/09/06 14:49:47 stephenreed Exp $
+d236 1
+a236 1
+        solution = new Solution(nbrSolutionsRequested);
+d366 2
+a367 1
+        solution.setVerbosity(verbosity);
+@
+
+
+1.24
+log
+@Renamed Rule to ConstraintRule, moved QueryLiteral class to inferencesupport.
+@
+text
+@d17 1
+a17 1
+ * @@version $Id: ConstraintProblem.java,v 1.23 2001/09/05 22:58:59 stephenreed Exp $
+d73 1
+a73 1
+    protected Backchainer backchainer = new Backchainer(this);
+d78 1
+a78 1
+    protected Solution solution = new Solution(this);
+d88 1
+a88 1
+    public CycConstant mt;
+d236 1
+d275 1
+a275 1
+        return solution.solutions;
+d377 1
+a377 1
+        backchainer.setMaxBackchainDepth(maxBackchainDepth);
+@
+
+
+1.23
+log
+@Reworking population of high cardinality domains
+@
+text
+@d7 1
+d10 1
+a10 1
+ * <tt>Rule</tt> object to model the attributes and behavior of a constraint problem.<p>
+d17 1
+a17 1
+ * @@version $Id: ConstraintProblem.java,v 1.22 2001/09/04 23:57:47 stephenreed Exp $
+d278 1
+a278 1
+     * Returns the number of variable domain populating <tt>Rule</tt>
+d281 1
+a281 1
+     * @@return the number of variable domain populating <tt>Rule</tt> objects.
+d288 1
+a288 1
+     * Returns the number of constraint <tt>Rule</tt> objects derived from
+d291 1
+a291 1
+     * @@return the number of constraint <tt>Rule</tt> objects.
+d314 1
+a314 1
+                Rule rule = (Rule) domainPopulationRules.get(i);
+d328 1
+a328 1
+                Rule rule = (Rule) constraintRules.get(i);
+@
+
+
+1.22
+log
+@Continued refactoring domain population methods.
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: ConstraintProblem.java,v 1.21 2001/09/04 14:30:23 stephenreed Exp $
+d116 1
+a116 1
+    protected ArrayList domainPopulationRules = new ArrayList();
+d122 1
+a122 1
+    protected ArrayList constraintRules = new ArrayList();
+a244 1
+            variableDomainPopulator.initializeDomains();
+@
+
+
+1.21
+log
+@Renamed HighCardinalityDomains to VariableDomainPopulator, in preparation
+for a reworking of the variable domain population technique.  The previous
+idea of augmenting the constraint problem with the constraint problem argument
+constraints is not efficient in a few cases where most of the rules involve
+high cardinality situations.
+
+The new technique will determine the best rule to instantiate domains for each
+variable, and whether to perform the instantiation immediately, or to postpone it
+for the forward checking search.  A new api call was added to get the instantiation
+counts from the OpenCyc indexing mechanism.
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: ConstraintProblem.java,v 1.20 2001/09/03 22:30:50 stephenreed Exp $
+d50 1
+a50 1
+     * High cardinality domains for this <tt>ConstraintProblem</tt>.
+d52 1
+a52 1
+    protected VariableDomainPopulator variableDomainPopulator = new VariableDomainPopulator();
+d245 1
+a245 1
+            problemParser.initializeDomains();
+@
+
+
+1.20
+log
+@Reworking ProblemParser to handle high cardinality domains better
+@
+text
+@d13 1
+a13 1
+ * A <tt>HighCardinalityDomains</tt> object is created to model variables whose value domain
+d16 1
+a16 1
+ * @@version $Id: ConstraintProblem.java,v 1.19 2001/08/31 23:30:33 stephenreed Exp $
+d52 1
+a52 1
+    protected HighCardinalityDomains highCardinalityDomains = new HighCardinalityDomains();
+d102 6
+d111 1
+a111 1
+    protected int verbosity = 8;
+a348 11
+     * Set the value of the variable value domain size beyond which the initial values
+     * are not all fetched from the KB using #$isa, rather some other more specific
+     * constraint rule populates the variable domain as needed.
+     *
+     * @@param domainSizeThreshold an <tt>int</tt> which is the new threshold.
+     */
+    public void setDomainSizeThreshold(int domainSizeThreshold) {
+        highCardinalityDomains.domainSizeThreshold = domainSizeThreshold;
+    }
+
+    /**
+d358 1
+a358 1
+        highCardinalityDomains.setVerbosity(verbosity);
+d389 13
+@
+
+
+1.19
+log
+@Continued backchain test cases
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: ConstraintProblem.java,v 1.18 2001/08/30 14:52:08 stephenreed Exp $
+d307 8
+a314 2
+            for (int i = 0; i < domainPopulationRules.size(); i++)
+                System.out.println("  " + domainPopulationRules.get(i));
+d321 8
+a328 2
+            for (int i = 0; i < constraintRules.size(); i++)
+                System.out.println("  " + constraintRules.get(i));
+@
+
+
+1.18
+log
+@Abbreviated diagnostic output for deep backchain examination.
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: ConstraintProblem.java,v 1.17 2001/08/30 00:06:55 stephenreed Exp $
+d233 1
+a233 1
+                    System.out.println("No solution because an input fact was not true");
+@
+
+
+1.17
+log
+@Changed CycAccess parameters from CycConstants to CycForts, more backchaining tests
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: ConstraintProblem.java,v 1.16 2001/08/29 15:25:19 stephenreed Exp $
+d153 2
+a154 1
+     * Constructs a new <tt>ConstraintProblem</tt> object.
+d157 12
+d171 19
+a189 2
+            if (verbosity > 3)
+                System.out.println("Initialized OpenCyc connection.");
+d244 7
+a250 2
+                if (nbrSolutionsRequested == null)
+                    System.out.println("Solving for all solutions");
+d266 1
+a266 1
+            System.out.println((endMilliseconds - startMilliseconds) + " milliseconds");
+d305 16
+a320 7
+        System.out.println("Domain Population Rules\n");
+        for (int i = 0; i < domainPopulationRules.size(); i++)
+            System.out.println("  " + domainPopulationRules.get(i));
+
+        System.out.println("\nConstraint Rules\n");
+        for (int i = 0; i < constraintRules.size(); i++)
+            System.out.println("  " + constraintRules.get(i));
+@
+
+
+1.16
+log
+@More backchain test cases
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: ConstraintProblem.java,v 1.15 2001/08/28 23:52:16 stephenreed Exp $
+d326 11
+@
+
+
+1.15
+log
+@Added more backchain support - testing with one level of backchaining
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: ConstraintProblem.java,v 1.14 2001/08/21 14:34:31 stephenreed Exp $
+a170 42
+     * Set the value of the variable value domain size beyond which the initial values
+     * are not all fetched from the KB using #$isa, rather some other more specific
+     * constraint rule populates the variable domain as needed.
+     *
+     * @@param domainSizeThreshold an <tt>int</tt> which is the new threshold.
+     */
+    public void setDomainSizeThreshold(int domainSizeThreshold) {
+        highCardinalityDomains.domainSizeThreshold = domainSizeThreshold;
+    }
+
+    /**
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     *
+     * @@param verbosity 0 --> quiet ... 9 -> maximum diagnostic input
+     */
+    public void setVerbosity(int verbosity) {
+        this.verbosity = verbosity;
+        problemParser.setVerbosity(verbosity);
+        valueDomains.setVerbosity(verbosity);
+        highCardinalityDomains.setVerbosity(verbosity);
+        argumentTypeConstrainer.setVerbosity(verbosity);
+        backchainer.setVerbosity(verbosity);
+        nodeConsistencyAchiever.setVerbosity(verbosity);
+        ruleEvaluator.setVerbosity(verbosity);
+        if (forwardCheckingSearcher != null)
+            forwardCheckingSearcher.setVerbosity(verbosity);
+        solution.setVerbosity(verbosity);
+    }
+
+    /**
+     * Sets the maximum depth of backchaining from an input constraint rule. A value of zero indicates
+     * no backchaining.
+     *
+     * @@param maxBackchainDepth the maximum depth of backchaining, or zero if no backchaing on the input
+     * constraint rules
+     */
+    public void setMaxBackchainDepth(int maxBackchainDepth) {
+        backchainer.setMaxBackchainDepth(maxBackchainDepth);
+    }
+
+    /**
+d210 1
+a210 1
+            if (variables.size() > 1)
+d284 42
+@
+
+
+1.14
+log
+@Implemented gathering of candidate backchain rules from the KB
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: ConstraintProblem.java,v 1.13 2001/08/20 21:26:24 stephenreed Exp $
+d202 11
+d242 8
+a249 1
+            problemParser.extractRulesAndDomains();
+@
+
+
+1.13
+log
+@Unit tests for argument type constraint augmentation now work.
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: ConstraintProblem.java,v 1.12 2001/08/20 14:00:07 stephenreed Exp $
+d234 2
+a235 1
+            nodeConsistencyAchiever.applyUnaryRulesAndPropagate();
+@
+
+
+1.12
+log
+@Geting unit tests working for ProblemParser and arg constraints gathering.
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: ConstraintProblem.java,v 1.11 2001/08/16 17:31:46 stephenreed Exp $
+d108 7
+a114 1
+     * The input problem <tt>CycList</tt>.
+d116 1
+a116 1
+    protected CycList problem = null;
+d125 1
+a125 12
+    protected ArrayList simplifiedRules;
+
+    /**
+     * Collection of the rules which populate variable domains.
+     */
+    protected ArrayList domainPopulationRules = new ArrayList();
+
+    /**
+     * Collection of the constraint rules used in the search for
+     * solution(s).
+     */
+    protected ArrayList constraintRules = new ArrayList();
+d148 5
+d158 2
+@
+
+
+1.11
+log
+@Completed European Cathedrals use case accessing OpenCyc.
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: ConstraintProblem.java,v 1.10 2001/08/15 23:49:56 stephenreed Exp $
+a44 5
+     * <tt>ProblemParser</tt> object for this <tt>ConstraintProblem</tt>.
+     */
+    protected ProblemParser problemParser = new ProblemParser(this);
+
+    /**
+d131 5
+@
+
+
+1.10
+log
+@Cached CycAccess instances by thread and introduced European Cathedrals
+constraint problem that evaluates its rules in OpenCyc.
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: ConstraintProblem.java,v 1.9 2001/08/15 18:00:34 stephenreed Exp $
+d234 8
+@
+
+
+1.9
+log
+@Fixed backchainer to pass unit tests with OpenCyc connection
+@
+text
+@d4 1
+d16 1
+a16 1
+ * @@version $Id: ConstraintProblem.java,v 1.8 2001/08/15 14:50:46 stephenreed Exp $
+d198 16
+d228 14
+a241 7
+        problemParser.extractRulesAndDomains();
+        problemParser.gatherVariables();
+        problemParser.initializeDomains();
+        nodeConsistencyAchiever.applyUnaryRulesAndPropagate();
+        valueDomains.initializeDomainValueMarking();
+        forwardCheckingSearcher  = new ForwardCheckingSearcher(this);
+        forwardCheckingSearcher.search(variables, 1);
+@
+
+
+1.8
+log
+@Made CycAccess the factory object for CycLists
+@
+text
+@d15 1
+a15 1
+ * @@version $Id: ConstraintProblem.java,v 1.7 2001/08/14 01:06:43 stephenreed Exp $
+d164 1
+@
+
+
+1.7
+log
+@Fixed double newlines.
+@
+text
+@d5 1
+d15 1
+a15 1
+ * @@version $Id: ConstraintProblem.java,v 1.6 2001/08/13 16:14:44 stephenreed Exp $
+d39 5
+d91 1
+a91 1
+    public CycConstant mt = CycConstant.makeCycConstant("EverythingPSC");
+d155 9
+@
+
+
+1.6
+log
+@Revised copyright notice to Cycorp Inc.
+@
+text
+@d1 257
+a257 257
+package org.opencyc.constraintsolver;
+
+import java.util.*;
+import org.opencyc.cycobject.*;
+
+/**
+ * <tt>Rule</tt> object to model the attributes and behavior of a constraint problem.<p>
+ * A <tt>ProblemParser</tt> object is created to parse the input constraint problem
+ * representation.<br>
+ * A <tt>ValueDomains</tt> object is created to model the variables and their value domains.<br>
+ * A <tt>HighCardinalityDomains</tt> object is created to model variables whose value domain
+ * cardinality exceeds a threshold for special case processing.
+ *
+ * @@version $Id: ConstraintProblem.java,v 1.5 2001/08/10 22:22:00 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class ConstraintProblem {
+
+    /**
+     * <tt>ProblemParser</tt> object for this <tt>ConstraintProblem</tt>.
+     */
+    protected ProblemParser problemParser = new ProblemParser(this);
+
+    /**
+     * <tt>ValueDomains</tt> object for this <tt>ConstraintProblem</tt>.
+     */
+    protected ValueDomains valueDomains = new ValueDomains(this);
+
+    /**
+     * High cardinality domains for this <tt>ConstraintProblem</tt>.
+     */
+    protected HighCardinalityDomains highCardinalityDomains = new HighCardinalityDomains();
+
+    /**
+     * <tt>NodeConsistencyAchiever</tt> for this <tt>ConstraintProblem</tt>.
+     */
+    protected NodeConsistencyAchiever nodeConsistencyAchiever = new NodeConsistencyAchiever(this);
+
+    /**
+     * <tt>RuleEvaluator</tt> for this <tt>ConstraintProblem</tt>.
+     */
+    protected RuleEvaluator ruleEvaluator = new RuleEvaluator(this);
+
+    /**
+     * <tt>ArgumentTypeConstrainer</tt> for this <tt>ConstraintProblem</tt>.
+     */
+    protected ArgumentTypeConstrainer argumentTypeConstrainer = new ArgumentTypeConstrainer(this);
+
+    /**
+     * <tt>Backchainer</tt> for this <tt>ConstraintProblem</tt>.
+     */
+    protected Backchainer backchainer = new Backchainer(this);
+
+    /**
+     * <tt>Solution</tt> for this <tt>ConstraintProblem</tt>.
+     */
+    protected Solution solution = new Solution(this);
+
+    /**
+     * <tt>ForwardCheckingSearcher</tt> for this <tt>ConstraintProblem</tt>.
+     */
+    protected ForwardCheckingSearcher forwardCheckingSearcher;
+
+    /**
+     * The OpenCyc microtheory in which the constraint rules should be asked.
+     */
+    public CycConstant mt = CycConstant.makeCycConstant("EverythingPSC");
+
+    /**
+     * When <tt>true</tt> randomizes the order of the variables and domain values before
+     * beginning the search for a solution.  Do this when tuning search heuristics to avoid
+     * bias for a particular order of input.
+     */
+    public boolean randomizeInput = false;
+
+    /**
+     * The number of solutions requested.  When <tt>null</tt>, all solutions are sought.
+     */
+    public Integer nbrSolutionsRequested = new Integer(1);
+
+    /**
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    protected int verbosity = 8;
+
+    /**
+     * The input problem <tt>CycList</tt>.
+     */
+    protected CycList problem = null;
+
+    /**
+     * Collection of the simplified constraint rules derived
+     * from the input problem <tt>CycList</tt>.  These include
+     * <tt>#$elementOf</tt> predicates which populate variable
+     * domains and then are discarded from the constraint rule
+     * set.
+     */
+    protected ArrayList simplifiedRules;
+
+    /**
+     * Collection of the rules which populate variable domains.
+     */
+    protected ArrayList domainPopulationRules = new ArrayList();
+
+    /**
+     * Collection of the constraint rules used in the search for
+     * solution(s).
+     */
+    protected ArrayList constraintRules = new ArrayList();
+
+    /**
+     * Collection of additional argument type constraint rules.
+     */
+    ArrayList argumentTypeConstraintRules = new ArrayList();
+
+    /**
+     * Collection of the constraint variables as <tt>CycVariable</tt> objects.
+     */
+    protected ArrayList variables = new ArrayList();
+
+    /**
+     * Number of KB asks performed during the search for solution(s).
+     */
+    protected int nbrAsks = 0;
+
+    /**
+     * Constructs a new <tt>ConstraintProblem</tt> object.
+     */
+    public ConstraintProblem() {
+    }
+
+    /**
+     * Set the value of the variable value domain size beyond which the initial values
+     * are not all fetched from the KB using #$isa, rather some other more specific
+     * constraint rule populates the variable domain as needed.
+     *
+     * @@param domainSizeThreshold an <tt>int</tt> which is the new threshold.
+     */
+    public void setDomainSizeThreshold(int domainSizeThreshold) {
+        highCardinalityDomains.domainSizeThreshold = domainSizeThreshold;
+    }
+
+    /**
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     *
+     * @@param verbosity 0 --> quiet ... 9 -> maximum diagnostic input
+     */
+    public void setVerbosity(int verbosity) {
+        this.verbosity = verbosity;
+        problemParser.setVerbosity(verbosity);
+        valueDomains.setVerbosity(verbosity);
+        highCardinalityDomains.setVerbosity(verbosity);
+        argumentTypeConstrainer.setVerbosity(verbosity);
+        backchainer.setVerbosity(verbosity);
+        nodeConsistencyAchiever.setVerbosity(verbosity);
+        ruleEvaluator.setVerbosity(verbosity);
+        if (forwardCheckingSearcher != null)
+            forwardCheckingSearcher.setVerbosity(verbosity);
+        solution.setVerbosity(verbosity);
+    }
+    /**
+     * Solves a constraint problem and return a list of solutions if one or more
+     * was found, otherwise returns <tt>null</tt>.
+     *
+     * @@param problem a constraint problem in the form of an OpenCyc query <tt>CycList</tt>
+     * @@return an <tt>ArrayList</tt> of solutions or <tt>null</tt> if no solutions were
+     * found.  Each solution is an <tt>ArrayList</tt> of variable binding <tt>ArrayList</tt>
+     * objects, each binding having the form of an <tt>ArrayList</tt> where the first
+     * element is the <tt>CycVariable</tt> and the second element is the domain value
+     * <tt>Object</tt>.
+     */
+    public ArrayList solve(CycList problem) {
+        long startMilliseconds = System.currentTimeMillis();
+        this.problem = problem;
+        problemParser.extractRulesAndDomains();
+        problemParser.gatherVariables();
+        problemParser.initializeDomains();
+        nodeConsistencyAchiever.applyUnaryRulesAndPropagate();
+        valueDomains.initializeDomainValueMarking();
+        forwardCheckingSearcher  = new ForwardCheckingSearcher(this);
+        forwardCheckingSearcher.search(variables, 1);
+        long endMilliseconds = System.currentTimeMillis();
+        if (verbosity > 0)
+            System.out.println((endMilliseconds - startMilliseconds) + " milliseconds");
+
+        return solution.solutions;
+    }
+
+   /**
+     * Returns the number of variable domain populating <tt>Rule</tt>
+     * objects derived from the input problem.
+     *
+     * @@return the number of variable domain populating <tt>Rule</tt> objects.
+     */
+    public int getNbrDomainPopulationRules() {
+        return domainPopulationRules.size();
+    }
+
+    /**
+     * Returns the number of constraint <tt>Rule</tt> objects derived from
+     * the input problem.
+     *
+     * @@return the number of constraint <tt>Rule</tt> objects.
+     */
+    public int getNbrConstraintRules() {
+        return constraintRules.size();
+    }
+
+    /**
+     * Returns the number of <tt>Variable</tt> objects derived from
+     * the input problem.
+     *
+     * @@return the number of <tt>CycVariable</tt> objects.
+     */
+    public int getNbrVariables() {
+        return variables.size();
+    }
+
+    /**
+     * Displays the input constraint rules.
+     */
+    public void displayConstraintRules() {
+        System.out.println("Domain Population Rules\n");
+        for (int i = 0; i < domainPopulationRules.size(); i++)
+            System.out.println("  " + domainPopulationRules.get(i));
+
+        System.out.println("\nConstraint Rules\n");
+        for (int i = 0; i < constraintRules.size(); i++)
+            System.out.println("  " + constraintRules.get(i));
+    }
+
+    /**
+     * Displays the variables and their value domains.
+     */
+    public void displayVariablesAndDomains() {
+        valueDomains.displayVariablesAndDomains();
+    }
+@
+
+
+1.5
+log
+@Completed coding and unit test of standalone constraint solver.
+Calls to OpenCyc are yet to be included.
+Unit test demonstrates solution of the Zebra puzzle in CycL form.
+@
+text
+@d14 1
+a14 1
+ * @@version $Id: ConstraintProblem.java,v 1.4 2001/08/02 11:14:59 stephenreed Exp $
+d17 1
+a17 1
+ * <p>Copyright 2001 OpenCyc.org, license is open source GNU LGPL.
+@
+
+
+1.4
+log
+@Continued coding methods in ForwardCheckingSearcher.  Removed search from unit tests until done.
+@
+text
+@d1 257
+a257 235
+package org.opencyc.constraintsolver;
+
+import java.util.*;
+import org.opencyc.cycobject.*;
+
+/**
+ * <tt>Rule</tt> object to model the attributes and behavior of a constraint problem.<p>
+ * A <tt>ProblemParser</tt> object is created to parse the input constraint problem
+ * representation.<br>
+ * A <tt>ValueDomains</tt> object is created to model the variables and their value domains.<br>
+ * A <tt>HighCardinalityDomains</tt> object is created to model variables whose value domain
+ * cardinality exceeds a threshold for special case processing.
+ *
+ * @@version $Id: ConstraintProblem.java,v 1.3 2001/07/30 22:59:00 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 OpenCyc.org, license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class ConstraintProblem {
+
+    /**
+     * <tt>ProblemParser</tt> object for this <tt>ConstraintProblem</tt>.
+     */
+    protected ProblemParser problemParser = new ProblemParser(this);
+
+    /**
+     * <tt>ValueDomains</tt> object for this <tt>ConstraintProblem</tt>.
+     */
+    protected ValueDomains valueDomains = new ValueDomains(this);
+
+    /**
+     * High cardinality domains for this <tt>ConstraintProblem</tt>.
+     */
+    protected HighCardinalityDomains highCardinalityDomains = new HighCardinalityDomains();
+
+    /**
+     * <tt>NodeConsistencyAchiever</tt> for this <tt>ConstraintProblem</tt>.
+     */
+    protected NodeConsistencyAchiever nodeConsistencyAchiever = new NodeConsistencyAchiever(this);
+
+    /**
+     * <tt>RuleEvaluator</tt> for this <tt>ConstraintProblem</tt>.
+     */
+    protected RuleEvaluator ruleEvaluator = new RuleEvaluator(this);
+
+    /**
+     * <tt>ForwardCheckingSearcher</tt> for this <tt>ConstraintProblem</tt>.
+     */
+    protected ForwardCheckingSearcher forwardCheckingSearcher = new ForwardCheckingSearcher(this);
+
+    /**
+     * <tt>Solution</tt> for this <tt>ConstraintProblem</tt>.
+     */
+    protected Solution solution = new Solution(this);
+
+    /**
+     * The OpenCyc microtheory in which the constraint rules should be asked.
+     */
+    public CycConstant mt = CycConstant.makeCycConstant("EverythingPSC");
+
+    /**
+     * When <tt>true</tt> randomizes the order of the variables and domain values before
+     * beginning the search for a solution.  Do this when tuning search heuristics to avoid
+     * bias for a particular order of input.
+     */
+    public boolean randomizeInput = false;
+
+    /**
+     * The number of solutions requested.  When <tt>null</tt>, all solutions are sought.
+     */
+    public Integer nbrSolutionsRequested = new Integer(1);
+
+    /**
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    protected int verbosity = 9;
+
+    /**
+     * The input problem <tt>CycList</tt>.
+     */
+    protected CycList problem = null;
+
+    /**
+     * Collection of the simplified constraint rules derived
+     * from the input problem <tt>CycList</tt>.  These include
+     * <tt>#$elementOf</tt> predicates which populate variable
+     * domains and then are discarded from the constraint rule
+     * set.
+     */
+    protected ArrayList simplifiedRules;
+
+    /**
+     * Collection of the rules which populate variable domains.
+     */
+    protected ArrayList domainPopulationRules = new ArrayList();
+
+    /**
+     * Collection of the constraint rules used in the search for
+     * solution(s).
+     */
+    protected ArrayList constraintRules = new ArrayList();
+
+    /**
+     * Collection of the constraint variables as <tt>CycVariable</tt> objects.
+     */
+    protected ArrayList variables = new ArrayList();
+
+    /**
+     * Number of KB asks performed during the search for solution(s).
+     */
+    protected int nbrAsks = 0;
+
+    /**
+     * Constructs a new <tt>ConstraintProblem</tt> object.
+     */
+    public ConstraintProblem() {
+    }
+
+    /**
+     * Set the value of the variable value domain size beyond which the initial values
+     * are not all fetched from the KB using #$isa, rather some other more specific
+     * constraint rule populates the variable domain as needed.
+     *
+     * @@param domainSizeThreshold an <tt>int</tt> which is the new threshold.
+     */
+    public void setDomainSizeThreshold(int domainSizeThreshold) {
+        highCardinalityDomains.domainSizeThreshold = domainSizeThreshold;
+    }
+
+    /**
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     *
+     * @@param verbosity 0 --> quiet ... 9 -> maximum diagnostic input
+     */
+    public void setVerbosity(int verbosity) {
+        this.verbosity = verbosity;
+        problemParser.setVerbosity(verbosity);
+        valueDomains.setVerbosity(verbosity);
+        highCardinalityDomains.setVerbosity(verbosity);
+        nodeConsistencyAchiever.setVerbosity(verbosity);
+        ruleEvaluator.setVerbosity(verbosity);
+        forwardCheckingSearcher.setVerbosity(verbosity);
+        solution.setVerbosity(verbosity);
+    }
+    /**
+     * Solves a constraint problem and return a list of solutions if one or more
+     * was found, otherwise returns <tt>null</tt>.
+     *
+     * @@param problem a constraint problem in the form of an OpenCyc query <tt>CycList</tt>
+     * @@return an <tt>ArrayList</tt> of solutions or <tt>null</tt> if no solutions were
+     * found.  Each solution is an <tt>ArrayList</tt> of variable binding <tt>ArrayList</tt>
+     * objects, each binding having the form of an <tt>ArrayList</tt> where the first
+     * element is the <tt>CycVariable</tt> and the second element is the domain value
+     * <tt>Object</tt>.
+     */
+    public ArrayList solve(CycList problem) {
+        this.problem = problem;
+        problemParser.extractRulesAndDomains();
+        problemParser.gatherVariables();
+        problemParser.initializeDomains();
+        nodeConsistencyAchiever.applyUnaryRulesAndPropagate();
+        valueDomains.initializeDomainValueMarking();
+        //TODO enable when coding for search is done
+        //forwardCheckingSearcher.search(variables, 1);
+
+        return solution.solutions;
+    }
+
+   /**
+     * Returns the number of variable domain populating <tt>Rule</tt>
+     * objects derived from the input problem.
+     *
+     * @@return the number of variable domain populating <tt>Rule</tt> objects.
+     */
+    public int getNbrDomainPopulationRules() {
+        return domainPopulationRules.size();
+    }
+
+    /**
+     * Returns the number of constraint <tt>Rule</tt> objects derived from
+     * the input problem.
+     *
+     * @@return the number of constraint <tt>Rule</tt> objects.
+     */
+    public int getNbrConstraintRules() {
+        return constraintRules.size();
+    }
+
+    /**
+     * Returns the number of <tt>Variable</tt> objects derived from
+     * the input problem.
+     *
+     * @@return the number of <tt>CycVariable</tt> objects.
+     */
+    public int getNbrVariables() {
+        return variables.size();
+    }
+
+    /**
+     * Displays the input constraint rules.
+     */
+    public void displayConstraintRules() {
+        System.out.println("Domain Population Rules\n");
+        for (int i = 0; i < domainPopulationRules.size(); i++)
+            System.out.println("  " + domainPopulationRules.get(i));
+
+        System.out.println("\nConstraint Rules\n");
+        for (int i = 0; i < constraintRules.size(); i++)
+            System.out.println("  " + constraintRules.get(i));
+    }
+
+    /**
+     * Displays the variables and their value domains.
+     */
+    public void displayVariablesAndDomains() {
+        valueDomains.displayVariablesAndDomains();
+    }
+@
+
+
+1.3
+log
+@Refactored ConstraintProblem class and added several other supporting classes
+@
+text
+@d14 1
+a14 1
+ * @@version $Id$
+a130 6
+     * Number of search steps performed during the search for solution(s).
+     */
+    protected int nbrSteps = 0;
+
+
+    /**
+d181 2
+a182 1
+        forwardCheckingSearcher.search(variables, 1);
+@
+
+
+1.2
+log
+@Updated javadoc comments.
+Employed apache-oro cache classes
+@
+text
+@d8 5
+d38 36
+a73 2
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+d75 1
+a75 1
+    public int verbosity = 3;
+d85 1
+a85 3
+     * The value of the variable value domain size beyond which the initial values are not
+     * all fetched from the KB using #$isa, rather some other more specific constraint
+     * rule populates the variable domain as needed.
+d87 1
+a87 1
+    public int domainSizeThreshold = 100;
+d90 2
+a91 1
+     * The number of solutions requested.  When <tt>null</tt>, all solutions are sought.
+d93 1
+a93 1
+    public Integer nbrSolutionsRequested = new Integer(1);
+a120 19
+     * Dictionary of dictionaries of integers used to mark domain values
+     * during search.  The purpose of marking is to eliminate values from
+     * the solution.  First key indexes by constraint variable, second key
+     * indexes by domain value for the variable, and the integer represents
+     * the search level at which the variable domain value was marked.
+     */
+    protected HashMap domains = new HashMap();
+
+    /**
+     * variable --> domain populating rule<p>
+     * Dictionary of items describing whether the domain of the key
+     * variable is too large to handle efficiently.  For high cardinality
+     * domains, the domain size is determined from the KB without asking
+     * for all of the values.  For variables not exceeding the <tt>domainSizeThreshold</tt>,
+     * the dictionary contains a value of <tt>null</tt>.
+     */
+    protected HashMap highCardinalityDomains = new HashMap();
+
+    /**
+a125 11
+     * Dictionary of variable --> domain value list.
+     */
+    protected HashMap varsDictionary = new HashMap();
+
+    /**
+     * List of solutions where each solution is a list of constraint variable -
+     * domain value bindings which satisfy all the constraint rules.
+     */
+    protected ArrayList solutions = new ArrayList();
+
+    /**
+d135 1
+d137 1
+a137 2
+     * Number of solutions found by the search.  Will not be more than the
+     * number requested if <tt>nbrSolutionsRequested</tt> is not <tt>null</tt>.
+d139 2
+a140 1
+    protected int nbrSolutionsFound = 0;
+d143 5
+a147 1
+     * Constructs a new <tt>ConstraintProblem</tt> object.
+d149 2
+a150 1
+    public ConstraintProblem() {
+d154 16
+d182 6
+a187 22
+        extractRulesAndDomains();
+        gatherVariables();
+
+        return solutions;
+    }
+
+    /**
+     * Simplifies the input problem into its constituent <tt>Rule</tt> objects,
+     * then divides the input rules into those which populate the variable
+     * domains, and those which subsequently constrain the search for
+     * one or more solutions.
+     */
+    protected void extractRulesAndDomains() {
+        simplifiedRules = Rule.simplifyRuleExpression(problem);
+        for (int i = 0; i < simplifiedRules.size(); i++) {
+            Rule rule = (Rule) simplifiedRules.get(i);
+            if (rule.isVariableDomainPopulatingRule())
+                domainPopulationRules.add(rule);
+            else
+                constraintRules.add(rule);
+        }
+    }
+d189 1
+a189 11
+    /**
+     * Gathers the unique variables used in this constraint problem.
+     */
+    protected void gatherVariables() {
+        HashSet uniqueVariables = new HashSet();
+        for (int i = 0; i < simplifiedRules.size(); i++) {
+            Rule rule = (Rule) simplifiedRules.get(i);
+            uniqueVariables.addAll(rule.getVariables());
+        }
+        variables.addAll(uniqueVariables);
+        //System.out.println(variables);
+d192 1
+a192 1
+    /**
+d222 7
+d230 4
+d235 6
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d3 3
+d9 2
+a10 2
+ * @@version $Id: ConstraintProblem.java,v 1.1 2001/07/23 21:39:17 reed Exp $
+ * @@author Stephen Reed
+d12 17
+a28 3
+ * Copyright 2001 OpenCyc.org, license is open source GNU LGPL.<p>
+ * <a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+a29 4
+
+import java.util.*;
+import org.opencyc.cycobject.*;
+
+d39 1
+a39 1
+     * When <tt>true</tt> randomize the order of the variables and domain values before
+d134 1
+a134 1
+     * Construct a new <tt>ConstraintProblem</tt> object.
+d140 2
+a141 2
+     * Solve a constraint problem and return a list of solutions if one or more
+     * was found, otherwise return <tt>null</tt>.
+d159 2
+a160 2
+     * Simplify the input problem into its constituent <tt>Rule</tt> objects,
+     * then divide the input rules into those which populate the variable
+d176 1
+a176 1
+     * Gather the unique variables used in this constraint problem.
+d189 1
+a189 1
+     * Return the number of variable domain populating <tt>Rule</tt>
+d199 1
+a199 1
+     * Return the number of constraint <tt>Rule</tt> objects derived from
+d209 1
+a209 1
+     * Return the number of <tt>Variable</tt> objects derived from
+@
+
+
+1.1.1.1
+log
+@Imported sources
+@
+text
+@@

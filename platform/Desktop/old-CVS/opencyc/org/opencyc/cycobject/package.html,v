@@ -1,0 +1,46 @@
+head	1.2;
+access;
+symbols
+	BRANCH_OPENCYC_1_0_1:1.1.0.2
+	OPENCYC_1_0_1:1.1
+	PRE_1_0:1.1;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2006.10.21.16.49.17;	author dmiles;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2003.08.08.13.22.24;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental packages
+@
+text
+@<body>
+Provides the attributes and behavior of OpenCyc Knowledge Base objects such as
+constants, functional expressions, lists, rules and assertions.
+</body>
+@
+
+
+1.1
+log
+@synchronized with work in progress.
+@
+text
+@d4 1
+a4 1
+</body>@
+

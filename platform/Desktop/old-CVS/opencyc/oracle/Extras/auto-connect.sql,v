@@ -1,0 +1,42 @@
+head	1.1;
+access;
+symbols
+	OPENCYC_1_0_1:1.1
+	PRE_1_0:1.1;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2003.01.08.13.10.53;	author yepster;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@New optional scripts with handy stuff.
+@
+text
+@prompt Create's an 'after logon on schema' trigger
+prompt to automatically connect to OpenCyc.
+prompt edit the file if OpenCyc doesn't run on the same server
+prompt as the database server.
+CREATE OR REPLACE TRIGGER "AFTERLOGON"
+	AFTER LOGON ON SCHEMA
+BEGIN
+-- Make a connection to OpenCyc running on localhost.
+    cyc.makeConnection( );
+
+-- Alternatively, make a connection to OpenCyc running on a different host.
+/*  cyc.makeConnection( '10.20.30.40' ); */
+
+END;
+/
+quit
+/
+@

@@ -1,0 +1,333 @@
+head	1.5;
+access;
+symbols
+	PRE_1_0:1.5;
+locks; strict;
+comment	@# @;
+
+
+1.5
+date	2003.09.20.23.42.54;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2003.09.18.21.22.57;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2003.09.14.13.58.03;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2003.09.05.18.16.10;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2003.08.25.13.59.33;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.5
+log
+@removed setter methods, put all variables into the constructor, coded the toString() method
+@
+text
+@package org.opencyc.elf.message;
+
+//// Internal Imports
+
+import org.opencyc.elf.NodeComponent;
+import org.opencyc.elf.Result;
+
+import org.opencyc.elf.bg.planner.Schedule;
+
+import org.opencyc.elf.bg.taskframe.TaskCommand;
+
+//// External Imports
+
+import java.util.List;
+
+/** Contains the ELF replan message that is sent from the plan selector to the
+ * scheduler and to the job assigner.
+ *
+ * @@version $Id: ReplanMsg.java,v 1.4 2003/09/18 21:22:57 stephenreed Exp $
+ * @@author  reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class ReplanMsg extends GenericMsg {
+  
+  //// Constructors
+  
+  /** Creates a new instance of ReplanMsg 
+   *
+   * @@param sender the sender of the message
+   * @@param controlledResources the resources controlled by this node
+   * @@param taskCommand the node's commanded task
+   * @@param schedule a proposed schedule of actions to carry out the commanded task using
+   * the node's contolled resources
+   * @@param result the schedule evaluation result
+   */
+  public ReplanMsg(NodeComponent sender,
+                   List controlledResources,
+                   TaskCommand taskCommand,
+                   Schedule schedule,
+                   Result result) {
+    this.sender = sender;
+    this.controlledResources = controlledResources;
+    this.taskCommand = taskCommand;
+    this.schedule = schedule;
+    this.result = result;
+  }
+  
+  //// Public Area
+  
+  /** Returns a string representation of this object.
+   *
+   * @@return a string representation of this object
+   */
+  public String toString() {
+    StringBuffer stringBuffer = new StringBuffer();
+    stringBuffer.append("[ReplanMsg: ");
+    stringBuffer.append(controlledResources.toString());
+    stringBuffer.append(" taskCommand: ");
+    stringBuffer.append(taskCommand.toString());
+    stringBuffer.append(" schedule: ");
+    stringBuffer.append(schedule.toString());
+    stringBuffer.append(" result: ");
+    stringBuffer.append(result.toString());
+    stringBuffer.append("]");
+    return stringBuffer.toString();
+  }
+  
+  /**
+   * Gets the resources controlled by this node
+   *
+   * @@return the resources controlled by this node
+   */
+  public List getControlledResources () {
+    return controlledResources;
+  }
+
+  /**
+   * Gets the node's commanded task
+   *
+   * @@return the node's commanded task
+   */
+  public TaskCommand getTaskCommand () {
+    return taskCommand;
+  }
+
+  /**
+   * Gets a proposed schedule of actions to carry out the commanded task using
+   * the node's contolled resources
+   *
+   * @@return a proposed schedule of actions to carry out the commanded task using
+   * the node's contolled resources
+   */
+  public Schedule getSchedule () {
+    return schedule;
+  }
+
+  /**
+   * Gets the schedule evaluation result
+   *
+   * @@return the schedule evaluation result
+   */
+  public Result getResult () {
+    return result;
+  }
+
+  //// Protected Area
+  
+  //// Private Area
+  
+  //// Internal Rep
+  
+  /**
+   * the resources controlled by this node
+   */
+  protected List controlledResources;
+  
+  /**
+   * the node's commanded task
+   */
+  protected TaskCommand taskCommand;
+  
+  /**
+   * a proposed schedule of actions to carry out the commanded task using
+   * the node's contolled resources
+   */
+  protected Schedule schedule;
+  
+  /**
+   * the schedule evaluation result
+   */
+  protected Result result;
+  
+  //// Main
+  
+}
+@
+
+
+1.4
+log
+@/home/reed/opencyc/org/opencyc/elf
+removed equals(...)  method if present and reformatted multiline comments to one less line
+@
+text
+@d5 1
+d19 1
+a19 1
+ * @@version $Id: ReplanMsg.java,v 1.3 2003/09/14 13:58:03 stephenreed Exp $
+d44 19
+a62 2
+  /** Creates a new instance of ReplanMsg */
+  public ReplanMsg() {
+d67 1
+a67 15
+  /**
+   * Returns true if the given object equals this object.
+   *
+   * @@param obj the given object
+   * @@return true if the given object equals this object
+   */
+  public boolean equals(Object obj) {
+    if (! (obj instanceof Class))
+      return false;
+    //TODO
+    return true;
+  }
+  
+  /**
+   * Returns a string representation of this object.
+d72 11
+a82 2
+    //TODO
+    return "";
+a94 9
+   * Sets the resources controlled by this node
+   *
+   * @@param controlledResources the resources controlled by this node
+   */
+  public void setControlledResources (List controlledResources) {
+    this.controlledResources = controlledResources;
+  }
+
+  /**
+a103 9
+   * Sets the node's commanded task
+   *
+   * @@param taskCommand the node's commanded task
+   */
+  public void setTaskCommand (TaskCommand taskCommand) {
+    this.taskCommand = taskCommand;
+  }
+
+  /**
+a114 11
+   * Sets a proposed schedule of actions to carry out the commanded task using
+   * the node's contolled resources
+   *
+   * @@param schedule a proposed schedule of actions to carry out the commanded task using
+   * the node's contolled resources
+   */
+  public void setSchedule (Schedule schedule) {
+    this.schedule = schedule;
+  }
+
+  /**
+a122 9
+  /**
+   * Sets the schedule evaluation result
+   *
+   * @@param result the schedule evaluation result
+   */
+  public void setResult (Result result) {
+    this.result = result;
+  }
+  
+@
+
+
+1.3
+log
+@Changed ArrayList to List, consistently formatted one line comments. ----------------------------------------------------------------------
+@
+text
+@d15 1
+a15 2
+/**
+ * Contains the ELF replan message that is sent from the plan selector to the
+d18 1
+a18 1
+ * @@version $Id: ReplanMsg.java,v 1.2 2003/09/05 18:16:10 stephenreed Exp $
+@
+
+
+1.2
+log
+@/home/reed/opencyc/org/opencyc/elf
+fixed javadoc errors
+@
+text
+@d13 1
+a13 1
+import java.util.ArrayList;
+d16 1
+a16 1
+ * <P>Contains the ELF replan message that is sent from the plan selector to the
+d19 1
+a19 1
+ * @@version $Id: ReplanMsg.java,v 1.1 2003/08/25 13:59:33 stephenreed Exp $
+d78 1
+a78 1
+  public ArrayList getControlledResources () {
+d87 1
+a87 1
+  public void setControlledResources (ArrayList controlledResources) {
+d158 1
+a158 1
+  protected ArrayList controlledResources;
+@
+
+
+1.1
+log
+@initial check in
+@
+text
+@d19 1
+a19 1
+ * @@version $Id: BehaviorGeneration.java,v 1.3 2002/11/19 02:42:53 stephenreed Exp $
+d103 1
+a103 1
+   * @@param taskCommandthe node's commanded task
+@
+

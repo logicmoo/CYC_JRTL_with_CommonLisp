@@ -1,0 +1,600 @@
+head	1.14;
+access;
+symbols
+	PRE_1_0:1.13;
+locks; strict;
+comment	@# @;
+
+
+1.14
+date	2006.10.21.16.49.16;	author dmiles;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2002.04.23.02.59.02;	author stephenreed;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2001.10.17.23.44.19;	author stephenreed;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2001.09.06.21.43.25;	author stephenreed;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2001.09.06.14.49.47;	author stephenreed;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2001.09.04.14.30.23;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2001.08.31.15.45.42;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2001.08.28.10.05.25;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2001.08.20.14.00.07;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2001.08.15.23.49.56;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2001.08.15.18.00.34;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2001.08.15.14.50.46;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2001.08.13.16.14.44;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2001.07.30.22.59.00;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.14
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental packages
+@
+text
+@package org.opencyc.constraintsolver;
+
+import java.io.IOException;
+
+import org.opencyc.api.CycAccess;
+import org.opencyc.api.CycApiException;
+import org.opencyc.cycobject.CycConstant;
+import org.opencyc.cycobject.CycList;
+import org.opencyc.inferencesupport.ConstraintRule;
+import org.opencyc.inferencesupport.UnitTest;
+
+/**
+ * <tt>RuleEvaluator</tt> object evaluates constraint rules
+ * for the parent <tt>ConstraintProblem</tt> object.  Although all
+ * rules may be evaluated by asking the OpenCyc KB, some rules having
+ * evaluatable predicates and functions may be efficiently evaluated locally<p>
+ *
+ * @@version $Id: RuleEvaluator.java,v 1.13 2002/04/23 02:59:02 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * @@see UnitTest#testConstraintProblem
+ */
+public class RuleEvaluator {
+
+    /**
+     * Reference to the parent <tt>ConstraintProblem</tt> object.
+     */
+    protected ConstraintProblem constraintProblem;
+
+    /**
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    protected int verbosity = ConstraintProblem.DEFAULT_VERBOSITY;
+
+    /**
+     * Cached reference to #$numericallyEqual predicate.
+     */
+    protected CycConstant numericallyEqual;
+
+    /**
+     * Cached reference to #$and logical operator.
+     */
+    protected CycConstant and;
+
+    /**
+     * Cached reference to #$or logical operator.
+     */
+    protected CycConstant or;
+
+    /**
+     * Cached reference to #$not logical operator.
+     */
+    protected CycConstant not;
+
+    /**
+     * Cached reference to #$different predicate.
+     */
+    protected CycConstant different;
+
+    /**
+     * Cached reference to #$PlusFn function.
+     */
+    protected CycConstant plusFn;
+
+    /**
+     * Constructs a new <tt>RuleEvaluator</tt> object for the parent
+     * <tt>ConstraintProblem</tt>.
+     *
+     * @@param constraintProblem the parent constraint problem
+     */
+    public RuleEvaluator(ConstraintProblem constraintProblem) {
+        this.constraintProblem = constraintProblem;
+    }
+
+    /**
+     * Initializes this instance once the parent <tt>ConstraintProblem</tt> object creates a
+     * <tt>CycAccess</tt> object.
+     */
+    public void initialize() {
+        try {
+            numericallyEqual = constraintProblem.cycAccess.makeCycConstant("numericallyEqual");
+            and = constraintProblem.cycAccess.makeCycConstant("and");
+            or = constraintProblem.cycAccess.makeCycConstant("or");
+            not = constraintProblem.cycAccess.makeCycConstant("not");
+            different = constraintProblem.cycAccess.makeCycConstant("different");
+            plusFn = constraintProblem.cycAccess.makeCycConstant("PlusFn");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Cannot access OpenCyc server " + e.getMessage());
+        }
+    }
+
+
+    /**
+     * Return <tt>true</tt> iff the instantiated constraint rule is proven true,
+     * otherwise return <tt>false</tt>
+     *
+     * @@param rule the instantiated constraint rule to be evaluated
+     * @@return <tt>true</tt> iff the instantiated constraint rule is proven true,
+     * otherwise return <tt>false</tt>
+     */
+    public boolean ask(ConstraintRule rule) throws IOException, CycApiException {
+        Object predicate = rule.getPredicate();
+        if (predicate.equals(and)) {
+            CycList arguments = (CycList) rule.getFormula().rest();
+            for (int i = 0; i < arguments.size(); i++) {
+                Object argument = arguments.get(i);
+                if (! (argument instanceof CycList))
+                    throw new RuntimeException("Invalid #$or argument: " +
+                                                argument);
+                if (! ask(new ConstraintRule((CycList) arguments.get(i))))
+                    return false;
+            }
+            return true;
+        }
+        else if (predicate.equals(or)) {
+            CycList arguments = (CycList) rule.getFormula().rest();
+            for (int i = 0; i < arguments.size(); i++) {
+                Object argument = arguments.get(i);
+                if (! (argument instanceof CycList))
+                    throw new RuntimeException("Invalid #$or argument: " +
+                                                argument);
+                if (ask(new ConstraintRule((CycList) arguments.get(i))))
+                    return true;
+            }
+            return false;
+        }
+        else if (predicate.equals(not)) {
+            CycList expression = (CycList) rule.getFormula().second();
+            if (! (expression instanceof CycList) ||
+                expression.size() < 2)
+                throw new RuntimeException("Invalid #$not expression: " +
+                                            expression);
+            return ! ask(new ConstraintRule(expression));
+        }
+        else if (predicate.equals(numericallyEqual)) {
+            Object argument1 = rule.getFormula().second();
+            int argument1Integer = 0;
+            if (argument1 instanceof CycList) {
+                if (((CycList) argument1).first().equals(plusFn) &&
+                    ((CycList) argument1).second() instanceof Integer)
+                    argument1Integer = 1 + ((Integer) ((CycList) argument1).second()).intValue();
+            }
+            else if (argument1 instanceof Integer)
+                argument1Integer = ((Integer) argument1).intValue();
+            else
+                // Ask OpenCyc.
+                return CycAccess.current().isQueryTrue_Cached(rule.getFormula(),
+                                                              constraintProblem.mt);
+            Object argument2 = rule.getFormula().third();
+            int argument2Integer = 0;
+            if (argument2 instanceof CycList) {
+                if (((CycList) argument2).first().equals(plusFn) &&
+                    ((CycList) argument2).second() instanceof Integer)
+                    argument2Integer = 1 + ((Integer) ((CycList) argument2).second()).intValue();
+            }
+            else if (argument2 instanceof Integer)
+                argument2Integer = ((Integer) argument2).intValue();
+            else
+                // Ask OpenCyc.
+                return CycAccess.current().isQueryTrue_Cached(rule.getFormula(),
+                                                              constraintProblem.mt);
+            return argument1Integer == argument2Integer;
+        }
+        else if (predicate.equals(different)) {
+            CycList arguments = (CycList) rule.getFormula().rest();
+            return ! arguments.containsDuplicates();
+        }
+        else
+            // Ask OpenCyc.
+            return CycAccess.current().isQueryTrue_Cached(rule.getFormula(),
+                                                          constraintProblem.mt);
+    }
+
+    /**
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     *
+     * @@param verbosity 0 --> quiet ... 9 -> maximum diagnostic input
+     */
+    public void setVerbosity(int verbosity) {
+        this.verbosity = verbosity;
+    }
+
+}@
+
+
+1.13
+log
+@Fixed bug in CycList.rest() method where it did not return the
+dotted element in a dotted pair list.  Wide impact because the
+function signature changed from CycList to Object.
+@
+text
+@a2 1
+import java.util.*;
+d4 7
+a10 3
+import org.opencyc.cycobject.*;
+import org.opencyc.inferencesupport.*;
+import org.opencyc.api.*;
+d18 1
+a18 1
+ * @@version $Id: RuleEvaluator.java,v 1.12 2001/10/17 23:44:19 stephenreed Exp $
+@
+
+
+1.12
+log
+@Added CycApiException, and replaced throws to IOException with it.
+@
+text
+@d15 1
+a15 1
+ * @@version $Id: RuleEvaluator.java,v 1.11 2001/09/06 21:43:25 stephenreed Exp $
+d122 1
+a122 1
+            CycList arguments = rule.getFormula().rest();
+d134 1
+a134 1
+            CycList arguments = rule.getFormula().rest();
+d183 1
+a183 1
+            CycList arguments = rule.getFormula().rest();
+@
+
+
+1.11
+log
+@Completed renaming of Rule to ConstraintRule class
+@
+text
+@d15 1
+a15 1
+ * @@version $Id: RuleEvaluator.java,v 1.10 2001/09/06 14:49:47 stephenreed Exp $
+d119 1
+a119 1
+    public boolean ask(ConstraintRule rule) throws IOException {
+@
+
+
+1.10
+log
+@Renamed Rule to ConstraintRule, moved QueryLiteral class to inferencesupport.
+@
+text
+@a2 1
+import org.opencyc.cycobject.*;
+d5 2
+d15 1
+a15 1
+ * @@version $Id: RuleEvaluator.java,v 1.9 2001/09/04 14:30:23 stephenreed Exp $
+@
+
+
+1.9
+log
+@Renamed HighCardinalityDomains to VariableDomainPopulator, in preparation
+for a reworking of the variable domain population technique.  The previous
+idea of augmenting the constraint problem with the constraint problem argument
+constraints is not efficient in a few cases where most of the rules involve
+high cardinality situations.
+
+The new technique will determine the best rule to instantiate domains for each
+variable, and whether to perform the instantiation immediately, or to postpone it
+for the forward checking search.  A new api call was added to get the instantiation
+counts from the OpenCyc indexing mechanism.
+@
+text
+@d14 1
+a14 1
+ * @@version $Id: RuleEvaluator.java,v 1.8 2001/08/31 15:45:42 stephenreed Exp $
+d118 1
+a118 1
+    public boolean ask(Rule rule) throws IOException {
+d127 1
+a127 1
+                if (! ask(new Rule((CycList) arguments.get(i))))
+d139 1
+a139 1
+                if (ask(new Rule((CycList) arguments.get(i))))
+d150 1
+a150 1
+            return ! ask(new Rule(expression));
+@
+
+
+1.8
+log
+@Renamed rule instance variable to formula, continued backchain test cases
+@
+text
+@d14 1
+a14 1
+ * @@version $Id: RuleEvaluator.java,v 1.7 2001/08/28 10:05:25 stephenreed Exp $
+d48 1
+a48 1
+    protected int verbosity = 9;
+@
+
+
+1.7
+log
+@Refactored binary api support to pass all unit tests
+@
+text
+@d14 1
+a14 1
+ * @@version $Id: RuleEvaluator.java,v 1.6 2001/08/20 14:00:07 stephenreed Exp $
+d121 1
+a121 1
+            CycList arguments = rule.getRule().rest();
+d133 1
+a133 1
+            CycList arguments = rule.getRule().rest();
+d145 1
+a145 1
+            CycList expression = (CycList) rule.getRule().second();
+d153 1
+a153 1
+            Object argument1 = rule.getRule().second();
+d164 1
+a164 1
+                return CycAccess.current().isQueryTrue_Cached(rule.getRule(),
+d166 1
+a166 1
+            Object argument2 = rule.getRule().third();
+d177 1
+a177 1
+                return CycAccess.current().isQueryTrue_Cached(rule.getRule(),
+d182 1
+a182 1
+            CycList arguments = rule.getRule().rest();
+d187 1
+a187 1
+            return CycAccess.current().isQueryTrue_Cached(rule.getRule(),
+@
+
+
+1.6
+log
+@Geting unit tests working for ProblemParser and arg constraints gathering.
+@
+text
+@d14 1
+a14 1
+ * @@version $Id: RuleEvaluator.java,v 1.5 2001/08/15 23:49:56 stephenreed Exp $
+d154 1
+a154 1
+            long argument1Long = 0;
+d157 2
+a158 2
+                    ((CycList) argument1).second() instanceof Long)
+                    argument1Long = 1 + ((Long) ((CycList) argument1).second()).longValue();
+d160 2
+a161 2
+            else if (argument1 instanceof Long)
+                argument1Long = ((Long) argument1).longValue();
+d167 1
+a167 1
+            long argument2Long = 0;
+d170 2
+a171 2
+                    ((CycList) argument2).second() instanceof Long)
+                    argument2Long = 1 + ((Long) ((CycList) argument2).second()).longValue();
+d173 2
+a174 2
+            else if (argument2 instanceof Long)
+                argument2Long = ((Long) argument2).longValue();
+d179 1
+a179 1
+            return argument1Long == argument2Long;
+@
+
+
+1.5
+log
+@Cached CycAccess instances by thread and introduced European Cathedrals
+constraint problem that evaluates its rules in OpenCyc.
+@
+text
+@d14 1
+a14 1
+ * @@version $Id: RuleEvaluator.java,v 1.4 2001/08/15 18:00:34 stephenreed Exp $
+d164 2
+a165 1
+                return constraintProblem.forwardCheckingSearcher.constraintRuleAsk(rule.getRule());
+d177 2
+a178 1
+                return constraintProblem.forwardCheckingSearcher.constraintRuleAsk(rule.getRule());
+d187 2
+a188 1
+            return constraintProblem.forwardCheckingSearcher.constraintRuleAsk(rule.getRule());
+@
+
+
+1.4
+log
+@Fixed backchainer to pass unit tests with OpenCyc connection
+@
+text
+@d5 1
+d14 1
+a14 1
+ * @@version $Id: RuleEvaluator.java,v 1.3 2001/08/15 14:50:46 stephenreed Exp $
+d118 1
+a118 1
+    public boolean ask(Rule rule) {
+a152 1
+            //TODO if args are not numeric, ask OpenCyc.
+d163 2
+a164 2
+                throw new RuntimeException("Invalid #$numericallyEqual argument1: " +
+                                            argument1);
+d175 2
+a176 2
+                throw new RuntimeException("Invalid #$numericallyEqual argument2: " +
+                                            argument2);
+d184 2
+a185 3
+            //TODO ask OpenCyc
+            throw new RuntimeException("Cannot locally evaluate " + rule.cyclify());
+
+@
+
+
+1.3
+log
+@Made CycAccess the factory object for CycLists
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: RuleEvaluator.java,v 1.2 2001/08/13 16:14:44 stephenreed Exp $
+d87 7
+d108 1
+d185 1
+a185 1
+            throw new RuntimeException("Cannot locally evaluate " + rule);
+@
+
+
+1.2
+log
+@Revised copyright notice to Cycorp Inc.
+@
+text
+@d5 1
+d13 1
+a13 1
+ * @@version $Id: RuleEvaluator.java,v 1.1 2001/07/30 22:59:00 stephenreed Exp $
+d52 1
+a52 1
+    protected CycConstant numericallyEqual = CycConstant.makeCycConstant("numericallyEqual");
+d57 1
+a57 1
+    protected CycConstant and = CycConstant.makeCycConstant("and");
+d62 1
+a62 1
+    protected CycConstant or = CycConstant.makeCycConstant("or");
+d67 1
+a67 1
+    protected CycConstant not = CycConstant.makeCycConstant("not");
+d72 1
+a72 1
+    protected CycConstant different = CycConstant.makeCycConstant("different");
+d77 1
+a77 1
+    protected CycConstant plusFn = CycConstant.makeCycConstant("PlusFn");
+d87 12
+@
+
+
+1.1
+log
+@Refactored ConstraintProblem class and added several other supporting classes
+@
+text
+@d12 1
+a12 1
+ * @@version $Id$
+d15 1
+a15 1
+ * <p>Copyright 2001 OpenCyc.org, license is open source GNU LGPL.
+d96 1
+a96 1
+    protected boolean ask(Rule rule) {
+d174 1
+a174 1
+    protected void setVerbosity(int verbosity) {
+@
+

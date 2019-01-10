@@ -1,0 +1,130 @@
+head	1.4;
+access;
+symbols
+	PRE_1_0:1.4;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2003.09.18.22.56.31;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2003.09.14.13.57.59;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2003.08.28.20.56.06;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2003.08.14.03.06.40;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@/home/reed/opencyc/org/opencyc/elf
+removed equals(...)  method if present and reformatted multiline comments to one less line
+@
+text
+@package org.opencyc.elf;
+
+//// Internal Imports
+
+//// External Imports
+
+/** Result contains result information.
+ * 
+ * @@version $Id: Result.java,v 1.3 2003/09/14 13:57:59 stephenreed Exp $
+ * @@author Stephen L. Reed  
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class Result {
+  
+  //// Constructors
+  
+  /** Creates a new instance of Result. */
+  public Result() {
+  }
+  
+  //// Public Area
+  
+  //// Protected Area
+  
+  //// Private Area
+  
+  //// Internal Rep
+  
+  //// Main
+  
+}
+@
+
+
+1.3
+log
+@Changed ArrayList to List, consistently formatted one line comments. ----------------------------------------------------------------------
+@
+text
+@d7 1
+a7 2
+/**
+ * Result contains result information.
+d9 1
+a9 1
+ * @@version $Id: Result.java,v 1.2 2003/08/28 20:56:06 stephenreed Exp $
+@
+
+
+1.2
+log
+@fixed $Id: cvs tag
+@
+text
+@a7 1
+ * <P>
+a8 1
+ * </p>
+d10 1
+a10 1
+ * @@version $Id: BehaviorGeneration.java,v 1.3 2002/11/19 02:42:53 stephenreed Exp $
+@
+
+
+1.1
+log
+@Initial check in
+@
+text
+@d12 1
+a12 2
+ * @@version $Id: BehaviorGeneration.java,v 1.3 2002/11/19 02:42:53 stephenreed
+ *          Exp $
+@
+

@@ -1,0 +1,408 @@
+head	1.5;
+access;
+symbols
+	PRE_1_0:1.4;
+locks; strict;
+comment	@# @;
+
+
+1.5
+date	2006.10.21.17.01.59;	author dmiles;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2002.01.29.18.17.50;	author stephenreed;	state dead;
+branches;
+next	1.3;
+
+1.3
+date	2002.01.28.03.00.56;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2002.01.25.23.40.14;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2002.01.23.21.49.51;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.5
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental classes.
+@
+text
+@package  org.opencyc.jxta;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Enumeration;
+
+import net.jxta.document.MimeMediaType;
+import net.jxta.document.StructuredDocumentFactory;
+import net.jxta.document.StructuredTextDocument;
+import net.jxta.document.TextElement;
+
+import org.jdom.JDOMException;
+import org.opencyc.api.CycObjectFactory;
+import org.opencyc.cycobject.CycList;
+
+import fipaos.ont.fipa.ACL;
+
+
+/**
+ * Provides a container for the JXTA Cyc api query.<p>
+ *
+ * See www.jxta.org for more information on the Juxtaposition peer to peer
+ * infrastructure.  OpenCyc uses the JXTA Resolver Service to pass messages to
+ * discovered JXTA peers.  Between OpenCyc peers, the message content is a
+ * FIPA-OS envelope and an enclosed FIPA-OS message represented in XML format.
+ *
+ * @@version $Id: CycApiQueryMsg.java,v 1.3 2002/01/28 03:00:56 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class CycApiQueryMsg {
+
+    /**
+     * the Agent Communication Language query
+     */
+    public ACL queryAcl;
+
+    /**
+     * the Agent Communication Language query
+     */
+    public CycList query;
+
+    /**
+     * Constructs a new CycApiQueryMsg object.
+     */
+    public CycApiQueryMsg () {
+    }
+
+    /**
+     * Creates a query object using the Agent Communication Language query.
+     *
+     * @@param   queryAcl the Agent Communication Language query
+     */
+    public CycApiQueryMsg (ACL queryAcl) {
+        this.queryAcl = queryAcl;
+        String contentXml = (String) queryAcl.getContentObject();
+        try {
+			query = (CycList) CycObjectFactory.unmarshall(contentXml);
+		} catch (JDOMException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+
+    /**
+     * Creates a query object by parsing the given input stream.
+     *
+     * @@param   stream the InputStream source of the query data.
+     */
+    public CycApiQueryMsg (InputStream stream) throws Exception {
+        StructuredTextDocument document =
+            (StructuredTextDocument) StructuredDocumentFactory.newStructuredDocument(
+                new MimeMediaType("text/xml"),
+                stream);
+        Enumeration elements = document.getChildren();
+        while (elements.hasMoreElements()) {
+            TextElement element = (TextElement)elements.nextElement();
+            if (element.getName().equals("acl")) {
+                queryAcl = new ACL(element.getTextValue());
+                String contentXml = (String) queryAcl.getContentObject();
+                query = (CycList) CycObjectFactory.unmarshall(contentXml);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Returns an XML String representation of the query.
+     *
+     * @@return  the XML String representing this query.
+     */
+    public String toString () {
+        return queryAcl.toString();
+    }
+}
+
+
+
+
+
+
+
+@
+
+
+1.4
+log
+@Decided to use Jxta pipes for api messaging and use the Jxta ResolverService for echo.
+@
+text
+@d3 14
+a16 8
+import  java.io.*;
+import  java.util.Enumeration;
+import  fipaos.ont.fipa.*;
+import  fipaos.ont.fipa.fipaman.*;
+import  fipaos.parser.ParserException;
+import  net.jxta.document.*;
+import  org.opencyc.cycobject.*;
+import  org.opencyc.api.*;
+d74 9
+a82 1
+        query = (CycList) CycObjectFactory.unmarshall(contentXml);
+@
+
+
+1.3
+log
+@Removed extra new-lines from source files
+@
+text
+@d21 1
+a21 1
+ * @@version $Id: CycApiQueryMsg.java,v 1.2 2002/01/25 23:40:14 stephenreed Exp $
+@
+
+
+1.2
+log
+@Adding ACL messages
+@
+text
+@d1 108
+a108 104
+package  org.opencyc.jxta;
+
+import  java.io.*;
+import  java.util.Enumeration;
+import  fipaos.ont.fipa.*;
+import  fipaos.ont.fipa.fipaman.*;
+import  fipaos.parser.ParserException;
+import  net.jxta.document.*;
+import  org.opencyc.cycobject.*;
+import  org.opencyc.api.*;
+
+
+/**
+ * Provides a container for the JXTA Cyc api query.<p>
+ *
+ * See www.jxta.org for more information on the Juxtaposition peer to peer
+ * infrastructure.  OpenCyc uses the JXTA Resolver Service to pass messages to
+ * discovered JXTA peers.  Between OpenCyc peers, the message content is a
+ * FIPA-OS envelope and an enclosed FIPA-OS message represented in XML format.
+ *
+ * @@version $Id: CycApiQueryMsg.java,v 1.1 2002/01/23 21:49:51 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class CycApiQueryMsg {
+
+    /**
+     * the Agent Communication Language query
+     */
+    public ACL queryAcl;
+
+    /**
+     * the Agent Communication Language query
+     */
+    public CycList query;
+
+    /**
+     * Constructs a new CycApiQueryMsg object.
+     */
+    public CycApiQueryMsg () {
+    }
+
+    /**
+     * Creates a query object using the Agent Communication Language query.
+     *
+     * @@param   queryAcl the Agent Communication Language query
+     */
+    public CycApiQueryMsg (ACL queryAcl) {
+        this.queryAcl = queryAcl;
+        String contentXml = (String) queryAcl.getContentObject();
+        query = (CycList) CycObjectFactory.unmarshall(contentXml);
+    }
+
+    /**
+     * Creates a query object by parsing the given input stream.
+     *
+     * @@param   stream the InputStream source of the query data.
+     */
+    public CycApiQueryMsg (InputStream stream) throws Exception {
+        StructuredTextDocument document =
+            (StructuredTextDocument) StructuredDocumentFactory.newStructuredDocument(
+                new MimeMediaType("text/xml"),
+                stream);
+        Enumeration elements = document.getChildren();
+        while (elements.hasMoreElements()) {
+            TextElement element = (TextElement)elements.nextElement();
+            if (element.getName().equals("acl")) {
+                queryAcl = new ACL(element.getTextValue());
+                String contentXml = (String) queryAcl.getContentObject();
+                query = (CycList) CycObjectFactory.unmarshall(contentXml);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Returns an XML String representation of the query.
+     *
+     * @@return  the XML String representing this query.
+     */
+    public String toString () {
+        return queryAcl.toString();
+    }
+}
+
+
+
+@
+
+
+1.1
+log
+@Initial check in of JXTA interface for OpenCyc.
+@
+text
+@d5 3
+d9 2
+d21 1
+a21 1
+ * @@version $Id: GenericAgent.java,v 1.11 2002/01/23 17:16:34 stephenreed Exp $
+d45 1
+a45 1
+     * The base for query.
+d47 2
+a48 1
+    private double base = 0.0;
+d50 1
+a50 1
+     * The power for the query.
+d52 1
+a52 1
+    private double power = 0.0;
+d61 1
+a61 1
+     * Creates a query object using the given base and power.
+d63 1
+a63 2
+     * @@param   aBase the base for the query.
+     * @@param   aPower the power for the query.
+d65 4
+a68 3
+    public CycApiQueryMsg (double aBase, double aPower) {
+        this.base = aBase;
+        this.power = aPower;
+d78 3
+a80 2
+        (StructuredTextDocument) StructuredDocumentFactory.newStructuredDocument(new MimeMediaType("text/xml"),
+                                                                                 stream);
+d84 5
+a88 7
+            if (element.getName().equals("base")) {
+                base = Double.valueOf(element.getTextValue()).doubleValue();
+                continue;
+            }
+            if (element.getName().equals("power")) {
+                power = Double.valueOf(element.getTextValue()).doubleValue();
+                continue;
+a93 34
+     * Returns the base for the query.
+     *
+     * @@return  the base value for the query.
+     */
+    public double getBase () {
+        return  base;
+    }
+
+    /**
+     * Returns a Document representation of the query.
+     *
+     * @@param   asMimeType the desired MIME type representation for the query.
+     * @@return  a Document form of the query in the specified MIME representation.
+     */
+    public Document getDocument (MimeMediaType asMimeType) throws Exception {
+        StructuredDocument document = (StructuredTextDocument)StructuredDocumentFactory.newStructuredDocument(asMimeType, "example:ExampleQuery");
+        Element element;
+        element = document.createElement("base", Double.toString(getBase()));
+        document.appendChild(element);
+        element = document.createElement("power", Double.toString(getPower()));
+        document.appendChild(element);
+        return  document;
+    }
+
+    /**
+     * Returns the power for the query.
+     *
+     * @@return  the power value for the query.
+     */
+    public double getPower () {
+        return  power;
+    }
+
+    /**
+d99 1
+a99 8
+        try {
+            StringWriter out = new StringWriter();
+            StructuredTextDocument doc = (StructuredTextDocument)getDocument(new MimeMediaType("text/xml"));
+            doc.sendToWriter(out);
+            return  out.toString();
+        } catch (Exception e) {
+            return  "";
+        }
+@
+

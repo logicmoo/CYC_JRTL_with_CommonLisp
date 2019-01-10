@@ -1,0 +1,105 @@
+head	1.2;
+access;
+symbols
+	BRANCH_OPENCYC_1_0_1:1.1.0.2
+	OPENCYC_1_0_1:1.1;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2006.10.21.16.49.17;	author dmiles;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.10.18.14.21.32;	author dmiles;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental packages
+@
+text
+@package org.opencyc.cycobject;
+
+import org.opencyc.api.CycObjectFactory;
+
+/**
+ * Provides the container for the ELMt CycConstant (Epistemlogical Level Microtheory
+ * Constant).<p>
+ *
+ * @@version $Id: ELMtConstant.java,v 1.3 2004/06/04 04:26:34 rck Exp $
+ * @@author Tony Brusseau
+ *
+ * <p>Copyright 2003 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+public class ELMtConstant extends CycConstant implements ELMt {
+  
+  static final long serialVersionUID = -2405506745680227189L;
+  
+  /** Privately creates a new instance of ELMtConstant */
+  private ELMtConstant(CycConstant cycConstant) {
+    super(cycConstant.getName(), cycConstant.getGuid());
+  }
+    
+  /**
+   * Returns a new ELMtConstant given a CycConstant.  Note, use the
+   * factory method in the CycAccess to create these.
+   */
+  public static ELMtConstant makeELMtConstant(CycConstant cycConstant) {
+    CycObjectFactory.removeCaches(cycConstant);
+    ELMtConstant elmtConstant = new ELMtConstant(cycConstant);
+    CycObjectFactory.addCycConstantCacheByGuid(cycConstant);
+    CycObjectFactory.addCycConstantCacheByName(cycConstant);
+    if (cycConstant.safeGetId() != null)
+        CycObjectFactory.addCycConstantCacheById(cycConstant);
+    return elmtConstant;
+  }
+}
+@
+
+
+1.1
+log
+@This is the Additional Content to Create OpenCyc-1.0.1
+@
+text
+@a2 1
+import org.opencyc.api.CycAccess;
+d9 1
+a9 1
+ * @@version $Id: ELMtConstant.java,v 1.4 2005/07/08 20:27:43 reed Exp $
+d35 1
+a35 3
+  /** Privately creates a new instance of ELMtConstant 
+   * deprecated
+   */
+d47 4
+a50 1
+    CycObjectFactory.addCycConstantCache(cycConstant);
+@
+

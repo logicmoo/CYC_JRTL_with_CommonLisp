@@ -1,0 +1,53 @@
+head	1.2;
+access;
+symbols
+	OPENCYC_1_0_1:1.2;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2002.12.30.13.12.09;	author yepster;	state dead;
+branches;
+next	1.1;
+
+1.1
+date	2002.12.24.15.20.01;	author yepster;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@Changed install script to ask for username to create interface objects for.
+@
+text
+@create user cyctest identified by cyctest
+default tablespace users temporary tablespace temp
+/
+grant connect,resource,javauserpriv to cyctest
+/
+grant select any table to cyctest
+/
+begin
+ dbms_java.grant_permission( 'CYCTEST', 'SYS:java.util.PropertyPermission',
+'org.opencyc.util.log', 'write' );
+end;
+/
+quit
+/
+@
+
+
+1.1
+log
+@New place for Oracle OpenCyc Interface; no more under 'org' tree, so
+CycJsprocs.java will not cause the org build script to give errors.
+@
+text
+@@
+

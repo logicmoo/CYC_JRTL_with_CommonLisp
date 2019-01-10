@@ -1,0 +1,1271 @@
+head	1.24;
+access;
+symbols
+	PRE_1_0:1.24;
+locks; strict;
+comment	@# @;
+
+
+1.24
+date	2003.10.20.15.21.50;	author stephenreed;	state Exp;
+branches;
+next	1.23;
+
+1.23
+date	2003.10.18.18.19.47;	author stephenreed;	state Exp;
+branches;
+next	1.22;
+
+1.22
+date	2003.10.06.05.15.08;	author stephenreed;	state Exp;
+branches;
+next	1.21;
+
+1.21
+date	2003.10.01.16.44.11;	author stephenreed;	state Exp;
+branches;
+next	1.20;
+
+1.20
+date	2003.09.19.22.21.42;	author stephenreed;	state Exp;
+branches;
+next	1.19;
+
+1.19
+date	2003.09.18.21.22.57;	author stephenreed;	state Exp;
+branches;
+next	1.18;
+
+1.18
+date	2003.09.17.23.09.49;	author stephenreed;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2003.09.17.16.53.51;	author stephenreed;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2003.09.14.13.58.03;	author stephenreed;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2003.09.08.18.52.37;	author stephenreed;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2003.09.05.18.16.10;	author stephenreed;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2003.09.04.21.54.17;	author stephenreed;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2003.09.03.21.56.32;	author stephenreed;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2003.09.03.04.04.56;	author stephenreed;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2003.08.31.11.55.23;	author stephenreed;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2003.08.31.02.05.54;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2003.08.31.00.37.48;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2003.08.31.00.21.23;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2003.08.30.05.45.04;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2003.08.29.22.52.30;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2003.08.29.01.54.41;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2003.08.28.02.32.52;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2003.08.11.21.40.50;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2003.08.11.21.27.58;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.24
+log
+@moved commands to org.opencyc.elf.bg.command package
+@
+text
+@package org.opencyc.elf.bg.taskframe;
+
+//// Internal Imports
+import org.opencyc.elf.BehaviorEngineException;
+import org.opencyc.elf.bg.command.Command;
+import org.opencyc.elf.bg.command.Parameter;
+import org.opencyc.elf.wm.state.State;
+import org.opencyc.elf.wm.state.StateVariable;
+
+//// External Imports
+import java.util.List;
+
+/** Action describes the action to be performed and may include a set of modifiers such as
+ * priorities, mode, path constraints, acceptable cost, and required conditions.
+ *
+ * <P>Copyright (c) 2003 Cycorp, Inc.  All rights reserved.
+ * <BR>This software is the proprietary information of Cycorp, Inc.
+ * <P>Use is subject to license terms.
+ *
+ * @@author Stephen L. Reed  
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * @@version $Id: Action.java,v 1.23 2003/10/18 18:19:47 stephenreed Exp $
+ */
+public class Action implements Command, Cloneable {
+  
+  //// Constructors
+  
+  /** Creates a new instance of Action. 
+   *
+   * @@param name the name of the action
+   * @@param inputParameters the input formal parameters for this action
+   * @@param outputParameters the output formal parameters for this action which are 
+   * customized by the schedule factory
+   */
+  public Action(String name, List inputParameters, List outputParameters) {
+    this.name = name;
+    this.inputParameters = inputParameters;
+    this.outputParameters = outputParameters;
+  }
+  
+  //// Public Area
+
+  /** Returns a string representation of this object.
+   *
+   * @@return a string representation of this object
+   */
+  public String toString () {
+    StringBuffer stringBuffer = new StringBuffer();
+    stringBuffer.append("[Action ");
+    stringBuffer.append(name);
+    if (inputParameters.size() > 0) {
+      stringBuffer.append(" input (");
+      for (int i = 0; i < inputParameters.size(); i++) {
+        Parameter parameter = (Parameter) inputParameters.get(i);
+        stringBuffer.append(" ");
+        stringBuffer.append(parameter.getName());
+        stringBuffer.append("(");
+        stringBuffer.append(parameter.getType().toString());
+        stringBuffer.append("): ");
+        if (inputParameters != null) {
+          Object parameterValue = inputParameters.get(i);
+          if (parameterValue instanceof String) {
+            stringBuffer.append('"');
+            stringBuffer.append(parameterValue.toString());
+            stringBuffer.append('"');
+          }
+          else
+            stringBuffer.append(parameterValue.toString());
+        }
+        else
+          stringBuffer.append("null");
+      }
+      stringBuffer.append(") ");
+    }
+    if (outputParameters.size() > 0) {
+      stringBuffer.append(" input (");
+      for (int i = 0; i < outputParameters.size(); i++) {
+        Parameter parameter = (Parameter) outputParameters.get(i);
+        stringBuffer.append(" ");
+        stringBuffer.append(parameter.getName());
+        stringBuffer.append("(");
+        stringBuffer.append(outputStateVariables.get(i).toString());
+        stringBuffer.append("): ");
+      }
+      stringBuffer.append(") ");
+    }
+    stringBuffer.append("]");
+    return stringBuffer.toString();
+  }
+  
+  /** Creates and returns a copy of this object. The action parameter values are not
+   * cloned so that the receiver may set them as appropriate for the task.
+   *
+   * @@return a partially instantiated copy of this object
+   */
+  public Object clone () {
+    return new Action(name, inputParameters, outputParameters);
+  }
+  
+  /** Gets the name of the action
+   *
+   * @@return name the name of the action
+   */
+  public String getName () {
+    return name;
+  }
+
+  /** Gets the input parameter values for this action which are customized by the schedule factory.
+   *
+   * @@return tthe input parameter values for this action which are customized by the schedule factory
+   */
+  public List getInputParameters () {
+    return inputParameters;
+  }
+    
+  /** Gets the output parameter values for this action which are customized by the schedule factory.
+   *
+   * @@return tthe output parameter values for this action which are customized by the schedule factory
+   */
+  public List getOutputParameters () {
+    return outputParameters;
+  }
+    
+  /** Sets the input parameter values for this action.
+   *
+   * @@param inputParameterValues the input parameter values for this action
+   */
+  public void setInputParameterValues (List inputParameterValues) {
+    if (inputParameterValues.size() != inputParameters.size())
+      throw new BehaviorEngineException("Number of parameter values (" + inputParameterValues.size() +
+                                        ") does not match the number of input parameters (" +
+                                        inputParameters.size() + ")");
+    for (int i = 0; i < inputParameterValues.size(); i++) {
+      Object parameterValue = inputParameterValues.get(i);
+      Parameter parameter = (Parameter) inputParameters.get(i);
+      Class parameterType = parameter.getType();
+      if (! (parameterType.isInstance(parameterValue))) {
+        throw new BehaviorEngineException("parameter values (" + parameterValue +
+                                          ") is not an instance of parameter type (" +
+                                          parameterType + ")");
+      }
+    }
+    this.inputParameterValues = inputParameterValues;
+  }
+       
+  /** Sets the output state variables for this action.
+   *
+   * @@param inputParameterValues the input parameter values for this action
+   */
+  public void setOutputStateVariables (List outputStateVariables) {
+    if (outputStateVariables.size() != outputParameters.size())
+      throw new BehaviorEngineException("Number of output state variables (" + outputStateVariables.size() +
+                                        ") does not match the number of input parameters (" +
+                                        outputParameters.size() + ")");
+    for (int i = 0; i < outputStateVariables.size(); i++) {
+      StateVariable stateVariable = (StateVariable) outputStateVariables.get(i);
+      Parameter parameter = (Parameter) outputParameters.get(i);
+      Class parameterType = parameter.getType();
+      if (! (parameterType.isInstance(stateVariable.getType()))) {
+        throw new BehaviorEngineException("state variable (" + stateVariable +
+                                          ") is not an instance of output parameter type (" +
+                                          parameterType + ")");
+      }
+    }
+    this.outputStateVariables = outputStateVariables;
+  }
+     
+  /** the abort action name */
+  public static final String ABORT = "Abort";
+  
+  /** the console prompted input action name */
+  public static final String CONSOLE_PROMPTED_INPUT = "ConsolePromptedInput";
+  
+  /** the converse with user action name */
+  public static final String CONVERSE_WITH_USER = "ConverseWithUser";
+  
+  /** the emergency stop action name */
+  public static final String EMERGENCY_STOP = "EmergencyStop";
+  
+  /** the init action name */
+  public static final String INITIALIZE = "Initialize";
+  
+  //// Protected Area
+  
+  //// Private Area
+  
+  //// Internal Rep
+    
+  /** the name of the action */
+  protected final String name;
+  
+  /** the input formal parameters for this action */
+  protected final List inputParameters;
+  
+  /** the input parameter values for this action which are customized by the schedule factory */
+  protected List inputParameterValues;
+  
+  /** the output formal parameters for this action which are customized by the schedule factory */
+  protected final List outputParameters;
+  
+  /** the output state variables for this action which are customized by the schedule factory */
+  protected List outputStateVariables;
+  
+  //// Main
+  
+}
+@
+
+
+1.23
+log
+@moved from org.opencyc.elf.bg.taskframe to org.opencyc.elf.bg.command package
+@
+text
+@d5 2
+d38 1
+a38 1
+ * @@version $Id: Action.java,v 1.22 2003/10/06 05:15:08 stephenreed Exp $
+@
+
+
+1.22
+log
+@refactored Action and Goal to include Parameter
+@
+text
+@d36 1
+a36 1
+ * @@version $Id: Action.java,v 1.21 2003/10/01 16:44:11 stephenreed Exp $
+d38 1
+a38 1
+public class Action implements Command {
+@
+
+
+1.21
+log
+@javadoc fix
+@
+text
+@a4 1
+
+d6 1
+a8 1
+import java.util.Iterator;
+d36 1
+a36 1
+ * @@version $Id: Action.java,v 1.20 2003/09/19 22:21:42 stephenreed Exp $
+d42 11
+a52 2
+  /** Creates a new instance of Action. */
+  public Action() {
+d63 1
+a63 1
+    stringBuffer.append("[Action: ");
+d65 18
+a82 12
+    stringBuffer.append("(");
+    for (int i = 0; i < getParameterNames().size(); i++) {
+      String parameterName = (String) getParameterNames().get(i);
+      stringBuffer.append(" ");
+      stringBuffer.append(parameterName);
+      stringBuffer.append(": ");
+      if (getParameterValues() != null) {
+        Object parameterValue = getParameterValues().get(i);
+        if (parameterValue instanceof String) {
+          stringBuffer.append('"');
+          stringBuffer.append(parameterValue.toString());
+          stringBuffer.append('"');
+d85 1
+a85 1
+          stringBuffer.append(parameterValue.toString());
+d87 1
+a87 2
+      else
+        stringBuffer.append("null");
+d89 13
+a101 1
+    stringBuffer.append(")]");
+d111 1
+a111 6
+    Action action = new Action();
+    action.setName(name);
+    action.setParameterNames(parameterNames);
+    action.setParameterTypes(parameterTypes);
+    action.setOutputType(outputType);
+    return action;
+d122 1
+a122 1
+  /** Gets the parameter names for this action.
+d124 1
+a124 1
+   * @@return the parameter names for this action
+d126 2
+a127 2
+  public List getParameterNames () {
+    return parameterNames;
+d129 2
+a130 2
+   
+  /** Gets the parameter types for this action.
+d132 1
+a132 1
+   * @@return the parameter types for this action
+d134 2
+a135 2
+  public List getParameterTypes () {
+    return parameterTypes;
+d138 1
+a138 9
+  /** Gets the parameter values for this action.
+   *
+   * @@return the parameter values for this action
+   */
+  public List getParameterValues () {
+    return parameterValues;
+  }
+  
+  /** Sets the parameter values for this action.
+d140 1
+a140 1
+   * @@param parameterValues the parameter values for this action
+d142 9
+a150 8
+  public void setParameterValues (List parameterValues) {
+    if (parameterValues.size() != getParameterTypes().size())
+      throw new BehaviorEngineException("Number of parameter values (" + parameterValues.size() +
+                                        ") does not match the number of parameter types (" +
+                                        getParameterTypes().size() + ")");
+    for (int i = 0; i < parameterValues.size(); i++) {
+      Object parameterValue = parameterValues.get(i);
+      Class parameterType = (Class) getParameterTypes().get(i);
+d157 1
+a157 1
+    this.parameterValues = parameterValues;
+d159 2
+a160 2
+  
+  /** Gets the output type for this action.
+d162 1
+a162 1
+   * @@return the output type for this action
+d164 16
+a179 45
+  public Class getOutputType () {
+    return outputType;
+   }
+  
+  /** Gets the output value for this (completed) action.
+   *
+   * @@return the parameter values for this (completed) action
+   */
+  public Object getOutputValue () {
+    return outputValue;
+  }
+    
+  
+  //// Protected Area
+  
+  /** Sets the name of the action
+   *
+   * @@param name the name of the action
+   */
+  public void setName (String name) {
+    this.name = name;
+  }  
+  
+  /** Sets the parameter names for this action.
+   *
+   * @@param parameterNames the parameter names for this action
+   */
+  public void setParameterNames (List parameterNames) {
+    this.parameterNames = parameterNames;
+  }
+   
+  /** Sets the parameter types for this action.
+   *
+   * @@param parameterTypes the parameter types for this action
+   */
+  public void setParameterTypes (List parameterTypes) {
+    this.parameterTypes = parameterTypes;
+  }
+   
+  /** Sets the output type for this action.
+   *
+   * @@param outputType the output type for this action
+   */
+  public void setOutputType (Class outputType) {
+    this.outputType = outputType;
+d181 1
+a181 9
+  
+  /** Sets the output value for this action.
+   *
+   * @@param outputValue the output valuefor this action
+   */
+  public void setOutputValue (Object outputValue) {
+    this.outputValue = outputValue;
+  }
+   
+d183 1
+a183 1
+  public static final String ABORT = "abort";
+d186 1
+a186 1
+  public static final String CONSOLE_PROMPTED_INPUT = "console prompted input";
+d189 1
+a189 1
+  public static final String CONVERSE_WITH_USER = "converse with user";
+d192 1
+a192 1
+  public static final String EMERGENCY_STOP = "emergency stop";
+d195 3
+a197 1
+  public static final String INIT = "init";
+d204 1
+a204 4
+  protected String name;
+  
+  /** the parameter names for this action */
+  protected List parameterNames;
+d206 2
+a207 2
+  /** the parameter types for this action */
+  protected List parameterTypes;
+d209 2
+a210 2
+  /** the parameter values for this action */
+  protected List parameterValues;
+d212 2
+a213 2
+  /** the output type for this action */
+  protected Class outputType;
+d215 2
+a216 2
+  /** the output value for this (completed) action */
+  protected Object outputValue;
+@
+
+
+1.20
+log
+@/home/reed/opencyc/org/opencyc/elf
+refactored job and schedule
+@
+text
+@d4 1
+a4 1
+import org.opencyc.elf.ELFException;
+d37 1
+a37 1
+ * @@version $Id: Action.java,v 1.19 2003/09/18 21:22:57 stephenreed Exp $
+d132 3
+a134 3
+      throw new ELFException("Number of parameter values (" + parameterValues.size() +
+                             ") does not match the number of parameter types (" +
+                             getParameterTypes().size() + ")");
+d139 3
+a141 3
+        throw new ELFException("parameter values (" + parameterValue +
+                               ") is not an instance of parameter type (" +
+                               parameterType + ")");
+@
+
+
+1.19
+log
+@/home/reed/opencyc/org/opencyc/elf
+removed equals(...)  method if present and reformatted multiline comments to one less line
+@
+text
+@d37 1
+a37 1
+ * @@version $Id: Action.java,v 1.18 2003/09/17 23:09:49 stephenreed Exp $
+d39 1
+a39 1
+public class Action {
+d80 2
+a81 1
+  /** Creates and returns a copy of this object.
+d197 1
+@
+
+
+1.18
+log
+@changed lexical order of action names
+@
+text
+@d12 1
+a12 2
+/**
+ * Action describes the action to be performed and may include a set of modifiers such as
+d37 1
+a37 1
+ * @@version $Id: Action.java,v 1.17 2003/09/17 16:53:51 stephenreed Exp $
+d49 1
+a49 2
+  /**
+   * Returns a string representation of this object.
+d80 1
+a80 2
+  /**
+   * Creates and returns a copy of this object.
+d93 1
+a93 2
+  /**
+   * Gets the name of the action
+d101 1
+a101 2
+  /**
+   * Gets the parameter names for this action.
+d109 1
+a109 2
+  /**
+   * Gets the parameter types for this action.
+d117 1
+a117 2
+  /**
+   * Gets the parameter values for this action.
+d125 1
+a125 2
+  /**
+   * Sets the parameter values for this action.
+d146 1
+a146 2
+  /**
+   * Gets the output type for this action.
+d154 1
+a154 2
+  /**
+   * Gets the output value for this (completed) action.
+d165 1
+a165 2
+  /**
+   * Sets the name of the action
+d173 1
+a173 2
+  /**
+   * Sets the parameter names for this action.
+d181 1
+a181 2
+  /**
+   * Sets the parameter types for this action.
+d189 1
+a189 2
+  /**
+   * Sets the output type for this action.
+d196 1
+a196 2
+   /**
+   * Sets the output value for this action.
+@
+
+
+1.17
+log
+@moved from org.opencyc.elf.bg.state to org.opencyc.elf.wm.state
+@
+text
+@d38 1
+a38 1
+ * @@version $Id: Action.java,v 1.16 2003/09/14 13:58:03 stephenreed Exp $
+d222 3
+d228 2
+a229 2
+  /** the console prompted input action name */
+  public static final String CONSOLE_PROMPTED_INPUT = "console prompted input";
+a232 3
+  
+  /** the emergency stop action name */
+  public static final String EMERGENCY_STOP = "emergency stop";
+@
+
+
+1.16
+log
+@Changed ArrayList to List, consistently formatted one line comments. ----------------------------------------------------------------------
+@
+text
+@d6 1
+a6 1
+import org.opencyc.elf.bg.state.State;
+d38 1
+a38 1
+ * @@version $Id: Action.java,v 1.15 2003/09/08 18:52:37 stephenreed Exp $
+@
+
+
+1.15
+log
+@added clone method
+@
+text
+@a8 1
+import java.util.ArrayList;
+d10 1
+d38 1
+a38 1
+ * @@version $Id: Action.java,v 1.14 2003/09/05 18:16:10 stephenreed Exp $
+d110 1
+a110 1
+  public ArrayList getParameterNames () {
+d119 1
+a119 1
+  public ArrayList getParameterTypes () {
+d128 1
+a128 1
+  public ArrayList getParameterValues () {
+d137 1
+a137 1
+  public void setParameterValues (ArrayList parameterValues) {
+d189 1
+a189 1
+  public void setParameterNames (ArrayList parameterNames) {
+d198 1
+a198 1
+  public void setParameterTypes (ArrayList parameterTypes) {
+d219 1
+a219 3
+  /**
+   * the abort action name
+   */
+d222 1
+a222 3
+  /**
+   * the converse with user action name
+   */
+d225 1
+a225 3
+  /**
+   * the console prompted input action name
+   */
+d228 1
+a228 3
+  /**
+   * the init action name
+   */
+d231 1
+a231 3
+  /**
+   * the emergency stop action name
+   */
+d238 1
+a238 3
+  /**
+   * the name of the action
+   */
+d241 2
+a242 4
+  /**
+   * the parameter names for this action
+   */
+  protected ArrayList parameterNames;
+d244 2
+a245 4
+  /**
+   * the parameter types for this action
+   */
+  protected ArrayList parameterTypes;
+d247 2
+a248 4
+  /**
+   * the parameter values for this action
+   */
+  protected ArrayList parameterValues;
+d250 1
+a250 3
+  /**
+   * the output type for this action
+   */
+d253 1
+a253 3
+  /**
+   * the output value for this (completed) action
+   */
+@
+
+
+1.14
+log
+@/home/reed/opencyc/org/opencyc/elf
+fixed javadoc errors
+@
+text
+@d38 1
+a38 1
+ * @@version $Id: Action.java,v 1.13 2003/09/04 21:54:17 stephenreed Exp $
+d80 14
+@
+
+
+1.13
+log
+@fix toString() to work on partially instantiated actions
+@
+text
+@d13 2
+a14 2
+ * <P>Action describes the action to be performed and may include a set of modifiers such as
+ * priorities, mode, path constraints, acceptable cost, and required conditions
+d38 1
+a38 2
+ * @@date August 11, 2003, 2:57 PM
+ * @@version $Id: Action.java,v 1.12 2003/09/03 21:56:32 stephenreed Exp $
+d121 1
+a121 1
+   * @@param parameterNames the parameter values for this action
+@
+
+
+1.12
+log
+@replaced state variables with explicit variables
+@
+text
+@d39 1
+a39 1
+ * @@version $Id: Action.java,v 1.11 2003/09/03 04:04:56 stephenreed Exp $
+a62 1
+      Object parameterValue = getParameterValues().get(i);
+d66 9
+a74 4
+      if (parameterValue instanceof String) {
+        stringBuffer.append('"');
+        stringBuffer.append(parameterValue.toString());
+        stringBuffer.append('"');
+d77 1
+a77 1
+        stringBuffer.append(parameterValue.toString());
+@
+
+
+1.11
+log
+@Added ResourceFactory
+@
+text
+@d39 1
+a39 1
+ * @@version $Id: Action.java,v 1.10 2003/08/31 11:55:23 stephenreed Exp $
+a88 9
+   * Gets the action state, including the parameters and action modifiers
+   *
+   * @@return the action state, including the parameters and action modifiers
+   */
+  public State getState () {
+    return state;
+  }
+  
+  /**
+d94 1
+a94 1
+    return (ArrayList) state.getStateValue(State.PARAMETER_NAMES);
+d103 1
+a103 1
+    return (ArrayList) state.getStateValue(State.PARAMETER_TYPES);
+d112 1
+a112 1
+    return (ArrayList) state.getStateValue(State.PARAMETER_VALUES);
+d134 1
+a134 1
+    state.setStateValue(State.PARAMETER_VALUES, parameterValues);
+d143 1
+a143 1
+    return (Class) state.getStateValue(State.OUTPUT_TYPE);
+d152 1
+a152 1
+    return state.getStateValue(State.OUTPUT_VALUE);
+d173 1
+a173 1
+    state.setStateValue(State.PARAMETER_NAMES, parameterNames);
+d182 1
+a182 1
+    state.setStateValue(State.PARAMETER_TYPES, parameterTypes);
+d190 2
+a191 2
+  public void setOutpuType (Class outputType) {
+    state.setStateValue(State.OUTPUT_TYPE, outputType);
+d193 2
+a194 3
+   
+  /**
+   * Sets the action state.
+d196 1
+a196 1
+   * @@param state the action state
+d198 2
+a199 2
+  public void setState (State state) {
+    this.state = state;
+d201 1
+a201 1
+
+d230 20
+d252 1
+a252 1
+   * the action state
+d254 1
+a254 1
+  protected State state;
+d257 1
+a257 1
+   * the name of the action
+d259 1
+a259 1
+  protected String name;
+@
+
+
+1.10
+log
+@added toString() method
+@
+text
+@d39 1
+a39 1
+ * @@version $Id: Action.java,v 1.9 2003/08/31 02:05:54 stephenreed Exp $
+d212 25
+@
+
+
+1.9
+log
+@fixed getParameterNames() method
+@
+text
+@d10 1
+d39 1
+a39 1
+ * @@version $Id: Action.java,v 1.8 2003/08/31 00:37:48 stephenreed Exp $
+d51 28
+@
+
+
+1.8
+log
+@now that there is an action factory, make the mutators proctected for use ony
+by the factory
+@
+text
+@d38 1
+a38 1
+ * @@version $Id: Action.java,v 1.7 2003/08/31 00:21:23 stephenreed Exp $
+d74 1
+a74 1
+    return (ArrayList) state.getStateValue(State.PARAMETER_TYPES);
+@
+
+
+1.7
+log
+@removed extra import
+@
+text
+@d38 1
+a38 1
+ * @@version $Id: Action.java,v 1.6 2003/08/30 05:45:04 stephenreed Exp $
+a59 8
+   * Sets the name of the action
+   *
+   * @@param name the name of the action
+   */
+  public void setName (String name) {
+    this.name = name;
+  }  
+  /**
+d127 1
+a127 1
+   * Gets the utput value for this (completed) action.
+d135 39
+d182 1
+a182 3
+  
+  //// Protected Area
+  
+@
+
+
+1.6
+log
+@added action name
+@
+text
+@a10 2
+import java.lang.reflect.*;
+
+d38 1
+a38 1
+ * @@version $Id: Action.java,v 1.5 2003/08/29 22:52:30 stephenreed Exp $
+@
+
+
+1.5
+log
+@removed execute method
+@
+text
+@a7 2
+import org.opencyc.elf.bg.procedure.Procedure;
+
+d40 1
+a40 1
+ * @@version $Id: Action.java,v 1.4 2003/08/29 01:54:41 stephenreed Exp $
+d51 1
+a51 1
+  
+d53 1
+a53 1
+   * Gets the action state, including the procedure, parameters and action modifiers
+d55 1
+a55 1
+   * @@return the action state, including the procedure, parameters and action modifiers
+d57 2
+a58 2
+  public State getState () {
+    return state;
+d62 1
+a62 1
+   * Gets the procedure to be performed for this action.
+d64 1
+a64 1
+   * @@return he procedure to be performed for this action
+d66 3
+a68 4
+  public Procedure getProcedure () {
+    return (Procedure) state.getStateValue(State.PROCEDURE);
+  }
+  
+d70 1
+a70 1
+   * Sets the procedure to be performed for this action.
+d72 1
+a72 1
+   * @@param procedure the procedure to be performed for this action
+d74 2
+a75 2
+  public void setProcedure (Procedure procedure) {
+    state.setStateValue(State.PROCEDURE, procedure);
+d79 1
+a79 1
+   * Gets the procedure parameter names for this action.
+d81 1
+a81 1
+   * @@return the procedure parameter names for this action
+d84 1
+a84 1
+    return (ArrayList) getProcedure().getParameterNames();
+d88 1
+a88 1
+   * Gets the procedure parameter types for this action.
+d90 1
+a90 1
+   * @@return the procedure parameter types for this action
+d93 1
+a93 1
+    return (ArrayList) getProcedure().getParameterTypes();
+d97 1
+a97 1
+   * Gets the procedure parameter values for this action.
+d99 1
+a99 1
+   * @@return the procedure parameter values for this action
+d106 1
+a106 1
+   * Sets the procedure parameter values for this action.
+d108 1
+a108 1
+   * @@param parameterNames the procedure parameter values for this action
+d133 2
+a134 2
+    return getProcedure().getOutputType();
+  }
+d137 1
+a137 1
+   * Gets the procedure output value for this (completed) action.
+d139 1
+a139 1
+   * @@return the procedure parameter values for this (completed) action
+d142 1
+a142 1
+    return state.getStateValue(State.PROCEDURE_OUTPUT_VALUE);
+d146 1
+a146 1
+   * Sets the action state, including the object, method, parameters and action modifiers
+d148 1
+a148 1
+   * @@param state the action state, including the object, method, parameters and action modifiers
+d156 4
+d161 1
+a161 1
+   * the action state, including the procedure, parameters and action modifiers
+d165 4
+a168 3
+  //// Private Area
+  
+  //// Internal Rep
+@
+
+
+1.4
+log
+@moved the execute() method from Procedure to Action.
+@
+text
+@d13 2
+d42 1
+a42 1
+ * @@version $Id: Action.java,v 1.3 2003/08/28 02:32:52 stephenreed Exp $
+a54 24
+   * Executes this action's procedure given its parameter list
+   * 
+   * @@param inputs the list of parameter values
+   * 
+   * @@return the output of the procedure
+   */
+  public Object execute(ArrayList parameterValues) {
+    setParameterValues(parameterValues);
+    return execute();
+  };
+
+  /**
+   * Executes this action's procedure
+   * 
+   * @@param inputs the list of parameter values
+   * 
+   * @@return the output of the procedure
+   */
+  public Object execute() {
+    //TODO
+    return null;
+  };
+
+  /**
+d149 1
+a149 1
+   * Sets the action state, including the procedure, parameters and action modifiers
+d151 1
+a151 1
+   * @@param state the action state, including the procedure, parameters and action modifiers
+@
+
+
+1.3
+log
+@added methods to access parameter names, types and values
+@
+text
+@d40 1
+a40 1
+ * @@version $Id: Action.java,v 1.2 2003/08/11 21:40:50 stephenreed Exp $
+d52 23
+d109 1
+a109 10
+    return (ArrayList) state.getStateValue(State.PARAMETER_NAMES);
+  }
+  
+  /**
+   * Sets the procedure parameter names for this action.
+   *
+   * @@param parameterNames the procedure parameter names for this action
+   */
+  public void setParameterNames (ArrayList parameterNames) {
+    state.setStateValue(State.PARAMETER_NAMES, parameterNames);
+d111 1
+a111 1
+  
+d118 1
+a118 10
+    return (ArrayList) state.getStateValue(State.PARAMETER_TYPES);
+  }
+  
+  /**
+   * Sets the procedure parameter types for this action.
+   *
+   * @@param parameterNames the procedure parameter types for this action
+   */
+  public void setParameterTypes (ArrayList parameterTypes) {
+    state.setStateValue(State.PARAMETER_TYPES, parameterTypes);
+d120 1
+a120 1
+  
+d152 8
+d161 9
+a169 1
+  
+@
+
+
+1.2
+log
+@Added state variables
+@
+text
+@d4 1
+d8 2
+d11 1
+d40 1
+a40 1
+ * @@version $Id: Action.java,v 1.1 2003/08/11 21:27:58 stephenreed Exp $
+d62 87
+@
+
+
+1.1
+log
+@Initial check-in
+@
+text
+@d5 2
+d36 1
+a36 1
+ * @@version $Id$
+d48 19
+d68 5
+@
+

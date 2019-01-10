@@ -1,0 +1,551 @@
+head	1.12;
+access;
+symbols
+	PRE_1_0:1.12;
+locks; strict;
+comment	@# @;
+
+
+1.12
+date	2003.10.20.15.21.50;	author stephenreed;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2003.09.19.22.21.42;	author stephenreed;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2003.09.18.21.22.57;	author stephenreed;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2003.09.14.13.58.03;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2003.09.05.13.29.30;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2003.09.04.18.04.01;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2003.08.31.11.55.57;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2003.08.28.20.40.24;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2003.08.19.18.07.48;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2003.08.11.22.56.40;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2003.08.11.20.52.08;	author stephenreed;	state dead;
+branches;
+next	1.1;
+
+1.1
+date	2003.08.08.13.22.24;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.12
+log
+@moved commands to org.opencyc.elf.bg.command package
+@
+text
+@package org.opencyc.elf.bg.taskframe;
+
+//// Internal Imports
+import org.opencyc.elf.bg.command.Command;
+import org.opencyc.elf.goal.Goal;
+import org.opencyc.elf.goal.GoalTime;
+
+//// External Imports
+
+/** TaskCommand is an instruction to perform the given command.  The next command is also
+ * provided for consideration and response.
+ * 
+ * @@version $Id: TaskCommand.java,v 1.11 2003/09/19 22:21:42 stephenreed Exp $
+ * @@author Stephen L. Reed  
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class TaskCommand {
+  
+  //// Constructors
+
+  /** Creates a new instance of TaskCommand given the command and next command.
+   * 
+   * @@param command the action or goal command plus modifiers
+   * @@param nextCommand the planned next action or goal command plus modifiers
+   */
+  public TaskCommand(Command command, Command nextCommand) {
+    this.command = command;
+    this.nextCommand = nextCommand;
+  }
+
+  //// Public Area
+
+  /** Returns a string representation of this object.
+   * 
+   * @@return a string representation of this object
+   */
+  public String toString() {
+    StringBuffer stringBuffer = new StringBuffer();
+    stringBuffer.append("[TaskCommand: ");
+    stringBuffer.append(command.toString());
+    stringBuffer.append("]");
+    return stringBuffer.toString();
+  }
+
+  /** Gets the action or goal command plus modifiers.
+   *
+   * @@return the action or goal command plus modifiers
+   */
+  public Command getCommand () {
+    return command;
+  }
+
+
+  /** Gets the planned next action or goal command plus modifiers.
+   *
+   * @@return the planned next action or goal command plus modifiers
+   */
+  public Command getNextCommand () {
+    return nextCommand;
+  }
+
+
+  //// Protected Area
+  
+  //// Private Area
+  
+  //// Internal Rep
+  
+  /** the action or goal command plus modifiers */
+  protected Command command;
+  
+  /** the planned next action or goal command plus modifiers */
+  protected Command nextCommand;
+    
+}@
+
+
+1.11
+log
+@/home/reed/opencyc/org/opencyc/elf
+refactored job and schedule
+@
+text
+@d4 1
+a4 1
+
+d13 1
+a13 1
+ * @@version $Id: TaskCommand.java,v 1.10 2003/09/18 21:22:57 stephenreed Exp $
+@
+
+
+1.10
+log
+@/home/reed/opencyc/org/opencyc/elf
+removed equals(...)  method if present and reformatted multiline comments to one less line
+@
+text
+@d10 2
+a11 1
+/** TaskCommand is an instruction to perform a named task.
+d13 1
+a13 1
+ * @@version $Id: TaskCommand.java,v 1.9 2003/09/14 13:58:03 stephenreed Exp $
+d37 8
+a44 2
+  /** Creates a new instance of TaskCommand */
+  public TaskCommand() {
+d56 1
+a56 4
+    if (actionCommand != null)
+      stringBuffer.append(actionCommand.toString());
+    if (goalCommand != null)
+      stringBuffer.append(goalCommand.toString());
+d61 1
+a61 9
+  /** Gets the action command plus modifiers
+   *
+   * @@return the action command plus modifiers
+   */
+  public Action getActionCommand () {
+    return actionCommand;
+  }
+
+  /** Sets the action command plus modifiers
+d63 1
+a63 1
+   * @@param actionCommand the action command plus modifiers
+d65 2
+a66 2
+  public void setActionCommand (Action actionCommand) {
+    this.actionCommand = actionCommand;
+a68 7
+  /** Gets the goal to be accomplish, or the state to be maintained, plus modifiers
+   *
+   * @@return the goal to be accomplish, or the state to be maintained, plus modifiers
+   */
+  public Goal getGoalCommand () {
+    return goalCommand;
+  }
+d70 1
+a70 1
+  /** Sets the goal to be accomplish, or the state to be maintained, plus modifiers
+d72 1
+a72 1
+   * @@param goalCommand the goal to be accomplish, or the state to be maintained, plus modifiers
+d74 2
+a75 2
+  public void setGoalCommand (Goal goalCommand) {
+    this.goalCommand = goalCommand;
+a77 63
+  /** Gets the goal time constraint plus modifiers such as tolerance
+   *
+   * @@return the goal time constraint plus modifiers such as tolerance
+   */
+  public GoalTime getgoalTime () {
+    return goalTime;
+  }
+
+  /** Sets the goal time constraint plus modifiers such as tolerance
+   *
+   * @@param goalTime the goal time constraint plus modifiers such as tolerance
+   */
+  public void setGoalTime (GoalTime goalTime) {
+    this.goalTime = goalTime;
+  }
+
+  /** Gets the planned next action command plus modifiers
+   *
+   * @@return the planned next action command plus modifiers
+   */
+  public Action getNextActionCommand () {
+    return nextActionCommand;
+  }
+
+  /** Sets the planned next action command plus modifiers
+   *
+   * @@param nextActionCommand the planned next action command plus modifiers
+   */
+  public void setNextActionCommand (Action nextActionCommand) {
+    this.nextActionCommand = nextActionCommand;
+  }
+
+  /** Gets the planned next goal to be accomplish, or the state to be maintained, plus modifiers
+   *
+   * @@return the planned next goal to be accomplish, or the state to be maintained, plus modifiers
+   */
+  public Goal getNextGoalCommand () {
+    return nextGoalCommand;
+  }
+
+  /** Sets the planned next goal to be accomplish, or the state to be maintained, plus modifiers
+   *
+   * @@param nextGoalCommand the planned next goal to be accomplish, or the state to be maintained, plus modifiers
+   */
+  public void setNextGoalCommand (Goal nextGoalCommand) {
+    this.nextGoalCommand = nextGoalCommand;
+  }
+
+  /** Gets the planned next goal time constraint plus modifiers such as tolerance
+   *
+   * @@return the planned next goal time constraint plus modifiers such as tolerance
+   */
+  public GoalTime getNextGoalTime () {
+    return nextGoalTime;
+  }
+
+  /** Sets the planned next goal time constraint plus modifiers such as tolerance
+   *
+   * @@param nextGoalTime the planned next goal time constraint plus modifiers such as tolerance
+   */
+  public void setNextGoalTime (GoalTime nextGoalTime) {
+    this.nextGoalTime = nextGoalTime;
+  }
+d85 2
+a86 17
+  /** the action command plus modifiers */
+  protected Action actionCommand;
+  
+  /** the goal to be accomplish, or the state to be maintained, plus modifiers */
+  protected Goal goalCommand;
+  
+  /** the goal time constraint plus modifiers such as tolerance */
+  protected GoalTime goalTime;
+  
+  /** the planned next action command plus modifiers */
+  protected Action nextActionCommand;
+  
+  /** the planned next goal to be accomplish, or the state to be maintained, plus modifiers */
+  protected Goal nextGoalCommand;
+  
+  /** the planned next goal time constraint plus modifiers such as tolerance */
+  protected GoalTime nextGoalTime;
+d88 3
+@
+
+
+1.9
+log
+@Changed ArrayList to List, consistently formatted one line comments. ----------------------------------------------------------------------
+@
+text
+@d10 1
+a10 2
+/**
+ * TaskCommand is an instruction to perform a named task.
+d12 1
+a12 1
+ * @@version $Id: TaskCommand.java,v 1.8 2003/09/05 13:29:30 stephenreed Exp $
+d42 1
+a42 18
+  /**
+   * Returns true if the given object equals this object.
+   * 
+   * @@param obj the given object
+   * 
+   * @@return true if the given object equals this object
+   */
+  public boolean equals(Object obj) {
+    if (!(obj instanceof TaskCommand)) {
+      return false;
+    }
+
+    //TODO
+    return true;
+  }
+
+  /**
+   * Returns a string representation of this object.
+d57 1
+a57 2
+  /**
+   * Gets the action command plus modifiers
+d65 1
+a65 2
+  /**
+   * Sets the action command plus modifiers
+d73 1
+a73 2
+  /**
+   * Gets the goal to be accomplish, or the state to be maintained, plus modifiers
+d81 1
+a81 2
+  /**
+   * Sets the goal to be accomplish, or the state to be maintained, plus modifiers
+d89 1
+a89 2
+  /**
+   * Gets the goal time constraint plus modifiers such as tolerance
+d97 1
+a97 2
+  /**
+   * Sets the goal time constraint plus modifiers such as tolerance
+d105 1
+a105 2
+  /**
+   * Gets the planned next action command plus modifiers
+d113 1
+a113 2
+  /**
+   * Sets the planned next action command plus modifiers
+d121 1
+a121 2
+  /**
+   * Gets the planned next goal to be accomplish, or the state to be maintained, plus modifiers
+d129 1
+a129 2
+  /**
+   * Sets the planned next goal to be accomplish, or the state to be maintained, plus modifiers
+d137 1
+a137 2
+  /**
+   * Gets the planned next goal time constraint plus modifiers such as tolerance
+d145 1
+a145 2
+  /**
+   * Sets the planned next goal time constraint plus modifiers such as tolerance
+@
+
+
+1.8
+log
+@moved section headers
+@
+text
+@a10 1
+ * <P>
+a11 1
+ * </p>
+d13 1
+a13 1
+ * @@version $Id: TaskCommand.java,v 1.7 2003/09/04 18:04:01 stephenreed Exp $
+d37 1
+a37 3
+  /**
+   * Creates a new instance of TaskCommand
+   */
+d189 1
+a189 3
+  /**
+   * the action command plus modifiers
+   */
+d192 1
+a192 3
+  /**
+   * the goal to be accomplish, or the state to be maintained, plus modifiers
+   */
+d195 1
+a195 3
+  /**
+   * the goal time constraint plus modifiers such as tolerance
+   */
+d198 1
+a198 3
+  /**
+   * the planned next action command plus modifiers
+   */
+d201 1
+a201 3
+  /**
+   * the planned next goal to be accomplish, or the state to be maintained, plus modifiers
+   */
+d204 1
+a204 3
+  /**
+   * the planned next goal time constraint plus modifiers such as tolerance
+   */
+@
+
+
+1.7
+log
+@line spacing
+@
+text
+@d15 1
+a15 1
+ * @@version $Id: TaskCommand.java,v 1.6 2003/08/31 11:55:57 stephenreed Exp $
+d189 4
+a222 2
+  //// Private Area
+  //// Internal Rep
+@
+
+
+1.6
+log
+@added toString() method
+@
+text
+@d15 1
+a15 1
+ * @@version $Id: TaskCommand.java,v 1.5 2003/08/28 20:40:24 stephenreed Exp $
+d36 1
+@
+
+
+1.5
+log
+@fixed cvs $Id:
+@
+text
+@d15 1
+a15 1
+ * @@version $Id: BehaviorGeneration.java,v 1.3 2002/11/19 02:42:53 stephenreed Exp $
+d68 8
+a75 2
+    //TODO
+    return "";
+@
+
+
+1.4
+log
+@fixed method name
+@
+text
+@d15 1
+a15 2
+ * @@version $Id: BehaviorGeneration.java,v 1.3 2002/11/19 02:42:53 stephenreed
+ *          Exp $
+@
+
+
+1.3
+log
+@/home/reed/opencyc/org/opencyc/elf/bg/taskframe
+renamed TaskCommandFrame.java to TaskCommand.java
+@
+text
+@d123 1
+a123 1
+  public void setXXX (GoalTime goalTime) {
+@
+
+
+1.2
+log
+@Renamed TaskCommand.java to TaskCommandFrame.java
+@
+text
+@d4 4
+d17 18
+a34 1
+ * @@author reed <p><p><p><p><p>
+d73 108
+d182 31
+@
+
+
+1.1
+log
+@synchronized with work in progress.
+@
+text
+@@
+

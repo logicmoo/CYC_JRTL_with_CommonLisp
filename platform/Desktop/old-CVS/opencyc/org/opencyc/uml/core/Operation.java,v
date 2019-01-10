@@ -1,0 +1,365 @@
+head	1.7;
+access;
+symbols
+	PRE_1_0:1.6;
+locks; strict;
+comment	@# @;
+
+
+1.7
+date	2006.10.21.16.49.18;	author dmiles;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2002.11.03.22.19.30;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2002.10.29.23.30.13;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2002.10.29.00.54.58;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2002.10.28.15.14.48;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2002.10.28.03.26.20;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2002.10.27.04.53.47;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.7
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental packages
+@
+text
+@package org.opencyc.uml.core;
+
+import org.opencyc.uml.statemachine.*;
+
+/**
+ * Operation from the UML Core package.
+ *
+ * @@version $Id: Operation.java,v 1.6 2002/11/03 22:19:30 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+public class Operation extends BehavioralFeature {
+
+    /**
+     * the kind of concurrency
+     */
+    protected int concurrency;
+
+    public static final int CCK_SEQUENTIAL = 1;
+    public static final int CCK_GUARDED = 2;
+    public static final int CCK_CONCURRENT = 3;
+
+    /**
+     * When true, indicates that this operation must not inherit
+     * a declaration of the same operation.
+     */
+    protected boolean isRoot;
+
+    /**
+     * When true, indicates that the implementation of this operation
+     * may not be overriden by a descendant class.
+     */
+    protected boolean isLeaf;
+
+    /**
+     * indicates whether this operation is abstract
+     */
+    protected boolean isAbstract;
+
+    /**
+     * the specification for this operation
+     */
+    protected String specification;
+
+    /**
+     * (Extension) the state machine implementing this Operation
+     */
+    protected StateMachine stateMachine;
+
+    /**
+     * Constructs a new Operation object.
+     */
+    public Operation() {
+    }
+
+    /**
+     * Gets the kind of concurrency.
+     *
+     * @@return the kind of concurrency
+     */
+    public int getConcurrency () {
+        return concurrency;
+    }
+
+    /**
+     * Sets the kind of concurrency.
+     *
+     * @@param concurrency the kind of concurrency
+     */
+    public void setConcurrency (int concurrency) {
+        this.concurrency = concurrency;
+    }
+
+    /**
+     * Gets whether this operation must not inherit
+     * a declaration of the same operation
+     *
+     * @@return whether this operation must not inherit
+     * a declaration of the same operation
+     */
+    public boolean isRoot () {
+        return isRoot;
+    }
+
+    /**
+     * Sets whether this operation must not inherit
+     * a declaration of the same operation
+     *
+     * @@param isLeaf whether this operation must not inherit
+     * a declaration of the same operation
+     */
+    public void setIsRoot (boolean isRoot) {
+        this.isRoot = isRoot;
+    }
+
+    /**
+     * Gets whether the implementation of this operation
+     * may not be overriden by a descendant class
+     *
+     * @@return whether the implementation of this operation
+     * may not be overriden by a descendant class
+     */
+    public boolean isLeaf () {
+        return isLeaf;
+    }
+
+    /**
+     * Sets whether the implementation of this operation
+     * may not be overriden by a descendant class
+     *
+     * @@param isLeaf whether the implementation of this operation
+     * may not be overriden by a descendant class
+     */
+    public void setIsLeaf (boolean isLeaf) {
+        this.isLeaf = isLeaf;
+    }
+
+    /**
+     * Gets whether this operation is abstract
+     *
+     * @@return whether this operation is abstract
+     */
+    public boolean isAbstract () {
+        return isAbstract;
+    }
+
+    /**
+     * Sets whether this operation is abstract
+     *
+     * @@param isAbstract whether this operation is abstract
+     */
+    public void setIsAbstract (boolean isAbstract) {
+        this.isAbstract = isAbstract;
+    }
+
+    /**
+     * Gets the specification for this operation
+     *
+     * @@return the specification for this operation
+     */
+    public String getSpecification () {
+        return specification;
+    }
+
+    /**
+     * Sets the specification for this operation
+     *
+     * @@param specification the specification for this operation
+     */
+    public void setSpecification (String specification) {
+        this.specification = specification;
+    }
+
+    /**
+     * Gets the state machine implementing this Operation
+     *
+     * @@return the state machine implementing this Operation
+     */
+    public StateMachine getstateMachine () {
+        return stateMachine;
+    }
+
+    /**
+     * Sets the state machine implementing this Operation
+     *
+     * @@param stateMachine the state machine implementing this Operation
+     */
+    public void setStateMachine (StateMachine stateMachine) {
+        this.stateMachine = stateMachine;
+    }
+
+}@
+
+
+1.6
+log
+@Moved Procedure from commonbehavior to core UML package.
+@
+text
+@d8 1
+a8 1
+ * @@version $Id: Operation.java,v 1.5 2002/10/29 23:30:13 stephenreed Exp $
+d100 1
+a100 1
+        return isRoot;;
+@
+
+
+1.5
+log
+@Added getter and setter methods.
+@
+text
+@d8 1
+a8 1
+ * @@version $Id: Operation.java,v 1.4 2002/10/29 00:54:58 stephenreed Exp $
+a72 1
+
+@
+
+
+1.4
+log
+@Aligning UML support with v 1.4
+@
+text
+@d8 1
+a8 1
+ * @@version $Id: Operation.java,v 1.3 2002/10/28 15:14:48 stephenreed Exp $
+d33 1
+a33 1
+     * kind of concurrency
+d35 1
+a35 1
+    public int concurrency;
+d45 1
+a45 1
+    public boolean isRoot;
+d51 1
+a51 1
+    public boolean isLeaf;
+d56 1
+a56 1
+    public boolean isAbstract;
+d59 1
+a59 1
+     * specification for this operation
+d61 1
+a61 1
+    public String specification;
+d66 1
+a66 1
+    public StateMachine stateMachine;
+d73 118
+@
+
+
+1.3
+log
+@Minor fixes for java 1.3 compatibility and added
+required imports for new UML support.
+@
+text
+@d8 1
+a8 1
+ * @@version $Id: Operation.java,v 1.2 2002/10/28 03:26:20 stephenreed Exp $
+d42 2
+a43 1
+     * indicates whether this operation is root
+d48 2
+a49 1
+     * indicates whether this operation is a leaf
+@
+
+
+1.2
+log
+@Check in.
+@
+text
+@d1 1
+a1 1
+package org.opencyc.uml.core;e
+d8 1
+a8 1
+ * @@version $Id: Operation.java,v 1.1 2002/10/27 04:53:47 stephenreed Exp $
+a64 10
+
+    /**
+     * (Extension) the state machine implementing this Operation
+     */
+    public StateMachine stateMachine;
+
+    /**
+     * (Extension) evaluatable expression implementing this Operation
+     */
+    public EvaluatableExpression evaluatableExpression;
+@
+
+
+1.1
+log
+@Added more UML statemachine support
+@
+text
+@d1 1
+a1 1
+package org.opencyc.uml.core;
+d8 1
+a8 1
+ * @@version $Id: PseudoState.java,v 1.1 2002/10/25 23:54:58 stephenreed Exp $
+d65 10
+@
+

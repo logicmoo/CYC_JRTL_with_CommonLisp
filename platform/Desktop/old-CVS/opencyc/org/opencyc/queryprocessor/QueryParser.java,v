@@ -1,0 +1,367 @@
+head	1.6;
+access;
+symbols
+	PRE_1_0:1.5;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2006.10.21.17.01.59;	author dmiles;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2001.10.06.02.37.21;	author stephenreed;	state dead;
+branches;
+next	1.4;
+
+1.4
+date	2001.09.11.13.56.34;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2001.09.06.21.43.25;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2001.09.06.15.30.52;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2001.09.06.14.02.29;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental classes.
+@
+text
+@package org.opencyc.queryprocessor;
+
+import java.util.*;
+import java.io.IOException;
+
+import org.opencyc.cycobject.*;
+import org.opencyc.api.*;
+import org.opencyc.inferencesupport.*;
+
+/**
+ * <tt>QueryParser</tt> object to model the attributes and behavior of
+ * a parser which inputs the query representation and sets up
+ * the parent <tt>QueryProcessor</tt> object.<p>
+ *
+ * @@version $Id: QueryParser.java,v 1.4 2001/09/11 13:56:34 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * @@see UnitTest#testQueryProcessor
+ */
+public class QueryParser {
+    /**
+     * Reference to the parent <tt>QueryProcessor</tt> object.
+     */
+    protected QueryProcessor queryProcessor;
+
+    /**
+     * Reference to the parent list of query literals.
+     */
+    protected ArrayList queryLiterals;
+
+    /**
+     * Reference to the parent list of constraint rules.
+     */
+    protected ArrayList constraintRules;
+
+    /**
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    protected int verbosity = QueryProcessor.DEFAULT_VERBOSITY;
+
+    /**
+     * Constructs a new <tt>QueryParser</tt> object for the parent
+     * <tt>QueryProcessor</tt>.
+     *
+     * @@param queryProcessor the parent constraint problem
+     */
+    public QueryParser(QueryProcessor queryProcessor) {
+        this.queryProcessor = queryProcessor;
+        queryLiterals = new ArrayList();
+        queryProcessor.queryLiterals = this.queryLiterals;
+        constraintRules = new ArrayList();
+        queryProcessor.constraintRules = this.constraintRules;
+    }
+
+    /**
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     *
+     * @@param verbosity 0 --> quiet ... 9 -> maximum diagnostic input
+     */
+    public void setVerbosity(int verbosity) {
+        this.verbosity = verbosity;
+    }
+
+    /**
+     * Simplifies the input problem into its constituent <tt>QueryLiteral</tt> and
+     * <tt>ConstraintRule</tt> objects,
+     * If a ground fact discovered among the query literals is proven false, then immediately
+     * return the value false.  If a query literal has no bindings, then immediately return the value false
+     *
+     * @@return <tt>false</tt> if no further backchaining is possible and a query literal cannot be satisfied,
+     * otherwise return <tt>true</tt>
+     */
+    public boolean extractQueryLiterals() throws IOException {
+        ArrayList literals = QueryLiteral.simplifyQueryLiteralExpression(queryProcessor.query);
+        for (int i = 0; i < literals.size(); i++) {
+            Literal literal = (Literal) literals.get(i);
+            if (literal.isEvaluatable()) {
+                ConstraintRule constraintRule = new ConstraintRule(literal.getFormula());
+                constraintRules.add(constraintRule);
+            }
+            else {
+                queryLiterals.add((QueryLiteral) literal);
+            }
+
+        }
+        // Sort by ascending arity to find likely unsatisfiable facts first.
+        Collections.sort(queryLiterals);
+        for (int i = 0; i < queryLiterals.size(); i++) {
+            QueryLiteral queryLiteral = (QueryLiteral) queryLiterals.get(i);
+            if ((queryProcessor.backchainer.backchainDepth ==
+                 queryProcessor.backchainer.maxBackchainDepth) &&
+                (! isQueryLiteralSatisfiable(queryLiteral)))
+                return false;
+        }
+        if (verbosity > 1) {
+            queryProcessor.displayQueryLiterals();
+            queryProcessor.displayConstraintRules();
+        }
+        return true;
+    }
+
+    /**
+     * Returns <tt>true</tt> iff the queryLiteral cannot be satisfied.
+     *
+     * @@param queryLiteral the query literal to check in the KB
+     * @@return <tt>true</tt> iff the queryLiteral cannot be satisfied
+     */
+    protected boolean isQueryLiteralSatisfiable(QueryLiteral queryLiteral) throws IOException {
+        if (queryLiteral.isGround()) {
+            if (verbosity > 3)
+                System.out.println("Ground fact with no backchaining possible\n" + queryLiteral);
+            boolean isTrueFact = CycAccess.current().isQueryTrue(queryLiteral.getFormula(), queryProcessor.mt);
+            if (verbosity > 3)
+                System.out.println("  --> " + isTrueFact);
+            if (! isTrueFact)
+                return false;
+        }
+        CycConstant term = null;
+        Integer argumentPostion = null;
+        for (int j = 0; j < queryLiteral.getArguments().size(); j++) {
+            Object argument = queryLiteral.getArguments().get(j);
+            if (argument instanceof CycConstant) {
+                term = (CycConstant) argument;
+                argumentPostion = new Integer(j + 1);
+                break;
+            }
+        }
+        if (term != null) {
+            boolean someInstancesExist =
+                CycAccess.current().hasSomePredicateUsingTerm(queryLiteral.getPredicate(),
+                                                              term,
+                                                              argumentPostion,
+                                                              queryProcessor.mt);
+            if (! someInstancesExist) {
+                if (verbosity > 3)
+                    System.out.println("No instances exist and with no backchaining possible\n" + queryLiteral);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Gathers the unique variables used in this constraint problem.
+     */
+    public void gatherVariables() {
+        HashSet uniqueVariables = new HashSet();
+        for (int i = 0; i < queryProcessor.queryLiterals.size(); i++) {
+            QueryLiteral queryLiteral = (QueryLiteral) queryProcessor.queryLiterals.get(i);
+            uniqueVariables.addAll(queryLiteral.getVariables());
+        }
+        queryProcessor.variables.addAll(uniqueVariables);
+    }
+
+
+}@
+
+
+1.5
+log
+@Removed experimental classes
+@
+text
+@d5 1
+@
+
+
+1.4
+log
+@Removing domain population logic from the constraint solver, having moved that behavior to the query processor.
+@
+text
+@d14 1
+a14 1
+ * @@version $Id: QueryParser.java,v 1.3 2001/09/06 21:43:25 stephenreed Exp $
+@
+
+
+1.3
+log
+@Completed renaming of Rule to ConstraintRule class
+@
+text
+@d14 1
+a14 1
+ * @@version $Id: QueryParser.java,v 1.2 2001/09/06 15:30:52 stephenreed Exp $
+d49 5
+d69 2
+d84 2
+a85 1
+     * Simplifies the input problem into its constituent <tt>QueryLiteral</tt> objects,
+d93 12
+a104 1
+        queryLiterals.addAll(QueryLiteral.simplifyQueryLiteralExpression(queryProcessor.query));
+d114 1
+a114 1
+        if (verbosity > 1)
+d116 2
+@
+
+
+1.2
+log
+@Added Literal abstract class parent to ConstraintRule and QueryLiteral classes.
+@
+text
+@d7 1
+d14 1
+a14 1
+ * @@version $Id: QueryParser.java,v 1.1 2001/09/06 14:02:29 stephenreed Exp $
+d78 2
+a79 5
+     * then divides the input rules into those which populate the variable
+     * domains, and those which subsequently constrain the search for
+     * one or more solutions.  Obtains additional argument type constraints for the constraint
+     * rules.  If a ground fact discovered among the rule set is proven false, then immediately
+     * return the value false.  If a rule has no instances, then immediately return the value false
+d81 1
+a81 1
+     * @@return <tt>false</tt> if no further backchaining is possible and a rule cannot be satisfied,
+d84 2
+a85 2
+    public boolean extractRulesAndDomains() throws IOException {
+        simplifiedRules.addAll(Rule.simplifyRuleExpression(queryProcessor.problem));
+d87 3
+a89 3
+        Collections.sort(simplifiedRules);
+        for (int i = 0; i < simplifiedRules.size(); i++) {
+            Rule rule = (Rule) simplifiedRules.get(i);
+d92 1
+a92 1
+                (! isRuleSatisfiable(rule)))
+a93 12
+            if (rule.isExtensionalVariableDomainPopulatingRule())
+                // Extensional rules that explicitly define the value domain will rank best.
+                rule.nbrFormulaInstances = 1;
+            else
+                rule.nbrFormulaInstances =
+                    CycAccess.current().countUsingBestIndex(rule.formula, queryProcessor.mt);
+            for (int j = 0; j < rule.getVariables().size(); j++) {
+                VariablePopulationItem variablePopulationItem =
+                    new VariablePopulationItem((CycVariable) rule.getVariables().get(j),
+                                               rule);
+                variableDomainPopulator.add(variablePopulationItem);
+            }
+a94 1
+        variableDomainPopulator.populateDomains();
+d96 1
+a96 1
+            queryProcessor.displayConstraintRules();
+d101 1
+a101 1
+     * Returns <tt>true</tt> iff the rule cannot be satisfied.
+d103 2
+a104 2
+     * @@param rule the rule to check in the KB
+     * @@return <tt>true</tt> iff the rule cannot be satisfied
+d106 2
+a107 2
+    protected boolean isRuleSatisfiable(Rule rule) throws IOException {
+        if (rule.isGround()) {
+d109 2
+a110 6
+                System.out.println("Ground fact with no backchaining possible\n" + rule);
+            boolean isTrueFact;
+            if (rule.isEvaluatable())
+                isTrueFact = Rule.evaluateConstraintRule(rule.getFormula());
+            else
+                isTrueFact = CycAccess.current().isQueryTrue(rule.getFormula(), queryProcessor.mt);
+d118 2
+a119 2
+        for (int j = 0; j < rule.getArguments().size(); j++) {
+            Object argument = rule.getArguments().get(j);
+d128 1
+a128 1
+                CycAccess.current().hasSomePredicateUsingTerm(rule.getPredicate(),
+d134 1
+a134 1
+                    System.out.println("No instances exist and with no backchaining possible\n" + rule);
+d146 3
+a148 3
+        for (int i = 0; i < queryProcessor.simplifiedRules.size(); i++) {
+            Rule rule = (Rule) queryProcessor.simplifiedRules.get(i);
+            uniqueVariables.addAll(rule.getVariables());
+@
+
+
+1.1
+log
+@Added to queryprocessor package.
+@
+text
+@a1 1
+package org.opencyc.inferencesupport;
+d13 1
+a13 1
+ * @@version $Id: QueryParser.java,v 1.20 2001/09/05 22:59:00 stephenreed Exp $
+@
+

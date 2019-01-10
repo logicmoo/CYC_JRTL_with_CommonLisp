@@ -1,0 +1,108 @@
+head	1.4;
+access;
+symbols
+	BRANCH_OPENCYC_1_0_1:1.3.0.2
+	OPENCYC_1_0_1:1.3
+	PRE_1_0:1.1;
+locks; strict;
+comment	@# @;
+
+
+1.4
+date	2006.10.21.16.49.17;	author dmiles;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2006.10.18.14.21.31;	author dmiles;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2006.10.18.13.36.02;	author dmiles;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2002.05.13.18.08.32;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.4
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental packages
+@
+text
+@package org.opencyc.cyclobject;
+
+/*****************************************************************************
+ * KB comment for #$CycLOpenDenotationalTerm as of 2002/05/07:<p>
+ *
+ * The collection of all open denotational terms in the CycL language.  An
+ * expression is "open" if it contains one or more free variables (see
+ * #$CycLOpenExpression).  A CycL term is said to be "denotational" if it is the
+ * right sort of term to have a denotation (or value) in the universe of
+ * discourse (see #$CycLDenotationalTerm).  Each instance of
+ * #$CycLOpenDenotationalTerm is either a #$CycLOpenNonAtomicTerm (i.e. a "NAT"
+ * with a free variable) or a #$CycLVariable iself.  Examples include `?X',
+ * `(#$JuvenileFn ?X)', and `(#$JuvenileFn #$isa ?X #$genls #$JuvenileFn)' (even
+ * though the latter is semantically ill-formed).<p>
+ * 
+ * @@version $Id: CycLOpenDenotationalTerm.java,v 1.5 2005/02/17 13:41:17 reed Exp $
+ * @@author Tony Brusseau, Steve Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://sf.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *****************************************************************************/
+public interface CycLOpenDenotationalTerm 
+  extends CycLOpenExpression, CycLDenotationalTerm {}
+@
+
+
+1.3
+log
+@This is the Additional Content to Create OpenCyc-1.0.1
+@
+text
+@@
+
+
+1.2
+log
+@This is a checkin of OpenCyc 1.0.1 Java  OPENCYC_1_0_1
+@
+text
+@@
+
+
+1.1
+log
+@Initial check in of CycL objects, an alternative to org.cycobject.* classes, in
+those cases where closer alignment to the CycL grammar is required.
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: CycLOpenDenotationalTerm.java,v 1.3 2002/05/07 20:04:01 jantos Exp $
+@
+

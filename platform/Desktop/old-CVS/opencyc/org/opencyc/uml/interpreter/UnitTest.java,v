@@ -1,0 +1,2894 @@
+head	1.31;
+access;
+symbols
+	PRE_1_0:1.30;
+locks; strict;
+comment	@# @;
+
+
+1.31
+date	2006.10.21.16.49.18;	author dmiles;	state Exp;
+branches;
+next	1.30;
+
+1.30
+date	2003.02.24.22.41.32;	author stephenreed;	state Exp;
+branches;
+next	1.29;
+
+1.29
+date	2003.02.11.00.26.37;	author stephenreed;	state Exp;
+branches;
+next	1.28;
+
+1.28
+date	2003.02.09.19.45.22;	author stephenreed;	state Exp;
+branches;
+next	1.27;
+
+1.27
+date	2003.02.09.02.14.19;	author stephenreed;	state Exp;
+branches;
+next	1.26;
+
+1.26
+date	2003.02.07.21.06.26;	author stephenreed;	state Exp;
+branches;
+next	1.25;
+
+1.25
+date	2003.02.06.02.57.03;	author stephenreed;	state Exp;
+branches;
+next	1.24;
+
+1.24
+date	2003.01.29.02.03.19;	author stephenreed;	state Exp;
+branches;
+next	1.23;
+
+1.23
+date	2003.01.29.00.18.10;	author stephenreed;	state Exp;
+branches;
+next	1.22;
+
+1.22
+date	2003.01.27.22.49.41;	author stephenreed;	state Exp;
+branches;
+next	1.21;
+
+1.21
+date	2003.01.24.00.20.50;	author stephenreed;	state Exp;
+branches;
+next	1.20;
+
+1.20
+date	2003.01.22.23.56.04;	author stephenreed;	state Exp;
+branches;
+next	1.19;
+
+1.19
+date	2003.01.13.23.58.09;	author stephenreed;	state Exp;
+branches;
+next	1.18;
+
+1.18
+date	2003.01.10.22.31.42;	author stephenreed;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2003.01.09.21.52.16;	author stephenreed;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2003.01.09.00.00.25;	author stephenreed;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2002.11.26.00.15.22;	author stephenreed;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2002.11.14.22.06.05;	author stephenreed;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2002.11.14.00.35.40;	author stephenreed;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2002.11.13.04.07.54;	author stephenreed;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2002.11.09.15.18.57;	author stephenreed;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2002.11.06.16.35.17;	author stephenreed;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2002.11.06.04.51.02;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2002.11.06.00.24.31;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2002.11.05.15.44.15;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2002.11.05.00.35.25;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2002.11.04.21.51.09;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2002.11.04.21.38.21;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2002.11.04.16.23.23;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2002.10.29.16.18.19;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2002.10.28.05.05.55;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.31
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental packages
+@
+text
+@package  org.opencyc.uml.interpreter;
+
+import  java.util.*;
+import  java.net.*;
+import  java.io.*;
+import  junit.framework.*;
+import  koala.dynamicjava.interpreter.*;
+import  koala.dynamicjava.parser.wrapper.*;
+import  org.opencyc.api.*;
+import  org.opencyc.cycobject.*;
+import  org.opencyc.util.*;
+import  org.opencyc.uml.core.*;
+import  org.opencyc.uml.action.*;
+import  org.opencyc.uml.commonbehavior.*;
+import  org.opencyc.uml.datatypes.Multiplicity;
+import  org.opencyc.uml.statemachine.*;
+
+
+/**
+ * Provides a unit test suite for the <tt>org.opencyc.uml.interpreter</tt> package<p>
+ *
+ * @@version $Id: UnitTest.java,v 1.30 2003/02/24 22:41:32 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class UnitTest extends TestCase {
+
+    /**
+     * Creates a <tt>UnitTest</tt> object with the given name.
+     */
+    public UnitTest (String name) {
+        super(name);
+    }
+
+    /**
+     * Returns the test suite.
+     *
+     * @@return the test suite
+     */
+    public static Test suite () {
+        TestSuite testSuite = new TestSuite();
+        /*
+        testSuite.addTest(new UnitTest("testJavaInterpreter"));
+        testSuite.addTest(new UnitTest("testExpressionEvaluation"));
+        testSuite.addTest(new UnitTest("testContextFrames"));
+        testSuite.addTest(new UnitTest("testProcedureInterpretation"));
+        testSuite.addTest(new UnitTest("testSimpleStateMachine"));
+        */
+        testSuite.addTest(new UnitTest("testCycExtractor"));
+        return  testSuite;
+    }
+
+    /**
+     * Main method in case tracing is prefered over running JUnit.
+     */
+    public static void main (String[] args) {
+        junit.textui.TestRunner.run(suite());
+    }
+
+    /**
+     * Tests java interpreter, which is no longer used for expression evaluation.
+     */
+    public void testJavaInterpreter () {
+        System.out.println("\n**** testJavaInterpreter ****");
+        // Create the interpreter. It will use the default JavaCC parser.
+        TreeInterpreter interpreter = new TreeInterpreter(new JavaCCParserFactory());
+        Integer integer1 = new Integer(1);
+        interpreter.defineVariable("integer1", integer1);
+        StringReader stringReader = new StringReader("integer1.intValue() + 1;");
+        Object result = interpreter.interpret(stringReader, "statement");
+        Assert.assertTrue(result instanceof Integer);
+        Assert.assertEquals(new Integer(2), result);
+        StringBuffer statements = new StringBuffer();
+        statements.append("String testString;\n");
+        statements.append("testString = \"abcdef\";\n");
+        statements.append("testString.substring(3);\n");
+        result = interpreter.interpret(new StringReader(statements.toString()),
+                "statements");
+        Assert.assertTrue(result instanceof String);
+        Assert.assertEquals("def", result);
+        statements = new StringBuffer();
+        statements.append("String testString2;\n");
+        statements.append("testString2 = testString + \"1234\";\n");
+        statements.append("testString2.startsWith(\"abc\");\n");
+        result = interpreter.interpret(new StringReader(statements.toString()),
+                "statements");
+        Assert.assertTrue(result instanceof Boolean);
+        Assert.assertEquals(Boolean.TRUE, result);
+        System.out.println("\n**** testJavaInterpreter OK ****");
+    }
+
+    /**
+     * Tests expression evaluation.
+     */
+    public void testExpressionEvaluation () {
+        System.out.println("\n**** testExpressionEvaluation ****");
+        try {
+            String localHostName = InetAddress.getLocalHost().getHostName();
+            CycAccess cycAccess;
+            if (localHostName.equals("crapgame.cyc.com")) {
+                cycAccess = new CycAccess("localhost", 3620, CycConnection.DEFAULT_COMMUNICATION_MODE,
+                        true);
+                //cycAccess.traceNamesOn();
+                cycAccess.setKePurpose("DAMLProject");
+            }
+            else if (localHostName.equals("thinker")) {
+                cycAccess = new CycAccess("localhost", 3600, CycConnection.DEFAULT_COMMUNICATION_MODE,
+                        true);
+                cycAccess.setKePurpose("OpenCyc");
+            }
+            else {
+                cycAccess = new CycAccess();
+                cycAccess.setKePurpose("OpenCyc");
+            }
+            cycAccess.setCyclist(cycAccess.getKnownConstantByName("Cyc"));
+            CycFort stateMt = cycAccess.getKnownConstantByName("UMLStateMachineInterpreter-TemporaryWorkspaceMt");
+            cycAccess.unassertMtContentsWithoutTranscript(stateMt);
+            Assert.assertEquals(0, cycAccess.getAllAssertionsInMt(stateMt).size());
+            ExpressionEvaluator expressionEvaluator = new ExpressionEvaluator(cycAccess,
+                    ExpressionEvaluator.QUIET_VERBOSITY);
+            Expression expression = new Expression();
+            String expressionText = "(#$ProgramAssignmentFn #$TestStateMachine-X 0)";
+            expression.setBody(cycAccess.makeCycList(expressionText));
+            expressionEvaluator.evaluate(expression, stateMt);
+            String queryText = "(#$softwareParameterValue #$TestStateMachine-X 0)";
+            CycList query = cycAccess.makeCycList(queryText);
+            Assert.assertTrue(cycAccess.isQueryTrue(query, stateMt));
+            Assert.assertEquals(1, cycAccess.getAllAssertionsInMt(stateMt).size());
+            queryText = "(#$evaluate ?X (#$PlusFn 1 2))";
+            query = cycAccess.makeCycList(queryText);
+            CycVariable variable = CycObjectFactory.makeCycVariable("?x");
+            Object answer = cycAccess.askWithVariable(query, variable, stateMt);
+            Assert.assertTrue(answer instanceof CycList);
+            Assert.assertEquals(1, ((CycList)answer).size());
+            answer = ((CycList)answer).first();
+            Assert.assertTrue(answer instanceof Integer);
+            Assert.assertEquals(3, ((Integer)answer).intValue());
+            queryText = "(#$evaluate ?X (#$GetParameterValueFn #$TestStateMachine-X))";
+            query = cycAccess.makeCycList(queryText);
+            answer = cycAccess.askWithVariable(query, variable, stateMt);
+            Assert.assertTrue(answer instanceof CycList);
+            Assert.assertEquals(1, ((CycList)answer).size());
+            answer = ((CycList)answer).first();
+            Assert.assertTrue(answer instanceof Integer);
+            Assert.assertEquals(0, ((Integer)answer).intValue());
+            cycAccess.unassertMtContentsWithoutTranscript(stateMt);
+            Assert.assertEquals(0, cycAccess.getAllAssertionsInMt(stateMt).size());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+        System.out.println("\n**** testExpressionEvaluation ****");
+    }
+
+    /**
+     * Tests creation and destruction of evaluation context frames.
+     */
+    public void testContextFrames () {
+        System.out.println("\n**** testContextFrames ****");
+        Log.makeLog("unit-test.log");
+        try {
+            String localHostName = InetAddress.getLocalHost().getHostName();
+            CycAccess cycAccess;
+            if (localHostName.equals("crapgame.cyc.com")) {
+                cycAccess = new CycAccess("localhost", 3620, CycConnection.DEFAULT_COMMUNICATION_MODE,
+                        true);
+                //cycAccess.traceNamesOn();
+            }
+            else if (localHostName.equals("thinker")) {
+                cycAccess = new CycAccess("localhost", 3600, CycConnection.DEFAULT_COMMUNICATION_MODE,
+                        true);
+            }
+            else
+                cycAccess = new CycAccess();
+            ContextStackPool contextStackPool = new ContextStackPool(cycAccess,
+                    cycAccess.getKnownConstantByName("UMLStateMachineInterpreter-TemporaryWorkspaceMt"),
+                    ContextStackPool.QUIET_VERBOSITY);
+            Assert.assertEquals(ContextStackPool.DEFAULT_CONTEXT_FRAMES_COUNT, contextStackPool.contextFrames.size());
+            CycConstant definitionMt = cycAccess.getKnownConstantByName("UMLStateMachineTest01Mt");
+            CycConstant contextFrame1 = contextStackPool.allocateContextFrame(null,
+                    definitionMt);
+            CycConstant contextFrame2 = contextStackPool.allocateContextFrame(contextFrame1,
+                    definitionMt);
+            CycConstant contextFrame3 = contextStackPool.allocateContextFrame(contextFrame2,
+                    definitionMt);
+            CycConstant contextFrame4 = contextStackPool.allocateContextFrame(contextFrame3,
+                    definitionMt);
+            CycConstant contextFrame5 = contextStackPool.allocateContextFrame(contextFrame4,
+                    definitionMt);
+            CycConstant contextFrame6 = contextStackPool.allocateContextFrame(contextFrame5,
+                    definitionMt);
+            CycConstant contextFrame7 = contextStackPool.allocateContextFrame(contextFrame6,
+                    definitionMt);
+            CycConstant contextFrame8 = contextStackPool.allocateContextFrame(contextFrame7,
+                    definitionMt);
+            CycConstant contextFrame9 = contextStackPool.allocateContextFrame(contextFrame8,
+                    definitionMt);
+            CycConstant contextFrame10 = contextStackPool.allocateContextFrame(contextFrame9,
+                    definitionMt);
+            Assert.assertEquals(contextFrame9, contextStackPool.getParentContextFrame(contextFrame10));
+            contextStackPool.deallocateContextFrame(contextFrame10);
+            Assert.assertEquals(contextFrame10, contextStackPool.allocateContextFrame(contextFrame9,
+                    definitionMt));
+            contextStackPool.destroyContextStack();
+            Assert.assertNull(contextStackPool.contextFrames);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+        System.out.println("\n**** testContextFrames ****");
+    }
+
+    /**
+     * Tests procedure interpretation.
+     */
+    public void testProcedureInterpretation () {
+        System.out.println("\n**** testProcedureInterpretation ****");
+        try {
+            String localHostName = InetAddress.getLocalHost().getHostName();
+            CycAccess cycAccess;
+            if (localHostName.equals("crapgame.cyc.com")) {
+                cycAccess = new CycAccess("localhost", 3620, CycConnection.DEFAULT_COMMUNICATION_MODE,
+                        true);
+                //cycAccess.traceNamesOn();
+                cycAccess.setKePurpose("DAMLProject");
+            }
+            else if (localHostName.equals("thinker")) {
+                cycAccess = new CycAccess("localhost", 3600, CycConnection.DEFAULT_COMMUNICATION_MODE,
+                        true);
+                cycAccess.setKePurpose("OpenCyc");
+            }
+            else {
+                cycAccess = new CycAccess();
+                cycAccess.setKePurpose("OpenCyc");
+            }
+            //cycAccess.traceNamesOn();
+            cycAccess.setCyclist(cycAccess.getKnownConstantByName("Cyc"));
+            CycFort definitionMt = cycAccess.getKnownConstantByName("UMLStateMachineTest01Mt");
+            ContextStackPool contextStackPool = new ContextStackPool(cycAccess,
+                    cycAccess.getKnownConstantByName("UMLStateMachineInterpreter-TemporaryWorkspaceMt"),
+                                                     ContextStackPool.QUIET_VERBOSITY);
+            CycConstant stateMt = contextStackPool.allocateContextFrame(null, definitionMt);
+            Assert.assertEquals(0, cycAccess.getAllAssertionsInMt(stateMt).size());
+            ProcedureInterpreter procedureInterpreter =
+                    new ProcedureInterpreter(cycAccess,
+                                             definitionMt,
+                                             contextStackPool,
+                                             Interpreter.QUIET_VERBOSITY);
+            Procedure initializeProcedure = new Procedure();
+            initializeProcedure.setName("UMLProcedure-InitializeNumberToZero");
+            Object procedureBody = cycAccess.getArg2("umlBody", "UMLProcedure-InitializeNumberToZero",
+                    "UMLProcedureDefinition-InitializeNumberToZeroMt");
+            initializeProcedure.setBody(procedureBody);
+            Transition transition1 = new Transition();
+            transition1.setName("TestStateMachine-Transition1");
+            transition1.setEffect(initializeProcedure);
+            ArrayList inputBindings = new ArrayList();
+            ArrayList outputBindings = new ArrayList();
+            OutputBinding outputBinding = new OutputBinding();
+            OutputPin outputPin = new OutputPin();
+            outputPin.setName("UMLProcedure-InitializeNumberToZero-OutputPin-X");
+            outputBinding.setBoundOutputPin(outputPin);
+            StateVariable stateVariable = new StateVariable();
+            stateVariable.setName("TestStateMachine-X");
+            outputBinding.setBoundOutputStateVariable(stateVariable);
+            outputBindings.add(outputBinding);
+            procedureInterpreter.interpretProcedure(initializeProcedure,
+                                                    inputBindings,
+                                                    outputBindings,
+                                                    stateMt);
+            CycList query = cycAccess.makeCycList("(#$softwareParameterValue #$TestStateMachine-X 0)");
+            Assert.assertTrue(cycAccess.isQueryTrue(query, stateMt));
+            contextStackPool.destroyContextStack();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+        System.out.println("\n**** testProcedureInterpretation ****");
+    }
+
+    /**
+     * Tests simple state machine.
+     */
+    public void testSimpleStateMachine () {
+        System.out.println("\n**** testSimpleStateMachine ****");
+        try {
+            String localHostName = InetAddress.getLocalHost().getHostName();
+            CycAccess cycAccess;
+            if (localHostName.equals("crapgame.cyc.com")) {
+                cycAccess = new CycAccess("localhost",
+                                          3620,
+                                          CycConnection.DEFAULT_COMMUNICATION_MODE,
+                                          true);
+                //cycAccess.traceNamesOn();
+                cycAccess.setKePurpose("DAMLProject");
+            }
+            else if (localHostName.equals("thinker")) {
+                cycAccess = new CycAccess("localhost",
+                                          3600,
+                                          CycConnection.DEFAULT_COMMUNICATION_MODE,
+                                          true);
+                cycAccess.setKePurpose("OpenCyc");
+            }
+            else {
+                cycAccess = new CycAccess();
+                cycAccess.setKePurpose("OpenCyc");
+            }
+            StateMachineFactory stateMachineFactory = new StateMachineFactory();
+            //  state machine
+            String namespaceName = "test namespace";
+            String name = "TestStateMachine";
+            String commentString = "This is the test comment for testStateMachine.";
+            StateMachine stateMachine =
+                stateMachineFactory.makeStateMachine(namespaceName,
+                                                     name,
+                                                     commentString);
+            Assert.assertTrue(stateMachine instanceof StateMachine);
+            Assert.assertTrue(stateMachine.getNamespace() instanceof Namespace);
+            Assert.assertEquals(namespaceName, stateMachine.getNamespace().getName());
+            Assert.assertTrue(stateMachine.getNamespace().getOwnedElement().contains(stateMachine));
+            Assert.assertEquals(name, stateMachine.getName());
+            Assert.assertTrue(stateMachine.getComment() instanceof Comment);
+            Assert.assertEquals(commentString, stateMachine.getComment().getBody());
+            Assert.assertEquals(stateMachine, stateMachine.getComment().getAnnotatedElement());
+            CycConstant classifierTerm = cycAccess.getKnownConstantByName("TestStateMachineContext");
+            stateMachineFactory.associateClassifierToStateMachine(classifierTerm.toString(),
+                                                                  commentString);
+            Assert.assertNotNull(stateMachine.getContext());
+            Assert.assertTrue(stateMachine.getContext() instanceof Classifier);
+            Assert.assertEquals(classifierTerm.toString(), stateMachine.getContext().getName());
+            name = "TestStateMachine-X";
+            commentString = "test state machine counter variable";
+            java.lang.Class type = null;
+            try {
+                type = java.lang.Class.forName("java.lang.String");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                Assert.fail();
+            }
+            Expression initialValue = null;
+            StateVariable stateVariable =
+                stateMachineFactory.addStateVariableToClassifier(name,
+                                                                 commentString,
+                                                                 StructuralFeature.SK_INSTANCE,
+                                                                 type,
+                                                                 StructuralFeature.CK_CHANGEABLE,
+                                                                 new Multiplicity(1, 1, false),
+                                                                 StructuralFeature.OK_UNORDERED,
+                                                                 initialValue);
+            //  procedures
+            name = "UMLProcedure-InitializeNumberToZero";
+            commentString = "Initializes the variable to the value zero.";
+            String language = "CycL";
+            Object body = cycAccess.getArg2("umlBody",
+                                            name,
+                                            "UMLProcedureDefinition-InitializeNumberToZeroMt");
+            boolean isList = false;
+            Procedure initializeNumberToZero =
+                stateMachineFactory.makeProcedure(name,
+                                                 commentString,
+                                                 language,
+                                                 body,
+                                                 isList);
+            Assert.assertTrue(initializeNumberToZero instanceof Procedure);
+            Assert.assertTrue(initializeNumberToZero.getNamespace() instanceof Namespace);
+            Assert.assertEquals(namespaceName, initializeNumberToZero.getNamespace().getName());
+            Assert.assertTrue(initializeNumberToZero.getNamespace().getOwnedElement().contains(initializeNumberToZero));
+            Assert.assertEquals(name, initializeNumberToZero.getName());
+            Assert.assertTrue(initializeNumberToZero.getComment() instanceof Comment);
+            Assert.assertEquals(commentString, initializeNumberToZero.getComment().getBody());
+            Assert.assertEquals(initializeNumberToZero, initializeNumberToZero.getComment().getAnnotatedElement());
+            Assert.assertEquals(language, initializeNumberToZero.getLanguage());
+            Assert.assertEquals(body, initializeNumberToZero.getBody());
+            Assert.assertEquals(isList, initializeNumberToZero.isList());
+            name = "UMLProcedure-InitializeNumberToZero-OutputPin-X";
+            commentString = "the variable X initialized to zero.";
+            type = null;
+            try {
+                type = java.lang.Class.forName("org.opencyc.uml.statemachine.PrimitiveInt");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                Assert.fail();
+            }
+            OutputPin outputPinX1 = new OutputPin();
+            stateMachineFactory.addOutputPinToProcedure(outputPinX1,
+                                                        name,
+                                                        commentString,
+                                                        initializeNumberToZero,
+                                                         type);
+            Assert.assertTrue(outputPinX1 instanceof OutputPin);
+            Assert.assertTrue(outputPinX1.getNamespace() instanceof Namespace);
+            Assert.assertEquals(namespaceName, outputPinX1.getNamespace().getName());
+            Assert.assertTrue(outputPinX1.getNamespace().getOwnedElement().contains(outputPinX1));
+            Assert.assertEquals(name, outputPinX1.getName());
+            Assert.assertTrue(outputPinX1.getComment() instanceof Comment);
+            Assert.assertEquals(commentString, outputPinX1.getComment().getBody());
+            Assert.assertEquals(outputPinX1, outputPinX1.getComment().getAnnotatedElement());
+            Assert.assertTrue(initializeNumberToZero.getResult().contains(outputPinX1));
+            Assert.assertEquals(initializeNumberToZero, outputPinX1.getProcedure());
+            name = "UMLProcedure-IncrementNumber";
+            commentString = "Increments the given number by one.";
+            language = "CycL";
+            body = cycAccess.getArg2("umlBody",
+                                     name,
+                                     "UMLProcedureDefinition-IncrementNumberMt");
+            isList = false;
+            Procedure increment =
+                stateMachineFactory.makeProcedure(name,
+                                                  commentString,
+                                                  language,
+                                                  body,
+                                                  isList);
+            Assert.assertTrue(increment instanceof Procedure);
+            Assert.assertTrue(increment.getNamespace() instanceof Namespace);
+            Assert.assertEquals(namespaceName, increment.getNamespace().getName());
+            Assert.assertTrue(increment.getNamespace().getOwnedElement().contains(increment));
+            Assert.assertEquals(name, increment.getName());
+            Assert.assertTrue(increment.getComment() instanceof Comment);
+            Assert.assertEquals(commentString, increment.getComment().getBody());
+            Assert.assertEquals(increment, increment.getComment().getAnnotatedElement());
+            Assert.assertEquals(language, increment.getLanguage());
+            Assert.assertEquals(body, increment.getBody());
+            Assert.assertEquals(isList, increment.isList());
+            name = "UMLProcedure-IncrementNumber-InputPin-X";
+            commentString = "the given number to be incremented";
+            InputPin inputPinX = new InputPin();
+            stateMachineFactory.addInputPinToProcedure(inputPinX,
+                                                       name,
+                                                       commentString,
+                                                       increment,
+                                                       type);
+            Assert.assertTrue(inputPinX instanceof InputPin);
+            Assert.assertTrue(inputPinX.getNamespace() instanceof Namespace);
+            Assert.assertEquals(namespaceName, inputPinX.getNamespace().getName());
+            Assert.assertTrue(inputPinX.getNamespace().getOwnedElement().contains(inputPinX));
+            Assert.assertEquals(name, inputPinX.getName());
+            Assert.assertTrue(inputPinX.getComment() instanceof Comment);
+            Assert.assertEquals(commentString, inputPinX.getComment().getBody());
+            Assert.assertEquals(inputPinX, inputPinX.getComment().getAnnotatedElement());
+            Assert.assertTrue(increment.getArgument().contains(inputPinX));
+            Assert.assertEquals(increment, inputPinX.getProcedure());
+            name = "UMLProcedure-IncrementNumber-OutputPin-X";
+            commentString = "the incremented number";
+            OutputPin outputPinX = new OutputPin();
+            stateMachineFactory.addOutputPinToProcedure(outputPinX,
+                                                        name,
+                                                        commentString,
+                                                        increment,
+                                                        type);
+            Assert.assertTrue(outputPinX instanceof OutputPin);
+            Assert.assertTrue(outputPinX.getNamespace() instanceof Namespace);
+            Assert.assertEquals(namespaceName, outputPinX.getNamespace().getName());
+            Assert.assertTrue(outputPinX.getNamespace().getOwnedElement().contains(outputPinX));
+            Assert.assertEquals(name, outputPinX.getName());
+            Assert.assertTrue(outputPinX.getComment() instanceof Comment);
+            Assert.assertEquals(commentString, outputPinX.getComment().getBody());
+            Assert.assertEquals(outputPinX, outputPinX.getComment().getAnnotatedElement());
+            Assert.assertTrue(increment.getResult().contains(outputPinX));
+            Assert.assertEquals(increment, outputPinX.getProcedure());
+            //  events (no events in this test)
+            //  states
+            name = "TestStateMachine-TopState";
+            commentString = "Top state for the test state machine.";
+            CompositeState container = null;
+            Procedure entry = null;
+            Procedure exit = null;
+            Procedure doActivity = null;
+            boolean isConcurrent = false;
+            CompositeState topState =
+                stateMachineFactory.makeCompositeState(name,
+                                                       commentString,
+                                                       container,
+                                                       entry,
+                                                       exit,
+                                                       doActivity,
+                                                       isConcurrent);
+            stateMachine.setTop(topState);
+            Assert.assertTrue(topState instanceof CompositeState);
+            Assert.assertTrue(topState.getNamespace() instanceof Namespace);
+            Assert.assertEquals(namespaceName, topState.getNamespace().getName());
+            Assert.assertTrue(topState.getNamespace().getOwnedElement().contains(topState));
+            Assert.assertEquals(name, topState.getName());
+            Assert.assertTrue(topState.getComment() instanceof Comment);
+            Assert.assertEquals(commentString, topState.getComment().getBody());
+            Assert.assertEquals(topState, topState.getComment().getAnnotatedElement());
+            Assert.assertEquals(container, topState.getContainer());
+            Assert.assertEquals(entry, topState.getEntry());
+            Assert.assertEquals(exit, topState.getExit());
+            Assert.assertEquals(doActivity, topState.getDoActivity());
+            Assert.assertEquals(isConcurrent, topState.isConcurrent());
+            Assert.assertEquals(0, topState.getDeferrableEvent().size());
+            Assert.assertTrue(!topState.isRegion());
+            Assert.assertEquals(topState, stateMachine.getTop());
+            name = "TestStateMachine-InitialState";
+            commentString = "Initial state for the test state machine.";
+            container = topState;
+            int kind = PseudoState.PK_INITIAL;
+            PseudoState initialState =
+                stateMachineFactory.makePseudoState(name,
+                                                    commentString,
+                                                    container,
+                                                    kind);
+            Assert.assertTrue(initialState instanceof PseudoState);
+            Assert.assertTrue(initialState.getNamespace() instanceof Namespace);
+            Assert.assertEquals(namespaceName, initialState.getNamespace().getName());
+            Assert.assertTrue(initialState.getNamespace().getOwnedElement().contains(initialState));
+            Assert.assertEquals(name, initialState.getName());
+            Assert.assertTrue(initialState.getComment() instanceof Comment);
+            Assert.assertEquals(commentString, initialState.getComment().getBody());
+            Assert.assertEquals(initialState, initialState.getComment().getAnnotatedElement());
+            Assert.assertEquals(container, initialState.getContainer());
+            Assert.assertEquals(kind, initialState.getKind());
+            Assert.assertTrue(topState.getSubVertex().contains(initialState));
+            name = "TestStateMachine-CounterState";
+            commentString = "Counter state for the test state machine.";
+            SimpleState counterState =
+                stateMachineFactory.makeSimpleState(name,
+                                                    commentString,
+                                                    container,
+                                                    entry,
+                                                    exit,
+                                                    doActivity);
+            Assert.assertTrue(counterState instanceof SimpleState);
+            Assert.assertTrue(counterState.getNamespace() instanceof Namespace);
+            Assert.assertEquals(namespaceName, counterState.getNamespace().getName());
+            Assert.assertTrue(counterState.getNamespace().getOwnedElement().contains(counterState));
+            Assert.assertEquals(name, counterState.getName());
+            Assert.assertTrue(counterState.getComment() instanceof Comment);
+            Assert.assertEquals(commentString, counterState.getComment().getBody());
+            Assert.assertEquals(counterState, counterState.getComment().getAnnotatedElement());
+            Assert.assertEquals(container, counterState.getContainer());
+            Assert.assertTrue(topState.getSubVertex().contains(counterState));
+            Assert.assertEquals(entry, counterState.getEntry());
+            Assert.assertEquals(exit, counterState.getExit());
+            Assert.assertEquals(doActivity, counterState.getDoActivity());
+            Assert.assertEquals(0, counterState.getDeferrableEvent().size());
+            name = "TestStateMachine-FinalState";
+            commentString = "Final state for the test state machine.";
+            FinalState finalState =
+                stateMachineFactory.makeFinalState(name,
+                                                   commentString,
+                                                   container,
+                                                   entry,
+                                                   exit,
+                                                   doActivity);
+            Assert.assertTrue(finalState instanceof FinalState);
+            Assert.assertTrue(finalState.getNamespace() instanceof Namespace);
+            Assert.assertEquals(namespaceName, finalState.getNamespace().getName());
+            Assert.assertTrue(finalState.getNamespace().getOwnedElement().contains(finalState));
+            Assert.assertEquals(name, finalState.getName());
+            Assert.assertTrue(finalState.getComment() instanceof Comment);
+            Assert.assertEquals(commentString, finalState.getComment().getBody());
+            Assert.assertEquals(finalState, finalState.getComment().getAnnotatedElement());
+            Assert.assertEquals(container, finalState.getContainer());
+            Assert.assertTrue(topState.getSubVertex().contains(finalState));
+            Assert.assertEquals(entry, finalState.getEntry());
+            Assert.assertEquals(exit, finalState.getExit());
+            Assert.assertEquals(doActivity, finalState.getDoActivity());
+            Assert.assertEquals(0, finalState.getDeferrableEvent().size());
+            //  state vertices (no state vertices in this test)
+            //  transistions
+            name = "TestStateMachine-InitializeTransition";
+            commentString = "Initialize transition for the test state machine.";
+            String guardExpressionLanguage = null;
+            Object guardExpressionBody = null;
+            Procedure effect = initializeNumberToZero;
+            Event trigger = null;
+            StateVertex source = initialState;
+            StateVertex target = counterState;
+            Transition transition1 = new Transition();
+            stateMachineFactory.addTransition(transition1,
+                                              name,
+                                              commentString,
+                                              guardExpressionLanguage,
+                                              guardExpressionBody,
+                                              effect,
+                                              trigger,
+                                              source,
+                                              target);
+            Assert.assertTrue(transition1 instanceof Transition);
+            Assert.assertTrue(transition1.getNamespace() instanceof Namespace);
+            Assert.assertEquals(namespaceName, transition1.getNamespace().getName());
+            Assert.assertTrue(transition1.getNamespace().getOwnedElement().contains(transition1));
+            Assert.assertEquals(name, transition1.getName());
+            Assert.assertTrue(transition1.getComment() instanceof Comment);
+            Assert.assertEquals(commentString, transition1.getComment().getBody());
+            Assert.assertEquals(transition1, transition1.getComment().getAnnotatedElement());
+            Assert.assertEquals(effect, transition1.getEffect());
+            Assert.assertNull(transition1.getGuard());
+            Assert.assertEquals(source, transition1.getSource());
+            Assert.assertEquals(target, transition1.getTarget());
+            Assert.assertEquals(stateMachine, transition1.getStateMachine());
+            Assert.assertEquals(trigger, transition1.getTrigger());
+            Assert.assertTrue(!transition1.isSelfTransition());
+            Assert.assertTrue(initialState.getOutgoing().contains(transition1));
+            Assert.assertTrue(counterState.getIncoming().contains(transition1));
+            stateMachineFactory.addEffectOutputBinding(transition1,
+                                                       outputPinX1,
+                                                       stateVariable);
+            Assert.assertEquals(0, transition1.getEffectInputBindings().size());
+            Assert.assertEquals(1, transition1.getEffectOutputBindings().size());
+            name = "TestStateMachine-CountingTransition";
+            commentString = "Counting transition for the test state machine.";
+            guardExpressionLanguage = "CycL";
+            guardExpressionBody = cycAccess.getArg2("umlBody",
+                                                    "TestStateMachine-BooleanExpression1",
+                                                    "UMLStateMachineTest01Mt");
+            effect = increment;
+            trigger = null;
+            source = counterState;
+            target = counterState;
+            Transition transition2 = new Transition();
+            stateMachineFactory.addTransition(transition2,
+                                              name,
+                                              commentString,
+                                              guardExpressionLanguage,
+                                              guardExpressionBody,
+                                              effect,
+                                              trigger,
+                                              source,
+                                              target);
+            Assert.assertTrue(transition2 instanceof Transition);
+            Assert.assertTrue(transition2.getNamespace() instanceof Namespace);
+            Assert.assertEquals(namespaceName, transition2.getNamespace().getName());
+            Assert.assertTrue(transition2.getNamespace().getOwnedElement().contains(transition2));
+            Assert.assertEquals(name, transition2.getName());
+            Assert.assertTrue(transition2.getComment() instanceof Comment);
+            Assert.assertEquals(commentString, transition2.getComment().getBody());
+            Assert.assertEquals(transition2, transition2.getComment().getAnnotatedElement());
+            Assert.assertEquals(effect, transition2.getEffect());
+            Assert.assertNotNull(transition2.getGuard());
+            Assert.assertTrue(transition2.getGuard() instanceof Guard);
+            Assert.assertNotNull(transition2.getGuard().getexpression());
+            Guard guard = transition2.getGuard();
+            Assert.assertEquals(name, guard.getName());
+            Assert.assertEquals(commentString, guard.getComment().getBody());
+            Assert.assertEquals(transition2, guard.getTransition());
+            Assert.assertTrue(guard.getNamespace().getOwnedElement().contains(guard));
+            Assert.assertEquals(guardExpressionBody, guard.getexpression().getBody());
+            Assert.assertEquals(source, transition2.getSource());
+            Assert.assertEquals(target, transition2.getTarget());
+            Assert.assertEquals(stateMachine, transition2.getStateMachine());
+            Assert.assertEquals(trigger, transition2.getTrigger());
+            Assert.assertTrue(transition2.isSelfTransition());
+            Assert.assertTrue(((State)source).getInternalTransition().contains(transition2));
+            Assert.assertEquals(0, transition2.getEffectInputBindings().size());
+            stateMachineFactory.addEffectInputBinding(transition2,
+                                                      inputPinX,
+                                                      stateVariable);
+            Assert.assertEquals(0, transition2.getEffectOutputBindings().size());
+            stateMachineFactory.addEffectOutputBinding(transition2,
+                                                       outputPinX,
+                                                       stateVariable);
+            Assert.assertEquals(1, transition2.getEffectInputBindings().size());
+            Assert.assertTrue(transition2.getEffectInputBindings().get(0) instanceof InputBinding);
+            Assert.assertEquals(1, transition2.getEffectOutputBindings().size());
+            Assert.assertTrue(transition2.getEffectOutputBindings().get(0) instanceof OutputBinding);
+            name = "TestStateMachine-TerminateTransition";
+            commentString = "Terminate transition for the test state machine.";
+            guardExpressionLanguage = "CycL";
+            guardExpressionBody = cycAccess.getArg2("umlBody",
+                                                    "TestStateMachine-BooleanExpression2",
+                                                    "UMLStateMachineTest01Mt");
+            effect = null;
+            trigger = null;
+            source = counterState;
+            target = finalState;
+            Transition transition3 = new Transition();
+            stateMachineFactory.addTransition(transition3,
+                                              name,
+                                              commentString,
+                                              guardExpressionLanguage,
+                                              guardExpressionBody,
+                                              effect,
+                                              trigger,
+                                              source,
+                                              target);
+            Assert.assertTrue(transition3 instanceof Transition);
+            Assert.assertTrue(transition3.getNamespace() instanceof Namespace);
+            Assert.assertEquals(namespaceName, transition3.getNamespace().getName());
+            Assert.assertTrue(transition3.getNamespace().getOwnedElement().contains(transition3));
+            Assert.assertEquals(name, transition3.getName());
+            Assert.assertTrue(transition3.getComment() instanceof Comment);
+            Assert.assertEquals(commentString, transition3.getComment().getBody());
+            Assert.assertEquals(transition3, transition3.getComment().getAnnotatedElement());
+            Assert.assertEquals(effect, transition3.getEffect());
+            Assert.assertNotNull(transition3.getGuard());
+            Assert.assertTrue(transition3.getGuard() instanceof Guard);
+            Assert.assertNotNull(transition3.getGuard().getexpression());
+            guard = transition3.getGuard();
+            Assert.assertEquals(name, guard.getName());
+            Assert.assertEquals(commentString, guard.getComment().getBody());
+            Assert.assertEquals(transition3, guard.getTransition());
+            Assert.assertTrue(guard.getNamespace().getOwnedElement().contains(guard));
+            Assert.assertEquals(guardExpressionBody, guard.getexpression().getBody());
+            Assert.assertEquals(source, transition3.getSource());
+            Assert.assertEquals(target, transition3.getTarget());
+            Assert.assertEquals(stateMachine, transition3.getStateMachine());
+            Assert.assertEquals(trigger, transition3.getTrigger());
+            Assert.assertTrue(!transition3.isSelfTransition());
+            Assert.assertTrue(source.getOutgoing().contains(transition3));
+            Assert.assertTrue(target.getIncoming().contains(transition3));
+            Assert.assertEquals(0, transition3.getEffectInputBindings().size());
+            Assert.assertEquals(0, transition3.getEffectOutputBindings().size());
+
+            interpretStateMachine(stateMachine, cycAccess);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+        System.out.println("\n**** testSimpleStateMachine ****");
+    }
+
+    /**
+     * Tests the given instantiated state machine
+     *
+     * @@param stateMachine the given instantiated state machine
+     * @@param cycAccess the given cyc server connection
+     */
+    protected void interpretStateMachine (StateMachine stateMachine, CycAccess cycAccess) {
+        Interpreter interpreter = null;
+        try {
+            CycFort temporaryWorkspaceMt = cycAccess.getKnownConstantByName("UMLStateMachineInterpreter-TemporaryWorkspaceMt");
+            int verbosity = Interpreter.QUIET_VERBOSITY;
+            //int verbosity = Interpreter.DEFAULT_VERBOSITY;
+            ContextStackPool contextStackPool =
+                    new ContextStackPool(cycAccess,
+                                         temporaryWorkspaceMt,
+                                         ContextStackPool.QUIET_VERBOSITY);
+            interpreter = new Interpreter(stateMachine,
+                                          cycAccess,
+                                          contextStackPool,
+                                          verbosity);
+            Assert.assertNotNull(interpreter);
+            Assert.assertTrue(interpreter instanceof Interpreter);
+            Assert.assertTrue(interpreter.eventQueue.isEmpty());
+            Assert.assertNull(interpreter.getCurrentEvent());
+            Assert.assertEquals(stateMachine, interpreter.getStateMachine());
+            interpreter.formAllStatesConfiguration();
+            if (verbosity > 2)
+                System.out.print(interpreter.displayAllStatesConfigurationTree());
+            interpreter.formInitialStateConfiguration();
+            Assert.assertEquals(new Integer(0), interpreter.getStateVariableValue("TestStateMachine-X"));
+            if (verbosity > 2)
+                System.out.print(interpreter.displayStateConfigurationTree());
+            interpreter.eventDispatcher();
+            Assert.assertNotNull(interpreter.getCurrentEvent());
+            Assert.assertTrue(interpreter.getCurrentEvent() instanceof CompletionEvent);
+            interpreter.eventProcessor();
+            interpreter.fireSelectedTransitions();
+            interpreter.getStateMachineFactory().destroyEvent(interpreter.getCurrentEvent());
+            interpreter.currentEvent = null;
+            Assert.assertNotNull(stateMachine.getTop());
+            Assert.assertTrue(stateMachine.getTop() instanceof CompositeState);
+            Assert.assertNotNull(stateMachine.getTop().getStateInterpreter());
+            Assert.assertEquals(stateMachine.getTop(), stateMachine.getTop().getStateInterpreter().getActiveState());
+            Assert.assertEquals(new Integer(1), interpreter.getStateVariableValue("TestStateMachine-X"));
+            if (verbosity > 2)
+                System.out.print(interpreter.displayStateConfigurationTree());
+            for (int i = 2; i < 10; i++) {
+                interpreter.eventDispatcher();
+                interpreter.eventProcessor();
+                interpreter.fireSelectedTransitions();
+                Assert.assertEquals(new Integer(i), interpreter.getStateVariableValue("TestStateMachine-X"));
+            }
+            if (verbosity > 2)
+                System.out.print(interpreter.displayStateConfigurationTree());
+            interpreter.eventDispatcher();
+            interpreter.eventProcessor();
+            interpreter.fireSelectedTransitions();
+            if (verbosity > 2)
+                System.out.print(interpreter.displayStateConfigurationTree());
+            contextStackPool.destroyContextStack();
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail(e.getMessage());
+        }
+    }
+
+    /**
+     * Tests simple state machine extraction from Cyc.
+     */
+    public void testCycExtractor () {
+        System.out.println("\n**** testCycExtractor ****");
+        Log.makeLog("unit-test.log");
+        try {
+            String localHostName = InetAddress.getLocalHost().getHostName();
+            CycAccess cycAccess;
+            if (localHostName.equals("crapgame.cyc.com")) {
+                cycAccess = new CycAccess("localhost", 3620, CycConnection.DEFAULT_COMMUNICATION_MODE,
+                        true);
+                //cycAccess.traceNamesOn();
+            }
+            else if (localHostName.equals("thinker")) {
+                cycAccess = new CycAccess("localhost", 3600, CycConnection.DEFAULT_COMMUNICATION_MODE,
+                        true);
+            }
+            else
+                cycAccess = new CycAccess();
+            //CycExtractor cycExtractor = new CycExtractor(cycAccess,
+            //                                             CycExtractor.QUIET_VERBOSITY);
+            CycExtractor cycExtractor = new CycExtractor(cycAccess,
+                                                         CycExtractor.DEFAULT_VERBOSITY);
+            StateMachine stateMachine = cycExtractor.extract("TestStateMachine");
+            Assert.assertTrue(stateMachine instanceof StateMachine);
+            Assert.assertTrue(stateMachine.getNamespace() instanceof Namespace);
+            Assert.assertEquals("TestStateMachineNamespace", stateMachine.getNamespace().getName());
+            Assert.assertTrue(stateMachine.getNamespace().getOwnedElement().contains(stateMachine));
+            Assert.assertEquals("TestStateMachine", stateMachine.getName());
+            Assert.assertTrue(stateMachine.getComment() instanceof Comment);
+            Assert.assertEquals("This is a test individual #$UMLStateMachine.",
+                    stateMachine.getComment().getBody());
+            Assert.assertEquals(stateMachine, stateMachine.getComment().getAnnotatedElement());
+            StateMachineReport stateMachineReport = new StateMachineReport(stateMachine);
+            System.out.println("*------- state machine description -------*");
+            stateMachineReport.report();
+            System.out.println("*----- end state machine description -----*");
+            interpretStateMachine(stateMachine, cycAccess);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+        System.out.println("\n**** testCycExtractor ****");
+    }
+}
+
+
+
+@
+
+
+1.30
+log
+@Passing unit tests for State Machine Interpretation
+@
+text
+@d22 1
+a22 1
+ * @@version $Id: UnitTest.java,v 1.29 2003/02/11 00:26:37 stephenreed Exp $
+d773 1
+a773 1
+            Assert.assertEquals(stateMachine.getTop(), stateMachine.getTop().getStateInterpreter().getState());
+@
+
+
+1.29
+log
+@Completed state machine unit tests after refactoring.
+@
+text
+@d22 1
+a22 1
+ * @@version $Id: UnitTest.java,v 1.28 2003/02/09 19:45:22 stephenreed Exp $
+d59 1
+d65 1
+@
+
+
+1.28
+log
+@removed file
+@
+text
+@d22 1
+a22 1
+ * @@version $Id: UnitTest.java,v 1.27 2003/02/09 02:14:19 stephenreed Exp $
+d59 5
+a63 5
+        //testSuite.addTest(new UnitTest("testJavaInterpreter"));
+        //testSuite.addTest(new UnitTest("testExpressionEvaluation"));
+        //testSuite.addTest(new UnitTest("testContextFrames"));
+        //testSuite.addTest(new UnitTest("testProcedureInterpretation"));
+        //testSuite.addTest(new UnitTest("testSimpleStateMachine"));
+d399 6
+a404 2
+            OutputPin outputPinX1 = stateMachineFactory.addOutputPinToProcedure(name,
+                    commentString, initializeNumberToZero, type);
+d441 6
+a446 5
+            InputPin inputPinX =
+                stateMachineFactory.addInputPinToProcedure(name,
+                                                           commentString,
+                                                           increment,
+                                                           type);
+d459 6
+a464 5
+            OutputPin outputPinX =
+                stateMachineFactory.addOutputPinToProcedure(name,
+                                                            commentString,
+                                                            increment,
+                                                            type);
+d585 10
+a594 9
+            Transition transition1 =
+                stateMachineFactory.makeTransition(name,
+                                                   commentString,
+                                                   guardExpressionLanguage,
+                                                   guardExpressionBody,
+                                                   effect,
+                                                   trigger,
+                                                   source,
+                                                   target);
+d627 10
+a636 9
+            Transition transition2 =
+                stateMachineFactory.makeTransition(name,
+                                                   commentString,
+                                                   guardExpressionLanguage,
+                                                   guardExpressionBody,
+                                                   effect,
+                                                   trigger,
+                                                   source,
+                                                   target);
+d683 10
+a692 9
+            Transition transition3 =
+                stateMachineFactory.makeTransition(name,
+                                                   commentString,
+                                                   guardExpressionLanguage,
+                                                   guardExpressionBody,
+                                                   effect,
+                                                   trigger,
+                                                   source,
+                                                   target);
+d739 2
+a740 2
+            //int verbosity = Interpreter.QUIET_VERBOSITY;
+            int verbosity = Interpreter.DEFAULT_VERBOSITY;
+d815 4
+a818 1
+            CycExtractor cycExtractor = new CycExtractor(cycAccess, CycExtractor.QUIET_VERBOSITY);
+@
+
+
+1.27
+log
+@Completed coding of procedure bindings - ready to test them
+@
+text
+@d22 1
+a22 1
+ * @@version $Id: UnitTest.java,v 1.26 2003/02/07 21:06:26 stephenreed Exp $
+d62 1
+a62 1
+        testSuite.addTest(new UnitTest("testProcedureInterpretation"));
+d64 1
+a64 1
+        //testSuite.addTest(new UnitTest("testCycExtractor"));
+d263 1
+a263 1
+                                             Interpreter.DEFAULT_VERBOSITY);
+d284 4
+a287 1
+                                                    outputBindings);
+d305 4
+a308 2
+                cycAccess = new CycAccess("localhost", 3620, CycConnection.DEFAULT_COMMUNICATION_MODE,
+                        true);
+d313 4
+a316 2
+                cycAccess = new CycAccess("localhost", 3600, CycConnection.DEFAULT_COMMUNICATION_MODE,
+                        true);
+d328 4
+a331 2
+            StateMachine stateMachine = stateMachineFactory.makeStateMachine(namespaceName,
+                    name, commentString);
+d342 1
+a342 1
+                    commentString);
+d356 9
+a364 4
+            stateMachineFactory.addStateVariableToClassifier(name, commentString,
+                    StructuralFeature.SK_INSTANCE, type, StructuralFeature.CK_CHANGEABLE,
+                    new Multiplicity(1, 1, false), StructuralFeature.OK_UNORDERED,
+                    initialValue);
+d369 3
+a371 1
+            Object body = cycAccess.getArg2("umlBody", name, "UMLProcedureDefinition-InitializeNumberToZeroMt");
+d373 6
+a378 2
+            Procedure initializeNumberToZero = stateMachineFactory.makeProcedure(name,
+                    commentString, language, body, isList);
+d390 1
+a390 1
+            name = "x";
+d414 3
+a416 1
+            body = cycAccess.getArg2("umlBody", name, "UMLProcedureDefinition-IncrementNumberMt");
+d418 6
+a423 2
+            Procedure increment = stateMachineFactory.makeProcedure(name, commentString,
+                    language, body, isList);
+d435 1
+a435 1
+            name = "x";
+d437 5
+a441 2
+            InputPin inputPinX = stateMachineFactory.addInputPinToProcedure(name,
+                    commentString, increment, type);
+d452 1
+d454 5
+a458 2
+            OutputPin outputPinX = stateMachineFactory.addOutputPinToProcedure(name,
+                    commentString, increment, type);
+d478 8
+a485 2
+            CompositeState topState = stateMachineFactory.makeCompositeState(name,
+                    commentString, container, entry, exit, doActivity, isConcurrent);
+d507 5
+a511 2
+            PseudoState initialState = stateMachineFactory.makePseudoState(name,
+                    commentString, container, kind);
+d525 7
+a531 2
+            SimpleState counterState = stateMachineFactory.makeSimpleState(name,
+                    commentString, container, entry, exit, doActivity);
+d548 7
+a554 2
+            FinalState finalState = stateMachineFactory.makeFinalState(name, commentString,
+                    container, entry, exit, doActivity);
+d571 2
+a572 2
+            name = "TestStateMachine-Transition1";
+            commentString = "Transition 1 for the test state machine.";
+d579 9
+a587 3
+            Transition transition1 = stateMachineFactory.makeTransition(name, commentString,
+                    guardExpressionLanguage, guardExpressionBody, effect, trigger,
+                    source, target);
+d605 7
+a611 2
+            name = "TestStateMachine-Transition2";
+            commentString = "Transition 2 for the test state machine.";
+d613 3
+a615 2
+            guardExpressionBody = cycAccess.getArg2("umlBody", "TestStateMachine-BooleanExpression1",
+                    "UMLStateMachineTest01Mt");
+d620 9
+a628 3
+            Transition transition2 = stateMachineFactory.makeTransition(name, commentString,
+                    guardExpressionLanguage, guardExpressionBody, effect, trigger,
+                    source, target);
+d653 14
+a666 2
+            name = "TestStateMachine-Transition3";
+            commentString = "Transition 3 for the test state machine.";
+d668 3
+a670 2
+            guardExpressionBody = cycAccess.getArg2("umlBody", "TestStateMachine-BooleanExpression2",
+                    "UMLStateMachineTest01Mt");
+d675 9
+a683 3
+            Transition transition3 = stateMachineFactory.makeTransition(name, commentString,
+                    guardExpressionLanguage, guardExpressionBody, effect, trigger,
+                    source, target);
+d709 3
+d730 10
+a739 5
+            int verbosity = Interpreter.QUIET_VERBOSITY;
+            ContextStackPool contextStackPool = new ContextStackPool(cycAccess,
+                    temporaryWorkspaceMt, ContextStackPool.QUIET_VERBOSITY);
+            interpreter = new Interpreter(stateMachine, cycAccess, contextStackPool,
+                    verbosity);
+@
+
+
+1.26
+log
+@Fixed compilation errors in the latest refactoring.
+@
+text
+@d22 1
+a22 1
+ * @@version $Id: UnitTest.java,v 1.25 2003/02/06 02:57:03 stephenreed Exp $
+d59 3
+a61 3
+        testSuite.addTest(new UnitTest("testJavaInterpreter"));
+        testSuite.addTest(new UnitTest("testExpressionEvaluation"));
+        testSuite.addTest(new UnitTest("testContextFrames"));
+d63 2
+a64 2
+        testSuite.addTest(new UnitTest("testSimpleStateMachine"));
+        testSuite.addTest(new UnitTest("testCycExtractor"));
+d256 1
+a256 1
+                    ContextStackPool.QUIET_VERBOSITY);
+d259 5
+a263 2
+            ProcedureInterpreter procedureInterpreter = new ProcedureInterpreter(cycAccess,
+                    definitionMt, contextStackPool, Interpreter.QUIET_VERBOSITY);
+d272 13
+a284 1
+            procedureInterpreter.interpretTransitionProcedure(transition1, stateMt);
+@
+
+
+1.25
+log
+@Refactoring of the UML state machine extractor.
+Work in progress  and will not all compile.
+@
+text
+@d1 16
+a16 1
+package org.opencyc.uml.interpreter;
+a17 13
+import java.util.*;
+import java.net.*;
+import java.io.*;
+import junit.framework.*;
+import koala.dynamicjava.interpreter.*;
+import koala.dynamicjava.parser.wrapper.*;
+import org.opencyc.api.*;
+import org.opencyc.cycobject.*;
+import org.opencyc.util.*;
+import org.opencyc.uml.core.*;
+import org.opencyc.uml.action.*;
+import org.opencyc.uml.commonbehavior.*;
+import org.opencyc.uml.statemachine.*;
+d22 1
+a22 1
+ * @@version $Id: UnitTest.java,v 1.24 2003/01/29 02:03:19 stephenreed Exp $
+a42 1
+
+d48 1
+a48 1
+    public UnitTest(String name) {
+d57 1
+a57 1
+    public static Test suite() {
+d65 1
+a65 1
+        return testSuite;
+d71 1
+a71 1
+    public static void main(String[] args) {
+a87 1
+
+d92 2
+a93 1
+        result = interpreter.interpret(new StringReader(statements.toString()), "statements");
+a95 1
+
+d100 2
+a101 1
+        result = interpreter.interpret(new StringReader(statements.toString()), "statements");
+a103 1
+
+a111 1
+
+d116 2
+a117 4
+                cycAccess = new CycAccess("localhost",
+                                          3620,
+                                          CycConnection.DEFAULT_COMMUNICATION_MODE,
+                                          true);
+d122 2
+a123 4
+                cycAccess = new CycAccess("localhost",
+                                          3600,
+                                          CycConnection.DEFAULT_COMMUNICATION_MODE,
+                                          true);
+d131 1
+a131 3
+            CycFort stateMt =
+                cycAccess.getKnownConstantByName("UMLStateMachineInterpreter-TemporaryWorkspaceMt");
+
+d134 2
+a135 5
+
+            ExpressionEvaluator expressionEvaluator =
+                new ExpressionEvaluator(cycAccess,
+                                        ExpressionEvaluator.QUIET_VERBOSITY);
+
+d137 1
+a137 2
+            String expressionText =
+               "(#$ProgramAssignmentFn #$TestStateMachine-X 0)";
+d140 1
+a140 2
+            String queryText =
+                "(#$softwareParameterValue #$TestStateMachine-X 0)";
+d144 1
+a144 3
+
+            queryText =
+                    "(#$evaluate ?X (#$PlusFn 1 2))";
+d149 2
+a150 2
+            Assert.assertEquals(1, ((CycList) answer).size());
+            answer = ((CycList) answer).first();
+d152 2
+a153 5
+            Assert.assertEquals(3, ((Integer) answer).intValue());
+
+
+            queryText =
+                    "(#$evaluate ?X (#$GetParameterValueFn #$TestStateMachine-X))";
+d157 2
+a158 2
+            Assert.assertEquals(1, ((CycList) answer).size());
+            answer = ((CycList) answer).first();
+d160 1
+a160 2
+            Assert.assertEquals(0, ((Integer) answer).intValue());
+
+d163 1
+a163 3
+
+        }
+        catch (Exception e) {
+a166 1
+
+a169 1
+
+a175 1
+
+d180 2
+a181 4
+                cycAccess = new CycAccess("localhost",
+                                          3620,
+                                          CycConnection.DEFAULT_COMMUNICATION_MODE,
+                                          true);
+d185 2
+a186 4
+                cycAccess = new CycAccess("localhost",
+                                          3600,
+                                          CycConnection.DEFAULT_COMMUNICATION_MODE,
+                                          true);
+d190 3
+a192 5
+
+            ContextStackPool contextStackPool =
+                new ContextStackPool(cycAccess,
+                                     cycAccess.getKnownConstantByName("UMLStateMachineInterpreter-TemporaryWorkspaceMt"),
+                                     ContextStackPool.QUIET_VERBOSITY);
+a193 1
+
+d195 21
+a215 14
+            CycConstant contextFrame1 = contextStackPool.allocateContextFrame(null, definitionMt);
+            CycConstant contextFrame2 = contextStackPool.allocateContextFrame(contextFrame1, definitionMt);
+            CycConstant contextFrame3 = contextStackPool.allocateContextFrame(contextFrame2, definitionMt);
+            CycConstant contextFrame4 = contextStackPool.allocateContextFrame(contextFrame3, definitionMt);
+            CycConstant contextFrame5 = contextStackPool.allocateContextFrame(contextFrame4, definitionMt);
+            CycConstant contextFrame6 = contextStackPool.allocateContextFrame(contextFrame5, definitionMt);
+            CycConstant contextFrame7 = contextStackPool.allocateContextFrame(contextFrame6, definitionMt);
+            CycConstant contextFrame8 = contextStackPool.allocateContextFrame(contextFrame7, definitionMt);
+            CycConstant contextFrame9 = contextStackPool.allocateContextFrame(contextFrame8, definitionMt);
+            CycConstant contextFrame10 = contextStackPool.allocateContextFrame(contextFrame9, definitionMt);
+
+            Assert.assertEquals(contextFrame9,
+                                contextStackPool.getParentContextFrame(contextFrame10));
+
+d217 2
+a218 4
+
+            Assert.assertEquals(contextFrame10, contextStackPool.allocateContextFrame(contextFrame9, definitionMt));
+
+
+d221 1
+a221 2
+        }
+        catch (Exception e) {
+a224 1
+
+a232 1
+
+d237 2
+a238 4
+                cycAccess = new CycAccess("localhost",
+                                          3620,
+                                          CycConnection.DEFAULT_COMMUNICATION_MODE,
+                                          true);
+d243 2
+a244 4
+                cycAccess = new CycAccess("localhost",
+                                          3600,
+                                          CycConnection.DEFAULT_COMMUNICATION_MODE,
+                                          true);
+d254 3
+a256 5
+            ContextStackPool contextStackPool =
+                new ContextStackPool(cycAccess,
+                                     cycAccess.getKnownConstantByName("UMLStateMachineInterpreter-TemporaryWorkspaceMt"),
+                                     ContextStackPool.QUIET_VERBOSITY);
+
+d259 2
+a260 6
+
+            ProcedureInterpreter procedureInterpreter =
+                new ProcedureInterpreter(cycAccess,
+                                         definitionMt,
+                                         contextStackPool,
+                                         Interpreter.QUIET_VERBOSITY);
+d263 2
+a264 4
+            Object procedureBody =
+                cycAccess.getArg2("umlBody",
+                                  "UMLProcedure-InitializeNumberToZero",
+                                  "UMLProcedureDefinition-InitializeNumberToZeroMt");
+d271 1
+a271 2
+        }
+        catch (Exception e) {
+a274 1
+
+a282 2
+
+
+d287 2
+a288 4
+                cycAccess = new CycAccess("localhost",
+                                          3620,
+                                          CycConnection.DEFAULT_COMMUNICATION_MODE,
+                                          true);
+d293 2
+a294 4
+                cycAccess = new CycAccess("localhost",
+                                          3600,
+                                          CycConnection.DEFAULT_COMMUNICATION_MODE,
+                                          true);
+a301 1
+
+d306 2
+a307 7
+            Object context = this;
+
+            StateMachine stateMachine =
+                    stateMachineFactory.makeStateMachine(namespaceName,
+                    name,
+                    commentString,
+                    context);
+d316 20
+a335 2
+            Assert.assertEquals(context, stateMachine.getContext());
+
+d340 1
+a340 4
+            Object body =
+                cycAccess.getArg2("umlBody",
+                                  name,
+                                  "UMLProcedureDefinition-InitializeNumberToZeroMt");
+d342 2
+a343 6
+            Procedure initializeNumberToZero =
+                    stateMachineFactory.makeProcedure(name,
+                    commentString,
+                    language,
+                    body,
+                    isList);
+d357 1
+a357 1
+            Class type = null;
+d359 2
+a360 3
+                type = Class.forName("org.opencyc.uml.statemachine.PrimitiveInt");
+            }
+            catch (ClassNotFoundException e) {
+d364 2
+a365 5
+            OutputPin outputPinX1 =
+                    stateMachineFactory.addOutputPinToProcedure(name,
+                    commentString,
+                    initializeNumberToZero,
+                    type);
+a375 1
+
+d379 1
+a379 4
+            body =
+                cycAccess.getArg2("umlBody",
+                                  name,
+                                  "UMLProcedureDefinition-IncrementNumberMt");
+d381 2
+a382 6
+            Procedure increment =
+                    stateMachineFactory.makeProcedure(name,
+                    commentString,
+                    language,
+                    body,
+                    isList);
+a393 2
+
+
+d396 2
+a397 5
+            InputPin inputPinX =
+                    stateMachineFactory.addInputPinToProcedure(name,
+                    commentString,
+                    increment,
+                    type);
+a407 1
+
+d409 2
+a410 5
+            OutputPin outputPinX =
+                    stateMachineFactory.addOutputPinToProcedure(name,
+                    commentString,
+                    increment,
+                    type);
+a420 1
+
+a422 1
+
+d430 2
+a431 9
+
+            CompositeState topState =
+                    stateMachineFactory.makeCompositeState(name,
+                    commentString,
+                    container,
+                    entry,
+                    exit,
+                    doActivity,
+                    isConcurrent);
+d447 1
+a447 1
+            Assert.assertTrue(! topState.isRegion());
+a448 2
+
+
+d453 2
+a454 5
+            PseudoState initialState =
+                    stateMachineFactory.makePseudoState(name,
+                    commentString,
+                    container,
+                    kind);
+a465 1
+
+d468 2
+a469 7
+            SimpleState counterState =
+                    stateMachineFactory.makeSimpleState(name,
+                    commentString,
+                    container,
+                    entry,
+                    exit,
+                    doActivity);
+a483 1
+
+d486 2
+a487 7
+            FinalState finalState =
+                    stateMachineFactory.makeFinalState(name,
+                    commentString,
+                    container,
+                    entry,
+                    exit,
+                    doActivity);
+a501 1
+
+a503 1
+
+d512 3
+a514 9
+            Transition transition1 =
+                    stateMachineFactory.makeTransition(name,
+                    commentString,
+                    guardExpressionLanguage,
+                    guardExpressionBody,
+                    effect,
+                    trigger,
+                    source,
+                    target);
+d529 1
+a529 1
+            Assert.assertTrue(! transition1.isSelfTransition());
+a531 2
+
+
+d535 2
+a536 4
+            guardExpressionBody =
+                cycAccess.getArg2("umlBody",
+                                  "TestStateMachine-BooleanExpression1",
+                                  "UMLStateMachineTest01Mt");
+d541 3
+a543 9
+            Transition transition2 =
+                    stateMachineFactory.makeTransition(name,
+                    commentString,
+                    guardExpressionLanguage,
+                    guardExpressionBody,
+                    effect,
+                    trigger,
+                    source,
+                    target);
+d567 1
+a567 2
+            Assert.assertTrue(((State) source).getInternalTransition().contains(transition2));
+
+d571 2
+a572 4
+            guardExpressionBody =
+                    cycAccess.getArg2("umlBody",
+                                      "TestStateMachine-BooleanExpression2",
+                                      "UMLStateMachineTest01Mt");
+d577 3
+a579 9
+            Transition transition3 =
+                    stateMachineFactory.makeTransition(name,
+                    commentString,
+                    guardExpressionLanguage,
+                    guardExpressionBody,
+                    effect,
+                    trigger,
+                    source,
+                    target);
+d602 1
+a602 1
+            Assert.assertTrue(! transition3.isSelfTransition());
+a604 1
+
+d606 1
+a606 2
+        }
+        catch (Exception e) {
+a609 1
+
+d619 1
+a619 2
+    protected void interpretStateMachine (StateMachine stateMachine,
+                                          CycAccess cycAccess) {
+a620 1
+
+d622 1
+a622 3
+            CycFort definitionMt = cycAccess.getKnownConstantByName("UMLStateMachineTest01Mt");
+            CycFort temporaryWorkspaceMt =
+                cycAccess.getKnownConstantByName("UMLStateMachineInterpreter-TemporaryWorkspaceMt");
+d625 3
+a627 7
+                                                                     temporaryWorkspaceMt,
+                                                                     ContextStackPool.QUIET_VERBOSITY);
+            interpreter = new Interpreter(stateMachine,
+                                          cycAccess,
+                                          definitionMt,
+                                          contextStackPool,
+                                          verbosity);
+a632 1
+
+d637 1
+a637 2
+            Assert.assertEquals(new Integer(0),
+                                interpreter.getStateVariableValue("TestStateMachine-X"));
+a646 1
+
+d650 2
+a651 5
+            Assert.assertEquals(stateMachine.getTop(),
+                                stateMachine.getTop().getStateInterpreter().getState());
+
+            Assert.assertEquals(new Integer(1),
+                                interpreter.getStateVariableValue("TestStateMachine-X"));
+d658 1
+a658 2
+                Assert.assertEquals(new Integer(i),
+                                    interpreter.getStateVariableValue("TestStateMachine-X"));
+a664 1
+
+d668 1
+a668 2
+        }
+        catch (Exception e) {
+a673 1
+
+a679 1
+
+d684 2
+a685 4
+                cycAccess = new CycAccess("localhost",
+                                          3620,
+                                          CycConnection.DEFAULT_COMMUNICATION_MODE,
+                                          true);
+d689 2
+a690 4
+                cycAccess = new CycAccess("localhost",
+                                          3600,
+                                          CycConnection.DEFAULT_COMMUNICATION_MODE,
+                                          true);
+d694 1
+a694 2
+            CycExtractor cycExtractor = new CycExtractor(cycAccess,
+                                                         CycExtractor.QUIET_VERBOSITY);
+d703 1
+a703 1
+                                stateMachine.getComment().getBody());
+a704 1
+
+a708 1
+
+d710 1
+a710 3
+
+        }
+        catch (Exception e) {
+a713 1
+
+d716 2
+a719 1
+}@
+
+
+1.24
+log
+@Refactored UML procedure definitions into individual microtheories.
+@
+text
+@d20 1
+a20 1
+ * @@version $Id: UnitTest.java,v 1.23 2003/01/29 00:18:10 stephenreed Exp $
+d58 5
+a62 5
+        //testSuite.addTest(new UnitTest("testJavaInterpreter"));
+        //testSuite.addTest(new UnitTest("testExpressionEvaluation"));
+        //testSuite.addTest(new UnitTest("testContextFrames"));
+        //testSuite.addTest(new UnitTest("testProcedureInterpretation"));
+        //testSuite.addTest(new UnitTest("testSimpleStateMachine"));
+@
+
+
+1.23
+log
+@Mostly completed the code for UML state machine interpretation.
+@
+text
+@d20 1
+a20 1
+ * @@version $Id: UnitTest.java,v 1.22 2003/01/27 22:49:41 stephenreed Exp $
+d58 5
+a62 5
+        testSuite.addTest(new UnitTest("testJavaInterpreter"));
+        testSuite.addTest(new UnitTest("testExpressionEvaluation"));
+        testSuite.addTest(new UnitTest("testContextFrames"));
+        testSuite.addTest(new UnitTest("testProcedureInterpretation"));
+        testSuite.addTest(new UnitTest("testSimpleStateMachine"));
+d300 1
+a300 1
+            initializeProcedure.setName("TestStateMachine-InitializeNumberToZeroProcedure");
+d303 2
+a304 2
+                                  "TestStateMachine-InitializeNumberToZeroProcedure",
+                                  "UMLStateMachineTest01Mt");
+d373 1
+a373 1
+            name = "TestStateMachine-InitializeNumberToZeroProcedure";
+d379 1
+a379 1
+                                  "UMLStateMachineTest01Mt");
+d424 1
+a424 1
+            name = "TestStateMachine-IncrementProcedure";
+d430 1
+a430 1
+                                  "UMLStateMachineTest01Mt");
+@
+
+
+1.22
+log
+@Adding code to the state machine interpreter.
+@
+text
+@d20 1
+a20 1
+ * @@version $Id: UnitTest.java,v 1.21 2003/01/24 00:20:50 stephenreed Exp $
+d58 2
+a59 2
+        //testSuite.addTest(new UnitTest("testJavaInterpreter"));
+        //testSuite.addTest(new UnitTest("testExpressionEvaluation"));
+d61 3
+a63 3
+        //testSuite.addTest(new UnitTest("testProcedureInterpretation"));
+        //testSuite.addTest(new UnitTest("testSimpleStateMachine"));
+        //testSuite.addTest(new UnitTest("testCycExtractor"));
+d136 2
+a137 1
+            CycFort stateMt = cycAccess.getKnownConstantByName("UMLStateMachineTest01-ContextMt");
+d222 1
+a222 3
+            Assert.assertEquals(0, contextStackPool.contextFrames.size());
+            contextStackPool.createContextStack();
+            Assert.assertEquals(10, contextStackPool.contextFrames.size());
+d225 1
+a225 1
+            CycConstant contextFrame1 = contextStackPool.allocateContextFrame();
+d286 4
+a289 1
+            CycFort stateMt = cycAccess.getKnownConstantByName("UMLStateMachineTest01-ContextMt");
+d291 1
+a291 1
+            cycAccess.unassertMtContentsWithoutTranscript(stateMt);
+d297 1
+a297 1
+                                         stateMt,
+d309 2
+a310 3
+            procedureInterpreter.interpretTransitionProcedure(transition1);
+
+
+d745 2
+a746 1
+            CycFort stateMt = cycAccess.getKnownConstantByName("UMLStateMachineTest01-ContextMt");
+d748 3
+d754 1
+a754 1
+                                          stateMt,
+d800 1
+a800 2
+            Assert.assertEquals(new Integer(9),
+                                interpreter.getStateVariableValue("TestStateMachine-X"));
+d803 1
+a803 1
+
+@
+
+
+1.21
+log
+@continuing unit tests of procedure interpreter
+@
+text
+@d20 1
+a20 1
+ * @@version $Id: UnitTest.java,v 1.20 2003/01/22 23:56:04 stephenreed Exp $
+d60 2
+a61 1
+        testSuite.addTest(new UnitTest("testProcedureInterpretation"));
+d143 1
+a143 2
+                                        stateMt,
+                                        ExpressionEvaluator.DEFAULT_VERBOSITY);
+d149 1
+a149 1
+            expressionEvaluator.evaluate(expression);
+a172 1
+            System.out.println(((CycList) answer).cyclify());
+d190 66
+d284 1
+d286 1
+d294 3
+a296 2
+                                        stateMt,
+                                        ExpressionEvaluator.DEFAULT_VERBOSITY);
+d301 1
+a301 1
+                                  "TestStateMachine-IncrementProcedure",
+a324 2
+/*
+        StateMachineFactory stateMachineFactory = new StateMachineFactory();
+a325 47
+        //  state machine
+        String namespaceName = "test namespace";
+        String name = "TestStateMachine";
+        String commentString = "This is the test comment for testStateMachine.";
+        Object context = this;
+
+        StateMachine stateMachine =
+            stateMachineFactory.makeStateMachine(namespaceName,
+                                                 name,
+                                                 commentString,
+                                                 context);
+        Assert.assertTrue(stateMachine instanceof StateMachine);
+        Assert.assertTrue(stateMachine.getNamespace() instanceof Namespace);
+        Assert.assertEquals(namespaceName, stateMachine.getNamespace().getName());
+        Assert.assertTrue(stateMachine.getNamespace().getOwnedElement().contains(stateMachine));
+        Assert.assertEquals(name, stateMachine.getName());
+        Assert.assertTrue(stateMachine.getComment() instanceof Comment);
+        Assert.assertEquals(commentString, stateMachine.getComment().getBody());
+        Assert.assertEquals(stateMachine, stateMachine.getComment().getAnnotatedElement());
+        Assert.assertEquals(context, stateMachine.getContext());
+
+        //  procedures
+        name = "TestStateMachine-InitializeNumberToZeroProcedure";
+        commentString = "Initializes the variable to the value zero.";
+        String language = "java";
+        CycList body = "x = 0;";
+        boolean isList = false;
+        Procedure initializeNumberToZero =
+            stateMachineFactory.makeProcedure(name,
+                                              commentString,
+                                              language,
+                                              body,
+                                              isList);
+        Assert.assertTrue(initializeNumberToZero instanceof Procedure);
+        Assert.assertTrue(initializeNumberToZero.getNamespace() instanceof Namespace);
+        Assert.assertEquals(namespaceName, initializeNumberToZero.getNamespace().getName());
+        Assert.assertTrue(initializeNumberToZero.getNamespace().getOwnedElement().contains(initializeNumberToZero));
+        Assert.assertEquals(name, initializeNumberToZero.getName());
+        Assert.assertTrue(initializeNumberToZero.getComment() instanceof Comment);
+        Assert.assertEquals(commentString, initializeNumberToZero.getComment().getBody());
+        Assert.assertEquals(initializeNumberToZero, initializeNumberToZero.getComment().getAnnotatedElement());
+        Assert.assertEquals(language, initializeNumberToZero.getLanguage());
+        Assert.assertEquals(body, initializeNumberToZero.getBody());
+        Assert.assertEquals(isList, initializeNumberToZero.isList());
+        name = "x";
+        commentString = "the variable X initialized to zero.";
+        Class type = null;
+d327 396
+a722 1
+            type = Class.forName("org.opencyc.uml.statemachine.PrimitiveInt");
+d724 1
+a724 1
+        catch (ClassNotFoundException e) {
+a727 308
+        OutputPin outputPinX1 =
+            stateMachineFactory.addOutputPinToProcedure(name,
+                                                        commentString,
+                                                        initializeNumberToZero,
+                                                        type);
+        Assert.assertTrue(outputPinX1 instanceof OutputPin);
+        Assert.assertTrue(outputPinX1.getNamespace() instanceof Namespace);
+        Assert.assertEquals(namespaceName, outputPinX1.getNamespace().getName());
+        Assert.assertTrue(outputPinX1.getNamespace().getOwnedElement().contains(outputPinX1));
+        Assert.assertEquals(name, outputPinX1.getName());
+        Assert.assertTrue(outputPinX1.getComment() instanceof Comment);
+        Assert.assertEquals(commentString, outputPinX1.getComment().getBody());
+        Assert.assertEquals(outputPinX1, outputPinX1.getComment().getAnnotatedElement());
+        Assert.assertTrue(initializeNumberToZero.getResult().contains(outputPinX1));
+        Assert.assertEquals(initializeNumberToZero, outputPinX1.getProcedure());
+
+        name = "TestStateMachine-IncrementProcedure";
+        commentString = "Increments the given number by one.";
+        language = "java";
+        body = "x++;";
+        isList = false;
+        Procedure increment =
+            stateMachineFactory.makeProcedure(name,
+                                              commentString,
+                                              language,
+                                              body,
+                                              isList);
+        Assert.assertTrue(increment instanceof Procedure);
+        Assert.assertTrue(increment.getNamespace() instanceof Namespace);
+        Assert.assertEquals(namespaceName, increment.getNamespace().getName());
+        Assert.assertTrue(increment.getNamespace().getOwnedElement().contains(increment));
+        Assert.assertEquals(name, increment.getName());
+        Assert.assertTrue(increment.getComment() instanceof Comment);
+        Assert.assertEquals(commentString, increment.getComment().getBody());
+        Assert.assertEquals(increment, increment.getComment().getAnnotatedElement());
+        Assert.assertEquals(language, increment.getLanguage());
+        Assert.assertEquals(body, increment.getBody());
+        Assert.assertEquals(isList, increment.isList());
+
+
+        name = "x";
+        commentString = "the given number to be incremented";
+        InputPin inputPinX =
+            stateMachineFactory.addInputPinToProcedure(name,
+                                                       commentString,
+                                                       increment,
+                                                       type);
+        Assert.assertTrue(inputPinX instanceof InputPin);
+        Assert.assertTrue(inputPinX.getNamespace() instanceof Namespace);
+        Assert.assertEquals(namespaceName, inputPinX.getNamespace().getName());
+        Assert.assertTrue(inputPinX.getNamespace().getOwnedElement().contains(inputPinX));
+        Assert.assertEquals(name, inputPinX.getName());
+        Assert.assertTrue(inputPinX.getComment() instanceof Comment);
+        Assert.assertEquals(commentString, inputPinX.getComment().getBody());
+        Assert.assertEquals(inputPinX, inputPinX.getComment().getAnnotatedElement());
+        Assert.assertTrue(increment.getArgument().contains(inputPinX));
+        Assert.assertEquals(increment, inputPinX.getProcedure());
+
+        commentString = "the incremented number";
+        OutputPin outputPinX =
+            stateMachineFactory.addOutputPinToProcedure(name,
+                                                        commentString,
+                                                        increment,
+                                                        type);
+        Assert.assertTrue(outputPinX instanceof OutputPin);
+        Assert.assertTrue(outputPinX.getNamespace() instanceof Namespace);
+        Assert.assertEquals(namespaceName, outputPinX.getNamespace().getName());
+        Assert.assertTrue(outputPinX.getNamespace().getOwnedElement().contains(outputPinX));
+        Assert.assertEquals(name, outputPinX.getName());
+        Assert.assertTrue(outputPinX.getComment() instanceof Comment);
+        Assert.assertEquals(commentString, outputPinX.getComment().getBody());
+        Assert.assertEquals(outputPinX, outputPinX.getComment().getAnnotatedElement());
+        Assert.assertTrue(increment.getResult().contains(outputPinX));
+        Assert.assertEquals(increment, outputPinX.getProcedure());
+
+        //  events (no events in this test)
+        //  states
+
+        name = "TestStateMachine-TopState";
+        commentString = "Top state for the test state machine.";
+        CompositeState container = null;
+        Procedure entry = null;
+        Procedure exit = null;
+        Procedure doActivity = null;
+        boolean isConcurrent = false;
+
+        CompositeState topState =
+            stateMachineFactory.makeCompositeState(name,
+                                                   commentString,
+                                                   container,
+                                                   entry,
+                                                   exit,
+                                                   doActivity,
+                                                   isConcurrent);
+        stateMachine.setTop(topState);
+        Assert.assertTrue(topState instanceof CompositeState);
+        Assert.assertTrue(topState.getNamespace() instanceof Namespace);
+        Assert.assertEquals(namespaceName, topState.getNamespace().getName());
+        Assert.assertTrue(topState.getNamespace().getOwnedElement().contains(topState));
+        Assert.assertEquals(name, topState.getName());
+        Assert.assertTrue(topState.getComment() instanceof Comment);
+        Assert.assertEquals(commentString, topState.getComment().getBody());
+        Assert.assertEquals(topState, topState.getComment().getAnnotatedElement());
+        Assert.assertEquals(container, topState.getContainer());
+        Assert.assertEquals(entry, topState.getEntry());
+        Assert.assertEquals(exit, topState.getExit());
+        Assert.assertEquals(doActivity, topState.getDoActivity());
+        Assert.assertEquals(isConcurrent, topState.isConcurrent());
+        Assert.assertEquals(0, topState.getDeferrableEvent().size());
+        Assert.assertTrue(! topState.isRegion());
+        Assert.assertEquals(topState, stateMachine.getTop());
+
+
+        name = "TestStateMachine-InitialState";
+        commentString = "Initial state for the test state machine.";
+        container = topState;
+        int kind = PseudoState.PK_INITIAL;
+        PseudoState initialState =
+            stateMachineFactory.makePseudoState(name,
+                                                commentString,
+                                                container,
+                                                kind);
+        Assert.assertTrue(initialState instanceof PseudoState);
+        Assert.assertTrue(initialState.getNamespace() instanceof Namespace);
+        Assert.assertEquals(namespaceName, initialState.getNamespace().getName());
+        Assert.assertTrue(initialState.getNamespace().getOwnedElement().contains(initialState));
+        Assert.assertEquals(name, initialState.getName());
+        Assert.assertTrue(initialState.getComment() instanceof Comment);
+        Assert.assertEquals(commentString, initialState.getComment().getBody());
+        Assert.assertEquals(initialState, initialState.getComment().getAnnotatedElement());
+        Assert.assertEquals(container, initialState.getContainer());
+        Assert.assertEquals(kind, initialState.getKind());
+        Assert.assertTrue(topState.getSubVertex().contains(initialState));
+
+        name = "TestStateMachine-CounterState";
+        commentString = "Counter state for the test state machine.";
+        SimpleState counterState =
+            stateMachineFactory.makeSimpleState(name,
+                                                commentString,
+                                                container,
+                                                entry,
+                                                exit,
+                                                doActivity);
+        Assert.assertTrue(counterState instanceof SimpleState);
+        Assert.assertTrue(counterState.getNamespace() instanceof Namespace);
+        Assert.assertEquals(namespaceName, counterState.getNamespace().getName());
+        Assert.assertTrue(counterState.getNamespace().getOwnedElement().contains(counterState));
+        Assert.assertEquals(name, counterState.getName());
+        Assert.assertTrue(counterState.getComment() instanceof Comment);
+        Assert.assertEquals(commentString, counterState.getComment().getBody());
+        Assert.assertEquals(counterState, counterState.getComment().getAnnotatedElement());
+        Assert.assertEquals(container, counterState.getContainer());
+        Assert.assertTrue(topState.getSubVertex().contains(counterState));
+        Assert.assertEquals(entry, counterState.getEntry());
+        Assert.assertEquals(exit, counterState.getExit());
+        Assert.assertEquals(doActivity, counterState.getDoActivity());
+        Assert.assertEquals(0, counterState.getDeferrableEvent().size());
+
+        name = "TestStateMachine-FinalState";
+        commentString = "Final state for the test state machine.";
+        FinalState finalState =
+            stateMachineFactory.makeFinalState(name,
+                                               commentString,
+                                               container,
+                                               entry,
+                                               exit,
+                                               doActivity);
+        Assert.assertTrue(finalState instanceof FinalState);
+        Assert.assertTrue(finalState.getNamespace() instanceof Namespace);
+        Assert.assertEquals(namespaceName, finalState.getNamespace().getName());
+        Assert.assertTrue(finalState.getNamespace().getOwnedElement().contains(finalState));
+        Assert.assertEquals(name, finalState.getName());
+        Assert.assertTrue(finalState.getComment() instanceof Comment);
+        Assert.assertEquals(commentString, finalState.getComment().getBody());
+        Assert.assertEquals(finalState, finalState.getComment().getAnnotatedElement());
+        Assert.assertEquals(container, finalState.getContainer());
+        Assert.assertTrue(topState.getSubVertex().contains(finalState));
+        Assert.assertEquals(entry, finalState.getEntry());
+        Assert.assertEquals(exit, finalState.getExit());
+        Assert.assertEquals(doActivity, finalState.getDoActivity());
+        Assert.assertEquals(0, finalState.getDeferrableEvent().size());
+
+        //  state vertices (no state vertices in this test)
+        //  transistions
+
+        name = "TestStateMachine-Transition1";
+        commentString = "Transition 1 for the test state machine.";
+        String guardExpressionLanguage = null;
+        String guardExpressionBody = null;
+        Procedure effect = initializeNumberToZero;
+        Event trigger = null;
+        StateVertex source = initialState;
+        StateVertex target = counterState;
+        Transition transition1 =
+            stateMachineFactory.makeTransition(name,
+                                               commentString,
+                                               guardExpressionLanguage,
+                                               guardExpressionBody,
+                                               effect,
+                                               trigger,
+                                               source,
+                                               target);
+        Assert.assertTrue(transition1 instanceof Transition);
+        Assert.assertTrue(transition1.getNamespace() instanceof Namespace);
+        Assert.assertEquals(namespaceName, transition1.getNamespace().getName());
+        Assert.assertTrue(transition1.getNamespace().getOwnedElement().contains(transition1));
+        Assert.assertEquals(name, transition1.getName());
+        Assert.assertTrue(transition1.getComment() instanceof Comment);
+        Assert.assertEquals(commentString, transition1.getComment().getBody());
+        Assert.assertEquals(transition1, transition1.getComment().getAnnotatedElement());
+        Assert.assertEquals(effect, transition1.getEffect());
+        Assert.assertNull(transition1.getGuard());
+        Assert.assertEquals(source, transition1.getSource());
+        Assert.assertEquals(target, transition1.getTarget());
+        Assert.assertEquals(stateMachine, transition1.getStateMachine());
+        Assert.assertEquals(trigger, transition1.getTrigger());
+        Assert.assertTrue(! transition1.isSelfTransition());
+        Assert.assertTrue(initialState.getOutgoing().contains(transition1));
+        Assert.assertTrue(counterState.getIncoming().contains(transition1));
+
+
+        name = "TestStateMachine-Transition2";
+        commentString = "Transition 2 for the test state machine.";
+        guardExpressionLanguage = "java";
+        guardExpressionBody = "x < 9;";
+        effect = increment;
+        trigger = null;
+        source = counterState;
+        target = counterState;
+        Transition transition2 =
+            stateMachineFactory.makeTransition(name,
+                                               commentString,
+                                               guardExpressionLanguage,
+                                               guardExpressionBody,
+                                               effect,
+                                               trigger,
+                                               source,
+                                               target);
+        Assert.assertTrue(transition2 instanceof Transition);
+        Assert.assertTrue(transition2.getNamespace() instanceof Namespace);
+        Assert.assertEquals(namespaceName, transition2.getNamespace().getName());
+        Assert.assertTrue(transition2.getNamespace().getOwnedElement().contains(transition2));
+        Assert.assertEquals(name, transition2.getName());
+        Assert.assertTrue(transition2.getComment() instanceof Comment);
+        Assert.assertEquals(commentString, transition2.getComment().getBody());
+        Assert.assertEquals(transition2, transition2.getComment().getAnnotatedElement());
+        Assert.assertEquals(effect, transition2.getEffect());
+        Assert.assertNotNull(transition2.getGuard());
+        Assert.assertTrue(transition2.getGuard() instanceof Guard);
+        Assert.assertNotNull(transition2.getGuard().getexpression());
+        Guard guard = transition2.getGuard();
+        Assert.assertEquals(name, guard.getName());
+        Assert.assertEquals(commentString, guard.getComment().getBody());
+        Assert.assertEquals(transition2, guard.getTransition());
+        Assert.assertTrue(guard.getNamespace().getOwnedElement().contains(guard));
+        Assert.assertEquals(guardExpressionBody, guard.getexpression().getBody());
+        Assert.assertEquals(source, transition2.getSource());
+        Assert.assertEquals(target, transition2.getTarget());
+        Assert.assertEquals(stateMachine, transition2.getStateMachine());
+        Assert.assertEquals(trigger, transition2.getTrigger());
+        Assert.assertTrue(transition2.isSelfTransition());
+        Assert.assertTrue(((State) source).getInternalTransition().contains(transition2));
+
+        name = "TestStateMachine-Transition3";
+        commentString = "Transition 3 for the test state machine.";
+        guardExpressionLanguage = "java";
+        //guardExpressionBody = "x == 9;";
+        effect = null;
+        trigger = null;
+        source = counterState;
+        target = finalState;
+        Transition transition3 =
+            stateMachineFactory.makeTransition(name,
+                                               commentString,
+                                               guardExpressionLanguage,
+                                               guardExpressionBody,
+                                               effect,
+                                               trigger,
+                                               source,
+                                               target);
+        Assert.assertTrue(transition3 instanceof Transition);
+        Assert.assertTrue(transition3.getNamespace() instanceof Namespace);
+        Assert.assertEquals(namespaceName, transition3.getNamespace().getName());
+        Assert.assertTrue(transition3.getNamespace().getOwnedElement().contains(transition3));
+        Assert.assertEquals(name, transition3.getName());
+        Assert.assertTrue(transition3.getComment() instanceof Comment);
+        Assert.assertEquals(commentString, transition3.getComment().getBody());
+        Assert.assertEquals(transition3, transition3.getComment().getAnnotatedElement());
+        Assert.assertEquals(effect, transition3.getEffect());
+        Assert.assertNotNull(transition3.getGuard());
+        Assert.assertTrue(transition3.getGuard() instanceof Guard);
+        Assert.assertNotNull(transition3.getGuard().getexpression());
+        guard = transition3.getGuard();
+        Assert.assertEquals(name, guard.getName());
+        Assert.assertEquals(commentString, guard.getComment().getBody());
+        Assert.assertEquals(transition3, guard.getTransition());
+        Assert.assertTrue(guard.getNamespace().getOwnedElement().contains(guard));
+        Assert.assertEquals(guardExpressionBody, guard.getexpression().getBody());
+        Assert.assertEquals(source, transition3.getSource());
+        Assert.assertEquals(target, transition3.getTarget());
+        Assert.assertEquals(stateMachine, transition3.getStateMachine());
+        Assert.assertEquals(trigger, transition3.getTrigger());
+        Assert.assertTrue(! transition3.isSelfTransition());
+        Assert.assertTrue(source.getOutgoing().contains(transition3));
+        Assert.assertTrue(target.getIncoming().contains(transition3));
+
+        interpretStateMachine(stateMachine);
+        */
+d735 2
+a736 1
+     * @@param the given instantiated state machine
+d738 2
+a739 2
+    protected void interpretStateMachine (StateMachine stateMachine) {
+        int verbosity = 3;
+d741 1
+a741 1
+        /*
+d743 49
+a791 37
+            interpreter = new Interpreter(stateMachine, null, verbosity);
+        }
+        catch (IOException e) {
+            Assert.fail(e.getMessage());
+        }
+        Assert.assertNotNull(interpreter);
+        Assert.assertTrue(interpreter instanceof Interpreter);
+        Assert.assertTrue(interpreter.eventQueue.isEmpty());
+        Assert.assertNull(interpreter.getCurrentEvent());
+        Assert.assertEquals(stateMachine, interpreter.getStateMachine());
+        //Assert.assertTrue(interpreter.getTreeInterpreter() instanceof TreeInterpreter);
+
+        interpreter.formAllStatesConfiguration();
+        if (verbosity > 2)
+            System.out.print(interpreter.displayAllStatesConfigurationTree());
+        interpreter.formInitialStateConfiguration();
+        //Assert.assertEquals(new Integer(0), interpreter.treeInterpreter.getVariable("x"));
+        if (verbosity > 2)
+            System.out.print(interpreter.displayStateConfigurationTree());
+        interpreter.eventDispatcher();
+        Assert.assertNotNull(interpreter.getCurrentEvent());
+        Assert.assertTrue(interpreter.getCurrentEvent() instanceof CompletionEvent);
+        interpreter.eventProcessor();
+        interpreter.fireSelectedTransitions();
+        interpreter.getStateMachineFactory().destroyEvent(interpreter.getCurrentEvent());
+        interpreter.currentEvent = null;
+
+        Assert.assertNotNull(stateMachine.getTop());
+        Assert.assertTrue(stateMachine.getTop() instanceof CompositeState);
+        Assert.assertNotNull(stateMachine.getTop().getStateInterpreter());
+        Assert.assertEquals(stateMachine.getTop(),
+                            stateMachine.getTop().getStateInterpreter().getState());
+
+        //Assert.assertEquals(new Integer(1), interpreter.treeInterpreter.getVariable("x"));
+        if (verbosity > 2)
+            System.out.print(interpreter.displayStateConfigurationTree());
+        for (int i = 2; i < 10; i++) {
+d795 9
+a803 1
+            //Assert.assertEquals(new Integer(i), interpreter.treeInterpreter.getVariable("x"));
+a804 9
+        if (verbosity > 2)
+            System.out.print(interpreter.displayStateConfigurationTree());
+        interpreter.eventDispatcher();
+        interpreter.eventProcessor();
+        interpreter.fireSelectedTransitions();
+        //Assert.assertEquals(new Integer(9), interpreter.treeInterpreter.getVariable("x"));
+        if (verbosity > 2)
+            System.out.print(interpreter.displayStateConfigurationTree());
+        */
+d833 2
+a834 1
+            CycExtractor cycExtractor = new CycExtractor(cycAccess);
+d847 1
+d849 1
+d851 1
+a851 1
+            interpretStateMachine(stateMachine);
+@
+
+
+1.20
+log
+@Added more test cases
+@
+text
+@d20 1
+a20 1
+ * @@version $Id: UnitTest.java,v 1.19 2003/01/13 23:58:09 stephenreed Exp $
+d59 2
+a60 1
+        testSuite.addTest(new UnitTest("testExpressionEvaluation"));
+d182 5
+d188 2
+a189 1
+            //TODO test #$umlProcedureInputBinding
+d191 5
+d197 24
+a220 5
+            Object body =
+                cycAccess.getArg2("umlBody",
+                                  "TestStateMachine-InitializeNumberToZeroProcedure",
+                                  "UMLStateMachineTest01Mt");
+            System.out.println("body: " + ((CycList) body).cyclify());
+d222 2
+a223 8
+            expression.setBody(body);
+            expressionEvaluator.evaluate(expression);
+            queryText =
+                "(#$softwareParameterValue \n" +
+                "  (#$SoftwareParameterFromSyntaxFn #$TestStateMachine-OutputPin2-X) 0)";
+            query = cycAccess.makeCycList(queryText);
+            Assert.assertTrue(cycAccess.isQueryTrue(query, stateMt));
+            Assert.assertEquals(2, cycAccess.getAllAssertionsInMt(stateMt).size());
+d225 7
+a231 2
+            Expression testExpression = new Expression();
+            Object testBody =
+d233 1
+a233 1
+                                  "TestStateMachine-BooleanExpression1",
+d235 5
+a239 5
+            System.out.println("body: " + ((CycList) testBody).cyclify());
+            testExpression.setBody(testBody);
+            Assert.assertTrue(!
+                expressionEvaluator.evaluateProgramConditionFn(
+                    (CycList) ((CycList) testExpression.getBody()).second()));
+a240 9
+            Expression incrementExpression = new Expression();
+            Object incrementBody =
+                cycAccess.getArg2("umlBody",
+                                  "TestStateMachine-IncrementProcedure",
+                                  "UMLStateMachineTest01Mt");
+            System.out.println("body: " + ((CycList) testBody).cyclify());
+            incrementExpression.setBody(incrementBody);
+            cycAccess.traceNamesOn();
+            expressionEvaluator.evaluate(incrementExpression);
+d248 1
+a248 1
+        System.out.println("\n**** testExpressionEvaluation ****");
+@
+
+
+1.19
+log
+@added more code to the state machine interpreter
+@
+text
+@d20 1
+a20 1
+ * @@version $Id: UnitTest.java,v 1.18 2003/01/10 22:31:42 stephenreed Exp $
+d135 1
+d155 23
+d180 4
+@
+
+
+1.18
+log
+@Added more code to the state machine interpreter
+@
+text
+@d20 1
+a20 1
+ * @@version $Id: UnitTest.java,v 1.17 2003/01/09 21:52:16 stephenreed Exp $
+d166 2
+a167 2
+                    "(#$softwareParameterValue \n" +
+                    "  (#$SoftwareParameterFromSyntaxFn #$TestStateMachine-OutputPin2-X) 0)";
+d172 18
+d191 1
+a191 5
+            body =
+                cycAccess.getAssertionArg2("umlBody",
+                                           "TestStateMachine-BooleanExpression1",
+                                           "UMLStateMachineTest01Mt");
+            System.out.println("body: " + ((CycList) body).cyclify());
+a192 2
+            expression.setBody(body);
+            expressionEvaluator.evaluate(expression);
+@
+
+
+1.17
+log
+@Added code to state machine expression evaluator
+@
+text
+@d20 1
+a20 1
+ * @@version $Id: UnitTest.java,v 1.16 2003/01/09 00:00:25 stephenreed Exp $
+d161 16
+@
+
+
+1.16
+log
+@Changing the state machine interpreter to keep state in the Cyc server.
+@
+text
+@d20 1
+a20 1
+ * @@version $Id: UnitTest.java,v 1.15 2002/11/26 00:15:22 stephenreed Exp $
+d58 1
+a58 1
+        testSuite.addTest(new UnitTest("testJavaInterpreter"));
+d60 2
+a61 2
+        testSuite.addTest(new UnitTest("testSimpleStateMachine"));
+        testSuite.addTest(new UnitTest("testCycExtractor"));
+d102 1
+a102 1
+        System.out.println("\n**** testJavaInterpreter ****");
+d120 1
+d127 1
+d129 1
+a129 1
+            else
+d131 7
+a137 1
+            CycFort stateMt = cycAccess.getKnownConstantByName("UMLStateMachineTest01Mt");
+d139 5
+a143 2
+                new ExpressionEvaluator(cycAccess, stateMt);
+            Expression expression1 = new Expression();
+d145 20
+a164 25
+               "(ProgramBlockFn \n" +
+               "  (ProgramAssignmentFn TestStateMachine-X 0) \n" +
+               "  (ProgramAssignmentFn \n" +
+               "    (SoftwareParameterFromSyntaxFn TestStateMachine-OutputPin2-X) \n" +
+               "      TestStateMachine-X))";
+            expression1.setBody(cycAccess.makeCycList(expressionText));
+            expressionEvaluator.evaluate(expression1);
+
+            Expression expression2 = new Expression();
+            //expression2.setBody("x = 0;");
+            expressionEvaluator.evaluate(expression2);
+
+            BooleanExpression booleanExpression1 = new BooleanExpression();
+            //booleanExpression1.setBody("x < 9;");
+            Assert.assertTrue(expressionEvaluator.evaluateBoolean(booleanExpression1));
+
+            Expression expression4 = new Expression();
+            //expression4.setBody("x++;");
+            for (int i = 0; i < 9; i++)
+                expressionEvaluator.evaluate(expression4);
+            Assert.assertTrue(! expressionEvaluator.evaluateBoolean(booleanExpression1));
+
+            BooleanExpression booleanExpression2 = new BooleanExpression();
+            //booleanExpression2.setBody("x == 9;");
+            Assert.assertTrue(expressionEvaluator.evaluateBoolean(booleanExpression2));
+@
+
+
+1.15
+log
+@Begin unit test of ChatterBot state machine
+@
+text
+@d20 1
+a20 1
+ * @@version $Id: UnitTest.java,v 1.14 2002/11/14 22:06:05 stephenreed Exp $
+d58 1
+d73 1
+a73 1
+     * Tests expression evaluation.
+d75 2
+a76 2
+    public void testExpressionEvaluation () {
+        System.out.println("\n**** testExpressionEvaluation ****");
+d102 8
+a109 23
+        ExpressionEvaluator expressionEvaluator =
+            new ExpressionEvaluator(new TreeInterpreter(new JavaCCParserFactory()));
+        Expression expression1 = new Expression();
+        expression1.setBody("int x;");
+        expressionEvaluator.evaluate(expression1);
+
+        Expression expression2 = new Expression();
+        expression2.setBody("x = 0;");
+        expressionEvaluator.evaluate(expression2);
+
+        BooleanExpression booleanExpression1 = new BooleanExpression();
+        booleanExpression1.setBody("x < 9;");
+        Assert.assertTrue(expressionEvaluator.evaluateBoolean(booleanExpression1));
+
+        Expression expression4 = new Expression();
+        expression4.setBody("x++;");
+        for (int i = 0; i < 9; i++)
+            expressionEvaluator.evaluate(expression4);
+        Assert.assertTrue(! expressionEvaluator.evaluateBoolean(booleanExpression1));
+
+        BooleanExpression booleanExpression2 = new BooleanExpression();
+        booleanExpression2.setBody("x == 9;");
+        Assert.assertTrue(expressionEvaluator.evaluateBoolean(booleanExpression2));
+d111 53
+d174 1
+d202 1
+a202 1
+        String body = "x = 0;";
+a220 1
+
+d497 1
+a497 1
+        guardExpressionBody = "x == 9;";
+d538 1
+d551 1
+d563 1
+a563 1
+        Assert.assertTrue(interpreter.getTreeInterpreter() instanceof TreeInterpreter);
+d569 1
+a569 1
+        Assert.assertEquals(new Integer(0), interpreter.treeInterpreter.getVariable("x"));
+d586 1
+a586 1
+        Assert.assertEquals(new Integer(1), interpreter.treeInterpreter.getVariable("x"));
+d593 1
+a593 1
+            Assert.assertEquals(new Integer(i), interpreter.treeInterpreter.getVariable("x"));
+d600 1
+a600 1
+        Assert.assertEquals(new Integer(9), interpreter.treeInterpreter.getVariable("x"));
+d603 1
+@
+
+
+1.14
+log
+@Completed first set of unit tests for UML State Machine extraction from Cyc.
+@
+text
+@d20 1
+a20 1
+ * @@version $Id: UnitTest.java,v 1.13 2002/11/14 00:35:40 stephenreed Exp $
+d510 7
+a516 1
+        Interpreter interpreter = new Interpreter(stateMachine, verbosity);
+@
+
+
+1.13
+log
+@Adding code to CycExtractor to extract the test state machine from Cyc
+@
+text
+@d20 1
+a20 1
+ * @@version $Id: UnitTest.java,v 1.12 2002/11/13 04:07:54 stephenreed Exp $
+d453 1
+a453 2
+        Assert.assertTrue(source.getOutgoing().contains(transition2));
+        Assert.assertTrue(target.getIncoming().contains(transition2));
+d498 12
+a509 1
+        int verbosity = 0;
+a538 4
+        Assert.assertNotNull(counterState.getStateInterpreter());
+        Assert.assertEquals(counterState,
+                            counterState.getStateInterpreter().getState());
+
+d556 1
+a557 2
+        System.out.println("\n**** testSimpleStateMachine ****");
+    }
+d595 6
+@
+
+
+1.12
+log
+@Beginning to unit test the CycExtractor
+@
+text
+@d4 1
+d11 1
+d20 1
+a20 1
+ * @@version $Id: UnitTest.java,v 1.11 2002/11/09 15:18:57 stephenreed Exp $
+d499 1
+a499 1
+        int verbosity = 3;
+d559 1
+d562 17
+a578 1
+            CycAccess cycAccess = new CycAccess();
+d580 10
+a589 1
+            StateMachine stateMachine = cycExtractor.extract("UMLStateMachine-Test01");
+@
+
+
+1.11
+log
+@Small mods to update UML association names per the UML doc.
+@
+text
+@d8 2
+d18 1
+a18 1
+ * @@version $Id: UnitTest.java,v 1.10 2002/11/06 16:35:17 stephenreed Exp $
+d58 1
+d550 19
+@
+
+
+1.10
+log
+@Completed first (simple) unit test of UML state machine support.
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: UnitTest.java,v 1.9 2002/11/06 04:51:02 stephenreed Exp $
+d494 2
+a495 1
+        Interpreter interpreter = new Interpreter(stateMachine);
+d504 2
+a505 1
+        System.out.print(interpreter.displayAllStatesConfigurationTree());
+d508 2
+a509 1
+        System.out.print(interpreter.displayStateConfigurationTree());
+d529 2
+a530 1
+        System.out.print(interpreter.displayStateConfigurationTree());
+d537 2
+a538 1
+        System.out.print(interpreter.displayStateConfigurationTree());
+d543 2
+a544 1
+        System.out.print(interpreter.displayStateConfigurationTree());
+@
+
+
+1.9
+log
+@Adding more code to UML state machine support.
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: UnitTest.java,v 1.8 2002/11/06 00:24:31 stephenreed Exp $
+d508 2
+d512 2
+d515 24
+@
+
+
+1.8
+log
+@Added more code for UML state machine interpretation.
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: UnitTest.java,v 1.7 2002/11/05 15:44:15 stephenreed Exp $
+d509 1
+@
+
+
+1.7
+log
+@Added more support for UML State Machine state interpretation
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: UnitTest.java,v 1.6 2002/11/05 00:35:25 stephenreed Exp $
+d96 25
+d376 1
+a376 1
+        Procedure effect = null;
+d411 1
+a411 1
+        guardExpressionBody = "x < 10";
+d454 1
+a454 1
+        guardExpressionBody = "x == 10";
+d500 1
+a500 1
+        Assert.assertTrue(interpreter.expressionEvaluator instanceof ExpressionEvaluator);
+d502 2
+d505 2
+d508 1
+@
+
+
+1.6
+log
+@Adding more code to the UML State Machine interpreter
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: UnitTest.java,v 1.5 2002/11/04 21:51:09 stephenreed Exp $
+d476 2
+@
+
+
+1.5
+log
+@Adding more code to the simple state machine unit test.
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: UnitTest.java,v 1.4 2002/11/04 21:38:21 stephenreed Exp $
+d256 1
+d272 1
+d475 2
+a476 1
+        //interpreter.eventDispatcher();
+@
+
+
+1.4
+log
+@Added primitive types for state machine interpretation.
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: UnitTest.java,v 1.3 2002/11/04 16:23:23 stephenreed Exp $
+d466 9
+@
+
+
+1.3
+log
+@Adding unit test case for simple state machine to increment a number from zero to ten.
+@
+text
+@d16 1
+a16 1
+ * @@version $Id: UnitTest.java,v 1.2 2002/10/29 16:18:19 stephenreed Exp $
+d109 1
+a109 1
+        String name = "testStateMachine";
+d129 2
+a130 2
+        name = "incrementProcedure";
+        commentString = "Increments the given number by one.";
+d132 1
+a132 1
+        String body = "x = new Integer(x.intValue() + 1);";
+d134 49
+d201 1
+a203 8
+        Class type = null;
+        try {
+            type = Class.forName("java.lang.Integer");
+        }
+        catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+d237 1
+a237 1
+        //  events
+d239 104
+a342 1
+        //  state vertices
+d345 121
+a465 1
+
+@
+
+
+1.2
+log
+@Adding getter and setter methods.
+@
+text
+@d8 4
+d16 1
+a16 1
+ * @@version $Id: UnitTest.java,v 1.1 2002/10/28 05:05:55 stephenreed Exp $
+d55 1
+d98 107
+@
+
+
+1.1
+log
+@Initial Check in
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: UnitTest.java,v 1.84 2002/10/25 23:23:56 stephenreed Exp $
+a49 1
+
+d72 19
+@
+

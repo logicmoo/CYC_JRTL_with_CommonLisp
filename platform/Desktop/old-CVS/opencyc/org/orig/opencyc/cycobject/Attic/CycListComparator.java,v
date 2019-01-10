@@ -1,0 +1,105 @@
+head	1.2;
+access;
+symbols
+	PRE_1_0:1.2
+	start:1.1.1.1
+	opencyc:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2001.07.23.22.49.16;	author stephenreed;	state dead;
+branches;
+next	1.1;
+
+1.1
+date	2001.07.23.22.27.32;	author stephenreed;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2001.07.23.22.27.32;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@Removing files that were put in the wrong place.
+@
+text
+@package org.opencyc.cycobject;
+
+/*****************************************************************************
+ * Provides a comparator for the <tt>sort</tt> method of the
+ * <tt>CycList</tt> class.
+ *
+ * @@version $0.1$
+ * @@author
+ *      Stephen L. Reed<P>
+ *
+ * Copyright 2001 OpenCyc.org, license is open source GNU LGPL.<p>
+ * <a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ *****************************************************************************/
+
+import java.util.*;
+
+public class CycListComparator implements Comparator {
+
+    /**
+     * Construct a new CycListComparator object.
+     */
+    public CycListComparator() {
+    }
+
+    /**
+     * Compare two <tt>CycList</tt> elements, according to their string
+     * representations.
+     *
+     * @@param o1 an Object for comparison
+     * @@param o2 another Object for comparison.
+     * @@return a negative integer, zero, or a positive integer as the first
+     * argument is less than, equal to, or greater than the second.
+     * @@exception ClassCastException - if the arguments' types prevent them from
+     * being compared by this Comparator
+     */
+    public int compare (Object o1, Object o2) {
+        String string1 = o1.toString();
+        String string2 = o2.toString();
+        return string1.compareTo(string2);
+    }
+
+    /**
+     * Return <tt>true</tt> if some other object is equal to this <tt>Comparator</tt>
+     *
+     * @@param object the reference object with which to compare.
+     * @@return <tt>true</tt> only if the specified object is also a
+     * comparator and it imposes the same ordering as this comparator.
+     */
+     public boolean equals (Object object) {
+        return object instanceof CycListComparator;
+     }
+}@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@@
+
+
+1.1.1.1
+log
+@Import Sources
+@
+text
+@@

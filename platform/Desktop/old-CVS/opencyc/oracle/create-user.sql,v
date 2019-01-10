@@ -1,0 +1,32 @@
+head	1.1;
+access;
+symbols
+	OPENCYC_1_0_1:1.1
+	PRE_1_0:1.1;
+locks; strict;
+comment	@# @;
+
+
+1.1
+date	2002.12.30.13.12.11;	author yepster;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@Changed install script to ask for username to create interface objects for.
+@
+text
+@define username = &1
+define userpwd = &2
+create user &&username identified by &&userpwd
+default tablespace users temporary tablespace temp
+/
+quit
+/
+@

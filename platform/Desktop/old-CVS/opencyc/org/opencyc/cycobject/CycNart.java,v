@@ -1,0 +1,3343 @@
+head	1.44;
+access;
+symbols
+	BRANCH_OPENCYC_1_0_1:1.43.0.2
+	OPENCYC_1_0_1:1.43
+	PRE_1_0:1.41
+	start:1.1.1.1
+	opencyc:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.44
+date	2006.10.21.16.49.17;	author dmiles;	state Exp;
+branches;
+next	1.43;
+
+1.43
+date	2006.10.18.14.21.32;	author dmiles;	state Exp;
+branches;
+next	1.42;
+
+1.42
+date	2006.10.18.13.36.03;	author dmiles;	state Exp;
+branches;
+next	1.41;
+
+1.41
+date	2003.04.22.19.54.42;	author stephenreed;	state Exp;
+branches;
+next	1.40;
+
+1.40
+date	2002.10.22.17.10.59;	author stephenreed;	state Exp;
+branches;
+next	1.39;
+
+1.39
+date	2002.10.09.19.35.45;	author stephenreed;	state Exp;
+branches;
+next	1.38;
+
+1.38
+date	2002.09.18.14.39.16;	author stephenreed;	state Exp;
+branches;
+next	1.37;
+
+1.37
+date	2002.09.16.22.21.31;	author stephenreed;	state Exp;
+branches;
+next	1.36;
+
+1.36
+date	2002.09.15.23.58.51;	author stephenreed;	state Exp;
+branches;
+next	1.35;
+
+1.35
+date	2002.07.23.20.17.22;	author stephenreed;	state Exp;
+branches;
+next	1.34;
+
+1.34
+date	2002.05.30.20.00.28;	author stephenreed;	state Exp;
+branches;
+next	1.33;
+
+1.33
+date	2002.04.23.02.59.02;	author stephenreed;	state Exp;
+branches;
+next	1.32;
+
+1.32
+date	2002.03.27.19.51.20;	author stephenreed;	state Exp;
+branches;
+next	1.31;
+
+1.31
+date	2002.02.03.18.07.22;	author stephenreed;	state Exp;
+branches;
+next	1.30;
+
+1.30
+date	2001.12.04.05.35.39;	author stephenreed;	state Exp;
+branches;
+next	1.29;
+
+1.29
+date	2001.11.17.00.32.48;	author stephenreed;	state Exp;
+branches;
+next	1.28;
+
+1.28
+date	2001.11.14.01.15.17;	author stephenreed;	state Exp;
+branches;
+next	1.27;
+
+1.27
+date	2001.11.08.22.12.27;	author stephenreed;	state Exp;
+branches;
+next	1.26;
+
+1.26
+date	2001.11.08.13.06.47;	author stephenreed;	state Exp;
+branches;
+next	1.25;
+
+1.25
+date	2001.11.08.03.21.00;	author stephenreed;	state Exp;
+branches;
+next	1.24;
+
+1.24
+date	2001.11.07.00.59.30;	author stephenreed;	state Exp;
+branches;
+next	1.23;
+
+1.23
+date	2001.11.06.22.09.12;	author stephenreed;	state Exp;
+branches;
+next	1.22;
+
+1.22
+date	2001.10.24.20.21.33;	author stephenreed;	state Exp;
+branches;
+next	1.21;
+
+1.21
+date	2001.10.24.18.35.57;	author stephenreed;	state Exp;
+branches;
+next	1.20;
+
+1.20
+date	2001.10.17.23.44.19;	author stephenreed;	state Exp;
+branches;
+next	1.19;
+
+1.19
+date	2001.10.12.22.45.36;	author stephenreed;	state Exp;
+branches;
+next	1.18;
+
+1.18
+date	2001.09.14.22.14.55;	author stephenreed;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2001.09.12.21.28.27;	author stephenreed;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2001.09.08.03.30.41;	author stephenreed;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2001.09.07.23.43.03;	author stephenreed;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2001.08.30.23.35.11;	author stephenreed;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2001.08.30.00.06.55;	author stephenreed;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2001.08.28.10.05.25;	author stephenreed;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2001.08.24.22.39.27;	author stephenreed;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2001.08.23.22.14.25;	author stephenreed;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2001.08.23.09.33.14;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2001.08.23.00.47.46;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2001.08.22.15.09.47;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2001.08.13.16.14.44;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2001.08.10.22.22.00;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2001.07.31.20.37.40;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2001.07.31.13.08.37;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2001.07.25.17.17.34;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2001.07.23.21.54.15;	author stephenreed;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2001.07.23.21.54.15;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.44
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental packages
+@
+text
+@package org.opencyc.cycobject;
+
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+
+import org.opencyc.api.CycAccess;
+import org.opencyc.api.CycApiException;
+import org.opencyc.api.CycObjectFactory;
+import org.opencyc.xml.XMLStringWriter;
+import org.opencyc.xml.XMLWriter;
+
+/**
+ * This class implements the behavior and attributes of a
+ * an OpenCyc NART (Non Atomic Reified Term).
+ *
+ * @@version $Id: CycNart.java,v 1.29 2004/06/10 12:51:40 reed Exp $
+ * @@author Stefano Bertolo
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class CycNart extends CycFort implements Comparable, Serializable {
+
+  static final long serialVersionUID = -1344072553770319121L;
+    /**
+     * XML serialization tags.
+     */
+    public static final String natXMLtag = "nat";
+    public static final String functorXMLtag = "functor";
+    public static final String argXMLtag = "arg";
+
+    /**
+     * XML serialization indentation.
+     */
+    public static int indentLength = 2;
+
+    /**
+     * The functor of the <ttt>CycNart</tt> object. For example, the <tt>CycConstant</tt>
+     * corresponding to #$FruitFn in (#$FruitFn #$AppleTree). This must be a CycFort
+     * (i.e. cannot be assumed to be a CycConstant) because functors can themselves be
+     * CycNarts.
+     */
+    private CycFort functor;
+
+    /**
+     * The list of the arguments of the <ttt>CycNart</tt> object.
+     */
+    private CycList arguments = new CycList();
+
+    /**
+     * Constructs a new incomplete <tt>CycNart</tt> object.
+     */
+    public CycNart () {
+    }
+
+    /**
+     * Constructs a new unary <tt>CycNart</tt> object from the functor and
+     * argument.
+     *
+     * @@param functor a <tt>CycFort</tt> which is the functor of this
+     * <tt>CycNart</tt> object.
+     * @@param argument an <tt>Object</tt> most typically a <tt>CycConstant</tt>
+     * which is the single argument of this <tt>CycNart</tt> object.
+     */
+    public CycNart (CycFort functor, Object argument) {
+        this.functor = functor;
+        arguments.add(argument);
+    }
+
+    /**
+     * Constructs a new binary <tt>CycNart</tt> object from the functor and
+     * the two arguments.
+     *
+     * @@param functor a <tt>CycFort</tt> which is the functor of this
+     * <tt>CycNart</tt> object.
+     * @@param argument1 an <tt>Object</tt>
+     * @@param argument2 an <tt>Object</tt>
+     */
+    public CycNart (CycFort functor, Object argument1, Object argument2) {
+        this.functor = functor;
+        arguments.add(argument1);
+        arguments.add(argument2);
+        this.arguments = arguments;
+    }
+
+    /**
+     * Constructs a new binary <tt>CycNart</tt> object from the functor and
+     * the three arguments.
+     *
+     * @@param functor a <tt>CycFort</tt> which is the functor of this
+     * <tt>CycNart</tt> object.
+     * @@param argument1 an <tt>Object</tt>
+     * @@param argument2 an <tt>Object</tt>
+     * @@param argument3 an <tt>Object</tt>
+     */
+    public CycNart (CycFort functor, Object argument1, Object argument2, Object argument3) {
+        this.functor = functor;
+        arguments.add(argument1);
+        arguments.add(argument2);
+        arguments.add(argument3);
+        this.arguments = arguments;
+    }
+
+    /**
+     * Constructs a new <tt>CycNart</tt> object from the <tt>CycList</tt> object.
+     *
+     * @@param cycList a list representation of the <tt>CycNart</tt>
+     */
+    public CycNart (CycList cycList) {
+        if (cycList.size() == 0)
+            throw new RuntimeException("Cannot make a CycNart from an empty CycList");
+        if (! (cycList.first() instanceof CycFort))
+            throw new RuntimeException("CycNart functor must be a CycFort " + cycList.cyclify());
+        functor = (CycFort) cycList.first();
+        arguments.addAll((CycList) cycList.rest());
+    }
+
+    /**
+     * Returns the given object if it is a <tt>CycNart</tt>, otherwise the object is expected to be
+     * a <tt>CycList</tt> and a <tt>CycNart</tt> object is returned using the given
+     * CycList representation.
+     *
+     * @@param object the object to be coerced into a CycNart
+     * @@return the given object if it is a <tt>CycNart</tt>, otherwise the object is expected to be
+     * a <tt>CycList</tt> and a <tt>CycNart</tt> object is returned using the given
+     * CycList representation
+     */
+    public static CycNart coerceToCycNart(Object object) {
+        if (object instanceof CycNart)
+            return (CycNart) object;
+        if (! (object instanceof CycList))
+            throw new RuntimeException("Cannot coerce to CycNart " + object);
+        return new CycNart((CycList) object);
+    }
+
+    /**
+     * Returns the functor of the <tt>CycNart</tt>.
+     *
+     * @@return the functor of the <tt>CycNart</tt>
+     */
+    public CycFort getFunctor() {
+        if (functor == null) {
+            CycNart cycNart = null;
+            try {
+                cycNart = CycAccess.current().completeCycNart(this);
+            }
+            catch (IOException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+            catch (CycApiException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+            functor = cycNart.functor;
+            arguments = cycNart.arguments;
+        }
+        return functor;
+    }
+
+    /**
+     * Sets the functor of the <tt>CycNart</tt>.
+     *
+     * @@param functor the <tt>CycFort</tt> functor object of the <tt>CycNart</tt>
+     */
+    public void setFunctor(CycFort functor) {
+        this.functor = functor;
+    }
+
+    /**
+     * Returns the arguments of the <tt>CycNart</tt>.
+     *
+     * @@return the arguments of the <tt>CycNart</tt>
+     */
+    public List getArguments() {
+        if (arguments == null) {
+            CycNart cycNart = null;
+            try {
+                cycNart = CycAccess.current().completeCycNart(this);
+            }
+            catch (IOException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+            catch (CycApiException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+            functor = cycNart.functor;
+            arguments = cycNart.arguments;
+        }
+        return arguments;
+    }
+
+    /**
+     * Sets the arguments of the <tt>CycNart</tt>.
+     *
+     * @@param arguments the arguments of the <tt>CycNart</tt>
+     */
+    public void setArguments(CycList arguments) {
+        this.arguments = arguments;
+    }
+
+    /**
+     * Returns the XML representation of this object.
+     *
+     * @@return the XML representation of this object
+     */
+    public String toXMLString () throws IOException {
+        XMLStringWriter xmlStringWriter = new XMLStringWriter();
+        toXML(xmlStringWriter, 0, false);
+        return xmlStringWriter.toString();
+    }
+
+    /**
+     * Prints the XML representation of the <ttt>CycNart</tt> to an <tt>XMLWriter</tt>
+     * It is supposed to look like this:<p>
+     * <pre>
+     * <nat>
+     *  <functor>
+     *   <constant>
+     *    <guid>bd58a976-9c29-11b1-9dad-c379636f7270</guid>
+     *    <name>FruitFn</name>
+     *   </constant>
+     *  </functor>
+     *  <arg>
+     *   <constant>
+     *    <guid>bd58c19d-9c29-11b1-9dad-c379636f7270</guid>
+     *    <name>AppleTree</name>
+     *   </constant>
+     *  </arg>
+     * </nat>
+     * </pre>
+     *
+     * The parameter [int indent] specifies by how many spaces the XML
+     * output should be indented.<p>
+     *
+     * The parameter [boolean relative] specifies whether the
+     * indentation should be absolute -- indentation with respect to
+     * the beginning of a new line, relative = false -- or relative
+     * to the indentation currently specified in the indent_string field
+     * of the xml_writer object, relative = true.
+     *
+     */
+    public void toXML (XMLWriter xmlWriter, int indent, boolean relative)
+        throws IOException {
+        xmlWriter.printXMLStartTag(natXMLtag, indent, relative, true);
+        if (super.getId() != null) {
+            xmlWriter.printXMLStartTag(idXMLTag, indentLength, true, false);
+            xmlWriter.print(this.getId().toString());
+            xmlWriter.printXMLEndTag(idXMLTag);
+        }
+        if (functor != null) {
+            xmlWriter.printXMLStartTag(functorXMLtag, indentLength, true, true);
+            this.getFunctor().toXML(xmlWriter, indentLength, true);
+            xmlWriter.printXMLEndTag(functorXMLtag, -indentLength, true);
+        }
+        ListIterator iterator = this.getArguments().listIterator();
+        Object arg;
+        while (iterator.hasNext()) {
+            xmlWriter.printXMLStartTag(argXMLtag, 0, true, true);
+            arg = iterator.next();
+            // Use a shared method with CycList for arbitrary elements.
+            CycList.toXML(arg, xmlWriter, indentLength, true);
+            xmlWriter.printXMLEndTag(argXMLtag, 0, true);
+        }
+        xmlWriter.printXMLEndTag(natXMLtag, -indentLength, true);
+    }
+
+    /**
+     * Returns a list representation of the OpenCyc NART.
+     *
+     * @@return a <tt>CycList</tt> representation of the OpenCyc NART.
+     */
+    public CycList toCycList() {
+        CycList cycList = new CycList();
+        getFunctor();
+        if (this.functor instanceof CycNart)
+            cycList.add(((CycNart) functor).toCycList());
+        else
+            cycList.add(functor);
+        getArguments();
+        ListIterator iterator = this.getArguments().listIterator();
+        while (iterator.hasNext())
+            cycList.add(iterator.next());
+        return cycList;
+    }
+
+    /**
+     * Returns a list representation of the OpenCyc NART and expands any embedded NARTs as well.
+     *
+     * @@return a <tt>CycList</tt> representation of the OpenCyc NART.
+     */
+    public CycList toDeepCycList() {
+        CycList cycList = new CycList();
+        getFunctor();
+        if (this.functor instanceof CycNart)
+            cycList.add(((CycNart) functor).toDeepCycList());
+        else
+            cycList.add(functor);
+        getArguments();
+        ListIterator iterator = this.getArguments().listIterator();
+        while (iterator.hasNext()) {
+            Object argument = iterator.next();
+            if (argument instanceof CycNart)
+                cycList.add(((CycNart) argument).toDeepCycList());
+            else
+                cycList.add(argument);
+        }
+        return cycList;
+    }
+
+    /**
+     * Returns a string representation of the OpenCyc NART.
+     *
+     * @@return a <tt>String</tt> representation of the OpenCyc NART.
+     */
+    public String toString() {
+        StringBuffer result = new StringBuffer("(");
+        result.append(this.getFunctor().toString());
+        ListIterator iterator = this.getArguments().listIterator();
+        while (iterator.hasNext()) {
+            result.append(" ");
+            Object object = iterator.next();
+            if (object instanceof String) {
+                result.append("\"");
+                result.append(object.toString());
+                result.append("\"");
+            }
+            else
+                result.append(object.toString());
+        }
+        return result.append(")").toString();
+    }
+
+    /**
+     * Returns a cyclified string representation of the OpenCyc NART.
+     * Embedded constants are prefixed with ""#$".
+     *
+     * @@return a cyclified <tt>String</tt>.
+     */
+    public String cyclify() {
+        StringBuffer result = new StringBuffer("(");
+        result.append(this.getFunctor().cyclify());
+        ListIterator iterator = this.getArguments().listIterator();
+        while (iterator.hasNext()) {
+            Object object = iterator.next();
+            result .append(" ");
+            result.append(DefaultCycObject.cyclify(object));
+        }
+        return result.append(")").toString();
+    }
+
+    /**
+     * Returns a cyclified string representation of the OpenCyc NART.
+     * Embedded constants are prefixed with "#$".
+     * Embedded strings have escape characters inserted in front of any double-quote
+     *   or backslash characters which they contain.
+     *
+     * @@return a cyclified <tt>String</tt>.
+     */
+    public String cyclifyWithEscapeChars() {
+        StringBuffer result = new StringBuffer("(");
+        result.append(this.getFunctor().cyclifyWithEscapeChars());
+        ListIterator iterator = this.getArguments().listIterator();
+        while (iterator.hasNext()) {
+            Object object = iterator.next();
+            result .append(" ");
+            result.append(DefaultCycObject.cyclifyWithEscapeChars(object));
+        }
+        return result.append(")").toString();
+    }
+
+    /**
+     * Returns a string representation without causing additional api calls to determine
+     * constant names.
+     *
+     * @@return a string representation without causing additional api calls to determine
+     * constant names
+     */
+    public String safeToString () {
+        StringBuffer result = new StringBuffer("(");
+        if (functor != null)
+            result.append(this.getFunctor().safeToString());
+        else
+            result.append("<uncomplete functor>");
+        ListIterator iterator = this.getArguments().listIterator();
+        while (iterator.hasNext()) {
+            Object object = iterator.next();
+            String safeObject = null;
+            if (object instanceof CycObject)
+                safeObject = ((CycObject) object).safeToString();
+            else
+                safeObject = object.toString();
+            result .append(" ");
+            result.append(safeObject);
+        }
+        return result.append(")").toString();
+    }
+
+    /**
+     * Returns this object in a form suitable for use as an <tt>String</tt> api expression value.
+     *
+     * @@return this object in a form suitable for use as an <tt>String</tt> api expression value
+     */
+    public String stringApiValue() {
+        return "(canonicalize-term '" + cyclifyWithEscapeChars() + ")";
+    }
+
+    /**
+     * Returns this object in a form suitable for use as an <tt>CycList</tt> api expression value.
+     *
+     * @@return this object in a form suitable for use as an <tt>CycList</tt> api expression value
+     */
+    public Object cycListApiValue() {
+        CycList apiValue = new CycList();
+        apiValue.add(CycObjectFactory.makeCycSymbol("canonicalize-term"));
+        apiValue.addQuoted(this.toCycList());
+        return apiValue;
+    }
+
+    /**
+     * Returns a string representation of the <ttt>CycNart</tt> with the guid in place
+     * of the constant name.
+     *
+     * @@return a <tt>String</tt> representation of the <ttt>CycNart</tt> with <tt>Guid</tt>
+     * external forms in place of the <tt>CycConstant</tt> names.
+     */
+    public String metaGuid() {
+        String functorGuid =
+            (this.functor instanceof CycConstant ?
+                ((CycConstant) this.functor).getGuid().toString() : ((CycNart) this.functor).metaGuid());
+        ListIterator iterator = this.arguments.listIterator();
+        StringBuffer result = new StringBuffer("(");
+        result.append(functorGuid);
+        Object arg;
+        String argGuid;
+        while (iterator.hasNext()) {
+            arg = iterator.next();
+            if (arg instanceof CycConstant)
+                argGuid = ((CycConstant)arg).getGuid().toString();
+            else if (arg instanceof CycNart)
+                argGuid = ((CycNart) arg).metaGuid();
+            else
+                argGuid = (String) arg;
+            result.append(" ");
+            result.append(argGuid);
+        }
+        return result.append(")").toString();
+    }
+
+    /**
+     * Returns a metaName representation of the <tt>CycNart</tt>.
+     *
+     * @@return a <tt>String</tt> metaName representation
+     */
+    public String metaName() {
+        String functorName =
+            (this.functor instanceof CycConstant ?
+                ((CycConstant)this.getFunctor()).getName() :
+                ((CycNart) this.getFunctor()).metaName());
+        ListIterator iterator = this.getArguments().listIterator();
+        StringBuffer result = new StringBuffer("(");
+        result.append(functorName);
+        Object arg;
+        String argName;
+        while (iterator.hasNext()) {
+            arg = iterator.next();
+            if (arg instanceof CycConstant)
+                argName = ((CycConstant)arg).getName();
+            else if (arg instanceof CycNart)
+                argName = ((CycNart)arg).metaName();
+            else
+                argName = (String)arg;
+            result.append(" ");
+            result.append(argName);
+        }
+        return result.append(")").toString();
+    }
+
+    /**
+     * Return a hash value for this object.
+     *
+     * @@return a hash value for this object
+     */
+    public int hashCode() {
+        if (super.getId() != null)
+            return this.getId().hashCode();
+        else
+            return functor.hashCode();
+    }
+
+    /**
+     * Returns <tt>true</tt> some object equals this <tt>CycNart</tt>
+     *
+     * @@param object the <tt>Object</tt> for equality comparison
+     * @@return equals <tt>boolean</tt> value indicating equality or non-equality.
+     */
+    public boolean equals(Object object) {
+        if (! (object instanceof CycNart))
+            return false;
+        Integer thisId = super.getId();
+        Integer thatId = ((CycFort) object).getId();
+        if ((thisId != null) && (thatId != null))
+            return thisId.equals(thatId);
+        CycNart thatNart = (CycNart) object;
+        if (! this.functor.equals(thatNart.functor))
+            return false;
+        return this.arguments.equals(thatNart.arguments);
+    }
+
+    /**
+     * Returns true if the functor and arguments are instantiated.
+     *
+     * @@return true if the functor and arguments are instantiated
+     */
+    public boolean hasFunctorAndArgs() {
+        return (functor != null) && (this.arguments != null);
+    }
+    
+    /**
+   * Returns a list of all constants refered to by this CycObject.
+   * For example, a CycConstant will return a List with itself as the
+   * value, a nart will return a list of its functor and all the constants refered
+   * to by its arguments, a CycList will do a deep search for all constants,
+   * a symbol or variable will return the empty list.
+   * @@return a list of all constants refered to by this CycObject
+   **/
+  public List getReferencedConstants() {
+    if (!hasFunctorAndArgs()) { 
+      return new ArrayList();
+    }
+    List result = getFunctor().getReferencedConstants();
+    List args = getArguments();
+    if (!(args instanceof CycList)) {
+      args = new CycList(args);
+    }
+    result.addAll(((CycList)args).getReferencedConstants());
+    return result;
+  }
+
+  //// serialization implementation
+  private void writeObject(ObjectOutputStream stream) throws java.io.IOException {
+    stream.defaultWriteObject();
+    stream.writeObject( functor);
+    stream.writeObject( arguments);
+  }
+   
+  private void readObject(ObjectInputStream stream) throws java.io.IOException, 
+  java.lang.ClassNotFoundException {
+    stream.defaultReadObject();
+    functor = (CycFort)stream.readObject();
+    arguments = (CycList)stream.readObject();
+  }
+  
+}
+
+@
+
+
+1.43
+log
+@This is the Additional Content to Create OpenCyc-1.0.1
+@
+text
+@d3 13
+a15 5
+import java.io.*;
+import java.util.*;
+import org.opencyc.xml.*;
+import org.opencyc.api.*;
+import org.opencyc.util.StringUtils;
+d21 1
+a21 1
+ * @@version $Id: CycNart.java,v 1.32.10.1 2006/06/06 22:50:55 builder Exp $
+d44 1
+a44 1
+  
+d46 343
+a388 215
+  /**
+   * XML serialization tags.
+   */
+  public static final String natXMLtag = "nat";
+  public static final String functorXMLtag = "functor";
+  public static final String argXMLtag = "arg";
+  
+  /**
+   * XML serialization indentation.
+   */
+  public static int indentLength = 2;
+  
+  /**
+   * The functor of the <ttt>CycNart</tt> object. For example, the <tt>CycConstant</tt>
+   * corresponding to #$FruitFn in (#$FruitFn #$AppleTree). This must be a CycFort
+   * (i.e. cannot be assumed to be a CycConstant) because functors can themselves be
+   * CycNarts.
+   */
+  private CycFort functor;
+  
+  /**
+   * The list of the arguments of the <ttt>CycNart</tt> object.
+   */
+  private CycList arguments = new CycList();
+  
+  /**
+   * Constructs a new incomplete <tt>CycNart</tt> object.
+   */
+  public CycNart() {
+  }
+  
+  /**
+   * Constructs a new unary <tt>CycNart</tt> object from the functor and
+   * argument.
+   *
+   * @@param functor a <tt>CycFort</tt> which is the functor of this
+   * <tt>CycNart</tt> object.
+   * @@param argument an <tt>Object</tt> most typically a <tt>CycConstant</tt>
+   * which is the single argument of this <tt>CycNart</tt> object.
+   */
+  public CycNart(CycFort functor, Object argument) {
+    this.functor = functor;
+    arguments.add(argument);
+  }
+  
+  /**
+   * Constructs a new binary <tt>CycNart</tt> object from the functor and
+   * the two arguments.
+   *
+   * @@param functor a <tt>CycFort</tt> which is the functor of this
+   * <tt>CycNart</tt> object.
+   * @@param argument1 an <tt>Object</tt>
+   * @@param argument2 an <tt>Object</tt>
+   */
+  public CycNart(CycFort functor, Object argument1, Object argument2) {
+    this.functor = functor;
+    arguments.add(argument1);
+    arguments.add(argument2);
+    this.arguments = arguments;
+  }
+  
+  /**
+   * Constructs a new binary <tt>CycNart</tt> object from the functor and
+   * the three arguments.
+   *
+   * @@param functor a <tt>CycFort</tt> which is the functor of this
+   * <tt>CycNart</tt> object.
+   * @@param argument1 an <tt>Object</tt>
+   * @@param argument2 an <tt>Object</tt>
+   * @@param argument3 an <tt>Object</tt>
+   */
+  public CycNart(CycFort functor, Object argument1, Object argument2, Object argument3) {
+    this.functor = functor;
+    arguments.add(argument1);
+    arguments.add(argument2);
+    arguments.add(argument3);
+    this.arguments = arguments;
+  }
+  
+  /**
+   * Constructs a new <tt>CycNart</tt> object from the <tt>CycList</tt> object.
+   *
+   * @@param cycList a list representation of the <tt>CycNart</tt>
+   */
+  public CycNart(CycList cycList) {
+    if (cycList.size() == 0)
+      throw new RuntimeException("Cannot make a CycNart from an empty CycList");
+    if (! (cycList.first() instanceof CycFort))
+      throw new RuntimeException("CycNart functor must be a CycFort " + cycList.cyclify());
+    functor = (CycFort) cycList.first();
+    arguments.addAll((CycList) cycList.rest());
+  }
+  
+  /** Constructs a the singleton invalid <tt>CycNart</tt> object. 
+   * This should only be called from CycObjectFactory.
+   *
+   * @@return the invalid nart
+   */
+  public static CycNart makeInvalidNart() {
+    final CycNart cycNart = new CycNart();
+    cycNart.isInvalid = true;
+    return cycNart;
+  }
+  
+  /**
+   * Returns the given object if it is a <tt>CycNart</tt>, otherwise the object is expected to be
+   * a <tt>CycList</tt> and a <tt>CycNart</tt> object is returned using the given
+   * CycList representation.
+   *
+   * @@param object the object to be coerced into a CycNart
+   * @@return the given object if it is a <tt>CycNart</tt>, otherwise the object is expected to be
+   * a <tt>CycList</tt> and a <tt>CycNart</tt> object is returned using the given
+   * CycList representation
+   */
+  public static CycNart coerceToCycNart(Object object) {
+    if (object instanceof CycNart)
+      return (CycNart) object;
+    if (! (object instanceof CycList))
+      throw new RuntimeException("Cannot coerce to CycNart " + object);
+    return new CycNart((CycList) object);
+  }
+  
+  /**
+   * Returns the functor of the <tt>CycNart</tt>.
+   *
+   * @@return the functor of the <tt>CycNart</tt>
+   */
+  public CycFort getFunctor() {
+    return functor;
+  }
+  
+  /**
+   * Sets the functor of the <tt>CycNart</tt>.
+   *
+   * @@param functor the <tt>CycFort</tt> functor object of the <tt>CycNart</tt>
+   */
+  public void setFunctor(CycFort functor) {
+    this.functor = functor;
+  }
+  
+  /**
+   * Returns the arguments of the <tt>CycNart</tt>.
+   *
+   * @@return the arguments of the <tt>CycNart</tt>
+   */
+  public List getArguments() {
+    return arguments;
+  }
+  
+  /**
+   * Sets the arguments of the <tt>CycNart</tt>.
+   *
+   * @@param arguments the arguments of the <tt>CycNart</tt>
+   */
+  public void setArguments(CycList arguments) {
+    this.arguments = arguments;
+  }
+  
+  /**
+   * Returns the XML representation of this object.
+   *
+   * @@return the XML representation of this object
+   */
+  public String toXMLString() throws IOException {
+    XMLStringWriter xmlStringWriter = new XMLStringWriter();
+    toXML(xmlStringWriter, 0, false);
+    return xmlStringWriter.toString();
+  }
+  
+  /**
+   * Prints the XML representation of the <ttt>CycNart</tt> to an <tt>XMLWriter</tt>
+   * It is supposed to look like this:<p>
+   * <pre>
+   * <nat>
+   *  <functor>
+   *   <constant>
+   *    <guid>bd58a976-9c29-11b1-9dad-c379636f7270</guid>
+   *    <name>FruitFn</name>
+   *   </constant>
+   *  </functor>
+   *  <arg>
+   *   <constant>
+   *    <guid>bd58c19d-9c29-11b1-9dad-c379636f7270</guid>
+   *    <name>AppleTree</name>
+   *   </constant>
+   *  </arg>
+   * </nat>
+   * </pre>
+   *
+   * The parameter [int indent] specifies by how many spaces the XML
+   * output should be indented.<p>
+   *
+   * The parameter [boolean relative] specifies whether the
+   * indentation should be absolute -- indentation with respect to
+   * the beginning of a new line, relative = false -- or relative
+   * to the indentation currently specified in the indent_string field
+   * of the xml_writer object, relative = true.
+   *
+   */
+  public void toXML(XMLWriter xmlWriter, int indent, boolean relative)
+  throws IOException {
+    xmlWriter.printXMLStartTag(natXMLtag, indent, relative, true);
+    if (functor != null) {
+      xmlWriter.printXMLStartTag(functorXMLtag, indentLength, true, true);
+      this.getFunctor().toXML(xmlWriter, indentLength, true);
+      xmlWriter.printXMLEndTag(functorXMLtag, -indentLength, true);
+    }
+    ListIterator iterator = this.getArguments().listIterator();
+    Object arg;
+    while (iterator.hasNext()) {
+      xmlWriter.printXMLStartTag(argXMLtag, 0, true, true);
+      arg = iterator.next();
+      // Use a shared method with CycList for arbitrary elements.
+      CycList.toXML(arg, xmlWriter, indentLength, true);
+      xmlWriter.printXMLEndTag(argXMLtag, 0, true);
+d390 26
+a415 42
+    xmlWriter.printXMLEndTag(natXMLtag, -indentLength, true);
+  }
+  
+  /**
+   * Returns a list representation of the OpenCyc NART.
+   *
+   * @@return a <tt>CycList</tt> representation of the OpenCyc NART.
+   */
+  public CycList toCycList() {
+    CycList cycList = new CycList();
+    getFunctor();
+    if (this.functor instanceof CycNart)
+      cycList.add(((CycNart) functor).toCycList());
+    else
+      cycList.add(functor);
+    getArguments();
+    ListIterator iterator = this.getArguments().listIterator();
+    while (iterator.hasNext())
+      cycList.add(iterator.next());
+    return cycList;
+  }
+  
+  /**
+   * Returns a list representation of the OpenCyc NART and expands any embedded NARTs as well.
+   *
+   * @@return a <tt>CycList</tt> representation of the OpenCyc NART.
+   */
+  public CycList toDeepCycList() {
+    CycList cycList = new CycList();
+    getFunctor();
+    if (this.functor instanceof CycNart)
+      cycList.add(((CycNart) functor).toDeepCycList());
+    else
+      cycList.add(functor);
+    getArguments();
+    ListIterator iterator = this.getArguments().listIterator();
+    while (iterator.hasNext()) {
+      Object argument = iterator.next();
+      if (argument instanceof CycNart)
+        cycList.add(((CycNart) argument).toDeepCycList());
+      else
+        cycList.add(argument);
+d417 8
+a424 24
+    return cycList;
+  }
+  
+  /**
+   * Returns a string representation of the OpenCyc NART.
+   *
+   * @@return a <tt>String</tt> representation of the OpenCyc NART.
+   */
+  public String toString() {
+    if (isInvalid)
+      return "INVALID-NART";
+    StringBuffer result = new StringBuffer("(");
+    result.append(this.getFunctor().toString());
+    ListIterator iterator = this.getArguments().listIterator();
+    while (iterator.hasNext()) {
+      result.append(" ");
+      Object object = iterator.next();
+      if (object instanceof String) {
+        result.append("\"");
+        result.append(object.toString());
+        result.append("\"");
+      }
+      else
+        result.append(object.toString());
+d426 11
+a436 19
+    return result.append(")").toString();
+  }
+  
+  /**
+   * Returns a cyclified string representation of the OpenCyc NART.
+   * Embedded constants are prefixed with ""#$".
+   *
+   * @@return a cyclified <tt>String</tt>.
+   */
+  public String cyclify() {
+    if (isInvalid)
+      return "INVALID-NART";
+    StringBuffer result = new StringBuffer("(");
+    result.append(this.getFunctor().cyclify());
+    ListIterator iterator = this.getArguments().listIterator();
+    while (iterator.hasNext()) {
+      Object object = iterator.next();
+      result .append(" ");
+      result.append(DefaultCycObject.cyclify(object));
+d438 29
+a466 21
+    return result.append(")").toString();
+  }
+  
+  /**
+   * Returns a cyclified string representation of the OpenCyc NART.
+   * Embedded constants are prefixed with "#$".
+   * Embedded strings have escape characters inserted in front of any double-quote
+   *   or backslash characters which they contain.
+   *
+   * @@return a cyclified <tt>String</tt>.
+   */
+  public String cyclifyWithEscapeChars() {
+    if (isInvalid)
+      return "INVALID-NART";
+    StringBuffer result = new StringBuffer("(");
+    result.append(this.getFunctor().cyclifyWithEscapeChars());
+    ListIterator iterator = this.getArguments().listIterator();
+    while (iterator.hasNext()) {
+      Object object = iterator.next();
+      result .append(" ");
+      result.append(DefaultCycObject.cyclifyWithEscapeChars(object));
+d468 28
+a495 50
+    return result.append(")").toString();
+  }
+  
+  /**
+   * Returns this object in a form suitable for use as an <tt>String</tt> api expression value.
+   *
+   * @@return this object in a form suitable for use as an <tt>String</tt> api expression value
+   */
+  public String stringApiValue() {
+    return "(canonicalize-term '" + cyclifyWithEscapeChars() + ")";
+  }
+  
+  /**
+   * Returns this object in a form suitable for use as an <tt>CycList</tt> api expression value.
+   *
+   * @@return this object in a form suitable for use as an <tt>CycList</tt> api expression value
+   */
+  public Object cycListApiValue() {
+    CycList apiValue = new CycList();
+    apiValue.add(CycObjectFactory.makeCycSymbol("canonicalize-term"));
+    apiValue.addQuoted(this.toCycList());
+    return apiValue;
+  }
+  
+  /**
+   * Returns a string representation of the <ttt>CycNart</tt> with the guid in place
+   * of the constant name.
+   *
+   * @@return a <tt>String</tt> representation of the <ttt>CycNart</tt> with <tt>Guid</tt>
+   * external forms in place of the <tt>CycConstant</tt> names.
+   */
+  public String metaGuid() {
+    String functorGuid =
+    (this.functor instanceof CycConstant ?
+    ((CycConstant) this.functor).getGuid().toString() : ((CycNart) this.functor).metaGuid());
+    ListIterator iterator = this.arguments.listIterator();
+    StringBuffer result = new StringBuffer("(");
+    result.append(functorGuid);
+    Object arg;
+    String argGuid;
+    while (iterator.hasNext()) {
+      arg = iterator.next();
+      if (arg instanceof CycConstant)
+        argGuid = ((CycConstant)arg).getGuid().toString();
+      else if (arg instanceof CycNart)
+        argGuid = ((CycNart) arg).metaGuid();
+      else
+        argGuid = (String) arg;
+      result.append(" ");
+      result.append(argGuid);
+d497 9
+a505 24
+    return result.append(")").toString();
+  }
+  
+  /**
+   * Returns a metaName representation of the <tt>CycNart</tt>.
+   *
+   * @@return a <tt>String</tt> metaName representation
+   */
+  public String metaName() {
+    String functorName =
+    (this.functor instanceof CycConstant ?
+    ((CycConstant)this.getFunctor()).getName() :
+      ((CycNart) this.getFunctor()).metaName());
+      ListIterator iterator = this.getArguments().listIterator();
+      StringBuffer result = new StringBuffer("(");
+      result.append(functorName);
+      Object arg;
+      String argName;
+      while (iterator.hasNext()) {
+        arg = iterator.next();
+        if (arg instanceof CycConstant)
+          argName = ((CycConstant)arg).getName();
+        else if (arg instanceof CycNart)
+          argName = ((CycNart)arg).metaName();
+d507 32
+a538 52
+          argName = (String)arg;
+        result.append(" ");
+        result.append(argName);
+      }
+      return result.append(")").toString();
+  }
+  
+  /**
+   * Return a hash value for this object.
+   *
+   * @@return a hash value for this object
+   */
+  public int hashCode() {
+    return functor.hashCode() + arguments.hashCode();
+  }
+  
+  /**
+   * Returns <tt>true</tt> some object equals this <tt>CycNart</tt>
+   *
+   * @@param object the <tt>Object</tt> for equality comparison
+   * @@return equals <tt>boolean</tt> value indicating equality or non-equality.
+   */
+  public boolean equals(Object object) {
+    if (!(object instanceof CycNart)) { return false; }
+    CycNart thatNart = (CycNart) object;
+    if (!functor.equals(thatNart.functor)) { return false; }
+    return arguments.equals(thatNart.arguments);
+  }
+  
+  /**
+   * Returns <tt>true</tt> some object equals this <tt>CycNart</tt>
+   *
+   * @@param object the <tt>Object</tt> for equality comparison
+   * @@return equals <tt>boolean</tt> value indicating equality or non-equality.
+   */
+  public boolean equalsAtEL(Object object) {
+    if (!(object instanceof CycNart)) { return false; }
+    CycNart thatNart = (CycNart) object;
+    if (!functor.equalsAtEL(thatNart.functor)) { return false; }
+    return arguments.equalsAtEL(thatNart.arguments);
+  }
+  
+  /**
+   * Returns true if the functor and arguments are instantiated.
+   *
+   * @@return true if the functor and arguments are instantiated
+   */
+  public boolean hasFunctorAndArgs() {
+    return (functor != null) && (this.arguments != null);
+  }
+  
+  /**
+d547 1
+a547 1
+    if (!hasFunctorAndArgs()) {
+d558 1
+a558 1
+  
+d565 2
+a566 2
+  
+  private void readObject(ObjectInputStream stream) throws java.io.IOException,
+@
+
+
+1.42
+log
+@This is a checkin of OpenCyc 1.0.1 Java  OPENCYC_1_0_1
+@
+text
+@@
+
+
+1.41
+log
+@Added Epistemlogical Layer Microtheory definition to better
+represent microtheories in the OpenCyc API.
+@
+text
+@d7 1
+d13 1
+a13 1
+ * @@version $Id: CycNart.java,v 1.16 2003/04/22 19:49:42 reed Exp $
+d35 404
+a438 432
+public class CycNart extends CycFort implements Comparable, ELMT {
+
+    /**
+     * XML serialization tags.
+     */
+    public static final String natXMLtag = "nat";
+    public static final String functorXMLtag = "functor";
+    public static final String argXMLtag = "arg";
+
+    /**
+     * XML serialization indentation.
+     */
+    public static int indentLength = 2;
+
+    /**
+     * The functor of the <ttt>CycNart</tt> object. For example, the <tt>CycConstant</tt>
+     * corresponding to #$FruitFn in (#$FruitFn #$AppleTree). This must be a CycFort
+     * (i.e. cannot be assumed to be a CycConstant) because functors can themselves be
+     * CycNarts.
+     */
+    private CycFort functor;
+
+    /**
+     * The list of the arguments of the <ttt>CycNart</tt> object.
+     */
+    private CycList arguments = new CycList();
+
+    /**
+     * Constructs a new incomplete <tt>CycNart</tt> object.
+     */
+    public CycNart () {
+    }
+
+    /**
+     * Constructs a new <tt>CycNart</tt> object from the given functor and
+     * argument list.
+     *
+     * @@param functor a <tt>CycFort</tt> which is the functor of this
+     * <tt>CycNart</tt> object.
+     * @@param arguments a <tt>CycList</tt> of the functor's arguments which
+     * are cyc objects
+     */
+    public CycNart (CycFort functor, CycList arguments) {
+        this.functor = functor;
+        this.arguments = arguments;
+    }
+
+    /**
+     * Constructs a new unary <tt>CycNart</tt> object from the functor and
+     * argument.
+     *
+     * @@param functor a <tt>CycFort</tt> which is the functor of this
+     * <tt>CycNart</tt> object.
+     * @@param argument an <tt>Object</tt> most typically a <tt>CycConstant</tt>
+     * which is the single argument of this <tt>CycNart</tt> object.
+     */
+    public CycNart (CycFort functor, Object argument) {
+        this.functor = functor;
+        arguments.add(argument);
+        this.arguments = arguments;
+    }
+
+    /**
+     * Constructs a new binary <tt>CycNart</tt> object from the functor and
+     * the two arguments.
+     *
+     * @@param functor a <tt>CycFort</tt> which is the functor of this
+     * <tt>CycNart</tt> object.
+     * @@param argument1 an <tt>Object</tt> most typically a <tt>CycConstant</tt>
+     * @@param argument2 an <tt>Object</tt> most typically a <tt>CycConstant</tt>
+     * which is the single argument of this <tt>CycNart</tt> object.
+     */
+    public CycNart (CycFort functor, Object argument1, Object argument2) {
+        this.functor = functor;
+        arguments.add(argument1);
+        arguments.add(argument2);
+        this.arguments = arguments;
+    }
+
+    /**
+     * Constructs a new <tt>CycNart</tt> object from the <tt>CycList</tt> object.
+     *
+     * @@param cycList a list representation of the <tt>CycNart</tt>
+     */
+    public CycNart (CycList cycList) {
+        if (cycList.size() == 0)
+            throw new RuntimeException("Cannot make a CycNart from an empty CycList");
+        if (! (cycList.first() instanceof CycFort))
+            throw new RuntimeException("CycNart functor must be a CycFort " + cycList.cyclify());
+        functor = (CycFort) cycList.first();
+        arguments.addAll((CycList) cycList.rest());
+    }
+
+    /**
+     * Returns the given object if it is a <tt>CycNart</tt>, otherwise the object is expected to be
+     * a <tt>CycList</tt> and a <tt>CycNart</tt> object is returned using the given
+     * CycList representation.
+     *
+     * @@param object the object to be coerced into a CycNart
+     * @@return the given object if it is a <tt>CycNart</tt>, otherwise the object is expected to be
+     * a <tt>CycList</tt> and a <tt>CycNart</tt> object is returned using the given
+     * CycList representation
+     */
+    public static CycNart coerceToCycNart(Object object) {
+        if (object instanceof CycNart)
+            return (CycNart) object;
+        if (! (object instanceof CycList))
+            throw new RuntimeException("Cannot coerce to CycNart " + object);
+        return new CycNart((CycList) object);
+    }
+
+    /**
+     * Returns the functor of the <tt>CycNart</tt>.
+     *
+     * @@return the functor of the <tt>CycNart</tt>
+     */
+    public CycFort getFunctor() {
+        if (functor == null) {
+            CycNart cycNart = null;
+            try {
+                cycNart = CycAccess.current().completeCycNart(this);
+            }
+            catch (IOException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+            catch (CycApiException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+            functor = cycNart.functor;
+            arguments = cycNart.arguments;
+        }
+        return functor;
+    }
+
+    /**
+     * Sets the functor of the <tt>CycNart</tt>.
+     *
+     * @@param functor the <tt>CycFort</tt> functor object of the <tt>CycNart</tt>
+     */
+    public void setFunctor(CycFort functor) {
+        this.functor = functor;
+    }
+
+    /**
+     * Returns the arguments of the <tt>CycNart</tt>.
+     *
+     * @@return the arguments of the <tt>CycNart</tt>
+     */
+    public List getArguments() {
+        if (arguments == null) {
+            CycNart cycNart = null;
+            try {
+                cycNart = CycAccess.current().completeCycNart(this);
+            }
+            catch (IOException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+            catch (CycApiException e) {
+                throw new RuntimeException(e.getMessage());
+            }
+            functor = cycNart.functor;
+            arguments = cycNart.arguments;
+        }
+        return arguments;
+    }
+
+    /**
+     * Sets the arguments of the <tt>CycNart</tt>.
+     *
+     * @@param arguments the arguments of the <tt>CycNart</tt>
+     */
+    public void setArguments(CycList arguments) {
+        this.arguments = arguments;
+    }
+
+    /**
+     * Returns the XML representation of this object.
+     *
+     * @@return the XML representation of this object
+     */
+    public String toXMLString () throws IOException {
+        XMLStringWriter xmlStringWriter = new XMLStringWriter();
+        toXML(xmlStringWriter, 0, false);
+        return xmlStringWriter.toString();
+    }
+
+    /**
+     * Prints the XML representation of the <ttt>CycNart</tt> to an <tt>XMLWriter</tt>
+     * It is supposed to look like this:<p>
+     * <pre>
+     * <nat>
+     *  <functor>
+     *   <constant>
+     *    <guid>bd58a976-9c29-11b1-9dad-c379636f7270</guid>
+     *    <name>FruitFn</name>
+     *   </constant>
+     *  </functor>
+     *  <arg>
+     *   <constant>
+     *    <guid>bd58c19d-9c29-11b1-9dad-c379636f7270</guid>
+     *    <name>AppleTree</name>
+     *   </constant>
+     *  </arg>
+     * </nat>
+     * </pre>
+     *
+     * The parameter [int indent] specifies by how many spaces the XML
+     * output should be indented.<p>
+     *
+     * The parameter [boolean relative] specifies whether the
+     * indentation should be absolute -- indentation with respect to
+     * the beginning of a new line, relative = false -- or relative
+     * to the indentation currently specified in the indent_string field
+     * of the xml_writer object, relative = true.
+     *
+     */
+    public void toXML (XMLWriter xmlWriter, int indent, boolean relative)
+        throws IOException {
+        xmlWriter.printXMLStartTag(natXMLtag, indent, relative, true);
+        if (super.getId() != null) {
+            xmlWriter.printXMLStartTag(idXMLTag, indentLength, true, false);
+            xmlWriter.print(this.getId().toString());
+            xmlWriter.printXMLEndTag(idXMLTag);
+        }
+        if (functor != null) {
+            xmlWriter.printXMLStartTag(functorXMLtag, indentLength, true, true);
+            this.getFunctor().toXML(xmlWriter, indentLength, true);
+            xmlWriter.printXMLEndTag(functorXMLtag, -indentLength, true);
+        }
+        ListIterator iterator = this.getArguments().listIterator();
+        Object arg;
+        while (iterator.hasNext()) {
+            xmlWriter.printXMLStartTag(argXMLtag, 0, true, true);
+            arg = iterator.next();
+            // Use a shared method with CycList for arbitrary elements.
+            CycList.toXML(arg, xmlWriter, indentLength, true);
+            xmlWriter.printXMLEndTag(argXMLtag, 0, true);
+        }
+        xmlWriter.printXMLEndTag(natXMLtag, -indentLength, true);
+    }
+
+    /**
+     * Returns a list representation of the OpenCyc NART.
+     *
+     * @@return a <tt>CycList</tt> representation of the OpenCyc NART.
+     */
+    public CycList toCycList() {
+        CycList cycList = new CycList();
+        if (this.functor instanceof CycNart)
+            cycList.add(((CycNart) functor).toCycList());
+        else
+            cycList.add(functor);
+        ListIterator iterator = this.getArguments().listIterator();
+        while (iterator.hasNext()) {
+            Object argument = iterator.next();
+            if (argument instanceof CycNart)
+                cycList.add(((CycNart) argument).toCycList());
+            else
+                cycList.add(argument);
+        }
+        return cycList;
+    }
+
+    /**
+     * Returns a string representation of the OpenCyc NART.
+     *
+     * @@return a <tt>String</tt> representation of the OpenCyc NART.
+     */
+    public String toString() {
+        StringBuffer result = new StringBuffer("(");
+        result.append(this.getFunctor().toString());
+        ListIterator iterator = this.getArguments().listIterator();
+        while (iterator.hasNext()) {
+            result.append(" ");
+            Object object = iterator.next();
+            if (object instanceof String) {
+                result.append("\"");
+                result.append(object.toString());
+                result.append("\"");
+            }
+            else
+                result.append(object.toString());
+        }
+        return result.append(")").toString();
+    }
+
+    /**
+     * Returns a cyclified string representation of the OpenCyc NART.
+     * Embedded constants are prefixed with ""#$".
+     *
+     * @@return a cyclified <tt>String</tt>.
+     */
+    public String cyclify() {
+        StringBuffer result = new StringBuffer("(");
+        result.append(this.getFunctor().cyclify());
+        ListIterator iterator = this.getArguments().listIterator();
+        while (iterator.hasNext()) {
+            Object object = iterator.next();
+            String cyclifiedObject = null;
+            if (object instanceof DefaultCycObject) {
+               cyclifiedObject = ((DefaultCycObject) object).cyclify();
+            } 
+            else if (object instanceof CycList) {
+               cyclifiedObject = ((CycList) object).cyclify();
+            } 
+            else if (object instanceof String) {
+               cyclifiedObject = "\"" + object + "\"";
+            } 
+            else {
+                cyclifiedObject = object.toString();
+            }
+            result .append(" ");
+            result.append(cyclifiedObject);
+        }
+        return result.append(")").toString();
+    }
+
+    /**
+     * Returns a string representation without causing additional api calls to determine
+     * constant names.
+     *
+     * @@return a string representation without causing additional api calls to determine
+     * constant names
+     */
+    public String safeToString () {
+        StringBuffer result = new StringBuffer("(");
+        if (functor != null)
+            result.append(this.getFunctor().safeToString());
+        else
+            result.append("<uncomplete functor>");
+        ListIterator iterator = this.getArguments().listIterator();
+        while (iterator.hasNext()) {
+            Object object = iterator.next();
+            String safeObject = null;
+            if (object instanceof CycFort)
+                safeObject = ((CycFort) object).safeToString();
+            else
+                safeObject = object.toString();
+            result .append(" ");
+            result.append(safeObject);
+        }
+        return result.append(")").toString();
+    }
+
+    /**
+     * Returns this object in a form suitable for use as an <tt>String</tt> api expression value.
+     *
+     * @@return this object in a form suitable for use as an <tt>String</tt> api expression value
+     */
+    public String stringApiValue() {
+        return "(quote " + cyclify() + ")";
+    }
+
+    /**
+     * Returns this object in a form suitable for use as an <tt>CycList</tt> api expression value.
+     *
+     * @@return this object in a form suitable for use as an <tt>CycList</tt> api expression value
+     */
+    public Object cycListApiValue() {
+        CycList apiValue = new CycList();
+        apiValue.add(CycObjectFactory.quote);
+        apiValue.add(this);
+        return apiValue;
+    }
+
+    /**
+     * Returns a string representation of the <ttt>CycNart</tt> with the guid in place
+     * of the constant name.
+     *
+     * @@return a <tt>String</tt> representation of the <ttt>CycNart</tt> with <tt>Guid</tt>
+     * external forms in place of the <tt>CycConstant</tt> names.
+     */
+    public String metaGuid() {
+        String functorGuid =
+            (this.functor instanceof CycConstant ?
+                ((CycConstant) this.functor).getGuid().toString() : ((CycNart) this.functor).metaGuid());
+        ListIterator iterator = this.arguments.listIterator();
+        StringBuffer result = new StringBuffer("(");
+        result.append(functorGuid);
+        Object arg;
+        String argGuid;
+        while (iterator.hasNext()) {
+            arg = iterator.next();
+            if (arg instanceof CycConstant)
+                argGuid = ((CycConstant)arg).getGuid().toString();
+            else if (arg instanceof CycNart)
+                argGuid = ((CycNart) arg).metaGuid();
+            else
+                argGuid = (String) arg;
+            result.append(" ");
+            result.append(argGuid);
+        }
+        return result.append(")").toString();
+    }
+
+    /**
+     * Returns a metaName representation of the <tt>CycNart</tt>.
+     *
+     * @@return a <tt>String</tt> metaName representation
+     */
+    public String metaName() {
+        String functorName =
+            (this.functor instanceof CycConstant ?
+                ((CycConstant)this.getFunctor()).getName() :
+                ((CycNart) this.getFunctor()).metaName());
+        ListIterator iterator = this.getArguments().listIterator();
+        StringBuffer result = new StringBuffer("(");
+        result.append(functorName);
+        Object arg;
+        String argName;
+        while (iterator.hasNext()) {
+            arg = iterator.next();
+            if (arg instanceof CycConstant)
+                argName = ((CycConstant)arg).getName();
+            else if (arg instanceof CycNart)
+                argName = ((CycNart)arg).metaName();
+            else
+                argName = (String)arg;
+            result.append(" ");
+            result.append(argName);
+        }
+        return result.append(")").toString();
+    }
+
+    /**
+     * Return a hash value for this object.
+     *
+     * @@return a hash value for this object
+     */
+    public int hashCode() {
+        if (super.getId() != null)
+            return this.getId().hashCode();
+d440 86
+a525 31
+            return functor.hashCode();
+    }
+
+    /**
+     * Returns <tt>true</tt> some object equals this <tt>CycNart</tt>
+     *
+     * @@param object the <tt>Object</tt> for equality comparison
+     * @@return equals <tt>boolean</tt> value indicating equality or non-equality.
+     */
+    public boolean equals(Object object) {
+        if (! (object instanceof CycNart))
+            return false;
+        Integer thisId = super.getId();
+        Integer thatId = ((CycFort) object).getId();
+        if ((thisId != null) && (thatId != null))
+            return thisId.equals(thatId);
+        CycNart thatNart = (CycNart) object;
+        if (! this.functor.equals(thatNart.functor))
+            return false;
+        return this.arguments.equals(thatNart.arguments);
+    }
+
+    /**
+     * Returns true if the functor and arguments are instantiated.
+     *
+     * @@return true if the functor and arguments are instantiated
+     */
+    public boolean hasFunctorAndArgs() {
+        return (functor != null) && (this.arguments != null);
+    }
+
+@
+
+
+1.40
+log
+@Fix CycNart toString() bug.
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.39 2002/10/09 19:35:45 stephenreed Exp $
+d34 1
+a34 1
+public class CycNart extends CycFort implements Comparable {
+d333 4
+a336 3
+            if(object instanceof CycObject) {
+               cyclifiedObject = ((CycObject) object).cyclify();
+            } else if (object instanceof CycList) {
+d338 2
+a339 1
+            } else if (object instanceof String) {
+d341 2
+a342 1
+            } else {
+a344 7
+            /*
+            if (object instanceof CycConstant)
+                cyclifiedObject = ((CycConstant) object).cyclify();
+            else if (object instanceof CycNart)
+                cyclifiedObject = ((CycNart) object).cyclify();
+            else
+                cyclifiedObject = object.toString();*/
+@
+
+
+1.39
+log
+@Improving SONAT DAML import after refactoring.
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.38 2002/09/18 14:39:16 stephenreed Exp $
+d308 1
+a308 1
+            Object object = iterator.next().toString();
+@
+
+
+1.38
+log
+@More fixes to SONAT DAML import.
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.37 2002/09/16 22:21:31 stephenreed Exp $
+d122 1
+a122 1
+            throw new RuntimeException("CycNart functor must be a CycFort");
+@
+
+
+1.37
+log
+@Modified api strings used in asserted gafs.
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.36 2002/09/15 23:58:51 stephenreed Exp $
+d308 8
+a315 1
+            result.append(iterator.next().toString());
+@
+
+
+1.36
+log
+@Fixes after unit testing SONAT DAML import
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.35 2002/07/23 20:17:22 stephenreed Exp $
+d381 1
+a381 2
+        //return "(quote " + cyclify() + ")";
+        return cyclify();
+a389 2
+        return this;
+        /*
+a393 1
+        */
+@
+
+
+1.35
+log
+@Handled embedded quotes within strings sent to Cyc.  This patch makes the ascii
+and cfasl (binary) api commands behave the same.  Added unit test cases.
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.34 2002/05/30 20:00:28 stephenreed Exp $
+d381 2
+a382 1
+        return "(quote " + cyclify() + ")";
+d391 2
+d397 1
+@
+
+
+1.34
+log
+@Unit test compliance mods.
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.11 2002/05/15 15:53:04 tbrussea Exp $
+d330 2
+d335 1
+a335 1
+            /*  
+@
+
+
+1.33
+log
+@Fixed bug in CycList.rest() method where it did not return the
+dotted element in a dotted pair list.  Wide impact because the
+function signature changed from CycList to Object.
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.32 2002/03/27 19:51:20 stephenreed Exp $
+d326 8
+d339 1
+a339 1
+                cyclifiedObject = object.toString();
+@
+
+
+1.32
+log
+@Prepared ApiDemo class as first in a series for the programming tutorial.  Other modules
+updated in preparation for public beta release.
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.31 2002/02/03 18:07:22 stephenreed Exp $
+d124 1
+a124 1
+        arguments.addAll(cycList.rest());
+@
+
+
+1.31
+log
+@More JXTA interface code and fixing CycNart api bug
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.30 2001/12/04 05:35:39 stephenreed Exp $
+d259 1
+a259 1
+            xmlWriter.printXMLStartTag(functorXMLtag, 0, true, true);
+d268 3
+a270 7
+            if (arg instanceof CycFort)
+                ((CycFort) arg).toXML(xmlWriter, indentLength, true);
+            else if (arg instanceof CycList)
+                ((CycList) arg).toXML(xmlWriter, indentLength, true);
+            else
+                xmlWriter.indentPrintln(arg.toString(), indentLength, true);
+            xmlWriter.printXMLEndTag(argXMLtag, -indentLength, true);
+@
+
+
+1.30
+log
+@Output HTML cyc KB subset
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.29 2001/11/17 00:32:48 stephenreed Exp $
+d280 22
+d480 8
+@
+
+
+1.29
+log
+@CoAbs agent tests
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.28 2001/11/14 01:15:17 stephenreed Exp $
+d427 5
+d433 4
+a436 1
+        return this.getId().hashCode();
+a456 15
+
+    /**
+     * Compares this object with the specified object for order.
+     * Returns a negative integer, zero, or a positive integer as this
+     * object is less than, equal to, or greater than the specified object.
+     *
+     * @@param object the reference object with which to compare.
+     * @@return a negative integer, zero, or a positive integer as this
+     * object is less than, equal to, or greater than the specified object
+     */
+     public int compareTo (Object object) {
+        if (! (object instanceof CycNart))
+            throw new ClassCastException("Must be a CycNart object");
+        return this.toString().compareTo(object.toString());
+     }
+@
+
+
+1.28
+log
+@Completed first round of CoABS agent tests with the OpenCyc api
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.27 2001/11/08 22:12:27 stephenreed Exp $
+d258 5
+a262 3
+        xmlWriter.printXMLStartTag(functorXMLtag, 0, true, true);
+        this.getFunctor().toXML(xmlWriter, indentLength, true);
+        xmlWriter.printXMLEndTag(functorXMLtag, -indentLength, true);
+d316 27
+@
+
+
+1.27
+log
+@Updated coabs agent messaging to use cyc-ml databinding.
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.26 2001/11/08 13:06:47 stephenreed Exp $
+d266 1
+a266 1
+            if (arg instanceof CycFort) {
+d268 2
+a269 1
+            }
+d271 1
+a271 1
+                xmlWriter.indentPrintln((String)arg, indentLength, true);
+@
+
+
+1.26
+log
+@Revised XML serialization for use with agent messaging
+@
+text
+@d5 1
+a5 1
+import org.opencyc.xml.XMLWriter;
+d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.25 2001/11/08 03:21:00 stephenreed Exp $
+d210 11
+d252 1
+a252 1
+        xmlWriter.printXMLStartTag(natXMLtag, indent, relative);
+d254 1
+a254 1
+            xmlWriter.printXMLStartTag(idXMLTag, 0, true, false);
+d258 1
+a258 1
+        xmlWriter.printXMLStartTag(functorXMLtag, indentLength, true);
+d264 1
+a264 1
+            xmlWriter.printXMLStartTag(argXMLtag, 0, true);
+@
+
+
+1.25
+log
+@Added xml databinding classes
+@
+text
+@a6 1
+import org.opencyc.cycobject.databinding.*;
+d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.24 2001/11/07 00:59:30 stephenreed Exp $
+d242 5
+a423 20
+    /**
+     * Returns the CycNartXmlDataBindingImpl object which contains this CycNart.  The
+     * xml databinding object can be subsequently serialized into xml.
+     *
+     * @@return the CycNartXmlDataBindingImpl object which contains this CycConstant
+     */
+    public CycNartXmlDataBinding toCycNartXmlDataBinding () {
+        CycNartXmlDataBinding cycNartXmlDataBindingImpl = new CycNartXmlDataBindingImpl();
+        cycNartXmlDataBindingImpl.setId(this.getId());
+        FunctorXmlDataBinding functorXmlDataBinding = new FunctorXmlDataBindingImpl();
+        if (functor instanceof CycConstant)
+            functorXmlDataBinding.setCycConstantXmlDataBinding(((CycConstant) functor).toCycConstantXmlDataBinding());
+        else if (functor instanceof CycNart)
+            functorXmlDataBinding.setCycNartXmlDataBinding(((CycNart) functor).toCycNartXmlDataBinding());
+        else
+            throw new RuntimeException("Invalid functor " + functor + " of " + this);
+        cycNartXmlDataBindingImpl.setFunctorXmlDataBinding(functorXmlDataBinding);
+        cycNartXmlDataBindingImpl.setArguments(arguments.toCycListXmlDataBinding());
+        return cycNartXmlDataBindingImpl;
+    }
+@
+
+
+1.24
+log
+@Renamed classes for XML databinding
+@
+text
+@d7 1
+d13 1
+a13 1
+ * @@version $Id: CycNart.java,v 1.23 2001/11/06 22:09:12 stephenreed Exp $
+d426 2
+a427 2
+    public CycNartXmlDataBindingImpl toCycNartXmlDataBindingImpl () {
+        CycNartXmlDataBindingImpl cycNartXmlDataBindingImpl = new CycNartXmlDataBindingImpl();
+d429 1
+d431 3
+a433 1
+            cycNartXmlDataBindingImpl.setFunctor(((CycConstant) functor).toCycConstantXmlDataBindingImpl());
+d435 3
+a437 2
+            cycNartXmlDataBindingImpl.setFunctor(((CycNart) functor).toCycNartXmlDataBindingImpl());
+        cycNartXmlDataBindingImpl.setArgumentList(arguments.toCycListXmlDataBindingImpl());
+@
+
+
+1.23
+log
+@Added XML databinding classes
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.22 2001/10/24 20:21:33 stephenreed Exp $
+a127 15
+     * Constructs a CycNart from the given xml databinding object.
+     *
+     * @@pararm cycNartXmlDataBinding the xml databinding object
+     */
+    public CycNart (CycNartXmlDataBinding cycNartXmlDataBinding) {
+        setId(cycNartXmlDataBinding.getId());
+        if (cycNartXmlDataBinding.getFunctor() instanceof CycConstantXmlDataBinding)
+            functor =
+                CycConstant.makeCycConstant((CycConstantXmlDataBinding)cycNartXmlDataBinding.getFunctor());
+        else
+            functor = new CycNart((CycNartXmlDataBinding) cycNartXmlDataBinding.getFunctor());
+        arguments = new CycList(cycNartXmlDataBinding.getArgumentList());
+    }
+
+    /**
+d420 1
+a420 1
+     * Returns the CycNartXmlDataBinding object which contains this CycNart.  The
+d423 1
+a423 1
+     * @@return the CycNartXmlDataBinding object which contains this CycConstant
+d425 3
+a427 3
+    public CycNartXmlDataBinding toCycNartXmlDataBinding () {
+        CycNartXmlDataBinding cycNartXmlDataBinding = new CycNartXmlDataBinding();
+        cycNartXmlDataBinding.setId(this.getId());
+d429 1
+a429 1
+            cycNartXmlDataBinding.setFunctor(((CycConstant) functor).toCycConstantXmlDataBinding());
+d431 3
+a433 3
+            cycNartXmlDataBinding.setFunctor(((CycNart) functor).toCycNartXmlDataBinding());
+        cycNartXmlDataBinding.setArgumentList(arguments.toCycListXmlDataBinding());
+        return cycNartXmlDataBinding;
+@
+
+
+1.22
+log
+@Added catch statements for CycApiException
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.21 2001/10/24 18:35:57 stephenreed Exp $
+d128 15
+d434 16
+@
+
+
+1.21
+log
+@Relaxed argtype of toXML methods from XMLPrintWriter to XMLWriter
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.5 2001/10/24 17:34:28 bertolo Exp $
+d159 3
+d189 3
+@
+
+
+1.20
+log
+@Added CycApiException, and replaced throws to IOException with it.
+@
+text
+@d5 1
+a5 1
+import org.opencyc.xml.XMLPrintWriter;
+d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.19 2001/10/12 22:45:36 stephenreed Exp $
+d156 1
+a156 1
+            catch (Exception e) {
+d185 1
+a185 1
+            catch (Exception e) {
+d204 1
+a204 1
+     * Prints the XML representation of the <ttt>CycNart</tt> to an <tt>XMLPrintWriter</tt>
+d233 1
+a233 1
+    public void toXML (XMLPrintWriter xmlWriter, int indent, boolean relative)
+a286 2
+            else if (object instanceof CycList)
+                cyclifiedObject = ((CycList) object).cyclify();
+@
+
+
+1.19
+log
+@Added test case for check-type SubL function.
+Fixed cyclify() for CycNarts.
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.18 2001/09/14 22:14:55 stephenreed Exp $
+d156 1
+a156 1
+            catch (IOException e) {
+d185 1
+a185 1
+            catch (IOException e) {
+@
+
+
+1.18
+log
+@Created new CycObjectFactory class to contain all cyc object caches
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.17 2001/09/12 21:28:27 stephenreed Exp $
+d287 2
+@
+
+
+1.17
+log
+@Added another test case
+@
+text
+@a4 1
+import org.apache.oro.util.*;
+d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.16 2001/09/08 03:30:41 stephenreed Exp $
+a61 6
+     * Least Recently Used Cache of CycNarts, so that a reference to an existing <tt>CycNart</tt>
+     * is returned instead of constructing a duplicate.
+     */
+    protected static Cache cache = new CacheLRU(500);
+
+    /**
+d311 1
+a311 1
+        apiValue.add(CycSymbol.quote);
+a412 38
+    /**
+     * Resets the <tt>CycNart</tt> cache.
+     */
+    public static void resetCache() {
+        cache = new CacheLRU(500);
+    }
+
+    /**
+     * Adds the <tt>CycNart</tt> to the cache.
+     */
+    public static void addCache(CycNart cycNart) {
+        cache.addElement(cycNart.getId(), cycNart);
+    }
+
+    /**
+     * Retrieves the <tt>CycNart</tt> with name, returning null if not found in the cache.
+     */
+    public static CycNart getCache(Integer id) {
+        return (CycNart) cache.getElement(id);
+    }
+
+    /**
+     * Removes the <tt>CycNart</tt> from the cache if it is contained within.
+     */
+    public static void removeCache(CycNart cycNart) {
+        Object element = cache.getElement(cycNart.getId());
+        if (element != null)
+            cache.addElement(cycNart.getId(), null);
+    }
+
+    /**
+     * Returns the size of the <tt>CycNart</tt> object cache.
+     *
+     * @@return an <tt>int</tt> indicating the number of <tt>CycNart</tt> objects in the cache
+     */
+    public static int getCacheSize() {
+        return cache.size();
+    }
+@
+
+
+1.16
+log
+@Unit testing HashJoiner
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: CycNart.java,v 1.15 2001/09/07 23:43:03 stephenreed Exp $
+d393 10
+a402 6
+    if (! (object instanceof CycNart))
+        return false;
+    CycNart thatNart = (CycNart) object;
+    if (! this.functor.equals(thatNart.functor))
+        return false;
+    return this.arguments.equals(thatNart.arguments);
+@
+
+
+1.15
+log
+@Added defered completion of CycForts in the binary api. Continued with HashJoiner.
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: CycNart.java,v 1.14 2001/08/30 23:35:11 stephenreed Exp $
+d244 1
+a244 1
+        this.functor.toXML(xmlWriter, indentLength, true);
+d246 1
+a246 1
+        ListIterator iterator = arguments.listIterator();
+a266 2
+        if (functor == null)
+            return "nart-with-id:" + getId();
+d268 2
+a269 2
+        result.append(this.functor.toString());
+        ListIterator iterator = arguments.listIterator();
+d285 2
+a286 2
+        result.append(this.functor.cyclify());
+        ListIterator iterator = arguments.listIterator();
+d361 3
+a363 2
+                ((CycConstant)this.functor).getName() : ((CycNart)this.functor).metaName());
+        ListIterator iterator = this.arguments.listIterator();
+d383 1
+a383 1
+        return this.cyclify().hashCode();
+@
+
+
+1.14
+log
+@Improved backchain rule filtering
+@
+text
+@d7 1
+d13 1
+a13 1
+ * @@version $Id: CycNart.java,v 1.13 2001/08/30 00:06:55 stephenreed Exp $
+d55 1
+a55 1
+    protected CycFort functor;
+d60 1
+a60 1
+    protected CycList arguments = new CycList();
+d158 11
+d187 11
+d268 1
+a268 1
+            return "nart-with-id:" + id;
+d335 1
+a335 1
+                ((CycConstant) this.functor).guid.toString() : ((CycNart) this.functor).metaGuid());
+d344 1
+a344 1
+                argGuid = ((CycConstant)arg).guid.toString();
+d363 1
+a363 1
+                ((CycConstant)this.functor).name : ((CycNart)this.functor).metaName());
+d372 1
+a372 1
+                argName = ((CycConstant)arg).name;
+d428 1
+a428 1
+        cache.addElement(cycNart.id, cycNart);
+d442 1
+a442 1
+        Object element = cache.getElement(cycNart.id);
+d444 1
+a444 1
+            cache.addElement(cycNart.id, null);
+@
+
+
+1.13
+log
+@Changed CycAccess parameters from CycConstants to CycForts, more backchaining tests
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.12 2001/08/28 10:05:25 stephenreed Exp $
+d312 1
+a312 1
+                ((CycConstant)this.functor).guid.toString() : ((CycNart)this.functor).metaGuid());
+d323 1
+a323 1
+                argGuid = ((CycNart)arg).metaGuid();
+d325 1
+a325 1
+                argGuid = (String)arg;
+d361 1
+a361 1
+        return this.metaGuid().hashCode();
+@
+
+
+1.12
+log
+@Refactored binary api support to pass all unit tests
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.11 2001/08/24 22:39:27 stephenreed Exp $
+d279 21
+@
+
+
+1.11
+log
+@Continued binary api test cases
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.10 2001/08/23 22:14:25 stephenreed Exp $
+d134 18
+d350 4
+a353 6
+    if (object instanceof CycNart &&
+        this.metaGuid().equals(((CycNart)object).metaGuid()) &&
+        this.metaName().equals(((CycNart)object).metaName())) {
+        return true;
+    }
+    else
+d355 1
+@
+
+
+1.10
+log
+@Continuing unit test cases for binary api
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.9 2001/08/23 09:33:14 stephenreed Exp $
+d59 1
+a59 1
+    protected List arguments = new ArrayList();
+d79 2
+a80 2
+     * @@param arguments a <tt>List</tt> of the functor's arguments which
+     * are of type <tt>Object</tt>
+d82 1
+a82 1
+    public CycNart (CycFort functor, List arguments) {
+d143 9
+d161 9
+d226 2
+@
+
+
+1.9
+log
+@Continued unit testing binary api
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.8 2001/08/23 00:47:46 stephenreed Exp $
+d192 1
+a192 1
+            if (arg instanceof com.cyc.util.CycFort) {
+@
+
+
+1.8
+log
+@Continuing integration of legacy binary api
+@
+text
+@d1 376
+a376 332
+package org.opencyc.cycobject;
+
+import java.io.Serializable;
+
+import java.util.*;
+//import com.cyc.xml.XMLPrintWriter;
+
+/**
+ * This class implements the behavior and attributes of a
+ * an OpenCyc NART (Non Atomic Reified Term).
+ *
+ * @@version $Id: CycNart.java,v 1.7 2001/08/22 15:09:47 stephenreed Exp $
+ * @@author Stefano Bertolo
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class CycNart extends CycFort implements Comparable {
+
+    /**
+     * XML serialization tags.
+     */
+    public static final String natXMLtag = "nat";
+    public static final String functorXMLtag = "functor";
+    public static final String argXMLtag = "arg";
+
+    /**
+     * XML serialization indentation.
+     */
+    public static int indentLength = 2;
+
+    /**
+     * The functor of the <ttt>CycNart</tt> object. For example, the <tt>CycConstant</tt>
+     * corresponding to #$FruitFn in (#$FruitFn #$AppleTree). This must be a CycFort
+     * (i.e. cannot be assumed to be a CycConstant) because functors can themselves be
+     * CycNarts.
+     */
+    protected CycFort functor;
+
+    /**
+     * The list of the arguments of the <ttt>CycNart</tt> object.
+     */
+    protected List arguments = new ArrayList();
+
+    /**
+     * Constructs a new incomplete <tt>CycNart</tt> object from the id.
+     *
+     * @@param id the id for this NART in the local KB
+     */
+    public CycNart (int id) {
+        this.id = id;
+    }
+
+    /**
+     * Constructs a new <tt>CycNart</tt> object from the given functor and
+     * argument list.
+     *
+     * @@param functor a <tt>CycFort</tt> which is the functor of this
+     * <tt>CycNart</tt> object.
+     * @@param arguments a <tt>List</tt> of the functor's arguments which
+     * are of type <tt>Object</tt>
+     */
+    public CycNart (CycFort functor, List arguments) {
+        this.functor = functor;
+        this.arguments = arguments;
+    }
+
+    /**
+     * Constructs a new unary <tt>CycNart</tt> object from the functor and
+     * argument.
+     *
+     * @@param functor a <tt>CycFort</tt> which is the functor of this
+     * <tt>CycNart</tt> object.
+     * @@param argument an <tt>Object</tt> most typically a <tt>CycConstant</tt>
+     * which is the single argument of this <tt>CycNart</tt> object.
+     */
+    public CycNart (CycFort functor, Object argument) {
+        this.functor = functor;
+        arguments.add(argument);
+        this.arguments = arguments;
+    }
+
+    /**
+     * Constructs a new binary <tt>CycNart</tt> object from the functor and
+     * the two arguments.
+     *
+     * @@param functor a <tt>CycFort</tt> which is the functor of this
+     * <tt>CycNart</tt> object.
+     * @@param argument1 an <tt>Object</tt> most typically a <tt>CycConstant</tt>
+     * @@param argument2 an <tt>Object</tt> most typically a <tt>CycConstant</tt>
+     * which is the single argument of this <tt>CycNart</tt> object.
+     */
+    public CycNart (CycFort functor, Object argument1, Object argument2) {
+        this.functor = functor;
+        arguments.add(argument1);
+        arguments.add(argument2);
+        this.arguments = arguments;
+    }
+
+    /**
+     * Constructs a new <tt>CycNart</tt> object from the <tt>CycList</tt> object.
+     *
+     * @@param cycList a list representation of the <tt>CycNart</tt>
+     */
+    public CycNart (CycList cycList) {
+        if (cycList.size() == 0)
+            throw new RuntimeException("Cannot make a CycNart from an empty CycList");
+        if (! (cycList.first() instanceof CycFort))
+            throw new RuntimeException("CycNart functor must be a CycFort");
+        functor = (CycFort) cycList.first();
+        arguments.addAll(cycList.rest());
+    }
+
+    /**
+     * Returns the functor of the <tt>CycNart</tt>.
+     *
+     * @@return the functor of the <tt>CycNart</tt>
+     */
+    public CycFort getFunctor() {
+        return functor;
+    }
+
+    /**
+     * Returns the arguments of the <tt>CycNart</tt>.
+     *
+     * @@return the arguments of the <tt>CycNart</tt>
+     */
+    public List getArguments() {
+        return arguments;
+    }
+
+    /**
+     * Prints the XML representation of the <ttt>CycNart</tt> to an <tt>XMLPrintWriter</tt>
+     * It is supposed to look like this:<p>
+     * <pre>
+     * <nat>
+     *  <functor>
+     *   <constant>
+     *    <guid>bd58a976-9c29-11b1-9dad-c379636f7270</guid>
+     *    <name>FruitFn</name>
+     *   </constant>
+     *  </functor>
+     *  <arg>
+     *   <constant>
+     *    <guid>bd58c19d-9c29-11b1-9dad-c379636f7270</guid>
+     *    <name>AppleTree</name>
+     *   </constant>
+     *  </arg>
+     * </nat>
+     * </pre>
+     *
+     * The parameter [int indent] specifies by how many spaces the XML
+     * output should be indented.<p>
+     *
+     * The parameter [boolean relative] specifies whether the
+     * indentation should be absolute -- indentation with respect to
+     * the beginning of a new line, relative = false -- or relative
+     * to the indentation currently specified in the indent_string field
+     * of the xml_writer object, relative = true.
+     *
+     */
+/*
+    public void toXML (XMLPrintWriter xmlWriter, int indent, boolean relative) {
+        xmlWriter.printXMLStartTag(natXMLtag, indent, relative);
+        xmlWriter.printXMLStartTag(functorXMLtag, indentLength, true);
+        this.functor.toXML(xmlWriter, indentLength, true);
+        xmlWriter.printXMLEndTag(functorXMLtag, -indentLength, true);
+        ListIterator iterator = arguments.listIterator();
+        Object arg;
+        while (iterator.hasNext()) {
+            xmlWriter.printXMLStartTag(argXMLtag, 0, true);
+            arg = iterator.next();
+            if (arg instanceof com.cyc.util.CycFort) {
+                ((CycFort) arg).toXML(xmlWriter, indentLength, true);
+            }
+            else
+                xmlWriter.indentPrintln((String)arg, indentLength, true);
+            xmlWriter.printXMLEndTag(argXMLtag, -indentLength, true);
+        }
+        xmlWriter.printXMLEndTag(natXMLtag, -indentLength, true);
+    }
+*/
+    /**
+     * Returns a string representation of the OpenCyc NART.
+     *
+     * @@return a <tt>String</tt> representation of the OpenCyc NART.
+     */
+    public String toString() {
+        StringBuffer result = new StringBuffer("(");
+        result.append(this.functor.toString());
+        ListIterator iterator = arguments.listIterator();
+        while (iterator.hasNext()) {
+            result.append(" ");
+            result.append(iterator.next().toString());
+        }
+        return result.append(")").toString();
+    }
+
+    /**
+     * Returns a cyclified string representation of the OpenCyc NART.
+     * Embedded constants are prefixed with ""#$".
+     *
+     * @@return a cyclified <tt>String</tt>.
+     */
+    public String cyclify() {
+        StringBuffer result = new StringBuffer("(");
+        result.append(this.functor.cyclify());
+        ListIterator iterator = arguments.listIterator();
+        while (iterator.hasNext()) {
+            Object object = iterator.next();
+            String cyclifiedObject = null;
+            if (object instanceof CycConstant)
+                cyclifiedObject = ((CycConstant) object).cyclify();
+            else if (object instanceof CycNart)
+                cyclifiedObject = ((CycNart) object).cyclify();
+            else
+                cyclifiedObject = object.toString();
+            result .append(" ");
+            result.append(cyclifiedObject);
+        }
+        return result.append(")").toString();
+    }
+
+    /**
+     * Returns a string representation of the <ttt>CycNart</tt> with the guid in place
+     * of the constant name.
+     *
+     * @@return a <tt>String</tt> representation of the <ttt>CycNart</tt> with <tt>Guid</tt>
+     * external forms in place of the <tt>CycConstant</tt> names.
+     */
+    public String metaGuid() {
+        String functorGuid =
+            (this.functor instanceof CycConstant ?
+                ((CycConstant)this.functor).guid.toString() : ((CycNart)this.functor).metaGuid());
+        ListIterator iterator = this.arguments.listIterator();
+        StringBuffer result = new StringBuffer("(");
+        result.append(functorGuid);
+        Object arg;
+        String argGuid;
+        while (iterator.hasNext()) {
+            arg = iterator.next();
+            if (arg instanceof CycConstant)
+                argGuid = ((CycConstant)arg).guid.toString();
+            else if (arg instanceof CycNart)
+                argGuid = ((CycNart)arg).metaGuid();
+            else
+                argGuid = (String)arg;
+            result.append(" ");
+            result.append(argGuid);
+        }
+        return result.append(")").toString();
+    }
+
+    /**
+     * Returns a metaName representation of the <tt>CycNart</tt>.
+     *
+     * @@return a <tt>String</tt> metaName representation
+     */
+    public String metaName() {
+        String functorName =
+            (this.functor instanceof CycConstant ?
+                ((CycConstant)this.functor).name : ((CycNart)this.functor).metaName());
+        ListIterator iterator = this.arguments.listIterator();
+        StringBuffer result = new StringBuffer("(");
+        result.append(functorName);
+        Object arg;
+        String argName;
+        while (iterator.hasNext()) {
+            arg = iterator.next();
+            if (arg instanceof CycConstant)
+                argName = ((CycConstant)arg).name;
+            else if (arg instanceof CycNart)
+                argName = ((CycNart)arg).metaName();
+            else
+                argName = (String)arg;
+            result.append(" ");
+            result.append(argName);
+        }
+        return result.append(")").toString();
+    }
+
+    public int hashCode() {
+        return this.metaGuid().hashCode();
+    }
+
+    /**
+     * Returns <tt>true</tt> some object equals this <tt>CycNart</tt>
+     *
+     * @@param object the <tt>Object</tt> for equality comparison
+     * @@return equals <tt>boolean</tt> value indicating equality or non-equality.
+     */
+    public boolean equals(Object object) {
+    if (object instanceof CycNart &&
+        this.metaGuid().equals(((CycNart)object).metaGuid()) &&
+        this.metaName().equals(((CycNart)object).metaName())) {
+        return true;
+    }
+    else
+        return false;
+    }
+
+    /**
+     * Compares this object with the specified object for order.
+     * Returns a negative integer, zero, or a positive integer as this
+     * object is less than, equal to, or greater than the specified object.
+     *
+     * @@param object the reference object with which to compare.
+     * @@return a negative integer, zero, or a positive integer as this
+     * object is less than, equal to, or greater than the specified object
+     */
+     public int compareTo (Object object) {
+        if (! (object instanceof CycNart))
+            throw new ClassCastException("Must be a CycNart object");
+        return this.toString().compareTo(object.toString());
+     }
+}
+@
+
+
+1.7
+log
+@Changes associated with binary interface to OpenCyc
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.6 2001/08/13 16:14:44 stephenreed Exp $
+a46 6
+
+    /**
+     * The ID of the <tt>CycNart<tt> object which is an integer unique within an OpenCyc
+     * KB but not necessarily unique globally.
+     */
+    public int id;
+@
+
+
+1.6
+log
+@Revised copyright notice to Cycorp Inc.
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.5 2001/08/10 22:22:00 stephenreed Exp $
+d49 6
+d66 9
+@
+
+
+1.5
+log
+@Completed coding and unit test of standalone constraint solver.
+Calls to OpenCyc are yet to be included.
+Unit test demonstrates solution of the Zebra puzzle in CycL form.
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.4 2001/07/31 20:37:40 stephenreed Exp $
+d16 1
+a16 1
+ * <p>Copyright 2001 OpenCyc.org, license is open source GNU LGPL.
+@
+
+
+1.4
+log
+@Added test cases for Solution class
+@
+text
+@d1 323
+a323 305
+package org.opencyc.cycobject;
+
+import java.io.Serializable;
+
+import java.util.*;
+//import com.cyc.xml.XMLPrintWriter;
+
+/**
+ * This class implements the behavior and attributes of a
+ * an OpenCyc NART (Non Atomic Reified Term).
+ *
+ * @@version $Id: CycNart.java,v 1.3 2001/07/31 13:08:37 stephenreed Exp $
+ * @@author Stefano Bertolo
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 OpenCyc.org, license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class CycNart extends CycFort implements Comparable {
+
+    /**
+     * XML serialization tags.
+     */
+    public static final String natXMLtag = "nat";
+    public static final String functorXMLtag = "functor";
+    public static final String argXMLtag = "arg";
+
+    /**
+     * XML serialization indentation.
+     */
+    public static int indentLength = 2;
+
+    /**
+     * The functor of the <ttt>CycNart</tt> object. For example, the <tt>CycConstant</tt>
+     * corresponding to #$FruitFn in (#$FruitFn #$AppleTree). This must be a CycFort
+     * (i.e. cannot be assumed to be a CycConstant) because functors can themselves be
+     * CycNarts.
+     */
+    protected CycFort functor;
+
+    /**
+     * The list of the arguments of the <ttt>CycNart</tt> object.
+     */
+    protected List arguments = new ArrayList();
+
+    /**
+     * Constructs a new <tt>CycNart</tt> object from the given functor and
+     * argument list.
+     *
+     * @@param functor a <tt>CycFort</tt> which is the functor of this
+     * <tt>CycNart</tt> object.
+     * @@param arguments a <tt>List</tt> of the functor's arguments which
+     * are of type <tt>Object</tt>
+     */
+    public CycNart (CycFort functor, List arguments) {
+        this.functor = functor;
+        this.arguments = arguments;
+    }
+
+    /**
+     * Constructs a new unary <tt>CycNart</tt> object from the functor and
+     * argument.
+     *
+     * @@param functor a <tt>CycFort</tt> which is the functor of this
+     * <tt>CycNart</tt> object.
+     * @@param argument an <tt>Object</tt> most typically a <tt>CycConstant</tt>
+     * which is the single argument of this <tt>CycNart</tt> object.
+     */
+    public CycNart (CycFort functor, Object argument) {
+        this.functor = functor;
+        arguments.add(argument);
+        this.arguments = arguments;
+    }
+
+    /**
+     * Constructs a new binary <tt>CycNart</tt> object from the functor and
+     * the two arguments.
+     *
+     * @@param functor a <tt>CycFort</tt> which is the functor of this
+     * <tt>CycNart</tt> object.
+     * @@param argument1 an <tt>Object</tt> most typically a <tt>CycConstant</tt>
+     * @@param argument2 an <tt>Object</tt> most typically a <tt>CycConstant</tt>
+     * which is the single argument of this <tt>CycNart</tt> object.
+     */
+    public CycNart (CycFort functor, Object argument1, Object argument2) {
+        this.functor = functor;
+        arguments.add(argument1);
+        arguments.add(argument2);
+        this.arguments = arguments;
+    }
+
+    /**
+     * Constructs a new <tt>CycNart</tt> object from the <tt>CycList</tt> object.
+     *
+     * @@param cycList a list representation of the <tt>CycNart</tt>
+     */
+    public CycNart (CycList cycList) {
+        if (cycList.size() == 0)
+            throw new RuntimeException("Cannot make a CycNart from an empty CycList");
+        if (! (cycList.first() instanceof CycFort))
+            throw new RuntimeException("CycNart functor must be a CycFort");
+        functor = (CycFort) cycList.first();
+        arguments.addAll(cycList.rest());
+    }
+
+    /**
+     * Prints the XML representation of the <ttt>CycNart</tt> to an <tt>XMLPrintWriter</tt>
+     * It is supposed to look like this:<p>
+     * <pre>
+     * <nat>
+     *  <functor>
+     *   <constant>
+     *    <guid>bd58a976-9c29-11b1-9dad-c379636f7270</guid>
+     *    <name>FruitFn</name>
+     *   </constant>
+     *  </functor>
+     *  <arg>
+     *   <constant>
+     *    <guid>bd58c19d-9c29-11b1-9dad-c379636f7270</guid>
+     *    <name>AppleTree</name>
+     *   </constant>
+     *  </arg>
+     * </nat>
+     * </pre>
+     *
+     * The parameter [int indent] specifies by how many spaces the XML
+     * output should be indented.<p>
+     *
+     * The parameter [boolean relative] specifies whether the
+     * indentation should be absolute -- indentation with respect to
+     * the beginning of a new line, relative = false -- or relative
+     * to the indentation currently specified in the indent_string field
+     * of the xml_writer object, relative = true.
+     *
+     */
+/*
+    public void toXML (XMLPrintWriter xmlWriter, int indent, boolean relative) {
+        xmlWriter.printXMLStartTag(natXMLtag, indent, relative);
+        xmlWriter.printXMLStartTag(functorXMLtag, indentLength, true);
+        this.functor.toXML(xmlWriter, indentLength, true);
+        xmlWriter.printXMLEndTag(functorXMLtag, -indentLength, true);
+        ListIterator iterator = arguments.listIterator();
+        Object arg;
+        while (iterator.hasNext()) {
+            xmlWriter.printXMLStartTag(argXMLtag, 0, true);
+            arg = iterator.next();
+            if (arg instanceof com.cyc.util.CycFort) {
+                ((CycFort) arg).toXML(xmlWriter, indentLength, true);
+            }
+            else
+                xmlWriter.indentPrintln((String)arg, indentLength, true);
+            xmlWriter.printXMLEndTag(argXMLtag, -indentLength, true);
+        }
+        xmlWriter.printXMLEndTag(natXMLtag, -indentLength, true);
+    }
+*/
+    /**
+     * Returns a string representation of the OpenCyc NART.
+     *
+     * @@return a <tt>String</tt> representation of the OpenCyc NART.
+     */
+    public String toString() {
+        StringBuffer result = new StringBuffer("(");
+        result.append(this.functor.toString());
+        ListIterator iterator = arguments.listIterator();
+        while (iterator.hasNext()) {
+            result.append(" ");
+            result.append(iterator.next().toString());
+        }
+        return result.append(")").toString();
+    }
+
+    /**
+     * Returns a cyclified string representation of the OpenCyc NART.
+     * Embedded constants are prefixed with ""#$".
+     *
+     * @@return a cyclified <tt>String</tt>.
+     */
+    public String cyclify() {
+        StringBuffer result = new StringBuffer("(");
+        result.append(this.functor.cyclify());
+        ListIterator iterator = arguments.listIterator();
+        while (iterator.hasNext()) {
+            Object object = iterator.next();
+            String cyclifiedObject = null;
+            if (object instanceof CycConstant)
+                cyclifiedObject = ((CycConstant) object).cyclify();
+            else if (object instanceof CycNart)
+                cyclifiedObject = ((CycNart) object).cyclify();
+            else
+                cyclifiedObject = object.toString();
+            result .append(" ");
+            result.append(cyclifiedObject);
+        }
+        return result.append(")").toString();
+    }
+
+    /**
+     * Returns a string representation of the <ttt>CycNart</tt> with the guid in place
+     * of the constant name.
+     *
+     * @@return a <tt>String</tt> representation of the <ttt>CycNart</tt> with <tt>Guid</tt>
+     * external forms in place of the <tt>CycConstant</tt> names.
+     */
+    public String metaGuid() {
+        String functorGuid =
+            (this.functor instanceof CycConstant ?
+                ((CycConstant)this.functor).guid.toString() : ((CycNart)this.functor).metaGuid());
+        ListIterator iterator = this.arguments.listIterator();
+        StringBuffer result = new StringBuffer("(");
+        result.append(functorGuid);
+        Object arg;
+        String argGuid;
+        while (iterator.hasNext()) {
+            arg = iterator.next();
+            if (arg instanceof CycConstant)
+                argGuid = ((CycConstant)arg).guid.toString();
+            else if (arg instanceof CycNart)
+                argGuid = ((CycNart)arg).metaGuid();
+            else
+                argGuid = (String)arg;
+            result.append(" ");
+            result.append(argGuid);
+        }
+        return result.append(")").toString();
+    }
+
+    /**
+     * Returns a metaName representation of the <tt>CycNart</tt>.
+     *
+     * @@return a <tt>String</tt> metaName representation
+     */
+    public String metaName() {
+        String functorName =
+            (this.functor instanceof CycConstant ?
+                ((CycConstant)this.functor).name : ((CycNart)this.functor).metaName());
+        ListIterator iterator = this.arguments.listIterator();
+        StringBuffer result = new StringBuffer("(");
+        result.append(functorName);
+        Object arg;
+        String argName;
+        while (iterator.hasNext()) {
+            arg = iterator.next();
+            if (arg instanceof CycConstant)
+                argName = ((CycConstant)arg).name;
+            else if (arg instanceof CycNart)
+                argName = ((CycNart)arg).metaName();
+            else
+                argName = (String)arg;
+            result.append(" ");
+            result.append(argName);
+        }
+        return result.append(")").toString();
+    }
+
+    public int hashCode() {
+        return this.metaGuid().hashCode();
+    }
+
+    /**
+     * Returns <tt>true</tt> some object equals this <tt>CycNart</tt>
+     *
+     * @@param object the <tt>Object</tt> for equality comparison
+     * @@return equals <tt>boolean</tt> value indicating equality or non-equality.
+     */
+    public boolean equals(Object object) {
+    if (object instanceof CycNart &&
+        this.metaGuid().equals(((CycNart)object).metaGuid()) &&
+        this.metaName().equals(((CycNart)object).metaName())) {
+        return true;
+    }
+    else
+        return false;
+    }
+
+    /**
+     * Compares this object with the specified object for order.
+     * Returns a negative integer, zero, or a positive integer as this
+     * object is less than, equal to, or greater than the specified object.
+     *
+     * @@param object the reference object with which to compare.
+     * @@return a negative integer, zero, or a positive integer as this
+     * object is less than, equal to, or greater than the specified object
+     */
+     public int compareTo (Object object) {
+        if (! (object instanceof CycNart))
+            throw new ClassCastException("Must be a CycNart object");
+        return this.toString().compareTo(object.toString());
+     }
+}
+@
+
+
+1.3
+log
+@Add compareTo methods and unit test cases
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.2 2001/07/25 17:17:34 stephenreed Exp $
+a304 1
+
+@
+
+
+1.2
+log
+@Updated javadoc comments.
+Employed apache-oro cache classes
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: CycNart.java,v 1.4 2001/07/02 19:07:10 bertolo Exp $
+d34 1
+a34 1
+public class CycNart extends CycFort {
+d59 1
+a59 1
+    protected List arguments;
+d62 2
+a63 1
+     * Constructs a new <ttt>CycNart</tt> object.
+d76 2
+a77 1
+     * Constructs a new unary <ttt>CycNart</tt> object.
+a85 1
+        ArrayList arguments = new ArrayList();
+d91 2
+a92 1
+     * Constructs a new binary <ttt>CycNart</tt> object.
+a101 1
+        ArrayList arguments = new ArrayList();
+d108 14
+d290 15
+@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@a2 12
+/*****************************************************************************
+ * This class implements the behavior and attributes of a
+ * an OpenCyc Non Atomic Reified Term.
+ *
+ * @@version $Id: CycNart.java,v 1.1 2001/07/23 21:39:35 reed Exp $
+ * @@author
+ *      Stefano Bertolo<BR>
+ *
+ * Copyright 2001 OpenCyc.org, license is open source GNU LGPL.<p>
+ * <a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ *****************************************************************************/
+d8 26
+d62 1
+a62 1
+     * Construct a new <ttt>CycNart</tt> object.
+d75 1
+a75 1
+     * Construct a new unary <ttt>CycNart</tt> object.
+d90 1
+a90 1
+     * Construct a new binary <ttt>CycNart</tt> object.
+d158 1
+a158 1
+     * Return a string representation of the OpenCyc NART.
+d174 1
+a174 1
+     * Return a cyclified string representation of the OpenCyc NART.
+d199 1
+a199 1
+     * Return a string representation of the <ttt>CycNart</tt> with the guid in place
+d229 1
+a229 1
+     * Return a metaName representation of the <tt>CycNart</tt>.
+d261 1
+a261 1
+     * Return <tt>true</tt> some object equals this <tt>CycNart</tt>
+@
+
+
+1.1.1.1
+log
+@Imported sources
+@
+text
+@@

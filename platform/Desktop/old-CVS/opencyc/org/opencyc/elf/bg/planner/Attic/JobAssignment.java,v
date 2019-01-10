@@ -1,0 +1,290 @@
+head	1.7;
+access;
+symbols
+	PRE_1_0:1.7;
+locks; strict;
+comment	@# @;
+
+
+1.7
+date	2003.09.19.21.00.15;	author stephenreed;	state dead;
+branches;
+next	1.6;
+
+1.6
+date	2003.09.18.21.22.56;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2003.09.14.13.58.03;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2003.09.05.18.16.10;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2003.09.04.19.52.51;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2003.09.03.04.04.46;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2003.09.02.23.45.04;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.7
+log
+@renamed JobAssignment to Job
+@
+text
+@package org.opencyc.elf.bg.planner;
+
+//// Internal Imports
+import org.opencyc.elf.bg.taskframe.Action;
+
+//// External Imports
+import java.util.List;
+
+/**
+ * JobAssignment contains non-temporal (for example spatial) task decompositions
+ * among agents and resources.
+ *
+ * @@version $Id: JobAssignment.java,v 1.6 2003/09/18 21:22:56 stephenreed Exp $
+ * @@author Stephen L. Reed  
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class JobAssignment {
+  
+  //// Constructors
+  
+  /** Creates a new instance of JobAssignment. */
+  public JobAssignment() {
+  }
+  
+  //// Public Area
+  
+  /**
+   * Gets the name of the commanded action to be accomplished
+   *
+   * @@return the name of the commanded action to be accomplished
+   */
+  public String getActionName () {
+    return actionName;
+  }
+
+  /**
+   * Sets the name of the commanded action to be accomplished
+   *
+   * @@param actionName the name of the commanded action to be accomplished
+   */
+  public void setActionName (String actionName) {
+    this.actionName = actionName;
+  }
+
+  /**
+   * Gets the resources required to schedule the tasks that accomplish the commanded action
+   *
+   * @@return the resources required to schedule the tasks that accomplish the commanded action
+   */
+  public List getRequiredResources () {
+    return requiredResources;
+  }
+
+  /**
+   * Sets the resources required to schedule the tasks that accomplish the commanded action
+   *
+   * @@param requiredResources the resources required to schedule the tasks that accomplish the commanded action
+   */
+  public void setRequiredResources (List requiredResources) {
+    this.requiredResources = requiredResources;
+  }
+
+  /**
+   * Gets the action to be performed by a qualified scheduler that will entirely or in part
+   * accomplish the commanded action
+   *
+   * @@return the action to be performed by a qualified scheduler that will entirely or in part
+   * accomplish the commanded action
+   */
+  public Action getActionForScheduling () {
+    return actionForScheduling;
+  }
+
+  /**
+   * Sets the action to be performed by a qualified scheduler that will entirely or in part
+   * accomplish the commanded action
+   *
+   * @@param actionForScheduling the action to be performed by a qualified scheduler that will entirely or in part
+   * accomplish the commanded action
+   */
+  public void setActionForScheduling (Action actionForScheduling) {
+    this.actionForScheduling = actionForScheduling;
+  }
+
+  /**
+   * Returns a string representation of this object.
+   * 
+   * @@return a string representation of this object
+   */
+  public String toString() {
+    StringBuffer stringBuffer = new StringBuffer();
+    stringBuffer.append("[JobAssignment for ");
+    stringBuffer.append(requiredResources.toString());
+    stringBuffer.append(" action: ");
+    stringBuffer.append(actionName);
+    stringBuffer.append("]");
+    return stringBuffer.toString();
+  }
+  
+  //// Protected Area
+  
+  //// Private Area
+  
+  //// Internal Rep
+  
+  /** the name of the commanded action to be accomplished */
+  protected String actionName;
+  
+  /** the resources required to schedule the tasks that accomplish the commanded action */
+  protected List requiredResources;
+  
+  /**
+   * the action to be performed by a qualified scheduler that will entirely or in part
+   * accomplish the commanded action
+   */
+  protected Action actionForScheduling;
+  
+  //// Main
+  
+}
+@
+
+
+1.6
+log
+@/home/reed/opencyc/org/opencyc/elf
+removed equals(...)  method if present and reformatted multiline comments to one less line
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: JobAssignment.java,v 1.5 2003/09/14 13:58:03 stephenreed Exp $
+@
+
+
+1.5
+log
+@Changed ArrayList to List, consistently formatted one line comments. ----------------------------------------------------------------------
+@
+text
+@d13 1
+a13 2
+ * </p>
+ * @@version $Id: JobAssignment.java,v 1.4 2003/09/05 18:16:10 stephenreed Exp $
+@
+
+
+1.4
+log
+@/home/reed/opencyc/org/opencyc/elf
+fixed javadoc errors
+@
+text
+@d7 1
+a7 1
+import java.util.ArrayList;
+d14 1
+a14 1
+ * @@version $Id: JobAssignment.java,v 1.3 2003/09/04 19:52:51 stephenreed Exp $
+d67 1
+a67 1
+  public ArrayList getRequiredResources () {
+d76 1
+a76 1
+  public void setRequiredResources (ArrayList requiredResources) {
+d123 1
+a123 3
+  /**
+   * the name of the commanded action to be accomplished
+   */
+d126 2
+a127 4
+  /**
+   * the resources required to schedule the tasks that accomplish the commanded action
+   */
+  protected ArrayList requiredResources;
+@
+
+
+1.3
+log
+@changed toString() method
+@
+text
+@d10 1
+a10 1
+ * <P>JobAssignment contains non-temporal (e.g. spatial) task decompositions
+d14 1
+a14 1
+ * @@version $Id: JobAssignment.java,v 1.2 2003/09/03 04:04:46 stephenreed Exp $
+@
+
+
+1.2
+log
+@Added ResourceFactory
+@
+text
+@d14 1
+a14 1
+ * @@version $Id: JobAssignment.java,v 1.1 2003/09/02 23:45:04 stephenreed Exp $
+d102 15
+@
+
+
+1.1
+log
+@intial check in
+@
+text
+@d14 1
+a14 1
+ * @@version $Id: ScheduleLibary.java,v 1.1 2003/09/02 23:18:37 stephenreed Exp $
+d87 1
+a87 1
+  public Action getactionForScheduling () {
+d98 1
+a98 1
+  public void setactionForScheduling (Action actionForScheduling) {
+@
+

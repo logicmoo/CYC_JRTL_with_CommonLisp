@@ -1,0 +1,459 @@
+head	1.11;
+access;
+symbols
+	PRE_1_0:1.11;
+locks; strict;
+comment	@# @;
+
+
+1.11
+date	2003.10.20.15.21.51;	author stephenreed;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2003.10.06.05.15.22;	author stephenreed;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2003.09.20.02.27.52;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2003.09.18.21.22.57;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2003.09.17.16.53.51;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2003.09.14.13.58.03;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2003.09.09.20.20.18;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2003.09.08.19.14.01;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2003.09.08.15.39.34;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2003.09.05.21.15.21;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2003.09.05.19.13.02;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.11
+log
+@moved commands to org.opencyc.elf.bg.command package
+@
+text
+@package org.opencyc.elf.wm;
+
+//// Internal Imports
+import org.opencyc.elf.bg.command.Parameter;
+import org.opencyc.elf.bg.taskframe.Action;
+import org.opencyc.elf.wm.state.State;
+
+//// External Imports
+import java.util.ArrayList;
+import java.util.List;
+
+/** ActionFactory populates the action libary.  There is a singleton instance.
+ *
+ * <P>Copyright (c) 2003 Cycorp, Inc.  All rights reserved.
+ * <BR>This software is the proprietary information of Cycorp, Inc.
+ * <P>Use is subject to license terms.
+ *
+ * @@author Stephen L. Reed  
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * @@version $Id: ActionFactory.java,v 1.10 2003/10/06 05:15:22 stephenreed Exp $
+ */
+public class ActionFactory {
+  
+  //// Constructors
+  
+  /** Creates a new instance of ActionFactory and stores it in the singleton instance. */
+  public ActionFactory() {
+    actionFactory = this;
+  }
+  
+  //// Public Area
+  
+  /** Gets the action factory singleton instance.
+   *
+   * @@return the action factory singleton instance
+   */
+  public static ActionFactory getInstance() {
+    return actionFactory;
+  }
+  
+  /** Populates the action library. */
+  public void populateActionLibrary () {
+    // abort
+    String name = Action.ABORT;
+    List inputParameters = new ArrayList();
+    List outputParameters = new ArrayList();
+    Action action = new Action(name, inputParameters, outputParameters);
+    ActionLibrary.getInstance().setAction(action.getName(), action);
+    
+    // console prompted input
+    name = Action.CONSOLE_PROMPTED_INPUT;
+    inputParameters = new ArrayList();
+    Parameter parameter = new Parameter(Parameter.PROMPT, String.class);
+    inputParameters.add(parameter);
+    outputParameters = new ArrayList();
+    action = new Action(name, inputParameters, outputParameters);
+    ActionLibrary.getInstance().setAction(action.getName(), action);
+    
+    // converse with user
+    name = Action.CONVERSE_WITH_USER;
+    inputParameters = new ArrayList();
+    outputParameters = new ArrayList();
+    parameter = new Parameter(Parameter.USER_INPUT, String.class);
+    outputParameters.add(parameter);
+    action = new Action(name, inputParameters, outputParameters);
+    ActionLibrary.getInstance().setAction(action.getName(), action);
+    
+    // emergency stop
+    name = Action.EMERGENCY_STOP;
+    inputParameters = new ArrayList();
+    outputParameters = new ArrayList();
+    action = new Action(name, inputParameters, outputParameters);
+    ActionLibrary.getInstance().setAction(action.getName(), action);
+    
+    // initialize
+    name = Action.INITIALIZE;
+    inputParameters = new ArrayList();
+    outputParameters = new ArrayList();
+    action = new Action(name, inputParameters, outputParameters);
+    ActionLibrary.getInstance().setAction(action.getName(), action);
+  }
+    
+  //// Protected Area
+  
+  //// Private Area
+  
+  //// Internal Rep
+  
+  /** the action factory singleton instance */
+  protected static ActionFactory actionFactory;
+  
+  //// Main
+
+}
+@
+
+
+1.10
+log
+@refactored Action and Goal to include Parameter
+@
+text
+@d4 1
+a5 1
+import org.opencyc.elf.bg.taskframe.Parameter;
+d36 1
+a36 1
+ * @@version $Id: ActionFactory.java,v 1.9 2003/09/20 02:27:52 stephenreed Exp $
+@
+
+
+1.9
+log
+@adding code to ScheduleLibrary
+@
+text
+@d5 1
+a5 1
+
+d36 1
+a36 1
+ * @@version $Id: ActionFactory.java,v 1.8 2003/09/18 21:22:57 stephenreed Exp $
+d60 4
+a63 4
+    Action action = new Action();
+    action.setName(Action.ABORT);
+    action.setParameterNames(new ArrayList());
+    action.setParameterTypes(new ArrayList());
+d67 6
+a72 8
+    action = new Action();
+    action.setName(Action.CONSOLE_PROMPTED_INPUT);
+    List parameterNames = new ArrayList();
+    parameterNames.add("prompt");
+    action.setParameterNames(parameterNames);
+    List parameterTypes = new ArrayList();
+    parameterTypes.add(String.class);
+    action.setParameterTypes(parameterTypes);
+d76 6
+a81 8
+    action = new Action();
+    action.setName(Action.CONVERSE_WITH_USER);
+    parameterNames = new ArrayList();
+    parameterNames.add("prompt");
+    action.setParameterNames(parameterNames);
+    parameterTypes = new ArrayList();
+    parameterTypes.add(String.class);
+    action.setParameterTypes(parameterTypes);
+d85 4
+a88 4
+    action = new Action();
+    action.setName(Action.EMERGENCY_STOP);
+    action.setParameterNames(new ArrayList());
+    action.setParameterTypes(new ArrayList());
+d91 5
+a95 5
+    // init
+    action = new Action();
+    action.setName(Action.INIT);
+    action.setParameterNames(new ArrayList());
+    action.setParameterTypes(new ArrayList());
+@
+
+
+1.8
+log
+@/home/reed/opencyc/org/opencyc/elf
+removed equals(...)  method if present and reformatted multiline comments to one less line
+@
+text
+@d36 1
+a36 1
+ * @@version $Id: ActionFactory.java,v 1.7 2003/09/17 16:53:51 stephenreed Exp $
+a38 1
+  
+@
+
+
+1.7
+log
+@moved from org.opencyc.elf.bg.state to org.opencyc.elf.wm.state
+@
+text
+@d12 1
+a12 2
+/**
+ * ActionFactory populates the action libary.  There is a singleton instance.
+d36 1
+a36 1
+ * @@version $Id: ActionFactory.java,v 1.6 2003/09/14 13:58:03 stephenreed Exp $
+d50 1
+a50 2
+  /**
+   * Gets the action factory singleton instance.
+d58 1
+a58 3
+  /**
+   * Populates the action library.
+   */
+@
+
+
+1.6
+log
+@Changed ArrayList to List, consistently formatted one line comments. ----------------------------------------------------------------------
+@
+text
+@d4 1
+a4 1
+import org.opencyc.elf.bg.state.State;
+d6 1
+a6 1
+import org.opencyc.elf.bg.taskframe.Action;
+d37 1
+a37 1
+ * @@version $Id: ActionFactory.java,v 1.5 2003/09/09 20:20:18 stephenreed Exp $
+@
+
+
+1.5
+log
+@console prompted input and converse with user actions are now stored in the library
+@
+text
+@d10 1
+d37 1
+a37 1
+ * @@version $Id: ActionFactory.java,v 1.4 2003/09/08 19:14:01 stephenreed Exp $
+d74 1
+a74 1
+    ArrayList parameterNames = new ArrayList();
+d77 1
+a77 1
+    ArrayList parameterTypes = new ArrayList();
+@
+
+
+1.4
+log
+@added populateActionLibrary method
+@
+text
+@d36 1
+a36 1
+ * @@version $Id: ActionFactory.java,v 1.3 2003/09/08 15:39:34 stephenreed Exp $
+d79 1
+d90 1
+a106 22
+  /**
+   * Makes a new emergency stop action having no arguments and having no return value.
+   */
+  public Action makeEmergencyStop () {
+    Action emergencyStopAction = new Action();
+    emergencyStopAction.setName(Action.EMERGENCY_STOP);
+    emergencyStopAction.setParameterNames(new ArrayList());
+    emergencyStopAction.setParameterTypes(new ArrayList());
+    return emergencyStopAction;
+  }
+  
+  /**
+   * Makes a new init action having no arguments and having no return value.
+   */
+  public Action makeInit () {
+    Action initAction = new Action();
+    initAction.setName(Action.INIT);
+    initAction.setParameterNames(new ArrayList());
+    initAction.setParameterTypes(new ArrayList());
+    return initAction;
+  }
+  
+@
+
+
+1.3
+log
+@made getInstance() static
+@
+text
+@d12 1
+a12 2
+ * ActionFactory creates named instances of Action for subsequent elaboration
+ * by behavior generation sub components.  There is a singleton instance.
+d36 1
+a36 1
+ * @@version $Id: ActionFactory.java,v 1.2 2003/09/05 21:15:21 stephenreed Exp $
+d60 1
+a60 1
+   * Makes a new abort action having no arguments and having no return value.
+d62 11
+a72 15
+  public Action makeAbort () {
+    Action abortAction = new Action();
+    abortAction.setName(Action.ABORT);
+    abortAction.setParameterNames(new ArrayList());
+    abortAction.setParameterTypes(new ArrayList());
+    return abortAction;
+  }
+  
+  /**
+   * Makes a new console prompted input action having a prompt and having a string
+   * return value.
+   */
+  public Action makeConsolePromptedInput () {
+    Action consolePromptedInputAction = new Action();
+    consolePromptedInputAction.setName(Action.CONSOLE_PROMPTED_INPUT);
+d75 1
+a75 1
+    consolePromptedInputAction.setParameterNames(parameterNames);
+d78 6
+a83 12
+    consolePromptedInputAction.setParameterTypes(parameterTypes);
+    return consolePromptedInputAction;
+  }
+  
+  /**
+   * Makes a new converse with user action having a prompt and having a string
+   * return value.
+   */
+  public Action makeConverseWithUser () {
+    Action converseWithUserAction = new Action();
+    converseWithUserAction.setName(Action.CONVERSE_WITH_USER);
+    ArrayList parameterNames = new ArrayList();
+d85 2
+a86 2
+    converseWithUserAction.setParameterNames(parameterNames);
+    ArrayList parameterTypes = new ArrayList();
+d88 15
+a102 2
+    converseWithUserAction.setParameterTypes(parameterTypes);
+    return converseWithUserAction;
+d104 1
+a104 1
+  
+@
+
+
+1.2
+log
+@/home/reed/opencyc/org/opencyc/elf/wm
+better handling of the singleton instance
+@
+text
+@d37 1
+a37 1
+ * @@version $Id: ActionFactory.java,v 1.1 2003/09/05 19:13:02 stephenreed Exp $
+d56 1
+a56 1
+  public ActionFactory getInstance() {
+@
+
+
+1.1
+log
+@moved from taskframe to wm package
+@
+text
+@d13 1
+a13 1
+ * by behavior generation sub components.
+d37 1
+a37 1
+ * @@version $Id: ActionFactory.java,v 1.6 2003/09/05 18:16:10 stephenreed Exp $
+d44 1
+a44 1
+  /** Creates a new instance of ActionFactory */
+d46 1
+d52 9
+d130 3
+@
+

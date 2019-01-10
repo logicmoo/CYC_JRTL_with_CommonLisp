@@ -1,0 +1,95 @@
+head	1.2;
+access;
+symbols
+	PRE_1_0:1.2
+	start:1.1.1.1
+	opencyc:1.1.1;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2001.07.23.22.49.16;	author stephenreed;	state dead;
+branches;
+next	1.1;
+
+1.1
+date	2001.07.23.22.27.33;	author stephenreed;	state Exp;
+branches
+	1.1.1.1;
+next	;
+
+1.1.1.1
+date	2001.07.23.22.27.33;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@Removing files that were put in the wrong place.
+@
+text
+@package org.opencyc.cycobject;
+
+/**
+ * OpenCyc <tt>CycAssertion</tt> object to model the attributes and behavior of an assertion .<p>
+ *
+ * @@version $Id: CycAssertion.java,v 1.1 2001/07/23 22:27:33 stephenreed Exp $
+ * @@author Stephen Reed
+ *
+ * Copyright 2001 OpenCyc.org, license is open source GNU LGPL.<p>
+ * <a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ */
+
+public class CycAssertion {
+
+    private CycList cycList;
+
+    public CycAssertion(CycList cycList) {
+        this.cycList = cycList;
+    }
+
+    public CycList asCycList() {
+        return cycList;
+    }
+
+    public boolean equals(Object object) {
+        if (! (object instanceof CycAssertion))
+            return false;
+        CycAssertion cycAssertion = (CycAssertion) object;
+        return cycList.equals(cycAssertion.asCycList());
+    }
+
+    public String toString() {
+        return cycList.toString();
+    }
+
+    public String cyclify() {
+        return cycList.cyclify();
+    }
+}@
+
+
+1.1
+log
+@Initial revision
+@
+text
+@d6 1
+a6 1
+ * @@version $Id: CycAssertion.java,v 1.1 2001/07/23 21:39:25 reed Exp $
+@
+
+
+1.1.1.1
+log
+@Import Sources
+@
+text
+@@

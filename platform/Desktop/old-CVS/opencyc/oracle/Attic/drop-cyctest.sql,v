@@ -1,0 +1,43 @@
+head	1.2;
+access;
+symbols
+	OPENCYC_1_0_1:1.2;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2002.12.30.13.12.11;	author yepster;	state dead;
+branches;
+next	1.1;
+
+1.1
+date	2002.12.24.15.20.01;	author yepster;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@Changed install script to ask for username to create interface objects for.
+@
+text
+@drop user cyctest cascade
+/
+quit
+/
+@
+
+
+1.1
+log
+@New place for Oracle OpenCyc Interface; no more under 'org' tree, so
+CycJsprocs.java will not cause the org build script to give errors.
+@
+text
+@@
+

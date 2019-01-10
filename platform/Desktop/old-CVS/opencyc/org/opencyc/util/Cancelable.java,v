@@ -1,0 +1,66 @@
+head	1.2;
+access;
+symbols
+	BRANCH_OPENCYC_1_0_1:1.1.0.2
+	OPENCYC_1_0_1:1.1;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2006.10.21.16.49.18;	author dmiles;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2006.10.18.14.21.32;	author dmiles;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental packages
+@
+text
+@/* $Id: Cancelable.java,v 1.2 2005/12/22 23:32:43 jantos Exp $
+ *
+ * Copyright (c) 2004 - 2006 Cycorp, Inc.  All rights reserved.
+ * This software is the proprietary information of Cycorp, Inc.
+ * Use is subject to license terms.
+ */
+
+package org.opencyc.util;
+
+//// Internal Imports
+
+//// External Imports
+
+/**
+ * <P>Cancelable is designed to...
+ *
+ * <P>Copyright (c) 2004 - 2006 Cycorp, Inc.  All rights reserved.
+ * <BR>This software is the proprietary information of Cycorp, Inc.
+ * <P>Use is subject to license terms.
+ *
+ * @@author tbrussea, zelal
+ * @@date October 10, 2005, 4:03 PM
+ * @@version $Id: Cancelable.java,v 1.2 2005/12/22 23:32:43 jantos Exp $
+ */
+public interface Cancelable {
+  void cancelTask();
+}
+@
+
+
+1.1
+log
+@This is the Additional Content to Create OpenCyc-1.0.1
+@
+text
+@@
+

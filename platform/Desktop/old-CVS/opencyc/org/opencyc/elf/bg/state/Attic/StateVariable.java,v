@@ -1,0 +1,342 @@
+head	1.7;
+access;
+symbols
+	PRE_1_0:1.7;
+locks; strict;
+comment	@# @;
+
+
+1.7
+date	2003.09.17.16.46.32;	author stephenreed;	state dead;
+branches;
+next	1.6;
+
+1.6
+date	2003.09.14.13.58.03;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2003.09.08.17.10.02;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2003.09.05.18.16.10;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2003.09.04.17.43.36;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2003.09.04.13.46.40;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2003.09.03.23.56.06;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.7
+log
+@moved from org.opencyc.elf.bg.state to org.opencyc.elf.wm.state
+@
+text
+@package org.opencyc.elf.bg.state;
+
+//// Internal Imports
+
+//// External Imports
+
+/**
+ * StateVariable contains the name of an ELF state variable.  This class is required to
+ * distinguish state variables from string literals used in goal predicate expressions.
+ *
+ * @@version $Id: StateVariable.java,v 1.6 2003/09/14 13:58:03 stephenreed Exp $
+ * @@author Stephen L. Reed  
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class StateVariable {
+  
+  //// Constructors
+  
+  /** 
+   * Creates a new instance of StateVariable given its name.
+   *
+   * @@param type the state variable type
+   * @@param name the state variable name
+   * @@param comment the comment
+   */
+  public StateVariable(Class type, String name, String comment) {
+    this.type = type;
+    this.name = name;
+    this.comment = comment;
+  }
+  
+  //// Public Area
+  
+  /**
+   * Gets the state variable type
+   *
+   * @@return the state variable type
+   */
+  public Class getType () {
+    return type;
+  }
+
+  /**
+   * Gets the state variable name
+   *
+   * @@return the state variable name
+   */
+  public String getName () {
+    return name;
+  }
+
+  /**
+   * Gets the state variable comment
+   *
+   * @@return the state variable comment
+   */
+  public String getComment () {
+    return comment;
+  }
+
+  /**
+   * Returns a string representation of this object.
+   * 
+   * @@return a string representation of this object
+   */
+  public String toString() {
+    return name;
+  }
+  
+  /**
+   * Returns true if the given object equals this object.
+   * 
+   * @@param obj the given object
+   * 
+   * @@return true if the given object equals this object
+   */
+  public boolean equals(Object obj) {
+    if (!(obj instanceof StateVariable)) {
+      return false;
+    }
+    StateVariable that = (StateVariable) obj;
+    return this.name.equals(that.name);
+  }
+  
+  /** the user input state variable name */ 
+  public static String USER_INPUT = "userInput";
+  
+  /** the user prompt state variable name */ 
+  public static String USER_PROMPT = "userPrompt";
+  
+  /** the console input state variable name */ 
+  public static String CONSOLE_INPUT = "consoleInput";
+  
+  /** the console prompt state variable name */ 
+  public static String CONSOLE_PROMPT = "consolePrompt";
+  
+  //// Protected Area
+  
+  //// Private Area
+  
+  //// Internal Rep
+  
+  /** the state variable type */
+  protected Class type;
+  
+  /** the state variable name */
+  protected String name;
+  
+  /** the state variable comment */
+  protected String comment;
+  
+  //// Main
+  
+}
+@
+
+
+1.6
+log
+@Changed ArrayList to List, consistently formatted one line comments. ----------------------------------------------------------------------
+@
+text
+@d11 1
+a11 1
+ * @@version $Id: StateVariable.java,v 1.5 2003/09/08 17:10:02 stephenreed Exp $
+@
+
+
+1.5
+log
+@changed static instances of state variable to strings to better align with the state varible library and factory
+@
+text
+@d8 1
+a8 1
+ * <P>StateVariable contains the name of an ELF state variable.  This class is required to
+d11 1
+a11 1
+ * @@version $Id: StateVariable.java,v 1.4 2003/09/05 18:16:10 stephenreed Exp $
+d101 1
+a101 3
+  /** 
+   * the user input state variable name
+   */
+d104 1
+a104 3
+  /** 
+   * the user prompt state variable name
+   */
+d107 1
+a107 3
+  /** 
+   * the console input state variable name
+   */
+d110 1
+a110 3
+  /** 
+   * the console prompt state variable name
+   */
+d119 1
+a119 3
+  /**
+   * the state variable type
+   */
+d122 1
+a122 3
+  /**
+   * the state variable name
+   */
+d125 1
+a125 3
+  /**
+   * the state variable comment
+   */
+@
+
+
+1.4
+log
+@/home/reed/opencyc/org/opencyc/elf
+fixed javadoc errors
+@
+text
+@d11 1
+a11 1
+ * @@version $Id: StateVariable.java,v 1.3 2003/09/04 17:43:36 stephenreed Exp $
+d101 4
+d107 1
+a107 1
+   * the console input state variable
+d109 1
+a109 1
+  public static StateVariable CONSOLE_INPUT;
+d112 1
+a112 1
+   * the console prompt state variable
+d114 1
+a114 1
+  public static StateVariable CONSOLE_PROMPT;
+d116 2
+a117 2
+  /**
+   * Initializes the state variables.
+d119 1
+a119 4
+  public static void initialize () {
+    CONSOLE_INPUT = new StateVariable(String.class, "consoleInput", "the console input string");
+    CONSOLE_PROMPT = new StateVariable(String.class, "consolePrompt", "the console prompt string");
+  }
+@
+
+
+1.3
+log
+@added type instance variable
+@
+text
+@a3 1
+import org.opencyc.elf.ELFObject;
+d11 1
+a11 1
+ * @@version $Id: StateVariable.java,v 1.2 2003/09/04 13:46:40 stephenreed Exp $
+d31 1
+a31 1
+public class StateVariable extends ELFObject {
+@
+
+
+1.2
+log
+@introduced StateVariable to distinguish state variables from ordinary strings within predicate expressions
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: StateVariable.java,v 1.1 2003/09/03 23:56:06 stephenreed Exp $
+d39 1
+d43 2
+a44 1
+  public StateVariable(String name, String comment) {
+d52 9
+d102 1
+d104 1
+a104 1
+   * the prompt 
+d106 6
+a111 1
+  public static StateVariable PROMPT;
+d117 2
+a118 1
+    PROMPT = new StateVariable("prompt", "the prompt");
+d126 5
+@
+
+
+1.1
+log
+@initial check in
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: Goal.java,v 1.9 2003/09/03 21:32:46 stephenreed Exp $
+d40 1
+d42 1
+a42 1
+  public StateVariable(String name) {
+d44 1
+d50 18
+d91 12
+d113 5
+@
+

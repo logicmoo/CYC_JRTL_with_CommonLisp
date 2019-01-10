@@ -1,0 +1,382 @@
+head	1.5;
+access;
+symbols
+	PRE_1_0:1.5;
+locks; strict;
+comment	@# @;
+
+
+1.5
+date	2002.11.20.16.38.53;	author stephenreed;	state dead;
+branches;
+next	1.4;
+
+1.4
+date	2002.03.01.15.18.05;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2002.02.28.22.44.22;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2002.02.28.06.02.23;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2002.02.18.16.08.34;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.5
+log
+@Removing previous state machine implementation which is
+replaced by org.opencyc.uml.statemachine package
+@
+text
+@package org.opencyc.conversation;
+
+/**
+ * Contains the attributes and behavior of a Finite
+ * State Machine Arc.<p>
+ *
+ * @@version $Id: Arc.java,v 1.4 2002/03/01 15:18:05 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+public class Arc implements Comparable {
+
+    /**
+     * finite state machine state transition from state
+     */
+    protected State transitionFromState;
+
+    /**
+     * finite state machine performative
+     */
+    protected Performative performative;
+
+    /**
+     * finite state machine state transition to state
+     */
+    protected State transitionToState;
+
+    /**
+     * finite state machine state sub fsm
+     */
+    protected Fsm subFsm;
+
+    /**
+     * finite state machine state action
+     */
+    protected Action action;
+
+    /**
+     * Constructs a new Arc object, given the current state, performative,
+     * transition-to state and the action to take.  Hooks the new arc into
+     * the current state.
+     *
+     * @@param transitionFromState the transition-from state
+     * @@param performative the transition trigger performative
+     * @@param transitionToState the transition-to state
+     * @@param subFsm the sub fsm to perform (null if none)
+     * @@param action the action to take
+     */
+    public Arc (State transitionFromState,
+                Performative performative,
+                State transitionToState,
+                Fsm subFsm,
+                Action action) {
+        this.transitionFromState = transitionFromState;
+        this.performative = performative;
+        this.transitionToState = transitionToState;
+        this.subFsm = subFsm;
+        this.action = action;
+        transitionFromState.addArc(this);
+    }
+
+    /**
+     * Sets the finite state machine state transition from state.
+     *
+     * @@param transitionFromState the finite state machine state transition from state
+     */
+    public void setTransitionFromState (State transitionFromState) {
+        this.transitionFromState = transitionFromState;
+    }
+
+    /**
+     * Returns the finite state machine state transition from state.
+     *
+     * @@return the finite state machine state transition from state
+     */
+    public State getTransitionFromState () {
+        return transitionFromState;
+    }
+
+    /**
+     * Sets the finite state machine state transition to state.
+     *
+     * @@param transitionFromState the finite state machine state transition to state
+     */
+    public void setTransitionToState (State transitionToState) {
+        this.transitionToState = transitionToState;
+    }
+
+    /**
+     * Returns the finite state machine state performative.
+     *
+     * @@return the finite state machine state performative
+     */
+    public Performative getPerformative () {
+        return performative;
+    }
+
+    /**
+     * Returns the finite state machine state transition to state.
+     *
+     * @@return the finite state machine state transition to state
+     */
+    public State getTransitionToState () {
+        return transitionToState;
+    }
+
+    /**
+     * Sets the finite state machine state sub fsm.
+     *
+     * @@param subFsm the finite state machine state sub fsm
+     */
+    public void setSubFsm (Fsm subFsm) {
+        this.subFsm = subFsm;
+    }
+
+    /**
+     * Returns the finite state machine state sub fsm.
+     *
+     * @@return the finite state machine state sub fsm
+     */
+    public Fsm getSubFsm () {
+        return subFsm;
+    }
+
+    /**
+     * Returns the finite state machine state action.
+     *
+     * @@return the finite state machine state action
+     */
+    public Action getAction () {
+        return action;
+    }
+
+    /**
+     * Compares this object with the specified object for order.
+     * Returns a negative integer, zero, or a positive integer as this
+     * object is less than, equal to, or greater than the specified object.
+     *
+     * @@param object the reference object with which to compare.
+     * @@return a negative integer, zero, or a positive integer as this
+     * object is less than, equal to, or greater than the specified object
+     */
+     public int compareTo (Object object) {
+        if (! (object instanceof Arc))
+            throw new ClassCastException("Must be a Arc object");
+        Arc that = (Arc) object;
+        if (this.transitionFromState.equals(that.transitionFromState))
+            return this.performative.compareTo(that.performative);
+        else
+            return this.transitionFromState.compareTo(that.transitionFromState);
+     }
+
+    /**
+     * Returns <tt>true</tt> iff some object equals this object
+     *
+     * @@param object the <tt>Object</tt> for equality comparison
+     * @@return equals <tt>boolean</tt> value indicating equality or non-equality.
+     */
+    public boolean equals(Object object) {
+        if (! (object instanceof Arc))
+            return false;
+        if (! ((Arc) object).performative.getPerformativeName().equals(performative.getPerformativeName()))
+            return false;
+        if (! ((Arc) object).transitionToState.equals(transitionToState))
+            return false;
+        if (action != null) {
+            if (((Arc) object).action == null)
+                return false;
+            else
+                return ((Arc) object).action.getName().equals(action.getName());
+        }
+        if (subFsm != null) {
+            if (((Arc) object).subFsm == null)
+                return false;
+            else
+                return ((Arc) object).subFsm.getName().equals(subFsm.getName());
+        }
+        return true;
+    }
+
+    /**
+     * Returns the string representation of the <tt>Arc</tt>
+     *
+     * @@return the representation of the <tt>Arc</tt> as a <tt>String</tt>
+     */
+    public String toString() {
+        StringBuffer stringBuffer = new StringBuffer();
+        stringBuffer.append("[when ");
+        stringBuffer.append(performative.getPerformativeName());
+        stringBuffer.append(" performative, transition ");
+        stringBuffer.append(transitionFromState.stateId);
+        stringBuffer.append(" --> ");
+        stringBuffer.append(transitionToState.stateId);
+        if (subFsm != null) {
+            stringBuffer.append(", then perform fsm ");
+            stringBuffer.append(subFsm.getName());
+        }
+        if (action != null) {
+            stringBuffer.append(", then ");
+            stringBuffer.append(action.getName());
+        }
+        stringBuffer.append("]");
+        return stringBuffer.toString();
+    }
+
+}@
+
+
+1.4
+log
+@Added validation to the Fsm and FsmClass classes
+@
+text
+@d7 1
+a7 1
+ * @@version $Id: Arc.java,v 1.3 2002/02/28 22:44:22 stephenreed Exp $
+@
+
+
+1.3
+log
+@Renamed Conversation*.java to Fsm*.java
+@
+text
+@d7 1
+a7 1
+ * @@version $Id: Arc.java,v 1.2 2002/02/28 06:02:23 stephenreed Exp $
+d81 9
+d99 9
+d180 17
+a196 3
+        return ((Arc) object).performative.equals(performative) &&
+               ((Arc) object).action.equals(action) &&
+               ((Arc) object).transitionToState.equals(transitionToState);
+d206 14
+a219 10
+        stringBuffer.append("[");
+        stringBuffer.append(transitionFromState);
+        stringBuffer.append(", ");
+        stringBuffer.append(performative);
+        stringBuffer.append(", ");
+        stringBuffer.append(subFsm);
+        stringBuffer.append(", ");
+        stringBuffer.append(action);
+        stringBuffer.append(", ");
+        stringBuffer.append(transitionToState);
+@
+
+
+1.2
+log
+@Refactored use of sub conversations
+@
+text
+@d4 1
+a4 1
+ * Contains the attributes and behavior of a chat conversation Finite
+d7 1
+a7 1
+ * @@version $Id: Arc.java,v 1.1 2002/02/18 16:08:34 stephenreed Exp $
+d47 1
+a47 1
+     * finite state machine state sub conversation
+d49 1
+a49 1
+    protected Conversation subConversation;
+d64 1
+a64 1
+     * @@param subConversation the sub conversation to perform (null if none)
+d70 1
+a70 1
+                Conversation subConversation,
+d75 1
+a75 1
+        this.subConversation = subConversation;
+d108 1
+a108 1
+     * Sets the finite state machine state sub conversation.
+d110 1
+a110 1
+     * @@param subConversation the finite state machine state sub conversation
+d112 2
+a113 2
+    public void setSubConversation (Conversation subConversation) {
+        this.subConversation = subConversation;
+d117 1
+a117 1
+     * Returns the finite state machine state sub conversation.
+d119 1
+a119 1
+     * @@return the finite state machine state sub conversation
+d121 2
+a122 2
+    public Conversation getSubConversation () {
+        return subConversation;
+d179 1
+a179 1
+        stringBuffer.append(subConversation);
+@
+
+
+1.1
+log
+@Renamed chatterbot classes, add finite state machine for dialog, and template parser for understanding chat messages.
+@
+text
+@d7 1
+a7 1
+ * @@version $Id: Arc.java,v 1.1 2002/02/11 09:21:38 stephenreed Exp $
+d47 5
+d61 1
+a61 1
+     * @@param transitionFromState the tranistion-from state
+d64 1
+d70 1
+d75 1
+d108 18
+d178 2
+@
+

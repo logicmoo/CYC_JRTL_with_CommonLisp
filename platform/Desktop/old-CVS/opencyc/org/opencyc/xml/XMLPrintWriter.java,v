@@ -1,0 +1,274 @@
+head	1.6;
+access;
+symbols
+	BRANCH_OPENCYC_1_0_1:1.5.0.2
+	OPENCYC_1_0_1:1.5
+	PRE_1_0:1.3;
+locks; strict;
+comment	@# @;
+
+
+1.6
+date	2006.10.21.16.49.20;	author dmiles;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2006.10.18.14.21.31;	author dmiles;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2006.10.18.13.36.03;	author dmiles;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2001.10.24.17.08.25;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2001.08.23.09.33.14;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2001.08.14.23.47.54;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.6
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental packages
+@
+text
+@package  org.opencyc.xml;
+
+import  java.io.PrintStream;
+import  java.io.PrintWriter;
+
+
+/**
+ * Implements an XMLPrintWriter with facilities for surrounding data
+ * elements with tags appropriately named and indented.<p>
+ *
+ * @@version $Id: XMLPrintWriter.java,v 1.3 2001/10/24 16:45:33 bertolo Exp $
+ * @@author Stefano Bertolo
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class XMLPrintWriter extends XMLWriter {
+    /**
+     * The <code>PrintWriter</code> to which the actual printing is delegated.
+     */
+    PrintWriter writer;
+
+    /**
+     * Constructs an XMLPrintWriter object given a PrintStream.
+     *
+     * @@param printStream the PrintStream on which XML is output
+     */
+    public XMLPrintWriter (java.io.PrintStream printStream) {
+        writer = new PrintWriter(printStream, true);
+    }
+
+    /**
+     * Prints a string to the <code>PrintWriter</code> stored in the field @@see #writer indenting it
+     * by the number of spaces indicated by @@see #indent either relative to the
+     * current indentation level (if @@see #relative is <code>true</code>) or with
+     * respect to the beginning of the line (if @@see #relative is <code>false</code>).
+     *
+     * @@param string the string to be printed.
+     * @@param indent the number of spaces by which the string needs to be indented.
+     * @@param relative id <code>true</code> the string is further indented with respect
+     * to the current indentation level, if <code>false</code> is indented with respect to
+     * the beginning of the line.
+     */
+    public void indentPrint (String string, int indent, boolean relative) {
+        this.setIndent(indent, relative);
+        writer.print(indentString + string);
+    }
+
+
+    /**
+     * Prints a string to the <code>PrintWriter</code> stored in the field @@see #writer.
+     *
+     * @@param string the string to be printed.
+     */
+    public void print (String string) {
+        writer.print(string);
+    }
+
+    /**
+     * Flushes the <code>PrintWriter</code> in the field @@see #writer.
+     */
+    public void flush () {
+        writer.flush();
+    }
+
+  /**
+   * Closes the <code>PrintWriter</code> in the field @@see #writer.
+   */
+  public void close () {
+    writer.close();
+  }
+}
+
+
+
+
+
+
+
+@
+
+
+1.5
+log
+@This is the Additional Content to Create OpenCyc-1.0.1
+@
+text
+@@
+
+
+1.4
+log
+@This is a checkin of OpenCyc 1.0.1 Java  OPENCYC_1_0_1
+@
+text
+@@
+
+
+1.3
+log
+@Revised XML classes
+@
+text
+@@
+
+
+1.2
+log
+@Continued unit testing binary api
+@
+text
+@d11 1
+a11 1
+ * @@version $Id: XMLPrintWriter.java,v 1.1 2001/08/14 23:47:54 stephenreed Exp $
+d80 7
+@
+
+
+1.1
+log
+@Added more api support classes
+@
+text
+@d1 87
+a87 82
+package  org.opencyc.xml;
+
+import  java.io.PrintStream;
+import  java.io.PrintWriter;
+
+
+/**
+ * Implements an XMLPrintWriter with facilities for surrounding data
+ * elements with tags appropriately named and indented.<p>
+ *
+ * @@version $Id: UnitTest.java,v 1.3 2001/08/13 16:14:44 stephenreed Exp $
+ * @@author Stefano Bertolo
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class XMLPrintWriter extends XMLWriter {
+    /**
+     * The <code>PrintWriter</code> to which the actual printing is delegated.
+     */
+    PrintWriter writer;
+
+    /**
+     * Constructs an XMLPrintWriter object given a PrintStream.
+     *
+     * @@param printStream the PrintStream on which XML is output
+     */
+    public XMLPrintWriter (java.io.PrintStream printStream) {
+        writer = new PrintWriter(printStream, true);
+    }
+
+    /**
+     * Prints a string to the <code>PrintWriter</code> stored in the field @@see #writer indenting it
+     * by the number of spaces indicated by @@see #indent either relative to the
+     * current indentation level (if @@see #relative is <code>true</code>) or with
+     * respect to the beginning of the line (if @@see #relative is <code>false</code>).
+     *
+     * @@param string the string to be printed.
+     * @@param indent the number of spaces by which the string needs to be indented.
+     * @@param relative id <code>true</code> the string is further indented with respect
+     * to the current indentation level, if <code>false</code> is indented with respect to
+     * the beginning of the line.
+     */
+    public void indentPrint (String string, int indent, boolean relative) {
+        this.setIndent(indent, relative);
+        writer.print(indentString + string);
+    }
+
+    /**
+     * Prints a string to the <code>PrintWriter</code> stored in the field @@see #writer.
+     *
+     * @@param string the string to be printed.
+     */
+    public void print (String string) {
+        writer.print(string);
+    }
+
+    /**
+     * Flushes the <code>PrintWriter</code> in the field @@see #writer.
+     */
+    public void flush () {
+        writer.flush();
+    }
+}
+
+
+
+@
+

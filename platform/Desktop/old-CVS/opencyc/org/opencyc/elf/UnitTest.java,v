@@ -1,0 +1,1152 @@
+head	1.32;
+access;
+symbols
+	PRE_1_0:1.32;
+locks; strict;
+comment	@# @;
+
+
+1.32
+date	2003.10.20.15.21.45;	author stephenreed;	state Exp;
+branches;
+next	1.31;
+
+1.31
+date	2003.10.06.05.12.59;	author stephenreed;	state Exp;
+branches;
+next	1.30;
+
+1.30
+date	2003.10.02.22.59.07;	author stephenreed;	state Exp;
+branches;
+next	1.29;
+
+1.29
+date	2003.10.02.14.18.35;	author stephenreed;	state Exp;
+branches;
+next	1.28;
+
+1.28
+date	2003.10.01.22.58.39;	author stephenreed;	state Exp;
+branches;
+next	1.27;
+
+1.27
+date	2003.09.25.13.19.21;	author stephenreed;	state Exp;
+branches;
+next	1.26;
+
+1.26
+date	2003.09.22.22.57.52;	author stephenreed;	state Exp;
+branches;
+next	1.25;
+
+1.25
+date	2003.09.22.02.29.54;	author stephenreed;	state Exp;
+branches;
+next	1.24;
+
+1.24
+date	2003.09.18.22.57.00;	author stephenreed;	state Exp;
+branches;
+next	1.23;
+
+1.23
+date	2003.09.17.23.17.44;	author stephenreed;	state Exp;
+branches;
+next	1.22;
+
+1.22
+date	2003.09.15.12.35.24;	author stephenreed;	state Exp;
+branches;
+next	1.21;
+
+1.21
+date	2003.09.14.13.57.59;	author stephenreed;	state Exp;
+branches;
+next	1.20;
+
+1.20
+date	2003.09.09.12.44.40;	author stephenreed;	state Exp;
+branches;
+next	1.19;
+
+1.19
+date	2003.09.08.22.38.14;	author stephenreed;	state Exp;
+branches;
+next	1.18;
+
+1.18
+date	2003.09.08.17.42.27;	author stephenreed;	state Exp;
+branches;
+next	1.17;
+
+1.17
+date	2003.09.08.17.07.37;	author stephenreed;	state Exp;
+branches;
+next	1.16;
+
+1.16
+date	2003.09.05.22.59.24;	author stephenreed;	state Exp;
+branches;
+next	1.15;
+
+1.15
+date	2003.09.05.19.20.53;	author stephenreed;	state Exp;
+branches;
+next	1.14;
+
+1.14
+date	2003.09.05.19.09.54;	author stephenreed;	state Exp;
+branches;
+next	1.13;
+
+1.13
+date	2003.09.05.18.59.20;	author stephenreed;	state Exp;
+branches;
+next	1.12;
+
+1.12
+date	2003.09.04.21.52.35;	author stephenreed;	state Exp;
+branches;
+next	1.11;
+
+1.11
+date	2003.09.03.14.07.24;	author stephenreed;	state Exp;
+branches;
+next	1.10;
+
+1.10
+date	2003.08.31.11.54.52;	author stephenreed;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2003.08.31.02.04.47;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2003.08.28.02.32.03;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2003.08.26.19.49.23;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2003.08.26.17.36.00;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2003.08.26.14.41.08;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2003.08.26.13.03.17;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2003.08.26.13.02.27;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2003.08.25.23.18.46;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2003.08.25.22.47.38;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.32
+log
+@moved commands to org.opencyc.elf.bg.command package
+@
+text
+@package org.opencyc.elf;
+
+//// Internal Imports
+import org.opencyc.elf.bg.BehaviorGeneration;
+import org.opencyc.elf.bg.command.Parameter;
+import org.opencyc.elf.bg.dictionary.*;
+import org.opencyc.elf.bg.expression.Minus;
+import org.opencyc.elf.bg.expression.Plus;
+import org.opencyc.elf.bg.list.*;
+import org.opencyc.elf.bg.planner.JobAssigner;
+import org.opencyc.elf.bg.planner.PlanSelector;
+import org.opencyc.elf.bg.planner.Resource;
+import org.opencyc.elf.bg.predicate.*;
+import org.opencyc.elf.bg.taskframe.Action;
+import org.opencyc.elf.bg.taskframe.TaskCommand;
+import org.opencyc.elf.message.DoTaskMsg;
+import org.opencyc.elf.sp.*;
+import org.opencyc.elf.vj.EntityEvaluator;
+import org.opencyc.elf.vj.PlanEvaluator;
+import org.opencyc.elf.vj.ValueJudgement;
+import org.opencyc.elf.wm.*;
+
+//// External Imports
+import EDU.oswego.cs.dl.util.concurrent.Puttable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
+import junit.framework.Assert;
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+import junit.textui.TestRunner;
+
+/** Provides a suite of JUnit test cases for the org.opencyc.elf package.
+ * 
+ * @@version $Id: UnitTest.java,v 1.31 2003/10/06 05:12:59 stephenreed Exp $
+ * @@author Stephen L. Reed  
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class UnitTest extends TestCase {
+  
+  //// Constructors
+  
+  /** Construct a new UnitTest object.
+   * 
+   * @@param name the test case name.
+   */
+  public UnitTest(String name) {
+    super(name);
+  }
+  
+  //// Public Area
+  
+  /** Runs the unit tests
+   * @@return the test suite
+   */
+  public static Test suite() {
+    TestSuite testSuite = new TestSuite();
+    testSuite.addTest(new UnitTest("testNodeFactory"));
+    testSuite.addTest(new UnitTest("testBehaviorGeneration"));
+    testSuite.addTest(new UnitTest("testBehaviorEngine"));
+    return testSuite;
+  }
+
+  /** Tests NodeFactory object behavior.
+   */
+  public void testNodeFactory() {
+    System.out.println("\n*** testNodeFactory ***");
+    
+    logger.info("Creating NodeFactory");
+    NodeFactory nodeFactory = new NodeFactory();
+    Node node = nodeFactory.makeNodeShell();
+    
+    Assert.assertNotNull(node.getLogger());
+    Assert.assertTrue(node.getLogger() instanceof Logger);
+    
+    Assert.assertNotNull(node.getBehaviorGeneration());
+    Assert.assertTrue(node.getBehaviorGeneration() instanceof BehaviorGeneration);
+    BehaviorGeneration behaviorGenertation = node.getBehaviorGeneration();
+    Assert.assertEquals(node, behaviorGenertation.getNode());
+    
+    Assert.assertNotNull(behaviorGenertation.getJobAssigner());
+    Assert.assertTrue(behaviorGenertation.getJobAssigner() instanceof JobAssigner);
+    JobAssigner jobAssigner = behaviorGenertation.getJobAssigner();
+    Assert.assertEquals(node, jobAssigner.getNode());
+    Assert.assertNotNull(jobAssigner.getChannel());
+    Assert.assertTrue(jobAssigner.getChannel() instanceof Puttable);
+
+    Assert.assertNotNull(behaviorGenertation.getPlanSelector());
+    Assert.assertTrue(behaviorGenertation.getPlanSelector() instanceof PlanSelector);
+    PlanSelector planSelector = behaviorGenertation.getPlanSelector();
+    Assert.assertEquals(node, planSelector.getNode());
+
+    Assert.assertNotNull(node.getWorldModel());
+    Assert.assertTrue(node.getWorldModel() instanceof WorldModel);
+    WorldModel worldModel = node.getWorldModel();
+    Assert.assertEquals(node, worldModel.getNode());
+    
+    Assert.assertNotNull(worldModel.getKnowledgeBase());
+    Assert.assertTrue(worldModel.getKnowledgeBase() instanceof KnowledgeBase);
+    KnowledgeBase knowledgeBase = worldModel.getKnowledgeBase();
+    Assert.assertEquals(node, knowledgeBase.getNode());
+    
+    Assert.assertNotNull(worldModel.getPlanSimulator());
+    Assert.assertTrue(worldModel.getPlanSimulator() instanceof PlanSimulator);
+    PlanSimulator planSimulator = worldModel.getPlanSimulator();
+    Assert.assertEquals(node, planSimulator.getNode());
+    
+    Assert.assertNotNull(worldModel.getPredictor());
+    Assert.assertTrue(worldModel.getPredictor() instanceof Predictor);
+    Predictor predictor = worldModel.getPredictor();
+    Assert.assertEquals(node, predictor.getNode());
+    
+    Assert.assertNotNull(node.getValueJudgement());
+    Assert.assertTrue(node.getValueJudgement() instanceof ValueJudgement);
+    ValueJudgement valueJudgement = node.getValueJudgement();
+    Assert.assertEquals(node, valueJudgement.getNode());
+    
+    Assert.assertNotNull(valueJudgement.getEntityEvaluator());
+    Assert.assertTrue(valueJudgement.getEntityEvaluator() instanceof EntityEvaluator);
+    EntityEvaluator entityEvaluator = valueJudgement.getEntityEvaluator();
+    Assert.assertEquals(node, entityEvaluator.getNode());
+    
+    Assert.assertNotNull(valueJudgement.getPlanEvaluator());
+    Assert.assertTrue(valueJudgement.getPlanEvaluator() instanceof PlanEvaluator);
+    PlanEvaluator planEvaluator = valueJudgement.getPlanEvaluator();
+    Assert.assertEquals(node, planEvaluator.getNode());
+    
+    Assert.assertNotNull(node.getSensoryPerception());
+    Assert.assertTrue(node.getSensoryPerception() instanceof SensoryPerception);
+    SensoryPerception sensoryPerception = node.getSensoryPerception();
+    Assert.assertEquals(node, sensoryPerception.getNode());
+    Assert.assertNotNull(sensoryPerception.getChannel());
+    Assert.assertTrue(sensoryPerception.getChannel() instanceof Puttable);
+        
+    Assert.assertNotNull(sensoryPerception.getEstimator());
+    Assert.assertTrue(sensoryPerception.getEstimator() instanceof Estimator);
+    Estimator estimator = sensoryPerception.getEstimator();
+    Assert.assertEquals(node, estimator.getNode());
+    
+    Assert.assertNotNull(sensoryPerception.getFeatureExtractor());
+    Assert.assertTrue(sensoryPerception.getFeatureExtractor() instanceof FeatureExtractor);
+    FeatureExtractor featureExtractor = sensoryPerception.getFeatureExtractor();
+    Assert.assertEquals(node, featureExtractor.getNode());
+    
+    Assert.assertNotNull(sensoryPerception.getHypothesisEvaluator());
+    Assert.assertTrue(sensoryPerception.getHypothesisEvaluator() instanceof HypothesisEvaluator);
+    HypothesisEvaluator hypothesisEvaluator = sensoryPerception.getHypothesisEvaluator();
+    Assert.assertEquals(node, hypothesisEvaluator.getNode());
+    
+    Assert.assertNotNull(sensoryPerception.getHypothesisFormer());
+    Assert.assertTrue(sensoryPerception.getHypothesisFormer() instanceof HypothesisFormer);
+    HypothesisFormer hypothesisFormer = sensoryPerception.getHypothesisFormer();
+    Assert.assertEquals(node, hypothesisFormer.getNode());
+    
+    try {
+      Thread.sleep(2000);
+    }
+    catch (InterruptedException e) {
+    }
+    System.out.println("*** testNodeFactory OK ***");
+  }
+
+  /** Tests BehaviorGeneration object behavior. */
+  public void testBehaviorGeneration() {
+    System.out.println("\n*** testBehaviorGeneration ***");
+    
+    logger.info("Testing behavior generation");
+    new KnowledgeBase();
+    new StateVariableLibrary();
+    (new StateVariableFactory()).getInstance().populateStateVariableLibrary();
+    new DictionaryEnter();
+    new DictionaryKeys();
+    new DictionaryLookup();
+    new DictionaryRemove();
+    new DictionaryValues();
+    new TheEmptyDictionary();
+    new Minus();
+    new Plus();
+    new FirstInList();
+    new JoinLists();
+    new LengthOfList();
+    new RestOfList();
+    new TheEmptyList();
+    new TheList();
+    new And();
+    new Different();
+    new Equals();
+    new LessThan();
+    new Not();
+    new NotNull();
+    new Or();
+    new True();
+    new ActionLibrary();
+    (new ActionFactory()).getInstance().populateActionLibrary();
+    new GoalLibrary();
+    (new GoalFactory()).getInstance().populateGoalLibrary();
+    new ResourcePool();
+    (new ResourceFactory()).getInstance().populateResourcePool();
+    new JobLibrary();
+    (new JobFactory()).getInstance().populateJobLibrary();
+    new ExperienceLibrary();
+    new ActuatorPool();
+    (new ActuatorFactory()).getInstance().populateActuatorPool();
+    new SensorPool();
+    (new SensorFactory()).getInstance().populateSensorPool();
+    new ScheduleLibrary();
+    (new ScheduleFactory()).getInstance().populateScheduleLibrary();
+    new NodeFactory();
+    Node node = NodeFactory.getInstance().makeNodeShell();
+    
+    ActionFactory actionFactory = new ActionFactory();
+    Action converseWithUserAction = ActionLibrary.getInstance().getAction(Action.CONVERSE_WITH_USER);
+    List inputParameterValues = new ArrayList();
+    inputParameterValues.add(">");
+    converseWithUserAction.setInputParameterValues(inputParameterValues);
+    
+    Assert.assertEquals("converse with user", converseWithUserAction.getName());
+    Assert.assertEquals("prompt", ((Parameter) converseWithUserAction.getInputParameters().get(0)).getName());
+    Assert.assertEquals("[Action: converse with user( prompt: \">\")]", 
+                        converseWithUserAction.toString());    
+    node.getSensoryPerception().initialize((Puttable) null);
+    node.getBehaviorGeneration().getJobAssigner().initialize((Puttable) null);
+    //jobAssigner generates consolePromptedInput action for the ConsoleActuator
+    TaskCommand taskCommand = new TaskCommand(converseWithUserAction, null);
+    DoTaskMsg doTaskMsg = new DoTaskMsg((NodeComponent) null, taskCommand);
+    Assert.assertEquals("[TaskCommand: [Action: converse with user( prompt: \">\")]]", 
+                        taskCommand.toString());
+    try {
+      node.getBehaviorGeneration().getJobAssigner().getChannel().put(doTaskMsg);
+    }
+    catch (InterruptedException e) {
+      Assert.fail(e.getMessage());
+    }
+    try {
+      Thread.sleep(2000);
+    }
+    catch (InterruptedException e) {
+    }
+    System.out.println("*** testBehaviorGeneration OK ***");
+  }
+  
+  /** Tests BehaviorEngine.
+   */
+  public void testBehaviorEngine () {
+    System.out.println("\n*** testBehaviorEngine ***");
+    logger.info("Testing behavior engine");
+    BehaviorEngine behaviorEngine = new BehaviorEngine();
+    behaviorEngine.initialize();
+    Assert.assertNotNull(ResourcePool.getInstance());
+    Assert.assertNotNull(ResourcePool.getInstance().getResource(Resource.CONSOLE));
+    Assert.assertEquals("[Resource: console]", ResourcePool.getInstance().getResource(Resource.CONSOLE).toString());
+    Assert.assertNotNull(JobLibrary.getInstance());
+    Assert.assertNotNull(JobLibrary.getInstance().getJobSets(Action.CONVERSE_WITH_USER));
+    Assert.assertEquals("[[[JobAssignment for [Action: converse with user( prompt: null)] using: [[Resource: console]]]]]", 
+                        JobLibrary.getInstance().getJobSets(Action.CONVERSE_WITH_USER).toString());
+    behaviorEngine.execute();
+    try {
+      Thread.sleep(2000);
+    }
+    catch (InterruptedException e) {
+    }
+    System.out.println("*** testBehaviorEngine OK ***");
+  }
+
+  //// Protected Area
+  
+  //// Private Area
+  
+  //// Internal Rep
+  
+  /** the logger */
+  protected static Logger logger;
+  
+  //// Main
+  
+  /** Main method in case tracing is prefered over running JUnit.
+   * @@param args command line arguments (unused)
+   */
+  public static void main(String[] args) {
+    logger = Logger.getLogger("org.opencyc.elf");
+    TestRunner.run(suite());
+    System.exit(0);
+  }
+}
+@
+
+
+1.31
+log
+@Refactored Action and Goal to include Parameter
+@
+text
+@d5 1
+a14 1
+import org.opencyc.elf.bg.taskframe.Parameter;
+d36 1
+a36 1
+ * @@version $Id: UnitTest.java,v 1.30 2003/10/02 22:59:07 stephenreed Exp $
+@
+
+
+1.30
+log
+@rearranged imports
+@
+text
+@d14 1
+d36 1
+a36 1
+ * @@version $Id: UnitTest.java,v 1.29 2003/10/02 14:18:35 stephenreed Exp $
+d230 3
+a232 3
+    List parameterValues = new ArrayList();
+    parameterValues.add(">");
+    converseWithUserAction.setParameterValues(parameterValues);
+d235 1
+a235 1
+    Assert.assertEquals("prompt", converseWithUserAction.getParameterNames().get(0));
+@
+
+
+1.29
+log
+@initialize singleton operators
+@
+text
+@a4 1
+
+d6 2
+a7 1
+import org.opencyc.elf.bg.expression.*;
+a8 1
+
+a11 1
+
+a12 1
+
+a14 1
+
+a15 1
+
+a19 1
+
+d23 1
+a26 3
+
+import EDU.oswego.cs.dl.util.concurrent.Puttable;
+
+a30 1
+
+d35 1
+a35 1
+ * @@version $Id: UnitTest.java,v 1.28 2003/10/01 22:58:39 stephenreed Exp $
+@
+
+
+1.28
+log
+@fixed to pass a test
+@
+text
+@d6 4
+d14 2
+d44 1
+a44 1
+ * @@version $Id: UnitTest.java,v 1.27 2003/09/25 13:19:21 stephenreed Exp $
+d196 22
+@
+
+
+1.27
+log
+@removed name and purpose from Node
+@
+text
+@d38 1
+a38 1
+ * @@version $Id: UnitTest.java,v 1.26 2003/09/22 22:57:52 stephenreed Exp $
+d203 2
+d251 1
+a251 1
+    Assert.assertEquals("[[Job for [[Resource: console]] action: converse with user]]", 
+@
+
+
+1.26
+log
+@used job sets
+@
+text
+@d38 1
+a38 1
+ * @@version $Id: UnitTest.java,v 1.25 2003/09/22 02:29:54 stephenreed Exp $
+d90 1
+a90 1
+    Node node = nodeFactory.makeNodeShell("test-node");
+d204 1
+a204 1
+    Node node = NodeFactory.getInstance().makeNodeShell("test-node");
+@
+
+
+1.25
+log
+@fixed compilation errors resulting from messages construct signature change
+@
+text
+@d38 1
+a38 1
+ * @@version $Id: UnitTest.java,v 1.24 2003/09/18 22:57:00 stephenreed Exp $
+d248 1
+a248 1
+    Assert.assertNotNull(JobLibrary.getInstance().getJobSet(Action.CONVERSE_WITH_USER));
+d250 1
+a250 1
+                        JobLibrary.getInstance().getJobSet(Action.CONVERSE_WITH_USER).toString());
+@
+
+
+1.24
+log
+@/home/reed/opencyc/org/opencyc/elf
+removed equals(...)  method if present and reformatted multiline comments to one less line
+@
+text
+@d38 1
+a38 1
+ * @@version $Id: UnitTest.java,v 1.23 2003/09/17 23:17:44 stephenreed Exp $
+d196 2
+a197 4
+    new JobAssignmentLibrary();
+    (new JobAssignmentFactory()).getInstance().populateJobAssignmentLibrary();
+    new TaskFrameLibrary();
+    (new TaskFrameFactory()).getInstance().populateTaskFrameLibrary();
+d219 2
+a220 4
+    TaskCommand taskCommand = new TaskCommand();
+    taskCommand.setActionCommand(converseWithUserAction);
+    DoTaskMsg doTaskMsg = new DoTaskMsg();
+    doTaskMsg.setTaskCommand(taskCommand);
+d247 4
+a250 4
+    Assert.assertNotNull(JobAssignmentLibrary.getInstance());
+    Assert.assertNotNull(JobAssignmentLibrary.getInstance().getJobAssignment(Action.CONVERSE_WITH_USER));
+    Assert.assertEquals("[JobAssignment for [[Resource: console]] action: converse with user]", 
+                        JobAssignmentLibrary.getInstance().getJobAssignment(Action.CONVERSE_WITH_USER).toString());
+@
+
+
+1.23
+log
+@comment reformatting
+@
+text
+@a3 2
+import org.opencyc.elf.a.Actuator;
+
+a5 3
+import org.opencyc.elf.bg.taskframe.Action;
+import org.opencyc.elf.bg.taskframe.TaskCommand;
+
+d10 3
+d15 1
+a15 8
+import org.opencyc.elf.s.Sensor;
+
+import org.opencyc.elf.sp.Estimator;
+import org.opencyc.elf.sp.FeatureExtractor;
+import org.opencyc.elf.sp.HypothesisEvaluator;
+import org.opencyc.elf.sp.HypothesisFormer;
+import org.opencyc.elf.sp.SensoryPerception;
+
+d20 1
+a20 27
+import org.opencyc.elf.wm.ActuatorClassFactory;
+import org.opencyc.elf.wm.ActionFactory;
+import org.opencyc.elf.wm.ActionLibrary;
+import org.opencyc.elf.wm.ActuatorFactory;
+import org.opencyc.elf.wm.ActuatorPool;
+import org.opencyc.elf.wm.NodeFactory;
+import org.opencyc.elf.wm.ExperienceLibrary;
+import org.opencyc.elf.wm.GoalFactory;
+import org.opencyc.elf.wm.GoalLibrary;
+import org.opencyc.elf.wm.JobAssignmentFactory;
+import org.opencyc.elf.wm.JobAssignmentLibrary;
+import org.opencyc.elf.wm.KnowledgeBase;
+import org.opencyc.elf.wm.NodeFactory;
+import org.opencyc.elf.wm.PlanSimulator;
+import org.opencyc.elf.wm.PredicateClassFactory;
+import org.opencyc.elf.wm.Predictor;
+import org.opencyc.elf.wm.ResourceFactory;
+import org.opencyc.elf.wm.ResourcePool;
+import org.opencyc.elf.wm.SensorFactory;
+import org.opencyc.elf.wm.SensorPool;
+import org.opencyc.elf.wm.StateVariableFactory;
+import org.opencyc.elf.wm.StateVariableLibrary;
+import org.opencyc.elf.wm.TaskFrameFactory;
+import org.opencyc.elf.wm.TaskFrameLibrary;
+import org.opencyc.elf.wm.WorldModel;
+
+import org.opencyc.elf.wm.state.StateVariable;
+d25 1
+d27 1
+a27 1
+import java.util.logging.Logger;
+d29 4
+a32 1
+import junit.framework.*;
+d34 1
+a34 4
+import EDU.oswego.cs.dl.util.concurrent.BoundedBuffer;
+import EDU.oswego.cs.dl.util.concurrent.Channel;
+import EDU.oswego.cs.dl.util.concurrent.Puttable;
+import EDU.oswego.cs.dl.util.concurrent.Takable;
+d38 1
+a38 1
+ * @@version $Id: UnitTest.java,v 1.22 2003/09/15 12:35:24 stephenreed Exp $
+d182 1
+a182 2
+  /** Tests BehaviorGeneration object behavior.
+   */
+d280 1
+a280 1
+    junit.textui.TestRunner.run(suite());
+@
+
+
+1.22
+log
+@fixes to pass execute method testing of the behavior engine
+@
+text
+@a14 2
+import org.opencyc.elf.bg.state.StateVariable;
+
+d55 2
+d70 1
+a70 2
+/**
+ * Provides a suite of JUnit test cases for the org.opencyc.elf package.
+d72 1
+a72 1
+ * @@version $Id: UnitTest.java,v 1.21 2003/09/14 13:57:59 stephenreed Exp $
+d96 1
+a96 2
+  /**
+   * Construct a new UnitTest object.
+d106 1
+a106 2
+  /**
+   * Runs the unit tests
+d117 1
+a117 2
+  /**
+   * Tests NodeFactory object behavior.
+d216 1
+a216 2
+  /**
+   * Tests BehaviorGeneration object behavior.
+d276 1
+a276 2
+  /**
+   * Tests BehaviorEngine.
+d305 1
+a305 3
+  /**
+   * the logger
+   */
+d310 1
+a310 2
+  /**
+   * Main method in case tracing is prefered over running JUnit.
+@
+
+
+1.21
+log
+@Changed ArrayList to List, consistently formatted one line comments. ----------------------------------------------------------------------
+@
+text
+@d73 1
+a73 1
+ * @@version $Id: UnitTest.java,v 1.20 2003/09/09 12:44:40 stephenreed Exp $
+d257 3
+a259 2
+                        converseWithUserAction.toString());
+    
+d296 1
+a296 1
+    //TODO add TaskFrame tests
+@
+
+
+1.20
+log
+@added SensorFactory and ActuatorFactory
+@
+text
+@a43 1
+import org.opencyc.elf.wm.NodePool;
+d59 1
+d73 1
+a73 1
+ * @@version $Id: UnitTest.java,v 1.19 2003/09/08 22:38:14 stephenreed Exp $
+d245 1
+a245 2
+    new NodePool();
+    (new NodeFactory()).getInstance().populateNodePool();
+d250 1
+a250 1
+    ArrayList parameterValues = new ArrayList();
+@
+
+
+1.19
+log
+@use action library instead of action factory
+@
+text
+@d31 1
+d34 3
+d38 2
+a41 3
+import org.opencyc.elf.wm.ELFFactory;
+import org.opencyc.elf.wm.GoalFactory;
+import org.opencyc.elf.wm.GoalLibrary;
+d43 2
+d46 1
+d50 2
+d73 1
+a73 1
+ * @@version $Id: UnitTest.java,v 1.18 2003/09/08 17:42:27 stephenreed Exp $
+d114 1
+a114 1
+    testSuite.addTest(new UnitTest("testELFFactory"));
+d121 1
+a121 1
+   * Tests ELFFactory object behavior.
+d123 2
+a124 2
+  public void testELFFactory() {
+    System.out.println("\n*** testELFFactory ***");
+d126 3
+a128 3
+    logger.info("Creating ELFFactory");
+    ELFFactory elfFactory = new ELFFactory();
+    Node node = elfFactory.makeNodeShell("test-node");
+d217 1
+a217 1
+    System.out.println("*** testELFFactory OK ***");
+d241 7
+a247 2
+    new ELFFactory();
+    Node node = ELFFactory.getInstance().makeNodeShell("test-node");
+@
+
+
+1.18
+log
+@added goal libary initialization
+@
+text
+@d32 1
+d65 1
+a65 1
+ * @@version $Id: UnitTest.java,v 1.17 2003/09/08 17:07:37 stephenreed Exp $
+d222 2
+a223 1
+    new ActionFactory();
+d237 1
+a237 1
+    Action converseWithUserAction = actionFactory.makeConverseWithUser();
+@
+
+
+1.17
+log
+@added state variable factory and state variable library
+@
+text
+@d37 1
+d64 1
+a64 1
+ * @@version $Id: UnitTest.java,v 1.16 2003/09/05 22:59:24 stephenreed Exp $
+d222 2
+a223 1
+    new GoalFactory();
+@
+
+
+1.16
+log
+@revised for new factory classes
+@
+text
+@d42 2
+d63 1
+a63 1
+ * @@version $Id: UnitTest.java,v 1.15 2003/09/05 19:20:53 stephenreed Exp $
+d218 2
+a223 1
+    StateVariable.initialize();
+@
+
+
+1.15
+log
+@fixed imports
+@
+text
+@d15 2
+d32 2
+d35 2
+d40 1
+a40 1
+import org.opencyc.elf.wm.ScheduleLibrary;
+d42 2
+d61 1
+a61 1
+ * @@version $Id: UnitTest.java,v 1.14 2003/09/05 19:09:54 stephenreed Exp $
+d215 13
+a227 5
+    (new ResourcePool()).getInstance().initialize();
+    (new JobAssignmentLibrary()).getInstance().initialize();
+    (new ScheduleLibrary()).getInstance().initialize();
+    ELFFactory elfFactory = new ELFFactory();
+    Node node = elfFactory.makeNodeShell("test-node");
+d276 1
+a276 3
+    Assert.assertNotNull(ScheduleLibrary.getInstance());
+    Assert.assertEquals("[[Schedule [[Action: console prompted input( prompt: null)]]]]", 
+                        ScheduleLibrary.getInstance().getSchedules(Action.CONVERSE_WITH_USER).toString());
+@
+
+
+1.14
+log
+@fixed imports
+@
+text
+@a8 1
+import org.opencyc.elf.bg.taskframe.ActionFactory;
+d29 1
+d53 1
+a53 1
+ * @@version $Id: UnitTest.java,v 1.13 2003/09/05 18:59:20 stephenreed Exp $
+@
+
+
+1.13
+log
+@fixed imports
+@
+text
+@a14 1
+import org.opencyc.elf.bg.planner.ScheduleLibrary;
+d34 1
+d53 1
+a53 1
+ * @@version $Id: UnitTest.java,v 1.12 2003/09/04 21:52:35 stephenreed Exp $
+@
+
+
+1.12
+log
+@added test cases to testBehaviorEngine()
+@
+text
+@a12 1
+import org.opencyc.elf.bg.planner.JobAssignmentLibrary;
+a14 1
+import org.opencyc.elf.bg.planner.ResourcePool;
+d31 1
+d35 1
+d53 1
+a53 1
+ * @@version $Id: UnitTest.java,v 1.11 2003/09/03 14:07:24 stephenreed Exp $
+@
+
+
+1.11
+log
+@added unit test method for the behavior engine
+@
+text
+@d15 1
+d53 1
+a53 1
+ * @@version $Id: UnitTest.java,v 1.10 2003/08/31 11:54:52 stephenreed Exp $
+a249 1
+    
+d251 12
+@
+
+
+1.10
+log
+@added test cases for action and taskCommand toString() methods
+@
+text
+@d13 1
+d15 2
+d52 1
+a52 1
+ * @@version $Id: UnitTest.java,v 1.9 2003/08/31 02:04:47 stephenreed Exp $
+d95 1
+d206 3
+d241 8
+d250 7
+a256 3
+    
+    
+    System.out.println("*** testBehaviorGeneration OK ***");
+@
+
+
+1.9
+log
+@added unit test cases for the converse with user action
+@
+text
+@d35 2
+d49 1
+a49 1
+ * @@version $Id: UnitTest.java,v 1.8 2003/08/28 02:32:03 stephenreed Exp $
+d187 5
+a191 1
+    
+a198 5
+    try {
+      Thread.sleep(4000);
+    }
+    catch (InterruptedException e) {
+    }
+d207 4
+d213 2
+d217 17
+@
+
+
+1.8
+log
+@began the unit test for behavior generation
+@
+text
+@d8 2
+d47 1
+a47 1
+ * @@version $Id: UnitTest.java,v 1.7 2003/08/26 19:49:23 stephenreed Exp $
+d203 7
+@
+
+
+1.7
+log
+@Adding logger diagnostics
+@
+text
+@d7 3
+d13 2
+d45 1
+a45 1
+ * @@version $Id: UnitTest.java,v 1.6 2003/08/26 17:36:00 stephenreed Exp $
+d87 1
+a87 1
+
+d185 20
+@
+
+
+1.6
+log
+@Added a unit test case to check for the existence of the node logger
+@
+text
+@a28 1
+import java.util.logging.LogManager;
+d40 1
+a40 1
+ * @@version $Id: UnitTest.java,v 1.5 2003/08/26 14:41:08 stephenreed Exp $
+d94 4
+a97 1
+    Node node = elfFactory.makeNodeShell();
+a177 2
+    Assert.assertNotNull(node.getLogger());
+    Assert.assertTrue(node.getLogger() instanceof Logger);
+@
+
+
+1.5
+log
+@Added logger
+@
+text
+@d41 1
+a41 1
+ * @@version $Id: UnitTest.java,v 1.4 2003/08/26 13:03:17 stephenreed Exp $
+d175 3
+@
+
+
+1.4
+log
+@comment alignment
+@
+text
+@d28 3
+d41 1
+a41 1
+ * @@version $Id: UnitTest.java,v 1.3 2003/08/26 13:02:27 stephenreed Exp $
+d92 2
+d185 5
+d197 1
+@
+
+
+1.3
+log
+@added channel existence test cases
+@
+text
+@d38 1
+a38 1
+ * @@version $Id: UnitTest.java,v 1.2 2003/08/25 23:18:46 stephenreed Exp $
+d174 1
+a174 1
+    //// Protected Area
+@
+
+
+1.2
+log
+@Added unit test cases for node component associations
+@
+text
+@d38 1
+a38 1
+ * @@version $Id: UnitTest.java,v 1.1 2003/08/25 22:47:38 stephenreed Exp $
+d101 2
+d148 2
+@
+
+
+1.1
+log
+@initial check in
+@
+text
+@d4 22
+d30 5
+d38 1
+a38 1
+ * @@version $Id: ELFFactory.java,v 1.1 2003/08/25 22:38:19 stephenreed Exp $
+d89 78
+d184 1
+@
+

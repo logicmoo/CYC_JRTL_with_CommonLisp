@@ -1,0 +1,489 @@
+head	1.2;
+access;
+symbols;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2006.10.21.17.11.14;	author dmiles;	state dead;
+branches;
+next	1.1;
+
+1.1
+date	2006.10.21.17.01.54;	author dmiles;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@Somehow the *.hide files made it into CVS.. removing them
+@
+text
+@package org.opencyc.api;
+
+import javax.xml.rpc.*;
+import java.net.*;
+import java.io.*;
+import java.rmi.RemoteException;
+import org.apache.axis.client.Call;
+import org.apache.axis.client.Service;
+import org.apache.axis.encoding.XMLType;
+import org.doomdark.uuid.*;
+import org.opencyc.cycobject.*;
+import org.opencyc.util.*;
+
+import  org.doomdark.uuid.UUID;
+
+
+/**
+ * Provides a Cyc binary (CFASL) API connection via the XML SOAP protocol.  
+ *
+ * @@author  reed
+ */
+public class SOAPBinaryCycConnection implements CycConnectionInterface {
+    
+    /**
+     * No api trace.
+     */
+    public static final int API_TRACE_NONE = 0;
+
+    /**
+     * Message-level api trace.
+     */
+    public static final int API_TRACE_MESSAGES = 1;
+
+    /**
+     * Detailed api trace.
+     */
+    public static final int API_TRACE_DETAILED = 2;
+
+    /**
+     * Parameter that, when true, causes a trace of the messages to and from the server.
+     */
+    protected int trace = API_TRACE_NONE;
+    //protected int trace = API_TRACE_MESSAGES;
+
+    /**
+     * The timer which optionally monitors the duration of requests to the OpenCyc server.
+     */
+    protected static final Timer notimeout = new Timer();
+
+    /**
+     * A reference to the parent CycAccess object for dereferencing constants in ascii symbolic expressions.
+     */
+    protected CycAccess cycAccess;
+
+    /**
+     * An indicator for ascii communications mode that strings should retain their quote delimiters.
+     */
+    protected boolean quotedStrings;
+    
+    /**
+     * the SOAP XML endpoint URL which indicates the Cyc API web services host
+     */
+    protected URL endpointURL;
+    
+    /** 
+     * Creates a new instance of SOAPCycConnection using a default endpoint URL.
+     */
+    public SOAPBinaryCycConnection() {
+        try {
+            endpointURL = new URL("http://localhost:8080/axis/services/CycSOAPService");
+            // for use with tcp monitor
+            //endpointURL = new URL("http://localhost:9080/axis/services/CycSOAPService");
+        }
+        catch (MalformedURLException e) {
+            Log.current.errorPrintln(e.getMessage());
+            Log.current.printStackTrace(e);
+            System.exit(1);
+        }
+    }
+    
+    /** 
+     * Creates a new instance of SOAPCycConnection using the given endpoint URL and the given
+     * CycAccess API method provider.
+     *
+     * @@param endpointURL the SOAP XML endpoint URL which indicates the Cyc API web services host
+     * @@param cycAccess the parent CycAccess object
+     */
+    public SOAPBinaryCycConnection (URL endpointURL, CycAccess cycAccess) {
+        this.endpointURL = endpointURL;
+        this.cycAccess = cycAccess;
+    }
+    
+    /**
+     * Provides the main method for the testing the SOAPBinaryCycConnection.
+     *
+     * @@param args the command line arguments
+     */
+    public static void main (String[] args) {
+        Log.makeLog("SOAPBinaryCycConnection.log");
+        try {
+            SOAPBinaryCycConnection soapBinaryCycConnection = new SOAPBinaryCycConnection();
+            soapBinaryCycConnection.setTrace(soapBinaryCycConnection.API_TRACE_MESSAGES);
+            Log.current.println("Trying helloWorld");
+            soapBinaryCycConnection.helloWorld();
+            CycList query = new CycList();
+            query.add(CycObjectFactory.makeCycSymbol("+"));
+            query.add(new Integer(1));
+            query.add(new Integer(1));
+            Log.current.println("binary query=" + query.toString());
+            String base64Query = Base64.encodeCycObject(query);
+            String hostname = "localhost";
+            String port = "3620";
+            String base64Response = 
+                soapBinaryCycConnection.remoteBinarySubLInteractorAtHostPort(base64Query, hostname, port);
+            Object cycObject = Base64.decodeCycObject(base64Response);
+            Log.current.println("result=" + cycObject);
+            
+            query.add(new Integer(1));
+            Log.current.println("binary query=" + query.toString());
+            base64Query = org.opencyc.util.Base64.encodeCycObject(query);
+            base64Response = 
+                soapBinaryCycConnection.remoteBinarySubLInteractorAtHostPort(base64Query, hostname, port);
+            cycObject = Base64.decodeCycObject(base64Response);
+            Log.current.println("result=" + cycObject);
+            
+            CycList errorQuery = new CycList();
+            errorQuery.add(CycObjectFactory.makeCycSymbol("an-error"));
+            base64Query = org.opencyc.util.Base64.encodeCycObject(errorQuery);
+            base64Response = 
+                soapBinaryCycConnection.remoteBinarySubLInteractorAtHostPort(base64Query, 
+                                                                             hostname, 
+                                                                             port);
+            Log.current.println("error=" + Base64.decodeCycObject(base64Response)); 
+
+            CycAccess cycAccess =
+                new CycAccess(new URL("http://localhost:8080/axis/services/CycSOAPService"), 
+                              "localhost", 
+                              3620);
+            cycAccess.traceNamesOn();
+            Log.current.println("CycAccess created");
+            soapBinaryCycConnection = (SOAPBinaryCycConnection) cycAccess.getCycConnection();
+            Log.current.println("Trying helloWorld");
+            soapBinaryCycConnection.helloWorld();
+            Log.current.println("cycAccess result=" + cycAccess.converseObject(query));
+            Object[] response = soapBinaryCycConnection.converse(query);
+            Log.current.println("response[0]=" + response[0].toString());
+            Log.current.println("response[1]=" + response[1].toString());        
+            CycList request = new CycList();
+            request.add(CycObjectFactory.makeCycSymbol("list"));
+            request.add(":none");
+            request.add(CycObjectFactory.makeCycSymbol(":none"));
+            Log.current.println("cycAccess request=" + request.toString());
+            Log.current.println("cycAccess result=" + cycAccess.converseObject(request));
+        }
+        catch( Exception e ) {
+            Log.current.errorPrintln(e.getMessage());
+            Log.current.printStackTrace(e);
+        }
+    }
+    
+    /**
+     * Provides a remote SubL Interactor using Base64 encoding of the binary (CFASL) request and
+     * response.
+     *
+     * @@param base64SubLRequest the given binary (CFASL) SubL request encoded as a Base64 string
+     * @@param hostname the computer hosting the Cyc server
+     * @@param port the listening port of the Cyc server
+     * which will be submitted to the Cyc server for evaluation
+     * @@return the Base64 encoded result of evaluating the given SubL request
+     */
+    protected String remoteBinarySubLInteractorAtHostPort (String base64SubLRequest, String hostname, String port)
+        throws ServiceException, MalformedURLException, RemoteException {
+        String methodName = "binarySubLInteractorAtHostPort";
+        Service service = new Service();
+        Call call = (Call) service.createCall();
+        call.setTargetEndpointAddress(endpointURL);
+        call.setOperationName(methodName);
+        call.addParameter("base64SubLRequest",
+                          XMLType.XSD_STRING,
+                          ParameterMode.IN);
+        call.addParameter("hostname",
+                          XMLType.XSD_STRING,
+                          ParameterMode.IN);
+        call.addParameter("port",
+                          XMLType.XSD_STRING,
+                          ParameterMode.IN);
+        call.setReturnType(XMLType.XSD_STRING);
+        return (String) call.invoke(new Object[] {base64SubLRequest, hostname, port});
+    }
+    
+    /**
+     * Provides a simple test of the SOAP service without Cyc access.
+     */
+    protected void helloWorld ()
+        throws ServiceException, MalformedURLException, RemoteException {
+        String methodName = "getHelloWorldMessage";
+        Service service = new Service();
+        Call call = (Call) service.createCall();
+        call.setTargetEndpointAddress(endpointURL);
+        call.setOperationName(methodName);
+        call.addParameter("name",
+                          XMLType.XSD_STRING,
+                          ParameterMode.IN);
+        call.setReturnType(XMLType.XSD_STRING);
+        String result = (String) call.invoke(new Object[] {"SOAP Client"});
+        Log.current.println(result);
+    }
+
+    /**
+     * Send a message to Cyc and return the <tt>Boolean</tt> true as the first
+     * element of an object array, and the cyc response Symbolic Expression as
+     * the second element.  If an error occurs the first element is <tt>Boolean</tt>
+     * false and the second element is the error message string.
+     *
+     * @@param message the api command
+     * @@return an array of two objects, the first is an Integer response code, and the second is the
+     * response object or error string.
+     */
+    public Object[] converse(Object message) throws IOException, CycApiException {
+        return  converse(message, notimeout);
+    }
+
+    /**
+     * Send a message to Cyc and return the response code as the first
+     * element of an object array, and the cyc response Symbolic Expression as
+     * the second element, spending no less time than the specified timer allows
+     * but throwing a <code>TimeOutException</code> at the first opportunity
+     * where that time limit is exceeded.
+     * If an error occurs the second element is the error message string.
+     *
+     * @@param message the api command which must be a String or a CycList
+     * @@param timeout a <tt>Timer</tt> object giving the time limit for the api call
+     * @@return an array of two objects, the first is an Integer response code, and the second is the
+     * response object or error string.
+     */
+    public Object[] converse (Object message, Timer timeout)
+        throws IOException, TimeOutException, CycApiException {
+        CycList messageCycList;
+        if (message instanceof CycList)
+            messageCycList = (CycList) message;
+        else if (message instanceof String) {
+            if (cycAccess == null)
+                throw new RuntimeException("CycAccess is required to process commands in string form");
+            messageCycList = cycAccess.makeCycList((String) message);
+        }
+        else
+            throw new CycApiException("Invalid class for message " + message);
+        messageCycList = substituteForBackquote(messageCycList, timeout);
+        return  converseBinary(messageCycList, timeout);
+    }
+
+
+    /**
+     * Substitute a READ-FROM-STRING expression for expressions directly containing a
+     * backquote symbol.  This transformation is only required for the binary api,
+     * which does not parse the backquoted expression.
+     *
+     * @@param messageCyclist the input expression to be checked for directly containing
+     * a backquote symbol.
+     * @@param timeout a <tt>Timer</tt> object giving the time limit for the api call
+     * @@return the expression with a READ-FROM-STRING expression substituted for
+     * expressions directly containing a backquote symbol
+     */
+    protected CycList substituteForBackquote(CycList messageCycList,
+                                             Timer timeout)
+        throws IOException, CycApiException {
+        if (messageCycList.treeContains(CycObjectFactory.backquote)) {
+            CycList substituteCycList = new CycList();
+            substituteCycList.add(CycObjectFactory.makeCycSymbol("read-from-string"));
+            substituteCycList.add(messageCycList.cyclify());
+            Object[] response = converseBinary(substituteCycList, timeout);
+            if ((response[0].equals(Boolean.TRUE)) &&
+                    (response[1] instanceof CycList)) {
+                CycList backquoteExpression = (CycList) response[1];
+                return backquoteExpression.subst(CycObjectFactory.makeCycSymbol("api-bq-list"),
+                                                 CycObjectFactory.makeCycSymbol("bq-list"));
+            }
+            throw new CycApiException("Invalid backquote substitution in " + messageCycList +
+                                      "\nstatus" + response[0] + "\nmessage " + response[1]);
+
+        }
+        return messageCycList;
+    }
+
+    /**
+     * Send a message to Cyc and return the response code as the first
+     * element of an object array, and the cyc response Symbolic Expression as
+     * the second element, spending no less time than the specified timer allows
+     * but throwing a <code>TimeOutException</code> at the first opportunity
+     * where that time limit is exceeded.
+     * If an error occurs the second element is the error message string.
+     * The concurrent mode of Cyc server communication is supported by
+     * Cyc's pool of transaction processor threads, each of which can
+     * concurrently process an api request.
+     *
+     * @@param message the api command
+     * @@param timeout a <tt>Timer</tt> object giving the time limit for the api call
+     * @@return an array of two objects, the first is an Integer response code, and the second is the
+     * response object or error string.
+     */
+    protected Object[] converseBinary (CycList message,
+                                       Timer timeout)
+        throws IOException, TimeOutException, CycApiException {
+        if (trace > API_TRACE_NONE) {
+            Log.current.println(((CycList) message).safeToString() + " --> cyc");
+        }
+        String base64SubLRequest = org.opencyc.util.Base64.encodeCycObject(message);
+        String base64Response = null;
+        try {
+            base64Response = 
+                remoteBinarySubLInteractorAtHostPort(base64SubLRequest,
+                                                     cycAccess.hostName,
+                                                     Integer.toString(cycAccess.port));
+        }
+        catch (ServiceException e) {
+            throw new IOException("Wrapping " + e.getMessage());
+        }
+        Object response = org.opencyc.util.Base64.decodeCycObject(base64Response);
+        Object[] answer =  {
+            null, null
+        };
+        if (response instanceof CycList &&
+            ((CycList) response).size() > 0 &&
+            ((CycList) response).first() instanceof CycSymbol &&
+            ((CycList) response).first().toString().equals("CYCAPIEXCEPTION")) {
+            answer[0] = Boolean.FALSE;
+            answer[1] = response;
+            if (trace > API_TRACE_NONE) {
+                String responseString = null;
+                if (response instanceof CycList)
+                    responseString = ((CycList) response).safeToString();
+                else if (response instanceof CycFort)
+                    responseString = ((CycFort) response).safeToString();
+                else
+                    responseString = response.toString();
+                Log.current.println("received error = " + response);
+            }
+            return answer;
+        }
+        answer[0] = Boolean.TRUE;
+        if (cycAccess == null)
+            answer[1] = response;
+        else if (cycAccess.deferObjectCompletion)
+            answer[1] = response;
+        else
+            answer[1] = cycAccess.completeObject(response);
+        if (trace > API_TRACE_NONE) {
+            String responseString = null;
+            if (response instanceof CycList)
+                responseString = ((CycList) response).safeToString();
+            else if (response instanceof CycFort)
+                responseString = ((CycFort) response).safeToString();
+            else
+                responseString = response.toString();
+            Log.current.println("cyc --> (" + answer[0] + ") " + responseString);
+        }
+        return  answer;
+    }
+
+    /**
+     * Close the api sockets and streams.
+     */
+    public void close () {
+    }
+
+    /**
+     * Returns the trace value.
+     *
+     * @@return the trace value
+     */
+    public int getTrace() {
+        return trace;
+    }
+
+    /**
+     * Sets the trace value.
+     * @@param trace the trace value
+     */
+    public void setTrace(int trace) {
+        this.trace = trace;
+    }
+
+    /**
+     * Turns on the diagnostic trace of socket messages.
+     */
+    public void traceOn() {
+        trace = API_TRACE_MESSAGES;
+    }
+
+    /**
+     * Turns on the detailed diagnostic trace of socket messages.
+     */
+    public void traceOnDetailed() {
+        trace = API_TRACE_DETAILED;
+    }
+
+    /**
+     * Turns off the diagnostic trace of socket messages.
+     */
+    public void traceOff() {
+        trace = API_TRACE_NONE;
+    }
+
+    /**
+     * Returns connection information, suitable for diagnostics.
+     *
+     * @@return connection information, suitable for diagnostics
+     */
+    public String connectionInfo () {
+        return "Cyc API Web Service at " + endpointURL.toString();
+    }
+
+    /** Returns the UUID that identifies this java api client connection.
+     *
+     * @@return the UUID that identifies this java api client connection
+     *
+     */
+    public UUID getUuid() {
+        return null;
+    }
+    
+    /** Returns the base port of this connection.
+     * @@return <code>int</code> of this connection's base port.
+     *
+     */
+    public int getBasePort() {
+      return cycAccess.port;
+    }    
+    
+    /** Returns the hostname of this connection.
+     * @@return <code>String</code> denoting this hostname.
+     *
+     */
+    public String getHostName() {
+      return cycAccess.hostName;
+    }
+    
+    /** @@ToDo Implement me!!!!!!!!!!!!!!! */
+    public void cancelCommunication(SubLWorker worker) {
+      //subl call
+    }
+
+    /** @@ToDo Implement me!!!!!!!!!!!!!!! */
+    public void abortCommunication(SubLWorker worker) {
+      ;//waitingReplyThreads.remove(id);
+      //subl call
+      //termination event
+    }
+
+    
+}
+
+@
+
+
+1.1
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental classes.
+@
+text
+@@
+

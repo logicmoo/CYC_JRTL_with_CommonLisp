@@ -1,0 +1,117 @@
+head	1.2;
+access;
+symbols
+	PRE_1_0:1.2;
+locks; strict;
+comment	@# @;
+
+
+1.2
+date	2003.09.04.03.31.44;	author stephenreed;	state dead;
+branches;
+next	1.1;
+
+1.1
+date	2003.09.04.03.16.35;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@moved to org.opencyc.elf.bg.predicate
+@
+text
+@package org.opencyc.elf.bg.expression;
+
+//// Internal Imports
+
+//// External Imports
+import java.util.ArrayList;
+
+/**
+ * <P>NotNull is a predicate expression of arity one that returns true if its argument
+ * is not null.
+ *
+ * @@version $Id: NotNull.java,v 1.1 2003/09/04 03:16:35 stephenreed Exp $
+ * @@author  reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+public class NotNull extends PredicateExpression {
+  
+  //// Constructors
+  
+  /** Creates a new instance of NotNull */
+  public NotNull() {
+    super();
+  }
+  
+  //// Public Area
+    
+  /**
+   * Returns a string representation of this predicate expression given
+   * the arguments.
+   *
+   * @@param arguments the given arguments to evaluate
+   * @@return a string representation of this object
+   */
+  public String toString(ArrayList arguments) {
+    StringBuffer stringBuffer = new StringBuffer();
+    stringBuffer.append("(not-null ");
+    stringBuffer.append(arguments.get(0).toString());
+    stringBuffer.append(")");
+    return stringBuffer.toString();
+  }
+  
+  /** 
+   * Evaluates the given arguments and returns the result.  The semantics
+   * of the predicate are defined by each implementing class.
+   *
+   * @@param arguments the given arguments to evaluate
+   *
+   */
+  protected boolean evalInternal(ArrayList arguments) {
+    return arguments.get(0)!= null;
+  }
+  
+  //// Protected Area
+  
+  //// Private Area
+  
+  //// Internal Rep
+  
+}
+@
+
+
+1.1
+log
+@initial check in
+@
+text
+@d12 1
+a12 1
+ * @@version $Id: BehaviorGeneration.java,v 1.3 2002/11/19 02:42:53 stephenreed Exp $
+@
+

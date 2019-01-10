@@ -1,0 +1,444 @@
+head	1.10;
+access;
+symbols
+	PRE_1_0:1.9;
+locks; strict;
+comment	@# @;
+
+
+1.10
+date	2006.10.21.16.49.16;	author dmiles;	state Exp;
+branches;
+next	1.9;
+
+1.9
+date	2001.10.17.23.44.19;	author stephenreed;	state Exp;
+branches;
+next	1.8;
+
+1.8
+date	2001.09.06.21.43.25;	author stephenreed;	state Exp;
+branches;
+next	1.7;
+
+1.7
+date	2001.09.06.14.49.47;	author stephenreed;	state Exp;
+branches;
+next	1.6;
+
+1.6
+date	2001.09.04.14.30.23;	author stephenreed;	state Exp;
+branches;
+next	1.5;
+
+1.5
+date	2001.08.20.21.26.24;	author stephenreed;	state Exp;
+branches;
+next	1.4;
+
+1.4
+date	2001.08.15.23.49.56;	author stephenreed;	state Exp;
+branches;
+next	1.3;
+
+1.3
+date	2001.08.13.16.14.44;	author stephenreed;	state Exp;
+branches;
+next	1.2;
+
+1.2
+date	2001.08.10.22.22.00;	author stephenreed;	state Exp;
+branches;
+next	1.1;
+
+1.1
+date	2001.07.30.22.59.00;	author stephenreed;	state Exp;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.10
+log
+@Post OpenCyc 1.0 Cyc Java API - This includes the adding back of many exprmental packages
+@
+text
+@package org.opencyc.constraintsolver;
+
+import java.io.IOException;
+import java.util.ArrayList;
+
+import org.opencyc.api.CycApiException;
+import org.opencyc.cycobject.CycVariable;
+import org.opencyc.inferencesupport.ConstraintRule;
+import org.opencyc.inferencesupport.UnitTest;
+
+/**
+ * The <tt>NodeConsistencyAchiever</tt> object achieves node consistency
+ * for the parent <tt>ConstraintProblem</tt> object.  Node consistency is
+ * the application of all unary constraint rules and the subsequent propagation
+ * of domain value reductions through applicable all-different rules<p>
+ *
+ * @@version $Id: NodeConsistencyAchiever.java,v 1.9 2001/10/17 23:44:19 stephenreed Exp $
+ * @@author Stephen L. Reed
+ *
+ * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
+ * <p><a href="http://www.opencyc.org/license.txt">the license</a>
+ * <p><a href="http://www.opencyc.org">www.opencyc.org</a>
+ * <p><a href="http://www.sourceforge.net/projects/opencyc">OpenCyc at SourceForge</a>
+ * <p>
+ * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
+ * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+ * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+ * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
+ * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *
+ * @@see UnitTest#testConstraintProblem
+ */
+public class NodeConsistencyAchiever {
+
+    /**
+     * Reference to the parent <tt>ConstraintProblem</tt> object.
+     */
+    protected ConstraintProblem constraintProblem;
+
+    /**
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     */
+    protected int verbosity = ConstraintProblem.DEFAULT_VERBOSITY;
+
+    /**
+     * The <tt>ArrayList</tt> of unary constraint rules belonging to the
+     * parent <tt>ConstraintProblem</tt>.
+     */
+    protected ArrayList unaryConstraintRules = new ArrayList();
+
+    /**
+     * The <tt>ArrayList</tt> of <tt>CycVariable</tt> variables
+     * which are affected by unary constraint rules belonging to the
+     * parent <tt>ConstraintProblem</tt>.
+     */
+    protected ArrayList affectedVariables = new ArrayList();
+
+    /**
+     * The <tt>ArrayList</tt> of #$different constraint rules.
+     */
+    protected ArrayList allDifferentRules = new ArrayList();
+
+    /**
+     * The <tt>ArrayList</tt> of variables having only one domain value
+     * after achieving node consistency.
+     */
+    protected ArrayList singletons = new ArrayList();
+
+    /**
+     * Constructs a new <tt>NodeConsistencyAchiever</tt> object for the parent
+     * <tt>ConstraintProblem</tt>.
+     *
+     * @@param constraintProblem the parent constraint problem
+     */
+    public NodeConsistencyAchiever(ConstraintProblem constraintProblem) {
+        this.constraintProblem = constraintProblem;
+    }
+
+    /**
+     * Sets verbosity of the constraint solver output.  0 --> quiet ... 9 -> maximum
+     * diagnostic input.
+     *
+     * @@param verbosity 0 --> quiet ... 9 -> maximum diagnostic input
+     */
+    public void setVerbosity(int verbosity) {
+        this.verbosity = verbosity;
+    }
+
+    /**
+     * Apply the unary constraint rules to restrict domain values and subsequently
+     * propagate the effects through any #$different constraint rules.
+     */
+    public void applyUnaryRulesAndPropagate() throws IOException, CycApiException {
+        CycVariable affectedVariable;
+        ArrayList inputDomainValues;
+        ArrayList outputDomainValues;
+        ConstraintRule instantiatedRule;
+        boolean instantiatedRuleResult;
+        // Select the unary constraint rules.
+        for (int i = 0; i < constraintProblem.getNbrConstraintRules(); i++) {
+            ConstraintRule rule = (ConstraintRule) constraintProblem.constraintRules.get(i);
+            if (rule.getArity() == 1)
+                unaryConstraintRules.add(rule);
+        }
+        // Apply the unary constraint rules.
+        for (int i = 0; i < unaryConstraintRules.size(); i++) {
+            ConstraintRule rule = (ConstraintRule) unaryConstraintRules.get(i);
+            if (verbosity > 5) {
+                System.out.println("\nApplying unary constraint rule to acheive node consistency:");
+                System.out.println(rule);
+            }
+            affectedVariable = (CycVariable) rule.getVariables().get(0);
+            affectedVariables.add(affectedVariable);
+            inputDomainValues = constraintProblem.valueDomains.getDomainValues(affectedVariable);
+            outputDomainValues = new ArrayList();
+            for (int j = 0; j < inputDomainValues.size(); j++) {
+                Object value = inputDomainValues.get(j);
+                instantiatedRule = rule.instantiate(affectedVariable, value);
+                instantiatedRuleResult = constraintProblem.ruleEvaluator.ask(instantiatedRule);
+                constraintProblem.nbrAsks++;
+                if (verbosity > 7)
+                    System.out.println("  " + instantiatedRule + " --> " +
+                                       instantiatedRuleResult);
+                if (instantiatedRuleResult)
+                    outputDomainValues.add(value);
+            }
+            // Update the affected variable's domain values.
+            constraintProblem.valueDomains.setDomainValues(affectedVariable,
+                                                           outputDomainValues);
+            // No longer consider the unary constraint after its one-time application.
+            constraintProblem.constraintRules.remove(rule);
+
+            if (verbosity > 5) {
+                if (inputDomainValues.size() > outputDomainValues.size())
+                    System.out.println("domain of " + affectedVariable +
+                                       " restricted from " + inputDomainValues +
+                                       " to " + outputDomainValues);
+                else
+                    System.out.println("domain of " + affectedVariable +
+                                       " unchanged ");
+                System.out.println("unary rule\n" + rule.cyclify() +
+                                   "  dropped after one-time application");
+            }
+        }
+        achieveAllDifferentConsistencyWrtSingletons();
+        if (verbosity > 1) {
+            System.out.println("\nAfter node consistency and all-different rule propagation.");
+            constraintProblem.valueDomains.displayVariablesAndDomains();
+        }
+    }
+
+    /**
+     * Achieves all-different consistency with regard to singletons, by propagating
+     * the affects of single-valued variables through all #$different
+     * constraint rules.
+     */
+    protected void achieveAllDifferentConsistencyWrtSingletons() throws IOException {
+        ArrayList differentVariables;
+        Object singletonValue;
+        // Gather the singleton variables.
+        for (int i = 0; i < constraintProblem.variables.size(); i++) {
+            CycVariable cycVariable = (CycVariable) constraintProblem.variables.get(i);
+            if (constraintProblem.valueDomains.getDomainValues(cycVariable).size() == 1)
+                singletons.add(cycVariable);
+        }
+        // Gather the applicable #$different rules.
+        for (int i = 0; i < constraintProblem.constraintRules.size(); i++) {
+            ConstraintRule rule = (ConstraintRule) constraintProblem.constraintRules.get(i);
+            if (rule.isAllDifferent())
+                allDifferentRules.add(rule);
+        }
+        // Propagate singleton variables through the #$different rules.
+        for (int i = 0; i < allDifferentRules.size(); i++) {
+            ConstraintRule rule = (ConstraintRule) allDifferentRules.get(i);
+            if (verbosity > 7)
+                System.out.println("\nPropagating through rule " + rule);
+            for (int j = 0; j < singletons.size(); j++) {
+                CycVariable singleton = (CycVariable) singletons.get(j);
+                if (rule.getVariables().contains(singleton)) {
+                    differentVariables = (ArrayList) rule.getVariables().clone();
+                    differentVariables.remove(singleton);
+                    singletonValue = constraintProblem.valueDomains.getDomainValues(singleton).get(0);
+                    if (verbosity > 7)
+                        System.out.println("singleton: " + singleton);
+                    for (int k = 0; k < differentVariables.size(); k++) {
+                        // Remove singleton's value from all other domains in the #$different constraint.
+                        CycVariable differentVariable = (CycVariable) differentVariables.get(k);
+                        if (verbosity > 7)
+                            System.out.println("  removing singleton value " + singletonValue +
+                                               " from " + differentVariable);
+                        constraintProblem.valueDomains.removeFromValue(differentVariable, singletonValue);
+                    }
+                }
+            }
+        }
+    }
+}@
+
+
+1.9
+log
+@Added CycApiException, and replaced throws to IOException with it.
+@
+text
+@a2 1
+import java.util.*;
+d4 6
+a9 3
+import org.opencyc.cycobject.*;
+import org.opencyc.inferencesupport.*;
+import org.opencyc.api.*;
+d17 1
+a17 1
+ * @@version $Id: NodeConsistencyAchiever.java,v 1.8 2001/09/06 21:43:25 stephenreed Exp $
+@
+
+
+1.8
+log
+@Completed renaming of Rule to ConstraintRule class
+@
+text
+@d7 1
+d15 1
+a15 1
+ * @@version $Id: NodeConsistencyAchiever.java,v 1.7 2001/09/06 14:49:47 stephenreed Exp $
+d99 1
+a99 1
+    public void applyUnaryRulesAndPropagate() throws IOException {
+@
+
+
+1.7
+log
+@Renamed Rule to ConstraintRule, moved QueryLiteral class to inferencesupport.
+@
+text
+@a2 1
+import org.opencyc.cycobject.*;
+d5 2
+d14 1
+a14 1
+ * @@version $Id: NodeConsistencyAchiever.java,v 1.6 2001/09/04 14:30:23 stephenreed Exp $
+@
+
+
+1.6
+log
+@Renamed HighCardinalityDomains to VariableDomainPopulator, in preparation
+for a reworking of the variable domain population technique.  The previous
+idea of augmenting the constraint problem with the constraint problem argument
+constraints is not efficient in a few cases where most of the rules involve
+high cardinality situations.
+
+The new technique will determine the best rule to instantiate domains for each
+variable, and whether to perform the instantiation immediately, or to postpone it
+for the forward checking search.  A new api call was added to get the instantiation
+counts from the OpenCyc indexing mechanism.
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: NodeConsistencyAchiever.java,v 1.5 2001/08/20 21:26:24 stephenreed Exp $
+d101 1
+a101 1
+        Rule instantiatedRule;
+d105 1
+a105 1
+            Rule rule = (Rule) constraintProblem.constraintRules.get(i);
+d111 1
+a111 1
+            Rule rule = (Rule) unaryConstraintRules.get(i);
+d172 1
+a172 1
+            Rule rule = (Rule) constraintProblem.constraintRules.get(i);
+d178 1
+a178 1
+            Rule rule = (Rule) allDifferentRules.get(i);
+@
+
+
+1.5
+log
+@Unit tests for argument type constraint augmentation now work.
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: NodeConsistencyAchiever.java,v 1.4 2001/08/15 23:49:56 stephenreed Exp $
+d47 1
+a47 1
+    protected int verbosity = 9;
+@
+
+
+1.4
+log
+@Cached CycAccess instances by thread and introduced European Cathedrals
+constraint problem that evaluates its rules in OpenCyc.
+@
+text
+@d13 1
+a13 1
+ * @@version $Id: NodeConsistencyAchiever.java,v 1.3 2001/08/13 16:14:44 stephenreed Exp $
+d134 14
+a147 4
+            if (verbosity > 5)
+                System.out.println("domain of " + affectedVariable +
+                                   " restricted from " + inputDomainValues +
+                                   " to " + outputDomainValues);
+@
+
+
+1.3
+log
+@Revised copyright notice to Cycorp Inc.
+@
+text
+@d5 1
+d13 1
+a13 1
+ * @@version $Id: NodeConsistencyAchiever.java,v 1.1 2001/07/30 22:59:00 stephenreed Exp $
+d97 1
+a97 1
+    public void applyUnaryRulesAndPropagate() {
+d151 1
+a151 1
+    protected void achieveAllDifferentConsistencyWrtSingletons() {
+@
+
+
+1.2
+log
+@Completed coding and unit test of standalone constraint solver.
+Calls to OpenCyc are yet to be included.
+Unit test demonstrates solution of the Zebra puzzle in CycL form.
+@
+text
+@d15 1
+a15 1
+ * <p>Copyright 2001 OpenCyc.org, license is open source GNU LGPL.
+d88 1
+a88 1
+    protected void setVerbosity(int verbosity) {
+d96 1
+a96 1
+    protected void applyUnaryRulesAndPropagate() {
+@
+
+
+1.1
+log
+@Refactored ConstraintProblem class and added several other supporting classes
+@
+text
+@d12 1
+a12 1
+ * @@version $Id$
+d139 1
+a139 1
+        if (verbosity > 0) {
+a189 4
+
+
+
+
+@
+
