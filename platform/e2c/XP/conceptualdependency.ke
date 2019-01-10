@@ -142,7 +142,9 @@ Default Mt: ConceptualDependencyVocabularyMt.
 
 Constant: CD-ACT.
 isa: Collection GoverningConceptualCategory.
-coExtensional: Action.
+;;dmiles coExtensional: Action.
+genls: Action.
+;; F: (siblingDisjointWithExceptios Situation SomethingExisting) 
 
 comment: "Real world actions; corresponds syntactically to verbs, verbal nouns,
 and most abstract nouns. #$coExtensional with #$Action.".
@@ -165,7 +167,7 @@ Default Mt: ConceptualDependencyVocabularyMt.
 
 Constant: CD-LOC.
 isa: Collection GoverningConceptualCategory.
-genls: SomethingExisting.
+;;dmiles  genls: SomethingExisting.
 coExtensional: SpatialThing-Localized.
 
 comment: "A location of a conceptualization.".
@@ -189,7 +191,7 @@ Default Mt: ConceptualDependencyVocabularyMt.
 
 Constant: CD-PA.
 isa: Collection AssistingConceptualCategory.
-genls: DisjointCollectionType.
+;;dmiles genls: FirstOrderCollection.
 
 comment: "Attribute of an object or agent #$CD-PP. Corresponds (in English) to
 adjectives and some abstract nouns. ".
@@ -208,7 +210,7 @@ Default Mt: ConceptualDependencyVocabularyMt.
 
 Constant: CD-AA.
 isa: Collection AssistingConceptualCategory.
-genls: DisjointCollectionType.
+;;dmiles genls: FirstOrderCollection.
 
 comment: "Attribute of an action #$CD-ACT. Corresponds (in English) to adverbs
 and indirectly objective abstract nouns.".
@@ -464,12 +466,14 @@ comment: "The collection of causal types defined by conceptual dependency theory
 type is a predicate that causally relates instances of #$CD-ACTs and #$CD-STATES. See also
 #$ScriptCausalType, that causally relates specializations of #$CD-ACTs and #$CD-STATES.".
 
+
 ;;----------------------------------
 
 Default Mt: ConceptualDependencyVocabularyMt.
 
 Constant: cd-r1.
 isa: AsymmetricBinaryPredicate CausalType.
+arity: 2.
 genlPreds: postSituation.
 arg1Isa: CD-ACT.
 arg2Isa: CD-STATE.
@@ -485,6 +489,7 @@ Default Mt: ConceptualDependencyVocabularyMt.
 
 Constant: cd-E.
 isa: AsymmetricBinaryPredicate CausalType.
+arity: 2.
 genlPreds: different startsAfterStartingOf.
 arg1Isa: CD-STATE.
 arg2Isa: CD-ACT.
@@ -503,6 +508,7 @@ Default Mt: ConceptualDependencyVocabularyMt.
 
 Constant: cd-I.
 isa: AsymmetricBinaryPredicate CausalType.
+arity: 2.
 genlPreds: different startsAfterStartingOf.
 arg1Isa: Situation. ;; was Situation-Temporal.
 arg2Isa: CD-STATE MentalSituation.
@@ -516,6 +522,7 @@ Default Mt: ConceptualDependencyVocabularyMt.
 ;; to bad... cd-r/CD-R already defined and this should be called cd-R..
 Constant: cd-R2.
 isa: AsymmetricBinaryPredicate CausalType.
+arity: 2.
 genlPreds: different startsAfterStartingOf.
 arg1Isa: CD-ACT MentalSituation.
 arg2Isa: CD-ACT PhysicalEvent.
@@ -531,6 +538,7 @@ Default Mt: ConceptualDependencyVocabularyMt.
 
 Constant: cd-dE.
 isa: AsymmetricBinaryPredicate CausalType.
+arity: 2.
 genlPreds: different startsAfterStartingOf.
 arg1Isa: CD-STATE.
 arg2Isa: CD-ACT.
@@ -543,6 +551,7 @@ causally relates instances of states and actions.".
 Default Mt: ConceptualDependencyVocabularyMt.
 
 Constant: cd-rE.
+arity: 3.
 isa: TernaryPredicate CausalType.
 arg1Isa: CD-ACT.
 arg2Isa: CD-STATE.
@@ -569,6 +578,7 @@ Direction: forward.
 Default Mt: ConceptualDependencyVocabularyMt.
 
 Constant: cd-IR.
+arity: 3.
 isa: TernaryPredicate CausalType.
 arg1Isa: Situation.  ;; was Situation-Temporal.
 arg2Isa: CD-STATE MentalSituation.
@@ -645,7 +655,8 @@ F:
     (objectOfPossessionTransfer ?ATRANS ?ORANGE)
 
     (cd-rE ?ATRANS ?BILLHASORANGE ?INGEST)
-    (holdsSometimeDuring ?BILLHASORANGE (owns CD-Bill ?ORANGE))
+    (holdsSometimeDuring ?BILLHASORANGE 
+                 (owns CD-Bill ?ORANGE))
     (performedBy ?INGEST CD-Bill)
 
     (cd-r1 ?INGEST ?BILLBETTER)
@@ -653,7 +664,9 @@ F:
   
 )    
 ))))).
-;; for health pos change make new DisjointCollectionType Health, and a healthattributedenoting
+
+
+;; for health pos change make new attributevalue Health, and a healthattributedenoting
 ;; function that takes integer as argument
 ;; then calculate new healthvalue in BILLBETTER situation from old, and
 ;; assert (holdsIn BILLBETTER (hasAttributes CD-Bill (HealthValueFn ?NEWVAL)))
@@ -688,3 +701,6 @@ F:
 ;; (holdsIn ?CD-HEALTHNEW (hasHealthValue ?PP (HealthFn ?NEWVAL)))
 ;; (equals ?NEWVAL ?OLDVAL+2)
 ;; )))))
+
+
+

@@ -49,7 +49,7 @@ comment: "#$SPGUTestDataMt contains some tests.".
 ;;; present in 0.7 KB.
 ;;;
 ;;; Schank term     OpenCyc term
-;;; a Story         an instance of #$Event
+;;; a Event         an instance of #$Event
 ;;; a Script        an instance of ScriptType (not disjoint scripttype)
 ;;;                 and NOT!!! genls #$Event
 ;;;
@@ -59,25 +59,26 @@ comment: "#$SPGUTestDataMt contains some tests.".
 ;;; ----------------------------------------------------------------
 
 ;;;----------------------------------
-;;; Story is coExtensional with Event;
-;;; Story is the collection of all events.
+;;; Event is coExtensional with Event;
+;;; Event is the collection of all events.
 ;;;----------------------------------
 
 Default Mt: SPGUVocabularyMt.
 
-Constant: Story.
-isa: TemporalStuffType.
-coExtensional: Event.
+;;Constant: Event.
+;; dmiles isa: TemporalStuffType.
+;;isa: Collection.
+;;coExtensional: Event.
 
 comment: "The collection of all stories. Since a story is the same as an event,
-#$Story is coExtensional with #$Event.".
+StoryEvent is coExtensional with #$Event.".
 
 ;;;----------------------------------
 ;;; A script is a prototype kind of event.
 ;;;----------------------------------
 Default Mt: SPGUVocabularyMt.
 
-Constant: Script.
+Constant: Script. 
 isa: Collection.
 genls: IntangibleIndividual.
 comment: "The collection of all scripts. A #$Script must not be confused with a
@@ -112,6 +113,20 @@ genls: Script.
 comment: "The collection of all atomic scripts. An atomic script does not have subscripts.
 An atomic scene combines a #$CD-ACT to the roles that are supposed to act in the scene.".
 
+Constant: CD-STATE.
+isa: Collection.
+coExtensional: StaticSituation.
+
+comment: "States (yes, this is a bad comment, but I only saw STATE
+mentioned a lot but nowhere defined. So I just assume coExtensional with 
+#$StaticSituation and move on :-)".
+
+Default Mt: SPGUVocabularyMt.
+Constant: storyReferences.
+isa: BinaryPredicate.
+arity: 2.
+;;;genlPreds: isa.
+
 Constant: StateScript.
 In Mt: SPGUVocabularyMt.
 isa: Collection.
@@ -143,6 +158,7 @@ Constant: subScripts.
 In Mt: SPGUVocabularyMt.
 isa: TransitiveBinaryPredicate AntiSymmetricBinaryPredicate NonPhysicalPartPredicate ReflexiveBinaryPredicate.
 ;;genlPreds: intangibleParts.
+arity: 2.
 arg1Isa: Script.
 arg2Isa: Script.
 comment: "(#$subSCripts SCRIPT SUBSCRIPT) means that SUBSCRIPT is part of SCRIPT.".
@@ -150,6 +166,7 @@ comment: "(#$subSCripts SCRIPT SUBSCRIPT) means that SUBSCRIPT is part of SCRIPT
 Constant: scriptACT.
 In Mt: SPGUVocabularyMt.
 isa: BinaryPredicate.
+arity: 2.
 arg1Isa: AtomicActionScript.
 arg2Isa: Collection.
 arg2Genl: CD-ACT.
@@ -160,6 +177,7 @@ of #$CD-ACT ACTCOL is a part of the template layed out by script.".
 Constant: scriptSTATE.
 In Mt: SPGUVocabularyMt.
 isa: BinaryPredicate.
+arity: 2.
 arg1Isa: StateScript.
 arg2Isa: Collection.
 arg2Genl: CD-STATE.
@@ -171,12 +189,14 @@ In Mt: SPGUVocabularyMt.
 isa: BinaryPredicate.
 arg1Isa: Script.
 arg2Isa: BinaryRolePredicate.
+arity: 2.
 comment: "(#$rolesForScript SCRIPT ROLE) means that for SCRIPT there
 might be an actor that plays ROLE.".
 
 Constant: requiredRolesForScript.
 In Mt: SPGUVocabularyMt.
 isa: BinaryPredicate.
+arity: 2.
 arg1Isa: Script.
 arg2Isa: BinaryRolePredicate.
 genlPreds: rolesForScript.
@@ -188,6 +208,7 @@ used.".
 Constant: oldScriptRoleIsa.
 In Mt: SPGUVocabularyMt.
 isa: TernaryPredicate.
+arity: 3.
 arg1Isa: Script.
 arg2Isa: BinaryRolePredicate.
 arg3Isa: Collection.
@@ -258,6 +279,20 @@ F:
 ;;;----------------------------------
 ;;; Causality, types defined in conceptualdependency but now on scripts.
 ;;;----------------------------------
+Constant: CausalType.
+isa: PredicateType.  ;; was PredicateCategory.
+genls: Predicate.
+; I'd like AsymmetricBinaryPredicate as genls, but there is 'rE' which is a ternary predicate.
+
+Constant: ScriptCausalType.
+isa: PredicateType.  ;; was PredicateCategory.
+genls: Predicate.
+genls: CausalType.
+
+Constant: cd-r1.
+isa: AsymmetricBinaryPredicate CausalType.
+genlPreds: postSituation.
+arity: 2.
 
 Constant: cd-r1-ScriptScript.
 In Mt: SPGUVocabularyMt.
@@ -265,6 +300,7 @@ isa: AsymmetricBinaryPredicate ScriptCausalType.
 ;;genlPreds: postSituation.
 arg1Isa: AtomicActionScript.
 arg2Isa: StateScript.
+arity: 2.
 comment: "(#$cd-r1-ScriptScript ACTSCRIPT STATESCRIPT) means that a script with an action results
 in a script with a state. A predicate that
 causally relates types (specializations of) actions and states. See also the variant on objects #$cd-r1.".
@@ -287,6 +323,7 @@ isa: AsymmetricBinaryPredicate ScriptCausalType.
 ;;genlPreds: different startsAfterStartingOf.
 arg1Isa: StateScript.
 arg2Isa: AtomicActionScript.
+arity: 2.
 comment: "(#$cd-E-ScriptScript STATESCRIPT ACTSCRIPT) means that STATESCRIPT enables ACTSCRIPT. A predicate that
 causally relates types of states and actions. Put different, state STATE is a precondition for ACT.".
 ; cd-E-ScriptScript is transitive in it's second argument with respect to subScripts.
@@ -299,6 +336,7 @@ isa: AsymmetricBinaryPredicate ScriptCausalType.
 ;;genlPreds: different startsAfterStartingOf.
 arg1Isa: Script.
 arg2Isa: StateScript.
+arity: 2.
 comment: "(#$cd-I-ScriptScript STATESCRIPT/ACTIONSCRIPT MSTATESCRIPT) means that SCRIPT initiates a mental
 state MSTATESCRIPT.".
 
@@ -309,6 +347,7 @@ isa: AsymmetricBinaryPredicate ScriptCausalType.
 ;;;genlPreds: different startsAfterStartingOf.
 arg1Isa: AtomicActionScript.
 arg2Isa: AtomicActionScript.
+arity: 2.
 comment: "(#$cd-R2-ScriptScript MENTALACTSCRIPT PHYSICALACTSCRIPT) means that a type of MENTALACT
 is the reason for a type of PHYSICALACT. (Mental acts include #$CD-MBuild and #$CD-MTrans, physical acts include
 #$CD-Propel, #$CD-PTrans, #$CD-Propel and #$CD-Move".
@@ -319,6 +358,7 @@ isa: AsymmetricBinaryPredicate ScriptCausalType.
 ;;genlPreds: different startsAfterStartingOf.
 arg1Isa: StateScript.
 arg2Isa: AtomicActionScript.
+arity: 2.
 comment: "(#$cd-dE-ScriptScript STATESCRIPT ACTSCRIPT) means that STATESCRIPT disables ACTSCRIPT.
 A predicate that causally relates types of states and actions.".
 
@@ -328,6 +368,7 @@ isa: TernaryPredicate ScriptCausalType.
 arg1Isa: AtomicActionScript.
 arg2Isa: StateScript.
 arg3Isa: AtomicActionScript.
+arity: 3.
 comment: "(#$cd-rE-ScriptScript ACTSCRIPT STATESCRIPT ACTSCRIPT) 
   a short way to say cd-r1-ScriptScript
 and cd-R2-ScriptScript.".
@@ -348,6 +389,7 @@ isa: TernaryPredicate ScriptCausalType.
 arg1Isa: AtomicActionScript.
 arg2Isa: StateScript.
 arg3Isa: AtomicActionScript.
+arity: 3.
 
 comment: "(#$cd-IR-ScriptScript ACTSCRIPT MSTATESCRIPT ACTSCRIPT) a type of ACT or STATE initiates a kind of
 thought MSTATE which is the reason to type of ACT. A short way for cd-R2-ScriptScript and cd-R2-ScriptScript.".
@@ -368,8 +410,9 @@ F: (implies
 Default Mt: SPGUVocabularyMt.
 Constant: storyReferences.
 isa: BinaryPredicate.
+arity: 2.
 ;;;genlPreds: isa.
-arg1Isa: Story.
+arg1Isa: Event.
 arg2Isa: Script.
 comment: "(#$storyReferences STORY SCRIPT) means that STORY makes a (possibly
 partial) reference to SCRIPT.".
@@ -377,6 +420,7 @@ partial) reference to SCRIPT.".
 Default Mt: SPGUVocabularyMt.
 Constant: roleFillerEquals.
 isa: QuaternaryPredicate.
+arity: 4.
 arg1Isa: Script.
 arg2Isa: BinaryRolePredicate.
 arg3Isa: Script.
@@ -599,7 +643,7 @@ F: (implies
 ;;; ----------------------------------------------------------------
 ;;; Goals and Plans
 ;;;
-;;; Goal is a specialisation of ELSentence-Assertible.
+;;; Goal is a specialisation of CycLSentence-Assertible.
 ;;; A Plan is specialisation of SupposedToBeMicrotheory.
 ;;;
 ;;; See:
@@ -609,7 +653,7 @@ F: (implies
 Default Mt: SPGUVocabularyMt.
 Constant: Goal.
 isa: Collection CycLExpressionType AtemporalNecessarilyEssentialCollectionType. 
-genls: ELSentence-Assertible.
+genls: CycLSentence-Assertible. ;; was ELSentence-Assertible
 ;; or just ELSentence?
 
 comment: "The collection of all goals.".

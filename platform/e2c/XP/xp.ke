@@ -1,0 +1,1780 @@
+;;; ----------------------------------------------------------------
+;;; OpenCyc implementation of Conceptual Depencency theory (CD)
+;;; date created: feb 17, 2003, Yeb Havinga
+;;; last change: mar 18, 2003
+;;;
+;;; Purpose: link the general definitions of CD to the right opencyc predicate.
+;;; so when a more specific fact is added, the general CD variant can be asked.
+;;;
+;;; Though CD has its disadvantages, representing it's vocabulary against
+;;; OpenCyc's vocabulary may ease incorporation of Schank's other theories,
+;;; first in Schank's own terms, maybe later in a native Cyc representation.
+;;;
+;;; Created from info:
+;;; From Script, Plans, Goals and Understanding (Schank & Abelson) section 1.4
+;;; http://www.cs.berkeley.edu/~wilensky/c288/lectures/ConceptualDependency6topage.pdf
+;;; http://egeria.cs.cf.ac.uk/Dave/AI2/subsection3_9_1.html
+;;; http://acl.ldc.upenn.edu/C/C69/C69-0201.pdf
+;;; http://www.ee.cooper.edu/courses/course_pages/past_courses/EE459/SCHANK/
+;;; http://www.cc.gatech.edu/computing/classes/cs3361_96_spring/Fall95/Notes/cd.html
+;;; ----------------------------------------------------------------
+
+;;***********************************
+
+Default Mt: UniversalVocabularyMt.
+
+Constant: ConceptualDependencyVocabularyMt.
+isa: VocabularyMicrotheory.
+genlMt: BaseKB.
+
+comment: "#$ConceptualDependencyVocabularyMt contains the vocabulary for Schanks
+Conceptual Depencency Theory. Implemented to allow representation of Scripts in
+general terms (see #$PrimitiveAct and #$ConceptualCategory) of causal chains of
+events.".
+
+;;***********************************
+
+Default Mt: UniversalVocabularyMt.
+
+Constant: ConceptualDependencyMt.
+isa: TheoryMicrotheory.
+genlMt-Vocabulary: ConceptualDependencyVocabularyMt.
+genlMt: VertebratePhysiologyMt HumanActivitiesMt AnimalMovementMt.
+
+comment: "#$ConceptualDependencyMt contains general asserions about the
+Conceptual Depencency Theory. The meaning propositions underlying language are
+called conceptualizations. A conceptualization can be active (form is Actor
+Action Object Direction (Instrument)) or stative (form is Object (is in State
+(with Value)). The use of #$PrimitiveActs is essential for representing meanings
+especially if sentences that have the same meaning must be represented in only
+one way. Example; if you #$CD-MTrans something to your #$LTM, then it is present
+there (you know it). This is true whether the verb of #$CD-MTrans ing was 'see',
+'hear' or whatever.".
+
+;;; Note the comment of about 'you know it' -> I read it as
+;;; (implies
+;;;   (and
+;;;     (isa ?EVENT MTrans)
+;;;     (informationUsed ?EVENT ?AIT)    (or infoTransferred?)
+;;;     (informationDestination ?EVENT ?LTM)
+;;;     (memoryOfAgent ?LTM ?AGENT))
+;;;     (containsInfoPropositional ?AIT ?PROP)
+;;;   (knows ?AGENT ?PROP)
+
+;;***********************************
+
+Default Mt: UniversalVocabularyMt.
+
+Constant: CDTestDataMt.
+isa: DataMicrotheory.
+genlMt-Vocabulary: ConceptualDependencyVocabularyMt.
+genlMt: ConceptualDependencyMt.
+
+comment: "#$CDTestDataMt contains some tests.".
+
+;;; ----------------------------------------------------------------
+;;; Conceptual Categories
+;;; The SPGU book doesn't introduce them (and the library doesn't have 
+;;; "Conceptual Dependency: Theory of Natural Language Understanding",
+;;; so the comments are a bit short.
+;;; ----------------------------------------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: ConceptualCategory.
+isa: CollectionType.
+genls: Collection.
+
+comment: "The collection of conceptual categories. The conceptual level works
+with a system of rules that operate on conceptual categories. The categories are
+devided into #$GoverningConceptualCategory and #$AssistingConceptualCategory.".
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: GoverningConceptualCategory.
+isa: CollectionType.
+genls: ConceptualCategory.
+
+comment: "The collection of governing conceptual categories.".
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: AssistingConceptualCategory.
+isa: CollectionType.
+genls: ConceptualCategory.
+
+comment: "The collection of assisting conceptual categories.".
+
+;;----------------------------------
+
+F: (partitionedInto ConceptualCategory
+   (ThePartition GoverningConceptualCategory AssistingConceptualCategory)).
+
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-PP.
+isa: Collection GoverningConceptualCategory.
+genls: Individual.
+
+comment: "Picture producer. Real world objects; an actor or object; corresponds
+syntactically to concrete nominal nouns or noun forms. 'We require that a PP be
+a physical object. Since nouns are often physical
+objects, it might seem that a PP is basically a noun. Certainly many     
+nouns at the syntactic level map into PPs at the conceptual level, but no
+all. No abstract noun is a PP because no abstract noun denotes a physical
+object. Also certain nouns denote much more than just a physical object.
+Thus, "doctor" is mapped conceptually into a PP (human) plus other    
+information describing the particular types of human that a doctor is.'
+Thus, #$coExtensional with #$PartiallyTangible.".
+
+F: (coExtensional PartiallyTangible CD-PP).
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-ACT.
+isa: Collection GoverningConceptualCategory.
+;;dmiles coExtensional: Action.
+genls: Action.
+;; F: (siblingDisjointWithExceptios Situation SomethingExisting) 
+
+comment: "Real world actions; corresponds syntactically to verbs, verbal nouns,
+and most abstract nouns. #$coExtensional with #$Action.".
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-STATE.
+isa: Collection.
+coExtensional: StaticSituation.
+
+comment: "States (yes, this is a bad comment, but I only saw STATE
+mentioned a lot but nowhere defined. So I just assume coExtensional with 
+#$StaticSituation and move on :-)".
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-LOC.
+isa: Collection GoverningConceptualCategory.
+;;dmiles  genls: SomethingExisting.
+coExtensional: SpatialThing-Localized.
+
+comment: "A location of a conceptualization.".
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-T.
+isa: Collection GoverningConceptualCategory.
+genls: TimeInterval.
+
+comment: "A time of a conceptualization; often has variant forms consisting of
+parts of a conceptualization.".
+
+F: (genls TimeInterval CD-T).
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-PA.
+isa: Collection AssistingConceptualCategory.
+;;dmiles genls: FirstOrderCollection.
+
+comment: "Attribute of an object or agent #$CD-PP. Corresponds (in English) to
+adjectives and some abstract nouns. ".
+
+F: (genls PersonTypeByPersonalBehavioralAttribute CD-PA) ;; opencyc HumanBehavioralAttribute
+ (genls  SpatialThingTypeByGenericLocation CD-PA) ;; opencyc LocationStateAttribute 
+ (genls ObjectTypeByColorTinge CD-PA) ;;ColorTingeAttribute
+ (genls HumanTypeBySkinColor CD-PA) ;; HumanSkinColor
+ (genls PhysicalQualityOfTangibleOnly CD-PA) ;; PhysicalAttributeOfTangibleOnly
+ (genls PersonTypeByPersonalityTrait CD-PA) ;; TemperamentAttribute
+ (genls ObjectTypeBySurfaceFeature CD-PA). ;; SurfaceAttribute
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-AA.
+isa: Collection AssistingConceptualCategory.
+;;dmiles genls: FirstOrderCollection.
+
+comment: "Attribute of an action #$CD-ACT. Corresponds (in English) to adverbs
+and indirectly objective abstract nouns.".
+
+F: (genls CommissiveIllocutionaryForce CD-AA)
+(genls ConstativeIllocutionaryForce CD-AA)
+(genls DirectiveIllocutionaryForce CD-AA)
+.
+
+;;; ----------------------------------------------------------------
+;;; Primitive acts
+;;; ----------------------------------------------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: PrimitiveAct.
+isa: CollectionType.
+genls: Collection.
+typeGenls: CD-ACT.
+
+comment: "The collection of the eleven primitive acts defined by CD.
+Each instance of this collection is a subcollection (specialisation) of
+#$CD-ACT. In contrast to the subcollections of #$CD-STATE, the number
+of primitive acts is strictly limited.
+A query to find relevant actorslots for a specific kind of primitive act is
+(and 
+   (genls ??EVENT MTrans) 
+   (genlPreds ??SPRED ?GENPRED) 
+   (argIsa ??SPRED ??N ??EVENT))".
+;;; there are not more than the 11 primitive acts.
+F: (completelyEnumerableCollection PrimitiveAct).
+;; PrimitiveAct is one way of deviding CD-ACT into subcollections.
+F: (facets-Generic CD-ACT PrimitiveAct).
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-ATrans.
+isa: Collection PrimitiveAct.
+genls: Event.
+
+comment: "The transfer of an abstract relationship such as possession, ownership
+or control. Thus, one sense of 'give' is: #$CD-ATrans something to someone else; a
+sense of 'take' is: CD-ATrans something to oneself.".
+
+;; Probably there are more specs.
+
+F: (genls ChangeInUserRights CD-ATrans)
+(genls MonetaryExchangeOfUserRights CD-ATrans)
+(genls ExchangeOfUserRights CD-ATrans)
+(genls ExchangeOfUserRights CD-ATrans)
+(genls GivingSomething CD-ATrans)
+(genls TemporaryChangeOfUserRights CD-ATrans)
+(genls TransferringPossession CD-ATrans).
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-PTrans.
+isa: Collection PrimitiveAct.
+genls: PhysicalEvent.
+
+comment: "The transfer of the physical location of an object. Thus, 'go' is
+#$CD-PTrans oneself to a place; 'put' is #$CD-PTrans of an object to a place.".
+
+F: (coExtensional Translocation CD-PTrans). 
+;;;(genls CausingAnotherObjectsTranslationalMotion CD-PTrans).
+F: (genls CD-PTrans MovementEvent).
+
+
+;; add rules to imply isa ?Ptrans MovementEvent or Causing..Motion depending on actors.
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-Propel.
+isa: Collection PrimitiveAct.
+genls: PhysicalEvent CausingAnotherObjectsTranslationalMotion.
+
+comment: "The application of a physical force to an object. #$CD-Propel is used
+whenever a movement (#$CD-PTrans) took place. In English, 'push', 'pull', 'throw',
+'kick', have #$CD-Propel as part of them. 'John pushed the table to the wall' is a
+#$CD-Propel that causes a #$CD-PTrans. Often words that do not necessarily mean
+#$CD-Propel can probably infer #$CD-Propel. Thus 'break' means #$Do something that
+causes a change in physical state of a specific sort (where #$Do indicates an
+unknown #$CD-ACT).".
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-Move.
+isa: Collection PrimitiveAct.
+genls: BodyMovementEvent.
+
+comment: "The movement of a body part of an animal by that animal. #$CD-Move is
+nearly always the #$CD-ACT in an instrumental conceptualization for other #$CD-ACTs. That
+is, in order to throw, it it necessary to #$CD-Move one's arm. Likewise #$CD-Move foot
+is the instrument of 'kick' and #$CD-Move hand is often the instrument of the verb
+'hand'.".
+
+F: (genls BodyMovementEvent CD-Move).
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-Grasp.
+isa: Collection PrimitiveAct.
+genls: Event.
+
+comment: "The grasping og an object by an actor. The verbs 'hold', 'grab', 'let
+go' and 'throw' involve #$CD-Grasp or the ending of a #$CD-Grasp.".
+
+; the only (be it a bit specific perhaps) thing i could find was
+; graspingsomethingwith a tool.
+F: (genls GraspingSomethingWithATool CD-Grasp).
+
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-Ingest.
+isa: Collection PrimitiveAct.
+genls: Event.
+
+comment: "The taking in of an object by an animal to the inside of that animal.
+Most commonly semantics for the objects of #$CD-Ingest (that is, what is usually
+#$CD-Ingest ed) are food, liquid and gas. This 'eat', 'drink', 'smoke', 'breathe'
+are common examples of #$CD-Ingest.".
+
+F: (genls BiologicalIntakeEvent CD-Ingest).
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-Expel.
+isa: Collection PrimitiveAct.
+genls: Event EmittingAnObject.
+
+comment: "The expulsion of an object from the body of an animal into the
+physical world. Whatever #$CD-Expel ed is very likely to have been previously
+#$Ingest ed. Words for excretion and secretion are described by #$CD-Expel, among
+them 'sweat', 'spit and 'cry'.".
+
+F: (genls Exhaling CD-Expel)
+ (genls SecretionEvent CD-Expel).
+
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-MTrans.
+isa: Collection PrimitiveAct.
+genls: Event.
+
+comment: "The transfer of mental information between animals or within an
+animal. We partition memory into two pieces: The #$CP (conscious processor where
+something is thought of), and the #$LTM (long term memory where things are
+stored.) The various sense organs can also serve as the originators of an
+#$CD-MTrans. This, 'tell' is #$CD-MTrans between people, 'see' is #$CD-MTrans from eyes
+to #$CP, 'remember' is #$CD-MTrans from #$LTM to #$CP, 'forget' is the inability to
+do that, 'learn' is the #$CD-MTrans ing of new information to #$LTM.".
+
+F: (genls Communicating CD-MTrans)
+(genls InformationGathering CD-MTrans).
+
+; see also the predicate #$resultantMentalObjects
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-MBuild.
+isa: Collection PrimitiveAct.
+genls: Event.
+
+comment: "The construction by an animal of new information from old information.
+Thus, 'decide', 'conclude', 'imagine', 'consider', are common examples of
+#$MBuild.".
+
+F: (genls SelectingSomething CD-MBuild).
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CD-Speak.
+isa: Collection PrimitiveAct.
+genls: Event.
+
+comment: "The actions of producing sounds. Many objects can #$CD-Speak, but humans
+usually are #$CD-Speak ing as an instrument of #$CD-MTrans ing. The words 'say', 'play
+music', 'purr', 'scream' involve #$CD-Speak.".
+
+F: (genls Talking CD-Speak).
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+   
+Constant: CD-Attend.
+isa: Collection PrimitiveAct.
+coExtensional: Perceiving-Voluntary.
+
+comment: "The action of attending or focusing a sense organ towards a stimulus.
+#$CD-Attend ear is 'listen', #$CD-Attend eye is 'see' and so on. #$CD-Attend is nearly
+always referred to in English as the instrument of #$CD-MTrans. Thus, in Conceptual
+Dependency, 'see' is treated as #$CD-MTrans to #$CP from eye by instrument of
+#$CD-Attend eye to object".
+
+
+;;; ----------------------------------------------------------------
+;;; Conceptual Cases
+;;; We define the conceptual cases of an action to
+;;; be the set of such additional modifications of an action. There are four    
+;;; connceptual cases: OBJECTIVE, DIRECTIVE, RECIPIENT and INSTRUMENTAL.
+;;; Each ACT in Conceptual Dependency requires a                  
+;;; speecific number of cases (either two or three).                               
+;;; ----------------------------------------------------------------
+
+;; (hmm forget this part..)
+;; see #$instumentalRole, #$recipientOf..., #$purposeInEvent,
+
+;;; ----------------------------------------------------------------
+;;; Causation Types
+;;;
+;;; New OpenCYC predicates inspired by not existing constants mentioned in
+;;; current OpenCyc 0.7KB comments, and causal relations mentioned in the
+;;; following documents:
+;;; - HPKB material and sources that are relevant for the RKF year 2 challenge problem
+;;;   http://www.isi.edu/expect/projects/rkf/HPKB-material/
+;;; - The representation of actions in KM and Cyc
+;;;   at http://www-formal.stanford.edu/aarati/techreports/action-reps-frg-techreport.ps
+;;; - KE File: KE for the representation of the Vaccinia Virus Life Cycle (done in MELD) 
+;;;   at http://www.iet.com/Projects/RKF/KEForVirusLifeCycleRepresentation.txt
+;;; ----------------------------------------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: CausalType.
+isa: PredicateType.  ;; was PredicateCategory.
+genls: Predicate.
+; I'd like AsymmetricBinaryPredicate as genls, but there is 'rE' which is a ternary predicate.
+
+comment: "The collection of causal types defined by conceptual dependency theory. Each causal
+type is a predicate that causally relates instances of #$CD-ACTs and #$CD-STATES. See also
+#$ScriptCausalType, that causally relates specializations of #$CD-ACTs and #$CD-STATES.".
+
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: cd-r1.
+isa: AsymmetricBinaryPredicate CausalType.
+arity: 2.
+genlPreds: postSituation.
+arg1Isa: CD-ACT.
+arg2Isa: CD-STATE.
+
+comment: "(#$cd-r1 ACT STATE) means that an ACT results in a STATE. A predicate that
+causally relates instances of actions and states.".
+;; hmm maybe also this..? but arg1 of postSituation is event, not action..
+;;; F: (genlPreds postSituation cd-r1).
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: cd-E.
+isa: AsymmetricBinaryPredicate CausalType.
+arity: 2.
+genlPreds: different startsAfterStartingOf.
+arg1Isa: CD-STATE.
+arg2Isa: CD-ACT.
+comment: "(#$cd-E STATE ACT) means that a STATE enables an ACT. A predicate that
+causally relates instances of states and actions. Put different, state STATE is 
+a precondition for ACT. #$preconditionFor-SitEvent does not exist. Also it is
+not genlPreds #$preSituation, because it is not said that STATE ends just
+before the start of ACT.".
+; if a state enables an event, it also enables all the events' subevents.
+F: (transitiveViaArg cd-E subEvents 2).
+
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: cd-I.
+isa: AsymmetricBinaryPredicate CausalType.
+arity: 2.
+genlPreds: different startsAfterStartingOf.
+arg1Isa: Situation. ;; was Situation-Temporal.
+arg2Isa: CD-STATE MentalSituation.
+
+comment: "(#$cd-I STATE/ACT MSTATE) means that a STATE or ACT initiates a mental
+state MSTATE.".
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+;; to bad... cd-r/CD-R already defined and this should be called cd-R..
+Constant: cd-R2.
+isa: AsymmetricBinaryPredicate CausalType.
+arity: 2.
+genlPreds: different startsAfterStartingOf.
+arg1Isa: CD-ACT MentalSituation.
+arg2Isa: CD-ACT PhysicalEvent.
+;; or ActionOnObject ?
+
+comment: "(#$cd-R2 MENTALACT PHYSICALACT) means that a MENTALACT is the reason for a
+PHYSICALACT. (Mental acts include #$CD-MBuild and #$CD-MTrans, physical acts include
+#$CD-Propel, #$CD-PTrans, #$CD-Propel and #$CD-Move".
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: cd-dE.
+isa: AsymmetricBinaryPredicate CausalType.
+arity: 2.
+genlPreds: different startsAfterStartingOf.
+arg1Isa: CD-STATE.
+arg2Isa: CD-ACT.
+
+comment: "(#$cd-dE STATE ACT) means that a STATE disables an ACT. A predicate that
+causally relates instances of states and actions.".
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: cd-rE.
+arity: 3.
+isa: TernaryPredicate CausalType.
+arg1Isa: CD-ACT.
+arg2Isa: CD-STATE.
+arg3Isa: CD-ACT.
+
+comment: "(#$cd-rE ACT STATE ACT) an ACT results in a STATE which enables an ACT.".
+
+Default Mt: ConceptualDependencyMt.
+;; rebuild into smaller parts
+Direction: forward.
+F: (implies
+     (cd-rE ?CAUSEACT ?RESULTSTATE ?ENABLEDACT)
+     (and
+       (cd-r1 ?CAUSEACT ?RESULTSTATE)
+       (cd-E ?RESULTSTATE ?ENABLEDACT))).
+Direction: forward.
+;; rebuild into causes-EventEvent? (if that would exist)
+;F: (implies
+;     (cd-rE ?CAUSEACT ?RESULTSTATE ?ENABLEDACT)
+;     (causes-EventEvent ?CAUSEACT ?ENABLEDACT)).
+
+;;----------------------------------
+
+Default Mt: ConceptualDependencyVocabularyMt.
+
+Constant: cd-IR.
+arity: 3.
+isa: TernaryPredicate CausalType.
+arg1Isa: Situation.  ;; was Situation-Temporal.
+arg2Isa: CD-STATE MentalSituation.
+arg3Isa: CD-ACT.
+
+comment: "(#$cd-IR ACT MSTATE ACT) an ACT or STATE initiates a thought MSTATE which
+is the reason to ACT.".
+
+Default Mt: ConceptualDependencyMt.
+;; rebuild into smaller parts
+Direction: forward.
+F: (implies
+     (cd-IR ?CAUSE ?IDEA ?ACTION)
+     (and
+       (cd-I ?CAUSE ?IDEA)
+       (cd-R2 ?IDEA ?ACTION))).
+
+;;; ----------------------------------------------------------------
+;;; Misc stuff
+;;; CD:  PP <==> ACT    "PPs can perform actions"    
+;;; Cyc: if             isa(PP,IntelligentAgent)
+;;;      then           (performedBy ACT PP)
+;;;      else           (actors ACT PP)
+;;; CD:  ACT <-- PP	"ACTs can have objects of PPs"
+;;; Cyc: most general:  (actors ACT PP)
+;;;      more specific: almost every spec of actors.
+;;;                     examples: fromLocation
+;;;                               toLocation
+;;;                               objectActedOn
+;;;                               objectRemoved, -Selected, -Moving, -Emitted, -TakenCareOf
+;;;                               observers
+;;; ----------------------------------------------------------------
+
+
+
+;;; ----------------------------------------------------------------
+;;; Test
+;;; John gave Bill an orange for his cold
+;;; ----------------------------------------------------------------
+
+Default Mt: CDTestDataMt.
+
+Constant: CD-John.
+isa: Person.
+
+Constant: CD-Bill.
+isa: Person.
+
+Constant: Orange.
+isa: Collection.
+genls: Fruit.
+comment: "Just a quick hack to represent the collection of all oranges.".
+
+; John ATRANS orange to Bill
+;      rE
+; Bill INGEST orange to INSIDE(Bill)
+;      r
+; Bill HEALTH(POS Change)
+
+F:
+(thereExists ?ATRANS
+(thereExists ?ORANGE
+(thereExists ?BILLHASORANGE
+(thereExists ?INGEST
+(thereExists ?BILLBETTER
+  (and
+    (isa ?ATRANS CD-ATrans)
+    (isa ?ORANGE Orange)
+    (isa ?BILLHASORANGE CD-STATE)
+    (isa ?INGEST CD-Ingest)
+    (isa ?BILLBETTER CD-STATE)
+
+    (performedBy ?ATRANS CD-John)
+    (objectOfPossessionTransfer ?ATRANS ?ORANGE)
+
+    (cd-rE ?ATRANS ?BILLHASORANGE ?INGEST)
+    (holdsSometimeDuring ?BILLHASORANGE 
+                 (owns CD-Bill ?ORANGE))
+    (performedBy ?INGEST CD-Bill)
+
+    (cd-r1 ?INGEST ?BILLBETTER)
+    (actors ?BILLBETTER CD-Bill)
+  
+)    
+))))).
+
+
+;; for health pos change make new attributevalue Health, and a healthattributedenoting
+;; function that takes integer as argument
+;; then calculate new healthvalue in BILLBETTER situation from old, and
+;; assert (holdsIn BILLBETTER (hasAttributes CD-Bill (HealthValueFn ?NEWVAL)))
+;; or something
+;;
+;; (genls CD-Health CD-STATE)
+;; (relationAllExists constituentInSituation CD-Health Animal)
+;; (implies
+;;   (and
+;;     (isa ?SIT CD-Health)
+;;     (constituentInSituation ?SIT ?PP))
+;;   (thereExists ?VALUE
+;;     (and
+;;       (isa ?VALUE HealthValue)
+;;       (holdsIn ?SIT (hasHealthValue ?PP ?VALUE)))))
+;;
+;; ACT <==> 
+;;      |  .---> HEALTH(a+2)
+;; PP <----|
+;;         .---< HEALTH(a)
+;;
+;; (thereExists ?CD-ACT
+;; (thereExists ?CD-PP
+;; (thereExists ?CD-HEALTHOLD
+;; (thereExists ?CD-HEALTHNEW
+;; (and
+;; (constituentInSituation ?CD-PP ?CD-HEALTHOLD)
+;; (constituentInSituation ?CD-PP ?CD-HEALTHNEW)
+;; (preSituation ?CD-ACT ?CD-HEALTHOLD)
+;; (postSituation ?CD-ACT ?CD-HEALTHNEW)
+;; (holdsIn ?CD-HEALTHOLD (hasHealthValue ?PP (HealthFn ?OLDVAL)))
+;; (holdsIn ?CD-HEALTHNEW (hasHealthValue ?PP (HealthFn ?NEWVAL)))
+;; (equals ?NEWVAL ?OLDVAL+2)
+;; )))))
+
+
+
+;;; ----------------------------------------------------------------
+;;; OpenCyc implementation of SPGU
+;;; date created: feb 20, 2003, Yeb Havinga
+;;; last changed: apr 09, 2003
+;;; 
+;;; built on: ConceptualDependencyMt
+;;;
+;;; Purpose: define vocabulary from Script, Plans, Goals and Understanding
+;;; in OpenCyc and link with existing definitions.
+;;; ----------------------------------------------------------------
+
+;;***********************************
+
+Default Mt: UniversalVocabularyMt.
+
+Constant: SPGUVocabularyMt.
+isa: VocabularyMicrotheory.
+genlMt: BaseKB ConceptualDependencyVocabularyMt.
+In Mt: BaseKB.
+comment: "#$SPGUVocabularyMt contains the vocabulary for the theory described in
+'Script, Plans, Goals and Understanding'.".
+
+Constant: SPGUMt.
+isa: TheoryMicrotheory.
+genlMt-Vocabulary: SPGUVocabularyMt.
+genlMt: ConceptualDependencyMt.
+In Mt: BaseKB.
+comment: "#$SPGUMt contains  general asserions about 'Script, Plans, Goals
+and Understanding'.".
+
+Constant: SPGUTestVocabularyMt.
+isa: VocabularyMicrotheory.
+genlMt: SPGUMt SPGUVocabularyMt.
+In Mt: SPGUMt.
+comment: "#$SPGUTestVocabularyMt contains the vocabulary for #$SPGUTestDataMt.".
+
+Constant: SPGUTestDataMt.
+isa: DataMicrotheory.
+genlMt-Vocabulary: SPGUTestVocabularyMt.
+genlMt: SPGUMt.
+In Mt: SPGUMt.
+comment: "#$SPGUTestDataMt contains some tests.".
+
+
+;;; ----------------------------------------------------------------
+;;; Stories and Scripts
+;;;
+;;; Almost everything to represent stories and scripts is already 
+;;; present in 0.7 KB.
+;;;
+;;; Schank term     OpenCyc term
+;;; a Event         an instance of #$Event
+;;; a Script        an instance of ScriptType (not disjoint scripttype)
+;;;                 and NOT!!! genls #$Event
+;;;
+;;; Schank:  a story X   references  a script Y           
+;;; OpenCyc: an event X  isa         collection Z (e.g. EatingEvent)
+;;;          and         references  a script Y
+;;; ----------------------------------------------------------------
+
+;;;----------------------------------
+;;; Event is coExtensional with Event;
+;;; Event is the collection of all events.
+;;;----------------------------------
+
+Default Mt: SPGUVocabularyMt.
+
+;;Constant: Event.
+;; dmiles isa: TemporalStuffType.
+;;isa: Collection.
+;;coExtensional: Event.
+
+comment: "The collection of all stories. Since a story is the same as an event,
+StoryEvent is coExtensional with #$Event.".
+
+;;;----------------------------------
+;;; A script is a prototype kind of event.
+;;;----------------------------------
+Default Mt: SPGUVocabularyMt.
+
+Constant: Script. 
+isa: Collection.
+genls: IntangibleIndividual.
+comment: "The collection of all scripts. A #$Script must not be confused with a
+subcollection of #$Event. An event is a record of what actually occurs,
+a script is a template or prototype of what usually occurs. Relations between events and
+actorslots are on objects (of events and actors), relations part of a script are between
+event types (argGenl Event) and actor types (argGenl CD-PP)".
+cyclistNotes: "So if #$ScriptType is a way of dividing #$Script into subcollections,
+a way of dividing #$Event into subcollections should be called #$EventType or perhaps
+#$DefaultDisjointEventType.".
+F: (relationAllInstance genlMt Script SPGUMt).
+
+;;Constant: Scene.
+;;In Mt: SPGUVocabularyMt.
+;;isa: Collection.
+;;; genls script, so a script is actually a big scene. (and arg1Isa of sceneParts is Script,
+;;; so sceneParts can also be used to relate subScenes to scenes.
+;;genls: PartiallyIntangibleIndividual Script.
+;;comment: "The collection of all scenes. A #$Script consists of (parts) #$Scenes.
+;;(see #$sceneParts)".
+;;; Are 'scenes' like templates for static situations?
+;;F: (relationAllInstance genlMt Scene SPGUMt).
+
+; Put info in all scenes and scripts in a problem solving context. (is this handy?)
+;Direction: forward.
+;F: (implies (isa ?PIT Scene) (genlMt AllScriptsPSC ?PIT)).
+
+Constant: AtomicScript.
+In Mt: SPGUVocabularyMt.
+isa: Collection.
+genls: Script.
+comment: "The collection of all atomic scripts. An atomic script does not have subscripts.
+An atomic scene combines a #$CD-ACT to the roles that are supposed to act in the scene.".
+
+Constant: CD-STATE.
+isa: Collection.
+coExtensional: StaticSituation.
+
+comment: "States (yes, this is a bad comment, but I only saw STATE
+mentioned a lot but nowhere defined. So I just assume coExtensional with 
+#$StaticSituation and move on :-)".
+
+Default Mt: SPGUVocabularyMt.
+Constant: storyReferences.
+isa: BinaryPredicate.
+arity: 2.
+;;;genlPreds: isa.
+
+Constant: StateScript.
+In Mt: SPGUVocabularyMt.
+isa: Collection.
+genls: Script.
+comment: "The collection of all state scripts. A #$StateScript is a scripted state,
+for example "the" client is located in "the" restaurant.".
+; If argument 2 of storyReferences is a StateScript, the first argument must be a CD-STATE.
+F: (interArgIsa2-1 storyReferences StateScript CD-STATE).
+
+Constant: AtomicActionScript.
+In Mt: SPGUVocabularyMt.
+isa: Collection.
+genls: AtomicScript.
+comment: "The collection of all atomic action scripts. An action script is a script for
+an action. In constrast to #$AtomicStateScript, which is the collection of scripts for
+states.".
+; If argument 2 of storyReferences is an AtomicActionScript, the first argument must be a CD-ACT.
+F: (interArgIsa2-1 storyReferences AtomicActionScript CD-ACT).
+
+Constant: AtomicStateScript.
+In Mt: SPGUVocabularyMt.
+isa: Collection.
+genls: AtomicScript StateScript.
+comment: "The collection of all atomic state scripts. A #$StateScript is a scripted state,
+for example "the" client is located in "the" restaurant.".
+F: (disjointWith AtomicStateScript AtomicActionScript).
+
+Constant: subScripts.
+In Mt: SPGUVocabularyMt.
+isa: TransitiveBinaryPredicate AntiSymmetricBinaryPredicate NonPhysicalPartPredicate ReflexiveBinaryPredicate.
+;;genlPreds: intangibleParts.
+arity: 2.
+arg1Isa: Script.
+arg2Isa: Script.
+comment: "(#$subSCripts SCRIPT SUBSCRIPT) means that SUBSCRIPT is part of SCRIPT.".
+
+Constant: scriptACT.
+In Mt: SPGUVocabularyMt.
+isa: BinaryPredicate.
+arity: 2.
+arg1Isa: AtomicActionScript.
+arg2Isa: Collection.
+arg2Genl: CD-ACT.
+comment: "(#$scriptACT SCRIPT ACTCOL) means that the specialisation
+of #$CD-ACT ACTCOL is a part of the template layed out by script.".
+
+; scriptstate is always a static situation.
+Constant: scriptSTATE.
+In Mt: SPGUVocabularyMt.
+isa: BinaryPredicate.
+arity: 2.
+arg1Isa: StateScript.
+arg2Isa: Collection.
+arg2Genl: CD-STATE.
+comment: "(#$scriptSTATE SCRIPT STATECOL) means that the specialisation
+of #$CD-STATE STATECOL is a part of the template layed out by SCRIPT.".
+
+Constant: rolesForScript.
+In Mt: SPGUVocabularyMt.
+isa: BinaryPredicate.
+arg1Isa: Script.
+arg2Isa: BinaryRolePredicate.
+arity: 2.
+comment: "(#$rolesForScript SCRIPT ROLE) means that for SCRIPT there
+might be an actor that plays ROLE.".
+
+Constant: requiredRolesForScript.
+In Mt: SPGUVocabularyMt.
+isa: BinaryPredicate.
+arity: 2.
+arg1Isa: Script.
+arg2Isa: BinaryRolePredicate.
+genlPreds: rolesForScript.
+comment: "(#$requiredRolesForScript SCRIPT ROLE) means that for SCRIPT there
+must be an actor that plays ROLE. For example, to say that in each buying 
+script there is a buyer (#$requiredRolesForScript #$MyScript123 #$buyer) would be
+used.".
+
+Constant: oldScriptRoleIsa.
+In Mt: SPGUVocabularyMt.
+isa: TernaryPredicate.
+arity: 3.
+arg1Isa: Script.
+arg2Isa: BinaryRolePredicate.
+arg3Isa: Collection.
+comment: "(#$oldScriptRoleIsa SCRIPT ROLE COLLECTION) means that the object that
+acts as ROLE in SCRIPT must be an instance of COLLECTION.".
+
+Direction: forward.
+;; link to OpenCyc's native script stuff.
+F:
+(implies
+  (and
+    (scriptACT ?SCRIPT ?EVENT) 
+    (rolesForEventType ?EVENT ?ROLE))
+  (rolesForScript ?SCRIPT ?ROLE)).
+
+;;;----------------------------------
+;;; "the" restaurant, "the" cook etc.
+;;;----------------------------------
+; the restaurant = ((FunctionToArg 2 eventOccursAt) HYP-Story-9454)
+; the restaurant = (TheSetOf ?X (eventOccursAt HYP-Story-9454 ?X))
+
+;;;----------------------------------
+;;; ScriptRole s
+;;;----------------------------------
+Constant: ScriptRole.
+In Mt: SPGUVocabularyMt.
+isa: Collection.
+genls: BinaryRolePredicate.
+comment: "The collection of scriptroles. A script role is a role in the context of a script.".
+
+Constant: ScriptRoleFn.
+In Mt: SPGUVocabularyMt.
+isa: Function-Denotational PredicateDenotingFunction FixedArityRelation.
+arity: 2.
+arg1Isa: Script.
+arg2Isa: BinaryRolePredicate.
+resultIsa: ScriptRole.
+resultIsa: CycLReifiableDenotationalTerm.
+comment: "(#$ScriptRoleFn SCRIPT ROLE) returns the script role for SCRIPT and ROLE.".
+
+Constant: scriptRoleIsa.
+In Mt: SPGUVocabularyMt.
+isa: BinaryPredicate.
+arg1Isa: ScriptRole.
+arg2Isa: Collection.
+comment: "(#$scriptRoleIsa SCRIPTROLE COLLECTION) means that the object that
+acts as ROLE in SCRIPT must be an instance of COLLECTION.".
+
+In Mt: SPGUMt.
+; transitiviteit of scriptRoleIsa via equals.
+F: (transitiveViaArg scriptRoleIsa equals 1).
+
+; deduce equality of role fillers
+;Direction: forward.
+F:
+(implies
+  (and
+   (equals (ScriptRoleFn ?SCRIPT1 ?ROLE1) (ScriptRoleFn ?SCRIPT2 ?ROLE2))
+   (storyReferences ?EVENT1 ?SCRIPT1)
+   (storyReferences ?EVENT2 ?SCRIPT2)
+   (subEvents ?STORY ?EVENT1)
+   (subEvents ?STORY ?EVENT2)
+   (?ROLE1 ?EVENT1 ?THING))
+ (?ROLE2 ?EVENT2 ?THING)).
+; de omgekeerde (rol1 / rol2 is niet nodig, aangezien equals commutatief is.
+
+
+;;;----------------------------------
+;;; Causality, types defined in conceptualdependency but now on scripts.
+;;;----------------------------------
+Constant: CausalType.
+isa: PredicateType.  ;; was PredicateCategory.
+genls: Predicate.
+; I'd like AsymmetricBinaryPredicate as genls, but there is 'rE' which is a ternary predicate.
+
+Constant: ScriptCausalType.
+isa: PredicateType.  ;; was PredicateCategory.
+genls: Predicate.
+genls: CausalType.
+
+Constant: cd-r1.
+isa: AsymmetricBinaryPredicate CausalType.
+genlPreds: postSituation.
+arity: 2.
+
+Constant: cd-r1-ScriptScript.
+In Mt: SPGUVocabularyMt.
+isa: AsymmetricBinaryPredicate ScriptCausalType.
+;;genlPreds: postSituation.
+arg1Isa: AtomicActionScript.
+arg2Isa: StateScript.
+arity: 2.
+comment: "(#$cd-r1-ScriptScript ACTSCRIPT STATESCRIPT) means that a script with an action results
+in a script with a state. A predicate that
+causally relates types (specializations of) actions and states. See also the variant on objects #$cd-r1.".
+; If a story references a script and a state that are related with cd-r1 -> also
+; infer that for the story.
+In Mt: SPGUMt.
+Direction: forward.
+F: (implies
+ (and
+   (storyReferences ?ACT ?ACTSCRIPT)
+   (storyReferences ?STATE ?STATESCRIPT)
+   (subEvents ?STORY ?ACT)
+   (subSituations ?STORY ?STATE)
+   (cd-r1-ScriptScript ?ACTSCRIPT ?STATESCRIPT))
+ (cd-r1 ?ACT ?STATE)).
+
+Constant: cd-E-ScriptScript.
+In Mt: SPGUVocabularyMt.
+isa: AsymmetricBinaryPredicate ScriptCausalType.
+;;genlPreds: different startsAfterStartingOf.
+arg1Isa: StateScript.
+arg2Isa: AtomicActionScript.
+arity: 2.
+comment: "(#$cd-E-ScriptScript STATESCRIPT ACTSCRIPT) means that STATESCRIPT enables ACTSCRIPT. A predicate that
+causally relates types of states and actions. Put different, state STATE is a precondition for ACT.".
+; cd-E-ScriptScript is transitive in it's second argument with respect to subScripts.
+F: (transitiveViaArg cd-E-ScriptScript subScripts 2).
+
+
+Constant: cd-I-ScriptScript.
+In Mt: SPGUVocabularyMt.
+isa: AsymmetricBinaryPredicate ScriptCausalType.
+;;genlPreds: different startsAfterStartingOf.
+arg1Isa: Script.
+arg2Isa: StateScript.
+arity: 2.
+comment: "(#$cd-I-ScriptScript STATESCRIPT/ACTIONSCRIPT MSTATESCRIPT) means that SCRIPT initiates a mental
+state MSTATESCRIPT.".
+
+;; to bad... cd-r1 already defined and this should be called cd-R..
+Constant: cd-R2-ScriptScript.
+In Mt: SPGUVocabularyMt.
+isa: AsymmetricBinaryPredicate ScriptCausalType.
+;;;genlPreds: different startsAfterStartingOf.
+arg1Isa: AtomicActionScript.
+arg2Isa: AtomicActionScript.
+arity: 2.
+comment: "(#$cd-R2-ScriptScript MENTALACTSCRIPT PHYSICALACTSCRIPT) means that a type of MENTALACT
+is the reason for a type of PHYSICALACT. (Mental acts include #$CD-MBuild and #$CD-MTrans, physical acts include
+#$CD-Propel, #$CD-PTrans, #$CD-Propel and #$CD-Move".
+
+Constant: cd-dE-ScriptScript.
+In Mt: SPGUVocabularyMt.
+isa: AsymmetricBinaryPredicate ScriptCausalType.
+;;genlPreds: different startsAfterStartingOf.
+arg1Isa: StateScript.
+arg2Isa: AtomicActionScript.
+arity: 2.
+comment: "(#$cd-dE-ScriptScript STATESCRIPT ACTSCRIPT) means that STATESCRIPT disables ACTSCRIPT.
+A predicate that causally relates types of states and actions.".
+
+Constant: cd-rE-ScriptScript.
+In Mt: SPGUVocabularyMt.
+isa: TernaryPredicate ScriptCausalType.
+arg1Isa: AtomicActionScript.
+arg2Isa: StateScript.
+arg3Isa: AtomicActionScript.
+arity: 3.
+comment: "(#$cd-rE-ScriptScript ACTSCRIPT STATESCRIPT ACTSCRIPT) 
+  a short way to say cd-r1-ScriptScript
+and cd-R2-ScriptScript.".
+
+Default Mt: SPGUMt.
+;; rebuild into smaller parts
+Direction: forward.
+F: (implies
+     (cd-rE-ScriptScript ?CAUSEACTCOL ?RESULTSTATECOL ?ENABLEDACTCOL)
+     (and
+       (cd-r1-ScriptScript ?CAUSEACTCOL ?RESULTSTATECOL)
+       (cd-E-ScriptScript ?RESULTSTATECOL ?ENABLEDACTCOL))).
+
+
+Constant: cd-IR-ScriptScript.
+In Mt: SPGUVocabularyMt.
+isa: TernaryPredicate ScriptCausalType.
+arg1Isa: AtomicActionScript.
+arg2Isa: StateScript.
+arg3Isa: AtomicActionScript.
+arity: 3.
+
+comment: "(#$cd-IR-ScriptScript ACTSCRIPT MSTATESCRIPT ACTSCRIPT) a type of ACT or STATE initiates a kind of
+thought MSTATE which is the reason to type of ACT. A short way for cd-R2-ScriptScript and cd-R2-ScriptScript.".
+
+Default Mt: SPGUMt.
+;; rebuild into smaller parts
+Direction: forward.
+F: (implies
+     (cd-IR-ScriptScript ?CAUSECOL ?IDEACOL ?ACTIONCOL)
+     (and
+       (cd-I-ScriptScript ?CAUSECOL ?IDEACOL)
+       (cd-R2-ScriptScript ?IDEACOL ?ACTIONCOL))).
+
+
+;;;----------------------------------
+;;; a story 'references' a script
+;;;----------------------------------
+Default Mt: SPGUVocabularyMt.
+Constant: storyReferences.
+isa: BinaryPredicate.
+arity: 2.
+;;;genlPreds: isa.
+arg1Isa: Event.
+arg2Isa: Script.
+comment: "(#$storyReferences STORY SCRIPT) means that STORY makes a (possibly
+partial) reference to SCRIPT.".
+
+Default Mt: SPGUVocabularyMt.
+Constant: roleFillerEquals.
+isa: QuaternaryPredicate.
+arity: 4.
+arg1Isa: Script.
+arg2Isa: BinaryRolePredicate.
+arg3Isa: Script.
+arg4Isa: BinaryRolePredicate.
+comment: "(#$roleFillerEquals SCRIPT1 ROLE1 SCRIPT2 ROLE2) means that the object performing ROLE1
+in SCRIPT1 is the same object that performs ROLE2 in SCRIPT2.".
+
+
+;;;----------------------------------
+;;; Handy rule macro implication
+;;; to say things like 'the object moving in the entering scene
+;;; is the restaurant client of the restaurantscript(scene).
+;;;----------------------------------
+Default Mt: SPGUMt.
+Direction: forward.
+; 2 - een event MOET refereren naar een automair script. (link met script kan niet
+;     alleen op soort event (bv cd-ptrans) en references link op hoofdscript,
+;     want dan zouden role fillers voor elke cd-trans gelden -> links van events
+;     aan scripts moet dus PER EVENT gebeuren!!)
+; 3 en 4 - de subscripts moeten deel uitmaken van hetzelfde script (kan dit niet met een argconstraint op roleFillerEquals -> ja!
+; merk op dat nu de link met soort event niet eens meer nodig is (scriptACT is verdwenen!!)
+F:
+(implies
+  (and
+   (roleFillerEquals ?SCRIPT1 ?ROLE1 ?SCRIPT2 ?ROLE2)
+   (storyReferences ?EVENT1 ?SCRIPT1)
+   (storyReferences ?EVENT2 ?SCRIPT2)
+   (subEvents ?STORY ?EVENT1)
+   (subEvents ?STORY ?EVENT2)
+   (?ROLE1 ?EVENT1 ?THING1)
+   (?ROLE2 ?EVENT2 ?THING2))
+ (equals ?THING1 ?THING2)).
+
+F:
+(implies
+  (and
+   (roleFillerEquals ?SCRIPT1 ?ROLE1 ?SCRIPT2 ?ROLE2)
+   (storyReferences ?EVENT1 ?SCRIPT1)
+   (storyReferences ?EVENT2 ?SCRIPT2)
+   (subEvents ?STORY ?EVENT1)
+   (subEvents ?STORY ?EVENT2)
+   (?ROLE1 ?EVENT1 ?THING))
+ (?ROLE2 ?EVENT2 ?THING)).
+
+F:
+(implies
+  (and
+   (roleFillerEquals ?SCRIPT1 ?ROLE1 ?SCRIPT2 ?ROLE2)
+   (storyReferences ?EVENT1 ?SCRIPT1)
+   (storyReferences ?EVENT2 ?SCRIPT2)
+   (subEvents ?STORY ?EVENT1)
+   (subEvents ?STORY ?EVENT2)
+   (?ROLE2 ?EVENT2 ?THING))
+ (?ROLE1 ?EVENT1 ?THING)).
+
+In Mt: SPGUMt.
+;Direction: forward.
+; transitiviteit of oldScriptRoleIsa via roleFillerEquals.
+F:
+(implies
+  (and
+   (roleFillerEquals ?SCRIPT1 ?ROLE1 ?SCRIPT2 ?ROLE2)
+   (oldScriptRoleIsa ?SCRIPT1 ?ROLE1 ?COL))
+ (oldScriptRoleIsa ?SCRIPT2 ?ROLE2 ?COL)).
+
+;Direction: forward.
+; transitiviteit of oldScriptRoleIsa via roleFillerEquals.
+F:
+(implies
+  (and
+   (roleFillerEquals ?SCRIPT1 ?ROLE1 ?SCRIPT2 ?ROLE2)
+   (oldScriptRoleIsa ?SCRIPT2 ?ROLE2 ?COL))
+ (oldScriptRoleIsa ?SCRIPT1 ?ROLE1 ?COL)).
+
+;; Roles for a script are also roles for it's subscripts.
+In Mt: SPGUMt.
+Direction: forward.
+; make it forward to enable firing of other rules.
+F: (transitiveViaArg rolesForScript subScripts 1).
+; this rule states the same, but generates consequences -> is this necessary?
+;Direction: forward.
+;F: (implies
+;    (and
+;     (rolesForScript ?SCRIPT ?ROLE)
+;     (subScripts ?SCRIPT ?SUBSCRIPT)
+;     (different ?SCRIPT ?SUBSCRIPT))
+;    (rolesForScript ?SUBSCRIPT ?ROLE)).
+;; Likewise, the same holds for oldScriptRoleIsa.
+F: (transitiveViaArg oldScriptRoleIsa subScripts 1).
+;Direction: forward.
+;F: (implies
+;    (and
+;     (oldScriptRoleIsa ?SCRIPT ?ROLE ?COL)
+;     (subScripts ?SCRIPT ?SUBSCRIPT)
+;     (different ?SCRIPT ?SUBSCRIPT))
+;    (oldScriptRoleIsa ?SUBSCRIPT ?ROLE ?COL)).
+;; And, likewise, it also holds for required roles for scripts.
+In Mt: SPGUMt.
+Direction: forward.
+; make it forward to enable firing of other rules.
+F: (transitiveViaArg requiredRolesForScript subScripts 1).
+; this rule states the same, but generates consequences
+;Direction: forward.
+;F: (implies
+;    (and
+;     (requiredRolesForScript ?SCRIPT ?ROLE)
+;     (subScripts ?SCRIPT ?SUBSCRIPT)
+;     (different ?SCRIPT ?SUBSCRIPT))
+;    (requiredRolesForScript ?SUBSCRIPT ?ROLE)).
+
+;; Also, and this is a strong statement, the role fillers are the
+;; same! No rule macro predicate for this implication.
+In Mt: SPGUMt.
+Direction: forward.
+;F: (implies
+;    (and
+;     (rolesForScript ?SCRIPT ?ROLE)
+;     (subScripts ?SCRIPT ?SUBSCRIPT)
+;     (different ?SCRIPT ?SUBSCRIPT))
+;    (roleFillerEquals ?SCRIPT ?ROLE ?SUBSCRIPT ?ROLE)).
+;; Different solution:
+F: (implies
+    (and
+     (rolesForScript ?SCRIPT ?ROLE)
+     (storyReferences ?STORY ?SCRIPT)
+     (storyReferences ?EVENT ?SUBSCRIPT)
+     (subScripts ?SCRIPT ?SUBSCRIPT)
+     (subEvents ?STORY ?EVENT)
+     (different ?STORY ?EVENT)
+     (different ?SCRIPT ?SUBSCRIPT)
+     (?ROLE ?STORY ?THING))
+   (?ROLE ?EVENT ?THING)).
+
+;; Likewise, the same holds for oldScriptRoleIsa.
+In Mt: SPGUMt.
+Direction: forward.
+F: (implies
+(and
+ (oldScriptRoleIsa ?SCRIPT ?ROLE ?COL)
+ (subScripts ?SCRIPT ?SUBSCRIPT)
+ (different ?SCRIPT ?SUBSCRIPT))
+(oldScriptRoleIsa ?SUBSCRIPT ?ROLE ?COL)).
+
+
+; oud
+;(implies
+;  (and
+;   (roleFillerEquals ?SCRIPT1 ?ROLE1 ?SCRIPT2 ?ROLE2)
+;   (storyReferences ?STORY ?SCRIPT)
+;   (subScripts ?SCRIPT ?SCRIPT1)
+;   (subScripts ?SCRIPT ?SCRIPT2)
+;   (scriptACT ?SCRIPT1 ?EVENTTYPE1)
+;   (scriptACT ?SCRIPT2 ?EVENTTYPE2)
+;   (subEvents ?STORY ?EVENT1)
+;   (subEvents ?STORY ?EVENT2)
+;   (isa ?EVENT1 ?EVENTYPE1)
+;   (isa ?EVENT2 ?EVENTYPE2)
+;   (?ROLE1 ?EVENT1 ?THING1)
+;   (?ROLE2 ?EVENT2 ?THING2))
+; (equals ?THING1 ?THING2)).
+
+
+;; Another way to state the same
+;F:
+;(implies
+;  (and
+;   (roleFillerEquals ?SCRIPT1 ?ROLE1 ?SCRIPT2 ?ROLE2)
+;   (storyReferences ?STORY ?SCRIPT)
+;   (subScripts ?SCRIPT ?SCRIPT1)
+;   (subScripts ?SCRIPT ?SCRIPT2)
+;   (scriptACT ?SCRIPT1 ?EVENTTYPE1)
+;   (scriptACT ?SCRIPT2 ?EVENTTYPE2)
+;   (subEvents ?STORY ?EVENT1)
+;   (subEvents ?STORY ?EVENT2)
+;   (isa ?EVENT1 ?EVENTYPE1)
+;   (isa ?EVENT2 ?EVENTYPE2)
+;   (?ROLE1 ?EVENT1 ?THING))
+; (?ROLE2 ?EVENT2 ?THING)).
+   
+;; And another way to state the same
+;F:
+;(implies
+;  (and
+;   (roleFillerEquals ?SCRIPT1 ?ROLE1 ?SCRIPT2 ?ROLE2)
+;   (storyReferences ?STORY ?SCRIPT)
+;   (subScripts ?SCRIPT ?SCRIPT1)
+;   (subScripts ?SCRIPT ?SCRIPT2)
+;   (scriptACT ?SCRIPT1 ?EVENTTYPE1)
+;   (scriptACT ?SCRIPT2 ?EVENTTYPE2)
+;   (subEvents ?STORY ?EVENT1)
+;   (subEvents ?STORY ?EVENT2)
+;   (isa ?EVENT1 ?EVENTYPE1)
+;   (isa ?EVENT2 ?EVENTYPE2)
+;   (?ROLE2 ?EVENT2 ?THING))
+; (?ROLE1 ?EVENT1 ?THING)).
+
+
+
+
+;;;----------------------------------
+;;; predicates on stories
+;;; 
+;;; subEvents   (see #$SubEventPredicate)
+;;; firstSubEvent
+;;; lastSubEvent
+;;; (causes-EventEvent?)
+;;; every CausalType: cd-IR, cd-rE, cd-dE, cd-R2, cd-r1, cd-I, cd-E 
+;;;----------------------------------
+;;;----------------------------------
+;;; predicates on scripts  (see #$ScriptPredicate)
+;;; (press Arg3: argGenl on Event)
+;;;
+;;; rolesForEventType
+;;; requiredActorSlots, directObjectRoles
+;;; subEventTypes -> cannot be used because of expansion to relationAllExists
+;;; etc.
+;;;----------------------------------
+
+
+;;; ----------------------------------------------------------------
+;;; Goals and Plans
+;;;
+;;; Goal is a specialisation of CycLSentence-Assertible.
+;;; A Plan is specialisation of SupposedToBeMicrotheory.
+;;;
+;;; See:
+;;; http://www.cc.gatech.edu/computing/classes/cs4344_98_winter/lec18.html
+;;; ---------------------------------------------------------------
+
+Default Mt: SPGUVocabularyMt.
+Constant: Goal.
+isa: Collection CycLExpressionType AtemporalNecessarilyEssentialCollectionType. 
+genls: CycLSentence-Assertible. ;; was ELSentence-Assertible
+;; or just ELSentence?
+
+comment: "The collection of all goals.".
+
+Default Mt: SPGUVocabularyMt.
+Constant: GoalType.
+isa: Collection CollectionType. 
+typeGenls: Goal.
+comment: "The collection of all types of goals.  ".
+
+;---- goal types
+
+Default Mt: SPGUVocabularyMt.
+Constant: DeltaGoal.
+isa: Collection GoalType. 
+genls: Goal.
+comment: "The collection of all delta goals. Delta goals are subgoals of the original goal,
+so the steps or actions of a plan can be viewed as
+being organized around these subgoals. Similar subgoals are found in lots of plans,
+so they've been given special names. The first three subgoals listed above are called "delta-goals" or "D-goals": 
+".
+
+Default Mt: SPGUVocabularyMt.
+Constant: SatisfactionGoal.
+isa: Collection GoalType. 
+genls: Goal.
+comment: "The collection of all satisfaction goals. These come from recurring biological needs,
+and have a frequency with which they must be satisfied. Examples are S-HUNGER, S-SLEEP,
+and S-SEX. When S-goals are frustrated, it serves as a major source of expectations to an understander.
+There are standard goal objects or instruments used for achieving S-goals (except for S-SLEEP).
+If an actor can't find a particular goal object, he or she will probably substitute another.".
+
+Default Mt: SPGUVocabularyMt.
+Constant: EnjoymentGoal.
+isa: Collection GoalType. 
+genls: Goal.
+comment: "The collection of all enjoyment goals: an activity which is optionally pursued for enjoyment
+or relaxation. Examples are E-TRAVEL, E-ENTERTAINMENT, E-EXERCISE, and E-COMPETITION. The primary plan
+ for achieving E-goals is to go to where the activity takes place. S-goals can be pursued as E-goals.".
+
+Default Mt: SPGUVocabularyMt.
+Constant: AchievementGoal.
+isa: Collection GoalType. 
+genls: Goal.
+comment: "The collection of all Achievement goals: the realization, often over a long period of time,
+of some valued property or position. Examples are A-POSSESSION, A-POWER-POSITION, A-GOOD-JOB,
+A-SOCIAL-RELATIONSHIP, or A-SKILL. When A-goals are satisfied, they typically guarantee the future
+satisfaction of bundles of S-goals and E-goals. Higher level goals are easier to satisfy if you are 
+rich and powerful.".
+
+Default Mt: SPGUVocabularyMt.
+Constant: PreservationGoal.
+isa: Collection GoalType. 
+genls: Goal.
+comment: "The collection of all Preservation goals: preserving or improving the health, safety, or
+good condition of people, property, or position. Examples are P-HEALTH, P-SAFETY, P-SOCIAL-POSITION,
+or P-EYESIGHT.".
+
+Default Mt: SPGUVocabularyMt.
+Constant: CrisisGoal.
+isa: Collection GoalType. 
+genls: Goal.
+comment: "The collection of all Crisis goals: responding to serious and imminent threats to valued
+persons or objects. These may be regarded as a special class of P-goals. Examples are C-HEALTH or C-FIRE.".
+
+;--- delta (sub)goals
+
+Default Mt: SPGUVocabularyMt.
+Constant: D-Know.
+isa: Collection GoalType. 
+genls: DeltaGoal.
+comment: "The collection of all D-Know goals. Acquire knowledge about where
+to get X (e.g., look in the phone
+book, ask someone, refer to memory).".
+
+Constant: D-Prox.
+In Mt: SPGUVocabularyMt.
+isa: Collection GoalType. 
+genls: DeltaGoal.
+comment: "The collection of all D-Prox goals. Change proximity to be nearer
+to X (e.g., drive, walk, call a taxi, take MARTA) ".
+
+Constant: D-Cont.
+In Mt: SPGUVocabularyMt.
+isa: Collection GoalType. 
+genls: DeltaGoal.
+comment: "The collection of all D-Cont goals. Achieve possession or control
+of X (e.g., buy it, steal it) ".
+
+Constant: I-Prep.
+In Mt: SPGUVocabularyMt.
+isa: Collection GoalType. 
+genls: Goal.
+comment: "The collection of all I-Prep goals. Make X ready for use
+(e.g., cut it up, cook it, put salt on it)".
+
+;----- no comments on these ones.. bad.. have to loopup more info.
+
+Constant: S-Hunger.
+In Mt: SPGUVocabularyMt.
+isa: Collection GoalType. 
+genls: SatisfactionGoal.
+
+Constant: S-Sleep.
+In Mt: SPGUVocabularyMt.
+isa: Collection GoalType. 
+genls: SatisfactionGoal.
+
+Constant: S-Sex.
+In Mt: SPGUVocabularyMt.
+isa: Collection GoalType. 
+genls: SatisfactionGoal.
+
+Constant: E-Travel.
+In Mt: SPGUVocabularyMt.
+isa: Collection GoalType. 
+genls: EnjoymentGoal.
+
+Constant: E-Entertainment.
+In Mt: SPGUVocabularyMt.
+isa: Collection GoalType. 
+genls: EnjoymentGoal.
+
+Constant: E-Exercise.
+In Mt: SPGUVocabularyMt.
+isa: Collection GoalType. 
+genls: EnjoymentGoal.
+
+Constant: E-Competition.
+In Mt: SPGUVocabularyMt.
+isa: Collection GoalType. 
+genls: EnjoymentGoal.
+
+Constant: A-Possession.
+In Mt: SPGUVocabularyMt.
+isa: Collection GoalType. 
+genls: AchievementGoal.
+
+Constant: A-Power-Position.
+In Mt: SPGUVocabularyMt.
+isa: Collection GoalType. 
+genls: AchievementGoal.
+
+Constant: A-Good-Job.
+In Mt: SPGUVocabularyMt.
+isa: Collection GoalType. 
+genls: AchievementGoal.
+
+Constant: A-Social-Relationship.
+In Mt: SPGUVocabularyMt.
+isa: Collection GoalType. 
+genls: AchievementGoal.
+
+Constant: A-Skill.
+In Mt: SPGUVocabularyMt.
+isa: Collection GoalType. 
+genls: AchievementGoal.
+
+Constant: P-Health.
+In Mt: SPGUVocabularyMt.
+isa: Collection GoalType. 
+genls: PreservationGoal.
+
+Constant: P-Safety.
+In Mt: SPGUVocabularyMt.
+isa: Collection GoalType. 
+genls: PreservationGoal.
+
+Constant: P-Social-Position.
+In Mt: SPGUVocabularyMt.
+isa: Collection GoalType. 
+genls: PreservationGoal.
+;; preservation of something... maybe make a goal denoting function? like (PreservationGoalFn Eyesight)
+Constant: P-Eyesight.
+In Mt: SPGUVocabularyMt.
+isa: Collection GoalType. 
+genls: PreservationGoal.
+
+Constant: C-Health.
+In Mt: SPGUVocabularyMt.
+isa: Collection GoalType. 
+genls: CrisisGoal.
+
+Constant: C-Fire.
+In Mt: SPGUVocabularyMt.
+isa: Collection GoalType. 
+genls: CrisisGoal.
+;;; ----------------------------------------------------------------
+;;; Test of OpenCyc implementation of CD and SPGU
+;;; date created: 09 03 2003, Yeb Havinga
+;;; last change: 06 05 2003
+;;; built on: ConceptualDependencyMt and SPGUMt
+;;; add conceptualdependency.ke and spgu.ke first.
+;;; ----------------------------------------------------------------
+
+;The classic example of Schank's theory is the restaurant script. The script has
+;the following characteristics:
+;Scene 1: Entering
+;S PTRANS S into restaurant, S ATTEND eyes to tables, S MBUILD where to sit, S
+;PTRANS S to table, S MOVE S to sitting position
+;Scene 2: Ordering
+;S PTRANS menu to S (menu already on table), S MBUILD choice of food, S MTRANS
+;signal to waiter, waiter PTRANS to table, S MTRANS 'I want food' to waiter,
+;waiter PTRANS to cook
+;Scene 3: Eating
+;Cook ATRANS food to waiter, waiter PTRANS food to S, S INGEST food
+;Scene 4: Exiting
+;waiter MOVE write check, waiter PTRANS to S, waiter ATRANS check to S, S ATRANS
+;money to waiter, S PTRANS out of restaurant
+
+;;; ----------------------------------------------------------------
+;;; The roles:      rolepredicate         spec of
+;;; the client (S)  #$customer    #$deliberateActors
+;;;   (in some scenes the object that is customer is also #$buyer)
+;;; the waiter	    #$waiter              #$deliberateActors
+;;;   (in some scenes the object that is the waiter is also #$seller,
+;;;    #$giver, #$presenter, #$entertainer)
+;;; the cook        #$cook                #$deliberateActors
+;;; the food	    #$food                #$actors
+;;;   (this object is in some scenes also #$objectPaidFor, #$objectMoving,
+;;;    #$products, #$thingsConsumed)
+;;; the check	    #$check               #$actors
+;;;   (in some scenes iboCreated)
+;;; the money       #$moneyTransferred
+;;; the restaurant  #$eventOccursAt
+;;; ----------------------------------------------------------------
+
+Default Mt: SPGUTestDataMt.
+
+Constant: customer.
+In Mt: SPGUTestVocabularyMt.
+isa: BinaryRolePredicate.
+arg1Isa: Situation.
+arg2Isa: Person CD-PP.
+arity: 2.
+genlPreds: deliberateActors.
+comment: "(#$customer CD-STATE CD-PP) means that the person CD-PP
+is the client in CD-STATE. (which is a static situation that references
+the #$RestaurantScript.)".
+
+Constant: waiter.
+In Mt: SPGUTestVocabularyMt.
+isa: BinaryRolePredicate.
+arity: 2.
+arg1Isa: Situation.
+arg2Isa: Person CD-PP.
+genlPreds: deliberateActors.
+comment: "(#$waiter CD-STATE CD-PP) means that the person CD-PP
+is the waiter in CD-STATE. (which is a static situation that references
+the #$RestaurantScript.)".
+
+Constant: cook.
+In Mt: SPGUTestVocabularyMt.
+isa: BinaryRolePredicate.
+arity: 2.
+arg1Isa: Situation.
+arg2Isa: Person CD-PP.
+genlPreds: deliberateActors.
+comment: "(#$cook CD-STATE CD-PP) means that the person CD-PP
+is the cook in CD-STATE which is a static situation that references
+the #$RestaurantScript.".
+
+Constant: theFood.
+In Mt: SPGUTestVocabularyMt.
+isa: BinaryRolePredicate.
+arg1Isa: Situation.
+arg2Isa: FoodOrDrink CD-PP.
+arity: 2.
+genlPreds: deliberateActors.
+comment: "(#$theFood CD-STATE CD-PP) means that the object CD-PP
+is the food in CD-STATE which is a static situation that references
+the #$RestaurantScript.".
+
+Constant: check.
+In Mt: SPGUTestVocabularyMt.
+isa: BinaryRolePredicate.
+arg1Isa: Situation.
+arg2Isa: Bill-PaymentRequest CD-PP.
+arity: 2.
+genlPreds: deliberateActors.
+comment: "(#$check CD-STATE CD-PP) means that the object CD-PP
+is the check in CD-STATE which is a static situation that references
+the #$RestaurantScript.".
+
+
+;;; ----------------------------------------------------------------
+;;; The script and subscripts
+;;; Hmmm... relation between a scene and the act and the roles:
+;;; There has to be something that captures act/role combinations: atomic scripts?
+
+Constant: RestaurantScript.
+In Mt: SPGUTestDataMt.
+isa: Script.
+; these two roles are required. Note that requiredRolesForScript is TVA with respect
+; to subScripts, so these two roles are required throughout all subscripts.
+requiredRolesForScript: customer eventOccursAt.
+comment: "This first order object is the restaurant script.".
+F: (scriptRoleIsa (ScriptRoleFn RestaurantScript eventOccursAt)  Restaurant-Organization).
+F: (scriptRoleIsa (ScriptRoleFn RestaurantScript customer)  Person).
+
+Constant: RestaurantScriptScene1.
+In Mt: SPGUTestDataMt.
+isa: Script.
+comment: "Scene 1: Entering. S PTRANS S into restaurant, S ATTEND eyes to tables,
+S MBUILD where to sit, S PTRANS S to table,S MOVE S to sitting position.".
+F: (subScripts RestaurantScript RestaurantScriptScene1).
+
+Constant: RSAtomicScene1.
+In Mt: SPGUTestDataMt.
+isa: AtomicActionScript.
+scriptACT: CD-PTrans.
+requiredRolesForScript: primaryObjectMoving toLocation.
+comment: "S PTRANS S into restaurant.".
+F: (subScripts RestaurantScriptScene1 RSAtomicScene1).
+; the primary object moving is the customer, the toLocation is the restaurant where it occurs.
+F: (equals (ScriptRoleFn RSAtomicScene1 primaryObjectMoving) (ScriptRoleFn RestaurantScript customer)).
+F: (equals (ScriptRoleFn RSAtomicScene1 performedBy) (ScriptRoleFn RestaurantScript customer)).
+F: (equals (ScriptRoleFn RSAtomicScene1 toLocation) (ScriptRoleFn RestaurantScript eventOccursAt)).
+
+Constant: RSState1.
+In Mt: SPGUTestDataMt.
+isa: StateScript.
+; maybe define state 'being somewhere?'
+scriptSTATE: CD-STATE.
+;rolesForScript: eventOccursAt.
+comment: "The state that is the result (and of which the characteristics are the goal of entering the restaurant.)
+'The customer being in the restaurant'.".
+;F: (subScripts RestaurantScriptScene1 RSState1).
+; the primary object moving is the customer, the toLocation is the restaurant where it occurs.
+;F: (holdsIn THIS STATE (The client is in the restaurant).
+F: (subScripts RestaurantScriptScene1 RSState1).
+; In this situation, the client is in the restaurant
+Direction: forward.
+F: (implies
+ (and
+   (subSituations ?EATING ?BEINGINRESTAURANT)
+   (storyReferences ?EATING RestaurantScript)
+   (storyReferences ?BEINGINRESTAURANT RSState1)
+   (eventOccursAt ?EATING ?RESTAURANT)
+   (customer ?EATING ?PERSON))
+ (holdsIn ?BEINGINRESTAURANT (objectFoundInLocation ?PERSON ?RESTAURANT))).
+; the result of 'an entering', is that 'the customer' is in 'the restaurant'
+F: (cd-r1-ScriptScript RSAtomicScene1 RSState1).
+
+Constant: Table.
+In Mt: SPGUTestDataMt.
+isa: Collection.
+genls: SpatialThing-Localized PartiallyTangible.
+comment: "The collection of all tables.".
+
+Constant: RSAtomicScene2.
+In Mt: SPGUTestDataMt.
+isa: AtomicActionScript.
+scriptACT: LookingForSomething CD-Attend.
+; (event occurs at is implicit via transitivity of requiredRolesForScript)
+requiredRolesForScript: objectSought performedBy.
+comment: "S ATTEND eyes to tables.".
+F: (subScripts RestaurantScriptScene1 RSAtomicScene2).
+; the objects sought are the tables in the restaurant
+Direction: forward.
+F: (implies
+ (and
+   (eventOccursAt ?EATING ?RESTAURANT)
+   (objectFoundInLocation ?TABLE ?RESTAURANT)
+   (isa ?TABLE Table)
+   (storyReferences ?EATING RestaurantScript)
+   (storyReferences ?SUBEVENT RSAtomicScene2)
+   (subEvents ?EATING ?SUBEVENT))
+ (objectSought ?SUBEVENT ?TABLE)).
+F: (equals (ScriptRoleFn RSAtomicScene2 performedBy) (ScriptRoleFn RestaurantScript customer)).
+F: (scriptRoleIsa (ScriptRoleFn RSAtomicScene2 objectSought) Table).
+
+; 'the customer being in the restaurant' enables looking for tables. Actually, it enables a lot of
+; things.
+F: (cd-E-ScriptScript RSState1 RSAtomicScene2).
+
+; the tables in restaurants.(SubcollectionOfWithRelationFromTypeFn #$Table #$objectFoundInLocation #$Restaurant-Object)
+
+Constant: RSAtomicScene3.
+In Mt: SPGUTestDataMt.
+isa: AtomicActionScript.
+scriptACT: CD-MBuild SelectingSomething.
+requiredRolesForScript: objectSelected performedBy.
+comment: "S MBUILD where to sit. Choose one of the objectSought tables of the previous event.".
+F: (subScripts RestaurantScriptScene1 RSAtomicScene3).
+F: (equals (ScriptRoleFn RSAtomicScene3 performedBy) (ScriptRoleFn RestaurantScript customer)).
+F: (scriptRoleIsa (ScriptRoleFn RSAtomicScene3 objectSelected) Table).
+
+Constant: RSAtomicScene4.
+In Mt: SPGUTestDataMt.
+isa: AtomicActionScript.
+scriptACT: CD-PTrans.
+requiredRolesForScript: primaryObjectMoving toLocation.
+comment: "S PTRANS S to table.".
+F: (subScripts RestaurantScriptScene1 RSAtomicScene4).
+F: (equals (ScriptRoleFn RSAtomicScene4 primaryObjectMoving) (ScriptRoleFn RestaurantScript customer)).
+F: (equals (ScriptRoleFn RSAtomicScene4 toLocation) (ScriptRoleFn RSAtomicScene3 objectSelected)).
+
+;;scene 4 enables scene 5... script enables...
+
+
+Constant: RestaurantScriptScene2.
+In Mt: SPGUTestDataMt.
+isa: Script.
+comment: "Ordering.".
+
+Constant: RestaurantScriptScene3.
+In Mt: SPGUTestDataMt.
+isa: Script.
+comment: "Eating.".
+
+Constant: RestaurantScriptScene4.
+In Mt: SPGUTestDataMt.
+isa: Script.
+comment: "Exiting.".
+
+
+
