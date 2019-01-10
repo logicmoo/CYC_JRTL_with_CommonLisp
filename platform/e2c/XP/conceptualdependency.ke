@@ -194,13 +194,13 @@ genls: DisjointCollectionType.
 comment: "Attribute of an object or agent #$CD-PP. Corresponds (in English) to
 adjectives and some abstract nouns. ".
 
-F: (genls HumanBehavioralAttribute CD-PA)
- (genls LocationStateAttribute CD-PA)
- (genls ColorTingeAttribute CD-PA)
- (genls HumanSkinColor CD-PA)
- (genls PhysicalAttributeOfTangibleOnly CD-PA)
- (genls TemperamentAttribute CD-PA)
- (genls SurfaceAttribute CD-PA).
+F: (genls PersonTypeByPersonalBehavioralAttribute CD-PA) ;; opencyc HumanBehavioralAttribute
+ (genls  SpatialThingTypeByGenericLocation CD-PA) ;; opencyc LocationStateAttribute 
+ (genls ObjectTypeByColorTinge CD-PA) ;;ColorTingeAttribute
+ (genls HumanTypeBySkinColor CD-PA) ;; HumanSkinColor
+ (genls PhysicalQualityOfTangibleOnly CD-PA) ;; PhysicalAttributeOfTangibleOnly
+ (genls PersonTypeByPersonalityTrait CD-PA) ;; TemperamentAttribute
+ (genls ObjectTypeBySurfaceFeature CD-PA). ;; SurfaceAttribute
 
 ;;----------------------------------
 
@@ -239,7 +239,7 @@ A query to find relevant actorslots for a specific kind of primitive act is
    (genlPreds ??SPRED ?GENPRED) 
    (argIsa ??SPRED ??N ??EVENT))".
 ;;; there are not more than the 11 primitive acts.
-F: (completeCollectionExtent PrimitiveAct).
+F: (completelyEnumerableCollection PrimitiveAct).
 ;; PrimitiveAct is one way of deviding CD-ACT into subcollections.
 F: (facets-Generic CD-ACT PrimitiveAct).
 
@@ -276,7 +276,7 @@ genls: PhysicalEvent.
 comment: "The transfer of the physical location of an object. Thus, 'go' is
 #$CD-PTrans oneself to a place; 'put' is #$CD-PTrans of an object to a place.".
 
-F: (coExtensional Translocation CD-PTrans);
+F: (coExtensional Translocation CD-PTrans). 
 ;;;(genls CausingAnotherObjectsTranslationalMotion CD-PTrans).
 F: (genls CD-PTrans MovementEvent).
 
@@ -436,7 +436,7 @@ Dependency, 'see' is treated as #$CD-MTrans to #$CP from eye by instrument of
 ;;; speecific number of cases (either two or three).                               
 ;;; ----------------------------------------------------------------
 
-(hmm forget this part..)
+;; (hmm forget this part..)
 ;; see #$instumentalRole, #$recipientOf..., #$purposeInEvent,
 
 ;;; ----------------------------------------------------------------
@@ -456,7 +456,7 @@ Dependency, 'see' is treated as #$CD-MTrans to #$CP from eye by instrument of
 Default Mt: ConceptualDependencyVocabularyMt.
 
 Constant: CausalType.
-isa: PredicateCategory.
+isa: PredicateType.  ;; was PredicateCategory.
 genls: Predicate.
 ; I'd like AsymmetricBinaryPredicate as genls, but there is 'rE' which is a ternary predicate.
 
@@ -468,16 +468,16 @@ type is a predicate that causally relates instances of #$CD-ACTs and #$CD-STATES
 
 Default Mt: ConceptualDependencyVocabularyMt.
 
-Constant: cd-r.
+Constant: cd-r1.
 isa: AsymmetricBinaryPredicate CausalType.
 genlPreds: postSituation.
 arg1Isa: CD-ACT.
 arg2Isa: CD-STATE.
 
-comment: "(#$cd-r ACT STATE) means that an ACT results in a STATE. A predicate that
+comment: "(#$cd-r1 ACT STATE) means that an ACT results in a STATE. A predicate that
 causally relates instances of actions and states.".
 ;; hmm maybe also this..? but arg1 of postSituation is event, not action..
-;;; F: (genlPreds postSituation cd-r).
+;;; F: (genlPreds postSituation cd-r1).
 
 ;;----------------------------------
 
@@ -504,7 +504,7 @@ Default Mt: ConceptualDependencyVocabularyMt.
 Constant: cd-I.
 isa: AsymmetricBinaryPredicate CausalType.
 genlPreds: different startsAfterStartingOf.
-arg1Isa: Situation-Temporal.
+arg1Isa: Situation. ;; was Situation-Temporal.
 arg2Isa: CD-STATE MentalSituation.
 
 comment: "(#$cd-I STATE/ACT MSTATE) means that a STATE or ACT initiates a mental
@@ -513,15 +513,15 @@ state MSTATE.".
 ;;----------------------------------
 
 Default Mt: ConceptualDependencyVocabularyMt.
-;; to bad... cd-r already defined and this should be called cd-R..
-Constant: cd-R-MP.
+;; to bad... cd-r/CD-R already defined and this should be called cd-R..
+Constant: cd-R2.
 isa: AsymmetricBinaryPredicate CausalType.
 genlPreds: different startsAfterStartingOf.
 arg1Isa: CD-ACT MentalSituation.
 arg2Isa: CD-ACT PhysicalEvent.
 ;; or ActionOnObject ?
 
-comment: "(#$cd-R-MP MENTALACT PHYSICALACT) means that a MENTALACT is the reason for a
+comment: "(#$cd-R2 MENTALACT PHYSICALACT) means that a MENTALACT is the reason for a
 PHYSICALACT. (Mental acts include #$CD-MBuild and #$CD-MTrans, physical acts include
 #$CD-Propel, #$CD-PTrans, #$CD-Propel and #$CD-Move".
 
@@ -556,7 +556,7 @@ Direction: forward.
 F: (implies
      (cd-rE ?CAUSEACT ?RESULTSTATE ?ENABLEDACT)
      (and
-       (cd-r ?CAUSEACT ?RESULTSTATE)
+       (cd-r1 ?CAUSEACT ?RESULTSTATE)
        (cd-E ?RESULTSTATE ?ENABLEDACT))).
 Direction: forward.
 ;; rebuild into causes-EventEvent? (if that would exist)
@@ -570,7 +570,7 @@ Default Mt: ConceptualDependencyVocabularyMt.
 
 Constant: cd-IR.
 isa: TernaryPredicate CausalType.
-arg1Isa: Situation-Temporal.
+arg1Isa: Situation.  ;; was Situation-Temporal.
 arg2Isa: CD-STATE MentalSituation.
 arg3Isa: CD-ACT.
 
@@ -584,7 +584,7 @@ F: (implies
      (cd-IR ?CAUSE ?IDEA ?ACTION)
      (and
        (cd-I ?CAUSE ?IDEA)
-       (cd-R-MP ?IDEA ?ACTION))).
+       (cd-R2 ?IDEA ?ACTION))).
 
 ;;; ----------------------------------------------------------------
 ;;; Misc stuff
@@ -648,7 +648,7 @@ F:
     (holdsSometimeDuring ?BILLHASORANGE (owns CD-Bill ?ORANGE))
     (performedBy ?INGEST CD-Bill)
 
-    (cd-r ?INGEST ?BILLBETTER)
+    (cd-r1 ?INGEST ?BILLBETTER)
     (actors ?BILLBETTER CD-Bill)
   
 )    

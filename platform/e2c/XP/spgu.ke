@@ -259,16 +259,16 @@ F:
 ;;; Causality, types defined in conceptualdependency but now on scripts.
 ;;;----------------------------------
 
-Constant: cd-r-ScriptScript.
+Constant: cd-r1-ScriptScript.
 In Mt: SPGUVocabularyMt.
 isa: AsymmetricBinaryPredicate ScriptCausalType.
 ;;genlPreds: postSituation.
 arg1Isa: AtomicActionScript.
 arg2Isa: StateScript.
-comment: "(#$cd-r-ScriptScript ACTSCRIPT STATESCRIPT) means that a script with an action results
+comment: "(#$cd-r1-ScriptScript ACTSCRIPT STATESCRIPT) means that a script with an action results
 in a script with a state. A predicate that
-causally relates types (specializations of) actions and states. See also the variant on objects #$cd-r.".
-; If a story references a script and a state that are related with cd-r -> also
+causally relates types (specializations of) actions and states. See also the variant on objects #$cd-r1.".
+; If a story references a script and a state that are related with cd-r1 -> also
 ; infer that for the story.
 In Mt: SPGUMt.
 Direction: forward.
@@ -278,8 +278,8 @@ F: (implies
    (storyReferences ?STATE ?STATESCRIPT)
    (subEvents ?STORY ?ACT)
    (subSituations ?STORY ?STATE)
-   (cd-r-ScriptScript ?ACTSCRIPT ?STATESCRIPT))
- (cd-r ?ACT ?STATE)).
+   (cd-r1-ScriptScript ?ACTSCRIPT ?STATESCRIPT))
+ (cd-r1 ?ACT ?STATE)).
 
 Constant: cd-E-ScriptScript.
 In Mt: SPGUVocabularyMt.
@@ -302,14 +302,14 @@ arg2Isa: StateScript.
 comment: "(#$cd-I-ScriptScript STATESCRIPT/ACTIONSCRIPT MSTATESCRIPT) means that SCRIPT initiates a mental
 state MSTATESCRIPT.".
 
-;; to bad... cd-r already defined and this should be called cd-R..
-Constant: cd-R-MP-ScriptScript.
+;; to bad... cd-r1 already defined and this should be called cd-R..
+Constant: cd-R2-ScriptScript.
 In Mt: SPGUVocabularyMt.
 isa: AsymmetricBinaryPredicate ScriptCausalType.
 ;;;genlPreds: different startsAfterStartingOf.
 arg1Isa: AtomicActionScript.
 arg2Isa: AtomicActionScript.
-comment: "(#$cd-R-MP-ScriptScript MENTALACTSCRIPT PHYSICALACTSCRIPT) means that a type of MENTALACT
+comment: "(#$cd-R2-ScriptScript MENTALACTSCRIPT PHYSICALACTSCRIPT) means that a type of MENTALACT
 is the reason for a type of PHYSICALACT. (Mental acts include #$CD-MBuild and #$CD-MTrans, physical acts include
 #$CD-Propel, #$CD-PTrans, #$CD-Propel and #$CD-Move".
 
@@ -328,8 +328,9 @@ isa: TernaryPredicate ScriptCausalType.
 arg1Isa: AtomicActionScript.
 arg2Isa: StateScript.
 arg3Isa: AtomicActionScript.
-comment: "(#$cd-rE-ScriptScript ACTSCRIPT STATESCRIPT ACTSCRIPT) a short wat to say cd-r-ScriptScript
-and cd-R-ScriptScript.".
+comment: "(#$cd-rE-ScriptScript ACTSCRIPT STATESCRIPT ACTSCRIPT) 
+  a short way to say cd-r1-ScriptScript
+and cd-R2-ScriptScript.".
 
 Default Mt: SPGUMt.
 ;; rebuild into smaller parts
@@ -337,7 +338,7 @@ Direction: forward.
 F: (implies
      (cd-rE-ScriptScript ?CAUSEACTCOL ?RESULTSTATECOL ?ENABLEDACTCOL)
      (and
-       (cd-r-ScriptScript ?CAUSEACTCOL ?RESULTSTATECOL)
+       (cd-r1-ScriptScript ?CAUSEACTCOL ?RESULTSTATECOL)
        (cd-E-ScriptScript ?RESULTSTATECOL ?ENABLEDACTCOL))).
 
 
@@ -349,7 +350,7 @@ arg2Isa: StateScript.
 arg3Isa: AtomicActionScript.
 
 comment: "(#$cd-IR-ScriptScript ACTSCRIPT MSTATESCRIPT ACTSCRIPT) a type of ACT or STATE initiates a kind of
-thought MSTATE which is the reason to type of ACT. A short way for cd-R-ScriptScript and cd-R-ScriptScript.".
+thought MSTATE which is the reason to type of ACT. A short way for cd-R2-ScriptScript and cd-R2-ScriptScript.".
 
 Default Mt: SPGUMt.
 ;; rebuild into smaller parts
@@ -358,7 +359,7 @@ F: (implies
      (cd-IR-ScriptScript ?CAUSECOL ?IDEACOL ?ACTIONCOL)
      (and
        (cd-I-ScriptScript ?CAUSECOL ?IDEACOL)
-       (cd-R-MP-ScriptScript ?IDEACOL ?ACTIONCOL))).
+       (cd-R2-ScriptScript ?IDEACOL ?ACTIONCOL))).
 
 
 ;;;----------------------------------
@@ -582,7 +583,7 @@ F: (implies
 ;;; firstSubEvent
 ;;; lastSubEvent
 ;;; (causes-EventEvent?)
-;;; every CausalType: cd-IR, cd-rE, cd-dE, cd-R-MP, cd-r, cd-I, cd-E 
+;;; every CausalType: cd-IR, cd-rE, cd-dE, cd-R2, cd-r1, cd-I, cd-E 
 ;;;----------------------------------
 ;;;----------------------------------
 ;;; predicates on scripts  (see #$ScriptPredicate)
