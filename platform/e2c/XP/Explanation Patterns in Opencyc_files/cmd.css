@@ -1,0 +1,81 @@
+BODY{
+	background: #000000;
+	color: #e0e0e0;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 14px;
+}
+SELECT, INPUT{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	}
+INPUT.grijs {
+	background: #d0d0d0;
+	color: #000000;
+	font-weight: bold;
+}	
+TD, TH, P{
+	font-family: Arial, Helvetica,sans-serif;
+	font-size: 14px;
+	vertical-align: top;
+}
+TH{	text-align: left;
+	background: #003388;
+}
+H1{	font-size: 22px; }
+H2{	font-size: 18px; }
+H3{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 17px;
+}
+H4{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+}
+TEXTAREA, PRE{
+	font-family: Courier New, Courier;
+	font-size: 11px;
+}
+A{
+	color: #4488CC;
+	text-decoration: none;
+	font-weight: bold;
+}
+A:visited{
+	color: #00AACC;
+	text-decoration: none;
+}
+A:hover{
+	color: #DDEEFF;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.zwart{	background: #000000; }
+.horrible{ background: #FF0000; }
+.slecht{ background: #D06040; }
+.normaal{ background: #808080; }
+.goed{ background: #40D060; }
+.fantastisch{ background: #00FF00; }
+.bold{ font-weight: bold; }
+
+/*
+     FILE ARCHIVED ON 23:49:53 Aug 13, 2004 AND RETRIEVED FROM THE
+     INTERNET ARCHIVE ON 12:11:12 Jan 09, 2019.
+     JAVASCRIPT APPENDED BY WAYBACK MACHINE, COPYRIGHT INTERNET ARCHIVE.
+
+     ALL OTHER CONTENT MAY ALSO BE PROTECTED BY COPYRIGHT (17 U.S.C.
+     SECTION 108(a)(3)).
+*/
+/*
+playback timings (ms):
+  LoadShardBlock: 125.858 (3)
+  esindex: 0.004
+  captures_list: 139.672
+  CDXLines.iter: 8.989 (3)
+  PetaboxLoader3.datanode: 209.744 (4)
+  exclusion.robots: 0.116
+  exclusion.robots.policy: 0.108
+  RedisCDXSource: 3.101
+  PetaboxLoader3.resolve: 45.145
+  load_resource: 172.655
+*/
