@@ -30,7 +30,8 @@ System Enablements
 --bowl         BeanBowl UI           (Featherwieght Widget/Class Inspector)
 --appdapter    AppdapterGUI          (UI that designs itself as your data mutaes)
 
-
+--jdwp=5005    Start the JVM Debug interface locally
+--jdwp=10.0.0.122:5005  Or remotely connect to one
 
 --noXXX        (such as --nogui)  is equivalent to --XXX=[false,f,no,n,0,off]
 
@@ -67,12 +68,12 @@ the variable EXTENSIONS:*COMMAND-LINE-ARGUMENT-LIST*.
 
 
 -D switches:
+````
+  -Dbaseport=3600          CYC/LarKC Base TCP Port
+  -Dhostname=10.0.0.180    
+````  
 
-  -Dbaseport=3600
 
-  -Dhostname=10.0.0.180
-  
- 
 
 Examples:
 
