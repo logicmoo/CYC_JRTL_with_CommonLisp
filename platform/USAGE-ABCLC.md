@@ -6,10 +6,6 @@ Which REPL to start from
 --repl=[prolog,cyc,cl,bsh] 
 ````
 
-New Threads (thus commonly I/O and REPLs) launch in what console interface?
-````
---console=[stdio,j,bshgui,awt,swing]  
-````
 
 System Enablements
 ````
@@ -38,6 +34,21 @@ System Enablements
 --XXX          Is same as:  --XXX=[true,t,yes,y,1,on]
 
 ````
+
+
+Worker Threads and extra REPLs commonly need I/O and thus launch into a console interface
+````
+--console=[stdio,telnet,bshgui,j,awt,swing]   
+
+Special cases when this was unspecified:
+
+--nogui   changes console to: telnet (Except for the first REPL)
+--bshgui  changes console to: bshgui
+--j       changes console to: j
+
+````
+
+
 
 
 JRTL/Cyc/Lisp-only
@@ -78,4 +89,4 @@ the variable EXTENSIONS:*COMMAND-LINE-ARGUMENT-LIST*.
 Examples:
 
 
-  
+./abclc   

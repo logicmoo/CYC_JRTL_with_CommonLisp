@@ -1,16 +1,14 @@
+#!/usr/bin/env swipl
 
-
-:- use_module(library(logicmoo_utils)).
+:- gethostname(gitlab) -> (getenv('DISPLAY',_)->true;setenv('DISPLAY','10.0.0.122:0.0')) ; true.
+%:- ignore(shell('killall -9 xterm')).
 
 :- multifile user:file_search_path/2.
 :- dynamic   user:file_search_path/2.
 :- asserta((user:file_search_path(jar, ('.')))).
 user:file_search_path(runtime, ('.')).
 
-:- getenv('DISPLAY',_)->true;setenv('DISPLAY','10.0.0.122:0.0').
-
-%:- ignore(shell('killall -9 xterm')).
-
+:- use_module(library(logicmoo_utils_all)).
 :- use_module(library(dictoo)).
 
 po(O):- format(user_error,'~N % LO: ~w ;; ~w~n',[O.toString,O.getClass.getSimpleName]),!.
@@ -50,7 +48,7 @@ cl_eval_string(L):- cl_eval_string(L, O),po(O).
 % cl_eval(L,O):-cl_lisp_eval(L,O).
 
 call_ctrl(Head):- call_ctrl(Head,_).
-call_ctrl(Head,O):-oo_deref(Head,HeadE),dwq_call(call_crtl(call_ctrl,[{HeadE}],O)).
+call_ctrl(Head,O):- strip_module(Head,M,H),oo_deref(M,H,HeadE),dwq_call(call_crtl(call_ctrl,[{HeadE}],O)).
 call_crtl(Name,Args,O):-jpl_call('org.logicmoo.system.BeanShellCntrl',Name,Args,O).
 
 
@@ -271,6 +269,19 @@ jvm_opts(
      '-Dsun.java2d.d3d=false' 
      % ,'-Dfile.encoding=Cp1252',
      %,'-Xbootclasspath:C:\\pf\\java\\jdk\\jre\\lib\\resources.jar;C:\\pf\\java\\jdk\\jre\\lib\\rt.jar;C:\\pf\\java\\jdk\\jre\\lib\\jsse.jar;C:\\pf\\java\\jdk\\jre\\lib\\jce.jar;C:\\pf\\java\\jdk\\jre\\lib\\charsets.jar;C:\\pf\\java\\jdk\\jre\\lib\\jfr.jar;C:\\pf\\java\\jdk\\lib\\tools.jar;C:\\pf\\java\\jdk\\lib\\sa-jdi.jar'
+     ]):- gethostname(gitlab),!,
+       jdwp_remote(Host:Port),
+       (jdwp_available 
+         -> format(atom(JDWPOpt),'-agentlib:jdwp=transport=dt_socket,suspend=y,address=~w:~w,server=n',[Host,Port])
+         ; format(atom(JDWPOpt),'-agentlib:jdwp=transport=dt_socket,suspend=y,address=~w,server=y',[Port])).
+
+jvm_opts(
+    [JDWPOpt, %'-XX:PermSize=512m','-XX:MaxPermSize=4g','-Xmx26g',
+     '-server','-d64','-Xms5000m','-Xmx8000m','-XX:ReservedCodeCacheSize=96m','-XX:+DoEscapeAnalysis','-XX:+UseCompressedOops','-XX:+UseConcMarkSweepGC','-XshowSettings:vm',
+     '-Djava.util.Arrays.useLegacyMergeSort=true',
+     '-Dsun.java2d.d3d=false' 
+     % ,'-Dfile.encoding=Cp1252',
+     %,'-Xbootclasspath:C:\\pf\\java\\jdk\\jre\\lib\\resources.jar;C:\\pf\\java\\jdk\\jre\\lib\\rt.jar;C:\\pf\\java\\jdk\\jre\\lib\\jsse.jar;C:\\pf\\java\\jdk\\jre\\lib\\jce.jar;C:\\pf\\java\\jdk\\jre\\lib\\charsets.jar;C:\\pf\\java\\jdk\\jre\\lib\\jfr.jar;C:\\pf\\java\\jdk\\lib\\tools.jar;C:\\pf\\java\\jdk\\lib\\sa-jdi.jar'
      ]):- 
        jdwp_remote(Host:Port),
        (jdwp_available 
@@ -293,7 +304,7 @@ jpl:-
   setenv('PATH',PATH),
   jvm_opts(Opts),
   jpl_set_default_jvm_opts(Opts),
-  getenv('CLASSPATH',WAS),format('CLASSPATH=~q~n',[WAS]),
+  % getenv('CLASSPATH',WAS), format('CLASSPATH=~q~n',[WAS]),
   listing(jdwp_available),
   jpl:setup_jvm,
   jpl_classname_to_class('java.lang.Class', _CC))).
@@ -358,7 +369,7 @@ uabcl:- call_abcl_main(['--prologsync','--eval','(init-cyc-server)']).
 labcl:- call_abcl_main(['--prologsync','--eval','(init-cyc-server)','--eval','(cyc-repl)']).
 
 
-do_in_bg:- labcl.
+do_in_bg:- call_abcl_main(['--prologsync','--eval','(init-cyc-server)','--eval','(bg-repl)']).
 
 %in_bg:- dwq_call(jpl_call('org.logicmoo.system.BeanShellCntrl',start_from_prolog,[],_O)).
 

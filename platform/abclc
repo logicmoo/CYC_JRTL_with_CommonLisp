@@ -28,7 +28,7 @@ export JAVA_OPTS1="-agentlib:jdwp=transport=dt_socket,server=n,address=10.0.0.12
 export JAVA_OPTS2="-agentlib:jdwp=transport=dt_socket,server=y,address=5005,suspend=y"
 
 echo ""
-echo CLASSPATH=$CLASSPATH
+# echo CLASSPATH=$CLASSPATH
 echo ""
 echo LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 echo JAVA_HOME=$JAVA_HOME

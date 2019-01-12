@@ -144,14 +144,15 @@ public class SubLMain {
 			try {
 
 				boolean startInSubLisp = true;
-				Object val = me.argNameToArgValueMap.get("-lisp");
-				if (val != null && (val instanceof Boolean))
-					startInSubLisp = !((Boolean) val).booleanValue();
+				Object val = me.argNameToArgValueMap.get("repl");
+				if (val != null) {
+					startInSubLisp = !val.toString().endsWith("cl");
+				}
 
 				if (startInSubLisp) {
 					SubLPackage.setCurrentPackage(SubLPackage.CYC_PACKAGE);
 					//CycEval.CYC_REPL.execute();
-                    BeanShellCntrl.cyc_repl();
+                    BeanShellCntrl.cyc_repl_now();
 				} else {
 					//SubLPackage.setCurrentPackage(Lisp.PACKAGE_CL_USER);
 					SubLPackage.setCurrentPackage(SubLPackage.CYC_PACKAGE);

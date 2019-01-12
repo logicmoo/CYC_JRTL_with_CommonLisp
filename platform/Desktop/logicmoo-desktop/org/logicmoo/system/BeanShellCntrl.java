@@ -680,8 +680,31 @@ public class BeanShellCntrl
 		}
 	}
 
+	static boolean repl_in_bg = false;
+
 	@LispMethod
-	static public LispObject cyc_repl() throws InterruptedException
+	static public LispObject bg_repl() throws InterruptedException
+	{
+		if (!repl_in_bg)
+		{
+			repl_in_bg = true;
+			while (repl_in_bg)
+			{
+				Thread.sleep(200);
+			}
+		}
+		return Lisp.EOF;
+	}
+
+	@LispMethod
+	static public LispObject fg_repl()
+	{
+		repl_in_bg = false;
+		return Lisp.EOF;
+	}
+
+	@LispMethod
+	static public LispObject cyc_repl_now() throws InterruptedException
 	{
 		boolean wasSubLisp = Main.isSubLisp();
 		init_subl();
@@ -1787,7 +1810,7 @@ public class BeanShellCntrl
 	{
 		swipl_init();
 		scanForExports(BeanShellCntrl.class);
-		if (!started_from_prolog)
+		if (!started_from_prolog || true)
 		{
 			swipl_init_server();
 
@@ -2047,8 +2070,9 @@ public class BeanShellCntrl
 
 		static public void error(String message, String caller)
 		{
-			try {
-				show(message, caller, JOptionPane.ERROR_MESSAGE);		
+			try
+			{
+				show(message, caller, JOptionPane.ERROR_MESSAGE);
 			} catch (Throwable unk)
 			{
 				// unk.printStackTrace();
@@ -2060,7 +2084,7 @@ public class BeanShellCntrl
 		static public void error(Throwable e)
 		{
 			e.printStackTrace();
-			
+
 			error(createStackTraceString(e));
 		}
 
@@ -2078,10 +2102,10 @@ public class BeanShellCntrl
 		{
 			try
 			{
-				 final Toolkit AWT_TOOLKIT = Toolkit.getDefaultToolkit();
-				 final Clipboard CLIPBOARD = AWT_TOOLKIT.getSystemClipboard();
+				final Toolkit AWT_TOOLKIT = Toolkit.getDefaultToolkit();
+				final Clipboard CLIPBOARD = AWT_TOOLKIT.getSystemClipboard();
 				CLIPBOARD.setContents(new StringSelection(message), null);
-				
+
 			} catch (Throwable unk)
 			{
 				// unk.printStackTrace();

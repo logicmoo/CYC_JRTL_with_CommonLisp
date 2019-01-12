@@ -131,7 +131,7 @@ public final class CycEval {
 		public LispObject execute() {
 			try
 			{
-				return BeanShellCntrl.cyc_repl();
+				return BeanShellCntrl.cyc_repl_now();
 			} catch (Throwable e)
 			{
 				e.printStackTrace();

@@ -191,7 +191,11 @@ public class Lisp
   }
 
   // End-of-file marker.
-  public static final LispObject EOF = new LispObject();
+  public static final LispObject EOF = new LispObject() {
+	    public String printObjectImpl() {
+	        return unreadableString("end-of-file marker", false);
+	      }
+  };
 
   // String hash randomization base
   // Sets a base offset hashing value per JVM session, as an antidote to

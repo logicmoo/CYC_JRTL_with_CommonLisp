@@ -52,10 +52,10 @@ public class SOAPBinaryCycConnection implements CycConnectionInterface
 	public static String DEFAULT_SOAP_ENDPOINT =
 
 			"http://" + //
-					CycConnection.DEFAULT_HOSTNAME + //
+					CycConnection.DEFAULT_HOSTNAME + // 
 					":" + //
-					(4480 + CycConnection.DEFAULT_BASE_PORT) + //
-					"80/axis/services/CycSOAPService";
+					(4480 + CycConnection.DEFAULT_BASE_PORT) + // 4480 + 3600 = 8080 
+					"/axis/services/CycSOAPService";
 
 	//// Constructors
 	/** Creates a new instance of SOAPCycConnection using a default endpoint URL */
