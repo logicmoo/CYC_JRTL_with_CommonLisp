@@ -1,4 +1,4 @@
-/* $Id: DefaultSubLWorker.java 138070 2012-01-10 19:46:08Z sbrown $
+/* $Id: DefaultSubLWorker.java 145590 2013-05-15 21:12:52Z vijay $
  */
 
 package org.opencyc.api;
@@ -81,7 +81,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  *
  * @author tbrussea
  * @date March 25, 2004, 2:01 PM
- * @version $Id: DefaultSubLWorker.java 138070 2012-01-10 19:46:08Z sbrown $
+ * @version $Id: DefaultSubLWorker.java 145590 2013-05-15 21:12:52Z vijay $
  */
 public class DefaultSubLWorker implements SubLWorker {
   
@@ -175,7 +175,7 @@ public class DefaultSubLWorker implements SubLWorker {
    * @param access the Cyc server that should process the SubL command
    * @param priority the priority at which the worker will be scheduled
    * on the CYC server side; 
-   * @see getPriority()
+   * @see #getPriority()
    */  
   public DefaultSubLWorker(CycList subLCommand, CycAccess access, 
       Integer priority) {
@@ -192,7 +192,7 @@ public class DefaultSubLWorker implements SubLWorker {
    * stop there as well.
    * @param priority the priority at which the worker will be scheduled
    * on the CYC server side; 
-   * @see getPriority()
+   * @see #getPriority()
    */  
   public DefaultSubLWorker(CycList subLCommand, CycAccess access, 
       long timeoutMsecs, Integer priority) {
@@ -206,7 +206,7 @@ public class DefaultSubLWorker implements SubLWorker {
    * incremental results
    * @param priority the priority at which the worker will be scheduled
    * on the CYC server side; 
-   * @see getPriority()
+   * @see #getPriority()
    */  
   public DefaultSubLWorker(CycList subLCommand, CycAccess access, 
       boolean expectIncrementalResults, Integer priority) {
@@ -230,7 +230,7 @@ public class DefaultSubLWorker implements SubLWorker {
    * stop there as well.
    * @param priority the priority at which the worker will be scheduled
    * on the CYC server side; 
-   * @see getPriority()
+   * @see #getPriority()
    */  
   public DefaultSubLWorker(CycList subLCommand, CycAccess access, 
       boolean expectIncrementalResults, long timeoutMsecs, Integer priority) {
@@ -332,8 +332,7 @@ public class DefaultSubLWorker implements SubLWorker {
     }
     setStatus(SubLWorkerStatus.WORKING_STATUS);
     
-    CycConnectionInterface conInt = getCycServer().getCycConnection();
-    conInt.converseBinary(this);    
+    getCycServer().converseWithRetrying(this);
   }
   
   /**
@@ -375,11 +374,11 @@ public class DefaultSubLWorker implements SubLWorker {
   /**
    * Return the task's priority. This is a value that meets the
    * constraints of SL:SET-PROCESS-PRIORITY.
-   * @see CycConnection.MAX_PRIORITY
-   * @see CycConnection.CRITICAL_PRIORITY
-   * @see CycConnection.NORMAL_PRIORITY
-   * @see CycConnection.BACKGROUND_PRIORITY
-   * @see CycConnection.MIN_PRIORITY
+   * @see CycConnection#MAX_PRIORITY
+   * @see CycConnection#CRITICAL_PRIORITY
+   * @see CycConnection#NORMAL_PRIORITY
+   * @see CycConnection#BACKGROUND_PRIORITY
+   * @see CycConnection#MIN_PRIORITY
    * @return the priority of the process
    */
   public Integer getPriority() {
@@ -598,7 +597,7 @@ public class DefaultSubLWorker implements SubLWorker {
     this.status = status;
   }
   
-  public BlockingQueue<CycConnection.TaskProcessorBinaryResponseHandler.NotificationTask> getNotificationQueue() {
+  public BlockingQueue<NotificationTask> getNotificationQueue() {
     return notificationQueue;
   }
   
@@ -621,8 +620,8 @@ public class DefaultSubLWorker implements SubLWorker {
   private volatile SubLWorkerStatus status = 
     SubLWorkerStatus.NOT_STARTED_STATUS;
   
-  private BlockingQueue<CycConnection.TaskProcessorBinaryResponseHandler.NotificationTask> notificationQueue 
-      = new LinkedBlockingQueue<CycConnection.TaskProcessorBinaryResponseHandler.NotificationTask>();
+  private BlockingQueue<NotificationTask> notificationQueue 
+      = new LinkedBlockingQueue<NotificationTask>();
   
   private Integer priority;
   

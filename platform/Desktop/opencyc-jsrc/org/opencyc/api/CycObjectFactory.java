@@ -27,7 +27,7 @@ import org.xml.sax.SAXException;
  *
  * Collaborates with the <tt>CycConnection</tt> class which manages the api connections.
  *
- * @version $Id: CycObjectFactory.java 140074 2012-05-18 14:24:36Z daves $
+ * @version $Id: CycObjectFactory.java 146582 2013-07-22 14:22:27Z daves $
  * @author Stephen L. Reed
  *
  * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
@@ -38,7 +38,7 @@ import org.xml.sax.SAXException;
  * THIS SOFTWARE AND KNOWLEDGE BASE CONTENT ARE PROVIDED ``AS IS'' AND
  * ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
- * PARTICULAR PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE OPENCYC
+ * PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE OPENCYC
  * ORGANIZATION OR ITS CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
  * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
@@ -77,26 +77,28 @@ public class CycObjectFactory {
    * The api command which is intercepted by the CycProxy agent to close the CycAccess object
    * associated with the connection between this agent and the particular cyc image.
    */
-  public static final CycList END_CYC_CONNECTION = (new CycList(makeCycSymbol("end-cyc-connection")));
+  public static final CycList END_CYC_CONNECTION = (new CycList(makeCycSymbol(
+          "end-cyc-connection")));
   /**
    * the default size of the constant cache by name
    */
   public static final int CONSTANT_CACHE_BY_NAME_SIZE = 10000;
   /**
    * Least Recently Used Cache of CycConstants, so that a reference to an existing <tt>CycConstant</tt>
-   * is returned instead of constructing a duplicate.  Indexed via the name, so is optimised for the ascii api.
+   * is returned instead of constructing a duplicate. Indexed via the name, so is optimised for the ascii api.
    */
-  protected static LRUCache cycConstantCacheByName = new LRUCache(1000, CONSTANT_CACHE_BY_NAME_SIZE, true);
+  protected static LRUCache cycConstantCacheByName = new LRUCache(1000,
+          CONSTANT_CACHE_BY_NAME_SIZE, true);
   /**
    * the default size of the constant cache by GUID
    */
   public static final int CONSTANT_CACHE_BY_GUID_SIZE = 10000;
   /**
    * Least Recently Used Cache of CycConstants, so that a reference to an existing <tt>CycConstant</tt>
-   * is returned instead of constructing a duplicate.  Indexed via the guid.
+   * is returned instead of constructing a duplicate. Indexed via the guid.
    */
-  protected static LRUCache cycConstantCacheByGuid = new LRUCache(CONSTANT_CACHE_BY_GUID_SIZE, CONSTANT_CACHE_BY_GUID_SIZE, true);
-
+  protected static LRUCache cycConstantCacheByGuid = new LRUCache(
+          CONSTANT_CACHE_BY_GUID_SIZE, CONSTANT_CACHE_BY_GUID_SIZE, true);
   /**
    * the default size of the CycNumber cache
    */
@@ -106,28 +108,26 @@ public class CycObjectFactory {
    * is returned instead of constructing a duplicate.
    */
   protected static LRUCache<Number, CycNumber> cycNumberCache =
-          new LRUCache<Number, CycNumber>(NUMBER_CACHE_SIZE, NUMBER_CACHE_SIZE, true);
- 
+          new LRUCache<Number, CycNumber>(NUMBER_CACHE_SIZE, NUMBER_CACHE_SIZE,
+          true);
   /**
    * Least Recently Used Cache of guids, so that a reference to an existing <tt>Guid</tt>
    * is returned instead of constructing a duplicate.
    */
   protected static LRUCache guidCache = new LRUCache(500, 500, true);
-    /**
-     * the default size of the variable cache
-     */
-    public static final int VARIABLE_CACHE_SIZE = 500;
-    
-            /**
-         * A variable name suffix used to make unique names.
-         */
-        protected static int suffix = 1;
-        
-        
+  /**
+   * the default size of the variable cache
+   */
+  public static final int VARIABLE_CACHE_SIZE = 500;
+  /**
+   * A variable name suffix used to make unique names.
+   */
+  protected static int suffix = 1;
+
   /**
    * Constructs a new <tt>CycSymbol</tt> object.
    *
-   * @param symbolName a <tt>String</tt> name.
+   * @param symbolNameAnyCase a <tt>String</tt> name.
    */
   public static CycSymbol makeCycSymbol(String symbolNameAnyCase) {
     String symbolName = CycSymbol.canonicalizeName(symbolNameAnyCase);
@@ -139,15 +139,18 @@ public class CycObjectFactory {
     return cycSymbol;
   }
 
-  public static CycSymbol makeCycSymbol(String packageNameCaseSensitive, String symbolNameCaseSensitive) {
+  public static CycSymbol makeCycSymbol(String packageNameCaseSensitive,
+          String symbolNameCaseSensitive) {
     CycSymbol cycSymbol = null;
     String symbolName = symbolNameCaseSensitive;
-    if ((packageNameCaseSensitive != null) && (!"".equals(packageNameCaseSensitive))) {
+    if ((packageNameCaseSensitive != null) && (!"".equals(
+            packageNameCaseSensitive))) {
       symbolName = packageNameCaseSensitive + ":" + symbolNameCaseSensitive;
     }
     cycSymbol = (CycSymbol) cycSymbolCache.get(symbolNameCaseSensitive);
     if (cycSymbol == null) {
-      cycSymbol = new CycSymbol(packageNameCaseSensitive, symbolNameCaseSensitive);
+      cycSymbol = new CycSymbol(packageNameCaseSensitive,
+              symbolNameCaseSensitive);
       cycSymbolCache.put(symbolName, cycSymbol);
     }
     return cycSymbol;
@@ -156,12 +159,14 @@ public class CycObjectFactory {
   /**
    * Constructs a new <tt>CycSymbol</tt> object.
    *
-   * @param symbolName a <tt>String</tt> name.
+   * @param symbolNameAnyCase a <tt>String</tt> name.
+   * @see org.opencyc.cycobject.CycSymbol
    */
-  public static CycSymbol makeCycSymbol(String symbolNameAnyCase, boolean shouldQuote) {
+  public static CycSymbol makeCycSymbol(String symbolNameAnyCase,
+          boolean shouldQuote) {
     String symbolName = CycSymbol.canonicalizeName(symbolNameAnyCase);
     CycSymbol cycSymbol = (CycSymbol) cycSymbolCache.get(symbolName);
-    if (cycSymbol == null) {
+    if (cycSymbol == null || cycSymbol.shouldQuote() != shouldQuote) {
       cycSymbol = new CycSymbol(symbolName, shouldQuote);
       cycSymbolCache.put(symbolName, cycSymbol);
     }
@@ -185,7 +190,6 @@ public class CycObjectFactory {
     cycSymbolCache.put(CycSymbol.canonicalizeName("`"), backquote);
     cycSymbolCache.put(CycSymbol.canonicalizeName(":NULL"), nul);
   }
-
   /** The number of symbols that should be in a freshly reset cache. */
   public static final int RESET_SYMBOL_CACHE_SIZE = 7;
 
@@ -240,12 +244,15 @@ public class CycObjectFactory {
    * Resets the Cyc constant caches.
    */
   public static void resetCycConstantCaches() {
-    cycConstantCacheByName = new LRUCache(CONSTANT_CACHE_BY_NAME_SIZE, CONSTANT_CACHE_BY_NAME_SIZE, true);
-    cycConstantCacheByGuid = new LRUCache(CONSTANT_CACHE_BY_GUID_SIZE, CONSTANT_CACHE_BY_NAME_SIZE, true);
+    cycConstantCacheByName = new LRUCache(CONSTANT_CACHE_BY_NAME_SIZE,
+            CONSTANT_CACHE_BY_NAME_SIZE, true);
+    cycConstantCacheByGuid = new LRUCache(CONSTANT_CACHE_BY_GUID_SIZE,
+            CONSTANT_CACHE_BY_NAME_SIZE, true);
   }
 
   /**
-   * Adds the <tt>CycConstant<tt> to the cache by name and by guid
+   * Adds the <tt>CycConstant</tt> to the cache by name and by guid
+   *
    * @param cycConstant the Cyc constant to be added to the cache
    */
   public static void addCycConstantCache(final CycConstant cycConstant) {
@@ -256,14 +263,14 @@ public class CycObjectFactory {
   }
 
   /**
-   * Retrieves the <tt>CycConstant<tt> with name, returning null if not found in the cache.
+   * Retrieves the <tt>CycConstant</tt> with name, returning null if not found in the cache.
    */
   public static CycConstant getCycConstantCacheByName(String name) {
     return (CycConstant) cycConstantCacheByName.get(name);
   }
 
   /**
-   * Retrieves the <tt>CycConstant<tt> with guid, returning null if not found in the cache.
+   * Retrieves the <tt>CycConstant</tt> with guid, returning null if not found in the cache.
    */
   public static CycConstant getCycConstantCacheByGuid(Guid guid) {
     return (CycConstant) cycConstantCacheByGuid.get(guid.toString());
@@ -298,115 +305,120 @@ public class CycObjectFactory {
     return cycConstantCacheByName.size();
   }
 
-    /**
-     * Constructs a new <tt>CycVariable</tt> object using the variable name.
-     *
-     * @param name a <tt>String</tt> name.
-     */
-    public static CycVariable makeCycVariable(String name) {
-        /*
-         * if (name.startsWith("?")) name = name.substring(1);
-         */
-        return CycVariableFactory.get(name);
-    }
-
-    /**
-     * Constructs a new <tt>CycVariable</tt> object by suffixing the given
-     * variable.
-     *
-     * @param modelCycVariable a <tt>CycVariable</tt> to suffix
-     */
-    public static CycVariable makeUniqueCycVariable(CycVariable modelCycVariable) {
-        return CycVariableFactory.get(modelCycVariable.name + "-" + suffix++);
-    }
-    
-    private static Pattern variableNumericSuffixPattern = Pattern.compile("-([0-9]*)$");
-
-    /**
-     * Return a CycVariable that is guaranteed to be different from all the
-     * variables in existingVariables.  If <code>modelCycVariable</code> is already
-     * different from those in <code>existingVariables</code>, it may be returned.
-     * 
-     * @param modelCycVariable
-     * @param existingVariables
-     * @return 
-     */
-    public static CycVariable makeUniqueCycVariable(CycVariable modelCycVariable,
-            Collection<CycObject> existingVariables) {
-        if (!existingVariables.contains(modelCycVariable)) {
-            return modelCycVariable;
-        } else {
-            CycVariable newVar;
-            Matcher matcher = variableNumericSuffixPattern.matcher(modelCycVariable.name);
-            if (matcher.find()) {
-                Integer num = Integer.parseInt(matcher.group(1)) + 1;
-                do {
-                    newVar = CycVariableFactory.get(modelCycVariable.name.substring(0, matcher.start() + 1) + num++);
-                } while (existingVariables.contains(newVar));
-            } else {
-                Integer num = 1;
-                do {
-                    newVar = CycVariableFactory.get(modelCycVariable.name + "-" + num++);
-                } while (existingVariables.contains(newVar));
-            }
-            return newVar;
-        }
-    }
-
-    /**
-     * Resets the <tt>CycVariable</tt> cache.
-     */
-    @Deprecated
-    public static void resetCycVariableCache() {
-        CycVariableFactory.reset();
-    }
-
-    /**
-     * Adds the <tt>CycVariable<tt> to the cache.
-     */
-    @Deprecated
-    public static void addCycVariableCache(CycVariable cycVariable) {
-        if (cycVariable.name == null) {
-            throw new RuntimeException("Invalid variable for caching " + cycVariable);
-        }
-        CycVariableFactory.add(cycVariable);
-    }
-
-    /**
-     * Retrieves the <tt>CycVariable</tt> with <tt>name</tt>, returning null if
-     * not found in the cache.
-     *
-     * @return a <tt>CycVariable</tt> if found in the cache, otherwise
-     * <tt>null</tt>
-     */
-    @Deprecated
-    public static CycVariable getCycVariableCache(String name) {
-        return CycVariableFactory.get(name);
-    }
-
-    /**
-     * Removes the <tt>CycVariable</tt> from the cache if it is contained
-     * within.
-     */
-    @Deprecated
-    public static void removeCycVariableCache(CycVariable cycVariable) {
-        CycVariableFactory.remove(cycVariable);
-    }
-
-    /**
-     * Returns the size of the <tt>CycVariable</tt> object cache.
-     *
-     * @return an <tt>int</tt> indicating the number of <tt>CycVariable</tt>
-     * objects in the cache
-     */
-    public static int getCycVariableCacheSize() {
-        return CycVariableFactory.size();
-    }
-
   /**
-   * Constructs a new <tt>CycNumber</tt> object using the variable name.
+   * Constructs a new <tt>CycVariable</tt> object using the variable name.
    *
    * @param name a <tt>String</tt> name.
+   */
+  public static CycVariable makeCycVariable(String name) {
+    /*
+     * if (name.startsWith("?")) name = name.substring(1);
+     */
+    return CycVariableFactory.get(name);
+  }
+
+  /**
+   * Constructs a new <tt>CycVariable</tt> object by suffixing the given
+   * variable.
+   *
+   * @param modelCycVariable a <tt>CycVariable</tt> to suffix
+   */
+  public static CycVariable makeUniqueCycVariable(CycVariable modelCycVariable) {
+    return CycVariableFactory.get(modelCycVariable.name + "-" + suffix++);
+  }
+  private static Pattern variableNumericSuffixPattern = Pattern.compile(
+          "-([0-9]*)$");
+
+  /**
+   * Return a CycVariable that is guaranteed to be different from all the
+   * variables in existingVariables. If
+   * <code>modelCycVariable</code> is already
+   * different from those in
+   * <code>existingVariables</code>, it may be returned.
+   *
+   * @param modelCycVariable
+   * @param existingVariables
+   * @return the new variable
+   */
+  public static CycVariable makeUniqueCycVariable(CycVariable modelCycVariable,
+          Collection<CycObject> existingVariables) {
+    if (!existingVariables.contains(modelCycVariable)) {
+      return modelCycVariable;
+    } else {
+      CycVariable newVar;
+      Matcher matcher = variableNumericSuffixPattern.matcher(
+              modelCycVariable.name);
+      if (matcher.find()) {
+        Integer num = Integer.parseInt(matcher.group(1)) + 1;
+        do {
+          newVar = CycVariableFactory.get(modelCycVariable.name.substring(0,
+                  matcher.start() + 1) + num++);
+        } while (existingVariables.contains(newVar));
+      } else {
+        Integer num = 1;
+        do {
+          newVar = CycVariableFactory.get(modelCycVariable.name + "-" + num++);
+        } while (existingVariables.contains(newVar));
+      }
+      return newVar;
+    }
+  }
+
+  /**
+   * Resets the <tt>CycVariable</tt> cache.
+   */
+  @Deprecated
+  public static void resetCycVariableCache() {
+    CycVariableFactory.reset();
+  }
+
+  /**
+   * Adds the <tt>CycVariable<tt> to the cache.
+   */
+  @Deprecated
+  public static void addCycVariableCache(CycVariable cycVariable) {
+    if (cycVariable.name == null) {
+      throw new RuntimeException("Invalid variable for caching " + cycVariable);
+    }
+    CycVariableFactory.add(cycVariable);
+  }
+
+  /**
+   * Retrieves the <tt>CycVariable</tt> with <tt>name</tt>, returning null if
+   * not found in the cache.
+   *
+   * @return a <tt>CycVariable</tt> if found in the cache, otherwise
+   * <tt>null</tt>
+   */
+  @Deprecated
+  public static CycVariable getCycVariableCache(String name) {
+    return CycVariableFactory.get(name);
+  }
+
+  /**
+   * Removes the <tt>CycVariable</tt> from the cache if it is contained
+   * within.
+   */
+  @Deprecated
+  public static void removeCycVariableCache(CycVariable cycVariable) {
+    CycVariableFactory.remove(cycVariable);
+  }
+
+  /**
+   * Returns the size of the <tt>CycVariable</tt> object cache.
+   *
+   * @return an <tt>int</tt> indicating the number of <tt>CycVariable</tt>
+   * objects in the cache
+   */
+  public static int getCycVariableCacheSize() {
+    return CycVariableFactory.size();
+  }
+
+  /**
+   * Constructs a new <tt>CycNumber</tt> object from a <tt>Number</tt>.
+   *
+   * @param num a <tt>Number</tt> number.
+   * @see java.lang.Number
    */
   public static CycNumber makeCycNumber(Number num) {
     CycNumber cycNumber = (CycNumber) cycNumberCache.get(num);
@@ -425,7 +437,7 @@ public class CycObjectFactory {
   }
 
   /**
-   * Adds the <tt>CycNumber<tt> to the cache.
+   * Adds the <tt>CycNumber</tt> to the cache.
    */
   public static void addCycNumberCache(CycNumber cycNumber) {
     if (cycNumber.getNumber() == null) {
@@ -468,7 +480,7 @@ public class CycObjectFactory {
    * Returns a cached <tt>Guid</tt> object or construct a new
    * Guid object from a guid string if the guid is not found in the cache.
    *
-   * @param guid a <tt>String</tt> form of a GUID.
+   * @param guidString a <tt>String</tt> form of a GUID.
    */
   public static Guid makeGuid(String guidString) {
     Guid guid = (Guid) guidCache.get(guidString);
@@ -530,42 +542,43 @@ public class CycObjectFactory {
   }
 
   /**
-   * Unmarshalls a cyc object from an XML representation.
+   * Unmarshals a cyc object from an XML representation.
    *
    * @param xmlString the XML representation of the cyc object
    * @return the cyc object
    */
-  public static Object unmarshall(final String xmlString) 
-      throws IOException, ParserConfigurationException, SAXException {
+  public static Object unmarshal(final String xmlString)
+          throws IOException, ParserConfigurationException, SAXException {
     DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
     dbf.setNamespaceAware(true);
     DocumentBuilder db = dbf.newDocumentBuilder();
-    Document doc = db.parse( new InputSource(new ByteArrayInputStream(xmlString.getBytes())));
-    return unmarshallElement(doc.getDocumentElement(), doc);
+    Document doc = db.parse(new InputSource(new ByteArrayInputStream(
+            xmlString.getBytes())));
+    return unmarshalElement(doc.getDocumentElement(), doc);
   }
 
   /**
-   * Unmarshalls a cyc object from the given element in an XML Document object.
+   * Unmarshals a cyc object from the given element in an XML Document object.
    *
    * @param element the element representing the cyc object
    * @param document the XML document containing the element
    * @return the cyc object
    */
-  protected static Object unmarshallElement(final Element element,
+  private static Object unmarshalElement(final Element element,
           final Document document) throws IOException {
     String elementName = element.getTagName();
     if (elementName.equals("guid")) {
-      return unmarshallGuid(element);
+      return unmarshalGuid(element);
     } else if (elementName.equals("symbol")) {
-      return unmarshallCycSymbol(element);
+      return unmarshalCycSymbol(element);
     } else if (elementName.equals("variable")) {
-      return unmarshallCycVariable(element);
+      return unmarshalCycVariable(element);
     } else if (elementName.equals("constant")) {
-      return unmarshallCycConstant(element, document);
+      return unmarshalCycConstant(element, document);
     } else if (elementName.equals("nat")) {
-      return unmarshallCycNart(element, document);
+      return unmarshalCycNart(element, document);
     } else if (elementName.equals("list")) {
-      return unmarshallCycList(element, document);
+      return unmarshalCycList(element, document);
     } else if (elementName.equals("string")) {
       return TextUtil.undoEntityReference(element.getTextContent());
     } else if (elementName.equals("integer")) {
@@ -573,21 +586,21 @@ public class CycObjectFactory {
     } else if (elementName.equals("double")) {
       return new Double(element.getTextContent().trim());
     } else if (elementName.equals("byte-vector")) {
-      return unmarshallByteArray(element, document);
+      return unmarshalByteArray(element, document);
     } else if (elementName.equals("assertion")) {
-      return unmarshallCycAssertion(element);
+      return unmarshalCycAssertion(element);
     } else {
       throw new IOException("Invalid element name " + elementName);
     }
   }
 
   /**
-   * Unmarshalls a Guid from the given element in an XML Document object.
+   * Unmarshals a Guid from the given element in an XML Document object.
    *
    * @param guidElement the guid xml element
    * @return the guid or cached reference to an existing guid object
    */
-  protected static Guid unmarshallGuid(Element guidElement) {
+  private static Guid unmarshalGuid(Element guidElement) {
     String guidString = guidElement.getTextContent().trim();
     Guid guid = getGuidCache(guidString);
     if (guid != null) {
@@ -597,13 +610,14 @@ public class CycObjectFactory {
   }
 
   /**
-   * Unmarshalls a CycSymbol from the given element in an XML Document object.
+   * Unmarshals a CycSymbol from the given element in an XML Document object.
    *
    * @param cycSymbolElement the CycSymbol xml element
    * @return the CycSymbol or cached reference to an existing CycSymbol object
    */
-  protected static CycSymbol unmarshallCycSymbol(Element cycSymbolElement) {
-    String symbolName = TextUtil.undoEntityReference(cycSymbolElement.getTextContent().trim());
+  private static CycSymbol unmarshalCycSymbol(Element cycSymbolElement) {
+    String symbolName = TextUtil.undoEntityReference(
+            cycSymbolElement.getTextContent().trim());
     CycSymbol cycSymbol = getCycSymbolCache(symbolName);
     if (cycSymbol != null) {
       return cycSymbol;
@@ -612,12 +626,13 @@ public class CycObjectFactory {
   }
 
   /**
-   * Unmarshalls a CycAssertion from the given element in an XML Document object.
+   * Unmarshals a CycAssertion from the given element in an XML Document object.
    *
    * @param cycAssertionElement the CycAssertion xml element
    * @return the CycAssertion object
    */
-  protected static CycAssertion unmarshallCycAssertion(Element cycAssertionElement) {
+  private static CycAssertion unmarshalCycAssertion(
+          Element cycAssertionElement) {
     //TODO
     CycList hlFormula = new CycList();
     CycFort mt = null;
@@ -625,20 +640,21 @@ public class CycObjectFactory {
   }
 
   /**
-   * Unmarshalls a CycVariable from the given element in an XML Document object.
+   * Unmarshals a CycVariable from the given element in an XML Document object.
    *
    * @param cycVariableElement the CycVariable xml element
    * @return the CycVariable or cached reference to an existing CycVariable object
    */
-  protected static CycVariable unmarshallCycVariable(Element cycVariableElement) {
-    String name = TextUtil.undoEntityReference(cycVariableElement.getTextContent().trim());
+  private static CycVariable unmarshalCycVariable(Element cycVariableElement) {
+    String name = TextUtil.undoEntityReference(
+            cycVariableElement.getTextContent().trim());
     CycVariable cycVariable = getCycVariableCache(name);
     if (cycVariable != null) {
       return cycVariable;
     }
     return makeCycVariable(name);
   }
-  
+
   private static Element getChild(Element parent, String tagName) {
     NodeList nodes = parent.getChildNodes();
     for (int i = 0, size = nodes.getLength(); i < size; i++) {
@@ -652,7 +668,7 @@ public class CycObjectFactory {
     }
     return null;
   }
-  
+
   private static Element getFirstChildElement(Element parent) {
     NodeList nodes = parent.getChildNodes();
     for (int i = 0, size = nodes.getLength(); i < size; i++) {
@@ -665,14 +681,14 @@ public class CycObjectFactory {
   }
 
   /**
-   * Unmarshalls a CycConstant from the given element in an XML Document object.
+   * Unmarshals a CycConstant from the given element in an XML Document object.
    *
    * @param cycConstantElement the element representing the CycConstant
    * @param document the XML document containing the element
-   * @param cycAccess the Cyc communications object
    * @return the CycConstant
    */
-  protected static CycConstant unmarshallCycConstant(final Element cycConstantElement,
+  private static CycConstant unmarshalCycConstant(
+          final Element cycConstantElement,
           final Document document) {
     CycConstant cycConstant = null;
     Guid guid = null;
@@ -701,28 +717,29 @@ public class CycObjectFactory {
   }
 
   /**
-   * Unmarshalls a CycNart from the given element in an XML Document object.
+   * Unmarshals a CycNart from the given element in an XML Document object.
    *
    * @param cycNartElement the element representing the CycNart
    * @param document the XML document containing the element
    * @return the CycNart
    */
-  protected static CycNart unmarshallCycNart(final Element cycNartElement,
+  private static CycNart unmarshalCycNart(final Element cycNartElement,
           final Document document) throws IOException {
     CycFort functor = null;
-    Node functorElement = getChild(cycNartElement, "functor");
+    Element functorElement = getChild(cycNartElement, "functor");
     if (functorElement != null) {
-      Element cycConstantFunctorElement = getChild(cycNartElement, "constant");
-      Element cycNartFunctorElement = getChild(cycNartElement, "nat");
+      Element cycConstantFunctorElement = getChild(functorElement, "constant");
+      Element cycNartFunctorElement = getChild(functorElement, "nat");
       if (cycConstantFunctorElement != null) {
         if (cycNartFunctorElement != null) {
           throw new IOException("Invalid CycNart functor" + functorElement);
         }
-        functor = unmarshallCycConstant(cycConstantFunctorElement, document);
+        functor = unmarshalCycConstant(cycConstantFunctorElement, document);
       } else if (cycNartFunctorElement != null) {
-        functor = unmarshallCycNart(cycNartFunctorElement, document);
+        functor = unmarshalCycNart(cycNartFunctorElement, document);
       } else {
-        throw new IOException("Missing functor constant/nart from CycNart " + cycNartElement);
+        throw new IOException(
+                "Missing functor constant/nart from CycNart " + cycNartElement);
       }
     }
     NodeList argElements = cycNartElement.getElementsByTagName("arg");
@@ -730,7 +747,8 @@ public class CycObjectFactory {
     for (int i = 0; i < argElements.getLength(); i++) {
       if (argElements.item(i) instanceof Element) {
         Element argElement = (Element) argElements.item(i);
-        arguments.add(unmarshallElement(getFirstChildElement(argElement), document));
+        arguments.add(unmarshalElement(getFirstChildElement(argElement),
+                document));
       }
     }
     CycList nartCycList = new CycList();
@@ -741,13 +759,13 @@ public class CycObjectFactory {
   }
 
   /**
-   * Unmarshalls a CycList from the given element in an XML Document object.
+   * Unmarshals a CycList from the given element in an XML Document object.
    *
    * @param cycListElement the element representing the CycList
    * @param document the XML document containing the element
    * @return the CycList
    */
-  protected static CycList unmarshallCycList(final Element cycListElement,
+  private static CycList unmarshalCycList(final Element cycListElement,
           final Document document)
           throws IOException {
     NodeList elements = cycListElement.getChildNodes();
@@ -757,9 +775,10 @@ public class CycObjectFactory {
       if (node.getNodeType() == Node.ELEMENT_NODE) {
         Element element = (Element) node;
         if (element.getTagName().equals("dotted-element")) {
-          cycList.setDottedElement(unmarshallElement(getFirstChildElement(element), document));
+          cycList.setDottedElement(unmarshalElement(getFirstChildElement(
+                  element), document));
         } else {
-          cycList.add(unmarshallElement(element, document));
+          cycList.add(unmarshalElement(element, document));
         }
       }
     }
@@ -767,13 +786,14 @@ public class CycObjectFactory {
   }
 
   /**
-   * Unmarshalls a ByteArray from the given element in an XML Document object.
+   * Unmarshals a ByteArray from the given element in an XML Document object.
    *
    * @param byteArrayElement the element representing the CycList
    * @param document the XML document containing the element
    * @return the ByteArray
    */
-  protected static ByteArray unmarshallByteArray(Element byteArrayElement, Document document)
+  private static ByteArray unmarshalByteArray(Element byteArrayElement,
+          Document document)
           throws IOException {
     NodeList elements = byteArrayElement.getChildNodes();
     ArrayList arrayList = new ArrayList();
@@ -792,42 +812,40 @@ public class CycObjectFactory {
     }
     return new ByteArray(bytes);
   }
-  
-    private static class CycVariableFactory {
 
+  private static class CycVariableFactory {
 
-        /**
-         * Least Recently Used Cache of CycVariables, so that a reference to an
-         * existing <tt>CycVariable</tt> is returned instead of constructing a
-         * duplicate.
-         */
-        protected static LRUCache cycVariableCache = new LRUCache(VARIABLE_CACHE_SIZE, VARIABLE_CACHE_SIZE, true);
+    /**
+     * Least Recently Used Cache of CycVariables, so that a reference to an
+     * existing <tt>CycVariable</tt> is returned instead of constructing a
+     * duplicate.
+     */
+    private static LRUCache cycVariableCache = new LRUCache(
+            VARIABLE_CACHE_SIZE, VARIABLE_CACHE_SIZE, true);
 
-        public static CycVariable get(String name) {
-            if (name.startsWith("?")) {
-                name = name.substring(1);
-            }
-            CycVariable cycVariable = (CycVariable) cycVariableCache.get(name);
-            if (cycVariable == null) {
-                cycVariable = new CycVariable(name);
-                cycVariableCache.put(name, cycVariable);
-            }
-            return cycVariable;
-        }
-        
-        public static void add(CycVariable var) {
-            cycVariableCache.put(var.name, var);
-        }
-
-        public static void remove(CycVariable var) {
-            cycVariableCache.remove(var.name);
-        }
-
-        public static int size() {
-            return cycVariableCache.size();
-        }        
-        static void reset() {
-                cycVariableCache = new LRUCache(VARIABLE_CACHE_SIZE, VARIABLE_CACHE_SIZE, true);
-        }
+    private static CycVariable get(String name) {
+      CycVariable cycVariable = (CycVariable) cycVariableCache.get(name);
+      if (cycVariable == null) {
+        cycVariable = new CycVariable(name);
+        cycVariableCache.put(name, cycVariable);
+      }
+      return cycVariable;
     }
+
+    private static void add(CycVariable var) {
+      cycVariableCache.put(var.name, var);
+    }
+
+    private static void remove(CycVariable var) {
+      cycVariableCache.remove(var.name);
+    }
+
+    private static int size() {
+      return cycVariableCache.size();
+    }
+
+    private static void reset() {
+      cycVariableCache.clear();
+    }
+  }
 }

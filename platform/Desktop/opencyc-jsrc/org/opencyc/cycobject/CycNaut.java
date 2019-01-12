@@ -1,4 +1,4 @@
-/* $Id: CycNaut.java 131492 2010-07-30 21:24:11Z baxter $
+/* $Id: CycNaut.java 142599 2013-01-03 17:15:53Z baxter $
  *
  * Copyright (c) 2008 Cycorp, Inc.  All rights reserved.
  * This software is the proprietary information of Cycorp, Inc.
@@ -24,7 +24,7 @@ import org.opencyc.util.DateConverter;
  *
  * Created on : Jul 6, 2009, 10:05:20 AM
  * Author     : baxter
- * @version $Id: CycNaut.java 131492 2010-07-30 21:24:11Z baxter $
+ * @version $Id: CycNaut.java 142599 2013-01-03 17:15:53Z baxter $
  */
 public class CycNaut extends CycFormula implements CycNonAtomicTerm, CycDenotationalTerm {
 
@@ -61,6 +61,13 @@ public class CycNaut extends CycFormula implements CycNonAtomicTerm, CycDenotati
     return this;
   }
 
+  
+  /**
+   * Get the arguments of this non-atomic term, not including the functor,
+   * or arg0.
+   * @see org.opencyc.cycobject.CycFormula#getArgs() for version that includes the functor.
+   * @return the list of arguments.
+   */
   @Override
   public List getArguments() {
     return getArgsUnmodifiable().subList(1, getArity() + 1);
@@ -72,7 +79,7 @@ public class CycNaut extends CycFormula implements CycNonAtomicTerm, CycDenotati
   }
 
   /**
-   * Returns <tt>true</tt> some object equals this <tt>CycNart</tt>
+   * Returns <tt>true</tt> some object equals this <tt>CycNaut</tt>
    *
    * @param object the <tt>Object</tt> for equality comparison
    * @return equals <tt>boolean</tt> value indicating equality or non-equality.

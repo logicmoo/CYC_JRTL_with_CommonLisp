@@ -8,7 +8,7 @@ package org.opencyc.util;
  *
  * user -Dorg.opencyc.util.log=file  to enable writing to a file.
  *
- * @version $Id: Log.java 138070 2012-01-10 19:46:08Z sbrown $
+ * @version $Id: Log.java 141934 2012-10-26 16:32:38Z baxter $
  * @author Stephen L. Reed
  *
  * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
@@ -129,7 +129,6 @@ public class Log {
      * @param logFilePath specifies the path for the log file.
      * @param writeToFile if true, write messages to the log file.
      * @param writeToOut if true, write messages to System.out.
-     * @param ignore if true, ignore all messages.
      */
     public Log(String logFilePath,
                boolean writeToFile,

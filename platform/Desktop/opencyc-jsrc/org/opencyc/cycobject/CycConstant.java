@@ -6,8 +6,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import org.opencyc.api.CycApiException;
-import org.opencyc.util.UUID;
 import org.opencyc.xml.TextUtil;
 import org.opencyc.xml.XMLStringWriter;
 import org.opencyc.xml.XMLWriter;
@@ -15,7 +13,7 @@ import org.opencyc.xml.XMLWriter;
 /**
  * Provides the behavior and attributes of an OpenCyc Constant.
  *
- * @version $Id: CycConstant.java 138070 2012-01-10 19:46:08Z sbrown $
+ * @version $Id: CycConstant.java 146582 2013-07-22 14:22:27Z daves $
  * @author Stefano Bertolo
  * @author Stephen L. Reed
  *
@@ -57,13 +55,13 @@ public class CycConstant extends CycFort implements Serializable {
   public static int indentLength = 2;
   
   /**
-   * The GUID (Globally Unique IDentifier) of the <tt>CycConstant<tt> object.
+   * The GUID (Globally Unique IDentifier) of the <tt>CycConstant</tt> object.
    * A string such as "c10af8ae-9c29-11b1-9dad-c379636f7270"
    */
   public Guid guid;
   
   /**
-   * The name of the <tt>CycConstant<tt> object. A string such as "HandGrenade"
+   * The name of the <tt>CycConstant</tt> object. A string such as "HandGrenade"
    */
   public String name;
   
@@ -150,9 +148,7 @@ public class CycConstant extends CycFort implements Serializable {
   }
   
   /**
-   * Gets the guid
-   *
-   * @return the guid
+   * Sets the guid
    */
   public void setGuid(Guid newGuid) {
     if (newGuid == null) {

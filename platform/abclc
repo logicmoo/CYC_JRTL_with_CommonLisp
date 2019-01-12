@@ -20,22 +20,45 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 export PRJS=${BASH_SOURCE[0]}
-unset CLASSPATH
+#unset CLASSPATH
 
-source set_classpath.sh
+#source set_classpath.sh
+
+export JAVA_OPTS1="-agentlib:jdwp=transport=dt_socket,server=n,address=10.0.0.122:5005,suspend=n"
+export JAVA_OPTS2="-agentlib:jdwp=transport=dt_socket,server=y,address=5005,suspend=y"
 
 echo ""
 echo CLASSPATH=$CLASSPATH
 echo ""
+echo LD_LIBRARY_PATH=$LD_LIBRARY_PATH
+echo JAVA_HOME=$JAVA_HOME
+echo LD_PRELOAD=$LD_PRELOAD
+echo LARKC_HOME=$LARKC_HOME
+echo SWI_HOME=$SWI_HOME
+echo JAVA_OPTS=$JAVA_OPTS
 echo ";"
-echo ";;;Running toplevel:  $PRJS $@"
+echo ";;; toplevel:  $PRJS $@"
 echo ";"  
 
-java \
-  -cp build/classes:dist/abcl-contrib.jar:"$CLASSPATH" \
-  -server -d64 -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC \
-  -Djava.library.path=$SWI_HOME/lib/x86_64-linux:. \
-  -XshowSettings:vm \
-  org.armedbear.lisp.Main \
-  $@
 
+export RUN_COMMAND="-server -d64 -Xms5000m -Xmx8000m -XX:ReservedCodeCacheSize=96m  -XX:+DoEscapeAnalysis -XX:+UseCompressedOops -XX:+UseConcMarkSweepGC \
+ -Djava.library.path=$SWI_HOME/lib/x86_64-linux:. \
+ -XshowSettings:vm \
+ org.armedbear.lisp.Main \
+ $@"
+
+echo ";;; Running: java -cp \$CLASSPATH $RUN_COMMAND"
+echo ""
+
+java -cp "$CLASSPATH" $JAVA_OPTS1 $RUN_COMMAND
+
+if [ "$?" -eq "2" ]; then
+
+java -cp "$CLASSPATH" $JAVA_OPTS2,suspend=n $RUN_COMMAND
+ 
+if [ "$?" -eq "2" ]; then
+  java -cp "$CLASSPATH" $RUN_COMMAND
+fi
+
+fi
+ 

@@ -8,6 +8,8 @@ import java.net.*;
 import org.opencyc.api.*;
 import org.opencyc.chat.*;
 import org.opencyc.cycobject.*;
+import org.opencyc.inference.params.DefaultInferenceParameters;
+import org.opencyc.inference.params.InferenceParameters;
 import org.opencyc.kif.*;
 import org.opencyc.util.*;
 import ViolinStrings.*;
@@ -18,14 +20,14 @@ public class ScriptChat extends IrcChat  implements ChatSender {
      * IRC Bot details
      */
     // Name Bot goes by on IRC
-    public String ircNick = "ScriptBot";
+    public String ircNick = "CycLScriptBot";
 
     // WHOIS Information
     public String ircComment = "http://wwwhome.portavita.nl/~yeb/XP/";
 
     // IRC Auto-join
 //    public String ircChannel = "#opencycchat";
-    public String ircChannel = "#test_sb";
+    public String ircChannel = "#logicmoo";
 
     /**
      * IRC Sever details
@@ -1170,7 +1172,7 @@ public class ScriptChat extends IrcChat  implements ChatSender {
 //                    sendMessage(returnpath, query3.toString() );
                     if( verbosity > 2 ) sendMessage(returnpath, "(script for " + subEvents.get(i).toString() + ": " + scripts.get(j).toString() + ")" );
 // *!*!*!*! dit is weer op 0 gezet is dit nodig? met backchainsteps 1 ??
-                    CycList roles = cyc.askWithVariable(query3, roleVar, mtForUser(cyclist),1,"1");
+                    CycList roles = cyc.askWithVariable(query3, roleVar, mtForUser(cyclist),"1 1");
 //                    CycList roles = cyc.askWithVariable(query3, roleVar, mtForUser(cyclist));
                     Iterator roleIt = roles.iterator();;
                     /*--------------------------------------------------------------------------
@@ -1350,7 +1352,7 @@ public class ScriptChat extends IrcChat  implements ChatSender {
             // ask the query (important!! must be done in scriptbotbeliefs, because #$storyReferences are also beliefs.
 //            sendMessage(returnpath, query.toString() );
 
-            CycList results = cyc.askWithVariables(query, variables, cyc.getKnownConstantByName("ScriptBotBeliefsMt"), 1, "30");
+            CycList results = cyc.askWithVariables(query, variables, cyc.getKnownConstantByName("ScriptBotBeliefsMt"), "1 30 nil nil");
             Iterator it = results.iterator();
             /*--------------------------------------------------------------------------
              * For each combination
@@ -1366,11 +1368,13 @@ public class ScriptChat extends IrcChat  implements ChatSender {
                 /*--------------------------------------------------------------------------
                  * Check if a role filler exists.
                  *-------------------------------------------------------------------------*/
+                InferenceParameters queryProperties = new DefaultInferenceParameters(cyc);
+                queryProperties.setMaxTransformationDepth(2);
                 if( !cyc.isQueryTrue(
                     cyc.makeCycList("(#$thereExists ?THING (#$and " +
                         "(#$isa ?THING " + ((CycConstant)result.fourth()).stringApiValue() + ") " +  // isa thing col
                         "(" + ((CycConstant)result.third()).stringApiValue() + "  " + ((CycConstant)result.first()).stringApiValue() +   " ?THING) " + // role event thing
-                        "))" ), cyc.getKnownConstantByName("ScriptBotBeliefsMt"), 2, 100 ) ) // note the backchain steps and time.
+                        "))" ), cyc.getKnownConstantByName("ScriptBotBeliefsMt"), queryProperties, 100 ) ) // note the backchain steps and time.
                 {
                     if( verbosity > 3 ) sendMessage( returnpath, "not found filler for event " + ((CycConstant)result.first()).toString()
                            + ", role " + ((CycConstant)result.third()).toString()

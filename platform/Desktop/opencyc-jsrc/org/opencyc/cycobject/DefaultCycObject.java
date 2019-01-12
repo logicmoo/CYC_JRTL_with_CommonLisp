@@ -13,12 +13,12 @@ import org.opencyc.xml.XMLWriter;
 import org.opencyc.api.CycAccess;
 import org.opencyc.api.CycObjectFactory;
 import org.opencyc.util.StringUtils;
-import org.opencyc.inference.InferenceParameters;
+import org.opencyc.inference.params.InferenceParameters;
 
 /**
  * This is the default implementation of a CycL object.
  *
- * @version $Id: DefaultCycObject.java 138070 2012-01-10 19:46:08Z sbrown $
+ * @version $Id: DefaultCycObject.java 150228 2014-04-03 19:23:54Z daves $
  * @author  tbrussea
  *
  * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
@@ -55,6 +55,7 @@ public abstract class DefaultCycObject implements CycObject {
    *
    * @return a cyclified <tt>String</tt>.
    */
+  @Override
   public String cyclify() {
     return toString();
   }
@@ -68,6 +69,7 @@ public abstract class DefaultCycObject implements CycObject {
    *
    * @return a cyclified <tt>String</tt> with escape characters.
    */
+  @Override
   public String cyclifyWithEscapeChars() {
     return cyclify();
   }
@@ -112,6 +114,14 @@ public abstract class DefaultCycObject implements CycObject {
     }
     if (obj instanceof Boolean) {
       return (obj == Boolean.FALSE) ? "nil" : "t";
+    }
+    // Apparently the dwimming happens elsewhere, but I fixed that so it can 
+    // take cyclish numbers too
+    if (obj instanceof Double){
+      return obj.toString().replaceFirst("E", "d");
+    }
+     if (obj instanceof Float){
+      return obj.toString().replaceFirst("E", "d");
     }
     return obj.toString();
   }
@@ -170,6 +180,7 @@ public abstract class DefaultCycObject implements CycObject {
   }
   private static final List emptyList = Arrays.asList(new Object[0]);
 
+  @Override
   public List getReferencedConstants() {
     return emptyList;
   }
@@ -180,11 +191,14 @@ public abstract class DefaultCycObject implements CycObject {
    * @return the given <tt>Object</tt> in a form suitable for use as a <tt>String</tt> api expression value
    */
   public static String stringApiValue(Object obj) {
-    if ((obj == null) || (!isCycLObject(obj))) {
+    if ((obj == null) || (!isCycLObject(obj) && (obj instanceof List))) {
       throw new RuntimeException(obj + " cannot be converted to a form suitable for use as a String api expression value.");
     }
     if (obj instanceof CycObject) {
       return ((CycObject) obj).stringApiValue();
+    }
+    if (obj instanceof List) {
+      return CycList.stringApiValue((List)obj);
     }
     if (obj instanceof InferenceParameters) {
       return ((InferenceParameters) obj).stringApiValue();
@@ -204,26 +218,36 @@ public abstract class DefaultCycObject implements CycObject {
     return "http://sw.opencyc.org/concept/en/" + cycl;
   }
 
-  /**
-   * Returns true iff the given object is an object than can be contained
-   * in a CycL expression.
-   *
-   * @return true iff the given object is an object than can be contained
-   * in a CycL expression
-   */
-  public static boolean isCycLObject(Object obj) {
-    return (obj instanceof CycObject
-            || obj instanceof InferenceParameters ||//@hack this is wrong GUIDs are not CycL objects --APB
-            obj instanceof Boolean
-            || obj instanceof String
-            || obj instanceof Integer
-            || obj instanceof Character
-            || obj instanceof Long
-            || obj instanceof BigInteger
-            || obj instanceof Guid || //@hack this is wrong GUIDs are not CycL objects --APB
-            obj instanceof Float
-            || obj instanceof Double);
-  }
+    /**
+     * Returns true iff the given object is an object than can be (or be
+     * contained in) a CycL expression.
+     *
+     * <P>In general, any {@link CycObject}, boolean, number, or string will
+     * pass this test.
+     *
+     * <P><B>Note regarding strings and numbers:</B> The CycL language itself includes
+     * only those integers, floats, and strings admitted by the SubL language as
+     * primitives. When assertions or queries are made using other kinds of
+     * numbers or strings, they may be converted to valid CycL equivalents. For
+     * instance, non-ASCII strings may be converted into #$UnicodeStringFn
+     * NAUTs.
+     *
+     * @return true iff the given object is an object than can be contained in a
+     * CycL expression
+     */
+    public static boolean isCycLObject(Object obj) {
+        return (obj instanceof CycObject
+                || obj instanceof InferenceParameters//@hack this is wrong inference params are not CycL objects --APB
+                || obj instanceof Boolean
+                || obj instanceof String
+                || obj instanceof Integer
+                || obj instanceof Character
+                || obj instanceof Long
+                || obj instanceof BigInteger
+                || obj instanceof Guid //@hack this is wrong GUIDs are not CycL objects --APB
+                || obj instanceof Float
+                || obj instanceof Double);
+    }
 
   /**
    * Returns a pretty CycL representation of this object.
@@ -245,6 +269,7 @@ public abstract class DefaultCycObject implements CycObject {
    *
    * @return this object in a form suitable for use as an <tt>String</tt> api expression value
    */
+  @Override
   public String stringApiValue() {
     return cyclifyWithEscapeChars();
   }
@@ -254,6 +279,7 @@ public abstract class DefaultCycObject implements CycObject {
    *
    * @return this object in a form suitable for use as an <tt>CycList</tt> api expression value
    */
+  @Override
   public Object cycListApiValue() {
     return cyclify();
   }
@@ -265,6 +291,7 @@ public abstract class DefaultCycObject implements CycObject {
    * @param indent an int that specifies by how many spaces to indent
    * @param relative a boolean; if true indentation is relative, otherwise absolute
    */
+  @Override
   public void toXML(XMLWriter xmlWriter, int indent, boolean relative)
           throws IOException {
     xmlWriter.printXMLStartTag(objectXMLTag, indent, relative, true);
@@ -272,15 +299,15 @@ public abstract class DefaultCycObject implements CycObject {
     xmlWriter.printXMLEndTag(objectXMLTag, -indent, true);
   }
 
-  public static final String toCompactExternalId(String cycObject) throws IOException {
+  public static String toCompactExternalId(String cycObject) throws IOException {
     return CompactHLIDConverter.converter().toCompactHLId(cycObject);
   }
 
-  public static final String toCompactExternalId(Number cycObject) throws IOException {
+  public static String toCompactExternalId(Number cycObject) throws IOException {
     return CompactHLIDConverter.converter().toCompactHLId(cycObject);
   }
 
-  public static final String toCompactExternalId(Object cycObject, CycAccess access)
+  public static String toCompactExternalId(Object cycObject, CycAccess access)
           throws IOException {
     if ((cycObject == null) || (!DefaultCycObject.isCycLObject(cycObject))) {
       throw new IllegalArgumentException(cycObject + "is not a valid CycL object.");
@@ -306,7 +333,18 @@ public abstract class DefaultCycObject implements CycObject {
     return (String) result;
   }
 
-  public static final Object fromCompactExternalId(String compactExternalId, CycAccess access)
+  /**
+   * Decode compactExternalId and return the resulting object.  This is intended to be used only in
+   * cases where it's certain that compactExternalId is in fact a valid compact HL-ID, as it does not 
+   * perform checks to make sure that the string is in fact the HL-ID for the returned object.  Thus, 
+   * it may return false positives for strings that aren't actually compact external HL-IDs.
+   * @param compactExternalId
+   * @param access
+   * @return the object uniquely identified by compactExternalId
+   * @see {@link #fromPossibleCompactExternalId()}
+   * @throws IOException 
+   */
+  public static Object fromCompactExternalId(String compactExternalId, CycAccess access)
           throws IOException {
     if ((compactExternalId == null) || ("".equals(compactExternalId))) {
       throw new IllegalArgumentException(compactExternalId + "is not a valid compact external id.");
@@ -326,16 +364,54 @@ public abstract class DefaultCycObject implements CycObject {
     compactExternalIdToCycObjectCache.put(compactExternalId, result);
     return result;
   }
+
+  /**
+   * Test to see if <code>compactExternalId</code> is a compact HL-ID, and return the relevant object iff
+   * <code>compactExternalId</code> is the canonical id for the object.  This is intended to be used in
+   * cases where it's not known whether compactExternalId is in fact a valid compact HL-ID, as it
+   * performs extra checks to make sure that the string is in fact the HL-ID for the returned object.
+   * @param compactExternalId
+   * @param access
+   * @return the object uniquely identified by compactExternalId
+   * @see {@link #fromCompactExternalId()}
+   * @throws IOException 
+   */
+  public static Object fromPossibleCompactExternalId(String compactExternalId, CycAccess access)
+          throws IOException {
+    if ((compactExternalId == null) || ("".equals(compactExternalId))) {
+      throw new IllegalArgumentException(compactExternalId + "is not a valid compact external id.");
+    }
+    // @todo support CompactHLIDConverter.converter() once we can simply identify
+    // if a compact external id is a String or Number
+    Object result = compactExternalIdToCycObjectCache.get(compactExternalId);
+    if (result != null) {
+      return result;
+    }
+    if (CompactHLIDConverter.converter().isNumberCompactHLId(compactExternalId)) {
+      Number num = (Number) CompactHLIDConverter.converter().fromCompactHLId(compactExternalId);
+      result = CycObjectFactory.makeCycNumber(num);
+    } else {
+      result = access.converseList("(multiple-value-list (maybe-find-object-by-compact-hl-external-id-string " + DefaultCycObject.stringApiValue(compactExternalId) + "))");
+      if (((CycList)result).second() == CycObjectFactory.nil) {
+          return null;
+      }
+    }
+    compactExternalIdToCycObjectCache.put(compactExternalId, ((CycList)result).first());
+    return ((CycList)result).first();
+  }
+    
   //@todo provide separate cache per CycAccess
   private static final int MAX_ENTRIES = 20000;
   private static final LinkedHashMap<String, Object> compactExternalIdToCycObjectCache = new LinkedHashMap() {
 
+    @Override
     protected boolean removeEldestEntry(Map.Entry eldest) {
       return size() > MAX_ENTRIES;
     }
   };
   private static final LinkedHashMap<Object, String> cycObjectToCompactExternalIdCache = new LinkedHashMap() {
 
+    @Override
     protected boolean removeEldestEntry(Map.Entry eldest) {
       return size() > MAX_ENTRIES;
     }

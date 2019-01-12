@@ -46,7 +46,7 @@ public class CycListVisitor implements Enumeration {
     /**
      * Constructs a new <tt>CycListEnumeration</tt> object.
      *
-     * @param the <tt>CycList</tt> for recursive enumeration.
+     * @param cycList the <tt>CycList</tt> for recursive enumeration.
      */
     public CycListVisitor(CycList cycList) {
         iterators.push(cycList.iterator());

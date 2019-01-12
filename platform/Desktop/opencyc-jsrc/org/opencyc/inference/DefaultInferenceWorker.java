@@ -1,4 +1,4 @@
-/* $Id: DefaultInferenceWorker.java 138070 2012-01-10 19:46:08Z sbrown $
+/* $Id: DefaultInferenceWorker.java 145738 2013-05-23 16:31:30Z daves $
  *
  * Copyright (c) 2004 - 2006 Cycorp, Inc.  All rights reserved.
  * This software is the proprietary information of Cycorp, Inc.
@@ -7,6 +7,8 @@
 package org.opencyc.inference;
 
 //// External Imports
+import org.opencyc.inference.params.InferenceParameters;
+import org.opencyc.inference.params.DefaultInferenceParameters;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EventListener;
@@ -55,7 +57,7 @@ import org.opencyc.parser.CycLParserUtil;
  *
  * @author tbrussea, zelal
  * @date July 27, 2005, 11:55 AM
- * @version $Id: DefaultInferenceWorker.java 138070 2012-01-10 19:46:08Z sbrown $
+ * @version $Id: DefaultInferenceWorker.java 145738 2013-05-23 16:31:30Z daves $
  */
 public class DefaultInferenceWorker extends DefaultSubLWorker implements InferenceWorker {
 
@@ -166,7 +168,7 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
   }
 
   /**
-   * Creates a new instance of DefaultInferenceWorker.
+   * Creates a new instance of DefaultInferenceWorker with normal priority.
    * @param query
    * @param mt
    * @param queryProperties
@@ -175,7 +177,6 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
    * @param optimizeVariables
    * @param access
    * @param timeoutMsecs
-   * @param priority
    */
   public DefaultInferenceWorker(CycList query, ELMt mt, InferenceParameters queryProperties,
           Map nlGenerationProperties, CycSymbol answerProcessingFunction,
@@ -194,7 +195,6 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
    * @param optimizeVariables
    * @param access
    * @param timeoutMsecs
-   * @param priority
    */
   public DefaultInferenceWorker(CycFormulaSentence query, ELMt mt, InferenceParameters queryProperties,
           Map nlGenerationProperties, CycSymbol answerProcessingFunction,
@@ -311,12 +311,20 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
   //public void continueInference() {
   //  throw new UnsupportedOperationException("continueInference() needs to be implemented.");
   //}
-  // with infinite patience
+  /**
+   * Issue a request that the inference stop running. May take arbitrarily
+   * long to actually halt. May be continuable after it halts.
+   * @see org.opencyc.inference.DefaultInferenceWorker#interruptInference(int) 
+   * @see org.opencyc.inference.DefaultInferenceWorker#continueInference(org.opencyc.inference.params.InferenceParameters) 
+   **/
   public void interruptInference() {
     interruptInference(null);
   }
 
-  // with said patience
+  /**
+   * Interrupt inference with specified patience.
+   * @param patience After this many seconds, if it has not halted, inference will be aborted.
+   */
   public void interruptInference(int patience) {
     interruptInference(new Integer(patience));
   }
@@ -381,8 +389,8 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
     //String command = createInferenceAbortionCommand();
     //DefaultSubLWorkerSynch newWorker = new DefaultSubLWorkerSynch(command, getCycServer(), false, getTimeoutMsecs());
     //newWorker.getWork();
-    if (this.suspendReason == InferenceWorkerSuspendReason.INTERRUPT) {
-      this.suspendReason = InferenceWorkerSuspendReason.ABORTED;
+    if (this.suspendReason == InferenceSuspendReason.INTERRUPT) {
+      this.suspendReason = InferenceSuspendReason.ABORTED;
     }
     super.abort();
   }
@@ -390,7 +398,7 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
   /**
    *
    * @param index
-   * @return
+   * @return a specified answer
    */
   public Object getAnswerAt(int index) {
     return answers.get(index);
@@ -398,7 +406,7 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
 
   /**
    *
-   * @return
+   * @return the number of answers that this worker's inference currently has.
    */
   public int getAnswersCount() {
     return answers.size();
@@ -406,7 +414,7 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
 
   /**
    *
-   * @return
+   * @return a list of answers from this worker's inference.
    */
   public List getAnswers() {
     synchronized (answers) {
@@ -418,7 +426,7 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
    *
    * @param startIndex
    * @param endIndex
-   * @return
+   * @return a sub-list of answers from this worker's inference.
    */
   public List getAnswers(int startIndex, int endIndex) {
     return new ArrayList(answers.subList(startIndex, endIndex));
@@ -426,7 +434,7 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
 
   /**
    *
-   * @return
+   * @return the ID number of this worker's inference.
    */
   public int getInferenceId() {
     return inferenceId;
@@ -439,7 +447,7 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
 
   /**
    *
-   * @return
+   * @return the current status of this worker's inference.
    */
   public InferenceStatus getInferenceStatus() {
     return status;
@@ -447,7 +455,7 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
 
   /**
    *
-   * @return
+   * @return the ID number of the problem store for this worker.
    */
   public int getProblemStoreId() {
     return problemStoreId;
@@ -498,9 +506,9 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
 
   /**
    *
-   * @return
+   * @return the reason this worker was suspended.
    */
-  public InferenceWorkerSuspendReason getSuspendReason() {
+  public InferenceSuspendReason getSuspendReason() {
     return suspendReason;
   }
   //// Protected Area
@@ -663,16 +671,7 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
     if (status == null) {
       throw new RuntimeException("Got bad inference status name: " + statusObj);
     }
-    final Object cycSuspendReason = data.get(2);
-    if (cycSuspendReason instanceof CycSymbol || cycSuspendReason == null) {
-      suspendReason = InferenceWorkerSuspendReason.fromCycSymbol((CycSymbol) cycSuspendReason);
-    } else if (cycSuspendReason instanceof CycList
-            && InferenceWorkerSuspendReason.ERROR_SYMBOL.equals(((CycList) cycSuspendReason).get(0))) {
-      suspendReason = InferenceWorkerSuspendReason.createFromErrorString((String) ((CycList) cycSuspendReason).get(1));
-    } else {
-      throw new RuntimeException("Unable to create InferenceWorkerSuspendReason from ("
-              + cycSuspendReason.getClass().getName() + ") " + cycSuspendReason.toString());
-    }
+    suspendReason = InferenceSuspendReason.fromCycSuspendReason(data.get(2));
     fireInferenceStatusChanged(oldStatus);
   }
 
@@ -762,7 +761,7 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
   /** This holds the list of registered SubLWorkerListener listeners. */
   final private EventListenerList inferenceListeners = new EventListenerList();
   private static Class inferenceListenerClass = InferenceWorkerListener.class;
-  private volatile InferenceWorkerSuspendReason suspendReason = null;
+  private volatile InferenceSuspendReason suspendReason = null;
   protected CycSymbol answerProcessingFunction;
   static private Map DEFAULT_NL_GENERATION_PROPERTIES = Collections.emptyMap();
 
@@ -782,7 +781,7 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
         }
 
         public void notifyInferenceStatusChanged(InferenceStatus oldStatus, InferenceStatus newStatus,
-                InferenceWorkerSuspendReason suspendReason, InferenceWorker inferenceWorker) {
+                InferenceSuspendReason suspendReason, InferenceWorker inferenceWorker) {
           System.out.println("GOT STATUS CHANGED EVENT\n" + inferenceWorker);
         }
 

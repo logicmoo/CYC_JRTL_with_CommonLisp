@@ -1,4 +1,4 @@
-/* $Id: SubLWorker.java 138070 2012-01-10 19:46:08Z sbrown $
+/* $Id: SubLWorker.java 145590 2013-05-15 21:12:52Z vijay $
  */
 package org.opencyc.api;
 
@@ -63,10 +63,13 @@ import java.util.concurrent.BlockingQueue;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
  * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
- * @see DefaultSubLWorker, SubLWorkerSynch, DefaultSubLWorkerSynch, SubLWorkerListener
+ * @see DefaultSubLWorker
+ * @see SubLWorkerSynch
+ * @see DefaultSubLWorkerSynch
+ * @see SubLWorkerListener
  * @author tbrussea
  * @date March 17, 2004, 11:26 AM
- * @version $Id: SubLWorker.java 138070 2012-01-10 19:46:08Z sbrown $
+ * @version $Id: SubLWorker.java 145590 2013-05-15 21:12:52Z vijay $
  */
 public interface SubLWorker extends Cancelable {
   
@@ -95,11 +98,11 @@ public interface SubLWorker extends Cancelable {
   /**
    * Return the task's priority. This is a value that meets the
    * constraints of SL:SET-PROCESS-PRIORITY.
-   * @see CycConnection.MAX_PRIORITY
-   * @see CycConnection.CRITICAL_PRIORITY
-   * @see CycConnection.NORMAL_PRIORITY
-   * @see CycConnection.BACKGROUND_PRIORITY
-   * @see CycConnection.MIN_PRIORITY
+   * @see CycConnection#MAX_PRIORITY
+   * @see CycConnection#CRITICAL_PRIORITY
+   * @see CycConnection#NORMAL_PRIORITY
+   * @see CycConnection#BACKGROUND_PRIORITY
+   * @see CycConnection#MIN_PRIORITY
    * @return the priority of the process
    */
   Integer getPriority();
@@ -224,6 +227,6 @@ public interface SubLWorker extends Cancelable {
    */  
   void fireSubLWorkerTerminatedEvent(SubLWorkerEvent event);
   
-  public BlockingQueue<CycConnection.TaskProcessorBinaryResponseHandler.NotificationTask> getNotificationQueue();
-
+  public BlockingQueue<NotificationTask> getNotificationQueue();
+  
 }

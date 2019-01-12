@@ -37,7 +37,7 @@ import static org.armedbear.lisp.Lisp.*;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
 
-public class SlotClass extends LispClass
+abstract public class SlotClass extends LispClass
 {
     private LispObject directSlotDefinitions = NIL;
     private LispObject slotDefinitions = NIL;

@@ -28,53 +28,204 @@ import com.cyc.tool.subl.util.ComparatorGenericKey;
 import com.cyc.tool.subl.util.ComparatorIdentityKey;
 import com.cyc.tool.subl.util.PatchFileLoader;
 
-public class SubLThread extends Thread {
-	public final class OverPoppableDeque extends ArrayDeque<SubLObject> {
+import sun.nio.ch.Interruptible;
+
+final public class SubLThread extends Thread
+{
+
+	public final class OverPoppableDeque extends ArrayDeque<SubLObject>
+	{
 		@Override
-		public SubLObject pop() {
-			try {
-			return super.pop();
-			} catch(Throwable e) {
+		public SubLObject pop()
+		{
+			try
+			{
+				return super.pop();
+			} catch (Throwable e)
+			{
 				//e.printStackTrace();
 				return Lisp.NIL;
 			}
 		}
 	}
 
-	LispThread listThread;
+	LispThread lispThread;
 
-	public LispThread getLispThread() {
+	public LispThread getLispThread()
+	{
 
-		if (listThread == null) {
-			listThread = LispThread.map.get(this);
-			if(listThread==null) {
-				 listThread = LispThread.currentThread();
+		if (lispThread == null)
+		{
+			lispThread = LispThread.map.get(this);
+			if (lispThread == null)
+			{
+				lispThread = LispThread.currentThread();
 			}
 		}
-		return listThread;
-
+		return lispThread;
 	}
 
-	public SubLThread(Runnable target, String name) {
+	/**
+	 * Interrupts this thread.
+	 *
+	 * <p> Unless the current thread is interrupting itself, which is
+	 * always permitted, the {@link #checkAccess() checkAccess} method
+	 * of this thread is invoked, which may cause a {@link
+	 * SecurityException} to be thrown.
+	 *
+	 * <p> If this thread is blocked in an invocation of the {@link
+	 * Object#wait() wait()}, {@link Object#wait(long) wait(long)}, or {@link
+	 * Object#wait(long, int) wait(long, int)} methods of the {@link Object}
+	 * class, or of the {@link #join()}, {@link #join(long)}, {@link
+	 * #join(long, int)}, {@link #sleep(long)}, or {@link #sleep(long, int)},
+	 * methods of this class, then its interrupt status will be cleared and it
+	 * will receive an {@link InterruptedException}.
+	 *
+	 * <p> If this thread is blocked in an I/O operation upon an {@link
+	 * java.nio.channels.InterruptibleChannel InterruptibleChannel}
+	 * then the channel will be closed, the thread's interrupt
+	 * status will be set, and the thread will receive a {@link
+	 * java.nio.channels.ClosedByInterruptException}.
+	 *
+	 * <p> If this thread is blocked in a {@link java.nio.channels.Selector}
+	 * then the thread's interrupt status will be set and it will return
+	 * immediately from the selection operation, possibly with a non-zero
+	 * value, just as if the selector's {@link
+	 * java.nio.channels.Selector#wakeup wakeup} method were invoked.
+	 *
+	 * <p> If none of the previous conditions hold then this thread's interrupt
+	 * status will be set. </p>
+	 *
+	 * <p> Interrupting a thread that is not alive need not have any effect.
+	 *
+	 * @throws  SecurityException
+	 *          if the current thread cannot modify this thread
+	 *
+	 * @revised 6.0
+	 * @spec JSR-51
+	 */
+	@Override
+	public void interrupt()
+	{
+		super.interrupt();
+	}
+
+	public Thread asJavaTread()
+	{
+		return intoJavaThread(this);
+	}
+
+	public static boolean isSubLThread(Object currentThread)
+	{
+		if ((currentThread instanceof SubLThread))
+		{ // 
+			assert ((currentThread.getClass() == SubLThread.class));
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void start()
+	{
+		launchContext = new Exception();
+		super.start();
+	}
+
+	//	public String getName()
+	//	{
+	//		return super.getName();
+	//	}
+	//
+	//	public void setName(String newJavaName)
+	//	{
+	//		super.setName(newJavaName);
+	//
+	//	}
+	//
+	//	public void setPriority(int subLPriorityToJavaPriority)
+	//	{
+	//		super.setPriority(subLPriorityToJavaPriority);
+	//
+	//	}
+
+	@Override
+	public boolean isInterrupted()
+	{
+		return super.isInterrupted();
+	}
+
+	public static Thread currentJavaThread()
+	{
+		SubLThread subLThread = SubLProcess.currentSubLThreadOrNull();
+		if (subLThread != null) return subLThread.asJavaTread();
+		return Thread.currentThread();
+	}
+
+	public static SubLThread intoSubLThread(Thread myGetOwner)
+	{
+		return (SubLThread) myGetOwner;
+	}
+
+	public static Thread intoJavaThread(SubLThread myGetOwner)
+	{
+		return (Thread) myGetOwner;
+	}
+
+	@Override
+	public void setContextClassLoader(ClassLoader cl)
+	{
+		super.setContextClassLoader(cl);
+	}
+
+	@Override
+	public ClassLoader getContextClassLoader()
+	{
+		return super.getContextClassLoader();
+	}
+
+	/**
+	 * Returns a reference to the currently executing thread object.
+	 *
+	 * @return  the currently executing thread.
+	 */
+	public static Thread currentThread()
+	{
+		final Thread currentThread = Thread.currentThread();
+		return currentThread;
+	}
+
+	public static boolean currentThreadIsSubL()
+	{
+		final Thread currentThread = Thread.currentThread();
+		return isSubLThread(currentThread);
+	}
+
+	public SubLThread(Runnable target, String name)
+	{
 		super(target, name);
 		init();
 	}
 
-	public SubLThread(ThreadGroup group, Runnable target, String name) {
+	public SubLThread(ThreadGroup group, Runnable target, String name)
+	{
 		super(group, target, name);
 		init();
 	}
 
-	public SubLThread(ThreadGroup group, Runnable target, String name, long stackSize) {
+	public SubLThread(ThreadGroup group, Runnable target, String name, long stackSize)
+	{
 		super(group, target, name, stackSize);
 		init();
 	}
 
-	public static Object getInterruptLock() {
+	public static Object getInterruptLock()
+	{
 		return SubLProcess.currentSubLThread().interruptLock;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args)
+	{
 	}
 
 	private volatile Exception launchContext;
@@ -110,7 +261,8 @@ public class SubLThread extends Thread {
 	final public static ComparatorGenericKey genericSortComparator = new ComparatorGenericKey(null, null);
 	final public static ComparatorIdentityKey identitySortComparator = new ComparatorIdentityKey(null);
 
-	private void init() {
+	private void init()
+	{
 		setContextClassLoader(PatchFileLoader.PATCH_FILE_LOADER);
 		resourcer = new Resourcer();
 		sublArraySize1 = new SubLObject[1];
@@ -140,127 +292,136 @@ public class SubLThread extends Thread {
 		interruptLock = new Object();
 	}
 
-	public SubLObject arg2(SubLObject arg1, SubLObject arg2) {
+	public SubLObject arg2(SubLObject arg1, SubLObject arg2)
+	{
 		return arg2;
 	}
 
-	public void clearBindings() {
-	    //getLispThread().clearBindings();
+	public void clearBindings()
+	{
+		//getLispThread().clearBindings();
 		Arrays.fill(bindingsList, null);
 	}
 
-	public SubLObject eighth_value_helper(SubLObject arg1, SubLObject result) {
+	public SubLObject eighth_value_helper(SubLObject arg1, SubLObject result)
+	{
 		SubLObject rslt = value8;
 		resetMultipleValues();
 		return rslt;
 	}
 
-	public SubLObject eighthMultipleValue() {
+	public SubLObject eighthMultipleValue()
+	{
 		return valuesCount < 8 ? SubLNil.NIL : value8;
 	}
 
-	public SubLObject fifth_value_helper(SubLObject arg1, SubLObject result) {
+	public SubLObject fifth_value_helper(SubLObject arg1, SubLObject result)
+	{
 		SubLObject rslt = value5;
 		resetMultipleValues();
 		return rslt;
 	}
 
-	public SubLObject fifthMultipleValue() {
+	public SubLObject fifthMultipleValue()
+	{
 		return valuesCount < 5 ? SubLNil.NIL : value5;
 	}
 
-	public SubLObject first_value_helper(SubLObject arg1, SubLObject result) {
+	public SubLObject first_value_helper(SubLObject arg1, SubLObject result)
+	{
 		resetMultipleValues();
 		return result;
 	}
 
-	public SubLObject firstMultipleValue() {
+	public SubLObject firstMultipleValue()
+	{
 		return valuesCount < 1 ? SubLNil.NIL : value1;
 	}
 
-	public SubLObject fourth_value_helper(SubLObject arg1, SubLObject result) {
+	public SubLObject fourth_value_helper(SubLObject arg1, SubLObject result)
+	{
 		SubLObject rslt = value4;
 		resetMultipleValues();
 		return rslt;
 	}
 
-	public SubLObject fourthMultipleValue() {
+	public SubLObject fourthMultipleValue()
+	{
 		return valuesCount < 4 ? SubLNil.NIL : value4;
 	}
 
-	public Exception getLaunchContext() {
+	public Exception getLaunchContext()
+	{
 		return launchContext;
 	}
 
-	public SubLList getMultipleValues() {
+	public SubLList getMultipleValues()
+	{
 		int size = valuesCount;
-		if (size == 0)
-			return SubLNil.NIL;
+		if (size == 0) return SubLNil.NIL;
 		SubLList result = SubLNil.NIL;
 		List<SubLObject> valuesArrayInt = valuesArray;
 		for (int i = valuesArrayInt.size() - 1; i >= 0; --i)
 			result = result.push(valuesArrayInt.get(i));
-		switch (size) {
-		default:
-			result = result.push(value8);
-		case 7:
-			result = result.push(value7);
-		case 6:
-			result = result.push(value6);
-		case 5:
-			result = result.push(value5);
-		case 4:
-			result = result.push(value4);
-		case 3:
-			result = result.push(value3);
-		case 2:
-			result = result.push(value2);
-		case 1:
-			result = result.push(value1);
-			resetMultipleValues();
-			return result;
+		switch (size)
+		{
+			default:
+				result = result.push(value8);
+			case 7:
+				result = result.push(value7);
+			case 6:
+				result = result.push(value6);
+			case 5:
+				result = result.push(value5);
+			case 4:
+				result = result.push(value4);
+			case 3:
+				result = result.push(value3);
+			case 2:
+				result = result.push(value2);
+			case 1:
+				result = result.push(value1);
+				resetMultipleValues();
+				return result;
 		}
 	}
 
-	public Resourcer getResourcer() {
+	public Resourcer getResourcer()
+	{
 		return resourcer;
 	}
 
-	public SubLObject[] getSubLObjectArraySize2() {
+	public SubLObject[] getSubLObjectArraySize2()
+	{
 		return sublArraySize2;
 	}
 
-	public SubLProcess getSubLProcess() {
+	public SubLProcess getSubLProcess()
+	{
 		return subLProcess;
 	}
 
-	public List<SubLObject> getValuesAsList() {
-		if (valuesCount == 0)
-			return null;
+	public List<SubLObject> getValuesAsList()
+	{
+		if (valuesCount == 0) return null;
 		ArrayList result = new ArrayList(valuesCount);
 		int count = 0;
-		if (count++ >= valuesCount)
-			return result;
+		if (count++ >= valuesCount) return result;
 		result.add(value1);
-		if (count++ >= valuesCount)
-			return result;
+		if (count++ >= valuesCount) return result;
 		result.add(value2);
-		if (count++ >= valuesCount)
-			return result;
+		if (count++ >= valuesCount) return result;
 		result.add(value3);
-		if (count++ >= valuesCount)
-			return result;
+		if (count++ >= valuesCount) return result;
 		result.add(value4);
-		if (count++ >= valuesCount)
-			return result;
+		if (count++ >= valuesCount) return result;
 		result.add(value5);
-		if (count++ >= valuesCount)
-			return result;
+		if (count++ >= valuesCount) return result;
 		result.add(value6);
-		if (count++ >= valuesCount)
-			return result;
+		if (count++ >= valuesCount) return result;
 		result.add(value7);
-		if (count++ < valuesCount) {
+		if (count++ < valuesCount)
+		{
 			result.add(value8);
 			result.addAll(valuesArray);
 			return result;
@@ -268,33 +429,27 @@ public class SubLThread extends Thread {
 		return result;
 	}
 
-	public SubLVector getValuesAsVector() {
-		if (valuesCount == 0)
-			return null;
+	public SubLVector getValuesAsVector()
+	{
+		if (valuesCount == 0) return null;
 		SubLVector result = SubLObjectFactory.makeVector(valuesCount);
 		int count = 0;
-		if (count >= valuesCount)
-			return result;
+		if (count >= valuesCount) return result;
 		result.set(count++, value1);
-		if (count >= valuesCount)
-			return result;
+		if (count >= valuesCount) return result;
 		result.set(count++, value2);
-		if (count >= valuesCount)
-			return result;
+		if (count >= valuesCount) return result;
 		result.set(count++, value3);
-		if (count >= valuesCount)
-			return result;
+		if (count >= valuesCount) return result;
 		result.set(count++, value4);
-		if (count >= valuesCount)
-			return result;
+		if (count >= valuesCount) return result;
 		result.set(count++, value5);
-		if (count >= valuesCount)
-			return result;
+		if (count >= valuesCount) return result;
 		result.set(count++, value6);
-		if (count >= valuesCount)
-			return result;
+		if (count >= valuesCount) return result;
 		result.set(count++, value7);
-		if (count < valuesCount) {
+		if (count < valuesCount)
+		{
 			result.set(count++, value8);
 			for (int i = 0, size = valuesArray.size(); i < size; ++i)
 				result.set(count++, valuesArray.get(i));
@@ -303,86 +458,92 @@ public class SubLThread extends Thread {
 		return result;
 	}
 
-	public SubLList multiple_value_list(SubLObject val1) {
+	public SubLList multiple_value_list(SubLObject val1)
+	{
 		int size = valuesCount;
-		if (size == 0)
-			size = 1;
+		if (size == 0) size = 1;
 		SubLList result = SubLNil.NIL;
 		List<SubLObject> valuesArray = this.valuesArray;
 		for (int i = valuesArray.size() - 1; i >= 0; --i)
 			result = result.push(valuesArray.get(i));
-		switch (size) {
-		default:
-			result = result.push(value8);
-		case 7:
-			result = result.push(value7);
-		case 6:
-			result = result.push(value6);
-		case 5:
-			result = result.push(value5);
-		case 4:
-			result = result.push(value4);
-		case 3:
-			result = result.push(value3);
-		case 2:
-			result = result.push(value2);
-		case 1:
-			result = result.push(val1);
-			resetMultipleValues();
-			return result;
+		switch (size)
+		{
+			default:
+				result = result.push(value8);
+			case 7:
+				result = result.push(value7);
+			case 6:
+				result = result.push(value6);
+			case 5:
+				result = result.push(value5);
+			case 4:
+				result = result.push(value4);
+			case 3:
+				result = result.push(value3);
+			case 2:
+				result = result.push(value2);
+			case 1:
+				result = result.push(val1);
+				resetMultipleValues();
+				return result;
 		}
 	}
 
-	public SubLList multiple_value_list_eval(SubLObject form, SubLEnvironment env) {
+	public SubLList multiple_value_list_eval(SubLObject form, SubLEnvironment env)
+	{
 		resetMultipleValues();
 		SubLList result = multiple_value_list(form.eval(env));
 		resetMultipleValues();
 		return result;
 	}
 
-	public SubLObject nth_value_step_1(SubLObject num) {
+	public SubLObject nth_value_step_1(SubLObject num)
+	{
 		resetMultipleValues();
 		return num;
 	}
 
-	public SubLObject nth_value_step_2(SubLObject num, SubLObject form) {
+	public SubLObject nth_value_step_2(SubLObject num, SubLObject form)
+	{
 		SubLObject result = this.nthMultipleValue(num.intValue());
 		resetMultipleValues();
 		return result;
 	}
 
-	public SubLObject nthMultipleValue(int n) {
-		if (valuesCount < n)
-			return SubLNil.NIL;
-		switch (n) {
-		case 0:
-			return value1;
-		case 1:
-			return value2;
-		case 2:
-			return value3;
-		case 3:
-			return value4;
-		case 4:
-			return value5;
-		case 5:
-			return value6;
-		case 6:
-			return value7;
-		case 7:
-			return value8;
-		default:
-			if (n >= valuesCount)
-				return SubLNil.NIL;
-			return valuesArray.get(n - 8);
+	public SubLObject nthMultipleValue(int n)
+	{
+		if (valuesCount < n) return SubLNil.NIL;
+		switch (n)
+		{
+			case 0:
+				return value1;
+			case 1:
+				return value2;
+			case 2:
+				return value3;
+			case 3:
+				return value4;
+			case 4:
+				return value5;
+			case 5:
+				return value6;
+			case 6:
+				return value7;
+			case 7:
+				return value8;
+			default:
+				if (n >= valuesCount) return SubLNil.NIL;
+				return valuesArray.get(n - 8);
 		}
 	}
 
-	public SubLObject nthMultipleValue(SubLObject n) {
+	public SubLObject nthMultipleValue(SubLObject n)
+	{
 		return this.nthMultipleValue(n.intValue());
 	}
 
-	public void reset() {
+	public void reset()
+	{
 		subLProcess = null;
 		launchContext = null;
 		resourcer = new Resourcer();
@@ -410,192 +571,194 @@ public class SubLThread extends Thread {
 		env = (Environment) SubLEnvironment.getDefaultEnvironment();
 	}
 
-	public SubLObject resetMultipleValues() {
+	public SubLObject resetMultipleValues()
+	{
 		int size = valuesCount;
-		if (size == 0)
-			return SubLNil.NIL;
+		if (size == 0) return SubLNil.NIL;
 		valuesCount = 0;
 		value1 = SubLNil.NIL;
 		value2 = SubLNil.NIL;
-		if (size < 3)
-			return SubLNil.NIL;
+		if (size < 3) return SubLNil.NIL;
 		value3 = SubLNil.NIL;
 		value4 = SubLNil.NIL;
 		value5 = SubLNil.NIL;
 		value6 = SubLNil.NIL;
 		value7 = SubLNil.NIL;
 		value8 = SubLNil.NIL;
-		if (size < 9)
-			return SubLNil.NIL;
+		if (size < 9) return SubLNil.NIL;
 		valuesArray.clear();
 		return SubLNil.NIL;
 	}
 
-	public void restoreValuesFromList(List<SubLObject> newValues) {
-		if (newValues == null) {
+	public void restoreValuesFromList(List<SubLObject> newValues)
+	{
+		if (newValues == null)
+		{
 			resetMultipleValues();
 			return;
 		}
 		valuesArray.clear();
 		valuesCount = newValues.size();
 		int count = 0;
-		if (count >= valuesCount)
-			return;
+		if (count >= valuesCount) return;
 		value1 = newValues.get(count++);
-		if (count >= valuesCount)
-			return;
+		if (count >= valuesCount) return;
 		value2 = newValues.get(count++);
-		if (count >= valuesCount)
-			return;
+		if (count >= valuesCount) return;
 		value3 = newValues.get(count++);
-		if (count >= valuesCount)
-			return;
+		if (count >= valuesCount) return;
 		value4 = newValues.get(count++);
-		if (count >= valuesCount)
-			return;
+		if (count >= valuesCount) return;
 		value5 = newValues.get(count++);
-		if (count >= valuesCount)
-			return;
+		if (count >= valuesCount) return;
 		value6 = newValues.get(count++);
-		if (count >= valuesCount)
-			return;
+		if (count >= valuesCount) return;
 		value7 = newValues.get(count++);
-		if (count < valuesCount) {
+		if (count < valuesCount)
+		{
 			value8 = newValues.get(count++);
 			for (int i = 8, size = newValues.size(); i < size; ++i)
 				valuesArray.add(newValues.get(i));
 		}
 	}
 
-	public void restoreValuesFromVector(SubLVector newValues) {
-		if (newValues == null) {
+	public void restoreValuesFromVector(SubLVector newValues)
+	{
+		if (newValues == null)
+		{
 			resetMultipleValues();
 			return;
 		}
 		valuesArray.clear();
 		valuesCount = newValues.size();
 		int count = 0;
-		if (count >= valuesCount)
-			return;
+		if (count >= valuesCount) return;
 		value1 = newValues.get(count++);
-		if (count >= valuesCount)
-			return;
+		if (count >= valuesCount) return;
 		value2 = newValues.get(count++);
-		if (count >= valuesCount)
-			return;
+		if (count >= valuesCount) return;
 		value3 = newValues.get(count++);
-		if (count >= valuesCount)
-			return;
+		if (count >= valuesCount) return;
 		value4 = newValues.get(count++);
-		if (count >= valuesCount)
-			return;
+		if (count >= valuesCount) return;
 		value5 = newValues.get(count++);
-		if (count >= valuesCount)
-			return;
+		if (count >= valuesCount) return;
 		value6 = newValues.get(count++);
-		if (count >= valuesCount)
-			return;
+		if (count >= valuesCount) return;
 		value7 = newValues.get(count++);
-		if (count < valuesCount) {
+		if (count < valuesCount)
+		{
 			value8 = newValues.get(count++);
 			for (int i = 8, size = newValues.size(); i < size; ++i)
 				valuesArray.add(newValues.get(i));
 		}
 	}
 
-	@Override
-	public void run() {
-		try {
+	//@Override
+	public void run()
+	{
+		try
+		{
 			// TODO? Main.setSubLisp(true);
 			super.run();
-		} finally {
+		} finally
+		{
 			assert previousName != null;
 			SubLProcess.currentSubLThread().setSubLProcess(null);
 		}
 	}
 
-	public SubLObject second_value_helper(SubLObject arg1, SubLObject result) {
+	public SubLObject second_value_helper(SubLObject arg1, SubLObject result)
+	{
 		SubLObject rslt = value2;
 		resetMultipleValues();
 		return rslt;
 	}
 
-	public SubLObject secondMultipleValue() {
+	public SubLObject secondMultipleValue()
+	{
 		return valuesCount < 2 ? SubLNil.NIL : value2;
 	}
 
-	public SubLObject setFirstMultipleValue(SubLObject value1) {
-		if (valuesCount <= 0)
-			valuesCount = 1;
+	public SubLObject setFirstMultipleValue(SubLObject value1)
+	{
+		if (valuesCount <= 0) valuesCount = 1;
 		return this.value1 = value1;
 	}
 
-	public void setSubLProcess(SubLProcess subLProcess) {
+	public void setSubLProcess(SubLProcess subLProcess)
+	{
 		this.subLProcess = subLProcess;
-		if (subLProcess != null) {
+		if (subLProcess != null)
+		{
 			previousName = getName();
 			SubLString newSubLName = subLProcess.getName();
 			String newJavaName = newSubLName.getStringValue();
 			setName(newJavaName);
-		} else
+		}
+		else
 			setName(previousName == null ? "" : previousName);
 	}
 
-	public SubLObject seventh_value_helper(SubLObject arg1, SubLObject result) {
+	public SubLObject seventh_value_helper(SubLObject arg1, SubLObject result)
+	{
 		SubLObject rslt = value7;
 		resetMultipleValues();
 		return rslt;
 	}
 
-	public SubLObject seventhMultipleValue() {
+	public SubLObject seventhMultipleValue()
+	{
 		return valuesCount < 7 ? SubLNil.NIL : value7;
 	}
 
-	public SubLObject sixth_value_helper(SubLObject arg1, SubLObject result) {
+	public SubLObject sixth_value_helper(SubLObject arg1, SubLObject result)
+	{
 		SubLObject rslt = value6;
 		resetMultipleValues();
 		return rslt;
 	}
 
-	public SubLObject sixthMultipleValue() {
+	public SubLObject sixthMultipleValue()
+	{
 		return valuesCount < 6 ? SubLNil.NIL : value6;
 	}
 
-	@Override
-	public void start() {
-		launchContext = new Exception();
-		super.start();
-	}
-
-	public SubLObject third_value_helper(SubLObject arg1, SubLObject result) {
+	public SubLObject third_value_helper(SubLObject arg1, SubLObject result)
+	{
 		SubLObject rslt = value3;
 		resetMultipleValues();
 		return rslt;
 	}
 
-	public SubLObject thirdMultipleValue() {
+	public SubLObject thirdMultipleValue()
+	{
 		return valuesCount < 3 ? SubLNil.NIL : value3;
 	}
 
-	public SubLObject values(SubLObject value1) {
+	public SubLObject values(SubLObject value1)
+	{
 		valuesCount = 1;
 		return this.value1 = value1;
 	}
 
-	public SubLObject values(SubLObject value1, SubLObject value2) {
+	public SubLObject values(SubLObject value1, SubLObject value2)
+	{
 		valuesCount = 2;
 		this.value2 = value2;
 		return this.value1 = value1;
 	}
 
-	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3) {
+	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3)
+	{
 		valuesCount = 3;
 		this.value3 = value3;
 		this.value2 = value2;
 		return this.value1 = value1;
 	}
 
-	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3, SubLObject value4) {
+	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3, SubLObject value4)
+	{
 		valuesCount = 4;
 		this.value4 = value4;
 		this.value3 = value3;
@@ -603,8 +766,8 @@ public class SubLThread extends Thread {
 		return this.value1 = value1;
 	}
 
-	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3, SubLObject value4,
-			SubLObject value5) {
+	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3, SubLObject value4, SubLObject value5)
+	{
 		valuesCount = 5;
 		this.value5 = value5;
 		this.value4 = value4;
@@ -613,8 +776,8 @@ public class SubLThread extends Thread {
 		return this.value1 = value1;
 	}
 
-	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3, SubLObject value4,
-			SubLObject value5, SubLObject value6) {
+	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3, SubLObject value4, SubLObject value5, SubLObject value6)
+	{
 		valuesCount = 6;
 		this.value6 = value6;
 		this.value5 = value5;
@@ -624,8 +787,8 @@ public class SubLThread extends Thread {
 		return this.value1 = value1;
 	}
 
-	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3, SubLObject value4,
-			SubLObject value5, SubLObject value6, SubLObject value7) {
+	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3, SubLObject value4, SubLObject value5, SubLObject value6, SubLObject value7)
+	{
 		valuesCount = 7;
 		this.value7 = value7;
 		this.value6 = value6;
@@ -636,8 +799,8 @@ public class SubLThread extends Thread {
 		return this.value1 = value1;
 	}
 
-	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3, SubLObject value4,
-			SubLObject value5, SubLObject value6, SubLObject value7, SubLObject value8) {
+	public SubLObject values(SubLObject value1, SubLObject value2, SubLObject value3, SubLObject value4, SubLObject value5, SubLObject value6, SubLObject value7, SubLObject value8)
+	{
 		valuesCount = 8;
 		this.value8 = value8;
 		this.value7 = value7;
@@ -649,40 +812,44 @@ public class SubLThread extends Thread {
 		return this.value1 = value1;
 	}
 
-	public SubLObject values(SubLObject[] moreValues) {
+	public SubLObject values(SubLObject[] moreValues)
+	{
 		int length = moreValues.length;
 		valuesCount = length;
 		int size = length;
-		if (size == 0)
-			return SubLNil.NIL;
-		switch (size) {
-		default:
-			value8 = moreValues[7];
-		case 7:
-			value7 = moreValues[6];
-		case 6:
-			value6 = moreValues[5];
-		case 5:
-			value5 = moreValues[4];
-		case 4:
-			value4 = moreValues[3];
-		case 3:
-			value3 = moreValues[2];
-		case 2:
-			value2 = moreValues[1];
-		case 1:
-			value1 = moreValues[0];
-			for (int i = 8; i < size; ++i)
-				valuesArray.add(moreValues[i]);
-			return moreValues[0];
+		if (size == 0) return SubLNil.NIL;
+		switch (size)
+		{
+			default:
+				value8 = moreValues[7];
+			case 7:
+				value7 = moreValues[6];
+			case 6:
+				value6 = moreValues[5];
+			case 5:
+				value5 = moreValues[4];
+			case 4:
+				value4 = moreValues[3];
+			case 3:
+				value3 = moreValues[2];
+			case 2:
+				value2 = moreValues[1];
+			case 1:
+				value1 = moreValues[0];
+				for (int i = 8; i < size; ++i)
+					valuesArray.add(moreValues[i]);
+				return moreValues[0];
 		}
 	}
 
-	public SubLObject[] getBindingsList() {
+	public SubLObject[] getBindingsList()
+	{
 		return bindingsList;
 	}
 
-	public void setBindingsList(SubLObject[] bindingsList) {
+	public void setBindingsList(SubLObject[] bindingsList)
+	{
 		this.bindingsList = bindingsList;
 	}
+
 }

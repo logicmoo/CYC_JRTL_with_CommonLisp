@@ -1,4 +1,4 @@
-/* $Id: CycConstantSentence.java 133723 2011-03-03 21:55:50Z mwitbrock $
+/* $Id: CycConstantSentence.java 141934 2012-10-26 16:32:38Z baxter $
  *
  * Copyright (c) 2008 Cycorp, Inc.  All rights reserved.
  * This software is the proprietary information of Cycorp, Inc.
@@ -18,15 +18,14 @@ package org.opencyc.cycobject;
  *
  * Created on : March 3, 2011, 10:05:43 AM
  * Author     : daves
- * @version $Id: CycConstantSentence.java 133723 2011-03-03 21:55:50Z mwitbrock $
+ * @version $Id: CycConstantSentence.java 141934 2012-10-26 16:32:38Z baxter $
  *
  */
 public class CycConstantSentence extends CycConstant implements CycSentence {
 
   /**
-   * Create and return a new CycSentence whose arguments are terms.
-   * CycList arguments will be converted to CycNauts or CycSentences.
-   * @param terms
+   * Create and return a new CycConstantSentence from constant
+   * @param constant
    */
   public CycConstantSentence(CycConstant constant) {
     super(constant.getName(), constant.getGuid());
@@ -36,6 +35,12 @@ public class CycConstantSentence extends CycConstant implements CycSentence {
 
   @Override
   public boolean isConditionalSentence() {
+    return false;
+  }
+
+
+  @Override
+  public boolean isNegated() {
     return false;
   }
 

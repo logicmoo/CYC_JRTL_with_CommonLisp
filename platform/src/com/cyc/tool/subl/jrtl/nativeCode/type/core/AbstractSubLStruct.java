@@ -182,7 +182,9 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 		for (int i = 0, size = getFieldCount(); i < size; ++i)
 		{
 			int index = i + 2;
-			if (!this.getField(index).equals(other.getField(index))) return false;
+			final SubLObject field1 = this.getField(index);
+			final SubLObject field2 = other.getField(index);
+			if (!field1.equals(field2)) return false;
 		}
 		return true;
 	}
@@ -250,6 +252,14 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 		int fieldNum = getStructDecl().getFieldNumForSymbolOffsetBy2(fieldName);
 		this.setField(fieldNum, value);
 	}
+
+	@Override
+	final public void setField(int fieldNum, SubLObject value)
+	{
+		setFieldImpl(fieldNum, value);
+	}
+
+	abstract public void setFieldImpl(int fieldNum, SubLObject value);
 
 	public int getStructFieldNumForSymbol(SubLSymbol fieldName)
 	{

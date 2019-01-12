@@ -1637,9 +1637,10 @@ public abstract class LispThread extends LispObject
 	}
 
 	public SubLThread currentSubLThread() {
-		if(javaThread instanceof  SubLThread){
-			return (SubLThread) javaThread;
-		}
+//		Object o  = javaThread;
+//		if(o instanceof  SubLThread){
+//			return (SubLThread) o;
+//		}
 		return SubLProcess.currentSubLThread();
 	};
 }

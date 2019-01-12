@@ -1,32 +1,28 @@
-/* $Id: DateConverter.java 138070 2012-01-10 19:46:08Z sbrown $
+/* $Id: DateConverter.java 150307 2014-04-07 18:56:02Z vijay $
  *
  * Copyright (c) 2007 Cycorp, Inc.  (Copyright is assigned to the United States Government under DFARS 252.227-7020).
  */
 package org.opencyc.util;
 
-//// External Imports
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
-
-//// Internal Imports
-import org.opencyc.cycobject.CycConstant;
-import org.opencyc.cycobject.CycFort;
-import org.opencyc.cycobject.CycList;
-import org.opencyc.cycobject.CycNaut;
-import org.opencyc.cycobject.CycObject;
-import org.opencyc.cycobject.Guid;
+import org.opencyc.cycobject.*;
 
 /**
  * <P>DateConverter is designed to convert java-style dates to their corresponding
  * CycL representations and vice versa.
  *
- * <P>Copyright (c) 2007 Cycorp, Inc.  (Copyright is assigned to the United States Government under DFARS 252.227-7020).
+ * @see java.util.Date
+ * @see java.util.Calendar
+ * @see org.opencyc.cycobject.CycNaut
+ *
+ * <P>Copyright (c) 2007 Cycorp, Inc. (Copyright is assigned to the United States Government under DFARS 252.227-7020).
  *
  *
  * @author baxter
  * @date January 15, 2008, 5:33 PM
- * @version $Id: DateConverter.java 138070 2012-01-10 19:46:08Z sbrown $
+ * @version $Id: DateConverter.java 150307 2014-04-07 18:56:02Z vijay $
  */
 public class DateConverter extends DataTypeConverter<Date> {
 
@@ -47,13 +43,15 @@ public class DateConverter extends DataTypeConverter<Date> {
   }
 
   //// Public Area
-  /** Returns an instance of <code>DateConverter</code>.
+  /** Returns an instance of
+   * <code>DateConverter</code>.
    *
    * If an instance has already been created, the existing one will be returned.
    * Otherwise, a new one will be created.
+   *
    * @return The singleton instance of this class.
    */
-  public static DateConverter getInstance() {
+  public static synchronized DateConverter getInstance() {
     DateConverter dateConverter = SHARED_INSTANCE;
     if (dateConverter == null) {
       dateConverter = new DateConverter();
@@ -61,16 +59,21 @@ public class DateConverter extends DataTypeConverter<Date> {
     return dateConverter;
   }
 
-  /** Try to parse <code>cycList</code> into a java <code>Date</code>
+  /** Try to parse
+   * <code>cycList</code> into a java
+   * <code>Date</code>
    *
-   * If the parse fails, prints a stack trace iff <code>shouldReportFailure</code>
+   * If the parse fails, prints a stack trace iff
+   * <code>shouldReportFailure</code>
    * is non-null, and returns null.
-   * 
+   *
    * The Cyc date is assumed to be in the default time zone.
+   *
    * @see TimeZone#getDefault
    * @deprecated Use CycNaut version.
    */
-  static public Date parseCycDate(final CycList cycList, final boolean shouldReportFailure) {
+  static public Date parseCycDate(final CycList cycList,
+          final boolean shouldReportFailure) {
     final Object naut = CycNaut.convertIfPromising(cycList);
     if (naut instanceof CycNaut) {
       return parseCycDate((CycNaut) naut, shouldReportFailure);
@@ -80,26 +83,34 @@ public class DateConverter extends DataTypeConverter<Date> {
     return null;
   }
 
-  /** Try to parse <code>naut</code> into a java <code>Date</code>
+  /** Try to parse
+   * <code>naut</code> into a java
+   * <code>Date</code>
    *
    * @param naut a date-denoting Cyc NAUT.
    * @param shouldReportFailure If true, and the parse fails, prints a stack trace.
    * @return the Date object corresponding to naut, or null if parse fails.
-   * 
+   *
    * The Cyc date is assumed to be in the default time zone.
    * @see TimeZone#getDefault
    */
-  static public Date parseCycDate(final CycNaut naut, final boolean shouldReportFailure) {
+  static public Date parseCycDate(final CycNaut naut,
+          final boolean shouldReportFailure) {
     return getInstance().parse(naut, shouldReportFailure);
   }
 
-  /** Try to parse <code>cycList</code> into a java <code>Date</code> in a given time zone.
+  /** Try to parse
+   * <code>cycList</code> into a java
+   * <code>Date</code> in a given time zone.
    *
-   * If the parse fails, prints a stack trace iff <code>shouldReportFailure</code>
+   * If the parse fails, prints a stack trace iff
+   * <code>shouldReportFailure</code>
    * is non-null, and returns null.
+   *
    * @deprecated Use CycNaut version.
    */
-  static public Date parseCycDate(final CycList cycList, final TimeZone timeZone, final boolean shouldReportFailure) {
+  static public Date parseCycDate(final CycList cycList, final TimeZone timeZone,
+          final boolean shouldReportFailure) {
     final Object naut = CycNaut.convertIfPromising(cycList);
     if (naut instanceof CycNaut) {
       return parseCycDate((CycNaut) naut, timeZone, shouldReportFailure);
@@ -109,16 +120,21 @@ public class DateConverter extends DataTypeConverter<Date> {
     return null;
   }
 
-  /** Try to parse <code>naut</code> into a java <code>Date</code> in a given time zone.
+  /** Try to parse
+   * <code>naut</code> into a java
+   * <code>Date</code> in a given time zone.
    *
-   * If the parse fails, prints a stack trace iff <code>shouldReportFailure</code>
+   * If the parse fails, prints a stack trace iff
+   * <code>shouldReportFailure</code>
    * is non-null, and returns null.
-   * @param naut 
-   * @param timeZone 
-   * @param shouldReportFailure 
-   * @return
+   *
+   * @param naut
+   * @param timeZone
+   * @param shouldReportFailure
+   * @return the java.util.Date representation of <tt>naut</tt>
    */
-  static public Date parseCycDate(final CycNaut naut, final TimeZone timeZone, final boolean shouldReportFailure) {
+  static public Date parseCycDate(final CycNaut naut, final TimeZone timeZone,
+          final boolean shouldReportFailure) {
     try {
       return naut2Date(naut, timeZone);
     } catch (ParseException ex) {
@@ -126,11 +142,14 @@ public class DateConverter extends DataTypeConverter<Date> {
     }
   }
 
-  /** Try to parse <code>cycList</code> into a java <code>Date</code>
+  /** Try to parse
+   * <code>cycList</code> into a java
+   * <code>Date</code>
    *
    * Prints stack trace and returns null if the parse fails.
-   * 
+   *
    * The Cyc date is assumed to be in the default time zone.
+   *
    * @see TimeZone#getDefault
    * @deprecated Use CycNaut version.
    */
@@ -138,12 +157,15 @@ public class DateConverter extends DataTypeConverter<Date> {
     return getInstance().parse(cycList);
   }
 
-  /** Try to parse <code>naut</code> into a java <code>Date</code>
+  /** Try to parse
+   * <code>naut</code> into a java
+   * <code>Date</code>
    *
    * Prints stack trace and returns null if the parse fails.
-   * @param naut 
+   *
+   * @param naut
    * @return the corresponding Date object.
-   * 
+   *
    * The Cyc date is assumed to be in the default time zone.
    * @see TimeZone#getDefault
    */
@@ -187,16 +209,20 @@ public class DateConverter extends DataTypeConverter<Date> {
     return -1;
   }
 
-  /** Convert the date in <code>date</code> to a CycL date term.
+  /** Convert the date in
+   * <code>date</code> to a CycL date term.
    *
    * @param date The date to be converted
    * @param granularity Indicates the desired granularity of the CycL term.
-   *        Should be an <code>int</code> constant from this class,
-   *        e.g. <code>DateConverter.YEAR_GRANULARITY</code> or <code>DateConverter.SECOND_GRANULARITY</code>.
+   * Should be an
+   * <code>int</code> constant from this class,
+   * e.g.
+   * <code>DateConverter.YEAR_GRANULARITY</code> or
+   * <code>DateConverter.SECOND_GRANULARITY</code>.
    * @return The Cyc term corresponding to date.
    * @throws ParseException if date cannot be converted.
-   **/
-  public static CycNaut toCycDate(final Date date, final int granularity) throws ParseException {
+   * */
+  public static CycNaut toCycDate(final Date date, final int granularity) {
     return date2Naut(date, granularity);
   }
 
@@ -208,31 +234,43 @@ public class DateConverter extends DataTypeConverter<Date> {
     return TimeGranularity.guessGranularity(millis).intValue();
   }
 
-  /** Convert the date in <code>date</code> to a CycL date term.
+  /** Convert the date in
+   * <code>date</code> to a CycL date term.
    *
    * @param date The date to be converted
    * @return The Cyc term corresponding to date.
    * @throws ParseException if date cannot be converted.
-   **/
-  public static CycObject toCycDate(Date date) throws ParseException {
+   * */
+  public static CycObject toCycDate(Date date) {
     return date2Naut(date, guessGranularity(date));
   }
 
-  /** Convert the date in <code>calendar</code> to a CycL date term.
+  /** Convert the date in
+   * <code>calendar</code> to a CycL date term.
    *
-   * @param calendar 
+   * @param calendar
    * @param granularity Indicates the desired granularity of the CycL term.
-   *        Should be an <code>int</code> constant from this class,
-   *        e.g. <code>DateConverter.YEAR_GRANULARITY</code> or <code>DateConverter.SECOND_GRANULARITY</code>.
-   * @return
-   **/
+   * Should be an
+   * <code>int</code> constant from this class,
+   * e.g.
+   * <code>DateConverter.YEAR_GRANULARITY</code> or
+   * <code>DateConverter.SECOND_GRANULARITY</code>.
+   * @return the CycNaut representation of <tt>calendar</tt>
+   * @see org.opencyc.cycobject.CycNaut
+   * */
   public static CycNaut toCycDate(final Calendar calendar, final int granularity) {
     return calendar2Naut(calendar, granularity);
   }
 
   //// Protected Area
   @Override
-  protected Date parseDataType(final CycNaut naut) throws ParseException {
+  protected Date fromCycTerm(final CycObject cycObject) throws ParseException {
+    final CycNaut naut;
+    try {
+      naut = (CycNaut) CycNaut.convertIfPromising(cycObject);
+    } catch (ClassCastException ex) {
+      throw new IllegalArgumentException();
+    }
     final Calendar calendar = Calendar.getInstance();
     calendar.clear();
     updateCalendar(naut, calendar);
@@ -240,34 +278,40 @@ public class DateConverter extends DataTypeConverter<Date> {
   }
 
   @Override
-  protected CycNaut toCycTerm(Date date) throws ParseException {
+  protected CycNaut toCycTerm(Date date) {
     return date2Naut(date, guessGranularity(date));
   }
 
   //// Private Area
-  static private CycNaut date2Naut(Date date, final int granularity) throws ParseException {
+  static private CycNaut date2Naut(Date date, final int granularity) {
     final Calendar calendar = Calendar.getInstance();
     calendar.setTime(date);
     return calendar2Naut(calendar, granularity);
   }
 
-  private static CycNaut calendar2Naut(final Calendar calendar, final int granularity) {
+  private static CycNaut calendar2Naut(final Calendar calendar,
+          final int granularity) {
     CycNaut dateNaut = new CycNaut(YEAR_FN, calendar.get(YEAR_GRANULARITY));
 //      if (granularity == WEEK_GRANULARITY) {
 //        dateNaut = new CycNaut(WEEK_FN, calendar.get(WEEK_GRANULARITY), dateNaut);
 //      } else
     if (granularity > YEAR_GRANULARITY) {
-      dateNaut = new CycNaut(MONTH_FN, lookupMonth(calendar.get(MONTH_GRANULARITY)), dateNaut);
-        if (granularity > MONTH_GRANULARITY) {
+      dateNaut = new CycNaut(MONTH_FN, lookupMonth(calendar.get(
+              MONTH_GRANULARITY)), dateNaut);
+      if (granularity > MONTH_GRANULARITY) {
         dateNaut = new CycNaut(DAY_FN, calendar.get(DAY_GRANULARITY), dateNaut);
         if (granularity > DAY_GRANULARITY) {
-          dateNaut = new CycNaut(HOUR_FN, calendar.get(HOUR_GRANULARITY), dateNaut);
+          dateNaut = new CycNaut(HOUR_FN, calendar.get(HOUR_GRANULARITY),
+                  dateNaut);
           if (granularity > Calendar.HOUR) {
-            dateNaut = new CycNaut(MINUTE_FN, calendar.get(MINUTE_GRANULARITY), dateNaut);
+            dateNaut = new CycNaut(MINUTE_FN, calendar.get(MINUTE_GRANULARITY),
+                    dateNaut);
             if (granularity > MINUTE_GRANULARITY) {
-              dateNaut = new CycNaut(SECOND_FN, calendar.get(SECOND_GRANULARITY), dateNaut);
+              dateNaut = new CycNaut(SECOND_FN, calendar.get(SECOND_GRANULARITY),
+                      dateNaut);
               if (granularity > SECOND_GRANULARITY) {
-                dateNaut = new CycNaut(MILLISECOND_FN, calendar.get(MILLISECOND_GRANULARITY), dateNaut);
+                dateNaut = new CycNaut(MILLISECOND_FN, calendar.get(
+                        MILLISECOND_GRANULARITY), dateNaut);
               }
             }
           }
@@ -281,7 +325,8 @@ public class DateConverter extends DataTypeConverter<Date> {
     return naut2Calendar(naut, timeZone).getTime();
   }
 
-  private static Calendar naut2Calendar(final CycNaut naut, final TimeZone timeZone) throws ParseException {
+  private static Calendar naut2Calendar(final CycNaut naut,
+          final TimeZone timeZone) throws ParseException {
     final Calendar calendar = Calendar.getInstance();
     calendar.clear();
     updateCalendar(naut, calendar);
@@ -289,7 +334,9 @@ public class DateConverter extends DataTypeConverter<Date> {
     return calendar;
   }
 
-  /** Set the time on <code>calendar</code> based on the CycL date <code>naut</code> */
+  /** Set the time on
+   * <code>calendar</code> based on the CycL date
+   * <code>naut</code> */
   static private void updateCalendar(final CycNaut naut, final Calendar calendar) throws ParseException {
     final int arity = naut.getArity();
     final CycFort functor = naut.getFunctor();
@@ -356,7 +403,9 @@ public class DateConverter extends DataTypeConverter<Date> {
       return FALL;
     } else if (season.equals("WI")) {
       return WINTER;
-    } else return null;
+    } else {
+      return null;
+    }
   }
 
   static private CycConstant lookupMonth(final int month) {
@@ -420,7 +469,7 @@ public class DateConverter extends DataTypeConverter<Date> {
           new Guid("be0100d7-9c29-11b1-9dad-c379636f7270"));
   public static final CycConstant SECOND_FN = new CycConstant("SecondFn",
           new Guid("be01010a-9c29-11b1-9dad-c379636f7270"));
-  public static final CycConstant MILLISECOND_FN = new CycConstant("MillisecondFn",
+  public static final CycConstant MILLISECOND_FN = new CycConstant("MilliSecondFn",
           new Guid("8c3206d3-1616-11d8-99b1-0002b361bcfc"));
   public static final CycConstant JANUARY = new CycConstant("January",
           new Guid("bd58b833-9c29-11b1-9dad-c379636f7270"));

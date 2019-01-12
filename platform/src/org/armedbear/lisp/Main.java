@@ -38,7 +38,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.cli.Option;
-import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.JVMImpl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
@@ -50,7 +49,7 @@ public final class Main
 
 	public static final long startTimeMillis = System.currentTimeMillis();
 
-	static public Boolean isSublispDefault = false;
+	public static boolean isSublispDefault = false;
 
 	public static ThreadLocal<Boolean> isSubLisp = new ThreadLocal<Boolean>()
 	{
@@ -74,7 +73,7 @@ public final class Main
 
 	public static void main(String[] args) throws InterruptedException
 	{
-		String[] argsNew = BeanShellCntrl.extractOptions(args);
+		String[] argsNew = Main.extractOptions(args);
 
 		Thread t = mainUnjoined(argsNew);
 		if (true)
@@ -124,7 +123,8 @@ public final class Main
 				}
 			}
 		};
-		Thread t = new SubLThread(null, r, Main.class.getClass().getName(), 4194304L);
+		
+		Thread t = new SubLThread(null, r, Main.class.getClass().getName(), 1 << 30L).asJavaTread();
 		return t;
 	}
 
@@ -148,14 +148,20 @@ public final class Main
 		Main.isNoDebug.set(isNoDebug);
 	}
 
+	public static boolean noProlog = false;
+	public static boolean noPrologJNI = false;
+	public static boolean disablePrologSync = false;
+	
+	public static boolean trackStructs = true;
 	public static boolean noBSH = false;
-	public static boolean noBSHGUI = false;
+	public static boolean noBSHGUI = true;
+	
 	public static String subLisp = null;
 	public static int lispInstances = 0;
+	
 	public static boolean needIOConsole = true;
 	public static boolean needABCL = true;
-	//	public static boolean commonSymbolsOK;
-	public static boolean noProlog = false;
+	//	public static boolean commonSymbolsOK;	
 	public static boolean noExit = true;
 	public static boolean abclProcessArgs = false;
 	public static String[] passedArgs;
@@ -167,5 +173,37 @@ public final class Main
 			return false;
 		};
 	};
+
+	public static String[] extractOptions(String[] args)
+	{
+		List<String> argsList = new ArrayList<String>(Arrays.asList(args));
+		if (argsList.remove("--prolog"))
+		{
+			noPrologJNI = false;
+		}
+		if (argsList.remove("--noprolog"))
+		{
+			noPrologJNI = true;
+		}
+		if (argsList.remove("--prologsync"))
+		{
+			disablePrologSync = false;
+			noPrologJNI = false;
+		}
+		if (argsList.remove("--noprologsync"))
+		{
+			disablePrologSync = true;
+		}
+		if (argsList.remove("--headless"))
+		{
+			noBSHGUI = true;
+		}
+		if (argsList.remove("--beandesk"))
+		{
+			noBSHGUI = false;
+		}
+		String[] argsNew = argsList.toArray(new String[argsList.size()]);
+		return argsNew;
+	}
 
 }

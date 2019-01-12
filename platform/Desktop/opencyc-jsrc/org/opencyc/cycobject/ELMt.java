@@ -1,7 +1,7 @@
 package org.opencyc.cycobject;
 
 /**
- * Defines the behavior of a Epistological Level Microtheory (ELMt), which can be
+ * Defines the behavior of a Epistemological Level Microtheory (ELMt), which can be
  * a Constant, NART (Non-Atomic Reified Term) or NAUT (Non-Atomic Unrefied Term).
  *
  * @version $0.1$

@@ -11,6 +11,7 @@ import org.armedbear.lisp.LispClass;
 import org.armedbear.lisp.LispError;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.LispThread;
+import org.armedbear.lisp.Main;
 import org.armedbear.lisp.StructureObject;
 import org.armedbear.lisp.Symbol;
 
@@ -55,21 +56,32 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 	@Override
 	public void clear()
 	{
-		Arrays.fill(slots, SubLNil.NIL);
+		final int pingAt = slots.length - 1;
+		Object was = slots[pingAt];
+		final SubLNil theNil = SubLNil.NIL;
+		Arrays.fill(slots, theNil);
+		PrologSync.wasSetField(this, pingAt, pingAt, was, theNil);
+	}
+	
+
+	protected void reallySetSlot(int index, LispObject newValue) throws ArrayIndexOutOfBoundsException
+	{
+		final int pingAt = slots.length - 1;
+		if (index == 0 || index == pingAt)
+		{
+			Object was = getSlotValue(index);
+			slots[index] = newValue;
+			PrologSync.wasSetField(this, index, pingAt, was, newValue);
+			return;
+		}
+		slots[index] = newValue;
 	}
 
 	@Override
 	public int getFieldCount()
 	{
-		if (slots == null) return 0;
+		if (slots == null) return -1;
 		return slots.length;
-	}
-
-	@Override
-	public void setField(int slotNum, SubLObject value)
-	{
-		if (slotNum == 0 || slotNum == 1) Errors.error("Can't set special slots on structs.");
-		slots[slotNum - 2] = (LispObject) value;
 	}
 
 	@Override
@@ -193,60 +205,11 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 		}
 	}
 
-	public void setSlotValue_0(LispObject value)
-
+	final public void setSlotValue(int index, LispObject value)
 	{
 		try
 		{
-			slots[0] = value;
-		} catch (ArrayIndexOutOfBoundsException e)
-		{
-			badIndex(0);
-		}
-	}
-
-	public void setSlotValue_1(LispObject value)
-
-	{
-		try
-		{
-			slots[1] = value;
-		} catch (ArrayIndexOutOfBoundsException e)
-		{
-			badIndex(1);
-		}
-	}
-
-	public void setSlotValue_2(LispObject value)
-
-	{
-		try
-		{
-			slots[2] = value;
-		} catch (ArrayIndexOutOfBoundsException e)
-		{
-			badIndex(2);
-		}
-	}
-
-	public void setSlotValue_3(LispObject value)
-
-	{
-		try
-		{
-			slots[3] = value;
-		} catch (ArrayIndexOutOfBoundsException e)
-		{
-			badIndex(3);
-		}
-	}
-
-	public void setSlotValue(int index, LispObject value)
-
-	{
-		try
-		{
-			slots[index] = value;
+			reallySetSlot(index, value);
 		} catch (ArrayIndexOutOfBoundsException e)
 		{
 			badIndex(index);
@@ -274,16 +237,22 @@ abstract public class SubLStructInterpreted extends AbstractSubLStruct implement
 
 		public SubLStructInterpretedImpl(int size)
 		{
-			slots = new LispObject[size];
-			clear();
+			init(size);
 			slotsStart[0] = SubLNumberFactory.makeInteger(size);
+		}
+
+		@Override
+		public void init(int size)
+		{
+			if (this.slots == null || this.slots.length != size) this.slots = new SubLObject[size];
+			super.init(size);
 		}
 
 		public SubLStructInterpretedImpl(Layout layout)
 		{
 			this(layout.getLength());
 			setLayout(layout);
-			if (PrologSync.trackStructs)
+			if (Main.trackStructs)
 			{
 				PrologSync.addThis(this);
 			}

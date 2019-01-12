@@ -68,7 +68,7 @@ public class Threads extends SubLTrampolineFile {
 	}
 
 	public static void possiblyHandleInterrupts(boolean shouldExpectInterruptFlag) {
-		if (shouldExpectInterruptFlag && !Thread.currentThread().isInterrupted())
+		if (shouldExpectInterruptFlag && !SubLThread.currentThread().isInterrupted())
 			return;
 		SubLProcess thisProcess = SubLProcess.currentProcess();
 		if (thisProcess != null)

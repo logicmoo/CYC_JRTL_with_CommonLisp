@@ -34,7 +34,7 @@ public class StackWithPointer extends Stack {
     public int sp = 0;
 
     /**
-     * Constructs a new empty <tt>StackWithPointer<tt> object.
+     * Constructs a new empty <tt>StackWithPointer</tt> object.
      */
     public StackWithPointer() {
     }

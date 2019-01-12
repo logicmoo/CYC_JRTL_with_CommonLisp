@@ -1,4 +1,4 @@
-/* $Id: CycNonAtomicTerm.java 131278 2010-06-28 13:51:40Z baxter $
+/* $Id: CycNonAtomicTerm.java 142599 2013-01-03 17:15:53Z baxter $
  *
  * Copyright (c) 2008 Cycorp, Inc.  All rights reserved.
  * This software is the proprietary information of Cycorp, Inc.
@@ -23,11 +23,16 @@ import java.util.List;
  *
  * Created on : Jul 6, 2009, 10:05:43 AM
  * Author     : baxter
- * @version $Id: CycNonAtomicTerm.java 131278 2010-06-28 13:51:40Z baxter $
+ * @version $Id: CycNonAtomicTerm.java 142599 2013-01-03 17:15:53Z baxter $
  */
 public interface CycNonAtomicTerm extends CycDenotationalTerm {
   
   abstract CycFort getFunctor();
+  /**
+   * Get the arguments of this non-atomic term, not including the functor,
+   * or arg0.
+   * @return the list of arguments.
+   */
   abstract List getArguments();
   abstract CycNaut getFormula();
   Object getArgument(final int argnum);

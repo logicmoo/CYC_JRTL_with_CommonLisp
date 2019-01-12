@@ -236,9 +236,9 @@ public class CycSymbol extends DefaultCycObject implements Serializable {
   }
 
   /**
-   * Returns <tt>true</tt> iff this symbol is a SubL keyword.
+   * Returns <tt>true</tt> iff this symbol should be quoted.
    *
-   * @return <tt>true</tt> iff this symbol is a SubL keyword
+   * @return <tt>true</tt> iff this symbol should be quoted.
    */
   public boolean shouldQuote() {
     return shouldQuote;

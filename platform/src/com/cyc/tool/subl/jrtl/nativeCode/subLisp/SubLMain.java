@@ -380,7 +380,10 @@ public class SubLMain {
 		// placeholder
 	}
 
+	static boolean initializedLMD = false;
 	private static void initializeLowMemoryDetection() {
+		if(initializedLMD) return;
+		initializedLMD = true;
 		MemoryMXBean mbean = ManagementFactory.getMemoryMXBean();
 		NotificationEmitter emitter = (NotificationEmitter) mbean;
 		MemoryListener listener = new MemoryListener();

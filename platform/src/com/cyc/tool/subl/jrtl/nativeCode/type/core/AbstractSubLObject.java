@@ -236,7 +236,7 @@ public abstract class AbstractSubLObject extends Lisp  implements SubLObject
 		type_error_str(this, "STRUCTURE");
 	}
 
-	public SubLObject setFieldImpl(int fieldNum, SubLObject value) {
+	private SubLObject setFieldThis(int fieldNum, SubLObject value) {
 		setField(fieldNum, value);
 		return value;
 	}
@@ -559,107 +559,107 @@ public abstract class AbstractSubLObject extends Lisp  implements SubLObject
 
 	@Override
 	public SubLObject setField0(SubLObject newVal) {
-		return setFieldImpl(0, newVal);
+		return setFieldThis(0, newVal);
 	}
 
 	@Override
 	public SubLObject setField1(SubLObject newVal) {
-		return setFieldImpl(1, newVal);
+		return setFieldThis(1, newVal);
 	}
 
 	@Override
 	public SubLObject setField10(SubLObject newVal) {
-		return setFieldImpl(10, newVal);
+		return setFieldThis(10, newVal);
 	}
 
 	@Override
 	public SubLObject setField11(SubLObject newVal) {
-		return setFieldImpl(11, newVal);
+		return setFieldThis(11, newVal);
 	}
 
 	@Override
 	public SubLObject setField12(SubLObject newVal) {
-		return setFieldImpl(12, newVal);
+		return setFieldThis(12, newVal);
 	}
 
 	@Override
 	public SubLObject setField13(SubLObject newVal) {
-		return setFieldImpl(13, newVal);
+		return setFieldThis(13, newVal);
 	}
 
 	@Override
 	public SubLObject setField14(SubLObject newVal) {
-		return setFieldImpl(14, newVal);
+		return setFieldThis(14, newVal);
 	}
 
 	@Override
 	public SubLObject setField15(SubLObject newVal) {
-		return setFieldImpl(15, newVal);
+		return setFieldThis(15, newVal);
 	}
 
 	@Override
 	public SubLObject setField16(SubLObject newVal) {
-		return setFieldImpl(16, newVal);
+		return setFieldThis(16, newVal);
 	}
 
 	@Override
 	public SubLObject setField17(SubLObject newVal) {
-		return setFieldImpl(17, newVal);
+		return setFieldThis(17, newVal);
 	}
 
 	@Override
 	public SubLObject setField18(SubLObject newVal) {
-		return setFieldImpl(18, newVal);
+		return setFieldThis(18, newVal);
 	}
 
 	@Override
 	public SubLObject setField19(SubLObject newVal) {
-		return setFieldImpl(19, newVal);
+		return setFieldThis(19, newVal);
 	}
 
 	@Override
 	public SubLObject setField2(SubLObject newVal) {
-		return setFieldImpl(2, newVal);
+		return setFieldThis(2, newVal);
 	}
 
 	@Override
 	public SubLObject setField20(SubLObject newVal) {
-		return setFieldImpl(20, newVal);
+		return setFieldThis(20, newVal);
 	}
 
 	@Override
 	public SubLObject setField3(SubLObject newVal) {
-		return setFieldImpl(3, newVal);
+		return setFieldThis(3, newVal);
 	}
 
 	@Override
 	public SubLObject setField4(SubLObject newVal) {
-		return setFieldImpl(4, newVal);
+		return setFieldThis(4, newVal);
 	}
 
 	@Override
 	public SubLObject setField5(SubLObject newVal) {
-		return setFieldImpl(5, newVal);
+		return setFieldThis(5, newVal);
 	}
 
 	@Override
 	public SubLObject setField6(SubLObject newVal) {
-		return setFieldImpl(6, newVal);
+		return setFieldThis(6, newVal);
 	}
 
 	@Override
 	public SubLObject setField7(SubLObject newVal) {
-		return setFieldImpl(7, newVal);
+		return setFieldThis(7, newVal);
 	}
 
 	@Override
 	public SubLObject setField8(SubLObject newVal) {
-		return setFieldImpl(8, newVal);
+		return setFieldThis(8, newVal);
 	}
 
 	@Override
 	public SubLObject setField9(SubLObject newVal) {
-		return setFieldImpl(9, newVal);
+		return setFieldThis(9, newVal);
 	}
 
 	@Override

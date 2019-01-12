@@ -31,7 +31,7 @@ import org.opencyc.api.CycObjectFactory;
 
 public class ELMtConstant extends CycConstant implements ELMt {
   
- // static final long serialVersionUID = -2405506745680227189L;
+  static final long serialVersionUID = -2405506745680227189L;
   
   /** Privately creates a new instance of ELMtConstant 
    * deprecated

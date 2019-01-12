@@ -17,6 +17,7 @@ import org.armedbear.lisp.LispObject;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCharacter;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
@@ -61,7 +62,7 @@ public class SubLException extends RuntimeException implements SubLObject
 	SubLException() {
 		date = new Date();
 		restarts = SubLNil.NIL;
-		threadName = Thread.currentThread().getName();
+		threadName = SubLThread.currentThread().getName();
 		description = null;
 		init();
 	}
@@ -70,7 +71,7 @@ public class SubLException extends RuntimeException implements SubLObject
 		super(message);
 		date = new Date();
 		restarts = SubLNil.NIL;
-		threadName = Thread.currentThread().getName();
+		threadName = SubLThread.currentThread().getName();
 		description = null;
 		init();
 	}
@@ -79,7 +80,7 @@ public class SubLException extends RuntimeException implements SubLObject
 		super(message, cause);
 		date = new Date();
 		restarts = SubLNil.NIL;
-		threadName = Thread.currentThread().getName();
+		threadName = SubLThread.currentThread().getName();
 		description = null;
 		init();
 	}
@@ -88,7 +89,7 @@ public class SubLException extends RuntimeException implements SubLObject
 		super(cause);
 		date = new Date();
 		restarts = SubLNil.NIL;
-		threadName = Thread.currentThread().getName();
+		threadName = SubLThread.currentThread().getName();
 		description = null;
 		init();
 	}

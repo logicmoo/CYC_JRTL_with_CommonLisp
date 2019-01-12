@@ -63,7 +63,7 @@ import java.io.UnsupportedEncodingException;
  * @version 1.14, 07/12/04
  * @since   1.5
  */
-public final class UUID
+class OldCycUUID
 implements java.io.Serializable, Comparable {
   
   /**
@@ -126,7 +126,7 @@ implements java.io.Serializable, Comparable {
     /*
      * Private constructor which uses a byte array to construct the new UUID.
      */
-  private UUID(byte[] data) {
+  private OldCycUUID(byte[] data) {
     long msb = 0;
     long lsb = 0;
     assert data.length == 16;
@@ -147,7 +147,7 @@ implements java.io.Serializable, Comparable {
    * @param  mostSigBits
    * @param  leastSigBits
    */
-  public UUID(long mostSigBits, long leastSigBits) {
+  public OldCycUUID(long mostSigBits, long leastSigBits) {
     this.mostSigBits = mostSigBits;
     this.leastSigBits = leastSigBits;
   }
@@ -160,7 +160,7 @@ implements java.io.Serializable, Comparable {
    *
    * @return  a randomly generated <tt>UUID</tt>.
    */
-  public static UUID randomUUID() {
+  public static OldCycUUID randomUUID() {
     SecureRandom ng = numberGenerator;
     if (ng == null) {
       numberGenerator = ng = new SecureRandom();
@@ -172,8 +172,8 @@ implements java.io.Serializable, Comparable {
     randomBytes[6]  |= 0x40;  /* set to version 4     */
     randomBytes[8]  &= 0x3f;  /* clear variant        */
     randomBytes[8]  |= 0x80;  /* set to IETF variant  */
-    UUID result = new UUID(randomBytes);
-    return new UUID(randomBytes);
+    OldCycUUID result = new OldCycUUID(randomBytes);
+    return  result;//new UUID(randomBytes);
   }
   
   /**
@@ -183,7 +183,7 @@ implements java.io.Serializable, Comparable {
    * @param  name a byte array to be used to construct a <tt>UUID</tt>.
    * @return  a <tt>UUID</tt> generated from the specified array.
    */
-  public static UUID nameUUIDFromBytes(byte[] name) {
+  public static OldCycUUID nameUUIDFromBytes(byte[] name) {
     MessageDigest md;
     try {
       md = MessageDigest.getInstance("MD5");
@@ -195,7 +195,7 @@ implements java.io.Serializable, Comparable {
     md5Bytes[6]  |= 0x30;  /* set to version 3     */
     md5Bytes[8]  &= 0x3f;  /* clear variant        */
     md5Bytes[8]  |= 0x80;  /* set to IETF variant  */
-    return new UUID(md5Bytes);
+    return new OldCycUUID(md5Bytes);
   }
   
   /**
@@ -207,7 +207,7 @@ implements java.io.Serializable, Comparable {
    * @throws IllegalArgumentException if name does not conform to the
    *         string representation as described in {@link #toString}.
    */
-  public static UUID fromString(String name) {
+  public static OldCycUUID fromString(String name) {
     String[] components = name.split("-");
     if (components.length != 5)
       throw new IllegalArgumentException("Invalid UUID string: "+name);
@@ -224,7 +224,7 @@ implements java.io.Serializable, Comparable {
     leastSigBits <<= 48;
     leastSigBits |= Long.decode(components[4]).longValue();
     
-    return new UUID(mostSigBits, leastSigBits);
+    return new OldCycUUID(mostSigBits, leastSigBits);
   }
   
   // Field Accessor Methods
@@ -443,11 +443,11 @@ implements java.io.Serializable, Comparable {
    *          <code>false</code> otherwise.
    */
   public boolean equals(Object obj) {
-    if (!(obj instanceof UUID))
+    if (!(obj instanceof OldCycUUID))
       return false;
-    if (((UUID)obj).variant() != this.variant())
+    if (((OldCycUUID)obj).variant() != this.variant())
       return false;
-    UUID id = (UUID)obj;
+    OldCycUUID id = (OldCycUUID)obj;
     return (mostSigBits == id.mostSigBits &&
     leastSigBits == id.leastSigBits);
   }
@@ -465,10 +465,10 @@ implements java.io.Serializable, Comparable {
    *         to, or greater than <tt>val</tt>.
    */
   public int compareTo(Object obj) {
-    if ((obj == null) || (!(obj instanceof UUID))) {
+    if ((obj == null) || (!(obj instanceof OldCycUUID))) {
       throw new RuntimeException("Can't compare UUIDs to non-UUIDs: " + obj);
     }
-    UUID val = (UUID)obj;
+    OldCycUUID val = (OldCycUUID)obj;
     // The ordering is intentionally set up so that the UUIDs
     // can simply be numerically compared as two numbers
     return (this.mostSigBits < val.mostSigBits ? -1 :

@@ -1,6 +1,8 @@
 package org.opencyc.util;
 
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.opencyc.api.CfaslInputStream;
 import org.opencyc.api.CfaslOutputStream;
 
@@ -91,7 +93,7 @@ public class Base64
         -5,                                         // Whitespace: Space
         -9,-9,-9,-9,-9,-9,-9,-9,-9,-9,              // Decimal 33 - 42
         62,                                         // Plus sign at decimal 43
-        -9,-9,-9,                                   // Decimal 44 - 46
+        -9,-9,-9,                                   // Decimal 44 - 46System.
         63,                                         // Slash at decimal 47
         52,53,54,55,56,57,58,59,60,61,              // Numbers zero through nine
         -9,-9,-9,                                   // Decimal 58 - 60
@@ -1052,7 +1054,7 @@ public class Base64
             }   // end if: white space, equals sign or better
             else
             {
-                System.err.println( "Bad Base64 input character at " + i + ": " + source[i] + "(decimal)" );
+                Logger.getLogger(Base64.class.getCanonicalName()).log(Level.FINE, "Bad Base64 input character at {0}: {1}(decimal)", new Object[]{i, source[i]});
                 return null;
             }   // end else: 
         }   // each input character

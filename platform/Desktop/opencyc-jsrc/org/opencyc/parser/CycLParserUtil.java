@@ -13,7 +13,7 @@ import java.util.*;
  * <P>CycLParserUtil is designed to be the main entry point into parsing
  * CycL expressions.
  *
- * @version $Id: CycLParserUtil.java 138070 2012-01-10 19:46:08Z sbrown $
+ * @version $Id: CycLParserUtil.java 150565 2014-04-16 21:52:36Z nwinant $
  * @author Tony Brusseau
  *
  * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
@@ -360,7 +360,7 @@ public class CycLParserUtil {
   
   private static String TEST_CYC_MACHINE = "localhost";
   
-  private static int TEST_CYC_PORT = 3660;
+  private static int TEST_CYC_PORT = 3600;
   
   //// Main
   

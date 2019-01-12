@@ -1,4 +1,4 @@
-/* $Id: CycNumber.java 132283 2010-09-21 18:20:46Z baxter $
+/* $Id: CycNumber.java 141934 2012-10-26 16:32:38Z baxter $
  *
  * Copyright (c) 2010 Cycorp, Inc.  All rights reserved.
  * This software is the proprietary information of Cycorp, Inc.
@@ -23,7 +23,7 @@ import org.opencyc.xml.XMLWriter;
 /**
  * Provides the behavior and attributes of an OpenCyc Number.
  *
- * @version $Id: CycNumber.java 132283 2010-09-21 18:20:46Z baxter $
+ * @version $Id: CycNumber.java 141934 2012-10-26 16:32:38Z baxter $
  * @author Dave Schneider
  *
  * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
@@ -84,7 +84,7 @@ public class CycNumber implements CycDenotationalTerm {
   /**
    * Constructs a new <tt>CycNumber</tt> object from a java Number.
    *
-   * @param name the constant name
+   * @param num  the java number
    */
   public CycNumber(final Number num) {
     if (num == null) {

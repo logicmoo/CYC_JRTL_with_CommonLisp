@@ -8,17 +8,16 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.opencyc.util.Base64;
-
 import org.opencyc.util.Base64Url;
 
 /**
  * A CFASL translating convert to/from compact external representations for CycL literal
  * types (Strings and Numbers) without needing to access a Cyc image.
  *
- * @see DefaultCycObject.toCompactExternalId()
- * @see DefaultCycObject.fromComactExternalId()
+ * @see org.opencyc.cycobject.DefaultCycObject#toCompactExternalId(Object, CycAccess) 
+ * @see org.opencyc.cycobject.DefaultCycObject#fromCompactExternalId(String, CycAccess) 
  * 
- * @version $Id: CompactHLIDConverter.java 131073 2010-05-27 21:47:32Z daves $
+ * @version $Id: CompactHLIDConverter.java 146145 2013-06-21 16:35:28Z daves $
  * @author daves
  * @todo add support for new, terser GUID serialization
  */
@@ -40,7 +39,7 @@ public class CompactHLIDConverter {
   //// Public Area
   /**
    *
-   * @return
+   * @return the singleton instance
    */
   public static CompactHLIDConverter converter() {
     return converter;
@@ -49,7 +48,7 @@ public class CompactHLIDConverter {
   /**
    *
    * @param obj Must be either a String or a Number.  Otherwise will throw IllegalArgumentException
-   * @return
+   * @return the compact HL ID
    * @throws IOException
    */
   public synchronized String toCompactHLId(Object obj) throws IOException {
@@ -59,7 +58,7 @@ public class CompactHLIDConverter {
   /**
    *
    * @param obj
-   * @return
+   * @return the compact HL ID
    * @throws IOException
    */
   public synchronized String toCompactHLId(String obj) throws IOException {
@@ -69,7 +68,7 @@ public class CompactHLIDConverter {
   /**
    *
    * @param obj
-   * @return
+   * @return the compact HL ID
    * @throws IOException
    */
   public synchronized String toCompactHLId(Number obj) throws IOException {
@@ -80,7 +79,7 @@ public class CompactHLIDConverter {
    *
    * @param obj ; must be either a Number or a String.
    * Otherwise, throws IllegalArgumentException
-   * @return
+   * @return the OpenCyc URI
    * @throws IOException
    */
   public String toOpenCycURI(Object obj) throws IOException {
@@ -90,7 +89,7 @@ public class CompactHLIDConverter {
   /**
    *
    * @param num
-   * @return
+   * @return the OpenCyc URI
    * @throws IOException
    */
   public String toOpenCycURI(String num) throws IOException {
@@ -100,7 +99,7 @@ public class CompactHLIDConverter {
   /**
    *
    * @param num
-   * @return
+   * @return the OpenCyc URI
    * @throws IOException
    */
   public String toOpenCycURI(Number num) throws IOException {
@@ -111,10 +110,10 @@ public class CompactHLIDConverter {
    *
    * @param obj ; must be either a Number or a String.
    * Otherwise, throws IllegalArgumentException
-   * @return
+   * @return the OpenCyc readable URI
    * @throws IOException
    */
-  public String toOpenCyReabablecURI(Object obj) throws IOException {
+  public String toOpenCyReadableURI(Object obj) throws IOException {
     if (obj instanceof Number) {
       return toOpenCycReadableURI((Number) obj);
     } else if (obj instanceof String) {
@@ -127,7 +126,7 @@ public class CompactHLIDConverter {
   /**
    *
    * @param num
-   * @return
+   * @return the OpenCyc readable URI
    * @throws IOException
    */
   public String toOpenCycReadableURI(String num) throws IOException {
@@ -137,7 +136,7 @@ public class CompactHLIDConverter {
   /**
    *
    * @param num
-   * @return
+   * @return the OpenCyc readable URI
    * @throws IOException
    */
   public String toOpenCycReadableURI(Number num) throws IOException {
@@ -157,7 +156,7 @@ public class CompactHLIDConverter {
   /**
    * 
    * @param num
-   * @return
+   * @return the OWL NL ID
    */
   public String toOwlNlId(Number num) {
     return num.toString();
@@ -166,7 +165,7 @@ public class CompactHLIDConverter {
   /**
    *
    * @param str
-   * @return
+   * @return the OWL NL ID
    */
   public String toOwlNlId(String str) {
     return "STRING_" + str;
@@ -175,7 +174,7 @@ public class CompactHLIDConverter {
   /**
    *
    * @param id
-   * @return
+   * @return the object with that ID
    * @throws IOException
    */
   public synchronized Object fromCompactHLId(String id) throws IOException {
@@ -189,7 +188,7 @@ public class CompactHLIDConverter {
   /**
    *
    * @param id
-   * @return
+   * @return true if <tt>id</tt> is a compact HL ID for a String
    * @note This does not return true for UnicodeStrings at this time.
    */
   public boolean isStringCompactHLId(String id) throws IOException {
@@ -203,10 +202,13 @@ public class CompactHLIDConverter {
   /**
    *
    * @param id
-   * @return
+   * @return true if <tt>id</tt> is a compact HL ID for a Number
    */
   public boolean isNumberCompactHLId(String id) throws IOException {
     byte[] bytes = base64.decode(padWithEqualSigns(id));
+    if (bytes == null) {
+        return false;
+    }
     CfaslInputStream cfaslInStream = new CfaslInputStream(new ByteArrayInputStream(bytes));
     Integer obj1 = cfaslInStream.read();
     Integer obj2 = cfaslInStream.read();
@@ -216,7 +218,7 @@ public class CompactHLIDConverter {
   /**
    *
    * @param id
-   * @return
+   * @return true if <tt>id</tt> is a compact HL ID for a literal (i.e. a string or number)
    */
   public boolean isLiteralCompactHLId(String id) throws IOException {
     byte[] bytes = base64.decode(padWithEqualSigns(id));

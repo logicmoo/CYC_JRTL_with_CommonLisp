@@ -3,25 +3,31 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.Primitive;
 import org.armedbear.lisp.Symbol;
+import org.logicmoo.system.BeanShellCntrl.LispMethod;
 
-import com.cyc.cycjava.cycl.assertion_content_holder;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStruct;
-import com.cyc.tool.subl.jrtl.nativeCode.type.operator.FixedArityFunctor;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbolFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLT;
-import com.cyc.tool.subl.util.SubLFiles;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
+
+import scala.reflect.internal.AnnotationInfos.Annotatable;
+import sun.reflect.FieldAccessor;
 
 public class SubLStructDeclNative extends SubLStructDecl
 {
@@ -58,12 +64,32 @@ public class SubLStructDeclNative extends SubLStructDecl
 	public static SubLStructDeclNative makeStructDeclNative(Class structClass, SubLSymbol typeName, String getterPrefix, String setterPre_Prefix)
 	{
 		Field[] actualFields = structClass.getDeclaredFields();
-		String[] actualFieldNames = new String[actualFields.length];
-		for (int i = 0; i < actualFieldNames.length; i++)
+		List useFields = new ArrayList();
+		boolean annotationRequired = structClass.isAnnotationPresent(LispMethod.class);
+
+		for (int i = 0; i < actualFields.length; i++)
 		{
-			actualFieldNames[i] = actualFields[i].getName();
+			Field f = actualFields[i];
+			if (annotationRequired)
+			{
+				if (!f.isAnnotationPresent(LispMethod.class))
+				{
+					continue;
+				}
+			}
+			else
+			{
+				if (Modifier.isStatic(f.getModifiers()))
+				{
+					if (!f.isAnnotationPresent(LispMethod.class))
+					{
+						continue;
+					}
+				}
+			}
+			useFields.add(f.getName());
 		}
-		return makeStructDeclNative(structClass, typeName, null, getterPrefix, setterPre_Prefix, actualFieldNames, null);
+		return makeStructDeclNative(structClass, typeName, null, getterPrefix, setterPre_Prefix, (String[]) useFields.toArray(new String[useFields.size()]), null);
 	}
 
 	public static SubLStructDeclNative makeStructDeclNative(Class structClass, SubLSymbol typeName, SubLSymbol predicateName, String getterPrefix, String setterPre_Prefix, String[] actualFieldNames, SubLSymbol printFunction)
@@ -113,13 +139,27 @@ public class SubLStructDeclNative extends SubLStructDecl
 		super(structName, getterNames, setterNames, slotKeywordNames, printFunction, hashFunction, testFunction, isInterned);
 		declaredFieldNameToFieldHash = new Hashtable();
 		this.structClass = structClass;
+
 		this.actualFieldNames = actualFieldNames;
 		int size = actualFieldNames.length;
 		fieldDecls = new Field[size];
+		int pingAt = size - 1;
 		try
 		{
 			for (int i = 0; i < size; ++i)
-				fieldDecls[i] = structClass.getDeclaredField(this.actualFieldNames[i]);
+			{
+				Field f = structClass.getDeclaredField(this.actualFieldNames[i]);
+				if (i == 0 || i == pingAt)
+				{
+					FieldAccessor before = (FieldAccessor) afa.invoke(f, true);
+					if (!(before instanceof SpyFA))
+					{
+						SpyFA spy = new SpyFA(pingAt, i, before);
+						sfa.invoke(f, spy, true);
+					}
+				}
+				fieldDecls[i] = f;
+			}
 		} catch (Exception e)
 		{
 			Errors.error("Got invalid struct field declaration.", e);
@@ -173,6 +213,231 @@ public class SubLStructDeclNative extends SubLStructDecl
 		} catch (Exception e)
 		{
 			Errors.error("Unable to set field on: " + this + ".", e);
+		}
+	}
+
+	public class SpyFA implements FieldAccessor
+	{
+		final FieldAccessor before;
+		private int index;
+		private int pingAt;
+
+		public SpyFA(int pingAt, int i, FieldAccessor b)
+		{
+
+			this.pingAt = pingAt;
+			this.index = i;
+			before = b;
+
+		}
+
+		@Override
+		public Object get(Object arg0) throws IllegalArgumentException
+		{
+			return before.get(arg0);
+		}
+
+		@Override
+		public boolean getBoolean(Object arg0) throws IllegalArgumentException
+		{
+			return before.getBoolean(arg0);
+		}
+
+		@Override
+		public byte getByte(Object arg0) throws IllegalArgumentException
+		{
+			return before.getByte(arg0);
+		}
+
+		@Override
+		public char getChar(Object arg0) throws IllegalArgumentException
+		{
+			return before.getChar(arg0);
+		}
+
+		@Override
+		public double getDouble(Object arg0) throws IllegalArgumentException
+		{
+			return before.getDouble(arg0);
+		}
+
+		@Override
+		public float getFloat(Object arg0) throws IllegalArgumentException
+		{
+
+			return before.getFloat(arg0);
+		}
+
+		@Override
+		public int getInt(Object arg0) throws IllegalArgumentException
+		{
+			return before.getInt(arg0);
+		}
+
+		@Override
+		public long getLong(Object arg0) throws IllegalArgumentException
+		{
+			return before.getLong(arg0);
+		}
+
+		@Override
+		public short getShort(Object arg0) throws IllegalArgumentException
+		{
+			return before.getShort(arg0);
+		}
+
+		@Override
+		public void set(Object arg0, Object arg1) throws IllegalArgumentException, IllegalAccessException
+		{
+			if (pingAt == index || index == 0)
+			{
+				Object waz = before.get(arg0);
+				before.set(arg0, arg1);
+				PrologSync.wasSetField((AbstractSubLStruct) arg0, index, pingAt, waz, arg1);
+				return;
+			}
+			before.set(arg0, arg1);
+		}
+
+		@Override
+		public void setBoolean(Object arg0, boolean arg1) throws IllegalArgumentException, IllegalAccessException
+		{
+			before.setBoolean(arg0, arg1);
+
+		}
+
+		@Override
+		public void setByte(Object arg0, byte arg1) throws IllegalArgumentException, IllegalAccessException
+		{
+			before.setByte(arg0, arg1);
+
+		}
+
+		@Override
+		public void setChar(Object arg0, char arg1) throws IllegalArgumentException, IllegalAccessException
+		{
+			before.setChar(arg0, arg1);
+
+		}
+
+		@Override
+		public void setDouble(Object arg0, double arg1) throws IllegalArgumentException, IllegalAccessException
+		{
+			before.setDouble(arg0, arg1);
+
+		}
+
+		@Override
+		public void setFloat(Object arg0, float arg1) throws IllegalArgumentException, IllegalAccessException
+		{
+			before.setFloat(arg0, arg1);
+
+		}
+
+		@Override
+		public void setInt(Object arg0, int arg1) throws IllegalArgumentException, IllegalAccessException
+		{
+			before.setInt(arg0, arg1);
+
+		}
+
+		@Override
+		public void setLong(Object arg0, long arg1) throws IllegalArgumentException, IllegalAccessException
+		{
+			before.setLong(arg0, arg1);
+
+		}
+
+		@Override
+		public void setShort(Object arg0, short arg1) throws IllegalArgumentException, IllegalAccessException
+		{
+			before.setShort(arg0, arg1);
+
+		}
+
+	}
+
+	// public static Unsafe unsafe = Unsafe.getUnsafe();
+	static Method afa;
+	static Method sfa;
+	static
+	{
+		try
+		{
+			afa = Field.class.getDeclaredMethod("acquireFieldAccessor", boolean.class);
+			afa.setAccessible(true);
+			sfa = Field.class.getDeclaredMethod("setFieldAccessor", FieldAccessor.class, boolean.class);
+			sfa.setAccessible(true);
+		} catch (Throwable e)
+		{
+			throw new RuntimeException(e);
+		}
+
+	}
+
+	public void setTrackStructInstance(boolean track, int pingAt)
+	{
+		this.trackStructInstance = track;
+		if (trackStructInstance)
+		{
+			listenToAllFields(fieldDecls, pingAt);
+		}
+	}
+
+	private void listenToAllFields(Field[] fields, int pingAt)
+	{
+		try
+		{
+			if (pingAt == -1)
+			{
+				pingAt = fields.length - 1;
+			}
+
+			if (pingAt < 0) { return; }
+			Field f = fields[pingAt];
+
+			FieldAccessor before;
+			before = (FieldAccessor) afa.invoke(f, true);
+			if (before instanceof SpyFA) return;
+			for (int i = 0; i < fields.length; i++)
+			{
+				f = fields[i];
+
+				before = (FieldAccessor) afa.invoke(f, true);
+				if (!(before instanceof SpyFA))
+				{
+					SpyFA spy = new SpyFA(pingAt, i, before);
+					sfa.invoke(f, spy, true);
+				}
+			}
+
+		} catch (Throwable e)
+		{
+			throw new RuntimeException(e);
+		}
+	}
+
+	void listenToField(Field[] fields, int pingAt)
+	{
+		try
+		{
+			if (pingAt == -1)
+			{
+				pingAt = fields.length - 1;
+			}
+
+			if (pingAt < 0) { return; }
+			Field f = fields[pingAt];
+			FieldAccessor before = (FieldAccessor) afa.invoke(f, true);
+			if (!(before instanceof SpyFA))
+			{
+				SpyFA spy = new SpyFA(pingAt, pingAt, before);
+				sfa.invoke(f, spy, true);
+			}
+
+		} catch (Throwable e)
+		{
+			throw new RuntimeException(e);
 		}
 	}
 }

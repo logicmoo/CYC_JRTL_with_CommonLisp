@@ -9,14 +9,15 @@ import org.opencyc.cycobject.CycFort;
 import org.opencyc.cycobject.CycList;
 import org.opencyc.cycobject.CycNart;
 import org.opencyc.cycobject.Guid;
-import org.opencyc.inference.DefaultInferenceParameters;
-import org.opencyc.inference.InferenceParameters;
+import org.opencyc.inference.params.DefaultInferenceParameters;
+import org.opencyc.inference.params.InferenceParameters;
+import org.opencyc.nl.Paraphraser;
 import org.opencyc.util.Log;
 
 /**
  * Provides a simple demo of the OpenCyc API.<p>
  *
- * @version $Id: ApiDemo.java 130974 2010-05-18 16:07:47Z baxter $
+ * @version $Id: ApiDemo.java 150228 2014-04-03 19:23:54Z daves $
  * @author Stephen L. Reed
  *
  * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
@@ -111,7 +112,7 @@ public class ApiDemo {
             demo10();
             break;
           case 11:
-            demo11();
+            System.out.println("Demo 11 has been removed.");
             break;
           case 12:
             demo12();
@@ -230,12 +231,14 @@ public class ApiDemo {
   protected void demo9() throws IOException, UnknownHostException, CycApiException {
     Log.current.println("Demonstrating getParaphrase api function.\n");
     CycFormulaSentence formula = cycAccess.makeCycSentence("(#$forAll ?THING (#$isa ?Thing #$Thing))");
-    String paraphrase = cycAccess.getParaphrase(formula);
+    Paraphraser p = Paraphraser.getInstance(Paraphraser.ParaphrasableType.FORMULA);
+    String paraphrase = p.paraphrase(formula).getString();
     Log.current.println("\nThe obtained paraphrase for\n" + formula + "\nis:\n" + paraphrase);
   }
   
   /**
    * Demonstrates getParaphrase (with quantified formula) api function.
+   * @todo this (and several others near here) should move into the NLAPI.
    */
   protected void demo10() throws IOException, UnknownHostException, CycApiException {
     if (cycAccess.isOpenCyc()) {
@@ -248,32 +251,12 @@ public class ApiDemo {
       "  (#$and\n" +
       "    (#$isa ?PLANET #$Planet)\n" +
       "    (#$orbits ?PLANET #$Sun)))");
-      String paraphrase = cycAccess.getParaphrase(formula);
+      Paraphraser p = Paraphraser.getInstance(Paraphraser.ParaphrasableType.FORMULA);
+      String paraphrase = p.paraphrase(formula).getString();
       Log.current.println("\nThe obtained paraphrase for\n" + formula + "\nis:\n" + paraphrase);
     }
   }
   
-  /**
-   * Demonstrates getImpreciseParaphrase (with quantified formula) api function.
-   */
-  protected void demo11() throws IOException, UnknownHostException, CycApiException {
-    if (cycAccess.isOpenCyc()) {
-      Log.current.println("\nThis demo is not available in OpenCyc");
-    }
-    else {
-      Log.current.println("Demonstrating getImpreciseParaphrase api function.\n");
-      CycFormulaSentence formula = cycAccess.makeCycSentence(
-      "(#$forAll ?PERSON1\n" +
-      "  (#$implies\n" +
-      "    (#$isa ?PERSON1 #$Person)\n" +
-      "    (#$thereExists ?PERSON\n" +
-      "      (#$and\n" +
-      "        (#$isa ?PERSON2 #$Person)\n" +
-      "        (#$loves ?PERSON1 ?PERSON2)))))");
-      String paraphrase = cycAccess.getImpreciseParaphrase(formula);
-      Log.current.println("\nThe obtained imprecise paraphrase for\n" + formula + "\nis:\n" + paraphrase);
-    }
-  }
   
   /**
    * Demonstrates usage of CycNart and getInstanceSiblings api function.

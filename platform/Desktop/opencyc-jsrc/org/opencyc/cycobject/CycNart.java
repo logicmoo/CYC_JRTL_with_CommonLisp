@@ -5,8 +5,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.net.UnknownHostException;
 import java.util.List;
 import java.util.ListIterator;
+import org.opencyc.api.CycAccess;
+import org.opencyc.api.CycApiException;
 
 //// Internal Imports
 import org.opencyc.api.CycObjectFactory;
@@ -17,7 +20,7 @@ import org.opencyc.xml.XMLWriter;
  * This class implements the behavior and attributes of a
  * an OpenCyc NART (Non Atomic Reified Term).
  *
- * @version $Id: CycNart.java 138070 2012-01-10 19:46:08Z sbrown $
+ * @version $Id: CycNart.java 148083 2013-10-30 19:26:07Z daves $
  * @author Stefano Bertolo
  * @author Stephen L. Reed
  *
@@ -74,8 +77,8 @@ public class CycNart extends CycFort implements CycNonAtomicTerm, Serializable {
    *
    * @param functor a <tt>CycFort</tt> which is the functor of this
    * <tt>CycNart</tt> object.
-   * @param argument an <tt>Object</tt> most typically a <tt>CycConstant</tt>
-   * which is the single argument of this <tt>CycNart</tt> object.
+   * @param arguments an array of <tt>Objects</tt> most typically <tt>CycConstants</tt>
+   * which are the arguments of this <tt>CycNart</tt> object.
    */
   public CycNart(CycFort functor, Object... arguments) {
     this.formula = new CycNaut(functor, arguments);
@@ -96,6 +99,39 @@ public class CycNart extends CycFort implements CycNonAtomicTerm, Serializable {
     this.formula = new CycNaut(cycList);
   }
 
+  /**
+   * Ensure that this CycNart is an actual reified term in the Cyc server accessible from {@link org.opencyc.api.CycAccess#getCurrent}.
+   * @return this
+   * @throws UnknownHostException
+   * @throws IOException 
+   */
+  public CycNart ensureReified() throws UnknownHostException, IOException {
+    return ensureReified(CycAccess.getCurrent());
+  }
+    
+
+  /**
+   * Ensure that this CycNart is an actual reified term in the Cyc server accessible from <code>access</code>.
+   * @param access
+   * @return
+   * @throws UnknownHostException
+   * @throws IOException
+   */
+  public CycNart ensureReified(CycAccess access) throws UnknownHostException, IOException {
+    Object result;
+    try {
+      String command = "(canonicalize-term-assert " + this.stringApiValue() + ")";
+      result = access.converseObject(command);
+    } catch (Exception e) {
+      throw new CycApiException("Exception while ensuring that " + this + " is a NART.", e);
+    }
+    if (!(result instanceof CycNart)) {
+      throw new CycApiException("Unable to convert " + this + " into a Cyc NART.");
+
+    }
+    return this;
+  }
+  
   /** Constructs a the singleton invalid <tt>CycNart</tt> object. 
    * This should only be called from CycObjectFactory.
    *

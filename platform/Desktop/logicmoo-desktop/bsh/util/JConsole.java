@@ -248,7 +248,7 @@ public class JConsole extends JScrollPane
 
 		println();
 		//printHtml("<a href=\"abc\">hyperlink</a>");
-		printHtml("<a href=\"http://localhost:3020/apropos_object?name=startDmilesBSH\">startDmilesBSH</a>, <a href=\"http://www.google.com/finance?q=NYSE:C\">C</a>, <a href=\"http://www.google.com/finance?q=NASDAQ:MSFT\">MSFT</a>");
+		printHtml("<a href=\"http://cycserver:3020/apropos_object?name=startDmilesBSH\">startDmilesBSH</a>, <a href=\"http://www.google.com/finance?q=NYSE:C\">C</a>, <a href=\"http://www.google.com/finance?q=NASDAQ:MSFT\">MSFT</a>");
 		println();
 		requestFocus();
 	}

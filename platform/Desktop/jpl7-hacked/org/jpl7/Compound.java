@@ -7,8 +7,9 @@ import org.jpl7.fli.term_t;
 import org.logicmoo.system.BeanShellCntrl;
 
 /**
- * A Compound represents a structured term, comprising a functor and arguments (Terms). Atom is a subclass of Compound, whose instances have zero arguments. Direct instances of Compound must have one
- * or more arguments (it is an error to attempt to construct a Compound with zero args; a JPLException will be thrown). For example, this Java expression yields a representation of the term f(a):
+ * A Compound represents a structured term, comprising a functor and one or more arguments (Terms). Direct instances of
+ * Compound must have one or more arguments (it is an error to attempt to construct a Compound with zero args; a
+ * JPLException will be thrown). For example, this Java expression yields a representation of the term f(a):
  *
  * <pre>
  * new Compound(&quot;f&quot;, new Term[] { new Atom(&quot;a&quot;) })
@@ -21,107 +22,144 @@ import org.logicmoo.system.BeanShellCntrl;
  * Util.textToTerm(&quot;f(a)&quot;)
  * </pre>
  *
- * The <i>arity</i> of a Compound is the quantity of its arguments. Once constructed, neither the name nor the arity of a Compound can be altered. An argument of a Compound can be replaced with the
- * setArg() method.
+ * The <i>arity</i> of a Compound is the quantity of its arguments. Once constructed, neither the name nor the arity of
+ * a Compound can be altered. An argument of a Compound can be replaced with the setArg() method.
  * <hr>
  * Copyright (C) 2004 Paul Singleton
  * <p>
  * Copyright (C) 1998 Fred Dushin
  * <p>
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
+ * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the
+ * following conditions are met:
  *
  * <ol>
- * <li> Redistributions of source code must retain the above copyright
- *      notice, this list of conditions and the following disclaimer.
+ * <li>Redistributions of source code must retain the above copyright notice, this list of conditions and the following
+ * disclaimer.
  *
- * <li> Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in
- *      the documentation and/or other materials provided with the
- *      distribution.
+ * <li>Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the
+ * following disclaimer in the documentation and/or other materials provided with the distribution.
  * </ol>
  *
  * <p>
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
- * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
- * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
+ * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+ * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * <hr>
  *
  * @see org.jpl7.Term
  * @see org.jpl7.Atom
  */
-public class Compound extends Atom
+public class Compound extends Term
 {
 
 	@Override
-	public Object toJavaObject() {
-		if(args == null || name() == null) {
-			return this;
-		}
-		return  BeanShellCntrl.to_lisp_object(this,name(),args);
+	public Object toJavaObject()
+	{
+		Object val = getTag();
+		if (val != null) return val;
+		if (args == null || name() == null) { return this; }
+		return BeanShellCntrl.to_lisp_object(this, name(), args);
 	}
 
 	/**
-	 * the arguments of this Compound
+	 * The (zero or more) arguments of this Compound.
 	 */
-	protected Term[] args;
+	protected final Term[] args;
 
 	/**
-	 * the name of this Compound
+	 * The name of (the functor of) this Compound.
 	 */
-	//protected final String name;
+	protected final String name;
 
 	/**
-	 * Creates a Compound with name and no args. This constructor is protected (from illegal public use) and is used only by Atom, which inherits it.
+	 * Creates a Compound with name and no args (which in SWI Prolog V7 is distinct from a text atom of the same name).
 	 *
 	 * @param name
 	 *            the name of this Compound
+	 * @throws JPLException
+	 *             if name is null
 	 */
-	public Compound(String name) {
-		super(name,"compound");
+	public Compound(String name)
+	{
+		if (name == null)
+		{
+			throw new JPLException("cannot construct with null name");
+		}
+		else
+		{
+			this.name = name;
+			this.args = new Term[] {};
+		}
 	}
 
 	/**
-	 * Creates a Compound with name and arity. This constructor, along with the setArg method, serves the new, native Prolog-term-to-Java-term routine, and is public only so as to be accessible via
-	 * JNI: it is not intended for general use.
+	 * Creates a Compound with name and arity. This constructor, along with the setArg method, serves the new, native
+	 * Prolog-term-to-Java-term routine, and is public only so as to be accessible via JNI: it is not intended for
+	 * general use.
 	 *
 	 * @param name
 	 *            the name of this Compound
 	 * @param arity
 	 *            the arity of this Compound
+	 * @throws JPLException
+	 *             if name is null or arity is negative
 	 */
-	protected Compound(String name, int arity) {
-		super(name,"compound");
+	protected Compound(String name, int arity)
+	{
+		if (name == null)
+		{
+			throw new JPLException("cannot construct with null name");
+		}
+		else if (arity < 0)
+		{
+			throw new JPLException("cannot construct with negative arity");
+		}
+		else
+		{
+			this.name = name;
 			this.args = new Term[arity];
 		}
+	}
 
 	/**
-	 * Creates a Compound with name and args.
+	 * Creates a Compound with name and (zero or more) args.
 	 *
 	 * @param name
 	 *            the name of this Compound
 	 * @param args
-	 *            the (one or more) arguments of this Compound
+	 *            the (zero or more) arguments of this Compound
+	 * @throws JPLException
+	 *             if name is null or args is null
 	 */
-	public Compound(String name, Term[] args) {
-		super(name,"compound");
+	public Compound(String name, Term[] args)
+	{
+		if (name == null)
+		{
+			throw new JPLException("cannot construct with null name");
+		}
+		else if (args == null)
+		{
+			throw new JPLException("cannot construct with null args");
+		}
+		else
+		{
+			this.name = name;
 			this.args = args;
 		}
+	}
 
 	/**
-	 * Returns the ith argument (counting from 1) of this Compound; throws an ArrayIndexOutOfBoundsException if i is inappropriate.
+	 * Returns the ith argument (counting from 1) of this Compound.
 	 *
+	 * @param i
+	 *            the ordinal number of the required arg (1 denotes the first arg etc.)
 	 * @return the ith argument (counting from 1) of this Compound
+	 * @throws ArrayIndexOutOfBoundsException
+	 *             if i is inappropriate
 	 */
 	public final Term arg(int i)
 	{
@@ -129,9 +167,9 @@ public class Compound extends Atom
 	}
 
 	/**
-	 * Returns the arguments of this Compound (1..arity) of this Compound as an array[0..arity-1] of Term.
+	 * Returns the arguments of this Compound as a Term[0..arity-1] array.
 	 *
-	 * @return the arguments (1..arity) of this Compound as an array[0..arity-1] of Term
+	 * @return the arguments of this Compound as a Term[0..arity-1] array.
 	 */
 	public final Term[] args()
 	{
@@ -139,9 +177,9 @@ public class Compound extends Atom
 	}
 
 	/**
-	 * Returns the arity (1+) of this Compound.
+	 * Returns the arity (0+) of this Compound.
 	 *
-	 * @return the arity (1+) of this Compound
+	 * @return the arity (0+) of this Compound
 	 */
 	public final int arity()
 	{
@@ -149,7 +187,8 @@ public class Compound extends Atom
 	}
 
 	/**
-	 * Two Compounds are equal if they are identical (same object) or their names and arities are equal and their respective arguments are equal.
+	 * Two Compounds are equal if they are identical (same object) or their names and arities are equal and their
+	 * respective arguments are equal.
 	 *
 	 * @param obj
 	 *            the Object to compare (not necessarily another Compound)
@@ -157,8 +196,7 @@ public class Compound extends Atom
 	 */
 	public final boolean equals(Object obj)
 	{
-		return (this == obj || (obj instanceof Compound && name().equals(((Compound) obj).name())
-				&&  terms_equals(args, ((Compound) obj).args)));
+		return (this == obj || (obj instanceof Compound && name.equals(((Compound) obj).name) && Term.terms_equals(args, ((Compound) obj).args)));
 	}
 
 	/**
@@ -169,10 +207,20 @@ public class Compound extends Atom
 	 * @param vars_to_Vars
 	 *            A Map from Prolog variables to JPL Variables
 	 */
-	public final void getSubst(Map<String, Term> varnames_to_Terms, Map<term_t, Variable> vars_to_Vars)
+	protected final void getSubst(Map<String, Term> varnames_to_Terms, Map<term_t, Variable> vars_to_Vars)
 	{
-		 getSubsts(varnames_to_Terms, vars_to_Vars, args);
+		try
+		{
+			getSubstsLevel++;
+			if (getSubstsLevel > 1) { return; }
+			Term.getSubsts(varnames_to_Terms, vars_to_Vars, args);
+		} finally
+		{
+			getSubstsLevel--;
+		}
 	}
+
+	int getSubstsLevel = 0;
 
 	/**
 	 * Tests whether this Compound's functor has (String) 'name' and 'arity'.
@@ -181,7 +229,7 @@ public class Compound extends Atom
 	 */
 	public final boolean hasFunctor(String name, int arity)
 	{
-		return name.equals(this.name()) && arity == args.length;
+		return name.equals(this.name) && arity == args.length;
 	}
 
 	/**
@@ -191,7 +239,7 @@ public class Compound extends Atom
 	 */
 	public boolean isJFalse()
 	{
-		return hasFunctor("@", 1) && arg(1).hasFunctor("false", 0);
+		return hasFunctor("@", 1) && arg(1).isAtomOfNameType("false", "text");
 	}
 
 	/**
@@ -201,27 +249,7 @@ public class Compound extends Atom
 	 */
 	public boolean isJNull()
 	{
-		return hasFunctor("@", 1) && arg(1).hasFunctor("null", 0);
-	}
-
-	/**
-	 * whether this Term is a 'jobject' structure, i.e. @(Tag)
-	 *
-	 * @return whether this Term is a 'jobject' structure, i.e. @(Tag)
-	 */
-	public boolean isJObject()
-	{
-		return hasFunctor("@", 1) && arg(1).isAtom() && JPL.isTag(arg(1).name());
-	}
-
-	/**
-	 * whether this Term is a 'jref' structure, i.e. @(Tag) or @(null)
-	 *
-	 * @return whether this Term is a 'jref' structure, i.e. @(Tag) or @(null)
-	 */
-	public boolean isJRef()
-	{
-		return isJObject() || isJNull();
+		return hasFunctor("@", 1) && arg(1).isAtomOfNameType("null", "text");
 	}
 
 	/**
@@ -231,7 +259,7 @@ public class Compound extends Atom
 	 */
 	public boolean isJTrue()
 	{
-		return hasFunctor("@", 1) && arg(1).hasFunctor("true", 0);
+		return hasFunctor("@", 1) && arg(1).isAtomOfNameType("true", "text");
 	}
 
 	/**
@@ -241,7 +269,7 @@ public class Compound extends Atom
 	 */
 	public boolean isJVoid()
 	{
-		return hasFunctor("@", 1) && arg(1).hasFunctor("void", 0);
+		return hasFunctor("@", 1) && arg(1).isAtomOfNameType("void", "text");
 	}
 
 	/**
@@ -251,21 +279,7 @@ public class Compound extends Atom
 	 */
 	public final boolean isListPair()
 	{
-		return args.length == 2 && name().equals(JPL.LIST_PAIR);
-	}
-
-	public Object jrefToObject()
-	{
-		if (this.isJObject())
-		{
-			return Prolog.tag_to_object(arg(1).name());
-		} else if (this.isJNull())
-		{
-			return null;
-		} else
-		{
-			throw new JPLException("term is not a JRef");
-		}
+		return hasFunctor(JPL.LIST_PAIR, 2);
 	}
 
 	/**
@@ -275,31 +289,113 @@ public class Compound extends Atom
 	 */
 	public final String name()
 	{
-		return super.name();
+		return name;
 	}
 
 	/**
-	 * To put a Compound in a term, we create a sequence of term_t references from the Term.terms_to_term_ts() method, and then use the Prolog.cons_functor_v() method to create a Prolog compound term.
+	 * To put a Compound in a term, we create a sequence of term_t references from the Term.terms_to_term_ts() method,
+	 * and then use the Prolog.cons_functor_v() method to create a Prolog compound term.
 	 *
 	 * @param varnames_to_vars
 	 *            A Map from variable names to Prolog variables
 	 * @param term
-	 *            A (previously created) term_t which is to be set to a Prolog term corresponding to the Term subtype (Atom, Variable, Compound, etc.) on which the method is invoked.
+	 *            A (previously created) term_t which is to be set to a Prolog term corresponding to the Term subtype
+	 *            (Atom, Variable, Compound, etc.) on which the method is invoked.
 	 */
-	public void put(Map<String, term_t> varnames_to_vars, term_t term)
+
+	long did = 0;
+
+	@Override
+	protected void put(Map<String, term_t> varnames_to_vars, term_t term)
 	{
-		// if (this instanceof Atom && this.equals(JPL.LIST_NIL)) {
-		// Prolog.put_nil(term);
-		// } else {
-		// Prolog.cons_functor_v(term, Prolog.new_functor(Prolog.new_atom(name), args.length), Term.putTerms(varnames_to_vars, args));
-		// }
-		Prolog.cons_functor_v(term, Prolog.new_functor(Prolog.new_atom(name()), args.length),
-				 putTerms(varnames_to_vars, args));
+		if (true)
+		{
+			long saved = did;
+			try
+			{
+				long at = term.value;
+				if (saved != 0)
+				{
+					if (saved == at) { return; }
+					term_t was = new term_t();
+					was.value = saved;
+
+					Prolog.put_term(term, was);
+					return;
+				}
+				did = at;
+				Prolog.cons_functor_v(term, Prolog.new_functor(Prolog.new_atom(name), args.length), Term.putTerms(varnames_to_vars, args));
+			} finally
+			{
+				did = saved;
+			}
+			return;
+		}
+		if (true)
+		{
+			term_t t_args;
+			t_args = putTerms(varnames_to_vars, args);
+			Prolog.cons_functor_v(term, Prolog.new_functor(Prolog.new_atom(name()), args.length), t_args);
+			return;
+		}
+		//		if (isListNil())
+		//		{
+		//			Prolog.put_nil(term);
+		//			return;
+		//		}
+		//		if (!isListPair())
+		//		{
+		//			Prolog.cons_functor_v(term, Prolog.new_functor(Prolog.new_atom(name()), args.length), putTerms(varnames_to_vars, args));
+		//			return;
+		//		}
+		if (isListPair() && false)
+		{
+			Compound.doListPair(this, varnames_to_vars, term);
+			return;
+		}
+
+	}
+
+	private static void doListPair(Compound compound, Map<String, term_t> varnames_to_vars, term_t term)
+	{
+		Term lastEle;
+		term_t nextTerm;
+		do_compound: do
+		{
+			final Term args[] = compound.args();
+			final int space = args.length;
+			nextTerm = Prolog.new_term_refs(space);
+			Prolog.cons_functor_v(term, Prolog.new_functor(Prolog.new_atom(compound.name()), space), nextTerm);
+			int i = 0;
+			eacharg: do
+			{
+				lastEle = args[i++];
+				if (i == space)
+				{
+					if (lastEle instanceof Compound && lastEle.arity() > 0)
+					{
+						compound = (Compound) lastEle;
+						term = nextTerm;
+						continue do_compound;
+					}
+					else
+					{
+						lastEle.put(varnames_to_vars, nextTerm);
+						break do_compound;
+					}
+				}
+				lastEle.put(varnames_to_vars, nextTerm);
+				nextTerm = new term_t(nextTerm.value + 1);
+				continue eacharg;
+			} while (true);
+
+		} while (true);
 	}
 
 	/**
-	 * Sets the i-th (from 1) arg of this Compound to the given Term instance. This method, along with the Compound(name,arity) constructor, serves the new, native Prolog-term-to-Java-term routine,
-	 * and is public only so as to be accessible via JNI: it is not intended for general use.
+	 * Sets the i-th (from 1) arg of this Compound to the given Term instance. This method, along with the
+	 * Compound(name,arity) constructor, serves the new, native Prolog-term-to-Java-term routine, and is public only so
+	 * as to be accessible via JNI: it is not intended for general use.
 	 *
 	 * @param i
 	 *            the index (1+) of the arg to be set
@@ -311,40 +407,68 @@ public class Compound extends Atom
 		if (i <= 0)
 		{
 			throw new JPLException("bad (non-positive) argument index");
-		} else if (i > args.length)
+		}
+		else if (i > args.length)
 		{
 			throw new JPLException("bad (out-of-range) argument index");
-		} else if (arg == null)
+		}
+		else if (arg == null)
 		{
 			throw new JPLException("bad (null) argument");
-		} else
+		}
+		else
 		{
 			args[i - 1] = arg;
 		}
 	}
 
 	/**
-	 * a prefix functional representation of a Compound of the form name(arg1,...), where 'name' is quoted iff necessary (to be valid Prolog soutce text) and each argument is represented according to
-	 * its toString() method.
+	 * a prefix functional representation of a Compound of the form name(arg1,...), where 'name' is quoted iff necessary
+	 * (to be valid Prolog soutce text) and each argument is represented according to its toString() method.
 	 *
 	 * @return string representation of an Compound
 	 */
 	public String toString()
 	{
-		if (isListPair())
+
+		try
 		{
-			if (args[1].isListNil()) {
-				return "[" + args[0] + "]";
-			}
-			if (args[1].isListPair())
+			getSubstsLevel++;
+			if (getSubstsLevel > 1) { return JPL.quotedName(name) + (args.length > 0 ? "( ... )" : ""); }
+
+			if (isListPair())
 			{
-				String s = "" + args[1];
-				return "[" + args[0] + "," + s.substring(1);
+				StringBuffer sb = new StringBuffer();
+				asListPairString(args, sb);
+				return sb.toString();
 			}
-			return "[" + args[0] + "|" + args[1] + "]";
+			return JPL.quotedName(name) + (args.length > 0 ? "(" + Term.toString(args) + ")" : "");
+		} finally
+		{
+			getSubstsLevel--;
 		}
-		return JPL.quotedName(name()) + (args.length > 0 ? "(" +  toString(args) + ")" : "");
-		// return name() + (args.length > 0 ? "(" + Term.toString(args) + ")" : "");
+	}
+	//int getSubstsLevel = 0;
+
+	public void asListPairString(Term[] args, StringBuffer sb)
+	{
+		do
+		{
+			final Term car = args[0];
+			final Term cdr = args[1];
+			if (cdr.isListNil())
+			{
+				sb.append("[" + car + "]");
+			}
+			if (cdr.isListPair())
+			{
+				Compound ccdr = (Compound) cdr;
+				String s = "" + cdr;
+				sb.append("[" + car + "," + s.substring(1));
+			}
+			sb.append("[" + car + "|" + cdr + "]");
+			break;
+		} while (true);
 	}
 
 	/**
@@ -352,24 +476,7 @@ public class Compound extends Atom
 	 *
 	 * @return the type of this term, as jpl.fli.Prolog.COMPOUND
 	 */
-	public int type() {
-		return Prolog.COMPOUND;
-	}
-
-	/**
-	 * the name of the type of this term, as "Compound"
-	 *
-	 * @return the name of the type of this term, as "Compound"
-	 */
-	public String typeName() {
-		return "Compound";
-	}
-	/**
-	 * the type of this term, as jpl.fli.Prolog.COMPOUND
-	 *
-	 * @return the type of this term, as jpl.fli.Prolog.COMPOUND
-	 */
-	public int prologType()
+	public int type()
 	{
 		return Prolog.COMPOUND;
 	}
@@ -379,29 +486,9 @@ public class Compound extends Atom
 	 *
 	 * @return the name of the type of this term, as "Compound"
 	 */
-	public String prologTypeName()
+	public String typeName()
 	{
 		return "Compound";
 	}
-
-	// /**
-	// * Returns the ith argument (counting from 0) of this Compound.
-	// *
-	// * @return the ith argument (counting from 0) of this Compound
-	// * @deprecated
-	// */
-	// public final Term arg0(int i) {
-	// return args[i];
-	// }
-
-	// /**
-	// * Returns a debug-friendly representation of a Compound.
-	// *
-	// * @return a debug-friendly representation of a Compound
-	// * @deprecated
-	// */
-	// public String debugString() {
-	// return "(Compound " + name + " " + Term.debugString(args) + ")";
-	// }
 
 }

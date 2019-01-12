@@ -33,6 +33,7 @@
 
 package org.armedbear.lisp;
 
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -79,23 +80,20 @@ public class StandardObject extends SubLStructInterpreted implements SubLStruct
 		this(layout, layout.getLength());
 	}
 
-	protected StandardObject(Layout layout, int length)
-	{
-		init(length);
-		setLayout(this.layout = layout);
-	}
-
 	protected StandardObject(LispClass cls, int length)
 	{
-		init(length);
-		setLayout(cls == null ? null : cls.getClassLayout());
+		this(cls == null ? null : cls.getClassLayout(), length);
 	}
 
 	protected StandardObject(LispClass cls)
 	{
-		slots = new LispObject[layout == null ? 0 : layout.getLength()];
-		init(slots.length);
-		setLayout(layout = cls == null ? null : cls.getClassLayout());
+		this(cls == null ? null : cls.getClassLayout());
+	}
+
+	protected StandardObject(Layout layout, int length)
+	{
+		setLayout(this.layout = layout);
+		init(length);
 	}
 
 	@Override
@@ -253,7 +251,6 @@ public class StandardObject extends SubLStructInterpreted implements SubLStruct
 			layout = structdecl;
 			updateLayoutSync();
 		}
-		if (structdecl != null) PrologSync.addThis(this);
 	}
 
 	public synchronized Layout updateLayoutSync()
@@ -363,7 +360,7 @@ public class StandardObject extends SubLStructInterpreted implements SubLStruct
 			thread.execute(Symbol.SLOT_MISSING, this.getLispClass(), this, slotName, Symbol.SETF, newValue);
 			thread._values = null;
 		}
-		slots[index] = newValue;
+		reallySetSlot(index, newValue);
 	}/*
 	  *
 	  * final public StandardObject checkStandardObject(LispObject first) {
@@ -529,16 +526,7 @@ public class StandardObject extends SubLStructInterpreted implements SubLStruct
 			{
 				return type_error(second, Symbol.INTEGER);
 			}
-			try
-			{
-				instance.slots[index] = third;
-			} catch (ArrayIndexOutOfBoundsException e)
-			{
-				if (instance.slots.length > 0)
-					return type_error(second, list(Symbol.INTEGER, Fixnum.ZERO, Fixnum.getInstance(instance.slots.length - 1)));
-				else
-					return program_error("The object " + instance.princToString() + " has no slots.");
-			}
+			instance.setSlotValue(index, third);
 			return third;
 		}
 	};
@@ -630,6 +618,14 @@ public class StandardObject extends SubLStructInterpreted implements SubLStruct
 	};
 
 	@Override
+	final public void setFieldImpl(int fieldNum, SubLObject value)
+	{
+		if (fieldNum == 0 || fieldNum == 1) Errors.error("Can't set special slots on structs.");
+		final int slotNum = fieldNum - 2;
+		reallySetSlot(slotNum, (LispObject) value);
+	}
+
+	@Override
 	public void setSlotValue(LispObject slotName, LispObject newValue)
 	{
 
@@ -642,7 +638,7 @@ public class StandardObject extends SubLStructInterpreted implements SubLStruct
 		if (index != null)
 		{
 			// Found instance slot.
-			slots[((Fixnum) index).value] = newValue;
+			reallySetSlot(((Fixnum) index).value, newValue);
 			return;
 		}
 		// Check for shared slot.

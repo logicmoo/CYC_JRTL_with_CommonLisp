@@ -1,4 +1,4 @@
-/* $Id: DefaultInferenceWorkerSynch.java 138070 2012-01-10 19:46:08Z sbrown $
+/* $Id: DefaultInferenceWorkerSynch.java 143831 2013-03-01 17:31:03Z baxter $
  *
  * Copyright (c) 2004 - 2006 Cycorp, Inc.  All rights reserved.
  * This software is the proprietary information of Cycorp, Inc.
@@ -8,6 +8,7 @@
 package org.opencyc.inference;
 
 //// Internal Imports
+import org.opencyc.inference.params.InferenceParameters;
 import org.opencyc.api.*;
 import org.opencyc.cycobject.*;
 import org.opencyc.util.*;
@@ -40,7 +41,7 @@ import org.opencyc.parser.CycLParserUtil;
  *
  * @author tbrussea, zelal
  * @date July 27, 2005, 11:55 AM
- * @version $Id: DefaultInferenceWorkerSynch.java 138070 2012-01-10 19:46:08Z sbrown $
+ * @version $Id: DefaultInferenceWorkerSynch.java 143831 2013-03-01 17:31:03Z baxter $
  */
 public class DefaultInferenceWorkerSynch extends DefaultInferenceWorker implements InferenceWorkerSynch {
   
@@ -266,7 +267,7 @@ public class DefaultInferenceWorkerSynch extends DefaultInferenceWorker implemen
       public void notifyInferenceCreated(InferenceWorker inferenceWorker) {
       }
 
-      public void notifyInferenceStatusChanged(InferenceStatus oldStatus, InferenceStatus newStatus, InferenceWorkerSuspendReason suspendReason, InferenceWorker inferenceWorker) {
+      public void notifyInferenceStatusChanged(InferenceStatus oldStatus, InferenceStatus newStatus, InferenceSuspendReason suspendReason, InferenceWorker inferenceWorker) {
       }
 
       public void notifyInferenceTerminated(InferenceWorker inferenceWorker, Exception e) {

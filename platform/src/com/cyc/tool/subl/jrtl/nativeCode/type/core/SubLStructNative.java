@@ -1,11 +1,15 @@
 //
+
 // For LarKC
 //
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import org.armedbear.lisp.Layout;
+import org.armedbear.lisp.Main;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow;
@@ -19,8 +23,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high;
 
+import sun.misc.Unsafe;
+import sun.reflect.FieldAccessor;
+
 public abstract class SubLStructNative extends AbstractSubLStruct implements SubLStruct
 {
+
 	@Override
 	public void setLayout(Layout structdecl)
 	{
@@ -28,7 +36,8 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 		if (layout == null)
 		{
 			layout = structdecl;
-			if (PrologSync.trackStructs) {
+			if (Main.trackStructs)
+			{
 				PrologSync.addThis(this);
 			}
 		}
@@ -40,10 +49,12 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 
 	protected SubLStructNative()
 	{
+		layout = getStructDecl();
 	}
 
 	protected SubLStructNative(SubLObject initValues)
 	{
+		layout = getStructDecl();
 		if (initValues == null || initValues == SubLNil.NIL || initValues == CommonSymbols.UNPROVIDED) return;
 		SubLObject next = SubLNil.NIL;
 		SubLStructDeclNative structDecl = (SubLStructDeclNative) getStructDecl();
@@ -84,7 +95,7 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 	}
 
 	@Override
-	public void setField(int fieldNum, SubLObject value)
+	public void setFieldImpl(int fieldNum, SubLObject value)
 	{
 		if (fieldNum == 0) Errors.unimplementedMethod("SublStructNative.setField(0)");
 		if (fieldNum == 1) Errors.unimplementedMethod("SublStructNative.setField(1)");
@@ -128,7 +139,7 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 	@Override
 	public SubLObject setField2(SubLObject value)
 	{
-		// TODO Auto-generated method stub
+
 		Field field = ((SubLStructDeclNative) getStructDecl()).getFieldDecl(0);
 		try
 		{
@@ -139,7 +150,7 @@ public abstract class SubLStructNative extends AbstractSubLStruct implements Sub
 		}
 		return value;
 	}
-	
+
 	@Override
 	public void setName(SubLSymbol name)
 	{

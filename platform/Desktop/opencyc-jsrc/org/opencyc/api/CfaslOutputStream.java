@@ -4,26 +4,18 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
-import java.math.BigInteger;
 import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.List;
-
-import org.opencyc.cycobject.ByteArray;
-import org.opencyc.cycobject.CycAssertion;
-import org.opencyc.cycobject.CycConstant;
-import org.opencyc.cycobject.CycList;
-import org.opencyc.cycobject.CycNart;
-import org.opencyc.cycobject.CycSymbol;
-import org.opencyc.cycobject.CycVariable;
-import org.opencyc.cycobject.Guid;
-import org.opencyc.util.ResultSetSlice;
+import java.util.UUID;
+import org.opencyc.cycobject.*;
 import org.opencyc.util.Log;
+import org.opencyc.util.ResultSetSlice;
 import org.opencyc.util.StringUtils;
-import org.opencyc.util.UUID;
-import org.opencyc.cycobject.CycFormula;
 
 
 /**
@@ -33,7 +25,7 @@ import org.opencyc.cycobject.CycFormula;
  * objects, such as binding-lists and formulas, should be explicitly coerced before being sent,
  * unless they inherit from a class which can be translated automatically.
  * 
- * @version $Id: CfaslOutputStream.java 140083 2012-05-18 17:40:09Z rck $
+ * @version $Id: CfaslOutputStream.java 145908 2013-06-04 19:31:00Z baxter $
  * @author Christopher
  * @author Dan Lipofsky <p><p><p><p><p>
  *
@@ -559,6 +551,9 @@ public class CfaslOutputStream
 
   /**
    * Writes a String to this CfaslOutputStream.
+   * <P>The string is always written as a sequence of UTF-8 bytes,
+   * but if it contains non-7bit-ASCII characters, it is
+   * written with the special CFASL code {@link #CFASL_UNICODE_STRING}.
    * 
    * @param s the string to be written
    * 
@@ -572,8 +567,11 @@ public class CfaslOutputStream
       Log.current.println("writeString = \"" + escapedString + "\"");
     }
     
-    if (StringUtils.is7BitASCII(escapedString))   write(CFASL_STRING);
-    else write(CFASL_UNICODE_STRING);
+      if (StringUtils.is7BitASCII(escapedString)) {
+          write(CFASL_STRING);
+      } else {
+          write(CFASL_UNICODE_STRING);
+      }
     
     byte[] bytes = escapedString.getBytes("UTF-8");
     
@@ -916,6 +914,7 @@ public class CfaslOutputStream
 
   /**
    * Writes a generic object to this CfaslOutputStream.
+   * This should only be called on *known* cfasl types.
    * 
    * @param o the object to be written
    * 
@@ -1019,13 +1018,28 @@ public class CfaslOutputStream
     else if (o instanceof byte[]) {
       writeByteArray((byte[]) o);
     }
-    else if (o instanceof UUID) {
+    else if (o instanceof UUID) { // @hack we should not need to do this
+                                                          // This was done to make inappropriate calls
+                                                          // to this method not error or warn.
+                                                          // The conversion to a cfasl known type should 
+                                                          // be done outside this method.
       writeString(o.toString());
     }
-    else if (o instanceof Timestamp) {
+    else if (o instanceof Timestamp) { // @hack we should not need to do this
+                                                          // This was done to make inappropriate calls
+                                                          // to this method not error or warn.
+                                                          // The conversion to a cfasl known type should 
+                                                          // be done outside this method.
       writeString(o.toString());
     }
-    else {
+    else if (o instanceof Date) { // @hack we should not need to do this
+                                                          // This was done to make inappropriate calls
+                                                          // to this method not error or warn.
+                                                          // The conversion to a cfasl known type should 
+                                                          // be done outside this method.
+      writeString(o.toString());
+    }
+    else { //@hack this should just error
       System.err.println("CfaslOutputStream: unknown class " + o.getClass().getName() + " sent as a string");
       writeString(o.toString());
     }

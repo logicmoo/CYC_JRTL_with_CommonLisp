@@ -7,6 +7,7 @@
 package org.opencyc.util;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.Date;
 import org.opencyc.api.CycAccess;
@@ -15,6 +16,9 @@ import org.opencyc.api.CycConnection;
 import org.opencyc.api.CycIOException;
 import org.opencyc.api.DefaultSubLWorkerSynch;
 import org.opencyc.api.SubLWorkerSynch;
+import org.opencyc.cycobject.CycFort;
+import org.opencyc.cycobject.CycObject;
+import org.opencyc.cycobject.CycSymbol;
 
 /**
  * This is a placeholder class for general cyc utilities.
@@ -33,7 +37,7 @@ import org.opencyc.api.SubLWorkerSynch;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE AND KNOWLEDGE
  * BASE CONTENT, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * @author  tbrussea
- * @version $Id: CycUtils.java 138070 2012-01-10 19:46:08Z sbrown $
+ * @version $Id: CycUtils.java 145643 2013-05-20 15:03:28Z sjoshi $
  */
 public class CycUtils {
     
@@ -160,4 +164,16 @@ public class CycUtils {
     return new Date((long)(timeStamp * 1000) - SUBL_TIME_OFFSET + (60 * 60 * 1000));
   }
   
+  
+  /*
+   * @param elem: A cyc Fort to get url for
+   * @param cyc: CycAccess Object to talk to
+   * 
+   * @returns: the url that opens the page for elem in the cyc browser. 
+   */
+  @Deprecated  
+  public static String getCBFormString(CycObject elem, CycAccess cyc) throws UnknownHostException, IOException {
+      String command = "(cb-form-string '" + elem.cyclify() + " :cb)";
+      return cyc.converseString(command);
+  }
 }

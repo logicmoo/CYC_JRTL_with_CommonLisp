@@ -1,4 +1,4 @@
-/* $Id: InferenceWorkerListener.java 138070 2012-01-10 19:46:08Z sbrown $
+/* $Id: InferenceWorkerListener.java 143831 2013-03-01 17:31:03Z baxter $
  */
 
 package org.opencyc.inference;
@@ -30,14 +30,14 @@ import java.util.List;
  *
  * @see InferenceWorker
  * @author tbrussea, zelal
- * @version $Id: InferenceWorkerListener.java 138070 2012-01-10 19:46:08Z sbrown $
+ * @version $Id: InferenceWorkerListener.java 143831 2013-03-01 17:31:03Z baxter $
  */
 public interface InferenceWorkerListener extends EventListener {
   
   public void notifyInferenceCreated(InferenceWorker inferenceWorker);
   
   public void notifyInferenceStatusChanged(InferenceStatus oldStatus, InferenceStatus newStatus, 
-    InferenceWorkerSuspendReason suspendReason, InferenceWorker inferenceWorker);
+    InferenceSuspendReason suspendReason, InferenceWorker inferenceWorker);
   
   public void notifyInferenceAnswersAvailable(InferenceWorker inferenceWorker, List newAnswers);
 

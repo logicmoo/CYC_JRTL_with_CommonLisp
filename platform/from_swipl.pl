@@ -218,7 +218,7 @@ check:predicate_name(A, D):- prolog_clause:predicate_name(A, D).
          ****     JPL SETUP        *****
         *******************************/
 
-:- exists_source(runtime('jpl.jar'))-> true ; shell('touch jpl.jar').
+% :- exists_source(runtime('jpl.jar'))-> true ; shell('touch jpl.jar').
  
 clean_bad_chars(PATH,Path10):-name(PATH,Chars),delete(Chars,0,Chars0),delete(Chars0,1,Chars1),delete(Chars1,10,Chars10),name(Path10,Chars10).
 

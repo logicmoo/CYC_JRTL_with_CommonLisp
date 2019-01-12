@@ -28,6 +28,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Resourcer;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLListListIterator;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThreadPool;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.ExceptionFactory;
@@ -566,7 +567,7 @@ public class SubLObjectFactory {
 		try {
 			SubLThreadPool.getDefaultPool().execute(process);
 		} catch (Exception e) {
-			Thread.currentThread().interrupt();
+			SubLThread.currentThread().interrupt();
 		}
 		return process;
 	}

@@ -28,7 +28,7 @@ public class CycLFormat extends Format {
     }
 
     /**
-     * Get a default NLFormat instance that will use the specified CycAccess.
+     * Get a default CycLFormat instance that will use the specified CycAccess.
      */
     public static CycLFormat getInstance(CycAccess cyc) {
         final CycLFormat cycF = new CycLFormat(cyc);

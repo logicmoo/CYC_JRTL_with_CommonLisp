@@ -1,4 +1,4 @@
-/* $Id: PasswordManager.java 130961 2010-05-14 21:19:18Z daves $
+/* $Id: PasswordManager.java 141934 2012-10-26 16:32:38Z baxter $
  *
  * Copyright (c) 2008 Cycorp, Inc.  All rights reserved.
  * This software is the proprietary information of Cycorp, Inc.
@@ -34,7 +34,7 @@ import org.opencyc.cycobject.Guid;
  *
  * Created on : Jul 27, 2009, 3:10:59 PM
  * Author     : baxter
- * @version $Id: PasswordManager.java 130961 2010-05-14 21:19:18Z daves $
+ * @version $Id: PasswordManager.java 141934 2012-10-26 16:32:38Z baxter $
  */
 public class PasswordManager {
 
@@ -153,7 +153,7 @@ public class PasswordManager {
    * @note Ideally, we'd like to do this conversion without constructing an intermediate String representation.
    * @param unencryptedPassword
    * @param charSet
-   * @return
+   * @return byte array representation of the password
    * @throws java.io.UnsupportedEncodingException
    */
   private static byte[] passwordCharsToBytes(final char[] unencryptedPassword,

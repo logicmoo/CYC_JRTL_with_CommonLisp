@@ -1,5 +1,7 @@
+
 package org.logicmoo.system;
 
+import static org.armedbear.lisp.Main.*;
 import static org.armedbear.lisp.Lisp.PACKAGE_CL;
 import static org.armedbear.lisp.Lisp.PACKAGE_CL_USER;
 import static org.armedbear.lisp.Lisp.PACKAGE_CYC;
@@ -25,10 +27,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -55,6 +55,7 @@ import org.armedbear.lisp.Java;
 import org.armedbear.lisp.JavaObject;
 //import org.appdapter.core.log.Debuggable;
 import org.armedbear.lisp.Lisp;
+import org.armedbear.lisp.LispClass;
 import org.armedbear.lisp.LispError;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.LispThread;
@@ -71,12 +72,17 @@ import org.jpl7.Atom;
 import org.jpl7.Compound;
 import org.jpl7.JPL;
 import org.jpl7.JPLException;
+import org.jpl7.JRef;
 import org.jpl7.Query;
 import org.jpl7.Term;
+import org.jpl7.fli.Prolog;
 import org.jpl7.fli.term_t;
 import org.logicmoo.bb.BeanBowl;
 import org.logicmoo.bb.BeansContextListener;
 
+import com.cyc.cycjava.cycl.constant_completion_high;
+import com.cyc.cycjava.cycl.constant_completion_low;
+import com.cyc.cycjava.cycl.constant_handles;
 import com.cyc.cycjava.cycl.constant_reader;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval;
@@ -86,6 +92,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLListListIterator;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLReader;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThreadPool;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCons;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
@@ -94,10 +101,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.ui.SubLReaderPanel;
 import com.cyc.tool.subl.util.SubLFiles;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 import com.netbreeze.bbowl.gui.BeanBowlGUI;
 import com.sun.tools.attach.AgentInitializationException;
 import com.sun.tools.attach.AgentLoadException;
@@ -122,7 +131,7 @@ import sun.misc.Unsafe;
 //import static org.slf4j.spi.LocationAwareLogger.log;
 public class BeanShellCntrl
 {
-	private static final Object StartupLock = new Object()
+	public static final Object StartupLock = new Object()
 	{
 		@Override
 		public String toString()
@@ -130,41 +139,14 @@ public class BeanShellCntrl
 			return "StartupLock";
 		}
 	};
-	public static boolean disableBeanDesk = true;
-	static public boolean disablePrologJNI = false;
-	static public boolean disablePrologSync = false;
-
-	public static String[] extractOptions(String[] args)
+	public static final Object StartupInitLock = new Object()
 	{
-		List<String> argsList = new ArrayList<String>(Arrays.asList(args));
-		if (argsList.remove("--prolog"))
+		@Override
+		public String toString()
 		{
-			disablePrologJNI = false;
+			return "StartupInitLock";
 		}
-		if (argsList.remove("--noprolog"))
-		{
-			disablePrologJNI = true;
-		}
-		if (argsList.remove("--prologsync"))
-		{
-			disablePrologSync = false;
-			disablePrologJNI = false;
-		}
-		if (argsList.remove("--noprologsync"))
-		{
-			disablePrologSync = true;
-		}
-		if (argsList.remove("--headless"))
-		{
-			disableBeanDesk = true;
-		}
-		if (argsList.remove("--beandesk"))
-		{
-			disableBeanDesk = false;
-		}
-		String[] argsNew = argsList.toArray(new String[argsList.size()]);
-		return argsNew;
-	}
+	};
 
 	static public BeanBowl bowl = new BeanBowl();
 
@@ -252,8 +234,7 @@ public class BeanShellCntrl
 
 	static public String addObject(String named, Object value)
 	{
-		bowl.addBean(named, value);
-		return bowl.getWrapper(value).getName();
+		return addObject(named, value, false);
 	}
 
 	static public String addObject(String named, Object value, boolean showNow)
@@ -274,14 +255,14 @@ public class BeanShellCntrl
 		setSingleton(isc, self);
 	}
 
-	private static LispObject atom_to_lisp_object(Atom a)
+	private static LispObject atom_to_lisp_object(String s)
 	{
-		String s = a.name();
+		//String s = a.name();
 		SimpleString ss = new SimpleString(s);
 		// TODO Auto-generated method stub
 		if (inited_cyc_complete)
 		{
-			SubLObject found = constant_reader.find_constant_by_name(ss);
+			SubLObject found = find_constant_by_name(ss);
 			if (found instanceof SubLStruct) return found.toLispObject();
 		}
 		boolean caseMatters = (!s.toLowerCase().equals(s));
@@ -297,6 +278,28 @@ public class BeanShellCntrl
 			o = org.armedbear.lisp.Interpreter.readFromString(s);
 		}
 		return o;
+	}
+
+	@SubLTranslatedFile.SubL(source = "cycl/constant-reader.lisp", position = 3066L)
+	public static SubLObject find_constant_by_name(final SubLObject name)
+	{
+		final SubLThread thread = SubLProcess.currentSubLThread();
+		final SubLNil localNil = SubLNil.NIL;
+		SubLObject constant = localNil;
+		final SubLObject _prev_bind_0 = constant_completion_low.$require_valid_constants$.currentBinding(thread);
+		try
+		{
+			constant_completion_low.$require_valid_constants$.bind(localNil, thread);
+			constant = constant_completion_high.constant_complete_exact(name, constant_reader.UNPROVIDED, constant_reader.UNPROVIDED);
+		} finally
+		{
+			constant_completion_low.$require_valid_constants$.rebind(_prev_bind_0, thread);
+		}
+		if (localNil == constant)
+		{
+			constant = constant_handles.find_invalid_constant(name);
+		}
+		return constant;
 	}
 
 	@LispMethod
@@ -338,7 +341,7 @@ public class BeanShellCntrl
 	@LispMethod
 	synchronized static public void bsh_desktop()
 	{
-		if (disableBeanDesk) return;
+		if (noBSHGUI) return;
 		try
 		{
 			if (calledStartDmiles) return;
@@ -986,7 +989,7 @@ public class BeanShellCntrl
 			{
 				init_cyc();
 				SubLPackage.setCurrentPackage("CYC");
-				Eval.eval("(sl:load \"init/jrtl-release-init.lisp\")");
+				Eval.evalInCurrentThread("(sl:load \"init/jrtl-release-init.lisp\")");
 			} catch (Throwable e)
 			{
 				throw JVMImpl.doThrow(e);
@@ -1288,7 +1291,7 @@ public class BeanShellCntrl
 
 	static public void registerPrologMethod(String prologName, Symbol sym, Method method)
 	{
-		if (disablePrologJNI) return;
+		if (noPrologJNI) return;
 		//if (disablePrologSync) return;
 		int arity = method.getParameterTypes().length;
 		int harity = arity;
@@ -1327,7 +1330,7 @@ public class BeanShellCntrl
 				params = "(" + args + ")";
 			}
 			String Head = prologName + params;
-			Query.oneSolution("assert(" + Head + ":- call_ctrl(" + Head + "))");
+			prologAssertString(Head + ":- call_ctrl(" + Head + ")");
 		}
 		else
 		{
@@ -1343,8 +1346,16 @@ public class BeanShellCntrl
 				Head = prologName + "(" + args + ",RT)";
 				Body = prologName + "(" + args + ")";
 			}
-			Query.oneSolution("assert(" + Head + ":- call_ctrl(" + Body + ",RT))");
+			prologAssertString(Head + ":- call_ctrl(" + Body + ", RT)");
 		}
+	}
+
+	private static void prologAssertString(String string)
+	{
+		if (noPrologJNI) return;
+		Term term = org.jpl7.Util.textToTerm("assert((" + string + "))");
+		Query.oneSolution(term);
+
 	}
 
 	static public void scanForExports(Class clz)
@@ -1475,13 +1486,16 @@ public class BeanShellCntrl
 	}
 
 	@LispMethod
-	synchronized static public void start_lisp_from_prolog() throws InterruptedException
+	synchronized static public void start_lisp_from_prolog()
 	{
-		disablePrologJNI = disablePrologSync = false;
-		PrologSync.trackStructs = !disablePrologSync;
+		if (!noProlog)
+		{
+			noPrologJNI = disablePrologSync = false;
+		}
+		//Main.trackStructs = !disablePrologSync;
 		bsh_desktop();
 		scanForExports(BeanShellCntrl.class); // again
-		PrologSync.setPrologReady(true);
+		PrologSync.setPrologReady(!disablePrologSync);
 	}
 
 	static public void startEmbedded()
@@ -1490,16 +1504,40 @@ public class BeanShellCntrl
 
 	}
 
+	static boolean calledSwiplInt = false;
+
 	@LispMethod
-	static void swipl_init() throws InterruptedException
+	static void swipl_init()
 	{
-		if (disablePrologJNI) return;
-		started_from_prolog = !JPL.init();
-		if (isIKVM())
+		synchronized (StartupLock)
 		{
-			Query.oneSolution("assert(swicli:is_ikvm)");
+			if (noPrologJNI) return;
+			if (calledSwiplInt) return;
+			calledSwiplInt = true;
 		}
-		start_lisp_from_prolog();
+		synchronized (StartupInitLock)
+		{
+			try
+			{
+				started_from_prolog = !JPL.init();
+				//Thread.sleep(10000);
+				Object r = Prolog.get_default_init_args();
+				Object tr = Prolog.new_term_ref();
+				JRef jref = (JRef) JRef.objectToJRef(StartupLock);
+				if (isIKVM())
+				{
+					Query.oneSolution("assert(swicli:is_ikvm)");
+				}
+			} catch (UnsatisfiedLinkError e)
+			{
+				noPrologJNI = true;
+				noProlog = true;
+				disablePrologSync = true;
+				System.err.println("" + e);
+			}
+			start_lisp_from_prolog();
+
+		}
 	}
 
 	@LispMethod
@@ -1507,22 +1545,27 @@ public class BeanShellCntrl
 	{
 		synchronized (StartupLock)
 		{
-			if (disablePrologJNI) return;
+			if (noPrologJNI) return;
 			if (swipl_inited_server) return;
 		}
-		try
+		synchronized (StartupInitLock)
 		{
-			swipl_init();
-			swipl_inited_server = Query.oneSolution("(current_thread(prolog_server,X),X=running)").size() > 0;
-			if (swipl_inited_server) return;
-			Query.oneSolution("use_module(library('prolog_server'))");
-			swipl_inited_server = true;
+			try
+			{
+				swipl_init();
+				final Map<String, Term> oneSolution = Query.oneSolution("(current_thread(prolog_server,X),X=running)");
+				swipl_inited_server = oneSolution != null && oneSolution.size() > 0;
+				if (swipl_inited_server) return;
+				Query.oneSolution("use_module(library('prolog_server'))");
+				swipl_inited_server = true;
+			} catch (Throwable t)
+			{
+				swipl_inited_server = false;
+				MsgBox.error(t);
+			}
 			Query.oneSolution("prolog_server(4023, [allow(_)])");
-		} catch (Throwable t)
-		{
-			swipl_inited_server = false;
-			MsgBox.error(t);
 		}
+
 	}
 
 	private static String symbolToPrologName(Symbol sym)
@@ -1563,15 +1606,35 @@ public class BeanShellCntrl
 			cons.setCdr(term_to_lobject(term.arg(2)));
 			return cons;
 		}
-		Object o = term.toJavaObject();
-		if (o instanceof Atom)
+		if (term instanceof Atom)
 		{
-			lo = atom_to_lisp_object((Atom) o);
+			lo = atom_to_lisp_object(term.name());
 		}
 		else
 		{
-			lo = JavaObject.getInstance(o, true);
+			Object o = term.toJavaObject();
+			if (o == null)
+			{
+				if (term instanceof Compound)
+				{
+					Compound c = (Compound) term;
+					lo = atom_to_lisp_object(c.name());
+
+					lo = LispClass.findClass(lo.checkSymbol(lo));
+				}
+
+			}
+
+			if (o instanceof LispObject)
+			{
+				lo = (LispObject) o;
+			}
+			else
+			{
+				lo = JavaObject.getInstance(o, true);
+			}
 		}
+
 		lo.termRef = term;
 		return lo;
 	}
@@ -1722,13 +1785,22 @@ public class BeanShellCntrl
 
 	static public void staticInit()
 	{
+		swipl_init();
 		scanForExports(BeanShellCntrl.class);
-		// swipl_init_server();
+		if (!started_from_prolog)
+		{
+			swipl_init_server();
+
+		}
+
 	}
 
 	static
 	{
-		staticInit();
+		synchronized (StartupInitLock)
+		{
+			staticInit();
+		}
 	}
 
 	static class CreationInfo
@@ -1965,9 +2037,6 @@ public class BeanShellCntrl
 
 	static public class MsgBox
 	{
-		static public final Toolkit AWT_TOOLKIT = Toolkit.getDefaultToolkit();
-
-		static public final Clipboard CLIPBOARD = AWT_TOOLKIT.getSystemClipboard();
 
 		static public final String NEW_LINE = System.getProperty("line.separator");
 
@@ -1978,12 +2047,20 @@ public class BeanShellCntrl
 
 		static public void error(String message, String caller)
 		{
-			show(message, caller, JOptionPane.ERROR_MESSAGE);
+			try {
+				show(message, caller, JOptionPane.ERROR_MESSAGE);		
+			} catch (Throwable unk)
+			{
+				// unk.printStackTrace();
+			}
+			// nb: we don't respond to the "your content was splattered"
+			// event, so it's OK to pass a null owner.
 		}
 
 		static public void error(Throwable e)
 		{
 			e.printStackTrace();
+			
 			error(createStackTraceString(e));
 		}
 
@@ -2001,7 +2078,10 @@ public class BeanShellCntrl
 		{
 			try
 			{
+				 final Toolkit AWT_TOOLKIT = Toolkit.getDefaultToolkit();
+				 final Clipboard CLIPBOARD = AWT_TOOLKIT.getSystemClipboard();
 				CLIPBOARD.setContents(new StringSelection(message), null);
+				
 			} catch (Throwable unk)
 			{
 				// unk.printStackTrace();

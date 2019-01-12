@@ -1,4 +1,4 @@
-/* $Id: CycLeaseManager.java 138070 2012-01-10 19:46:08Z sbrown $
+/* $Id: CycLeaseManager.java 145590 2013-05-15 21:12:52Z vijay $
  *
  * Copyright (c) 2005 - 2006 Cycorp, Inc.  All rights reserved.
  * This software is the proprietary information of Cycorp, Inc.
@@ -23,65 +23,70 @@ import org.opencyc.util.TimeOutException;
 /**
  * <P>CycLeaseManager manages api service leases between a Cyc image (server) and application client.
  *
- * <P>Copyright (c) 2003 - 2006 Cycorp, Inc.  All rights reserved.
+ * <P>Copyright (c) 2003 - 2006 Cycorp, Inc. All rights reserved.
  * <BR>This software is the proprietary information of Cycorp, Inc.
  * <P>Use is subject to license terms.
+ *
  * @author reed
- *  date June 27, 2005, 10:20 AM
- * @version $Id: CycLeaseManager.java 138070 2012-01-10 19:46:08Z sbrown $
+ * date June 27, 2005, 10:20 AM
+ * @version $Id: CycLeaseManager.java 145590 2013-05-15 21:12:52Z vijay $
  */
 public class CycLeaseManager extends Thread {
 
   //// Constructors
-  /** Creates a new instance of CycLeaseManager. 
+  /** Creates a new instance of CycLeaseManager.
    *
    * @param cycAccess the Cyc api services client
    */
-  public CycLeaseManager(final CycAccess cycAccess) {
+      
+  public CycLeaseManager(final CycConnection cycConnection) {
     //// Preconditions
-    if (cycAccess == null) {
+    if (cycConnection == null) {
       throw new InvalidParameterException("cycAccess must not be null");
     }
 
     logger = Logger.getLogger("org.opencyc.api.CycLeaseManager");
-    this.cycAccess = cycAccess;
+    this.cycConnection = cycConnection;
   }
-
+    
   //// Public Area
   /** Adds a Cyc lease manager listener.
    *
    * @param cycLeaseManagerListener a listener for Cyc lease manager events
    */
-  public synchronized void addListener(final CycLeaseManagerListener cycLeaseManagerListener) {
+  public synchronized void addListener(
+          final CycLeaseManagerListener cycLeaseManagerListener) {
     //// Preconditions
     if (cycLeaseManagerListener == null) {
-      throw new InvalidParameterException("cycLeaseManagerListener must not be null");
+      throw new InvalidParameterException(
+              "cycLeaseManagerListener must not be null");
     }
     if (listeners.contains(cycLeaseManagerListener)) {
-      throw new InvalidParameterException("listener must not be currently registered");
+      throw new InvalidParameterException(
+              "listener must not be currently registered");
     }
     assert listeners != null : "listeners must not be null";
-    if (cycAccess.getCycConnection() instanceof CycConnection) {
-      assert cycAccess.getCycLeaseManager().isAlive() : "the CycLeaseManager thread has died because a lease timed-out, errored or was denied";
-    }
+    assert this.isAlive() : "the CycLeaseManager thread has died because a lease timed-out, errored or was denied";
     // otherwise, this is a SOAP client connection and leasing is never started
 
     listeners.add(cycLeaseManagerListener);
   }
 
+  
   /** Removes a Cyc lease manager listener.
    *
    * @param cycLeaseManagerListener a listener for Cyc lease manager events
    */
-  public synchronized void removeListener(final CycLeaseManagerListener cycLeaseManagerListener) {
+  public synchronized void removeListener(
+          final CycLeaseManagerListener cycLeaseManagerListener) {
     //// Preconditions
     if (cycLeaseManagerListener == null) {
-      throw new InvalidParameterException("cycLeaseManagerListener must not be null");
+      throw new InvalidParameterException(
+              "cycLeaseManagerListener must not be null");
     }
-    assert listeners != null : "listeners must not be null";
-    if (cycAccess.getCycConnection() instanceof CycConnection) {
-      assert cycAccess.getCycLeaseManager().isAlive() : "the CycLeaseManager thread has died because a lease timed-out, errored or was denied";
-    }
+    assert listeners != null : "listeners must not be null";    
+    assert this.isAlive() : "the CycLeaseManager thread has died because a lease timed-out, errored or was denied";
+       
     // otherwise, this is a SOAP client connection and leasing is never started
 
     listeners.remove(cycLeaseManagerListener);
@@ -89,22 +94,21 @@ public class CycLeaseManager extends Thread {
 
   /**
    * Returns whether or not we have a valid lease with the Cyc server.
+   *
    * @return whether or not we have a valid lease with the Cyc server
    */
   public boolean hasValidLease() {
     return hasValidLease;
   }
 
-  /** Removes all Cyc lease manager listeners.
-   *
-   * @param cycLeaseManagerListener a listener for Cyc lease manager events
-   */
+  /**
+   * Removes all Cyc lease manager listeners.
+   */  
   public void removeAllListeners() {
     //// Preconditions
-    assert listeners != null : "listeners must not be null";
-    if (cycAccess.getCycConnection() instanceof CycConnection) {
-      assert cycAccess.getCycLeaseManager().isAlive() : "the CycLeaseManager thread has died because a lease timed-out, errored or was denied";
-    }
+    assert listeners != null : "listeners must not be null";   
+    assert this.isAlive() : "the CycLeaseManager thread has died because a lease timed-out, errored or was denied";
+    
     // otherwise, this is a SOAP client connection and leasing is never started
 
     listeners.clear();
@@ -112,45 +116,47 @@ public class CycLeaseManager extends Thread {
   /** the Cyc api services lease request timeout in milliseconds */
   public static long CYC_API_SERVICES_LEASE_REQUEST_TIMEOUT_MILLIS = 120000;
 
-  /** Performs periodic Cyc api service lease acquistion, and notifies listeners if the lease fails or is denied. */
+  /** Performs periodic Cyc api service lease acquisition, and notifies listeners if the lease fails or is denied. */
   public void run() {
 
     //// Preconditions
     assert listeners != null : "listeners must not be null";
-    assert cycAccess != null : "cycAccess must not be null";
-
-    /*
-    try {
-    Thread.currentThread().sleep(Long.MAX_VALUE);
-    } catch (InterruptedException ie) {
-    } finally {
-    if (true) {
-    return;
-    }
-    }
-     */
+  //Tag: Fix CycLeaseManager    
+    // assert cycAccess != null : "cycAccess must not be null";
+    assert cycConnection != null : "cycConnection must not be null";
 
 
     Thread.currentThread().setName("Cyc API services lease manager");
     Thread.currentThread().setPriority(Thread.MAX_PRIORITY);
-    while (!cycAccess.isClosed()) {
+    //while (!cycAccess.isClosed()) {
+    while (!cycConnection.isClosed()) {
       // SubL side gets a lease request for twice the value of the lease duration
-      final String script = "(with-immediate-execution (acquire-api-services-lease " +
-              (getLeaseDurationMilliseconds() * 2) + " \"" +
-              cycAccess.getCycConnection().getUuid().toString() + "\"))";
-      final CycList scriptList = cycAccess.makeCycList(script);
+      final String script = "(with-immediate-execution (acquire-api-services-lease "
+              + (getLeaseDurationMilliseconds() * 2) + " \""
+      //            + cycAccess.getCycConnection().getUuid().toString() + "\"))";
+              + cycConnection.getUuid().toString() + "\"))";
+      final CycList scriptList = cycConnection.cycAccess.makeCycList(script);
       String results = null;
       isLeaseRequestPending = true;
       logger.fine("Requesting API services lease");
       try {
-        DefaultSubLWorkerSynch worker = new DefaultSubLWorkerSynch(scriptList, cycAccess,
+        /*
+        DefaultSubLWorkerSynch worker = new DefaultSubLWorkerSynch(scriptList,
+                cycAccess,
                 CYC_API_SERVICES_LEASE_REQUEST_TIMEOUT_MILLIS);
         worker.setShouldIgnoreInvalidLeases(true);
         results = (String) worker.getWork();
+        */
+        
+        Object[] response = {null, null};
+        response = cycConnection.converse(scriptList);
+        results = (String) response[1];
+        
         logger.finest(results);
       } catch (TimeOutException toe) {
         isLeaseRequestPending = false;
-        logger.fine("Cyc communications timeout encountered when attempting " + "to renew the API services lease.\n" + toe.getMessage());
+        logger.fine(
+                "Cyc communications timeout encountered when attempting " + "to renew the API services lease.\n" + toe.getMessage());
         notifyListeners(CYC_DOES_NOT_RESPOND_TO_LEASE_REQUEST);
         try {
           Thread.sleep(getLeaseDurationMilliseconds());
@@ -159,7 +165,8 @@ public class CycLeaseManager extends Thread {
         continue;
       } catch (Exception e) {
         isLeaseRequestPending = false;
-        logger.fine("Cyc communications error encountered when attempting " + "to renew the API services lease.\n" + e.getMessage());
+        logger.fine(
+                "Cyc communications error encountered when attempting " + "to renew the API services lease.\n" + e.getMessage());
         notifyListeners(CYC_COMMUNICATION_ERROR);
         try {
           Thread.sleep(getLeaseDurationMilliseconds());
@@ -170,7 +177,8 @@ public class CycLeaseManager extends Thread {
       //cycAccess.getCycConnection().traceOff();
       isLeaseRequestPending = false;
       if (results.equals("api services lease denied")) {
-        logger.severe("The request to renew the API services lease was denied by the Cyc server.");
+        logger.severe(
+                "The request to renew the API services lease was denied by the Cyc server.");
         notifyListeners(CYC_DENIES_THE_LEASE_REQUEST);
       } else {
         String currentImageID = extractImageID(results);
@@ -203,7 +211,7 @@ public class CycLeaseManager extends Thread {
 
   /** Returns the indicator whether a lease request is currently pending.
    *
-   * @return the indicator whether a lease request is currently pending 
+   * @return the indicator whether a lease request is currently pending
    */
   public boolean isLeaseRequestPending() {
     return isLeaseRequestPending;
@@ -219,16 +227,19 @@ public class CycLeaseManager extends Thread {
 
   /** Sets the lease duration milliseconds.
    *
-   * @param leaseDurationMillieconds the lease duration milliseconds
+   * @param leaseDurationMilliseconds the lease duration milliseconds
    */
   public void setLeaseDurationMilliseconds(final long leaseDurationMilliseconds) {
     //// Preconditions
     if (leaseDurationMilliseconds < 2000) {
-      throw new InvalidParameterException("leaseDurationMilliseconds must be at least 2000");
+      throw new InvalidParameterException(
+              "leaseDurationMilliseconds must be at least 2000");
     }
 
     this.leaseDurationMilliseconds = leaseDurationMilliseconds;
   }
+  
+  
 
   /** Class to contain the Cyc lease manager event reason */
   public static class CycLeaseManagerReason {
@@ -285,14 +296,16 @@ public class CycLeaseManager extends Thread {
      * @param source the object on which the Event initially occurred
      * @param reason the Cyc lease manager event reason
      */
-    public CycLeaseEventObject(final Object source, final CycLeaseManagerReason cycLeaseManagerReason) {
+    public CycLeaseEventObject(final Object source,
+            final CycLeaseManagerReason reason) {
       super(source);
       //// Preconditions
-      if (cycLeaseManagerReason == null) {
-        throw new InvalidParameterException("cycLeaseManagerReason must not be null");
+      if (reason == null) {
+        throw new InvalidParameterException(
+                "cycLeaseManagerReason must not be null");
       }
 
-      this.cycLeaseManagerReason = cycLeaseManagerReason;
+      this.cycLeaseManagerReason = reason;
     }
 
     /** Returns a string representation of this object.
@@ -343,7 +356,7 @@ public class CycLeaseManager extends Thread {
     //// Preconditions
     assert cycLeaseManagerReason != null : "cycLeaseManagerReason must not be null";
     assert listeners != null : "listeners must not be null";
-    assert cycAccess != null : "cycAccess must not be null";
+//    assert cycAccess != null : "cycAccess must not be null";
     if ((cycLeaseManagerReason == CycLeaseManager.CYC_COMMUNICATION_ERROR) || (cycLeaseManagerReason == CycLeaseManager.CYC_DENIES_THE_LEASE_REQUEST) || (cycLeaseManagerReason == CycLeaseManager.CYC_DOES_NOT_RESPOND_TO_LEASE_REQUEST)) {
       hasValidLease = false;
     } else {
@@ -351,15 +364,24 @@ public class CycLeaseManager extends Thread {
     }
     final int listeners_size = listeners.size();
     for (int i = 0; i < listeners_size; i++) {
-      final CycLeaseManagerListener cycLeaseManagerListener = (CycLeaseManagerListener) listeners.get(i);
-      cycLeaseManagerListener.notifyCycLeaseEvent(new CycLeaseEventObject(cycAccess, cycLeaseManagerReason));
+      final CycLeaseManagerListener cycLeaseManagerListener = 
+              (CycLeaseManagerListener) listeners.get(i);
+      //cycLeaseManagerListener.notifyCycLeaseEvent(new CycLeaseEventObject(
+      //        cycAccess, cycLeaseManagerReason));
+      cycLeaseManagerListener.notifyCycLeaseEvent(new CycLeaseEventObject(
+              cycConnection, cycLeaseManagerReason));
+
     }
   }
   //// Internal Rep
   /** the logger */
   private final Logger logger;
   /** the Cyc api services client */
-  private final CycAccess cycAccess;
+  //private final CycAccess cycAccess;
+  
+  /** the Cyc api services client */
+  private final CycConnection cycConnection;
+  
   /** the Cyc image ID from the previous lease */
   private String cycImageID = null;
   /** the list of registered listeners */
@@ -380,7 +402,8 @@ public class CycLeaseManager extends Thread {
     try {
       Logger.getAnonymousLogger().info("Starting.");
       final CycAccess cycAccess = new CycAccess("public1.cyc.com", 3600);
-      Logger.getAnonymousLogger().info("Connected to: " + cycAccess.getHostName() + ":" + cycAccess.getBasePort());
+      Logger.getAnonymousLogger().info(
+              "Connected to: " + cycAccess.getHostName() + ":" + cycAccess.getBasePort());
       //      cycAccess.traceOn();
       for (int i = 0; i < 2; i++) {
         Thread.sleep(2000);

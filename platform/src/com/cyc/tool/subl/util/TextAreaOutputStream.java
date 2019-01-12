@@ -12,6 +12,7 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 
 public class TextAreaOutputStream extends OutputStream {
 	public TextAreaOutputStream(JTextArea textArea, JScrollPane scrollPane) {
@@ -52,7 +53,7 @@ public class TextAreaOutputStream extends OutputStream {
 				}
 			});
 		} catch (InterruptedException ie) {
-			Thread.currentThread().interrupt();
+			SubLThread.currentThread().interrupt();
 		} catch (Exception e) {
 			Errors.handleError("Error while scrolling GUI read/eval loop panel.", e);
 		}

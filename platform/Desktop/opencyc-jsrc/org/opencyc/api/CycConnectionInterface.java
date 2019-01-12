@@ -1,15 +1,18 @@
 package org.opencyc.api;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.UnknownHostException;
+import java.util.Map;
+import java.util.UUID;
 import org.opencyc.cycobject.CycList;
 import org.opencyc.util.TimeOutException;
 import org.opencyc.util.Timer;
-import org.opencyc.util.UUID;
 
 /**
  * Defines the interface for local and remote CycConnection objects<p>
  *
- * @version $Id: CycConnectionInterface.java 138557 2012-02-10 14:21:38Z daves $
+ * @version $Id: CycConnectionInterface.java 145942 2013-06-06 15:57:51Z daves $
  * @author Stephen L. Reed
  *
  * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
@@ -115,6 +118,13 @@ public interface CycConnectionInterface {
    */
   public int getConnectionType();
   
+  /**
+   * Is this CycConnection a connect to a specific Cyc server that will not change
+   * over the lifetime of this connection?
+   * @return 
+   */
+  public boolean connectedToStaticCyc();
+  
   /** Sets the trace value.
    *
    * @param trace the trace value
@@ -178,7 +188,9 @@ public interface CycConnectionInterface {
    * @param worker the given SubLWorker
    */
   public void abortCommunication(SubLWorker worker) throws IOException;
-  
+
+  public void setupNewCommConnection(InputStream is) throws IOException, UnknownHostException, CycApiException;
+
   /**
    * Send a message to Cyc and return the response code as the first element of an object array,
    * and the cyc response Symbolic Expression as the second element, spending no less time than
@@ -199,4 +211,13 @@ public interface CycConnectionInterface {
    * @throws CycApiException when a Cyc api error occurs
    */
   //public void converseBinary(CycList message, Timer timeout, SubLWorker worker) throws IOException, TimeOutException, CycApiException;
+  
+    public Map<String, CycLeaseManager> getCycLeaseManagerMap();
+
+  public void setCycLeaseManagerMap(Map<String, CycLeaseManager> cycLeaseManagerMap);
+
+  public Map<InputStream, CycLeaseManager> getCycLeaseManagerCommMap();
+
+  public void setCycLeaseManagerCommMap(Map<InputStream, CycLeaseManager> cycLeaseManagerCommMap);
+
 }

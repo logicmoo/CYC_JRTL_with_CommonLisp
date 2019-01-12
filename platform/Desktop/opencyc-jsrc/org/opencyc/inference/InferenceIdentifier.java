@@ -1,6 +1,3 @@
-/*
- * An object that identifies an inference object in a Cyc image.
- */
 package org.opencyc.inference;
 
 import java.io.IOException;
@@ -9,10 +6,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.opencyc.api.CycAccess;
 import org.opencyc.api.CycApiException;
+import org.opencyc.api.CycObjectFactory;
 import static org.opencyc.api.SubLAPIHelper.makeNestedSubLStmt;
 import static org.opencyc.api.SubLAPIHelper.makeSubLStmt;
 
 /**
+ * An object that identifies an inference object in a Cyc image.
  *
  * @author baxter
  */
@@ -67,9 +66,11 @@ public class InferenceIdentifier {
   public Integer getFirstProofId(Integer answerId) {
     Integer proofId = null;
     try {
-      proofId = cyc.converseInt(makeSubLStmt("proof-suid", makeNestedSubLStmt("inference-answer-justification-first-proof",
+      proofId = cyc.converseInt(makeSubLStmt("proof-suid", makeNestedSubLStmt(
+              "inference-answer-justification-first-proof",
               makeNestedSubLStmt("inference-answer-first-justification",
-              makeNestedSubLStmt("find-inference-answer-by-ids", getProblemStoreID(), getInferenceID(), answerId)))));
+              makeNestedSubLStmt("find-inference-answer-by-ids",
+              getProblemStoreID(), getInferenceID(), answerId)))));
     } catch (UnknownHostException ex) {
       logSevereException(ex);
     } catch (IOException ex) {
@@ -81,7 +82,8 @@ public class InferenceIdentifier {
   }
 
   private static void logSevereException(Exception ex) {
-    Logger.getLogger(InferenceIdentifier.class.getName()).log(Level.SEVERE, null, ex);
+    Logger.getLogger(InferenceIdentifier.class.getName()).log(Level.SEVERE, null,
+            ex);
   }
 
   @Override
@@ -90,7 +92,8 @@ public class InferenceIdentifier {
   }
 
   public String stringApiValue() {
-    return "(find-inference-by-ids " + Integer.toString(problemStoreID) + " " + Integer.toString(inferenceID) + ")";
+    return "(find-inference-by-ids " + Integer.toString(problemStoreID) + " " + Integer.toString(
+            inferenceID) + ")";
   }
 
   public InferenceIdentifier(int problemStoreID, int inferenceID, CycAccess cyc) {
@@ -105,7 +108,29 @@ public class InferenceIdentifier {
 
   public void close() {
     try {
-      getCycAccess().converseVoid("(destroy-inference-and-problem-store " + stringApiValue() + ")");
+      getCycAccess().converseVoid(
+              "(destroy-inference-and-problem-store " + stringApiValue() + ")");
+    } catch (UnknownHostException ex) {
+      logSevereException(ex);
+    } catch (IOException ex) {
+      logSevereException(ex);
+    } catch (CycApiException ex) {
+      logSevereException(ex);
+    }
+  }
+
+  /**
+   * Interrupt this inference.
+   *
+   * @param patience Give inference process this many seconds to halt gracefully,
+   * after which terminate it with prejudice. A null value indicates infinite patience.
+   */
+  public void interrupt(final Integer patience) {
+    try {
+      getCycAccess().converseVoid(
+              "(inference-interrupt-external " + stringApiValue() + " "
+              + ((patience == null) ? CycObjectFactory.nil : patience)
+              + ")");
     } catch (UnknownHostException ex) {
       logSevereException(ex);
     } catch (IOException ex) {

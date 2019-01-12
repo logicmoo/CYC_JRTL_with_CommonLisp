@@ -2,6 +2,7 @@ package org.opencyc.javacyc;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.util.UUID;
 
 import org.opencyc.api.CycAccess;
 import org.opencyc.api.CycApiException;
@@ -9,7 +10,7 @@ import org.opencyc.api.CycConnection;
 import org.opencyc.api.CycObjectFactory;
 import org.opencyc.cycobject.CycList;
 import org.opencyc.util.Log;
-import org.opencyc.util.UUID;
+
 
 /**
  * Provides the main function for JavaCyc, which is the Java VM coupled

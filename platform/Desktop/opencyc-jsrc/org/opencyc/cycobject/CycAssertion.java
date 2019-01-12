@@ -22,7 +22,7 @@ import org.opencyc.xml.XMLWriter;
  * The associated formula, microtheory, truth-value, direction, and remaining attributes are
  * is fetched later.
  *
- * @version $Id: CycAssertion.java 138070 2012-01-10 19:46:08Z sbrown $
+ * @version $Id: CycAssertion.java 148819 2014-01-10 17:47:53Z daves $
  * @author Stephen L. Reed
  * @author Dan Lipofsky
  *
@@ -158,6 +158,16 @@ public class CycAssertion extends DefaultCycObject {
     }
   }
 
+  @Override
+  public int hashCode() {
+    int hash = 7;
+    hash = 41 * hash + (this.hlFormula != null ? this.hlFormula.hashCode() : 0);
+    hash = 41 * hash + (this.mt != null ? this.mt.hashCode() : 0);
+    hash = 41 * hash + (this.isInvalid ? 1 : 0);
+    return hash;
+  }
+ 
+
   /**
    * Returns a <tt>String</tt> representation of the <tt>CycAssertion</tt>.
    *
@@ -212,6 +222,23 @@ public class CycAssertion extends DefaultCycObject {
   public Object cycListApiValue() {
     return this;
   }
+  
+  public CycObject getArg0(final CycAccess cycAccess) throws CycApiException, UnknownHostException, IOException {
+    if (isGaf()) {
+      return (CycObject)(getGaf().getArg0());
+    } else {
+      return (CycObject)(getELFormula(cycAccess).getArg0());
+    }    
+  }
+
+  public Object getArg(int argNum, final CycAccess cycAccess) throws CycApiException, UnknownHostException, IOException {
+    if (isGaf()) {
+      return getGaf().getArg(argNum);
+    } else {
+      return (getELFormula(cycAccess).getArg(argNum));
+    }    
+  }
+
 
   /**
    * Returns the EL formula for this assertion.
@@ -268,7 +295,7 @@ public class CycAssertion extends DefaultCycObject {
   public CycFormulaSentence getGaf(final CycAccess cycAccess) {
     return getGaf();
   }
-
+    
   /** @return true iff this assertion's formula is both ground and atomic. */
   public boolean isGaf() {
     if (negLits.isEmpty()) {
@@ -326,7 +353,7 @@ public class CycAssertion extends DefaultCycObject {
     xmlWriter.printXMLStartTag(cycAssertionXMLTag, indent, relative, true);
     hlFormula.toXML(xmlWriter, indent, relative);
     mt.toXML(xmlWriter, indent, relative);
-    xmlWriter.printXMLEndTag(cycAssertionXMLTag);
+    xmlWriter.printXMLEndTag(cycAssertionXMLTag, indent, relative);
   }
 
   /**

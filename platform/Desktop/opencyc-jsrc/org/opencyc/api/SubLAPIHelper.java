@@ -1,4 +1,4 @@
-/* $Id: SubLAPIHelper.java 133920 2011-03-25 18:25:34Z tbrussea $
+/* $Id: SubLAPIHelper.java 142909 2013-01-17 19:47:41Z vijay $
  *
  * Copyright (c) 2010 Cycorp, Inc.  All rights reserved.
  * This software is the proprietary information of Cycorp, Inc.
@@ -28,7 +28,7 @@ import org.opencyc.cycobject.Guid;
  *
  * Created on : Nov 4, 2010, 11:33:24 AM
  * Author     : tbrussea
- * @version $Id: SubLAPIHelper.java 133920 2011-03-25 18:25:34Z tbrussea $
+ * @version $Id: SubLAPIHelper.java 142909 2013-01-17 19:47:41Z vijay $
  */
 public class SubLAPIHelper {
 
@@ -156,12 +156,12 @@ public class SubLAPIHelper {
     return maxTimeoutMSecs;
   }
 
-  /** @return an executable SubL statment string applying function to params. */
+  /** @return an executable SubL statement string applying function to params. */
   public static String makeSubLStmt(CycSymbol function, Object... params) {
     return makeSubLStmt(function.getSymbolName(), params);
   }
 
-  /** @return an executable SubL statment string applying function to params. */
+  /** @return an executable SubL statement string applying function to params. */
   public static String makeSubLStmt(String functionName, Object... params) {
     StringBuilder buf = new StringBuilder(2048);
     buf.append("(").append(functionName);
@@ -171,13 +171,24 @@ public class SubLAPIHelper {
     buf.append(")");
     return buf.toString();
   }
+  
+  /** @return an executable SubL statement string applying function to params. */
+  public static String makeSubLStmtWNartSubstitute(String functionName, Object... params) {
+    StringBuilder buf = new StringBuilder(2048);
+    buf.append("(").append(functionName);
+    for (Object param : params) {
+      buf.append(" (nart-substitute ").append(getAPIString(param)).append(")");
+    }
+    buf.append(")");
+    return buf.toString();
+  }
 
-  /** @return a SubL statment applying function to params, suitable for using as an argument to {@link makeSubLStmt}. */
+  /** @return a SubL statement applying function to params, suitable for using as an argument to {@link #makeSubLStmt(String, Object[])}. */
   public static AsIsTerm makeNestedSubLStmt(CycSymbol function, Object... params) {
     return makeNestedSubLStmt(function.getSymbolName(), params);
   }
 
-  /** @return a SubL statment applying function to params, suitable for using as an argument to {@link makeSubLStmt}. */
+  /** @return a SubL statement applying function to params, suitable for using as an argument to {@link #makeSubLStmt(String, Object[])}. */
   public static AsIsTerm makeNestedSubLStmt(String functionName, Object... params) {
     return new AsIsTerm(makeSubLStmt(functionName, params));
   }

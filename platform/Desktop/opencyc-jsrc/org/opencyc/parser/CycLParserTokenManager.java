@@ -934,6 +934,9 @@ private int jjMoveStringLiteralDfa35_0(long old0, long active0)
    return jjMoveNfa_0(0, 35);
 }
 static final long[] jjbitVec0 = {
+   0xfffffffffffffffeL, 0xffffffffffffffffL, 0xffffffffffffffffL, 0xffffffffffffffffL
+};
+static final long[] jjbitVec2 = {
    0x0L, 0x0L, 0xffffffffffffffffL, 0xffffffffffffffffL
 };
 private int jjMoveNfa_0(int startState, int curPos)
@@ -6383,6 +6386,9 @@ private int jjMoveNfa_0(int startState, int curPos)
       }
       else
       {
+         int hiByte = (int)(curChar >> 8);
+         int i1 = hiByte >> 6;
+         long l1 = 1L << (hiByte & 077);
          int i2 = (curChar & 0xff) >> 6;
          long l2 = 1L << (curChar & 077);
          do
@@ -6391,12 +6397,12 @@ private int jjMoveNfa_0(int startState, int curPos)
             {
                case 80:
                case 82:
-                  if ((jjbitVec0[i2] & l2) != 0L)
+                  if (jjCanMove_0(hiByte, i1, i2, l1, l2))
                      jjCheckNAddStates(46, 48);
                   break;
                case 1295:
                case 1297:
-                  if ((jjbitVec0[i2] & l2) != 0L)
+                  if (jjCanMove_0(hiByte, i1, i2, l1, l2))
                      jjCheckNAddStates(55, 57);
                   break;
                default : break;
@@ -6481,6 +6487,18 @@ static final int[] jjnextStates = {
    573, 647, 648, 722, 723, 797, 798, 872, 873, 947, 948, 1022, 1023, 1097, 1098, 1172, 
    1173, 1247, 1248, 1307, 1308, 
 };
+private static final boolean jjCanMove_0(int hiByte, int i1, int i2, long l1, long l2)
+{
+   switch(hiByte)
+   {
+      case 0:
+         return ((jjbitVec2[i2] & l2) != 0L);
+      default :
+         if ((jjbitVec0[i1] & l1) != 0L)
+            return true;
+         return false;
+   }
+}
 
 /** Token literal values. */
 public static final String[] jjstrLiteralImages = {

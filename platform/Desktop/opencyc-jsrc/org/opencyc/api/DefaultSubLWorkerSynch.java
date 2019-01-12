@@ -1,4 +1,4 @@
-/* $Id: DefaultSubLWorkerSynch.java 138070 2012-01-10 19:46:08Z sbrown $
+/* $Id: DefaultSubLWorkerSynch.java 141934 2012-10-26 16:32:38Z baxter $
  *
  * Copyright (c) 2004 - 2006 Cycorp, Inc.  All rights reserved.
  * This software is the proprietary information of Cycorp, Inc.
@@ -58,7 +58,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author tbrussea
  * @date March 25, 2004, 2:01 PM
- * @version $Id: DefaultSubLWorkerSynch.java 138070 2012-01-10 19:46:08Z sbrown $
+ * @version $Id: DefaultSubLWorkerSynch.java 141934 2012-10-26 16:32:38Z baxter $
  */
 public class DefaultSubLWorkerSynch
     extends DefaultSubLWorker
@@ -91,7 +91,7 @@ public class DefaultSubLWorkerSynch
   /** Creates a new instance of DefaultSubLWorkerSynch.
    * @param subLCommand the SubL command that does the work as a String
    * @param access the Cyc server that should process the SubL command
-   * @param expectIncrementalResults boolean indicating wether to expect
+   * @param expectIncrementalResults boolean indicating whether to expect
    * incremental results
    */
   public DefaultSubLWorkerSynch(String subLCommand, CycAccess access,
@@ -99,19 +99,18 @@ public class DefaultSubLWorkerSynch
     this(access.makeCycList(subLCommand), access, expectIncrementalResults);
   }
   
-  /** Creates a new instance of DefaultSubLWorkerSynch.
+  /** Creates a new instance of DefaultSubLWorkerSynch with normal priority
    * @param subLCommand the SubL command that does the work as a String
    * @param access the Cyc server that should process the SubL command
-   * @param expectIncrementalResults boolean indicating wether to expect
+   * @param expectIncrementalResults boolean indicating whether to expect
    * incremental results
    * @param timeoutMsec the max time to wait in msecs for the work to
    * be completed before giving up (0 means to wait forever, and negative
    * values will cause an exception to be thrown). When communications time
    * out, an abort command is sent back to the Cyc server so processing will
    * stop there as well.
-   * @param priority the priority at which the worker will be scheduled
    * on the CYC server side; 
-   * @see getPriority()
+   * @see CycConnection#NORMAL_PRIORITY
    */
   public DefaultSubLWorkerSynch(String subLCommand, CycAccess access,
       boolean expectIncrementalResults, long timeoutMsec) {
@@ -144,7 +143,7 @@ public class DefaultSubLWorkerSynch
   /** Creates a new instance of DefaultSubLWorkerSynch.
    * @param subLCommand the SubL command that does the work as a CycList
    * @param access the Cyc server that should process the SubL command
-   * @param expectIncrementalResults boolean indicating wether to expect
+   * @param expectIncrementalResults boolean indicating whether to expect
    * incremental results
    */
   public DefaultSubLWorkerSynch(CycList subLCommand, CycAccess access,
@@ -162,7 +161,7 @@ public class DefaultSubLWorkerSynch
    * stop there as well.
    * @param priority the priority at which the worker will be scheduled
    * on the CYC server side; 
-   * @see getPriority()
+   * @see #getPriority()
    */
   public DefaultSubLWorkerSynch(CycList subLCommand, CycAccess access,
       long timeoutMsecs, Integer priority) {
@@ -172,11 +171,11 @@ public class DefaultSubLWorkerSynch
   /** Creates a new instance of DefaultSubLWorkerSynch.
    * @param subLCommand the SubL command that does the work as a CycList
    * @param access the Cyc server that should process the SubL command
-   * @param expectIncrementalResults boolean indicating wether to expect
+   * @param expectIncrementalResults boolean indicating whether to expect
    * incremental results
    * @param priority the priority at which the worker will be scheduled
    * on the CYC server side; 
-   * @see getPriority()
+   * @see #getPriority()
    */
   public DefaultSubLWorkerSynch(CycList subLCommand, CycAccess access,
       boolean expectIncrementalResults, Integer priority) {
@@ -186,7 +185,7 @@ public class DefaultSubLWorkerSynch
   /** Creates a new instance of DerfaultSubLWorker.
    * @param subLCommand the SubL command that does the work as a CycList
    * @param access the Cyc server that should process the SubL command
-   * @param expectIncrementalResults boolean indicating wether to expect
+   * @param expectIncrementalResults boolean indicating whether to expect
    * incremental results
    * @param timeoutMsecs the max time to wait in msecs for the work to
    * be completed before giving up (0 means to wait forever, and negative
@@ -195,7 +194,7 @@ public class DefaultSubLWorkerSynch
    * stop there as well.
    * @param priority the priority at which the worker will be scheduled
    * on the CYC server side; 
-   * @see getPriority()
+   * @see #getPriority()
    */
   public DefaultSubLWorkerSynch(CycList subLCommand, CycAccess access,
       boolean expectIncrementalResults, long timeoutMsecs, Integer priority) {
@@ -287,7 +286,7 @@ public class DefaultSubLWorkerSynch
    */
   public void notifySubLWorkerTerminated(SubLWorkerEvent event) {
     setException(event.getException());
-    sem.release(Integer.MAX_VALUE);
+    sem.release();
   }
   
   /** Returns the exception thrown in the process of doing the work.

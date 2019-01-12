@@ -1,11 +1,9 @@
-/*
- * An identifier for an individual answer within a specific Cyc inference.
- */
 package org.opencyc.inference;
 
 import org.opencyc.cycobject.CycList;
 
 /**
+ * An identifier for an individual answer within a specific Cyc inference.
  *
  * @author baxter
  */
@@ -26,7 +24,8 @@ public class InferenceAnswerIdentifier {
   }
 
   public CycList<Integer> cycListApiValue() {
-    return CycList.makeCycList(inferenceID.getProblemStoreID(), inferenceID.getInferenceID(), answerID);
+    return CycList.makeCycList(inferenceID.getProblemStoreID(),
+            inferenceID.getInferenceID(), answerID);
   }
 
   public int getAnswerID() {

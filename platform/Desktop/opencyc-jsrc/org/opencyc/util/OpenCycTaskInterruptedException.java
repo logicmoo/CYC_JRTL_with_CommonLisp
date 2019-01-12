@@ -3,9 +3,9 @@ package  org.opencyc.util;
 /**
  * Implements an exception class for notification when a Cyc server 
  * communication has timed out. When this is thrown, the outstanding
- * task on the Cyc server is arborted.
+ * task on the Cyc server is aborted.
  *
- * @version $Id: OpenCycTaskInterruptedException.java 138070 2012-01-10 19:46:08Z sbrown $
+ * @version $Id: OpenCycTaskInterruptedException.java 141934 2012-10-26 16:32:38Z baxter $
  * @author Eric E. Allen<br>
  *
  * <p>Copyright 2001 Cycorp, Inc., license is open source GNU LGPL.
@@ -31,7 +31,7 @@ public class OpenCycTaskInterruptedException extends RuntimeException {
   /**
    * Construct a TimeOutException object with the 
    * specified throwable.
-   * @param t the throwable that caused this exception
+   * @param ie the throwable that caused this exception
    */
   public OpenCycTaskInterruptedException(InterruptedException ie) {
     super(ie);

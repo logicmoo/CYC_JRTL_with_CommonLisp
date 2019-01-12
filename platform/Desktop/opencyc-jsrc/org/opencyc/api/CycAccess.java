@@ -1,8 +1,10 @@
 package org.opencyc.api;
 
 //// External Imports
+import java.io.ByteArrayOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -22,20 +24,19 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-
-//// Internal Imports
 import static org.opencyc.api.CycObjectFactory.makeCycSymbol;
 import static org.opencyc.api.SubLAPIHelper.makeNestedSubLStmt;
 import static org.opencyc.api.SubLAPIHelper.makeSubLStmt;
-import org.opencyc.cycobject.CycFormulaSentence;
-import org.opencyc.util.StringUtils;
+import org.opencyc.comm.Comm;
 import org.opencyc.cycobject.CycAssertion;
 import org.opencyc.cycobject.CycConstant;
 import org.opencyc.cycobject.CycDenotationalTerm;
 import org.opencyc.cycobject.CycFormula;
+import org.opencyc.cycobject.CycFormulaSentence;
 import org.opencyc.cycobject.CycFort;
 import org.opencyc.cycobject.CycList;
 import org.opencyc.cycobject.CycListParser;
@@ -51,19 +52,22 @@ import org.opencyc.cycobject.ELMtConstant;
 import org.opencyc.cycobject.ELMtCycNaut;
 import org.opencyc.cycobject.ELMtNart;
 import org.opencyc.cycobject.Guid;
-import org.opencyc.inference.DefaultInferenceParameterDescriptions;
-import org.opencyc.inference.DefaultInferenceParameters;
 import org.opencyc.inference.DefaultInferenceWorkerSynch;
-import org.opencyc.inference.InferenceParameterDescriptions;
-import org.opencyc.inference.InferenceParameters;
 import org.opencyc.inference.InferenceResultSet;
+import org.opencyc.inference.InferenceSuspendReason;
 import org.opencyc.inference.InferenceWorkerSynch;
+import org.opencyc.inference.params.DefaultInferenceParameterDescriptions;
+import org.opencyc.inference.params.DefaultInferenceParameters;
+import org.opencyc.inference.params.InferenceParameterDescriptions;
+import org.opencyc.inference.params.InferenceParameters;
+import org.opencyc.nl.Paraphraser;
 import org.opencyc.soap.SOAPBinaryCycConnection;
 import org.opencyc.util.DateConverter;
 import org.opencyc.util.LRUCache;
 import org.opencyc.util.Log;
 import org.opencyc.util.Pair;
 import org.opencyc.util.PasswordManager;
+import org.opencyc.util.StringUtils;
 import org.opencyc.util.TimeOutException;
 
 /**
@@ -73,18 +77,22 @@ import org.opencyc.util.TimeOutException;
  * Collaborates with the <tt>CycConnection</tt> class which manages the api connections.
  * </p>
  *
- * @version $Id: CycAccess.java 140169 2012-05-24 20:58:48Z daves $
- * @author Stephen L. Reed <p><p><p><p><p>
+ * @version $Id: CycAccess.java 150228 2014-04-03 19:23:54Z daves $
+ * @author Stephen L. reed <p><p><p><p><p>
  */
 public class CycAccess {
 
   private static final CycSymbol CYC_QUERY = makeCycSymbol("cyc-query");
   private static final CycSymbol EL_WFF = makeCycSymbol("el-wff?");
   private static final CycSymbol EQUALS_EL = makeCycSymbol("equals-el?");
-  private static final CycSymbol FPRED_VALUE_IN_MT = makeCycSymbol("fpred-value-in-mt");
-  private static final CycSymbol SOME_PRED_VALUE_IN_ANY_MT = makeCycSymbol("some-pred-value-in-any-mt");
-  private static final CycSymbol SOME_PRED_VALUE_IN_RELEVANT_MTS = makeCycSymbol("some-pred-value-in-relevant-mts");
+  private static final CycSymbol FPRED_VALUE_IN_MT = makeCycSymbol(
+          "fpred-value-in-mt");
+  private static final CycSymbol SOME_PRED_VALUE_IN_ANY_MT = makeCycSymbol(
+          "some-pred-value-in-any-mt");
+  private static final CycSymbol SOME_PRED_VALUE_IN_RELEVANT_MTS = makeCycSymbol(
+          "some-pred-value-in-relevant-mts");
   private static final CycSymbol WITH_ALL_MTS = makeCycSymbol("with-all-mts");
+  private Boolean isOpenCyc = null;
 
   //// Constructors
   /**
@@ -98,6 +106,7 @@ public class CycAccess {
           throws UnknownHostException, IOException, CycApiException {
     this(CycConnection.DEFAULT_HOSTNAME,
             CycConnection.DEFAULT_BASE_PORT);
+    System.out.println("Using Cyc " + this);
   }
 
   /**
@@ -135,7 +144,8 @@ public class CycAccess {
     this.port = basePort;
     isSOAPConnection = true;
     this.persistentConnection = PERSISTENT_CONNECTION;
-    cycConnection = new SOAPBinaryCycConnection(endpointURL, hostName, basePort, this);
+    cycConnection = new SOAPBinaryCycConnection(endpointURL, hostName, basePort,
+            this);
     commonInitialization();
   }
 
@@ -152,45 +162,98 @@ public class CycAccess {
   public CycAccess(String hostName,
           int basePort)
           throws UnknownHostException, IOException, CycApiException {
-    this.hostName = hostName;
+    this.hostName = hostName;  
     this.port = basePort;
-    this.persistentConnection = PERSISTENT_CONNECTION;
+      this.persistentConnection = PERSISTENT_CONNECTION;
+      cycConnection = new CycConnection(hostName, port, this);
+      commonInitialization();
+    //}
+  }
+  
+  public CycAccess(Comm c)
+          throws UnknownHostException, IOException, CycApiException {
 
-    cycConnection = new CycConnection(hostName,
-            port,
-            this);
+    System.out.println("Cyc Access with Comm object: " + c.toString());
+    System.out.flush();
+    setupComm(c);
     commonInitialization();
   }
 
+  /*
+  public void setupNewCommConnection(InputStream is) throws IOException, UnknownHostException, CycApiException {
+    this.cycConnection.setupNewCommConnection(is);
+    commonInitialization();
+  }
+  */ 
+
+  /**
+   * Attempt to create a new CycAccess object from defaultHost and defaultPort;
+   * prompting the user if no Cyc server is accessible at that address. 
+   *
+   * @param defaultHost
+   * @param defaultPort
+   * @return
+   */
+  public static CycAccess getNewCycAccessInteractively(String defaultHost,
+          int defaultPort) {
+    CycAccess cycAccess = null;
+    try {
+      cycAccess = new CycAccess(defaultHost, defaultPort);
+      return cycAccess;
+    } catch (IOException ex) {
+      Logger.getLogger(CycAccess.class.getName()).log(Level.INFO,
+              "Cyc server not reachable at " + defaultHost + ":" + defaultPort + ". Asking the user to specify host and port.");
+    }
+    return getNewCycAccessInteractively();
+  }
+
+  
+  /**
+   * Prompts the user (via a JOptionPane), for a Cyc host & port, and returns a 
+   * new CycAccess object. If no Cyc server is accessible at that address, it will
+   * prompt the user again.
+   * 
+   * @param server
+   * @return Returns a CycAccess object, or null if the user cancels out.
+   */
   public static CycAccess getNewCycAccessInteractively() {
     CycAccess cycAccess = null;
-    String hostname = "localhost";
     final Integer[] ports = {3600, 3620, 3600, 3660, 3680};
-    Integer port = ports[0];
+    //String hostname = "localhost";
+    //Integer port = ports[0];
+    CycServer server = new CycServer("localhost", ports[0]);
     while (cycAccess == null) {
+      server = CycConnectionPanel.promptUser(server);
+      /*
       hostname = JOptionPane.showInputDialog("Specify host machine:", hostname);
       if (hostname == null) {
         return null;
       }
       port = (Integer) JOptionPane.showInputDialog(
-              null, "Specify port:", "Specify Port", JOptionPane.QUESTION_MESSAGE, null,
+              null, "Specify port:", "Specify Port",
+              JOptionPane.QUESTION_MESSAGE, null,
               ports, port);
       if (port == null) {
         return null;
       }
+      */
       try {
-        cycAccess = new CycAccess(hostname, port);
+        if (server == null) {
+          return null;
+        }
+        cycAccess = new CycAccess(server.getHostName(), server.getBasePort());
       } catch (Exception ex) {
         final int result = JOptionPane.showConfirmDialog(null,
-                "Got Exception trying to connect to " + hostname + ":" + port + ":\n" + ex.getLocalizedMessage()
-                + "\nTry again?", "Exception", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                "Got Exception trying to connect to " + server.toString() + ":\n" + ex.getLocalizedMessage()
+                + "\nTry again?", "Exception", JOptionPane.OK_CANCEL_OPTION,
+                JOptionPane.WARNING_MESSAGE);
         if (result != JOptionPane.OK_OPTION) {
           return null;
         }
       }
     }
     return cycAccess;
-  } //// Public Area
+  }
   /**
    * Dictionary of CycAccess instances, indexed by thread so that the application does not have to
    * keep passing around a CycAccess object reference.
@@ -219,80 +282,114 @@ public class CycAccess {
   public FileWriter apiRequestLog = null;
   /** Convenient reference to #$BaseKb. */
   public static final ELMt baseKB = ELMtConstant.makeELMtConstant(
-          new CycConstant("BaseKB", new Guid("bd588111-9c29-11b1-9dad-c379636f7270")));
+          new CycConstant("BaseKB", new Guid(
+          "bd588111-9c29-11b1-9dad-c379636f7270")));
   /** Convenient reference to #$isa. */
-  public static final CycConstant isa = new CycConstant("isa", new Guid("bd588104-9c29-11b1-9dad-c379636f7270"));
+  public static final CycConstant isa = new CycConstant("isa", new Guid(
+          "bd588104-9c29-11b1-9dad-c379636f7270"));
   /** Convenient reference to #$genls. */
-  public static final CycConstant genls = new CycConstant("genls", new Guid("bd58810e-9c29-11b1-9dad-c379636f7270"));
+  public static final CycConstant genls = new CycConstant("genls", new Guid(
+          "bd58810e-9c29-11b1-9dad-c379636f7270"));
   /** Convenient reference to #$genlMt. */
-  public static final CycConstant genlMt = new CycConstant("genlMt", new Guid("bd5880e5-9c29-11b1-9dad-c379636f7270"));
+  public static final CycConstant genlMt = new CycConstant("genlMt", new Guid(
+          "bd5880e5-9c29-11b1-9dad-c379636f7270"));
   /** Convenient reference to #$comment. */
-  public static final CycConstant comment = new CycConstant("comment", new Guid("bd588109-9c29-11b1-9dad-c379636f7270"));
+  public static final CycConstant comment = new CycConstant("comment", new Guid(
+          "bd588109-9c29-11b1-9dad-c379636f7270"));
   /** Convenient reference to #$Collection. */
-  public static final CycConstant collection = new CycConstant("Collection", new Guid("bd5880cc-9c29-11b1-9dad-c379636f7270"));
+  public static final CycConstant collection = new CycConstant("Collection",
+          new Guid("bd5880cc-9c29-11b1-9dad-c379636f7270"));
   /** Convenient reference to #$BinaryPredicate. */
-  public static final CycConstant binaryPredicate = new CycConstant("BinaryPredicate", new Guid("bd588102-9c29-11b1-9dad-c379636f7270"));
+  public static final CycConstant binaryPredicate = new CycConstant(
+          "BinaryPredicate", new Guid("bd588102-9c29-11b1-9dad-c379636f7270"));
   /** Convenient reference to #$elementOf. */
-  public static final CycConstant elementOf = new CycConstant("elementOf", new Guid("c0659a2b-9c29-11b1-9dad-c379636f7270"));
+  public static final CycConstant elementOf = new CycConstant("elementOf",
+          new Guid("c0659a2b-9c29-11b1-9dad-c379636f7270"));
   /** Convenient reference to #$numericallyEquals. */
-  public static final CycConstant numericallyEqual = new CycConstant("numericallyEquals", new Guid("bd589d90-9c29-11b1-9dad-c379636f7270"));
-  /************************* constants needed by CycL parser *********/
+  public static final CycConstant numericallyEqual = new CycConstant(
+          "numericallyEquals", new Guid("bd589d90-9c29-11b1-9dad-c379636f7270"));
+  /** *********************** constants needed by CycL parser ******** */
   /** Convenient reference to #$True. */
-  public static final CycConstant trueConst = new CycConstant("True", new Guid("bd5880d9-9c29-11b1-9dad-c379636f7270"));
+  public static final CycConstant trueConst = new CycConstant("True", new Guid(
+          "bd5880d9-9c29-11b1-9dad-c379636f7270"));
   /** Convenient reference to #$False. */
-  public static final CycConstant falseConst = new CycConstant("False", new Guid("bd5880d8-9c29-11b1-9dad-c379636f7270"));
+  public static final CycConstant falseConst = new CycConstant("False",
+          new Guid("bd5880d8-9c29-11b1-9dad-c379636f7270"));
   /** Convenient reference to #$not. */
-  public static final CycConstant not = new CycConstant("not", new Guid("bd5880fb-9c29-11b1-9dad-c379636f7270"));
+  public static final CycConstant not = new CycConstant("not", new Guid(
+          "bd5880fb-9c29-11b1-9dad-c379636f7270"));
   /** Convenient reference to #$and. */
-  public static final CycConstant and = new CycConstant("and", new Guid("bd5880f9-9c29-11b1-9dad-c379636f7270"));
+  public static final CycConstant and = new CycConstant("and", new Guid(
+          "bd5880f9-9c29-11b1-9dad-c379636f7270"));
   /** Convenient reference to #$or. */
-  public static final CycConstant or = new CycConstant("or", new Guid("bd5880fa-9c29-11b1-9dad-c379636f7270"));
+  public static final CycConstant or = new CycConstant("or", new Guid(
+          "bd5880fa-9c29-11b1-9dad-c379636f7270"));
   /** Convenient reference to #$xor. */
-  public static final CycConstant xorConst = new CycConstant("xor", new Guid("bde7f9f2-9c29-11b1-9dad-c379636f7270"));
+  public static final CycConstant xorConst = new CycConstant("xor", new Guid(
+          "bde7f9f2-9c29-11b1-9dad-c379636f7270"));
   /** Convenient reference to #$equiv. */
-  public static final CycConstant equivConst = new CycConstant("equiv", new Guid("bda887b6-9c29-11b1-9dad-c379636f7270"));
+  public static final CycConstant equivConst = new CycConstant("equiv",
+          new Guid("bda887b6-9c29-11b1-9dad-c379636f7270"));
   /** Convenient reference to #$implies. */
-  public static final CycConstant impliesConst = new CycConstant("implies", new Guid("bd5880f8-9c29-11b1-9dad-c379636f7270"));
+  public static final CycConstant impliesConst = new CycConstant("implies",
+          new Guid("bd5880f8-9c29-11b1-9dad-c379636f7270"));
   /** Convenient reference to #$forAll. */
-  public static final CycConstant forAllConst = new CycConstant("forAll", new Guid("bd5880f7-9c29-11b1-9dad-c379636f7270"));
+  public static final CycConstant forAllConst = new CycConstant("forAll",
+          new Guid("bd5880f7-9c29-11b1-9dad-c379636f7270"));
   /** Convenient reference to #$thereExists. */
-  public static final CycConstant thereExistsConst = new CycConstant("thereExists", new Guid("bd5880f6-9c29-11b1-9dad-c379636f7270"));
+  public static final CycConstant thereExistsConst = new CycConstant(
+          "thereExists", new Guid("bd5880f6-9c29-11b1-9dad-c379636f7270"));
   /** Convenient reference to #$thereExistExactly. */
-  public static final CycConstant thereExistExactlyConst = new CycConstant("thereExistExactly", new Guid("c10ae7b8-9c29-11b1-9dad-c379636f7270"));
+  public static final CycConstant thereExistExactlyConst = new CycConstant(
+          "thereExistExactly", new Guid("c10ae7b8-9c29-11b1-9dad-c379636f7270"));
   /** Convenient reference to #$thereExistAtMost. */
-  public static final CycConstant thereExistAtMostConst = new CycConstant("thereExistAtMost", new Guid("c10af932-9c29-11b1-9dad-c379636f7270"));
+  public static final CycConstant thereExistAtMostConst = new CycConstant(
+          "thereExistAtMost", new Guid("c10af932-9c29-11b1-9dad-c379636f7270"));
   /** Convenient reference to #$thereExistAtLeast. */
-  public static final CycConstant thereExistAtLeastConst = new CycConstant("thereExistAtLeast", new Guid("c10af5e7-9c29-11b1-9dad-c379636f7270"));
+  public static final CycConstant thereExistAtLeastConst = new CycConstant(
+          "thereExistAtLeast", new Guid("c10af5e7-9c29-11b1-9dad-c379636f7270"));
   /** Convenient reference to #$ExapndSubLFn. */
-  public static final CycConstant expandSubLFnConst = new CycConstant("ExpandSubLFn", new Guid("c0b2bc13-9c29-11b1-9dad-c379636f7270"));
+  public static final CycConstant expandSubLFnConst = new CycConstant(
+          "ExpandSubLFn", new Guid("c0b2bc13-9c29-11b1-9dad-c379636f7270"));
   /** Convenient reference to #$SubLQuoteFn. */
-  public static final CycConstant sublQuoteFnConst = new CycConstant("SubLQuoteFn", new Guid("94f07021-8b0d-11d7-8701-0002b3a8515d"));
+  public static final CycConstant sublQuoteFnConst = new CycConstant(
+          "SubLQuoteFn", new Guid("94f07021-8b0d-11d7-8701-0002b3a8515d"));
   /** Convenient reference to #$PlusFn. */
-  public static final CycConstant plusFn = new CycConstant("PlusFn", new Guid("bd5880ae-9c29-11b1-9dad-c379636f7270"));
+  public static final CycConstant plusFn = new CycConstant("PlusFn", new Guid(
+          "bd5880ae-9c29-11b1-9dad-c379636f7270"));
   /** Convenient reference to #$different. */
-  public static final CycConstant different = new CycConstant("different", new Guid("bd63f343-9c29-11b1-9dad-c379636f7270"));
+  public static final CycConstant different = new CycConstant("different",
+          new Guid("bd63f343-9c29-11b1-9dad-c379636f7270"));
   /** Convenient reference to #$Thing. */
-  public static final CycConstant thing = new CycConstant("Thing", new Guid("bd5880f4-9c29-11b1-9dad-c379636f7270"));
+  public static final CycConstant thing = new CycConstant("Thing", new Guid(
+          "bd5880f4-9c29-11b1-9dad-c379636f7270"));
   /** Convenient reference to #$MtSpace. */
-  public static final CycConstant mtSpace = new CycConstant("MtSpace", new Guid("abb96eb5-e798-11d6-8ac9-0002b3a333c3"));
+  public static final CycConstant mtSpace = new CycConstant("MtSpace", new Guid(
+          "abb96eb5-e798-11d6-8ac9-0002b3a333c3"));
   /** Convenient reference to #$CurrentWorldDataCollectorMt-NonHomocentric. */
   public static final ELMt currentWorldDataMt = ELMtConstant.makeELMtConstant(
-          new CycConstant("CurrentWorldDataCollectorMt-NonHomocentric", new Guid("bf192b1e-9c29-11b1-9dad-c379636f7270")));
+          new CycConstant("CurrentWorldDataCollectorMt-NonHomocentric",
+          new Guid("bf192b1e-9c29-11b1-9dad-c379636f7270")));
   /** Convenient reference to #$InferencePSC. */
   public static final ELMt inferencePSC = ELMtConstant.makeELMtConstant(
-          new CycConstant("InferencePSC", new Guid("bd58915a-9c29-11b1-9dad-c379636f7270")));
+          new CycConstant("InferencePSC", new Guid(
+          "bd58915a-9c29-11b1-9dad-c379636f7270")));
   /** Convenient reference to #$AnytimePSC. */
   public static final ELMt anytimePSC = ELMtConstant.makeELMtConstant(
-          new CycConstant("AnytimePSC", new Guid("28392742-b00f-41d8-98de-8399027785de")));
+          new CycConstant("AnytimePSC", new Guid(
+          "28392742-b00f-41d8-98de-8399027785de")));
   /** Convenient reference to #$EverythingPSC. */
-  public static final ELMt everythingPSC = ELMtConstant.makeELMtConstant(  
-          new CycConstant("EverythingPSC", new Guid("be7f041b-9c29-11b1-9dad-c379636f7270")));
+  public static final ELMt everythingPSC = ELMtConstant.makeELMtConstant(
+          new CycConstant("EverythingPSC", new Guid(
+          "be7f041b-9c29-11b1-9dad-c379636f7270")));
   /** Convenient reference to #$UniversalVocabularyMt. */
   public static final ELMt universalVocabularyMt = ELMtConstant.makeELMtConstant(
-          new CycConstant("UniversalVocabularyMt", new Guid("dff4a041-4da2-11d6-82c0-0002b34c7c9f")));
+          new CycConstant("UniversalVocabularyMt", new Guid(
+          "dff4a041-4da2-11d6-82c0-0002b34c7c9f")));
   /** Convenient reference to #$bookkeepingMt. */
   public static final ELMt bookkeepingMt = ELMtConstant.makeELMtConstant(
-          new CycConstant("BookkeepingMt", new Guid("beaed5bd-9c29-11b1-9dad-c379636f7270")));
+          new CycConstant("BookkeepingMt", new Guid(
+          "beaed5bd-9c29-11b1-9dad-c379636f7270")));
 
   /**
    * Returns a string representation of this object.
@@ -309,40 +406,50 @@ public class CycAccess {
 
   /**
    * Returns the CycAccess that is to be used for this thread.
-   * @return 
+   *
+   * @return the CycAccess that is to be used for this thread.
    * @throws RuntimeException when there is no CycAccess for this thread.
    */
   public static CycAccess getCurrent() {
-      return currentCyc.get();
-  }
-  
-  /**
-   * 
-   * @param access set the CycAccess object that will be used as the default CycAccess object for this thread.
-   */
-  public static CycAccess setCurrent(CycAccess access) {
-      currentCyc.set(access);
-      return access;
+    CycAccess cyc = currentCyc.get();
+    if (!(cyc instanceof CycAccess)) {
+      throw new RuntimeException(
+              "The current CycAccess hasn't been set yet.  CycAccess.setCurrent() must be called before CycAccess.getCurrent() is called.");
+    }
+    return cyc;
   }
 
   /**
-   * Specify that this thread should use a CycAccess object pointing to <code>hostname</code> and <code>port</code>.
-   * This may use an existing CycAccess object, or if one can't be found, it will create a new CycAccess object 
+   *
+   * @param access set the CycAccess object that will be used as the default CycAccess object for this thread.
+   */
+  public static CycAccess setCurrent(CycAccess access) {
+    currentCyc.set(access);
+    //System.out.println("Set current CycAccess to " + access);
+    return access;
+  }
+
+  /**
+   * Specify that this thread should use a CycAccess object pointing to
+   * <code>hostname</code> and
+   * <code>port</code>.
+   * This may use an existing CycAccess object, or if one can't be found, it will create a new CycAccess object
    * and make that new CycAccess object the default one for this thread.
+   *
    * @param hostName the name of the machine where the desired Cyc Server resides.
    * @param port the port number where the desired Cyc Server resides.
    */
-    public static CycAccess setCurrent(String hostName, int port) throws UnknownHostException, IOException {
-        String key = hostName + ":" + port;
-        if (currentCycAccesses.containsKey(key)) {
-            setCurrent(currentCycAccesses.get(key));
-        } else {
-            CycAccess cyc = new CycAccess(hostName, port);
-            setCurrent(cyc);
-            currentCycAccesses.put(key, cyc);
-        }
-        return getCurrent();
+  public static CycAccess setCurrent(String hostName, int port) throws UnknownHostException, IOException {
+    String key = hostName + ":" + port;
+    if (currentCycAccesses.containsKey(key)) {
+      setCurrent(currentCycAccesses.get(key));
+    } else {
+      CycAccess cyc = new CycAccess(hostName, port);
+      setCurrent(cyc);
+      currentCycAccesses.put(key, cyc);
     }
+    return getCurrent();
+  }
 
   /**
    * Returns the <tt>CycAccess</tt> object for this thread.
@@ -370,41 +477,38 @@ public class CycAccess {
    * Returns true if there is a CycAccess object for this thread.
    *
    * @return true if there is a CycAccess object for this thread.
-   * @deprecated  Check to see if the value of {@link getCurrent()} is null
    */
-  @Deprecated
   public static boolean hasCurrent() {
-    CycAccess cycAccess = cycAccessInstances.get(Thread.currentThread());
-
-    if (cycAccess == null) {
-      /*if (sharedCycAccessInstance != null) {
-      return true;
-      } else*/ {
-        return false;
-      }
-    }
-    return true;
+    return currentCyc.get() instanceof CycAccess;
   }
 
   /**
    * Sets the shared <tt>CycAccess</tt> instance.
    *
    * @param sharedCycAccessInstance shared<tt>CycAccess</tt> instance
-   * @deprecated  Use {@link setCurrent(CycAccess)} instead.
+   * @deprecated Use {@link #setCurrent(CycAccess)} instead.
    */
   @Deprecated
-  public static void setSharedCycAccessInstance(CycAccess sharedCycAccessInstance) {
+  public static void setSharedCycAccessInstance(
+          CycAccess sharedCycAccessInstance) {
     CycAccess.sharedCycAccessInstance = sharedCycAccessInstance;
   }
 
   /** Returns the Cyc api services lease manager.
    *
-   *@return the Cyc api services lease manager
+   * @return the Cyc api services lease manager
    */
+
+  @Deprecated
   public CycLeaseManager getCycLeaseManager() {
-    return cycLeaseManager;
+    if (this.c == null) {
+      return this.getCycConnection().getCycLeaseManagerMap().get(this.hostName + Integer.toString(this.port + CycConnection.CFASL_PORT_OFFSET));
+    } else {
+      throw new CycApiException("Please access CycLeaseManager via CycConnection when Comm object is specified");
+    }
   }
 
+  
   /**
    * Turns on the diagnostic trace of socket messages.
    */
@@ -450,7 +554,6 @@ public class CycAccess {
     return cycConnection.getBasePort();
   }
 
-
   /**
    * @return the http of server the connection is connected to.
    */
@@ -458,28 +561,35 @@ public class CycAccess {
     return cycConnection.getHttpPort();
   }
 
-  /** 
+  /**
    * Returns the browser URL for the Cyc image that this CycAccess is connected to,
-   * as the URL would be seen from the machine where the CycAccess is running.  Note that if
+   * as the URL would be seen from the machine where the CycAccess is running. Note that if
    * there is a firewall, port-forwarding or other indirection between the browser and the machine where
    * this CycAccess is situated, the URL returned may not be functional.
    */
   public String getBrowserUrl() {
     return "http://" + getHostName() + ":" + getHttpPort() + "/cgi-bin/cg?cb-start";
   }
-  
+
   /**
    * Returns the CycConnection object.
    *
    * @return the CycConnection object
    */
-  public CycConnectionInterface getCycConnection() {
+  public synchronized CycConnectionInterface getCycConnection() {
+    try {
+      maybeReEstablishCycConnection();
+    } catch (IOException ex) {
+      Log.current.println(
+              "Couldn't re-establish Cyc connection.\n" + ex.getLocalizedMessage());
+    }
     return cycConnection;
   }
   /** Indicates whether the connection is closed */
   private volatile boolean isClosed = false;
 
   /** Returns whether the connection is closed
+   *
    * @return whether the connection is closed
    */
   public boolean isClosed() {
@@ -495,9 +605,13 @@ public class CycAccess {
       return;
     }
     isClosed = true;
+  //Tag: Fix CycLeaseManager
+    /*
     if (cycLeaseManager != null) {
       cycLeaseManager.interrupt();
     }
+    */
+
     if (cycConnection != null) {
       cycConnection.close();
     }
@@ -509,19 +623,19 @@ public class CycAccess {
       }
     }
     cycAccessInstances.remove(Thread.currentThread());
-    // make sure it's not every used again for setting as the 'current' CycAccess.
+    // make sure it's not ever used again for setting as the 'current' CycAccess.
     for (Map.Entry<String, CycAccess> entry : currentCycAccesses.entrySet()) {
       if (entry.getValue().equals(this)) {
-         currentCycAccesses.remove(entry.getKey());
+        currentCycAccesses.remove(entry.getKey());
       }
     }
-    /*if (sharedCycAccessInstance == null || sharedCycAccessInstance.equals(this)) {
-    final Iterator iter = cycAccessInstances.values().iterator();
-    if (iter.hasNext())
-    sharedCycAccessInstance = (CycAccess) iter.next();
-    else
-    sharedCycAccessInstance = null;
-    }*/
+    /* if (sharedCycAccessInstance == null || sharedCycAccessInstance.equals(this)) {
+     * final Iterator iter = cycAccessInstances.values().iterator();
+     * if (iter.hasNext())
+     * sharedCycAccessInstance = (CycAccess) iter.next();
+     * else
+     * sharedCycAccessInstance = null;
+     * } */
   }
 
   /**
@@ -543,12 +657,12 @@ public class CycAccess {
     if (response[0].equals(Boolean.TRUE)) {
       return response[1];
     } else {
-      throw new ConverseException(command, response);
+      throw new ConverseException(command, this , response);
     }
   }
 
   /**
-   * Converses with Cyc to perform an API command whose result is returned as a list.  The symbol
+   * Converses with Cyc to perform an API command whose result is returned as a list. The symbol
    * nil is returned as the empty list.
    *
    * @param command the command string or CycList
@@ -573,7 +687,7 @@ public class CycAccess {
         }
       }
     }
-    throw new ConverseException(command, response);
+    throw new ConverseException(command, this, response);
   }
 
   /**
@@ -615,7 +729,7 @@ public class CycAccess {
         return (CycObject) response[1];
       }
     } else {
-      throw new ConverseException(command, response);
+      throw new ConverseException(command, this, response);
     }
   }
 
@@ -644,14 +758,51 @@ public class CycAccess {
 
       return (String) response[1];
     } else {
-      throw new ConverseException(command, response);
+      throw new ConverseException(command, this, response);
     }
+  }
+
+  /**
+   * Verify that this is not an OpenCyc image.
+   *
+   * @throws IOException if we can't communicate with Cyc.
+   * @throws UnsupportedOperationException if it is an OpenCyc image.
+   */
+  public void requireNonOpenCyc() throws IOException {
+    if (this.isOpenCyc()) {
+      throw new UnsupportedOperationException(
+              "This operation is not supported by OpenCyc.");
+    }
+  }
+
+  private void setupComm(Comm c) throws CycApiException, IOException {    
+    this.persistentConnection = PERSISTENT_CONNECTION;
+    this.c = c;
+    
+    cycConnection = new CycConnection(c, this);
+    c.setCycConnection(cycConnection);
+    /*
+    if (c instanceof SocketComm) {
+      commonInitialization();
+    }*/
+    
+  }
+  
+  /**
+   * Does this CycAccess access a single Cyc?  
+   * @return true if this CycAccess will always access the same Cyc server,
+   * and returns false if the CycAccess was constructed with 
+   * a {@link org.opencyc.comm.Comm} object that may result in different calls
+   * being sent to different Cyc servers.
+   */
+  public boolean hasStaticCycServer() {
+      return (cycConnection.connectedToStaticCyc());
   }
 
   static public class ConverseException extends CycApiException {
 
-    private ConverseException(final Object command, final Object[] response) {
-      super(response[1].toString() + "\nrequest: " + makeRequestString(command));
+    private ConverseException(final Object command, CycAccess cyc, final Object[] response) {
+      super(response[1].toString() + "\nrequest " + (cyc.hasStaticCycServer() ? "to " + (cyc.getHostName() + ":" + cyc.getBasePort()) : "") + " : " + makeRequestString(command));
       if (response[1] instanceof CycApiException) {
         this.initCause((CycApiException) response[1]);
       }
@@ -690,7 +841,7 @@ public class CycAccess {
         return false;
       }
     } else {
-      throw new ConverseException(command, response);
+      throw new ConverseException(command, this, response);
     }
   }
 
@@ -713,7 +864,7 @@ public class CycAccess {
     if (response[0].equals(Boolean.TRUE)) {
       return Integer.valueOf(response[1].toString());
     } else {
-      throw new ConverseException(command, response);
+      throw new ConverseException(command, this, response);
     }
   }
 
@@ -732,14 +883,17 @@ public class CycAccess {
     response = converse(command);
 
     if (response[0].equals(Boolean.FALSE)) {
-      throw new ConverseException(command, response);
+      throw new ConverseException(command, this, response);
     }
   }
 
-  /** Try to enhance <code>urlString</code> to log <code>cyclist</code> in and redirect to
+  /** Try to enhance
+   * <code>urlString</code> to log
+   * <code>cyclist</code> in and redirect to
    * the page it would otherwise go to directly.
    */
-  public String maybeAddLoginRedirect(final String urlString, final CycFort cyclist,
+  public String maybeAddLoginRedirect(final String urlString,
+          final CycFort cyclist,
           final CycDenotationalTerm applicationTerm) {
     // sample urlString: cg?CB-CF&236134
     final int questionMarkPos = urlString.indexOf('?');
@@ -748,7 +902,8 @@ public class CycAccess {
       final String originalQueryString = urlString.substring(questionMarkPos + 1);
       final StringBuilder stringBuilder = new StringBuilder(cgiProgram);
       stringBuilder.append("?cb-login-handler");
-      stringBuilder.append("&new_login_name=").append(((CycConstant) cyclist).getName());
+      stringBuilder.append("&new_login_name=").append(
+              ((CycConstant) cyclist).getName());
       maybeAddPassword(cyclist, applicationTerm, stringBuilder);
       stringBuilder.append("&redirect-handler=").append(originalQueryString);
       return stringBuilder.toString();
@@ -766,17 +921,20 @@ public class CycAccess {
   }
 
   /** Add a piece to the URL being string-built to specify cyclist's (encrypted) password */
-  private void maybeAddPassword(final CycFort cyclist, final CycDenotationalTerm applicationTerm,
+  private void maybeAddPassword(final CycFort cyclist,
+          final CycDenotationalTerm applicationTerm,
           final StringBuilder stringBuilder) {
     if (cyclist instanceof CycConstant) {
       final PasswordManager passwordManager = new PasswordManager(this);
       try {
         if (passwordManager.isPasswordRequired()) {
-          final String password = passwordManager.lookupPassword((CycConstant) cyclist, applicationTerm);
+          final String password = passwordManager.lookupPassword(
+                  (CycConstant) cyclist, applicationTerm);
           if (password != null) {
             // @hack -- Cyc decodes '+' characters twice, so we encode twice:
             final String urlEncodedPassword = doubleURLEncode(password);
-            stringBuilder.append("&new_login_hashed_password=").append(urlEncodedPassword);
+            stringBuilder.append("&new_login_hashed_password=").append(
+                    urlEncodedPassword);
           }
         }
       } catch (IOException ex) {
@@ -837,15 +995,49 @@ public class CycAccess {
     } else {
       fort = getKnownConstantByName(fortName);
     }
+    if (fort == null) {
+      throw new CycApiException("'" + fortName + "' is not a valid FORT name.");
+    }
     return fort;
   }
 
+  /**
+   * Gets a CycDenotationalTerm (i.e. CycConstant, CycNart, or CycNaut) by using its constant name 
+   * or formula string.  This method will not create any terms.  However, if a NAT formula is sent
+   * in, and its functor is reifiable, this method will return a CycNart object, regardless of whether
+   * or not that term has actually been reified in the Cyc KB.
+   *
+   * @param termName the name of the term to be instantiated
+   * @return the complete <tt>CycDenotationalTerm</tt> if found, otherwise throw an exception
+   * @throws IOException if a communications error occurs
+   * @throws UnknownHostException if the Cyc server cannot be found
+   * @throws CycApiException if the Cyc server returns an error
+   */
+  public CycDenotationalTerm getTermByName(String termName)
+          throws UnknownHostException, IOException, CycApiException {
+    CycDenotationalTerm term = null;
+    if (termName.contains(")")) {
+      final CycList terms = new CycListParser(this).read(termName);
+      term = getCycNartFromCons(terms);
+      if (term == null && isFunction((CycObject)terms.first())) {          
+          term = new CycNaut(terms);
+      }
+    } else {
+      term = getKnownConstantByName(termName);
+    }
+    if (term == null) {
+      throw new CycApiException("'" + termName + "' is not a valid FORT name.");
+    }
+    return term;
+  }
+  
   public List findConstantsForNames(List constantNames)
           throws UnknownHostException, IOException, CycApiException {
     if ((constantNames == null) || (constantNames.size() <= 0)) {
       return null;
     }
-    StringBuffer command = new StringBuffer("(MAPCAR (QUOTE FIND-CONSTANT) (LIST");
+    StringBuffer command = new StringBuffer(
+            "(MAPCAR (QUOTE FIND-CONSTANT) (LIST");
     for (Iterator iter = constantNames.iterator(); iter.hasNext();) {
       command.append(" \"");
       String curConstName = StringUtils.escapeDoubleQuotes("" + iter.next());
@@ -897,7 +1089,7 @@ public class CycAccess {
       name = name.substring(2);
     }
     CycConstant answer = CycObjectFactory.getCycConstantCacheByName(name);
-    if (answer != null) {
+    if (answer != null) { //@todo sometimes the cache is stale, and we ought to be able to force a look in the KB.
       return answer;
     }
     final String command = makeSubLStmt("find-constant", name);
@@ -1050,6 +1242,7 @@ public class CycAccess {
 
   /**
    * Adds #$ to string for all CycConstants mentioned in the string that don't already have them
+   *
    * @param str the String that will have #$'s added to it.
    *
    * @return a copy of str with #$'s added where appropriate.
@@ -1108,12 +1301,16 @@ public class CycAccess {
    * @param elCons the given list which names the functor and arguments
    *
    * @return a CycNart object from a Cons object that lists the names of its functor and its
-   *         arguments
+   * arguments
    */
-  public CycNart getCycNartFromCons(CycList elCons) {
-    return new CycNart(elCons);
+  public CycNart getCycNartFromCons(CycList elCons) throws UnknownHostException, IOException {
+    if (isReifiableFunction((CycObject) (elCons.get(0)))) {
+      return new CycNart(elCons);
+    } else {
+      return null;
+    }
   }
-
+  
   /**
    * Returns true if CycConstant BINARYPREDICATE relates CycFort ARG1 and CycFort ARG2.
    *
@@ -1122,7 +1319,7 @@ public class CycAccess {
    * @param arg2 the second argument related by the predicate
    *
    * @return true if CycConstant BINARYPREDICATE relates CycFort ARG1 and CycFort ARG2 otherwise
-   *         false
+   * false
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -1159,7 +1356,7 @@ public class CycAccess {
    * @param mt the relevant mt
    *
    * @return true if CycConstant BINARYPREDICATE relates CycFort ARG1 and CycFort ARG2 otherwise
-   *         false
+   * false
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -1172,7 +1369,8 @@ public class CycAccess {
           throws UnknownHostException, IOException, CycApiException {
     Object[] response = {null, null};
     final String command =
-            makeSubLStmt("pred-u-v-holds", binaryPredicate, arg1, arg2, makeELMt(mt));
+            makeSubLStmt("pred-u-v-holds", binaryPredicate, arg1, arg2,
+            makeELMt(mt));
     response = converse(command);
 
     if (response[0].equals(Boolean.TRUE)) {
@@ -1188,177 +1386,10 @@ public class CycAccess {
     }
   }
 
-  private String getGeneratedPhrase(CycObject cycObject, boolean precise, CycObject languageMt)
-          throws UnknownHostException, IOException, CycApiException {
-    //// Preconditions
-    if (cycObject == null) {
-      throw new NullPointerException("cycObject must not be null");
-    }
-    final NLFormat nlf = NLFormat.getInstance(this);
-    nlf.setPrecise(precise);
-    if (languageMt != null) {
-      nlf.setFormatLanguageMt(languageMt);
-    }
-    return nlf.format(cycObject);
-  }
+
 
   /**
-   * Gets the default generated phrase for a CycFort (intended for predicates).
-   *
-   * @param cycObject the predicate term for paraphrasing
-   *
-   * @return the default generated phrase for a CycFort
-   *
-   * @throws UnknownHostException if cyc server host not found on the network
-   * @throws IOException if a data communication error occurs
-   * @throws CycApiException if the api request results in a cyc server error
-   */
-  public String getGeneratedPhrase(CycObject cycObject)
-          throws UnknownHostException, IOException, CycApiException {
-    return getGeneratedPhrase(cycObject, true, null);
-  }
-
-  /**
-   * Gets the default generated phrase for a CycFort (intended for predicates),
-   * with precise paraphrasing off.
-   *
-   * @param cycObject the predicate term for paraphrasing
-   *
-   * @return the default generated phrase for a CycFort
-   *
-   * @throws UnknownHostException if cyc server host not found on the network
-   * @throws IOException if a data communication error occurs
-   * @throws CycApiException if the api request results in a cyc server error
-   */
-  /*
-  public String getImpreciseGeneratedPhrase(CycObject cycObject)
-  throws UnknownHostException, IOException, CycApiException {
-  //// Preconditions
-  if (cycObject == null) {
-  throw new NullPointerException("cycObject must not be null");
-  }
-  if (!(cycObject instanceof CycConstant
-  || cycObject instanceof CycNart
-  || cycObject instanceof CycList)) {
-  throw new IllegalArgumentException("cycObject must be a CycConstant, CycNart or CycList " + cycObject.cyclify());
-  }
-  String command = "(with-precise-paraphrase-off (generate-phrase "
-  + cycObject.stringApiValue() + "))";
-  return converseString(command);
-  }
-   */
-  /**
-   * Gets the default generated phrase for a CycFort (intended for predicates)
-   * from a particular MT with precise paraphrasing off.
-   *
-   * @param cycObject the predicate term for paraphrasing
-   *
-   * @return the default generated phrase for a CycFort
-   *
-   * @throws UnknownHostException if cyc server host not found on the network
-   * @throws IOException if a data communication error occurs
-   * @throws CycApiException if the api request results in a cyc server error
-   */
-  /*
-  public String getImpreciseGeneratedPhrase(CycObject cycObject, CycObject mt)
-  throws UnknownHostException, IOException, CycApiException {
-  //// Preconditions
-  if (cycObject == null) {
-  throw new NullPointerException("cycObject must not be null");
-  }
-  if (!(cycObject instanceof CycConstant
-  || cycObject instanceof CycNart
-  || cycObject instanceof CycList)) {
-  throw new IllegalArgumentException("cycObject must be a CycConstant, CycNart or CycList " + cycObject.cyclify());
-  }
-  String command = "(with-precise-paraphrase-off (generate-phrase "
-  + cycObject.stringApiValue() + " :DEFAULT nil " + mt.stringApiValue() + "))";
-  return converseString(command);
-  }
-   */
-  /**
-   * Gets the paraphrase for a Cyc assertion.
-   *
-   * @param assertion the assertion formula
-   *
-   * @return the paraphrase for a Cyc assertion
-   *
-   * @throws UnknownHostException if cyc server host not found on the network
-   * @throws IOException if a data communication error occurs
-   * @throws CycApiException if the api request results in a cyc server error
-   */
-  public String getParaphrase(CycList assertion)
-          throws UnknownHostException, IOException, CycApiException {
-    return getGeneratedPhrase(assertion);
-  }
-
-  /**
-   * Gets the paraphrase for a Cyc sentence.
-   *
-   * @param sentence the sentence
-   *
-   * @return the paraphrase
-   *
-   * @throws UnknownHostException if cyc server host not found on the network
-   * @throws IOException if a data communication error occurs
-   * @throws CycApiException if the api request results in a cyc server error
-   */
-  public String getParaphrase(CycFormulaSentence sentence)
-          throws UnknownHostException, IOException, CycApiException {
-    return getGeneratedPhrase(sentence);
-  }
-
-  /**
-   * Gets the imprecise paraphrase for a Cyc assertion.
-   *
-   * @param assertionString the assertion formula
-   *
-   * @return the imprecise paraphrase for a Cyc assertion
-   *
-   * @throws UnknownHostException if cyc server host not found on the network
-   * @throws IOException if a data communication error occurs
-   * @throws CycApiException if the api request results in a cyc server error
-   */
-  public String getImpreciseParaphrase(String assertionString)
-          throws UnknownHostException, IOException, CycApiException {
-    CycFormulaSentence assertion = this.makeCycSentence(assertionString);
-    return getGeneratedPhrase(assertion, false, null);
-  }
-
-  /**
-   * Gets the imprecise paraphrase for a Cyc assertion.
-   *
-   * @param assertion the assertion formula
-   *
-   * @return the imprecise paraphrase for a Cyc assertion
-   *
-   * @throws UnknownHostException if cyc server host not found on the network
-   * @throws IOException if a data communication error occurs
-   * @throws CycApiException if the api request results in a cyc server error
-   */
-  public String getImpreciseParaphrase(CycList assertion)
-          throws UnknownHostException, IOException, CycApiException {
-    return getGeneratedPhrase(assertion, false, null);
-  }
-
-  /**
-   * Gets the concise paraphrase for a Cyc sentence.
-   *
-   * @param sentence the assertion formula
-   *
-   * @return the imprecise paraphrase for a Cyc assertion
-   *
-   * @throws UnknownHostException if cyc server host not found on the network
-   * @throws IOException if a data communication error occurs
-   * @throws CycApiException if the api request results in a cyc server error
-   */
-  public String getImpreciseParaphrase(CycFormulaSentence sentence)
-          throws UnknownHostException, IOException, CycApiException {
-    return getGeneratedPhrase(sentence, false, null);
-  }
-
-  /**
-   * Gets the comment for a CycFort.  Embedded quotes are replaced by spaces.
+   * Gets the comment for a CycFort. Embedded quotes are replaced by spaces.
    *
    * @param cycObject the term for which the comment is sought
    *
@@ -1389,7 +1420,7 @@ public class CycAccess {
   /**
    * Gets the comment for a CycFort in the relevant mt. Embedded quotes are replaced by spaces.
    *
-   * @param cycFort the term for which the comment is sought
+   * @param cycObject the term for which the comment is sought
    * @param mt the relevant mt from which the comment is visible
    *
    * @return the comment for the given CycFort
@@ -1410,7 +1441,8 @@ public class CycAccess {
     }
     String script =
             "(clet ((comment-string \n"
-            + "         (comment " + cycObject.stringApiValue() + " " + makeELMt(mt).stringApiValue() + "))) \n"
+            + "         (comment " + cycObject.stringApiValue() + " " + makeELMt(
+            mt).stringApiValue() + "))) \n"
             + "  (fif comment-string \n"
             + "       (string-substitute \" \" \"\\\"\" comment-string) \n"
             + "       \"\"))";
@@ -1668,7 +1700,7 @@ public class CycAccess {
    * @param cycFort the given collection
    *
    * @return the list of the siblings (direct specs of the direct genls) for the given CycFort
-   *         collection
+   * collection
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -1687,7 +1719,7 @@ public class CycAccess {
    * @param mt the microtheory in which to look
    *
    * @return the list of the siblings (direct specs of the direct genls) for the given CycFort
-   *         collection
+   * collection
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -1707,7 +1739,7 @@ public class CycAccess {
    * @param cycFort the given collection
    *
    * @return the list of the siblings (direct specs of the direct genls) for the given CycFort
-   *         collection
+   * collection
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -1727,7 +1759,7 @@ public class CycAccess {
    * @param mt the microtheory in which to look
    *
    * @return the list of the siblings (direct specs of the direct genls) for the given CycFort
-   *         collection
+   * collection
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -1764,7 +1796,7 @@ public class CycAccess {
    * @param mt the relevant mt
    *
    * @return the list of all of the direct and indirect genls for a CycFort collection given a
-   *         relevant microtheory
+   * relevant microtheory
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -1830,7 +1862,7 @@ public class CycAccess {
    * @param genl the more general collection
    *
    * @return the list of all of the direct and indirect genls for a CycFort SPEC which are also
-   *         specs of CycFort GENL
+   * specs of CycFort GENL
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -1852,7 +1884,7 @@ public class CycAccess {
    * @param mt the relevant mt
    *
    * @return the list of all of the direct and indirect genls for a CycFort SPEC which are also
-   *         specs of CycFort GENL
+   * specs of CycFort GENL
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -1867,9 +1899,9 @@ public class CycAccess {
   }
 
   /**
-   * Gets the list of all of the dependent specs for a CycFort collection.  Dependent specs are
+   * Gets the list of all of the dependent specs for a CycFort collection. Dependent specs are
    * those direct and indirect specs of the collection such that every path connecting the spec to
-   * a genl of the collection passes through the collection.  In a typical taxomonmy it is
+   * a genl of the collection passes through the collection. In a typical taxomonmy it is
    * expected that all-dependent-specs gives the same result as all-specs.
    *
    * @param cycFort the given collection
@@ -1887,9 +1919,9 @@ public class CycAccess {
   }
 
   /**
-   * Gets the list of all of the dependent specs for a CycFort collection.  Dependent specs are
+   * Gets the list of all of the dependent specs for a CycFort collection. Dependent specs are
    * those direct and indirect specs of the collection such that every path connecting the spec to
-   * a genl of the collection passes through the collection.  In a typical taxomonmy it is
+   * a genl of the collection passes through the collection. In a typical taxomonmy it is
    * expected that all-dependent-specs gives the same result as all-specs.
    *
    * @param cycFort the given collection
@@ -1906,6 +1938,23 @@ public class CycAccess {
           throws UnknownHostException, IOException, CycApiException {
     return converseList("(all-dependent-specs " + cycFort.stringApiValue() + " "
             + makeELMt(mt).stringApiValue() + ")");
+  }
+
+  /**
+   * Gets a list of all KB assertions for an indexed term.
+   *
+   * @param cycFort the given indexed term
+   *
+   * @return the list of all CycAssertions for the term
+   *
+   * @throws UnknownHostException if cyc server host not found on the network
+   * @throws IOException if a data communication error occurs
+   * @throws CycApiException if the api request results in a cyc server error
+   */
+  public List<CycAssertion> getAllTermAssertions(CycFort cycFort) throws UnknownHostException, CycApiException, IOException {
+    final String command = SubLAPIHelper.makeSubLStmt("all-term-assertions",
+            cycFort);
+    return converseList(command);
   }
 
   /**
@@ -1988,7 +2037,8 @@ public class CycAccess {
     if (mt == null) {
       throw new NullPointerException("mt must not be null");
     }
-    return (CycFort) converseObject("(with-inference-mt-relevance " + makeELMt(mt).stringApiValue()
+    return (CycFort) converseObject("(with-inference-mt-relevance " + makeELMt(
+            mt).stringApiValue()
             + " (min-col " + collections.stringApiValue() + "))");
   }
 
@@ -2279,7 +2329,7 @@ public class CycAccess {
    * @param specMt the microtheory for spec-mt determination
    *
    * @return <tt>true</tt> if CycFort GENLMT is a genl-mt of CycFort SPECPRED in mt-mt (currently
-   *         #$UniversalVocabularyMt)
+   * #$UniversalVocabularyMt)
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -2300,7 +2350,7 @@ public class CycAccess {
    * @param collection2 the second given collection
    *
    * @return true if CycFort COLLECION1 and CycFort COLLECTION2 are tacitly coextensional via
-   *         mutual genls of each other, otherwise false
+   * mutual genls of each other, otherwise false
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -2322,7 +2372,7 @@ public class CycAccess {
    * @param mt the relevant mt
    *
    * @return true if CycFort COLLECION1 and CycFort COLLECTION2 are tacitly coextensional via
-   *         mutual genls of each other, otherwise false
+   * mutual genls of each other, otherwise false
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -2344,7 +2394,7 @@ public class CycAccess {
    * @param collection2 the second collection
    *
    * @return true if CycFort COLLECION1 and CycFort COLLECTION2 are asserted coextensional
-   *         otherwise false
+   * otherwise false
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -2377,7 +2427,7 @@ public class CycAccess {
    * @param mt the relevant mt
    *
    * @return true if CycFort COLLECION1 and CycFort COLLECTION2 are asserted coextensional
-   *         otherwise false
+   * otherwise false
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -2412,7 +2462,7 @@ public class CycAccess {
    * @param collection2 the second collection
    *
    * @return true if CycFort COLLECION1 and CycFort COLLECTION2 intersect with regard to all-specs
-   *         otherwise false
+   * otherwise false
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -2434,7 +2484,7 @@ public class CycAccess {
    * @param mt the relevant mt
    *
    * @return true if CycFort COLLECION1 and CycFort COLLECTION2 intersect with regard to all-specs
-   *         otherwise false
+   * otherwise false
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -2544,7 +2594,7 @@ public class CycAccess {
    * @param genl the more general collection
    *
    * @return the English parapharse of the justifications of why CycFort SPEC is a SPEC of CycFort
-   *         GENL
+   * GENL
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -2563,10 +2613,11 @@ public class CycAccess {
 
     CycList iter = listAnswer;
 
+    Paraphraser p = Paraphraser.getInstance(Paraphraser.ParaphrasableType.FORMULA);
     for (int i = 0; i < listAnswer.size(); i++) {
       CycList assertion = (CycList) ((CycList) listAnswer.get(
               i)).first();
-      answerPhrases.add(getParaphrase(assertion));
+      answerPhrases.add(p.paraphrase(assertion).getString());
     }
 
     return answerPhrases;
@@ -2582,7 +2633,7 @@ public class CycAccess {
    * @param mt the relevant mt
    *
    * @return the English parapharse of the justifications of why CycFort SPEC is a SPEC of CycFort
-   *         GENL
+   * GENL
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -2603,10 +2654,11 @@ public class CycAccess {
 
     CycList iter = listAnswer;
 
+    Paraphraser p = Paraphraser.getInstance(Paraphraser.ParaphrasableType.FORMULA);
     for (int i = 0; i < listAnswer.size(); i++) {
       CycList assertion = (CycList) ((CycList) listAnswer.get(
               i)).first();
-      answerPhrases.add(getParaphrase(assertion));
+      answerPhrases.add(p.paraphrase(assertion).getString());
     }
 
     return answerPhrases;
@@ -2620,7 +2672,7 @@ public class CycAccess {
    * @param collection2 the second collection
    *
    * @return the list of the justifications of why CycFort COLLECTION1 and a CycFort COLLECTION2
-   *         intersect
+   * intersect
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -2629,7 +2681,8 @@ public class CycAccess {
   public CycList getWhyCollectionsIntersect(CycFort collection1,
           CycFort collection2)
           throws UnknownHostException, IOException, CycApiException {
-    return converseList("(with-all-mts (why-collections-intersect? "
+    return converseList(
+            "(with-all-mts (why-collections-intersect? "
             + collection1.stringApiValue() + " " + collection2.stringApiValue() + "))");
   }
 
@@ -2642,7 +2695,7 @@ public class CycAccess {
    * @param mt the relevant mt
    *
    * @return the list of the justifications of why CycFort COLLECTION1 and a CycFort COLLECTION2
-   *         intersect
+   * intersect
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -2665,7 +2718,7 @@ public class CycAccess {
    * @param collection2 the second collection
    *
    * @return the English parapharse of the justifications of why CycFort COLLECTION1 and a CycFort
-   *         COLLECTION2 intersect
+   * COLLECTION2 intersect
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -2685,6 +2738,7 @@ public class CycAccess {
     }
 
     CycList iter = listAnswer;
+    Paraphraser p = Paraphraser.getInstance(Paraphraser.ParaphrasableType.FORMULA);
 
     for (int i = 0; i < listAnswer.size(); i++) {
       CycList assertion = (CycList) ((CycList) listAnswer.get(
@@ -2692,7 +2746,7 @@ public class CycAccess {
 
 
       //Log.current.println("assertion: " + assertion);
-      answerPhrases.add(getParaphrase(assertion));
+      answerPhrases.add(p.paraphrase(assertion).getString());
     }
 
     return answerPhrases;
@@ -2707,7 +2761,7 @@ public class CycAccess {
    * @param mt the relevant mt
    *
    * @return the English parapharse of the justifications of why CycFort COLLECTION1 and a CycFort
-   *         COLLECTION2 intersect
+   * COLLECTION2 intersect
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -2729,6 +2783,7 @@ public class CycAccess {
     }
 
     CycList iter = listAnswer;
+    Paraphraser p = Paraphraser.getInstance(Paraphraser.ParaphrasableType.FORMULA);
 
     for (int i = 0; i < listAnswer.size(); i++) {
       CycList assertion = (CycList) ((CycList) listAnswer.get(
@@ -2736,7 +2791,7 @@ public class CycAccess {
 
 
       //Log.current.println("assertion: " + assertion);
-      answerPhrases.add(getParaphrase(assertion));
+      answerPhrases.add(p.paraphrase(assertion).getString());
     }
 
     return answerPhrases;
@@ -2749,7 +2804,7 @@ public class CycAccess {
    * @param cycFort the given collection
    *
    * @return the list of the collection leaves (most specific of the all-specs) for a CycFort
-   *         collection
+   * collection
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -2757,7 +2812,8 @@ public class CycAccess {
    */
   public CycList getCollectionLeaves(CycFort cycFort)
           throws UnknownHostException, IOException, CycApiException {
-    return converseList("(with-all-mts (collection-leaves " + cycFort.stringApiValue() + "))");
+    return converseList(
+            "(with-all-mts (collection-leaves " + cycFort.stringApiValue() + "))");
   }
 
   /**
@@ -2768,7 +2824,7 @@ public class CycAccess {
    * @param mt the relevant mt
    *
    * @return the list of the collection leaves (most specific of the all-specs) for a CycFort
-   *         collection
+   * collection
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -2794,7 +2850,8 @@ public class CycAccess {
    */
   public CycList getLocalDisjointWith(CycObject cycFort)
           throws UnknownHostException, IOException, CycApiException {
-    return converseList("(with-all-mts (local-disjoint-with " + cycFort.stringApiValue() + "))");
+    return converseList(
+            "(with-all-mts (local-disjoint-with " + cycFort.stringApiValue() + "))");
   }
 
   /**
@@ -2864,7 +2921,7 @@ public class CycAccess {
    * @param cycFort the given term
    *
    * @return the list of the most specific collections (having no subsets) which contain a CycFort
-   *         term
+   * term
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -2872,7 +2929,8 @@ public class CycAccess {
    */
   public CycList getMinIsas(CycObject cycFort)
           throws UnknownHostException, IOException, CycApiException {
-    return converseList("(with-all-mts (min-isa " + cycFort.stringApiValue() + "))");
+    return converseList(
+            "(with-all-mts (min-isa " + cycFort.stringApiValue() + "))");
   }
 
   /**
@@ -2883,7 +2941,7 @@ public class CycAccess {
    * @param mt the relevant mt
    *
    * @return the list of the most specific collections (having no subsets) which contain a CycFort
-   *         term
+   * term
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -2909,7 +2967,8 @@ public class CycAccess {
    */
   public CycList getInstances(CycObject cycFort)
           throws UnknownHostException, IOException, CycApiException {
-    CycList result = converseList("(with-all-mts (instances " + cycFort.stringApiValue() + "))");
+    CycList result = converseList(
+            "(with-all-mts (instances " + cycFort.stringApiValue() + "))");
     return result;
   }
 
@@ -2939,7 +2998,7 @@ public class CycAccess {
    * @param cycFort the given term
    *
    * @return the list of the instance siblings of a CycFort, for all collections of which it is an
-   *         instance
+   * instance
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -2947,7 +3006,8 @@ public class CycAccess {
    */
   public CycList getInstanceSiblings(CycObject cycFort)
           throws UnknownHostException, IOException, CycApiException {
-    return converseList("(with-all-mts (instance-siblings " + cycFort.stringApiValue() + "))");
+    return converseList(
+            "(with-all-mts (instance-siblings " + cycFort.stringApiValue() + "))");
   }
 
   /**
@@ -2958,7 +3018,7 @@ public class CycAccess {
    * @param mt the relevant mt
    *
    * @return the list of the instance siblings of a CycFort, for all collections of which it is an
-   *         instance
+   * instance
    *
    * @throws IOException if a communications error occurs
    * @throws UnknownHostException if the Cyc server cannot be found
@@ -2977,7 +3037,7 @@ public class CycAccess {
    * @param cycFort the given term
    *
    * @return the list of the collections of which the CycFort is directly and indirectly an
-   *         instance
+   * instance
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -2997,7 +3057,7 @@ public class CycAccess {
    * @param mt the relevant mt
    *
    * @return the list of the collections of which the CycFort is directly and indirectly an
-   *         instance
+   * instance
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -3014,10 +3074,10 @@ public class CycAccess {
    * Gets a list of all the direct and indirect instances (individuals) for a CycFort collection.
    *
    * @param cycFort the collection for which all the direct and indirect instances (individuals)
-   *        are sought
+   * are sought
    *
    * @return the list of all the direct and indirect instances (individuals) for the given
-   *         collection
+   * collection
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -3025,7 +3085,8 @@ public class CycAccess {
    */
   public CycList getAllInstances(CycObject cycFort)
           throws UnknownHostException, IOException, CycApiException {
-    return converseList("(all-instances-in-all-mts " + cycFort.stringApiValue() + ")");
+    return converseList(
+            "(all-instances-in-all-mts " + cycFort.stringApiValue() + ")");
   }
 
   /**
@@ -3062,7 +3123,8 @@ public class CycAccess {
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error given collection
    */
-  public CycList getAllQuotedInstances(final CycObject cycFort, final CycObject mt)
+  public CycList getAllQuotedInstances(final CycObject cycFort,
+          final CycObject mt)
           throws UnknownHostException, IOException, CycApiException {
     return getAllQuotedInstances(cycFort, mt, 0);
   }
@@ -3082,10 +3144,12 @@ public class CycAccess {
    * @throws CycApiException if the api request results in a cyc server error given collection
    * @throws TimeOutException if the calculation times out
    */
-  public CycList getAllQuotedInstances(final CycObject cycFort, final CycObject mt,
+  public CycList getAllQuotedInstances(final CycObject cycFort,
+          final CycObject mt,
           final long timeoutMsecs)
           throws UnknownHostException, IOException, CycApiException, TimeOutException {
-    final CycVariable queryVariable = CycObjectFactory.makeCycVariable("?QUOTED-INSTANCE");
+    final CycVariable queryVariable = CycObjectFactory.makeCycVariable(
+            "?QUOTED-INSTANCE");
     final CycFormulaSentence query = CycFormulaSentence.makeCycFormulaSentence(
             getKnownConstantByName("quotedIsa"), queryVariable, cycFort);
     return queryVariable(queryVariable, query, makeELMt(mt), null, timeoutMsecs);
@@ -3156,6 +3220,31 @@ public class CycAccess {
   }
 
   /**
+   * Returns true if CycFort TERM is provably not a instance of CycFort COLLECTION, 
+   * using the given microtheory.
+   * Method implementation optimised for the binary api.
+   *
+   * @param term the term
+   * @param collection the collection
+   * @param mt the microtheory in which the ask is performed
+   *
+   * @return <tt>true</tt> if CycFort TERM is provably not a instance of CycFort COLLECTION
+   *
+   * @throws UnknownHostException if cyc server host not found on the network
+   * @throws IOException if a data communication error occurs
+   * @throws CycApiException if the api request results in a cyc server error
+   */
+  public boolean provablyNotIsa(CycObject term,
+          CycObject collection,
+          CycObject mt)
+          throws UnknownHostException, IOException, CycApiException {
+    final String command = "(not-isa? " + term.stringApiValue() + " "
+            + collection.stringApiValue() + " " + makeELMt(mt).stringApiValue() + ")";
+    return converseBoolean(command);
+  }
+
+  
+  /**
    * Returns true if the quoted CycFort TERM is a instance of CycFort COLLECTION, in any microtheory.
    * Method implementation optimised for the binary api.
    *
@@ -3180,7 +3269,7 @@ public class CycAccess {
    * @param term the term
    * @param collection the collection
    * @param timeoutMsecs the time in milliseconds to wait before giving up, set to
-   * zero to wait  forever.
+   * zero to wait forever.
    *
    * @return <tt>true</tt> if the quoted CycFort TERM is a instance of CycFort COLLECTION
    *
@@ -3189,7 +3278,8 @@ public class CycAccess {
    * @throws CycApiException if the api request results in a cyc server error
    * @throws TimeOutException if the calculation times out
    */
-  public boolean isQuotedIsa(final CycObject term, final CycObject collection, long timeoutMsecs)
+  public boolean isQuotedIsa(final CycObject term, final CycObject collection,
+          long timeoutMsecs)
           throws UnknownHostException, IOException, CycApiException, TimeOutException {
     //// Preconditions
     if (term == null) {
@@ -3218,7 +3308,8 @@ public class CycAccess {
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
    */
-  public boolean isQuotedIsa(final CycObject term, final CycObject collection, final CycObject mt)
+  public boolean isQuotedIsa(final CycObject term, final CycObject collection,
+          final CycObject mt)
           throws UnknownHostException, IOException, CycApiException, TimeOutException {
     return isQuotedIsa(term, collection, mt, 0);
   }
@@ -3240,7 +3331,8 @@ public class CycAccess {
    * @throws CycApiException if the api request results in a cyc server error
    * @throws TimeOutException if the calculation times out
    */
-  public boolean isQuotedIsa(final CycObject term, final CycObject collection, final CycObject mt, long timeoutMsecs)
+  public boolean isQuotedIsa(final CycObject term, final CycObject collection,
+          final CycObject mt, long timeoutMsecs)
           throws UnknownHostException, IOException, CycApiException, TimeOutException {
     if (term == null) {
       throw new NullPointerException("Term must not be null.");
@@ -3265,7 +3357,7 @@ public class CycAccess {
    * @param genl the more general collection
    *
    * @return the list of the justifications of why CycFort TERM is an instance of CycFort
-   *         COLLECTION
+   * COLLECTION
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -3288,7 +3380,7 @@ public class CycAccess {
    * @param mt the relevant mt
    *
    * @return the list of the justifications of why CycFort TERM is an instance of CycFort
-   *         COLLECTION
+   * COLLECTION
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -3305,13 +3397,13 @@ public class CycAccess {
   /**
    * Gets the English parapharse of the justifications of why CycFort TERM is an instance of
    * CycFort COLLECTION. getWhyGenlParaphase("Brazil", "Country") --> "Brazil is an independent
-   * country" "an  independent country is a kind of country"
+   * country" "an independent country is a kind of country"
    *
    * @param spec the specialized collection
    * @param genl the more general collection
    *
    * @return the English parapharse of the justifications of why CycFort TERM is an instance of
-   *         CycFort COLLECTION
+   * CycFort COLLECTION
    *
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
@@ -3327,11 +3419,12 @@ public class CycAccess {
     if (listAnswer.size() == 0) {
       return answerPhrases;
     }
+    Paraphraser p = Paraphraser.getInstance(Paraphraser.ParaphrasableType.FORMULA);
 
     for (int i = 0; i < listAnswer.size(); i++) {
       CycList assertion = (CycList) ((CycList) listAnswer.get(
               i)).first();
-      answerPhrases.add(getParaphrase(assertion));
+      answerPhrases.add(p.paraphrase(assertion).getString());
     }
 
     return answerPhrases;
@@ -3340,14 +3433,14 @@ public class CycAccess {
   /**
    * Gets the English parapharse of the justifications of why CycFort TERM is an instance of
    * CycFort COLLECTION. getWhyGenlParaphase("Brazil", "Country") --> "Brazil is an independent
-   * country" "an  independent country is a kind of country"
+   * country" "an independent country is a kind of country"
    *
    * @param spec the specialized collection
    * @param genl the more general collection
    * @param mt the relevant mt
    *
    * @return the English parapharse of the justifications of why CycFort TERM is an instance of
-   *         CycFort COLLECTION
+   * CycFort COLLECTION
    *
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
@@ -3364,11 +3457,12 @@ public class CycAccess {
     if (listAnswer.size() == 0) {
       return answerPhrases;
     }
+    Paraphraser p = Paraphraser.getInstance(Paraphraser.ParaphrasableType.FORMULA);
 
     for (int i = 0; i < listAnswer.size(); i++) {
       CycList assertion = (CycList) ((CycList) listAnswer.get(
               i)).first();
-      answerPhrases.add(getParaphrase(assertion));
+      answerPhrases.add(p.paraphrase(assertion).getString());
     }
 
     return answerPhrases;
@@ -3419,11 +3513,13 @@ public class CycAccess {
       final String script =
               "(clet ((canonicalized-predicate (canonicalize-term " + predicate.stringApiValue() + ")))"
               + "  (pif (fort-p canonicalized-predicate)"
-              + "    (remove-duplicates (with-all-mts (genl-predicates canonicalized-predicate " + makeELMt(mt).stringApiValue() + ")))"
+              + "    (remove-duplicates (with-all-mts (genl-predicates canonicalized-predicate " + makeELMt(
+              mt).stringApiValue() + ")))"
               + "    nil))";
       return converseList(script);
     } else {
-      return converseList("(genl-predicates " + predicate.stringApiValue() + " " + makeELMt(mt).stringApiValue() + ")");
+      return converseList("(genl-predicates " + predicate.stringApiValue() + " " + makeELMt(
+              mt).stringApiValue() + ")");
     }
   }
 
@@ -3470,7 +3566,7 @@ public class CycAccess {
    * @param cycFort the predicate
    *
    * @return the list of all of the direct and indirect spec-preds for the given predicate in all
-   *         microtheories.
+   * microtheories.
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -3509,7 +3605,7 @@ public class CycAccess {
    * @param cycFort the predicate
    *
    * @return the list of all of the direct and indirect spec-inverses for the given predicate in
-   *         all microtheories.
+   * all microtheories.
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -3548,7 +3644,7 @@ public class CycAccess {
    * @param mt the microtheory
    *
    * @return the list of all of the direct and indirect specs-mts for the given microtheory in
-   *         mt-mt (currently #$UniversalVocabularyMt)
+   * mt-mt (currently #$UniversalVocabularyMt)
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -3593,17 +3689,17 @@ public class CycAccess {
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
    */
-  public CycList getArg1Isas(final CycObject cycObject,
+  public CycList getArg1Isas(final CycObject predicate,
           final CycObject mt)
           throws UnknownHostException, IOException, CycApiException {
     //// Preconditions
-    if (cycObject == null) {
+    if (predicate == null) {
       throw new NullPointerException("cycObject must not be null");
     }
     if (mt == null) {
       throw new NullPointerException("mt must not be null");
     }
-    return converseList("(arg1-isa " + cycObject.stringApiValue() + " "
+    return converseList("(arg1-isa " + predicate.stringApiValue() + " "
             + makeELMt(mt).stringApiValue() + ")");
   }
 
@@ -3612,7 +3708,7 @@ public class CycAccess {
    *
    * @param cycObject the predicate for which argument 2 contraints are sought.
    *
-   * @return the list of the arg1Isas for a CycConstant predicate
+   * @return the list of the arg2Isas for a CycConstant predicate
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -3777,7 +3873,7 @@ public class CycAccess {
   }
 
   /**
-   * Gets the list of the interArgIsa1-2 isa constraint pairs for the given predicate.  Each item
+   * Gets the list of the interArgIsa1-2 isa constraint pairs for the given predicate. Each item
    * of the returned list is a pair (arg1-isa arg2-isa) which means that when (#$isa arg1
    * arg1-isa) holds, (#$isa arg2 arg2-isa) must also hold for (predicate arg1 arg2 ..) to be well
    * formed.
@@ -3799,7 +3895,7 @@ public class CycAccess {
   }
 
   /**
-   * Gets the list of the interArgIsa1-2 isa constraint pairs for the given predicate.  Each item
+   * Gets the list of the interArgIsa1-2 isa constraint pairs for the given predicate. Each item
    * of the returned list is a pair (arg1-isa arg2-isa) which means that when (#$isa arg1
    * arg1-isa) holds, (#$isa arg2 arg2-isa) must also hold for (predicate arg1 arg2 ..) to be well
    * formed.
@@ -3925,7 +4021,7 @@ public class CycAccess {
    *
    * @param predicate the given predicate term
    * @param argPosition the argument position for which the genls argument constraints are sought
-   *        (position 1 = first argument)
+   * (position 1 = first argument)
    *
    * @return the list of the argNGenls for a CycConstant predicate
    *
@@ -3945,7 +4041,7 @@ public class CycAccess {
    *
    * @param predicate the given predicate term
    * @param argPosition the argument position for which the genls argument constraints are sought
-   *        (position 1 = first argument)
+   * (position 1 = first argument)
    * @param mt the relevant mt
    *
    * @return the list of the argNGenls for a CycConstant predicate
@@ -3980,7 +4076,8 @@ public class CycAccess {
       throw new NullPointerException("cycObject must not be null");
     }
     verifyPossibleDenotationalTerm(cycObject);
-    return converseList("(with-all-mts (arg1-format " + cycObject.stringApiValue() + "))");
+    return converseList(
+            "(with-all-mts (arg1-format " + cycObject.stringApiValue() + "))");
   }
 
   /**
@@ -4028,7 +4125,8 @@ public class CycAccess {
       throw new NullPointerException("cycObject must not be null");
     }
     verifyPossibleDenotationalTerm(cycObject);
-    return converseList("(with-all-mts (arg2-format " + cycObject.stringApiValue() + "))");
+    return converseList(
+            "(with-all-mts (arg2-format " + cycObject.stringApiValue() + "))");
   }
 
   /**
@@ -4100,7 +4198,7 @@ public class CycAccess {
   }
 
   /**
-   * Gets a list of the coExtensionals for a CycFort.  Limited to 120 seconds.
+   * Gets a list of the coExtensionals for a CycFort. Limited to 120 seconds.
    *
    * @param cycObject the given collection term
    *
@@ -4116,7 +4214,7 @@ public class CycAccess {
   }
 
   /**
-   * Gets a list of the coExtensionals for a CycFort.  Limited to 120 seconds.
+   * Gets a list of the coExtensionals for a CycFort. Limited to 120 seconds.
    *
    * @param cycObject the given collection term
    * @param timeoutMsecs the time to wait before giving up
@@ -4134,7 +4232,7 @@ public class CycAccess {
   }
 
   /**
-   * Gets a list of the coExtensionals for a CycFort.  Limited to 120 seconds.
+   * Gets a list of the coExtensionals for a CycFort. Limited to 120 seconds.
    *
    * @param cycObject the given collection term
    * @param mt the microtheory
@@ -4153,7 +4251,7 @@ public class CycAccess {
   /**
    * Gets a list of the coExtensionals for a CycFort.
    *
-   * @param cycFort the given collection term
+   * @param cycObject the given collection term
    * @param mt the relevant mt for inference
    *
    * @return a list of the coExtensionals for a CycFort
@@ -4179,7 +4277,8 @@ public class CycAccess {
               + "    (#$coextensionalSetOrCollections " + cycObject.cyclify() + " ?X)))";
       final CycFormulaSentence query = makeCycSentence(queryString);
       final CycVariable queryVariable = CycObjectFactory.makeCycVariable("?X");
-      answer = queryVariable(queryVariable, query, makeELMt(mt), null, timeoutMsecs);
+      answer = queryVariable(queryVariable, query, makeELMt(mt), null,
+              timeoutMsecs);
     } catch (IOException e) {
       Log.current.println("getCoExtensionals - ignoring:\n" + e.getMessage());
       return new CycList();
@@ -4191,7 +4290,7 @@ public class CycAccess {
   /**
    * Returns true if the given term is a microtheory.
    *
-   * @param cycFort the constant for determination as a microtheory
+   * @param term the constant for determination as a microtheory
    *
    * @return <tt>true</tt> iff cycConstant is a microtheory
    *
@@ -4199,9 +4298,10 @@ public class CycAccess {
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
    */
-  public boolean isMicrotheory(CycFort cycFort)
+  public boolean isMicrotheory(CycObject term)
           throws UnknownHostException, IOException, CycApiException {
-    return converseBoolean("(isa-in-any-mt? " + cycFort.stringApiValue() + " #$Microtheory)");
+    return converseBoolean(
+            "(isa-in-any-mt? " + term.stringApiValue() + " #$Microtheory)");
   }
 
   /**
@@ -4222,7 +4322,8 @@ public class CycAccess {
       throw new NullPointerException("cycObject must not be null");
     }
     verifyPossibleDenotationalTerm(cycObject);
-    return converseBoolean("(isa-in-any-mt? " + cycObject.stringApiValue() + " #$Collection)");
+    return converseBoolean(
+            "(isa-in-any-mt? " + cycObject.stringApiValue() + " #$Collection)");
   }
 
   /**
@@ -4247,13 +4348,14 @@ public class CycAccess {
     if (mt == null) {
       throw new NullPointerException("mt must not be null");
     }
-    return converseBoolean("(isa? " + cycObject.stringApiValue() + " #$Collection " + makeELMt(mt).stringApiValue() + ")");
+    return converseBoolean("(isa? " + cycObject.stringApiValue() + " #$Collection " + makeELMt(
+            mt).stringApiValue() + ")");
   }
 
   /**
    * Returns true if the given object is a Collection.
    *
-   * @param term the given term
+   * @param obj the given term
    *
    * @return true if the given term is a Collection
    *
@@ -4331,7 +4433,8 @@ public class CycAccess {
       throw new NullPointerException("cycObject must not be null");
     }
     verifyPossibleDenotationalTerm(cycObject);
-    return converseBoolean("(isa-in-any-mt? " + cycObject.stringApiValue() + " #$Individual)");
+    return converseBoolean(
+            "(isa-in-any-mt? " + cycObject.stringApiValue() + " #$Individual)");
   }
 
   /**
@@ -4356,13 +4459,14 @@ public class CycAccess {
     if (mt == null) {
       throw new NullPointerException("mt must not be null");
     }
-    return converseBoolean("(isa? " + cycObject.stringApiValue() + " #$Individual " + makeELMt(mt).stringApiValue() + ")");
+    return converseBoolean("(isa? " + cycObject.stringApiValue() + " #$Individual " + makeELMt(
+            mt).stringApiValue() + ")");
   }
 
   /**
    * Returns true if the given is a Function.
    *
-   * @param cycFort the given term
+   * @param cycObj the given term
    *
    * @return true if the given is a Function
    *
@@ -4370,12 +4474,29 @@ public class CycAccess {
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
    */
-  public boolean isFunction(CycFort cycFort)
+  public boolean isFunction(CycObject cycObj)
           throws UnknownHostException, IOException, CycApiException {
-    return converseBoolean("(isa-in-any-mt? " + cycFort.stringApiValue()
+    return converseBoolean("(isa-in-any-mt? " + cycObj.stringApiValue()
             + " #$Function-Denotational)");
   }
-
+  
+  /**
+   * Returns true if the given is a Function.
+   *
+   * @param cycObj the given term
+   *
+   * @return true if the given is a ReifiableFunction
+   *
+   * @throws UnknownHostException if cyc server host not found on the network
+   * @throws IOException if a data communication error occurs
+   * @throws CycApiException if the api request results in a cyc server error
+   */ 
+  public boolean isReifiableFunction(CycObject cycObj)
+          throws UnknownHostException, IOException, CycApiException {
+    return converseBoolean("(isa-in-any-mt? " + cycObj.stringApiValue()
+            + " #$ReifiableFunction)");
+  }
+  
   /**
    * Returns true if the given term is an evaluatable predicate.
    *
@@ -4389,7 +4510,8 @@ public class CycAccess {
    */
   public boolean isEvaluatablePredicate(CycFort predicate)
           throws UnknownHostException, IOException, CycApiException {
-    final String command = makeSubLStmt("with-all-mts", makeNestedSubLStmt("evaluatable-predicate?", predicate));
+    final String command = makeSubLStmt("with-all-mts", makeNestedSubLStmt(
+            "evaluatable-predicate?", predicate));
     return converseBoolean(command);
   }
 
@@ -4411,7 +4533,8 @@ public class CycAccess {
       throw new NullPointerException("cycObject must not be null");
     }
     verifyPossibleDenotationalTerm(cycObject);
-    return converseBoolean("(isa-in-any-mt? " + cycObject.stringApiValue() + " #$Predicate)");
+    return converseBoolean(
+            "(isa-in-any-mt? " + cycObject.stringApiValue() + " #$Predicate)");
   }
 
   /**
@@ -4436,7 +4559,8 @@ public class CycAccess {
     if (mt == null) {
       throw new NullPointerException("mt must not be null");
     }
-    return converseBoolean("(isa? " + cycObject.stringApiValue() + " #$Predicate " + makeELMt(mt).stringApiValue() + ")");
+    return converseBoolean("(isa? " + cycObject.stringApiValue() + " #$Predicate " + makeELMt(
+            mt).stringApiValue() + ")");
   }
 
   public boolean isPredicate(final Object object, final CycObject mt) throws UnknownHostException, IOException, CycApiException {
@@ -4511,7 +4635,8 @@ public class CycAccess {
 
   protected void verifyPossibleDenotationalTerm(CycObject cycObject) throws IllegalArgumentException {
     if (!(cycObject instanceof CycDenotationalTerm || cycObject instanceof CycList)) {
-      throw new IllegalArgumentException("cycObject must be a Cyc denotational term " + cycObject.cyclify());
+      throw new IllegalArgumentException(
+              "cycObject must be a Cyc denotational term " + cycObject.cyclify());
     }
   }
 
@@ -4533,7 +4658,8 @@ public class CycAccess {
       throw new NullPointerException("cycObject must not be null");
     }
     verifyPossibleDenotationalTerm(cycObject);
-    return converseBoolean("(binary-predicate? " + cycObject.stringApiValue() + ")");
+    return converseBoolean(
+            "(binary-predicate? " + cycObject.stringApiValue() + ")");
   }
 
   /**
@@ -4568,7 +4694,8 @@ public class CycAccess {
    */
   public boolean isValidConstantName(String candidateName)
           throws UnknownHostException, IOException, CycApiException {
-    return converseBoolean("(new-constant-name-spec-p \"" + candidateName + "\")");
+    return converseBoolean(
+            "(new-constant-name-spec-p " + DefaultCycObject.stringApiValue(candidateName) + ")");
   }
 
   /**
@@ -4601,7 +4728,8 @@ public class CycAccess {
    */
   public boolean isQuotedCollection(CycFort cycFort)
           throws UnknownHostException, IOException, CycApiException {
-    throw new CycApiException("quotedCollection is no longer supported, see Quote");
+    throw new CycApiException(
+            "quotedCollection is no longer supported, see Quote");
   }
 
   /**
@@ -4620,14 +4748,16 @@ public class CycAccess {
   public boolean isQuotedCollection(CycFort cycFort,
           CycObject mt)
           throws UnknownHostException, IOException, CycApiException {
-    throw new CycApiException("quotedCollection is no longer supported, see Quote");
+    throw new CycApiException(
+            "quotedCollection is no longer supported, see Quote");
   }
 
   /** @return true iff expression is free of all variables.
    * @throws IOException if a data communication error occurs
    */
   public boolean isGround(CycObject expression) throws IOException {
-    return converseBoolean("(ground? " + DefaultCycObject.stringApiValue(expression) + ")");
+    return converseBoolean("(ground? " + DefaultCycObject.stringApiValue(
+            expression) + ")");
   }
 
   /**
@@ -4659,7 +4789,8 @@ public class CycAccess {
   public CycList getPublicConstants()
           throws UnknownHostException, IOException, CycApiException {
     // #$PublicConstant
-    return getKbSubset(getKnownConstantByGuid("bd7abd90-9c29-11b1-9dad-c379636f7270"));
+    return getKbSubset(getKnownConstantByGuid(
+            "bd7abd90-9c29-11b1-9dad-c379636f7270"));
   }
 
   /**
@@ -4691,12 +4822,37 @@ public class CycAccess {
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
    */
-  public synchronized void rename(final CycConstant cycConstant, final String newName)
+  public synchronized void rename(final CycConstant cycConstant,
+          final String newName)
           throws UnknownHostException, IOException, CycApiException {
-    String command = wrapBookkeeping("(ke-rename-now " + cycConstant.stringApiValue() + "\"" + newName + "\")");
+    rename(cycConstant, newName, true, true);
+  }
+
+  /**
+   * Renames the given constant.
+   *
+   * @param cycConstant the constant term to be renamed
+   * @param newName the new constant name
+   * @param bookkeeping Should bookkeeping data be recorded?
+   * @param transcript Should the KB operation(s) be transcripted?
+   *
+   * @throws UnknownHostException if cyc server host not found on the network
+   * @throws IOException if a data communication error occurs
+   * @throws CycApiException if the api request results in a cyc server error
+   */
+  public synchronized void rename(final CycConstant cycConstant,
+          final String newName, final boolean bookkeeping,
+          final boolean transcript)
+          throws UnknownHostException, IOException, CycApiException {
+    final String fn = (transcript) ? "ke-rename-now" : "rename-constant";
+    String command = "(" + fn + " " + cycConstant.stringApiValue() + "\"" + newName + "\")";
+    if (bookkeeping) {
+      command = wrapBookkeeping(command);
+    }
     Object result = converseObject(command);
     if (result.equals(CycObjectFactory.nil)) {
-      throw new CycApiException(newName + " is an invalid new name for " + cycConstant.cyclify());
+      throw new CycApiException(
+              newName + " is an invalid new name for " + cycConstant.cyclify());
     }
     CycObjectFactory.removeCaches(cycConstant);
     cycConstant.setName(newName);
@@ -4704,23 +4860,33 @@ public class CycAccess {
   }
 
   /**
-   * Kills a Cyc constant.  If CYCCONSTANT is a microtheory, then all the contained assertions are
-   * deleted from the KB, the Cyc Truth Maintenance System (TML) will automatically delete any
-   * derived assertions whose sole support is the killed term(s).
-   *
-   * @param cycConstant the constant term to be removed from the KB
-   *
-   * @throws UnknownHostException if cyc server host not found on the network
-   * @throws IOException if a data communication error occurs
-   * @throws CycApiException if the api request results in a cyc server error
+   * Merge assertions of KILL-FORT onto KEEP-FORT and kill KILL-FORT.
+   * 
+   * @return 0 boolean ;; t if success, o/w nil
+   * @return 1 list ;; error list of form (ERROR-TYPE ERROR-STRING) otherwise.
+   * @param KILL-FORT fort
+   * @param KEEP-FORT fort
+   * @note Assumes cyclist is ok.
+   * @note The salient property of this function is that it never throws an error.
+   * @owner jantos
+   * @privacy done
    */
-  public synchronized void kill(CycConstant cycConstant)
+  public synchronized boolean merge(CycFort killFort, CycFort keepFort)
           throws UnknownHostException, IOException, CycApiException {
-    String command = wrapBookkeeping("(ke-kill-now " + cycConstant.stringApiValue() + ")");
-    converseBoolean(command);
-    CycObjectFactory.removeCaches(cycConstant);
+    String command = "(ke-merge-now " + killFort.stringApiValue() + " " + keepFort.stringApiValue() + ")";
+    Object[] response = {null, null};
+    response = converse(command);
+    if (response[0].equals(Boolean.TRUE)) {
+      if (response[1].equals(CycObjectFactory.nil)) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      throw new ConverseException(command, this , response);
+    }
   }
-
+  
   /**
    * Kills a Cyc constant without issuing a transcript operation. If CYCCONSTANT is a microtheory,
    * then all the contained assertions are deleted from the KB, the Cyc Truth Maintenance System
@@ -4735,13 +4901,11 @@ public class CycAccess {
    */
   public synchronized void killWithoutTranscript(CycConstant cycConstant)
           throws UnknownHostException, IOException, CycApiException {
-    String command = wrapBookkeeping("(cyc-kill " + cycConstant.stringApiValue() + ")");
-    converseBoolean(command);
-    CycObjectFactory.removeCaches(cycConstant);
+    kill(cycConstant, false, false);
   }
 
   /**
-   * Kills the given Cyc constants.  If CYCCONSTANT is a microtheory, then all the contained
+   * Kills the given Cyc constants. If CYCCONSTANT is a microtheory, then all the contained
    * assertions are deleted from the KB, the Cyc Truth Maintenance System (TMS) will automatically
    * delete any derived assertions whose sole support is the killed term(s).
    *
@@ -4759,7 +4923,7 @@ public class CycAccess {
   }
 
   /**
-   * Kills the given Cyc constants.  If CYCCONSTANT is a microtheory, then all the contained
+   * Kills the given Cyc constants. If CYCCONSTANT is a microtheory, then all the contained
    * assertions are deleted from the KB, the Cyc Truth Maintenance System (TMS) will automatically
    * delete any derived assertions whose sole support is the killed term(s).
    *
@@ -4777,7 +4941,7 @@ public class CycAccess {
   }
 
   /**
-   * Kills a Cyc NART (Non Atomic Reified Term).  If CYCFORT is a microtheory, then all the
+   * Kills a reified Cyc term. If CYCFORT is a microtheory, then all the
    * contained assertions are deleted from the KB, the Cyc Truth Maintenance System (TMS) will
    * automatically delete any derived assertions whose sole support is the killed term(s).
    *
@@ -4789,28 +4953,96 @@ public class CycAccess {
    */
   public synchronized void kill(CycFort cycFort)
           throws UnknownHostException, IOException, CycApiException {
-    if (cycFort instanceof CycConstant) {
-      kill((CycConstant) cycFort);
-    } else {
-      String command = wrapBookkeeping("(ke-kill-now " + cycFort.stringApiValue() + ")");
-      converseBoolean(command);
-    }
+    kill(cycFort, true, true);
   }
 
   /**
-   * Returns the value of the Cyclist.
+   * Kills a reified Cyc term. If CYCFORT is a microtheory, then all the
+   * contained assertions are deleted from the KB, the Cyc Truth Maintenance System (TMS) will
+   * automatically delete any derived assertions whose sole support is the killed term(s).
    *
-   * @return the value of the Cyclist
+   * @param cycFort the NART term to be removed from the KB
+   *
+   * @throws UnknownHostException if cyc server host not found on the network
+   * @throws IOException if a data communication error occurs
+   * @throws CycApiException if the api request results in a cyc server error
    */
-  public CycFort getCyclist() {
+  public synchronized void kill(CycFort cycFort, boolean bookkeeping,
+          boolean transcript)
+          throws UnknownHostException, IOException, CycApiException {
+    final String fn = (transcript) ? "ke-kill-now" : "cyc-kill";
+    String command = "(" + fn + " " + cycFort.stringApiValue() + ")";
+    if (bookkeeping) {
+      command = wrapBookkeeping(command);
+    }
+    converseBoolean(command);
+    if (cycFort instanceof CycConstant) {
+      CycObjectFactory.removeCaches((CycConstant) cycFort);
+    }
+  }
+  
+  /**
+   * Clear the cyclist value for the current thread.  If the current CycAccess has a default
+   * Cyclist, that cyclist will now become the current cyclist.
+   */
+  public static void clearCurrentCyclist() {
+    currentCyclist.set(null);
+  }
+  
+  /**
+   *
+   * Specify that this thread should use a particular Cyclist.  This value will override (for the current thread only) any
+   * value that might have been set via {@link #setCyclist}.
+   * @param cyclist the cyclist for the current thread
+   */
+  public static CycFort setCurrentCyclist(CycFort cyclist) {
+    currentCyclist.set(cyclist);
     return cyclist;
   }
 
   /**
-   * Sets the value of the Cyclist, whose identity will be attached via #$myCreator bookkeeping
-   * assertions to new KB entities created in this session.
+   * Specify that this thread should use a particular Cyclist. This value will override (for the
+   * current thread only) any value that might have been set via {@link #setCyclist}.
    *
-   * @param cyclistName the name of the cyclist term
+   * Will throw an exception if there is no CycAccess set for the current thread.
+   *
+   * @param cyclist String representation of the cyclist for the current thread (with or without
+   * '#$' prefixes)
+   */
+  public static CycFort setCurrentCyclist(String cyclist) throws CycApiException, IOException {
+    Object term = CycAccess.getCurrent().getHLCycTerm(cyclist);
+    CycFort newCyclist = null;
+    if (term instanceof CycFort) {
+      newCyclist = (CycFort) term;
+    } else {
+      // see if it is a blank name
+      newCyclist = CycAccess.getCurrent().find(cyclist);
+    }
+    if (newCyclist == null) {
+      throw new CycApiException(
+              "Cannot interpret " + cyclist + " as a cyclist.");
+    }
+    return setCurrentCyclist(newCyclist);
+  }
+  
+
+  /**
+   * Returns the value of the Cyclist.  Returns the value from {@link #setCurrentCyclist} if one has been set.
+   * Otherwise, returns the default as set with {@link @setCyclist}.  If that also has not been set,
+   * return null.
+   *
+   * @return the value of the default Cyclist
+   */
+  public CycFort getCyclist() {    
+    return (currentCyclist.get() != null) ? currentCyclist.get() : cyclist;
+  }
+  
+  /**
+   * Sets the value of the default Cyclist for this CycAccess, whose identity will be attached via #$myCreator bookkeeping
+   * assertions to new KB entities created in this session.  Setting the current Cyclist (via {@link #setCurrentCyclist} will
+   * override this default Cyclist within that thread.
+   *
+   * @param cyclistName the name of the default cyclist term
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -4830,14 +5062,16 @@ public class CycAccess {
       newCyclist = find(cyclistName);
     }
     if (newCyclist == null) {
-      throw new CycApiException("Cannot interpret " + cyclistName + " as a cyclist.");
+      throw new CycApiException(
+              "Cannot interpret " + cyclistName + " as a cyclist.");
     }
     setCyclist(newCyclist);
   }
 
   /**
-   * Sets the value of the Cyclist, whose identity will be attached via #$myCreator bookkeeping
-   * assertions to new KB entities created in this session.
+   * Sets the value of the default Cyclist, whose identity will be attached via #$myCreator bookkeeping
+   * assertions to new KB entities created in this session.  Setting the current Cyclist (via {@link #setCurrentCyclist})
+   * will override the default cyclist within that thread.
    *
    * @param cyclist the cyclist term
    */
@@ -4908,7 +5142,7 @@ public class CycAccess {
   public void assertWithTranscript(String sentence,
           CycObject mt)
           throws UnknownHostException, IOException, CycApiException {
-    assertSentence(sentence, makeELMt(mt), false, true);
+    assertSentence(sentence, makeELMt(mt), null, null, false, true);
   }
 
   /**
@@ -4936,7 +5170,8 @@ public class CycAccess {
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
    */
-  public void assertWithTranscriptAndBookkeeping(CycFormulaSentence sentence, CycObject mt)
+  public void assertWithTranscriptAndBookkeeping(CycFormulaSentence sentence,
+          CycObject mt)
           throws UnknownHostException, IOException, CycApiException {
     assertWithTranscriptAndBookkeepingInternal(sentence, mt);
   }
@@ -4966,9 +5201,10 @@ public class CycAccess {
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
    */
-  private void assertWithTranscriptAndBookkeepingInternal(CycObject sentence, CycObject mt)
+  private void assertWithTranscriptAndBookkeepingInternal(CycObject sentence,
+          CycObject mt)
           throws UnknownHostException, IOException, CycApiException {
-    assertSentence(sentence.stringApiValue(), makeELMt(mt), true, true);
+    assertSentence(sentence.stringApiValue(), makeELMt(mt), null, null, true, true);
   }
 
   /**
@@ -4981,7 +5217,8 @@ public class CycAccess {
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
    */
-  public void assertWithBookkeepingAndWithoutTranscript(CycList sentence, CycObject mt)
+  public void assertWithBookkeepingAndWithoutTranscript(CycList sentence,
+          CycObject mt)
           throws UnknownHostException, IOException, CycApiException {
     assertWithBookkeepingAndWithoutTranscript(sentence.stringApiValue(), mt);
   }
@@ -4996,36 +5233,77 @@ public class CycAccess {
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
    */
-  public void assertWithBookkeepingAndWithoutTranscript(String sentence, CycObject mt)
+  public void assertWithBookkeepingAndWithoutTranscript(String sentence,
+          CycObject mt)
           throws UnknownHostException, IOException,
           CycApiException {
-    assertSentence(sentence, makeELMt(mt), true, false);
+    assertSentence(sentence, makeELMt(mt), null, null, true, false);
   }
 
-  public void assertSentence(String sentence, ELMt mt, boolean bookkeeping, boolean transcript)
+  public void assertSentence(String sentence, ELMt mt, boolean bookkeeping,
+          boolean transcript)
           throws UnknownHostException, IOException, CycApiException {
-    assertSentence(sentence, mt, bookkeeping, transcript, null);
+    assertSentence(sentence, mt, null, null, bookkeeping, transcript, (CycFort) null);
+  }
+  
+  public void assertSentence(String sentence, ELMt mt, String strength, String direction, boolean bookkeeping,
+          boolean transcript)
+          throws UnknownHostException, IOException, CycApiException {
+    assertSentence(sentence, mt, strength, direction, bookkeeping, transcript, (CycFort) null);
   }
 
-  public void assertSentence(String sentence, ELMt mt, boolean bookkeeping, boolean transcript,
+  public void assertSentence(String sentence, ELMt mt, String strength, String direction, boolean bookkeeping,
+          boolean transcript,
           CycFort template)
           throws UnknownHostException, IOException, CycApiException {
-    String command = "(multiple-value-list (" + (transcript ? "ke-assert-now" : "cyc-assert") + "\n"
-            + sentence + "\n" + mt.stringApiValue() + "))";
+    List<CycFort> templates = new ArrayList<CycFort>();
+    if (template != null) {
+      templates.add(template);
+    }
+    assertSentence(sentence, mt, strength, direction, bookkeeping, transcript, false, templates);
+  }
+
+  public void assertSentence(String sentence, ELMt mt, boolean bookkeeping,
+          boolean transcript,
+          List<CycFort> templates)
+          throws UnknownHostException, IOException, CycApiException {
+    assertSentence(sentence, mt, null, null, bookkeeping, transcript, false, templates);
+  }
+
+  public void assertSentence(String sentence, ELMt mt, String strength, String direction, boolean bookkeeping,
+          boolean transcript, boolean disableWFFChecking,
+          List<CycFort> templates)
+          throws UnknownHostException, IOException, CycApiException {
+    if (getCurrentTransaction() != null) {
+      getCurrentTransaction().noteForAssertion(sentence, mt, bookkeeping,
+              transcript, disableWFFChecking, templates);
+      return;
+    }
+    if (strength == null){
+    	strength = ":default";
+    }
+    if (direction == null){
+    	direction = "";
+    }
+    String command = "(multiple-value-list (" + (true ? "ke-assert-now" : "cyc-assert") + "\n"
+            + sentence + "\n" + mt.stringApiValue() + " " + strength + " " + direction + "))";
     if (bookkeeping) {
       command = wrapBookkeeping(command);
     } else {
       command = wrapCyclistAndPurpose(command);
     }
-    if (template != null) {
-      String loadRules = "(" + "creation-template-allowable-rules" + " " + template.stringApiValue() + ")";
-      command = wrapDynamicBinding(command, "*forward-inference-allowed-rules*", loadRules);
+    command = wrapForwardInferenceRulesTemplates(command, templates);
+    if (disableWFFChecking) {
+      command = wrapDisableWffChecking(command);
     }
     CycList<Object> results = converseList(command);
     boolean statusOk = !results.get(0).equals(CycObjectFactory.nil);
     if (!statusOk) {
-      throw new CycApiException("Assertion failed in mt: " + mt.cyclify()
-              + "\n" + sentence + "\nbecause: \n" + results.get(1));
+      String message = "Assertion failed in mt: " + mt.cyclify();
+      if (results.size() > 1) {
+        message += "\n" + sentence + "\nbecause: \n" + results.get(1);
+      }
+      throw new CycApiException(message);
     }
   }
 
@@ -5043,14 +5321,55 @@ public class CycAccess {
           CycObject mt)
           throws UnknownHostException, IOException,
           CycApiException {
-    String command = wrapBookkeeping("(cyc-unassert " + sentence.stringApiValue()
-            + makeELMt(mt).stringApiValue() + ")");
-    boolean unassertOk = converseBoolean(command);
+    if (getCurrentTransaction() != null) {
+      getCurrentTransaction().noteForUnassertion(hostName, baseKB, true, false);
+    } else {
+      String command = wrapBookkeeping("(cyc-unassert " + sentence.stringApiValue()
+              + makeELMt(mt).stringApiValue() + ")");
+      boolean unassertOk = converseBoolean(command);
 
-    if (!unassertOk) {
-      throw new CycApiException("Could not unassert from mt: " + makeELMt(
-              mt) + "\n  "
-              + sentence.cyclify());
+      if (!unassertOk) {
+        throw new CycApiException("Could not unassert from mt: " + makeELMt(
+                mt) + "\n  "
+                + sentence.cyclify());
+      }
+    }
+  }
+
+  /**
+   * Edit the sentence contained in unassertSentence to instead be
+   * assertSentence. If the Mt is null, unassertSentence and assertSentence
+   * must be contextualized sentences (i.e. the Mt must be specified using
+   * #$ist). If unassertSentence is an empty conjunction, this amounts to "assert", while
+   * if assertSentence is an empty conjunction, it amounts to unassert.
+   *
+   * @param unassertSentence
+   * @param assertSentence
+   * @param mt
+   * @param bookkeeping
+   * @param transcript
+   * @param disableWFFChecking
+   * @param templates
+   */
+  public void edit(String unassertSentence, String assertSentence, ELMt mt,
+          boolean bookkeeping, boolean transcript, boolean disableWFFChecking,
+          List<CycFort> templates) throws CycApiException, UnknownHostException, IOException {
+    String command = "(multiple-value-list (" + (transcript ? "ke-edit-now" : "cyc-edit") + "\n"
+            + unassertSentence + "\n" + assertSentence + "\n" + mt.stringApiValue() + "))";
+    if (bookkeeping) {
+      command = wrapBookkeeping(command);
+    } else {
+      command = wrapCyclistAndPurpose(command);
+    }
+    command = wrapForwardInferenceRulesTemplates(command, templates);
+    if (disableWFFChecking) {
+      command = wrapDisableWffChecking(command);
+    }
+    CycList<Object> results = converseList(command);
+    boolean statusOk = !results.get(0).equals(CycObjectFactory.nil);
+    if (!statusOk) {
+      throw new CycApiException("Edit failure of " + unassertSentence + " to " + assertSentence + " in mt: " + mt.cyclify()
+              + "\nbecause: \n" + results.get(1));
     }
   }
 
@@ -5075,7 +5394,7 @@ public class CycAccess {
   }
 
   /**
-   * Finds or creates a Cyc constant in the KB with the specified name.  The operation will be
+   * Finds or creates a Cyc constant in the KB with the specified name. The operation will be
    * added to the KB transcript for replication and archive.
    *
    * @param constantName the name of the new constant
@@ -5092,7 +5411,7 @@ public class CycAccess {
   }
 
   /**
-   * Creates a new permanent Cyc constant in the KB with the specified name.  The operation will be
+   * Creates a new permanent Cyc constant in the KB with the specified name. The operation will be
    * added to the KB transcript for replication and archive.
    *
    * @param constantName the name of the new constant
@@ -5109,7 +5428,7 @@ public class CycAccess {
   }
 
   /**
-   * Asserts a ground atomic formula (gaf) in the specified microtheory MT.  The operation will be
+   * Asserts a ground atomic formula (gaf) in the specified microtheory MT. The operation will be
    * added to the KB transcript for replication and archive.
    *
    * @param mt the microtheory in which the assertion is made
@@ -5131,12 +5450,11 @@ public class CycAccess {
     sentence.add(predicate);
     sentence.add(arg1);
     sentence.add(arg2);
-    assertWithTranscriptAndBookkeeping(sentence,
-            mt);
+    assertWithTranscriptAndBookkeeping(sentence, mt);
   }
 
   /**
-   * Asserts a ground atomic formula (gaf) in the specified microtheory MT.  The operation will be
+   * Asserts a ground atomic formula (gaf) in the specified microtheory MT. The operation will be
    * added to the KB transcript for replication and archive.
    *
    * @param mt the microtheory in which the assertion is made
@@ -5158,12 +5476,11 @@ public class CycAccess {
     sentence.add(predicate);
     sentence.add(arg1);
     sentence.add(arg2);
-    assertWithTranscriptAndBookkeeping(sentence,
-            mt);
+    assertWithTranscriptAndBookkeeping(sentence, mt);
   }
 
   /**
-   * Asserts a ground atomic formula (gaf) in the specified microtheory MT.  The operation will be
+   * Asserts a ground atomic formula (gaf) in the specified microtheory MT. The operation will be
    * added to the KB transcript for replication and archive.
    *
    * @param mt the microtheory in which the assertion is made
@@ -5189,7 +5506,7 @@ public class CycAccess {
   }
 
   /**
-   * Asserts a ground atomic formula (gaf) in the specified microtheory MT.  The operation will be
+   * Asserts a ground atomic formula (gaf) in the specified microtheory MT. The operation will be
    * added to the KB transcript for replication and archive.
    *
    * @param mt the microtheory in which the assertion is made
@@ -5211,7 +5528,7 @@ public class CycAccess {
   }
 
   /**
-   * Asserts a ground atomic formula (gaf) in the specified microtheory.  The operation will be
+   * Asserts a ground atomic formula (gaf) in the specified microtheory. The operation will be
    * added to the KB transcript for replication and archive.
    *
    * @param mt the microtheory in which the assertion is made
@@ -5233,12 +5550,11 @@ public class CycAccess {
     sentence.add(predicate);
     sentence.add(arg1);
     sentence.add(arg2);
-    assertWithTranscriptAndBookkeeping(sentence,
-            mt);
+    assertWithTranscriptAndBookkeeping(sentence, mt);
   }
 
   /**
-   * Asserts a ground atomic formula (gaf) in the specified microtheory.  The operation will be
+   * Asserts a ground atomic formula (gaf) in the specified microtheory. The operation will be
    * added to the KB transcript for replication and archive.
    *
    * @param mt the microtheory in which the assertion is made
@@ -5260,8 +5576,7 @@ public class CycAccess {
     sentence.add(predicate);
     sentence.add(arg1);
     sentence.add(arg2);
-    assertWithTranscriptAndBookkeeping(sentence,
-            mt);
+    assertWithTranscriptAndBookkeeping(sentence, mt);
   }
 
   /**
@@ -5290,12 +5605,11 @@ public class CycAccess {
     sentence.add(arg1);
     sentence.add(arg2);
     sentence.add(arg3);
-    assertWithTranscriptAndBookkeeping(sentence,
-            mt);
+    assertWithTranscriptAndBookkeeping(sentence, mt);
   }
 
   /**
-   * Asserts a ground atomic formula (gaf) in the specified microtheory MT.  The operation will be
+   * Asserts a ground atomic formula (gaf) in the specified microtheory MT. The operation will be
    * added to the KB transcript for replication and archive.
    *
    * @param gaf the gaf in the form of a CycList
@@ -5308,12 +5622,11 @@ public class CycAccess {
   public void assertGaf(CycList gaf,
           CycObject mt)
           throws UnknownHostException, IOException, CycApiException {
-    assertWithTranscriptAndBookkeeping(gaf,
-            mt);
+    assertWithTranscriptAndBookkeeping(gaf, mt);
   }
 
   /**
-   * Asserts a ground atomic formula (gaf) in the specified microtheory MT.  The operation will be
+   * Asserts a ground atomic formula (gaf) in the specified microtheory MT. The operation will be
    * added to the KB transcript for replication and archive.
    *
    * @param gaf the gaf in the form of a CycFormulaSentence
@@ -5329,9 +5642,10 @@ public class CycAccess {
   }
 
   /**
-   * Asserts a ground atomic formula (gaf) in the specified microtheory MT.  The operation is performed at the HL level
-   * and does not perform wff-checking, nor forward inference, nor bookkeeping assertions, nor transcript recording.  The advantage of
-   * this method is that it is fast.
+   * Asserts a ground atomic formula (gaf) in the specified microtheory MT. The operation is performed at the HL level
+   * and does not perform wff-checking, nor forward inference, nor bookkeeping assertions, nor transcript recording. The advantage of
+   * this method is that it is fast. It does not respect KBTransactions. If this called while a SimpleKBTransaction is active, it
+   * will throw and UnsupportedOperationException.
    *
    * @param gaf the gaf in the form of a CycList
    * @param mt the microtheory in which the assertion is made
@@ -5341,9 +5655,14 @@ public class CycAccess {
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
    */
-  public void assertHLGaf(final CycList gaf, final CycObject mt, final CycSymbol strength)
+  public void assertHLGaf(final CycList gaf, final CycObject mt,
+          final CycSymbol strength)
           throws UnknownHostException, IOException, CycApiException {
     // (HL-ADD-ARGUMENT '(:ASSERTED-ARGUMENT <strength>) '(NIL ((<gaf>)) <mt> :FORWARD NIL)
+    if (CycAccess.getCurrentTransaction() != null) {
+      throw new UnsupportedOperationException(
+              "Attempt to call assertHLGaf aborted.  This method is not supported within the scope of a KBTransaction.");
+    }
     final CycList command = new CycList();
     command.add(makeCycSymbol("hl-add-argument"));
     final CycList command1 = new CycList();
@@ -5385,9 +5704,7 @@ public class CycAccess {
   public void unassertGaf(CycList gaf,
           CycObject mt)
           throws UnknownHostException, IOException, CycApiException {
-    String command = wrapBookkeeping("(ke-unassert-now " + gaf.stringApiValue()
-            + makeELMt(mt).stringApiValue() + ")");
-    converseVoid(command);
+    unassertGaf(CycFormulaSentence.makeCycFormulaSentence(gaf), mt, true, true);
   }
 
   /**
@@ -5402,11 +5719,64 @@ public class CycAccess {
    */
   public void unassertGaf(CycFormulaSentence gaf, CycObject mt)
           throws UnknownHostException, IOException, CycApiException {
-    String command = wrapBookkeeping("(ke-unassert-now " + gaf.stringApiValue()
-            + makeELMt(mt).stringApiValue() + ")");
-    converseVoid(command);
+    unassertGaf(gaf, mt, true, true);
   }
 
+  /**
+   * Unasserts the given ground atomic formula (gaf) in the specified
+   * microtheory MT.
+   *
+   * @param gaf the gaf in the form of a CycList
+   * @param mt the microtheory in which the assertion is made
+   *
+   * @throws UnknownHostException if cyc server host not found on the network
+   * @throws IOException if a data communication error occurs
+   * @throws CycApiException if the api request results in a cyc server error
+   */
+  public void unassertGaf(CycFormulaSentence gaf, CycObject mt,
+          boolean bookkeeping,
+          boolean transcript)
+          throws UnknownHostException, IOException, CycApiException {
+    if (getCurrentTransaction() != null) {
+      getCurrentTransaction().noteForUnassertion(gaf.stringApiValue(), makeELMt(
+              mt), bookkeeping, transcript);
+    } else {
+      final String fn = (transcript) ? "ke-unassert-now" : "cyc-unassert";
+      String command = "(" + fn + " " + gaf.stringApiValue()
+              + makeELMt(mt).stringApiValue() + ")";
+      if (bookkeeping) {
+        command = wrapBookkeeping(command);
+      }
+      converseVoid(command);
+    }
+  }
+
+  /**
+   * Unasserts the given assertion.
+   *
+   * @param assertion the assertion in the form of a CycAssertion
+   *
+   * @throws UnknownHostException if cyc server host not found on the network
+   * @throws IOException if a data communication error occurs
+   * @throws CycApiException if the api request results in a cyc server error
+   */
+  public void unassertAssertion(CycAssertion assertion,
+          boolean bookkeeping,
+          boolean transcript)
+          throws UnknownHostException, IOException, CycApiException {
+    if (getCurrentTransaction() != null) {
+      getCurrentTransaction().noteForUnassertion(assertion.stringApiValue(), makeELMt(assertion.getMt()), bookkeeping, transcript);
+    } else {
+      final String fn = (transcript) ? "ke-unassert" : "cyc-unassert";
+      String command = "(" + fn + " " + assertion.getELFormula(CycAccess.getCurrent()).stringApiValue() + " " 
+              + assertion.getMt().stringApiValue() + ")";
+      if (bookkeeping) {
+        command = wrapBookkeeping(command);
+      }
+      converseVoid(command);
+    }
+  }
+  
   /**
    * Assert a nameString for the specified CycConstant in the specified lexical microtheory. The
    * operation will be added to the KB transcript for replication and archive.
@@ -5430,7 +5800,7 @@ public class CycAccess {
   }
 
   /**
-   * Assert a comment for the specified CycConstant in the specified microtheory MT.  The operation
+   * Assert a comment for the specified CycConstant in the specified microtheory MT. The operation
    * will be added to the KB transcript for replication and archive.
    *
    * @param cycConstantName the name of the given term
@@ -5528,7 +5898,8 @@ public class CycAccess {
 
     assertGaf(sentence,
             // #$EnglishParaphraseMt
-            makeELMt(getKnownConstantByGuid("bda16220-9c29-11b1-9dad-c379636f7270")));
+            makeELMt(getKnownConstantByGuid(
+            "bda16220-9c29-11b1-9dad-c379636f7270")));
   }
 
   /**
@@ -5590,8 +5961,6 @@ public class CycAccess {
    * @param comment the comment for the new microtheory
    * @param isaMt the type of the new microtheory
    * @param genlMts the list of more general microtheories
-   *
-   * @return the new microtheory term
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -5671,9 +6040,9 @@ public class CycAccess {
   }
 
   /**
-   * Create a microtheory system for a new mt.  Given a root mt name, create a theory ROOTMt,
-   * create a vocabulary ROOTVocabMt, and a data ROOTDataMt.  Establish genlMt links for the
-   * theory mt and data mt.  Assert that the theory mt is a genlMt of the
+   * Create a microtheory system for a new mt. Given a root mt name, create a theory ROOTMt,
+   * create a vocabulary ROOTVocabMt, and a data ROOTDataMt. Establish genlMt links for the
+   * theory mt and data mt. Assert that the theory mt is a genlMt of the
    * WorldLikeOursCollectorMt. Assert that the data mt is a genlMt of the collector
    * CurrentWorldDataMt.
    *
@@ -5884,7 +6253,8 @@ public class CycAccess {
   public void assertGenlPreds(String specPredName,
           String genlPredName)
           throws UnknownHostException, IOException, CycApiException {
-    CycConstant genlPreds = getKnownConstantByGuid("bd5b4951-9c29-11b1-9dad-c379636f7270");
+    CycConstant genlPreds = getKnownConstantByGuid(
+            "bd5b4951-9c29-11b1-9dad-c379636f7270");
     assertGaf(universalVocabularyMt,
             genlPreds,
             getKnownConstantByName(specPredName),
@@ -5906,7 +6276,8 @@ public class CycAccess {
   public void assertGenlPreds(CycFort specPred,
           CycFort genlPred)
           throws UnknownHostException, IOException, CycApiException {
-    CycConstant genlPreds = getKnownConstantByGuid("bd5b4951-9c29-11b1-9dad-c379636f7270");
+    CycConstant genlPreds = getKnownConstantByGuid(
+            "bd5b4951-9c29-11b1-9dad-c379636f7270");
     assertGaf(universalVocabularyMt,
             genlPreds,
             specPred,
@@ -6064,7 +6435,7 @@ public class CycAccess {
    * Assert that the cycFort is a collection, in the UniversalVocabularyMt. The operation will be
    * added to the KB transcript for replication and archive.
    *
-   * @param cycFort the collection element
+   * @param instance the collection element
    * @param aCollection the collection
    *
    * @throws UnknownHostException if cyc server host not found on the network
@@ -6177,7 +6548,7 @@ public class CycAccess {
   /**
    * Constructs a new ELMt object by the given CycObject.
    *
-   * @param cycObject the given CycObject from which the ELMt is derived
+   * @param object the given CycObject from which the ELMt is derived
    *
    * @return the new ELMt object by the given CycObject
    *
@@ -6214,11 +6585,78 @@ public class CycAccess {
   }
 
   /**
-   * Returns the canonical Heuristic Level Microtheory (HLMT) given a list  representation.
+   * Constructs a new ELMt object by the given CycObject.
+   *
+   * @param cycObject the given CycObject from which the ELMt is derived
+   *
+   * @return the new ELMt object by the given CycObject
+   *
+   * @note this is redundant with the Object version, but leaving in for compatability
+   *
+   * @throws IOException if a communication error occurs
+   * @throws CycApiException if the api request results in a cyc server error
+   * @throws IllegalArgumentException if the cycObject is not the correct type of thing for
+   * making into an ELMt
+   */
+  public ELMt makeELMt(CycObject cycObject)
+          throws IOException, CycApiException {
+    if (cycObject instanceof ELMt) {
+      return (ELMt) cycObject;
+    } else if (cycObject instanceof CycList) {
+      return canonicalizeHLMT((CycList) cycObject);
+    } else if (cycObject instanceof CycNaut) {
+      return canonicalizeHLMT((CycNaut) cycObject);
+    } else if (cycObject instanceof CycFort) {
+      return makeELMt((CycFort) cycObject);
+    } else {
+      throw new IllegalArgumentException("Can't make an ELMt from " + cycObject
+              + " class: " + cycObject.getClass().getSimpleName());
+    }
+  }
+
+  /** @note this is redundant with the Object version, but leaving in for compatability */
+  public ELMt makeELMt(CycFort cycObject) {
+    ELMt result = null;
+    if (cycObject instanceof CycConstant) {
+      result = ELMtConstant.makeELMtConstant((CycConstant) cycObject);
+    } else if (cycObject instanceof CycNart) {
+      result = ELMtNart.makeELMtNart((CycNart) cycObject);
+    } else {
+      throw new IllegalArgumentException("CycObject: " + cycObject.cyclify()
+              + "is not a valid ELMt.");
+    }
+    return result;
+  }
+
+  /**
+   * Constructs a new ELMt object by the given String.
+   *
+   * @param elmtString the given CycObject from which the ELMt is derived
+   *
+   * @return the new ELMt object by the given CycObject
+   *
+   * @note this is redundant with the Object version, but leaving in for compatability
+   *
+   * @throws IOException if a communication error occurs
+   * @throws CycApiException if the api request results in a cyc server error
+   */
+  public ELMt makeELMt(String elmtString)
+          throws IOException, CycApiException {
+    elmtString = elmtString.trim();
+    if (elmtString.startsWith("(")) {
+      CycList elmtCycList = makeCycList(elmtString);
+      return makeELMt(elmtCycList);
+    } else {
+      return makeELMt(getKnownConstantByName(elmtString));
+    }
+  }
+
+  /**
+   * Returns the canonical Heuristic Level Microtheory (HLMT) given a list representation.
    *
    * @param cycList the given CycList NART/NAUT representation
    *
-   * @return the canonical Heuristic Level Microtheory (HLMT) given a list  representation
+   * @return the canonical Heuristic Level Microtheory (HLMT) given a list representation
    *
    * @throws IOException if a communication error occurs
    * @throws CycApiException if the Cyc server returns an error
@@ -6239,11 +6677,11 @@ public class CycAccess {
   }
 
   /**
-   * Returns the canonical Heuristic Level Microtheory (HLMT) given a list  representation.
+   * Returns the canonical Heuristic Level Microtheory (HLMT) given a list representation.
    *
    * @param naut the given NAUT representation
    *
-   * @return the canonical Heuristic Level Microtheory (HLMT) given a list  representation
+   * @return the canonical Heuristic Level Microtheory (HLMT) given a list representation
    *
    * @throws IOException if a communication error occurs
    * @throws CycApiException if the Cyc server returns an error
@@ -6262,7 +6700,7 @@ public class CycAccess {
    */
   public String wrapBookkeeping(String command) {
     final String projectName = (project == null) ? "nil" : project.stringApiValue();
-    final String cyclistName = (cyclist == null) ? "nil" : cyclist.stringApiValue();
+    final String cyclistName = (getCyclist() == null) ? "nil" : getCyclist().stringApiValue();
 
     String wrappedCommand = "(with-bookkeeping-info (new-bookkeeping-info " + cyclistName
             + " (the-date) " + projectName + " (the-second))\n"
@@ -6274,11 +6712,12 @@ public class CycAccess {
 
   public String wrapCyclistAndPurpose(String command) {
     final String projectName = (project == null) ? "nil" : project.stringApiValue();
-    final String cyclistName = (cyclist == null) ? "nil" : cyclist.stringApiValue();
+    final String cyclistName = (getCyclist() == null) ? "nil" : getCyclist().stringApiValue();
     return wrapCyclistAndPurpose(command, cyclistName, projectName);
   }
 
-  public String wrapCyclistAndPurpose(String command, String cyclistName, String projectName) {
+  public String wrapCyclistAndPurpose(String command, String cyclistName,
+          String projectName) {
     return "(clet ((*require-case-insensitive-name-uniqueness* nil)\n"
             + "       (*the-cyclist* " + cyclistName + ")\n"
             + "       (*ke-purpose* " + projectName + "))\n"
@@ -6286,7 +6725,32 @@ public class CycAccess {
             + "\n)";
   }
 
-  public String wrapDynamicBinding(String command, String symbolName, String apiValue) {
+  public String wrapForwardInferenceRulesTemplates(String command,
+          List<CycFort> templates) {
+    if ((templates == null) || templates.isEmpty()) {
+      return command;
+    }
+    StringBuilder loadRules = new StringBuilder("(union");
+    for (CycFort template : templates) {
+      loadRules.append(" (creation-template-allowable-rules ").append(
+              template.stringApiValue()).append(")");
+    }
+    loadRules.append(")");
+    command = wrapDynamicBinding(command, "*forward-inference-allowed-rules*",
+            loadRules.toString());
+    return command;
+  }
+
+  public String wrapDisableWffChecking(String command) {
+    command = wrapDynamicBinding(command, "*assume-forward-deduction-is-wf?*",
+            "t");
+    command = wrapDynamicBinding(command, "*assume-assert-sentence-is-wf?*", "t");
+    command = "(with-strict-wff " + command + ")";
+    return command;
+  }
+
+  public String wrapDynamicBinding(String command, String symbolName,
+          String apiValue) {
     return "(clet ((" + symbolName + " " + apiValue + "))\n"
             + "  " + command + "\n)";
   }
@@ -6296,16 +6760,37 @@ public class CycAccess {
    * information and archiving to the Cyc transcript.
    *
    * @param name Name of the constant. If prefixed with "#$", then the prefix is removed for
-   *        canonical representation.
+   * canonical representation.
    *
    * @return a new <tt>CycConstant</tt> object using the constant name, recording bookkeeping
-   *         information and archiving to the Cyc transcript
+   * information and archiving to the Cyc transcript
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
    */
   public CycConstant makeCycConstant(String name)
+          throws UnknownHostException, IOException, CycApiException {
+    return makeCycConstant(name, true, true);
+  }
+
+  /**
+   * Returns a new <tt>CycConstant</tt> object using the constant name
+   *
+   * @param name Name of the constant. If prefixed with "#$", then the prefix is removed for
+   * canonical representation.
+   * @param bookkeeping If true, bookkeeping data will be added to the KB.
+   * @param transcript If true, the operation(s) will be added to the transcript.
+   *
+   * @return a new <tt>CycConstant</tt> object using the constant name, recording bookkeeping
+   * information and archiving to the Cyc transcript
+   *
+   * @throws UnknownHostException if cyc server host not found on the network
+   * @throws IOException if a data communication error occurs
+   * @throws CycApiException if the api request results in a cyc server error
+   */
+  public CycConstant makeCycConstant(String name, boolean bookkeeping,
+          boolean transcript)
           throws UnknownHostException, IOException, CycApiException {
     String constantName = name;
 
@@ -6319,7 +6804,11 @@ public class CycAccess {
       return cycConstant;
     }
 
-    String command = wrapBookkeeping("(ke-create-now \"" + constantName + "\")");
+    final String fn = (transcript) ? "ke-create-now" : "fi-create-int";
+    String command = "(" + fn + " \"" + constantName + "\")";
+    if (bookkeeping) {
+      command = wrapBookkeeping(command);
+    }
     Object object = converseObject(command);
 
     if (object instanceof CycConstant) {
@@ -6328,19 +6817,21 @@ public class CycAccess {
       throw new CycApiException("Cannot create new constant for " + name);
     }
     CycObjectFactory.addCycConstantCache(cycConstant);
-
+    if (getCurrentTransaction() != null) {
+      getCurrentTransaction().noteCreation(cycConstant);
+    }
     return cycConstant;
   }
 
   /**
    * Returns a new unique <tt>CycConstant</tt> object using the constant start name prefixed by
-   * TMP-, recording bookkeeping information and archiving to the Cyc transcript.  If
+   * TMP-, recording bookkeeping information and archiving to the Cyc transcript. If
    * the start name begins with #$ that portion of the start name is ignored.
    *
    * @param startName the starting name of the constant which will be made unique using a suffix.
    *
    * @return a new <tt>CycConstant</tt> object using the constant starting name, recording
-   *         bookkeeping information and archiving to the Cyc transcript
+   * bookkeeping information and archiving to the Cyc transcript
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -6379,7 +6870,7 @@ public class CycAccess {
    * @param prefix the prefix
    *
    * @return a new <tt>CycConstant</tt> object using the constant starting name, recording
-   *         bookkeeping information and archiving to the Cyc transcript
+   * bookkeeping information and archiving to the Cyc transcript
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -6399,7 +6890,9 @@ public class CycAccess {
     CycConstant cycConstant = (CycConstant) converseObject(
             command);
     CycObjectFactory.addCycConstantCache(cycConstant);
-
+    if (getCurrentTransaction() != null) {
+      getCurrentTransaction().noteCreation(cycConstant);
+    }
     return cycConstant;
   }
 
@@ -6415,14 +6908,16 @@ public class CycAccess {
    * @throws IOException if a communications error occurs
    * @throws UnknownHostException if the Cyc server cannot be found
    * @throws CycApiException if the Cyc server returns an error
-   * @deprecated use <code>executeQuery</code>
+   * @deprecated use
+   * <code>executeQuery</code>
    */
   public CycList askNewCycQuery(final CycList query,
           final CycObject mt,
           final InferenceParameters queryProperties)
           throws UnknownHostException, IOException, CycApiException {
     final String script =
-            "(new-cyc-query " + query.stringApiValue() + " " + makeELMt(mt).stringApiValue() + " " + queryPropertiesToString(queryProperties) + ")";
+            "(new-cyc-query " + query.stringApiValue() + " " + makeELMt(mt).stringApiValue() + " " + queryPropertiesToString(
+            queryProperties) + ")";
     return converseList(script);
   }
 
@@ -6438,7 +6933,8 @@ public class CycAccess {
    * @param queryProperties the query properties to use when asking the query
    * @param timeoutMsecs the amount of time in milliseconds to wait before
    * giving up. A zero for this value means to wait forever.
-   * @return the <code>InferenceResultSet</code> which provides a convenient
+   * @return the
+   * <code>InferenceResultSet</code> which provides a convenient
    * mechanism for walking over results similar to java.sql.ResultSet
    * @throws IOException if a communication error occurs
    * @throws CycApiException if an internal error occurs
@@ -6448,10 +6944,8 @@ public class CycAccess {
           final ELMt mt, final InferenceParameters queryProperties,
           final long timeoutMsecs)
           throws IOException, CycApiException, TimeOutException {
-    InferenceWorkerSynch worker =
-            new DefaultInferenceWorkerSynch(query, mt, queryProperties, this, timeoutMsecs);
-    InferenceResultSet rs = worker.executeQuery();
-    return rs;
+    return executeQuery(new CycFormulaSentence(query), mt, queryProperties,
+            timeoutMsecs);
   }
 
   /**
@@ -6464,7 +6958,8 @@ public class CycAccess {
    * @param query the query in CycFormulaSentence form to ask
    * @param mt the microtheory in which the query should be asked
    * @param queryProperties the query properties to use when asking the query
-   * @return the <code>InferenceResultSet</code> which provides a convenient
+   * @return the
+   * <code>InferenceResultSet</code> which provides a convenient
    * mechanism for walking over results similar to java.sql.ResultSet
    * @throws IOException if a communication error occurs
    * @throws CycApiException if an internal error occurs
@@ -6488,7 +6983,8 @@ public class CycAccess {
    * @param queryProperties the query properties to use when asking the query
    * @param timeoutMsecs the amount of time in milliseconds to wait before
    * giving up. A zero for this value means to wait forever.
-   * @return the <code>InferenceResultSet</code> which provides a convenient
+   * @return the
+   * <code>InferenceResultSet</code> which provides a convenient
    * mechanism for walking over results similar to java.sql.ResultSet
    * @throws IOException if a communication error occurs
    * @throws CycApiException if an internal error occurs
@@ -6498,25 +6994,58 @@ public class CycAccess {
           final CycObject mt, final InferenceParameters queryProperties,
           final long timeoutMsecs)
           throws IOException, CycApiException, TimeOutException {
-    InferenceWorkerSynch worker =
-            new DefaultInferenceWorkerSynch(query, (ELMt) mt, queryProperties, this, timeoutMsecs);
-    InferenceResultSet rs = worker.executeQuery();
-    return rs;
+    // Use new-cyc-query if args are okay for it:
+    if (isOkForNewCycQuery(queryProperties, timeoutMsecs)) {
+        final String command = makeSubLStmt("multiple-value-list",
+                               makeNestedSubLStmt("new-cyc-query", query, mt,
+                               (queryProperties != null) ? queryProperties : new DefaultInferenceParameters(
+                               this)));
+      final CycList results = converseList(command);
+      final CycObject bindings = (CycObject) results.get(0);
+      final InferenceSuspendReason haltReason = InferenceSuspendReason.fromCycSuspendReason(
+              results.get(1));
+      if (haltReason.isError()) {
+        throw new CycApiServerSideException(
+                "Inference halted due to error:\n" + haltReason);
+      }
+      return new InferenceResultSet(CycObjectFactory.nil.equals(bindings)
+              ? Collections.emptyList() : (CycList) bindings);
+    } else {
+      InferenceWorkerSynch worker =
+              new DefaultInferenceWorkerSynch(query, (ELMt) mt, queryProperties,
+              this, timeoutMsecs);
+      return worker.executeQuery();
+    }
+  }
+
+  private boolean isOkForNewCycQuery(final InferenceParameters queryProperties,
+          final long timeoutMsecs) {
+    if (timeoutMsecs != 0) {
+      return false; //timeouts require subl workers.
+    } else if (queryProperties == null) {
+      return true; //default properties are okay.
+    } else if (queryProperties.containsKey(CycObjectFactory.makeCycSymbol(
+            ":RETURN"))) {
+      return false; //we rely on the standard return format.
+    } else {
+      return true;
+    }
   }
 
   /**
    * Run a synchronous query against Cyc.
-   * 
+   *
    * </p><strong>Note: </strong> One should put this call in a try/finally statement
    * and the finally statement should explicitly close the result set. Failure to do so
    * could cause garbage to accumulate on the server.
-   * 
+   *
    * @param query the query in String form to ask
    * @param mt the microtheory in which the query should be asked (as a String, CycObject or ELMt)
    * @param queryProperties the query properties to use when asking the query
-   * @param timeoutMsecs the amount of time in milliseconds to wait before 
+   * @param timeoutMsecs the amount of time in milliseconds to wait before
    * giving up. A zero for this value means to wait forever.
-   * @return the <code>InferenceResultSet</code> which provides a convenient 
+   * @return the
+   * <code>InferenceResultSet</code> which provides a convenient
    * mechanism for walking over results similar to java.sql.ResultSet
    * @throws IOException if a communication error occurs
    * @throws CycApiException if an internal error occurs
@@ -6527,7 +7056,8 @@ public class CycAccess {
           final long timeoutMsecs)
           throws IOException, CycApiException, TimeOutException {
     InferenceWorkerSynch worker =
-            new DefaultInferenceWorkerSynch(query, makeELMt(mt), queryProperties, this, timeoutMsecs);
+            new DefaultInferenceWorkerSynch(query, makeELMt(mt), queryProperties,
+            this, timeoutMsecs);
     InferenceResultSet rs = worker.executeQuery();
     return rs;
   }
@@ -6586,12 +7116,13 @@ public class CycAccess {
           throws UnknownHostException, IOException, CycApiException {
     String xmlSpecString = (xmlSpec == null) ? ":default" : xmlSpec.stringApiValue();
     final String script =
-            "(query-results-to-xml-string " + query.stringApiValue() + " " + makeELMt(mt).stringApiValue() + " " + queryPropertiesToString(queryProperties) + " " + xmlSpecString + ")";
+            "(query-results-to-xml-string " + query.stringApiValue() + " " + makeELMt(
+            mt).stringApiValue() + " " + queryPropertiesToString(queryProperties) + " " + xmlSpecString + ")";
     return converseString(script);
   }
 
   /**
-   * Returns true if the  Cyc query (with inference parameters) is proven true.
+   * Returns true if the Cyc query (with inference parameters) is proven true.
    *
    * @param query the query expression
    * @param mt the inference microtheory
@@ -6604,13 +7135,14 @@ public class CycAccess {
    * @throws UnknownHostException if the Cyc server cannot be found
    * @throws CycApiException if the Cyc server returns an error or if there are open variables in the query
    */
-  public boolean isQueryTrue(CycList query, CycObject mt, InferenceParameters queryProperties)
+  public boolean isQueryTrue(CycList query, CycObject mt,
+          InferenceParameters queryProperties)
           throws UnknownHostException, IOException, CycApiException {
     return isQueryTrue(query, mt, queryProperties, 0);
   }
 
   /**
-   * Returns true if the  Cyc query (with inference parameters) is proven true.
+   * Returns true if the Cyc query (with inference parameters) is proven true.
    *
    * @param query the query expression
    * @param mt the inference microtheory
@@ -6623,40 +7155,14 @@ public class CycAccess {
    * @throws UnknownHostException if the Cyc server cannot be found
    * @throws CycApiException if the Cyc server returns an error or if there are open variables in the query
    */
-  public boolean isQueryTrue(CycFormulaSentence query, CycObject mt, InferenceParameters queryProperties)
+  public boolean isQueryTrue(CycFormulaSentence query, CycObject mt,
+          InferenceParameters queryProperties)
           throws UnknownHostException, IOException, CycApiException {
     return isQueryTrue(query, mt, queryProperties, 0);
   }
 
   /**
-   * Returns true if the  Cyc query (with inference parameters) is proven true.
-   *
-   * @param query the query expression
-   * @param mt the inference microtheory
-   * @param queryProperties queryProperties the list of query property keywords 
-   * and values, or null if the defaults are to used
-   * @param timeoutMsecs the time in milliseconds to wait before giving up,
-   * set to zero in order to wait forever
-   *
-   * @return true if the query is proven true.
-   *
-   * @throws IOException if a communications error occurs
-   * @throws UnknownHostException if the Cyc server cannot be found
-   * @throws CycApiException if the Cyc server returns an error or if there are open variables in the query
-   * @throws TimeOutException if the calculation takes too long
-   */
-  public boolean isQueryTrue(CycList query, CycObject mt, InferenceParameters queryProperties, long timeoutMsecs)
-          throws UnknownHostException, IOException, CycApiException {
-    InferenceResultSet rs = executeQuery(query, makeELMt(mt), queryProperties, timeoutMsecs);
-    try {
-      return rs.getTruthValue();
-    } finally {
-      rs.close();
-    }
-  }
-
-  /**
-   * Returns true if the  Cyc query (with inference parameters) is proven true.
+   * Returns true if the Cyc query (with inference parameters) is proven true.
    *
    * @param query the query expression
    * @param mt the inference microtheory
@@ -6672,20 +7178,45 @@ public class CycAccess {
    * @throws CycApiException if the Cyc server returns an error or if there are open variables in the query
    * @throws TimeOutException if the calculation takes too long
    */
-  public boolean isQueryTrue(CycFormulaSentence query, CycObject mt, InferenceParameters queryProperties, long timeoutMsecs)
+  public boolean isQueryTrue(CycList query, CycObject mt,
+          InferenceParameters queryProperties, long timeoutMsecs)
           throws UnknownHostException, IOException, CycApiException {
-    InferenceResultSet rs = executeQuery(query, makeELMt(mt), queryProperties, timeoutMsecs);
+    InferenceResultSet rs = executeQuery(query, makeELMt(mt), queryProperties,
+            timeoutMsecs);
     try {
       return rs.getTruthValue();
     } finally {
       rs.close();
     }
   }
-  
-  public boolean isQueryTrue(CycList<Object> makeCycList, CycConstant knownConstantByName, int i, int timeoutMsecs)
-  {
-  	// TODO Auto-generated method stub
-  	return false;
+
+  /**
+   * Returns true if the Cyc query (with inference parameters) is proven true.
+   *
+   * @param query the query expression
+   * @param mt the inference microtheory
+   * @param queryProperties queryProperties the list of query property keywords
+   * and values, or null if the defaults are to used
+   * @param timeoutMsecs the time in milliseconds to wait before giving up,
+   * set to zero in order to wait forever
+   *
+   * @return true if the query is proven true.
+   *
+   * @throws IOException if a communications error occurs
+   * @throws UnknownHostException if the Cyc server cannot be found
+   * @throws CycApiException if the Cyc server returns an error or if there are open variables in the query
+   * @throws TimeOutException if the calculation takes too long
+   */
+  public boolean isQueryTrue(CycFormulaSentence query, CycObject mt,
+          InferenceParameters queryProperties, long timeoutMsecs)
+          throws UnknownHostException, IOException, CycApiException {
+    InferenceResultSet rs = executeQuery(query, makeELMt(mt), queryProperties,
+            timeoutMsecs);
+    try {
+      return rs.getTruthValue();
+    } finally {
+      rs.close();
+    }
   }
 
   /**
@@ -6702,11 +7233,11 @@ public class CycAccess {
    * @throws UnknownHostException if the Cyc server cannot be found
    * @throws CycApiException if the Cyc server returns an error
    */
-  public CycList<Object> queryVariable(final CycVariable queryVariable,
+  public CycList<Object> queryVariable(final CycVariable variable,
           final CycList query, final CycObject mt,
           final InferenceParameters queryProperties)
           throws UnknownHostException, IOException, CycApiException {
-    return queryVariable(queryVariable, query, mt, queryProperties, 0);
+    return queryVariable(variable, query, mt, queryProperties, 0);
   }
 
   /**
@@ -6725,7 +7256,8 @@ public class CycAccess {
   public CycList<Object> queryVariable(final CycVariable queryVariable,
           final CycFormulaSentence query, final CycObject mt)
           throws UnknownHostException, IOException, CycApiException {
-    return queryVariable(queryVariable, query, mt, new DefaultInferenceParameters(this));
+    return queryVariable(queryVariable, query, mt,
+            new DefaultInferenceParameters(this));
   }
 
   /**
@@ -6746,7 +7278,8 @@ public class CycAccess {
           final CycFormulaSentence query, final CycObject mt,
           final InferenceParameters queryProperties)
           throws UnknownHostException, IOException, CycApiException {
-    final InferenceResultSet rs = executeQuery(query, makeELMt(mt), queryProperties);
+    final InferenceResultSet rs = executeQuery(query, makeELMt(mt),
+            queryProperties);
     return queryVariableLow(queryVariable, rs);
   }
 
@@ -6769,7 +7302,8 @@ public class CycAccess {
           final InferenceParameters queryProperties,
           final long timeoutMsecs)
           throws UnknownHostException, IOException, CycApiException {
-    final InferenceResultSet rs = executeQuery(query, mt, queryProperties, timeoutMsecs);
+    final InferenceResultSet rs = executeQuery(query, mt, queryProperties,
+            timeoutMsecs);
     return queryVariableLow(queryVariable, rs);
   }
 
@@ -6789,14 +7323,14 @@ public class CycAccess {
    * @throws CycApiException if the Cyc server returns an error
    * @throws TimeOutException if the calculation takes too long
    */
-  public CycList<Object> queryVariable(final CycVariable queryVariable,
+  public CycList<Object> queryVariable(final CycVariable variable,
           final CycList query, final CycObject mt,
           final InferenceParameters queryProperties, long timeoutMsecs)
           throws UnknownHostException, IOException, CycApiException, TimeOutException {
     InferenceResultSet rs = null;
     try {
       rs = executeQuery(query, makeELMt(mt), queryProperties, timeoutMsecs);
-      return queryVariableLow(queryVariable, rs);
+      return queryVariableLow(variable, rs);
     } finally {
       return new CycList<Object>();
     }
@@ -6841,12 +7375,13 @@ public class CycAccess {
    * @throws CycApiException if the Cyc server returns an error
    * @throws TimeOutException if the calculation takes too long
    */
-  public CycList<Object> queryVariable(final CycVariable queryVariable,
+  public CycList<Object> queryVariable(final CycVariable variable,
           final CycFormulaSentence query, final CycObject mt,
           final InferenceParameters queryProperties, long timeoutMsecs)
           throws UnknownHostException, IOException, CycApiException, TimeOutException {
-    InferenceResultSet rs = executeQuery(query, makeELMt(mt), queryProperties, timeoutMsecs);
-    return queryVariableLow(queryVariable, rs);
+    InferenceResultSet rs = executeQuery(query, makeELMt(mt), queryProperties,
+            timeoutMsecs);
+    return queryVariableLow(variable, rs);
   }
 
   /**
@@ -6864,13 +7399,13 @@ public class CycAccess {
    * @throws UnknownHostException if the Cyc server cannot be found
    * @throws CycApiException if the Cyc server returns an error
    */
-  public CycList queryVariable(final CycVariable queryVariable,
+  public CycList queryVariable(final CycVariable variable,
           final CycList query,
           final CycObject mt,
           final InferenceParameters queryProperties,
           final String inferenceProblemStoreName)
           throws UnknownHostException, IOException, CycApiException {
-    if (queryVariable == null) {
+    if (variable == null) {
       throw new NullPointerException("queryVariables must not be null");
     }
     if (query == null) {
@@ -6883,17 +7418,21 @@ public class CycAccess {
       throw new NullPointerException("mt must not be null");
     }
     if (inferenceProblemStoreName == null) {
-      throw new NullPointerException("inferenceProblemStoreName must not be null");
+      throw new NullPointerException(
+              "inferenceProblemStoreName must not be null");
     }
     if (inferenceProblemStoreName.length() == 0) {
-      throw new IllegalArgumentException("inferenceProblemStoreName must not be an empty list");
+      throw new IllegalArgumentException(
+              "inferenceProblemStoreName must not be an empty list");
     }
     final InferenceParameters tempQueryProperties = (queryProperties == null) ? getHLQueryProperties() : queryProperties;
-    tempQueryProperties.put(makeCycSymbol(":problem-store"), makeCycSymbol("problem-store", false));
+    tempQueryProperties.put(makeCycSymbol(":problem-store"), makeCycSymbol(
+            "problem-store", false));
     final String script =
             "(clet ((problem-store (find-problem-store-by-name \"" + inferenceProblemStoreName + "\")))"
-            + "  (query-variable " + queryVariable.stringApiValue() + " "
-            + query.stringApiValue() + " " + makeELMt(mt).stringApiValue() + " " + queryPropertiesToString(tempQueryProperties) + "))";
+            + "  (query-variable " + variable.stringApiValue() + " "
+            + query.stringApiValue() + " " + makeELMt(mt).stringApiValue() + " " + queryPropertiesToString(
+            tempQueryProperties) + "))";
     return converseList(script);
   }
 
@@ -6911,13 +7450,13 @@ public class CycAccess {
    * @throws UnknownHostException if the Cyc server cannot be found
    * @throws CycApiException if the Cyc server returns an error
    */
-  public CycList<Object> queryVariables(final CycList<CycVariable> queryVariables,
+  public CycList<Object> queryVariables(final CycList<CycVariable> variables,
           final CycList<Object> query,
           final CycObject mt,
           final InferenceParameters queryProperties)
           throws UnknownHostException, IOException, CycApiException {
     // @todo use inference property timeout rather than 0 if given
-    return queryVariablesLow(queryVariables, query, mt, queryProperties, 0);
+    return queryVariablesLow(variables, query, mt, queryProperties, 0);
   }
 
   /**
@@ -6934,12 +7473,12 @@ public class CycAccess {
    * @throws UnknownHostException if the Cyc server cannot be found
    * @throws CycApiException if the Cyc server returns an error
    */
-  public CycList<Object> queryVariables(final CycList<CycVariable> queryVariables,
+  public CycList<Object> queryVariables(final CycList<CycVariable> variables,
           final CycFormulaSentence query,
           final CycObject mt,
           final InferenceParameters queryProperties)
           throws UnknownHostException, IOException, CycApiException {
-    return queryVariablesLow(queryVariables, query, mt, queryProperties, 0);
+    return queryVariablesLow(variables, query, mt, queryProperties, 0);
   }
 
   /**
@@ -6957,28 +7496,33 @@ public class CycAccess {
    * @throws CycApiException if the Cyc server returns an error
    */
   @SuppressWarnings("unchecked")
-  public CycList<Object> queryVariables(final CycList<CycVariable> queryVariables,
+  public CycList<Object> queryVariables(final CycList<CycVariable> variables,
           final String query,
           final Object mt,
           final InferenceParameters queryProperties,
           final long timeoutMsecs)
           throws UnknownHostException, IOException, CycApiException {
-    final String command = makeSubLStmt("query-template", queryVariables, query, makeELMt(mt), queryProperties);
-    SubLWorkerSynch worker = new DefaultSubLWorkerSynch(command, this, timeoutMsecs);
+    final String command = makeSubLStmt("query-template", variables, query,
+            makeELMt(mt), queryProperties);
+    SubLWorkerSynch worker = new DefaultSubLWorkerSynch(command, this,
+            timeoutMsecs);
     if (CycObjectFactory.nil.equals(worker.getWork())) {
       return new CycList<Object>();
     }
     return (CycList<Object>) worker.getWork();
   }
 
-  private CycList<Object> queryVariablesLow(final CycList<CycVariable> queryVariables,
+  private CycList<Object> queryVariablesLow(
+          final CycList<CycVariable> queryVariables,
           final CycObject query,
           final CycObject mt,
           final InferenceParameters queryProperties,
           final long timeoutMsecs)
           throws UnknownHostException, IOException, CycApiException {
-    final String command = makeSubLStmt("query-template", queryVariables, query, makeELMt(mt), queryProperties);
-    SubLWorkerSynch worker = new DefaultSubLWorkerSynch(command, this, timeoutMsecs);
+    final String command = makeSubLStmt("query-template", queryVariables, query,
+            makeELMt(mt), queryProperties);
+    SubLWorkerSynch worker = new DefaultSubLWorkerSynch(command, this,
+            timeoutMsecs);
     if (CycObjectFactory.nil.equals(worker.getWork())) {
       return new CycList<Object>();
     }
@@ -7009,7 +7553,8 @@ public class CycAccess {
     if (query.isEmpty()) {
       throw new IllegalArgumentException("query must not be empty");
     }
-    return queryVariablesInternal(queryVariables, query, mt, queryProperties, inferenceProblemStoreName, 0);
+    return queryVariablesInternal(queryVariables, query, mt, queryProperties,
+            inferenceProblemStoreName, 0);
   }
 
   /**
@@ -7033,7 +7578,8 @@ public class CycAccess {
           final InferenceParameters queryProperties,
           final String inferenceProblemStoreName)
           throws UnknownHostException, IOException, CycApiException {
-    return queryVariablesInternal(queryVariables, query, mt, queryProperties, inferenceProblemStoreName, 0);
+    return queryVariablesInternal(queryVariables, query, mt, queryProperties,
+            inferenceProblemStoreName, 0);
   }
 
   private CycList queryVariablesInternal(final CycList queryVariables,
@@ -7057,18 +7603,23 @@ public class CycAccess {
       throw new NullPointerException("mt must not be null");
     }
     if (inferenceProblemStoreName == null) {
-      throw new NullPointerException("inferenceProblemStoreName must not be null");
+      throw new NullPointerException(
+              "inferenceProblemStoreName must not be null");
     }
     if (inferenceProblemStoreName.length() == 0) {
-      throw new IllegalArgumentException("inferenceProblemStoreName must not be an empty list");
+      throw new IllegalArgumentException(
+              "inferenceProblemStoreName must not be an empty list");
     }
     final InferenceParameters tempQueryProperties = (queryProperties == null) ? getHLQueryProperties() : queryProperties;
-    tempQueryProperties.put(makeCycSymbol(":problem-store"), makeCycSymbol("problem-store", false));
+    tempQueryProperties.put(makeCycSymbol(":problem-store"), makeCycSymbol(
+            "problem-store", false));
     final String script =
             "(clet ((problem-store (find-problem-store-by-name \"" + inferenceProblemStoreName + "\")))"
             + "  (query-template " + queryVariables.stringApiValue() + " "
-            + query.stringApiValue() + " " + makeELMt(mt).stringApiValue() + " " + queryPropertiesToString(tempQueryProperties) + "))";
-    SubLWorkerSynch worker = new DefaultSubLWorkerSynch(script, this, timeoutMsecs);
+            + query.stringApiValue() + " " + makeELMt(mt).stringApiValue() + " " + queryPropertiesToString(
+            tempQueryProperties) + "))";
+    SubLWorkerSynch worker = new DefaultSubLWorkerSynch(script, this,
+            timeoutMsecs);
     if (CycObjectFactory.nil.equals(worker.getWork())) {
       return new CycList<Object>();
     }
@@ -7077,14 +7628,15 @@ public class CycAccess {
 
   /**
    * Asks a Cyc query and returns the binding list. Properties:
+   *
    * @param query the query expression
    * @param mt the inference microtheory
    * @param maxTransformationDepth the Integer maximum transformation depth or nil for no limit
    * @param maxNumber the Integer maximum number of returned bindings or nil for no limit
    * @param maxTimeSeconds the Integer maximum number of seconds inference duration or nil for no
-   *        limit
+   * limit
    * @param maxProofDepth the Integer maximum number of levels in the proof tree or nil for no
-   *        limit
+   * limit
    *
    * @return the binding list of answers for the given query and inference property settings
    *
@@ -7123,7 +7675,9 @@ public class CycAccess {
 
   /**
    * Asks a Cyc query and returns the binding list.
-   * @deprecated use <code>executeQuery</code>
+   *
+   * @deprecated use
+   * <code>executeQuery</code>
    * @param query the query expression
    * @param mt the inference microtheory
    * @param queryProperties queryProperties the list of query property keywords and values
@@ -7134,7 +7688,8 @@ public class CycAccess {
    * @throws UnknownHostException if the Cyc server cannot be found
    * @throws CycApiException if the Cyc server returns an error
    */
-  public CycList askCycQuery(CycList query, CycObject mt, HashMap queryProperties)
+  public CycList askCycQuery(CycList query, CycObject mt,
+          HashMap queryProperties)
           throws UnknownHostException, IOException, CycApiException {
     CycList parameterList = new CycList();
     Iterator iter = queryProperties.entrySet().iterator();
@@ -7177,8 +7732,10 @@ public class CycAccess {
     queryBuffer.append("       (*unique-inference-result-bindings* t) ");
     queryBuffer.append("       (*generate-readable-fi-results* nil)) ");
     queryBuffer.append("  (without-wff-semantics ");
-    queryBuffer.append("    (ask-template ").append(variable.stringApiValue()).append(" ");
-    queryBuffer.append("                  ").append(query.stringApiValue()).append(" ");
+    queryBuffer.append("    (ask-template ").append(variable.stringApiValue()).append(
+            " ");
+    queryBuffer.append("                  ").append(query.stringApiValue()).append(
+            " ");
     queryBuffer.append("                  ").append(makeELMt(
             mt).stringApiValue()).append(" ");
     queryBuffer.append("                  0 nil nil nil)))");
@@ -7206,25 +7763,35 @@ public class CycAccess {
           CycVariable variable,
           CycObject mt)
           throws UnknownHostException, IOException, CycApiException {
+	  return askWithVariable(query, variable, mt, "0 nil nil nil");
+  }
+  
+  public CycList askWithVariable(CycList query,
+          CycVariable variable,
+          CycObject mt, String restParams)
+          throws UnknownHostException, IOException, CycApiException {
     StringBuilder queryBuffer = new StringBuilder();
     queryBuffer.append("(clet ((*cache-inference-results* nil) ");
     queryBuffer.append("       (*compute-inference-results* nil) ");
     queryBuffer.append("       (*unique-inference-result-bindings* t) ");
     queryBuffer.append("       (*generate-readable-fi-results* nil)) ");
     queryBuffer.append("  (without-wff-semantics ");
-    queryBuffer.append("    (ask-template ").append(variable.stringApiValue()).append(" ");
-    queryBuffer.append("                  ").append(query.stringApiValue()).append(" ");
+    queryBuffer.append("    (ask-template ").append(variable.stringApiValue()).append(
+            " ");
+    queryBuffer.append("                  ").append(query.stringApiValue()).append(
+            " ");
     queryBuffer.append("                  ").append(makeELMt(
             mt).stringApiValue()).append(" ");
-    queryBuffer.append("                  0 nil nil nil)))");
+    queryBuffer.append("                  "+ restParams + ")))");
 
     CycList answer = converseList(queryBuffer.toString());
 
     return canonicalizeList(answer);
   }
 
+
   /**
-   * Returns a list of bindings for a query with unbound variables.  The bindings each consist of a
+   * Returns a list of bindings for a query with unbound variables. The bindings each consist of a
    * list in the order of the unbound variables list parameter, in which each bound term is the
    * binding for the corresponding variable.
    *
@@ -7243,16 +7810,26 @@ public class CycAccess {
           List variables,
           CycObject mt)
           throws UnknownHostException, IOException, CycApiException {
+	  return askWithVariables(query, variables, mt, "0 nil nil nil");
+  }
+
+  public CycList askWithVariables(CycList query,
+          List variables,
+          CycObject mt, String restParams)
+          throws UnknownHostException, IOException, CycApiException {
     StringBuilder queryBuffer = new StringBuilder();
     queryBuffer.append("(clet ((*cache-inference-results* nil) ");
     queryBuffer.append("       (*compute-inference-results* nil) ");
     queryBuffer.append("       (*unique-inference-result-bindings* t) ");
     queryBuffer.append("       (*generate-readable-fi-results* nil)) ");
     queryBuffer.append("  (without-wff-semantics ");
-    queryBuffer.append("    (ask-template ").append((new CycList(variables)).stringApiValue()).append(" ");
-    queryBuffer.append("                  ").append(query.stringApiValue()).append(" ");
-    queryBuffer.append("                  ").append(mt.stringApiValue()).append(" ");
-    queryBuffer.append("                  0 nil nil nil)))");
+    queryBuffer.append("    (ask-template ").append(
+            (new CycList(variables)).stringApiValue()).append(" ");
+    queryBuffer.append("                  ").append(query.stringApiValue()).append(
+            " ");
+    queryBuffer.append("                  ").append(mt.stringApiValue()).append(
+            " ");
+    queryBuffer.append("                  "+restParams+")))");
 
     CycList bindings = converseList(queryBuffer.toString());
     CycList canonicalBindings = new CycList();
@@ -7263,19 +7840,6 @@ public class CycAccess {
     }
     return canonicalBindings;
   }
-
-  public CycList askWithVariable(CycList query3, CycVariable roleVar, CycFort mtForUser, int i, String string)
-  {
-  	// TODO Auto-generated method stub
-  	return null;
-  }
-  
-  public CycList askWithVariables(CycList query, ArrayList variables, CycConstant knownConstantByName, int i, String string)
-  {
-  	// TODO Auto-generated method stub
-  	return null;
-  }
-  
   /**
    * Returns <tt>true</tt> iff the query is true in the knowledge base.
    *
@@ -7291,7 +7855,8 @@ public class CycAccess {
    */
   public boolean isQueryTrue(CycList query, CycObject mt)
           throws UnknownHostException, IOException, CycApiException {
-    String command = makeSubLStmt(CYC_QUERY, canonicalizeList(query), makeELMt(mt));
+    String command = makeSubLStmt(CYC_QUERY, canonicalizeList(query), makeELMt(
+            mt));
     CycList response = converseList(command);
 
     return response.size() > 0;
@@ -7375,7 +7940,7 @@ public class CycAccess {
    * @param predicate the predicate for which backward chaining implication rules are sought
    * @param formula the literal for which backward chaining implication rules are sought
    * @param mt the microtheory (and its genlMts) in which the search for backchaining implication
-   *        rules takes place
+   * rules takes place
    *
    * @return a list of the backchaining implication rules which might apply to the given predicate
    *
@@ -7400,7 +7965,8 @@ public class CycAccess {
       command.append("                    (unify-el-possible ").
               append(formula.stringApiValue()).
               append(" ");
-      command.append("                                          (third formula))) ");
+      command.append(
+              "                                          (third formula))) ");
       command.append("         (cpush formula backchain-rules)))) ");
       command.append("   backchain-rules)");
     } else {
@@ -7416,7 +7982,8 @@ public class CycAccess {
       command.append("                    (unify-el-possible ").
               append(formula.stringApiValue()).
               append(" ");
-      command.append("                                          (third formula))) ");
+      command.append(
+              "                                          (third formula))) ");
       command.append("         (cpush formula backchain-rules)))) ");
       command.append("   backchain-rules)");
     }
@@ -7431,10 +7998,10 @@ public class CycAccess {
    * @param predicate the predicate for which forward chaining implication rules are sought
    * @param formula the literal for which forward chaining implication rules are sought
    * @param mt the microtheory (and its genlMts) in which the search for forward chaining rules
-   *        takes place
+   * takes place
    *
    * @return a list of the forward chaining implication rules which might apply to the given
-   *         predicate
+   * predicate
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -7448,21 +8015,28 @@ public class CycAccess {
             everythingPSC)) {
       command.append("(clet (backchain-rules formula) ");
       command.append("  (with-all-mts ");
-      command.append("    (do-predicate-rule-index (rule ").append(predicate.stringApiValue()).append(" :pos nil :forward) ");
+      command.append("    (do-predicate-rule-index (rule ").append(
+              predicate.stringApiValue()).append(" :pos nil :forward) ");
       command.append("       (csetq formula (assertion-el-formula rule)) ");
       command.append("       (pwhen (cand (eq (first formula) #$implies) ");
-      command.append("                    (unify-el-possible ").append(formula.stringApiValue()).append(" ");
-      command.append("                                          (third formula))) ");
+      command.append("                    (unify-el-possible ").append(
+              formula.stringApiValue()).append(" ");
+      command.append(
+              "                                          (third formula))) ");
       command.append("         (cpush formula backchain-rules)))) ");
       command.append("   backchain-rules)");
     } else {
       command.append("(clet (backchain-rules formula) ");
-      command.append("  (with-inference-mt-relevance ").append(makeELMt(mt).stringApiValue()).append(" ");
-      command.append("    (do-predicate-rule-index (rule ").append(predicate.stringApiValue()).append(" :pos nil :forward) ");
+      command.append("  (with-inference-mt-relevance ").append(
+              makeELMt(mt).stringApiValue()).append(" ");
+      command.append("    (do-predicate-rule-index (rule ").append(
+              predicate.stringApiValue()).append(" :pos nil :forward) ");
       command.append("       (csetq formula (assertion-el-formula rule)) ");
       command.append("       (pwhen (cand (eq (first formula) #$implies) ");
-      command.append("                    (unify-el-possible ").append(formula.stringApiValue()).append(" ");
-      command.append("                                          (third formula))) ");
+      command.append("                    (unify-el-possible ").append(
+              formula.stringApiValue()).append(" ");
+      command.append(
+              "                                          (third formula))) ");
       command.append("         (cpush formula backchain-rules)))) ");
       command.append("   backchain-rules)");
     }
@@ -7475,7 +8049,7 @@ public class CycAccess {
    *
    * @param predicate the predicate for which backchaining rules are sought
    * @param mt the microtheory (and its genlMts) in which the search for backchaining rules takes
-   *        place
+   * place
    *
    * @return a list of the backchaining implication rules which might apply to the given predicate
    *
@@ -7490,22 +8064,29 @@ public class CycAccess {
             everythingPSC)) {
       command.append("(clet (backchain-rules) ");
       command.append("  (with-all-mts ");
-      command.append("    (do-predicate-rule-index (rule ").append(predicate.stringApiValue()).append(" ");
+      command.append("    (do-predicate-rule-index (rule ").append(
+              predicate.stringApiValue()).append(" ");
       command.append("                                :sense :pos ");
       command.append("                                :done nil ");
       command.append("                                :direction :backward) ");
-      command.append("       (pwhen (eq (first (assertion-el-formula rule)) #$implies) ");
-      command.append("         (cpush (assertion-el-formula rule) backchain-rules)))) ");
+      command.append(
+              "       (pwhen (eq (first (assertion-el-formula rule)) #$implies) ");
+      command.append(
+              "         (cpush (assertion-el-formula rule) backchain-rules)))) ");
       command.append("   backchain-rules)");
     } else {
       command.append("(clet (backchain-rules) ");
-      command.append("  (with-inference-mt-relevance ").append(makeELMt(mt).stringApiValue()).append(" ");
-      command.append("    (do-predicate-rule-index (rule ").append(predicate.stringApiValue()).append(" ");
+      command.append("  (with-inference-mt-relevance ").append(
+              makeELMt(mt).stringApiValue()).append(" ");
+      command.append("    (do-predicate-rule-index (rule ").append(
+              predicate.stringApiValue()).append(" ");
       command.append("                                :sense :pos ");
       command.append("                                :done nil ");
       command.append("                                :direction :backward) ");
-      command.append("       (pwhen (eq (first (assertion-el-formula rule)) #$implies) ");
-      command.append("         (cpush (assertion-el-formula rule) backchain-rules)))) ");
+      command.append(
+              "       (pwhen (eq (first (assertion-el-formula rule)) #$implies) ");
+      command.append(
+              "         (cpush (assertion-el-formula rule) backchain-rules)))) ");
       command.append("   backchain-rules)");
     }
 
@@ -7519,10 +8100,10 @@ public class CycAccess {
    *
    * @param predicate the predicate for which forward chaining rules are sought
    * @param mt the microtheory (and its genlMts) in which the search for forward chaining rules
-   *        takes place
+   * takes place
    *
    * @return a list of the forward chaining implication rules which might apply to the given
-   *         predicate
+   * predicate
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -7537,22 +8118,29 @@ public class CycAccess {
             everythingPSC)) {
       command.append("(clet (backchain-rules) ");
       command.append("  (with-all-mts ");
-      command.append("    (do-predicate-rule-index (rule ").append(predicate.stringApiValue()).append(" ");
+      command.append("    (do-predicate-rule-index (rule ").append(
+              predicate.stringApiValue()).append(" ");
       command.append("                                :sense :pos ");
       command.append("                                :done nil ");
       command.append("                                :direction :forward) ");
-      command.append("       (pwhen (eq (first (assertion-el-formula rule)) #$implies) ");
-      command.append("         (cpush (assertion-el-formula rule) backchain-rules)))) ");
+      command.append(
+              "       (pwhen (eq (first (assertion-el-formula rule)) #$implies) ");
+      command.append(
+              "         (cpush (assertion-el-formula rule) backchain-rules)))) ");
       command.append("   backchain-rules)");
     } else {
       command.append("(clet (backchain-rules) ");
-      command.append("  (with-inference-mt-relevance ").append(makeELMt(mt).stringApiValue()).append(" ");
-      command.append("    (do-predicate-rule-index (rule ").append(predicate.stringApiValue()).append(" ");
+      command.append("  (with-inference-mt-relevance ").append(
+              makeELMt(mt).stringApiValue()).append(" ");
+      command.append("    (do-predicate-rule-index (rule ").append(
+              predicate.stringApiValue()).append(" ");
       command.append("                                :sense :pos ");
       command.append("                                :done nil ");
       command.append("                                :direction :forward) ");
-      command.append("       (pwhen (eq (first (assertion-el-formula rule)) #$implies) ");
-      command.append("         (cpush (assertion-el-formula rule) backchain-rules)))) ");
+      command.append(
+              "       (pwhen (eq (first (assertion-el-formula rule)) #$implies) ");
+      command.append(
+              "         (cpush (assertion-el-formula rule) backchain-rules)))) ");
       command.append("   backchain-rules)");
     }
 
@@ -7560,7 +8148,7 @@ public class CycAccess {
   }
 
   /**
-   * Gets the value of a given KB symbol.  This is intended mainly for test case setup.
+   * Gets the value of a given KB symbol. This is intended mainly for test case setup.
    *
    * @param cycSymbol the KB symbol which will have a value bound
    *
@@ -7576,7 +8164,7 @@ public class CycAccess {
   }
 
   /**
-   * Sets a KB symbol to have the specified value.  This is intended mainly for test case setup. If
+   * Sets a KB symbol to have the specified value. This is intended mainly for test case setup. If
    * the symbol does not exist at the KB, then it will be created and assigned the value.
    *
    * @param cycSymbol the KB symbol which will have a value bound
@@ -7588,7 +8176,8 @@ public class CycAccess {
    */
   public void setSymbolValue(CycSymbol cycSymbol, Object value)
           throws UnknownHostException, IOException, CycApiException {
-    converseVoid(makeSubLStmt("csetq", new SubLAPIHelper.AsIsTerm(cycSymbol), value));
+    converseVoid(makeSubLStmt("csetq", new SubLAPIHelper.AsIsTerm(cycSymbol),
+            value));
   }
 
   /**
@@ -7625,16 +8214,17 @@ public class CycAccess {
 
   private boolean isWellFormedFormulaInternal(CycObject cycList)
           throws UnknownHostException, IOException, CycApiException {
-    return converseBoolean(makeSubLStmt(WITH_ALL_MTS, makeNestedSubLStmt(EL_WFF, cycList)));
+    return converseBoolean(makeSubLStmt(WITH_ALL_MTS, makeNestedSubLStmt(EL_WFF,
+            cycList)));
   }
 
   /**
    * Returns <tt>true</tt> iff backchain inference on the given predicate is required.
    *
    * @param predicate the <tt>CycConstant</tt> predicate for which backchaining required status is
-   *        sought
+   * sought
    * @param mt microtheory (including its genlMts) in which the backchaining required status is
-   *        sought
+   * sought
    *
    * @return <tt>true</tt> iff backchain inference on the given predicate is required
    *
@@ -7655,9 +8245,9 @@ public class CycAccess {
    * Returns <tt>true</tt> iff backchain inference on the given predicate is encouraged.
    *
    * @param predicate the <tt>CycConstant</tt> predicate for which backchaining encouraged status
-   *        is sought
+   * is sought
    * @param mt microtheory (including its genlMts) in which the backchaining encouraged status is
-   *        sought
+   * sought
    *
    * @return <tt>true</tt> iff backchain inference on the given predicate is encouraged
    *
@@ -7678,9 +8268,9 @@ public class CycAccess {
    * Returns <tt>true</tt> iff backchain inference on the given predicate is discouraged.
    *
    * @param predicate the <tt>CycConstant</tt> predicate for which backchaining discouraged status
-   *        is sought
+   * is sought
    * @param mt microtheory (including its genlMts) in which the backchaining discouraged status is
-   *        sought
+   * sought
    *
    * @return <tt>true</tt> iff backchain inference on the given predicate is discouraged
    *
@@ -7701,9 +8291,9 @@ public class CycAccess {
    * Returns <tt>true</tt> iff backchain inference on the given predicate is forbidden.
    *
    * @param predicate the <tt>CycConstant</tt> predicate for which backchaining forbidden status is
-   *        sought
+   * sought
    * @param mt microtheory (including its genlMts) in which the backchaining forbidden status is
-   *        sought
+   * sought
    *
    * @return <tt>true</tt> iff backchain inference on the given predicate is forbidden
    *
@@ -7728,7 +8318,7 @@ public class CycAccess {
    * @param mt microtheory (including its genlMts) in which the irreflexive status is sought
    *
    * @return <tt>true</tt> iff the predicate has the irreflexive property: (#$isa ?PRED
-   *         #$IrreflexsiveBinaryPredicate)
+   * #$IrreflexsiveBinaryPredicate)
    *
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
@@ -7754,7 +8344,7 @@ public class CycAccess {
    * @param mt microtheory (including its genlMts) in which the existence is sought
    *
    * @return <tt>true</tt> iff any ground formula instances exist having the given predicate, and
-   *         the given term in the given argument position
+   * the given term in the given argument position
    *
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
@@ -7766,7 +8356,8 @@ public class CycAccess {
           throws IOException, CycApiException {
     String command;
     if (makeELMt(mt).equals(inferencePSC) || makeELMt(mt).equals(everythingPSC)) {
-      command = makeSubLStmt(SOME_PRED_VALUE_IN_ANY_MT, term, predicate, argumentPosition);
+      command = makeSubLStmt(SOME_PRED_VALUE_IN_ANY_MT, term, predicate,
+              argumentPosition);
     } else {
       command = makeSubLStmt(SOME_PRED_VALUE_IN_RELEVANT_MTS, term, predicate,
               makeELMt(mt), argumentPosition);
@@ -7778,13 +8369,13 @@ public class CycAccess {
 
   /**
    * Returns the count of the assertions indexed according to the given pattern, using the best
-   * index (from among the predicate and argument indices).  The formula can contain variables.
+   * index (from among the predicate and argument indices). The formula can contain variables.
    *
    * @param formula the formula whose indexed instances are counted
    * @param mt microtheory (including its genlMts) in which the count is determined
    *
    * @return the count of the assertions indexed according to the given pattern, using the best
-   *         index (from among the predicate and argument indices)
+   * index (from among the predicate and argument indices)
    *
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
@@ -7793,7 +8384,8 @@ public class CycAccess {
           CycObject mt)
           throws IOException, CycApiException {
     String command = makeSubLStmt("with-inference-mt-relevance", makeELMt(mt),
-            makeNestedSubLStmt("best-index-count", formula, CycObjectFactory.t, CycObjectFactory.t));
+            makeNestedSubLStmt("best-index-count", formula, CycObjectFactory.t,
+            CycObjectFactory.t));
     return converseInt(command);
   }
 
@@ -7832,7 +8424,7 @@ public class CycAccess {
    * @param domainMt the microtherory in which the info about candidate terms is asked
    *
    * @return a parsing expression consisting of a parsing span expression, and a list of parsed
-   *         terms
+   * terms
    *
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
@@ -7858,7 +8450,7 @@ public class CycAccess {
    * @param domainMt the microtherory in which the info about candidate terms is asked
    *
    * @return a parsing expression consisting of a parsing span expression, and a list of parsed
-   *         terms
+   * terms
    *
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
@@ -7884,7 +8476,7 @@ public class CycAccess {
    * @param objects the list of terms to be disambiguated
    *
    * @return a list of disambiguation expressions, corresponding to each of the terms in the given
-   *         list of objects
+   * list of objects
    *
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
@@ -7942,14 +8534,15 @@ public class CycAccess {
           throws IOException, CycApiException {
 
     CycVariable variable = CycObjectFactory.makeCycVariable("?arg2");
-    final CycFormulaSentence query = CycFormulaSentence.makeCycFormulaSentence(predicate, arg1, variable);
+    final CycFormulaSentence query = CycFormulaSentence.makeCycFormulaSentence(
+            predicate, arg1, variable);
 
     return queryVariable(variable, query, inferencePSC);
   }
 
   /**
    * Returns the single (first) arg2 value of a binary gaf, given the predicate and arg0, looking
-   * in all microtheories.  Return null if none found.
+   * in all microtheories. Return null if none found.
    *
    * @param predicate the given predicate for the gaf pattern
    * @param arg1 the given first argument of the gaf
@@ -8026,7 +8619,7 @@ public class CycAccess {
    */
   public boolean isCycLNonAtomicReifableTerm(CycList formula)
           throws UnknownHostException, IOException, CycApiException {
-    return isCycLNonAtomicReifableTermInternal(formula);
+    return isCycLNonAtomicReifableTerm(formula);
   }
 
   /**
@@ -8040,12 +8633,7 @@ public class CycAccess {
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
    */
-  public boolean isCycLNonAtomicReifableTerm(CycFormula formula)
-          throws UnknownHostException, IOException, CycApiException {
-    return isCycLNonAtomicReifableTermInternal(formula);
-  }
-
-  private boolean isCycLNonAtomicReifableTermInternal(CycObject formula)
+  public boolean isCycLNonAtomicReifableTerm(CycObject formula)
           throws UnknownHostException, IOException, CycApiException {
     return converseBoolean("(cycl-nart-p " + formula.stringApiValue() + ")");
   }
@@ -8061,28 +8649,7 @@ public class CycAccess {
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
    */
-  public boolean isCycLNonAtomicUnreifableTerm(CycList formula)
-          throws UnknownHostException, IOException, CycApiException {
-    return isCycLNonAtomicUnreifableTermInternal(formula);
-  }
-
-  /**
-   * Returns true if formula is well-formed Non Atomic Un-reifable Term.
-   *
-   * @param formula the given EL formula
-   *
-   * @return true if formula is well-formed Non Atomic Un-reifable Term, otherwise false
-   *
-   * @throws UnknownHostException if cyc server host not found on the network
-   * @throws IOException if a data communication error occurs
-   * @throws CycApiException if the api request results in a cyc server error
-   */
-  public boolean isCycLNonAtomicUnreifableTerm(CycFormula formula)
-          throws UnknownHostException, IOException, CycApiException {
-    return isCycLNonAtomicUnreifableTermInternal(formula);
-  }
-
-  private boolean isCycLNonAtomicUnreifableTermInternal(CycObject formula)
+  public boolean isCycLNonAtomicUnreifableTerm(CycObject formula)
           throws UnknownHostException, IOException, CycApiException {
     return converseBoolean("(cycl-naut-p " + formula.stringApiValue() + ")");
   }
@@ -8224,14 +8791,14 @@ public class CycAccess {
    *
    * @param predicateName the name of the new binary predicate
    * @param predicateTypeName the type of binary predicate, for example
-   *        #$TransitiveBinaryPredicate, which when null defaults to #$BinaryPredicate
+   * #$TransitiveBinaryPredicate, which when null defaults to #$BinaryPredicate
    * @param comment the comment for the new binary predicate, or null
    * @param arg1IsaName the argument position one type constraint, or null
    * @param arg2IsaName the argument position two type constraint, or null
    * @param arg1FormatName the argument position one format constraint, or null
    * @param arg2FormatName the argument position two format constraint, or null
    * @param genlPredsName the more general binary predicate of which this new predicate is a
-   *        specialization, that when null defaults to #$conceptuallyRelated
+   * specialization, that when null defaults to #$conceptuallyRelated
    * @param genFormatList the paraphrase generation list string, or null
    * @param genFormatString the paraphrase generation string, or null
    *
@@ -8268,14 +8835,14 @@ public class CycAccess {
    *
    * @param predicateName the name of the new binary predicate
    * @param predicateType the type of binary predicate, for example #$TransitiveBinaryPredicate,
-   *        which when null defaults to #$BinaryPredicate
+   * which when null defaults to #$BinaryPredicate
    * @param comment the comment for the new binary predicate, or null
    * @param arg1Isa the argument position one type constraint, or null
    * @param arg2Isa the argument position two type constraint, or null
    * @param arg1Format the argument position one format constraint, or null
    * @param arg2Format the argument position two format constraint, or null
    * @param genlPreds the more general binary predicate of which this new predicate is a
-   *        specialization, that when null defaults to #$conceptuallyRelated
+   * specialization, that when null defaults to #$conceptuallyRelated
    * @param genFormatList the paraphrase generation list string, or null
    * @param genFormatString the paraphrase generation string, or null
    *
@@ -8745,11 +9312,11 @@ public class CycAccess {
    * @param commentMt the microtheory in which the comment is asserted
    * @param arg1IsaName the collection of which the new binary function is an instance
    * @param arg2GenlsName the kind of objects this binary function takes as its first argument, or
-   *        null
+   * null
    * @param arg2IsaName the kind of objects this binary function takes as its second argument, or
-   *        null
+   * null
    * @param arg1GenlsName the general collections this binary function takes as its first argument,
-   *        or null
+   * or null
    * @param resultIsa the kind of object represented by this reified term
    *
    * @return the new collection-denoting reifiable binary function term
@@ -8809,9 +9376,9 @@ public class CycAccess {
    * @param arg1Isa the kind of objects this binary function takes as its first argument, or null
    * @param arg2Isa the kind of objects this binary function takes as its first argument, or null
    * @param arg1Genls the general collections this binary function takes as its first argument, or
-   *        null
+   * null
    * @param arg2Genls the general collections this binary function takes as its second argument, or
-   *        null
+   * null
    * @param resultIsa the kind of object represented by this reified term
    *
    * @return the new collection-denoting reifiable binary function term
@@ -9024,17 +9591,16 @@ public class CycAccess {
    * @throws IOException if a data communication error occurs
    * @throws UnknownHostException if cyc server host not found on the network
    */
-  public boolean isOpenCyc()
-          throws UnknownHostException, IOException {
-    boolean answer;
-
-    try {
-      answer = converseBoolean("(cyc-opencyc-feature)");
-    } catch (CycApiException e) {
-      answer = false;
+  public synchronized boolean isOpenCyc() throws UnknownHostException, IOException {
+    if (isOpenCyc == null) {
+      try {
+        isOpenCyc = converseBoolean("(cyc-opencyc-feature)");
+      } catch (CycApiException e) {
+        isOpenCyc = false;
+      }
     }
 
-    return answer;
+    return isOpenCyc;
   }
 
   /**
@@ -9066,7 +9632,8 @@ public class CycAccess {
    * @throws IOException if a communications error occurs
    * @throws CycApiException if the Cyc server returns an error
    */
-  public CycFort importOwlOntology(final String uri, final String prefix, final String sourceFile)
+  public CycFort importOwlOntology(final String uri, final String prefix,
+          final String sourceFile)
           throws IOException, CycApiException {
     final CycFort ontology = null;
     return importOwlOntology(uri, prefix, sourceFile, ontology);
@@ -9107,10 +9674,12 @@ public class CycAccess {
    * @throws CycApiException if the Cyc server returns an error
    */
   public CycFort importOwlOntology(final String uri, final String prefix,
-          final String sourceFile, final CycFort ontology, final CycFort quotedIsa)
+          final String sourceFile, final CycFort ontology,
+          final CycFort quotedIsa)
           throws IOException, CycApiException {
     final CycFort currentCyclist = getCyclist();
-    return importOwlOntology(uri, prefix, sourceFile, ontology, quotedIsa, currentCyclist);
+    return importOwlOntology(uri, prefix, sourceFile, ontology, quotedIsa,
+            currentCyclist);
   }
 
   /**
@@ -9129,14 +9698,19 @@ public class CycAccess {
    * @throws CycApiException if the Cyc server returns an error
    */
   public CycFort importOwlOntology(final String uri, final String prefix,
-          final String sourceFile, final CycFort ontology, final CycFort quotedIsa,
+          final String sourceFile, final CycFort ontology,
+          final CycFort quotedIsa,
           final CycFort cyclist)
           throws IOException, CycApiException {
     final String sourceFileString = ((sourceFile != null) && (sourceFile.length() > 0)) ? "\"" + sourceFile + "\"" : "nil";
-    final String ontologyString = (ontology == null) ? "nil" : CycFort.stringApiValue(ontology);
-    final String quotedIsaString = (quotedIsa == null) ? "nil" : CycFort.stringApiValue(quotedIsa);
-    final String cyclistString = (cyclist == null) ? "nil" : CycFort.stringApiValue(cyclist);
-    final Object object = converseObject("(import-owl-ontology " + "\"" + uri + "\" " + "\"" + prefix + "\" " + sourceFileString + " " + ontologyString + " " + quotedIsaString + " " + cyclistString + ")");
+    final String ontologyString = (ontology == null) ? "nil" : CycFort.stringApiValue(
+            ontology);
+    final String quotedIsaString = (quotedIsa == null) ? "nil" : CycFort.stringApiValue(
+            quotedIsa);
+    final String cyclistString = (cyclist == null) ? "nil" : CycFort.stringApiValue(
+            cyclist);
+    final Object object = converseObject(
+            "(import-owl-ontology " + "\"" + uri + "\" " + "\"" + prefix + "\" " + sourceFileString + " " + ontologyString + " " + quotedIsaString + " " + cyclistString + ")");
     if (object instanceof CycFort) {
       return (CycFort) object;
     } else {
@@ -9151,7 +9725,7 @@ public class CycAccess {
    * @param name the name used to lookup an existing constant
    *
    * @return a constant whose name differs from the given name only by case, otherwise null if none
-   *         exists
+   * exists
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -9159,7 +9733,8 @@ public class CycAccess {
    */
   public CycConstant constantNameCaseCollision(String name)
           throws UnknownHostException, IOException, CycApiException {
-    Object object = converseObject("(constant-name-case-collision \"" + name + "\")");
+    Object object = converseObject(
+            "(constant-name-case-collision \"" + name + "\")");
 
     if (object instanceof CycConstant) {
       return (CycConstant) object;
@@ -9175,7 +9750,7 @@ public class CycAccess {
    * @param kbSubsetCollections the list of KBSubsetCollections
    *
    * @return the list of applicable binary predicates which are elements of any of the given list
-   *         of KBSubsetCollections
+   * of KBSubsetCollections
    *
    * @throws IOException if a communications error occurs
    * @throws UnknownHostException if the Cyc server cannot be found
@@ -9190,8 +9765,10 @@ public class CycAccess {
               i);
       String query = "(#$and \n" + "  (#$isa ?binary-predicate " + kbSubsetCollection.stringApiValue()
               + ") \n" + "  (#$isa ?binary-predicate #$BinaryPredicate))";
-      result.addAllNew(queryVariable(CycObjectFactory.makeCycVariable("?binary-predicate"),
-              makeCycSentence(query), inferencePSC, new DefaultInferenceParameters(this)));
+      result.addAllNew(queryVariable(CycObjectFactory.makeCycVariable(
+              "?binary-predicate"),
+              makeCycSentence(query), inferencePSC,
+              new DefaultInferenceParameters(this)));
     }
 
     return result;
@@ -9206,7 +9783,7 @@ public class CycAccess {
    * @param mt the relevant inference microtheory
    *
    * @return the list of gafs in which the predicate is a element of the given list of predicates
-   *         and in which the given term appears in the first argument position
+   * and in which the given term appears in the first argument position
    *
    * @throws IOException if a communications error occurs
    * @throws UnknownHostException if the Cyc server cannot be found
@@ -9248,7 +9825,7 @@ public class CycAccess {
    * @param mt the relevant inference microtheory
    *
    * @return the list of gafs in which the predicate is a element of the given list of predicates
-   *         and in which the given term appears in the first argument position
+   * and in which the given term appears in the first argument position
    *
    * @throws IOException if a communications error occurs
    * @throws UnknownHostException if the Cyc server cannot be found
@@ -9294,7 +9871,7 @@ public class CycAccess {
    * @param predicates the given list of predicates
    *
    * @return the list of gafs in which the predicate is a element of the given list of predicates
-   *         and in which the given term appears in the first argument position
+   * and in which the given term appears in the first argument position
    *
    * @throws IOException if a communications error occurs
    * @throws UnknownHostException if the Cyc server cannot be found
@@ -9327,7 +9904,7 @@ public class CycAccess {
    * @param predicate the given predicate
    *
    * @return the list of gafs in which the predicate is a element of the given list of predicates
-   *         and in which the given term appears in the first argument position
+   * and in which the given term appears in the first argument position
    *
    * @throws IOException if a communications error occurs
    * @throws UnknownHostException if the Cyc server cannot be found
@@ -9365,13 +9942,13 @@ public class CycAccess {
 
   /**
    * Returns the list of gafs in which the predicate is the given predicate and in which the given
-   * term appears in the first argument position.
+   * NAUT appears in the first argument position.
    *
-   * @param cycObject the given term
+   * @param naut the given NAUT
    * @param predicate the given predicate
    *
    * @return the list of gafs in which the predicate is a element of the given list of predicates
-   *         and in which the given term appears in the first argument position
+   * and in which the given term appears in the first argument position
    *
    * @throws IOException if a communications error occurs
    * @throws UnknownHostException if the Cyc server cannot be found
@@ -9404,13 +9981,13 @@ public class CycAccess {
    * @param predicate the given predicate
    * @param indexArg the argument position in which the given term appears
    * @param gatherArgs the list of argument Integer positions which indicate the assertion
-   *        arguments to be returned as each tuple
+   * arguments to be returned as each tuple
    * @param mt the relevant inference microtheory
    *
    * @return the list of tuples gathered from assertions in given microtheory in which the
-   *         predicate is the given predicate, in which the given term appears in the indexArg
-   *         position and in which the list of gatherArgs determines the assertion arguments
-   *         returned as each tuple
+   * predicate is the given predicate, in which the given term appears in the indexArg
+   * position and in which the list of gatherArgs determines the assertion arguments
+   * returned as each tuple
    *
    * @throws IOException if a communications error occurs
    * @throws UnknownHostException if the Cyc server cannot be found
@@ -9420,7 +9997,8 @@ public class CycAccess {
           int indexArg, CycList gatherArgs, CycObject mt)
           throws UnknownHostException, IOException, CycApiException {
     CycList tuples = new CycList();
-    String command = makeSubLStmt("pred-value-tuples-in-mt", term, predicate, indexArg,
+    String command = makeSubLStmt("pred-value-tuples-in-mt", term, predicate,
+            indexArg,
             gatherArgs, makeELMt(mt));
     return converseList(command);
   }
@@ -9438,7 +10016,8 @@ public class CycAccess {
   public void assertArg1FormatSingleEntry(CycFort relation)
           throws UnknownHostException, IOException, CycApiException {
     // (#$arg1Format relation SingleEntry)
-    assertArgFormat(relation, 1, getKnownConstantByGuid("bd5880eb-9c29-11b1-9dad-c379636f7270"));
+    assertArgFormat(relation, 1, getKnownConstantByGuid(
+            "bd5880eb-9c29-11b1-9dad-c379636f7270"));
   }
 
   /**
@@ -9453,11 +10032,13 @@ public class CycAccess {
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
    */
-  public void assertArgFormat(CycFort relation, int argPosition, CycFort argNFormat)
+  public void assertArgFormat(CycFort relation, int argPosition,
+          CycFort argNFormat)
           throws UnknownHostException, IOException, CycApiException {
     // (#$argFormat relation argPosition argNFormat)
     CycFormulaSentence sentence = CycFormulaSentence.makeCycFormulaSentence(
-            getKnownConstantByGuid("bd8a36e1-9c29-11b1-9dad-c379636f7270"), relation,
+            getKnownConstantByGuid("bd8a36e1-9c29-11b1-9dad-c379636f7270"),
+            relation,
             argPosition, argNFormat);
     assertGaf(sentence, baseKB);
   }
@@ -9504,13 +10085,14 @@ public class CycAccess {
           throws UnknownHostException, IOException, CycApiException {
     CycFormulaSentence gaf = CycFormulaSentence.makeCycFormulaSentence(
             // #$synonymousExternalConcept
-            getKnownConstantByGuid("c0e2af4e-9c29-11b1-9dad-c379636f7270"), cycTerm, informationSource, externalConcept);
+            getKnownConstantByGuid("c0e2af4e-9c29-11b1-9dad-c379636f7270"),
+            cycTerm, informationSource, externalConcept);
     assertGaf(gaf, makeELMt(mt));
   }
 
   /**
    * Gets the list of mappings from the specified information source given the inference
-   * microtheory.  Each returned list item is the pair consisting of external concept string and
+   * microtheory. Each returned list item is the pair consisting of external concept string and
    * synonymous Cyc term.
    *
    * @param informationSource the external indexed information source
@@ -9523,15 +10105,17 @@ public class CycAccess {
    * @throws UnknownHostException if the Cyc server cannot be found
    * @throws CycApiException if the Cyc server returns an error
    */
-  public CycList getSynonymousExternalConcepts(String informationSource, String mt)
+  public CycList getSynonymousExternalConcepts(String informationSource,
+          String mt)
           throws UnknownHostException, IOException, CycApiException {
-    return getSynonymousExternalConcepts(getKnownConstantByName(informationSource),
+    return getSynonymousExternalConcepts(getKnownConstantByName(
+            informationSource),
             getKnownConstantByName(mt));
   }
 
   /**
    * Gets the list of mappings from the specified information source given the inference
-   * microtheory.  Each returned list item is the pair consisting of external concept string and
+   * microtheory. Each returned list item is the pair consisting of external concept string and
    * synonymous Cyc term.
    *
    * @param informationSource the external indexed information source
@@ -9544,13 +10128,15 @@ public class CycAccess {
    * @throws UnknownHostException if the Cyc server cannot be found
    * @throws CycApiException if the Cyc server returns an error
    */
-  public CycList getSynonymousExternalConcepts(CycFort informationSource, CycObject mt)
+  public CycList getSynonymousExternalConcepts(CycFort informationSource,
+          CycObject mt)
           throws UnknownHostException, IOException, CycApiException {
     CycList variables = new CycList();
     CycVariable cycTermVar = CycObjectFactory.makeCycVariable("?cyc-term");
     variables.add(cycTermVar);
 
-    CycVariable externalConceptVar = CycObjectFactory.makeCycVariable("?externalConcept");
+    CycVariable externalConceptVar = CycObjectFactory.makeCycVariable(
+            "?externalConcept");
     variables.add(externalConceptVar);
 
     final CycFormulaSentence query = CycFormulaSentence.makeCycFormulaSentence(
@@ -9558,7 +10144,8 @@ public class CycAccess {
             getKnownConstantByGuid("c0e2af4e-9c29-11b1-9dad-c379636f7270"),
             cycTermVar, informationSource, externalConceptVar);
 
-    return queryVariables(variables, query, makeELMt(mt), new DefaultInferenceParameters(this));
+    return queryVariables(variables, query, makeELMt(mt),
+            new DefaultInferenceParameters(this));
   }
 
   /**
@@ -9583,7 +10170,8 @@ public class CycAccess {
             getKnownConstantByGuid("bd6757b8-9c29-11b1-9dad-c379636f7270"),
             phrase);
 
-    ELMt elmt = makeELMt(getKnownConstantByGuid("bda16220-9c29-11b1-9dad-c379636f7270"));
+    ELMt elmt = makeELMt(getKnownConstantByGuid(
+            "bda16220-9c29-11b1-9dad-c379636f7270"));
     assertGaf(gaf, elmt);
   }
 
@@ -9612,7 +10200,8 @@ public class CycAccess {
     gaf.add(getKnownConstantByGuid("bd5a6853-9c29-11b1-9dad-c379636f7270"));
     gaf.add(phrase);
 
-    ELMt elmt = makeELMt(getKnownConstantByGuid("bda16220-9c29-11b1-9dad-c379636f7270"));
+    ELMt elmt = makeELMt(getKnownConstantByGuid(
+            "bda16220-9c29-11b1-9dad-c379636f7270"));
     assertGaf(gaf,
             elmt);
   }
@@ -9636,7 +10225,8 @@ public class CycAccess {
 
     CycVariable variable = CycObjectFactory.makeCycVariable("?name-string");
     final CycFormulaSentence query = CycFormulaSentence.makeCycFormulaSentence(
-            getKnownConstantByGuid("c0fdf7e8-9c29-11b1-9dad-c379636f7270"), cycFort, variable);
+            getKnownConstantByGuid("c0fdf7e8-9c29-11b1-9dad-c379636f7270"),
+            cycFort, variable);
 
     return queryVariable(variable, query, makeELMt(mt));
   }
@@ -9684,7 +10274,8 @@ public class CycAccess {
    * @throws UnknownHostException if the Cyc server cannot be found
    * @throws CycApiException if the Cyc server returns an error
    */
-  public void ensureWffConstraints(CycFort cycFort, CycFort isaConstraint, CycFort genlsConstraint)
+  public void ensureWffConstraints(CycFort cycFort, CycFort isaConstraint,
+          CycFort genlsConstraint)
           throws UnknownHostException, IOException, CycApiException {
     if ((isaConstraint != null)
             && (!isa(cycFort, isaConstraint, universalVocabularyMt))) {
@@ -9769,7 +10360,7 @@ public class CycAccess {
    * @param mt the inference microtheory
    *
    * @return the first arg2 term from gafs having the specified predicate and arg1 values or null
-   *         if none
+   * if none
    *
    * @throws IOException if a communications error occurs
    * @throws UnknownHostException if the Cyc server cannot be found
@@ -9790,7 +10381,7 @@ public class CycAccess {
    * @param mt the inference microtheory
    *
    * @return the first arg2 term from gafs having the specified predicate and arg1 values or null
-   *         if none
+   * if none
    *
    * @throws IOException if a communications error occurs
    * @throws UnknownHostException if the Cyc server cannot be found
@@ -9809,7 +10400,7 @@ public class CycAccess {
    * @param mt the inference microtheory
    *
    * @return the first arg2 term from gafs having the specified predicate and arg1 values or null
-   *         if none
+   * if none
    *
    * @throws IOException if a communications error occurs
    * @throws UnknownHostException if the Cyc server cannot be found
@@ -9821,7 +10412,8 @@ public class CycAccess {
     CycVariable variable = CycObjectFactory.makeCycVariable("?arg2");
     final CycFormulaSentence query = CycFormulaSentence.makeCycFormulaSentence(
             predicate, arg1, variable);
-    final DefaultInferenceParameters params = new DefaultInferenceParameters(this);
+    final DefaultInferenceParameters params = new DefaultInferenceParameters(
+            this);
     params.setMaxNumber(1);
     CycList answer = queryVariable(variable, query, makeELMt(mt), params);
 
@@ -9841,7 +10433,7 @@ public class CycAccess {
    * @param mt the inference microtheory
    *
    * @return the first arg2 ground or non-term from assertions having the specified predicate and
-   *         arg1 values
+   * arg1 values
    *
    * @throws IOException if a communications error occurs
    * @throws UnknownHostException if the Cyc server cannot be found
@@ -9863,7 +10455,7 @@ public class CycAccess {
    * @param mt the inference microtheory
    *
    * @return the first arg2 ground or non-term from assertions having the specified predicate and
-   *         arg1 values
+   * arg1 values
    *
    * @throws IOException if a communications error occurs
    * @throws UnknownHostException if the Cyc server cannot be found
@@ -9871,7 +10463,8 @@ public class CycAccess {
    */
   public Object getAssertionArg2(CycFort predicate, CycFort arg1, CycObject mt)
           throws UnknownHostException, IOException, CycApiException {
-    return this.converseObject(makeSubLStmt(FPRED_VALUE_IN_MT, arg1, predicate, makeELMt(mt)));
+    return this.converseObject(makeSubLStmt(FPRED_VALUE_IN_MT, arg1, predicate,
+            makeELMt(mt)));
   }
 
   /**
@@ -9907,7 +10500,8 @@ public class CycAccess {
    * @throws UnknownHostException if the Cyc server cannot be found
    * @throws CycApiException if the Cyc server returns an error
    */
-  public Object getArg1(CycFort predicate, CycDenotationalTerm arg2, CycObject mt)
+  public Object getArg1(CycFort predicate, CycDenotationalTerm arg2,
+          CycObject mt)
           throws UnknownHostException, IOException, CycApiException {
     CycList answer = getArg1s(predicate, arg2, makeELMt(mt));
 
@@ -9951,7 +10545,8 @@ public class CycAccess {
    * @throws UnknownHostException if the Cyc server cannot be found
    * @throws CycApiException if the Cyc server returns an error
    */
-  public CycList getArg1s(CycFort predicate, CycDenotationalTerm arg2, CycObject mt)
+  public CycList getArg1s(CycFort predicate, CycDenotationalTerm arg2,
+          CycObject mt)
           throws UnknownHostException, IOException, CycApiException {
 
     CycVariable variable = CycObjectFactory.makeCycVariable("?arg1");
@@ -9974,7 +10569,36 @@ public class CycAccess {
           throws UnknownHostException, IOException, CycApiException {
     return converseString(CYC_IMAGE_ID_EXPRESSION);
   }
-  static private final String CYC_IMAGE_ID_EXPRESSION = makeSubLStmt("cyc-image-id");
+  static private final String CYC_IMAGE_ID_EXPRESSION = makeSubLStmt(
+          "cyc-image-id");
+
+  /**
+   * Returns the Cyc revision string (akin to the build number).
+   *
+   * @return the Cyc revision string for the Cyc server.
+   *
+   * @throws IOException if a communications error occurs
+   * @throws UnknownHostException if the Cyc server cannot be found
+   * @throws CycApiException if the Cyc server returns an error
+   */
+  public String getCycRevisionString()
+          throws UnknownHostException, IOException, CycApiException {
+    return converseString(makeSubLStmt("cyc-revision-string"));
+  }
+
+  /**
+   * Returns the KB version string (KBNum.OperationCount) for the Cyc server.
+   *
+   * @return the Cyc KB version string.
+   *
+   * @throws IOException if a communications error occurs
+   * @throws UnknownHostException if the Cyc server cannot be found
+   * @throws CycApiException if the Cyc server returns an error
+   */
+  public String getCycKBVersionString()
+          throws UnknownHostException, IOException, CycApiException {
+    return converseString(makeSubLStmt("kb-version-string"));
+  }
 
   /**
    * Returns the list of assertions contained in the given mt.
@@ -10009,7 +10633,8 @@ public class CycAccess {
 
     while (iter.hasNext()) {
       CycAssertion assertion = (CycAssertion) iter.next();
-      String command = wrapBookkeeping(makeSubLStmt("ke-unassert-now", assertion, makeELMt(mt)));
+      String command = wrapBookkeeping(makeSubLStmt("ke-unassert-now", assertion,
+              makeELMt(mt)));
       converseVoid(command);
     }
   }
@@ -10092,7 +10717,8 @@ public class CycAccess {
    */
   public CycList getDenotsOfString(String denotationString)
           throws UnknownHostException, IOException, CycApiException {
-    return new CycList(NLFormat.getInstance(this).parseObjects(denotationString));
+    String command = makeSubLStmt("denots-of-string", denotationString);
+    return converseList(command);
   }
 
   /**
@@ -10110,28 +10736,16 @@ public class CycAccess {
    */
   public CycList getDenotsOfString(String denotationString, CycList collections)
           throws UnknownHostException, IOException, CycApiException {
-    CycList terms = getDenotsOfString(denotationString);
-    CycList result = new CycList();
-    Iterator collectionsIterator = collections.iterator();
-
-    while (collectionsIterator.hasNext()) {
-      CycFort oneCollection = (CycFort) collectionsIterator.next();
-      Iterator termsIter = terms.iterator();
-
-      while (termsIter.hasNext()) {
-        CycFort term = (CycFort) termsIter.next();
-
-        if (this.isa(term, oneCollection)) {
-          result.add(term);
-        }
-      }
-    }
-
-    return result;
+    CycList setArgs = collections.addToBeginning(new CycConstant("TheSet", new Guid("bd58e476-9c29-11b1-9dad-c379636f7270")));
+    CycNaut collectionUnion = new CycNaut(new CycConstant("CollectionUnionFn", new Guid("beb84af8-9c29-11b1-9dad-c379636f7270")), setArgs);
+    String command = makeSubLStmt("typed-denots-of-string", denotationString, collectionUnion);
+    return converseList(command);
   }
 
   /**
    * Returns the list of Cyc terms whose denotation matches the given English multi-word string.
+   *
+   * @deprecated use getDenotsOfString instead
    *
    * @param multiWordDenotationString the given English denotation multi-word string
    *
@@ -10141,15 +10755,19 @@ public class CycAccess {
    * @throws UnknownHostException if the Cyc server cannot be found
    * @throws CycApiException if the Cyc server returns an error
    */
+  @Deprecated
   public CycList getMWSDenotsOfString(CycList multiWordDenotationString)
           throws UnknownHostException, IOException, CycApiException {
-    String command = makeSubLStmt("mws-denots-of-string", multiWordDenotationString);
+    String command = makeSubLStmt("mws-denots-of-string",
+            multiWordDenotationString);
     return converseList(command);
   }
 
   /**
    * Returns the list of Cyc terms whose denotation matches the given English multi-word string and
    * which are instances of any of the given collections.
+   *
+   * @deprecated use getDenotsOfString instead
    *
    * @param multiWordDenotationString the given English denotation string
    * @param collections the given list of collections
@@ -10160,10 +10778,12 @@ public class CycAccess {
    * @throws UnknownHostException if the Cyc server cannot be found
    * @throws CycApiException if the Cyc server returns an error
    */
+  @Deprecated
   public CycList getMWSDenotsOfString(CycList multiWordDenotationString,
           CycList collections)
           throws UnknownHostException, IOException, CycApiException {
-    String command = makeSubLStmt("mws-denots-of-string", multiWordDenotationString);
+    String command = makeSubLStmt("mws-denots-of-string",
+            multiWordDenotationString);
 
     CycList terms = converseList(command);
     CycList result = new CycList();
@@ -10217,7 +10837,8 @@ public class CycAccess {
    */
   public boolean isFunctionBound(CycSymbol cycSymbol)
           throws UnknownHostException, IOException, CycApiException {
-    String command = makeSubLStmt("boolean", makeNestedSubLStmt("fboundp"), cycSymbol);
+    String command = makeSubLStmt("boolean", makeNestedSubLStmt("fboundp"),
+            cycSymbol);
     return converseBoolean(command);
   }
 
@@ -10255,7 +10876,7 @@ public class CycAccess {
 
   /** Returns the external ID for the given Cyc object.
    *
-   * @deprecated Should be replaced in favor of {@link #org.opencyc.cycObject.DefaultCycObject.toCompactExternalId(obj, access)}
+   * @deprecated Should be replaced in favor of {@link DefaultCycObject#toCompactExternalId(Object, CycAccess)}
    * @param cycObject the Cyc object
    * @return the external ID string
    *
@@ -10389,7 +11010,8 @@ public class CycAccess {
     if (date.equals(CycObjectFactory.nil)) {
       return 0l;
     } else {
-      throw new CycApiException("unexpected type of date returned " + date.toString());
+      throw new CycApiException(
+              "unexpected type of date returned " + date.toString());
     }
   }
 
@@ -10433,19 +11055,21 @@ public class CycAccess {
     return !response.equals(CycObjectFactory.nil);
   }
 
-  /** Asserts that the given term is dependent upon the given independent term.  If the latter is
+  /** Asserts that the given term is dependent upon the given independent term. If the latter is
    * killed, then the truth maintenance kills the dependent term.
    *
    * @param dependentTerm the dependent term
    * @param independentTerm the independent term
    * @param mt the assertion microtheory
    */
-  public void assertTermDependsOn(final CycFort dependentTerm, final CycFort independentTerm, final CycFort mt) throws IOException, CycApiException {
+  public void assertTermDependsOn(final CycFort dependentTerm,
+          final CycFort independentTerm, final CycFort mt) throws IOException, CycApiException {
     // assert (#$termDependsOn <dependentTerm> <independentTerm>) in #$UniversalVocabularyMt
-    assertGaf(mt, getKnownConstantByGuid("bdf02d74-9c29-11b1-9dad-c379636f7270"), dependentTerm, independentTerm);
+    assertGaf(mt, getKnownConstantByGuid("bdf02d74-9c29-11b1-9dad-c379636f7270"),
+            dependentTerm, independentTerm);
   }
 
-  /** Asserts that the given term is defined in the given mt.  If the mt is
+  /** Asserts that the given term is defined in the given mt. If the mt is
    * subsequently killed, then the truth maintenance kills the dependent term.
    *
    * @param dependentTerm the dependent term
@@ -10453,7 +11077,8 @@ public class CycAccess {
    */
   public void assertDefiningMt(final CycFort dependentTerm, final CycFort mt) throws IOException, CycApiException {
     // assert (#$definingMt <dependentTerm> <mt>) in #$BaseKB
-    assertGaf(baseKB, getKnownConstantByGuid("bde5ec9c-9c29-11b1-9dad-c379636f7270"), dependentTerm, mt);
+    assertGaf(baseKB, getKnownConstantByGuid(
+            "bde5ec9c-9c29-11b1-9dad-c379636f7270"), dependentTerm, mt);
   }
 
   /** Returns the XML datetime string corresponding to the given CycL date
@@ -10465,7 +11090,8 @@ public class CycAccess {
   static public String xmlDatetimeString(final CycList date) throws IOException, CycApiException {
     try {
       final CycNaut dateNaut = (CycNaut) CycNaut.convertIfPromising(date);
-      final Date javadate = DateConverter.parseCycDate(dateNaut, TimeZone.getDefault(), false);
+      final Date javadate = DateConverter.parseCycDate(dateNaut,
+              TimeZone.getDefault(), false);
       int cycDatePrecision = DateConverter.getCycDatePrecision(dateNaut);
       if (cycDatePrecision > DateConverter.DAY_GRANULARITY) {
         return new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'").format(javadate);
@@ -10479,50 +11105,88 @@ public class CycAccess {
 
   /**
    * Returns whether or not we have a valid lease with the Cyc server.
+   *
    * @return whether or not we have a valid lease with the Cyc server
    */
+  //Tag: Fix CycLeaseManager
   public boolean hasValidLease() {
-    return (cycLeaseManager == null) ? true : cycLeaseManager.hasValidLease();
+    boolean valid = false;
+    for (Entry<String, CycLeaseManager> kv : cycConnection.getCycLeaseManagerMap().entrySet()){
+      if (kv.getValue().hasValidLease()){
+        valid = true;
+      }
+    }
+    if (c != null) {
+      for (Entry<InputStream, CycLeaseManager> kv : cycConnection.getCycLeaseManagerCommMap().entrySet()) {
+        if (kv.getValue().hasValidLease()) {
+          valid = true;
+        }
+      }  
+    }
+    return valid;
   }
+   
 
   /** Initializes the query properties. */
   private void initializeQueryProperties() {
-    defaultQueryProperties.put(makeCycSymbol(":allowed-rules"), makeCycSymbol(":all"));
-    defaultQueryProperties.put(makeCycSymbol(":result-uniqueness"), makeCycSymbol(":bindings"));
-    defaultQueryProperties.put(makeCycSymbol(":allow-hl-predicate-transformation?"), false);
-    defaultQueryProperties.put(makeCycSymbol(":allow-unbound-predicate-transformation?"), false);
-    defaultQueryProperties.put(makeCycSymbol(":allow-evaluatable-predicate-transformation?"), false);
-    defaultQueryProperties.put(makeCycSymbol(":intermediate-step-validation-level"), makeCycSymbol(":all"));
+    defaultQueryProperties.put(makeCycSymbol(":allowed-rules"), makeCycSymbol(
+            ":all"));
+    defaultQueryProperties.put(makeCycSymbol(":result-uniqueness"),
+            makeCycSymbol(":bindings"));
+    defaultQueryProperties.put(makeCycSymbol(
+            ":allow-hl-predicate-transformation?"), false);
+    defaultQueryProperties.put(makeCycSymbol(
+            ":allow-unbound-predicate-transformation?"), false);
+    defaultQueryProperties.put(makeCycSymbol(
+            ":allow-evaluatable-predicate-transformation?"), false);
+    defaultQueryProperties.put(makeCycSymbol(
+            ":intermediate-step-validation-level"), makeCycSymbol(":all"));
     defaultQueryProperties.put(makeCycSymbol(":negation-by-failure?"), false);
-    defaultQueryProperties.put(makeCycSymbol(":allow-indeterminate-results?"), true);
-    defaultQueryProperties.put(makeCycSymbol(":allow-abnormality-checking?"), true);
-    defaultQueryProperties.put(makeCycSymbol(":disjunction-free-el-vars-policy"), makeCycSymbol(":compute-intersection"));
-    defaultQueryProperties.put(makeCycSymbol(":allowed-modules"), makeCycSymbol(":all"));
-    defaultQueryProperties.put(makeCycSymbol(":completeness-minimization-allowed?"), true);
-    defaultQueryProperties.put(makeCycSymbol(":direction"), makeCycSymbol(":backward"));
-    defaultQueryProperties.put(makeCycSymbol(":equality-reasoning-method"), makeCycSymbol(":czer-equal"));
-    defaultQueryProperties.put(makeCycSymbol(":equality-reasoning-domain"), makeCycSymbol(":all"));
-    defaultQueryProperties.put(makeCycSymbol(":max-problem-count"), Long.valueOf(100000));
+    defaultQueryProperties.put(makeCycSymbol(":allow-indeterminate-results?"),
+            true);
+    defaultQueryProperties.put(makeCycSymbol(":allow-abnormality-checking?"),
+            true);
+    defaultQueryProperties.put(makeCycSymbol(":disjunction-free-el-vars-policy"),
+            makeCycSymbol(":compute-intersection"));
+    defaultQueryProperties.put(makeCycSymbol(":allowed-modules"), makeCycSymbol(
+            ":all"));
+    defaultQueryProperties.put(makeCycSymbol(
+            ":completeness-minimization-allowed?"), true);
+    defaultQueryProperties.put(makeCycSymbol(":direction"), makeCycSymbol(
+            ":backward"));
+    defaultQueryProperties.put(makeCycSymbol(":equality-reasoning-method"),
+            makeCycSymbol(":czer-equal"));
+    defaultQueryProperties.put(makeCycSymbol(":equality-reasoning-domain"),
+            makeCycSymbol(":all"));
+    defaultQueryProperties.put(makeCycSymbol(":max-problem-count"),
+            Long.valueOf(100000));
     defaultQueryProperties.put(makeCycSymbol(":transformation-allowed?"), false);
-    defaultQueryProperties.put(makeCycSymbol(":add-restriction-layer-of-indirection?"), true);
+    defaultQueryProperties.put(makeCycSymbol(
+            ":add-restriction-layer-of-indirection?"), true);
     defaultQueryProperties.put(makeCycSymbol(":evaluate-subl-allowed?"), true);
     defaultQueryProperties.put(makeCycSymbol(":rewrite-allowed?"), false);
     defaultQueryProperties.put(makeCycSymbol(":abduction-allowed?"), false);
-    defaultQueryProperties.put(makeCycSymbol(":removal-backtracking-productivity-limit"), Long.valueOf(2000000));
+    defaultQueryProperties.put(makeCycSymbol(
+            ":removal-backtracking-productivity-limit"), Long.valueOf(2000000));
     // dynamic query properties
     defaultQueryProperties.put(makeCycSymbol(":max-number"), null);
     defaultQueryProperties.put(makeCycSymbol(":max-time"), Integer.valueOf(120));
-    defaultQueryProperties.put(makeCycSymbol(":max-transformation-depth"), Integer.valueOf(0));
+    defaultQueryProperties.put(makeCycSymbol(":max-transformation-depth"),
+            Integer.valueOf(0));
     defaultQueryProperties.put(makeCycSymbol(":block?"), false);
     defaultQueryProperties.put(makeCycSymbol(":max-proof-depth"), null);
     defaultQueryProperties.put(makeCycSymbol(":cache-inference-results?"), false);
-    defaultQueryProperties.put(makeCycSymbol(":answer-language"), makeCycSymbol(":el"));
+    defaultQueryProperties.put(makeCycSymbol(":answer-language"), makeCycSymbol(
+            ":el"));
     defaultQueryProperties.put(makeCycSymbol(":continuable?"), false);
     defaultQueryProperties.put(makeCycSymbol(":browsable?"), false);
-    defaultQueryProperties.put(makeCycSymbol(":productivity-limit"), Long.valueOf(2000000));
+    defaultQueryProperties.put(makeCycSymbol(":productivity-limit"),
+            Long.valueOf(2000000));
 
-    final CycList<CycSymbol> queryPropertiesList = new CycList(defaultQueryProperties.keySet());
-    final String command = makeSubLStmt("mapcar", makeCycSymbol("query-property-p"), queryPropertiesList);
+    final CycList<CycSymbol> queryPropertiesList = new CycList(
+            defaultQueryProperties.keySet());
+    final String command = makeSubLStmt("mapcar", makeCycSymbol(
+            "query-property-p"), queryPropertiesList);
     try {
       CycList results = converseList(command);
       for (int i = 0, size = results.size(); i < size; i++) {
@@ -10543,11 +11207,14 @@ public class CycAccess {
     synchronized (defaultQueryProperties) {
       defaultQueryProperties.clear();
       try {
-        final InferenceParameterDescriptions desc = DefaultInferenceParameterDescriptions.loadInferenceParameterDescriptions(this, 10000);
+        final InferenceParameterDescriptions desc = DefaultInferenceParameterDescriptions.loadInferenceParameterDescriptions(
+                this, 10000);
         final InferenceParameters defaults = desc.getDefaultInferenceParameters();
-        final CycList allQueryProperties = converseList(makeSubLStmt("ALL-QUERY-PROPERTIES"));
+        final CycList allQueryProperties = converseList(makeSubLStmt(
+                "ALL-QUERY-PROPERTIES"));
         for (final Object property : allQueryProperties) {
-          if (property instanceof CycSymbol && defaults.containsKey((CycSymbol) property)) {
+          if (property instanceof CycSymbol && defaults.containsKey(
+                  (CycSymbol) property)) {
             final Object value = defaults.get((CycSymbol) property);
             defaultQueryProperties.put((CycSymbol) property, value);
           }
@@ -10584,7 +11251,8 @@ public class CycAccess {
    * @return a query properties string for the given query properties if present, otherwise
    * returns a query properties string for the default query properties
    */
-  public String queryPropertiesToString(final InferenceParameters queryProperties) {
+  public String queryPropertiesToString(
+          final InferenceParameters queryProperties) {
     final InferenceParameters tempQueryProperties = (queryProperties == null) ? getHLQueryProperties() : queryProperties;
     final CycList parameterList = new CycList();
     for (final Iterator<Entry<CycSymbol, Object>> iter = tempQueryProperties.entrySet().iterator(); iter.hasNext();) {
@@ -10592,7 +11260,8 @@ public class CycAccess {
       CycSymbol queryParameterKeyword = mapEntry.getKey();
       parameterList.add(queryParameterKeyword);
       final Object rawValue = mapEntry.getValue();
-      parameterList.add(tempQueryProperties.parameterValueCycListApiValue(queryParameterKeyword, rawValue));
+      parameterList.add(tempQueryProperties.parameterValueCycListApiValue(
+              queryParameterKeyword, rawValue));
     }
     return parameterList.stringApiValue();
   }
@@ -10602,7 +11271,8 @@ public class CycAccess {
    * @param name the unique problem store name
    * @param queryProperties the given query properties or null if the defaults are to be used
    */
-  public void initializeNamedInferenceProblemStore(final String name, final InferenceParameters queryProperties) throws IOException, CycApiException {
+  public void initializeNamedInferenceProblemStore(final String name,
+          final InferenceParameters queryProperties) throws IOException, CycApiException {
     //// Preconditions
     if (name == null) {
       throw new NullPointerException("name must not be null");
@@ -10613,7 +11283,8 @@ public class CycAccess {
     final InferenceParameters tempQueryProperties = (queryProperties == null) ? getHLQueryProperties() : queryProperties;
     final String command =
             "(progn "
-            + "  (find-or-create-problem-store-by-name \"" + name + "\" (filter-plist " + queryPropertiesToString(tempQueryProperties) + "'problem-store-property-p)) "
+            + "  (find-or-create-problem-store-by-name \"" + name + "\" (filter-plist " + queryPropertiesToString(
+            tempQueryProperties) + "'problem-store-property-p)) "
             + "  nil)";
     converseVoid(command);
   }
@@ -10645,10 +11316,16 @@ public class CycAccess {
 
   /** Determines whether the two input objects are equal EL expressions. */
   public boolean equalsEL(Object obj1, Object obj2) throws IOException {
-    String command = makeSubLStmt(EQUALS_EL, obj1, obj2);
-    // execute the SubL function-call and access the response
-    Object response = converseObject(command);
-    return !response.equals(CycObjectFactory.nil);
+    if (obj1 != null && obj1.equals(obj2)) {
+      return true;
+    } else if (obj2 != null && obj2.equals(obj1)) {
+      return true;
+    } else {
+      String command = makeSubLStmt(EQUALS_EL, obj1, obj2);
+      // execute the SubL function-call and access the response
+      Object response = converseObject(command);
+      return !response.equals(CycObjectFactory.nil);
+    }
   }
 
   /** Determines whether the two input queries are equal EL expressions. */
@@ -10658,7 +11335,15 @@ public class CycAccess {
     Object response = converseObject(command);
     return !response.equals(CycObjectFactory.nil);
   }
+
   //// Protected Area
+  static KBTransaction getCurrentTransaction() {
+    return currentTransaction.get();
+  }
+
+  static void setCurrentTransaction(KBTransaction transaction) {
+    currentTransaction.set(transaction);
+  }
 
   /**
    * Provides common local and remote CycAccess object initialization.
@@ -10677,41 +11362,34 @@ public class CycAccess {
     }
     cycAccessInstances.put(Thread.currentThread(), this);
 
-    /*if (sharedCycAccessInstance == null) {
-    sharedCycAccessInstance = this;
-    }*/
+    /* if (sharedCycAccessInstance == null) {
+     * sharedCycAccessInstance = this;
+     * } 
+     */
     cycImageID = getCycImageID();
     try {
-      DefaultInferenceParameterDescriptions.loadInferenceParameterDescriptions(this, 0);
+      DefaultInferenceParameterDescriptions.loadInferenceParameterDescriptions(
+              this, 0);
     } catch (Exception e) {
       Logger logger = Logger.getLogger("org.opencyc.api.CycAccess");
-      logger.warning("Could not load inference parameter descriptions.");
+      logger.log(Level.WARNING, "Could not load inference parameter descriptions.", e);
       Throwable curr = e;
       while (curr != null) {
         logger.warning(curr.getLocalizedMessage());
         curr = curr.getCause();
       }
     }
-    if (!isSOAPConnection) // if the communication mode is SOAP, then there is a lease manager, but it is never started
-    {
-      try {
-        // wait for the sockets to initialize
-        Thread.sleep(500);
-      } catch (java.lang.InterruptedException e) {
-      }
-      cycLeaseManager = new CycLeaseManager(this);
-      cycLeaseManager.start();
-    }
+
   }
 
   /**
-   * Converses with Cyc to perform an API command.  Creates a new connection for this command if
+   * Converses with Cyc to perform an API command. Creates a new connection for this command if
    * the connection is not persistent.
    *
    * @param command the command string or CycList
    *
    * @return the result as an object array of two objects
-   * @see org.opencyc.api.CycConnectionInterface.converse
+   * @see org.opencyc.api.CycConnectionInterface#converse(Object)
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -10724,13 +11402,13 @@ public class CycAccess {
   }
 
   /**
-   * Converses with Cyc to perform an API command.  Creates a new connection for this command if
+   * Converses with Cyc to perform an API command. Creates a new connection for this command if
    * the connection is not persistent.
    *
    * @param command the command string or CycList
    *
    * @return the result as an object array of two objects
-   * @see CycConnectionInterface.converse
+   * @see CycConnectionInterface#converse(Object)
    *
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -10739,61 +11417,68 @@ public class CycAccess {
   protected Object[] converse(Object command)
           throws UnknownHostException, IOException, CycApiException {
     Object[] response = {null, null};
-
-    if (trace > CycConnection.API_TRACE_NONE || areAPIRequestsLoggedToFile) {
-      final CycList commandCycList = (command instanceof CycList) ? (CycList) command : makeCycList((String) command);
-      final String prettyCommandCycList = commandCycList.toPrettyCyclifiedString("");
-      final String escapedCommandCycList = commandCycList.toPrettyEscapedCyclifiedString("");
-      if (areAPIRequestsLoggedToFile) {
-        apiRequestLog.write(escapedCommandCycList);
-        apiRequestLog.write('\n');
-      }
-      if (trace > CycConnection.API_TRACE_NONE) {
-        Log.current.println(prettyCommandCycList + "\n--> cyc");
-      }
-    }
-
-    if (!isSOAPConnection) {
-//      if ((previousAccessedMilliseconds + MAX_UNACCESSED_MILLIS) < System.currentTimeMillis()) {
-//        Log.current.println("Re-establishing a stale Cyc connection.");
-//        reEstablishCycConnection();
-//      }
-//      else
-      if (!((CycConnection) getCycConnection()).isValidBinaryConnection()) {
-        Log.current.println("Re-establishing an invalid Cyc connection.");
-        reEstablishCycConnection();
-      }
-    }
-    response = cycConnection.converse(command);
+    maybeLogCommand(command);
+    response = converseWithRetrying(command);
     previousAccessedMilliseconds = System.currentTimeMillis();
-
-    if (trace > CycConnection.API_TRACE_NONE) {
-      String responseString;
-
-      if (response[1] instanceof CycList) {
-        responseString = ((CycList) response[1]).toPrettyString("");
-      } else if (response[1] instanceof CycFort) {
-        responseString = ((CycFort) response[1]).cyclify();
-      } else {
-        responseString = response[1].toString();
-      }
-      Log.current.println("cyc --> " + responseString);
-    }
-
+    maybeLogResponse(response);
     return response;
   }
 
-  /** Re-estabishes a stale binary CycConnection. */
-  protected void reEstablishCycConnection() throws UnknownHostException, IOException, CycApiException {
+  /** Re-establishes a stale binary CycConnection. */
+  protected synchronized void reEstablishCycConnection() 
+          throws UnknownHostException, IOException, CycApiException {
+    Log.current.println(
+            "Trying to re-establish a closed Cyc connection to " + this);
     previousAccessedMilliseconds = System.currentTimeMillis();
     cycConnection.close();
-    cycConnection = new CycConnection(hostName,
-            port,
-            this);
+    
+    if (this.c == null) {
+      Log.current.println ("Connect using host: " + hostName + " and port: " + port);
+      cycConnection = new CycConnection(hostName, port, this);
+    } else {
+      Log.current.println ("Connect using comm object: " + c.toString());
+      cycConnection = new CycConnection(c, this);
+      c.setCycConnection(cycConnection);
+      
+      // TODO: Vijay: There is a timing issue here.
+      // If we do not sleep here, the next call to Cyc, which is getCycImageID()
+      // enters a recursive loop of reEstablishCycConnection() and throws a 
+      // stack-overflow exception.
+      /*
+      try {
+        Thread.sleep(1000);
+      } catch (InterruptedException e) {
+        // Even having this makes the code throw stack-overflow
+        //Thread.currentThread().interrupt();
+      }
+      */ 
+    }
+
     if (!(cycImageID.equals(getCycImageID()))) {
       Log.current.println("New Cyc image detected, resetting caches.");
       CycObjectFactory.resetCaches();
     }
+  }
+
+  /*
+   * Should the connection to the Cyc server be re-established if it for some reason becomes unreachable?
+   * If true, a reconnect will be attempted, and a connection will be established with whatever Cyc
+   * server is reachable to the original address, even if it is a different server process."
+   */
+  public boolean getReestablishClosedConnections() {
+    return reestablishClosedConnections;
+  }
+
+  /*
+   * If true, the CycAccess will try to re-establish a connection with a Cyc server at the
+   * provided address. Note that this may end up connecting to a different Cyc server than
+   * it was originally connected to. If it is important for your application that the CycAccess only
+   * ever connect to a single server, and not connect to a different server if the original one
+   * becomes inaccessible, be sure to set this to false.
+   * Default value is true.
+   */
+  public void setReestablishClosedConnections(boolean value) {
+    reestablishClosedConnections = value;
   }
 
   /**
@@ -10810,21 +11495,131 @@ public class CycAccess {
 
     String cyclistName = "nil";
 
-    if (cyclist != null) {
-      cyclistName = cyclist.stringApiValue();
+    if (getCyclist() != null) {
+      cyclistName = getCyclist().stringApiValue();
     }
 
     return "(with-bookkeeping-info (new-bookkeeping-info " + cyclistName + " (the-date) "
             + projectName + "(the-second)) ";
   }
+
+  /**
+   * Send a command to Cyc, and maybe try to recover from a closed connection.
+   *
+   * @param command - String, CycList, or SubLWorker
+   * @return the results of evaluating the command
+   * @throws CycApiException
+   * @throws IOException
+   * @see #getReestablishClosedConnections()
+   * @see CycConnection#converse(java.lang.Object)
+   * @see CycConnection#converseBinary(org.opencyc.api.SubLWorker)
+   */
+  Object[] converseWithRetrying(Object command) throws CycApiException, IOException {
+    Object[] response = {null, null};
+    try {
+      response = doConverse(getCycConnection(), command);
+    } catch (CycApiClosedConnectionException ex) {
+      if (getReestablishClosedConnections()) {
+        reEstablishCycConnection();
+        response = doConverse(cycConnection, command);
+      } else {
+        throw (ex);
+      }
+    }
+    return response;
+  }
   //// Private Area
 
-  private CycConstant makePrefetchedConstant(String guidStr, HashMap constantInfoDictionary) {
+  private void maybeReEstablishCycConnection() throws IOException, CycApiException {
+    if (!isSOAPConnection) {
+//      if ((previousAccessedMilliseconds + MAX_UNACCESSED_MILLIS) < System.currentTimeMillis()) {
+//        Log.current.println("Re-establishing a stale Cyc connection.");
+//        reEstablishCycConnection();
+//      }
+//      else
+      if (!((CycConnection) cycConnection).isValidBinaryConnection()) {
+        Log.current.println(
+                "Re-establishing an invalid Cyc connection  to " + this);
+        reEstablishCycConnection();
+      }
+    }
+  }
+
+  private void maybeLogCommand(Object command) throws CycApiException, IOException {
+    if (trace > CycConnection.API_TRACE_NONE || areAPIRequestsLoggedToFile) {
+      final CycList commandCycList = (command instanceof CycList) ? (CycList) command : makeCycList(
+              (String) command);
+      final String prettyCommandCycList = commandCycList.toPrettyCyclifiedString(
+              "");
+      final String escapedCommandCycList = commandCycList.toPrettyEscapedCyclifiedString(
+              "");
+      if (areAPIRequestsLoggedToFile) {
+        apiRequestLog.write(escapedCommandCycList);
+        apiRequestLog.write('\n');
+      }
+      if (trace > CycConnection.API_TRACE_NONE) {
+        Log.current.println(prettyCommandCycList + "\n--> cyc");
+      }
+    }
+  }
+
+  private void maybeLogResponse(Object[] response) {
+    if (trace > CycConnection.API_TRACE_NONE) {
+      String responseString;
+
+      if (response[1] instanceof CycList) {
+        responseString = ((CycList) response[1]).toPrettyString("");
+      } else if (response[1] instanceof CycFort) {
+        responseString = ((CycFort) response[1]).cyclify();
+      } else {
+        responseString = response[1].toString();
+      }
+      Log.current.println("cyc --> " + responseString);
+    }
+  }
+
+  private Object[] doConverse(final CycConnectionInterface cycConnection,
+          final Object command) throws IOException {
+    if (command instanceof SubLWorker) {
+      //SubL workers talk directly to Cyc:
+      cycConnection.converseBinary((SubLWorker) command);
+      return null;
+    } else {
+      //String or CycList commands go through a few intermediaries:
+      return cycConnection.converse(command);
+    }
+  }
+
+  private CycConstant makePrefetchedConstant(String guidStr,
+          HashMap constantInfoDictionary) {
     Guid guid = CycObjectFactory.makeGuid(guidStr);
     CycConstant prefetchedConstant = makeConstantWithGuidName(guid,
             (String) constantInfoDictionary.get(guid));
     CycObjectFactory.addCycConstantCache(prefetchedConstant);
     return prefetchedConstant;
+  }
+  
+  public static byte[] getCycInitializationRequest(UUID uuid) {
+    CycList request = new CycList();
+    request.add(new CycSymbol("INITIALIZE-JAVA-API-PASSIVE-SOCKET"));
+    request.add(uuid.toString());
+    ByteArrayOutputStream baos = new ByteArrayOutputStream(2048);
+    CfaslOutputStream cfo = new CfaslOutputStream(baos);
+    try {
+      cfo.writeObject(request);
+      cfo.flush();
+    } catch (IOException ioe) {} // ignore, should never happen
+    return baos.toByteArray();
+  }
+  
+  public static void handleCycInitializationRequestResponse(InputStream is) throws IOException {
+    CfaslInputStream inboundStream = new CfaslInputStream(is);
+    // read and ignore the status
+    inboundStream.resetIsInvalidObject();
+    Object status = inboundStream.readObject();
+    // read and ignore the response
+    inboundStream.resetIsInvalidObject();
+    Object response = inboundStream.readObject();
   }
 
   /** @return true iff <tt>focalTerm</tt> is known to have a fact sheet accessible to this CycAccess */
@@ -10840,6 +11635,9 @@ public class CycAccess {
   protected String hostName;
   /** the Cyc server host tcp port number */
   protected int port;
+  
+  protected Comm c;
+  
   /** the Cyc server OK response code */
   protected static final int OK_RESPONSE_CODE = 200;
   /** the parameter that, when true, causes a trace of the messages to and from the server */
@@ -10852,20 +11650,25 @@ public class CycAccess {
   /** the current Cyc project */
   private CycFort project = null;
   /** Least Recently Used Cache of ask results. */
-  private final Map<CycList, Boolean> askCache = new LRUCache<CycList, Boolean>(500, 5000, true);
+  private final Map<CycList, Boolean> askCache = new LRUCache<CycList, Boolean>(
+          500, 5000, true);
   /** Least Recently Used Cache of countAllInstances results. */
-  private final Map<CycFort, Integer> countAllInstancesCache = new LRUCache<CycFort, Integer>(500, 5000, true);
+  private final Map<CycFort, Integer> countAllInstancesCache = new LRUCache<CycFort, Integer>(
+          500, 5000, true);
   /** Least Recently Used Cache of isCollection results. */
-  private final Map<CycObject, Boolean> isCollectionCache = new LRUCache<CycObject, Boolean>(500, 5000, true);
+  private final Map<CycObject, Boolean> isCollectionCache = new LRUCache<CycObject, Boolean>(
+          500, 5000, true);
   /** Least Recently Used Cache of isGenlOf results. */
-  private final Map<Pair, Boolean> isGenlOfCache = new LRUCache<Pair, Boolean>(500, 5000, true);
+  private final Map<Pair, Boolean> isGenlOfCache = new LRUCache<Pair, Boolean>(
+          500, 5000, true);
   /**
    * Reference to <tt>CycConnection</tt> object which manages the api connection to the OpenCyc
    * server.
    */
   protected CycConnectionInterface cycConnection;
   /** default query properties, initialized by initializeQueryProperties(). */
-  private final InferenceParameters defaultQueryProperties = new DefaultInferenceParameters(this);
+  private final InferenceParameters defaultQueryProperties = new DefaultInferenceParameters(
+          this);
   private boolean queryPropertiesInitialized = false;
   /** the timestamp for the previous access to Cyc, used to re-establish too-long unused connections */
   private long previousAccessedMilliseconds = System.currentTimeMillis();
@@ -10876,15 +11679,42 @@ public class CycAccess {
   /** the Cyc image ID used for detecting new Cyc images that cause the constants cache to be reset */
   private String cycImageID;
   /** the Cyc lease manager that acquires Cyc api service leases */
-  private CycLeaseManager cycLeaseManager;
+  //Tag: Fix CycLeaseManager
+  //private CycLeaseManager cycLeaseManager;
+    
   /** The indicator that this CycAccess object is using a SOAP connection to communicate with Cyc */
   private boolean isSOAPConnection = false;
   final private Set<CycObject> termsKnownToHavePrecachedFactSheets = new HashSet<CycObject>();
-  
-  private static ThreadLocal<CycAccess> currentCyc = new ThreadLocal<CycAccess>();
-  private static Map<String, CycAccess> currentCycAccesses = Collections.synchronizedMap(new HashMap<String, CycAccess>());
+  private boolean reestablishClosedConnections = true;
+  private static ThreadLocal<CycAccess> currentCyc = new ThreadLocal<CycAccess>() {
+    @Override
+    protected CycAccess initialValue() {
+      // Commenting this out. Assuming a default Cyc server often leads to bugs. - nwinant, 2014-02-10
+      /*
+      try {
+        return new CycAccess();
+      } catch (Exception ex) {
+        // If we care about this exception, we shouldn't swallow it. - nwinant, 2014-02-10
+        Logger.getLogger(CycAccess.class.getName()).log(Level.SEVERE, null, ex);
+      }
+      */
+      return null;
+    }
+  };
 
+  private static ThreadLocal<CycFort> currentCyclist = new ThreadLocal<CycFort>() {
+    @Override
+    protected CycFort initialValue() {
+        return null;
+    }
+  };
 
-
-
+  private static ThreadLocal<KBTransaction> currentTransaction = new ThreadLocal<KBTransaction>() {
+    @Override
+    protected KBTransaction initialValue() {
+      return null;
+    }
+  };
+  private static Map<String, CycAccess> currentCycAccesses = Collections.synchronizedMap(
+          new HashMap<String, CycAccess>());
 }

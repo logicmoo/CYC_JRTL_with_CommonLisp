@@ -1,4 +1,4 @@
-/* $Id: APIExamples.java 135269 2011-07-25 20:54:40Z baxter $
+/* $Id: APIExamples.java 150228 2014-04-03 19:23:54Z daves $
  *
  * Copyright (c) 2008 Cycorp, Inc.  All rights reserved.
  * This software is the proprietary information of Cycorp, Inc.
@@ -22,15 +22,16 @@ import org.opencyc.cycobject.CycSymbol;
 import org.opencyc.cycobject.DefaultCycObject;
 import org.opencyc.cycobject.ELMt;
 import org.opencyc.cycobject.Guid;
-import org.opencyc.inference.DefaultInferenceParameters;
+import org.opencyc.inference.params.DefaultInferenceParameters;
 import org.opencyc.inference.DefaultInferenceWorker;
 import org.opencyc.inference.DefaultInferenceWorkerSynch;
-import org.opencyc.inference.InferenceParameters;
+import org.opencyc.inference.params.InferenceParameters;
 import org.opencyc.inference.InferenceStatus;
 import org.opencyc.inference.InferenceWorker;
 import org.opencyc.inference.InferenceWorkerListener;
-import org.opencyc.inference.InferenceWorkerSuspendReason;
+import org.opencyc.inference.InferenceSuspendReason;
 import org.opencyc.inference.InferenceWorkerSynch;
+import org.opencyc.nl.Paraphraser;
 import org.opencyc.parser.CycLParserUtil;
 
 //// External Imports
@@ -43,7 +44,7 @@ import org.opencyc.parser.CycLParserUtil;
  *
  * Created on : May 1, 2009, 11:13:55 AM
  * Author     : tbrussea
- * @version $Id: APIExamples.java 135269 2011-07-25 20:54:40Z baxter $
+ * @version $Id: APIExamples.java 150228 2014-04-03 19:23:54Z daves $
  */
 public class APIExamples {
 
@@ -117,10 +118,8 @@ public class APIExamples {
       // be isas of InferenceParameter. The Symbol name to use will be documented
       // as a rewriteOf assertion on the inference parameter.
       // Note: NIL can be passed by using CycObjectFactory.nil
-      InferenceParameters inferenceParameters = new DefaultInferenceParameters(access);
-      inferenceParameters.setMaxTime(10);
-      inferenceParameters.setMaxNumber(100);
-      inferenceParameters.setMaxTransformationDepth(2);
+      InferenceParameters inferenceParameters = new DefaultInferenceParameters(access).setMaxTime(10).
+          setMaxNumber(100).setMaxTransformationDepth(2);
       inferenceParameters.put(new CycSymbol(":ALLOW-INDETERMINATE-RESULTS?"), Boolean.FALSE);
       ELMt inferencePSC = access.makeELMt("InferencePSC");
       CycFormulaSentence query = CycLParserUtil.parseCycLSentence("(isa ?X Dog)", true, access);
@@ -189,7 +188,7 @@ public class APIExamples {
         }
 
         public void notifyInferenceStatusChanged(InferenceStatus oldStatus, InferenceStatus newStatus,
-                InferenceWorkerSuspendReason suspendReason, InferenceWorker inferenceWorker) {
+                InferenceSuspendReason suspendReason, InferenceWorker inferenceWorker) {
           System.out.println("GOT STATUS CHANGED EVENT\n" + inferenceWorker);
         }
 
@@ -258,7 +257,9 @@ public class APIExamples {
       assert !isValid : "Good grief! Our assertion didn't get removed from the KB.";
 
       // Generating NL for an assertion
-      String nl = access.getImpreciseParaphrase(gaf);
+      Paraphraser p = Paraphraser.getInstance(Paraphraser.ParaphrasableType.FORMULA);
+
+      String nl = p.paraphrase(gaf).getString();
       System.out.println("Got generation for assertion, " + gaf + "\n" + nl);
 
     } catch (UnknownHostException nohost) {
@@ -276,6 +277,8 @@ public class APIExamples {
   public static final void exampleNartManipulations() {
     System.out.println("Starting Cyc NART examples.");
     try {
+      Paraphraser p = Paraphraser.getInstance(Paraphraser.ParaphrasableType.KBOBJECT);
+
       CycConstant cycAdministrator = access.getKnownConstantByName("CycAdministrator");
       CycConstant generalCycKE = access.getKnownConstantByName("GeneralCycKE");
       access.setCyclist(cycAdministrator); // needed to maintain bookeeping information
@@ -326,7 +329,7 @@ public class APIExamples {
 
       // generating NL
       System.out.println("The concept " + apple.cyclify()
-              + " can be referred to in English as '" + access.getGeneratedPhrase(apple) + "'.");
+              + " can be referred to in English as '" + p.paraphrase(apple).getString() + "'.");
 
       // Killing a NART -- removing a NART and all assertions involving that NART from the KB
       // Warning: you can potentially do serious harm to the KB if you remove critical information
@@ -348,6 +351,8 @@ public class APIExamples {
   public static final void exampleContantsManipulations() {
     System.out.println("Starting Cyc constant manipulation examples.");
     try {
+      Paraphraser p = Paraphraser.getInstance(Paraphraser.ParaphrasableType.FORMULA);
+
       CycConstant cycAdministrator = access.getKnownConstantByName("CycAdministrator");
       CycConstant generalCycKE = access.getKnownConstantByName("GeneralCycKE");
       access.setCyclist(cycAdministrator); // needed to maintain bookeeping information
@@ -391,7 +396,7 @@ public class APIExamples {
       System.out.println("Got specializations of Dog: " + access.getAllSpecs(dog, CycAccess.baseKB));
 
       // generating NL
-      String dogNl = access.getGeneratedPhrase(dog);
+      String dogNl = p.paraphrase(dog).getString();
       System.out.println("The concept " + dog.cyclify()
               + " can be referred to in English as '" + dogNl + "'.");
 
@@ -411,11 +416,13 @@ public class APIExamples {
 
   public static final void helloWorldExample() {
     try {
+      Paraphraser p = Paraphraser.getInstance(Paraphraser.ParaphrasableType.FORMULA);
+
       CycConstant planetInSolarSystem = (CycConstant) DefaultCycObject.fromCompactExternalId("Mx4rWIie-jN6EduAAADggVbxzQ", access);
       CycList planets = access.getAllInstances(planetInSolarSystem);
       for (Object planet : planets) {
         System.out.println("Hello '"
-                + access.getGeneratedPhrase((CycObject) planet) + "'.");
+                + p.paraphrase((CycObject) planet).getString() + "'.");
       }
     } catch (Exception e) {
       e.printStackTrace();

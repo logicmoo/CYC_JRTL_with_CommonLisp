@@ -90,10 +90,10 @@ public class SubLThreadPool extends ThreadPoolExecutor {
 	}
 
 	synchronized static Thread makeSubLThreadReal(Runnable command) {
-		Thread t = new SubLThread(SubLThreadPool.defaultThreadGroup, command,
+		SubLThread t = new SubLThread(SubLThreadPool.defaultThreadGroup, command,
 				"SubL Thread #" + SubLThreadPool.threadNum++);
 		// should not do this? t.setDaemon(true);
-		return t;
+		return t.asJavaTread();
 	}
 
 	public void execute(SubLProcess runnable) {
@@ -106,7 +106,7 @@ public class SubLThreadPool extends ThreadPoolExecutor {
 	}
 
 	public static void runInSubLThread(Runnable runnable) {
-		if(Thread.currentThread() instanceof SubLThread) {
+		if(SubLThread.currentThreadIsSubL()) {
 			runnable.run();
 		} else {
 			getDefaultPool().execute(runnable);

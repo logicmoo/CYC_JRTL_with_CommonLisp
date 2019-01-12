@@ -18,18 +18,28 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbolFactory;
 
-public class SubLReadWriteLock extends FromSubLisp implements SubLObject {
-	private class MyReentrantReadWriteLock extends ReentrantReadWriteLock {
-		protected Thread myGetOwner() {
+public class SubLReadWriteLock extends FromSubLisp implements SubLObject
+{
+	private class MyReentrantReadWriteLock extends ReentrantReadWriteLock
+	{
+		protected Thread myGetOwner()
+		{
 			return getOwner();
 		}
 
-		protected Collection<Thread> myGetQueuedThreads() {
+		protected SubLThread mySubLGetOwner()
+		{
+			return SubLThread.intoSubLThread(myGetOwner());
+		}
+
+		protected Collection<Thread> myGetQueuedThreads()
+		{
 			return getQueuedThreads();
 		}
 	}
 
-	SubLReadWriteLock(SubLString name) {
+	SubLReadWriteLock(SubLString name)
+	{
 		nativeReadWriteLock = new MyReentrantReadWriteLock();
 		this.name = name;
 	}
@@ -38,270 +48,327 @@ public class SubLReadWriteLock extends FromSubLisp implements SubLObject {
 	private MyReentrantReadWriteLock nativeReadWriteLock;
 	public static String READ_WRITE_LOCK_TYPE_NAME = "READ-WRITE-LOCK";
 	public static SubLSymbol READ_WRITE_LOCK_TYPE_SYMBOL;
-	static {
+	static
+	{
 		READ_WRITE_LOCK_TYPE_SYMBOL = SubLSymbolFactory.makeSymbol("READ-WRITE-LOCK", SubLPackage.SUBLISP_PACKAGE);
 	}
 
 	@Override
-	public boolean canFastHash() {
+	public boolean canFastHash()
+	{
 		return true;
 	}
 
-	public SubLString getName() {
+	public SubLString getName()
+	{
 		return name.toStr();
 	}
 
-	public SubLString getSubLName() {
+	public SubLString getSubLName()
+	{
 		return name;
 	}
 
 	@Override
-	public SubLSymbol getType() {
+	public SubLSymbol getType()
+	{
 		return SubLReadWriteLock.READ_WRITE_LOCK_TYPE_SYMBOL;
 	}
 
 	@Override
-	public SubLFixnum getTypeCode() {
+	public SubLFixnum getTypeCode()
+	{
 		Errors.unimplementedMethod("SubLReadWriteLock.getTypeCode()");
 		return CommonSymbols.ZERO_INTEGER;
 	}
 
-	public SubLObject getWaiters() {
+	public SubLObject getWaiters()
+	{
 		SubLObject result = SubLNil.NIL;
-		try {
+		try
+		{
 			Collection<Thread> threads = nativeReadWriteLock.myGetQueuedThreads();
 			for (Thread thread : threads)
-				result = new Cons(((SubLThread) thread).getSubLProcess(), result);
-		} catch (Exception ex) {
+				result = new Cons(SubLThread.intoSubLThread(thread).getSubLProcess(), result);
+		} catch (Exception ex)
+		{
 		}
 		return result;
 	}
 
-	public SubLObject getWriter() {
+	public SubLObject getWriter()
+	{
 		SubLObject result = SubLNil.NIL;
-		try {
+		try
+		{
 			Thread thread = nativeReadWriteLock.myGetOwner();
-			result = ((SubLThread) thread).getSubLProcess();
-		} catch (Exception ex) {
+			result = SubLThread.intoSubLThread(thread).getSubLProcess();
+		} catch (Exception ex)
+		{
 		}
 		return result;
 	}
 
 	@Override
-	public int hashCode(int currentDepth) {
-		if (currentDepth < 8)
-			return superHash();
+	public int hashCode(int currentDepth)
+	{
+		if (currentDepth < 8) return superHash();
 		return 0;
 	}
 
 	@Override
-	public boolean isAlien() {
+	public boolean isAlien()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isAtom() {
+	public boolean isAtom()
+	{
 		return true;
 	}
 
 	@Override
-	public boolean isBigIntegerBignum() {
+	public boolean isBigIntegerBignum()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isBignum() {
+	public boolean isBignum()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isBoolean() {
+	public boolean isBoolean()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isChar() {
+	public boolean isChar()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isCons() {
+	public boolean isCons()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isDouble() {
+	public boolean isDouble()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isEnvironment() {
+	public boolean isEnvironment()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isError() {
+	public boolean isError()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isFixnum() {
+	public boolean isFixnum()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isFunction() {
+	public boolean isFunction()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isFunctionSpec() {
+	public boolean isFunctionSpec()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isGuid() {
+	public boolean isGuid()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isHashtable() {
+	public boolean isHashtable()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isHashtableIterator() {
+	public boolean isHashtableIterator()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isIntBignum() {
+	public boolean isIntBignum()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isInteger() {
+	public boolean isInteger()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isKeyhash() {
+	public boolean isKeyhash()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isKeyhashIterator() {
+	public boolean isKeyhashIterator()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isKeyword() {
+	public boolean isKeyword()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isList() {
+	public boolean isList()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isLock() {
+	public boolean isLock()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isLongBignum() {
+	public boolean isLongBignum()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isMacroOperator() {
+	public boolean isMacroOperator()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isNil() {
+	public boolean isNil()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isNumber() {
+	public boolean isNumber()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isPackage() {
+	public boolean isPackage()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isPackageIterator() {
+	public boolean isPackageIterator()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isProcess() {
+	public boolean isProcess()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isReadWriteLock() {
+	public boolean isReadWriteLock()
+	{
 		return true;
 	}
 
 	@Override
-	public boolean isRegexPattern() {
+	public boolean isRegexPattern()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isSemaphore() {
+	public boolean isSemaphore()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isSequence() {
+	public boolean isSequence()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isStream() {
+	public boolean isStream()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isString() {
+	public boolean isString()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isStructure() {
+	public boolean isStructure()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isSymbol() {
+	public boolean isSymbol()
+	{
 		return false;
 	}
 
 	@Override
-	public boolean isVector() {
+	public boolean isVector()
+	{
 		return false;
 	}
 
-	public void releaseReadLock() {
+	public void releaseReadLock()
+	{
 		nativeReadWriteLock.readLock().unlock();
 	}
 
-	public void releaseWriteLock() {
+	public void releaseWriteLock()
+	{
 		nativeReadWriteLock.writeLock().unlock();
 	}
 
-	public void seizeReadLock() {
-		while (true) {
-			try {
+	public void seizeReadLock()
+	{
+		while (true)
+		{
+			try
+			{
 				nativeReadWriteLock.readLock().lockInterruptibly();
-			} catch (InterruptedException ie) {
+			} catch (InterruptedException ie)
+			{
 				Threads.possiblyHandleInterrupts(false);
 				continue;
 			}
@@ -309,11 +376,15 @@ public class SubLReadWriteLock extends FromSubLisp implements SubLObject {
 		}
 	}
 
-	public void seizeWriteLock() {
-		while (true) {
-			try {
+	public void seizeWriteLock()
+	{
+		while (true)
+		{
+			try
+			{
 				nativeReadWriteLock.writeLock().lockInterruptibly();
-			} catch (InterruptedException ie) {
+			} catch (InterruptedException ie)
+			{
 				Threads.possiblyHandleInterrupts(false);
 				continue;
 			}
@@ -322,17 +393,20 @@ public class SubLReadWriteLock extends FromSubLisp implements SubLObject {
 	}
 
 	@Override
-	public SubLReadWriteLock toReadWriteLock() {
+	public SubLReadWriteLock toReadWriteLock()
+	{
 		return this;
 	}
 
 	@Override
-	public String printObjectImpl() {
+	public String printObjectImpl()
+	{
 		return "#<" + toTypeName() + " " + getName() + " @ " + this.hashCode(0) + ">";
 	}
 
 	@Override
-	public String toTypeName() {
+	public String toTypeName()
+	{
 		return "READ-WRITE-LOCK";
 	}
 }

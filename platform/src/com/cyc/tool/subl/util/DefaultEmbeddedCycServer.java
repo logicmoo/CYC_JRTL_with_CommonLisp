@@ -40,7 +40,7 @@ public class DefaultEmbeddedCycServer implements EmbeddedCycServer {
 
 	public static void evalInApiInSubLThread(final String clientUUIDStr, final InputStream request,
 			final OutputStream response) throws SubLException {
-		if (Thread.currentThread().getClass() != SubLThread.class) {
+		if (SubLThread.currentThreadIsSubL()) {
 			final ArrayList<SubLObject> result = new ArrayList<SubLObject>(1);
 			final ArrayList<SubLException> resultException = new ArrayList<SubLException>(1);
 			final CountDownLatch cdl = new CountDownLatch(1);
@@ -76,7 +76,7 @@ public class DefaultEmbeddedCycServer implements EmbeddedCycServer {
 			try {
 				cdl.await();
 			} catch (InterruptedException ie) {
-				Thread.currentThread().interrupt();
+				SubLThread.currentThread().interrupt();
 				return;
 			}
 			synchronized (resultException) {

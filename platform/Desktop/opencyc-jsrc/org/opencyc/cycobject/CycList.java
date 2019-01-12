@@ -288,6 +288,14 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
     return super.size();
   }
 
+  public static int getProperListSize(List l) {
+    if (l instanceof CycList && !((CycList)l).isProperList()) {
+      return l.size() - 1;
+    } else {
+      return l.size();
+    }
+  }
+
   /**
    * Answers true iff the CycList contains valid elements.  This is a necessary, but
    * not sufficient condition for CycL well-formedness.
@@ -311,7 +319,6 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
   /**
    * Returns true if formula is well-formed in the relevant mt.
    *
-   * @param formula the given EL formula
    * @param mt the relevant mt
    * @return true if formula is well-formed in the relevant mt, otherwise false
    * @throws UnknownHostException if cyc server host not found on the network
@@ -327,7 +334,6 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
   /**
    * Returns true if formula is well-formed Non Atomic Reifable Term.
    *
-   * @param formula the given EL formula
    * @return true if formula is well-formed Non Atomic Reifable Term, otherwise false
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -342,7 +348,6 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
   /**
    * Returns true if formula is well-formed Non Atomic Un-reifable Term.
    *
-   * @param formula the given EL formula
    * @return true if formula is well-formed Non Atomic Un-reifable Term, otherwise false
    * @throws UnknownHostException if cyc server host not found on the network
    * @throws IOException if a data communication error occurs
@@ -887,7 +892,7 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
   /**
    * Returns a `pretty-printed' <tt>String</tt> representation of this
    * <tt>CycList</tt>.
-   * @param indent, the indent string that is added before the
+   * @param indent the indent string that is added before the
    * <tt>String</tt> representation this <tt>CycList</tt>
    * @return a `pretty-printed' <tt>String</tt> representation of this
    * <tt>CycList</tt>.
@@ -899,7 +904,7 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
   /**
    * Returns a `pretty-printed' <tt>String</tt> representation of this
    * <tt>CycList</tt> with embedded strings escaped.
-   * @param indent, the indent string that is added before the
+   * @param indent the indent string that is added before the
    * <tt>String</tt> representation this <tt>CycList</tt>
    * @return a `pretty-printed' <tt>String</tt> representation of this
    * <tt>CycList</tt>.
@@ -911,7 +916,7 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
   /**
    * Returns a `pretty-printed' <tt>String</tt> representation of this
    * <tt>CycList</tt>.
-   * @param indent, the indent string that is added before the
+   * @param indent the indent string that is added before the
    * <tt>String</tt> representation this <tt>CycList</tt>
    * @return a `pretty-printed' <tt>String</tt> representation of this
    * <tt>CycList</tt>.
@@ -923,7 +928,7 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
   /**
    * Returns an HTML `pretty-printed' <tt>String</tt> representation of this
    * <tt>CycList</tt>.
-   * @param indent, the indent string that is added before the
+   * @param indent the indent string that is added before the
    * <tt>String</tt> representation this <tt>CycList</tt>
    * @return an HTML `pretty-printed' <tt>String</tt> representation of this
    * <tt>CycList</tt>.
@@ -933,15 +938,27 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
     return "<html><body>" + toPrettyStringInt(indent, "&nbsp&nbsp", "<br>", false, false) + "</body></html>";
   }
 
+   /**
+   * Returns an HTML `pretty-printed' <tt>String</tt> representation of this
+   * <tt>CycList</tt> without having to say what the indent string is (empty indent).
+
+   * @return an HTML `pretty-printed' <tt>String</tt> representation of this
+   * <tt>CycList</tt>.
+   */
+  public String toHTMLPrettyString() {
+    // dpb -- shouldn't this be "&nbsp;&nbsp;"?
+    return "<html><body>" + toPrettyStringInt("", "&nbsp&nbsp", "<br>", false, false) + "</body></html>";
+  }
+  
   /**
    * Returns a `pretty-printed' <tt>String</tt> representation of this
    * <tt>CycList</tt>.
-   * @param indent, the indent string that is added before the
+   * @param indent the indent string that is added before the
    * <tt>String</tt> representation this <tt>CycList</tt>
-   * @param incrementIndent, the indent string that to the <tt>String</tt>
+   * @param incrementIndent the indent string that to the <tt>String</tt>
    * representation this <tt>CycList</tt>is added at each level
    * of indenting
-   * @param newLineString, the string added to indicate a new line
+   * @param newLineString the string added to indicate a new line
    * @param shouldCyclify indicates that the output constants should have #$ prefix
    * @param shouldEscape indicates that embedded strings should have appropriate escapes for the SubL reader
    * @return a `pretty-printed' <tt>String</tt> representation of this
@@ -1094,7 +1111,7 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
 
   /** Convert this to a Map.  This method is only valid if the list is an association list.
    * 
-   * @return 
+   * @return the Map
    */
   public Map<Object, Object> toMap() {
     final Map<Object, Object> map = new HashMap<Object, Object>(this.size());
@@ -1107,6 +1124,20 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
       throw new UnsupportedOperationException("Unable to convert CycList to Map because CycList is not an association-list.", e);
     }
     return map;
+  }
+  
+  /**
+   * Create a new association list from a map.
+   * @param m
+   * @return the association list that corresponds to m.
+   */
+  public static CycList fromMap(Map m) {
+    CycList l = new CycList();
+    for (Object i : m.entrySet()) {
+      Map.Entry e = (Map.Entry)i;
+        l.add(CycList.makeDottedPair(e.getKey(), e.getValue()));
+    }
+    return l;
   }
 
   /** Returns true if the given object is equal to this object as EL CycL expressions
@@ -1297,7 +1328,7 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
    * Embedded constants are prefixed with ""#$".  Embedded quote and backslash
    * chars in strings are escaped.
    *
-   * @param isApi; should the list be cyclified for as an API call?
+   * @param isApi Should the list be cyclified for as an API call?
    * @return a <tt>String</tt> representation in cyclified form.
    *
    */
@@ -1420,11 +1451,16 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
    * because of the danger of causing a stack overflow in the communication
    * with the SubL interpreter
    */
+  @Override
   public String stringApiValue() {
-    if (isEmpty()) {
+    return CycList.stringApiValue(this);
+  }
+  
+  public static String stringApiValue(List l) {
+    if (l.isEmpty()) {
       return "(list)";
     }
-    final int fullSlices = (size() / MAX_STRING_API_VALUE_LIST_LITERAL_SIZE);
+    final int fullSlices = (l.size() / MAX_STRING_API_VALUE_LIST_LITERAL_SIZE);
     if (fullSlices > MAX_STRING_API_VALUE_LIST_LITERAL_SIZE) {
       // @todo this could be improved upon, since the 
       // (NCONC (LIST ... slice1 ... ) (LIST ... slice2 ...))
@@ -1436,8 +1472,8 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
     }
     final int tailSliceStart = fullSlices * MAX_STRING_API_VALUE_LIST_LITERAL_SIZE;
     final boolean fitsIntoOneSlice = fullSlices == 0;
-    final StringBuilder result = new StringBuilder(size() * 20);
-    final boolean properList = isProperList();
+    final StringBuilder result = new StringBuilder(l.size() * 20);
+    final boolean properList = ((!(l instanceof CycList)) || ((CycList)l).isProperList());
     if (!fitsIntoOneSlice) {
       // we have multiple slices 
       result.append("(nconc").append(" ");
@@ -1445,32 +1481,34 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
         int start = i * MAX_STRING_API_VALUE_LIST_LITERAL_SIZE;
         int end = start + MAX_STRING_API_VALUE_LIST_LITERAL_SIZE;
         // and full slices are ALL proper
-        appendSubSlice(result, start, end, true);
+        CycList.appendSubSlice(l, result, start, end, true);
       }
     }
     // @note if fullSlices is 0, tailSliceStart will be 0 also
-    appendSubSlice(result, tailSliceStart, getProperListSize(), properList);
+    appendSubSlice(l, result, tailSliceStart, CycList.getProperListSize(l), properList);
     if (!fitsIntoOneSlice) {
       result.append(")");
     }
     return result.toString();
   }
 
-  protected StringBuilder appendSubSlice(StringBuilder builder, int start, int end, boolean properList) {
+  protected static StringBuilder appendSubSlice(List l, StringBuilder builder, int start, int end, boolean properList) {
     // note the asterisk, which results in a dotted list
+    if (l instanceof UnmodifiableCycList) {
+      throw new UnsupportedOperationException();
+    }
     builder.append(properList ? "(list" : "(list*");
     for (int i = start; i < end; i++) {
-      appendElement(builder, get(i));
+      CycList.appendElement(builder, l.get(i));
     }
     if (!properList) {
-      final E dottedObject = (E) ((dottedElement == null) ? LIST_NIL : dottedElement);
-      appendElement(builder, dottedObject);
+      ((CycList)l).appendDottedElement(builder);
     }
     builder.append(")");
     return builder;
   }
 
-  protected void appendElement(StringBuilder builder, E object) {
+  protected static void appendElement(StringBuilder builder, Object object) {
     if (object == null) {
       throw new RuntimeException("Got unexpected null object.");
     }
@@ -1478,6 +1516,10 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
     builder.append(DefaultCycObject.stringApiValue(object));
   }
 
+  private void appendDottedElement(StringBuilder builder) {
+      final E dottedObject = (E) ((dottedElement == null) ? LIST_NIL : dottedElement);
+      appendElement(builder, dottedObject);    
+  }
   /**
    * Returns this object in a form suitable for use as an <tt>CycList</tt> api expression value.
    *
@@ -1524,7 +1566,6 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
   /**
    * Returns the list of constants found in the tree
    *
-   * @param object the object to be found in the tree.
    * @return the list of constants found in the tree
    */
   public CycList treeConstants() {
@@ -1613,6 +1654,31 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
    */
   public Object getf(CycSymbol indicator, Object defaultResult) {
     return getf(indicator, defaultResult, false);
+  }
+  
+  /**
+   * 
+   * @return true iff this CycList is a property-list, which is a list with an even number of elements,
+   * consisting of alternating keywords and values, with no repeating keywords.
+   */
+  public boolean isPlist() {
+    boolean expectingKeyword = true;
+    List<CycSymbol> keywords = new ArrayList<CycSymbol>();
+    for (Object elt : this) {
+        if (expectingKeyword) {
+            if (elt instanceof CycSymbol && ((CycSymbol)elt).isKeyword() && keywords.contains(elt) == false) {
+                expectingKeyword = false;
+                keywords.add((CycSymbol) elt);
+            } else return false;
+        } else { 
+            expectingKeyword = true;
+        }
+    }
+    if (expectingKeyword) {
+        return true;
+    } else { 
+        return false;
+    }
   }
 
   /**
@@ -1796,28 +1862,29 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
    * -- or relative to the indentation currently specified in the indent_string field
    * of the xml_writer object, relative = true.
    */
-  public void toXML(final XMLWriter xmlWriter, final int indent, final boolean relative) throws IOException {
+  public void toXML(final XMLWriter xmlWriter, final int indent,
+          final boolean relative) throws IOException {
     final int startingIndent = xmlWriter.getIndentLength();
     xmlWriter.printXMLStartTag(cycListXMLTag, indent, relative, true);
-    final Iterator iterator = this.iterator();
-    Object arg;
-    for (int i = 0, size = getProperListSize(); i < size; i++) {
-      arg = iterator.next();
-      toXML(arg, xmlWriter, indentLength, true);
+    try {
+      final Iterator iterator = this.iterator();
+      Object arg;
+      for (int i = 0, size = getProperListSize(); i < size; i++) {
+        arg = iterator.next();
+        toXML(arg, xmlWriter, indentLength, true);
+      }
+      if (!isProperList) {
+        xmlWriter.printXMLStartTag(dottedElementXMLTag, indentLength, relative,
+                true);
+        toXML(dottedElement, xmlWriter, indentLength, true);
+        xmlWriter.printXMLEndTag(dottedElementXMLTag, 0, true);
+        xmlWriter.setIndent(-indentLength, true);
+      }
+    } catch (Exception e) {
+      e.printStackTrace(System.err);
+    } finally {
+      xmlWriter.printXMLEndTag(cycListXMLTag, 0, true);
     }
-    if (!isProperList) {
-      xmlWriter.printXMLStartTag(dottedElementXMLTag, indentLength, relative,
-              true);
-      toXML(dottedElement, xmlWriter, indentLength, true);
-      xmlWriter.printXMLEndTag(dottedElementXMLTag, 0, true);
-      xmlWriter.setIndent(-indentLength, true);
-    }
-    xmlWriter.printXMLEndTag(cycListXMLTag, 0, true);        /*
-    if (startingIndent != xmlWriter.getIndentLength())
-    throw new RuntimeException("Starting indent " + startingIndent +
-    " is not equal to ending indent " + xmlWriter.getIndentLength());
-     */
-
   }
 
   /**
@@ -1946,7 +2013,6 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
    * Sets the object in this CycList to the given value according to the
    * path specified by the given ((n1 n2 ...) zero-indexed path expression.
    *
-   * @param cycList the given CycList
    * @param pathSpecification the (n1 n2 ...) zero-indexed path expression
    * @param value the given value
    */
@@ -1958,7 +2024,6 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
    * Sets the object in this CycList to the given value according to the
    * path specified by the given ((n1 n2 ...) zero-indexed path expression.
    *
-   * @param cycList the given CycList
    * @param pathSpecification the (n1 n2 ...) zero-indexed path expression
    * @param value the given value
    */
@@ -2187,17 +2252,7 @@ public class CycList<E> extends ArrayList<E> implements CycObject, List<E>, Seri
     }
 
     @Override
-    protected void appendElement(StringBuilder builder, Object object) {
-      throw new UnsupportedOperationException();
-    }
-
-    @Override
     public CycList<E> appendElements(CycList<? extends E> cycList) {
-      throw new UnsupportedOperationException();
-    }
-
-    @Override
-    protected StringBuilder appendSubSlice(StringBuilder builder, int start, int end, boolean properList) {
       throw new UnsupportedOperationException();
     }
 

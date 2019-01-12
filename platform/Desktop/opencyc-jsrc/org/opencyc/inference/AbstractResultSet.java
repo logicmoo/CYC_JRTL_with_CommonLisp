@@ -110,7 +110,7 @@ import org.opencyc.util.DateConverter;
  *
  * @author tbrussea
  * @date Mar 22, 2010, 11:55 AM
- * @version $Id: AbstractResultSet.java 135677 2011-09-01 09:06:49Z daves $
+ * @version $Id: AbstractResultSet.java 141934 2012-10-26 16:32:38Z baxter $
  */
 public abstract class AbstractResultSet implements ResultSet {
 
@@ -1046,7 +1046,7 @@ public abstract class AbstractResultSet implements ResultSet {
    * <code>CycVariable</code> in the original query. Returns </code>null<code>
    * if no value is set for the current row and given column.
    *
-   * @param col the name of the variable that represents the column of interest
+   * @param columnLabel the name of the variable that represents the column of interest
    * @return the value, as a <code>java.sql.Date</code>, at the current row and
    * at the column identified by the <code>col</code> which is a
    * <code>CycVariable</code> in the original query. Returns </code>null<code>,
@@ -1165,9 +1165,10 @@ public abstract class AbstractResultSet implements ResultSet {
   }
 
   /**
-   * Returns the truth value for this query, or <code>null</code> if the query has open variables.
+   * Returns the truth value for this query.
    *
-   * @return the truth value for this query, or <code>null</code> if the query has open variables.
+   * @return the truth value for this query
+   * @throws RuntimeException if the query has open variables.
    */
   public boolean getTruthValue() {
     if (!hasTruthValue()) {

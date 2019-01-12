@@ -39,7 +39,10 @@ public final class assertion_content_holder
 	static
 	{
 
-		if (true) structDecl = SubLStructDecl.makeStructDeclInterpreted(new String[] { "$formula_data", "$mt", "$flags", "$arguments", "$plist" }, assertions_low.$sym0$ASSERTION_CONTENT, "AS-CONTENT", "_CSETF-");
+		if (true) structDecl = SubLStructDecl.makeStructDeclInterpreted( //
+				new String[] { "$formula_data", "$mt", "$flags", "$arguments", "$plist" }, // 
+				assertions_low.$sym0$ASSERTION_CONTENT, "AS-CONTENT", "_CSETF-");
+		structDecl.setTrackStructInstance(true, -1);
 		//		else
 		//			structDecl = SubLStructDeclNative.makeStructDeclNative($assertion_content_native1.class, 
 		//					 assertions_low.$sym0$ASSERTION_CONTENT, "AS-CONTENT", "_CSETF-");

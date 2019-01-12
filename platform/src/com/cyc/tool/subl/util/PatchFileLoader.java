@@ -18,11 +18,13 @@ import java.util.StringTokenizer;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+
 public class PatchFileLoader extends ClassLoader {
 	public PatchFileLoader(List<JarFile> files) {
 		classNameToClassMap = new HashMap<String, Class>(1024);
 		this.files = files;
-		Thread.currentThread().setContextClassLoader(this);
+		SubLThread.currentThread().setContextClassLoader(this);
 	}
 
 	private static void addPossibleCycLJarFilesToPatches(List<JarFile> jarFiles) {

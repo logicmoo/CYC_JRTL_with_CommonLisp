@@ -290,30 +290,30 @@ public final class PopMailbox extends LocalMailbox
         File outputFile = null;
         long start = System.currentTimeMillis();
         try {
-            if (Thread.currentThread().isInterrupted() || cancelled)
+            if (interuptedOrCanceled())
                 return true;
             int count = stat();
             if (count < 0)
                 return false; // Error.
             if (count == 0)
                 return true; // No messages on the server.
-            if (Thread.currentThread().isInterrupted() || cancelled)
+            if (interuptedOrCanceled())
                 return true;
             List serverMessageList = getServerMessageList(count);
             if (serverMessageList == null)
                 return false; // Error.
-            if (Thread.currentThread().isInterrupted() || cancelled)
+            if (interuptedOrCanceled())
                 return true;
             // Removed uidls from the expunged uidls list if the corresponding
             // message no longer exists on the server.
             pruneExpungedUidlsList(serverMessageList);
-            if (Thread.currentThread().isInterrupted() || cancelled)
+            if (interuptedOrCanceled())
                 return true;
             // Remove messages from the server message list if we already have
             // them or if they've been expunged locally.
             List messagesToBeRetrieved =
                 getMessagesToBeRetrieved(serverMessageList);
-            if (Thread.currentThread().isInterrupted() || cancelled)
+            if (interuptedOrCanceled())
                 return true;
             // Is there anything left?
             if (messagesToBeRetrieved.size() == 0) {
@@ -387,6 +387,11 @@ public final class PopMailbox extends LocalMailbox
         Log.debug("retrieveNewMessages " + (System.currentTimeMillis() - start) + " ms");
         return true; // Success!
     }
+
+	private boolean interuptedOrCanceled()
+	{
+		return Thread.currentThread().isInterrupted() || cancelled;
+	}
 
     private boolean connect()
     {

@@ -1,6 +1,19 @@
 package org.opencyc.soap;
 
 //// Internal Imports
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.UnknownHostException;
+import java.rmi.RemoteException;
+import java.util.Map;
+import java.util.UUID;
+import javax.xml.rpc.ParameterMode;
+import javax.xml.rpc.ServiceException;
+import org.apache.axis.client.Call;
+import org.apache.axis.client.Service;
+import org.apache.axis.encoding.XMLType;
 import org.opencyc.api.*;
 import org.opencyc.cycobject.CycList;
 import org.opencyc.cycobject.CycSymbol;
@@ -8,19 +21,6 @@ import org.opencyc.util.Base64;
 import org.opencyc.util.Log;
 import org.opencyc.util.TimeOutException;
 import org.opencyc.util.Timer;
-import org.opencyc.util.UUID;
-
-//// External Imports
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.rmi.RemoteException;
-import javax.swing.SwingUtilities;
-import javax.xml.rpc.ParameterMode;
-import javax.xml.rpc.ServiceException;
-import org.apache.axis.client.Call;
-import org.apache.axis.client.Service;
-import org.apache.axis.encoding.XMLType;
 
 /** Provides a Cyc binary (CFASL) API connection via the XML SOAP protocol.
  *
@@ -420,6 +420,35 @@ public class SOAPBinaryCycConnection implements CycConnectionInterface {
     Log.current.println(result);
   }
 
+  @Override
+  public void setupNewCommConnection(InputStream is) throws IOException, UnknownHostException, CycApiException {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Map<String, CycLeaseManager> getCycLeaseManagerMap() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public void setCycLeaseManagerMap(Map<String, CycLeaseManager> cycLeaseManagerMap) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public Map<InputStream, CycLeaseManager> getCycLeaseManagerCommMap() {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public void setCycLeaseManagerCommMap(Map<InputStream, CycLeaseManager> cycLeaseManagerCommMap) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+    @Override
+    public boolean connectedToStaticCyc() {
+        return true;
+    }
 
   protected class SubLWorkerProcessor extends Thread {
 

@@ -85,7 +85,7 @@ import org.opencyc.cycobject.*;
  *
  * @author tbrussea
  * @date Mar 22, 2010, 11:55 AM
- * @version $Id: InferenceResultSet.java 139950 2012-05-07 18:15:54Z tbrussea $
+ * @version $Id: InferenceResultSet.java 152025 2014-06-20 14:12:49Z baxter $
  */
 @SuppressWarnings("deprecation")
 public final class InferenceResultSet extends AbstractResultSet implements ResultSet {
@@ -171,16 +171,16 @@ public final class InferenceResultSet extends AbstractResultSet implements Resul
   /**
    * Returns, as an <code>Object</code>, the value at the current row and at the 
    * column identified by <code>col</code> which should be a 
-   * <code>CycVariable</code> in the original query. Returns </code>null<code> 
+   * <code>CycVariable</code> in the original query. Returns <code>null</code> 
    * if no value is set for the current row and given column.
    *
-   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)<code> once
+   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)</code> once
    * and the version of this method that takes an integer for maximum performance.
    *
    * @param col the name of the variable that represents the column of interest
    * @return the value, as an <code>Object</code>, at the current row and 
    * at the column identified by the <code>col</code> which is a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>,
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>,
    * if no value is set for the current row and given column.
    * @exception CycApiException if called on a closed result set
    * @exception IllegalArgumentException if <code>col</code> is not valid
@@ -194,16 +194,16 @@ public final class InferenceResultSet extends AbstractResultSet implements Resul
   /**
    * Returns, as a <code>CycDenotationalTerm</code>, the value at the current row and at the
    * column identified by <code>col</code> which should be a 
-   * <code>CycVariable</code> in the original query. Returns </code>null<code> 
+   * <code>CycVariable</code> in the original query. Returns <code>null</code> 
    * if no value is set for the current row and given column.
    *
-   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)<code> once
+   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)</code> once
    * and the version of this method that takes an integer for maximum performance.
    *
    * @param col the name of the variable that represents the column of interest
    * @return the value, as a <code>CycDenotationalTerm</code>, at the current row and
    * at the column identified by the <code>col</code> which is a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>,
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>,
    * if no value is set for the current row and given column.
    * @exception CycApiException if called on a closed result set
    * @exception IllegalArgumentException if <code>col</code> is not valid
@@ -219,16 +219,16 @@ public final class InferenceResultSet extends AbstractResultSet implements Resul
   /**
    * Returns, as a <code>String</code>, the value at the current row and at the
    * column identified by <code>col</code> which should be a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>
    * if no value is set for the current row and given column.
    *
-   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)<code> once
+   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)</code> once
    * and the version of this method that takes an integer for maximum performance.
    *
    * @param col the name of the variable that represents the column of interest
    * @return the value, as a <code>String</code>, at the current row and
    * at the column identified by the <code>col</code> which is a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>,
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>,
    * if no value is set for the current row and given column.
    * @exception CycApiException if called on a closed result set
    * @exception IllegalArgumentException if <code>col</code> is not valid
@@ -244,16 +244,16 @@ public final class InferenceResultSet extends AbstractResultSet implements Resul
   /**
    * Returns, as a <code>long</code>, the value at the current row and at the
    * column identified by <code>col</code> which should be a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>
    * if no value is set for the current row and given column.
    *
-   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)<code> once
+   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)</code> once
    * and the version of this method that takes an integer for maximum performance.
    *
    * @param col the name of the variable that represents the column of interest
    * @return the value, as a <code>long</code>, at the current row and
    * at the column identified by the <code>col</code> which is a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>,
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>,
    * if no value is set for the current row and given column.
    * @exception CycApiException if called on a closed result set
    * @exception IllegalArgumentException if <code>col</code> is not valid
@@ -269,16 +269,16 @@ public final class InferenceResultSet extends AbstractResultSet implements Resul
   /**
    * Returns, as a <code>int</code>, the value at the current row and at the
    * column identified by <code>col</code> which should be a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>
    * if no value is set for the current row and given column.
    *
-   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)<code> once
+   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)</code> once
    * and the version of this method that takes an integer for maximum performance.
    *
    * @param col the name of the variable that represents the column of interest
    * @return the value, as a <code>int</code>, at the current row and
    * at the column identified by the <code>col</code> which is a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>,
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>,
    * if no value is set for the current row and given column.
    * @exception CycApiException if called on a closed result set
    * @exception IllegalArgumentException if <code>col</code> is not valid
@@ -294,16 +294,16 @@ public final class InferenceResultSet extends AbstractResultSet implements Resul
   /**
    * Returns, as a <code>double</code>, the value at the current row and at the
    * column identified by <code>col</code> which should be a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>
    * if no value is set for the current row and given column.
    *
-   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)<code> once
+   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)</code> once
    * and the version of this method that takes an integer for maximum performance.
    *
    * @param col the name of the variable that represents the column of interest
    * @return the value, as a <code>double</code>, at the current row and
    * at the column identified by the <code>col</code> which is a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>,
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>,
    * if no value is set for the current row and given column.
    * @exception CycApiException if called on a closed result set
    * @exception IllegalArgumentException if <code>col</code> is not valid
@@ -319,16 +319,16 @@ public final class InferenceResultSet extends AbstractResultSet implements Resul
   /**
    * Returns, as a <code>float</code>, the value at the current row and at the
    * column identified by <code>col</code> which should be a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>
    * if no value is set for the current row and given column.
    *
-   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)<code> once
+   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)</code> once
    * and the version of this method that takes an integer for maximum performance.
    *
    * @param col the name of the variable that represents the column of interest
    * @return the value, as a <code>float</code>, at the current row and
    * at the column identified by the <code>col</code> which is a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>,
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>,
    * if no value is set for the current row and given column.
    * @exception CycApiException if called on a closed result set
    * @exception IllegalArgumentException if <code>col</code> is not valid
@@ -344,16 +344,16 @@ public final class InferenceResultSet extends AbstractResultSet implements Resul
   /**
    * Returns, as a <code>boolean</code>, the value at the current row and at the
    * column identified by <code>col</code> which should be a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>
    * if no value is set for the current row and given column.
    *
-   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)<code> once
+   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)</code> once
    * and the version of this method that takes an integer for maximum performance.
    *
    * @param col the name of the variable that represents the column of interest
    * @return the value, as a <code>boolean</code>, at the current row and
    * at the column identified by the <code>col</code> which is a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>,
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>,
    * if no value is set for the current row and given column.
    * @exception CycApiException if called on a closed result set
    * @exception IllegalArgumentException if <code>col</code> is not valid
@@ -369,16 +369,16 @@ public final class InferenceResultSet extends AbstractResultSet implements Resul
   /**
    * Returns, as a <code>CycConstant</code>, the value at the current row and at the
    * column identified by <code>col</code> which should be a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>
    * if no value is set for the current row and given column.
    *
-   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)<code> once
+   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)</code> once
    * and the version of this method that takes an integer for maximum performance.
    *
    * @param col the name of the variable that represents the column of interest
    * @return the value, as a <code>CycConstant</code>, at the current row and
    * at the column identified by the <code>col</code> which is a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>,
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>,
    * if no value is set for the current row and given column.
    * @exception CycApiException if called on a closed result set
    * @exception IllegalArgumentException if <code>col</code> is not valid
@@ -394,16 +394,16 @@ public final class InferenceResultSet extends AbstractResultSet implements Resul
   /**
    * Returns, as a <code>CycObject</code>, the value at the current row and at the
    * column identified by <code>col</code> which should be a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>
    * if no value is set for the current row and given column.
    *
-   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)<code> once
+   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)</code> once
    * and the version of this method that takes an integer for maximum performance.
    *
    * @param col the name of the variable that represents the column of interest
    * @return the value, as a <code>CycObject</code>, at the current row and
    * at the column identified by the <code>col</code> which is a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>,
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>,
    * if no value is set for the current row and given column.
    * @exception CycApiException if called on a closed result set
    * @exception IllegalArgumentException if <code>col</code> is not valid
@@ -419,16 +419,16 @@ public final class InferenceResultSet extends AbstractResultSet implements Resul
   /**
    * Returns, as a <code>CycFort</code>, the value at the current row and at the
    * column identified by <code>col</code> which should be a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>
    * if no value is set for the current row and given column.
    *
-   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)<code> once
+   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)</code> once
    * and the version of this method that takes an integer for maximum performance.
    *
    * @param col the name of the variable that represents the column of interest
    * @return the value, as a <code>CycFort</code>, at the current row and
    * at the column identified by the <code>col</code> which is a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>,
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>,
    * if no value is set for the current row and given column.
    * @exception CycApiException if called on a closed result set
    * @exception IllegalArgumentException if <code>col</code> is not valid
@@ -444,16 +444,16 @@ public final class InferenceResultSet extends AbstractResultSet implements Resul
   /**
    * Returns, as a <code>CycList</code>, the value at the current row and at the
    * column identified by <code>col</code> which should be a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>
    * if no value is set for the current row and given column.
    *
-   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)<code> once
+   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)</code> once
    * and the version of this method that takes an integer for maximum performance.
    *
    * @param col the name of the variable that represents the column of interest
    * @return the value, as a <code>CycList</code>, at the current row and
    * at the column identified by the <code>col</code> which is a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>,
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>,
    * if no value is set for the current row and given column.
    * @exception CycApiException if called on a closed result set
    * @exception IllegalArgumentException if <code>col</code> is not valid
@@ -469,16 +469,16 @@ public final class InferenceResultSet extends AbstractResultSet implements Resul
   /**
    * Returns, as a <code>v</code>, the value at the current row and at the
    * column identified by <code>col</code> which should be a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>
    * if no value is set for the current row and given column.
    *
-   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)<code> once
+   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)</code> once
    * and the version of this method that takes an integer for maximum performance.
    *
    * @param col the name of the variable that represents the column of interest
    * @return the value, as a <code>CycNart</code>, at the current row and
    * at the column identified by the <code>col</code> which is a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>,
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>,
    * if no value is set for the current row and given column.
    * @exception CycApiException if called on a closed result set
    * @exception IllegalArgumentException if <code>col</code> is not valid
@@ -494,16 +494,16 @@ public final class InferenceResultSet extends AbstractResultSet implements Resul
   /**
    * Returns, as a <code>CycNaut</code>, the value at the current row and at the
    * column identified by <code>col</code> which should be a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>
    * if no value is set for the current row and given column.
    *
-   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)<code> once
+   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)</code> once
    * and the version of this method that takes an integer for maximum performance.
    *
    * @param col the name of the variable that represents the column of interest
    * @return the value, as a <code>CycNaut</code>, at the current row and
    * at the column identified by the <code>col</code> which is a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>,
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>,
    * if no value is set for the current row and given column.
    * @exception CycApiException if called on a closed result set
    * @exception IllegalArgumentException if <code>col</code> is not valid
@@ -519,16 +519,16 @@ public final class InferenceResultSet extends AbstractResultSet implements Resul
   /**
    * Returns, as a <code>java.util.Date</code> object, the value at the current row and at the
    * column identified by <code>col</code> which should be a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>
    * if no value is set for the current row and given column.
    *
-   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)<code> once
+   * <p/><strong>Note:</strong> Use the method <code>int colIindex = findColumn(col)</code> once
    * and the version of this method that takes an integer for maximum performance.
    *
    * @param col the name of the variable that represents the column of interest
    * @return the value, as a <code>java.util.Date</code>, at the current row and
    * at the column identified by the <code>col</code> which is a
-   * <code>CycVariable</code> in the original query. Returns </code>null<code>,
+   * <code>CycVariable</code> in the original query. Returns <code>null</code>,
    * if no value is set for the current row and given column.
    * @note Fails on dates that are not CycNauts using #$YearFn (i.e. it will not
    * work on skolemized dates, or other forms of dates that don't use the #$YearFn vocabulary).
@@ -563,7 +563,7 @@ public final class InferenceResultSet extends AbstractResultSet implements Resul
    * from the non-strict version in that it throws detailed error messages.
    *
    * @param col the index name to look up
-   * @return the column index for the given <code>col</code
+   * @return the column index for the given <code>col</code>
    * @exception IllegalArgumentException if called with an invalid <code>col</code>
    */
   protected int findColumnStrict(CycVariable col) throws IllegalArgumentException {
@@ -704,11 +704,13 @@ public final class InferenceResultSet extends AbstractResultSet implements Resul
     System.exit(0);
   }
 
+  // @Override only in Java 1.7+
   public <T> T getObject(int columnIndex, Class<T> type) throws SQLException {
-    throw new UnsupportedOperationException("Not supported yet.");
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 
+  // @Override only in Java 1.7+
   public <T> T getObject(String columnLabel, Class<T> type) throws SQLException {
-    throw new UnsupportedOperationException("Not supported yet.");
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

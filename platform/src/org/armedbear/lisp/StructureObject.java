@@ -70,16 +70,20 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 
 	protected void setStructureClass(Symbol symbol)
 	{
-		setName(symbol);
+
 		StructureClass structureClass = (StructureClass) LispClass.findClass(symbol/*, true*/); // Might return null.
+		setName(symbol);
 		if (structureClass == null)
 		{
 			System.err.println("Oh noes, structure object got a null class:" + symbol + ", symbol name:" + symbol);
 			System.err.println("No mitens sitten: " + BuiltInClass.SYSTEM_STREAM);
 			System.err.println("joopa joo:" + Symbol.SYSTEM_STREAM);
-		} else {
-			this.structureClass =  structureClass;
-			if (PrologSync.trackStructs) {
+		}
+		else
+		{
+			this.structureClass = structureClass;
+			if (Main.trackStructs)
+			{
 				PrologSync.addThis(this);
 			}
 		}
@@ -243,7 +247,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 		final int index = getSlotIndex(slotName);
 		if (index >= 0)
 		{
-			slots[index] = newValue;
+			reallySetSlot(index, newValue);
 		}
 		else
 		{
@@ -263,14 +267,31 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 		result = result.push(new Cons("class", classOf()));
 		LispObject effectiveSlots = structureClass.getSlotDefinitions();
 		LispObject[] effectiveSlotsArray = effectiveSlots.copyToArray();
+		if (effectiveSlotsArray.length == 0)
+		{
+			effectiveSlotsArray = layout.slotNames;
+		}
 		Debug.assertTrue(effectiveSlotsArray.length == slots.length);
 		for (int i = 0; i < slots.length; i++)
 		{
-			SimpleVector slotDefinition = (SimpleVector) effectiveSlotsArray[i];
-			LispObject slotName = slotDefinition.AREF(1);
+			LispObject slotName = intoSlotName(effectiveSlotsArray, i);
 			result = result.push(new Cons(slotName, slots[i]));
 		}
 		return result.nreverse();
+	}
+
+	static LispObject intoSlotName(LispObject[] effectiveSlotsArray, int i)
+	{
+		if (effectiveSlotsArray == null) return new SimpleString("SLOT_" + i);
+		if (effectiveSlotsArray.length < i) return new SimpleString("SLOT_" + i + "_OF_" + effectiveSlotsArray.length);
+		LispObject effectiveSlot = effectiveSlotsArray[i];
+		if (effectiveSlot instanceof SimpleVector)
+		{
+			SimpleVector slotDefinition = (SimpleVector) effectiveSlotsArray[i];
+			LispObject slotName = slotDefinition.AREF(1);
+			return slotName;
+		}
+		return effectiveSlot;
 	}
 
 	public LispObject typep(LispObject type)
@@ -573,7 +594,7 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 		{
 			if (first instanceof StructureObject) try
 			{
-				((StructureObject) first).slots[Fixnum.getValue(second)] = third;
+				((StructureObject) first).reallySetSlot(second.intValue(), third);
 				return third;
 			} catch (ArrayIndexOutOfBoundsException e)
 			{
@@ -703,9 +724,10 @@ public class StructureObject extends SubLStructInterpreted implements SubLStruct
 	}
 
 	@Override
-	public void setField(int fieldNum, SubLObject value)
+	public void setFieldImpl(int fieldNum, SubLObject value)
 	{
-		setSlotValue(fieldNum - 2, maybeUnbound(value));
+		final int slotNum = fieldNum - 2;
+		setSlotValue(slotNum, maybeUnbound(value));
 	}
 
 	private LispObject maybeUnbound(SubLObject value)

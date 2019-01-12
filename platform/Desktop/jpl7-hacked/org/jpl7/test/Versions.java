@@ -26,9 +26,12 @@ public class Versions {
 
 		String[] defaultInitArgsNew1;
 		if (argv.length == 1 && argv[0].equals("traditional")) {
-			defaultInitArgsNew1 = new String[] { "swipl", "-g", "true", "-nosignals", "--traditional" };
+			defaultInitArgsNew1 = new String[] {
+				"swipl", "-g", "true", "--nosignals",
+				"--traditional" };
 		} else {
-			defaultInitArgsNew1 = new String[] { "swipl", "-g", "true", "-nosignals" };
+			defaultInitArgsNew1 = new String[] {
+				"swipl", "-g", "true", "--nosignals" };
 		}
 		org.jpl7.JPL.setDefaultInitArgs(defaultInitArgsNew1);
 
@@ -49,8 +52,9 @@ public class Versions {
 			System.out.println();
 		}
 
-		// String swiplHome = ((Term) (new Query("current_prolog_flag(home,Home)")).oneSolution().get("Home")).name();
-		// System.out.println("    SWI-Prolog home dir: " + swiplHome );
+		// String swiplHome = ((Term) (new
+		// Query("current_prolog_flag(home,Home)")).oneSolution().get("Home")).name();
+		// System.out.println(" SWI-Prolog home dir: " + swiplHome );
 
 		System.out.println("home1 = " + (new Atom("c:/swipl-7.1.26")).toString());
 
@@ -76,10 +80,13 @@ public class Versions {
 
 		System.out.println("      SWI Prolog syntax: " + org.jpl7.fli.Prolog.get_syntax());
 
-		// if ( prologVersion.equals(javaVersion) && javaVersion.equals(cVersion) ) {
-		// System.out.println("BINGO! you appear to have the same version of each library installed");
+		// if ( prologVersion.equals(javaVersion) &&
+		// javaVersion.equals(cVersion) ) {
+		// System.out.println("BINGO! you appear to have the same version of
+		// each library installed");
 		// } else {
-		// System.out.println("WHOOPS! you appear not to have the same version of each library installed");
+		// System.out.println("WHOOPS! you appear not to have the same version
+		// of each library installed");
 		// }
 
 		System.out.println();

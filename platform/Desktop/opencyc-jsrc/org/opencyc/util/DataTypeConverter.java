@@ -1,4 +1,4 @@
-/* $Id: DataTypeConverter.java 131068 2010-05-27 19:43:54Z baxter $
+/* $Id: DataTypeConverter.java 142584 2013-01-02 21:33:25Z baxter $
  *
  * Copyright (c) 2010 Cycorp, Inc.  All rights reserved.
  * This software is the proprietary information of Cycorp, Inc.
@@ -10,10 +10,9 @@ package org.opencyc.util;
 //// External Imports
 import java.math.BigDecimal;
 import java.util.Map;
-
-//// OpenCyc Imports
 import org.opencyc.cycobject.CycList;
 import org.opencyc.cycobject.CycNaut;
+import org.opencyc.cycobject.CycObject;
 
 /** 
  * <P>DataTypeConverter is an abstract base class for building classes which
@@ -26,7 +25,7 @@ import org.opencyc.cycobject.CycNaut;
  *
  * Created on : May 21, 2010, 4:01:30 PM
  * Author     : nwinant
- * @version $Id: DataTypeConverter.java 131068 2010-05-27 19:43:54Z baxter $
+ * @version $Id: DataTypeConverter.java 142584 2013-01-02 21:33:25Z baxter $
  */
 abstract public class DataTypeConverter<E> {
 
@@ -43,7 +42,7 @@ abstract public class DataTypeConverter<E> {
    *
    * If the parse fails, prints a stack trace iff <code>shouldReportFailure</code>
    * is non-null, and returns null.
-   * @deprecated Use CycNaut version.
+   * @deprecated Use CycObject version.
    */
   protected E parse(final CycList cycList, final boolean shouldReportFailure) {
     final Object naut = CycNaut.convertIfPromising(cycList);
@@ -60,9 +59,9 @@ abstract public class DataTypeConverter<E> {
    * If the parse fails, prints a stack trace iff <code>shouldReportFailure</code>
    * is non-null, and returns null.
    */
-  protected E parse(final CycNaut naut, final boolean shouldReportFailure) {
+  protected E parse(final CycObject cycObject, final boolean shouldReportFailure) {
     try {
-      return parseDataType(naut);
+      return fromCycTerm(cycObject);
     } catch (ParseException ex) {
       return handleParseException(ex, shouldReportFailure);
     }
@@ -71,7 +70,7 @@ abstract public class DataTypeConverter<E> {
   /** Try to parse <code>cycList</code> into a Java <code>E</code>.
    *
    * Prints stack trace and returns null if the parse fails.
-   * @deprecated Use CycNaut version.
+   * @deprecated Use CycObject version.
    */
   protected E parse(final CycList cycList) {
     return parse(cycList, true);
@@ -81,15 +80,15 @@ abstract public class DataTypeConverter<E> {
    *
    * Prints stack trace and returns null if the parse fails.
    */
-  protected E parse(final CycNaut naut) {
-    return parse(naut, true);
+  protected E parse(final CycObject cycObject) {
+    return parse(cycObject, true);
   }
 
   protected boolean isOfType(final Object object) {
     if (object instanceof CycList) {
       return parse((CycList) object, false) != null;
-    } else if (object instanceof CycNaut) {
-      return parse((CycNaut) object, false) != null;
+    } else if (object instanceof CycObject) {
+      return parse((CycObject) object, false) != null;
     } else {
       return false;
     }
@@ -100,7 +99,7 @@ abstract public class DataTypeConverter<E> {
    *
    * Throws a ParseException if the parse fails.
    */
-  protected abstract CycNaut toCycTerm(final E obj) throws ParseException;
+  protected abstract CycObject toCycTerm(final E obj) throws ParseException;
 
   //// Protected Area
   /** Try to parse <code>naut</code> into a Java <code>E</code>. This method
@@ -108,7 +107,7 @@ abstract public class DataTypeConverter<E> {
    *
    * Throws a ParseException if the parse fails.
    */
-  protected abstract E parseDataType(final CycNaut naut) throws ParseException;
+  protected abstract E fromCycTerm(final CycObject cycObject) throws ParseException;
 
   protected static Integer parseInteger(final Object obj, final String type) throws ParseException {
     final Integer result;

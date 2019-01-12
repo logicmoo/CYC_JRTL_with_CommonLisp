@@ -1,4 +1,4 @@
-/* $Id: KBQueryFactory.java 136863 2011-11-13 16:57:24Z baxter $
+/* $Id: KBQueryFactory.java 142849 2013-01-14 22:40:04Z baxter $
  *
  * Copyright (c) 2010 Cycorp, Inc.  All rights reserved.
  * This software is the proprietary information of Cycorp, Inc.
@@ -6,6 +6,8 @@
  */
 package org.opencyc.inference;
 
+import org.opencyc.inference.params.InferenceParameters;
+import org.opencyc.inference.params.DefaultInferenceParameters;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Map;
@@ -32,7 +34,7 @@ import org.opencyc.cycobject.ELMt;
  *
  * @author rck
  * @date 2010-07-08
- * @version $Id: KBQueryFactory.java 136863 2011-11-13 16:57:24Z baxter $
+ * @version $Id: KBQueryFactory.java 142849 2013-01-14 22:40:04Z baxter $
  */
 public class KBQueryFactory {
 

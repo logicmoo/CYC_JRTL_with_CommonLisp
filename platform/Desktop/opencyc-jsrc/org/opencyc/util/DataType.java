@@ -11,7 +11,6 @@ import org.opencyc.cycobject.CycNaut;
  *
  * @todo This needs to be fleshed out a lot more.
  *
- * @return
  */
 public enum DataType {
 

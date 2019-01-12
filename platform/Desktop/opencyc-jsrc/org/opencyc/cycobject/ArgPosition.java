@@ -11,42 +11,31 @@ import java.util.List;
  */
 public class ArgPosition extends DefaultCycObject {
 
-  private final List<Integer> path = new ArrayList<Integer>();
+  protected final List<Integer> path = new ArrayList<Integer>();
 
   /**
    * Create a new arg position for the specified path.
+   *
    * @param path
    */
   public ArgPosition(final List<Integer> path) {
     this.path.addAll(path);
   }
   /** arg position for the top-level term/formula itself. */
-  public static final ArgPosition TOP = new ArgPosition() {
-
-    @Override
-    public String toString() {
-      return "TOP";
-    }
-
-    @Override
-    public ArgPosition extend(ArgPosition otherArgPos) {
-      throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public ArgPosition extend(Integer argnum) {
-      throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public ArgPosition toParent() {
-      throw new UnsupportedOperationException();
-    }
-  };
+  public static final ArgPosition TOP = new UnmodifiableArgPosition("TOP");
+  // Some common arg positions, for re-use and code readability:
+  public static final ArgPosition ARG0 = new UnmodifiableArgPosition(0);
+  public static final ArgPosition ARG1 = new UnmodifiableArgPosition(1);
+  public static final ArgPosition ARG2 = new UnmodifiableArgPosition(2);
+  public static final ArgPosition ARG3 = new UnmodifiableArgPosition(3);
+  public static final ArgPosition ARG4 = new UnmodifiableArgPosition(4);
+  public static final ArgPosition ARG5 = new UnmodifiableArgPosition(5);
+  public static final ArgPosition ARG6 = new UnmodifiableArgPosition(6);
 
   /**
    * Create a new arg position for the specified argnums.
    * If argnums is empty, then returns an arg position for the top-level term/formula itself.
+   *
    * @param argNums
    */
   public ArgPosition(final Integer... argNums) {
@@ -55,7 +44,8 @@ public class ArgPosition extends DefaultCycObject {
 
   /**
    * Get the list of argnums for this arg position, from top level to deepest level.
-   * @return
+   *
+   * @return the list of argnums for this arg position,
    */
   public List<Integer> getPath() {
     return Collections.unmodifiableList(path);
@@ -63,6 +53,7 @@ public class ArgPosition extends DefaultCycObject {
 
   /**
    * Destructively extend this arg position by another arg position.
+   *
    * @param otherArgPos
    * @return this ArgPosition.
    */
@@ -73,6 +64,7 @@ public class ArgPosition extends DefaultCycObject {
 
   /**
    * Destructively extend this arg position by one argnum.
+   *
    * @param argnum
    * @return this ArgPosition.
    */
@@ -81,13 +73,20 @@ public class ArgPosition extends DefaultCycObject {
     return this;
   }
 
+  /**
+   * Get the first element in this arg position's path.
+   * This is the argument number of the argument of the top-level formula
+   * that contains this position.
+   * @return the argument number.
+   */
   public Integer first() {
     return getPath().get(0);
   }
 
   /**
    * Get the argnum of the designated argument in its immediate context.
-   * @return
+   *
+   * @return the argnum of the designated argument
    */
   public Integer last() {
     final List<Integer> myPath = getPath();
@@ -96,7 +95,8 @@ public class ArgPosition extends DefaultCycObject {
 
   /**
    * Get the nesting depth of this arg position. Top-level argument positions have depth 1.
-   * @return
+   *
+   * @return the nesting depth of this arg position
    */
   public int depth() {
     return getPath().size();
@@ -123,6 +123,7 @@ public class ArgPosition extends DefaultCycObject {
 
   /**
    * Destructively modify this ArgPosition to be its parent arg position.
+   *
    * @return this ArgPosition.
    */
   public ArgPosition toParent() {
@@ -130,14 +131,15 @@ public class ArgPosition extends DefaultCycObject {
     return this;
   }
 
-  ArgPosition deepCopy() {
+  public ArgPosition deepCopy() {
     return new ArgPosition(path);
   }
 
   /**
    * Check if this arg position is for an ancestor of another arg position.
+   *
    * @param otherArgPosition
-   * @return
+   * @return true iff his arg position is for an ancestor of otherArgPosition
    */
   public boolean isPrefixOf(ArgPosition otherArgPosition) {
     if (otherArgPosition == null || otherArgPosition.depth() < depth()) {
@@ -154,9 +156,10 @@ public class ArgPosition extends DefaultCycObject {
 
   /**
    * Does this arg position match candidate?
+   *
    * @param candidate
    * @param matchEmpty Should we match the null arg position?
-   * @return
+   * @return true iff this arg position matches candidate
    */
   public boolean matchingArgPosition(ArgPosition candidate, boolean matchEmpty) {
     if (candidate == null) {
@@ -166,6 +169,7 @@ public class ArgPosition extends DefaultCycObject {
     }
   }
 
+  @Override
   public int compareTo(Object o) {
     if (o instanceof ArgPosition) {
       ArgPosition other = (ArgPosition) o;
@@ -186,6 +190,44 @@ public class ArgPosition extends DefaultCycObject {
       }
     } else {
       return 0;
+    }
+  }
+
+  private static class UnmodifiableArgPosition extends ArgPosition {
+
+    private final String name;
+
+    public UnmodifiableArgPosition(final String name, final Integer... argNums) {
+      super(argNums);
+      this.name = name;
+    }
+
+    public UnmodifiableArgPosition(final Integer... argNums) {
+      this(null, argNums);
+    }
+
+    @Override
+    public String toString() {
+      if (name == null) {
+        return super.toString();
+      } else {
+        return name;
+      }
+    }
+
+    @Override
+    public ArgPosition extend(ArgPosition otherArgPos) {
+      throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public ArgPosition extend(Integer argnum) {
+      throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public ArgPosition toParent() {
+      throw new UnsupportedOperationException();
     }
   }
 }
