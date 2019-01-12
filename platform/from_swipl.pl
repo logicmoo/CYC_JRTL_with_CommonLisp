@@ -316,7 +316,7 @@ swicli:-
    cli_type_to_classname('java.lang.Class', _CC),
    cli_ensure_classpath)).
 
-swc:-
+bshwc:-
   must_det_l(( cli_type_to_classname('org.slf4j.LoggerFactory',Found1),
    writeln([found,Found1]),
    cli_type_to_classname('org.logicmoo.system.BeanShellCntrl',Found),
@@ -346,70 +346,23 @@ call_jmain(Class,ArgsList):-
 call_abcl_main(ArgsList):- call_jmain('org.armedbear.lisp.Main',['--load','abclc-rc.lisp'| ArgsList]).
 
 /*
-
---prolog        Enables 2-Way calling beteween Lisp and Prolog
-
---trackstructs  F-Logic for CLOS/SubL Structures fullfiling the dreams of type-theory and OO. 
-
---bsh           F-Logic extension of BeanShell's Ecosystem (+BSF)          
-    
---subl          Load the Cycorp JRTL's SubLisp system
---cyc           F-Logic Ecosystem called LarKC  
---prologsync    CYC's KB is kept/managed from the Prolog VM instead of the JRTL (JavaRunTimeLibrary)
-
-
---gui=false    Makes the JVM act headless disabling all of the bellow
- 
---j            J Desktop from ABCL   (Heavywieght Code Editing/REPLs)
---bshgui       BeanShell Desktop     (Lightwieght REPLs + User Widgets)
---bowl         BeanBowl GUI          (Featherwieght Widget/Class Inspector)
---appdapter    AppdapterGUI          (UI that designs itself as your data mutaes)
-
---repl=[normal,j,bshgui]  New Threads (thus protentially I/O and REPLs) launch normal or using J or Beanshell Desktop
-
-
-Lisp Options: 
-
---help
-    Displays the ABCL-Only message.
---noinform
-    Suppresses the printing of startup information and banner.
---noinit
-    Suppresses the loading of the '~/.abclrc' startup file.
---nosystem
-    Suppresses loading the 'system.lisp' customization file.
---eval <FORM>
-    Evaluates the <FORM> before initializing REPL.
---load <FILE>
-    Loads the file <FILE> before initializing REPL.
---load-system-file <FILE>
-    Loads the system file <FILE> before initializing REPL.
---batch
-    The process evaluates forms specified by arguments and possibly by those
-    by those in the intialization file '~/.abcl', and then exits.
-
-The occurance of '--' copies the remaining arguments, unprocessed, into
-the variable EXTENSIONS:*COMMAND-LINE-ARGUMENT-LIST*.
-
 */
 
-% ABCL compiler/interpretor with all LarKC features not getting get in the way
+% Just Vanila ABCL compiler/interpretor with all LarKC features not getting get in it way (compiler and ANSI-Lisp testing)
 jabcl:- call_abcl_main(['--nocyc','--noprolog','--noprologsync','--nogui','--nobsh']).
 
-% used for emulating AlegroCL 
+% Used for emulating AlegroCL while porting code code into CYC
 uabcl:- call_abcl_main(['--prologsync','--eval','(init-cyc-server)']).
 
-% used for emulating RCYC 
-cabcl:- call_abcl_main(['--prologsync','--eval','(init-cyc-server)','--eval','(init-cyc-server)']).
+% used for emulating LarKC or RCYC 
+labcl:- call_abcl_main(['--prologsync','--eval','(init-cyc-server)','--eval','(cyc-repl)']).
 
-% :- swc.
-% :- jpl.
-% :- set_prolog_flag(verbose_load, silent).
 
-startDmiles:- cabcl, !.
-%startDmiles:- dwq_call(jpl_call('org.logicmoo.system.BeanShellCntrl',start_from_prolog,[],_O)).
+do_in_bg:- labcl.
 
-%:- thread_create(startDmiles,_,[detached(true),debug(false),alias(startDmiles)]).
+%in_bg:- dwq_call(jpl_call('org.logicmoo.system.BeanShellCntrl',start_from_prolog,[],_O)).
+
+startBG:- thread_create(do_in_bg,_,[detached(true),debug(false),alias(do_in_bg)]).
 %:- set_prolog_flag(access_level,system).                         
 %:- debug.
 
@@ -428,9 +381,11 @@ test_e:- cl_read_lisp("(+ 1 2)", O), po(O.cdr.toString).
 test_x:- jpl:jpl_class_to_methods('org.logicmoo.system.BeanShellCntrl',_C).
 
 % :- interactor.
-% :- jabcl.
+:- startBG.
 
 end_of_file.
+
+
 
 
 cl_eval(['cyc:safely-rename-or-merge',"Rebelliousness","vtRebelliousnessFeeling"]).

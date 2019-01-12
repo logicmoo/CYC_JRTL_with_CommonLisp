@@ -1,37 +1,37 @@
 
 # Command line params
 
-Language at First Console
+Which REPL to start from
 ````
---console=[prolog,cyc,cl,bsh] 
+--repl=[prolog,cyc,cl,bsh] 
 ````
 
-New Threads (thus protentially I/O and REPLs) launch normal or using J or Beanshell Desktop
+New Threads (thus commonly I/O and REPLs) launch in what console interface?
 ````
---repl= [stdio,j,bshgui,awt,swing]  
+--console=[stdio,j,bshgui,awt,swing]  
 ````
 
 System Enablements
 ````
---prolog        Enables 2-Way calling beteween Lisp and Prolog
---nobsh         Do not allow use of BeanShell''s Ecosystem (Security-risk otherwise)
 --nocyc         Do not load F-Logic CYC Inference Engine
---subl          Yet Still load the Cycorp JRTL''s SubLisp system to load LarKC/CYC later
 --nolarkc       Do not load the LarKC Plugins and advanced SPARQL Services
+--subl          Yet Still load the Cycorp JRTL''s SubLisp system to load LarKC/CYC later
+
+--prolog        Enable 2-Way calling beteween Lisp and Prolog
 --prologsync    CYC''s KB is kept/managed from the Prolog VM instead of the JRTL (JavaRunTimeLibrary)
 --trackstructs  F-Logic for CLOS/SubL Structures fullfiling the dreams of type-theory and OO. 
-
 --swish         Start SWISH and SWI-Prolog''s WebUIs (Not finished)
 
+--nobsh         Do not allow use of BeanShell''s Ecosystem (Security-risk otherwise)
 --nogui         Makes the JVM act headless disabling many GUI options
 
---j            J Desktop from ABCL   (Heavywieght Code Editing/REPLs)
+--j            J Desktop from ABCL   (Heavywieght Code Editing / REPLs)
 --bshgui       BeanShell Desktop     (Lightwieght REPLs + User Widgets)
 --bowl         BeanBowl UI           (Featherwieght Widget/Class Inspector)
---appdapter    AppdapterGUI          (UI that designs itself as your data mutaes)
+--appdapter    AppdapterGUI          (The UI that redesigns itself to accomidate how your data is changing at runtime)
 
---jdwp=5005    Start the JVM Debug interface locally
---jdwp=10.0.0.122:5005  Or remotely connect to one
+--jdwp=5005    Start the JVM Debug Server interface locally
+--jdwp=10.0.0.122:5005  (supply a hostname to remotely connect to one)
 
 --noXXX        (such as --nogui)  is equivalent to --XXX=[false,f,no,n,0,off]
 
@@ -76,5 +76,6 @@ the variable EXTENSIONS:*COMMAND-LINE-ARGUMENT-LIST*.
 
 
 Examples:
+
 
   
