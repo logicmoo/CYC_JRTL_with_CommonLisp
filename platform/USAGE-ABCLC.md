@@ -11,16 +11,19 @@ New Threads (thus protentially I/O and REPLs) launch normal or using J or Beansh
 --repl= [stdio,j,bshgui,awt,swing]  
 ````
 
-System Enablement
+System Enablements
 ````
 --prolog        Enables 2-Way calling beteween Lisp and Prolog
---bsh           Allow use of BeanShell''s Ecosystem (+BSF)              
---subl          Load the Cycorp JRTL''s SubLisp system
---cyc           F-Logic Inference Engine
+--nobsh         Do not allow use of BeanShell''s Ecosystem (Security-risk otherwise)
+--nocyc         Do not load F-Logic CYC Inference Engine
+--subl          Yet Still load the Cycorp JRTL''s SubLisp system to load LarKC/CYC later
+--nolarkc       Do not load the LarKC Plugins and advanced SPARQL Services
 --prologsync    CYC''s KB is kept/managed from the Prolog VM instead of the JRTL (JavaRunTimeLibrary)
 --trackstructs  F-Logic for CLOS/SubL Structures fullfiling the dreams of type-theory and OO. 
- 
---nogui        Makes the JVM act headless disabling many GUI options
+
+--swish         Start SWISH and SWI-Prolog''s WebUIs (Not finished)
+
+--nogui         Makes the JVM act headless disabling many GUI options
 
 --j            J Desktop from ABCL   (Heavywieght Code Editing/REPLs)
 --bshgui       BeanShell Desktop     (Lightwieght REPLs + User Widgets)
@@ -28,15 +31,14 @@ System Enablement
 --appdapter    AppdapterGUI          (UI that designs itself as your data mutaes)
 
 
---noXXX (such as --nogui)
- means the same things as: 
-     --XXX=[false,f,no,n,0,off]
 
---XXX (such as --gui)
-  means the same things as:
-      --XXX=[true,t,yes,y,1,on]
+--noXXX        (such as --nogui)  is equivalent to --XXX=[false,f,no,n,0,off]
+
+--XXX          Is same as:  --XXX=[true,t,yes,y,1,on]
 
 ````
+
+
 JRTL/Cyc/Lisp-only
 ````
 
@@ -57,9 +59,21 @@ JRTL/Cyc/Lisp-only
 --batch
     The process evaluates forms specified by arguments and possibly by those
     by those in the intialization file '~/.abcl', and then exits.
-````
 
 The occurance of '--' copies the remaining arguments, unprocessed, into
 the variable EXTENSIONS:*COMMAND-LINE-ARGUMENT-LIST*.
 
+````
 
+
+-D switches:
+
+  -Dbaseport=3600
+
+  -Dhostname=10.0.0.180
+  
+ 
+
+Examples:
+
+  
