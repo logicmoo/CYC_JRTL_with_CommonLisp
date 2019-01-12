@@ -54,6 +54,7 @@ import org.opencyc.inference.params.DefaultInferenceParameters;
 import org.opencyc.inference.params.InferenceParameters;
 import org.opencyc.nl.Paraphraser;
 import org.opencyc.parser.CycLParserUtil;
+import org.opencyc.soap.SOAPBinaryCycConnection;
 import org.opencyc.util.StringUtils;
 
 /**
@@ -107,7 +108,8 @@ public class UnitTest implements CycLeaseManager.CycLeaseManagerListener {
     /**
      * the SOAP service url
      */
-    public static final String endpointURLString = "http://207.207.9.187/axis/services/CycSOAPService";
+    //  "http://207.207.9.187/axis/services/CycSOAPService"
+    public static final String endpointURLString = SOAPBinaryCycConnection.DEFAULT_SOAP_ENDPOINT;
     /**
      * the endpoint URL for the Cyc API web service
      */

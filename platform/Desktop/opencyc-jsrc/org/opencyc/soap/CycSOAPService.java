@@ -110,8 +110,8 @@ public class CycSOAPService {
       query.add(new Integer(1));
       query.add(new Integer(1));
       Log.current.println("binary query=" + query.toString());
-      String hostname = "localhost";
-      String port = "3600";
+      String hostname = CycConnection.DEFAULT_HOSTNAME;  // "localhost";
+      String port = String.valueOf(CycConnection.DEFAULT_BASE_PORT);
       Base64 base64 = new Base64();
       String base64Query = base64.encodeCycObject(query, 0);
       String base64Response =

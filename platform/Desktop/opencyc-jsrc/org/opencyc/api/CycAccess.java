@@ -102,14 +102,25 @@ public class CycAccess {
    * @throws IOException if a data communication error occurs
    * @throws CycApiException if the api request results in a cyc server error
    */
-  public CycAccess()
-          throws UnknownHostException, IOException, CycApiException {
-    this(CycConnection.DEFAULT_HOSTNAME,
-            CycConnection.DEFAULT_BASE_PORT);
-    System.out.println("Using Cyc " + this);
-  }
+	public CycAccess() throws UnknownHostException, IOException, CycApiException
+	{
+		this(getCmdLineHost(), getCmdLinePort());
+		System.out.println("Using Cyc " + this);
+	}
 
-  /**
+	private static int getCmdLinePort()
+	{
+		String portSpec = System.getProperty("baseport", null);
+		if (portSpec == null) return CycConnection.DEFAULT_BASE_PORT;
+		return Short.parseShort(portSpec);
+	}
+
+	private static String getCmdLineHost()
+	{
+		return System.getProperty("cychost", System.getProperty("hostname", CycConnection.DEFAULT_HOSTNAME));
+	}
+
+/**
    * Constructs a new CycAccess object.
    *
    * @param conn the Cyc connection object (in persistent, binary mode)
@@ -218,10 +229,11 @@ public class CycAccess {
    */
   public static CycAccess getNewCycAccessInteractively() {
     CycAccess cycAccess = null;
-    final Integer[] ports = {3600, 3620, 3600, 3660, 3680};
+    final int port3600 = CycConnection.DEFAULT_BASE_PORT;
+	Integer[] ports = new Integer[] { port3600, port3600 + 20, port3600 + 40, port3600 + 60, port3600 + 80 };
     //String hostname = "localhost";
     //Integer port = ports[0];
-    CycServer server = new CycServer("localhost", ports[0]);
+    CycServer server = new CycServer(CycConnection.DEFAULT_HOSTNAME, ports[0]);
     while (cycAccess == null) {
       server = CycConnectionPanel.promptUser(server);
       /*

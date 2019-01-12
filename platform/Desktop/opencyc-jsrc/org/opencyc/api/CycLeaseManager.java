@@ -401,7 +401,7 @@ public class CycLeaseManager extends Thread {
   public static void main(String[] args) {
     try {
       Logger.getAnonymousLogger().info("Starting.");
-      final CycAccess cycAccess = new CycAccess("public1.cyc.com", 3600);
+      final CycAccess cycAccess = new CycAccess(); // "public1.cyc.com", 3600
       Logger.getAnonymousLogger().info(
               "Connected to: " + cycAccess.getHostName() + ":" + cycAccess.getBasePort());
       //      cycAccess.traceOn();

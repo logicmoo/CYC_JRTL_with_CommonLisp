@@ -235,9 +235,9 @@ public class SubLCommandProfiler implements SubLWorkerListener {
    */
   public static void main(final String[] args) {
     DefaultSubLWorker.startProfiling();
-    final int BASE_PORT = 3600;
+   // final int BASE_PORT = 3600;
     try {
-      final CycAccess access = new CycAccess("localhost", BASE_PORT);
+      final CycAccess access = new CycAccess();
       SubLWorkerSynch worker = new DefaultSubLWorkerSynch("(+ 1 1)", access);
       Object work = worker.getWork();
       System.out.println("Got worker: " + worker + "\nGot result: " + work + ".");
@@ -251,7 +251,7 @@ public class SubLCommandProfiler implements SubLWorkerListener {
       e.printStackTrace();
     }
     try {
-      final CycAccess access = new CycAccess("localhost", BASE_PORT);
+      final CycAccess access = new CycAccess();
       Thread workerThread = new Thread() {
         public void run() {
           try {

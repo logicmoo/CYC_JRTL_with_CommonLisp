@@ -34,7 +34,7 @@ public class SimpleKBTransactionTest {
 
     @BeforeClass
     public static void setUpClass() {
-        cyc = CycAccess.getNewCycAccessInteractively("localhost", 3600);
+        cyc = CycAccess.getNewCycAccessInteractively();
         CycAccess.setCurrent(cyc);
 
     }

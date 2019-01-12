@@ -358,9 +358,9 @@ public class CycLParserUtil {
   
   //// Internal Reader
   
-  private static String TEST_CYC_MACHINE = "localhost";
+  private static String TEST_CYC_MACHINE = CycConnection.DEFAULT_HOSTNAME; // "localhost";
   
-  private static int TEST_CYC_PORT = 3600;
+  private static int TEST_CYC_PORT = CycConnection.DEFAULT_BASE_PORT; // 3600;
   
   //// Main
   

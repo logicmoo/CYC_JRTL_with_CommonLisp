@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import org.opencyc.api.CycAccess;
+import org.opencyc.api.CycConnection;
 import org.opencyc.api.CycConnectionInterface;
 import static org.opencyc.comm.Comm.RequestType.INIT;
 import static org.opencyc.comm.Comm.RequestType.NORMAL;
@@ -35,13 +36,13 @@ public class SocketCommRoundRobin extends AbstractComm implements Comm {
 
   @Override
   public synchronized InputStream sendRequest(byte request[], String requestSummary, RequestType requestType) throws CommException, IOException {
-
+	  final int port3600 = CycConnection.DEFAULT_BASE_PORT;
     switch (requestType) {
       case INIT:
         // This will add upto 5 cyc images, running on localhost, 3600, 3620 to 3680.
         // This is only for testing purposes
         String host = "localhost";
-        int port = 3600 + 20 * socketList.size();
+        int port = port3600 + (20 * socketList.size());
         //System.out.println("Socket connection to: Host: " + host + " Port: " + port);
         SocketData socketData = new SocketData(host, port);
 

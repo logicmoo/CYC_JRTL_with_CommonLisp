@@ -771,7 +771,7 @@ public class DefaultInferenceWorker extends DefaultSubLWorker implements Inferen
    */
   public static void main(String[] args) {
     try {
-      CycAccess access = new CycAccess("localhost", 3600);
+      CycAccess access = new CycAccess(); // "localhost", 3600
       InferenceWorker worker = new DefaultInferenceWorker("(#$isa ?X #$Dog)",
               CycAccess.inferencePSC, null, access, 10000);
       worker.addInferenceListener(new InferenceWorkerListener() {

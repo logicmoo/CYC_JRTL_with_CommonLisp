@@ -383,7 +383,7 @@ public String stringApiValue() {
   public static void main(String[] args) {
     try {
       System.out.println("Starting...");
-      CycAccess cycAccess = new CycAccess("localhost", 3600);
+      CycAccess cycAccess = new CycAccess();
       InferenceParameterDescriptions parameters = new DefaultInferenceParameterDescriptions(cycAccess, 100000);
       System.out.println("PARAMETERS: " + parameters);
     } catch (Exception e) {

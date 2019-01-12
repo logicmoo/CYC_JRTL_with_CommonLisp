@@ -413,7 +413,7 @@ public class DefaultInferenceParameters extends SpecifiedInferenceParameters {
   public static void main(String[] args) {
     try {
       System.out.println("Starting...");
-      CycAccess cycAccess = new CycAccess("public1", 3600);
+      CycAccess cycAccess = new CycAccess(); // "public1", 3600
       InferenceParameters parameters = new DefaultInferenceParameters(cycAccess);
       parameters.put(new CycSymbol(":MAX-NUMBER"), new Integer(10));
       parameters.put(new CycSymbol(":PROBABLY-APPROXIMATELY-DONE"), new Double(

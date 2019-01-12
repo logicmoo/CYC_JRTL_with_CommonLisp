@@ -54,7 +54,8 @@ public class CycConnectionPanel extends JPanel {
   // Protected
   
   protected Integer[] getBasePorts() {
-    return new Integer[]{3600, 3620, 3600, 3660, 3680};
+	  final int port3600 = CycConnection.DEFAULT_BASE_PORT;
+		return new Integer[] { port3600, port3600 + 20, port3600 + 40, port3600 + 60, port3600 + 80 };
   }
   
   protected String getHostName() {

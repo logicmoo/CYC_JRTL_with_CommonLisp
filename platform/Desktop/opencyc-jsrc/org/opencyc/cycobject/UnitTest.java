@@ -134,9 +134,10 @@ public class UnitTest {
             "(DEFMACRO-IN-API MY-MACRO (A B C) (RET ` (LIST , A , B , C)))");
     assertTrue(cycList50.treeContains(CycObjectFactory.backquote));
 
+    final int port3600 = CycConnection.DEFAULT_BASE_PORT;
     // getValueForKeyword
     cycList50 = getCyc().makeCycList(
-            "(fipa-transport-message\n" + "  (envelope\n" + "    :to my-remote-agent\n" + "    :from my-cyc-agent\n" + "    :date 3215361678\n" + "    :X-agent-community :coabs\n" + "    :X-cyc-image-id \"balrog-200111112091457-939\"\n" + "    :X-base-tcp-port 3600)\n" + "  (payload\n" + "    (inform\n" + "      :sender my-cyc-agent\n" + "      :receiver my-remote-agent\n" + "      :reply-to message1\n" + "      :content \"Hello from my-cyc-agent\"\n" + "      :language :cycl\n" + "      :reply-with \"my cookie\"\n" + "      :ontology cyc-api\n" + "      :protocol :fipa-request)))");
+            "(fipa-transport-message\n" + "  (envelope\n" + "    :to my-remote-agent\n" + "    :from my-cyc-agent\n" + "    :date 3215361678\n" + "    :X-agent-community :coabs\n" + "    :X-cyc-image-id \"balrog-200111112091457-939\"\n" + "    :X-base-tcp-port "+port3600+")\n" + "  (payload\n" + "    (inform\n" + "      :sender my-cyc-agent\n" + "      :receiver my-remote-agent\n" + "      :reply-to message1\n" + "      :content \"Hello from my-cyc-agent\"\n" + "      :language :cycl\n" + "      :reply-with \"my cookie\"\n" + "      :ontology cyc-api\n" + "      :protocol :fipa-request)))");
     assertEquals(cycList50.size(), 3);
     assertEquals(cycList50.first(), CycObjectFactory.makeCycSymbol(
             "fipa-transport-message"));
@@ -154,7 +155,7 @@ public class UnitTest {
     assertEquals("balrog-200111112091457-939",
             envelope.getValueForKeyword(CycObjectFactory.makeCycSymbol(
             ":X-cyc-image-id")));
-    assertEquals(Integer.valueOf(3600),
+    assertEquals(Integer.valueOf(port3600),
             envelope.getValueForKeyword(CycObjectFactory.makeCycSymbol(
             ":X-base-tcp-port")));
     assertNull(envelope.getValueForKeyword(CycObjectFactory.makeCycSymbol(

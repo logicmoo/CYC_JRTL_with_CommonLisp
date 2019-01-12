@@ -1,4 +1,5 @@
 
+
 (in-package "CYC")
 
 
@@ -8,7 +9,7 @@
 ;(load-ke-text-file #$CycAdministrator "e2c/XP/spgu.ke")
 ;(load-ke-text-file #$CycAdministrator "e2c/XP/restaurantscript.ke")
 
-;; (load-ke-text-file #$CycAdministrator "e2c/XP/xp.ke")
+(load-ke-text-file #$CycAdministrator "e2c/XP/xp.ke")
 
 
 

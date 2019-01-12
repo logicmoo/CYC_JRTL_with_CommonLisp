@@ -339,7 +339,7 @@ public class DefaultSubLWorkerSynch
    */
   public static void main(String[] args) {
     try {
-      CycAccess access = new CycAccess("localhost", 3600);
+      CycAccess access = new CycAccess();
       SubLWorkerSynch worker = new DefaultSubLWorkerSynch("(+ 1 1)", access);
       Object work = worker.getWork();
       System.out.println("Got worker: " + worker + "\nGot result: " + work + ".");
@@ -347,7 +347,7 @@ public class DefaultSubLWorkerSynch
       e.printStackTrace();
     }
     try {
-      final CycAccess access = new CycAccess("localhost", 3600);
+      final CycAccess access = new CycAccess();
       Thread workerThread = new Thread() {
         public void run() {
           try {

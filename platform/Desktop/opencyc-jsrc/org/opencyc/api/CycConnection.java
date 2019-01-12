@@ -44,10 +44,13 @@ import org.opencyc.util.Timer;
  */
 public class CycConnection implements CycConnectionInterface {
 
+  public static boolean DEFAULT_GETS_RESETED = true;	
+  
   /** Default host name for the OpenCyc server. */
   public static String DEFAULT_HOSTNAME = "localhost";
+  
   /** Default base tcp port for the OpenCyc server. */
-  public static final int DEFAULT_BASE_PORT = 3600;
+  public static int DEFAULT_BASE_PORT = 3600;
   /** HTTP port offset for the OpenCyc server. */
   public static final int HTTP_PORT_OFFSET = 2;
   /** HTTP port offset for the OpenCyc webapp server. */
@@ -218,6 +221,10 @@ public class CycConnection implements CycConnectionInterface {
       Log.makeLog("cyc-api.log");
     }
     logger = Logger.getLogger("org.opencyc.CycConnection");
+    if(DEFAULT_GETS_RESETED) {
+    	DEFAULT_HOSTNAME = hostName;
+    	DEFAULT_BASE_PORT = basePort;
+    }
     this.hostName = hostName;
     this.basePort = basePort;
     cfaslPort = basePort + CFASL_PORT_OFFSET;

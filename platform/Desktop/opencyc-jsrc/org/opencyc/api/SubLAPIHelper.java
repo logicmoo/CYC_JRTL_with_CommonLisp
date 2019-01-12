@@ -263,7 +263,7 @@ public class SubLAPIHelper {
     SubLAPIHelper thisObj = null;
     try {
       CycConstant admin = new CycConstant("Administrator", new Guid("bd58aedc-9c29-11b1-9dad-c379636f7270"));
-      thisObj = new SubLAPIHelper("localhost", 3660, admin);
+      thisObj = new SubLAPIHelper(new CycAccess(), admin);
       setLoggingLevel(Level.FINE);
       String command = thisObj.makeSubLStmt("asdlfksjd", 1, 2, 3, 4);
       Object result = thisObj.executeCommandSynchronously(command);

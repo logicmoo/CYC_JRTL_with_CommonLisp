@@ -49,7 +49,8 @@ public class CycSOAPClient {
    /**
     * the web service URL
     */
-   public String endpointURL = "http://localhost:8080/axis/services/CycSOAPService";
+	public String endpointURL = SOAPBinaryCycConnection.DEFAULT_SOAP_ENDPOINT;
+   // public String endpointURL = "http://localhost:8080/axis/services/CycSOAPService";
 //   public String endpointURL = "http://207.207.8.29/axis/services/CycSOAPService";
     
     /**
