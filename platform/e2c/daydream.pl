@@ -62,7 +62,7 @@ call_crtl(Name,Args,O):-jpl_call('org.logicmoo.system.BeanShellCntrl',Name,Args,
 :- debug.
 :- nodebug(_).
 :- Six = 6, set_prolog_stack(global, limit(Six*10**9)),set_prolog_stack(local, limit(Six*10**9)),set_prolog_stack(trail, limit(Six*10**9)).
-:- set_prolog_flag(gc,false).
+%:- set_prolog_flag(%gc,false).
 :- set_prolog_flag(gc,true).
 % user:file_search_path(pack,'/devel/LogicmooDeveloperFramework/PrologMUD/pack' ).
 

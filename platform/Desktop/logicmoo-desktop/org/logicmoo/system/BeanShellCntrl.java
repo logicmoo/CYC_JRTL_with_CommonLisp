@@ -44,6 +44,7 @@ import org.appdapter.gui.api.BoxPanelSwitchableView;
 import org.appdapter.gui.browse.Utility;
 import org.appdapter.gui.demo.DemoBrowser;
 import org.armedbear.j.Editor;
+import org.armedbear.j.JLisp;
 import org.armedbear.j.Log;
 import org.armedbear.j.ReaderThread;
 import org.armedbear.lisp.Cons;
@@ -338,6 +339,14 @@ public class BeanShellCntrl
 		// BeanBowlGUI.startBeanBowl();
 	}
 
+	static JLisp jLispHeadless;
+	@LispMethod
+	synchronized static public int init_jlisp()
+	{
+		jLispHeadless = JLisp.jlispHeadless();
+		return jLispHeadless.port;
+	}
+
 	@LispMethod
 	synchronized static public void bsh_desktop()
 	{
@@ -452,7 +461,8 @@ public class BeanShellCntrl
 	static public Object call_lisp2(Symbol found, Term[] args)
 	{
 		LispObject[] largs = terms_to_lisp_objects(args);
-		return found.execute(largs);
+		LispObject ret = found.execute(largs);
+		return ret;
 	}
 
 	@LispMethod
@@ -685,6 +695,7 @@ public class BeanShellCntrl
 	@LispMethod
 	static public LispObject bg_repl() throws InterruptedException
 	{
+		oneSolution("on_bg_repl");
 		if (!repl_in_bg)
 		{
 			repl_in_bg = true;
@@ -1259,14 +1270,17 @@ public class BeanShellCntrl
 
 	@LispMethod
 	static public Object prolog_query_all(String arg)
-	{
+	{		
 		return Query.allSolutions(arg);
 	}
 
 	@LispMethod
-	static public Object prolog_query_once(String arg)
+	static public boolean oneSolution(String arg)
 	{
-		return Query.oneSolution(arg);
+		if (noPrologJNI) throw new StartupError("noPrologJNI: " + arg);
+		final Term term = org.jpl7.Util.textToTerm(arg);
+		final Map<String, Term> oneSolution = Query.oneSolution(term);
+		return oneSolution != null && oneSolution.size() > 0;
 	}
 
 	@LispMethod
@@ -1374,10 +1388,8 @@ public class BeanShellCntrl
 	}
 
 	private static void prologAssertString(String string)
-	{
-		if (noPrologJNI) return;
-		Term term = org.jpl7.Util.textToTerm("assert((" + string + "))");
-		Query.oneSolution(term);
+	{	
+		oneSolution("assert((" + string + "))");
 
 	}
 
@@ -1549,7 +1561,7 @@ public class BeanShellCntrl
 				JRef jref = (JRef) JRef.objectToJRef(StartupLock);
 				if (isIKVM())
 				{
-					Query.oneSolution("assert(swicli:is_ikvm)");
+					oneSolution("assert(swicli:is_ikvm)");
 				}
 			} catch (UnsatisfiedLinkError e)
 			{
@@ -1576,17 +1588,16 @@ public class BeanShellCntrl
 			try
 			{
 				swipl_init();
-				final Map<String, Term> oneSolution = Query.oneSolution("(current_thread(prolog_server,X),X=running)");
-				swipl_inited_server = oneSolution != null && oneSolution.size() > 0;
+				swipl_inited_server = oneSolution("(current_thread(prolog_server,X),X=running)");
 				if (swipl_inited_server) return;
-				Query.oneSolution("use_module(library('prolog_server'))");
+				oneSolution("use_module(library('prolog_server'))");
 				swipl_inited_server = true;
 			} catch (Throwable t)
 			{
 				swipl_inited_server = false;
 				MsgBox.error(t);
 			}
-			Query.oneSolution("prolog_server(4023, [allow(_)])");
+			oneSolution("prolog_server(4023, [allow(_)])");
 		}
 
 	}
@@ -1612,30 +1623,55 @@ public class BeanShellCntrl
 	{
 		if (term == null) return null;
 		LispObject lo;
-		Object tag = term.getTag();
-		if (tag instanceof LispObject)
+		try
 		{
-			lo = (LispObject) tag;
-			lo.termRef = term;
-			return lo;
+
+			Object tag = term.getTag();
+			if (tag instanceof LispObject)
+			{
+				lo = (LispObject) tag;
+				lo.termRef = term;
+				return lo;
+			}
+		} catch (Error e)
+		{
+			Class termClass = term.getClass();
+			ClassLoader cl = termClass.getClassLoader();
+			e.printStackTrace();
 		}
 		if (term.isListNil()) return Lisp.NIL;
 		if (term.isListPair())
 		{
-			Cons cons;
-			term.setTag(cons = new Cons(Lisp.NIL, Lisp.NIL));
-			cons.termRef = term;
+			Cons cons = new Cons(Lisp.NIL, Lisp.NIL);
+			try
+			{
+				cons.termRef = term;
+			} catch (Error e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			cons.setCar(term_to_lobject(term.arg(1)));
 			cons.setCdr(term_to_lobject(term.arg(2)));
 			return cons;
 		}
+		Object o = term.toJavaObject();
 		if (term instanceof Atom)
 		{
-			lo = atom_to_lisp_object(term.name());
+			Atom aterm = (Atom) term;
+			String atomType = aterm.atomType();
+			if ("string".equals(atomType))
+			{
+				lo = JavaObject.getInstance(o, true);
+			}
+			else
+			{
+				lo = atom_to_lisp_object(term.name());
+			}
 		}
 		else
 		{
-			Object o = term.toJavaObject();
+
 			if (o == null)
 			{
 				if (term instanceof Compound)

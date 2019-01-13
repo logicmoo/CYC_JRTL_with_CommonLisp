@@ -412,8 +412,13 @@ public final class uncanonicalizer extends SubLTranslatedFile
     public static SubLObject unwrap_el_formulas_of_assertions_destructive(SubLObject el_cnfs) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject pattern = (SubLObject)uncanonicalizer.$list34;
-        SubLObject el_formula = null;
-        for (SubLObject last_el_cnfs = (SubLObject)uncanonicalizer.NIL, pattern_result = (SubLObject)uncanonicalizer.NIL; !el_cnfs.equal(last_el_cnfs); el_cnfs = cycl_utilities.expression_subst(el_formula, pattern_result, el_cnfs, Symbols.symbol_function((SubLObject)uncanonicalizer.EQUAL), (SubLObject)uncanonicalizer.UNPROVIDED)) {
+        // TODO see what shis should be
+        SubLObject el_formula = NIL;
+        for (SubLObject last_el_cnfs = (SubLObject)uncanonicalizer.NIL, //
+        		pattern_result = (SubLObject)uncanonicalizer.NIL; !el_cnfs.equal(last_el_cnfs);// 
+        		el_cnfs = cycl_utilities.expression_subst(el_formula, pattern_result,// 
+        				el_cnfs, Symbols.symbol_function((SubLObject)uncanonicalizer.EQUAL),// 
+        				(SubLObject)uncanonicalizer.UNPROVIDED)) {//
             last_el_cnfs = el_cnfs;
             thread.resetMultipleValues();
             final SubLObject success = formula_pattern_match.formula_matches_pattern(el_cnfs, pattern);
@@ -2937,7 +2942,7 @@ public final class uncanonicalizer extends SubLTranslatedFile
         uncanonicalizer.$retain_leading_universals$ = null;
         uncanonicalizer.$vars_to_universalize$ = null;
         uncanonicalizer.$universal_vars_to_skolem$ = null;
-        uncanonicalizer.$uncanonicalizer_dnf_threshold$ = null;
+        uncanonicalizer.$uncanonicalizer_dnf_threshold$ = null; 
         uncanonicalizer.$default_skolem_vars$ = null;
         $list0 = ConsesLow.list((SubLObject)SubLObjectFactory.makeSymbol("CNF"), (SubLObject)SubLObjectFactory.makeSymbol("&BODY"), (SubLObject)SubLObjectFactory.makeSymbol("BODY"));
         $sym1$CLET = SubLObjectFactory.makeSymbol("CLET");

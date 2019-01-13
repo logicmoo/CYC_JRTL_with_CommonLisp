@@ -49,7 +49,7 @@ CLASSPATH=$CPR/slf4j-api-1.7.5.jar:$CPR/slf4j-log4j12-1.7.5.jar:$CLASSPATH
 CLASSPATH=$LARKC_HOME/build/classes:$LARKC_HOME/dist/abcl-contrib.jar:$CLASSPATH
 
 
-#CLASSPATH=jpl.jar:$CLASSPATH
+CLASSPATH=$LARKC_HOME/jpl.jar:$CLASSPATH
 
 export CLASSPATH
 

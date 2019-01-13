@@ -40,9 +40,9 @@ public final class JLisp extends LispShell
     private Thread thread;
     private final File initialDir;
 
-    private int port;
+    public int port;
     private Socket socket;
-    private Interpreter interpreter;
+    public Interpreter interpreter;
 
     static int jlispInstance = 0;
     private JLisp(File initialDir)
@@ -71,7 +71,11 @@ public final class JLisp extends LispShell
     {
         return true;
     }
-
+    
+    public void start1Process() {
+    	startServer();    	
+    }
+    
     protected void startProcess()
     {
         thread = new Thread("JLisp interpreter: " + title) {
@@ -183,6 +187,42 @@ public final class JLisp extends LispShell
         disposeThread.start();
 	}
 
+    static JLisp jLispHeadless = null;
+    public static JLisp jlispHeadless()
+    {
+        //final Editor editor = Editor.currentEditor();
+        // Look for existing jlisp buffer.
+//        for (BufferIterator it = new BufferIterator(); it.hasNext();) {
+//            Buffer buf = it.nextBuffer();
+//            if (false && buf instanceof JLisp) {
+//                editor.makeNext(buf);
+//                editor.activateInOtherWindow(buf);
+//                return;
+//            }
+//        }
+//        // Not found.
+//        editor.setWaitCursor();
+    	if(Editor.isLispInitialized()) {
+    		if(jLispHeadless!=null) return jLispHeadless;
+    	}
+        File initialDir = File.getInstance(new java.io.File(".").getAbsolutePath());//.getAbsolutePath();
+        if (initialDir == null || initialDir.isRemote())
+            initialDir = Directories.getUserHomeDirectory();
+        JLisp jlisp = jLispHeadless = new JLisp(initialDir);
+        jlisp.startProcess();
+//        editor.makeNext(jlisp);
+//        Editor ed;
+//        Buffer b = editor.getBuffer();
+//        if (b != null && b.isPaired()) {
+//            Frame frame = editor.getFrame();
+//            editor.switchToBuffer(jlisp);
+//            ed = frame.getCurrentEditor();
+//        } else
+//            ed = editor.activateInOtherWindow(jlisp);
+//        ed.eob();
+//        editor.setDefaultCursor();
+        return jlisp;
+    }
     public static void jlisp()
     {
         final Editor editor = Editor.currentEditor();

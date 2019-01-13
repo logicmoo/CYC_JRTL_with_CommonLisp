@@ -68,7 +68,7 @@ call_crtl(Name,Args,O):-jpl_call('org.logicmoo.system.BeanShellCntrl',Name,Args,
 :- debug.
 :- nodebug(_).
 %:- Six = 6, set_prolog_stack(global, limit(Six*10**9)),set_prolog_stack(local, limit(Six*10**9)),set_prolog_stack(trail, limit(Six*10**9)).
-:- set_prolog_flag(gc,false).
+%:- set_prolog_flag(gc,false).
 :- set_prolog_flag(gc,true).
 % user:file_search_path(pack,'/devel/LogicmooDeveloperFramework/PrologMUD/pack' ).
 
@@ -401,10 +401,16 @@ test_e:- cl_read_lisp("(+ 1 2)", O), po(O.cdr.toString).
 
 test_x:- jpl:jpl_class_to_methods('org.logicmoo.system.BeanShellCntrl',C),dmsg(C).
 
-:- initialization(startBG, program).
-
 % :- sleep(1), writeln('?-').
 % :- interactor.
+
+lmmud :-
+  cd('/home/prologmud_server/'),
+  ensure_loaded(run_mud_server).
+  
+on_bg_repl:- must(thread_signal(main, lmmud)).
+
+:- initialization(startBG, program).
 
 end_of_file.
 
