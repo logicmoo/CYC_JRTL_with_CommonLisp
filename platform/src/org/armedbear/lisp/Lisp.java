@@ -48,6 +48,7 @@ import java.util.Collections;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.jpl7.JPL;
 import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -2897,11 +2898,17 @@ public static void checkOutput(Symbol standardOutput, LispObject stdout2) {
     public Object javaInstance() {
     	return this;
     }
+	  {
+		  termRef = new org.jpl7.Variable("_");
+	  }
   }
 
   public static final LispObject NULL_VALUE = new nullValue();
   private static class nullValue extends LispObject
   {
+	  {
+		  termRef = JPL.JNULL;
+	  }
     @Override
     public String printObjectImpl()
     {

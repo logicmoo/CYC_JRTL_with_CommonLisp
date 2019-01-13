@@ -1,6 +1,11 @@
 #!/usr/bin/env swipl
 
-:- gethostname(gitlab) -> (getenv('DISPLAY',_)->true;setenv('DISPLAY','10.0.0.122:0.0')) ; true.
+:- load_files(library(prolog_stack)).
+prolog_stack:stack_guard(none).
+
+dmiles_machine:- gethostname('gitlab.logicmoo.org').
+
+:- dmiles_machine -> (getenv('DISPLAY',_)->true;setenv('DISPLAY','10.0.0.122:0.0')) ; true.
 %:- ignore(shell('killall -9 xterm')).
 
 :- multifile user:file_search_path/2.
@@ -11,10 +16,10 @@ user:file_search_path(runtime, ('.')).
 :- use_module(library(logicmoo_utils_all)).
 :- use_module(library(dictoo)).
 
-po(O):- format(user_error,'~N % LO: ~w ;; ~w~n',[O.toString,O.getClass.getSimpleName]),!.
-po(O):- format(user_error,'~N % PO: ~q ~n',[O]),!.
+po(O):- atomic(O), format(user_error,'~N% LO: ~w ;; ~w~n',[O.toString,O.getClass.getSimpleName]),!.
+po(O):- format(user_error,'~N% PO: ~q ~n',[O]),!.
 
-dwq(Q):- format(user_error,'~N % DWQ: ~q~n',[Q]).
+dwq(Q):- format(user_error,'~N% DWQ: ~q~n',[Q]).
 
 :- meta_predicate dwq_call(0).
 dwq_call(Q):- Q *-> dwq(success:Q); (dwq(failed:Q),!,fail).
@@ -23,11 +28,10 @@ dwq_call(Q):- Q *-> dwq(success:Q); (dwq(failed:Q),!,fail).
 
     SWI-Prolog personalization file
 */
+sys :- set_prolog_flag(access_level,system).
+usys :- set_prolog_flag(access_level,user).
+mp_test:- sys, meta_predicate(system: write(7)), meta_predicate(system: writeq(7)), meta_predicate(system:is(7,7)),meta_predicate(system: =:=(7,7)),usys.
 
-mp:- sys, meta_predicate(system: write(7)), meta_predicate(system: writeq(7)), meta_predicate(system:is(7,7)),meta_predicate(system: =:=(7,7)),usys.
-
-:- load_files(library(prolog_stack)).
-prolog_stack:stack_guard(none).
 :- use_module(library(base32)).
 
 :- set_prolog_flag(access_level,system).
@@ -43,6 +47,7 @@ prolog_stack:stack_guard(none).
 
 
 cl_eval(L):- cl_eval(L, O),po(O).
+cyc_eval(L):- cl_cyc_eval(L, O),po(O).
 cl_read_lisp(L):- cl_read_lisp(L, O),po(O).
 cl_eval_string(L):- cl_eval_string(L, O),po(O).
 % cl_eval(L,O):-cl_lisp_eval(L,O).
@@ -85,8 +90,6 @@ call_crtl(Name,Args,O):-jpl_call('org.logicmoo.system.BeanShellCntrl',Name,Args,
 :-asserta(noguitracer).
 :-endif.
 
-sys :- set_prolog_flag(access_level,system).
-usys :- set_prolog_flag(access_level,user).
 
 
 %lmv:-lm,call(call,use_listing_vars).
@@ -106,7 +109,7 @@ lm_repl :-lmcd,system:ensure_loaded(logicmoo_repl),qsave_program(lm_repl).
 
 lms:-lmp,lmcd,call(call,swicli).
 
-:- lmcd.
+%:- lmcd.
 :- lmp.
 
 
@@ -194,8 +197,6 @@ check:predicate_name(A, D):- prolog_clause:predicate_name(A, D).
 %:- check.
 :- set_prolog_flag(access_level,user).
 
-
-
 :- if(current_predicate(prolog_ide/1)).
 :- prolog_ide(debug_monitor).
 :- endif.
@@ -250,17 +251,42 @@ append_to_classpath(WildCard):-
 
 % :- call(call,swi_cli:jpl_start_dbg(5005)).
 
-jdwp_remote('10.0.0.122':5005).
+cmd_option_value(Name,Value):- current_prolog_flag(os_argv, L), member(E,L), 
+  cmd_option_value(E,Name,Value).
+cmd_option_value(E,Name,Value):- atom_concat('--no',Name,E),!, opt_value(no,Value).
+cmd_option_value(E,Name,Value):- atom_concat('--',NameValue,E),!,cmd_option_value(NameValue,Name,Value).
+cmd_option_value(E,Name,Value):- atomic_list_concat([Name,Val],'=',E),!,opt_value(Val,Value).
+cmd_option_value(E,Name,Value):- atom(E),Name=E,opt_value(yes,Value).
+
+opt_value(Val,HP):- compound(HP),H:PN=HP,atom(Val),atomic_list_concat([H,P],':',Val),!,atom_number(P,PN).  
+opt_value(y,true). opt_value(yes,true). opt_value(true,true). opt_value(t,true). opt_value(1,true).
+opt_value(n,false). opt_value(no,false). opt_value(false,false). opt_value(f,false). opt_value(0,false).
+  
+
 :- dynamic(jdwp_available/0).
-:- if(false).
-jdwp_available.
-:- if( \+ jdwp_available).
-:- jdwp_remote(Where), catch((  tcp_connect(Where, StreamPair, []),close(StreamPair),asserta(jdwp_available)),_,true).
-:- endif.
-:- endif.
+% '--jdwp=10.0.0.122:5005'
+jdwp_remote(Host:Port):- cmd_option_value(jdwp,Host:Port),!.
+jdwp_remote(Port):- cmd_option_value(jdwp,WPort),!,WPort=Port.
+jdwp_remote('10.0.0.122':5005):- dmiles_machine, jdwp_available, !.
+jdwp_remote(5005).
+
+:-ignore((jdwp_remote(Host:Port), 
+  catch((  tcp_connect(Host:Port, StreamPair, []),close(StreamPair),asserta(jdwp_available)),_,true))).
+
+jdwp_suspend(y):- dmiles_machine, !.
+jdwp_suspend(n).
+
+
 
 % jdwp_available. 
- 
+jdwp_opts(JDWPOpt):- jdwp_remote(Host:Port), jdwp_suspend(YN),
+   format(atom(JDWPOpt),'-agentlib:jdwp=transport=dt_socket,suspend=~w,address=~w:~w,server=n',[YN, Host,Port]),!.
+jdwp_opts(JDWPOpt):- jdwp_remote(Port), jdwp_suspend(YN),
+   format(atom(JDWPOpt),'-agentlib:jdwp=transport=dt_socket,suspend=~w,address=~w,server=y',[YN, Port]).
+jdwp_opts('').
+
+:- current_prolog_flag(os_argv, Y), dwq(Y).
+
 
 jvm_opts(
     [JDWPOpt, %'-XX:PermSize=512m','-XX:MaxPermSize=4g','-Xmx26g',
@@ -269,28 +295,14 @@ jvm_opts(
      '-Dsun.java2d.d3d=false' 
      % ,'-Dfile.encoding=Cp1252',
      %,'-Xbootclasspath:C:\\pf\\java\\jdk\\jre\\lib\\resources.jar;C:\\pf\\java\\jdk\\jre\\lib\\rt.jar;C:\\pf\\java\\jdk\\jre\\lib\\jsse.jar;C:\\pf\\java\\jdk\\jre\\lib\\jce.jar;C:\\pf\\java\\jdk\\jre\\lib\\charsets.jar;C:\\pf\\java\\jdk\\jre\\lib\\jfr.jar;C:\\pf\\java\\jdk\\lib\\tools.jar;C:\\pf\\java\\jdk\\lib\\sa-jdi.jar'
-     ]):- gethostname(gitlab),!,
-       jdwp_remote(Host:Port),
-       (jdwp_available 
-         -> format(atom(JDWPOpt),'-agentlib:jdwp=transport=dt_socket,suspend=y,address=~w:~w,server=n',[Host,Port])
-         ; format(atom(JDWPOpt),'-agentlib:jdwp=transport=dt_socket,suspend=y,address=~w,server=y',[Port])).
+     ]):- dwq_call(jdwp_opts(JDWPOpt)).
 
-jvm_opts(
-    [JDWPOpt, %'-XX:PermSize=512m','-XX:MaxPermSize=4g','-Xmx26g',
-     '-server','-d64','-Xms5000m','-Xmx8000m','-XX:ReservedCodeCacheSize=96m','-XX:+DoEscapeAnalysis','-XX:+UseCompressedOops','-XX:+UseConcMarkSweepGC','-XshowSettings:vm',
-     '-Djava.util.Arrays.useLegacyMergeSort=true',
-     '-Dsun.java2d.d3d=false' 
-     % ,'-Dfile.encoding=Cp1252',
-     %,'-Xbootclasspath:C:\\pf\\java\\jdk\\jre\\lib\\resources.jar;C:\\pf\\java\\jdk\\jre\\lib\\rt.jar;C:\\pf\\java\\jdk\\jre\\lib\\jsse.jar;C:\\pf\\java\\jdk\\jre\\lib\\jce.jar;C:\\pf\\java\\jdk\\jre\\lib\\charsets.jar;C:\\pf\\java\\jdk\\jre\\lib\\jfr.jar;C:\\pf\\java\\jdk\\lib\\tools.jar;C:\\pf\\java\\jdk\\lib\\sa-jdi.jar'
-     ]):- 
-       jdwp_remote(Host:Port),
-       (jdwp_available 
-         -> format(atom(JDWPOpt),'-agentlib:jdwp=transport=dt_socket,suspend=y,address=~w:~w,server=n',[Host,Port])
-         ; format(atom(JDWPOpt),'-agentlib:jdwp=transport=dt_socket,suspend=n,address=~w,server=y',[Port])).
-%  /var/lib/myfrdcsa/codebases/minor/3t-frdcsa/planner/ 
+
+       %  /var/lib/myfrdcsa/codebases/minor/3t-frdcsa/planner/ 
 
 :- multifile(oo_started/0).
 :- dynamic(oo_started/0).
+jpl:- current_module(swicli),!, swicli.
 jpl:- oo_started,!.
 jpl:-
   must_det_l((
@@ -327,53 +339,51 @@ swicli:-
    cli_type_to_classname('java.lang.Class', _CC),
    cli_ensure_classpath)).
 
-bshwc:-
+
+
+main_args_to_jref(Args, JRef):- 
+  maplist(atom_string,ArgList,Args),
+  jpl_new(array(class([java,lang],['String'])), ArgList, JRef).
+
+
+call_jmain(Class,Args):- jpl,
+  main_args_to_jref(Args, JRef),
+  jpl_call(Class,main,[JRef],_Out).
+
+call_main(Args):- !, call_jmain('org.logicmoo.system.BeanShellCntrl',['--load','abclc-rc.lisp'| Args]).
+call_main(Args):- call_jmain('org.armedbear.lisp.Main',['--load','abclc-rc.lisp'| Args]).
+call_main(Args):- call_jmain('com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain',['--load','abclc-rc.lisp'| Args]).
+
+/*
+*/
+bshwc:-  
   must_det_l(( cli_type_to_classname('org.slf4j.LoggerFactory',Found1),
    writeln([found,Found1]),
    cli_type_to_classname('org.logicmoo.system.BeanShellCntrl',Found),
    writeln([found,Found]),
-   jpl_call('org.logicmoo.system.BeanShellCntrl',start_from_prolog_ikvm,[],_O))).
-
-
-
-
-:- if(not(current_module(prolog_server))).
-:- if(not(current_module(jpl))).
-%:- swicli.
-:- endif.  
-:- endif.
-  
-:- if(not(current_module(swicli))).
-:- jpl. 
-:- endif.  
-
-
-
-call_jmain(Class,ArgsList):-
-  maplist(atom_string,Args,ArgsList),
-  jpl_new(array(class([java,lang],['String'])), Args, JRef),
-  jpl_call(Class,main,[JRef],_Out).
-
-call_abcl_main(ArgsList):- call_jmain('org.armedbear.lisp.Main',['--load','abclc-rc.lisp'| ArgsList]).
-
-/*
-*/
+   call_crtl(start_from_prolog_ikvm,[],_O))).
 
 % Just Vanila ABCL compiler/interpretor with all LarKC features not getting get in it way (compiler and ANSI-Lisp testing)
-jabcl:- call_abcl_main(['--nocyc','--noprolog','--noprologsync','--nogui','--nobsh']).
+jabcl:- call_main(['--nocyc','--noprolog','--noprologsync','--nogui','--nobsh']).
 
 % Used for emulating AlegroCL while porting code code into CYC
-uabcl:- call_abcl_main(['--prologsync','--eval','(init-cyc-server)']).
+uabcl:- call_main(['--prologsync','--eval','(init-cyc-server)']).
 
 % used for emulating LarKC or RCYC 
-labcl:- call_abcl_main(['--prologsync','--eval','(init-cyc-server)','--eval','(cyc-repl)']).
+labcl:- call_main(['--prologsync','--eval','(init-cyc-server)','--eval','(cyc-repl)']).
+
+bg_abcl:- call_main(['--prologsync','--eval','(init-cyc-server)','--eval','(bg-repl)']).
+
+start_bsh:- dwq_call(jpl_call('org.logicmoo.system.BeanShellCntrl',start_from_prolog,[],_O)).
+
+startBG:- start_in_bg(bg_abcl).
 
 
-do_in_bg:- call_abcl_main(['--prologsync','--eval','(init-cyc-server)','--eval','(bg-repl)']).
-
-%in_bg:- dwq_call(jpl_call('org.logicmoo.system.BeanShellCntrl',start_from_prolog,[],_O)).
-
-startBG:- thread_create(do_in_bg,_,[detached(true),debug(false),alias(do_in_bg)]).
+start_in_bg(Goal):-  
+  format(atom(Alias),'~w',[Goal]),   
+  ((thread_property(Some,alias(Alias)),thread_property(Some,status(running))) -> true; 
+    thread_create(Goal,_,[detached(true),debug(false),alias(Alias)])),
+  threads.
 %:- set_prolog_flag(access_level,system).                         
 %:- debug.
 
@@ -389,10 +399,12 @@ test_e:- cl_eval([+,1,2], O),po(O).
 test_e:- cl_eval_string("(+ 1 2)", O),po(O.toString).
 test_e:- cl_read_lisp("(+ 1 2)", O), po(O.cdr.toString).
 
-test_x:- jpl:jpl_class_to_methods('org.logicmoo.system.BeanShellCntrl',_C).
+test_x:- jpl:jpl_class_to_methods('org.logicmoo.system.BeanShellCntrl',C),dmsg(C).
 
+:- initialization(startBG, program).
+
+% :- sleep(1), writeln('?-').
 % :- interactor.
-:- startBG.
 
 end_of_file.
 

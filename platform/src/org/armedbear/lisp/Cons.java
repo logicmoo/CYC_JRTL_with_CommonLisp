@@ -61,18 +61,15 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
 
 	public Cons(SubLObject first, SubLObject rest)
 	{
-		if (first == null || rest == null)
-		{
-			Errors.error("Bad null cons");
-		}
-		this.car = (LispObject) first;
-		this.cdr = (LispObject) rest;
-		++count;
+		this((LispObject) first, (LispObject) rest); 
 	}
 
 	public Cons(LispObject car, LispObject cdr)
 	{
-		//  super(car,cdr);
+		if (car == null || cdr == null)
+		{
+			Errors.error("Bad null cons");
+		}
 		this.car = car;
 		this.cdr = cdr;
 		++count;
@@ -80,6 +77,10 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
 
 	public Cons(LispObject car)
 	{
+		if (car == null)
+		{
+			Errors.error("Bad null cons");
+		}
 		this.car = car;
 		this.cdr = NIL;
 		++count;
@@ -102,9 +103,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
 
 	public Cons(String name, Object value)
 	{
-		this.car = new SimpleString(name);
-		this.cdr = value != null ? JavaObject.getInstance(value) : NULL_VALUE;
-		++count;
+		this(new SimpleString(name), value != null ? JavaObject.getInstance(value) : NULL_VALUE);
 	}
 
 	static Cons pnCons(Cons original)
@@ -621,13 +620,20 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
 		LispObject obj = this;
 		Term[] args = new Term[] { unboundPLTerm(), unboundPLTerm() };
 		obj.termRef = new Compound(JPL.LIST_PAIR, args);
+		int length = 0;
 		while (true)
-		{			
+		{
 			args[0] = PrologSync.toProlog(obj.car(), skip);
 			LispObject next = obj.cdr();
 			if (next instanceof Cons)
 			{
-				Term[] nargs = new Term[] { unboundPLTerm(), unboundPLTerm() };				
+				length++;
+				if (length > 100)
+				{
+					args[1] = next.termRef = JPL.newJRef(next);
+					return termRef;
+				}
+				Term[] nargs = new Term[] { unboundPLTerm(), unboundPLTerm() };
 				args[1] = next.termRef = new Compound(JPL.LIST_PAIR, nargs);
 				args = nargs;
 				obj = next;

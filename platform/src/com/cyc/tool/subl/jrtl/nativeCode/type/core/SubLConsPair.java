@@ -211,9 +211,13 @@ abstract public class SubLConsPair extends LispObject implements SubLCons, SubLL
 		if (!obj.isCons())
 			return false;
 		SubLObject cur1;
-		for (cur1 = this; cur1.isCons() && obj.isCons(); cur1 = cur1.rest(), obj = obj.rest())
-			if (!cur1.first().equal(obj.first()))
+		for (cur1 = this; cur1.isCons() && obj.isCons(); cur1 = cur1.rest(), obj = obj.rest()) {
+			final SubLObject e1 = cur1.first();
+			final SubLObject e2 =  obj.first();
+			if (!e1.equal(e2)) {
 				return false;
+			}
+		}
 		return !cur1.isCons() && !obj.isCons() && cur1.equal(obj);
 	}
 
@@ -1119,13 +1123,18 @@ abstract public class SubLConsPair extends LispObject implements SubLCons, SubLL
 
 	@Override
 	public SubLCons setFirst(SubLObject first) {
-		toLispObject().car = (LispObject) first;
+		toLispObject().car = notNull(first);
 		return this;
+	}
+
+	static public LispObject notNull(SubLObject first)
+	{
+		return first.toLispObject();
 	}
 
 	@Override
 	public SubLCons setRest(SubLObject rest) {
-		toLispObject().cdr = (LispObject) rest;
+		toLispObject().cdr = notNull(rest);
 		return this;
 	}
 

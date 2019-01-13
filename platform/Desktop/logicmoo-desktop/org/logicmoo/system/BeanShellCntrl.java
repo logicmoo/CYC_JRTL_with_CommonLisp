@@ -1826,6 +1826,12 @@ public class BeanShellCntrl
 		}
 	}
 
+	public static void main(String[] args) throws InterruptedException
+	{
+		swipl_init_server();
+		org.armedbear.lisp.Main.main(args);
+	}
+
 	static class CreationInfo
 	{
 
