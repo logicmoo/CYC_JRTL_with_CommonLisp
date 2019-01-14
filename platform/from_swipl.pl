@@ -16,6 +16,9 @@ user:file_search_path(runtime, ('.')).
 :- use_module(library(logicmoo_utils_all)).
 :- use_module(library(dictoo)).
 
+to_string(O,S):- jpl_object(O),jpl_call(O,toString,[],S),!.
+to_string(O,O):-!.
+
 po(O):- atomic(O), format(user_error,'~N% LO: ~w ;; ~w~n',[O.toString,O.getClass.getSimpleName]),!.
 po(O):- format(user_error,'~N% PO: ~q ~n',[O]),!.
 
@@ -54,7 +57,7 @@ cl_eval_string(L):- cl_eval_string(L, O),po(O).
 
 call_ctrl(Head):- call_ctrl(Head,@(null)).
 call_ctrl(Head,Result):- strip_module(Head,M,H),oo_deref(M,H,HeadE),
-  invoke_ctrl(call_ctrl,[{HeadE},{Result}],O),!,
+  invoke_ctrl(call_ctrl,[{HeadE},{Result}],{O}),!,
   (var(Result)->O=Result;true).
 invoke_ctrl(Name,Args,O):-jpl_call('org.logicmoo.system.BeanShellCntrl',Name,Args,O).
 
