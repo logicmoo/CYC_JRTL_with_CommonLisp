@@ -117,7 +117,9 @@ public final class Interpreter implements Runnable
 		try{
  	    	synchronized(Interpreter.class) {
  	           if (globalInterpreter != null)
- 	              return null;
+ 	               {
+ 	        	      return null; 	               
+ 	               }
  	          globalInterpreter = new Interpreter();
  	          return initInstance(globalInterpreter,args,false);
     	}

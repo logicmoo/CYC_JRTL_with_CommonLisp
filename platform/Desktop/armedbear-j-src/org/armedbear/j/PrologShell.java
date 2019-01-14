@@ -1,4 +1,5 @@
 /*
+
  * PrologShell.java
  *
  * Copyright (C) 2002-2010 Peter Graves
@@ -17,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
- */
+ */ 
 
 package org.armedbear.j;
 
@@ -111,7 +112,7 @@ public class PrologShell extends Shell
   protected void startProcess()
   {
 	  if(true) {
-	  BeanShellCntrl.swipl_init_server();
+	  BeanShellCntrl.init_swipl_server();
 	  return;
 	  }
     if (shellCommand == null)
@@ -140,7 +141,7 @@ public class PrologShell extends Shell
 
     try
       {
-    	 p = new Socket("localhost", 4023);
+    	 p = new Socket("cycserver", 4023);
         stdin  = new OutputStreamWriter(p.getOutputStream());
         stdoutThread = new StdoutThread(p.getInputStream());
         stderrThread = new StderrThread(p.getInputStream());

@@ -26,6 +26,7 @@ export PRJS=${BASH_SOURCE[0]}
 
 export JAVA_OPTS1="-agentlib:jdwp=transport=dt_socket,server=n,address=10.0.0.122:5005,suspend=n"
 export JAVA_OPTS2="-agentlib:jdwp=transport=dt_socket,server=y,address=5005,suspend=y"
+export _JAVA_SR_SIGNUM=20 
 
 echo ""
 # echo CLASSPATH=$CLASSPATH

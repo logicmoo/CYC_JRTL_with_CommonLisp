@@ -46,15 +46,17 @@ mp_test:- sys, meta_predicate(system: write(7)), meta_predicate(system: writeq(7
 
 
 
-cl_eval(L):- cl_eval(L, O),po(O).
+cl_eval(L):- trace, cl_eval(L, O),po(O).
 cyc_eval(L):- cl_cyc_eval(L, O),po(O).
-cl_read_lisp(L):- cl_read_lisp(L, O),po(O).
+cl_read_lisp(L):- cl_read_lisp(L, O),po(O).                                
 cl_eval_string(L):- cl_eval_string(L, O),po(O).
 % cl_eval(L,O):-cl_lisp_eval(L,O).
 
-call_ctrl(Head):- call_ctrl(Head,_).
-call_ctrl(Head,O):- strip_module(Head,M,H),oo_deref(M,H,HeadE),dwq_call(call_crtl(call_ctrl,[{HeadE}],O)).
-call_crtl(Name,Args,O):-jpl_call('org.logicmoo.system.BeanShellCntrl',Name,Args,O).
+call_ctrl(Head):- call_ctrl(Head,@(null)).
+call_ctrl(Head,Result):- strip_module(Head,M,H),oo_deref(M,H,HeadE),
+  invoke_ctrl(call_ctrl,[{HeadE},{Result}],O),!,
+  (var(Result)->O=Result;true).
+invoke_ctrl(Name,Args,O):-jpl_call('org.logicmoo.system.BeanShellCntrl',Name,Args,O).
 
 
 /*
@@ -91,6 +93,11 @@ call_crtl(Name,Args,O):-jpl_call('org.logicmoo.system.BeanShellCntrl',Name,Args,
 :-endif.
 
 
+ensure_prolog_server :- 
+ ((current_thread(prolog_server,X),X=running) -> true ;
+  ((use_module(library('prolog_server')), prolog_server(4023, [allow(_)])))).
+:- ensure_prolog_server.	
+
 
 %lmv:-lm,call(call,use_listing_vars).
 %lm :- use_module(system:library(logicmoo_utils)).
@@ -115,8 +122,6 @@ lms:-lmp,lmcd,call(call,swicli).
 
 %:- user:use_module(library(lists)).
 %:- user:use_module(library(make)).
-
-
 
 
 
@@ -309,6 +314,7 @@ jpl:-
   asserta((oo_started)),
   retractall((user:file_search_path(jar, _))),
   asserta((user:file_search_path(jar, ('.')))),
+  setenv('_JAVA_SR_SIGNUM',20),
   ensure_loaded(library(jpl)),  
   getenv('PATH',PATH),getenv('JAVA_HOME',JH),current_prolog_flag(home,HOME),atomic_list_concat([JH,HOME],';',NEWPATH),
   setenv('PATH',NEWPATH),
@@ -350,7 +356,7 @@ call_jmain(Class,Args):- jpl,
   main_args_to_jref(Args, JRef),
   jpl_call(Class,main,[JRef],_Out).
 
-call_main(Args):- !, call_jmain('org.logicmoo.system.BeanShellCntrl',['--load','abclc-rc.lisp'| Args]).
+call_main(Args):- !, call_jmain('org.logicmoo.system.BeanShellCntrl',['--eval','(init-cyc)','--load','abclc-rc.lisp'| Args]).
 call_main(Args):- call_jmain('org.armedbear.lisp.Main',['--load','abclc-rc.lisp'| Args]).
 call_main(Args):- call_jmain('com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain',['--load','abclc-rc.lisp'| Args]).
 
@@ -361,7 +367,7 @@ bshwc:-
    writeln([found,Found1]),
    cli_type_to_classname('org.logicmoo.system.BeanShellCntrl',Found),
    writeln([found,Found]),
-   call_crtl(start_from_prolog_ikvm,[],_O))).
+   invoke_ctrl(start_from_prolog_ikvm,[],_O))).
 
 % Just Vanila ABCL compiler/interpretor with all LarKC features not getting get in it way (compiler and ANSI-Lisp testing)
 jabcl:- call_main(['--nocyc','--noprolog','--noprologsync','--nogui','--nobsh']).
@@ -373,6 +379,8 @@ uabcl:- call_main(['--prologsync','--eval','(init-cyc-server)']).
 labcl:- call_main(['--prologsync','--eval','(init-cyc-server)','--eval','(cyc-repl)']).
 
 bg_abcl:- call_main(['--prologsync','--eval','(init-cyc-server)','--eval','(bg-repl)']).
+
+fg_abcl:- call_main(['--prologsync','--eval','(init-cyc-server)']).
 
 start_bsh:- dwq_call(jpl_call('org.logicmoo.system.BeanShellCntrl',start_from_prolog,[],_O)).
 
@@ -394,6 +402,7 @@ p_rn(B,A):- atom_string(B,BS),atom_string(A,AS),format('(safely-rename-or-merge 
 do_rn(B,A):- atom_string(B,BS),atom_string(A,AS),cl_eval(['safely-rename-or-merge',BS,AS], _O),!.
 
 
+%%cl_eval_string('*package*').
 test_e:- cl_eval('*package*').
 test_e:- cl_eval([+,1,2], O),po(O).
 test_e:- cl_eval_string("(+ 1 2)", O),po(O.toString).
@@ -404,13 +413,28 @@ test_x:- jpl:jpl_class_to_methods('org.logicmoo.system.BeanShellCntrl',C),dmsg(C
 % :- sleep(1), writeln('?-').
 % :- interactor.
 
+
+%:- if((app_argv('--irc'))).
+:- if(exists_source(library(eggdrop))).
+:- dmsg("Eggdrop Server").
+:- user:use_module(library(eggdrop)).
+:- egg_go.
+:- endif.
+%:- endif.
+
+
 lmmud :-
   cd('/home/prologmud_server/'),
   ensure_loaded(run_mud_server).
   
-on_bg_repl:- must(thread_signal(main, lmmud)).
+on_bg_repl:- thread_signal(main, call(call,lmmud)).
 
-:- initialization(startBG, program).
+%program_init :-startBG.
+program_init :-fg_abcl,lmmud.
+
+
+%:- initialization(startBG, program).
+:- initialization(program_init, program).
 
 end_of_file.
 

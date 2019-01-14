@@ -32,6 +32,9 @@ import org.jpl7.fli.term_t;
 import org.logicmoo.bb.BeanBowl;
 import org.logicmoo.system.BeanShellCntrl;
 
+import com.cyc.cycjava.cycl.constants_high;
+import com.cyc.cycjava.cycl.constants_interface;
+import com.cyc.cycjava.cycl.constants_low;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -538,22 +541,35 @@ public class PrologSync extends SubLTrampolineFile
 		try
 		{
 			term_t tt;
+			if (o.isString())
+			{ //
+				return term = new Atom(o.getStringValue(), "string");
+			}
 			if (o.isSymbol())
 			{
 				String s = ((Symbol) o.toSymbol()).getQualifiedName();
-				return term = new Atom(s);
+				return term = new Atom(s, "text");
+
+			}
+			if (constants_high.installed_constant_p(o) != SubLNil.NIL)
+			{
+				String s = constants_high.constant_name(o).getStringValue();
+				return term = new Atom(s, "text");
 			}
 			if (o.isDouble()) { return term = new org.jpl7.Float(o.doubleValue()); }
-			if (o.isString()) { return term = new Atom(o.getStringValue(), "string"); }
 			if (o.isInteger())
 			{
-				final BigInteger bigIntegerValue = o.bigIntegerValue();
-				return new org.jpl7.Integer(bigIntegerValue);
+				if (o.isBigIntegerBignum())
+				{
+					final BigInteger bigIntegerValue = o.bigIntegerValue();
+					return term = new org.jpl7.Integer(bigIntegerValue);
+				}
+				return term = new org.jpl7.Integer(o.longValue());
 			}
-			if (o instanceof IPrologifiable) { return term = ((IPrologifiable) o).toProlog(skipped); }
 			int idx = indexOfById(skipped, o);
 			if (idx >= 0) { return term = toPrologFromJava(o); }
 			skipped.add(o);
+			if (o instanceof IPrologifiable) { return term = ((IPrologifiable) o).toProlog(skipped); }
 			if (o instanceof SubLStruct)
 			{
 				{
@@ -567,6 +583,7 @@ public class PrologSync extends SubLTrampolineFile
 			//return Atom.objectToJRef(o);
 			return term = toPrologFromJava(o);
 		} finally
+
 		{
 			if (ass != null && term != null)
 			{

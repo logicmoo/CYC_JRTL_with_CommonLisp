@@ -73,7 +73,7 @@ public class Variable extends Term {
 	/**
 	 * defined between Query.open() and Query.get2()
 	 */
-	protected transient term_t term_ = null;
+	public transient term_t term_ = null;
 
 	/**
 	 * Create a new Variable with new sequential name of the form "_261".

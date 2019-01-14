@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
-reset
+#reset
 stty sane
 $( cls >/dev/null 2>&1)
 
 ./from_swipl.pl $@
+RESULT_CODE=$?
 stty sane
 
 $(return >/dev/null 2>&1)

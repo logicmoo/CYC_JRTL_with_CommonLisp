@@ -182,7 +182,7 @@ public class Query implements Iterable<Map<String, Term>>, Iterator<Map<String, 
 	 * @param args
 	 *            the arguments of this Query's goal
 	 */
-	public Query(String text, Term[] args) {
+	public Query(String text, Term... args) {
 		this(buildQueryTerm(text, args));
 	}
 
@@ -941,7 +941,7 @@ public class Query implements Iterable<Map<String, Term>>, Iterator<Map<String, 
 	 *            the query text
 	 * @return true iff the query can be proved
 	 */
-	public static final boolean hasSolution(String text, Term[] params) {
+	public static final boolean hasSolution(String text, Term... params) {
 		return (new Query(text, params)).hasSolution();
 	}
 

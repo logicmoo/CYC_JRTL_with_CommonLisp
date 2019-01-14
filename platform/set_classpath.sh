@@ -63,3 +63,5 @@ echo SWI_HOME=$SWI_HOME
 
 
 echo "while sleep 1; do ./run-cyc-java.sh; done"
+echo "true ; while [ $? -ne 4 ]; do sleep 1 ; ./From_Prolog.sh ; done"
+

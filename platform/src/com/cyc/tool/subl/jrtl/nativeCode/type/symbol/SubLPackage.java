@@ -27,6 +27,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types;
@@ -36,6 +37,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
+import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLMacro;
 import com.cyc.tool.subl.util.SubLFiles;
 
 abstract public class SubLPackage extends LispObject implements SubLObject {
@@ -392,7 +394,7 @@ abstract public class SubLPackage extends LispObject implements SubLObject {
 		// SubLNil.NIL);
 		// SubLPackage.SUBLISP_PACKAGE.symbolNameToSymbolMap.put(SubLT.T.getSubLName(),
 		// SubLT.T);
-		Object o = Lisp._AUTOLOAD_VERBOSE_;
+		SubLMain.preInitLisp();
 		SUBLISP_PACKAGE = (SubLPackage) (Object) Lisp.PACKAGE_SUBLISP;
 		CYC_PACKAGE = (SubLPackage) (Object) Lisp.PACKAGE_CYC;
 		KEYWORD_PACKAGE = (SubLPackage) (Object) Lisp.PACKAGE_KEYWORD;

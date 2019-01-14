@@ -38,6 +38,7 @@ import java.util.logging.Level;
 import javax.swing.JDesktopPane;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.WindowConstants;
 
 import org.appdapter.core.convert.Converter.ConverterMethod;
 import org.appdapter.gui.api.BoxPanelSwitchableView;
@@ -76,6 +77,7 @@ import org.jpl7.JPLException;
 import org.jpl7.JRef;
 import org.jpl7.Query;
 import org.jpl7.Term;
+import org.jpl7.Variable;
 import org.jpl7.fli.Prolog;
 import org.jpl7.fli.term_t;
 import org.logicmoo.bb.BeanBowl;
@@ -85,6 +87,7 @@ import com.cyc.cycjava.cycl.constant_completion_high;
 import com.cyc.cycjava.cycl.constant_completion_low;
 import com.cyc.cycjava.cycl.constant_handles;
 import com.cyc.cycjava.cycl.constant_reader;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
@@ -155,7 +158,7 @@ public class BeanShellCntrl
 	static public boolean calledStartDmiles = false;
 
 	static public boolean started_from_prolog = true;
-	static boolean swipl_inited_server = false;
+	static boolean init_swipled_server = false;
 
 	static public Object dbrowser;
 	static Container desktop;
@@ -178,7 +181,7 @@ public class BeanShellCntrl
 
 	static
 	{
-		int hc = CycEval.CYC_EVAL.hotCount;
+		//int hc = CycEval.CYC_EVAL.hotCount;
 	}
 
 	static public void addConsole(bsh.This thiz, final JConsole console) throws UtilEvalError, EvalError, InterruptedException
@@ -291,7 +294,7 @@ public class BeanShellCntrl
 		try
 		{
 			constant_completion_low.$require_valid_constants$.bind(localNil, thread);
-			constant = constant_completion_high.constant_complete_exact(name, constant_reader.UNPROVIDED, constant_reader.UNPROVIDED);
+			constant = constant_completion_high.constant_complete_exact(name, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED);
 		} finally
 		{
 			constant_completion_low.$require_valid_constants$.rebind(_prev_bind_0, thread);
@@ -340,6 +343,7 @@ public class BeanShellCntrl
 	}
 
 	static JLisp jLispHeadless;
+
 	@LispMethod
 	synchronized static public int init_jlisp()
 	{
@@ -420,7 +424,7 @@ public class BeanShellCntrl
 	}
 
 	@LispMethod
-	static public Object call_ctrl(Term list)
+	static public Object call_ctrl(Term list, Term result)
 	{
 		String atom = list.name();
 		int arity = list.arity();
@@ -446,7 +450,13 @@ public class BeanShellCntrl
 			{
 				Main.setNoDebug(true);
 			}
-			return call_lisp2(found, list.args());
+			LispObject lo = call_lisp2(found, list.args());
+			if (!result.isVariable()) { return result; }
+			Term t = lobject_to_term(lo);
+			Variable v = (Variable) result;
+			Term.putTerm(t, v.term_);
+			Object o = lo.javaInstance();
+			return t;
 		} catch (Throwable t)
 		{
 			if (!wasNoDebug)
@@ -458,7 +468,7 @@ public class BeanShellCntrl
 		}
 	}
 
-	static public Object call_lisp2(Symbol found, Term[] args)
+	static public LispObject call_lisp2(Symbol found, Term[] args)
 	{
 		LispObject[] largs = terms_to_lisp_objects(args);
 		LispObject ret = found.execute(largs);
@@ -548,7 +558,7 @@ public class BeanShellCntrl
 			console = console0;
 		try
 		{
-			swipl_init_server();
+			init_swipl_server();
 			Socket p = null;
 			try
 			{
@@ -607,6 +617,7 @@ public class BeanShellCntrl
 		{
 
 			// Netbeans IDE automatically overrides this toString()
+			@Override
 			public String toString()
 			{
 				return string.toString();
@@ -651,9 +662,22 @@ public class BeanShellCntrl
 	}
 
 	@LispMethod
+	static public SubLObject cyc_eval(final LispObject str)
+	{
+		return while_not_changing_package(new Callable<SubLObject>()
+		{
+			@Override
+			public SubLObject call() throws Exception
+			{
+				return cyc_eval_progn(new Cons(str), SubLEnvironment.currentEnvironment());
+			}
+		});
+	}
+
+	@LispMethod
 	static public <T> T while_not_changing_package(Callable<T> str)
 	{
-		SubLPackage prevPackage = SubLPackage.getCurrentPackage();
+		SubLPackage prevPackage = Lisp.getCurrentPackage();
 		try
 		{
 			return str.call();
@@ -667,8 +691,10 @@ public class BeanShellCntrl
 	}
 
 	@LispMethod
-	static public SubLObject cyc_eval(SubLCons specialForm, SubLEnvironment env)
+	static public SubLObject cyc_eval_progn(SubLCons specialForm, SubLEnvironment env)
 	{
+		init_subl();
+		if (!SubLMain.commonSymbolsOK) throw new RuntimeException("SubLMain not yet started");
 		boolean wasSubLisp = Main.isSubLisp();
 		Main.setSubLisp(true);
 		try
@@ -715,7 +741,7 @@ public class BeanShellCntrl
 	}
 
 	@LispMethod
-	static public LispObject cyc_repl_now() throws InterruptedException
+	static public LispObject cyc_repl() throws InterruptedException
 	{
 		boolean wasSubLisp = Main.isSubLisp();
 		init_subl();
@@ -724,7 +750,7 @@ public class BeanShellCntrl
 		boolean was_shouldReadloopExit = SLR.shouldReadloopExit;
 		SLR.quitOnExit = false;
 		SLR.shouldReadloopExit = false;
-		SubLPackage prevPackage = SubLPackage.getCurrentPackage();
+		SubLPackage prevPackage = Lisp.getCurrentPackage();
 		try
 		{
 			try
@@ -772,6 +798,7 @@ public class BeanShellCntrl
 		{
 
 			// Netbeans IDE automatically overrides this toString()
+			@Override
 			public String toString()
 			{
 				return string.toString();
@@ -873,14 +900,25 @@ public class BeanShellCntrl
 	{
 		int argCount = javaArgs.length;
 		Method result = null;
+		Method macro = null;
 		for (int i = staticMethods.length; i-- > 0;)
 		{
 			Method method = staticMethods[i];
-			if (method.getParameterTypes().length != argCount)
+			final Class<?>[] parameterTypes = method.getParameterTypes();
+			final int parameterTypeslength = parameterTypes.length;
+			if (parameterTypeslength != argCount)
 			{
+				if (parameterTypeslength == 2)
+				{
+					Class sc = parameterTypes[1];
+					if (SubLEnvironment.class.isAssignableFrom(sc))
+					{
+						macro = method;
+					}
+				}
 				continue;
 			}
-			Class<?>[] methodTypes = (Class<?>[]) method.getParameterTypes();
+			Class<?>[] methodTypes = parameterTypes;
 			if (!Java.isApplicableMethod(methodTypes, javaArgs))
 			{
 				continue;
@@ -890,6 +928,7 @@ public class BeanShellCntrl
 				result = method;
 			}
 		}
+		if (result == null) return macro;
 		return result;
 	}
 
@@ -925,8 +964,8 @@ public class BeanShellCntrl
 			js = "+" + js.substring(1, js.length() - 2) + "+";
 		}
 		js = js.toUpperCase();
-		if (pkg == null) pkg = org.armedbear.lisp.Package.getCurrentPackage();
-		Symbol sym = ((Package) pkg).internAndExport(js);
+		if (pkg == null) pkg = Lisp.getCurrentPackage();
+		Symbol sym = pkg.internAndExport(js);
 
 		exportInCyc(sym);
 		return sym;
@@ -974,7 +1013,7 @@ public class BeanShellCntrl
 		Main.setSubLisp(true);
 		try
 		{
-			SubLPackage prevPackage = SubLPackage.getCurrentPackage();
+			SubLPackage prevPackage = Lisp.getCurrentPackage();
 			try
 			{
 				init_subl();
@@ -1018,7 +1057,7 @@ public class BeanShellCntrl
 		Main.setSubLisp(true);
 		try
 		{
-			SubLPackage prevPackage = SubLPackage.getCurrentPackage();
+			SubLPackage prevPackage = Lisp.getCurrentPackage();
 			try
 			{
 				init_cyc();
@@ -1048,7 +1087,7 @@ public class BeanShellCntrl
 		Main.setSubLisp(true);
 		try
 		{
-			SubLPackage prevPackage = SubLPackage.getCurrentPackage();
+			SubLPackage prevPackage = Lisp.getCurrentPackage();
 			try
 			{
 				init_cyc();
@@ -1073,20 +1112,21 @@ public class BeanShellCntrl
 	}
 
 	@LispMethod
-	synchronized static public void init_subl() throws InterruptedException
+	synchronized static public void init_subl()
 	{
 		synchronized (StartupLock)
 		{
 			if (inited_subl) return;
 			inited_subl = true;
 		}
-		swipl_init();
+		init_swipl();
+		SubLMain.commonSymbolsOK = true;
 		boolean b = SubLMain.isInitialized();
 		if (b) { return; }
 		boolean wasSubLisp = Main.isSubLisp();
 		boolean wasshouldRunInBackground = SubLMain.shouldRunInBackground;
 		SubLMain me = SubLMain.me;
-		SubLPackage prevPackage = SubLPackage.getCurrentPackage();
+		SubLPackage prevPackage = Lisp.getCurrentPackage();
 		SubLPackage.initPackages();
 		Main.setSubLisp(true);
 		try
@@ -1166,11 +1206,11 @@ public class BeanShellCntrl
 	static public LispObject lisp_eval(LispObject args)
 	{
 		Environment env = Environment.currentLispEnvironment();
-		return lisp_eval(args, env);
+		return lisp_eval_progn(args, env);
 	}
 
 	@LispMethod
-	static public LispObject lisp_eval(LispObject args, Environment env)
+	static public LispObject lisp_eval_progn(LispObject args, Environment env)
 	{
 		boolean wasSubLisp = Main.isSubLisp();
 		Main.setSubLisp(false);
@@ -1195,12 +1235,12 @@ public class BeanShellCntrl
 		return org.armedbear.lisp.Interpreter.evaluate(statements);
 	}
 
-	// @LispMethod
-	static public LispObject lisp_eval_tp(Term term)
+	@LispMethod
+	static public LispObject lisp_eval(Term term)
 	{
 		LispObject args = term_to_lobject(term);
 		Environment env = Environment.currentLispEnvironment();
-		return lisp_eval(args, env);
+		return lisp_eval_progn(args, env);
 	}
 
 	@LispMethod
@@ -1233,7 +1273,29 @@ public class BeanShellCntrl
 	static public Term lobject_to_term(LispObject o)
 	{
 		Term term = PrologSync.toProlog(o, new ArrayList());
+		o.termRef = term;
 		return term;
+	}
+
+	@LispMethod
+	static public Object prolog_call_all(Term arg)
+	{
+		return (new org.jpl7.Query("call", arg)).allSolutions();
+
+	}
+
+	@LispMethod
+	static public Object prolog_call_n(Term arg, long n)
+	{
+		return (new org.jpl7.Query("call", arg)).nSolutions(n);
+
+	}
+
+	@LispMethod
+	static public Object prolog_call_1(Term arg, long n)
+	{
+		return (new org.jpl7.Query("call", arg)).oneSolution();
+
 	}
 
 	@LispMethod
@@ -1270,8 +1332,16 @@ public class BeanShellCntrl
 
 	@LispMethod
 	static public Object prolog_query_all(String arg)
-	{		
+	{
 		return Query.allSolutions(arg);
+	}
+
+	@LispMethod
+	static public Object prolog_query(String arg)
+	{
+		if (noPrologJNI) throw new StartupError("noPrologJNI: " + arg);
+		final Term term = org.jpl7.Util.textToTerm(arg);
+		return Query.oneSolution(term);
 	}
 
 	@LispMethod
@@ -1315,13 +1385,13 @@ public class BeanShellCntrl
 		if (evalArgsFirst)
 		{
 			MethodFunction cf = setMethodFunction(sym);
-			if (cf == null) return;
+			//if (cf == null) return;
 			cf.setEvalArgsFirst(evalArgsFirst);
 			cf.addMethod(m);
 			return;
 		}
 		SpecialMethod cf = setSpecialMethod(sym);
-		if (cf == null) return;
+		//if (cf == null) return;
 		cf.setEvalArgsFirst(evalArgsFirst);
 		cf.addMethod(m);
 	}
@@ -1388,7 +1458,7 @@ public class BeanShellCntrl
 	}
 
 	private static void prologAssertString(String string)
-	{	
+	{
 		oneSolution("assert((" + string + "))");
 
 	}
@@ -1434,10 +1504,10 @@ public class BeanShellCntrl
 		}
 		else
 		{
-			//String complaint = "Trying to overwrite a non method function "; // + sf;
-			//System.err.println(complaint);
-			// Lisp.program_error(complaint);
-			return (MethodFunction) null;
+			String complaint = "Trying to overwrite a non method function "; // + sf;
+			System.err.println(complaint);
+			Lisp.program_error(complaint);
+			return null;
 		}
 
 	}
@@ -1456,7 +1526,7 @@ public class BeanShellCntrl
 				{
 					String message = "Difference from " + was + " and " + wasnt + " isntance " + self;
 					MsgBox.error(message);
-					if (false) throw new StartupError(message);
+					if (true) throw new StartupError(message);
 					named = null;
 				}
 				// throw new StartupError("REregistering from " + isc + "
@@ -1542,7 +1612,7 @@ public class BeanShellCntrl
 	static boolean calledSwiplInt = false;
 
 	@LispMethod
-	static void swipl_init()
+	static void init_swipl()
 	{
 		synchronized (StartupLock)
 		{
@@ -1556,9 +1626,7 @@ public class BeanShellCntrl
 			{
 				started_from_prolog = !JPL.init();
 				//Thread.sleep(10000);
-				Object r = Prolog.get_default_init_args();
-				Object tr = Prolog.new_term_ref();
-				JRef jref = (JRef) JRef.objectToJRef(StartupLock);
+				Object r = JPL.getDefaultInitArgs();
 				if (isIKVM())
 				{
 					oneSolution("assert(swicli:is_ikvm)");
@@ -1570,31 +1638,30 @@ public class BeanShellCntrl
 				disablePrologSync = true;
 				System.err.println("" + e);
 			}
-			start_lisp_from_prolog();
 
 		}
 	}
 
 	@LispMethod
-	synchronized static public void swipl_init_server()
+	synchronized static public void init_swipl_server()
 	{
 		synchronized (StartupLock)
 		{
 			if (noPrologJNI) return;
-			if (swipl_inited_server) return;
+			if (init_swipled_server) return;
 		}
 		synchronized (StartupInitLock)
 		{
 			try
 			{
-				swipl_init();
-				swipl_inited_server = oneSolution("(current_thread(prolog_server,X),X=running)");
-				if (swipl_inited_server) return;
+				init_swipl();
+				init_swipled_server = oneSolution("(current_thread(prolog_server,X),X=running)");
+				if (init_swipled_server) return;
 				oneSolution("use_module(library('prolog_server'))");
-				swipl_inited_server = true;
+				init_swipled_server = true;
 			} catch (Throwable t)
 			{
-				swipl_inited_server = false;
+				init_swipled_server = false;
 				MsgBox.error(t);
 			}
 			oneSolution("prolog_server(4023, [allow(_)])");
@@ -1605,7 +1672,9 @@ public class BeanShellCntrl
 	private static String symbolToPrologName(Symbol sym)
 	{
 		Package p = (Package) sym.getPackage();
-		String prologName = (p == null ? ":" : (p == Lisp.PACKAGE_CL_USER ? "cl_" : (p.showShortName() + "_")) + sym.getName());
+		String prologName = (p == null ? ":"
+				: (p == Lisp.PACKAGE_CL_USER ? "cl_" : (p.showShortName() + "_")) // 
+						+ sym.getName());
 		prologName = prologName.replaceAll("-", "_").toLowerCase();
 
 		for (String rp : new String[] { "cl_lisp_", })
@@ -1679,7 +1748,7 @@ public class BeanShellCntrl
 					Compound c = (Compound) term;
 					lo = atom_to_lisp_object(c.name());
 
-					lo = LispClass.findClass(lo.checkSymbol(lo));
+					lo = LispClass.findClass(Lisp.checkSymbol(lo));
 				}
 
 			}
@@ -1760,7 +1829,7 @@ public class BeanShellCntrl
 
 	static public LispObject[] toArray(LispObject args)
 	{
-		if (args == Nil.NIL) return EMPTY_LISP_OBJECT;
+		if (args == SubLNil.NIL) return EMPTY_LISP_OBJECT;
 		if (!(args instanceof Cons)) return new LispObject[] { args };
 		return args.copyToArray();
 	}
@@ -1806,7 +1875,7 @@ public class BeanShellCntrl
 			DemoBrowser.ensureRunning(true, new String[0]);
 			DemoBrowser.show();
 			JFrame appFrame = Utility.getAppFrame();
-			appFrame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+			appFrame.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 			// some more test code
 			DemoBrowser.addMoreExamples();
 
@@ -1844,11 +1913,11 @@ public class BeanShellCntrl
 
 	static public void staticInit()
 	{
-		swipl_init();
+		init_swipl();
 		scanForExports(BeanShellCntrl.class);
 		if (!started_from_prolog || true)
 		{
-			swipl_init_server();
+			init_swipl_server();
 
 		}
 
@@ -1864,8 +1933,12 @@ public class BeanShellCntrl
 
 	public static void main(String[] args) throws InterruptedException
 	{
-		swipl_init_server();
-		org.armedbear.lisp.Main.main(args);
+		String[] argsNew = Main.extractOptions(args);
+		init_swipl();
+		init_swipl_server();
+		start_lisp_from_prolog();
+		Runnable runnable = Main.mainRunnable(argsNew, null);
+		runnable.run();
 	}
 
 	static class CreationInfo
@@ -1903,7 +1976,13 @@ public class BeanShellCntrl
 
 	}
 
-	static public class MethodFunction extends org.armedbear.lisp.Primitive
+	@Retention(RetentionPolicy.RUNTIME)
+	static public @interface LispSlot
+	{
+
+	}
+
+	static public class MethodFunction extends SpecialOperator
 	{
 
 		boolean evalArgs;
@@ -1986,6 +2065,17 @@ public class BeanShellCntrl
 			return executeEVA(env, args.copyToArray());
 		}
 
+		// Special operator
+		public LispObject executeOP(LispObject form, Environment env)
+		{
+			if (isSubLispFunction())
+			{
+				SubLObject toEval = super.apply((SubLCons) form, env);
+				return (LispObject) toEval;//(LispObject) toEval.eval(env);
+			}
+			return Lisp.eval(form, env);
+		}
+
 		@Override
 		public LispObject execute(LispObject[] args)
 		{
@@ -2029,15 +2119,19 @@ public class BeanShellCntrl
 			Class[] argTypes = m.getParameterTypes();
 			int argTypesLen = argTypes.length;
 			int usedLen = args.length;
-			if (argTypesLen == 2 && argTypes[1] == Environment.class && usedLen == 1)
+			if (argTypesLen == 2 && SubLEnvironment.class.isAssignableFrom(argTypes[1]))
 			{
+				LispObject invokeWith;
 				assert env != null;
-				return (LispObject) invokeM(m, null, args[0], env);
-			}
-			if (argTypesLen == 2 && argTypes[1] == SubLEnvironment.class && usedLen == 1)
-			{
-				assert env != null;
-				return (LispObject) invokeM(m, null, args[0], env);
+				if (usedLen == 1)
+				{
+					invokeWith = new Cons(args[0]);
+				}
+				else
+				{
+					invokeWith = Lisp.list(args);
+				}
+				return (LispObject) invokeM(m, null, invokeWith, env);
 			}
 			Object[] methodArgs = new Object[argTypesLen];
 			for (int i = 0; i < usedLen; i++)
@@ -2047,7 +2141,7 @@ public class BeanShellCntrl
 				if (evalArgs)
 				{
 					LispObject sarg = Lisp.eval(arg, env);
-					arg = (LispObject) sarg;
+					arg = sarg;
 				}
 
 				if (false && arg.equals(NIL))
@@ -2079,9 +2173,37 @@ public class BeanShellCntrl
 		}
 
 		@Override
+		public SubLObject apply(SubLCons p0, SubLEnvironment p1)
+		{
+			return getBinaryFunction().processItem(p0, p1);
+			//return Lisp.eval(cons, env);
+			//Errors.unimplementedMethod("Auto-generated method stub:  SubLFunction.apply");
+			//return null;
+		}
+
+		@Override
+		public LispObject funcallCL(LispObject... args)
+		{
+			return this.execute(args);
+		}
+
+		@Override
 		public boolean isFunction()
 		{
-			return super.isFunction();// evalArgs;
+			return true;
+		}
+
+		@Override
+		public SubLObject evalViaApply(SubLCons form, SubLEnvironment env)
+		{
+			if (isSubLispFunction()) { return super.evalViaApply(form, env); }
+			return Lisp.eval((Cons) form, (Environment) env);
+		}
+
+		@Override
+		public boolean isInterpreted()
+		{
+			return true;
 		}
 
 		@Override
@@ -2091,13 +2213,14 @@ public class BeanShellCntrl
 			{
 				bp();
 			}
-			return super.isSpecial();// !evalArgs;
+			return !evalArgs;
 		}
 
 		public void setEvalArgsFirst(boolean evalArgsFirst)
 		{
 			evalArgs = evalArgsFirst;
 		}
+
 	}
 
 	static public class MsgBox
@@ -2320,7 +2443,7 @@ public class BeanShellCntrl
 				if (evalArgs)
 				{
 					LispObject sarg = Lisp.eval(arg, env);
-					arg = (LispObject) sarg;
+					arg = sarg;
 				}
 
 				if (false && arg.equals(NIL))

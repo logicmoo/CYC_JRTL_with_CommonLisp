@@ -91,6 +91,22 @@ public final class Main
 		// Run the interpreter in a secondary thread so we can control the stack
 		// size.
 		//Lisp.checkOutput(Symbol.STANDARD_OUTPUT,Lisp.stdout);
+		Runnable r = mainRunnable(args, new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				Interpreter interpreter = Interpreter.getInstance();
+				if (interpreter != null) interpreter.run();
+			}
+		});
+
+		Thread t = new SubLThread(null, r, Main.class.getClass().getName(), 1 << 30L).asJavaTread();
+		return t;
+	}
+
+	public static Runnable mainRunnable(final String[] args, final  Runnable after)
+	{
 		globalContext.set(true);
 		needIOConsole = false;
 		Lisp.initLisp();
@@ -103,7 +119,7 @@ public final class Main
 				try
 				{
 					globalContext.set(true);
-					SubLMain.commonSymbolsOK = true;
+					//SubLMain.commonSymbolsOK = true;
 					setSubLisp(false);
 					//Main.noSubLisp =true;
 					abclProcessArgs = true;
@@ -113,7 +129,7 @@ public final class Main
 					/*Interpreter interpreter = Interpreter.createNewLispInstance(SystemCurrent.in, SystemCurrent.out,
 						 initialDir.getCanonicalPath(),
 					        Version.getLongVersionString());*/
-					if (interpreter != null) interpreter.run();
+					if (after != null) after.run();
 				} catch (ProcessingTerminated e)
 				{
 					System.exit(e.getStatus());
@@ -123,9 +139,7 @@ public final class Main
 				}
 			}
 		};
-		
-		Thread t = new SubLThread(null, r, Main.class.getClass().getName(), 1 << 30L).asJavaTread();
-		return t;
+		return r;
 	}
 
 	public static boolean isSubLisp()
@@ -151,14 +165,14 @@ public final class Main
 	public static boolean noProlog = false;
 	public static boolean noPrologJNI = false;
 	public static boolean disablePrologSync = false;
-	
+
 	public static boolean trackStructs = true;
 	public static boolean noBSH = false;
 	public static boolean noBSHGUI = true;
-	
+
 	public static String subLisp = null;
 	public static int lispInstances = 0;
-	
+
 	public static boolean needIOConsole = true;
 	public static boolean needABCL = true;
 	//	public static boolean commonSymbolsOK;	

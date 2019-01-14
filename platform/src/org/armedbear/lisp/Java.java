@@ -1092,8 +1092,9 @@ public final class Java
             if(methodType.isInstance(arg)) continue;
             if (isAssignable(arg.getClass(), methodType)) continue;
             if(arg instanceof LispObject) {
-        		Object lo = ((LispObject) arg).javaInstance(methodType);
-        		if(methodType.isInstance(lo)) continue;
+        		Object jo = ((LispObject) arg).javaInstance();
+        		if(jo==null) continue;        		
+        		if(methodType.isInstance(jo)) continue;
             }
             return false;
         }
