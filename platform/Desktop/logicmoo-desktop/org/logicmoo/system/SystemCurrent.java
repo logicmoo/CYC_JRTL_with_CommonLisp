@@ -3,6 +3,7 @@
 //
 package org.logicmoo.system;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.RandomAccessFile;
 import java.io.Reader;
+import java.lang.reflect.Field;
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
@@ -19,6 +21,7 @@ import java.nio.channels.ClosedByInterruptException;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.FileChannel;
 
+import org.armedbear.j.Buffer;
 import org.armedbear.lisp.IntegrityError;
 import org.armedbear.lisp.Keyword;
 import org.armedbear.lisp.Symbol;
@@ -34,6 +37,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLStreamNilException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.netbreeze.swing.editors.ThrowableBeanInfo;
 
 import bsh.ConsoleInterface;
 
@@ -75,14 +79,72 @@ public class SystemCurrent
 	 */
 	public static void setIn(InputStream in)
 	{
+		if (in != null && underlyingStream(in) == null) { return; }
 		SystemInOutErr.get().in = in;
 	}
 
 	private static InputStream currentSystemInput()
 	{
-		InputStream willBe = SystemCurrent.SystemInOutErr.get().in;
-		if (willBe instanceof In || willBe == null) { return originalSystemIn; }
-		return willBe;
+		InputStream is = SystemCurrent.SystemInOutErr.get().in;
+		InputStream is2 = underlyingStream(in);
+		if (is2 == null)
+		{
+			is = originalSystemIn;
+		}
+		return is;
+	}
+
+	private static InputStream underlyingStream(InputStream is)
+	{
+		if (is instanceof In || is == null) return null;
+		InputStream is2 = is;
+		Class clz = is.getClass();
+		tryAgain: do
+		{
+			try
+			{
+				Field f = clz.getDeclaredField("in");
+				f.setAccessible(true);
+				is2 = (InputStream) f.get(is);
+				if (is2 instanceof In || is2 == is || is2 == null)
+				{
+					is2 = null;
+				}
+				return is2;
+			} catch (NoSuchFieldException e)
+			{
+				clz = clz.getSuperclass();
+				if (clz != null) continue tryAgain;
+				return is;
+
+			} catch (Throwable e)
+			{
+				e.printStackTrace();
+				return is;
+			}
+
+		} while (true);
+	}
+
+	private static OutputStream underlyingStream(OutputStream is)
+	{
+		if (is instanceof Out) return null;
+		OutputStream is2 = is;
+		try
+		{
+			Field f = is.getClass().getField("out");
+			f.setAccessible(true);
+			is2 = (OutputStream) f.get(is);
+			if (is2 instanceof Out || is2 == is || is2 == null)
+			{
+				is2 = null;
+			}
+			return is2;
+		} catch (Throwable e)
+		{
+			e.printStackTrace();
+			return is;
+		}
 	}
 
 	public static final In in = new SystemCurrent.In("#<System.in>");
@@ -108,6 +170,7 @@ public class SystemCurrent
 	 */
 	public static void setOut(PrintStream out)
 	{
+		if (out != null) if (underlyingStream(out) == null) { return; }
 		SystemInOutErr.get().out = out;
 	}
 
@@ -116,7 +179,10 @@ public class SystemCurrent
 		public OutputStream getOutputStream()
 		{
 			PrintStream willBe = SystemCurrent.SystemInOutErr.get().out;
-			if (willBe instanceof Out || willBe == null) { return originalSystemOut; }
+			if (willBe instanceof Out || willBe == null)
+			{
+				willBe = originalSystemOut;
+			}
 			return willBe;
 		}
 	};
@@ -166,10 +232,10 @@ public class SystemCurrent
 	{
 		private String named;
 
-		public In get()
-		{
-			return in;
-		}
+		//		public In get()
+		//		{
+		//			return in;
+		//		}
 
 		public In(String n)
 		{
@@ -280,7 +346,7 @@ public class SystemCurrent
 					e.printStackTrace();
 				}
 				super.flush();
-			}  
+			}
 		}
 	}
 

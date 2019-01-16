@@ -105,6 +105,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStruct;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructInterpreted.SubLStructInterpretedImpl;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
@@ -185,7 +186,7 @@ public class BeanShellCntrl
 
 	static
 	{
-		//int hc = CycEval.CYC_EVAL.hotCount;
+		int hc = CycEval.CYC_PROGN.hotCount;
 	}
 
 	static public void addConsole(bsh.This thiz, final JConsole console) throws UtilEvalError, EvalError, InterruptedException
@@ -1778,6 +1779,7 @@ public class BeanShellCntrl
 		return prologName;
 	}
 
+	@LispMethod
 	static public LispObject term_to_lobject(Term term)
 	{
 		if (term == null) return null;
@@ -1839,6 +1841,8 @@ public class BeanShellCntrl
 					lo = atom_to_lisp_object(c.name());
 
 					lo = LispClass.findClass(Lisp.checkSymbol(lo));
+				
+		
 				}
 
 			}

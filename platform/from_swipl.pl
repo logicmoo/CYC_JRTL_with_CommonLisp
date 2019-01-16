@@ -466,7 +466,9 @@ on_bg_repl:- thread_signal(main, call(call,lmmud)).
 
 %:- jpl.
 %program_init :-startBG.
-program_init :- fg_abcl, lmmud.
+program_init :- fg_abcl.
+
+
 
 
 %:- initialization(startBG, program).

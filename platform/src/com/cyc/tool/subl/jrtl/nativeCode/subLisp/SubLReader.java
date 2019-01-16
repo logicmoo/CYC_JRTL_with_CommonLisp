@@ -243,7 +243,8 @@ public class SubLReader {
 				history.add(historyItem);
 				writePrompt(historyItem.getCommandPrompt());
 				streams_high.force_output(StreamsLow.$standard_output$.getDynamicValue());
-				historyItem.setCommand(statement = getNextSubLStatementToProcess());
+				statement = getNextSubLStatementToProcess();
+				historyItem.setCommand(statement);
 				writeCommand(historyItem.getCommand());
 				String command = historyItem.getCommand();
 				SubLString commandTyped = SubLObjectFactory.makeString(command);

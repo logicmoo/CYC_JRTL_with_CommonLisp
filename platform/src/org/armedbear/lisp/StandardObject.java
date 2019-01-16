@@ -675,7 +675,7 @@ public class StandardObject extends SubLStructInterpreted implements SubLStruct
 		}
 	};
 
-	private static final Primitive _STD_ALLOCATE_INSTANCE = new pf__std_allocate_instance();
+	public static final Primitive _STD_ALLOCATE_INSTANCE = new pf__std_allocate_instance();
 
 	@DocString(name = "%std-allocate-instance", args = "class", returns = "instance")
 	private static final class pf__std_allocate_instance extends Primitive
