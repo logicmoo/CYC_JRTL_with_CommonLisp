@@ -76,7 +76,7 @@ public class DefaultInferenceParameters extends SpecifiedInferenceParameters {
    */
   public DefaultInferenceParameters(CycAccess cycAccess, String params) {
     this.cycAccess = cycAccess;
-    if (params == null && params.isEmpty()) {
+    if (params == null || params.isEmpty()) {
       return;
     }
     CycList paramList = null;

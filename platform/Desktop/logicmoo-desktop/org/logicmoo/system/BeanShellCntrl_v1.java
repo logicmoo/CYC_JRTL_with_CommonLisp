@@ -343,7 +343,7 @@ public class BeanShellCntrl_v1
 			{
 				try
 				{
-					org.armedbear.lisp.Interpreter interp = org.armedbear.lisp.Interpreter.createNewLispInstance(console.getInputStream(), console.getOut(), new File("./").getCanonicalPath(), Version.getVersion());
+					org.armedbear.lisp.Interpreter interp = org.armedbear.lisp.Interpreter.createNewLispInstance(console.getInputStream(), console.getOut(), new File("./").getCanonicalPath(), Version.getVersion(), false);
 					console.setNameCompletion(new LispNameCompletion());
 					interp.run();
 				} catch (IOException e)
@@ -874,7 +874,7 @@ public class BeanShellCntrl_v1
 			return org.armedbear.lisp.JavaObject.getInstance(editor);
 
 		if (editor == null)
-			Editor.startJ(new String[0], false);
+			Editor.startJ(new String[0], false, false);
 		if (editor == null)
 			editor = Editor.currentEditor();
 		if (editor == null)

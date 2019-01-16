@@ -114,8 +114,8 @@ public final class LispShellMode extends LispMode implements Constants, Mode
             Debug.bug();
             return;
         }
-        if (buffer instanceof LispShell)
-            ((LispShell)buffer).enter();
+        if (isRightShell(buffer))
+            (buffer).enter();
         else
             Debug.bug();
     }
@@ -128,7 +128,7 @@ public final class LispShellMode extends LispMode implements Constants, Mode
             Debug.bug();
             return;
         }
-        if (buffer instanceof LispShell)
+        if (isRightShell(buffer))
             ((LispShell)buffer).electricCloseParen();
         else
             Debug.bug();
@@ -142,7 +142,7 @@ public final class LispShellMode extends LispMode implements Constants, Mode
             Debug.bug();
             return;
         }
-        if (buffer instanceof LispShell)
+        if (isRightShell(buffer))
             ((LispShell)buffer).resetLisp();
         else
             Debug.bug();
@@ -161,7 +161,7 @@ public final class LispShellMode extends LispMode implements Constants, Mode
             Debug.bug();
             return;
         }
-        if (!(buffer instanceof LispShell)) {
+        if (!(isRightShell(buffer))) {
             Debug.bug();
             return;
         }
@@ -255,7 +255,7 @@ public final class LispShellMode extends LispMode implements Constants, Mode
     {
         final Editor editor = Editor.currentEditor();
         final Buffer buffer = editor.getBuffer();
-        if (!(buffer instanceof LispShell)) {
+        if (!(isRightShell(buffer))) {
             Debug.bug();
             return;
         }
@@ -317,4 +317,11 @@ public final class LispShellMode extends LispMode implements Constants, Mode
             }
         }
     }
+
+	private static boolean isRightShell(Buffer buffer)
+	{
+		if(buffer instanceof LispShell) return true;
+		if(buffer instanceof PrologShell) return true;
+		return false;
+	}
 }

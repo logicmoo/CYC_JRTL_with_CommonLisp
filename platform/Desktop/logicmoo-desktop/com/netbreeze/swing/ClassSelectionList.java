@@ -301,8 +301,8 @@ public class ClassSelectionList extends JPanel {
         } catch (Throwable e) {
           cat.warn("GET CLASS DEFINITION STRING EXCEPTION !!!", e);
         } finally {
-            return result;
         }
+        return result;
     }
     /**
      * get class name without package info

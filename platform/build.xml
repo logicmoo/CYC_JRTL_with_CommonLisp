@@ -75,16 +75,15 @@ For help on the automatic tests available, use the Ant target 'help.test'.
       <include name="org/armedbear/lisp/scripting/util/*.java" if="abcl.jsr-223.p"/>
       <include name="org/armedbear/Main.java"/>
       <include name="org/logicmoo*/**/*.java" />
-      <!--
+      <exclude name="**/Test*.java"/>
       <exclude name="**/UnitTest.java"/>
-      <exclude name="**/*JUnit.java"/>
+	  <exclude name="**/*JUnit.java"/>
+      <exclude name="**/test/**/*.java"/>
+      <!--
       <exclude name="org.logicmoo-kepp/**"/>
 
       <exclude name="com/cyc/tool/subl/webserver/*.java"/>
     -  <include name="../../AppdatorGUI/src/**/*.java"/>
-      <exclude name="**/UnitTest.java"/>
-      <exclude name="**/Test*.java"/>
-      <exclude name="**/test/**/*.java"/>
       <exclude name="com/cyc/tool/subl/webserver/*.java"/> -->
     </patternset>
 
@@ -92,7 +91,7 @@ For help on the automatic tests available, use the Ant target 'help.test'.
       <include name="org/armedbear/lisp/*.lisp"/>
       <include name="org/armedbear/lisp/java/**/*.lisp"/>
       <include name="org/armedbear/lisp/tests/*.lisp"/>
-      <!--<exclude name="org/armedbear/lisp/j.lisp"/>-->
+      <include name="org/armedbear/lisp/j.lisp"/>
       <include name="org/armedbear/lisp/scripting/lisp/*.lisp" if="abcl.jsr-223.p"/>
     </patternset>
 
@@ -599,7 +598,7 @@ from ${abcl.home.dir}
       <path id="abcl.runtime.classpath">
         <pathelement location="${abcl.runtime.jar.path}"/>
         <pathelement path="${additional.jars}"/>
-         <pathelement path="bin-eclipse/"/>
+         <pathelement path="c:\pf\Java\jdk1.8.0_162\lib\tools.jar"/>
       </path>
       <!-- set via '-Djava.options=JAVA_OPTIONS' or in 'build.properties -->
       <property name="java.options" value=""/>

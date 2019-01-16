@@ -73,6 +73,7 @@ import org.armedbear.lisp.Interpreter;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.LispThread;
+import org.armedbear.lisp.Main;
 import org.logicmoo.system.SystemCurrent;
 
 import gnu.regexp.RE;
@@ -226,10 +227,11 @@ public final class Editor extends JPanel implements Constants,
         return String.valueOf(System.currentTimeMillis() - startTimeMillis) + " ms";
     }
 
-    public static void main(String[] args) {
-    	startJ(args,true);
+    public static void main(String[] argsIn) {
+		String[] args = Main.extractOptions(argsIn);
+    	startJ(args,true,true);
     }
-    public static void startJ(String[] args , boolean blockUnused)
+    public static void startJ(String[] args , boolean blockUnusedNow, boolean mayExit)
     {
         final File currentDir = File.getInstance(System.getProperty("user.dir"));
         boolean forceNewInstance = false;
@@ -245,11 +247,11 @@ public final class Editor extends JPanel implements Constants,
             if (arg.startsWith("-")) {
                 if (arg.equals("-h") || arg.equals("-help") || arg.equals("--help")) {
                     usage();
-                    System.exit(0);
+                    if(mayExit)System.exit(0);
                 }
                 if (arg.equals("-version")) {
                     version();
-                    System.exit(0);
+                    if(mayExit)System.exit(0);
                 }
                 if (arg.equals("-d") || arg.equals("--debug")) {
                     debug = true;
@@ -293,18 +295,18 @@ public final class Editor extends JPanel implements Constants,
                         unknown(arg);
 
                     if (home == null || home.length() == 0)
-                        fatal("Option \"--home\" requires an argument.");
+                    	fatal(mayExit,"Option \"--home\" requires an argument.");
 
                     userHomeDir = File.getInstance(currentDir, home);
 
                     if (userHomeDir == null || !userHomeDir.isDirectory()) {
-                        fatal("Specified home directory \"" +
+                    	fatal(mayExit,"Specified home directory \"" +
                             userHomeDir.canonicalPath() +
                             "\" does not exist.");
                     }
 
                     if (!userHomeDir.canWrite()) {
-                        fatal("Specified home directory \"" +
+                    	fatal(mayExit,"Specified home directory \"" +
                             userHomeDir.canonicalPath() +
                             "\" is not writable.");
                     }
@@ -358,7 +360,7 @@ public final class Editor extends JPanel implements Constants,
                     out.flush();
                     out.close();
                     socket.close();
-                    System.exit(0);
+                    if(mayExit)System.exit(0);
                 }
             }
             catch (ConnectException e) {
@@ -475,11 +477,16 @@ public final class Editor extends JPanel implements Constants,
         System.err.println(message);
         System.exit(1);
     }
+    public static final void fatal(boolean mayExit, String message)
+    {
+        System.err.println(message);
+        if(mayExit)System.exit(1);
+    }
 
     private static final void unknown(String arg)
     {
         usage();
-        fatal("Unknown option \"" + arg + "\"");
+        fatal( false, "Unknown option \"" + arg + "\"");
     }
 
     public Editor(Frame f)

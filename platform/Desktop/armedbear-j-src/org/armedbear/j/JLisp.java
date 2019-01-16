@@ -150,7 +150,7 @@ public final class JLisp extends LispShell
             		Interpreter.createNewLispInstance(socket.getInputStream(),
                                                 socket.getOutputStream(),
                                                 initialDir.canonicalPath(),
-                                                Version.getLongVersionString());
+                                                Version.getLongVersionString(), true);
         }
         catch (Throwable t) {
             Log.error(t);

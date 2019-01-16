@@ -1001,7 +1001,7 @@ public class TriggerMenuFactory<TT extends Trigger<Box<TT>> & KnownComponent> {
 			return ReflectUtils.asList(ts);
 		ArrayList<T> sl = new ArrayList();
 		sl.addAll(ReflectUtils.asList(path));
-		if (ts != null || ts.length > 0)
+		if (ts != null && ts.length > 0)
 			sl.addAll(ReflectUtils.asList(ts));
 		return sl;
 	}

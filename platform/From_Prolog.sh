@@ -4,7 +4,7 @@
 stty sane
 $( cls >/dev/null 2>&1)
 
-./from_swipl.pl $@
+swipl from_swipl.pl $@
 RESULT_CODE=$?
 stty sane
 

@@ -13,6 +13,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.logicmoo.system.SystemCurrent;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -36,7 +38,7 @@ import com.cyc.tool.subl.util.SubLCommandHistoryItem;
 
 public class SubLReader {
 	public SubLReader() {
-		this(true, System.in, System.out);
+		this(true, SystemCurrent.in, SystemCurrent.out);
 	}
 
 	public SubLReader(boolean quitOnExit, InputStream is, OutputStream os) {
@@ -46,16 +48,16 @@ public class SubLReader {
 		isBusy = false;
 		if (!(is instanceof BufferedInputStream))
 			is = new BufferedInputStream(is);
-		System.setIn(is);
+		SystemCurrent.setIn(is);
 		PrintStream ps = null;
 		if (os instanceof PrintStream)
 			ps = (PrintStream) os;
 		else
 			ps = new PrintStream(os, true);
-		System.setOut(ps);
-		System.setErr(ps);
-		SubLOutputTextStream standardOutputStream = SubLStreamFactory.makeOutputTextStream(System.out);
-		SubLInputTextStream inputTextStream = SubLStreamFactory.makeInputTextStream(System.in);
+		SystemCurrent.setOut(ps);
+		SystemCurrent.setErr(ps);
+		SubLOutputTextStream standardOutputStream = SubLStreamFactory.makeOutputTextStream(SystemCurrent.out);
+		SubLInputTextStream inputTextStream = SubLStreamFactory.makeInputTextStream(SystemCurrent.in);
 		inputStream = inputTextStream;
 		SubLInputTextStream standardInputStream = inputTextStream;
 		SubLInOutTextStream ioStream = SubLStreamFactory.makeInOutTextStream(standardInputStream, standardOutputStream);
@@ -234,8 +236,10 @@ public class SubLReader {
 					} finally {
 						lastException = null;
 					}
+
+				final String packageName = env.getCurrentPackage().getName();
 				SubLCommandHistoryItem historyItem = new SubLCommandHistoryItem(historyCount++,
-						env.getCurrentPackage().getName());
+						packageName);
 				history.add(historyItem);
 				writePrompt(historyItem.getCommandPrompt());
 				streams_high.force_output(StreamsLow.$standard_output$.getDynamicValue());
@@ -270,8 +274,8 @@ public class SubLReader {
 			} finally {
 				setIsBusy(false);
 			}
-		System.out.println("Exiting SubL read loop...\n");
-		System.out.println("quitOnExit = " + quitOnExit);
+		SystemCurrent.out.println("Exiting SubL read loop...\n");
+		SystemCurrent.out.println("quitOnExit = " + quitOnExit);
 		if (quitOnExit)
 			SubLMain.me.doSystemCleanupAndExit(0);
 	}
@@ -317,19 +321,19 @@ public class SubLReader {
 	}
 
 	public void writeCommand(String command) {
-		System.out.flush();
+		SystemCurrent.out.flush();
 		writer.flush();
 	}
 
 	public void writePrompt(String prompt) {
-		System.out.print(prompt);
-		System.out.flush();
+		SystemCurrent.out.print(prompt);
+		SystemCurrent.out.flush();
 		writer.flush();
 	}
 
 	public void writeResults(String results) {
 		if (!shouldReadloopExit()) {
-			System.out.println(results);
+			SystemCurrent.out.println(results);
 			writer.flush();
 		}
 	}
@@ -339,7 +343,7 @@ public class SubLReader {
 			SubLObject val = SubLNil.NIL;
 			val = conses_high.first(resultValues);
 			while (SubLNil.NIL == Types.sublisp_null(resultValues)) {
-				System.out.println("" + val);
+				SystemCurrent.out.println("" + val);
 				resultValues = (SubLList) conses_high.rest(resultValues);
 				val = conses_high.first(resultValues);
 			}

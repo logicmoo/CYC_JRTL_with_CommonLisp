@@ -61,10 +61,15 @@ import com.cyc.tool.subl.util.SubLFiles;
  * -server -Xms256m -Xmx776m -Xss1m -XX:MaxPermSize=128m Typical working
  * directory: /home/<user>/cvs/head/cycorp/cyc/top/
  *
- * @author goolsbey, tbrussea
+ * @author goolsbey, tbrussea, dmiles
  */
 public class SubLMain
 {
+
+	static
+	{
+		SystemCurrent.setupIO();
+	}
 
 	public static final class InitialEmbeddedMain extends SubLProcess
 	{
@@ -332,9 +337,13 @@ public class SubLMain
 
 	static ThreadLocal<SubLReader> mainReader = new ThreadLocal<SubLReader>();
 
+	private static SubLReader trueMainReader;
+
 	public static SubLReader getMainReader()
 	{
-		return mainReader.get();
+		SubLReader locally = mainReader.get();
+		if (locally != null) return locally;
+		return trueMainReader;
 	}
 
 	public static SubLString getWorldFileName()
@@ -705,6 +714,7 @@ public class SubLMain
 		commonSymbolsOK = true;
 
 		preInitLisp();
+		trueMainReader = new SubLReader();
 		if (args == null || args.length == 0)
 		{
 			args = new String[] { "--moo" };
@@ -742,8 +752,8 @@ public class SubLMain
 		{
 			Main.setSubLisp(false);
 			// Interpreter.nosystem = true;
-			Object o =  Lisp._AUTOLOAD_VERBOSE_;
-			 Lisp.initLisp();
+			Object o = Lisp._AUTOLOAD_VERBOSE_;
+			Lisp.initLisp();
 		} finally
 		{
 			Main.setSubLisp(wasSubLisp);
@@ -849,8 +859,9 @@ public class SubLMain
 		System.exit(code);
 	}
 
-	public void processCommandLineArgs(String[] args)
+	public void processCommandLineArgs(String[] argsIn)
 	{
+		String[] args = Main.extractOptions(argsIn);
 		for (int i = 0, size = args.length; i < size; ++i)
 		{
 			String arg = args[i];

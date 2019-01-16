@@ -42,6 +42,10 @@ public final class History
         strings = new String[limit];
         if (name != null) {
             SessionProperties sessionProperties = Editor.getSessionProperties();
+            if(sessionProperties==null) {
+            	reset();
+            	return;
+            }
             int i;
             for (i = 0; i < limit; i++) {
                 String key = "history." + name + "." + String.valueOf(i);

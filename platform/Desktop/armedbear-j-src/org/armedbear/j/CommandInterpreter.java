@@ -152,7 +152,7 @@ public class CommandInterpreter extends Buffer
         return true;
     }
 
-    protected void enter()
+    public void enter()
     {
         if (!checkProcess())
             return;

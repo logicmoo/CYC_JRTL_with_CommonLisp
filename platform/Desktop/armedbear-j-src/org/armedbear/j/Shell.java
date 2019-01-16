@@ -261,7 +261,7 @@ public class Shell extends CommandInterpreter implements Constants
         return false;
     }
 
-    protected void startWatcherThread()
+    final protected void startWatcherThread()
     {
         Thread thread = new Thread("shell watcher") {
             public void run()

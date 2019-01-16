@@ -47,9 +47,14 @@ import bsh.*;
 */
 public class Sessiond extends Thread
 {
+	static Sessiond globalSessiond = null;
 	private ServerSocket ss;
 	NameSpace globalNameSpace;
 
+	public static void initBshSessiond(NameSpace ns, int port) throws IOException
+	{
+		globalSessiond = new Sessiond(ns, port);
+	}
 	/*
 	public static void main(String argv[]) throws IOException
 	{
@@ -67,10 +72,15 @@ public class Sessiond extends Thread
 	{
 		try
 		{
-			while(true)
-				new SessiondConnection(globalNameSpace, ss.accept()).start();
+			while (true)
+			{
+				final Socket accepted = ss.accept();
+				new SessiondConnection(globalNameSpace, accepted).start();
+			}
+		} catch (IOException e)
+		{
+			System.out.println(e);
 		}
-		catch(IOException e) { System.out.println(e); }
 	}
 }
 
@@ -91,12 +101,12 @@ class SessiondConnection extends Thread
 		{
 			InputStream in = client.getInputStream();
 			PrintStream out = new PrintStream(client.getOutputStream());
-			Interpreter i = new Interpreter( 
-				new InputStreamReader(in), out, out, true, globalNameSpace);
-			i.setExitOnEOF( false ); // don't exit interp
+			Interpreter i = new Interpreter(new InputStreamReader(in), out, out, true, globalNameSpace);
+			i.setExitOnEOF(false); // don't exit interp
 			i.run();
+		} catch (IOException e)
+		{
+			System.out.println(e);
 		}
-		catch(IOException e) { System.out.println(e); }
 	}
 }
-

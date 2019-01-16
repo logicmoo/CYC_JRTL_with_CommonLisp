@@ -1173,7 +1173,7 @@ public class Numbers extends SubLTrampolineFile {
 	public static SubLSymbol $e$;
 	public static SubLFloat PI_FLOAT;
 	public static SubLSymbol $pi$;
-	private static SubLObject RET_T;
+	//private static SubLObject RET_T;
 	public static SubLInteger FLOAT_DIGITS;
 	public static SubLDoubleFloat ZERO_FLOAT;
 	private static SubLFixnum MINUS_EIGHT_INTEGER;
@@ -1196,7 +1196,7 @@ public class Numbers extends SubLTrampolineFile {
 		me = new Numbers();
 		E_FLOAT = SubLObjectFactory.makeDouble(2.718281828459045);
 		PI_FLOAT = SubLObjectFactory.makeDouble(3.141592653589793);
-		RET_T = CommonSymbols.T;
+		//RET_T = CommonSymbols.T;
 		FLOAT_DIGITS = SubLNumberFactory.makeInteger(53);
 		ZERO_FLOAT = SubLNumberFactory.makeDouble(0.0);
 		MINUS_EIGHT_INTEGER = (SubLFixnum) SubLObjectFactory.makeInteger(-8);

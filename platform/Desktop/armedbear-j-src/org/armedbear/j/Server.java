@@ -34,94 +34,97 @@ public class Server implements Runnable
 {
     private static Server server;
 
-    private ServerSocket socket;
-    private Thread thread;
+	public static int port;
 
-    public static void startServer()
-    {
-        try {
-            server = new Server();
-            server.socket = new ServerSocket(0);
-            int port = server.socket.getLocalPort();
-            OutputStream out = Editor.portfile.getOutputStream();
-            out.write(String.valueOf(port).getBytes());
-            out.close();
-            server.thread = new Thread(server);
-            server.thread.setName("server");
-            server.thread.setPriority(Thread.MIN_PRIORITY);
-            server.thread.setDaemon(true);
-            server.thread.start();
-        }
-        catch (Exception e) {
-            Log.error(e);
-        }
-    }
+	private ServerSocket socket;
+	private Thread thread;
 
-    public static void stopServer()
-    {
-        Editor.portfile.delete();
-    }
+	public static void startServer()
+	{
+		try
+		{
+			server = new Server();
+			server.socket = new ServerSocket(0);
+			port = server.socket.getLocalPort();
+			OutputStream out = Editor.portfile.getOutputStream();
+			out.write(String.valueOf(port).getBytes());
+			out.close();
+			server.thread = new Thread(server);
+			server.thread.setName("server");
+			server.thread.setPriority(Thread.MIN_PRIORITY);
+			server.thread.setDaemon(true);
+			server.thread.start();
+		} catch (Exception e)
+		{
+			Log.error(e);
+		}
+	}
 
-    public void run()
-    {
-        while (true) {
-            try {
-                Socket sock = socket.accept(); // Blocks.
-                // Process request.
-                BufferedReader in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
-                Vector v = null;
-                while (true) {
-                    String s = in.readLine();
-                    if (s == null)
-                        break;
-                    if (v == null)
-                        v = new Vector();
-                    v.add(s);
-                }
-                in.close();
-                sock.close();
-                SwingUtilities.invokeLater(new Messenger(v));
-            }
-            catch (SocketException e) {
-                return;
-            }
-            catch (Exception e) {
-                Log.error(e);
-            }
-        }
-    }
+	public static void stopServer()
+	{
+		Editor.portfile.delete();
+	}
 
-    class Messenger implements Runnable
-    {
-        Vector v = null;
+	public void run()
+	{
+		while (true)
+		{
+			try
+			{
+				Socket sock = socket.accept(); // Blocks.
+				// Process request.
+				BufferedReader in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
+				Vector v = null;
+				while (true)
+				{
+					String s = in.readLine();
+					if (s == null) break;
+					if (v == null) v = new Vector();
+					v.add(s);
+				}
+				in.close();
+				sock.close();
+				SwingUtilities.invokeLater(new Messenger(v));
+			} catch (SocketException e)
+			{
+				return;
+			} catch (Exception e)
+			{
+				Log.error(e);
+			}
+		}
+	}
 
-        // If this constructor is private, we run into jikes 1.15 bug #2256.
-        Messenger(Vector v)
-        {
-            this.v = v;
-        }
+	class Messenger implements Runnable
+	{
+		Vector v = null;
 
-        public void run()
-        {
-            Editor editor = Editor.currentEditor();
-            if (v != null && v.size() > 0) {
-                Editor other = editor.getOtherEditor();
-                if (other != null && editor.getBuffer().isSecondary())
-                    editor = other;
-                if (!editor.getBuffer().isPrimary())
-                    Debug.bug();
-                Buffer toBeActivated = editor.openFiles(v);
-                if (toBeActivated != null) {
-                    editor.makeNext(toBeActivated);
-                    editor.switchToBuffer(toBeActivated);
-                    if (!Editor.getEditorList().contains(editor))
-                        Debug.bug();
-                    editor.updateDisplay();
-                }
-            }
-            editor.getFrame().toFront();
-            editor.requestFocus();
-            Editor.restoreFocus();
-        }
-    }
+		// If this constructor is private, we run into jikes 1.15 bug #2256.
+		Messenger(Vector v)
+		{
+			this.v = v;
+		}
+
+		public void run()
+		{
+			Editor editor = Editor.currentEditor();
+			if (v != null && v.size() > 0)
+			{
+				Editor other = editor.getOtherEditor();
+				if (other != null && editor.getBuffer().isSecondary()) editor = other;
+				if (!editor.getBuffer().isPrimary()) Debug.bug();
+				Buffer toBeActivated = editor.openFiles(v);
+				if (toBeActivated != null)
+				{
+					editor.makeNext(toBeActivated);
+					editor.switchToBuffer(toBeActivated);
+					if (!Editor.getEditorList().contains(editor)) Debug.bug();
+					editor.updateDisplay();
+				}
+			}
+			editor.getFrame().toFront();
+			editor.requestFocus();
+			Editor.restoreFocus();
+		}
+	}
 }

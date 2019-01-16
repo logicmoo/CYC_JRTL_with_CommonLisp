@@ -16,6 +16,7 @@ import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
@@ -112,10 +113,8 @@ import com.cyc.tool.subl.ui.SubLReaderPanel;
 import com.cyc.tool.subl.util.SubLFiles;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 import com.netbreeze.bbowl.gui.BeanBowlGUI;
-import com.sun.tools.attach.AgentInitializationException;
-import com.sun.tools.attach.AgentLoadException;
-import com.sun.tools.attach.AttachNotSupportedException;
 import com.sun.tools.attach.VirtualMachine;
+//import com.sun.tools.attach.AttachNotSupportedException;
 import com.sun.tools.attach.VirtualMachineDescriptor;
 
 //import com.netbreeze.bbowl.gui.BeanBowlGUI;
@@ -135,6 +134,11 @@ import sun.misc.Unsafe;
 //import static org.slf4j.spi.LocationAwareLogger.log;
 public class BeanShellCntrl
 {
+	static
+	{
+		SystemCurrent.setupIO();
+	}
+
 	public static final Object StartupLock = new Object()
 	{
 		@Override
@@ -172,7 +176,7 @@ public class BeanShellCntrl
 
 	// final static public BeanBowlGUI gui = BeanBowlGUI.getDefaultFrame();
 
-	static public Interpreter interpreter;
+	static public Interpreter bshInterpreter;
 
 	final static public Map<String, Symbol> prologMethods = new HashMap();
 	final static public Method multiMethod;
@@ -307,31 +311,50 @@ public class BeanShellCntrl
 	}
 
 	@LispMethod
-	static public boolean attach_jvm() throws AttachNotSupportedException, IOException, AgentLoadException, AgentInitializationException
+	static public boolean attach_jvm(String jarfile) throws IOException
 	{
 
-		java.util.List<VirtualMachineDescriptor> descs = VirtualMachine.list();
-		if (descs.size() == 0) { return false; }
-		VirtualMachineDescriptor desc = descs.get(0);
-		// attach to target VM
-		VirtualMachine vm = VirtualMachine.attach(desc);
-
-		// get system properties in target VM
-		Properties props = vm.getSystemProperties();
-
-		// construct path to management agent
-		String home = props.getProperty("java.home");
-		String agent = home + File.separator + "lib" + File.separator + "management-agent.jar";
-		if (new File(agent).exists())
+		try
 		{
+			java.util.List<VirtualMachineDescriptor> descs = VirtualMachine.list();
+			if (descs.size() == 0) { return false; }
+			VirtualMachineDescriptor desc = descs.get(0);
+			// attach to target VM
+			VirtualMachine vm = VirtualMachine.attach(desc);
+			// get system properties in target VM
+			Properties props = vm.getSystemProperties();
+
+			// construct path to management agent
+			String home = props.getProperty("java.home");
+			String agent = "" + jarfile;
+			if (!new File(agent).exists())
+			{
+				agent = home + File.separator + jarfile;
+				if (!new File(agent).exists())
+				{
+					if (jarfile == null || jarfile.length() == 0)
+					{
+						agent = home + File.separator + "lib" + File.separator + "management-agent.jar";
+					}
+					if (!new File(agent).exists())
+					{
+						agent = jarfile;
+					}
+				}
+			}
 			// load agent into target VM
 			// transport=dt_socket,suspend=y,address=10.0.0.95:5005,server=n
 			// vm.loadAgent(agent, "com.sun.management.jmxremote.port=5005");
-			vm.loadAgent(agent, "com.sun.management.jmxremote.port=5005,server=n");
+			vm.loadAgent(agent, "com.sun.management.jmxremote.port=5005,server=y");
 
 			// detach
 			// vm.detach();
 			return true;
+
+		} catch (Exception e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return false;
 	}
@@ -345,14 +368,32 @@ public class BeanShellCntrl
 	static JLisp jLispHeadless;
 
 	@LispMethod
-	synchronized static public int init_jlisp()
+	static public int init_jlisp()
 	{
-		jLispHeadless = JLisp.jlispHeadless();
+		if (jLispHeadless == null)
+		{
+			jLispHeadless = JLisp.jlispHeadless();
+		}
 		return jLispHeadless.port;
 	}
 
 	@LispMethod
-	synchronized static public void bsh_desktop()
+	static public void init_j()
+	{
+		try
+		{
+			Class c = Class.forName("org.armedbear.j.Editor");
+			Method method = c.getMethod("startJ", String[].class, boolean.class, boolean.class);
+			method.invoke(null, new String[] { "--no-session", "--debug", "--force-new-instance" }, false, false);
+			j_desktop();
+		} catch (Throwable e)
+		{
+			MsgBox.error(e);
+		}
+	}
+
+	@LispMethod
+	static public void bsh_desktop()
 	{
 		if (noBSHGUI) return;
 		try
@@ -442,8 +483,8 @@ public class BeanShellCntrl
 				found = prologMethods.get(prologName + "/" + (1 + arity));
 			}
 		}
-		boolean wasNoDebug = Main.isNoDebug();
 		if (found == null) throw new JPLException("No method " + key);
+		boolean wasNoDebug = Main.isNoDebug();
 		try
 		{
 			if (!wasNoDebug)
@@ -463,8 +504,13 @@ public class BeanShellCntrl
 			{
 				Main.setNoDebug(false);
 			}
+			t.printStackTrace();
+			System.err.println("" + t.getMessage());
 			if (t instanceof JPLException) { throw (JPLException) t; }
 			throw new JPLException(createStackTraceString(t));
+		} finally
+		{
+			Main.setNoDebug(wasNoDebug);
 		}
 	}
 
@@ -535,7 +581,7 @@ public class BeanShellCntrl
 			{
 				try
 				{
-					org.armedbear.lisp.Interpreter interp = org.armedbear.lisp.Interpreter.createNewLispInstance(console.getInputStream(), console.getOut(), new File("./").getCanonicalPath(), Version.getVersion());
+					org.armedbear.lisp.Interpreter interp = org.armedbear.lisp.Interpreter.createNewLispInstance(console.getInputStream(), console.getOut(), new File("./").getCanonicalPath(), Version.getVersion(), false);
 					console.setNameCompletion(new LispNameCompletion());
 					interp.run();
 				} catch (IOException e)
@@ -631,6 +677,7 @@ public class BeanShellCntrl
 		};
 		string.append("" + t.getClass() + ": " + t);
 		t.printStackTrace(new PrintStream(outputStream));
+		string.append("" + t.getClass() + ": " + t);
 		return string.toString();
 	}
 
@@ -717,6 +764,7 @@ public class BeanShellCntrl
 	}
 
 	static boolean repl_in_bg = false;
+	private static NameSpace bshMasterNamespace;
 
 	@LispMethod
 	static public LispObject bg_repl() throws InterruptedException
@@ -746,6 +794,12 @@ public class BeanShellCntrl
 		boolean wasSubLisp = Main.isSubLisp();
 		init_subl();
 		SubLReader SLR = SubLMain.getMainReader();
+		if (SLR == null)
+		{
+			//boolean quitOnExit, InputStream is, OutputStream os
+			SLR = new SubLReader();
+			SubLMain.setMainReader(SLR);
+		}
 		boolean wasQuitOnExit = SLR.quitOnExit;
 		boolean was_shouldReadloopExit = SLR.shouldReadloopExit;
 		SLR.quitOnExit = false;
@@ -755,7 +809,10 @@ public class BeanShellCntrl
 		{
 			try
 			{
-				if (false && SubLMain.shouldRunReadloopInGUI()) SubLMain.setMainReader(SubLReaderPanel.startReadloopWindow());
+				if (false && SubLMain.shouldRunReadloopInGUI())
+				{
+					SubLMain.setMainReader(SubLReaderPanel.startReadloopWindow());
+				}
 
 				SLR.setThread(SubLProcess.currentSubLThread());
 
@@ -821,14 +878,31 @@ public class BeanShellCntrl
 
 	static public bsh.Interpreter ensureBSH()
 	{
-		if (interpreter == null) interpreter = new bsh.Interpreter();
-		return interpreter;
+		if (bshInterpreter == null)
+		{
+			bshInterpreter = new bsh.Interpreter();
+			bshMasterNamespace = bshInterpreter.getNameSpace();
+		}
+		return bshInterpreter;
+	}
+
+	static public bsh.Interpreter new_bsh_interpeter() throws EvalError
+	{
+		bshInterpreter = ensureBSH();
+		return (Interpreter) bshInterpreter.eval("new bsh.Interpreter()");
+	}
+
+	static public bsh.NameSpace masterNamespace()
+	{
+		ensureBSH();
+		return bshMasterNamespace;
+
 	}
 
 	/**
 	 *
 	 */
-	synchronized static public SubLReader ensureMainReader()
+	static public SubLReader ensureMainReader()
 	{
 		SubLReader SLR = SubLMain.getMainReader();
 		if (SLR == null)
@@ -867,23 +941,8 @@ public class BeanShellCntrl
 			if (pane == null || pane == Primitive.VOID)
 			{
 
-				if (false && org.appdapter.gui.browse.Utility.controlApp != null)
-				{
-
-					BoxPanelSwitchableView bpo = org.appdapter.gui.browse.Utility.controlApp.getBoxPanelTabPane();
-					if (bpo != null)
-					{
-						Container container = bpo.getContainer();
-						ns.setVariable("pane", container, false);
-						Container parent = container.getParent();
-						while (parent.getParent() != null)
-						{
-							parent = parent.getParent();
-						}
-						ns.setVariable("frame", parent, false);
-						return container;
-					}
-				}
+				Container container = introduced_appdapter(ns);
+				if (container != null) { return container; }
 				pane = desktop = new JDesktopPane();
 				ns.setVariable("pane", pane, false);
 			}
@@ -893,6 +952,28 @@ public class BeanShellCntrl
 			MsgBox.error(e);
 		}
 
+		return null;
+	}
+
+	private static Container introduced_appdapter(NameSpace ns) throws UtilEvalError
+	{
+		if (false && org.appdapter.gui.browse.Utility.controlApp != null)
+		{
+
+			BoxPanelSwitchableView bpo = org.appdapter.gui.browse.Utility.controlApp.getBoxPanelTabPane();
+			if (bpo != null)
+			{
+				Container container = bpo.getContainer();
+				ns.setVariable("pane", container, false);
+				Container parent = container.getParent();
+				while (parent.getParent() != null)
+				{
+					parent = parent.getParent();
+				}
+				ns.setVariable("frame", parent, false);
+				return container;
+			}
+		}
 		return null;
 	}
 
@@ -1001,7 +1082,7 @@ public class BeanShellCntrl
 	}
 
 	@LispMethod
-	synchronized static public void init_cyc()
+	static public void init_cyc()
 	{
 		synchronized (StartupLock)
 		{
@@ -1045,7 +1126,7 @@ public class BeanShellCntrl
 	}
 
 	@LispMethod
-	synchronized static public void init_kb()
+	static public void init_kb()
 	{
 		synchronized (StartupLock)
 		{
@@ -1077,7 +1158,7 @@ public class BeanShellCntrl
 	}
 
 	@LispMethod
-	synchronized static public void init_server()
+	static public void init_server()
 	{
 		synchronized (StartupLock)
 		{
@@ -1112,7 +1193,7 @@ public class BeanShellCntrl
 	}
 
 	@LispMethod
-	synchronized static public void init_subl()
+	static public void init_subl()
 	{
 		synchronized (StartupLock)
 		{
@@ -1191,11 +1272,12 @@ public class BeanShellCntrl
 	@LispMethod
 	static public LispObject j_desktop()
 	{
+
 		if (editor == null) editor = Editor.currentEditor();
 
 		if (true && false) return org.armedbear.lisp.JavaObject.getInstance(editor);
 
-		if (editor == null) Editor.startJ(new String[0], false);
+		if (editor == null) Editor.startJ(new String[] { "--no-session", "--debug", "--force-new-instance" }, false, false);
 		if (editor == null) editor = Editor.currentEditor();
 		if (editor == null) Errors.unimplementedMethod("BeanShellCntrl.j_desktop");
 		addSingleton(editor);
@@ -1591,7 +1673,7 @@ public class BeanShellCntrl
 	}
 
 	@LispMethod
-	synchronized static public void start_lisp_from_prolog()
+	static public void start_lisp_from_prolog()
 	{
 		if (!noProlog)
 		{
@@ -1643,7 +1725,7 @@ public class BeanShellCntrl
 	}
 
 	@LispMethod
-	synchronized static public void init_swipl_server()
+	static public void init_swipl_server()
 	{
 		synchronized (StartupLock)
 		{
@@ -1664,9 +1746,17 @@ public class BeanShellCntrl
 				init_swipled_server = false;
 				MsgBox.error(t);
 			}
-			oneSolution("prolog_server(4023, [allow(_)])");
 		}
-
+		synchronized (StartupInitLock)
+		{
+			try
+			{
+				oneSolution("prolog_server(4023, [allow(_)])");
+			} catch (Throwable t)
+			{
+				System.err.println("" + t);
+			}
+		}
 	}
 
 	private static String symbolToPrologName(Symbol sym)
@@ -1933,6 +2023,7 @@ public class BeanShellCntrl
 
 	public static void main(String[] args) throws InterruptedException
 	{
+
 		String[] argsNew = Main.extractOptions(args);
 		init_swipl();
 		init_swipl_server();

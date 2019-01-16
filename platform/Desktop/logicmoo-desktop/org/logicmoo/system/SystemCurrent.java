@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.RandomAccessFile;
+import java.io.Reader;
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
@@ -21,7 +22,6 @@ import java.nio.channels.FileChannel;
 import org.armedbear.lisp.IntegrityError;
 import org.armedbear.lisp.Keyword;
 import org.armedbear.lisp.Symbol;
-import org.logicmoo.system.SystemCurrent.Out.PrintOutputStream;
 
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -35,179 +35,267 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLStreamNilException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
-public class SystemCurrent {
+import bsh.ConsoleInterface;
 
-	static public abstract class In extends InputStream {
+public class SystemCurrent
+{
 
-		private InputStream wazOnce;
+	public static InputStream originalSystemIn = System.in;
+	public static PrintStream originalSystemOut = System.out;
+	public static PrintStream originalSystemErr = System.err;
+
+	static InheritableThreadLocal<InOutErr> SystemInOutErr = new InheritableThreadLocal<InOutErr>()
+	{
+		@Override
+		protected InOutErr initialValue()
+		{
+			return new InOutErr();
+		}
+	};
+
+	/**
+	 * Reassigns the "standard" input stream.
+	 *
+	 * <p>First, if there is a security manager, its <code>checkPermission</code>
+	 * method is called with a <code>RuntimePermission("setIO")</code> permission
+	 *  to see if it's ok to reassign the "standard" input stream.
+	 * <p>
+	 *
+	 * @param in the new standard input stream.
+	 *
+	 * @throws SecurityException
+	 *        if a security manager exists and its
+	 *        <code>checkPermission</code> method doesn't allow
+	 *        reassigning of the standard input stream.
+	 *
+	 * @see SecurityManager#checkPermission
+	 * @see java.lang.RuntimePermission
+	 *
+	 * @since   JDK1.1
+	 */
+	public static void setIn(InputStream in)
+	{
+		SystemInOutErr.get().in = in;
+	}
+
+	private static InputStream currentSystemInput()
+	{
+		InputStream willBe = SystemCurrent.SystemInOutErr.get().in;
+		if (willBe instanceof In || willBe == null) { return originalSystemIn; }
+		return willBe;
+	}
+
+	public static final In in = new SystemCurrent.In("#<System.in>");
+
+	/**
+	 * Reassigns the "standard" output stream.
+	 *
+	 * <p>First, if there is a security manager, its <code>checkPermission</code>
+	 * method is called with a <code>RuntimePermission("setIO")</code> permission
+	 *  to see if it's ok to reassign the "standard" output stream.
+	 *
+	 * @param out the new standard output stream
+	 *
+	 * @throws SecurityException
+	 *        if a security manager exists and its
+	 *        <code>checkPermission</code> method doesn't allow
+	 *        reassigning of the standard output stream.
+	 *
+	 * @see SecurityManager#checkPermission
+	 * @see java.lang.RuntimePermission
+	 *
+	 * @since   JDK1.1
+	 */
+	public static void setOut(PrintStream out)
+	{
+		SystemInOutErr.get().out = out;
+	}
+
+	public static final ThreadLocalPrintStream tlout = new ThreadLocalPrintStream()
+	{
+		public OutputStream getOutputStream()
+		{
+			PrintStream willBe = SystemCurrent.SystemInOutErr.get().out;
+			if (willBe instanceof Out || willBe == null) { return originalSystemOut; }
+			return willBe;
+		}
+	};
+	public static final Out out = new Out("#<System.out>", tlout);
+
+	/**
+	 * Reassigns the "standard" error output stream.
+	 *
+	 * <p>First, if there is a security manager, its <code>checkPermission</code>
+	 * method is called with a <code>RuntimePermission("setIO")</code> permission
+	 *  to see if it's ok to reassign the "standard" error output stream.
+	 *
+	 * @param err the new standard error output stream.
+	 *
+	 * @throws SecurityException
+	 *        if a security manager exists and its
+	 *        <code>checkPermission</code> method doesn't allow
+	 *        reassigning of the standard error output stream.
+	 *
+	 * @see SecurityManager#checkPermission
+	 * @see java.lang.RuntimePermission
+	 *
+	 * @since   JDK1.1
+	 */
+	public static void setErr(PrintStream err)
+	{
+		SystemInOutErr.get().err = err;
+	}
+
+	public static final ThreadLocalPrintStream tlerr = new ThreadLocalPrintStream()
+	{
+		public OutputStream getOutputStream()
+		{
+			PrintStream willBe = SystemCurrent.SystemInOutErr.get().err;
+			if (willBe instanceof Out || willBe == null) { return originalSystemErr; }
+			return willBe;
+		}
+	};
+	public static final Out err = new Out("#<System.err>", tlerr);
+
+	static
+	{
+		setupIO();
+	}
+
+	static public class In extends InputStream
+	{
 		private String named;
 
-		public In(String n) {
+		public In get()
+		{
+			return in;
+		}
+
+		public In(String n)
+		{
 			this.named = n;
 		}
 
 		@Override
-		public String toString() {
+		public String toString()
+		{
 			return named;
 		}
 
-		public abstract InputStream getIn();
-
-		public InputStream getSomeInStrm() {
-			InputStream was = getIn();
-			// System.setIn(null);
-			if (was == this)
-				throw new RuntimeException("was=this");
-			if (was instanceof In)
-				throw new RuntimeException("was instanceof In");
-			if (was == in)
-				throw new RuntimeException("was==in");
-			if (wazOnce == null) {
-				wazOnce = was;
-			} else {
-				if (was == null) {
-					return wazOnce;
-				}
-			}
-			return was;
-		}
-
 		@Override
-		public int read() throws IOException {
-			InputStream is = getSomeInStrm();
-			if (is.available() < 1) {
-				return is.read();
-			}
+		public int read() throws IOException
+		{
+			InputStream is = currentSystemInput();
+			if (is.available() < 1) { return is.read(); }
 			return is.read();
 		}
 
 		@Override
-		public int read(byte[] array, int n, int n2) throws IOException {
-			InputStream is = getSomeInStrm();
+		public int read(byte[] array, int n, int n2) throws IOException
+		{
+			InputStream is = currentSystemInput();
 			return is.read(array, n, n2);
 		}
+
 		@Override
-		public int available() throws IOException {
-			return getSomeInStrm().available();
+		public int available() throws IOException
+		{
+			return currentSystemInput().available();
 		}
 
-		public synchronized void mark(final int n) {
-			getSomeInStrm().mark(n);
+		public synchronized void mark(final int n)
+		{
+			currentSystemInput().mark(n);
 		}
 
-		public synchronized void reset() throws IOException {
-			getSomeInStrm().reset();
+		public synchronized void reset() throws IOException
+		{
+			currentSystemInput().reset();
 		}
 
-		public boolean markSupported() {
-			return getSomeInStrm().markSupported();
+		public boolean markSupported()
+		{
+			return currentSystemInput().markSupported();
 		}
 
-		public void close() throws IOException {
-			getSomeInStrm().close();
+		public void close() throws IOException
+		{
+			currentSystemInput().close();
 		}
 	}
 
-	static public abstract class Out extends OutputStream {
-
-
-		public class PrintOutputStream extends PrintStream {
-			final String named;
-			private OutputStream was;
-
-			public PrintOutputStream(String naimed, OutputStream out) {
-				super(out);
-				this.named = naimed;
-				this.was = out;
-			}
-
-			public OutputStream getOutputStream() {
-				return was;
-			}
-
-			@Override
-			public String toString() {
-				return named;
-			}
-		}
-
+	static public class Out extends PrintStream
+	{
 		private String named;
-		private PrintOutputStream ps;
 
-		protected Out(String n) {
+		protected Out(String n, OutputStream out)
+		{
+			super(out);
 			this.named = n;
-			wazFirst = getOutStream();
-		}
-
-		abstract public OutputStream getOutStream();
-
-		public PrintOutputStream getPrintStream() {
-			if (ps == null)
-				ps = new PrintOutputStream(named, this);
-			return ps;
-		}
-
-		OutputStream wazWonce;
-		final OutputStream wazFirst;
-
-		final public void close() throws IOException {
-			OutputStream was = someOutput();
-			was.close();
-		}
-
-		final public OutputStream someOutput() {
-			OutputStream was = getOutStream();
-			if (was == this)
-				throw new RuntimeException("was==this OUT");
-			if (was == out)
-				throw new RuntimeException("was==out");
-			if (was == err)
-				throw new RuntimeException("was==err");
-			if (was instanceof Out)
-				throw new RuntimeException("was Out");
-			if (was instanceof PrintOutputStream)
-				throw new RuntimeException("was Synonym");
-			if (was == null)
-				return wazWonce;
-			return wazWonce = was;
 		}
 
 		@Override
-		final public void write(int b) throws IOException {
-			OutputStream os = someOutput();
-			os.write(b);
-		}
-
-		@Override
-		final public void flush() throws IOException {
-			someOutput().flush();
+		public String toString()
+		{
+			return named;
 		}
 	}
 
-	static InheritableThreadLocal<InputStream> SystemIn = new InheritableThreadLocal<InputStream>() {
+	private static abstract class ThreadLocalPrintStream extends OutputStream
+	{
 		@Override
-		protected InputStream initialValue() {
-			return System.in;
-		}
-	};
-
-	public static final SystemCurrent.In in = new SystemCurrent.In("#<System.in>") {
-		@Override
-		public InputStream getIn() {
-			return SystemIn.get();
+		public void write(int b) throws IOException
+		{
+			OutputStream redirect = getOutputStream();
+			if (redirect != null) redirect.write(b);
 		}
 
-	};
-	public static final PrintOutputStream out = (new SystemCurrent.Out("#<System.out>") {
-		@Override
-		public OutputStream getOutStream() {
-			return System.out;
-		}
-	}).getPrintStream();
-	public static final PrintOutputStream err = (new SystemCurrent.Out("#<System.err>") {
-		public OutputStream getOutStream() {
-			return System.err;
-		}
-	}).getPrintStream();
+		abstract OutputStream getOutputStream();
 
+		final public void close()
+		{
+			OutputStream redirect = getOutputStream();
+			if (redirect != null) try
+			{
+				redirect.close();
+			} catch (IOException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		@Override
+		public void flush() throws IOException
+		{
+			OutputStream redirect = getOutputStream();
+			if (redirect != null)
+			{
+				try
+				{
+					redirect.flush();
+				} catch (IOException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				super.flush();
+			}  
+		}
+	}
+
+	public static void setupIO()
+	{
+		if (true) return;
+		if (!(System.in instanceof In) || System.in != in) System.setIn(in);
+		if (!(System.out instanceof Out) || System.out != out) System.setOut(out);
+		if (!(System.err instanceof Out) || System.err != err) System.setErr(err);
+	}
+}
+
+class InOutErr
+{
+	transient InputStream in;
+	transient PrintStream out;
+	transient PrintStream err;
 }

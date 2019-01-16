@@ -3146,4 +3146,10 @@ public class Buffer extends SystemBuffer
     {
         return mode.isKeyword(s);
     }
+
+	public void enter()
+	{
+		// TODO Auto-generated method stub
+		
+	}
 }

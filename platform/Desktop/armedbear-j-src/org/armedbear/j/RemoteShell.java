@@ -30,7 +30,7 @@ public class RemoteShell extends Shell
 {
     private String host;
 
-    private RemoteShell(int type, String host)
+    protected RemoteShell(int type, String host)
     {
         super();
         if (type != TYPE_TELNET && type != TYPE_SSH)

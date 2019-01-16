@@ -773,6 +773,6 @@ abstract public class RowTableModel<T> extends DefaultTableModel2 implements Lis
 	 * @since 1.3
 	 */
 	public <T extends EventListener> T[] getListeners(Class<T> listenerType) {
-		return listenerList.getListeners(listenerType);
+		return (T[]) listenerList.getListeners(listenerType);
 	}
 }

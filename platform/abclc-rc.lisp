@@ -8,8 +8,9 @@
 (require 'abcl-contrib)
 (require 'jss)
 (require 'asdf)
-(ql:quickload "swank")
-(ql:quickload "swank.live")
+
+;; (ql:quickload "swank")
+;; (ql:quickload "swank.live")
 
 
 

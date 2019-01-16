@@ -3,7 +3,17 @@
 :- load_files(library(prolog_stack)).
 prolog_stack:stack_guard(none).
 
-dmiles_machine:- gethostname('gitlab.logicmoo.org').
+dmiles_machine:- gethostname('gitlab.logicmoo.org') ; gethostname('i74930k').
+
+ensure_updated_pack(P):- pack_install(P,[upgrade(true),git(true),interactive(false)]).
+
+:- maplist(ensure_updated_pack, 
+[ predicate_streams,multimodal_dcg,eggdrop,
+gvar_syntax,dictoo,logicmoo_utils,
+instant_prolog_docs,pfc,logicmoo_base,
+prologmud,s_expression,
+wam_common_lisp,prologmud_samples]).
+
 
 :- dmiles_machine -> (getenv('DISPLAY',_)->true;setenv('DISPLAY','10.0.0.122:0.0')) ; true.
 %:- ignore(shell('killall -9 xterm')).
@@ -296,17 +306,39 @@ jdwp_opts('').
 :- current_prolog_flag(os_argv, Y), dwq(Y).
 
 
+% 
+%,'-Xbootclasspath:C:\\pf\\java\\jdk\\jre\\lib\\resources.jar;C:\\pf\\java\\jdk\\jre\\lib\\rt.jar;C:\\pf\\java\\jdk\\jre\\lib\\jsse.jar;C:\\pf\\java\\jdk\\jre\\lib\\jce.jar;C:\\pf\\java\\jdk\\jre\\lib\\charsets.jar;C:\\pf\\java\\jdk\\jre\\lib\\jfr.jar;C:\\pf\\java\\jdk\\lib\\tools.jar;C:\\pf\\java\\jdk\\lib\\sa-jdi.jar'
 jvm_opts(
-    [JDWPOpt, %'-XX:PermSize=512m','-XX:MaxPermSize=4g','-Xmx26g',
-     '-server','-d64','-Xms5000m','-Xmx8000m','-XX:ReservedCodeCacheSize=96m','-XX:+DoEscapeAnalysis','-XX:+UseCompressedOops','-XX:+UseConcMarkSweepGC','-XshowSettings:vm',
-     '-Djava.util.Arrays.useLegacyMergeSort=true',
-     '-Dsun.java2d.d3d=false' 
-     % ,'-Dfile.encoding=Cp1252',
-     %,'-Xbootclasspath:C:\\pf\\java\\jdk\\jre\\lib\\resources.jar;C:\\pf\\java\\jdk\\jre\\lib\\rt.jar;C:\\pf\\java\\jdk\\jre\\lib\\jsse.jar;C:\\pf\\java\\jdk\\jre\\lib\\jce.jar;C:\\pf\\java\\jdk\\jre\\lib\\charsets.jar;C:\\pf\\java\\jdk\\jre\\lib\\jfr.jar;C:\\pf\\java\\jdk\\lib\\tools.jar;C:\\pf\\java\\jdk\\lib\\sa-jdi.jar'
-     ]):- dwq_call(jdwp_opts(JDWPOpt)).
+    [%'-XX:PermSize=512m','-XX:MaxPermSize=4g','-Xmx26g',
+     % '-server',
+     '-d64','-Xms5000m','-Xmx8000m',
+     '-XX:ReservedCodeCacheSize=96m',
+     '-XX:+DoEscapeAnalysis','-XX:+UseCompressedOops',
+     '-XX:+UseConcMarkSweepGC', % '-XshowSettings:vm',
+    % '-Djava.util.Arrays.useLegacyMergeSort=true',
+    % '-Dsun.java2d.d3d=false' ,'-Dfile.encoding=Cp1252',
+    JDWPOpt ]):- dwq_call(jdwp_opts(JDWPOpt)).
 
 
        %  /var/lib/myfrdcsa/codebases/minor/3t-frdcsa/planner/ 
+
+path_sep(';'):- current_prolog_flag(_,dll),!.
+path_sep(':').
+
+guess_claspath(CP):-
+  maplist(expand_file_name,['c:/program files/Java/jd*8.*/lib/tools.jar','c:/program files (x86)/Java/jd*8.*/lib/tools.jar',
+  '/usr/lib/jvm/java*8*/lib/tools.jar'],LL1),
+  append(LL1,[ToolsJar|_]),
+  maplist(expand_file_name,['jpl.jar','lib/*.jar','dist/*-contrib.jar'],LL2),append(LL2,L22),
+  exclude(hidden_jars,L22,L2),
+  maplist(absolute_file_name,['build/classes',ToolsJar|L2],AA),
+  maplist(prolog_to_os_filename,AA,A), path_sep(SEP),
+  atomic_list_concat(A,SEP,CP),!.
+
+
+hidden_jars(L22):- \+ atom(L22),!,fail.
+hidden_jars(L22):- atom_concat('cyc.',_,L22).
+hidden_jars(L22):- atom_concat('subl.',_,L22).
 
 :- multifile(oo_started/0).
 :- dynamic(oo_started/0).
@@ -318,12 +350,12 @@ jpl:-
   retractall((user:file_search_path(jar, _))),
   asserta((user:file_search_path(jar, ('.')))),
   setenv('_JAVA_SR_SIGNUM',20),
+  guess_claspath(CP),setenv('CLASSPATH',CP),
+  %getenv('PATH',PATH),getenv('JAVA_HOME',JH),current_prolog_flag(home,HOME),atomic_list_concat([JH,HOME],';',NEWPATH),
+  %setenv('PATH',NEWPATH),setenv('PATH',PATH),
   ensure_loaded(library(jpl)),  
-  getenv('PATH',PATH),getenv('JAVA_HOME',JH),current_prolog_flag(home,HOME),atomic_list_concat([JH,HOME],';',NEWPATH),
-  setenv('PATH',NEWPATH),
-  use_module(library(jpl)),
-  setenv('PATH',PATH),
   jvm_opts(Opts),
+  use_module(library(jpl)),  
   jpl_set_default_jvm_opts(Opts),
   % getenv('CLASSPATH',WAS), format('CLASSPATH=~q~n',[WAS]),
   listing(jdwp_available),
@@ -359,7 +391,7 @@ call_jmain(Class,Args):- jpl,
   main_args_to_jref(Args, JRef),
   jpl_call(Class,main,[JRef],_Out).
 
-call_main(Args):- !, call_jmain('org.logicmoo.system.BeanShellCntrl',['--eval','(init-cyc)','--load','abclc-rc.lisp'| Args]).
+call_main(Args):- !, call_jmain('org.logicmoo.system.BeanShellCntrl',['--eval','(init-j)','--eval','(init-cyc)','--load','abclc-rc.lisp'| Args]).
 call_main(Args):- call_jmain('org.armedbear.lisp.Main',['--load','abclc-rc.lisp'| Args]).
 call_main(Args):- call_jmain('com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain',['--load','abclc-rc.lisp'| Args]).
 
@@ -427,13 +459,14 @@ test_x:- jpl:jpl_class_to_methods('org.logicmoo.system.BeanShellCntrl',C),dmsg(C
 
 
 lmmud :-
-  cd('/home/prologmud_server/'),
-  ensure_loaded(run_mud_server).
+  % cd('/home/prologmud_server/'),
+  ensure_loaded(library('prologmud_sample_games/run_mud_server')).
   
 on_bg_repl:- thread_signal(main, call(call,lmmud)).
 
+%:- jpl.
 %program_init :-startBG.
-program_init :-fg_abcl,lmmud.
+program_init :- fg_abcl, lmmud.
 
 
 %:- initialization(startBG, program).

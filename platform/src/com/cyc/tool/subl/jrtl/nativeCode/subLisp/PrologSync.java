@@ -1,3 +1,4 @@
+
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import java.lang.ref.WeakReference;
@@ -31,6 +32,7 @@ import org.jpl7.fli.Prolog;
 import org.jpl7.fli.term_t;
 import org.logicmoo.bb.BeanBowl;
 import org.logicmoo.system.BeanShellCntrl;
+import org.logicmoo.system.SystemCurrent;
 
 import com.cyc.cycjava.cycl.constants_high;
 import com.cyc.cycjava.cycl.constants_interface;
@@ -769,12 +771,6 @@ public class PrologSync extends SubLTrampolineFile
 
 	}
 
-	static
-	{
-		addStaticFields(null, PrologSync.class);
-		BeanShellCntrl.addObject("mapClass2Refs", PrologSync.mapClass2Refs);
-	}
-
 	public interface IPrologifiable
 	{
 		Term toProlog(java.util.List circle);
@@ -887,6 +883,7 @@ public class PrologSync extends SubLTrampolineFile
 					try
 					{
 						Thread.sleep((long) 250);
+						SystemCurrent.setupIO();
 					} catch (Throwable e)
 					{
 						return;
@@ -920,5 +917,11 @@ public class PrologSync extends SubLTrampolineFile
 		}
 		doSyncStruct(structureObject);
 
+	}
+
+	static
+	{
+		addStaticFields(null, PrologSync.class);
+		BeanShellCntrl.addObject("mapClass2Refs", PrologSync.mapClass2Refs);
 	}
 }

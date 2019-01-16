@@ -588,7 +588,7 @@ abstract public class SubLString extends AbstractString  implements SubLObject, 
 			Arrays.sort(chars, new ComparatorIdentityKey<Object>(pred));
 		else
 			Arrays.sort(chars, new ComparatorGenericKey<Object>(pred, key));
-		if (chars == null)
+		if (chars != null)
 			this.chars = new char[chars.length];
 		for (int i = 0, size = chars.length; i < size; ++i)
 			this.chars[i] = chars[i].charValue();

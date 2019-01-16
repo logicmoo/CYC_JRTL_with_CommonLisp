@@ -39,7 +39,10 @@ import java.util.List;
 
 import org.apache.commons.cli.Option;
 import org.logicmoo.system.JVMImpl;
+import org.logicmoo.system.SystemCurrent;
+import org.logicmoo.system.SystemCurrent.In;
 
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLMain;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
@@ -73,8 +76,11 @@ public final class Main
 
 	public static void main(String[] args) throws InterruptedException
 	{
+		SystemCurrent.setupIO();
+		assert (System.in instanceof In);
+		abclProcessArgs = true;
+		Main.noBSH = true;
 		String[] argsNew = Main.extractOptions(args);
-
 		Thread t = mainUnjoined(argsNew);
 		if (true)
 		{
@@ -105,7 +111,7 @@ public final class Main
 		return t;
 	}
 
-	public static Runnable mainRunnable(final String[] args, final  Runnable after)
+	public static Runnable mainRunnable(final String[] args, final Runnable after)
 	{
 		globalContext.set(true);
 		needIOConsole = false;
@@ -116,26 +122,31 @@ public final class Main
 			@Override
 			public void safeRun()
 			{
+				boolean wasSubLisp = Main.isSubLisp();
 				try
 				{
-					globalContext.set(true);
-					//SubLMain.commonSymbolsOK = true;
-					setSubLisp(false);
-					//Main.noSubLisp =true;
-					abclProcessArgs = true;
-					Main.noBSH = true;
-					//File initialDir = new File("./");
-					Interpreter interpreter = Interpreter.createDefaultInstance(args);
-					/*Interpreter interpreter = Interpreter.createNewLispInstance(SystemCurrent.in, SystemCurrent.out,
-						 initialDir.getCanonicalPath(),
-					        Version.getLongVersionString());*/
-					if (after != null) after.run();
-				} catch (ProcessingTerminated e)
+					try
+					{
+						globalContext.set(true);
+						//SubLMain.commonSymbolsOK = true;
+						setSubLisp(false);
+						//Main.noSubLisp =true;
+						//File initialDir = new File("./");
+						Interpreter.createDefaultInstance(args);
+						/*Interpreter interpreter = Interpreter.createNewLispInstance(SystemCurrent.in, SystemCurrent.out,
+							 initialDir.getCanonicalPath(),
+						        Version.getLongVersionString());*/
+						if (after != null) after.run();
+					} catch (ProcessingTerminated e)
+					{
+						System.exit(e.getStatus());
+					} catch (Throwable e)
+					{
+						throw JVMImpl.doThrow(e);
+					}
+				} finally
 				{
-					System.exit(e.getStatus());
-				} catch (Throwable e)
-				{
-					throw JVMImpl.doThrow(e);
+					Main.setSubLisp(wasSubLisp);
 				}
 			}
 		};
@@ -198,6 +209,13 @@ public final class Main
 		if (argsList.remove("--noprolog"))
 		{
 			noPrologJNI = true;
+		}
+		if (argsList.remove("--cyc"))
+		{
+			Main.subLisp = "cyc-init";
+			Main.noBSHGUI = false;
+			Main.needABCL = false;
+			SubLMain.noInitCyc = false;
 		}
 		if (argsList.remove("--prologsync"))
 		{
