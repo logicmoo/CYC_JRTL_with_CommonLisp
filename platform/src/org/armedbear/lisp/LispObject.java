@@ -35,6 +35,7 @@ package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
 
+import java.io.IOException;
 import java.util.AbstractList;
 import java.util.AbstractSet;
 import java.util.ArrayList;
@@ -88,41 +89,6 @@ public class LispObject extends AbstractSubLObject
 //		  return Lisp.get(obj, env, thread);
 //
 //   }
-
-
-	  public String toString() {
-		if(Lisp.insideToString>3) {
-			Thread.dumpStack();
-		}
-		if(Lisp.insideToString>1) {
-			return easyToString();
-		}
-		final Object o = Lisp.printingObject;
-		if(o==this) return "OVERFLOW: "+easyToString();
-        final LispThread thread = LispThread.currentThread();
-		final SpecialBindingsMark mark = thread.markSpecialBindings();
-		try {
-			Lisp.printingObject = this;
-			Lisp.insideToString++;
-			 // Symbol.PRINT_CIRCLE.setSymbolValue(T);
-			return printObject();
-		} catch (Throwable t) {
-			t.printStackTrace();
-			return easyToString();
-        } finally {
-            thread.resetSpecialBindings(mark);
-			Lisp.insideToString--;
-			Lisp.printingObject = o;
-		}
-	}
-
-  protected String easyToString() {
-		int hc = 0;
-		//if (hc==0) this.hashCode();
-		if (hc==0) hc = System.identityHashCode(this);
-		return
-				getDotName(this.getClass()) + "@" + Integer.toHexString(hc);
-	}
 
 /** Function to allow objects to return the value
    * "they stand for". Used by AutoloadedFunctionProxy to return
@@ -838,7 +804,7 @@ public class LispObject extends AbstractSubLObject
    */
   public String princToString()
   {
-	  if(Main.isNoDebug()) return null;
+	  //if(Main.isNoDebug()) return null;
       LispThread thread = LispThread.currentThread();
       SpecialBindingsMark mark = thread.markSpecialBindings();
       try {
@@ -850,7 +816,6 @@ public class LispObject extends AbstractSubLObject
           thread.resetSpecialBindings(mark);
       }
   }
-
 
 	static class LinkedIdentityHashSet extends AbstractList {
 		ArrayList set = new ArrayList();
@@ -921,41 +886,176 @@ public class LispObject extends AbstractSubLObject
 
 	protected final static ThreadLocal<List> printingObjectR = new ThreadLocal<List>() {
 		protected List initialValue() {
-			return (List) new LinkedIdentityHashSet();
+			return new LinkedIdentityHashSet();
 		};
 	};
 
-	public String printObject() {
+	public String printObject()
+	{
 
 		final LispThread thread = LispThread.currentThread();
 		final SpecialBindingsMark mark = thread.markSpecialBindings();
 		List set = printingObjectR.get();
 		int index = set.indexOf(this);
-		if (index >= 0) {
-			return "#=(" + index + "#|" + easyToString() + "|#)=#";
-		}
-		try {
+		if (index >= 0) { return "#=(" + index + "#|" + easyToString() + "|#)=#"; }
+		try
+		{
 			//Symbol.PRINT_CIRCLE.setSymbolValue(T);
-
 			set.add(this);
 			return printObjectImpl();
-		} finally {
+		} catch (IOException e)
+		{			
+			e.printStackTrace();
+			return "#=(" + index + "#|" + easyToString() + "|#)=#";
+		} finally
+		{
 			set.remove(this);
 			thread.resetSpecialBindings(mark);
 		}
 
 	}
 
-  public String printObjectImpl()
-  {
-		try {
+	public String printObjectImpl() throws IOException 
+	{
+		try
+		{
 			SubLSymbol sym = getType();
 			return unreadableString(sym.getName(), true);
 		} catch (Throwable t) {
 			t.printStackTrace();
 			return unreadableString(easyToString(), true);
 		}
-	  }
+	}
+
+	public String toString()
+	{
+		if (Lisp.insideToString > 3)
+		{
+			Thread.dumpStack();
+		}
+		if (Lisp.insideToString > 1) { return easyToString(); }
+		final Object o = Lisp.printingObject;
+		if (o == this) return "OVERFLOW: " + easyToString();
+		final LispThread thread = LispThread.currentThread();
+		final SpecialBindingsMark mark = thread.markSpecialBindings();
+		try
+		{
+			Lisp.printingObject = this;
+			Lisp.insideToString++;
+			// Symbol.PRINT_CIRCLE.setSymbolValue(T);
+			return printObject();
+		} catch (Throwable t)
+		{
+			t.printStackTrace();
+			return easyToString();
+		} finally
+		{
+			thread.resetSpecialBindings(mark);
+			Lisp.insideToString--;
+			Lisp.printingObject = o;
+		}
+	}
+
+	public String printReadableObject(boolean quoted) {
+		/*
+		 *  if *print-readably* is true, 
+		 *  printing proceeds as if *print-escape*, *print-array*, and *print-gensym* were also true, 
+		 *  and as if *print-length*, *print-level*, and *print-lines* were false.
+		 */
+		LispThread thread = LispThread.currentThread();
+		SpecialBindingsMark mark = thread.markSpecialBindings();
+		try
+		{
+			thread.bindSpecial(Symbol.PRINT_READABLY, T);
+			thread.bindSpecial(Symbol.PRINT_ESCAPE, T);
+			thread.bindSpecial(Symbol.PRINT_ARRAY, T);
+			thread.bindSpecial(Symbol.PRINT_LENGTH, NIL);
+			thread.bindSpecial(Symbol.PRINT_LEVEL, NIL);
+			thread.bindSpecial(Symbol.PRINT_LINES, NIL);
+			String s =  printObject();
+			if (quoted)
+			{
+				return "'" + s;
+			} else {
+				return s;
+			}
+			
+		} finally
+		{
+			thread.resetSpecialBindings(mark);
+		}
+	}
+	
+	//  (defmethod print-object ((obj built-in-class) stream) (FORMAT stream "#.~a" `(find-class ',(class-name obj)) stream))
+	// (defmethod print-object ((obj built-in-class) stream) (FORMAT stream "#.") (write `(find-class ',(class-name obj)) :stream stream :readably t)))
+	 // 
+	//  (let ((*print-readably* t)) (prin1-to-string (find-class 'symbol)))
+
+	protected String easyToString()
+	{
+		int hc = 0;
+		//if (hc==0) this.hashCode();
+		if (hc == 0) hc = System.identityHashCode(this);
+		String s = getDotName(this.getClass()) + "@" + Integer.toHexString(hc);
+		return  getType() + " " +  s;
+	}
+
+	//void chars() throws Throwable{} // uncomment to find accidental calls
+	public String writeToString()
+	{
+		return printObject();
+	}
+	  /** Creates a readably (as per CLHS terminology) representation
+	   * of the 'this' object, 
+	   *
+	   * If the current value of the variable *PRINT-READABLY* is T
+	   *
+	   * This function is a helper for printObject()
+	   *
+	   * @param func
+	   * @param identity when 'true', includes Java's identityHash for the object
+	   *            in the output.
+	   * @return a reabable string (i.e. one enclosed in the #.(..) markers)
+	   */
+	public final String readableString(LispObject func, LispObject... identity)
+	{
+		StringBuilder sb = new StringBuilder("#");
+		final boolean asUnreadable = !Lisp.initialized || Symbol.PRINT_READABLY.symbolValue() == NIL;
+
+		if (asUnreadable)
+		{
+			sb.append("<");
+			func = this.typeOf();
+			sb.append(func.princToString());
+		}
+		else
+		{
+			sb.append(".(");
+			sb.append(func.printReadableObject(false));
+		}
+
+		for (int i = 0; i < identity.length; i++)
+		{
+			sb.append(" ");
+			sb.append(identity[i].printReadableObject(true));
+			if (asUnreadable)
+			{
+				sb.append(">");
+				return sb.toString();
+			}
+		}
+		sb.append(")");
+		return sb.toString();
+	}
+	public String unreadableString(Symbol mailbox)
+	{
+		return unreadableString(mailbox.printObject(), true);
+	}
+
+	protected void extraInfo(StringBuilder sb)
+	{
+		//sb.append(objectFieldsString(this));
+	}
 
   /** Calls unreadableString(String s, boolean identity) with a default
    * identity value of 'true'.
@@ -964,6 +1064,7 @@ public class LispObject extends AbstractSubLObject
    *
    * @param s String representation of this object.
    * @return String enclosed in the non-readable #< ... > markers
+ * @throws IOException 
    */
   public final String unreadableString(String s) {
      return unreadableString(s, true);
@@ -1550,19 +1651,22 @@ public class LispObject extends AbstractSubLObject
   {
   }
 
-@Override
-public boolean canFastHash() {
-	// TODO Auto-generated method stub
-	// if(true) Errors.unimplementedMethod("Auto-generated method stub:  SubLObject.canFastHash");
-	return false;
-}
+	@Override
+	public boolean canFastHash()
+	{
+		// TODO Auto-generated method stub
+		// if(true) Errors.unimplementedMethod("Auto-generated method stub:  SubLObject.canFastHash");
+		return false;
+	}
 
-@Override
-public int hashCode(int p0) {
-	// TODO Auto-generated method stub
-	// if(true) Errors.unimplementedMethod("Auto-generated method stub:  SubLObject.hashCode");
-	return superHash();
-}
+	@Override
+	public int hashCode(int p0)
+	{
+		// TODO Auto-generated method stub
+		// if(true) Errors.unimplementedMethod("Auto-generated method stub:  SubLObject.hashCode");
+		return superHash();
+	}
+
 
 @Override
 public boolean isAlien() {
@@ -1822,18 +1926,4 @@ public boolean isSymbol() {
 public boolean isVector() {
 	return false;
 }
-//void chars() throws Throwable{} // uncomment to find accidental calls
-public String writeToString() {
-	return printObject();
-}
-public String unreadableString(Symbol mailbox) {
-	return unreadableString(mailbox.printObject(),true);
-}
-
-
-	protected void extraInfo(StringBuilder sb) {
-		//sb.append(objectFieldsString(this));
-	}
-
-
 }

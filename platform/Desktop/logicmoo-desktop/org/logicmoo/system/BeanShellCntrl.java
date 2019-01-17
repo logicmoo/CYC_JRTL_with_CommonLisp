@@ -393,6 +393,7 @@ public class BeanShellCntrl
 	@LispMethod
 	static public void init_j()
 	{
+		if(noGUI) return;
 		try
 		{
 			Class c = Class.forName("org.armedbear.j.Editor");
@@ -1342,7 +1343,21 @@ public class BeanShellCntrl
 	{
 		LispObject args = term_to_lobject(term);
 		Environment env = Environment.currentLispEnvironment();
-		return lisp_eval_progn(args, env);
+		boolean wasNoDebug = Main.isNoDebug();
+		if (!wasNoDebug)
+		{
+			Main.setNoDebug(true);
+		}
+		try
+		{
+			return lisp_eval_progn(args, env);		
+		} finally
+		{
+			if (!wasNoDebug)
+			{
+				Main.setNoDebug(false);
+			}
+		}
 	}
 
 	@LispMethod
@@ -2280,10 +2295,6 @@ public class BeanShellCntrl
 			boolean wasNoDebug = Main.isNoDebug();
 			try
 			{
-				if (!wasNoDebug)
-				{
-					Main.setNoDebug(true);
-				}
 
 				final Term[] args = list.args();
 
@@ -2312,7 +2323,10 @@ public class BeanShellCntrl
 					if ((m = macro) == null) error(new LispError("no such method"));
 					break;
 				} while (true);
-
+				if (!wasNoDebug)
+				{
+					Main.setNoDebug(true);
+				}
 				Object o = BeanShellCntrl.invokeM(m, null, javaArgs);
 				if (!result.isVariable()) { return result; }
 				Class rt = m.getReturnType();

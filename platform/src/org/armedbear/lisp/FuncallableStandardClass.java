@@ -67,8 +67,8 @@ public class FuncallableStandardClass extends StandardClass
     return super.typep(type);
   }
 
-  public String printObjectImpl()
-  {
+  public String printObjectUnreadable()
+    {
     StringBuilder sb =
       new StringBuilder(Symbol.FUNCALLABLE_STANDARD_CLASS.printObject());
     if (getLispClassName() != null)

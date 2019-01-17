@@ -193,11 +193,13 @@ public class Lisp
   }
 
   // End-of-file marker.
-  public static final LispObject EOF = new LispObject() {
-	    public String printObjectImpl() {
-	        return unreadableString("end-of-file marker", false);
-	      }
-  };
+	public static final LispObject EOF = new LispObject()
+	{
+		public String printObjectImpl()
+		{
+			return readableString(Symbol.JCALL, JavaObject.getInstance(Lisp.class), JavaObject.getInstance("EOF"));
+		}
+	};
 
   // String hash randomization base
   // Sets a base offset hashing value per JVM session, as an antidote to
@@ -437,7 +439,6 @@ public class Lisp
 
   public static final LispObject error(LispObject condition)
   {
-    pushJavaStackFrames();
 	  if (Main.isNoDebug()) {
 		  throw conditionToSubLException(condition);
 	  }
@@ -445,6 +446,7 @@ public class Lisp
     	if(SubLMain.commonSymbolsOK)
     	return (LispObject) Errors.error("Lisp.error", conditionToSubLException(condition));
     }
+    pushJavaStackFrames();
     return Symbol.ERROR.execute(condition);
   }
 
@@ -3138,5 +3140,11 @@ public static void checkOutput(Symbol standardOutput, LispObject stdout2) {
 	public static void initLisp() {
 		_AUTOLOAD_VERBOSE_.toString();
 
+	}
+
+	public static boolean isPrintReadable(LispThread thread)
+	{
+		if(thread==null) thread = LispThread.currentThread();
+		return  Symbol.PRINT_READABLY.symbolValue() != NIL;
 	}
 }

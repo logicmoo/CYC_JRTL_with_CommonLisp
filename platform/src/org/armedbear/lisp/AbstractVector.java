@@ -207,7 +207,7 @@ public abstract class AbstractVector extends AbstractArray
   public String printObjectImpl()
   {
     final LispThread thread = LispThread.currentThread();
-    if (Symbol.PRINT_READABLY.symbolValue(thread) != NIL)
+    if (Lisp.isPrintReadable(thread))
       {
         StringBuilder sb = new StringBuilder("#(");
         final int limit = length();
@@ -268,7 +268,7 @@ public abstract class AbstractVector extends AbstractArray
         StringBuffer sb = new StringBuffer();
         sb.append(isSimpleVector() ? "SIMPLE-VECTOR " : "VECTOR ");
         sb.append(capacity());
-        return unreadableString(sb.toString());
+        return unreadableString(sb.toString() ,true);
       }
   }
 

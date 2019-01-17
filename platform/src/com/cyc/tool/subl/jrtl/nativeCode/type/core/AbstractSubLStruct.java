@@ -3,6 +3,7 @@
 //
 package com.cyc.tool.subl.jrtl.nativeCode.type.core;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.armedbear.lisp.Condition;
@@ -304,7 +305,7 @@ public abstract class AbstractSubLStruct extends LispObject implements SubLStruc
 	}
 
 	@Override
-	abstract public String printObjectImpl();
+	abstract public String printObjectImpl() throws IOException;
 
 	@Override
 	public SubLStruct toStruct()

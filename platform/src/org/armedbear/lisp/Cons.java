@@ -618,7 +618,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
 	{
 		if (this.termRef != null) return termRef;
 		LispObject obj = this;
-		Term[] args = new Term[] { unboundPLTerm(), unboundPLTerm() };
+		Term[] args = new Term[] { unboundPLTerm(), JPL.LIST_NIL };
 		obj.termRef = new Compound(JPL.LIST_PAIR, args);
 		int length = 0;
 		while (true)
@@ -633,7 +633,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
 					args[1] = next.termRef = JPL.newJRef(next);
 					return termRef;
 				}
-				Term[] nargs = new Term[] { unboundPLTerm(), unboundPLTerm() };
+				Term[] nargs = new Term[] { unboundPLTerm(), JPL.LIST_NIL };
 				args[1] = next.termRef = new Compound(JPL.LIST_PAIR, nargs);
 				args = nargs;
 				obj = next;
@@ -641,7 +641,7 @@ public final class Cons extends SubLConsPair implements java.io.Serializable, IP
 			}
 			else
 			{
-				args[1] = PrologSync.toProlog(cdr, skip);
+				args[1] = PrologSync.toProlog(next, skip);
 				return termRef;
 			}
 		}

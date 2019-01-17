@@ -38,7 +38,15 @@ import static org.armedbear.lisp.Lisp.*;
 // ### peek-char
 public final class peek_char extends Primitive
 {
-    private static LispObject internalEOF = new LispObject();
+    public static LispObject internalEOF = new LispObject() {
+    	@Override
+    	final public String printObject()
+    	{
+    		if(isPrintReadable(null)) {
+    		}
+    		return unreadableString("internalEOF");
+    	}
+    };
     
     private peek_char()
     {

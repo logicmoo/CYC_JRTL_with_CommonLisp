@@ -36,6 +36,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public abstract class AbstractSubLObject extends Lisp  implements SubLObject
 {
+	
 	public Term termRef;
 
 	/**

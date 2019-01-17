@@ -210,7 +210,7 @@ public abstract class BroadcastStream extends Stream
 
     public String printObjectImpl()
     {
-        return unreadableString("BROADCAST-STREAM");
+        return unreadableString("BROADCAST-STREAM", true);
     }
 
     // ### make-broadcast-stream &rest streams => broadcast-stream

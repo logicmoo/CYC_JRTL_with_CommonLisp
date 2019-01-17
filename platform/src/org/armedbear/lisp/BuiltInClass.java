@@ -71,7 +71,7 @@ public class BuiltInClass extends LispClass
     return new SimpleString(princToString());
   }
 
-  public String printObjectImpl()
+  public String printObjectUnreadable()
   {
     return unreadableString(getLispClassName().princToString());
   }

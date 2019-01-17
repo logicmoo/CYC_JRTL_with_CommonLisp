@@ -78,6 +78,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 
 
 	final public static String SYMBOL_TYPE_NAME = "SYMBOL";
+	public static boolean USE_THREAD_LOCALS = true;
 	private static int idCounter = 0;
 
 	final public AbstractString name;
@@ -87,7 +88,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	private int subLID = INVALID_BINDING_INDEX;
 	protected SubLFiles.VariableAccessMode accessModeVar = VariableAccessMode.UNDECLARED;
 	private transient SubLObject value = SubLSymbol.UNBOUND;
-	ThreadLocal<SubLObject> threadLocalValue = null;
+	private transient ThreadLocal<SubLObject> threadLocalValue = null;
 	private int identityHashCode = -1;
     ///boolean barrier = true;
 	private Package disownedby;
@@ -105,15 +106,20 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 		thread.bindingsList[subLID] = newValue;
 	}
 
-	private int checkSubLId() {
+	private int checkSubLId()
+	{
 		checkOwned();
-		if(subLID==INVALID_BINDING_INDEX) {
+		if (subLID == INVALID_BINDING_INDEX)
+		{
 			unboundError();
-	}
+		}
 		return subLID;
 	}
-	private void checkOwned() {
-		if(this.disownedby!=null) {
+
+	private void checkOwned()
+	{
+		if (this.disownedby != null)
+		{
 			unboundError();
 		}
 	}
@@ -143,7 +149,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 
 	public SubLObject getTLValue()
 	{
-		if (threadLocalValue != null)
+		if(USE_THREAD_LOCALS)if (threadLocalValue != null)
 		{
 			SubLObject maybe = threadLocalValue.get();
 			if (maybe != null) return maybe;
@@ -178,7 +184,11 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 
 	public void setTLValue(SubLObject value)
 	{
-		checkChange(value);
+		if(!USE_THREAD_LOCALS) {
+			this.value = value;
+			return;
+		}
+	   checkChange(value);
 		
 		if (threadLocalValue != null)
 		{
@@ -197,7 +207,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 
 	private void notifyChange(SubLObject value)
 	{
-		Debug.warn("changing value of " + this + " to " + value);
+		// Debug.warn("changing value of " + this + " to " + value);
 		
 	}
 	@Override
@@ -1383,22 +1393,27 @@ public void symbolSetQ(LispObject argVal, Environment envI, LispThread threadI) 
   }
 
   @Override
-  final public String printObjectImpl()
-  {
-	  if(Lisp.printingObject==this) {
-		  return toDebugString();
-	  }
-	  if(Lisp.insideToString>0) {
-		  return getQualifiedName();
-	  }
-    final String n = name.getStringValue();
-    final LispObject pkg = getPackageOrNil();
-    final LispThread thread = LispThread.currentThread();
-    boolean printEscape = (PRINT_ESCAPE.symbolValue(thread) != NIL);
-    LispObject printCase = PRINT_CASE.symbolValue(thread);
+	final public String printObjectImpl()
+	{
+		final LispThread thread = LispThread.currentThread();
+		boolean printEscape = (PRINT_ESCAPE.symbolValue(thread) != NIL);
+		boolean printReadably = (PRINT_READABLY.symbolValue(thread) != NIL);
+		String unquoted = printObjectImpl(printReadably, printEscape);
+		//if(printReadably) return "'"+ unquoted;
+		return unquoted;
+	}
+
+	String printObjectImpl(boolean printReadably, boolean printEscape)
+	{
+		if (Lisp.printingObject == this) { return toDebugString(); }
+		if (Lisp.insideToString > 1) { return getQualifiedName(); }
+	    final String n = name.getStringValue();
+	    final LispObject pkg = getPackageOrNil();
+	    final LispThread thread = LispThread.currentThread();
+	    LispObject printCase = PRINT_CASE.symbolValue(thread);
+	
     final LispObject readtableCase =
       ((Readtable)CURRENT_READTABLE.symbolValue(thread)).getReadtableCase();
-    boolean printReadably = (PRINT_READABLY.symbolValue(thread) != NIL);
 
     if (printReadably) {
       if (readtableCase != Keyword.UPCASE || printCase != Keyword.UPCASE) {
@@ -1750,9 +1765,12 @@ public void symbolSetQ(LispObject argVal, Environment envI, LispThread threadI) 
   final public LispObject execute(LispObject arg)
   {
     LispObject fun;
-    if ((fun = getSymbolFunction()) == null)
+    if ((fun = getSymbolFunction()) == null) 
+    {
+    	if(true) {    	
+    	}
         return undefinedFunction(list(arg));
-
+    }
     return fun.execute(arg);
   }
 

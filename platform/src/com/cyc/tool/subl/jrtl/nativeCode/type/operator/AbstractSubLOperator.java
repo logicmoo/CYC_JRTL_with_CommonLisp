@@ -13,7 +13,7 @@ public abstract class AbstractSubLOperator extends LispObject implements SubLOpe
 	AbstractSubLOperator() {
 		this(null);
 	}
-
+	
 	AbstractSubLOperator(SubLSymbol functionSymbol) {
 		setFunctionSymbol(functionSymbol);
 		if (functionSymbol != null) {

@@ -39,6 +39,16 @@ import static org.armedbear.lisp.Lisp.*;
 public abstract class LispClass extends StandardObject
 {
 
+	  final public String printObject()
+	  {
+	    return readableString(Symbol.FIND_CLASS, getLispClassName());
+	  }
+	  final public String printObjectImpl()
+	  {
+	    return readableString(Symbol.FIND_CLASS, getLispClassName());
+	  }
+	  abstract public String printObjectUnreadable();
+	  
   @Override
 	public int hashCode() {
 //	    if(name!=null)

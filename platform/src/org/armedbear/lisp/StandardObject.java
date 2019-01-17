@@ -33,6 +33,8 @@
 
 package org.armedbear.lisp;
 
+import java.io.IOException;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrologSync;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
@@ -215,7 +217,7 @@ public class StandardObject extends SubLStructInterpreted implements SubLStruct
 	}
 
 	@Override
-	public String printObjectImpl()
+	public String printObjectImpl() throws IOException
 	{
 		final LispThread thread = LispThread.currentThread();
 		int maxLevel = Integer.MAX_VALUE;

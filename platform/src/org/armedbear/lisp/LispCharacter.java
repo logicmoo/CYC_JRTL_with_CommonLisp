@@ -245,6 +245,7 @@ abstract public class LispCharacter extends LispObject
     // false."
     boolean printEscape =
       printReadably || (Symbol.PRINT_ESCAPE.symbolValue(thread) != NIL);
+        
     StringBuilder sb = new StringBuilder();
     if (printEscape)
       {

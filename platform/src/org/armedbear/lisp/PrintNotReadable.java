@@ -38,9 +38,13 @@ import static org.armedbear.lisp.Lisp.*;
 public class PrintNotReadable extends LispError
 {
     public PrintNotReadable(LispObject initArgs)
+    
     {
         super(StandardClass.PRINT_NOT_READABLE);
         super.initialize(initArgs);
+        LispObject lo = initArgs.cdr().car();
+        String s= lo.printReadableObject(true);
+        
         LispObject object = null;
         while (initArgs != NIL) {
             LispObject first = initArgs.car();

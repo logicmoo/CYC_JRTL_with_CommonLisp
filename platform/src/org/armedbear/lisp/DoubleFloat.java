@@ -582,7 +582,7 @@ public final class DoubleFloat extends SubLDoubleFloat
         }
 
         LispThread thread = LispThread.currentThread();
-        boolean printReadably = Symbol.PRINT_READABLY.symbolValue(thread) != NIL;
+        boolean printReadably = Lisp.isPrintReadable(thread);
 
         if (value != value) {
             if (printReadably)

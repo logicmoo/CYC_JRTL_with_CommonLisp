@@ -348,7 +348,7 @@ public class StandardClass extends SlotClass
     return super.typep(type);
   }
 
-  public String printObjectImpl()
+  public String printObjectUnreadable()
   {
     StringBuilder sb =
       new StringBuilder(Symbol.STANDARD_CLASS.printObject());

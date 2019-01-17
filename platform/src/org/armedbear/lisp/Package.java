@@ -1173,9 +1173,10 @@ public class Package extends SubLPackage implements java.io.Serializable
 		return (Symbol[]) getLocalSymbols().toArray();
 	}
 
-    public String printObjectImpl()
+    public String printObject()
     {
-		if (Lisp.initialized && _PRINT_FASL_.symbolValue() != NIL && name != null) {
+    	boolean printReadable = Lisp.initialized && (_PRINT_FASL_.symbolValue() != NIL|| Lisp.isPrintReadable(null)) && name != null;
+		if (printReadable) {
 			StringBuilder sb = new StringBuilder("#.(CL:FIND-PACKAGE \"");
 			sb.append(name);
 			sb.append("\")");
