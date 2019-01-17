@@ -191,7 +191,7 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 
 
 	public LispObject getStreamElementType() {
-		return elementType;
+		return elementType.toLispObject();
 	}
 
 	@Override
@@ -487,10 +487,13 @@ public abstract class AbstractSubLStream extends StructureObject implements SubL
 	}
 
 	protected void setStreamElementType(LispObject streamElementType) {
-		this.elementType = streamElementType;
+		this.elementType = streamElementType.toLispObject();
 	}
 
 	protected void setElementType(SubLSymbol elementType) {
 		this.subLElementType = elementType;
+		if(this.elementType==null) {
+			this.elementType = elementType.toLispObject();
+		}
 	}
 }

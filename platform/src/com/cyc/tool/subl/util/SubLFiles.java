@@ -51,17 +51,25 @@ public class SubLFiles {
 					return CommonSymbols.UNDECLARED;
 				}
 			};
-		public static final VariableAccessMode GLOBAL_TOP_LEVEL = new VariableAccessMode("GLOBAL-TOP-LEVEL") {
+			
+			/* Process Local */
+		public static final VariableAccessMode GLOBAL_TOP_LEVEL = new VariableAccessMode("GLOBAL-TOP-LEVEL")
+		{
 			@Override
-			public SubLSymbol toSymbol() {
+			public SubLSymbol toSymbol()
+			{
 				return Keyword.TOP_LEVEL;
-		}
+			}
 		};
-		public static final VariableAccessMode INHERITED_ENV = new VariableAccessMode("INHERITED_ENV") {
-		@Override
-			public SubLSymbol toSymbol() {
+		
+		/* Process Local/Iherited from parent */
+		public static final VariableAccessMode INHERITED_ENV = new VariableAccessMode("INHERITED-ENV")
+		{
+			@Override
+			public SubLSymbol toSymbol()
+			{
 				return Keyword.INHERITED;
-		}
+			}
 		};
 
 		private final String toStr;

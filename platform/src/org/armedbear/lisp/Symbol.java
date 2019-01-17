@@ -34,6 +34,9 @@
 package org.armedbear.lisp;
 
 import static org.armedbear.lisp.Lisp.*;
+
+import org.semanticweb.kaon2.api.owl.axioms.SubObjectPropertyOf;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLEnvironment;
@@ -83,7 +86,8 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	//boolean slValueMode = !clValueMode;
 	private int subLID = INVALID_BINDING_INDEX;
 	protected SubLFiles.VariableAccessMode accessModeVar = VariableAccessMode.UNDECLARED;
-	public transient SubLObject value = SubLSymbol.UNBOUND;
+	private transient SubLObject value = SubLSymbol.UNBOUND;
+	ThreadLocal<SubLObject> threadLocalValue = null;
 	private int identityHashCode = -1;
     ///boolean barrier = true;
 	private Package disownedby;
@@ -132,13 +136,70 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	}
 
 	@Override
-	public void forceGlobalValue(SubLObject newValue) {
-		if (isConstantSymbol())
-			value = (LispObject) newValue;
-		else
-			value = newValue;
+	public void forceGlobalValue(SubLObject newValue)
+	{
+		setTLValue(newValue);
 	}
 
+	public SubLObject getTLValue()
+	{
+		if (threadLocalValue != null)
+		{
+			SubLObject maybe = threadLocalValue.get();
+			if (maybe != null) return maybe;
+		}
+		return value;
+	}
+
+	private void checkChange(SubLObject value)
+	{
+		SubLObject waz = getTLValue();
+		if (isConstantSymbol() && waz == null) { return; }
+		if (!isSpecialSymbol() || isTraced || threadLocalValue != null)
+		{
+			if (isTraced)
+			{
+				notifyChange(value);
+			}
+			else
+			{
+				if (accessModeVar != VariableAccessMode.LEXICAL && accessModeVar != VariableAccessMode.UNDECLARED)
+				{
+
+					if (waz != value)
+					{
+						notifyChange(value);
+					}
+				}
+			}
+		}
+
+	}
+
+	public void setTLValue(SubLObject value)
+	{
+		checkChange(value);
+		
+		if (threadLocalValue != null)
+		{
+			threadLocalValue.set(value);
+			if (this.value == null)
+			{
+				this.value = value;
+			}
+		}
+		else
+		{
+			this.value = value;
+		}
+
+	}
+
+	private void notifyChange(SubLObject value)
+	{
+		Debug.warn("changing value of " + this + " to " + value);
+		
+	}
 	@Override
 	public int getBindingId() {
 		int subLID = checkSubLId();
@@ -177,7 +238,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 
 	@Override
 	public SubLObject getGlobalValue() {
-		SubLObject result = this.value;
+		SubLObject result = this.getTLValue();
 		if (result != SubLSymbol.UNBOUND) return result;
 		if (insideToString==1) {
 			try {
@@ -211,7 +272,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 			if (result != SubLSymbol.UNBOUND) return result;
 		}
 		//SubLObject result = isConstantSymbol() ? value : value;
-		SubLObject result = this.value;
+		SubLObject result = this.getTLValue();
 		if (result != SubLSymbol.UNBOUND) return result;
 		if(!throh) return null;
 		unboundError();
@@ -264,7 +325,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 	@Override
 	public SubLOperator getFunction() {
 		LispObject function = getSymbolFunction();
-		if (function!=null)return (SubLOperator) function;
+		if (function != null) return (SubLOperator) function;
 		Errors.error(this + " is not fboundp.");
 		return null;
 	}
@@ -351,13 +412,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 
 	@Override
 	public void setDynamicValue(SubLObject newValue) {
-		resetCache();
-		SubLObject[] bindings = SubLProcess.currentSubLThread().bindingsList;
-		int subLID = checkSubLId();
-		if (bindings[subLID] != SubLSymbol.UNBOUND)
-			bindings[subLID] = newValue;
-		else
-			value = newValue;
+		setDynamicValue(newValue, SubLProcess.currentSubLThread());
 	}
 
 	@Override
@@ -367,24 +422,18 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 		if (bindings[subLID] != SubLSymbol.UNBOUND)
 			bindings[subLID] = newValue;
 		else
-			value = newValue;
+			setTLValue(newValue);
 	}
 
 	@Override
 	public void setDynamicValue(SubLObject newValue, SubLThread thread) {
-		resetCache();
-		int subLID = checkSubLId();
-		SubLObject[] bindings = thread.bindingsList;
-		if (bindings[subLID] != SubLSymbol.UNBOUND)
-			bindings[subLID] = newValue;
-		else
-			value = newValue;
+		setDynamicValue(newValue, thread.bindingsList);
 	}
 
 	@Override
 	public void setGlobalValue(SubLObject newValue) {
 		resetCache();
-		value = newValue;
+		setTLValue(newValue);
 	}
 
 	public void setUndeclaredValue(SubLObject newValue) {
@@ -394,7 +443,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 		{
 			env.setBinding(this, newValue);
 		}
-		value = (LispObject) newValue;
+		setTLValue((LispObject) newValue);
 	}
 
 
@@ -404,16 +453,21 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 			SubLObject[] bindings = SubLProcess.currentSubLThread().bindingsList;
 			if (bindings[subLID] != SubLSymbol.UNBOUND)
 				bindings[subLID] = value;
-			else
-				this.value = value;
+			else {
+				this.setTLValue(value);
+				if(isSpecialVariable()) {
+					
+				}
+			}
 		} else if (accessModeVar == VariableAccessMode.LEXICAL)
-			this.value = value; // was setGlobalValue()
+			this.setTLValue(value); // was setGlobalValue()
 		else if (accessModeVar == VariableAccessMode.CONSTANT) {
-			if(this.value==null) {
-				this.value = value;
+			if (this.getTLValue() == null)
+			{
+				this.setTLValue(value);
 				return;
 			}
-			if(!this.value.equal(value)) {
+			if(!this.getTLValue().equal(value)) {
 				if (isConstantSymbol()) {
 					program_error(princToString() + " is a constant and thus cannot be set.");
 				}
@@ -424,10 +478,10 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 		else if (accessModeVar == VariableAccessMode.UNDECLARED) {
 			SubLEnvironment env = SubLEnvironment.currentEnvironment();
 			env.setBinding(this, value);
-			if(!isSpecialVariable()) this.value = (LispObject) value;
+			if(!isSpecialVariable()) this.setTLValue((LispObject) value);
 		}
 		else if (accessModeVar == VariableAccessMode.GLOBAL_TOP_LEVEL) {
-			this.value = (LispObject) value;
+			this.setTLValue((LispObject) value);
 		} else
 			Errors.error("Don't know about access mode: " + accessModeVar);
 	}
@@ -456,7 +510,7 @@ public class Symbol extends AbstractSubLSymbol implements java.io.Serializable, 
 
 	@Override
 	public boolean boundp() {
-		if( value != SubLSymbol.UNBOUND || isKeyword()) return true;
+		if( getTLValue() != SubLSymbol.UNBOUND || isKeyword()) return true;
 
 		return false;
 	}
@@ -655,7 +709,7 @@ public Symbol(AbstractString string, Package pkg)
     LispObject parts = NIL;
     parts = parts.push(new Cons("name", name));
     parts = parts.push(new Cons("package", pkg));
-    parts = parts.push(new Cons("value", (LispObject)value));
+    parts = parts.push(new Cons("value", (LispObject)getTLValue()));
     parts = parts.push(new Cons("function", function));
     parts = parts.push(new Cons("operator", (LispObject)function));
     parts = parts.push(new Cons("plist", propertyList));
@@ -729,7 +783,7 @@ public Symbol(AbstractString string, Package pkg)
   public void initializeGlobal(LispObject zero) {
 	//setAccessMode(accessModeVar.GLOBAL_TOP_LEVEL);
 	  setAccessMode(accessModeVar.DYNAMIC);
-	value = zero;
+	setTLValue(zero);
   }
 
   public final void setSpecial(boolean b)
@@ -743,7 +797,8 @@ public Symbol(AbstractString string, Package pkg)
   public final void initializeSpecial(LispObject value)
   {
     flags |= FLAG_SPECIAL;
-    this.value = value;
+    threadLocalValue = new ThreadLocal<SubLObject>();
+    this.setTLValue(value);
   }
 
   public boolean isConstantSymbol()
@@ -804,7 +859,7 @@ public Symbol(AbstractString string, Package pkg)
   @Override
   public LispObject getSymbolValue()
   {
-    return (LispObject) value;
+    return (LispObject) getTLValue();
   }
 
   /** Sets the value associated with the symbol
@@ -815,9 +870,6 @@ public Symbol(AbstractString string, Package pkg)
    * @see Symbol#symbolValue
    */
   public final void setSymbolValue(SubLObject argVal) {
-	  if(isTraced) {
-		  Debug.warn("changing value of " + this);
-	  }
   	setValueCL((LispObject) argVal);
 	  	//setValueSL(argVal);
  }
@@ -834,7 +886,6 @@ public Symbol(AbstractString string, Package pkg)
 		final Environment env = Environment.newEnvironment();
 		final Symbol symbol = this;
 		boolean saved = false;
-
 		if (symbol.isSpecialVariable() || env.isDeclaredSpecial(symbol)) {
 			SpecialBinding binding = thread.getSpecialBinding(symbol);
 			if (binding != null) {
@@ -858,12 +909,12 @@ public Symbol(AbstractString string, Package pkg)
 			}
 			if (!saved) {
 				if(isConstantSymbol()) {
-					if(this.value!=null) {
-						if(!this.value.equal(argVal)) {
+					if(this.getTLValue()!=null) {
+						if(!this.getTLValue().equal(argVal)) {
 							program_error(princToString() + " is a constant and thus cannot be reset.");
 						}
 					}
-					this.value = argVal;
+					this.setTLValue(argVal);
 					return;
 				}
 				if(true) {
@@ -871,8 +922,8 @@ public Symbol(AbstractString string, Package pkg)
 					 return;
 				}
 				if(true) {
-					if(this.value!=null) {
-						if(!this.value.equal(argVal)) {
+					if(this.getTLValue()!=null) {
+						if(!this.getTLValue().equal(argVal)) {
 							if(true) {
 								thread.bindSpecial(symbol, argVal);
 								return;
@@ -880,7 +931,7 @@ public Symbol(AbstractString string, Package pkg)
 							program_error(princToString() + " is a special and thus cannot be reset.");
 						}
 					}
-					this.value = argVal;
+					this.setTLValue(argVal);
 					return;
 				}
 				thread.bindSpecial(symbol, argVal);
@@ -940,21 +991,21 @@ public void symbolSetQ(LispObject argVal, Environment envI, LispThread threadI) 
 						else {
 							lastCaller = slthread;
 							callerValue = argVal;
-							this.value = argVal;
+							this.setTLValue(argVal);
 						}
 					} else {
 						lastCaller = null;
-						this.value = argVal;
+						this.setTLValue(argVal);
 					}
 					return;
 				} else if (accessModeVar == VariableAccessMode.LEXICAL)
-					this.value = argVal; // was setGlobalValue()
+					this.setTLValue(argVal); // was setGlobalValue()
 				else if (accessModeVar == VariableAccessMode.CONSTANT)
 					Errors.error("Can't set the value of constant symbol: " + this);
 				else if (accessModeVar == VariableAccessMode.UNDECLARED) {
 					SubLEnvironment env1 = SubLEnvironment.currentEnvironment();
 					env1.setBinding(this, argVal);
-					this.value = (LispObject) argVal;
+					this.setTLValue((LispObject) argVal);
 				} else
 					Errors.error("Don't know about access mode: " + accessModeVar);
 				if (accessModeVar==VariableAccessMode.CONSTANT && isConstantSymbol()) {
@@ -987,15 +1038,15 @@ public void symbolSetQ(LispObject argVal, Environment envI, LispThread threadI) 
 						if (bindings[subLID] != SubLSymbol.UNBOUND)
 							bindings[subLID] = argVal;
 						else
-							this.value = argVal;
+							this.setTLValue(argVal);
 					} else if (accessModeVar == VariableAccessMode.LEXICAL)
-						this.value = argVal; // was setGlobalValue()
+						this.setTLValue(argVal); // was setGlobalValue()
 					else if (accessModeVar == VariableAccessMode.CONSTANT)
 						Errors.error("Can't set the value of constant symbol: " + this);
 					else if (accessModeVar == VariableAccessMode.UNDECLARED) {
 						SubLEnvironment env1 = SubLEnvironment.currentEnvironment();
 						env1.setBinding(this, argVal);
-						this.value = (LispObject) argVal;
+						this.setTLValue((LispObject) argVal);
 					} else
 						Errors.error("Don't know about access mode: " + accessModeVar);
 				}
@@ -1005,10 +1056,11 @@ public void symbolSetQ(LispObject argVal, Environment envI, LispThread threadI) 
 /**
  *
  */
-private void resetCache() {
-	lastCaller = null;
-	callerValue = null;
-}
+	private void resetCache()
+	{
+		lastCaller = null;
+		callerValue = null;
+	}
 
     @Override
   	public int hashCode() {
@@ -1096,7 +1148,7 @@ private void resetCache() {
 		LispObject result;
 		if (symbol.isSpecialVariable()) {
 			if((flags & FLAG_CONSTANT) != 0)
-				return (LispObject) value;
+				return (LispObject) getTLValue();
 			else
 				result = thread.lookupSpecial(symbol);
 		} else {
@@ -1110,7 +1162,7 @@ private void resetCache() {
 		if (result == null) {
 			result = symbol.getSymbolMacro();
 			if (result == null) {
-				result = (LispObject) value;
+				result = (LispObject) getTLValue();
 			}
 			if (result == null) {
 				return (LispObject) getValueSL(false);
@@ -1134,9 +1186,9 @@ private void resetCache() {
   public final LispObject symbolValueNoThrowInternal(LispThread thread, Environment env)
 	{
 		if (accessModeVar == VariableAccessMode.CONSTANT)
-			return (LispObject) value;
+			return (LispObject) getTLValue();
 		if (accessModeVar == VariableAccessMode.GLOBAL_TOP_LEVEL)
-			return (LispObject) value;
+			return (LispObject) getTLValue();
 
 		Object newCaller = null;
 		SubLObject result = null;
@@ -1220,7 +1272,7 @@ private void resetCache() {
 				} // SubLObject result = isConstantSymbol() ? value : value;
 			}
 		}
-		result = this.value;
+		result = this.getTLValue();
 		if (result != SubLSymbol.UNBOUND)
 			return (LispObject) result;
 		return null;
@@ -1865,7 +1917,7 @@ private void resetCache() {
 			neatsies++;
 		}
 
-		if (value != this && value != null) {
+		if (getTLValue() != this && getTLValue() != null) {
 			neatsies++;
 		}
 		if(propertyList!=NIL && propertyList!=null) {
@@ -1935,7 +1987,6 @@ private void resetCache() {
 		  //return getParts().toString();
 	  }
 
-
 // External symbols in CL package.
   public static final Symbol AND_ALLOW_OTHER_KEYS =
     PACKAGE_CL.addExternalSymbol("&ALLOW-OTHER-KEYS");
@@ -1975,8 +2026,14 @@ private void resetCache() {
     PACKAGE_CL.addExternalSymbol("*DEBUGGER-HOOK*");
   public static final Symbol DEFAULT_PATHNAME_DEFAULTS =
     PACKAGE_CL.addExternalSymbol("*DEFAULT-PATHNAME-DEFAULTS*");
+  static {
+	  DEFAULT_PATHNAME_DEFAULTS.traceSymbol(debug);
+  }
   public static final Symbol ERROR_OUTPUT =
     PACKAGE_CL.addExternalSymbol("*ERROR-OUTPUT*");
+  static {
+	  DEFAULT_PATHNAME_DEFAULTS.traceSymbol(debug);
+  }
   public static final Symbol FEATURES =
     PACKAGE_CL.addExternalSymbol("*FEATURES*");
   public static final Symbol GENSYM_COUNTER =

@@ -74,6 +74,7 @@ import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.LispThread;
 import org.armedbear.lisp.Main;
+import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.SystemCurrent;
 
 import gnu.regexp.RE;
@@ -247,11 +248,11 @@ public final class Editor extends JPanel implements Constants,
             if (arg.startsWith("-")) {
                 if (arg.equals("-h") || arg.equals("-help") || arg.equals("--help")) {
                     usage();
-                    if(mayExit)System.exit(0);
+                    if(mayExit)BeanShellCntrl.exit(0);
                 }
                 if (arg.equals("-version")) {
                     version();
-                    if(mayExit)System.exit(0);
+                    if(mayExit)BeanShellCntrl.exit(0);
                 }
                 if (arg.equals("-d") || arg.equals("--debug")) {
                     debug = true;
@@ -360,7 +361,7 @@ public final class Editor extends JPanel implements Constants,
                     out.flush();
                     out.close();
                     socket.close();
-                    if(mayExit)System.exit(0);
+                    if(mayExit)BeanShellCntrl.exit(0);
                 }
             }
             catch (ConnectException e) {
@@ -387,6 +388,7 @@ public final class Editor extends JPanel implements Constants,
 
         tagFileManager = new TagFileManager();
 
+        if (!Main.noGUI) {
         setCurrentEditor(new Editor(null));
 
         currentEditor.getFrame().updateControls();
@@ -397,6 +399,8 @@ public final class Editor extends JPanel implements Constants,
 
         currentEditor.getFrame().placeWindow();
 
+        }
+        
         Buffer toBeActivated = null;
 
         if (restoreSession) {
@@ -423,7 +427,7 @@ public final class Editor extends JPanel implements Constants,
         if (toBeActivated == null)
             toBeActivated = new Directory(currentDir);
 
-        currentEditor.activate(toBeActivated);
+        if (!Main.noGUI) currentEditor.activate(toBeActivated);
 
         if (startServer)
             Server.startServer();
@@ -437,7 +441,7 @@ public final class Editor extends JPanel implements Constants,
                     sidebar.setUpdateFlag(SIDEBAR_ALL);
             }
         };
-        SwingUtilities.invokeLater(r);
+        if (!Main.noGUI) SwingUtilities.invokeLater(r);
 
         if (isLispInitialized())
             LispThread.remove(Thread.currentThread());
@@ -475,12 +479,12 @@ public final class Editor extends JPanel implements Constants,
     public static final void fatal(String message)
     {
         System.err.println(message);
-        System.exit(1);
+        BeanShellCntrl.exit(1);
     }
     public static final void fatal(boolean mayExit, String message)
     {
         System.err.println(message);
-        if(mayExit)System.exit(1);
+        if(mayExit)BeanShellCntrl.exit(1);
     }
 
     private static final void unknown(String arg)
@@ -4371,7 +4375,7 @@ public final class Editor extends JPanel implements Constants,
         Server.stopServer();
         pendingOperations.run();
         setDefaultCursor();
-        System.exit(0);
+        BeanShellCntrl.exit(0);
     }
 
     public void killFrame()

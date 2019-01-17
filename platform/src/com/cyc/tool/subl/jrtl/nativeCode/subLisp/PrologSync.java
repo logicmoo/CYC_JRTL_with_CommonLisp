@@ -18,6 +18,7 @@ import java.util.Set;
 import org.armedbear.lisp.Go;
 import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispClass;
+import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.Main;
 import org.armedbear.lisp.StructureObject;
 import org.armedbear.lisp.Symbol;
@@ -43,6 +44,7 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStruct;
 import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLStream;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
@@ -297,22 +299,37 @@ public class PrologSync extends SubLTrampolineFile
 		{
 			final BeanBowl guibowl = BeanShellCntrl.bowl;
 			serial = guibowl.generateUniqueName(className, struct);
-			if (!Main.noBSHGUI) BeanShellCntrl.addObject(className + serial, struct);
+			if (!Main.noBSHGUI)
+			{
+				BeanShellCntrl.addObject(className + serial, struct);
+			}
 		}
+		addTypeThing(className, struct);
+		return extractedProlog(struct, className, serial);
+
+	}
+
+	private static Term extractedProlog(AbstractSubLStruct struct, final String className, long serial)
+
+	{
+		Term was = struct.termRef;
 		if (!Main.disablePrologSync)
 		{
 			try
 			{
 				final Term shouldBe = toProlog(className, struct, new LinkedList());
-				struct.termRef = shouldBe;
+				if (was != shouldBe)
+				{
+					struct.termRef = shouldBe;
+				}
 				//return NEEDSYNCED;
 				try
 				{
 					prologAssert(className, serial, shouldBe);
-					//String s = shouldBe.toString();
+					String s = shouldBe.toString();
 				} catch (Throwable e)
 				{
-					//e.printStackTrace();
+					e.printStackTrace();
 					System.err.println("PrologAssertError: " + struct.getParts());
 					return UNSYNCED;
 				}
@@ -324,9 +341,7 @@ public class PrologSync extends SubLTrampolineFile
 			}
 
 		}
-		addTypeThing(className, struct);
 		return SYNCED;
-
 	}
 
 	private static String getClassName(AbstractSubLStruct struct)
@@ -549,8 +564,22 @@ public class PrologSync extends SubLTrampolineFile
 			}
 			if (o.isSymbol())
 			{
-				String s = ((Symbol) o.toSymbol()).getQualifiedName();
-				return term = new Atom(s, "text");
+				Symbol s = o.toSymbol().toLispObject();
+				SubLPackage pack = s.getPackage();
+				String prefix;
+				if (pack == null)
+				{
+					prefix = "nil";
+				}
+				else if (pack == Lisp.PACKAGE_KEYWORD)
+				{
+					prefix = "";
+				}
+				else
+				{
+					prefix = pack.showShortName();
+				}
+				return term = new Atom(prefix + ":" + s.getName(), "text");
 
 			}
 			if (constants_high.installed_constant_p(o) != SubLNil.NIL)
@@ -594,6 +623,15 @@ public class PrologSync extends SubLTrampolineFile
 			}
 			// skipped.remove(o);
 		}
+	}
+
+	public static Term toProlog(Object o)
+	{
+		if (o == null) return JPL.JNULL;
+		if (o instanceof Term) { return (Term) o; }
+		if (o instanceof IPrologifiable) { return ((IPrologifiable) o).toProlog(new LinkedList()); }
+		if (o instanceof SubLObject) { return toProlog((SubLObject) o, new LinkedList()); }
+		return toPrologFromJava(o);
 	}
 
 	public static Term toPrologFromJava(Object o)

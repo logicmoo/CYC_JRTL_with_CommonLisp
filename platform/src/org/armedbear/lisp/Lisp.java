@@ -71,6 +71,9 @@ public class Lisp
   public static boolean NO_STACK_FRAMES = !debug;
   public static int insideToString = 0;
 
+  static final WeakHashMap<LispObject, LispObject>
+  documentationHashTable = new WeakHashMap<LispObject, LispObject>();
+  
   public static boolean LISP_NOT_JAVA = true;
   // Packages.
   public static final Package PACKAGE_CL =
@@ -123,8 +126,6 @@ public class Lisp
   @DocString(name="nil")
   public static final Symbol NIL = Nil.NIL;
 
-  static final WeakHashMap<LispObject, LispObject>
-    documentationHashTable = new WeakHashMap<LispObject, LispObject>();
   static
   {
     T.initializeConstant(T);
@@ -3090,12 +3091,12 @@ public static void checkOutput(Symbol standardOutput, LispObject stdout2) {
 	}
 
 	public static boolean isText(SubLObject elementType) {
-		if (Symbol.CHARACTER == elementType) return true;
-		if (Keyword.TEXT_KEYWORD_CHARACTER == elementType) return true;
-		if (elementType == Symbol.BASE_CHAR) return true;
-		if (Symbol.CHAR == elementType) return true;
-		if (Keyword.TEXT_KEYWORD == elementType) return true;
-
+		if (elementType==null) throw new NullPointerException("isText"); 
+		if (Symbol.CHARACTER.eql(elementType)) return true;
+		if (Keyword.TEXT_KEYWORD_CHARACTER.eql(elementType)) return true;
+		if (Symbol.BASE_CHAR.eql(elementType)) return true;
+		if (Symbol.CHAR.eql(elementType)) return true;
+		if (Keyword.TEXT_KEYWORD.eql(elementType)) return true;
 		return false;
 	}
 

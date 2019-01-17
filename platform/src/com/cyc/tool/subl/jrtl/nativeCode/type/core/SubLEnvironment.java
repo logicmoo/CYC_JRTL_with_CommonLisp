@@ -118,7 +118,6 @@ abstract public class SubLEnvironment extends FromSubLisp {
 	}
 
 
-
 	public SubLObject lookupBinding(SubLSymbol var) {
 		if (!var.isUndeclared())
 			Errors.error("Illegal call of lookupBinding on declared symbol: " + var);
@@ -128,7 +127,7 @@ abstract public class SubLEnvironment extends FromSubLisp {
 				return currentBinding.getValue();
 		}
 		if (outerEnvironment == null)
-			return ((Symbol)var).value;
+			return ((Symbol)var).getTLValue();
 		return outerEnvironment.lookupBinding(var);
 	}
 

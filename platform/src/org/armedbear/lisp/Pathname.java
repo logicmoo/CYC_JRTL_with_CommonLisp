@@ -2633,6 +2633,7 @@ public class Pathname extends LispObject {
 
     static {
         LispObject obj = Symbol.DEFAULT_PATHNAME_DEFAULTS.getSymbolValue();
+        
         Pathname coerceToPathname = coerceToPathname(obj);
 		Symbol.DEFAULT_PATHNAME_DEFAULTS.setSymbolValue(coerceToPathname);
     }

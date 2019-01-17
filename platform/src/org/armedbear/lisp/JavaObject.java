@@ -214,7 +214,7 @@ public final class JavaObject extends LispObject {
             return getInstance(obj, intendedClass);
 
         if (obj == null) return NIL;
-
+        
         if (obj instanceof LispObject)
             return (LispObject)obj;
 

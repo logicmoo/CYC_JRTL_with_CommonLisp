@@ -407,7 +407,7 @@ public class SubLMain
 			if (shouldQuitAfterExecutingInitializationForm()) if (me != null)
 				me.doSystemCleanupAndExit(exit_with_error ? 1 : 0);
 			else
-				System.exit(exit_with_error ? 1 : 0);
+				BeanShellCntrl.exit(exit_with_error ? 1 : 0);
 		}
 	}
 
@@ -856,7 +856,7 @@ public class SubLMain
 			{
 			}
 		StreamsLow.$terminal_io$.getValue().toOutputStream().flush();
-		System.exit(code);
+		BeanShellCntrl.exit(code);
 	}
 
 	public void processCommandLineArgs(String[] argsIn)

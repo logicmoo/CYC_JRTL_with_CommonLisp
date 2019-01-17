@@ -122,7 +122,7 @@ public abstract class LispThread extends LispObject
                       // Might happen.
                 }
                 catch (ProcessingTerminated e) {
-                    System.exit(e.getStatus());
+                    Lisp.exit(e.getStatus());
                 }
                 catch (Throwable t) { // any error: process thread interrupts
                     if (isInterrupted()) {

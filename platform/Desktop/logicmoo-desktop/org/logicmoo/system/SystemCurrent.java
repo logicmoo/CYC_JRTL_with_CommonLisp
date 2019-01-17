@@ -209,6 +209,7 @@ public class SystemCurrent
 	 */
 	public static void setErr(PrintStream err)
 	{
+		if (err != null && underlyingStream(err) == null) { return; }
 		SystemInOutErr.get().err = err;
 	}
 

@@ -321,23 +321,23 @@ public final class Interpreter implements Runnable
 			{
 				Symbol.FEATURES.setSymbolValue(new Cons(Keyword.J, Symbol.FEATURES.getSymbolValue()));
 				Load.loadSystemFile("boot.lisp", false, false, false);
+				try
+				{
 
-				try
-				{
-					Class.forName("org.armedbear.j.LispAPI");
-				} catch (ClassNotFoundException e)
-				{
-				} // FIXME: what to do?
-				try
-				{
-					Load.loadSystemFile("j.lisp", false); // not being autoloaded
-				} catch (Throwable e)
-				{
-					e.printStackTrace();
-				} // FIXME: what to do?
-				try
-				{
-					// Load.loadSystemFile("emacs.lisp", true); // not being autoloaded
+					try
+					{
+						Class.forName("org.armedbear.j.LispAPI");
+					} catch (ClassNotFoundException e)
+					{
+					} // FIXME: what to do?
+					try
+					{
+						Load.loadSystemFile("j.lisp", false); // not being autoloaded
+					} catch (Throwable e)
+					{
+						e.printStackTrace();
+					} // FIXME: what to do?
+					  // Load.loadSystemFile("emacs.lisp", true); // not being autoloaded
 				} catch (Throwable e)
 				{
 					e.printStackTrace();
@@ -379,7 +379,8 @@ public final class Interpreter implements Runnable
 				Interpreter.noinit = true;
 				// checks local directory firsts
 				File file = new File(".abclrc");
-				if (!file.isFile()) {
+				if (!file.isFile())
+				{
 					String userHome = System.getProperty("user.home");
 					file = new File(userHome, ".abclrc");
 				}
@@ -529,16 +530,14 @@ public final class Interpreter implements Runnable
 						SubLPackage.setCurrentPackage("CL-USER");
 					}
 				}
-						        
-		    	else if (arg.equals("--compile-system"))
+
+				else if (arg.equals("--compile-system"))
 				{
 					if (i + 1 < args.length)
 					{
 						try
 						{
-							evaluate("(setf *load-verbose* t)"
-									+ "(handler-case (compile-system :zip nil :quit t :output-path \"build/classes/\") "
-									+ "(t (x) (progn (format t &quot;~A: ~A~%&quot; (type-of x) x) (exit :status -1))))");
+							evaluate("(setf *load-verbose* t)" + "(handler-case (compile-system :zip nil :quit t :output-path \"build/classes/\") " + "(t (x) (progn (format t &quot;~A: ~A~%&quot; (type-of x) x) (exit :status -1))))");
 						} catch (UnhandledCondition c)
 						{
 							final String separator = System.getProperty("line.separator");
@@ -771,7 +770,7 @@ public final class Interpreter implements Runnable
 		{
 			((Stream) Symbol.STANDARD_OUTPUT.getSymbolValue())._finishOutput();
 			((Stream) Symbol.ERROR_OUTPUT.getSymbolValue())._finishOutput();
-			System.exit(status);
+			BeanShellCntrl.exit(status);
 		}
 	}
 

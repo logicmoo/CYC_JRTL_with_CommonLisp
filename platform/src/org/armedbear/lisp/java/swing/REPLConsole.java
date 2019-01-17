@@ -60,6 +60,7 @@ import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.JTextComponent;
 import org.armedbear.lisp.Function;
 import org.armedbear.lisp.Interpreter;
+import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.LispThread;
 import org.armedbear.lisp.Main;
@@ -384,7 +385,7 @@ public class REPLConsole extends DefaultStyledDocument {
 			todo.start();
 		} catch (Throwable e) {
 			e.printStackTrace();
-			System.exit(1); // Ok. We haven't done anything useful yet.
+			Lisp.exit(1); // Ok. We haven't done anything useful yet.
 		}
 	}
 

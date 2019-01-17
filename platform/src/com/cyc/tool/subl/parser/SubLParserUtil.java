@@ -7,6 +7,9 @@ import java.io.BufferedReader;
 import java.io.Reader;
 import java.io.StringReader;
 
+import org.armedbear.lisp.Lisp;
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLCharacter;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -79,7 +82,7 @@ public class SubLParserUtil {
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Finished abnormally");
-			System.exit(-1);
+			BeanShellCntrl.exit(-1);
 		}
 	}
 

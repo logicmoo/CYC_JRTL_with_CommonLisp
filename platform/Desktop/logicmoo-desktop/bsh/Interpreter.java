@@ -36,6 +36,7 @@ package bsh;
 import java.util.Iterator;
 import java.util.Vector;
 
+import org.armedbear.lisp.Lisp;
 import org.armedbear.lisp.Main;
 import org.logicmoo.system.BeanShellCntrl;
 import org.logicmoo.system.SystemCurrent;
@@ -567,7 +568,7 @@ public class Interpreter
         }
 
 		if ( interactive && exitOnEOF && !Main.noExit)
-			System.exit(0);
+			BeanShellCntrl.exit(0);
     }
 
 	// begin source and eval

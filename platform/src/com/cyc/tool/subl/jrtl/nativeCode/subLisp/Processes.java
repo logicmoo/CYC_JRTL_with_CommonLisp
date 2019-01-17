@@ -13,6 +13,8 @@ import java.util.Map;
 
 import org.armedbear.lisp.Keyword;
 import org.armedbear.lisp.Lisp;
+import org.armedbear.lisp.Main;
+import org.logicmoo.system.BeanShellCntrl;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
@@ -261,7 +263,15 @@ public class Processes extends SubLTrampolineFile {
 		if (code == UNPROVIDED)
 			code = ZERO_INTEGER;
 		SubLInteger codeTyped = code.toInteger();
-		SubLMain.me.doSystemCleanupAndExit(codeTyped.intValue());
+		int status = codeTyped.intValue();
+		if (Main.noExit)
+		{
+			BeanShellCntrl.exit(status);
+		}
+		else
+		{
+			SubLMain.me.doSystemCleanupAndExit(status);
+		}
 		return SubLNil.NIL;
 	}
 

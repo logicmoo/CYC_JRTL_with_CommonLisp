@@ -80,6 +80,7 @@ public final class Main
 		assert (System.in instanceof In);
 		abclProcessArgs = true;
 		Main.noBSH = true;
+		Main.noExit = false;
 		String[] argsNew = Main.extractOptions(args);
 		Thread t = mainUnjoined(argsNew);
 		if (true)
@@ -139,7 +140,7 @@ public final class Main
 						if (after != null) after.run();
 					} catch (ProcessingTerminated e)
 					{
-						System.exit(e.getStatus());
+						Lisp.exit(e.getStatus());
 					} catch (Throwable e)
 					{
 						throw JVMImpl.doThrow(e);
@@ -180,6 +181,7 @@ public final class Main
 	public static boolean trackStructs = true;
 	public static boolean noBSH = false;
 	public static boolean noBSHGUI = true;
+	public static boolean noGUI = false;
 
 	public static String subLisp = null;
 	public static int lispInstances = 0;
@@ -226,8 +228,9 @@ public final class Main
 		{
 			disablePrologSync = true;
 		}
-		if (argsList.remove("--headless"))
+		if (argsList.remove("--headless") || argsList.remove("--nogui"))
 		{
+			noGUI = true;
 			noBSHGUI = true;
 		}
 		if (argsList.remove("--beandesk"))
