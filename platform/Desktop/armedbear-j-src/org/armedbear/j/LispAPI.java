@@ -52,7 +52,6 @@ import gnu.regexp.REException;
 
 public final class LispAPI extends Lisp
 {
-  private static final Preferences preferences = Editor.preferences();
 
   public static final Package PACKAGE_J = Packages.createPackage("J");
   private static final Symbol INVOKE_HOOK = PACKAGE_J.intern("INVOKE-HOOK");
@@ -84,7 +83,12 @@ public final class LispAPI extends Lisp
   public static final Symbol _LAST_COMMAND_ =
     exportSpecial("*LAST-COMMAND*", PACKAGE_J, NIL);
 
-  public static final void eventHandled()
+	private static Preferences getPreferences()
+	{
+		return Editor.preferences();
+	}
+
+public static final void eventHandled()
   {
     _LAST_COMMAND_.setSymbolValue(_CURRENT_COMMAND_.getSymbolValue());
     _CURRENT_COMMAND_.setSymbolValue(NIL);
@@ -866,7 +870,7 @@ public final class LispAPI extends Lisp
     {
       public LispObject execute()
       {
-        preferences.killTheme();
+        getPreferences().killTheme();
         return T;
       }
     };
@@ -1056,7 +1060,7 @@ public final class LispAPI extends Lisp
           }
         if (property.isBooleanProperty())
           {
-            preferences.setProperty(property,
+        	setProperty(property,
                                     (second == NIL) ? "false" : "true");
             return second;
           }
@@ -1064,7 +1068,7 @@ public final class LispAPI extends Lisp
           {
             if (second instanceof Fixnum)
               {
-                preferences.setProperty(property,
+            	setProperty(property,
                                         String.valueOf(((Fixnum)second).value));
                 return second;
               }
@@ -1080,14 +1084,14 @@ public final class LispAPI extends Lisp
                     return error(new LispError(second.writeToString() +
                                                " cannot be converted to a Java integer."));
                   }
-                preferences.setProperty(property, value);
+                setProperty(property, value);
                 return second;
               }
           }
         // It must be a string property.
         if (!(second instanceof AbstractString))
           return type_error(second, Symbol.STRING);
-        preferences.setProperty(property, second.getStringValue());
+        setProperty(property, second.getStringValue());
         return second;
       }
     };
@@ -1232,10 +1236,10 @@ public final class LispAPI extends Lisp
                                        " does not designate a property."));
           }
         if (property.isBooleanProperty())
-          return preferences.getBooleanProperty(property) ? T : NIL;
+          return getPreferences().getBooleanProperty(property) ? T : NIL;
         if (property.isIntegerProperty())
-          return number(preferences.getIntegerProperty(property));
-        String value = preferences.getStringProperty(property);
+          return number(getPreferences().getIntegerProperty(property));
+        String value = getPreferences().getStringProperty(property);
         return value != null ? new SimpleString(value) : NIL;
       }
     };
@@ -1462,7 +1466,18 @@ public final class LispAPI extends Lisp
       }
   }
 
-  public static void invokeBufferActivatedHook(Buffer buffer)
+	protected static void setProperty(Property key, String value)
+	{
+		getPreferences().setProperty(key, value);
+
+	}
+	protected static void setProperty(Property key, int value)
+	{
+		getPreferences().setProperty(key, value);
+
+	}
+
+public static void invokeBufferActivatedHook(Buffer buffer)
   {
     if (buffer != null)
       {

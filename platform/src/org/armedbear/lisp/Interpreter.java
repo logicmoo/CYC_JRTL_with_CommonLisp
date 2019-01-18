@@ -753,15 +753,15 @@ public final class Interpreter implements Runnable
 		{
 			try
 			{
-				inputStream.close();
-			} catch (IOException e)
+				if (inputStream!=null)inputStream.close();
+			} catch (Throwable e)
 			{
 				Debug.trace(e);
 			}
 			try
 			{
-				outputStream.close();
-			} catch (IOException e)
+				if (outputStream!=null)outputStream.close();
+			} catch (Throwable e)
 			{
 				Debug.trace(e);
 			}
@@ -770,6 +770,7 @@ public final class Interpreter implements Runnable
 		{
 			((Stream) Symbol.STANDARD_OUTPUT.getSymbolValue())._finishOutput();
 			((Stream) Symbol.ERROR_OUTPUT.getSymbolValue())._finishOutput();
+			
 			BeanShellCntrl.exit(status);
 		}
 	}

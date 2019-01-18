@@ -66,14 +66,16 @@ For help on the automatic tests available, use the Ant target 'help.test'.
       <include name="org/armedbear/lisp/protocol/*.java"/>
       <include name="org/armedbear/lisp/java/**/*.java"/>
       <include name="org/armedbear/**/*.java"/>
-	  <include name="**/*.*"/>
-	  <include name="**/*.java"/>
+      <include name="gnu/regexp/*.*"/>
+      <include name="**/*.*"/>
+      <include name="**/*.java"/>
       <include name="bsh/**/*.*"/>
       <include name="org/objectweb/asm/**/*.java"/>
       <include name="com/cyc/tool/subl/**/*.java"/>
       <include name="org/armedbear/lisp/scripting/*.java" if="abcl.jsr-223.p"/>
       <include name="org/armedbear/lisp/scripting/util/*.java" if="abcl.jsr-223.p"/>
       <include name="org/armedbear/Main.java"/>
+      <include name="org/armedbear/*/*.java"/>
       <include name="org/logicmoo*/**/*.java" />
       <exclude name="**/Test*.java"/>
       <exclude name="**/UnitTest.java"/>
@@ -92,18 +94,18 @@ For help on the automatic tests available, use the Ant target 'help.test'.
       <include name="org/armedbear/lisp/java/**/*.lisp"/>
       <include name="org/armedbear/lisp/tests/*.lisp"/>
       <include name="org/armedbear/lisp/j.lisp"/>
+      <include name="org/armedbear/*/*.lisp"/>
       <include name="org/armedbear/lisp/scripting/lisp/*.lisp" if="abcl.jsr-223.p"/>
     </patternset>
 
     <!-- Lisp files required at runtime -->
     <patternset id="abcl.source.lisp.dist">
       <include name="org/armedbear/lisp/boot.lisp"/>
+      <include name="org/armedbear/*/*.lisp"/>
       <include name="org/armedbear/lisp/scripting/lisp/*.lisp" if="abcl.jsr-223.p"/>
       <include name="**/*.lisp" if="abcl.compile.lisp.skip"/>
       <include name="**/*.*"/>
-	  <include name="bsh/commands/**"/>      
-      <include name="./../src2/**/*.*"/>
-      <include name="./../src1/**/*.*"/>
+      <include name="bsh/commands/**"/>      
     </patternset>
 
     <patternset id="abcl.objects">
@@ -117,8 +119,9 @@ For help on the automatic tests available, use the Ant target 'help.test'.
 	  <include name="**/*"/>
 	  <include name="bsh/commands/**"/>
 	  <include name="bsh/**/*.*"/>
-      <include name="./../src2/**/*.*"/>
-      <include name="./../src1/**/*.*"/>
+      <include name="**/*.*"/>
+      <include name="org/armedbear/**/*.*"/>
+      <include name="gnu/regexp/*.*"/>
       <include name="org/armedbear/lisp/**/*.abcl"/>
       <include name="org/armedbear/lisp/version"/>
       <include name="org/armedbear/lisp/scripting/*.class" if="abcl.jsr-223.p"/>

@@ -136,7 +136,18 @@ property-mult-property and property-div-property functions.
  (:compile-toplevel :load-toplevel :execute)
  (defun hash-dollar-reader (stream subchar arg)
    (declare (ignore subchar arg))
-   (convert-to-cycl (case-sensitive-read-km stream t nil t))))
+    (list 'quote (convert-to-cycl-tree (case-sensitive-read-km stream t nil t)))))
+
+(defun convert-to-cycl-tree (obj) 
+  (cond ((null obj) nil)
+	((consp obj) (cons (convert-to-cycl-tree (first obj)) (convert-to-cycl-tree (rest obj))))
+	((listp obj) (mapcar #'convert-to-cycl-tree obj))
+	((keywordp obj) obj)    
+    ((and (symbolp obj) 
+       (not (position #\? (symbol-name obj)))
+       (not (position #\* (symbol-name obj))) )
+             (convert-to-cycl obj))
+	(t obj)))
 
 ;; (case-sensitive-read-km *standard-input* t nil t)
 (defun convert-to-cycl (s) (if (not (fboundp 'cyc::find-constant)) s
@@ -190,7 +201,7 @@ produces:
 
 (defun add-quotes (obj)
   (cond ((null obj) nil)
-	((aconsp obj) (cons (add-quotes (first obj)) (add-quotes (rest obj))))
+	((consp obj) (cons (add-quotes (first obj)) (add-quotes (rest obj))))
 	((listp obj) (mapcar #'add-quotes obj))
 	((stringp obj) (format nil "~s" obj)) 		; (concat "\"" obj "\"") <- Insufficient for "a\"b"
 	((and (symbolp obj)
@@ -251,7 +262,7 @@ produces:
   (cond ((null list) (format stream ")"))
 	(t (cond (first-time-through (format stream "("))
 		 (t (format stream " ")))
-	   (cond ((aconsp list) (write-km-vals2 (first list) stream)
+	   (cond ((consp list) (write-km-vals2 (first list) stream)
 		  (format stream " . ") (write-km-vals2 (rest list) stream) (format stream ")"))
 		 (t (write-km-vals2 (first list) stream)
 		    (write-km-list (rest list) stream nil))))))		; i.e. first-time-through = nil

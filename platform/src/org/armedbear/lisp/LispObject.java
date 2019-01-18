@@ -997,7 +997,7 @@ public class LispObject extends AbstractSubLObject
 		//if (hc==0) this.hashCode();
 		if (hc == 0) hc = System.identityHashCode(this);
 		String s = getDotName(this.getClass()) + "@" + Integer.toHexString(hc);
-		return  getType() + " " +  s;
+		return  s;
 	}
 
 	//void chars() throws Throwable{} // uncomment to find accidental calls

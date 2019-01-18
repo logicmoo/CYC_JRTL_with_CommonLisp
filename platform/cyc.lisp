@@ -58,9 +58,9 @@
 #+CYC-HTML
 (sl:csetq cyc::*CB-DEFAULT-INDEX-VIEW* :legacy)
 
-#+CYC-EXTERNAL
+;; #+CYC-EXTERNAL
 ;; makes constant names slightly friendlier to prolog
-(print (let ((*PACKAGE* *PACKAGE*))  (in-package :cyc) (sl:load "e2c/renames-fixed.lisp")))
+;; (print (let ((*PACKAGE* *PACKAGE*))  (in-package :cyc) (sl:load "e2c/renames-fixed.lisp")))
 
 ;; uses com.cyc.cycjava.cycl.constants_low.lookup_constant_by_guid
 (defun foc (str)
@@ -84,11 +84,10 @@
 ;; Starts Daydreamer
 (defun dd ()
   (Daydreamer)
- ;; (lisp-eval "(UI-INSPECT ^cx.3)")
+  ;;(lisp-eval "(UI-INSPECT ^cx.3)")
   ;;(lisp-eval "(UI-INSPECT ^cx.30)")
   ;;(lisp-eval "(UI-INSPECT ^cx.50)")
   )
-
 
 ;; ABCL JSS:     (#"setText" my-label "The Larch")
 ;; ABCL JFLI:    (jlabel.settext my-label "The Larch")
@@ -97,3 +96,6 @@
 ;; (prolog-eval-lobject 'rn)
 
 ;; (prolog-query-once "rn")
+
+
+
