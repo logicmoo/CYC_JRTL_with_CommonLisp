@@ -56,15 +56,6 @@ import org.logicmoo.system.BeanShellCntrl;
 public class Compound extends Term
 {
 
-	@Override
-	public Object toJavaObject()
-	{
-		Object val = getTag();
-		if (val != null) return val;
-		if (args == null || name() == null) { return this; }
-		return BeanShellCntrl.to_lisp_object(this, name(), args);
-	}
-
 	/**
 	 * The (zero or more) arguments of this Compound.
 	 */
@@ -135,7 +126,7 @@ public class Compound extends Term
 	 * @throws JPLException
 	 *             if name is null or args is null
 	 */
-	public Compound(String name, Term[] args)
+	public Compound(String name, Term... args)
 	{
 		if (name == null)
 		{

@@ -6,6 +6,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.opencyc.api.CycAccess;
 import org.opencyc.cycobject.CycConstant;
 import org.opencyc.cycobject.CycFort;
 import org.opencyc.cycobject.CycList;
@@ -112,7 +113,7 @@ public class CycBulkAssertions {
     public void setDefaultProject(CycConstant project) throws Exception {
 	cycAccess.setKePurpose("OpenCycProject");
 	cycAccess.setCyclist("#$CycAdministrator");
-	cycAccess.assertIsa(project,cycAccess.cycBasedProject,cycAccess.baseKB);
+	cycAccess.assertIsa(project,cycAccess.cycBasedProject,CycAccess.baseKB);
 	defaultProject=project;
 	cycAccess.setKePurpose(defaultProject);
     }

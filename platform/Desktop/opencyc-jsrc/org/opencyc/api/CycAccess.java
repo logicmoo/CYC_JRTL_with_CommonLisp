@@ -11727,6 +11727,19 @@ public class CycAccess {
       return null;
     }
   };
+
   private static Map<String, CycAccess> currentCycAccesses = Collections.synchronizedMap(
           new HashMap<String, CycAccess>());
+
+  public InferenceParameters createInferenceParams() {
+	InferenceParameters inferenceParams = new DefaultInferenceParameters(this);
+	return inferenceParams;
+  };
+
+  public boolean frdcsaSetHostAndPort (String hostName, int port) {
+	this.hostName = hostName;
+	this.port = port;
+	return true;
+  };
+
 }

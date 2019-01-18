@@ -1,8 +1,15 @@
 
 (defpackage "COMMON-LISP-USER" (:nicknames "U" "USER" "CL-USER"))
 
-'(let ((*PACKAGE* *PACKAGE*))
+(let ((*PACKAGE* *PACKAGE*))
   (cl:load "e2c/hash-dollar.lisp"))
+
+;; (let ((*print-readably* t)) (prin1-to-string (find-class 'symbol)))
+(defmethod print-object ((obj class) stream)
+  (print1 "#." stream) 
+    (write `(find-class ',(class-name obj)) :stream stream :readably t))
+
+
 
 ;; Starts AppdapterGUI
 ;; (UI-INSPECTOR)
@@ -15,8 +22,8 @@
 ;; Starts of SWI-Prolog Telnet Server
 ;; (swipl-init-server)
 
-;;(require :abcl-contrib)
-;;(require :jss)
+(require :abcl-contrib)
+'(require :jss)
 
 (pushnew :use-cyc *features*)
 ;; (pushnew :use-dd *features*)

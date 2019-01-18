@@ -264,65 +264,6 @@ public class BeanShellCntrl
 		setSingleton(isc, self);
 	}
 
-	private static LispObject atom_to_lisp_object(String s)
-	{
-		//String s = a.name();
-		if (s.startsWith("#$"))
-		{
-			s = s.substring(2);
-			SimpleString cs = new SimpleString(s);
-			SubLObject found = find_constant_by_name(cs);
-			if (found instanceof SubLStruct) return found.toLispObject();
-		}
-
-		SimpleString ss = new SimpleString(s);
-		if (inited_cyc_complete)
-		{
-			SubLObject found = find_constant_by_name(ss);
-			if (found instanceof SubLStruct) return found.toLispObject();
-		}
-
-		boolean caseMatters = (!s.toLowerCase().equals(s));
-		if (s.contains(":"))
-		{
-			caseMatters = false;
-		}
-		// boolean caseMattersU = (!s.toUpperCase().equals(s));
-
-		LispObject o;
-		if (caseMatters)
-		{
-			o = Lisp.readObjectFromString(s);
-		}
-		else
-		{
-			o = org.armedbear.lisp.Interpreter.readFromString(s);
-		}
-		return o;
-	}
-
-	@SubLTranslatedFile.SubL(source = "cycl/constant-reader.lisp", position = 3066L)
-	public static SubLObject find_constant_by_name(final SubLObject name)
-	{
-		final SubLThread thread = SubLProcess.currentSubLThread();
-		final SubLNil localNil = SubLNil.NIL;
-		SubLObject constant = localNil;
-		final SubLObject _prev_bind_0 = constant_completion_low.$require_valid_constants$.currentBinding(thread);
-		try
-		{
-			constant_completion_low.$require_valid_constants$.bind(localNil, thread);
-			constant = constant_completion_high.constant_complete_exact(name, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED);
-		} finally
-		{
-			constant_completion_low.$require_valid_constants$.rebind(_prev_bind_0, thread);
-		}
-		if (localNil == constant)
-		{
-			constant = constant_handles.find_invalid_constant(name);
-		}
-		return constant;
-	}
-
 	@LispMethod
 	static public boolean attach_jvm(String jarfile) throws IOException
 	{
@@ -393,7 +334,7 @@ public class BeanShellCntrl
 	@LispMethod
 	static public void init_j()
 	{
-		if(noGUI) return;
+		if (noGUI) return;
 		try
 		{
 			Class c = Class.forName("org.armedbear.j.Editor");
@@ -518,6 +459,7 @@ public class BeanShellCntrl
 			Variable v = (Variable) result;
 			Term.putTerm(t, v.term_);
 			Object o = lo.javaInstance();
+			if (o instanceof JPLException) { throw (JPLException) o; }
 			return t;
 		} catch (Throwable t)
 		{
@@ -1350,7 +1292,7 @@ public class BeanShellCntrl
 		}
 		try
 		{
-			return lisp_eval_progn(args, env);		
+			return lisp_eval_progn(args, env);
 		} finally
 		{
 			if (!wasNoDebug)
@@ -1477,12 +1419,6 @@ public class BeanShellCntrl
 	{
 		JConsole console = (JConsole) bsh_eval("makeConsole(\"PrologUI\")");
 		return console;
-	}
-
-	@LispMethod
-	static public LispObject read_lisp(String s)
-	{
-		return Lisp.readObjectFromString(s);
 	}
 
 	static public void registerMethod(Method m)
@@ -1787,17 +1723,30 @@ public class BeanShellCntrl
 	@LispMethod
 	static public LispObject term_to_lobject(Term term)
 	{
+		if (term instanceof Atom) { return atom_to_lobject((Atom) term); }
+		Object o = term_to_object(term);
+		if (o instanceof LispObject) { return (LispObject) o; }
+		return JavaObject.getInstance(o, true);
+	}
+
+	@LispMethod
+	static public Object term_to_object(Term term)
+	{
 		if (term == null) return null;
-		LispObject lo;
 		try
 		{
-
 			Object tag = term.getTag();
-			if (tag instanceof LispObject)
+			if (tag != null || term instanceof JRef)
 			{
-				lo = (LispObject) tag;
-				lo.termRef = term;
-				return lo;
+				if (tag instanceof LispObject)
+				{
+					LispObject lo;
+					lo = (LispObject) tag;
+					lo.termRef = term;
+					return lo;
+
+				}
+				return tag;
 			}
 		} catch (Error e)
 		{
@@ -1805,7 +1754,188 @@ public class BeanShellCntrl
 			ClassLoader cl = termClass.getClassLoader();
 			e.printStackTrace();
 		}
+		if (term instanceof Atom) { return atom_to_object((Atom) term); }
+		if (term instanceof Variable) { return toJavaObject((Variable) term); }
+		if (term instanceof org.jpl7.Float)
+		{
+			org.jpl7.Float f = (org.jpl7.Float) term;
+			if (f.isBig()) return f.bigFloatValue();
+			return f.doubleValue();
+		}
+		if (term instanceof org.jpl7.Integer)
+		{
+			org.jpl7.Integer f = (org.jpl7.Integer) term;
+			if (f.isBig()) return f.bigValue();
+			return f.longValue();
+		}
+		if (term instanceof org.jpl7.Variable)
+		{
+			org.jpl7.Integer f = (org.jpl7.Integer) term;
+			if (f.isBig()) return f.bigValue();
+			return f.longValue();
+		}
+		return compound_to_object((Compound) term, term.name(), term.args());
+	}
+
+	private static long n = 0;
+
+	@LispMethod
+	static public LispObject read_lisp(String s)
+	{
+		return Lisp.readObjectFromString(s);
+	}
+
+	private static LispObject atom_to_lisp_object(String s)
+	{
+		SubLObject found;
+		//String s = a.name();
+		if (s.startsWith("#$"))
+		{
+			if (!inited_cyc_complete)
+			{
+				Debug.assertTrue(inited_cyc_complete);
+			}
+			found = read_sublisp(s);
+			if (found != null) { return found.toLispObject(); }
+			SimpleString cs = new SimpleString(s);
+			s = s.substring(2);
+			found = find_constant_by_name(cs);
+			if (found instanceof SubLStruct) return found.toLispObject();
+			found = null;
+		}
+		if (s.startsWith("?") || s.contains("#$"))
+		{
+			if (!inited_cyc_complete)
+			{
+				Debug.assertTrue(inited_cyc_complete);
+			}
+			found = read_sublisp(s);
+			if (found instanceof LispObject) return (LispObject) found;
+			if (found != null) { return found.toLispObject(); }
+			found = null;
+			//			return found.toLispObject();
+		}
+
+		if (inited_cyc_complete)
+		{
+			SimpleString ss = new SimpleString(s);
+			found = find_constant_by_name(ss);
+			if (found instanceof SubLStruct) return found.toLispObject();
+		}
+
+		boolean caseMatters = (!s.toLowerCase().equals(s));
+		if (s.contains(":"))
+		{
+			caseMatters = false;
+		}
+		// boolean caseMattersU = (!s.toUpperCase().equals(s));
+
+		LispObject o;
+		if (caseMatters)
+		{
+			o = read_lisp(s);
+		}
+		else
+		{
+			o = org.armedbear.lisp.Interpreter.readFromString(s);
+		}
+		return o;
+	}
+
+	static public Object atom_to_object(Atom thiz)
+	{
+		String value = thiz.name();
+		String type = thiz.atomType();
+		if (type.equals("string")) return value;
+		Object val = thiz.getTag();
+		if (val != null) return val;
+		if (value.equals("[]")) return Lisp.NIL;
+		if (value.equals("T")) return Lisp.T;
+		return atom_to_lobject(thiz);
+
+	}
+
+	private static LispObject atom_to_lobject(Atom term)
+	{
 		if (term.isListNil()) return Lisp.NIL;
+		String atomType = term.atomType();
+		LispObject lo;
+		if ("string".equals(atomType))
+		{
+			lo = string_string(term.name());
+		}
+		else
+		{
+			lo = atom_to_lisp_object(term.name());
+		}
+		return lo;
+	}
+
+	static LispObject string_string(String text)
+	{
+		return JavaObject.getInstance(text, true);
+	}
+
+	public static SubLObject read_sublisp(String name)
+	{
+		SubLObject form = com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader. //
+				read_from_string(SubLObjectFactory.makeString(name), //
+						CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED);
+		return form;
+	}
+
+	@SubLTranslatedFile.SubL(source = "cycl/constant-reader.lisp", position = 3066L)
+	public static SubLObject find_constant_by_name(final SubLObject name)
+	{
+		final SubLThread thread = SubLProcess.currentSubLThread();
+		final SubLNil localNil = SubLNil.NIL;
+		SubLObject constant = localNil;
+		final SubLObject _prev_bind_0 = constant_completion_low.$require_valid_constants$.currentBinding(thread);
+		try
+		{
+			constant_completion_low.$require_valid_constants$.bind(localNil, thread);
+			constant = constant_completion_high.constant_complete_exact(name, CommonSymbols.UNPROVIDED, CommonSymbols.UNPROVIDED);
+		} finally
+		{
+			constant_completion_low.$require_valid_constants$.rebind(_prev_bind_0, thread);
+		}
+		if (localNil == constant)
+		{
+			constant = constant_handles.find_invalid_constant(name);
+		}
+		return constant;
+	}
+
+	static public Object toJavaObject(Variable thiz)
+	{
+		Object object = thiz.getTag();
+		if (object == null)
+		{
+			String name = thiz.name;
+			if (name.equals("_"))
+			{
+				name = "??" + (n++);
+			}
+			else if (name.startsWith("_"))
+			{
+				name = "?" + name.substring(1);
+			}
+			SubLObject form = BeanShellCntrl.read_sublisp("?" + name);
+		}
+		return object;
+	}
+
+	static public Object compound_to_object(Compound term, String value, Term[] args)
+	{
+		Object o = term.getTag();
+		if (o != null) return o;
+
+		Term arg1 = null;
+		if (args.length != 0)
+		{
+			arg1 = args[0];
+		}
+
 		if (term.isListPair())
 		{
 			Cons cons = new Cons(Lisp.NIL, Lisp.NIL);
@@ -1817,51 +1947,39 @@ public class BeanShellCntrl
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			cons.setCar(term_to_lobject(term.arg(1)));
+			cons.setCar(term_to_lobject(arg1));
 			cons.setCdr(term_to_lobject(term.arg(2)));
 			return cons;
 		}
-		Object o = term.toJavaObject();
-		if (term instanceof Atom)
+		//lo.termRef = term;
+
+		if (term.hasFunctor("@", 1))
 		{
-			Atom aterm = (Atom) term;
-			String atomType = aterm.atomType();
-			if ("string".equals(atomType))
+
+			if (arg1 instanceof Atom)
 			{
-				lo = JavaObject.getInstance(o, true);
+				Atom a = (Atom) arg1;
+				if (a.isAtomOfNameType("null", "text")) return null;
+				if (a.isAtomOfNameType("true", "text")) return true;
+				if (a.isAtomOfNameType("false", "text")) return false;
 			}
-			else
-			{
-				lo = atom_to_lisp_object(term.name());
-			}
+		}
+		if (value.equals("[]")) { return BeanShellCntrl.terms_to_lisp_objects(args); }
+		if (value.equals("s"))
+		{
+			if (args.length == 1) { return term_to_object(arg1); }
+		}
+
+		LispObject lo = atom_to_lisp_object(term.name());
+		LispClass c = LispClass.findClass(Lisp.checkSymbol(lo));
+		if (o instanceof LispObject)
+		{
+			lo = (LispObject) o;
 		}
 		else
 		{
-
-			if (o == null)
-			{
-				if (term instanceof Compound)
-				{
-					Compound c = (Compound) term;
-					lo = atom_to_lisp_object(c.name());
-
-					lo = LispClass.findClass(Lisp.checkSymbol(lo));
-
-				}
-
-			}
-
-			if (o instanceof LispObject)
-			{
-				lo = (LispObject) o;
-			}
-			else
-			{
-				lo = JavaObject.getInstance(o, true);
-			}
+			lo = JavaObject.getInstance(o, true);
 		}
-
-		lo.termRef = term;
 		return lo;
 	}
 
@@ -1916,13 +2034,6 @@ public class BeanShellCntrl
 	static public <T extends Throwable> Error throwException1(final Throwable exception, Object dummy) throws T
 	{
 		throw (T) exception;
-	}
-
-	static public Object to_lisp_object(Compound thiz, String value, Term[] args)
-	{
-
-		if (value.equals("[]")) { return BeanShellCntrl.terms_to_lisp_objects(args); }
-		return thiz;
 	}
 
 	static public LispObject[] toArray(LispObject args)
@@ -2511,4 +2622,5 @@ public class BeanShellCntrl
 		}
 
 	}
+
 }

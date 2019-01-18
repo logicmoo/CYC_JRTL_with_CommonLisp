@@ -49,18 +49,6 @@ import org.jpl7.fli.term_t;
 public class Atom extends Term
 {
 
-	@Override
-	public Object toJavaObject()
-	{
-		String value = name();
-		if (type.equals("string")) return name();
-		if (value.equals("[]")) return Lisp.NIL;
-		if (value.equals("T")) return Lisp.T;
-		Object val = getTag();
-		if(val!=null) return val;
-		return this;// name();
-	}
-
 	/**
 	 * the name of this Atom
 	 */
@@ -163,7 +151,7 @@ public class Atom extends Term
 	 *            an Atom (blob) type, e.g. "text", "reserved_symbol"
 	 * @return whether this Term instance is an Atom with name and type
 	 */
-	protected final boolean isAtomOfNameType(String name, String type)
+	public final boolean isAtomOfNameType(String name, String type)
 	{
 		return name != null && type != null && name.equals(this.name) && type.equals(this.type);
 	}

@@ -50,7 +50,7 @@ public class Integer extends Term {
 	private static BigInteger BIG_MIN_LONG = BigInteger.valueOf(java.lang.Long.MIN_VALUE);
 	private static BigInteger BIG_MAX_LONG = BigInteger.valueOf(java.lang.Long.MAX_VALUE);
 
-	public final Object toJavaObject() {
+	public final Number toJavaObject() {
 		if (bigValue == null) {
 			return value;
 		} else {

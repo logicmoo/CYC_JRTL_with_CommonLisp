@@ -6,6 +6,13 @@ import java.util.Map;
 import org.armedbear.lisp.Lisp;
 import org.jpl7.fli.Prolog;
 import org.jpl7.fli.term_t;
+import org.logicmoo.system.BeanShellCntrl;
+
+import com.cyc.cycjava.cycl.variables;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLReader;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
 
 /**
  * This class supports Java representations of Prolog variables.
@@ -50,20 +57,15 @@ import org.jpl7.fli.term_t;
  * @author Fred Dushin fadushin@syr.edu
  * @version $Revision$
  */
-public class Variable extends Term {
-	
-	@Override
-	public Object toJavaObject()
-	{
-		return Lisp.readObjectFromString("?"+name+""+index);
-	}
-	
+public class Variable extends Term
+{
+
 	/**
 	 * the integral part of the next automatic variable name to be allocated
 	 */
 	private static long n = 0;
 
-	protected transient int index; // only used by (redundant?)
+	protected transient long index; // only used by (redundant?)
 
 	/**
 	 * the name of this Variable
@@ -79,7 +81,8 @@ public class Variable extends Term {
 	 * Create a new Variable with new sequential name of the form "_261".
 	 *
 	 */
-	public Variable() {
+	public Variable()
+	{
 		this.name = "_" + Long.toString(n++); // e.g. _0, _1 etc.
 	}
 
@@ -90,17 +93,28 @@ public class Variable extends Term {
 	 * @param name
 	 *            the source name of this Variable
 	 */
-	public Variable(String name) {
-		if (name == null) {
+	public Variable(String name)
+	{
+		if (name == null)
+		{
 			throw new JPLException("name cannot be null");
-		} else if (name.equals("")) {
+		}
+		else if (name.equals(""))
+		{
 			throw new JPLException("name cannot be empty String");
-		} else {
+		}
+		else
+		{
+			if (name.equals("_"))
+			{
+				index = ++n;
+			}
 			this.name = name;
 		}
 	}
 
-	public final Term[] args() {
+	public final Term[] args()
+	{
 		throw new JPLException("args() is undefined for Variable");
 	}
 
@@ -109,7 +123,8 @@ public class Variable extends Term {
 	 *
 	 * @return the arity of a Term
 	 */
-	public int arity() {
+	public int arity()
+	{
 		throw new JPLException("arity() is undefined for Variable");
 	};
 
@@ -121,7 +136,8 @@ public class Variable extends Term {
 	 *            The Object to compare.
 	 * @return true if the Object is a Variable and the above condition apply.
 	 */
-	public final boolean equals(Object obj) {
+	public final boolean equals(Object obj)
+	{
 		return obj instanceof Variable && !this.name.equals("_") && this.name.equals(((Variable) obj).name);
 	}
 
@@ -137,11 +153,13 @@ public class Variable extends Term {
 	 * @param vars_to_Vars
 	 *            A Map from Prolog variables to JPL Variables.
 	 */
-	protected final void getSubst(Map<String, Term> varnames_to_Terms, Map<term_t, Variable> vars_to_Vars) {
+	protected final void getSubst(Map<String, Term> varnames_to_Terms, Map<term_t, Variable> vars_to_Vars)
+	{
 		// NB a Variable.name cannot be "" i.e. of 0 length
 		// if (!(this.name.charAt(0) == '_') && varnames_to_Terms.get(this.name)
 		// == null) {
-		if (tellThem() && varnames_to_Terms.get(this.name) == null) {
+		if (tellThem() && varnames_to_Terms.get(this.name) == null)
+		{
 			varnames_to_Terms.put(this.name, Term.getTerm(vars_to_Vars, this.term_));
 		}
 	}
@@ -149,28 +167,32 @@ public class Variable extends Term {
 	/* (non-Javadoc)
 	 * @see org.jpl7.Term#hasFunctor(java.math.BigInteger, int)
 	 */
-	public boolean hasFunctor(BigInteger value, int arity) {
+	public boolean hasFunctor(BigInteger value, int arity)
+	{
 		throw new JPLException("hasFunctor() is undefined for Variable");
 	}
 
 	/* (non-Javadoc)
 	 * @see org.jpl7.Term#hasFunctor(java.lang.String, int)
 	 */
-	public boolean hasFunctor(String name, int arity) {
+	public boolean hasFunctor(String name, int arity)
+	{
 		throw new JPLException("hasFunctor() is undefined for Variable");
 	}
 
 	/* (non-Javadoc)
 	 * @see org.jpl7.Term#hasFunctor(long, int)
 	 */
-	public boolean hasFunctor(long value, int arity) {
+	public boolean hasFunctor(long value, int arity)
+	{
 		throw new JPLException("hasFunctor() is undefined for Variable");
 	}
 
 	/* (non-Javadoc)
 	 * @see org.jpl7.Term#hasFunctor(double, int)
 	 */
-	public boolean hasFunctor(double value, int arity) {
+	public boolean hasFunctor(double value, int arity)
+	{
 		throw new JPLException("hasFunctor() is undefined for Variable");
 	}
 
@@ -179,7 +201,8 @@ public class Variable extends Term {
 	 *
 	 * @return the lexical name of this Variable
 	 */
-	public final String name() {
+	public final String name()
+	{
 		return this.name;
 	}
 
@@ -199,18 +222,23 @@ public class Variable extends Term {
 	 *            A (previously created) term_t which is to be set to a (new or
 	 *            reused) Prolog variable.
 	 */
-	protected final void put(Map<String, term_t> varnames_to_vars, term_t term) {
+	protected final void put(Map<String, term_t> varnames_to_vars, term_t term)
+	{
 		term_t var;
 		// if this var is anonymous or as yet unseen, put a new Prolog variable
-		if (this.name.equals("_") || (var = (term_t) varnames_to_vars.get(this.name)) == null) {
+		if (this.name.equals("_") || (var = (term_t) varnames_to_vars.get(this.name)) == null)
+		{
 			this.term_ = term;
 			this.index = varnames_to_vars.size(); // i.e. first var in is #0
-													// etc.
+												  // etc.
 			Prolog.put_variable(term);
-			if (!this.name.equals("_")) {
+			if (!this.name.equals("_"))
+			{
 				varnames_to_vars.put(this.name, term);
 			}
-		} else {
+		}
+		else
+		{
 			this.term_ = var;
 			Prolog.put_term(term, var);
 		}
@@ -224,7 +252,8 @@ public class Variable extends Term {
 	 * @return whether, according to prevailing policy and this Variable's name,
 	 *         its binding (if any) should be returned in a substitution
 	 */
-	private final boolean tellThem() {
+	private final boolean tellThem()
+	{
 		return !(this.name.equals("_") || org.jpl7.JPL.modeDontTellMe && this.name.charAt(0) == '_');
 	}
 
@@ -233,7 +262,8 @@ public class Variable extends Term {
 	 *
 	 * @return a Prolog source text representation of this Variable
 	 */
-	public String toString() {
+	public String toString()
+	{
 		return this.name;
 	}
 
@@ -242,7 +272,8 @@ public class Variable extends Term {
 	 *
 	 * @return the type of this subclass of Term, i.e. Prolog.VARIABLE
 	 */
-	public final int type() {
+	public final int type()
+	{
 		return Prolog.VARIABLE;
 	}
 
@@ -251,7 +282,8 @@ public class Variable extends Term {
 	 *
 	 * @return the typeName of this subclass of Term, i.e. "Variable"
 	 */
-	public String typeName() {
+	public String typeName()
+	{
 		return "Variable";
 	}
 

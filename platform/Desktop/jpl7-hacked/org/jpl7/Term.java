@@ -815,7 +815,7 @@ public abstract class Term {
 	public abstract String typeName();
 
 	abstract public String toString();
-	abstract public Object toJavaObject();
+	//abstract public Object toJavaObject();
 
 	public Object getTag()
 	{

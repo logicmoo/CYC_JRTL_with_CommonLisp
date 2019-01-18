@@ -119,7 +119,8 @@ public class PrologSync extends SubLTrampolineFile
 	public static void addSingleton(SubLFile file)
 	{
 		addTypeThing("SUBLFILE", file);
-		// TODO SLOW BeanShellCntrl.addSingleton(file);
+		// TODO SLOW 
+		BeanShellCntrl.addSingleton(file);
 	}
 
 	private static void addStaticFields(String prefix, Class class1)
@@ -309,6 +310,7 @@ public class PrologSync extends SubLTrampolineFile
 
 	}
 
+
 	private static Term extractedProlog(AbstractSubLStruct struct, final String className, long serial)
 
 	{
@@ -495,181 +497,6 @@ public class PrologSync extends SubLTrampolineFile
 		// System.out.println(Arrays.toString(string));
 	}
 
-	public static Term toProlog(String name, SubLStruct s, java.util.List l)
-	{
-		if (s instanceof AbstractSubLStruct)
-		{
-			AbstractSubLStruct ass = (AbstractSubLStruct) s;
-			if (ass.termRef != null && !(ass.termRef instanceof SyncState)) { return ass.termRef; }
-		}
-
-		if (name == null)
-		{
-			name = getClassName((AbstractSubLStruct) s);
-		}
-		final int arity = s.toStruct().getFieldCount();
-		final Term[] args = new Term[arity];
-		int argN = 0;
-		for (int i = 0; i < arity; i++)
-		{
-			final SubLObject o = s.getField(i + 2);
-			Term t = toProlog(o, l);
-			if (t == null)
-			{
-				bp();
-			}
-			args[argN] = t;
-			argN++;
-		}
-		return new Compound(name, args);
-	}
-
-	public static Term toProlog(SubLObject o, java.util.List skipped)
-	{
-
-		if (o == null) return JPL.JNULL;
-		if (o == Lisp.NIL) return JPL.LIST_NIL;
-		AbstractSubLObject ass = null;
-		if (o instanceof AbstractSubLObject)
-		{
-			ass = (AbstractSubLObject) o;
-			if (ass.termRef != null && !(ass.termRef instanceof SyncState)) { return ass.termRef; }
-			do
-			{
-				//				if (ass.termRef == null)
-				//				{
-				//					//ass.termRef = NEEDSYNCED;
-				//					Term symcme = toProlog(o, skipped);
-				//					assert (ass.termRef != NEEDSYNCED);
-				//					if (ass.termRef == NEEDSYNCED) // 
-				//					{ //
-				//						break;
-				//						new JPLException("LOOPED ASS! " + ass).printStackTrace();
-				//						symcme = null;
-				//					}
-				//					ass.termRef = symcme;
-				//					return symcme;
-				//				}
-				break;
-			} while (true);
-		}
-
-		Term term = null;
-		try
-		{
-			term_t tt;
-			if (o.isString())
-			{ //
-				return term = new Atom(o.getStringValue(), "string");
-			}
-			if (o.isSymbol())
-			{
-				Symbol s = o.toSymbol().toLispObject();
-				SubLPackage pack = s.getPackage();
-				String prefix;
-				if (pack == null)
-				{
-					prefix = "nil";
-				}
-				else if (pack == Lisp.PACKAGE_KEYWORD)
-				{
-					prefix = "";
-				}
-				else
-				{
-					prefix = pack.showShortName();
-				}
-				return term = new Atom(prefix + ":" + s.getName(), "text");
-
-			}
-			if (constants_high.installed_constant_p(o) != SubLNil.NIL)
-			{
-				String s = constants_high.constant_name(o).getStringValue();
-				return term = new Atom(s, "text");
-			}
-			if (o.isDouble()) { return term = new org.jpl7.Float(o.doubleValue()); }
-			if (o.isInteger())
-			{
-				if (o.isBigIntegerBignum())
-				{
-					final BigInteger bigIntegerValue = o.bigIntegerValue();
-					return term = new org.jpl7.Integer(bigIntegerValue);
-				}
-				return term = new org.jpl7.Integer(o.longValue());
-			}
-			int idx = indexOfById(skipped, o);
-			if (idx >= 0) { return term = toPrologFromJava(o); }
-			skipped.add(o);
-			if (o instanceof IPrologifiable) { return term = ((IPrologifiable) o).toProlog(skipped); }
-			if (o instanceof SubLStruct)
-			{
-				{
-					return term = toProlog(null, (SubLStruct) o, skipped);
-				}
-			}
-			Object oo = o.javaInstance();
-
-			if (oo != null) { return term = toPrologFromJava(oo); }
-
-			//return Atom.objectToJRef(o);
-			return term = toPrologFromJava(o);
-		} finally
-
-		{
-			if (ass != null && term != null)
-			{
-				ass.termRef = term;
-
-			}
-			// skipped.remove(o);
-		}
-	}
-
-	public static Term toProlog(Object o)
-	{
-		if (o == null) return JPL.JNULL;
-		if (o instanceof Term) { return (Term) o; }
-		if (o instanceof IPrologifiable) { return ((IPrologifiable) o).toProlog(new LinkedList()); }
-		if (o instanceof SubLObject) { return toProlog((SubLObject) o, new LinkedList()); }
-		return toPrologFromJava(o);
-	}
-
-	public static Term toPrologFromJava(Object o)
-	{
-		if (o == null) return JPL.JNULL;
-		if (o instanceof Term) { return (Term) o; }
-		if (o instanceof AbstractSubLObject)
-		{
-			Object oo = ((SubLObject) o).javaInstance();
-			if (oo == o || oo == null) { return Atom.objectToJRef(o); }
-			if (true) { return Atom.objectToJRef(o); }
-			new JPLException("LOOPED ASS! " + o).printStackTrace();
-		}
-		if (o instanceof Boolean) return ((Boolean) o).booleanValue() ? JPL.JTRUE : JPL.JFALSE;
-		if (o instanceof String) { return new Atom((String) o, "string"); }
-		if (o instanceof Float)
-		{
-			new org.jpl7.Float((Float) o);
-		}
-		if (o instanceof Double)
-		{
-			new org.jpl7.Float((Double) o);
-		}
-		if (o instanceof BigDecimal)
-		{
-			new org.jpl7.Float(((BigDecimal) o).doubleValue());
-		}
-		if (o instanceof BigInteger)
-		{
-			new org.jpl7.Integer((BigInteger) o);
-		}
-		if (o instanceof Number)
-		{
-			new org.jpl7.Integer(((Number) o).longValue());
-		}
-		return Atom.objectToJRef(o);
-	}
-
 	public static void updThis(SubLSymbol structName, SubLObject id, SubLObject content)
 	{
 		sync_println("UPDATE-", structName, " id =", id, ": ", content);
@@ -816,6 +643,7 @@ public class PrologSync extends SubLTrampolineFile
 
 	public static final class SyncState extends Atom
 	{
+
 		public SyncState(String twoStr)
 		{
 			super(twoStr, "sync");
@@ -962,4 +790,185 @@ public class PrologSync extends SubLTrampolineFile
 		addStaticFields(null, PrologSync.class);
 		BeanShellCntrl.addObject("mapClass2Refs", PrologSync.mapClass2Refs);
 	}
+
+	public static Term toProlog(String name, SubLStruct s, java.util.List l)
+	{
+		if (s instanceof AbstractSubLStruct)
+		{
+			AbstractSubLStruct ass = (AbstractSubLStruct) s;
+			if (ass.termRef != null && !(ass.termRef instanceof SyncState)) { return ass.termRef; }
+		}
+
+		if (name == null)
+		{
+			name = getClassName((AbstractSubLStruct) s);
+		}
+		final int arity = s.toStruct().getFieldCount();
+		final Term[] args = new Term[arity];
+		int argN = 0;
+		for (int i = 0; i < arity; i++)
+		{
+			final SubLObject o = s.getField(i + 2);
+			Term t = toProlog(o, l);
+			if (t == null)
+			{
+				bp();
+			}
+			args[argN] = t;
+			argN++;
+		}
+		return new Compound(name, args);
+	}
+
+	public static Term toProlog(SubLObject o, java.util.List skipped)
+	{
+
+		if (o == null) return JPL.JNULL;
+		if (o == Lisp.NIL) return JPL.LIST_NIL;
+		AbstractSubLObject ass = null;
+		if (o instanceof AbstractSubLObject)
+		{
+			ass = (AbstractSubLObject) o;
+			if (ass.termRef != null && !(ass.termRef instanceof SyncState)) { return ass.termRef; }
+			do
+			{
+				//				if (ass.termRef == null)
+				//				{
+				//					//ass.termRef = NEEDSYNCED;
+				//					Term symcme = toProlog(o, skipped);
+				//					assert (ass.termRef != NEEDSYNCED);
+				//					if (ass.termRef == NEEDSYNCED) // 
+				//					{ //
+				//						break;
+				//						new JPLException("LOOPED ASS! " + ass).printStackTrace();
+				//						symcme = null;
+				//					}
+				//					ass.termRef = symcme;
+				//					return symcme;
+				//				}
+				break;
+			} while (true);
+		}
+
+		Term term = null;
+		try
+		{
+			term_t tt;
+			if (o.isString())
+			{ //
+				return term = toPrologFromJava(o.getStringValue());
+			}
+			if (o.isSymbol())
+			{
+				Symbol s = o.toSymbol().toLispObject();
+				SubLPackage pack = s.getPackage();
+				String prefix;
+				if (pack == null)
+				{
+					prefix = "#";
+				}
+				else if (pack == Lisp.PACKAGE_KEYWORD)
+				{
+					prefix = "";
+				}
+				else
+				{
+					prefix = pack.showShortName();
+				}
+				return term = new Atom(prefix + ":" + s.getName(), "text");
+
+			}
+			if (constants_high.installed_constant_p(o) != SubLNil.NIL)
+			{
+				String s = constants_high.constant_name(o).getStringValue();
+				return term = new Atom(s, "text");
+			}
+			if (o instanceof IPrologifiable) { return term = ((IPrologifiable) o).toProlog(skipped); }
+			if (o.isDouble()) { return term = new org.jpl7.Float(o.doubleValue()); }
+			if (o.isInteger())
+			{
+				if (o.isBigIntegerBignum())
+				{
+					final BigInteger bigIntegerValue = o.bigIntegerValue();
+					return term = new org.jpl7.Integer(bigIntegerValue);
+				}
+				return term = new org.jpl7.Integer(o.longValue());
+			}
+			int idx = indexOfById(skipped, o);
+			if (idx >= 0) { return term = toPrologFromJava(o); }
+			skipped.add(o);
+			if (o instanceof SubLStruct)
+			{
+				{
+					return term = toProlog(null, (SubLStruct) o, skipped);
+				}
+			}
+			return term = toPrologFromJava(o);
+		} finally
+
+		{
+			if (ass != null && term != null)
+			{
+				ass.termRef = term;
+
+			}
+			// skipped.remove(o);
+		}
+	}
+
+	public static Term toProlog(Object o)
+	{
+		if (o == null) return JPL.JNULL;
+		if (o instanceof Term) { return (Term) o; }
+		if (o instanceof IPrologifiable) { return ((IPrologifiable) o).toProlog(new LinkedList()); }
+		if (o instanceof SubLObject) { return toProlog((SubLObject) o, new LinkedList()); }
+		return toPrologFromJava(o);
+	}
+
+	public static Term toPrologFromJava(Object o)
+	{
+		if (o == null) return JPL.JNULL;
+		if (o instanceof Void) return JPL.JVOID;
+		if (o instanceof Boolean) return ((Boolean) o).booleanValue() ? JPL.JTRUE : JPL.JFALSE;
+		if (o instanceof Term) { return (Term) o; }
+		if (o instanceof String)
+		{
+			if (true)
+			{
+				final String quote = "\"";
+				final String escapedString = escapedString((String) o, quote);
+				final String name = quote + escapedString + quote;
+				return new Atom(name, "text");
+			}
+			if (true) { return new Compound("s", new Atom((String) o, "text")); }
+			return new Atom((String) o, "string");
+		}
+
+		if (o instanceof Float) { return new org.jpl7.Float((Float) o); }
+		if (o instanceof Double) { return new org.jpl7.Float((Double) o); }
+		if (o instanceof BigDecimal) { return new org.jpl7.Float(((BigDecimal) o)); }
+
+		if (o instanceof BigInteger) { return new org.jpl7.Integer((BigInteger) o); }
+		if (o instanceof Number) { return new org.jpl7.Integer(((Number) o).longValue()); }
+
+		if (o instanceof SubLObject)
+		{
+			Object oo = ((SubLObject) o).javaInstance();
+			if (oo != o && oo != null) { return toPrologFromJava(oo); }
+			//return Atom.objectToJRef(o);
+		}
+		return Atom.objectToJRef(o);
+	}
+
+	private static String escapedString(String o, String quote)
+	{
+		String value = o.replace("\\", "\\\\") //				
+				.replace("\n", "\\n") //
+				.replace("\r", "\\r") //
+				.replace("\t", "\\t");
+
+		return value.replace(quote, "\\" + quote);
+
+	}
+
 }

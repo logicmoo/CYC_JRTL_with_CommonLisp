@@ -40,11 +40,6 @@ import org.jpl7.fli.term_t;
  */
 public class JRef extends Term {
 
-	@Override
-	public Object toJavaObject()
-	{
-		return object;
-	}
 	/**
 	 * the JRef's value (a non-null, non-String Object)
 	 */
