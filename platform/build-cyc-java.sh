@@ -38,7 +38,10 @@ echo ""
 echo ""
 echo "Success!?"
 
-chmod +x *.sh
+chmod 555 *.sh
+chmod 555 ./abclc
+chmod 555 ./data/scg-repo-v2  -R
+chmod 777 transcripts/7166/
 
 
 

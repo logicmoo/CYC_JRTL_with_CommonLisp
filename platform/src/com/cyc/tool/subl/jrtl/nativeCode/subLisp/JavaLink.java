@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.armedbear.lisp.JavaObject;
+import org.armedbear.lisp.LispObject;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.AbstractSubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLAlienObject;
@@ -313,6 +314,8 @@ public class JavaLink extends SubLTrampolineFile {
 		Object result;
 		if (object instanceof SubLAlienObject)
 			result = ((SubLAlienObject) object).getAlien();
+		else if (object instanceof JavaObject)
+			result = ((JavaObject) object).javaInstance();
 		else
 			result = object;
 		if (JavaLink.DEBUG)
@@ -333,6 +336,8 @@ public class JavaLink extends SubLTrampolineFile {
 		Object result;
 		if (subLObject instanceof SubLAlienObject)
 			result = ((SubLAlienObject) subLObject).getAlien();
+		else if (subLObject instanceof JavaObject)
+			result = ((JavaObject) subLObject).javaInstance();
 		else
 			result = subLObject;
 		if (JavaLink.DEBUG)
@@ -479,7 +484,15 @@ public class JavaLink extends SubLTrampolineFile {
 								"arg " + j + " = [" + argObjects[j] + "], is of type " + argObjects[j].getClass());
 					argClasses[j] = getJavaClass(argObjects[j]);
 				}
-				method = (Method) unbox(_method(classObject, methodObject, (Object[]) argClasses));
+				{
+					Object o = unbox(_method(classObject, methodObject, (Object[]) argClasses));
+				  if(o instanceof Method) {
+					  method = (Method)o;
+				  } else {
+					  o = ((LispObject)o).javaInstance(Method.class);
+					  method = (Method)o;
+				  }
+				}				
 			} else
 				method = (Method) unbox(_method(classObject, methodObject, new Object[0]));
 			Object[] args = null;
@@ -579,7 +592,7 @@ public class JavaLink extends SubLTrampolineFile {
 	}
 
 	public static SubLObject java_object_p(SubLObject object) {
-		return box(object instanceof SubLAlienObject);
+		return box(object instanceof SubLAlienObject || object instanceof JavaObject);
 	}
 
 	public static SubLObject java_static(SubLObject methodObject, SubLObject classObject, SubLObject... args) {

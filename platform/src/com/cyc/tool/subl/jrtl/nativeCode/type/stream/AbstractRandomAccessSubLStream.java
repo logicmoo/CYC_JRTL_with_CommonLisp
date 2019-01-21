@@ -181,7 +181,7 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 				if (doesExist) {
 					if (direction != Keyword.INPUT_KEYWORD) {
 						if (!theFile.canWrite())
-							Errors.error("Don't have permissions to write file: " + theFile);
+							System.err.println(";; WARNING: Don't have permissions to write file: " + theFile);
 						if (ifExists == Keyword.ERROR_KEYWORD)
 							Errors.error("File already exists: " + theFile);
 						if (ifExists == CommonSymbols.NEW_VERSION_KEYWORD)
@@ -232,9 +232,7 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 						theFile.createNewFile();
 				}
 			}
-			if ("w".equals(fileMode))
-				fileMode = "rw";
-			raf = new RandomAccessFile(theFile, fileMode);
+			raf = new RandomAccessFile(theFile, correctFileMode(theFile, fileMode));
 			if (shouldTruncateToZeroLength && raf.length() > 0L)
 				raf.setLength(0L);
 			fileChannel = raf.getChannel();
@@ -242,7 +240,7 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 				if (theFile.length() > 100000L && theFile.length() < 2147483647L && shouldMemoryMap) {
 					mappedBuffer = direction == Keyword.INPUT_KEYWORD
 							? fileChannel.map(FileChannel.MapMode.READ_ONLY, 0L, theFile.length())
-							: fileChannel.map(FileChannel.MapMode.READ_WRITE, 0L, theFile.length());
+							: fileChannel.map(canWrite()?FileChannel.MapMode.READ_WRITE:FileChannel.MapMode.READ_ONLY, 0L, theFile.length());
 					readByteBuffer = mappedBuffer;
 					isMapped = true;
 					if (theFile.length() <= 700000000L)
@@ -259,6 +257,19 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 		} catch (IOException e) {
 			Errors.error("Error opening stream: " + this, e);
 		}
+	}
+
+	private String correctFileMode(File theFile, String fileMode)
+	{
+		if ("w".equals(fileMode))
+			fileMode = "rw";
+		if ("rww".equals(fileMode))
+			fileMode = "rw";
+		if(!theFile.canWrite()) {
+			fileMode = "r";
+		}
+		this.fileMode=fileMode;
+		return fileMode;
 	}
 
 	private boolean isNullFile(String fileName) {
@@ -295,8 +306,8 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 						try {
 							raf.close();
 						} catch (Exception ex2) {
-						}
-					raf = new RandomAccessFile(theFile, fileMode);
+						}					
+					raf = new RandomAccessFile(theFile, correctFileMode(theFile, fileMode));
 					(fileChannel = raf.getChannel()).position(pos);
 					underlyingFilePos = pos;
 					if (isMapped)
@@ -984,8 +995,11 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 			synchronized (SubLThread.getInterruptLock()) {
 				boolean needsInterruption = Threads.forciblyHandleInterrupts();
 				try {
-					int result = fileChannel.write(writeByteBuffer);
-					underlyingFilePos += result;
+					if (canWrite())
+					{
+						int result = fileChannel.write(writeByteBuffer);
+						underlyingFilePos += result;
+					}
 				} finally {
 					if (needsInterruption)
 						SubLProcess.currentProcess().interrupt();
@@ -1001,6 +1015,12 @@ public abstract class AbstractRandomAccessSubLStream extends AbstractSubLStream 
 			reopenChannel(filePos);
 			this.writeWritableDataToChannel(filePos, bufferPos, checkOpen);
 		}
+	}
+
+	public boolean canWrite()
+	{
+		if (theFile != null) return theFile.canWrite();
+		return true;
 	}
 
 }
